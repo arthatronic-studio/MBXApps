@@ -1,0 +1,1 @@
+export const listPrivilegeUser = [999, 2, 802];
