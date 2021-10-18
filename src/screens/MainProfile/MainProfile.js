@@ -51,6 +51,8 @@ const MainProfile = ({ navigation, route }) => {
         state => state['user.auth'].login.user
     );
 
+    console.log('user', user);
+
     const { Color } = useColor();
     const { width } = useWindowDimensions();
 
@@ -100,7 +102,7 @@ const MainProfile = ({ navigation, route }) => {
                 }
             </View>
 
-            {/* <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
+            <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
                 <TouchableOpacity onPress={() => setModalVirtual(true)}>
                     <Row>
                         <Col justify='center' size={0.75}>
@@ -114,7 +116,7 @@ const MainProfile = ({ navigation, route }) => {
                         </Col>
                     </Row>
                 </TouchableOpacity>
-            </Grid> */}
+            </Grid>
 
             {user && !user.guest && <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
                 <TouchableOpacity onPress={() => navigation.navigate('ChangeProfile')}>
