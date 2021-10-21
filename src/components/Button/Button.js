@@ -8,13 +8,13 @@ import {
 } from '@src/components';
 
 const CustomButton = Styled(TouchableOpacity)`
-  backgroundcolor: ${(props) => (props.disabled ? '#E7CE3E' : props.color)};
+  backgroundColor: ${(props) => (props.disabled ? '#E7CE3E' : props.color)};
   width: 100%;
-  minheight: 35px;
-  borderradius: 4px;
-  alignitems: center;
-  justifycontent: center;
-  flexdirection: row;
+  minHeight: 35px;
+  borderRadius: 4px;
+  alignItems: center;
+  justifyContent: center;
+  flexDirection: row;
 `;
 
 const CustomImage = Styled(Image)`
