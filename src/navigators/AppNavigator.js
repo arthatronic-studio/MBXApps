@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 
 // uncanny
 import MainPage from '@src/navigators/BottomTabsNavigator';
@@ -31,6 +31,7 @@ import ChangeProfile from '@src/screens/MainProfile/ChangeProfile';
 import SettingScreen from '@src/screens/MainProfile/SettingScreen';
 import ShowAllFromProfile from '@src/screens/MainProfile/ShowAllFromProfile';
 import Register from '@src/screens/MainProfile/RegisterKomunitas/Register'
+import ReferralCodeScreen from '@src/screens/MainProfile/ReferralCodeScreen';
 
 // News
 import NewsScreen from 'src/screens/News/Index';
@@ -63,7 +64,7 @@ import PdamScreen from '@src/screens/PPOB/PdamScreen';
 // import OrderListScreen from '@src/screens/MyBooking/OrderList';
 import OrderListPerProduct from '@src/screens/MyBooking/OrderListPerProduct';
 
-const { Navigator, Screen } = createStackNavigator();
+const {Navigator, Screen} = createStackNavigator();
 
 function MainStackNavigator() {
     return (
@@ -112,6 +113,7 @@ function MainStackNavigator() {
             <Screen name='ShowAllFromProfile' component={ShowAllFromProfile} />
             <Screen name='SettingScreen' component={SettingScreen} />
             <Screen name='Register' component={Register} />
+            <Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />
             {/* payment */}
             <Screen name='PaymentScreen' component={PaymentScreen} />
             <Screen name='PaymentDetail' component={PaymentDetail} />
