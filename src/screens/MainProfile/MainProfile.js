@@ -235,7 +235,7 @@ const MainProfile = ({navigation, route}) => {
       </Grid>
 
       <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
-            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+            <TouchableOpacity onPress={() => navigation.navigate('RegisterKomunitas')}>
                 <Row>
                     <Col size={0.75} justify='center'>
                         <AntDesign name='form' color={Color.text} style={{marginTop: 2}} />
