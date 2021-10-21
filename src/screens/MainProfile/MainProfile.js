@@ -213,7 +213,7 @@ const MainProfile = ({navigation, route}) => {
           borderTopWidth: 0.5,
           borderColor: Color.border,
         }}>
-        <TouchableOpacity onPress={() => Linking.openURL('mailto:bummitbs@gmail.com?subject=SendMail&Body')}>
+        <TouchableOpacity onPress={() => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran untuk Komoto&Body')}>
           <Row>
             <Col size={0.75} justify="center">
               <AntDesign
