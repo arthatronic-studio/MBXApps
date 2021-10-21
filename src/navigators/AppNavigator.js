@@ -30,6 +30,7 @@ import DetailForumScreen from '@src/screens/MainForum/DetailForumScreen';
 import ChangeProfile from '@src/screens/MainProfile/ChangeProfile';
 import SettingScreen from '@src/screens/MainProfile/SettingScreen';
 import ShowAllFromProfile from '@src/screens/MainProfile/ShowAllFromProfile';
+import Register from '@src/screens/MainProfile/RegisterKomunitas/Register'
 
 // News
 import NewsScreen from 'src/screens/News/Index';
@@ -110,6 +111,7 @@ function MainStackNavigator() {
             <Screen name='ChangeProfile' component={ChangeProfile} />
             <Screen name='ShowAllFromProfile' component={ShowAllFromProfile} />
             <Screen name='SettingScreen' component={SettingScreen} />
+            <Screen name='Register' component={Register} />
             {/* payment */}
             <Screen name='PaymentScreen' component={PaymentScreen} />
             <Screen name='PaymentDetail' component={PaymentDetail} />

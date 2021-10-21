@@ -149,6 +149,22 @@ const MainProfile = ({ navigation, route }) => {
                     </Row>
                 </TouchableOpacity>
             </Grid>
+            
+            {user && !user.guest && <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
+                <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                    <Row>
+                        <Col size={0.75} justify='center'>
+                            <AntDesign name='form' color={Color.text} style={{marginTop: 2}} />
+                        </Col>
+                        <Col align='flex-start' size={8} justify='center'>
+                            <Text size={12} type='medium'>Daftar Komunitas</Text>
+                        </Col>
+                        <Col align='flex-end' size={3.25} justify='center'>
+                            <FontAwesome name='angle-right' color={Color.text} size={20} />
+                        </Col>
+                    </Row>
+                </TouchableOpacity>
+            </Grid>}
 
             {user && !user.guest && <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
                 <TouchableOpacity onPress={() => onPressExit()}>
