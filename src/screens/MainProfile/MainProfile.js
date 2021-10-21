@@ -8,6 +8,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch, useSelector } from 'react-redux';
 import { Modalize } from 'react-native-modalize';
+import QRCode from 'react-native-qrcode-svg';
 
 import {
     Alert,
@@ -41,6 +42,14 @@ const ExitButton = Styled(TouchableOpacity)`
     alignItems: center;
     flexDirection: row;
 `;
+
+// const Qrcode = ()=>{
+//     return (
+//         <QRCode
+//             value="http://awesome.link.qr"
+//         />
+//     );
+// };
 
 const MainProfile = ({ navigation, route }) => {
     const [modalVirtual, setModalVirtual] = useState(false);
@@ -191,20 +200,23 @@ const MainProfile = ({ navigation, route }) => {
                 <View style={{flex: 1, padding: 16, backgroundColor: 'rgba(0, 0, 0, 0.4)'}}>
                     <View style={{width: '100%', flexDirection: 'row', flexWrap: 'wrap', padding: 16, borderRadius: 8, alignItems: 'flex-start', backgroundColor: Color.primary}}>
                         <View style={{width: '100%', flexDirection: 'row', borderRadius: 16, marginBottom: 16, padding: 4, backgroundColor: Color.textInput, alignItems: 'center', justifyContent: 'center'}}>
-                            <Image source={iconSplash} style={{width: 100, height: 24}} />
+                            <Image source={iconSplash} style={{width: 210, height: 24}} />
                             <AntDesign name='close' color={Color.textInput} size={20} onPress={() => setModalVirtual(false)} style={{position: 'absolute', right: 6, backgroundColor: Color.error, borderRadius: 50}} />
                         </View>
                         
                         <View style={{width: width - 90 - 64, height: 90, justifyContent: 'space-between'}}>
-                            <Text align='left' color={Color.textInput}>NIK 1234509876030396</Text>
                             <View>
                                 <Text align='left' type='bold' size={20} color={Color.textInput}>{user && user.firstName} {user && user.lastName}</Text>
                                 <Text align='left' size={18} color={Color.textInput}>{user && user.phoneNumber || '082216981621'}</Text>
                             </View>
                         </View>
                         <View style={{width: 90, height: 90}}>
-                            <Image source={{uri: ''}} style={{width: '100%', height: '100%', backgroundColor: Color.border, borderRadius: 8}} />
+                            {/* <Image source={{uri: ''}} style={{width: '100%', height: '100%', backgroundColor: Color.border, borderRadius: 8}} />     */}
+                            <QRCode
+                            value={user.code}
+                            />
                         </View>
+                        
                     </View>
                 </View>
             </Modal>

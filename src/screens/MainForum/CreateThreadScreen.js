@@ -64,7 +64,7 @@ const CreateThreadScreen = (props) => {
         code: '',
         name: '',
         image: '',
-        status: 'PUBLISH', // PUBLISH | DRAFT | PRIVATE | REMOVE
+        status: 'PRIVATE', // PUBLISH | DRAFT | PRIVATE | REMOVE
         method: 'INSERT', // UPDATE | DELETE
         type: params.productType,
         category: params.productSubCategory,
@@ -78,7 +78,7 @@ const CreateThreadScreen = (props) => {
     const [thumbImage, setThumbImage] = useState('');
     const [mimeImage, setMimeImage] = useState('image/jpeg');
     const [selectedStatus, setSelectedStatus] = useState({
-        id: 1, value: 'PUBLISH', iconName: 'globe'
+        id: 2, value: 'PRIVATE', iconName: 'lock-closed'
     });
 
     // ref
