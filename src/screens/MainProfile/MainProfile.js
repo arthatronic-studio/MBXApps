@@ -6,6 +6,7 @@ import {
   Modal,
   Image,
   useWindowDimensions,
+  Linking
 } from 'react-native';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -205,6 +206,34 @@ const MainProfile = ({navigation, route}) => {
           </Row>
         </TouchableOpacity>
       </Grid>
+
+      <Grid
+        style={{
+          backgroundColor: Color.theme,
+          borderTopWidth: 0.5,
+          borderColor: Color.border,
+        }}>
+        <TouchableOpacity onPress={() => Linking.openURL('mailto:bummitbs@gmail.com?subject=SendMail&Body')}>
+          <Row>
+            <Col size={0.75} justify="center">
+              <AntDesign
+                name="kritik dan saran"
+                color={Color.text}
+                style={{marginTop: 2}}
+              />
+            </Col>
+            <Col align="flex-start" size={8} justify="center">
+              <Text size={12} type="medium">
+                Kritik dan saran
+              </Text>
+            </Col>
+            <Col align="flex-end" size={3.25} justify="center">
+              <FontAwesome name="angle-right" color={Color.text} size={20} />
+            </Col>
+          </Row>
+        </TouchableOpacity>
+      </Grid>
+
       <Grid
         style={{
           backgroundColor: Color.theme,
