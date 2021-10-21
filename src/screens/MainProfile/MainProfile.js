@@ -234,7 +234,7 @@ const MainProfile = ({navigation, route}) => {
         </TouchableOpacity>
       </Grid>
 
-      {user && !user.guest && <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
+      <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
             <TouchableOpacity onPress={() => navigation.navigate('Register')}>
                 <Row>
                     <Col size={0.75} justify='center'>
@@ -248,7 +248,7 @@ const MainProfile = ({navigation, route}) => {
                     </Col>
                 </Row>
             </TouchableOpacity>
-      </Grid>}
+      </Grid>
 
       <Grid
         style={{
