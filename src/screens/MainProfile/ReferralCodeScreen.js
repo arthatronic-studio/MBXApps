@@ -30,6 +30,10 @@ import validate from '@src/lib/validate';
 import Client from '@src/lib/apollo';
 import {queryMaudiProductManage} from '@src/lib/query';
 
+import {
+  iconSplash,
+} from '@assets/images';
+
 const MainView = Styled(SafeAreaView)`
     flex: 1;
 `;
@@ -63,6 +67,7 @@ const ErrorView = Styled(View)`
   paddingVertical: 4px;
   alignItems: flex-start;
 `;
+
 
 const ReferralCode = (props) => {
   //   const {navigation, route} = props;
@@ -244,8 +249,10 @@ const ReferralCode = (props) => {
             />
           </TouchableOpacity>
         )} */}
-
-        <View style={{paddingHorizontal: 16, paddingTop: 24}}>
+        <View style={{ marginLeft:15 }}>
+              <Image source={iconSplash} style={{width: 80, height: 40}} resizeMode='contain' />
+            </View>
+        <View style={{paddingHorizontal: 16}}>
           <LabelInput>
             <Text
               size={12}
