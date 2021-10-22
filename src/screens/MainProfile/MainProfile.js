@@ -6,6 +6,7 @@ import {
   Modal,
   Image,
   useWindowDimensions,
+  Linking
 } from 'react-native';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -13,8 +14,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {useDispatch, useSelector} from 'react-redux';
-import {Modalize} from 'react-native-modalize';
+import { useDispatch, useSelector } from 'react-redux';
+import { Modalize } from 'react-native-modalize';
+import QRCode from 'react-native-qrcode-svg';
 
 import {
   Alert,
@@ -91,7 +93,9 @@ const MainProfile = ({navigation, route}) => {
             alignItems: 'center',
             ...shadowStyle,
           }}>
-          <AntDesign size={120} name="qrcode" color={Color.text} />
+            <QRCode
+                value={user.code}
+            />
           <View
             style={{
               position: 'absolute',
@@ -205,6 +209,50 @@ const MainProfile = ({navigation, route}) => {
           </Row>
         </TouchableOpacity>
       </Grid>
+
+      <Grid
+        style={{
+          backgroundColor: Color.theme,
+          borderTopWidth: 0.5,
+          borderColor: Color.border,
+        }}>
+        <TouchableOpacity onPress={() => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran untuk Komoto&Body')}>
+          <Row>
+            <Col size={0.75} justify="center">
+              <AntDesign
+                name="kritik dan saran"
+                color={Color.text}
+                style={{marginTop: 2}}
+              />
+            </Col>
+            <Col align="flex-start" size={8} justify="center">
+              <Text size={12} type="medium">
+                Kritik dan saran
+              </Text>
+            </Col>
+            <Col align="flex-end" size={3.25} justify="center">
+              <FontAwesome name="angle-right" color={Color.text} size={20} />
+            </Col>
+          </Row>
+        </TouchableOpacity>
+      </Grid>
+
+      <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
+            <TouchableOpacity onPress={() => navigation.navigate('RegisterKomunitas')}>
+                <Row>
+                    <Col size={0.75} justify='center'>
+                        <AntDesign name='form' color={Color.text} style={{marginTop: 2}} />
+                    </Col>
+                    <Col align='flex-start' size={8} justify='center'>
+                        <Text size={12} type='medium'>Daftar Komunitas</Text>
+                    </Col>
+                    <Col align='flex-end' size={3.25} justify='center'>
+                        <FontAwesome name='angle-right' color={Color.text} size={20} />
+                    </Col>
+                </Row>
+            </TouchableOpacity>
+      </Grid>
+
       <Grid
         style={{
           backgroundColor: Color.theme,
@@ -319,7 +367,7 @@ const MainProfile = ({navigation, route}) => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Image source={iconSplash} style={{width: 100, height: 24}} />
+              <Image source={iconSplash} style={{width: 210, height: 24}} />
               <AntDesign
                 name="close"
                 color={Color.textInput}
@@ -340,9 +388,6 @@ const MainProfile = ({navigation, route}) => {
                 height: 90,
                 justifyContent: 'space-between',
               }}>
-              <Text align="left" color={Color.textInput}>
-                NIK 1234509876030396
-              </Text>
               <View>
                 <Text
                   align="left"
@@ -357,15 +402,9 @@ const MainProfile = ({navigation, route}) => {
               </View>
             </View>
             <View style={{width: 90, height: 90}}>
-              <Image
-                source={{uri: ''}}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  backgroundColor: Color.border,
-                  borderRadius: 8,
-                }}
-              />
+                <QRCode
+                    value={user.code}
+                />
             </View>
           </View>
         </View>
