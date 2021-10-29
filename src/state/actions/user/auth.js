@@ -14,13 +14,15 @@ const encodeData = new Buffer(`${clientId}:${secret}`).toString('base64');
 
 const instance = axios.create({ baseURL: Config.AUTH_API_URL, headers: { 'Content-Type': 'application/x-www-form-urlencoded', Authorization: `Basic ${encodeData}` } });
 
-export const callAuthApi = async (tempEmail, password, refreshToken) => {
+export const callAuthApi = async (tempEmail, password, refreshToken, fcm_token) => {
   const email = tempEmail ? tempEmail.toLowerCase() : tempEmail;
   let body = { scope: Config.SCOPE, };
   try {
-    if (email && password) body = { ...body, grant_type: 'password', client_id: clientId, secret, username: email, password };
+    if (email && password) body = { ...body, grant_type: 'password', client_id: clientId, secret, username: email, password, fcm_token };
     else if (refreshToken) body = { ...body, grant_type: 'refresh_token', refresh_token: refreshToken };
     else body = { ...body, grant_type: Config.GRANT_TYPE, client_id: clientId, secret, };
+
+    console.log('body auth', body);
 
     const response = await instance.post('/oauth/token', querystring.stringify(body));
     if (response) return { success: true, data: response.data };
@@ -181,11 +183,11 @@ export const updateCurrentUserProfile = (params) => async (dispatch, getState) =
  });
 };
 
-export const login = (tempEmail, password) => async (dispatch, getState) => {
+export const login = (tempEmail, password, fcm_token) => async (dispatch, getState) => {
   const email = tempEmail ? tempEmail.toLowerCase() : tempEmail;
   dispatch({ type: 'USER.CLEAR_LOGIN' });
   dispatch({ type: 'USER.FETCH_LOGIN' });
-  const response = await callAuthApi(email, password);
+  const response = await callAuthApi(email, password, null, fcm_token);
 
   console.log(response, 'response');
   

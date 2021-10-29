@@ -1,6 +1,7 @@
 import {AppRegistry} from 'react-native';
 import App from './App';
 import {name as appName} from './app.json';
+import messaging from '@react-native-firebase/messaging';
 
 const moment = require('moment');
 const momentDurationFormatSetup = require('moment-duration-format');
@@ -12,5 +13,10 @@ typeof moment.duration.fn.format === "function";
 typeof moment.duration.format === "function";
 
 console.disableYellowBox = true;
+
+// Register background handler
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+    console.log('Message handled in the background!', remoteMessage);
+});
 
 AppRegistry.registerComponent(appName, () => App);

@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { useIsFocused } from '@react-navigation/native';
+import messaging from '@react-native-firebase/messaging';
 
 import {
   // Button,
@@ -127,6 +128,7 @@ const LoginScreen = ({ navigation, route }) => {
   const [state, changeState] = useState({
     username: '',
     password: '',
+    fcm_token: '',
     error: { username: null, password: null },
     showPassword: false,
     isSucceddForgot: false,
@@ -162,6 +164,13 @@ const LoginScreen = ({ navigation, route }) => {
   const [popupProps, showPopup] = usePopup();
 
   const passwordRef = useRef();
+
+  useEffect(() => {
+    messaging().getToken().then((res) => {
+      console.log('token fcm: ', res);
+      setState({ fcm_token: res });
+    });
+  }, []);
 
   useEffect(() => {
     if (register.status) {
@@ -211,7 +220,7 @@ const LoginScreen = ({ navigation, route }) => {
   useEffect(() => {
     if (state.allValid) {
       setState({ allValid: false });
-      dispatch(login(state.username, state.password));
+      dispatch(login(state.username, state.password, state.fcm_token));
     }
   }, [state.allValid])
 

@@ -1,4 +1,4 @@
-package com.ivosight.komoto;
+package com.komoto;
 
 import android.content.Intent;
 import android.os.Bundle;

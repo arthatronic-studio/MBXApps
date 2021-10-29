@@ -6,7 +6,8 @@ import {
   Modal,
   Image,
   useWindowDimensions,
-  Linking
+  Linking,
+  ScrollView,
 } from 'react-native';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -33,6 +34,7 @@ import {redirectTo, loginRequired} from '@src/utils';
 import {shadowStyle} from '@src/styles';
 
 import {iconSplash} from '@assets/images';
+import { Divider } from 'src/styled';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -82,78 +84,178 @@ const MainProfile = ({navigation, route}) => {
     <MainView style={{backgroundColor: Color.theme}}>
       <HeaderBig title="Profile" style={{paddingTop: 16}} />
 
-      <View style={{alignItems: 'center'}}>
-        <View
-          style={{
-            padding: 8,
-            marginBottom: 8,
-            borderRadius: 8,
-            backgroundColor: Color.textInput,
-            justifyContent: 'center',
-            alignItems: 'center',
-            ...shadowStyle,
-          }}>
-            <QRCode
-                value={user.code}
-            />
+      <ScrollView>
+        <View style={{alignItems: 'center'}}>
           <View
             style={{
-              position: 'absolute',
-              height: 50,
-              width: 50,
-              borderRadius: 25,
+              padding: 8,
+              marginBottom: 8,
+              borderRadius: 8,
               backgroundColor: Color.textInput,
               justifyContent: 'center',
               alignItems: 'center',
+              ...shadowStyle,
             }}>
-            <Ionicons name="person" color={Color.primary} size={35} />
+              {user && <QRCode
+                  value={user.code}
+              />}
+            <View
+              style={{
+                position: 'absolute',
+                height: 50,
+                width: 50,
+                borderRadius: 25,
+                backgroundColor: Color.textInput,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Ionicons name="person" color={Color.primary} size={35} />
+            </View>
           </View>
+
+          {user && !user.guest ? (
+            <>
+              <Text type="bold" letterSpacing={0.18}>
+                {user.firstName} {user.lastName}
+              </Text>
+              <Text size={12} letterSpacing={0.18}>
+                {user.phoneNumber || '082216981621'}
+              </Text>
+            </>
+          ) : (
+            <Text type="bold" letterSpacing={0.18}>
+              Halo Tamu, Silakan Login
+            </Text>
+          )}
         </View>
 
-        {user && !user.guest ? (
-          <>
-            <Text type="bold" letterSpacing={0.18}>
-              {user.firstName} {user.lastName}
-            </Text>
-            <Text size={12} letterSpacing={0.18}>
-              {user.phoneNumber || '082216981621'}
-            </Text>
-          </>
-        ) : (
-          <Text type="bold" letterSpacing={0.18}>
-            Halo Tamu, Silakan Login
-          </Text>
+        <Grid
+          style={{
+            backgroundColor: Color.theme,
+            borderTopWidth: 0.5,
+            borderColor: Color.border,
+          }}>
+          <TouchableOpacity onPress={() => setModalVirtual(true)}>
+            <Row>
+              <Col justify="center" size={0.75}>
+                <FontAwesome
+                  name="credit-card"
+                  color={Color.text}
+                  style={{marginTop: 2}}
+                />
+              </Col>
+              <Col align="flex-start" size={8} justify="center">
+                <Text size={12} type="medium">
+                  Virtual Card
+                </Text>
+              </Col>
+              <Col align="flex-end" size={3.25} justify="center">
+                <FontAwesome name="angle-right" color={Color.text} size={20} />
+              </Col>
+            </Row>
+          </TouchableOpacity>
+        </Grid>
+
+        {user && !user.guest && (
+          <Grid
+            style={{
+              backgroundColor: Color.theme,
+              borderTopWidth: 0.5,
+              borderColor: Color.border,
+            }}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ChangeProfile')}>
+              <Row>
+                <Col justify="center" size={0.75}>
+                  <FontAwesome
+                    name="edit"
+                    color={Color.text}
+                    style={{marginTop: 2}}
+                  />
+                </Col>
+                <Col align="flex-start" size={8} justify="center">
+                  <Text size={12} type="medium">
+                    Ubah Profil
+                  </Text>
+                </Col>
+                <Col align="flex-end" size={3.25} justify="center">
+                  <FontAwesome name="angle-right" color={Color.text} size={20} />
+                </Col>
+              </Row>
+            </TouchableOpacity>
+          </Grid>
         )}
-      </View>
 
-      <Grid
-        style={{
-          backgroundColor: Color.theme,
-          borderTopWidth: 0.5,
-          borderColor: Color.border,
-        }}>
-        <TouchableOpacity onPress={() => setModalVirtual(true)}>
-          <Row>
-            <Col justify="center" size={0.75}>
-              <FontAwesome
-                name="credit-card"
-                color={Color.text}
-                style={{marginTop: 2}}
-              />
-            </Col>
-            <Col align="flex-start" size={8} justify="center">
-              <Text size={12} type="medium">
-                Virtual Card
-              </Text>
-            </Col>
-            <Col align="flex-end" size={3.25} justify="center">
-              <FontAwesome name="angle-right" color={Color.text} size={20} />
-            </Col>
-          </Row>
-        </TouchableOpacity>
-      </Grid>
+        <Grid
+          style={{
+            backgroundColor: Color.theme,
+            borderTopWidth: 0.5,
+            borderColor: Color.border,
+          }}>
+          <TouchableOpacity onPress={() => navigation.navigate('SettingScreen')}>
+            <Row>
+              <Col size={0.75} justify="center">
+                <AntDesign
+                  name="setting"
+                  color={Color.text}
+                  style={{marginTop: 2}}
+                />
+              </Col>
+              <Col align="flex-start" size={8} justify="center">
+                <Text size={12} type="medium">
+                  Setting
+                </Text>
+              </Col>
+              <Col align="flex-end" size={3.25} justify="center">
+                <FontAwesome name="angle-right" color={Color.text} size={20} />
+              </Col>
+            </Row>
+          </TouchableOpacity>
+        </Grid>
 
-      {user && !user.guest && (
+        <Grid
+          style={{
+            backgroundColor: Color.theme,
+            borderTopWidth: 0.5,
+            borderColor: Color.border,
+          }}>
+          <TouchableOpacity onPress={() => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran untuk Komoto&Body')}>
+            <Row>
+              <Col size={0.75} justify="center">
+                <AntDesign
+                  name="carryout"
+                  color={Color.text}
+                  style={{marginTop: 2}}
+                />
+              </Col>
+              <Col align="flex-start" size={8} justify="center">
+                <Text size={12} type="medium">
+                  Kritik dan saran
+                </Text>
+              </Col>
+              <Col align="flex-end" size={3.25} justify="center">
+                <FontAwesome name="angle-right" color={Color.text} size={20} />
+              </Col>
+            </Row>
+          </TouchableOpacity>
+        </Grid>
+
+        <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
+              <TouchableOpacity onPress={() => navigation.navigate('RegisterKomunitas')}>
+                  <Row>
+                      <Col size={0.75} justify='center'>
+                          <AntDesign name='form' color={Color.text} style={{marginTop: 2}} />
+                      </Col>
+                      <Col align='flex-start' size={8} justify='center'>
+                          <Text size={12} type='medium'>Daftar Komunitas</Text>
+                      </Col>
+                      <Col align='flex-end' size={3.25} justify='center'>
+                          <FontAwesome name='angle-right' color={Color.text} size={20} />
+                      </Col>
+                  </Row>
+              </TouchableOpacity>
+        </Grid>
+
         <Grid
           style={{
             backgroundColor: Color.theme,
@@ -161,18 +263,18 @@ const MainProfile = ({navigation, route}) => {
             borderColor: Color.border,
           }}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('ChangeProfile')}>
+            onPress={() => navigation.navigate('ReferralCodeScreen')}>
             <Row>
-              <Col justify="center" size={0.75}>
-                <FontAwesome
-                  name="edit"
+              <Col size={0.75} justify="center">
+                <AntDesign
+                  name="user"
                   color={Color.text}
                   style={{marginTop: 2}}
                 />
               </Col>
               <Col align="flex-start" size={8} justify="center">
                 <Text size={12} type="medium">
-                  Ubah Profil
+                  Masuk Komunitas
                 </Text>
               </Col>
               <Col align="flex-end" size={3.25} justify="center">
@@ -181,163 +283,67 @@ const MainProfile = ({navigation, route}) => {
             </Row>
           </TouchableOpacity>
         </Grid>
-      )}
 
-      <Grid
-        style={{
-          backgroundColor: Color.theme,
-          borderTopWidth: 0.5,
-          borderColor: Color.border,
-        }}>
-        <TouchableOpacity onPress={() => navigation.navigate('SettingScreen')}>
-          <Row>
-            <Col size={0.75} justify="center">
-              <AntDesign
-                name="setting"
-                color={Color.text}
-                style={{marginTop: 2}}
-              />
-            </Col>
-            <Col align="flex-start" size={8} justify="center">
-              <Text size={12} type="medium">
-                Setting
-              </Text>
-            </Col>
-            <Col align="flex-end" size={3.25} justify="center">
-              <FontAwesome name="angle-right" color={Color.text} size={20} />
-            </Col>
-          </Row>
-        </TouchableOpacity>
-      </Grid>
-
-      <Grid
-        style={{
-          backgroundColor: Color.theme,
-          borderTopWidth: 0.5,
-          borderColor: Color.border,
-        }}>
-        <TouchableOpacity onPress={() => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran untuk Komoto&Body')}>
-          <Row>
-            <Col size={0.75} justify="center">
-              <AntDesign
-                name="kritik dan saran"
-                color={Color.text}
-                style={{marginTop: 2}}
-              />
-            </Col>
-            <Col align="flex-start" size={8} justify="center">
-              <Text size={12} type="medium">
-                Kritik dan saran
-              </Text>
-            </Col>
-            <Col align="flex-end" size={3.25} justify="center">
-              <FontAwesome name="angle-right" color={Color.text} size={20} />
-            </Col>
-          </Row>
-        </TouchableOpacity>
-      </Grid>
-
-      <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
-            <TouchableOpacity onPress={() => navigation.navigate('RegisterKomunitas')}>
-                <Row>
-                    <Col size={0.75} justify='center'>
-                        <AntDesign name='form' color={Color.text} style={{marginTop: 2}} />
-                    </Col>
-                    <Col align='flex-start' size={8} justify='center'>
-                        <Text size={12} type='medium'>Daftar Komunitas</Text>
-                    </Col>
-                    <Col align='flex-end' size={3.25} justify='center'>
-                        <FontAwesome name='angle-right' color={Color.text} size={20} />
-                    </Col>
-                </Row>
+        {user && !user.guest && (
+          <Grid
+            style={{
+              backgroundColor: Color.theme,
+              borderTopWidth: 0.5,
+              borderColor: Color.border,
+            }}>
+            <TouchableOpacity onPress={() => onPressExit()}>
+              <Row>
+                <Col justify="center" size={0.75}>
+                  <Ionicons
+                    name="exit-outline"
+                    color={Color.error}
+                    style={{marginTop: 2}}
+                  />
+                </Col>
+                <Col align="flex-start" size={8} justify="center">
+                  <Text size={12} type="medium" color={Color.error}>
+                    Logout
+                  </Text>
+                </Col>
+                <Col align="flex-end" size={3.25} justify="center">
+                  <FontAwesome name="angle-right" color={Color.text} size={20} />
+                </Col>
+              </Row>
             </TouchableOpacity>
-      </Grid>
+          </Grid>
+        )}
 
-      <Grid
-        style={{
-          backgroundColor: Color.theme,
-          borderTopWidth: 0.5,
-          borderColor: Color.border,
-        }}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('ReferralCodeScreen')}>
-          <Row>
-            <Col size={0.75} justify="center">
-              <AntDesign
-                name="user"
-                color={Color.text}
-                style={{marginTop: 2}}
-              />
-            </Col>
-            <Col align="flex-start" size={8} justify="center">
-              <Text size={12} type="medium">
-                Masuk Komunitas
-              </Text>
-            </Col>
-            <Col align="flex-end" size={3.25} justify="center">
-              <FontAwesome name="angle-right" color={Color.text} size={20} />
-            </Col>
-          </Row>
-        </TouchableOpacity>
-      </Grid>
+        {user && user.guest && (
+          <Grid
+            style={{
+              backgroundColor: Color.theme,
+              borderTopWidth: 0.5,
+              borderColor: Color.border,
+            }}>
+            <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
+              <Row>
+                <Col justify="center" size={0.75}>
+                  <Ionicons
+                    name="exit-outline"
+                    color={Color.info}
+                    style={{marginTop: 2}}
+                  />
+                </Col>
+                <Col align="flex-start" size={8} justify="center">
+                  <Text size={12} type="medium" color={Color.info}>
+                    Login
+                  </Text>
+                </Col>
+                <Col align="flex-end" size={3.25} justify="center">
+                  <FontAwesome name="angle-right" color={Color.text} size={20} />
+                </Col>
+              </Row>
+            </TouchableOpacity>
+          </Grid>
+        )}
 
-      {user && !user.guest && (
-        <Grid
-          style={{
-            backgroundColor: Color.theme,
-            borderTopWidth: 0.5,
-            borderColor: Color.border,
-          }}>
-          <TouchableOpacity onPress={() => onPressExit()}>
-            <Row>
-              <Col justify="center" size={0.75}>
-                <Ionicons
-                  name="exit-outline"
-                  color={Color.error}
-                  style={{marginTop: 2}}
-                />
-              </Col>
-              <Col align="flex-start" size={8} justify="center">
-                <Text size={12} type="medium" color={Color.error}>
-                  Logout
-                </Text>
-              </Col>
-              <Col align="flex-end" size={3.25} justify="center">
-                <FontAwesome name="angle-right" color={Color.text} size={20} />
-              </Col>
-            </Row>
-          </TouchableOpacity>
-        </Grid>
-      )}
-
-      {user && user.guest && (
-        <Grid
-          style={{
-            backgroundColor: Color.theme,
-            borderTopWidth: 0.5,
-            borderColor: Color.border,
-          }}>
-          <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
-            <Row>
-              <Col justify="center" size={0.75}>
-                <Ionicons
-                  name="exit-outline"
-                  color={Color.info}
-                  style={{marginTop: 2}}
-                />
-              </Col>
-              <Col align="flex-start" size={8} justify="center">
-                <Text size={12} type="medium" color={Color.info}>
-                  Login
-                </Text>
-              </Col>
-              <Col align="flex-end" size={3.25} justify="center">
-                <FontAwesome name="angle-right" color={Color.text} size={20} />
-              </Col>
-            </Row>
-          </TouchableOpacity>
-        </Grid>
-      )}
+        <Divider />
+      </ScrollView>
 
       <Modal
         visible={modalVirtual}
@@ -402,9 +408,9 @@ const MainProfile = ({navigation, route}) => {
               </View>
             </View>
             <View style={{width: 90, height: 90}}>
-                <QRCode
-                    value={user.code}
-                />
+                {user && <QRCode
+                  value={user.code}
+                />}
             </View>
           </View>
         </View>

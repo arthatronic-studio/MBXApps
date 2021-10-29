@@ -110,7 +110,7 @@ const sambatanMenus = [
   {id: 0, name: 'Pulsa', images: iconPulsa, nav: 'PulsaScreen', params: {}},
   {id: 1, name: 'Listrik', images: iconPLN, nav: 'PlnScreen', params: {}},
   {id: 2, name: 'PDAM', images: iconPDAM, nav: 'PdamScreen', params: {}},
-  {id: 3, name: 'Game', images: iconGames, nav: '', params: {}},
+  // {id: 3, name: 'Game', images: iconGames, nav: '', params: {}},
   // {id: 4, name: 'BPJS', images: iconBPJS, nav: '', params: {}},
   // {
   //   id: 5,

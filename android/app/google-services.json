@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "559476656127",
+    "project_id": "komoto-74a11",
+    "storage_bucket": "komoto-74a11.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:559476656127:android:8eef93d1a142bf573e49ca",
+        "android_client_info": {
+          "package_name": "com.komoto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "559476656127-9stht1kcicb1cmpk3v32g0skssto9nvn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVD-1e4HMDvbOa4cPDa-Vicwnx6-nG55I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "559476656127-9stht1kcicb1cmpk3v32g0skssto9nvn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

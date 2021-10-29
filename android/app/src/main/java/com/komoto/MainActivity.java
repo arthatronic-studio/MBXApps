@@ -1,4 +1,4 @@
-package com.ivosight.komoto;
+package com.komoto;
 
 import org.devio.rn.splashscreen.SplashScreen;
 import android.os.Bundle;
