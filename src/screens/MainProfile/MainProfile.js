@@ -256,7 +256,7 @@ const MainProfile = ({navigation, route}) => {
               </TouchableOpacity>
         </Grid>
 
-        <Grid
+        {/* <Grid
           style={{
             backgroundColor: Color.theme,
             borderTopWidth: 0.5,
@@ -282,7 +282,7 @@ const MainProfile = ({navigation, route}) => {
               </Col>
             </Row>
           </TouchableOpacity>
-        </Grid>
+        </Grid> */}
 
         {user && !user.guest && (
           <Grid
