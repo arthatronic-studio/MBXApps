@@ -12,7 +12,7 @@ const staticColors = {
   info: '#0787D7',
   warning: '#F5B72C',
   error: '#D83030',
-  green: '#09990A',
+  green: '#59A12F',
   gray: '#666666',
   red: '#D83030',
   yellow: '#FFD35B',
