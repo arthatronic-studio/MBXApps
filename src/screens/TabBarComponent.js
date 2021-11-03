@@ -27,8 +27,7 @@ const TabBarComponent = (props) => {
         
     const [menus] = useState([
         { id: 'ber', name: 'Beranda', iconName: 'home', iconType: 'Entypo', nav: 'MainHome', },
-        // ganti nav menjadi CreateEmergencyScreen
-        { id: 'eme', name: 'Emergency', iconName: 'vibration', iconType: 'MaterialIcons', nav: 'CreatePanicScreen' },
+        { id: 'eme', name: 'Emergency', iconName: 'vibration', iconType: 'MaterialIcons', nav: 'CreateEmergencyScreen' },
         { id: 'pro', name: 'Profil', iconName: 'person', iconType: 'Ionicons', nav: 'MainProfile' },
     ]);
 
@@ -105,7 +104,13 @@ const TabBarComponent = (props) => {
                             {route.id=='eme' && 
                             <TouchableDebounce 
                             onPress={() => {
-                            props.navigation.navigate(route.nav, { routeIndex });
+                            props.navigation.navigate(route.nav, { 
+                                routeIndex, 
+                                title: 'Emergency Area',
+                                productType: 'TRIBES',
+                                productCategory: 'SCENE',
+                                productSubCategory: 'SURPRISE', 
+                            });
                             }}
                             style={{
                                 top: -25,
