@@ -4,7 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 // uncanny
 import MainPage from '@src/navigators/BottomTabsNavigator';
 import KnowMeScreen from '@src/screens/KnowMeScreen';
-import CreatePanicScreen from '@src/screens/CreatePanicScreen';
+import CreateEmergencyScreen from '@src/screens/CreateEmergencyScreen';
 
 // user
 import LoginScreen from '@src/screens/User/LoginScreen';
@@ -78,7 +78,7 @@ function MainStackNavigator() {
             {/* uncanny */}
             <Screen name='MainPage' component={MainPage} />
             <Screen name="KnowMeScreen" component={KnowMeScreen} />
-            <Screen name='CreatePanicScreen' component={CreatePanicScreen} />
+            <Screen name='CreateEmergencyScreen' component={CreateEmergencyScreen} />
             {/* user */}
             <Screen name='LoginScreen' component={LoginScreen} />
             <Screen name='RegisterScreen' component={RegisterScreen} />

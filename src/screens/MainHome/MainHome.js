@@ -144,7 +144,7 @@ const MainHome = ({navigation, route}) => {
   const [listJalanJalan, setListJalanJalan] = useState([]);
   const [listBelajar, setListBelajar] = useState([]);
   const [listKerja, setListKerja] = useState([]);
-  const [listPanicButton, setListPanicButton] = useState([]);
+  const [listEmergencyArea, setListEmergencyArea] = useState([]);
 
   const user = useSelector((state) => state['user.auth'].login.user);
   const dispatch = useDispatch();
@@ -194,7 +194,7 @@ const MainHome = ({navigation, route}) => {
       await getMaudiProduct('TRIBES', '', 'TRIBES_KERJA'),
     ]);
 
-    setListPanicButton(result[0]);
+    setListEmergencyArea(result[0]);
     setListTampil(result[1]);
     setListJalanJalan(result[2]);
     setListBelajar(result[3]);
@@ -436,8 +436,8 @@ const MainHome = ({navigation, route}) => {
                     marginBottom: 4,
                   }}
                   onPress={() =>
-                    navigation.navigate('CreatePanicScreen', {
-                      title: 'Panic Button',
+                    navigation.navigate('CreateEmergencyScreen', {
+                      title: 'Emergency Area',
                       productType: 'TRIBES',
                       productCategory: 'SCENE',
                       productSubCategory: 'SURPRISE',
@@ -452,7 +452,7 @@ const MainHome = ({navigation, route}) => {
                 </TouchableOpacity>
                 <View style={{width: '100%', alignItems: 'center'}}>
                   <Text size={9} type="medium" color={Color.text}>
-                    Panic!
+                    Emergency!
                   </Text>
                 </View>
               </View>
@@ -536,10 +536,10 @@ const MainHome = ({navigation, route}) => {
             paddingHorizontal: 16,
             marginTop: 30,
           }}>
-          <Text type="bold">Panic Button</Text>
+          <Text type="bold">Emergency Area</Text>
           <Text
             onPress={() =>
-              navigation.navigate('NewsScreen', {title: 'Panic Button'})
+              navigation.navigate('NewsScreen', {title: 'Emergency Area'})
             }
             size={12}
             color={Color.primary}>
@@ -548,7 +548,7 @@ const MainHome = ({navigation, route}) => {
           </Text>
         </View>
         <ListNews
-          data={listPanicButton}
+          data={listEmergencyArea}
           horizontal
           onPress={(item) => {
             navigation.navigate('NewsDetail', {item});

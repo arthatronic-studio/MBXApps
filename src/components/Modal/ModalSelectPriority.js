@@ -13,16 +13,17 @@ import { useCombinedRefs } from '@src/hooks';
 const { width } = Dimensions.get('window');
 
 const defaultProps = {
-    selected: { id: 2, value: 'PRIVATE', iconName: 'lock-closed' },
+    selected: { id: 3, value: 'HIGH' },
     onPress: () => {},
 };
 
 const data = [
-    { id: 1, value: 'PUBLISH', iconName: 'globe' },
-    { id: 2, value: 'PRIVATE', iconName: 'lock-closed' },
+    { id: 1, value: 'LOW' },
+    { id: 2, value: 'MEDIUM' },
+    { id: 3, value: 'HIGH' },
 ];
 
-const ModalSelectStatus = forwardRef((props, ref) => {
+const ModalSelectPriority = forwardRef((props, ref) => {
   const { selected, onPress } = props;
 
   const modalizeRef = useRef(null);
@@ -45,7 +46,7 @@ const ModalSelectStatus = forwardRef((props, ref) => {
             style={{flexDirection: 'row', paddingVertical: 8}}
         >
             <Text size={12} color={selected.id === item.id ? Color.primary : Color.text}>
-                <Ionicons name={item.iconName} size={12} />  {item.value}
+                {item.value}
             </Text>
         </TouchableOpacity>
     )
@@ -66,6 +67,6 @@ const ModalSelectStatus = forwardRef((props, ref) => {
   );
 });
 
-ModalSelectStatus.defaultProps = defaultProps;
+ModalSelectPriority.defaultProps = defaultProps;
 
-export default ModalSelectStatus;
+export default ModalSelectPriority;
