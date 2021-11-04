@@ -7,7 +7,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useIsFocused } from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { launchImageLibrary } from 'react-native-image-picker';
-import DatePicker from 'react-native-date-picker'
+import DatePicker from 'react-native-date-picker';
 
 import {
   // Button,

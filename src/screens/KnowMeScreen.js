@@ -97,17 +97,17 @@ const KnowMeScreen = ({ navigation, route }) => {
         dispatch({ type: 'USER.LOGOUT' });
       }
       else if (user) {
-        redirectToMainPage();
+        redirectTo('MainPage');
       }
     }
   }, [user, error, isFocused]);
 
-  const redirectToMainPage = () => {
+  const redirectTo = (nav) => {
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
         routes: [
-          { name: 'MainPage' }
+          { name: nav }
         ],
       })
     );
@@ -137,7 +137,8 @@ const KnowMeScreen = ({ navigation, route }) => {
           type='bottomSingleButton'
           buttonBorderTopWidth={0}
           onPress={() => {
-            dispatch(guestLogin());
+            // dispatch(guestLogin());
+            redirectTo('LoginScreen');
           }}
           style={{backgroundColor: 'transparent'}}
         />
@@ -185,8 +186,8 @@ const KnowMeScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: Color.theme}}>
       <HeaderBig
-        titleRight='Masuk'
-        onPressRightButton={() => navigation.navigate('LoginScreen')}
+        // titleRight='Masuk'
+        // onPressRightButton={() => navigation.navigate('LoginScreen')}
         style={{backgroundColor: 'transparent', paddingTop: 16}}
       />
 
