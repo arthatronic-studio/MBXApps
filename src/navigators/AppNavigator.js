@@ -4,7 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 // uncanny
 import MainPage from '@src/navigators/BottomTabsNavigator';
 import KnowMeScreen from '@src/screens/KnowMeScreen';
-import CreatePanicScreen from '@src/screens/CreatePanicScreen';
+import CreateEmergencyScreen from '@src/screens/CreateEmergencyScreen';
 
 // user
 import LoginScreen from '@src/screens/User/LoginScreen';
@@ -30,7 +30,7 @@ import DetailForumScreen from '@src/screens/MainForum/DetailForumScreen';
 import ChangeProfile from '@src/screens/MainProfile/ChangeProfile';
 import SettingScreen from '@src/screens/MainProfile/SettingScreen';
 import ShowAllFromProfile from '@src/screens/MainProfile/ShowAllFromProfile';
-import RegisterKomunitas from '@src/screens/MainProfile/RegisterKomunitas/Register'
+import JoinKomunitas from '@src/screens/MainProfile/JoinKomunitas/Join'
 import ReferralCodeScreen from '@src/screens/MainProfile/ReferralCodeScreen';
 
 // News
@@ -78,7 +78,7 @@ function MainStackNavigator() {
             {/* uncanny */}
             <Screen name='MainPage' component={MainPage} />
             <Screen name="KnowMeScreen" component={KnowMeScreen} />
-            <Screen name='CreatePanicScreen' component={CreatePanicScreen} />
+            <Screen name='CreateEmergencyScreen' component={CreateEmergencyScreen} />
             {/* user */}
             <Screen name='LoginScreen' component={LoginScreen} />
             <Screen name='RegisterScreen' component={RegisterScreen} />
@@ -112,7 +112,7 @@ function MainStackNavigator() {
             <Screen name='ChangeProfile' component={ChangeProfile} />
             <Screen name='ShowAllFromProfile' component={ShowAllFromProfile} />
             <Screen name='SettingScreen' component={SettingScreen} />
-            <Screen name='RegisterKomunitas' component={RegisterKomunitas} />
+            <Screen name='JoinKomunitas' component={JoinKomunitas} />
             <Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />
             {/* payment */}
             <Screen name='PaymentScreen' component={PaymentScreen} />

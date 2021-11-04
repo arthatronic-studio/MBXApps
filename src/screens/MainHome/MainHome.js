@@ -46,7 +46,7 @@ const ContentView = Styled(View)`
 
 const BalanceView = Styled(View)`
   width: 100%;
-  borderRadius: 4px;
+  borderRadius: 8px;
   flexDirection: row;
   justifyContent: space-between;
   padding: 18px 16px 16px;
@@ -54,7 +54,7 @@ const BalanceView = Styled(View)`
 
 const SambatanMenuView = Styled(View)`
   width: 100%;
-  borderRadius: 4px;
+  borderRadius: 8px;
   marginTop: 16px;
   paddingTop: 30px;
   paddingHorizontal: 8px;
@@ -100,6 +100,18 @@ const ComingSoonView = Styled(View)`
 `;
 
 const sambatanMenus = [
+  
+  {id: 0, name: 'Pulsa', images: iconPulsa, nav: 'PulsaScreen', params: {}},
+  {id: 1, name: 'Listrik', images: iconPLN, nav: 'PlnScreen', params: {}},
+  {id: 2, name: 'Game', images: iconGames, nav: '', params: {}},
+  {id: 3, name: 'PDAM', images: iconPDAM, nav: 'PdamScreen', params: {}},
+  {id: 4, name: 'BPJS', images: iconBPJS, nav: '', params: {}},
+  {
+    id: 5, 
+    name: 'Internet', 
+    images: iconInternet, 
+    nav: '', 
+    params: {title: 'Iuran Non-wajib', type: 'ACTIVE', productType: 'SAMBATAN_O',}},
   {
     id: 6,
     name: 'Iuran',
@@ -107,33 +119,13 @@ const sambatanMenus = [
     nav: 'OrderListPerProduct',
     params: {title: 'Iuran', type: 'ACTIVE', productType: 'ALL_SAMBATAN'},
   },
-  {id: 0, name: 'Pulsa', images: iconPulsa, nav: 'PulsaScreen', params: {}},
-  {id: 1, name: 'Listrik', images: iconPLN, nav: 'PlnScreen', params: {}},
-  {id: 2, name: 'PDAM', images: iconPDAM, nav: 'PdamScreen', params: {}},
-  // {id: 3, name: 'Game', images: iconGames, nav: '', params: {}},
-  // {id: 4, name: 'BPJS', images: iconBPJS, nav: '', params: {}},
-  // {
-  //   id: 5,
-  //   name: 'Internet',
-  //   images: iconInternet,
-  //   nav: '',
-  //   params: {
-  //     title: 'Iuran Non-wajib',
-  //     type: 'ACTIVE',
-  //     productType: 'SAMBATAN_O',
-  //   },
-  // },
-  // {
-  //   id: 7,
-  //   name: 'Semua',
-  //   images: iconSemua,
-  //   nav: '',
-  //   params: {
-  //     title: 'Iuran Non-wajib',
-  //     type: 'ACTIVE',
-  //     productType: 'SAMBATAN_O',
-  //   },
-  // },
+  {
+    id: 7, 
+    name: 'Semua', 
+    images: iconSemua, 
+    nav: '', 
+    params: {title: 'Iuran Non-wajib', type: 'ACTIVE', productType: 'SAMBATAN_O',}},
+
 ];
 
 const MainHome = ({navigation, route}) => {
@@ -144,7 +136,7 @@ const MainHome = ({navigation, route}) => {
   const [listJalanJalan, setListJalanJalan] = useState([]);
   const [listBelajar, setListBelajar] = useState([]);
   const [listKerja, setListKerja] = useState([]);
-  const [listPanicButton, setListPanicButton] = useState([]);
+  const [listEmergencyArea, setListEmergencyArea] = useState([]);
 
   const user = useSelector((state) => state['user.auth'].login.user);
   const dispatch = useDispatch();
@@ -194,7 +186,7 @@ const MainHome = ({navigation, route}) => {
       await getMaudiProduct('TRIBES', '', 'TRIBES_KERJA'),
     ]);
 
-    setListPanicButton(result[0]);
+    setListEmergencyArea(result[0]);
     setListTampil(result[1]);
     setListJalanJalan(result[2]);
     setListBelajar(result[3]);
@@ -361,28 +353,18 @@ const MainHome = ({navigation, route}) => {
           <BalanceView
             style={{...shadowStyle, backgroundColor: Color.textInput}}>
             <View style={{justifyContent: 'center', alignItems: 'flex-start'}}>
-              <Text size={10}>Saldo</Text>
+              <Text size={10}>Saldoku</Text>
               <Text size={18} type="semibold" style={{marginTop: 2}}>
                 {FormatMoney.getFormattedMoney(vestaAmount)}
               </Text>
             </View>
+
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'center',
                 alignItems: 'flex-end',
               }}>
-              {/* <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                <TouchableOpacity
-                  style={{aspectRatio: 1, height: 30, borderRadius: 4, backgroundColor: Color.primary, alignItems: 'center', justifyContent: 'center', marginBottom: 4}}
-                  onPress={() => {}}
-                >
-                    <Feather name='upload' color={Color.textInput} size={22} />
-                </TouchableOpacity>
-                <View style={{width: '100%', alignItems: 'center'}}>
-                  <Text size={9} type='medium' color={Color.text}>Tarik</Text>
-                </View>
-              </View> */}
 
               <View
                 style={{
@@ -395,7 +377,7 @@ const MainHome = ({navigation, route}) => {
                     aspectRatio: 1,
                     height: 30,
                     borderRadius: 4,
-                    backgroundColor: Color.primary,
+                    backgroundColor: Color.green,
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginBottom: 4,
@@ -414,8 +396,35 @@ const MainHome = ({navigation, route}) => {
                 </TouchableOpacity>
                 <View style={{width: '100%', alignItems: 'center'}}>
                   <Text size={9} type="medium" color={Color.text}>
-                    Saldo
+                    Top Up
                   </Text>
+                </View>
+              </View>
+
+              <View 
+                style={{
+                  justifyContent: 'center', 
+                  alignItems: 'center', 
+                  marginLeft: 16
+                }}>
+                <TouchableOpacity
+                  style={{
+                    aspectRatio: 1, 
+                    height: 30, 
+                    borderRadius: 4, 
+                    backgroundColor: Color.green, 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    marginBottom: 4
+                  }}
+                  onPress={() => {}}
+                >
+                    <Feather name='upload' color={Color.textInput} size={22} />
+                </TouchableOpacity>
+                <View style={{width: '100%', alignItems: 'center'}}>
+                  <Text size={9} type='medium' color={Color.text}>
+                    Tarik
+                    </Text>
                 </View>
               </View>
 
@@ -430,21 +439,15 @@ const MainHome = ({navigation, route}) => {
                     aspectRatio: 1,
                     height: 30,
                     borderRadius: 4,
-                    backgroundColor: Color.primary,
+                    backgroundColor: Color.gray,
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginBottom: 4,
                   }}
-                  onPress={() =>
-                    navigation.navigate('CreatePanicScreen', {
-                      title: 'Panic Button',
-                      productType: 'TRIBES',
-                      productCategory: 'SCENE',
-                      productSubCategory: 'SURPRISE',
-                    })
-                  }>
+                  onPress={() => {}}
+                  >
                   <Ionicons
-                    name="information"
+                    name="ellipsis-vertical-outline"
                     color={Color.textInput}
                     size={22}
                     style={{marginLeft: 2, marginTop: 2}}
@@ -452,7 +455,7 @@ const MainHome = ({navigation, route}) => {
                 </TouchableOpacity>
                 <View style={{width: '100%', alignItems: 'center'}}>
                   <Text size={9} type="medium" color={Color.text}>
-                    Panic!
+                    Lainnya
                   </Text>
                 </View>
               </View>
@@ -503,7 +506,7 @@ const MainHome = ({navigation, route}) => {
           {/* <Text type='bold'>Acara Terbaru</Text> */}
           {/* {showAll && <Text onPress={() => onPressShowAll()} size={12} color={Color.primary}>Lihat Semua <Ionicons name='arrow-forward' size={12} color={Color.primary} /></Text>} */}
         </View>
-        <CarouselView
+        {/* <CarouselView
           delay={5000}
           showIndicator
           style={{width, aspectRatio: 3 / 1}}>
@@ -525,7 +528,7 @@ const MainHome = ({navigation, route}) => {
               />
             </TouchableOpacity>
           ))}
-        </CarouselView>
+        </CarouselView> */}
 
         <View
           style={{
@@ -536,10 +539,10 @@ const MainHome = ({navigation, route}) => {
             paddingHorizontal: 16,
             marginTop: 30,
           }}>
-          <Text type="bold">Panic Button</Text>
+          <Text type="bold">Emergency Area</Text>
           <Text
             onPress={() =>
-              navigation.navigate('NewsScreen', {title: 'Panic Button'})
+              navigation.navigate('NewsScreen', {title: 'Emergency Area'})
             }
             size={12}
             color={Color.primary}>
@@ -548,7 +551,7 @@ const MainHome = ({navigation, route}) => {
           </Text>
         </View>
         <ListNews
-          data={listPanicButton}
+          data={listEmergencyArea}
           horizontal
           onPress={(item) => {
             navigation.navigate('NewsDetail', {item});
