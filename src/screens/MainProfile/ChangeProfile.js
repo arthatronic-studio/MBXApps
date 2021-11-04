@@ -319,7 +319,7 @@ const [open, setOpen] = useState(false)
           </LabelInput>
           <EmailRoundedView>
             <CustomTextInput
-              placeholder=' Masukan nomor punggung'
+              placeholder=' Masukan nomor punggung '
               keyboardType='number-pad'
               placeholderTextColor={Color.gray}
               underlineColorAndroid='transparent'
