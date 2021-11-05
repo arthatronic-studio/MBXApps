@@ -125,7 +125,7 @@ const Join = () => {
                         </CustomTouch>
                     </View>
 
-                    <View style={{paddingHorizontal: 16, paddingTop: 28}}>
+                     <View style={{paddingHorizontal: 16, paddingTop: 28}}>
                         <View style={{marginTop: 6, paddingHorizontal: 12, borderWidth: 1, borderRadius: 4, borderColor: Color.border}}>
                             <LabelInput>
                                 <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Tipe Mobil</Text>
