@@ -20,7 +20,6 @@ import ListNews from 'src/components/List/ListNews';
 import ListPlace from 'src/components/List/ListPlace';
 import ListWorkshop from 'src/components/List/ListWorkshop';
 import ListJob from 'src/components/List/ListJob';
-import CarouselView from 'src/components/CarouselView';
 import {shadowStyle} from '@src/styles';
 import {MainView} from '@src/styled';
 
@@ -506,29 +505,6 @@ const MainHome = ({navigation, route}) => {
           {/* <Text type='bold'>Acara Terbaru</Text> */}
           {/* {showAll && <Text onPress={() => onPressShowAll()} size={12} color={Color.primary}>Lihat Semua <Ionicons name='arrow-forward' size={12} color={Color.primary} /></Text>} */}
         </View>
-        {/* <CarouselView
-          delay={5000}
-          showIndicator
-          style={{width, aspectRatio: 3 / 1}}>
-          {listTampil.map((e, idx) => (
-            <TouchableOpacity
-              key={idx}
-              onPress={() => {}}
-              style={{width: width - 32, height: '100%'}}>
-              <Image
-                source={{uri: e.image}}
-                style={{
-                  height: '100%',
-                  width: '100%',
-                  resizeMode: 'cover',
-                  borderRadius: 8,
-                  backgroundColor: Color.borderSoft,
-                }}
-                resizeMode="cover"
-              />
-            </TouchableOpacity>
-          ))}
-        </CarouselView> */}
 
         <View
           style={{
