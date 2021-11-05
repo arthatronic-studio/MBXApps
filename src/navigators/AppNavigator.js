@@ -30,8 +30,11 @@ import DetailForumScreen from '@src/screens/MainForum/DetailForumScreen';
 import ChangeProfile from '@src/screens/MainProfile/ChangeProfile';
 import SettingScreen from '@src/screens/MainProfile/SettingScreen';
 import ShowAllFromProfile from '@src/screens/MainProfile/ShowAllFromProfile';
-import RegisterKomunitas from '@src/screens/MainProfile/RegisterKomunitas/Register'
+import RegisterKomunitas from '@src/screens/MainProfile/RegisterKomunitas/Register';
 import ReferralCodeScreen from '@src/screens/MainProfile/ReferralCodeScreen';
+import CommunityAdmin from '@src/screens/MainProfile/CommunityAdmin/CommunityAdmin';
+import NumbersInput from 'src/screens/MainProfile/CommunityAdmin/NumbersInput';
+import ApproveMember from 'src/screens/MainProfile/CommunityAdmin/ApproveMember';
 
 // News
 import NewsScreen from 'src/screens/News/Index';
@@ -67,67 +70,69 @@ import OrderListPerProduct from '@src/screens/MyBooking/OrderListPerProduct';
 const {Navigator, Screen} = createStackNavigator();
 
 function MainStackNavigator() {
-    return (
-        <Navigator
-            initialRouteName='KnowMeScreen'
-            screenOptions={{
-                gestureEnabled: false,
-                headerShown: false,
-            }}
-        >
-            {/* uncanny */}
-            <Screen name='MainPage' component={MainPage} />
-            <Screen name="KnowMeScreen" component={KnowMeScreen} />
-            <Screen name='CreatePanicScreen' component={CreatePanicScreen} />
-            {/* user */}
-            <Screen name='LoginScreen' component={LoginScreen} />
-            <Screen name='RegisterScreen' component={RegisterScreen} />
-            <Screen name='ForgotPasswordScreen' component={ForgotPasswordScreen} />
-            <Screen name='UserChangePassword' component={UserChangePassword} />
-            {/* topup */}
-            <Screen name='TopUpScreen' component={TopUpScreen} />
-            {/* News */}
-            <Screen name='NewsScreen' component={NewsScreen} />
-            <Screen name='NewsDetail' component={NewsDetail} />
-            {/* Place */}
-            <Screen name='PlaceScreen' component={PlaceScreen} />
-            <Screen name='PlaceDetail' component={PlaceDetail} />
-            {/* Workshop */}
-            <Screen name='WorkshopScreen' component={WorkshopScreen} />
-            <Screen name='WorkshopDetail' component={WorkshopDetail} />
-            {/* Job */}
-            <Screen name='JobScreen' component={JobScreen} />
-            <Screen name='JobDetail' component={JobDetail} />
+  return (
+    <Navigator
+      initialRouteName="KnowMeScreen"
+      screenOptions={{
+        gestureEnabled: false,
+        headerShown: false,
+      }}>
+      {/* uncanny */}
+      <Screen name="MainPage" component={MainPage} />
+      <Screen name="KnowMeScreen" component={KnowMeScreen} />
+      <Screen name="CreatePanicScreen" component={CreatePanicScreen} />
+      {/* user */}
+      <Screen name="LoginScreen" component={LoginScreen} />
+      <Screen name="RegisterScreen" component={RegisterScreen} />
+      <Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} />
+      <Screen name="UserChangePassword" component={UserChangePassword} />
+      {/* topup */}
+      <Screen name="TopUpScreen" component={TopUpScreen} />
+      {/* News */}
+      <Screen name="NewsScreen" component={NewsScreen} />
+      <Screen name="NewsDetail" component={NewsDetail} />
+      {/* Place */}
+      <Screen name="PlaceScreen" component={PlaceScreen} />
+      <Screen name="PlaceDetail" component={PlaceDetail} />
+      {/* Workshop */}
+      <Screen name="WorkshopScreen" component={WorkshopScreen} />
+      <Screen name="WorkshopDetail" component={WorkshopDetail} />
+      {/* Job */}
+      <Screen name="JobScreen" component={JobScreen} />
+      <Screen name="JobDetail" component={JobDetail} />
 
-            {/* screen */}
-            <Screen name='CommentListScreen' component={CommentListScreen} />
-            <Screen name='DetailEbookScreen' component={DetailEbookScreen} />
-            <Screen name='MainSearch' component={MainSearch} />
-            {/* forum */}
-            <Screen name='ShowAllFromForum' component={ShowAllFromForum} />
-            <Screen name='ForumSegmentScreen' component={ForumSegmentScreen} />
-            <Screen name='CreateThreadScreen' component={CreateThreadScreen} />
-            <Screen name='DetailForumScreen' component={DetailForumScreen} />
-            {/* profile */}
-            <Screen name='ChangeProfile' component={ChangeProfile} />
-            <Screen name='ShowAllFromProfile' component={ShowAllFromProfile} />
-            <Screen name='SettingScreen' component={SettingScreen} />
-            <Screen name='RegisterKomunitas' component={RegisterKomunitas} />
-            <Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />
-            {/* payment */}
-            <Screen name='PaymentScreen' component={PaymentScreen} />
-            <Screen name='PaymentDetail' component={PaymentDetail} />
-            <Screen name='PaymentInstruction' component={PaymentInstruction} />
-            <Screen name='PaymentSucceed' component={PaymentSucceed} />
-            {/* PPOB */}
-            <Screen name='PulsaScreen' component={PulsaScreen} />
-            <Screen name='PlnScreen' component={PlnScreen} />
-            <Screen name='PdamScreen' component={PdamScreen} />
-            {/* order */}
-            {/* <Screen name='OrderListScreen' component={OrderListScreen} options={{ headerShown: true, headerTitle: 'Riwayat Pesanan' }} /> */}
-            <Screen name='OrderListPerProduct' component={OrderListPerProduct} />
-        </Navigator>
-    );
+      {/* screen */}
+      <Screen name="CommentListScreen" component={CommentListScreen} />
+      <Screen name="DetailEbookScreen" component={DetailEbookScreen} />
+      <Screen name="MainSearch" component={MainSearch} />
+      {/* forum */}
+      <Screen name="ShowAllFromForum" component={ShowAllFromForum} />
+      <Screen name="ForumSegmentScreen" component={ForumSegmentScreen} />
+      <Screen name="CreateThreadScreen" component={CreateThreadScreen} />
+      <Screen name="DetailForumScreen" component={DetailForumScreen} />
+      {/* profile */}
+      <Screen name="ChangeProfile" component={ChangeProfile} />
+      <Screen name="ShowAllFromProfile" component={ShowAllFromProfile} />
+      <Screen name="SettingScreen" component={SettingScreen} />
+      <Screen name="RegisterKomunitas" component={RegisterKomunitas} />
+      <Screen name="CommunityAdmin" component={CommunityAdmin} />
+      <Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />
+      <Screen name="NumbersInput" component={NumbersInput} />
+      <Screen name="ApproveMember" component={ApproveMember} />
+      {/* payment */}
+      <Screen name="PaymentScreen" component={PaymentScreen} />
+      <Screen name="PaymentDetail" component={PaymentDetail} />
+      <Screen name="PaymentInstruction" component={PaymentInstruction} />
+      <Screen name="PaymentSucceed" component={PaymentSucceed} />
+      {/* PPOB */}
+      <Screen name="PulsaScreen" component={PulsaScreen} />
+      <Screen name="PlnScreen" component={PlnScreen} />
+      <Screen name="PdamScreen" component={PdamScreen} />
+      {/* order */}
+      {/* <Screen name='OrderListScreen' component={OrderListScreen} options={{ headerShown: true, headerTitle: 'Riwayat Pesanan' }} /> */}
+      <Screen name="OrderListPerProduct" component={OrderListPerProduct} />
+    </Navigator>
+  );
 }
 
 export default MainStackNavigator;
