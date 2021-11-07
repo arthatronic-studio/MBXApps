@@ -20,9 +20,11 @@ import ListNews from 'src/components/List/ListNews';
 import ListPlace from 'src/components/List/ListPlace';
 import ListWorkshop from 'src/components/List/ListWorkshop';
 import ListJob from 'src/components/List/ListJob';
+import CardEmergency from 'src/components/List/CardEmergency';
 import CarouselView from 'src/components/CarouselView';
 import {shadowStyle} from '@src/styles';
 import {MainView} from '@src/styled';
+import { Divider } from '@src/styled';
 
 import Client from '@src/lib/apollo';
 import {queryMaudiProduct} from '@src/lib/query';
@@ -39,6 +41,7 @@ import {
   iconSemua,
 } from '@assets/images/home';
 
+
 const ContentView = Styled(View)`
   width: 100%;
   paddingHorizontal: 16px;
@@ -48,6 +51,13 @@ const BalanceView = Styled(View)`
   width: 100%;
   borderRadius: 8px;
   flexDirection: row;
+  justifyContent: space-between;
+  padding: 18px 16px 16px;
+`;
+
+const VerticalView = Styled(View)`
+  width: 100%;
+  borderRadius: 8px;
   justifyContent: space-between;
   padding: 18px 16px 16px;
 `;
@@ -187,6 +197,7 @@ const MainHome = ({navigation, route}) => {
     ]);
 
     setListEmergencyArea(result[0]);
+    console.log(result[0]);
     setListTampil(result[1]);
     setListJalanJalan(result[2]);
     setListBelajar(result[3]);
@@ -194,6 +205,7 @@ const MainHome = ({navigation, route}) => {
 
     // hideLoading();
   };
+  
 
   const getMaudiProduct = async (
     productType,
@@ -530,34 +542,53 @@ const MainHome = ({navigation, route}) => {
           ))}
         </CarouselView> */}
 
-        <View
-          style={{
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 16,
-            marginTop: 30,
-          }}>
-          <Text type="bold">Emergency Area</Text>
-          <Text
-            onPress={() =>
-              navigation.navigate('NewsScreen', {title: 'Emergency Area'})
-            }
-            size={12}
-            color={Color.primary}>
-            Lihat Semua{' '}
-            <Ionicons name="arrow-forward" size={12} color={Color.primary} />
-          </Text>
-        </View>
-        <ListNews
+        
+        
+        <ContentView style={{ paddingVertical: 8 }}>
+          <VerticalView style={{...shadowStyle, backgroundColor: Color.textInput, paddingTop:16 }}>
+            <View
+              style={{
+              width: '100%',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              paddingHorizontal: 10,
+              marginBottom: 16,
+            }}>
+              <Text type="bold">Emergency Area</Text>
+              <Text
+                onPress={() =>
+                  navigation.navigate('NewsScreen', {title: 'Emergency Area'})
+                }
+                size={12}
+                color={Color.primary}>
+                Lihat Semua{' '}
+                <Ionicons name="arrow-forward" size={12} color={Color.primary} />
+              </Text>
+            </View>
+            {listEmergencyArea.slice(0,6).map((Emergency, EmergencyIndex) => {
+              return(
+                <CardEmergency
+                key={EmergencyIndex}
+                item={Emergency}
+                index={EmergencyIndex}
+                onPress={(item) => {
+                  navigation.navigate('NewsDetail', {item});
+                }}
+                style={{paddingLeft: 8}}
+              />
+              )
+            })}
+          </VerticalView>
+        </ContentView>
+        {/* <ListNews
           data={listEmergencyArea}
           horizontal
           onPress={(item) => {
             navigation.navigate('NewsDetail', {item});
           }}
           style={{paddingLeft: 8}}
-        />
+        /> */}
 
         <View
           style={{

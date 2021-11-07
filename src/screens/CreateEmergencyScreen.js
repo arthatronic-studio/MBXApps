@@ -174,6 +174,7 @@ const CreateEmergencyScreen = (props) => {
     return (
         <MainView style={{backgroundColor: Color.theme}}>
             <Header
+                showLeftButton={false}
                 title={`Buat ${params.title}`}
             />
 
