@@ -92,7 +92,7 @@ const CardEmergency = (props) => {
                 style
             ]}
         >
-            <View style={{flexDirection: 'row', height: (index !== 5) ? 169 : 144, width: 323, paddingBottom: 16, borderBottomWidth: (index !== 5) ? 0.5 : 0}}>
+            <TouchableOpacity onPress={() => onPress(item)} style={{flexDirection: 'row', height: (index !== 5) ? 169 : 144, width: 323, paddingBottom: 16, borderBottomWidth: (index !== 5) ? 0.5 : 0}}>
                 <Image source={{uri: item.image}} style={{marginTop:6, width: 73, height: 73, borderRadius: 8, backgroundColor: Color.border}} />
                 <View style={{flexDirection: 'column', height: 144, width: 240, paddingLeft: 10 }}>
                     <Text size={16} type='bold' align='left' numberOfLines={1}>{item.productName}</Text>
@@ -130,7 +130,7 @@ const CardEmergency = (props) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </View>
+            </TouchableOpacity>
         </View>
     )
 }

@@ -20,11 +20,8 @@ import ListNews from 'src/components/List/ListNews';
 import ListPlace from 'src/components/List/ListPlace';
 import ListWorkshop from 'src/components/List/ListWorkshop';
 import ListJob from 'src/components/List/ListJob';
-<<<<<<< HEAD
 import CardEmergency from 'src/components/List/CardEmergency';
 import CarouselView from 'src/components/CarouselView';
-=======
->>>>>>> 2d9ffb51b70a162845c23f440a0c119aee01d8d0
 import {shadowStyle} from '@src/styles';
 import {MainView} from '@src/styled';
 import { Divider } from '@src/styled';
@@ -200,7 +197,6 @@ const MainHome = ({navigation, route}) => {
     ]);
 
     setListEmergencyArea(result[0]);
-    console.log(result[0]);
     setListTampil(result[1]);
     setListJalanJalan(result[2]);
     setListBelajar(result[3]);
@@ -561,14 +557,6 @@ const MainHome = ({navigation, route}) => {
             })}
           </VerticalView>
         </ContentView>
-        {/* <ListNews
-          data={listEmergencyArea}
-          horizontal
-          onPress={(item) => {
-            navigation.navigate('NewsDetail', {item});
-          }}
-          style={{paddingLeft: 8}}
-        /> */}
 
         <View
           style={{
