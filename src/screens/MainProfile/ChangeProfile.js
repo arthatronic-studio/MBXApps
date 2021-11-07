@@ -8,6 +8,7 @@ import { useIsFocused } from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { launchImageLibrary } from 'react-native-image-picker';
 import DatePicker from 'react-native-date-picker';
+import Moment from 'moment';
 
 import {
   // Button,
@@ -38,7 +39,9 @@ const Container = Styled(View)`
   justifyContent: center;
   padding: 30px 16px 0px;
 `;
-
+const CustomTouch = Styled(TouchableOpacity)`
+    backgroundColor: transparent;
+`;
 const EmailRoundedView = Styled(View)`
   width: 100%;
   height: 50px;
@@ -121,12 +124,15 @@ export default ({ navigation, route }) => {
     idNumber: '',
     email: user ? user.email : '',
     phoneNumber: user ? user.phoneNumber : '',
+    date: user ? user.date : new Date()
+ 
   });
   const [errorData, setErrorData] = useState({
     fullName: null,
     idNumber: null,
     email: null,
     phoneNumber: null,
+    date:null
   });
 
   //Image
@@ -144,6 +150,7 @@ const backToSelectVideo = () => {
 //Tanggal Lahir
 const [date, setDate] = useState(new Date())
 const [open, setOpen] = useState(false)
+
 
   useEffect(() => {
     if (isFocused) {
@@ -179,6 +186,7 @@ const [open, setOpen] = useState(false)
         lastName: lastName.trim(),
         email,
         phoneNumber,
+        date,
       };
 
       dispatch(updateCurrentUserProfile(newUserData));
@@ -207,7 +215,7 @@ const [open, setOpen] = useState(false)
     setErrorData(newErrorState);
     setAllValid(valid);
   }
-
+  
   return (
     <MainView style={{backgroundColor: Color.theme}}>
       <Header
@@ -274,26 +282,66 @@ const [open, setOpen] = useState(false)
           <ErrorView>
             <Text size={12} color={Color.error} type='medium' align='left'>{errorData.fullName}</Text>
           </ErrorView>
-          <LabelInput>
+
+  <LabelInput>
             <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Tanggal Lahir</Text>
           </LabelInput>
           <EmailRoundedView>
+           
+            <CustomTouch onPress={() => setOpen(true)}>
+                  <View style={{marginTop: 6, paddingHorizontal: 12}}>
+                      
+                     
+                      {/* <View style={{height: 34, paddingRight: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                          <Text size={14} style={{marginTop: 2}}>20-08-1001</Text>
+                          <Ionicons name='chevron-down-outline' color={Color.text} />
+                      </View> */}
+                  </View>
+
+                  <EmailRoundedView>
+                          <View style={{height: 34, paddingRight: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
+                          <Text size={14} style={{marginTop: 2}}></Text>
+                         
+                      
+                        <Text>{Moment(userData.date).format('DD-MM-YYYY') ? Moment(userData.date).format('DD-MM-YYYY') : 'Pilih Tanggal '} </Text>
+
+                        
+                          <Ionicons name='chevron-down-outline' color={Color.text} />
+                      </View>
+                  </EmailRoundedView>
+
+              </CustomTouch>
+             
+          </EmailRoundedView>
+              
+                    
+         
+
+          
+         
+
+                      
            <>
-      <Button title="Open" onPress={() => setOpen(true)} />
+      {/* <Button title="Open" onPress={() => setOpen(true)} /> */}
+     
+                      
       <DatePicker
         modal
         open={open}
         date={date}
+        mode ="date"
         onConfirm={(date) => {
-          setOpen(false)
-          setDate(date)
+        setOpen(false)
+        setDate(date);
+        onChangeUserData('date', date)
+        console.log('koko',date)
         }}
         onCancel={() => {
           setOpen(false)
         }}
       />
     </>
-          </EmailRoundedView>
+         
           <LabelInput>
             <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>NIK</Text>
           </LabelInput>
