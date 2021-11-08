@@ -13,17 +13,17 @@ import { useCombinedRefs } from '@src/hooks';
 const { width } = Dimensions.get('window');
 
 const defaultProps = {
-    selected: { id: 1, value: 'Komunitas Baca' },
+    selected: { id: 3, value: 'HIGH' },
     onPress: () => {},
 };
 
 const data = [
-    { id: 1, value: 'Komunitas Baca' },
-    { id: 2, value: 'Komunitas Otomotif' },
-    { id: 3, value: 'Komunitas Renang' },
+    { id: 1, value: 'LOW' },
+    { id: 2, value: 'MEDIUM' },
+    { id: 3, value: 'HIGH' },
 ];
 
-const ModalSelectCommunity = forwardRef((props, ref) => {
+const ModalSelectPriority = forwardRef((props, ref) => {
   const { selected, onPress } = props;
 
   const modalizeRef = useRef(null);
@@ -46,7 +46,7 @@ const ModalSelectCommunity = forwardRef((props, ref) => {
             style={{flexDirection: 'row', paddingVertical: 8}}
         >
             <Text size={12} color={selected.id === item.id ? Color.primary : Color.text}>
-              {item.value}
+                {item.value}
             </Text>
         </TouchableOpacity>
     )
@@ -67,6 +67,6 @@ const ModalSelectCommunity = forwardRef((props, ref) => {
   );
 });
 
-ModalSelectCommunity.defaultProps = defaultProps;
+ModalSelectPriority.defaultProps = defaultProps;
 
-export default ModalSelectCommunity;
+export default ModalSelectPriority;

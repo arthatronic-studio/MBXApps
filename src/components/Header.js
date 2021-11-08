@@ -141,7 +141,7 @@ const Header = (props) => {
           </ColumnView>
 
           <ColumnView size={7.8} style={{alignItems: centerTitle ? 'center' : 'flex-start'}}>
-            {children || <Text size={16} type='bold' align='left' letterSpacing={0.23} color={color || Color.text}>{title}</Text>}
+            {children || <Text size={16} type='bold' align='left' letterSpacing={0.23} color={color || Color.text } style={{ paddingTop: showLeftButton ? 0 : '7%' }}>{title}</Text>}
           </ColumnView>
 
           <ColumnView size={2.2}>

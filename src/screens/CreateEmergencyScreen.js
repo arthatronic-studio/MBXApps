@@ -13,6 +13,7 @@ import {
     useColor
   } from '@src/components';
 import { TouchSelect } from '@src/components/Form';
+import ModalSelectPriority from '@src/components/Modal/ModalSelectPriority';
 import ModalSelectStatus from '@src/components/Modal/ModalSelectStatus';
 import validate from '@src/lib/validate';
 
@@ -53,7 +54,7 @@ const ErrorView = Styled(View)`
   alignItems: flex-start;
 `;
 
-const CreatePanicScreen = (props) => {
+const CreateEmergencyScreen = (props) => {
     const { navigation, route } = props;
     const { params } = route;
 
@@ -64,11 +65,12 @@ const CreatePanicScreen = (props) => {
         code: '',
         name: '',
         image: '',
-        status: 'PUBLISH', // PUBLISH | DRAFT | PRIVATE | REMOVE
+        status: 'PRIVATE', // PUBLISH | DRAFT | PRIVATE | REMOVE
         method: 'INSERT', // UPDATE | DELETE
         type: params.productType,
         category: params.productSubCategory,
         description: '',
+        priority: 'HIGH',
     });
     const [error, setError] = useState({
         name: null,
@@ -77,11 +79,16 @@ const CreatePanicScreen = (props) => {
     });
     const [thumbImage, setThumbImage] = useState('');
     const [mimeImage, setMimeImage] = useState('image/jpeg');
+    const [selectedPriority, setSelectedPriority] = useState({
+        id: 3, value: 'HiGH'
+    });
+
     const [selectedStatus, setSelectedStatus] = useState({
-        id: 1, value: 'PUBLISH', iconName: 'globe'
+        id: 2, value: 'PRIVATE', iconName: 'lock-closed'
     });
 
     // ref
+    const modalSelectPriorityRef = useRef();
     const modalSelectStatusRef = useRef();
 
     // hooks
@@ -167,6 +174,7 @@ const CreatePanicScreen = (props) => {
     return (
         <MainView style={{backgroundColor: Color.theme}}>
             <Header
+                showLeftButton={false}
                 title={`Buat ${params.title}`}
             />
 
@@ -252,12 +260,18 @@ const CreatePanicScreen = (props) => {
                     </ErrorView>
                 </View>
 
-                {/* <TouchSelect
+                <TouchSelect
                     title='Siapa yang dapat melihat ini?'
                     value={userData.status}
                     iconName={selectedStatus.iconName}
                     onPress={() => modalSelectStatusRef.current.open()}
-                /> */}
+                />
+
+                <TouchSelect
+                    title='Priority'
+                    value={userData.priority}
+                    onPress={() => modalSelectPriorityRef.current.open()}
+                />
             </ScrollView>
 
             <Submit
@@ -283,8 +297,18 @@ const CreatePanicScreen = (props) => {
                     modalSelectStatusRef.current.close();
                 }}
             />
+
+            <ModalSelectPriority
+                ref={modalSelectPriorityRef}
+                selected={selectedPriority}
+                onPress={(e) => {
+                    onChangeUserData('status', e.value);
+                    setSelectedPriority(e);
+                    modalSelectPriorityRef.current.close();
+                }}
+            />
         </MainView>
     )
 }
 
-export default CreatePanicScreen;
+export default CreateEmergencyScreen;

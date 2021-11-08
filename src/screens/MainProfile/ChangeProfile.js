@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, TouchableOpacity as NativeTouchable, ScrollView, SafeAreaView } from 'react-native';
+import React, { useState, useEffect,useRef } from 'react';
+import { View, TextInput,Platform, TouchableOpacity as NativeTouchable, ScrollView, SafeAreaView,Image,Keyboard, BackHandler, useWindowDimensions } from 'react-native';
 import Styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useIsFocused } from '@react-navigation/native';
+import Entypo from 'react-native-vector-icons/Entypo';
+import { launchImageLibrary } from 'react-native-image-picker';
+import DatePicker from 'react-native-date-picker';
+import Moment from 'moment';
 
 import {
   // Button,
@@ -35,7 +39,9 @@ const Container = Styled(View)`
   justifyContent: center;
   padding: 30px 16px 0px;
 `;
-
+const CustomTouch = Styled(TouchableOpacity)`
+    backgroundColor: transparent;
+`;
 const EmailRoundedView = Styled(View)`
   width: 100%;
   height: 50px;
@@ -93,6 +99,8 @@ export default ({ navigation, route }) => {
   // dispatch
   const dispatch = useDispatch();
 
+  //
+   const { height } = useWindowDimensions();
   // selector
   const user = useSelector(state => state['user.auth'].login.user);
   const {
@@ -110,19 +118,39 @@ export default ({ navigation, route }) => {
   const [popupProps, showPopup] = usePopup();
 
   // state
-  const [allValid, setAllValid] = useState(false);
+  const [allValid, setAllValid] = useState(false);``
   const [userData, setUserData] = useState({
     fullName: user ? user.firstName + ' ' + user.lastName : '',
     idNumber: '',
     email: user ? user.email : '',
     phoneNumber: user ? user.phoneNumber : '',
+    date: user ? user.date : new Date()
+ 
   });
   const [errorData, setErrorData] = useState({
     fullName: null,
     idNumber: null,
     email: null,
     phoneNumber: null,
+    date:null
   });
+
+  //Image
+  const [thumbImage, setThumbImage] = useState('');
+  const [mimeImage, setMimeImage] = useState('image/jpeg');
+  const handleBackPress = () => {
+    backToSelectVideo();
+    return true;
+}
+
+const backToSelectVideo = () => {
+    setThumbImage('');
+    setMimeImage('image/jpeg');
+}
+//Tanggal Lahir
+const [date, setDate] = useState(new Date())
+const [open, setOpen] = useState(false)
+
 
   useEffect(() => {
     if (isFocused) {
@@ -158,6 +186,7 @@ export default ({ navigation, route }) => {
         lastName: lastName.trim(),
         email,
         phoneNumber,
+        date,
       };
 
       dispatch(updateCurrentUserProfile(newUserData));
@@ -186,7 +215,7 @@ export default ({ navigation, route }) => {
     setErrorData(newErrorState);
     setAllValid(valid);
   }
-
+  
   return (
     <MainView style={{backgroundColor: Color.theme}}>
       <Header
@@ -195,8 +224,44 @@ export default ({ navigation, route }) => {
       />
 
       <ScrollView keyboardShouldPersistTaps='handled' contentContainerStyle={{paddingBottom: 16}}>
+      
 
         <Container>
+        {thumbImage !== '' && <TouchableOpacity
+                    onPress={() => {}}
+                    style={{width: '100%', height: height / 3, borderRadius: 4, alignItems: 'center'}}
+                >
+                    <Image
+                        style={{height: '100%', aspectRatio: 1, borderRadius: 40, alignItems: 'center', justifyContent: 'center'}}
+                        source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
+                    />
+                </TouchableOpacity>}
+       
+                    <LabelInput>
+                       
+                    </LabelInput>
+                    <TouchableOpacity
+                        onPress={() => {
+                            const options = {
+                                mediaType: 'photo',
+                                maxWidth: 320,
+                                maxHeight: 320,
+                                quality: 1,
+                                includeBase64: true,
+                            }
+
+                            launchImageLibrary(options, (callback) => {
+                                setThumbImage(callback.base64);
+                                setMimeImage(callback.type);
+                            })
+                        }}
+                        style={{width: '100%', height: 70, borderRadius: 4, marginTop: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
+                    >
+                        <Entypo name='folder-images' size={22} style={{marginBottom: 4}} />
+                        <Text size={10}>Pilih gambar</Text>
+                    </TouchableOpacity>
+             
+               
           <LabelInput>
             <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Nama Lengkap</Text>
           </LabelInput>
@@ -218,7 +283,65 @@ export default ({ navigation, route }) => {
             <Text size={12} color={Color.error} type='medium' align='left'>{errorData.fullName}</Text>
           </ErrorView>
 
+  <LabelInput>
+            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Tanggal Lahir</Text>
+          </LabelInput>
+          <EmailRoundedView>
+           
+            <CustomTouch onPress={() => setOpen(true)}>
+                  <View style={{marginTop: 6, paddingHorizontal: 12}}>
+                      
+                     
+                      {/* <View style={{height: 34, paddingRight: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                          <Text size={14} style={{marginTop: 2}}>20-08-1001</Text>
+                          <Ionicons name='chevron-down-outline' color={Color.text} />
+                      </View> */}
+                  </View>
 
+                  <EmailRoundedView>
+                          <View style={{height: 34, paddingRight: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
+                          <Text size={14} style={{marginTop: 2}}></Text>
+                         
+                      
+                        <Text>{Moment(userData.date).format('DD-MM-YYYY') ? Moment(userData.date).format('DD-MM-YYYY') : 'Pilih Tanggal '} </Text>
+
+                        
+                          <Ionicons name='chevron-down-outline' color={Color.text} />
+                      </View>
+                  </EmailRoundedView>
+
+              </CustomTouch>
+             
+          </EmailRoundedView>
+              
+                    
+         
+
+          
+         
+
+                      
+           <>
+      {/* <Button title="Open" onPress={() => setOpen(true)} /> */}
+     
+                      
+      <DatePicker
+        modal
+        open={open}
+        date={date}
+        mode ="date"
+        onConfirm={(date) => {
+        setOpen(false)
+        setDate(date);
+        onChangeUserData('date', date)
+        console.log('koko',date)
+        }}
+        onCancel={() => {
+          setOpen(false)
+        }}
+      />
+    </>
+         
           <LabelInput>
             <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>NIK</Text>
           </LabelInput>
@@ -238,6 +361,26 @@ export default ({ navigation, route }) => {
           </EmailRoundedView>
           <ErrorView>
             <Text size={12} color={Color.error} type='medium' align='left'>{errorData.idNumber}</Text>
+          </ErrorView>
+          <LabelInput>
+            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Nomor Punggung</Text>
+          </LabelInput>
+          <EmailRoundedView>
+            <CustomTextInput
+              placeholder=' Masukan nomor punggung '
+              keyboardType='number-pad'
+              placeholderTextColor={Color.gray}
+              underlineColorAndroid='transparent'
+              autoCorrect={false}
+              onChangeText={(text) => onChangeUserData('nomorPunggung', text)}
+              selectionColor={Color.text}
+              value={userData.nomorPunggung}
+              onBlur={() => isValueError('nomorPunggung')}
+              style={{color: Color.text}}
+              />
+          </EmailRoundedView>
+          <ErrorView>
+            <Text size={12} color={Color.error} type='medium' align='left'>{errorData.nomorPunggung}</Text>
           </ErrorView>
 
           <LabelInput>
@@ -259,6 +402,27 @@ export default ({ navigation, route }) => {
           </EmailRoundedView>
           <ErrorView>
             <Text size={12} color={Color.error} type='medium' align='left'>{errorData.email}</Text>
+          </ErrorView>
+
+          <LabelInput>
+            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Alamat</Text>
+          </LabelInput>
+          <EmailRoundedView>
+            <CustomTextInput
+              placeholder='Masukan Alamat'
+              keyboardType='default'
+              placeholderTextColor={Color.gray}
+              underlineColorAndroid='transparent'
+              autoCorrect={false}
+              onChangeText={(text) => onChangeUserData('alamat', text)}
+              selectionColor={Color.text}
+              value={userData.alamat}
+              onBlur={() => isValueError('alamat')}
+              style={{color: Color.text}}
+            />
+          </EmailRoundedView>
+          <ErrorView>
+            <Text size={12} color={Color.error} type='medium' align='left'>{errorData.alamat}</Text>
           </ErrorView>
 
           <LabelInput>

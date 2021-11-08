@@ -11,6 +11,7 @@ import {
     useColor
 } from '@src/components';
 import { shadowStyle } from '@src/styles';
+import TouchableDebounce from 'src/components/Button/TouchableDebounce';
 
 const Scaler = Styled(View)`
     flexDirection: row;
@@ -26,11 +27,10 @@ const TabBarComponent = (props) => {
         
     const [menus] = useState([
         { id: 'ber', name: 'Beranda', iconName: 'home', iconType: 'Entypo', nav: 'MainHome', },
-        { id: 'his', name: 'Riwayat', iconName: 'history', iconType: 'MaterialIcons', nav: 'MainHistory', params: { type: 'HISTORY', productType: 'ALL_SAMBATAN' } },
-        { id: 'jad', name: 'Jadwal', iconName: 'calendar', iconType: 'Ionicons', nav: 'MainSchedule' },
-        { id: 'for', name: 'Forum', iconName: 'people-outline', iconType: 'Ionicons', nav: 'MainForum' },
+        { id: 'eme', name: 'Emergency', iconName: 'vibration', iconType: 'MaterialIcons', nav: 'CreateEmergencyScreen' },
         { id: 'pro', name: 'Profil', iconName: 'person', iconType: 'Ionicons', nav: 'MainProfile' },
     ]);
+
     const [keyboardShow, setKeyboardShow] = useState(false);
 
     const { Color } = useColor();
@@ -56,7 +56,7 @@ const TabBarComponent = (props) => {
     const getIconMenu = (iconType, iconName, isRouteActive) => {
         switch(iconType) {
             case 'MaterialIcons':
-                return <MaterialIcons name={iconName} size={22} color={isRouteActive ? Color.primary : Color.gray} />
+                return <MaterialIcons name={iconName} size={33} color={isRouteActive ? Color.textInput : Color.textInput} />
             case 'AntDesign':
                 return <AntDesign name={iconName} size={20} color={isRouteActive ? Color.primary : Color.gray} />
             case 'Ionicons': 
@@ -69,10 +69,14 @@ const TabBarComponent = (props) => {
     if (keyboardShow) return <View />;
 
     return (
-        <Scaler style={{backgroundColor: Color.textInput, ...shadowStyle}}>
+        <Scaler style={{
+            backgroundColor: Color.textInput,
+            borderTopLeftRadius: 8,
+            borderTopRightRadius: 8,
+            ...shadowStyle,
+        }}>
             {menus.map((route, routeIndex) => {
                 const isRouteActive = routeIndex === activeRouteIndex;
-
                 return (
                     <TouchableNativeFeedback
                         key={routeIndex}
@@ -92,7 +96,41 @@ const TabBarComponent = (props) => {
                                 justifyContent: 'center',
                             }}
                         >
-                            {getIconMenu(route.iconType, route.iconName, isRouteActive)}
+                            
+                            {route.id=='eme' && <TouchableDebounce 
+                                onPress={() => {
+                                    props.navigation.navigate(route.nav, { 
+                                        routeIndex, 
+                                        title: 'Emergency Area',
+                                        productType: 'TRIBES',
+                                        productCategory: 'SCENE',
+                                        productSubCategory: 'SURPRISE', 
+                                    });
+                                }}
+                                style={{
+                                    top: -25,
+                                    position: 'absolute',
+                                    alignSelf: 'center',
+                                    width: 56,
+                                    height: 56,
+                                    borderRadius: 28,
+                                    backgroundColor: '#EE2D32',
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                {getIconMenu(route.iconType, route.iconName, isRouteActive)}
+                            </TouchableDebounce>}
+
+                            {route.id!='eme' ?
+                                getIconMenu(route.iconType, route.iconName, isRouteActive)
+                            : 
+                                <View 
+                                    style={{
+                                        height: 30
+                                    }}> 
+                                </View>}
+
                             <Text
                                 size={10}
                                 type='semibold'
