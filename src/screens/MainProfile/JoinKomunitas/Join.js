@@ -132,7 +132,7 @@ const Join = () => {
                             </LabelInput>
                             <EmailRoundedView>
                                 <CustomTextInput 
-                                    placeholder=''
+                                    placeholder='Sedan'
                                     keyboardType='default'
                                     placeholderTextColor={Color.gray}
                                     underlineColorAndroid='transparent'
@@ -156,7 +156,7 @@ const Join = () => {
                             </LabelInput>
                             <EmailRoundedView>
                                 <CustomTextInput 
-                                    placeholder=''
+                                    placeholder='Merah'
                                     keyboardType='default'
                                     placeholderTextColor={Color.gray}
                                     underlineColorAndroid='transparent'
@@ -177,7 +177,7 @@ const Join = () => {
                             </LabelInput>
                             <EmailRoundedView>
                                 <CustomTextInput 
-                                    placeholder=''
+                                    placeholder='1992'
                                     keyboardType='default'
                                     placeholderTextColor={Color.gray}
                                     underlineColorAndroid='transparent'
@@ -186,6 +186,7 @@ const Join = () => {
                                     selectionColor={Color.text}
                                     value={userData.tahunMobil}
                                     onBlur={() => isValueError('tahunMobil')}
+                                    keyboardType='numeric'
                                 />
                             </EmailRoundedView>
                         </View>
@@ -198,7 +199,7 @@ const Join = () => {
                             </LabelInput>
                             <EmailRoundedView>
                                 <CustomTextInput 
-                                    placeholder=''
+                                    placeholder='B 1234 ABC'
                                     keyboardType='default'
                                     placeholderTextColor={Color.gray}
                                     underlineColorAndroid='transparent'
@@ -219,7 +220,7 @@ const Join = () => {
                             </LabelInput>
                             <EmailRoundedView>
                                 <CustomTextInput
-                                    placeholder=''
+                                    placeholder='Tuliskan alasan...'
                                     keyboardType='default'
                                     placeholderTextColor={Color.gray}
                                     underlineColorAndroid='transparent'
