@@ -259,7 +259,7 @@ const LoginScreen = ({ navigation, route }) => {
 
           <EmailRoundedView style={{backgroundColor: Color.textInput, ...shadowStyle}}>
             <CustomTextInput
-              placeholder='Username'
+              placeholder='Email atau No. Telepon'
               placeholderTextColor={Color.gray}
               underlineColorAndroid='transparent'
               autoCorrect={false}
@@ -275,7 +275,7 @@ const LoginScreen = ({ navigation, route }) => {
             />
             <View style={{position: 'absolute', bottom: 0, left: 0, paddingLeft: 16, height: '100%', width: '10%', justifyContent: 'center', alignItems: 'flex-start'}}>
               <EyeIconView onPress={() => setState({ showPassword: !state.showPassword })}>
-                <Ionicons size={14} name='call-outline' color={Color.gray} />
+                <Ionicons size={14} name='person' color={Color.gray} />
               </EyeIconView>
             </View>
           </EmailRoundedView>

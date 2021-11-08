@@ -7,7 +7,7 @@ const constraints = {
     email: true,
   },
   username: {
-    presence: { allowEmpty: false, message: '^Mohon isi username Anda' },
+    presence: { allowEmpty: false, message: '^Mohon isi dengan Email atau No. Telepon Anda' },
   },
   idNumber: {
     presence: { allowEmpty: false, message: '^Mohon isi NIK dengan benar' },
