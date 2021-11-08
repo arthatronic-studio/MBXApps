@@ -15,8 +15,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useDispatch, useSelector } from 'react-redux';
-import { Modalize } from 'react-native-modalize';
+import {useDispatch, useSelector} from 'react-redux';
+import {Modalize} from 'react-native-modalize';
 import QRCode from 'react-native-qrcode-svg';
 
 import {
@@ -34,7 +34,7 @@ import {redirectTo, loginRequired} from '@src/utils';
 import {shadowStyle} from '@src/styles';
 
 import {iconSplash} from '@assets/images';
-import { Divider } from 'src/styled';
+import {Divider} from 'src/styled';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -96,9 +96,7 @@ const MainProfile = ({navigation, route}) => {
               alignItems: 'center',
               ...shadowStyle,
             }}>
-              {user && <QRCode
-                  value={user.code}
-              />}
+            {user && <QRCode value={user.code} />}
             <View
               style={{
                 position: 'absolute',
@@ -179,7 +177,11 @@ const MainProfile = ({navigation, route}) => {
                   </Text>
                 </Col>
                 <Col align="flex-end" size={3.25} justify="center">
-                  <FontAwesome name="angle-right" color={Color.text} size={20} />
+                  <FontAwesome
+                    name="angle-right"
+                    color={Color.text}
+                    size={20}
+                  />
                 </Col>
               </Row>
             </TouchableOpacity>
@@ -192,7 +194,8 @@ const MainProfile = ({navigation, route}) => {
             borderTopWidth: 0.5,
             borderColor: Color.border,
           }}>
-          <TouchableOpacity onPress={() => navigation.navigate('SettingScreen')}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('SettingScreen')}>
             <Row>
               <Col size={0.75} justify="center">
                 <AntDesign
@@ -219,7 +222,12 @@ const MainProfile = ({navigation, route}) => {
             borderTopWidth: 0.5,
             borderColor: Color.border,
           }}>
-          <TouchableOpacity onPress={() => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran untuk Komoto&Body')}>
+          <TouchableOpacity
+            onPress={() =>
+              Linking.openURL(
+                'mailto:bummitbs@gmail.com?subject=Kritik dan saran untuk Komoto&Body',
+              )
+            }>
             <Row>
               <Col size={0.75} justify="center">
                 <AntDesign
@@ -240,20 +248,53 @@ const MainProfile = ({navigation, route}) => {
           </TouchableOpacity>
         </Grid>
 
-        <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
-              <TouchableOpacity onPress={() => navigation.navigate('JoinKomunitas')}>
-                  <Row>
-                      <Col size={0.75} justify='center'>
-                          <AntDesign name='form' color={Color.text} style={{marginTop: 2}} />
-                      </Col>
-                      <Col align='flex-start' size={8} justify='center'>
-                          <Text size={12} type='medium'>Gabung Komunitas</Text>
-                      </Col>
-                      <Col align='flex-end' size={3.25} justify='center'>
-                          <FontAwesome name='angle-right' color={Color.text} size={20} />
-                      </Col>
-                  </Row>
-              </TouchableOpacity>
+        <Grid
+          style={{
+            backgroundColor: Color.theme,
+            borderTopWidth: 0.5,
+            borderColor: Color.border,
+          }}>
+          <TouchableOpacity onPress={() => navigation.navigate('JoinKomunitas')}>
+              <Row>
+                  <Col size={0.75} justify='center'>
+                      <AntDesign name='form' color={Color.text} style={{marginTop: 2}} />
+                  </Col>
+                  <Col align='flex-start' size={8} justify='center'>
+                      <Text size={12} type='medium'>Gabung Komunitas</Text>
+                  </Col>
+                  <Col align='flex-end' size={3.25} justify='center'>
+                      <FontAwesome name='angle-right' color={Color.text} size={20} />
+                  </Col>
+              </Row>
+          </TouchableOpacity>
+        </Grid> 
+
+        <Grid
+          style={{
+            backgroundColor: Color.theme,
+            borderTopWidth: 0.5,
+            borderColor: Color.border,
+          }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('CommunityAdmin')}>
+            <Row>
+              <Col size={0.75} justify="center">
+                <AntDesign
+                  name="form"
+                  color={Color.text}
+                  style={{marginTop: 2}}
+                />
+              </Col>
+              <Col align="flex-start" size={8} justify="center">
+                <Text size={12} type="medium">
+                  Community Admin
+                </Text>
+              </Col>
+              <Col align="flex-end" size={3.25} justify="center">
+                <FontAwesome name="angle-right" color={Color.text} size={20} />
+              </Col>
+            </Row>
+          </TouchableOpacity>
         </Grid>
 
         {/* <Grid
@@ -306,7 +347,11 @@ const MainProfile = ({navigation, route}) => {
                   </Text>
                 </Col>
                 <Col align="flex-end" size={3.25} justify="center">
-                  <FontAwesome name="angle-right" color={Color.text} size={20} />
+                  <FontAwesome
+                    name="angle-right"
+                    color={Color.text}
+                    size={20}
+                  />
                 </Col>
               </Row>
             </TouchableOpacity>
@@ -320,7 +365,8 @@ const MainProfile = ({navigation, route}) => {
               borderTopWidth: 0.5,
               borderColor: Color.border,
             }}>
-            <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('LoginScreen')}>
               <Row>
                 <Col justify="center" size={0.75}>
                   <Ionicons
@@ -335,7 +381,11 @@ const MainProfile = ({navigation, route}) => {
                   </Text>
                 </Col>
                 <Col align="flex-end" size={3.25} justify="center">
-                  <FontAwesome name="angle-right" color={Color.text} size={20} />
+                  <FontAwesome
+                    name="angle-right"
+                    color={Color.text}
+                    size={20}
+                  />
                 </Col>
               </Row>
             </TouchableOpacity>
@@ -408,9 +458,7 @@ const MainProfile = ({navigation, route}) => {
               </View>
             </View>
             <View style={{width: 90, height: 90}}>
-                {user && <QRCode
-                  value={user.code}
-                />}
+              {user && <QRCode value={user.code} />}
             </View>
           </View>
         </View>

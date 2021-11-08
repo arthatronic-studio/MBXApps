@@ -32,6 +32,9 @@ import SettingScreen from '@src/screens/MainProfile/SettingScreen';
 import ShowAllFromProfile from '@src/screens/MainProfile/ShowAllFromProfile';
 import JoinKomunitas from '@src/screens/MainProfile/JoinKomunitas/Join'
 import ReferralCodeScreen from '@src/screens/MainProfile/ReferralCodeScreen';
+import CommunityAdmin from '@src/screens/MainProfile/CommunityAdmin/CommunityAdmin';
+import NumbersInput from 'src/screens/MainProfile/CommunityAdmin/NumbersInput';
+import ApproveMember from 'src/screens/MainProfile/CommunityAdmin/ApproveMember';
 
 // News
 import NewsScreen from 'src/screens/News/Index';
@@ -113,7 +116,10 @@ function MainStackNavigator() {
             <Screen name='ShowAllFromProfile' component={ShowAllFromProfile} />
             <Screen name='SettingScreen' component={SettingScreen} />
             <Screen name='JoinKomunitas' component={JoinKomunitas} />
+            <Screen name="CommunityAdmin" component={CommunityAdmin} />
             <Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />
+            <Screen name="NumbersInput" component={NumbersInput} />
+            <Screen name="ApproveMember" component={ApproveMember} />
             {/* payment */}
             <Screen name='PaymentScreen' component={PaymentScreen} />
             <Screen name='PaymentDetail' component={PaymentDetail} />
