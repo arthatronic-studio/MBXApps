@@ -305,7 +305,9 @@ const MainHome = ({navigation, route}) => {
         actions={
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
-              onPress={() => {}}
+              onPress={() => {
+                navigation.navigate('NotificationScreen');
+              }}
               style={{
                 width: '20%',
                 justifyContent: 'flex-start',
@@ -317,7 +319,7 @@ const MainHome = ({navigation, route}) => {
                 color={Color.text}
               />
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {}}
               style={{
                 width: '20%',
@@ -325,7 +327,7 @@ const MainHome = ({navigation, route}) => {
                 alignItems: 'flex-end',
               }}>
               <Ionicons name="chatbox-outline" size={22} color={Color.text} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         }
       />

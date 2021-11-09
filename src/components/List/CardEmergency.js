@@ -44,6 +44,11 @@ const CardEmergency = (props) => {
     const navigation = useNavigation();
 
     useEffect(() => {
+        setLike(item.like);
+        setImLike(item.im_like);
+    }, [item.like, item.im_like]);
+
+    useEffect(() => {
         const valid = prevImLike !== im_like;
 
         const timeout = valid ? setTimeout(() => {
@@ -72,7 +77,7 @@ const CardEmergency = (props) => {
         })
         .catch((err) => {
             console.log(err, 'err add like');
-        })
+        });
     }
 
     const onSubmitLike = () => {
