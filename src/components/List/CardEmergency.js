@@ -87,16 +87,15 @@ const CardEmergency = (props) => {
                     width: width / numColumns - (horizontal ? 32 : 16),
                     paddingHorizontal: 8,
                     marginBottom: 16,
-                    borderRadius: 4,
                 },
                 style
             ]}
         >
-            <TouchableOpacity onPress={() => onPress(item)} style={{flexDirection: 'row', height: (index !== 5) ? 169 : 144, width: 323, paddingBottom: 16, borderBottomWidth: (index !== 5) ? 0.5 : 0}}>
-                <Image source={{uri: item.image}} style={{marginTop:6, width: 73, height: 73, borderRadius: 8, backgroundColor: Color.border}} />
-                <View style={{flexDirection: 'column', height: 144, width: 240, paddingLeft: 10 }}>
+            <TouchableOpacity onPress={() => onPress(item)} style={{flexDirection: 'row', height: (index !== 5) ? 169 : 144, width: '87%', paddingBottom: 16, borderBottomWidth: (index !== 5) ? 0.5 : 0}}>
+                <Image source={{uri: item.image}} style={{marginTop:6, width: '25%', height: '50%', borderRadius: 8, backgroundColor: Color.border}} />
+                <View style={{flexDirection: 'column', height: '100%', width: '60%', paddingLeft: 10 }}>
                     <Text size={16} type='bold' align='left' numberOfLines={1}>{item.productName}</Text>
-                    <View style={{alignItems:'center', flexDirection: 'row', width: 240, paddingTop: 8}}>
+                    <View style={{alignItems:'center', flexDirection: 'row', width: '100%', paddingTop: 8}}>
                         <Image 
                             style={{ height: 10, width: 10, aspectRatio: 1 }}
                             source={iconCategory}
@@ -114,14 +113,14 @@ const CardEmergency = (props) => {
                         </Text>
                     </View>
                     <View style={{width: '100%', height: '20%', flexDirection: 'row', paddingTop: 16}}>
-                        <TouchableOpacity onPress={() => onSubmitLike(item)} style={{width: 119, height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRightWidth:0.5}}>
+                        <TouchableOpacity onPress={() => onSubmitLike(item)} style={{width: '70%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRightWidth:0.5}}>
                             <Image
                                 style={{ height:20, width:20 }}
                                 source={im_like ? iconLiked : iconLike}
                             />
                             <Text style={{ paddingLeft: 4, marginBottom: 4}}>{like} </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => navigation.navigate('CommentListScreen', { item })} style={{width: 119, height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderLeftWidth:0.5}}>
+                        <TouchableOpacity onPress={() => navigation.navigate('CommentListScreen', { item })} style={{width: '70%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderLeftWidth:0.5}}>
                             <Image
                                 style={{ height:20, width:20 }}
                                 source={iconComment}

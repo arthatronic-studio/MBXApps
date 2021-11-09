@@ -58,6 +58,7 @@ const BalanceView = Styled(View)`
 const VerticalView = Styled(View)`
   width: 100%;
   borderRadius: 8px;
+  flexDirection: column;
   justifyContent: space-between;
   padding: 18px 16px 16px;
 `;
@@ -542,7 +543,7 @@ const MainHome = ({navigation, route}) => {
                 <Ionicons name="arrow-forward" size={12} color={Color.primary} />
               </Text>
             </View>
-            {listEmergencyArea.slice(0,6).map((Emergency, EmergencyIndex) => {
+            {listEmergencyArea.map((Emergency, EmergencyIndex) => {
               return(
                 <CardEmergency
                 key={EmergencyIndex}
