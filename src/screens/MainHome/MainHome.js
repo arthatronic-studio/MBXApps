@@ -58,6 +58,7 @@ const BalanceView = Styled(View)`
 const VerticalView = Styled(View)`
   width: 100%;
   borderRadius: 8px;
+  flexDirection: column;
   justifyContent: space-between;
   padding: 18px 16px 16px;
 `;
@@ -305,7 +306,9 @@ const MainHome = ({navigation, route}) => {
         actions={
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
-              onPress={() => {}}
+              onPress={() => {
+                navigation.navigate('NotificationScreen');
+              }}
               style={{
                 width: '20%',
                 justifyContent: 'flex-start',
@@ -317,7 +320,7 @@ const MainHome = ({navigation, route}) => {
                 color={Color.text}
               />
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {}}
               style={{
                 width: '20%',
@@ -325,7 +328,7 @@ const MainHome = ({navigation, route}) => {
                 alignItems: 'flex-end',
               }}>
               <Ionicons name="chatbox-outline" size={22} color={Color.text} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         }
       />
@@ -542,7 +545,7 @@ const MainHome = ({navigation, route}) => {
                 <Ionicons name="arrow-forward" size={12} color={Color.primary} />
               </Text>
             </View>
-            {listEmergencyArea.slice(0,6).map((Emergency, EmergencyIndex) => {
+            {listEmergencyArea.map((Emergency, EmergencyIndex) => {
               return(
                 <CardEmergency
                 key={EmergencyIndex}

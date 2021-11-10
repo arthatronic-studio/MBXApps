@@ -302,7 +302,7 @@ const CreateEmergencyScreen = (props) => {
                 ref={modalSelectPriorityRef}
                 selected={selectedPriority}
                 onPress={(e) => {
-                    onChangeUserData('status', e.value);
+                    onChangeUserData('priority', e.value);
                     setSelectedPriority(e);
                     modalSelectPriorityRef.current.close();
                 }}

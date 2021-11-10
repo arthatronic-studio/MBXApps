@@ -67,6 +67,10 @@ import PdamScreen from '@src/screens/PPOB/PdamScreen';
 // import OrderListScreen from '@src/screens/MyBooking/OrderList';
 import OrderListPerProduct from '@src/screens/MyBooking/OrderListPerProduct';
 
+// notification
+import NotificationScreen from '@src/screens/Notification/NotificationScreen';
+import NotificationDetail from '@src/screens/Notification/NotificationDetail';
+
 const {Navigator, Screen} = createStackNavigator();
 
 function MainStackNavigator() {
@@ -132,6 +136,10 @@ function MainStackNavigator() {
             {/* order */}
             {/* <Screen name='OrderListScreen' component={OrderListScreen} options={{ headerShown: true, headerTitle: 'Riwayat Pesanan' }} /> */}
             <Screen name='OrderListPerProduct' component={OrderListPerProduct} />
+
+            {/* notification */}
+            <Screen name='NotificationScreen' component={NotificationScreen} />
+            <Screen name='NotificationDetail' component={NotificationDetail} />
         </Navigator>
     );
 }
