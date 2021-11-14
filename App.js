@@ -27,7 +27,7 @@ const App = () => {
   // ===========================================
   useEffect(() => {
       registerAppWithFCM();
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
       registerListener(onRegister, onNotification, onOpenNotification);
       
       localPushNotification.configure(onOpenNotification);

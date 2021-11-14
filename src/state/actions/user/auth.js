@@ -164,16 +164,17 @@ export const getCurrentUserProfile = () => async (dispatch, getState) => {
  });
 };
 
+
 export const updateCurrentUserProfile = (params) => async (dispatch, getState) => {
   const {
-    firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country
+    firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber,Nomor_ID
   } = params;
 
   dispatch({ type: 'USER.CLEAR_ERROR' });
   dispatch({ type: 'USER.FETCH_PROFILE' });
   Client.mutate({
     mutation: updateUserProfileMutation,
-    variables: { firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country }
+    variables: { firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber, Nomor_ID }
   })
   .then(res => {
     dispatch(getCurrentUserProfile());
@@ -228,11 +229,14 @@ export const register = (user) => async (dispatch, getState) => {
         email,
         phone_country_code: user.phoneCountryCode,
         phone_number: user.phoneNumber,
+        idCardNumber : user.idCardNumber,
+       
         address: '',
         city: '',
         postal_code: '',
         country: '',
         reference_code: user.refCode,
+       
       };
       const responseRegis = await instanceRegister.post('/api/registration/signup', body);
       
@@ -310,6 +314,9 @@ const getUserProfileQuery = gql`
     organizationName
     userCode
     isDirector
+    idCardNumber
+    
+
   }
 }`;
 
@@ -323,7 +330,10 @@ mutation inputUserDetails(
   $address: String,
   $city: String,
   $postalCode: String,
-  $country: String
+  $country: String,
+  $idCardNumber: String,
+ 
+ 
 ){
     inputUserDetails(
       firstName: $firstName,
@@ -334,8 +344,11 @@ mutation inputUserDetails(
       address: $address,
       city: $city,
       postalCode: $postalCode,
-      country: $country
+      country: $country,
+      idCardNumber : $idCardNumber,
+
+  
     ){
-    userId userName firstName lastName email phoneCountryCode phoneNumber address city postalCode country
+    userId userName firstName lastName email phoneCountryCode phoneNumber address city postalCode country idCardNumber
   }
 }`;
