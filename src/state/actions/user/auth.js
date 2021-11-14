@@ -310,6 +310,12 @@ const getUserProfileQuery = gql`
     organizationName
     userCode
     isDirector
+    image
+    qr_code
+    Foto_Profil
+    Nomor_ID
+    Alamat
+    Tanggal_Lahir
   }
 }`;
 
