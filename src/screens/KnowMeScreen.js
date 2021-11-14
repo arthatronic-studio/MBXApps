@@ -72,10 +72,10 @@ const DotIndicator = Styled(View)`
 `;
 
 const sliderData = [
-  { title: 'Tribes Community', subTitle: 'Tribes Community adalah adalah adalah adalah adalah adalah adalah adalah' },
-  { title: 'Tribes Community', subTitle: 'Tribes Community adalah adalah adalah adalah adalah adalah adalah adalah' },
-  { title: 'Tribes Community', subTitle: 'Tribes Community adalah adalah adalah adalah adalah adalah adalah' },
-  { title: 'Tribes Community', subTitle: 'Tribes Community adalah adalah adalah adalah adalah adalah adalah adalah' },
+  { title: 'Komoto', subTitle: 'Komoto Community adalah adalah adalah adalah adalah adalah adalah adalah' },
+  { title: 'Komoto', subTitle: 'Komoto Community adalah adalah adalah adalah adalah adalah adalah adalah' },
+  { title: 'Komoto', subTitle: 'Komoto Community adalah adalah adalah adalah adalah adalah adalah adalah' },
+  { title: 'Komoto', subTitle: 'Komoto Community adalah adalah adalah adalah adalah adalah adalah adalah' },
 ];
 
 const KnowMeScreen = ({ navigation, route }) => {

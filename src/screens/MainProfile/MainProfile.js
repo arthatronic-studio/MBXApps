@@ -34,7 +34,7 @@ import {redirectTo, loginRequired} from '@src/utils';
 import {shadowStyle} from '@src/styles';
 
 import {iconSplash} from '@assets/images';
-import {Divider} from 'src/styled';
+import {Box, Divider} from 'src/styled';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -394,6 +394,13 @@ const MainProfile = ({navigation, route}) => {
 
         <Divider />
       </ScrollView>
+
+      {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}
+      <Box
+          size={70}
+          style={{position: 'absolute', bottom: -40}}
+      />
+      {/*  */}
 
       <Modal
         visible={modalVirtual}

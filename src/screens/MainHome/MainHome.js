@@ -5,6 +5,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Feather from 'react-native-vector-icons/Feather';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useIsFocused} from '@react-navigation/native';
 
 import {
@@ -23,7 +24,7 @@ import ListJob from 'src/components/List/ListJob';
 import CardEmergency from 'src/components/List/CardEmergency';
 import CarouselView from 'src/components/CarouselView';
 import {shadowStyle} from '@src/styles';
-import {MainView} from '@src/styled';
+import {Box, MainView} from '@src/styled';
 import { Divider } from '@src/styled';
 
 import Client from '@src/lib/apollo';
@@ -40,6 +41,8 @@ import {
   iconPulsa,
   iconSemua,
 } from '@assets/images/home';
+import ModalPosting from './ModalPosting';
+import { useRef } from 'react/cjs/react.development';
 
 
 const ContentView = Styled(View)`
@@ -114,15 +117,15 @@ const sambatanMenus = [
   
   {id: 0, name: 'Pulsa', images: iconPulsa, nav: 'PulsaScreen', params: {}},
   {id: 1, name: 'Listrik', images: iconPLN, nav: 'PlnScreen', params: {}},
-  {id: 2, name: 'Game', images: iconGames, nav: '', params: {}},
+  // {id: 2, name: 'Game', images: iconGames, nav: '', params: {}},
   {id: 3, name: 'PDAM', images: iconPDAM, nav: 'PdamScreen', params: {}},
-  {id: 4, name: 'BPJS', images: iconBPJS, nav: '', params: {}},
-  {
-    id: 5, 
-    name: 'Internet', 
-    images: iconInternet, 
-    nav: '', 
-    params: {title: 'Iuran Non-wajib', type: 'ACTIVE', productType: 'SAMBATAN_O',}},
+  // {id: 4, name: 'BPJS', images: iconBPJS, nav: '', params: {}},
+  // {
+  //   id: 5, 
+  //   name: 'Internet', 
+  //   images: iconInternet, 
+  //   nav: '', 
+  //   params: {title: 'Iuran Non-wajib', type: 'ACTIVE', productType: 'SAMBATAN_O',}},
   {
     id: 6,
     name: 'Iuran',
@@ -130,13 +133,12 @@ const sambatanMenus = [
     nav: 'OrderListPerProduct',
     params: {title: 'Iuran', type: 'ACTIVE', productType: 'ALL_SAMBATAN'},
   },
-  {
-    id: 7, 
-    name: 'Semua', 
-    images: iconSemua, 
-    nav: '', 
-    params: {title: 'Iuran Non-wajib', type: 'ACTIVE', productType: 'SAMBATAN_O',}},
-
+  // {
+  //   id: 7, 
+  //   name: 'Semua', 
+  //   images: iconSemua, 
+  //   nav: '', 
+  //   params: {title: 'Iuran Non-wajib', type: 'ACTIVE', productType: 'SAMBATAN_O',}},
 ];
 
 const MainHome = ({navigation, route}) => {
@@ -156,6 +158,7 @@ const MainHome = ({navigation, route}) => {
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const {width} = useWindowDimensions();
   const isFocused = useIsFocused();
+  const modalPostingRef = useRef();
 
   useEffect(() => {
     if (isFocused) {
@@ -299,6 +302,9 @@ const MainHome = ({navigation, route}) => {
 
   const isWalletClose = wallet === 'CLOSE';
 
+  console.log(listEmergencyArea, 'list emergency');
+  // console.log(user);
+
   return (
     <MainView style={{backgroundColor: Color.theme}}>
       <HeaderBig
@@ -343,7 +349,7 @@ const MainHome = ({navigation, route}) => {
             paddingVertical: 20,
           }}>
           <Image
-            source={{uri: ''}}
+            source={{uri: user ? user.image : ''}}
             style={{
               width: '14%',
               aspectRatio: 1,
@@ -391,6 +397,38 @@ const MainHome = ({navigation, route}) => {
                     aspectRatio: 1,
                     height: 30,
                     borderRadius: 4,
+                    backgroundColor: Color.info,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: 4,
+                  }}
+                  onPress={() => {
+                    modalPostingRef.current.open();
+                  }}>
+                  <MaterialIcons
+                    name="post-add"
+                    color={Color.textInput}
+                    size={20}
+                  />
+                </TouchableOpacity>
+                <View style={{width: '100%', alignItems: 'center'}}>
+                  <Text size={9} type="medium" color={Color.text}>
+                    Posting
+                  </Text>
+                </View>
+              </View>
+
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginLeft: 16,
+                }}>
+                <TouchableOpacity
+                  style={{
+                    aspectRatio: 1,
+                    height: 30,
+                    borderRadius: 4,
                     backgroundColor: Color.green,
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -404,8 +442,7 @@ const MainHome = ({navigation, route}) => {
                   <Ionicons
                     name="add"
                     color={Color.textInput}
-                    size={26}
-                    style={{marginLeft: 2, marginTop: 2}}
+                    size={24}
                   />
                 </TouchableOpacity>
                 <View style={{width: '100%', alignItems: 'center'}}>
@@ -415,7 +452,7 @@ const MainHome = ({navigation, route}) => {
                 </View>
               </View>
 
-              <View 
+              {/* <View 
                 style={{
                   justifyContent: 'center', 
                   alignItems: 'center', 
@@ -440,9 +477,9 @@ const MainHome = ({navigation, route}) => {
                     Tarik
                     </Text>
                 </View>
-              </View>
+              </View> */}
 
-              <View
+              {/* <View
                 style={{
                   justifyContent: 'center',
                   alignItems: 'center',
@@ -472,7 +509,7 @@ const MainHome = ({navigation, route}) => {
                     Lainnya
                   </Text>
                 </View>
-              </View>
+              </View> */}
             </View>
           </BalanceView>
         </ContentView>
@@ -672,6 +709,22 @@ const MainHome = ({navigation, route}) => {
           style={{paddingBottom: 8}}
         />
       </ScrollView>
+
+      {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}
+      <Box
+          size={70}
+          style={{position: 'absolute', bottom: -40}}
+      />
+      {/*  */}
+
+      <ModalPosting
+          ref={modalPostingRef}
+          selected={null}
+          onPress={(e) => {
+            navigation.navigate(e.nav, e.params);
+            modalPostingRef.current.close();
+          }}
+      />
 
       <Loading {...loadingProps} />
     </MainView>
