@@ -93,7 +93,7 @@ const LabelInput = Styled(View)`
   alignItems: flex-start;
 `;
 
-const inputs = ['fullName', 'idCardNumber', 'email', 'phoneNumber'];
+const inputs = ['fullName', 'idCardNumber', 'email', 'phoneNumber','Nomor_ID', 'Alamat'];
 
 export default ({ navigation, route }) => {
   // dispatch
@@ -103,6 +103,9 @@ export default ({ navigation, route }) => {
    const { height } = useWindowDimensions();
   // selector
   const user = useSelector(state => state['user.auth'].login.user);
+
+
+  console.log("user dano",user)
   const {
     register,
     loading,
@@ -125,6 +128,9 @@ export default ({ navigation, route }) => {
     email: user ? user.email : '',
     phoneNumber: user ? user.phoneNumber : '',
     date: user ? user.date : new Date(),
+    Nomor_ID: user ? user.Nomor_ID :  '',
+    Alamat : user ? user.Alamat : '',
+
   
  
   });
@@ -133,7 +139,8 @@ export default ({ navigation, route }) => {
     idCardNumber: null,
     email: null,
     phoneNumber: null,
-   
+    Nomor_ID : null,
+    Alamat : null,
   });
 
   //Image
@@ -172,7 +179,7 @@ const [open, setOpen] = useState(false)
     if (allValid) {
       setAllValid(false)
 
-      const { fullName, idCardNumber, email, phoneNumber } = userData;
+      const { fullName, idCardNumber, email, phoneNumber, Nomor_ID, Alamat } = userData;
 
       const nameSplit = fullName.split(' ');
       let lastName = '';
@@ -188,6 +195,8 @@ const [open, setOpen] = useState(false)
         idCardNumber,
         email,
         phoneNumber,
+        Nomor_ID,
+        Alamat,
         
       };
 
@@ -400,15 +409,15 @@ const [open, setOpen] = useState(false)
               placeholderTextColor={Color.gray}
               underlineColorAndroid='transparent'
               autoCorrect={false}
-              onChangeText={(text) => onChangeUserData('alamat', text)}
+              onChangeText={(text) => onChangeUserData('Alamat', text)}
               selectionColor={Color.text}
-              value={userData.alamat}
-              onBlur={() => isValueError('alamat')}
+              value={userData.Alamat}
+              onBlur={() => isValueError('Alamat')}
               style={{color: Color.text}}
             />
           </EmailRoundedView>
           <ErrorView>
-            <Text size={12} color={Color.error} type='medium' align='left'>{errorData.alamat}</Text>
+            <Text size={12} color={Color.error} type='medium' align='left'>{errorData.Alamat}</Text>
           </ErrorView>
 
           <LabelInput>

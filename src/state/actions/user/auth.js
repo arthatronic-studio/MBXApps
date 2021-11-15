@@ -167,14 +167,14 @@ export const getCurrentUserProfile = () => async (dispatch, getState) => {
 
 export const updateCurrentUserProfile = (params) => async (dispatch, getState) => {
   const {
-    firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber,Nomor_ID
+    firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber, Nomor_ID, Alamat,
   } = params;
 
   dispatch({ type: 'USER.CLEAR_ERROR' });
   dispatch({ type: 'USER.FETCH_PROFILE' });
   Client.mutate({
     mutation: updateUserProfileMutation,
-    variables: { firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber, Nomor_ID }
+    variables: { firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber, Nomor_ID, Alamat }
   })
   .then(res => {
     dispatch(getCurrentUserProfile());
@@ -230,7 +230,8 @@ export const register = (user) => async (dispatch, getState) => {
         phone_country_code: user.phoneCountryCode,
         phone_number: user.phoneNumber,
         idCardNumber : user.idCardNumber,
-       
+        Nomor_ID : user.Nomor_ID,
+        Alamat : user.Alamat,
         address: '',
         city: '',
         postal_code: '',
@@ -314,6 +315,7 @@ const getUserProfileQuery = gql`
     organizationName
     userCode
     isDirector
+    idCardNumber
     image
     qr_code
     Foto_Profil
@@ -322,6 +324,7 @@ const getUserProfileQuery = gql`
     Tanggal_Lahir
   }
 }`;
+
 
 const updateUserProfileMutation = gql`
 mutation inputUserDetails(
@@ -335,8 +338,8 @@ mutation inputUserDetails(
   $postalCode: String,
   $country: String,
   $idCardNumber: String,
- 
- 
+  $Nomor_ID: String,
+  $Alamat: String,
 ){
     inputUserDetails(
       firstName: $firstName,
@@ -349,9 +352,10 @@ mutation inputUserDetails(
       postalCode: $postalCode,
       country: $country,
       idCardNumber : $idCardNumber,
-
+      Nomor_ID: $Nomor_ID,
+      Alamat: $Alamat,
   
     ){
-    userId userName firstName lastName email phoneCountryCode phoneNumber address city postalCode country idCardNumber
+    userId userName firstName lastName email phoneCountryCode phoneNumber address city postalCode country idCardNumber Nomor_ID Alamat
   }
 }`;
