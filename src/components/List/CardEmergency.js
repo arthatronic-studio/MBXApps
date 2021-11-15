@@ -68,7 +68,7 @@ const CardEmergency = (props) => {
             }
         })
         .then((res) => {
-        //   console.log(res, 'res add like');
+          console.log(res, 'res add like');
         
         //   if (res.data.maudiAddLike.id) {
         //     if (res.data.maudiAddLike.status === 1) {

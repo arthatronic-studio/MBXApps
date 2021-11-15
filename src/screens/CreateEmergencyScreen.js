@@ -19,6 +19,7 @@ import validate from '@src/lib/validate';
 
 import Client from '@src/lib/apollo';
 import { queryMaudiProductManage } from '@src/lib/query';
+import { Box } from 'src/styled';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -273,6 +274,13 @@ const CreateEmergencyScreen = (props) => {
                     onPress={() => modalSelectPriorityRef.current.open()}
                 />
             </ScrollView>
+
+            {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}
+            <Box
+                size={70}
+                style={{position: 'absolute', bottom: -40}}
+            />
+            {/*  */}
 
             <Submit
                 buttonLabel='Buat'
