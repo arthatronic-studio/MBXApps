@@ -123,6 +123,7 @@ const TopUpScreen = ({ navigation, route }) => {
       headerTitle='Isi Saldo'
       popupProps={popupProps}
       loadingProps={loadingProps}
+      
     >
       <HeaderView>
         <TextHeader>Isi Nominal</TextHeader>
