@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -8,27 +8,87 @@ import {
   Image,
 } from 'react-native';
 import Styled from 'styled-components';
-import {Header, TouchableOpacity, useColor} from '@src/components';
+import {
+  Header,
+  TouchableOpacity,
+  useColor,
+  usePopup,
+  Popup,
+} from '@src/components';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {shadowStyle} from '@src/styles';
+
+import Client from '@src/lib/apollo';
+import {joinCommunityManage} from '@src/lib/query/joinCommunityManage';
+import {joinCommunityMember} from 'src/lib/query/joinCommunityMember';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
 `;
 
 const ApproveMember = () => {
-
   const [data, setData] = useState([
     {nama: 'excel', id: 1, data: true},
     {nama: 'dani', id: 2, data: true},
+    {nama: 'test', id: 3, data: true},
   ]);
 
+  const [popupProps, showPopup] = usePopup();
+
+  // useEffect(() => {
+  //   // Client.query({
+  //   //   query: joinCommunityMember,
+  //   //   variables: {
+  //   //     status: 0,
+  //   //   },
+  //   // })
+  //   //   .then((res) => {
+  //   //     alert(JSON.stringify(res));
+  //   //     setData(res.data.joinCommunityMember);
+  //   //     // showPopup('test', 'warning');
+  //   //   })
+  //   //   .catch((err) => {
+  //   //     showPopup('catch', 'warning');
+  //   //   });
+  // }, []);
+
+  const handleSuccess = (index) => {
+    data[index].data = false;
+    setData([...data.filter((item) => item.data !== false)]);
+
+    Client.query({
+      query: joinCommunityManage,
+      variables: {
+        status: 1,
+        id: 1,
+      },
+    })
+      .then((res) => {
+        showPopup('test', 'warning');
+      })
+      .catch((err) => {
+        showPopup('catch', 'warning');
+      });
+  };
+
   const handleRemove = (index) => {
-    data[index].data=false
-    setData([
-      ...data.filter((item)=> item.data!==false)
-    ])
+    data[index].data = false;
+    setData([...data.filter((item) => item.data !== false)]);
+
+    Client.query({
+      query: joinCommunityManage,
+      variables: {
+        status: 2,
+        id: 1,
+      },
+    })
+      .then((res) => {
+        showPopup('test', 'warning');
+      })
+      .catch((err) => {
+        showPopup('catch', 'warning');
+      });
   };
 
   const {Color} = useColor();
@@ -79,7 +139,6 @@ const ApproveMember = () => {
           (item, index) =>
             item.data && (
               <View
-
                 style={{
                   marginTop: 15,
                   borderWidth: 0.5,
@@ -99,7 +158,7 @@ const ApproveMember = () => {
                   <Text style={{paddingBottom: 5}}>{item.nama}</Text>
                   <View style={{flexDirection: 'row', width: 200, height: 33}}>
                     <TouchableOpacity
-                      onPress={() => handleRemove(index)}
+                      onPress={() => handleSuccess(index)}
                       style={{
                         backgroundColor: 'green',
                         flex: 1,
@@ -109,7 +168,8 @@ const ApproveMember = () => {
                       }}>
                       <Text>Add</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleRemove(index)}
+                    <TouchableOpacity
+                      onPress={() => handleRemove(index)}
                       style={{
                         backgroundColor: 'red',
                         flex: 1,
@@ -123,8 +183,8 @@ const ApproveMember = () => {
               </View>
             ),
         )}
-        
       </View>
+      <Popup {...popupProps} />
     </MainView>
   );
 };

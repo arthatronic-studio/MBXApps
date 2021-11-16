@@ -276,7 +276,7 @@ const MainProfile = ({navigation, route}) => {
             borderColor: Color.border,
           }}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('CommunityAdmin')}>
+            onPress={() => navigation.navigate('CommunityAdminPage')}>
             <Row>
               <Col size={0.75} justify="center">
                 <AntDesign
