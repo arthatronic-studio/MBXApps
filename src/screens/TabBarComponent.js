@@ -1,23 +1,26 @@
-import React, { useState, useEffect } from 'react'
-import { View, TouchableNativeFeedback, Keyboard, SafeAreaView } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react'
+import { View, SafeAreaView, Image, Animated, useWindowDimensions } from 'react-native';
+import { TouchableOpacity as TouchableOpacityAbs } from 'react-native-gesture-handler';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 
-import {
-    Text,
-    useColor
-} from '@src/components';
-import { shadowStyle } from '@src/styles';
-import TouchableDebounce from 'src/components/Button/TouchableDebounce';
+import Text from '@src/components/Text';
+import TouchableOpacity from 'src/components/Button/TouchableDebounce';
+import { useColor } from '@src/components/Color';
+
+import { shadowStyle } from 'src/styles';
+import { CommonActions } from '@react-navigation/routers';
+import { isIphoneNotch } from 'src/utils/constants';
+import { startAnimation } from '@src/utils/animations';
+import { Divider, Line } from 'src/styled';
 
 const Scaler = Styled(View)`
     flexDirection: row;
-    height: 60px;
+    height: 100%;
     width: 100%;
-    paddingHorizontal: 18px;
 `;
 
 const TabBarComponent = (props) => {
@@ -26,31 +29,38 @@ const TabBarComponent = (props) => {
     const { index: activeRouteIndex } = state;
         
     const [menus] = useState([
-        { id: 'ber', name: 'Beranda', iconName: 'home', iconType: 'Entypo', nav: 'MainHome', },
-        { id: 'eme', name: 'Emergency', iconName: 'vibration', iconType: 'MaterialIcons', nav: 'CreateEmergencyScreen' },
-        { id: 'pro', name: 'Profil', iconName: 'person', iconType: 'Ionicons', nav: 'MainProfile' },
+        {id: 'ber', name: 'Beranda', iconName: 'home', iconType: 'Entypo', nav: 'MainHome', ref: useRef(new Animated.Value(1)).current, viewRef: useRef(new Animated.Value(0)).current },
+        {id: 'eme', name: 'Emergency', iconName: 'vibration', iconType: 'MaterialIcons', nav: 'CreateEmergencyScreen', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
+        {id: 'pro', name: 'Profil', iconName: 'person', iconType: 'Ionicons', nav: 'MainProfile', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
     ]);
-
-    const [keyboardShow, setKeyboardShow] = useState(false);
-
+    
     const { Color } = useColor();
+    const { width } = useWindowDimensions();
+    
+    const bgAnimatedRef = useRef(new Animated.Value(width / menus.length)).current;
 
     useEffect(() => {
-        Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
-        Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
+        menus.map((_, i) => {
+            startAnimation(_.ref, i === activeRouteIndex ? 1 : 0.4);
+            startAnimation(_.viewRef, i === activeRouteIndex ? 0 : 1);
 
-        return () => {
-            Keyboard.removeListener('keyboardDidShow', handleKeyboardShow);
-            Keyboard.removeListener('keyboardDidHide', handleKeyboardHide);
-        }
-    }, []);
+            Animated.spring(bgAnimatedRef, {
+                toValue: activeRouteIndex * (width / menus.length),
+                velocity: 10,
+                useNativeDriver: true,
+            }).start();
+        });
+    }, [activeRouteIndex, width]);
 
-    const handleKeyboardShow = () => {
-        setKeyboardShow(true);
-    }
-
-    const handleKeyboardHide = () => {
-        setKeyboardShow(false);
+    const redirectTo = (name, params) => {
+        props.navigation.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [
+                    { name, params }
+                ],
+            })
+        );
     }
 
     const getIconMenu = (iconType, iconName, isRouteActive) => {
@@ -66,84 +76,130 @@ const TabBarComponent = (props) => {
         }
     }
 
-    if (keyboardShow) return <View />;
+    const renderFloatingMenu = () => {
+        const isRouteActive = 1 === activeRouteIndex;
+
+        return (
+            <View
+                style={{
+                    bottom: 70 + (isIphoneNotch() ? 23 : 28),
+                    height: width / 5 - 8,
+                    width: width / 5 - 8,
+                    borderRadius: width / 5 - 8,
+                    backgroundColor: Color.primary,
+                    alignSelf: 'center',
+                    ...shadowStyle
+                }}
+            >
+                <TouchableOpacityAbs
+                    onPress={() => {
+                        props.navigation.navigate('CreateEmergencyScreen', { 
+                            routeIndex: 1, 
+                            title: 'Emergency Area',
+                            productType: 'TRIBES',
+                            productCategory: 'SCENE',
+                            productSubCategory: 'SURPRISE', 
+                        });
+                    }}
+                    style={{width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center'}}
+                >
+                    {getIconMenu('MaterialIcons', 'vibration', isRouteActive)}
+                </TouchableOpacityAbs>
+            </View>
+        )
+    }
 
     return (
-        <Scaler style={{
-            backgroundColor: Color.textInput,
-            borderTopLeftRadius: 8,
-            borderTopRightRadius: 8,
-            ...shadowStyle,
-        }}>
-            {menus.map((route, routeIndex) => {
-                const isRouteActive = routeIndex === activeRouteIndex;
-                return (
-                    <TouchableNativeFeedback
-                        key={routeIndex}
-                        style={{
-                            flex: 1,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        }}
-                        onPress={() => {
-                            props.navigation.navigate(route.nav, { routeIndex });
-                        }}
-                        onLongPress={() => {}}
-                    >
-                        <View style={{
-                                flex: 1,
+        <SafeAreaView
+            style={{
+                width,
+                height: 70,
+                backgroundColor: Color.textInput,
+            }}
+        >
+            {activeRouteIndex < menus.length && <Animated.View
+                style={{
+                    height: 30,
+                    width: 30,
+                    position: 'absolute',
+                    left: (width / menus.length) / 2 - 15,
+                    top: 12,
+                    borderRadius: 8,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    // backgroundColor: activeRouteIndex === 2 ? 'transparent' : Color.primary,
+                    transform: [{ translateX: bgAnimatedRef }],
+                }}
+            >
+                {menus[activeRouteIndex].image !== '' && <Image
+                    source={menus[activeRouteIndex].image}
+                    style={{height: 20, width: 20, transform: [{ rotate: '330deg' }]}}
+                    resizeMode='contain'
+                />}
+            </Animated.View>}
+
+            <Line width={width - 32} color={Color.border} style={{position: 'absolute', top: 0}} />
+
+            <Scaler>
+                {menus.map((route, routeIndex) => {
+                    const isRouteActive = routeIndex === activeRouteIndex;
+
+                    return (
+                        <TouchableOpacity
+                            key={routeIndex}
+                            activeOpacity={1}
+                            style={{
+                                width: width / menus.length,
                                 alignItems: 'center',
-                                justifyContent: 'center',
+                            }}
+                            onPress={() => {
+                                if (route.nav === 'MainHome') {
+                                    redirectTo(route.nav);
+                                    return;                                    
+                                }
+
+                                props.navigation.navigate(route.nav, { routeIndex });
                             }}
                         >
-                            
-                            {route.id=='eme' && <TouchableDebounce 
-                                onPress={() => {
-                                    props.navigation.navigate(route.nav, { 
-                                        routeIndex, 
-                                        title: 'Emergency Area',
-                                        productType: 'TRIBES',
-                                        productCategory: 'SCENE',
-                                        productSubCategory: 'SURPRISE', 
-                                    });
-                                }}
+                            <Animated.View
                                 style={{
-                                    top: -25,
+                                    height: 30,
+                                    width: 30,
                                     position: 'absolute',
-                                    alignSelf: 'center',
-                                    width: 56,
-                                    height: 56,
-                                    borderRadius: 28,
-                                    backgroundColor: '#EE2D32',
+                                    top: 12,
+                                    borderRadius: 8,
+                                    alignItems: 'center',
                                     justifyContent: 'center',
-                                    alignItems: 'center'
+                                    // backgroundColor: routeIndex === 2 ? 'transparent' : Color.blueStroke,
+                                    // opacity: route.viewRef,
                                 }}
                             >
-                                {getIconMenu(route.iconType, route.iconName, isRouteActive)}
-                            </TouchableDebounce>}
+                                {route.id !== 'eme' ?
+                                        getIconMenu(route.iconType, route.iconName, isRouteActive)
+                                    : 
+                                        <Divider />
+                                }
+                            </Animated.View>
 
-                            {route.id!='eme' ?
-                                getIconMenu(route.iconType, route.iconName, isRouteActive)
-                            : 
-                                <View 
-                                    style={{
-                                        height: 30
-                                    }}> 
-                                </View>}
-
-                            <Text
-                                size={10}
-                                type='semibold'
-                                color={isRouteActive ? Color.primary : Color.gray}
-                                style={{marginTop: 4}}
+                            <Animated.Text
+                                style={{
+                                    fontSize: 10,
+                                    fontWeight: '500',
+                                    color: Color.text,
+                                    position: 'absolute',
+                                    bottom: 12,
+                                    opacity: route.ref,
+                                }}
                             >
                                 {route.name}
-                            </Text>
-                        </View>
-                    </TouchableNativeFeedback>
-                )
-            })}
-        </Scaler>
+                            </Animated.Text>
+                        </TouchableOpacity>
+                    )
+                })}
+            </Scaler>
+
+            {renderFloatingMenu()}
+        </SafeAreaView>
     )
 }
 

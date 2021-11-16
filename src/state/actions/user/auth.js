@@ -164,16 +164,17 @@ export const getCurrentUserProfile = () => async (dispatch, getState) => {
  });
 };
 
+
 export const updateCurrentUserProfile = (params) => async (dispatch, getState) => {
   const {
-    firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country
+    firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber, Nomor_ID, Alamat,
   } = params;
 
   dispatch({ type: 'USER.CLEAR_ERROR' });
   dispatch({ type: 'USER.FETCH_PROFILE' });
   Client.mutate({
     mutation: updateUserProfileMutation,
-    variables: { firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country }
+    variables: { firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber, Nomor_ID, Alamat }
   })
   .then(res => {
     dispatch(getCurrentUserProfile());
@@ -228,11 +229,15 @@ export const register = (user) => async (dispatch, getState) => {
         email,
         phone_country_code: user.phoneCountryCode,
         phone_number: user.phoneNumber,
+        idCardNumber : user.idCardNumber,
+        Nomor_ID : user.Nomor_ID,
+        Alamat : user.Alamat,
         address: '',
         city: '',
         postal_code: '',
         country: '',
         reference_code: user.refCode,
+       
       };
       const responseRegis = await instanceRegister.post('/api/registration/signup', body);
       
@@ -310,8 +315,16 @@ const getUserProfileQuery = gql`
     organizationName
     userCode
     isDirector
+    idCardNumber
+    image
+    qr_code
+    Foto_Profil
+    Nomor_ID
+    Alamat
+    Tanggal_Lahir
   }
 }`;
+
 
 const updateUserProfileMutation = gql`
 mutation inputUserDetails(
@@ -323,7 +336,10 @@ mutation inputUserDetails(
   $address: String,
   $city: String,
   $postalCode: String,
-  $country: String
+  $country: String,
+  $idCardNumber: String,
+  $Nomor_ID: String,
+  $Alamat: String,
 ){
     inputUserDetails(
       firstName: $firstName,
@@ -334,8 +350,12 @@ mutation inputUserDetails(
       address: $address,
       city: $city,
       postalCode: $postalCode,
-      country: $country
+      country: $country,
+      idCardNumber : $idCardNumber,
+      Nomor_ID: $Nomor_ID,
+      Alamat: $Alamat,
+  
     ){
-    userId userName firstName lastName email phoneCountryCode phoneNumber address city postalCode country
+    userId userName firstName lastName email phoneCountryCode phoneNumber address city postalCode country idCardNumber Nomor_ID Alamat
   }
 }`;

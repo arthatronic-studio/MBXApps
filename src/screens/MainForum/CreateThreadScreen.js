@@ -166,7 +166,7 @@ const CreateThreadScreen = (props) => {
     return (
         <MainView style={{backgroundColor: Color.theme}}>
             <Header
-                title={`Buat Thread ${params.title}`}
+                title={params.title}
             />
 
             <ScrollView>

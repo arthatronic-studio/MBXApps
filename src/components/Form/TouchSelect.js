@@ -94,7 +94,7 @@ const TouchSelect = (props) => {
                     <CustomTouch onPress={() => onPress()}>
                         <View style={{height: 34, marginTop: 6, paddingHorizontal: 12, borderRadius: 18, borderWidth: 1, borderColor: Color.border, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                             <View style={{height: 34, paddingRight: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                                <Ionicons name={iconName} color={Color.text} />
+                                {iconName !== '' && <Ionicons name={iconName} color={Color.text} />}
                                 <Text size={12} style={{marginTop: 2, marginLeft: 4}}>{value}</Text>
                             </View>
                             <Ionicons name='chevron-down-outline' color={Color.text} />
