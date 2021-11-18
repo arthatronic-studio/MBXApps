@@ -4,7 +4,6 @@ import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
-import { queryGetChapterList }  from 'src/lib/query';
 import { launchImageLibrary } from 'react-native-image-picker';
 import {
     Header,
@@ -55,13 +54,6 @@ const CustomTouch = Styled(TouchableOpacity)`
 const Join = () => {
     const { height } = useWindowDimensions();
     const { Color } = useColor();
-
-    useEffect(() => {
-        Client.query({query: queryGetChapterList})
-        .then((res) => {
-            console.log(res.data.getChapterList)
-        })
-    }, [])
 
     const modalSelectChapterRef = useRef();
 
