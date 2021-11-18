@@ -254,7 +254,7 @@ const MainProfile = ({navigation, route}) => {
             borderTopWidth: 0.5,
             borderColor: Color.border,
           }}>
-          <TouchableOpacity onPress={() => navigation.navigate('JoinKomunitas')}>
+          <TouchableOpacity onPress={() => navigation.navigate('JoinCommunity')}>
               <Row>
                   <Col size={0.75} justify='center'>
                       <AntDesign name='form' color={Color.text} style={{marginTop: 2}} />

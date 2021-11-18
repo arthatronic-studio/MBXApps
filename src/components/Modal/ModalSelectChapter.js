@@ -1,7 +1,9 @@
-import React, { useRef, forwardRef, useState } from 'react';
+import React, { useRef, forwardRef, useState, useEffect } from 'react';
 import { Dimensions, TouchableOpacity } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { queryGetChapterList }  from 'src/lib/query';
+import Client from '@src/lib/apollo';
 import {
   Text,
   // TouchableOpacity,
@@ -29,6 +31,15 @@ const data = [
 
 const ModalSelectChapter = forwardRef((props, ref) => {
   const { selected, onPress } = props;
+  const [data2, setData2] = useState(null)
+
+  useEffect(() => {
+    Client.query({query: queryGetChapterList})
+      .then((res) => {
+        setData2(res.data.getChapterList)
+        console.log(data2)
+      })
+  }, [])
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
@@ -41,7 +52,7 @@ const ModalSelectChapter = forwardRef((props, ref) => {
   };
 
   const renderContent = () => {
-    return data.map((item, idx) =>
+    return data2.map((item, idx) =>
         <TouchableOpacity
             key={idx}
             onPress={() => {
@@ -50,7 +61,7 @@ const ModalSelectChapter = forwardRef((props, ref) => {
             style={{flexDirection: 'row', paddingVertical: 8}}
         >
             <Text size={14} color={selected.id === item.id ? Color.primary : Color.text}>
-              {item.value}
+              {item.name}
             </Text>
         </TouchableOpacity>
     )
@@ -77,7 +88,7 @@ const ModalSelectChapter = forwardRef((props, ref) => {
               />
           </View>
         </View>
-        {renderContent()}
+        {data2 && renderContent()}
     </Modalize>
   );
 });
