@@ -82,13 +82,13 @@ const TabBarComponent = (props) => {
         return (
             <View
                 style={{
-                    bottom: 70 + (isIphoneNotch() ? 23 : 28),
+                    bottom: 86 + (isIphoneNotch() ? 23 : 28),
                     height: width / 5 - 8,
                     width: width / 5 - 8,
                     borderRadius: width / 5 - 8,
                     backgroundColor: Color.primary,
                     alignSelf: 'center',
-                    ...shadowStyle
+                    ...shadowStyle,
                 }}
             >
                 <TouchableOpacityAbs

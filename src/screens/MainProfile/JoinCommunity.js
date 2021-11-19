@@ -160,11 +160,11 @@ const Join = () => {
                 carIdentity: userData.carIdentity,
                 reason: userData.reason,
                 chapterId: selectedChapter.community_id,
-                carPhotoMain: thumbImage,
-                carPhotoFront: thumbImage2,
-                carPhotoSide: thumbImage3,
-                carPhotoBack: thumbImage4,
-                transactionProof: thumbImage5,
+                carPhotoMain: 'data:image/png;base64,' + thumbImage,
+                carPhotoFront: 'data:image/png;base64,' + thumbImage2,
+                carPhotoSide: 'data:image/png;base64,' + thumbImage3,
+                carPhotoBack: 'data:image/png;base64,' + thumbImage4,
+                transactionProof: 'data:image/png;base64,' + thumbImage5,
             },
         };
 

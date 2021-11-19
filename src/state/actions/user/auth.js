@@ -318,10 +318,10 @@ const getUserProfileQuery = gql`
     idCardNumber
     image
     qr_code
-    Foto_Profil
-    Nomor_ID
-    Alamat
-    Tanggal_Lahir
+    photoProfile
+    nomor_id
+    alamat
+    tanggalLahir
   }
 }`;
 
@@ -338,8 +338,8 @@ mutation inputUserDetails(
   $postalCode: String,
   $country: String,
   $idCardNumber: String,
-  $Nomor_ID: String,
-  $Alamat: String,
+  $nomor_id: String,
+  $alamat: String,
 ){
     inputUserDetails(
       firstName: $firstName,
@@ -352,10 +352,25 @@ mutation inputUserDetails(
       postalCode: $postalCode,
       country: $country,
       idCardNumber : $idCardNumber,
-      Nomor_ID: $Nomor_ID,
-      Alamat: $Alamat,
+      nomor_id: $nomor_id,
+      alamat: $alamat,
   
     ){
-    userId userName firstName lastName email phoneCountryCode phoneNumber address city postalCode country idCardNumber Nomor_ID Alamat
+    userId
+    userName
+    firstName
+    lastName
+    email
+    phoneCountryCode
+    phoneNumber
+    address
+    city
+    postalCode
+    country
+    idCardNumber
+    photoProfile
+    nomor_id
+    alamat
+    tanggalLahir
   }
 }`;

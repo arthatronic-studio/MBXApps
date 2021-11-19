@@ -195,8 +195,8 @@ const [open, setOpen] = useState(false)
         idCardNumber,
         email,
         phoneNumber,
-        Nomor_ID,
-        Alamat,
+        nomor_id: Nomor_ID,
+        alamat: Alamat,
         
       };
 

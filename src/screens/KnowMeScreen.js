@@ -89,14 +89,12 @@ const KnowMeScreen = ({ navigation, route }) => {
 
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+
+  console.log(error, 'error');
   
   useEffect(() => {
     if (isFocused) {
-      if (error) {
-        showPopup(error || 'Server Kami Sedang Maintenance', 'error');
-        dispatch({ type: 'USER.LOGOUT' });
-      }
-      else if (user) {
+      if (user) {
         redirectTo('MainPage');
       }
     }

@@ -29,7 +29,7 @@ const CardComponent = (props) => {
   const [data, setData] = useState([]);
   // const user = useSelector((state) => state['user.auth'].login.user);
   const user = useSelector((state) => state['joinCommunity']);
-  console.log(user, 'ini user');
+  // console.log(user, 'ini user');
 
   // const [data, setData] = useState([
   //   {name: 'excel', id: 1, data: true},

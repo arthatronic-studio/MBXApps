@@ -20,7 +20,6 @@ export const queryJoinCommunity = gql`
             car_photo_back
             transaction_proof
             status
-            userId
         }
     }
 `;
