@@ -15,7 +15,7 @@ const MainView = Styled(SafeAreaView)`
 
 const AnggotaBaruRoute = () => (
   
-    <CardComponent name="excel" handleSuccess="Add" handleRemove="Remove"/>
+    <CardComponent name="excel" handleSuccess="Add" handleRemove="Remove" type="newAnggota"/>
 
 );
 
@@ -27,7 +27,7 @@ const AnggotaRoute = () => (
 
 const AnggotaDitolakRoute = () => (
   <View>
-    <CardComponent name="excel" handleSuccess="Approve" handleRemove="Reject"/>
+    <CardComponent name="excel" handleSuccess="Approve" handleRemove="Reject" type="notAnggota"/>
   </View>
 );
 
