@@ -8,6 +8,7 @@ import { queryMaudiAddComment } from './queryMaudiAddComment';
 import { queryMaudiComment } from './queryMaudiComment';
 import { queryJoinCommunity } from './queryJoinCommunity';
 import { queryGetChapterList } from './queyGetChapterList'
+import { queryCheckVersion } from './queryCheckVersion';
 
 export {
     queryMaudiProduct,
@@ -20,4 +21,5 @@ export {
     queryMaudiComment,
     queryJoinCommunity,
     queryGetChapterList,
+    queryCheckVersion,
 };
