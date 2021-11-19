@@ -2,9 +2,9 @@ import { Platform } from 'react-native';
 import axios from 'axios';
 import { Buffer } from 'buffer';
 import Config from 'react-native-config';
-import querystring from 'querystring';
 import Moment from 'moment';
 import gql from 'graphql-tag';
+import qs from 'qs';
 import Client from '../../../lib/apollo';
 
 const clientId = Platform.OS === 'ios' ? Config.CLIENT_ID_IOS : Config.CLIENT_ID_ANDROID;
@@ -24,7 +24,7 @@ export const callAuthApi = async (tempEmail, password, refreshToken, fcm_token) 
 
     console.log('body auth', body);
 
-    const response = await instance.post('/oauth/token', querystring.stringify(body));
+    const response = await instance.post('/oauth/token', qs.stringify(body));
     if (response) return { success: true, data: response.data };
     return { success: false, error: 'Kesalahan server' };
   }

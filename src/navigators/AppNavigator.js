@@ -30,7 +30,7 @@ import DetailForumScreen from '@src/screens/MainForum/DetailForumScreen';
 import ChangeProfile from '@src/screens/MainProfile/ChangeProfile';
 import SettingScreen from '@src/screens/MainProfile/SettingScreen';
 import ShowAllFromProfile from '@src/screens/MainProfile/ShowAllFromProfile';
-import JoinKomunitas from '@src/screens/MainProfile/JoinKomunitas/Join'
+import JoinCommunity from 'src/screens/MainProfile/JoinCommunity'
 import ReferralCodeScreen from '@src/screens/MainProfile/ReferralCodeScreen';
 import CommunityAdminPage from '@src/screens/MainProfile/CommunityAdmin/CommunityAdminPage';
 import NumbersInput from 'src/screens/MainProfile/CommunityAdmin/NumbersInput';
@@ -119,7 +119,7 @@ function MainStackNavigator() {
             <Screen name='ChangeProfile' component={ChangeProfile} />
             <Screen name='ShowAllFromProfile' component={ShowAllFromProfile} />
             <Screen name='SettingScreen' component={SettingScreen} />
-            <Screen name='JoinKomunitas' component={JoinKomunitas} />
+            <Screen name='JoinCommunity' component={JoinCommunity} />
             <Screen name="CommunityAdminPage" component={CommunityAdminPage} />
             <Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />
             <Screen name="NumbersInput" component={NumbersInput} />
