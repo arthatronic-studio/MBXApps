@@ -89,8 +89,6 @@ const KnowMeScreen = ({ navigation, route }) => {
 
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
-
-  console.log(error, 'error');
   
   useEffect(() => {
     if (isFocused) {

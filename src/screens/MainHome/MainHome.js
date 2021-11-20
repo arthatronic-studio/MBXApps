@@ -1,10 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {View, ScrollView, Image, useWindowDimensions} from 'react-native';
 import Styled from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useIsFocused} from '@react-navigation/native';
 
@@ -42,8 +40,6 @@ import {
   iconSemua,
 } from '@assets/images/home';
 import ModalPosting from './ModalPosting';
-import { useRef } from 'react/cjs/react.development';
-
 
 const ContentView = Styled(View)`
   width: 100%;
@@ -154,6 +150,8 @@ const MainHome = ({navigation, route}) => {
   const user = useSelector((state) => state['user.auth'].login.user);
   const dispatch = useDispatch();
 
+  console.log(useSelector((state) => state));
+
   const {Color} = useColor();
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const {width} = useWindowDimensions();
@@ -246,29 +244,6 @@ const MainHome = ({navigation, route}) => {
       return result.data.maudiProduct;
     } else {
       return [];
-    }
-  };
-
-  const getIconMenu = (iconType, iconName, isRouteActive) => {
-    switch (iconType) {
-      case 'Ionicons':
-        return (
-          <Ionicons
-            name={iconName}
-            size={50}
-            color={isRouteActive ? Color.primary : Color.gray}
-            style={{marginBottom: 8}}
-          />
-        );
-      case 'FontAwesome5':
-        return (
-          <FontAwesome5
-            name={iconName}
-            size={50}
-            color={isRouteActive ? Color.primary : Color.gray}
-            style={{marginBottom: 8}}
-          />
-        );
     }
   };
 
@@ -701,7 +676,7 @@ const MainHome = ({navigation, route}) => {
         </View>
         <ListJob
           data={listKerja}
-          horizontal={false}
+          horizontal
           showHeader={false}
           onPress={(item) => {
             navigation.navigate('JobDetail', {item});

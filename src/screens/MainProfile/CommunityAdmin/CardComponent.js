@@ -23,13 +23,9 @@ import {useSelector, useDispatch} from 'react-redux';
 import Client from '@src/lib/apollo';
 import {joinCommunityManage} from '@src/lib/query/joinCommunityManage';
 import {joinCommunityMember} from 'src/lib/query/joinCommunityMember';
-import {joinCommunityUserList} from 'src/state/actions/joinCommunity/index.js';
 
 const CardComponent = (props) => {
   const [data, setData] = useState([]);
-  // const user = useSelector((state) => state['user.auth'].login.user);
-  const user = useSelector((state) => state['joinCommunity']);
-  // console.log(user, 'ini user');
 
   // const [data, setData] = useState([
   //   {name: 'excel', id: 1, data: true},
