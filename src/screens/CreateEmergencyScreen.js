@@ -19,7 +19,7 @@ import validate from '@src/lib/validate';
 
 import Client from '@src/lib/apollo';
 import { queryMaudiProductManage } from '@src/lib/query';
-import { Box } from 'src/styled';
+import { Box, Divider } from 'src/styled';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -291,6 +291,8 @@ const CreateEmergencyScreen = (props) => {
                     onSubmit();
                 }}
             />
+
+            <Divider height={24} />
 
             <Loading {...loadingProps} />
 

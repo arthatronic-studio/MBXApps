@@ -123,7 +123,7 @@ export default ({ navigation, route }) => {
 
             <ListPlace
                 data={state.listProduct}
-                subData={state.listCategory}
+                showHeader={false}
                 onPress={(item) => navigation.navigate('PlaceDetail', { item })}
             />
         </Scaffold>

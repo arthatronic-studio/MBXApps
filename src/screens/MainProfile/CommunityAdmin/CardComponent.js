@@ -12,6 +12,8 @@ import {
   useColor,
   usePopup,
   Popup,
+  Scaffold,
+  Alert,
 } from '@src/components';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -25,18 +27,21 @@ import { Divider } from 'src/styled';
 
 const CardComponent = (props) => {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [popupProps, showPopup] = usePopup();
   const {Color} = useColor();
 
   useEffect(() => {
-    let status;
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
+    let status = 2;
     if (props.type === 'newAnggota') {
       status = 0;
     } else if (props.type === 'Anggota') {
       status = 1;
-    } else {
-      status = 2;
     }
 
     Client.query({
@@ -45,15 +50,19 @@ const CardComponent = (props) => {
         status: status,
       },
     })
-      .then((res) => {
-        setData(res.data.joinCommunityMember);
-      })
-      .catch((err) => {
-        showPopup('catch', 'warning');
-      });
-  }, []);
+    .then((res) => {
+      setData(res.data.joinCommunityMember);
+      setLoading(false);
+    })
+    .catch((err) => {
+      console.log('catch', 'warning');
+      setLoading(false);
+    });
+  }
 
   const handleSuccess = (id) => {
+    setLoading(true);
+
     Client.query({
       query: joinCommunityManage,
       variables: {
@@ -63,13 +72,18 @@ const CardComponent = (props) => {
     })
       .then((res) => {
         showPopup('Akun selesai di Approve', 'success');
+        fetchData();
+        setLoading(false);
       })
       .catch((err) => {
         showPopup(err.message, 'warning');
+        setLoading(false);
       });
   };
 
   const handleRemove = (id) => {
+    setLoading(true);
+
     Client.query({
       query: joinCommunityManage,
       variables: {
@@ -78,15 +92,36 @@ const CardComponent = (props) => {
       },
     })
       .then((res) => {
-        showPopup('Akun berhasil ditolak', 'error');
+        showPopup('Akun berhasil ditolak', 'success');
+        fetchData();
+        setLoading(false);
       })
       .catch((err) => {
         showPopup('catch', 'warning');
+        setLoading(false);
       });
   };
 
   const fetchUpdateMember = (item) => {
-    console.log(item);
+    setLoading(true);
+
+    Client.query({
+      query: joinCommunityManage,
+      variables: {
+        status: 1,
+        id: item.id,
+        customIdNumber: item.userDetail.idNumber,
+      },
+    })
+      .then((res) => {
+        showPopup('Akun berhasil diubah', 'success');
+        fetchData();
+        setLoading(false);
+      })
+      .catch((err) => {
+        showPopup('catch', 'error');
+        setLoading(false);
+      });
   }
 
   const renderItem = (item, index) => {
@@ -127,8 +162,11 @@ const CardComponent = (props) => {
               <TextInput
                 placeholder={item.userDetail.idNumber || "Input Nomor ID"}
                 placeholderTextColor={Color.gray}
+                value={item.userDetail.idNumber}
                 onChangeText={(val) => {
-                  item.userDetail.idNumber = val;
+                  let newData = [...data];
+                  newData[index].userDetail.idNumber = val;
+                  setData(newData);
                 }}
                 style={{
                   color: Color.gray,
@@ -158,7 +196,7 @@ const CardComponent = (props) => {
                     justifyContent: 'center',
                   }}
                   onPress={() => {
-                    fetchUpdateMember(item);
+                    Alert('Konfirmasi', 'Apakah Anda yakin akan mengubah data anggota ini?', () => fetchUpdateMember(item));
                   }}
                 >
                   <Ionicons
@@ -172,7 +210,9 @@ const CardComponent = (props) => {
           ) : (
             <View style={{flexDirection: 'row', width: '100%', height: 33}}>
               <TouchableOpacity
-                onPress={() => handleSuccess(item.id)}
+                onPress={() => {
+                  Alert('Terima', 'Apakah Anda yakin akan menerima anggota ini?', () => handleSuccess(item.id));
+                }}
                 style={{
                   backgroundColor: Color.info,
                   flex: 1,
@@ -182,9 +222,11 @@ const CardComponent = (props) => {
                 }}>
                 <Text color={Color.textInput}>{props.handleSuccess}</Text>
               </TouchableOpacity>
-              <Divider />
-              <TouchableOpacity
-                onPress={() => handleRemove(item.id)}
+              {props.type !== 'notAnggota' && <Divider />}
+              {props.type !== 'notAnggota' && <TouchableOpacity
+                onPress={() => {
+                  Alert('Tolak', 'Apakah Anda yakin akan menolak anggota ini?', () => handleRemove(item.id));
+                }}
                 style={{
                   backgroundColor: Color.error,
                   flex: 1,
@@ -193,7 +235,7 @@ const CardComponent = (props) => {
                   borderRadius: 4,
                 }}>
                 <Text color={Color.textInput}>{props.handleRemove}</Text>
-              </TouchableOpacity>
+              </TouchableOpacity>}
             </View>
           )}
         </View>
@@ -202,23 +244,26 @@ const CardComponent = (props) => {
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: 'center',
-      }}
+    <Scaffold
+      fallback={loading}
+      header={<View />}
+      popupProps={popupProps}
     >
-      <FlatList
-        keyExtractor={(item, index) => item.id + index.toString()}
-        data={data}
-        renderItem={({ item, index }) => renderItem(item, index)}
-        contentContainerStyle={{
-          padding: 16,
-        }}
-      />
-      
-      <Popup {...popupProps} />
-    </View>
+      {data.length > 0 ?
+        <FlatList
+          keyExtractor={(item, index) => item.id + index.toString()}
+          data={data}
+          renderItem={({ item, index }) => renderItem(item, index)}
+          contentContainerStyle={{
+            padding: 16,
+          }}
+        />
+      : 
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <Text>Data belum tersedia</Text>
+        </View>
+      }
+    </Scaffold>
   );
 };
 

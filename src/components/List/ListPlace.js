@@ -1,32 +1,63 @@
 import React from 'react';
 import { View, FlatList } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import CardPlace from 'src/components/List/CardPlace';
-import ListCategory from '@src/components/List/ListCategory';
+import {
+    Text,
+    TouchableOpacity,
+    HeaderBig,
+    Loading,
+    useLoading,
+    useColor,
+} from '@src/components';
+import { useNavigation } from '@react-navigation/core';
 
 const defaultProps = {
     data: [],
-    subData: [],
     horizontal: false,
     onPress: () => {},
     style: {},
-    // additional
-    showAll: true,
-    onPressShowAll: () => {},
     showHeader: true,
 }
 
 const ListPlace = (props) => {
     const {
-        data, subData, horizontal, style, onPress,
-        showAll, onPressShowAll, showHeader,
+        data, horizontal, style, onPress, showHeader,
     } = props;
+
+    const {Color} = useColor();
+    const navigation = useNavigation();
 
     let extraProps = { numColumns: 2 };
     if (horizontal) extraProps = {};
 
+    const renderHeader = () => {
+        return (
+            <View
+                style={{
+                    width: '100%',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    paddingHorizontal: 16,
+                }}>
+                <Text type="bold">Tempat Terdekat</Text>
+                <Text
+                    onPress={() => navigation.navigate('PlaceScreen')}
+                    size={12}
+                    color={Color.primary}>
+                    Lihat Semua{' '}
+                    <Ionicons name="arrow-forward" size={12} color={Color.primary} />
+                </Text>
+            </View>
+        )
+    }
+
     return (
-        <View style={{flex: 1, paddingBottom: 8, paddingTop: showHeader ? 0 : 8}}>
+        <View style={{flex: 1, paddingBottom: 8, paddingTop: showHeader ? 0 : 0}}>
+            {showHeader && renderHeader()}
+
             <FlatList
                 key='ListPlace'
                 keyExtractor={(item, index) => item.toString() + index}
@@ -34,32 +65,8 @@ const ListPlace = (props) => {
                 {...extraProps}
                 horizontal={horizontal}
                 showsHorizontalScrollIndicator={false}
-                // ListHeaderComponent={
-                //     <ListCategory
-                //         title='Kategori Favorit Kamu'
-                //         data={subData}
-                //     />
-                // }
                 contentContainerStyle={{paddingTop: 16, paddingHorizontal: 8, ...style}}
                 renderItem={({ item, index }) => {
-                    // if (index === 0) {
-                    //     return (
-                    //         <>
-                    //             <ListCategory
-                    //                 title='Kategori Favorit Kamu'
-                    //                 data={subData}
-                    //             />
-
-                    //             <CardPlace
-                    //                 item={item}
-                    //                 numColumns={2}
-                    //                 horizontal={horizontal}
-                    //                 onPress={() => onPress(item)}
-                    //             />
-                    //         </>
-                    //     )
-                    // }
-
                     return (
                         <CardPlace
                             item={item}
@@ -75,5 +82,4 @@ const ListPlace = (props) => {
 }
 
 ListPlace.defaultProps = defaultProps;
-
 export default ListPlace;

@@ -13,17 +13,15 @@ import {
   Loading,
   useLoading,
   useColor,
+  Scaffold,
 } from '@src/components';
 import {FormatMoney} from '@src/utils';
 import ListNews from 'src/components/List/ListNews';
 import ListPlace from 'src/components/List/ListPlace';
 import ListWorkshop from 'src/components/List/ListWorkshop';
 import ListJob from 'src/components/List/ListJob';
-import CardEmergency from 'src/components/List/CardEmergency';
-import CarouselView from 'src/components/CarouselView';
 import {shadowStyle} from '@src/styles';
-import {Box, MainView} from '@src/styled';
-import { Divider } from '@src/styled';
+import {Box, Divider, MainView} from '@src/styled';
 
 import Client from '@src/lib/apollo';
 import {queryMaudiProduct} from '@src/lib/query';
@@ -40,6 +38,7 @@ import {
   iconSemua,
 } from '@assets/images/home';
 import ModalPosting from './ModalPosting';
+import ListEmergency from 'src/components/List/ListEmergency';
 
 const ContentView = Styled(View)`
   width: 100%;
@@ -52,14 +51,6 @@ const BalanceView = Styled(View)`
   flexDirection: row;
   justifyContent: space-between;
   padding: 18px 16px 16px;
-`;
-
-const VerticalView = Styled(View)`
-  width: 100%;
-  borderRadius: 8px;
-  flexDirection: column;
-  justifyContent: space-between;
-  padding: 16px 16px 16px;
 `;
 
 const SambatanMenuView = Styled(View)`
@@ -281,39 +272,42 @@ const MainHome = ({navigation, route}) => {
   // console.log(user);
 
   return (
-    <MainView style={{backgroundColor: Color.theme}}>
-      <HeaderBig
-        style={{paddingTop: 8}}
-        actions={
-          <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('NotificationScreen');
-              }}
-              style={{
-                width: '20%',
-                justifyContent: 'flex-start',
-                alignItems: 'flex-end',
-              }}>
-              <Ionicons
-                name="notifications-outline"
-                size={22}
-                color={Color.text}
-              />
-            </TouchableOpacity>
-            {/* <TouchableOpacity
-              onPress={() => {}}
-              style={{
-                width: '20%',
-                justifyContent: 'flex-start',
-                alignItems: 'flex-end',
-              }}>
-              <Ionicons name="chatbox-outline" size={22} color={Color.text} />
-            </TouchableOpacity> */}
-          </View>
-        }
-      />
-
+    <Scaffold
+      loadingProps={loadingProps}
+      header={
+        <HeaderBig
+          style={{paddingTop: 8}}
+          actions={
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('NotificationScreen');
+                }}
+                style={{
+                  width: '20%',
+                  justifyContent: 'flex-start',
+                  alignItems: 'flex-end',
+                }}>
+                <Ionicons
+                  name="notifications-outline"
+                  size={22}
+                  color={Color.text}
+                />
+              </TouchableOpacity>
+              {/* <TouchableOpacity
+                onPress={() => {}}
+                style={{
+                  width: '20%',
+                  justifyContent: 'flex-start',
+                  alignItems: 'flex-end',
+                }}>
+                <Ionicons name="chatbox-outline" size={22} color={Color.text} />
+              </TouchableOpacity> */}
+            </View>
+          }
+        />
+      }
+    >
       <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
@@ -426,65 +420,6 @@ const MainHome = ({navigation, route}) => {
                   </Text>
                 </View>
               </View>
-
-              {/* <View 
-                style={{
-                  justifyContent: 'center', 
-                  alignItems: 'center', 
-                  marginLeft: 16
-                }}>
-                <TouchableOpacity
-                  style={{
-                    aspectRatio: 1, 
-                    height: 30, 
-                    borderRadius: 4, 
-                    backgroundColor: Color.green, 
-                    alignItems: 'center', 
-                    justifyContent: 'center', 
-                    marginBottom: 4
-                  }}
-                  onPress={() => {}}
-                >
-                    <Feather name='upload' color={Color.textInput} size={22} />
-                </TouchableOpacity>
-                <View style={{width: '100%', alignItems: 'center'}}>
-                  <Text size={9} type='medium' color={Color.text}>
-                    Tarik
-                    </Text>
-                </View>
-              </View> */}
-
-              {/* <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginLeft: 16,
-                }}>
-                <TouchableOpacity
-                  style={{
-                    aspectRatio: 1,
-                    height: 30,
-                    borderRadius: 4,
-                    backgroundColor: Color.gray,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: 4,
-                  }}
-                  onPress={() => {}}
-                  >
-                  <Ionicons
-                    name="ellipsis-vertical-outline"
-                    color={Color.textInput}
-                    size={22}
-                    style={{marginLeft: 2, marginTop: 2}}
-                  />
-                </TouchableOpacity>
-                <View style={{width: '100%', alignItems: 'center'}}>
-                  <Text size={9} type="medium" color={Color.text}>
-                    Lainnya
-                  </Text>
-                </View>
-              </View> */}
             </View>
           </BalanceView>
         </ContentView>
@@ -520,75 +455,17 @@ const MainHome = ({navigation, route}) => {
           </SambatanMenuView>
         </ContentView>
 
-        <View
-          style={{
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 16,
-            marginTop: 16,
-          }}>
-          {/* <Text type='bold'>Acara Terbaru</Text> */}
-          {/* {showAll && <Text onPress={() => onPressShowAll()} size={12} color={Color.primary}>Lihat Semua <Ionicons name='arrow-forward' size={12} color={Color.primary} /></Text>} */}
-        </View>
+        <Divider />
 
-        <ContentView style={{ paddingVertical: 8 }}>
-          <VerticalView style={{...shadowStyle, backgroundColor: Color.textInput, paddingTop:16 }}>
-            <View
-              style={{
-              width: '100%',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: 24,
-            }}>
-              <Text type="bold">Emergency Area</Text>
-              <Text
-                onPress={() =>
-                  navigation.navigate('NewsScreen', {title: 'Emergency Area'})
-                }
-                size={12}
-                color={Color.primary}>
-                Lihat Semua{' '}
-                <Ionicons name="arrow-forward" size={12} color={Color.primary} />
-              </Text>
-            </View>
-            {listEmergencyArea.map((Emergency, EmergencyIndex) => {
-              return (
-                <CardEmergency
-                  key={EmergencyIndex}
-                  item={Emergency}
-                  index={EmergencyIndex}
-                  onPress={(item) => {
-                    navigation.navigate('NewsDetail', {item});
-                  }}
-                />
-              )
-            })}
-          </VerticalView>
-        </ContentView>
+        <ListEmergency
+          data={listEmergencyArea}
+          horizontal
+          onPress={(item) => {
+            navigation.navigate('EmergencyDetail', {item});
+          }}
+          style={{paddingLeft: 8}}
+        />
 
-        <View
-          style={{
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 16,
-            marginTop: 30,
-          }}>
-          <Text type="bold">Postingan Artikel</Text>
-          <Text
-            onPress={() =>
-              navigation.navigate('NewsScreen', {title: 'Postingan Artikel'})
-            }
-            size={12}
-            color={Color.primary}>
-            Lihat Semua{' '}
-            <Ionicons name="arrow-forward" size={12} color={Color.primary} />
-          </Text>
-        </View>
         <ListNews
           data={listTampil}
           horizontal
@@ -598,23 +475,6 @@ const MainHome = ({navigation, route}) => {
           style={{paddingLeft: 8}}
         />
 
-        <View
-          style={{
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 16,
-          }}>
-          <Text type="bold">Tempat Terdekat</Text>
-          <Text
-            onPress={() => navigation.navigate('PlaceScreen')}
-            size={12}
-            color={Color.primary}>
-            Lihat Semua{' '}
-            <Ionicons name="arrow-forward" size={12} color={Color.primary} />
-          </Text>
-        </View>
         <ListPlace
           data={listJalanJalan}
           horizontal
@@ -624,56 +484,20 @@ const MainHome = ({navigation, route}) => {
           style={{paddingLeft: 8}}
         />
 
-        <View
-          style={{
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 16,
-            paddingBottom: 8,
-          }}>
-          <Text type="bold">Event Terbaru</Text>
-          <Text
-            onPress={() => navigation.navigate('WorkshopScreen')}
-            size={12}
-            color={Color.primary}>
-            Lihat Semua{' '}
-            <Ionicons name="arrow-forward" size={12} color={Color.primary} />
-          </Text>
-        </View>
         <ListWorkshop
           data={listBelajar}
           horizontal
-          showHeader={false}
+          showHeader
           onPress={(item) => {
             navigation.navigate('WorkshopDetail', {item});
           }}
           style={{paddingBottom: 8}}
         />
 
-        <View
-          style={{
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 16,
-            paddingBottom: 8,
-          }}>
-          <Text type="bold">Lowongan Pekerjaan</Text>
-          <Text
-            onPress={() => navigation.navigate('JobScreen')}
-            size={12}
-            color={Color.primary}>
-            Lihat Semua{' '}
-            <Ionicons name="arrow-forward" size={12} color={Color.primary} />
-          </Text>
-        </View>
         <ListJob
           data={listKerja}
           horizontal
-          showHeader={false}
+          showHeader
           onPress={(item) => {
             navigation.navigate('JobDetail', {item});
           }}
@@ -696,9 +520,7 @@ const MainHome = ({navigation, route}) => {
             modalPostingRef.current.close();
           }}
       />
-
-      <Loading {...loadingProps} />
-    </MainView>
+    </Scaffold>
   );
 };
 

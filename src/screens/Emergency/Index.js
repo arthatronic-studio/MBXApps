@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View } from 'react-native';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useSelector } from 'react-redux';
 
 import {
@@ -11,23 +10,21 @@ import {
     useColor
 } from '@src/components';
 import Text from '@src/components/Text';
-import { TouchableOpacity } from '@src/components/Button';
 import Scaffold from '@src/components/Scaffold';
-import ListWorkshop from 'src/components/List/ListWorkshop';
+import ListNews from 'src/components/List/ListNews';
 
 import Client from '@src/lib/apollo';
 import { queryMaudiProduct } from '@src/lib/query';
-import { shadowStyle } from '@src/styles';
 import { listPrivilegeUser } from 'src/utils/constants';
+import ListEmergency from 'src/components/List/ListEmergency';
 
 const Example = Styled(View)`
 `;
 
 export default ({ navigation, route }) => {
     const [state, changeState] = useState({
-        fallback: true,
-        listCategory: [],
         listProduct: [],
+        fallback: true,
     });
 
     const setState = (obj) => {
@@ -54,14 +51,12 @@ export default ({ navigation, route }) => {
         setState({
           fallback: true,
         });
-    
-        const listCategory = await getMaudiProduct('TRIBES', '', '');
-        const listProduct = await getMaudiProduct('TRIBES', '', 'TRIBES_BELAJAR');
+
+        const listProduct = await getMaudiProduct('TRIBES', 'SCENE', '');
     
         setState({
-            fallback: false,
-            listCategory,
             listProduct,
+            fallback: false,
         });
     }
 
@@ -97,8 +92,15 @@ export default ({ navigation, route }) => {
 
     return (
         <Scaffold
-            headerTitle='Event Terbaru'
-            // iconRightButton={<MaterialIcons name='bookmarks' color={Color.primary} size={22} />}
+            headerTitle={route.params && route.params.title ? route.params.title : ''}
+            iconRightButton={
+              <Ionicons
+                name='search'
+                color={Color.primary}
+                size={22}
+                onPress={() => navigation.navigate('MainSearch')}
+              />
+            }
             fallback={state.fallback}
             empty={false}
             popupProps={popupProps}
@@ -108,32 +110,25 @@ export default ({ navigation, route }) => {
                 color={Color.textInput}
                 style={{backgroundColor: Color.primary, paddingTop: 2, paddingBottom: 6}}
                 onPress={() => navigation.navigate('CreateThreadScreen', {
-                  title: 'Belajar',
+                  title: 'Tampil',
                   productType: "TRIBES",
-                  productCategory: '',
-                  productSubCategory: 'TRIBES_BELAJAR',
+                  productCategory: 'SCENE',
+                  productSubCategory: '',
                 })}
               >
                 Buat
             </Text>}
 
-            <View style={{paddingHorizontal: 16, paddingTop: 16}}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('MainSearch')}
-                  style={{height: 50, width: '100%', borderRadius: 25, flexDirection: 'row', backgroundColor: Color.textInput, paddingHorizontal: 16, alignItems: 'center', ...shadowStyle}}
-                >
-                    <Ionicons name='search' size={22} color={Color.primary} />
-                    <Text style={{opacity: 0.6, paddingLeft: 12}}>Cari</Text>
-                </TouchableOpacity>
-            </View>
-
-            <ListWorkshop
-                showHeader={false}
-                showAll={false}
+            <ListEmergency
                 data={state.listProduct}
-                onPress={(item) => navigation.navigate('WorkshopDetail', { item })}
+                showHeader={false}
+                onPress={(item) => {
+                  navigation.navigate('EmergencyDetail', {
+                    item
+                  });
+                }}
                 style={{
-                  paddingBottom: 160
+                  paddingBottom: 76
                 }}
             />
         </Scaffold>

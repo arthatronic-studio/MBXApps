@@ -36,6 +36,10 @@ import CommunityAdminPage from '@src/screens/MainProfile/CommunityAdmin/Communit
 import NumbersInput from 'src/screens/MainProfile/CommunityAdmin/NumbersInput';
 import ApproveMember from 'src/screens/MainProfile/CommunityAdmin/ApproveMember';
 
+// Emergency
+import EmergencyScreen from 'src/screens/Emergency/Index';
+import EmergencyDetail from 'src/screens/Emergency/Detail';
+
 // News
 import NewsScreen from 'src/screens/News/Index';
 import NewsDetail from 'src/screens/News/Detail';
@@ -93,6 +97,9 @@ function MainStackNavigator() {
             <Screen name='UserChangePassword' component={UserChangePassword} />
             {/* topup */}
             <Screen name='TopUpScreen' component={TopUpScreen} />
+            {/* Emergency */}
+            <Screen name='EmergencyScreen' component={EmergencyScreen} />
+            <Screen name='EmergencyDetail' component={EmergencyDetail} />
             {/* News */}
             <Screen name='NewsScreen' component={NewsScreen} />
             <Screen name='NewsDetail' component={NewsDetail} />

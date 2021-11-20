@@ -4,20 +4,20 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { useColor } from '@src/components';
 import Text from '@src/components/Text';
-import CardWorkshop from 'src/components/List/CardWorkshop';
+import CardEmergency from './CardEmergency';
 import { useNavigation } from '@react-navigation/core';
 
 const defaultProps = {
     data: [],
     horizontal: false,
-    onPress: () => {},
     style: {},
+    onPress: () => {},
     showHeader: true,
 }
 
-const ListWorkshop = (props) => {
+const ListEmergency = (props) => {
     const {
-        data, horizontal, onPress, style, showHeader,
+        data, horizontal, style, onPress, showHeader,
     } = props;
 
     const { Color } = useColor();
@@ -27,18 +27,21 @@ const ListWorkshop = (props) => {
         return (
             <View
                 style={{
-                    width: '100%',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingHorizontal: 16,
-                    paddingBottom: 8,
-                }}>
-                <Text type="bold">Event Terbaru</Text>
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingHorizontal: 16,
+                marginBottom: 8,
+            }}>
+                <Text type="bold">Emergency Area</Text>
                 <Text
-                    onPress={() => navigation.navigate('WorkshopScreen')}
+                    onPress={() => {
+                        navigation.navigate('EmergencyScreen', {title: 'Emergency Area'})
+                    }}
                     size={12}
-                    color={Color.primary}>
+                    color={Color.primary}
+                >
                     Lihat Semua{' '}
                     <Ionicons name="arrow-forward" size={12} color={Color.primary} />
                 </Text>
@@ -47,20 +50,20 @@ const ListWorkshop = (props) => {
     }
 
     return (
-        <View style={{paddingBottom: 8, paddingTop: showHeader ? 0 : 16}}>
+        <View style={{paddingBottom: 8, paddingTop: showHeader ? 8 : 8}}>
             {showHeader && renderHeader()}
 
             <FlatList
-                key='ListWorkshop'
+                key='ListEmergency'
                 keyExtractor={(item, index) => item.toString() + index}
                 data={data}
                 numColumns={1}
                 horizontal={horizontal}
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{paddingTop: 8, paddingLeft: 8, paddingBottom: 136, ...style}}
+                contentContainerStyle={{paddingTop: 8, paddingHorizontal: 8, alignItems: 'center', ...style}}
                 renderItem={({ item, index }) => {
                     return (
-                        <CardWorkshop
+                        <CardEmergency
                             item={item}
                             numColumns={1}
                             horizontal={horizontal}
@@ -73,5 +76,6 @@ const ListWorkshop = (props) => {
     )
 }
 
-ListWorkshop.defaultProps = defaultProps;
-export default ListWorkshop;
+ListEmergency.defaultProps = defaultProps;
+
+export default ListEmergency;

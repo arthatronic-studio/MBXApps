@@ -2,22 +2,19 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View } from 'react-native';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useSelector } from 'react-redux';
 
 import {
-    TouchableOpacity,
     useLoading,
     usePopup,
     useColor
 } from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
-import ListJob from 'src/components/List/ListJob';
+import ListNews from 'src/components/List/ListNews';
 
 import Client from '@src/lib/apollo';
 import { queryMaudiProduct } from '@src/lib/query';
-import { shadowStyle } from '@src/styles';
 import { listPrivilegeUser } from 'src/utils/constants';
 
 const Example = Styled(View)`
@@ -25,9 +22,9 @@ const Example = Styled(View)`
 
 export default ({ navigation, route }) => {
     const [state, changeState] = useState({
-        fallback: true,
         listCategory: [],
         listProduct: [],
+        fallback: true,
     });
 
     const setState = (obj) => {
@@ -54,14 +51,14 @@ export default ({ navigation, route }) => {
         setState({
           fallback: true,
         });
-    
+
         const listCategory = await getMaudiProduct('TRIBES', '', '');
-        const listProduct = await getMaudiProduct('TRIBES', '', 'TRIBES_KERJA');
+        const listProduct = await getMaudiProduct('TRIBES', '', 'TRIBES_TAMPIL');
     
         setState({
-            fallback: false,
             listCategory,
             listProduct,
+            fallback: false,
         });
     }
 
@@ -97,8 +94,16 @@ export default ({ navigation, route }) => {
 
     return (
         <Scaffold
-            headerTitle='Loker'
-            iconRightButton={<MaterialIcons name='bookmarks' color={Color.primary} size={24} />}
+            headerTitle='Lowongan Pekerjaan'
+            // headerTitle={route.params && route.params.title ? route.params.title : ''}
+            iconRightButton={
+              <Ionicons
+                name='search'
+                color={Color.primary}
+                size={22}
+                onPress={() => navigation.navigate('MainSearch')}
+              />
+            }
             fallback={state.fallback}
             empty={false}
             popupProps={popupProps}
@@ -108,30 +113,26 @@ export default ({ navigation, route }) => {
                 color={Color.textInput}
                 style={{backgroundColor: Color.primary, paddingTop: 2, paddingBottom: 6}}
                 onPress={() => navigation.navigate('CreateThreadScreen', {
-                  title: 'Kerja',
+                  title: 'Tampil',
                   productType: "TRIBES",
                   productCategory: '',
-                  productSubCategory: 'TRIBES_KERJA',
+                  productSubCategory: 'TRIBES_TAMPIL',
                 })}
               >
                 Buat
             </Text>}
 
-            <View style={{padding: 16}}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('MainSearch')}
-                  style={{height: 50, width: '100%', borderRadius: 25, flexDirection: 'row', backgroundColor: Color.textInput, paddingHorizontal: 16, alignItems: 'center', ...shadowStyle}}>
-                    <Ionicons name='search' size={22} color={Color.primary} />
-                    <Text style={{opacity: 0.6, paddingLeft: 12}}>Cari</Text>
-                </TouchableOpacity>
-            </View>
-
-            <ListJob
-                title='Rekomendasi Buat Kamu'
-                showAll={false}
+            <ListNews
                 data={state.listProduct}
-                onPress={(item) => navigation.navigate('JobDetail', { item })}
-                style={{paddingBottom: 160}}
+                showHeader={false}
+                onPress={(item) => {
+                  navigation.navigate('NewsDetail', {
+                    item
+                  });
+                }}
+                style={{
+                  paddingBottom: 76
+                }}
             />
         </Scaffold>
     )

@@ -13,7 +13,7 @@ import { useColor } from '@src/components/Color';
 
 import { shadowStyle } from 'src/styles';
 import { CommonActions } from '@react-navigation/routers';
-import { isIphoneNotch } from 'src/utils/constants';
+import { isIphoneNotch, statusBarHeight } from 'src/utils/constants';
 import { startAnimation } from '@src/utils/animations';
 import { Divider, Line } from 'src/styled';
 
@@ -82,7 +82,7 @@ const TabBarComponent = (props) => {
         return (
             <View
                 style={{
-                    bottom: 86 + (isIphoneNotch() ? 23 : 28),
+                    bottom: 60 + statusBarHeight,
                     height: width / 5 - 8,
                     width: width / 5 - 8,
                     borderRadius: width / 5 - 8,

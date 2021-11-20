@@ -1,29 +1,64 @@
 import React from 'react';
 import { View, FlatList } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import CardNews from 'src/components/List/CardNews';
-import ListCategory from '@src/components/List/ListCategory';
+import {
+    Text,
+    TouchableOpacity,
+    HeaderBig,
+    Loading,
+    useLoading,
+    useColor,
+} from '@src/components';
+import { useNavigation } from '@react-navigation/core';
 
 const defaultProps = {
     data: [],
-    subData: [],
     horizontal: false,
     style: {},
-    // additinal
-    showAll: true,
     onPress: () => {},
-    onPressShowAll: () => {},
     showHeader: true,
 }
 
 const ListNews = (props) => {
     const {
-        data, subData, horizontal, style,
-        title, showAll, onPressShowAll, onPress, showHeader,
+        data, horizontal, style, onPress, showHeader,
     } = props;
 
+    const {Color} = useColor();
+    const navigation = useNavigation();
+
+    const renderHeader = () => {
+        return (
+            <View
+                style={{
+                    width: '100%',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    paddingHorizontal: 16,
+                    marginTop: 30,
+                }}>
+                <Text type="bold">Postingan Artikel</Text>
+                <Text
+                    onPress={() => {
+                        navigation.navigate('NewsScreen', {title: 'Postingan Artikel'})
+                    }}
+                    size={12}
+                    color={Color.primary}
+                >
+                    Lihat Semua{' '}
+                    <Ionicons name="arrow-forward" size={12} color={Color.primary} />
+                </Text>
+            </View>
+        )
+    }
+
     return (
-        <View style={{paddingBottom: 8, paddingTop: showHeader ? 0 : 8}}>
+        <View style={{paddingBottom: 8, paddingTop: showHeader ? 0 : 0}}>
+            {showHeader && renderHeader()}
+
             <FlatList
                 key='ListNews'
                 keyExtractor={(item, index) => item.toString() + index}
@@ -33,24 +68,6 @@ const ListNews = (props) => {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{paddingTop: 16, paddingHorizontal: 8, ...style}}
                 renderItem={({ item, index }) => {
-                    if (index === 0 && horizontal === false) {
-                        return (
-                            <>
-                                <ListCategory
-                                    title='Kategori Favorit Kamu'
-                                    data={subData}
-                                />
-
-                                <CardNews
-                                    item={item}
-                                    numColumns={1}
-                                    horizontal={horizontal}
-                                    onPress={() => onPress(item)}
-                                />
-                            </>
-                        )
-                    }
-
                     return (
                         <CardNews
                             item={item}
@@ -66,5 +83,4 @@ const ListNews = (props) => {
 }
 
 ListNews.defaultProps = defaultProps;
-
 export default ListNews;

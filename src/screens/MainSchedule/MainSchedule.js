@@ -103,7 +103,6 @@ export default ({ navigation, route }) => {
 
       <ListNews
         data={listProduct}
-        subData={listCategory}
         onPress={(item) => {
           navigation.navigate('NewsDetail', {
             item

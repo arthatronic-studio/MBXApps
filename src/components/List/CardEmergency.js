@@ -57,7 +57,7 @@ const CardEmergency = (props) => {
     }, [trigger]);
 
     const maudiAddLike = () => {
-        console.log('lhaa');
+        console.log('trigger emergency');
 
         Client.query({
             query: queryMaudiAddLike,
@@ -85,16 +85,22 @@ const CardEmergency = (props) => {
         <View
             style={[
                 {
-                    width: width / numColumns - (horizontal ? 64 : 64),
+                    width: width / numColumns - (horizontal ? 32 : 16),
                     paddingHorizontal: 8,
-                    marginBottom: 16,
+                    marginBottom: horizontal ? 0 : 16,
                 },
                 style
             ]}
         >
             <TouchableOpacity
                 onPress={() => onPress(item)}
-                style={{flexDirection: 'row', height: (index !== 5) ? 169 : 144, width: '100%', paddingBottom: 16, borderBottomWidth: (index !== 5) ? 0.5 : 0}}
+                style={{
+                    flexDirection: 'row',
+                    width: '100%',
+                    padding: 16,
+                    backgroundColor: Color.textInput,
+                    borderRadius: 8,
+                }}
             >
                 <Image
                     source={{uri: item.image}}

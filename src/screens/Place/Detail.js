@@ -18,7 +18,6 @@ import { shadowStyle } from '@src/styles';
 
 import Client from '@src/lib/apollo';
 import { queryMaudiAddLike } from '@src/lib/query';
-import { usePreviousState } from '@src/hooks';
 
 const Example = Styled(View)`
 `;
@@ -36,21 +35,16 @@ export default ({ navigation, route }) => {
     const [loadingProps, showLoading, hideLoading] = useLoading();
 
     const { Color } = useColor();
-    const prevState = usePreviousState(state);
-
-    const ref = useRef();
 
     // useEffect(() => {
-    //     const valid = prevState && prevState.im_like !== state.im_like;
-
-    //     const timeout = valid ? setTimeout(() => {
+    //     const timeout = trigger ? setTimeout(() => {
     //         maudiAddLike();
     //     }, 500) : null;
 
     //     return () => {
     //         clearTimeout(timeout);
     //     }
-    // }, [state.im_like]);
+    // }, [trigger]);
 
     const maudiAddLike = () => {
         showLoading();

@@ -13,7 +13,6 @@ import { shadowStyle } from '@src/styles';
 
 import Client from '@src/lib/apollo';
 import { queryMaudiAddLike } from '@src/lib/query';
-import { usePreviousState } from '@src/hooks';
 
 const { width } = Dimensions.get('window');
 
@@ -29,24 +28,29 @@ const CardNews = (props) => {
 
     const [like, setLike] = useState(item.like);
     const [im_like, setImLike] = useState(item.im_like);
+    const [trigger, setTrigger] = useState(false);
 
-    const prevImLike = usePreviousState(im_like);
     const { Color } = useColor();
     const navigation = useNavigation();
 
     useEffect(() => {
-        const valid = prevImLike !== im_like;
+        setLike(item.like);
+        setImLike(item.im_like);
+    }, [item]);
 
-        const timeout = valid ? setTimeout(() => {
+    useEffect(() => {
+        const timeout = trigger ? setTimeout(() => {
             maudiAddLike();
         }, 500) : null;
 
         return () => {
             clearTimeout(timeout);
         }
-    }, [im_like]);
+    }, [trigger]);
 
     const maudiAddLike = () => {
+        console.log('trigger article');
+
         Client.query({
           query: queryMaudiAddLike,
           variables: {
@@ -54,21 +58,19 @@ const CardNews = (props) => {
           }
         })
         .then((res) => {
-        //   console.log(res, 'res add like');
-        
-        //   if (res.data.maudiAddLike.id) {
-        //     if (res.data.maudiAddLike.status === 1) {
-        //     }
-        //   }
+            console.log(res, 'res add like');
+            setTrigger(false);
         })
         .catch((err) => {
             console.log(err, 'err add like');
+            setTrigger(false);
         })
     }
 
     const onSubmitLike = () => {
         setLike(!im_like ? like + 1 : like - 1);
         setImLike(!im_like);
+        setTrigger(true);
     }
 
     return (

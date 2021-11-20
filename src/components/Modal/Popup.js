@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { View, Animated, Dimensions, SafeAreaView } from 'react-native';
+import { View, Animated, Dimensions } from 'react-native';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Portal } from 'react-native-portalize';
 
-import TouchableOpacity from '@src/components/Button/TouchableDebounce';
+import TouchableOpacity from 'src/components/Button/TouchableDebounce';
 import Text from '@src/components/Text';
-import { useColor } from '@src/components';
+import { useColor } from '@src/components/Color';
+import { isIphoneNotch, statusBarHeight } from 'src/utils/constants';
 
 const { height, width } = Dimensions.get('window');
 
 const MainView = Styled(Animated.View)`
-    width: ${width};
+    width: ${width}px;
     position: absolute;
-    top: 0;
-    ${props => !props.fitHeight && `height: ${height}`}
+    top: ${props => props.top}px;
+    ${props => !props.fitHeight && `height: ${height}px`}
 `;
 
 const TouchablePopup = Styled(TouchableOpacity)`
@@ -65,9 +66,10 @@ const defaultProps = {
     onClose: () => {},
     timeout: true,
     timeoutDelay: 3000,
-    fitHeight: false,
+    fitHeight: true,
     popupType: '',
     popupLabel: '',
+    isTranslucent: false,
 }
 
 const Popup = ({
@@ -78,6 +80,7 @@ const Popup = ({
     fitHeight,
     popupType,
     popupLabel,
+    isTranslucent,
 }) => {
     const [showPopup] = useState(new Animated.Value(-height));
 
@@ -117,9 +120,9 @@ const Popup = ({
     const getLabelType = (type) => {
         switch(type) {
             case 'info': return 'Info!';
-            case 'warning': return 'Warning!';
-            case 'error': return 'Error!';
-            default: return 'Success!';
+            case 'warning': return 'Peringatan!';
+            case 'error': return 'Ups!';
+            default: return 'Berhasil!';
         }
     }
 
@@ -132,24 +135,23 @@ const Popup = ({
             <MainView
                 style={{ transform: [{translateY: showPopup}] }}
                 fitHeight={fitHeight}
+                top={isTranslucent ? statusBarHeight : isIphoneNotch() ? statusBarHeight : 0}
             >
-                <SafeAreaView>
-                    <TouchablePopup
-                        onPress={() => closeModalPopup()}
-                        backgroundColor={popupType && popupType !== '' ? Color[popupType] : '#000000'}
-                    >
-                        <IconView>
-                            {icon}
-                        </IconView>
-                        <DescriptionView>
-                            <Text size={12} type='bold' align='left' color={Color.theme}>{getLabelType(popupType)}</Text>
-                            <Text size={14} align='left' color={Color.theme}>{popupLabel}</Text>
-                        </DescriptionView>
-                        <CloseView onPress={() => onClose()}>
-                            <Ionicons name='close-outline' color={Color.theme} size={20} />
-                        </CloseView>
-                    </TouchablePopup>
-                </SafeAreaView>
+                <TouchablePopup
+                    onPress={() => closeModalPopup()}
+                    backgroundColor={popupType && popupType !== '' ? Color[popupType] : 'transparent'}
+                >
+                    <IconView>
+                        {icon}
+                    </IconView>
+                    <DescriptionView>
+                        <Text size={12} type='bold' align='left' color={Color.theme}>{getLabelType(popupType)}</Text>
+                        <Text size={14} align='left' color={Color.theme}>{popupLabel}</Text>
+                    </DescriptionView>
+                    <CloseView onPress={() => onClose()}>
+                        <Ionicons name='close-outline' color={Color.theme} size={20} />
+                    </CloseView>
+                </TouchablePopup>
             </MainView>
         )
     }
