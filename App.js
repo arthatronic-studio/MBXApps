@@ -141,7 +141,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <SafeAreaView style={{flex: 1, backgroundColor: Color.primary}}>
+        <SafeAreaView style={{flex: 1, backgroundColor: Color.theme}}>
           <StatusBar
             backgroundColor={Color.primary}
             barStyle={Color.colorDominant === 'dark' ? 'light-content' : 'dark-content'}

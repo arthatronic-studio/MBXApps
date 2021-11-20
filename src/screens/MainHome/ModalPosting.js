@@ -23,8 +23,8 @@ const defaultProps = {
 };
 
 const data = [
-  { id: 1, name: 'Posting Berita', nav: 'CreateThreadScreen', params: {
-    title: 'Posting Berita',
+  { id: 1, name: 'Posting Artikel', nav: 'CreateThreadScreen', params: {
+    title: 'Posting Artikel',
     productType: "TRIBES",
     productCategory: '',
     productSubCategory: 'TRIBES_TAMPIL'

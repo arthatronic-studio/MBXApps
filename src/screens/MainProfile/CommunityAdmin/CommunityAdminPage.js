@@ -3,32 +3,32 @@ import {View, useWindowDimensions, SafeAreaView, Text} from 'react-native';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import Styled from 'styled-components';
 import {Header, useColor} from '@src/components';
-
 import CardComponent from './CardComponent';
 
-const {Color} = useColor('root');
 const MainView = Styled(SafeAreaView)`
     flex: 1;
 `;
 
-
-
 const AnggotaBaruRoute = () => (
-  
-    <CardComponent name="excel" handleSuccess="Add" handleRemove="Remove" type="newAnggota"/>
-
+  <CardComponent
+    type="newAnggota"
+    handleSuccess="Approve"
+    handleRemove="Reject"
+  />
 );
 
 const AnggotaRoute = () => (
-  <View>
-    <CardComponent name="excel" type="Anggota" />
-  </View>
+  <CardComponent
+    type="Anggota"
+  />
 );
 
 const AnggotaDitolakRoute = () => (
-  <View>
-    <CardComponent name="excel" handleSuccess="Approve" handleRemove="Reject" type="notAnggota"/>
-  </View>
+  <CardComponent
+    type="notAnggota"
+    handleSuccess="Approve"
+    handleRemove="Reject"
+  />
 );
 
 const renderScene = SceneMap({
@@ -59,6 +59,7 @@ const CommunityAdminPage = ({navigation}) => {
       labelStyle={{fontWeight: 'bold', textAlign: 'center'}}
     />
   );
+  
   return (
     <MainView style={{backgroundColor: Color.theme}}>
       <Header title="Community Admin" />

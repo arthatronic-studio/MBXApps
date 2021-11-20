@@ -1,15 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import {
   View,
-  Text,
-  SafeAreaView,
-  ScrollView,
+  FlatList,
   TextInput,
   Image,
 } from 'react-native';
 import Styled from 'styled-components';
 import {
-  Header,
+  Text,
   TouchableOpacity,
   useColor,
   usePopup,
@@ -23,17 +21,13 @@ import {useSelector, useDispatch} from 'react-redux';
 import Client from '@src/lib/apollo';
 import {joinCommunityManage} from '@src/lib/query/joinCommunityManage';
 import {joinCommunityMember} from 'src/lib/query/joinCommunityMember';
+import { Divider } from 'src/styled';
 
 const CardComponent = (props) => {
   const [data, setData] = useState([]);
 
-  // const [data, setData] = useState([
-  //   {name: 'excel', id: 1, data: true},
-  //   {name: 'dani', id: 2, data: true},
-  //   {name: 'test', id: 3, data: true},
-  // ]);
-
   const [popupProps, showPopup] = usePopup();
+  const {Color} = useColor();
 
   useEffect(() => {
     let status;
@@ -57,7 +51,7 @@ const CardComponent = (props) => {
       .catch((err) => {
         showPopup('catch', 'warning');
       });
-  }, [data]);
+  }, []);
 
   const handleSuccess = (id) => {
     Client.query({
@@ -91,157 +85,141 @@ const CardComponent = (props) => {
       });
   };
 
-  const {Color} = useColor();
-  return (
-    <View
-      style={{
-        alignItems: 'center',
-      }}>
-      {data.map((item, index) => (
-        <View
+  const fetchUpdateMember = (item) => {
+    console.log(item);
+  }
+
+  const renderItem = (item, index) => {
+    if (index === 0) {
+      console.log(item);
+    }
+
+    return (
+      <View
+        style={{
+          borderWidth: 0.5,
+          borderRadius: 15,
+          width: '100%',
+          flexDirection: 'row',
+          alignItems: 'center',
+          padding: 16,
+          marginBottom: 16,
+        }}>
+        <Image
+          source={{ uri: item.userDetail.photoProfile || item.userDetail.image || item.car_photo_main }}
           style={{
-            marginTop: 15,
-            borderWidth: 0.5,
-            borderRadius: 15,
-            width: '80%',
-            flexDirection: 'row',
-            padding: 15,
-            alignItems: 'center',
-          }}>
-          <View
-            style={{
-              backgroundColor: Color.disabled,
-              width: 60,
-              height: 60,
-            }}></View>
-          <View style={{marginLeft: 10}}>
-            <Text style={{paddingBottom: 5}}>{item.userDetail.firstName}</Text>
+            backgroundColor: Color.disabled,
+            width: '20%',
+            aspectRatio: 1,
+            borderRadius: 16,
+          }}
+        />
+        
+        <View style={{width: '80%', paddingLeft: 16, justifyContent: 'space-between'}}>
+          <View>
+            <Text align='left'>{item.userDetail.firstName} - {item.car_type}</Text>
+          </View>
 
-            {props.type === 'Anggota' ? (
-              <View style={{flexDirection: 'row', width: 200, height: 33}}>
-                <TextInput
-                  placeholder="Input Nomor"
-                  placeholderTextColor={Color.gray}
-                  style={{
-                    color: Color.gray,
-                    fontSize: 14,
-                    fontFamily: 'Raleway-Regular',
-                    width: 160,
-                    backgroundColor: '#fff',
-                    padding: 10,
-                  }}
-                />
+          <Divider height={12} />
 
+          {props.type === 'Anggota' ? (
+            <View style={{flexDirection: 'row', width: '100%', height: 33}}>
+              <TextInput
+                placeholder={item.userDetail.idNumber || "Input Nomor ID"}
+                placeholderTextColor={Color.gray}
+                onChangeText={(val) => {
+                  item.userDetail.idNumber = val;
+                }}
+                style={{
+                  color: Color.gray,
+                  fontSize: 14,
+                  fontFamily: 'Raleway-Regular',
+                  width: '80%',
+                  backgroundColor: '#fff',
+                  padding: 12,
+                  borderRadius: 4,
+                }}
+              />
+
+              <View
+                style={{
+                  width: '20%',
+                  height: '100%',
+                  alignItems: 'flex-end',
+                }}
+              >
                 <TouchableOpacity
                   style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: 14,
-                    backgroundColor: Color.primary,
+                    height: '100%',
+                    aspectRatio: 1,
+                    borderRadius: 50,
+                    backgroundColor: Color.info,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginLeft: 20,
-                  }}>
+                  }}
+                  onPress={() => {
+                    fetchUpdateMember(item);
+                  }}
+                >
                   <Ionicons
-                    name="arrow-forward"
+                    name="save"
                     color={Color.theme}
-                    size={18}
+                    size={16}
                   />
                 </TouchableOpacity>
               </View>
-            ) : (
-              <View style={{flexDirection: 'row', width: 200, height: 33}}>
-                <TouchableOpacity
-                  onPress={() => handleSuccess(item.id)}
-                  style={{
-                    backgroundColor: Color.success,
-                    flex: 1,
-                    marginRight: 10,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Text>{props.handleSuccess}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => handleRemove(item.id)}
-                  style={{
-                    backgroundColor: Color.error,
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Text>{props.handleRemove}</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
+            </View>
+          ) : (
+            <View style={{flexDirection: 'row', width: '100%', height: 33}}>
+              <TouchableOpacity
+                onPress={() => handleSuccess(item.id)}
+                style={{
+                  backgroundColor: Color.info,
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: 4,
+                }}>
+                <Text color={Color.textInput}>{props.handleSuccess}</Text>
+              </TouchableOpacity>
+              <Divider />
+              <TouchableOpacity
+                onPress={() => handleRemove(item.id)}
+                style={{
+                  backgroundColor: Color.error,
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: 4,
+                }}>
+                <Text color={Color.textInput}>{props.handleRemove}</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
-      ))}
+      </View>
+    )
+  }
+
+  return (
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+      }}
+    >
+      <FlatList
+        keyExtractor={(item, index) => item.id + index.toString()}
+        data={data}
+        renderItem={({ item, index }) => renderItem(item, index)}
+        contentContainerStyle={{
+          padding: 16,
+        }}
+      />
+      
       <Popup {...popupProps} />
     </View>
   );
 };
 
 export default CardComponent;
-
-{
-  /* ANGGOTA */
-}
-{
-  /* <View style={{flexDirection: 'row', width: 200, height: 33}}>
-          <TextInput
-            placeholder="Input Nomor"
-            placeholderTextColor={Color.gray}
-            style={{
-              color: Color.gray,
-              fontSize: 14,
-              fontFamily: 'Raleway-Regular',
-              width: 160,
-              backgroundColor: '#fff',
-              padding: 10,
-            }}
-          />
-          
-          <TouchableOpacity
-            style={{
-              width: 28,
-              height: 28,
-              borderRadius: 14,
-              backgroundColor: Color.primary,
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginLeft: 20,
-            }}>
-            <Ionicons name="arrow-forward" color={Color.theme} size={18} />
-          </TouchableOpacity>
-        </View> */
-}
-
-{
-  /* ANGGOTA BARU */
-}
-{
-  /* <View style={{flexDirection: 'row', width: 200, height: 33}}>
-          <TouchableOpacity
-            onPress={() => handleSuccess(index)}
-            style={{
-              backgroundColor: 'green',
-              flex: 1,
-              marginRight: 10,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text>Add</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleRemove(index)}
-            style={{
-              backgroundColor: 'red',
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text>Remove</Text>
-          </TouchableOpacity>
-        </View> */
-}

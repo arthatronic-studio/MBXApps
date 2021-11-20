@@ -59,7 +59,7 @@ const VerticalView = Styled(View)`
   borderRadius: 8px;
   flexDirection: column;
   justifyContent: space-between;
-  padding: 18px 16px 16px;
+  padding: 16px 16px 16px;
 `;
 
 const SambatanMenuView = Styled(View)`
@@ -150,8 +150,6 @@ const MainHome = ({navigation, route}) => {
   const user = useSelector((state) => state['user.auth'].login.user);
   const dispatch = useDispatch();
 
-  console.log(useSelector((state) => state));
-
   const {Color} = useColor();
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const {width} = useWindowDimensions();
@@ -197,6 +195,8 @@ const MainHome = ({navigation, route}) => {
       await getMaudiProduct('TRIBES', '', 'TRIBES_BELAJAR'),
       await getMaudiProduct('TRIBES', '', 'TRIBES_KERJA'),
     ]);
+
+    console.log('emer', result[0]);
 
     setListEmergencyArea(result[0]);
     setListTampil(result[1]);
@@ -277,7 +277,7 @@ const MainHome = ({navigation, route}) => {
 
   const isWalletClose = wallet === 'CLOSE';
 
-  console.log(listEmergencyArea, 'list emergency');
+  // console.log(listEmergencyArea, 'list emergency');
   // console.log(user);
 
   return (
@@ -533,8 +533,6 @@ const MainHome = ({navigation, route}) => {
           {/* {showAll && <Text onPress={() => onPressShowAll()} size={12} color={Color.primary}>Lihat Semua <Ionicons name='arrow-forward' size={12} color={Color.primary} /></Text>} */}
         </View>
 
-        
-        
         <ContentView style={{ paddingVertical: 8 }}>
           <VerticalView style={{...shadowStyle, backgroundColor: Color.textInput, paddingTop:16 }}>
             <View
@@ -543,8 +541,7 @@ const MainHome = ({navigation, route}) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
-              paddingHorizontal: 10,
-              marginBottom: 16,
+              marginBottom: 24,
             }}>
               <Text type="bold">Emergency Area</Text>
               <Text
@@ -558,16 +555,15 @@ const MainHome = ({navigation, route}) => {
               </Text>
             </View>
             {listEmergencyArea.map((Emergency, EmergencyIndex) => {
-              return(
+              return (
                 <CardEmergency
-                key={EmergencyIndex}
-                item={Emergency}
-                index={EmergencyIndex}
-                onPress={(item) => {
-                  navigation.navigate('NewsDetail', {item});
-                }}
-                style={{paddingLeft: 8}}
-              />
+                  key={EmergencyIndex}
+                  item={Emergency}
+                  index={EmergencyIndex}
+                  onPress={(item) => {
+                    navigation.navigate('NewsDetail', {item});
+                  }}
+                />
               )
             })}
           </VerticalView>
@@ -582,10 +578,10 @@ const MainHome = ({navigation, route}) => {
             paddingHorizontal: 16,
             marginTop: 30,
           }}>
-          <Text type="bold">Postingan Saat Ini</Text>
+          <Text type="bold">Postingan Artikel</Text>
           <Text
             onPress={() =>
-              navigation.navigate('NewsScreen', {title: 'Postingan Saat Ini'})
+              navigation.navigate('NewsScreen', {title: 'Postingan Artikel'})
             }
             size={12}
             color={Color.primary}>

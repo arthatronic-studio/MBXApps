@@ -228,8 +228,6 @@ const Join = () => {
                         </View>
                     </View>
 
-                    
-
                     <View style={{paddingHorizontal: 16, paddingTop: 28}}>
                         <View style={{marginTop: 6, paddingHorizontal: 12, borderWidth: 1, borderRadius: 4, borderColor: Color.border}}>
                             <LabelInput>
@@ -466,7 +464,7 @@ const Join = () => {
                             style={{width: '100%', height: 120, borderRadius: 4, marginTop: 28, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
                         >
                             <Feather name='camera' size={22} style={{marginBottom: 4}}/>
-                            <Text size={14}>Upload Transaction Proof</Text>
+                            <Text size={14}>Upload Payment Receipt</Text>
                         </TouchableOpacity>
                     </View>
 

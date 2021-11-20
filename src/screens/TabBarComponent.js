@@ -114,7 +114,7 @@ const TabBarComponent = (props) => {
             style={{
                 width,
                 height: 70,
-                backgroundColor: Color.textInput,
+                backgroundColor: Color.theme,
             }}
         >
             {activeRouteIndex < menus.length && <Animated.View
