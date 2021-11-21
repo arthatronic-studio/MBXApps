@@ -82,5 +82,4 @@ const CardWorkshop = (props) => {
 }
 
 CardWorkshop.defaultProps = defaultProps;
-
 export default CardWorkshop;

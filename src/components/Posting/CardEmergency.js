@@ -155,6 +155,5 @@ const CardEmergency = (props) => {
 }
 
 CardEmergency.defaultProps = defaultProps
-
 export default CardEmergency;
 

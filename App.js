@@ -1,6 +1,6 @@
-import React, { useState, useEffect, createRef } from 'react';
+import React, { useEffect, createRef } from 'react';
 import 'react-native-gesture-handler';
-import { StatusBar, Platform, Appearance, SafeAreaView, Alert } from 'react-native';
+import { StatusBar, Platform, Appearance, SafeAreaView } from 'react-native';
 import { Provider } from 'react-redux';
 import SplashScreen from 'react-native-splash-screen';
 import { PersistGate } from 'redux-persist/lib/integration/react';
@@ -12,6 +12,7 @@ import AppNavigator from '@src/navigators/AppNavigator';
 import { persistor, store } from '@src/state/redux';
 import { useColor } from '@src/components';
 import { localPushNotification } from '@src/lib/pushNotification';
+import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
 
 export let navigationRef = createRef();
 
@@ -26,6 +27,8 @@ const App = () => {
   // ========== START FIREBASE NOTIFICATION ==========
   // ===========================================
   useEffect(() => {
+      requestLocationPermission();
+
       registerAppWithFCM();
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
       registerListener(onRegister, onNotification, onOpenNotification);
@@ -69,7 +72,20 @@ const App = () => {
         unsub;
         localPushNotification.unregister();
       }
-  }, [])
+  }, []);
+
+  const requestLocationPermission = async () => {
+    await geoLocationPermission();
+
+    geoCurrentPosition(
+      (res) => {
+        console.log(res, 'res location');
+      },
+      (err) => {
+        console.log(err, 'err location');
+      }
+    );
+  }
 
   const requestUserPermission = async (onRegister) => {
     const authStatus = await messaging().requestPermission();

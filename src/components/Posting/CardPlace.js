@@ -72,5 +72,4 @@ const CardPlace = (props) => {
 }
 
 CardPlace.defaultProps = defaultProps;
-
 export default CardPlace;

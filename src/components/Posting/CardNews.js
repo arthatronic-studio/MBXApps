@@ -147,5 +147,4 @@ const CardNews = (props) => {
 }
 
 CardNews.defaultProps = defaultProps;
-
 export default CardNews;

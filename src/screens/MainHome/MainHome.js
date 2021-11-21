@@ -132,11 +132,21 @@ const MainHome = ({navigation, route}) => {
   // state
   const [vestaAmount, setVestaAmount] = useState(0);
   const [wallet, setWallet] = useState('CLOSE');
-  const [listTampil, setListTampil] = useState([]);
-  const [listJalanJalan, setListJalanJalan] = useState([]);
-  const [listBelajar, setListBelajar] = useState([]);
-  const [listKerja, setListKerja] = useState([]);
+
+  const [loadingEmergency, setLoadingEmergency] = useState(true);
   const [listEmergencyArea, setListEmergencyArea] = useState([]);
+
+  const [loadingTampil, setLoadingTampil] = useState(true);
+  const [listTampil, setListTampil] = useState([]);
+
+  const [loadingJalanJalan, setLoadingJalanJalan] = useState(true);
+  const [listJalanJalan, setListJalanJalan] = useState([]);
+
+  const [loadingBelajar, setLoadingBelajar] = useState(true);
+  const [listBelajar, setListBelajar] = useState([]);
+
+  const [loadingKerja, setLoadingKerja] = useState(true);
+  const [listKerja, setListKerja] = useState([]);
 
   const user = useSelector((state) => state['user.auth'].login.user);
   const dispatch = useDispatch();
@@ -177,8 +187,6 @@ const MainHome = ({navigation, route}) => {
   };
 
   const fetchData = async () => {
-    // showLoading();
-
     const result = await Promise.all([
       await getMaudiProduct('TRIBES', 'SCENE', ''),
       await getMaudiProduct('TRIBES', '', 'TRIBES_TAMPIL'),
@@ -187,15 +195,20 @@ const MainHome = ({navigation, route}) => {
       await getMaudiProduct('TRIBES', '', 'TRIBES_KERJA'),
     ]);
 
-    console.log('emer', result[0]);
-
+    setLoadingEmergency(false);
     setListEmergencyArea(result[0]);
-    setListTampil(result[1]);
-    setListJalanJalan(result[2]);
-    setListBelajar(result[3]);
-    setListKerja(result[4]);
 
-    // hideLoading();
+    setLoadingTampil(false);
+    setListTampil(result[1]);
+
+    setLoadingJalanJalan(false);
+    setListJalanJalan(result[2]);
+
+    setLoadingBelajar(false);
+    setListBelajar(result[3]);
+
+    setLoadingKerja(false);
+    setListKerja(result[4]);
   };
   
 
@@ -267,9 +280,6 @@ const MainHome = ({navigation, route}) => {
   };
 
   const isWalletClose = wallet === 'CLOSE';
-
-  // console.log(listEmergencyArea, 'list emergency');
-  // console.log(user);
 
   return (
     <Scaffold
@@ -461,6 +471,7 @@ const MainHome = ({navigation, route}) => {
 
         <ListEmergency
           data={listEmergencyArea}
+          loading={loadingEmergency}
           horizontal
           showHeader
           onPress={(item) => {
@@ -471,6 +482,7 @@ const MainHome = ({navigation, route}) => {
 
         <ListNews
           data={listTampil}
+          loading={loadingTampil}
           horizontal
           showHeader
           onPress={(item) => {
@@ -481,6 +493,7 @@ const MainHome = ({navigation, route}) => {
 
         <ListPlace
           data={listJalanJalan}
+          loading={loadingJalanJalan}
           horizontal
           showHeader
           onPress={(item) => {
@@ -491,6 +504,7 @@ const MainHome = ({navigation, route}) => {
 
         <ListWorkshop
           data={listBelajar}
+          loading={loadingBelajar}
           horizontal
           showHeader
           onPress={(item) => {
@@ -501,6 +515,7 @@ const MainHome = ({navigation, route}) => {
 
         <ListJob
           data={listKerja}
+          loading={loadingKerja}
           horizontal
           showHeader
           onPress={(item) => {

@@ -25,7 +25,7 @@ const defaultProps = {
     onSeeAllPress: () => {},
 }
 
-const HeaderPost = (props) => {
+const PostingHeader = (props) => {
     const {
         title, onSeeAllPress,
     } = props;
@@ -54,6 +54,6 @@ const HeaderPost = (props) => {
     )
 }
 
-HeaderPost.propTypes = propTypes;
-HeaderPost.defaultProps = defaultProps;
-export default HeaderPost;
+PostingHeader.propTypes = propTypes;
+PostingHeader.defaultProps = defaultProps;
+export default PostingHeader;

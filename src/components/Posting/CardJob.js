@@ -67,5 +67,4 @@ const CardJob = (props) => {
 }
 
 CardJob.defaultProps = defaultProps;
-
 export default CardJob;
