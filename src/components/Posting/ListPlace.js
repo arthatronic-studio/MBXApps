@@ -1,17 +1,19 @@
 import React from 'react';
 import { View, FlatList } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import PropTypes from 'prop-types';
 
-import CardPlace from 'src/components/List/CardPlace';
-import {
-    Text,
-    TouchableOpacity,
-    HeaderBig,
-    Loading,
-    useLoading,
-    useColor,
-} from '@src/components';
+import CardPlace from 'src/components/Posting/CardPlace';
+import { useColor } from '@src/components';
 import { useNavigation } from '@react-navigation/core';
+import HeaderPost from './HeaderPost';
+
+const propTypes = {
+    data: PropTypes.array,
+    horizontal: PropTypes.bool,
+    style: PropTypes.object,
+    onPress: PropTypes.func,
+    showHeader: PropTypes.bool,
+}
 
 const defaultProps = {
     data: [],
@@ -34,28 +36,17 @@ const ListPlace = (props) => {
 
     const renderHeader = () => {
         return (
-            <View
-                style={{
-                    width: '100%',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingHorizontal: 16,
-                }}>
-                <Text type="bold">Tempat Terdekat</Text>
-                <Text
-                    onPress={() => navigation.navigate('PlaceScreen')}
-                    size={12}
-                    color={Color.primary}>
-                    Lihat Semua{' '}
-                    <Ionicons name="arrow-forward" size={12} color={Color.primary} />
-                </Text>
-            </View>
+            <HeaderPost
+                title='Tempat Terdekat'
+                onSeeAllPress={() => {
+                    navigation.navigate('PlaceScreen', {title: 'Tempat Terdekat'})
+                }}
+            />
         )
     }
 
     return (
-        <View style={{flex: 1, paddingBottom: 8, paddingTop: showHeader ? 0 : 0}}>
+        <View style={{paddingBottom: 8}}>
             {showHeader && renderHeader()}
 
             <FlatList
@@ -81,5 +72,6 @@ const ListPlace = (props) => {
     )
 }
 
+ListPlace.propTypes = propTypes;
 ListPlace.defaultProps = defaultProps;
 export default ListPlace;

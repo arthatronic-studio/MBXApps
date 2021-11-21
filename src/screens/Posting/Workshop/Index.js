@@ -13,7 +13,7 @@ import {
 import Text from '@src/components/Text';
 import { TouchableOpacity } from '@src/components/Button';
 import Scaffold from '@src/components/Scaffold';
-import ListWorkshop from 'src/components/List/ListWorkshop';
+import ListWorkshop from 'src/components/Posting/ListWorkshop';
 
 import Client from '@src/lib/apollo';
 import { queryMaudiProduct } from '@src/lib/query';
@@ -98,7 +98,14 @@ export default ({ navigation, route }) => {
     return (
         <Scaffold
             headerTitle='Event Terbaru'
-            // iconRightButton={<MaterialIcons name='bookmarks' color={Color.primary} size={22} />}
+            iconRightButton={
+              <Ionicons
+                name='search'
+                color={Color.primary}
+                size={22}
+                onPress={() => navigation.navigate('MainSearch')}
+              />
+            }
             fallback={state.fallback}
             empty={false}
             popupProps={popupProps}
@@ -117,7 +124,7 @@ export default ({ navigation, route }) => {
                 Buat
             </Text>}
 
-            <View style={{paddingHorizontal: 16, paddingTop: 16}}>
+            {/* <View style={{paddingHorizontal: 16, paddingTop: 16}}>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('MainSearch')}
                   style={{height: 50, width: '100%', borderRadius: 25, flexDirection: 'row', backgroundColor: Color.textInput, paddingHorizontal: 16, alignItems: 'center', ...shadowStyle}}
@@ -125,7 +132,7 @@ export default ({ navigation, route }) => {
                     <Ionicons name='search' size={22} color={Color.primary} />
                     <Text style={{opacity: 0.6, paddingLeft: 12}}>Cari</Text>
                 </TouchableOpacity>
-            </View>
+            </View> */}
 
             <ListWorkshop
                 showHeader={false}
@@ -133,7 +140,7 @@ export default ({ navigation, route }) => {
                 data={state.listProduct}
                 onPress={(item) => navigation.navigate('WorkshopDetail', { item })}
                 style={{
-                  paddingBottom: 160
+                  paddingBottom: 48
                 }}
             />
         </Scaffold>

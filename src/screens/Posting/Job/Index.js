@@ -11,18 +11,19 @@ import {
 } from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
-import ListNews from 'src/components/List/ListNews';
+import ListNews from 'src/components/Posting/ListNews';
 
 import Client from '@src/lib/apollo';
 import { queryMaudiProduct } from '@src/lib/query';
 import { listPrivilegeUser } from 'src/utils/constants';
-import ListEmergency from 'src/components/List/ListEmergency';
+import ListJob from 'src/components/Posting/ListJob';
 
 const Example = Styled(View)`
 `;
 
 export default ({ navigation, route }) => {
     const [state, changeState] = useState({
+        listCategory: [],
         listProduct: [],
         fallback: true,
     });
@@ -52,9 +53,11 @@ export default ({ navigation, route }) => {
           fallback: true,
         });
 
-        const listProduct = await getMaudiProduct('TRIBES', 'SCENE', '');
+        const listCategory = await getMaudiProduct('TRIBES', '', '');
+        const listProduct = await getMaudiProduct('TRIBES', '', 'TRIBES_TAMPIL');
     
         setState({
+            listCategory,
             listProduct,
             fallback: false,
         });
@@ -92,7 +95,8 @@ export default ({ navigation, route }) => {
 
     return (
         <Scaffold
-            headerTitle={route.params && route.params.title ? route.params.title : ''}
+            headerTitle='Lowongan Pekerjaan'
+            // headerTitle={route.params && route.params.title ? route.params.title : ''}
             iconRightButton={
               <Ionicons
                 name='search'
@@ -112,23 +116,23 @@ export default ({ navigation, route }) => {
                 onPress={() => navigation.navigate('CreateThreadScreen', {
                   title: 'Tampil',
                   productType: "TRIBES",
-                  productCategory: 'SCENE',
-                  productSubCategory: '',
+                  productCategory: '',
+                  productSubCategory: 'TRIBES_TAMPIL',
                 })}
               >
                 Buat
             </Text>}
 
-            <ListEmergency
+            <ListJob
                 data={state.listProduct}
                 showHeader={false}
                 onPress={(item) => {
-                  navigation.navigate('EmergencyDetail', {
+                  navigation.navigate('JobDetail', {
                     item
                   });
                 }}
                 style={{
-                  paddingBottom: 76
+                  paddingBottom: 45
                 }}
             />
         </Scaffold>

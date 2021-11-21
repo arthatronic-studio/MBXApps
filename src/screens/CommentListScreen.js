@@ -110,7 +110,7 @@ const CommentListScreen = ({ navigation, route }) => {
 
     return (
         <MainView style={{backgroundColor: Color.theme}}>
-            <Header title='' />
+            <Header title='Komentar' />
 
             <View style={{width: '100%', height: 70, marginVertical: 16, paddingHorizontal: 16, flexDirection: 'row'}}>
                 <View style={{width: '20%', height: '100%'}}>

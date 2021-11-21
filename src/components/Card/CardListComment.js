@@ -107,6 +107,7 @@ const CardListComment = (props) => {
                       paddingVertical: 8,
                       paddingLeft: 8,
                       paddingRight: 40,
+                      minHeight: 45,
                     }}
                     value={textComment}
                     multiline

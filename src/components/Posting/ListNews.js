@@ -1,17 +1,19 @@
 import React from 'react';
 import { View, FlatList } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import PropTypes from 'prop-types';
 
-import CardNews from 'src/components/List/CardNews';
-import {
-    Text,
-    TouchableOpacity,
-    HeaderBig,
-    Loading,
-    useLoading,
-    useColor,
-} from '@src/components';
+import CardNews from 'src/components/Posting/CardNews';
+import { useColor } from '@src/components';
 import { useNavigation } from '@react-navigation/core';
+import HeaderPost from './HeaderPost';
+
+const propTypes = {
+    data: PropTypes.array,
+    horizontal: PropTypes.bool,
+    style: PropTypes.object,
+    onPress: PropTypes.func,
+    showHeader: PropTypes.bool,
+}
 
 const defaultProps = {
     data: [],
@@ -31,32 +33,17 @@ const ListNews = (props) => {
 
     const renderHeader = () => {
         return (
-            <View
-                style={{
-                    width: '100%',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingHorizontal: 16,
-                    marginTop: 30,
-                }}>
-                <Text type="bold">Postingan Artikel</Text>
-                <Text
-                    onPress={() => {
-                        navigation.navigate('NewsScreen', {title: 'Postingan Artikel'})
-                    }}
-                    size={12}
-                    color={Color.primary}
-                >
-                    Lihat Semua{' '}
-                    <Ionicons name="arrow-forward" size={12} color={Color.primary} />
-                </Text>
-            </View>
+            <HeaderPost
+                title='Postingan Artikel'
+                onSeeAllPress={() => {
+                    navigation.navigate('NewsScreen', {title: 'Postingan Artikel'})
+                }}
+            />
         )
     }
 
     return (
-        <View style={{paddingBottom: 8, paddingTop: showHeader ? 0 : 0}}>
+        <View style={{paddingBottom: 8}}>
             {showHeader && renderHeader()}
 
             <FlatList
@@ -82,5 +69,6 @@ const ListNews = (props) => {
     )
 }
 
+ListNews.propTypes = propTypes;
 ListNews.defaultProps = defaultProps;
 export default ListNews;

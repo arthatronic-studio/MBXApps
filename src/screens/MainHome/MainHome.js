@@ -16,10 +16,10 @@ import {
   Scaffold,
 } from '@src/components';
 import {FormatMoney} from '@src/utils';
-import ListNews from 'src/components/List/ListNews';
-import ListPlace from 'src/components/List/ListPlace';
-import ListWorkshop from 'src/components/List/ListWorkshop';
-import ListJob from 'src/components/List/ListJob';
+import ListNews from 'src/components/Posting/ListNews';
+import ListPlace from 'src/components/Posting/ListPlace';
+import ListWorkshop from 'src/components/Posting/ListWorkshop';
+import ListJob from 'src/components/Posting/ListJob';
 import {shadowStyle} from '@src/styles';
 import {Box, Divider, MainView} from '@src/styled';
 
@@ -38,7 +38,7 @@ import {
   iconSemua,
 } from '@assets/images/home';
 import ModalPosting from './ModalPosting';
-import ListEmergency from 'src/components/List/ListEmergency';
+import ListEmergency from 'src/components/Posting/ListEmergency';
 
 const ContentView = Styled(View)`
   width: 100%;
@@ -424,6 +424,8 @@ const MainHome = ({navigation, route}) => {
           </BalanceView>
         </ContentView>
 
+        <Divider height={8} />
+
         <ContentView>
           <SambatanMenuView
             style={{...shadowStyle, backgroundColor: Color.textInput}}>
@@ -455,11 +457,12 @@ const MainHome = ({navigation, route}) => {
           </SambatanMenuView>
         </ContentView>
 
-        <Divider />
+        <Divider height={24} />
 
         <ListEmergency
           data={listEmergencyArea}
           horizontal
+          showHeader
           onPress={(item) => {
             navigation.navigate('EmergencyDetail', {item});
           }}
@@ -469,6 +472,7 @@ const MainHome = ({navigation, route}) => {
         <ListNews
           data={listTampil}
           horizontal
+          showHeader
           onPress={(item) => {
             navigation.navigate('NewsDetail', {item});
           }}
@@ -478,6 +482,7 @@ const MainHome = ({navigation, route}) => {
         <ListPlace
           data={listJalanJalan}
           horizontal
+          showHeader
           onPress={(item) => {
             navigation.navigate('PlaceDetail', {item});
           }}
@@ -491,7 +496,7 @@ const MainHome = ({navigation, route}) => {
           onPress={(item) => {
             navigation.navigate('WorkshopDetail', {item});
           }}
-          style={{paddingBottom: 8}}
+          style={{paddingLeft: 8}}
         />
 
         <ListJob
@@ -501,7 +506,7 @@ const MainHome = ({navigation, route}) => {
           onPress={(item) => {
             navigation.navigate('JobDetail', {item});
           }}
-          style={{paddingBottom: 8}}
+          style={{paddingLeft: 8}}
         />
       </ScrollView>
 

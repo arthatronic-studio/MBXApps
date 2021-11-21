@@ -28,7 +28,15 @@ const CardWorkshop = (props) => {
     return (
         <TouchableOpacity
             onPress={() => onPress(item)}
-            style={[{width: width / numColumns - (horizontal ? 32 : 16), paddingHorizontal: 8, marginBottom: 16, borderRadius: 4}, style]}
+            style={[
+                {
+                    width: width / numColumns - (horizontal ? 32 : 16),
+                    paddingHorizontal: 8,
+                    marginBottom: 16,
+                    borderRadius: 4
+                },
+                style,
+            ]}
         >
             <View style={{flexDirection: 'row', width: '100%', backgroundColor: Color.textInput, borderRadius: 4, ...shadowStyle}}>
                 <Image

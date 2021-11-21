@@ -87,7 +87,7 @@ const CardEmergency = (props) => {
                 {
                     width: width / numColumns - (horizontal ? 32 : 16),
                     paddingHorizontal: 8,
-                    marginBottom: horizontal ? 0 : 16,
+                    marginBottom: 16,
                 },
                 style
             ]}

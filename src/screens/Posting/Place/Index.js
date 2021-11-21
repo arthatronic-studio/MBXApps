@@ -11,7 +11,7 @@ import {
 } from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
-import ListNews from 'src/components/List/ListNews';
+import ListPlace from 'src/components/Posting/ListPlace';
 
 import Client from '@src/lib/apollo';
 import { queryMaudiProduct } from '@src/lib/query';
@@ -22,9 +22,9 @@ const Example = Styled(View)`
 
 export default ({ navigation, route }) => {
     const [state, changeState] = useState({
+        fallback: true,
         listCategory: [],
         listProduct: [],
-        fallback: true,
     });
 
     const setState = (obj) => {
@@ -51,14 +51,14 @@ export default ({ navigation, route }) => {
         setState({
           fallback: true,
         });
-
+    
         const listCategory = await getMaudiProduct('TRIBES', '', '');
-        const listProduct = await getMaudiProduct('TRIBES', '', 'TRIBES_TAMPIL');
+        const listProduct = await getMaudiProduct('TRIBES', '', 'TRIBES_JALAN_JALAN');
     
         setState({
+            fallback: false,
             listCategory,
             listProduct,
-            fallback: false,
         });
     }
 
@@ -91,10 +91,10 @@ export default ({ navigation, route }) => {
           return [];
         }
     }
-
+    
     return (
         <Scaffold
-            headerTitle={route.params && route.params.title ? route.params.title : ''}
+            headerTitle='Tempat'
             iconRightButton={
               <Ionicons
                 name='search'
@@ -112,26 +112,19 @@ export default ({ navigation, route }) => {
                 color={Color.textInput}
                 style={{backgroundColor: Color.primary, paddingTop: 2, paddingBottom: 6}}
                 onPress={() => navigation.navigate('CreateThreadScreen', {
-                  title: 'Tampil',
+                  title: 'Jalan Jalan',
                   productType: "TRIBES",
                   productCategory: '',
-                  productSubCategory: 'TRIBES_TAMPIL',
+                  productSubCategory: 'TRIBES_JALAN_JALAN',
                 })}
               >
                 Buat
             </Text>}
 
-            <ListNews
+            <ListPlace
                 data={state.listProduct}
                 showHeader={false}
-                onPress={(item) => {
-                  navigation.navigate('NewsDetail', {
-                    item
-                  });
-                }}
-                style={{
-                  paddingBottom: 76
-                }}
+                onPress={(item) => navigation.navigate('PlaceDetail', { item })}
             />
         </Scaffold>
     )

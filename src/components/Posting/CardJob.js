@@ -28,7 +28,11 @@ const CardJob = (props) => {
         <TouchableOpacity
             onPress={() => onPress(item)}
             style={[
-                {width: width / numColumns - 16, paddingHorizontal: 8, marginBottom: 16},
+                {
+                    width: width / numColumns - 16,
+                    paddingHorizontal: 8,
+                    marginBottom: 16
+                },
                 style,
             ]}
         >

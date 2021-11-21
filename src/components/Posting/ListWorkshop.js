@@ -1,11 +1,19 @@
 import React from 'react';
 import { View, FlatList } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import PropTypes from 'prop-types';
 
 import { useColor } from '@src/components';
-import Text from '@src/components/Text';
-import CardWorkshop from 'src/components/List/CardWorkshop';
+import CardWorkshop from 'src/components/Posting/CardWorkshop';
 import { useNavigation } from '@react-navigation/core';
+import HeaderPost from './HeaderPost';
+
+const propTypes = {
+    data: PropTypes.array,
+    horizontal: PropTypes.bool,
+    style: PropTypes.object,
+    onPress: PropTypes.func,
+    showHeader: PropTypes.bool,
+}
 
 const defaultProps = {
     data: [],
@@ -25,29 +33,17 @@ const ListWorkshop = (props) => {
 
     const renderHeader = () => {
         return (
-            <View
-                style={{
-                    width: '100%',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingHorizontal: 16,
-                    paddingBottom: 8,
-                }}>
-                <Text type="bold">Event Terbaru</Text>
-                <Text
-                    onPress={() => navigation.navigate('WorkshopScreen')}
-                    size={12}
-                    color={Color.primary}>
-                    Lihat Semua{' '}
-                    <Ionicons name="arrow-forward" size={12} color={Color.primary} />
-                </Text>
-            </View>
+            <HeaderPost
+                title='Event Terbaru'
+                onSeeAllPress={() => {
+                    navigation.navigate('WorkshopScreen', {title: 'Event Terbaru'})
+                }}
+            />
         )
     }
 
     return (
-        <View style={{paddingBottom: 8, paddingTop: showHeader ? 0 : 16}}>
+        <View style={{paddingBottom: 8}}>
             {showHeader && renderHeader()}
 
             <FlatList
@@ -57,7 +53,7 @@ const ListWorkshop = (props) => {
                 numColumns={1}
                 horizontal={horizontal}
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{paddingTop: 8, paddingLeft: 8, paddingBottom: 136, ...style}}
+                contentContainerStyle={{paddingTop: 16, paddingHorizontal: 8, ...style}}
                 renderItem={({ item, index }) => {
                     return (
                         <CardWorkshop
@@ -73,5 +69,6 @@ const ListWorkshop = (props) => {
     )
 }
 
+ListWorkshop.propTypes = propTypes;
 ListWorkshop.defaultProps = defaultProps;
 export default ListWorkshop;

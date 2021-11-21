@@ -80,7 +80,6 @@ const CardNews = (props) => {
                     width: width / numColumns - (horizontal ? 32 : 16),
                     paddingHorizontal: 8,
                     marginBottom: 16,
-                    borderRadius: 4,
                 },
                 style
             ]}

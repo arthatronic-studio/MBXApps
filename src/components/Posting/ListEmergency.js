@@ -1,11 +1,19 @@
 import React from 'react';
 import { View, FlatList } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import PropTypes from 'prop-types';
 
 import { useColor } from '@src/components';
-import Text from '@src/components/Text';
 import CardEmergency from './CardEmergency';
 import { useNavigation } from '@react-navigation/core';
+import HeaderPost from './HeaderPost';
+
+const propTypes = {
+    data: PropTypes.array,
+    horizontal: PropTypes.bool,
+    style: PropTypes.object,
+    onPress: PropTypes.func,
+    showHeader: PropTypes.bool,
+}
 
 const defaultProps = {
     data: [],
@@ -25,32 +33,17 @@ const ListEmergency = (props) => {
 
     const renderHeader = () => {
         return (
-            <View
-                style={{
-                width: '100%',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                paddingHorizontal: 16,
-                marginBottom: 8,
-            }}>
-                <Text type="bold">Emergency Area</Text>
-                <Text
-                    onPress={() => {
-                        navigation.navigate('EmergencyScreen', {title: 'Emergency Area'})
-                    }}
-                    size={12}
-                    color={Color.primary}
-                >
-                    Lihat Semua{' '}
-                    <Ionicons name="arrow-forward" size={12} color={Color.primary} />
-                </Text>
-            </View>
+            <HeaderPost
+                title='Emergency Area'
+                onSeeAllPress={() => {
+                    navigation.navigate('EmergencyScreen', {title: 'Emergency Area'})
+                }}
+            />
         )
     }
 
     return (
-        <View style={{paddingBottom: 8, paddingTop: showHeader ? 8 : 8}}>
+        <View style={{paddingBottom: 8}}>
             {showHeader && renderHeader()}
 
             <FlatList
@@ -60,7 +53,7 @@ const ListEmergency = (props) => {
                 numColumns={1}
                 horizontal={horizontal}
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{paddingTop: 8, paddingHorizontal: 8, alignItems: 'center', ...style}}
+                contentContainerStyle={{paddingTop: 16, paddingHorizontal: 8, ...style}}
                 renderItem={({ item, index }) => {
                     return (
                         <CardEmergency
@@ -76,6 +69,6 @@ const ListEmergency = (props) => {
     )
 }
 
+ListEmergency.propTypes = propTypes;
 ListEmergency.defaultProps = defaultProps;
-
 export default ListEmergency;

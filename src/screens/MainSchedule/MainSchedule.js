@@ -10,7 +10,7 @@ import {
 import Text from '@src/components/Text';
 import HeaderBig from '@src/components/HeaderBig';
 import Scaffold from '@src/components/Scaffold';
-import ListNews from 'src/components/List/ListNews';
+import ListNews from 'src/components/Posting/ListNews';
 
 import Client from '@src/lib/apollo';
 import { queryMaudiProduct } from '@src/lib/query';

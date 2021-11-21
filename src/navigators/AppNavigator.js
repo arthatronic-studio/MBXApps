@@ -37,24 +37,24 @@ import NumbersInput from 'src/screens/MainProfile/CommunityAdmin/NumbersInput';
 import ApproveMember from 'src/screens/MainProfile/CommunityAdmin/ApproveMember';
 
 // Emergency
-import EmergencyScreen from 'src/screens/Emergency/Index';
-import EmergencyDetail from 'src/screens/Emergency/Detail';
+import EmergencyScreen from 'src/screens/Posting/Emergency/Index';
+import EmergencyDetail from 'src/screens/Posting/Emergency/Detail';
 
 // News
-import NewsScreen from 'src/screens/News/Index';
-import NewsDetail from 'src/screens/News/Detail';
+import NewsScreen from 'src/screens/Posting/News/Index';
+import NewsDetail from 'src/screens/Posting/News/Detail';
 
 // Place
-import PlaceScreen from 'src/screens/Place/Index';
-import PlaceDetail from 'src/screens/Place/Detail';
+import PlaceScreen from 'src/screens/Posting/Place/Index';
+import PlaceDetail from 'src/screens/Posting/Place/Detail';
 
 // Workshop
-import WorkshopScreen from 'src/screens/Workshop/Index';
-import WorkshopDetail from 'src/screens/Workshop/Detail';
+import WorkshopScreen from 'src/screens/Posting/Workshop/Index';
+import WorkshopDetail from 'src/screens/Posting/Workshop/Detail';
 
 // Job
-import JobScreen from 'src/screens/Job/Index';
-import JobDetail from 'src/screens/Job/Detail';
+import JobScreen from 'src/screens/Posting/Job/Index';
+import JobDetail from 'src/screens/Posting/Job/Detail';
 
 // payment
 import PaymentScreen from '@src/screens/Payment/PaymentScreen';
