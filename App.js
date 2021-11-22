@@ -2,7 +2,7 @@ import React, { useEffect, createRef } from 'react';
 import 'react-native-gesture-handler';
 import { StatusBar, Platform, Appearance, SafeAreaView } from 'react-native';
 import { Provider } from 'react-redux';
-// import SplashScreen from 'react-native-splash-screen';
+import RNBootSplash from "react-native-bootsplash";
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { NavigationContainer } from "@react-navigation/native";
 import { Host } from 'react-native-portalize';
@@ -20,7 +20,7 @@ const App = () => {
   const { Color } = useColor('root');
 
   const onReady = () => {
-    // SplashScreen.hide();
+    RNBootSplash.hide({ fade: true });
   }
 
   // ===========================================
