@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { View, Modal } from 'react-native';
 import Styled from 'styled-components';
-import Pdf from 'react-native-pdf';
+// import Pdf from 'react-native-pdf';
 
 import { useColor } from '@src/components';
 import Header from '@src/components/Header';
@@ -45,7 +45,7 @@ const ModalShowPDF = (props) => {
                 <View>
                     <Text style={{opacity: 0.6}}>{currentPage}/{totalPage}</Text>
                 </View>
-                <Pdf
+                {/* <Pdf
                     ref={pdfRef}
                     source={{
                         uri: item.videoFilename,
@@ -77,7 +77,7 @@ const ModalShowPDF = (props) => {
                     enablePaging
                     enableRTL
                     spacing={8}
-                />
+                /> */}
             </MainView>
         </Modal>
     )
