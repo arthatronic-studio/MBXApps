@@ -11,7 +11,7 @@ import {
 } from '@src/components';
 
 import Client from '@src/lib/apollo';
-import { queryMaudiLike } from '@src/lib/query';
+import { queryLike } from '@src/lib/query';
 
 const MainView = Styled(SafeAreaView)`
   flex: 1;
@@ -31,7 +31,7 @@ const ShowAllFromProfile = ({ navigation, route }) => {
 
     useEffect(() => {
       if (itemData.page !== -1) {
-        getMaudiLike();
+        fetchListLike();
       }
       
       if (route.params && route.params.popToTop) {
@@ -56,9 +56,9 @@ const ShowAllFromProfile = ({ navigation, route }) => {
       }
     }
 
-    const getMaudiLike = () => {
+    const fetchListLike = () => {
       Client.query({
-        query: queryMaudiLike,
+        query: queryLike,
         variables: {
           page: itemData.page + 1,
           itemPerPage: 10,
@@ -68,9 +68,9 @@ const ShowAllFromProfile = ({ navigation, route }) => {
         // console.log(res, 'ressss');
 
         setStateItemData({
-          data: itemData.data.concat(res.data.maudiLike),
+          data: itemData.data.concat(res.data.contentLike),
           loading: false,
-          page: res.data.maudiLike.length === 10 ? itemData.page + 1 : -1,
+          page: res.data.contentLike.length === 10 ? itemData.page + 1 : -1,
           loadNext: false,
         });
       })

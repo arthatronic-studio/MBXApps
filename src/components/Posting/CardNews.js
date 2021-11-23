@@ -12,7 +12,7 @@ import {
 import { shadowStyle } from '@src/styles';
 
 import Client from '@src/lib/apollo';
-import { queryMaudiAddLike } from '@src/lib/query';
+import { queryAddLike } from '@src/lib/query';
 
 const { width } = Dimensions.get('window');
 
@@ -40,7 +40,7 @@ const CardNews = (props) => {
 
     useEffect(() => {
         const timeout = trigger ? setTimeout(() => {
-            maudiAddLike();
+            fetchAddLike();
         }, 500) : null;
 
         return () => {
@@ -48,11 +48,11 @@ const CardNews = (props) => {
         }
     }, [trigger]);
 
-    const maudiAddLike = () => {
+    const fetchAddLike = () => {
         console.log('trigger article');
 
         Client.query({
-          query: queryMaudiAddLike,
+          query: queryAddLike,
           variables: {
             productId: item.id
           }

@@ -1,24 +1,24 @@
-import { queryMaudiProduct } from './queryMaudiProduct';
-import { queryMaudiMyProduct } from './queryMaudiMyProduct';
-import { queryMaudiProductManage } from './queryAddMaudiProduk';
-import { queryMaudiAddLike } from './queryMaudiAddLike';
-import { queryMaudiDelComment } from './queryMaudiDelComment';
-import { queryMaudiLike } from './queryMaudiLike';
-import { queryMaudiAddComment } from './queryMaudiAddComment';
-import { queryMaudiComment } from './queryMaudiComment';
+import { queryContentProduct } from './queryContentProduct';
+import { queryContentMyProduct } from './queryContentMyProduct';
+import { queryProductManage } from './queryContentProductManage';
+import { queryAddLike } from './queryContentAddLike';
+import { queryAddComment } from './queryContentAddComment';
+import { queryDelComment } from './queryContentDelComment';
+import { queryLike } from './queryContentLike';
+import { queryComment } from './queryContentComment';
 import { queryJoinCommunity } from './queryJoinCommunity';
 import { queryGetChapterList } from './queyGetChapterList'
 import { queryCheckVersion } from './queryCheckVersion';
 
 export {
-    queryMaudiProduct,
-    queryMaudiMyProduct,
-    queryMaudiProductManage,
-    queryMaudiAddLike,
-    queryMaudiDelComment,
-    queryMaudiLike,
-    queryMaudiAddComment,
-    queryMaudiComment,
+    queryContentProduct,
+    queryContentMyProduct,
+    queryProductManage,
+    queryAddLike,
+    queryAddComment,
+    queryDelComment,
+    queryLike,
+    queryComment,
     queryJoinCommunity,
     queryGetChapterList,
     queryCheckVersion,

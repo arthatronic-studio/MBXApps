@@ -14,7 +14,7 @@ import Scaffold from '@src/components/Scaffold';
 import ListNews from 'src/components/Posting/ListNews';
 
 import Client from '@src/lib/apollo';
-import { queryMaudiProduct } from '@src/lib/query';
+import { queryContentProduct } from '@src/lib/query';
 import { listPrivilegeUser } from 'src/utils/constants';
 import ListEmergency from 'src/components/Posting/ListEmergency';
 
@@ -52,7 +52,7 @@ export default ({ navigation, route }) => {
           fallback: true,
         });
 
-        const listProduct = await getMaudiProduct('TRIBES', 'SCENE', '');
+        const listProduct = await fetchContentProduct('TRIBES', 'SCENE', '');
     
         setState({
             listProduct,
@@ -60,7 +60,7 @@ export default ({ navigation, route }) => {
         });
     }
 
-    const getMaudiProduct = async(productType, productCategory, productSubCategory) => {
+    const fetchContentProduct = async(productType, productCategory, productSubCategory) => {
         const variables = {
           page: 0,
           itemPerPage: 6,
@@ -79,12 +79,12 @@ export default ({ navigation, route }) => {
         }
         
         const result = await Client.query({
-          query: queryMaudiProduct,
+          query: queryContentProduct,
           variables,
         });
     
-        if (result && result.data && result.data.maudiProduct && Array.isArray(result.data.maudiProduct)) {
-          return result.data.maudiProduct;
+        if (result && result.data && result.data.contentProduct && Array.isArray(result.data.contentProduct)) {
+          return result.data.contentProduct;
         } else {
           return [];
         }

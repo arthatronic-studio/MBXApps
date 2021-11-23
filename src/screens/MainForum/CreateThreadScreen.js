@@ -17,7 +17,7 @@ import ModalSelectStatus from '@src/components/Modal/ModalSelectStatus';
 import validate from '@src/lib/validate';
 
 import Client from '@src/lib/apollo';
-import { queryMaudiProductManage } from '@src/lib/query';
+import { queryProductManage } from '@src/lib/query';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -146,7 +146,7 @@ const CreateThreadScreen = (props) => {
         
 
         Client.query({
-            query: queryMaudiProductManage,
+            query: queryProductManage,
             variables,
         })
         .then((res) => {

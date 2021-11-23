@@ -12,7 +12,7 @@ import {
 import { shadowStyle } from '@src/styles';
 
 import Client from '@src/lib/apollo';
-import { queryMaudiAddLike } from '@src/lib/query';
+import { queryAddLike } from '@src/lib/query';
 
 import {
     iconLocation,
@@ -48,7 +48,7 @@ const CardEmergency = (props) => {
 
     useEffect(() => {
         const timeout = trigger ? setTimeout(() => {
-            maudiAddLike();
+            fetchAddLike();
         }, 500) : null;
 
         return () => {
@@ -56,11 +56,11 @@ const CardEmergency = (props) => {
         }
     }, [trigger]);
 
-    const maudiAddLike = () => {
+    const fetchAddLike = () => {
         console.log('trigger emergency');
 
         Client.query({
-            query: queryMaudiAddLike,
+            query: queryAddLike,
             variables: {
                 productId: item.id
             }

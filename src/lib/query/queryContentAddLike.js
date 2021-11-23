@@ -1,10 +1,10 @@
 import gql from 'graphql-tag';
 
-export const queryMaudiAddLike = gql`
+export const queryAddLike = gql`
     query(
         $productId: Int
     ){
-        maudiAddLike(
+        contentAddLike(
             productId: $productId
         ) {
             id

@@ -1,23 +1,26 @@
 import gql from 'graphql-tag';
 
-export const queryMaudiLike = gql`
+export const queryComment = gql`
     query(
         $page: Int
         $itemPerPage: Int
         $productId: Int
     ){
-        maudiLike(
+        contentComment(
             page: $page
             itemPerPage: $itemPerPage
             productId: $productId
-        ) {
+        ){
             id
             userId
             fullname
             image
-            likeDate
+            comment
+            commentDate
             productId
-            status
+            parentCommentId
+            imageVideo
+            videoFilename
         }
     }
 `;

@@ -1,11 +1,11 @@
 import gql from 'graphql-tag';
 
-export const queryMaudiDelComment = gql`
+export const queryDelComment = gql`
     query(
         $id: Int
         $productId: Int
     ){
-        maudiDelComment(
+        contentDelComment(
             id: $id
             productId: $productId
         ) {

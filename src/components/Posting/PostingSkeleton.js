@@ -9,18 +9,6 @@ import {
     TouchableOpacity,
     useColor
 } from '@src/components';
-import { shadowStyle } from '@src/styles';
-
-import Client from '@src/lib/apollo';
-import { queryMaudiAddLike } from '@src/lib/query';
-
-import {
-    iconLocation,
-    iconCategory,
-    iconComment,
-    iconLiked,
-    iconLike,
-} from '@assets/images/home';
 import { Divider } from 'src/styled';
 
 const { width } = Dimensions.get('window');

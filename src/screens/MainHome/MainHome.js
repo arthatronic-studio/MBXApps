@@ -24,7 +24,7 @@ import {shadowStyle} from '@src/styles';
 import {Box, Divider, MainView} from '@src/styled';
 
 import Client from '@src/lib/apollo';
-import {queryMaudiProduct} from '@src/lib/query';
+import { queryContentProduct } from '@src/lib/query';
 import {queryVestaBalance, queryVestaOpenBalance} from '@src/lib/query/payment';
 
 import {
@@ -188,11 +188,11 @@ const MainHome = ({navigation, route}) => {
 
   const fetchData = async () => {
     const result = await Promise.all([
-      await getMaudiProduct('TRIBES', 'SCENE', ''),
-      await getMaudiProduct('TRIBES', '', 'TRIBES_TAMPIL'),
-      await getMaudiProduct('TRIBES', '', 'TRIBES_JALAN_JALAN'),
-      await getMaudiProduct('TRIBES', '', 'TRIBES_BELAJAR'),
-      await getMaudiProduct('TRIBES', '', 'TRIBES_KERJA'),
+      await fetchContentProduct('TRIBES', 'SCENE', ''),
+      await fetchContentProduct('TRIBES', '', 'TRIBES_TAMPIL'),
+      await fetchContentProduct('TRIBES', '', 'TRIBES_JALAN_JALAN'),
+      await fetchContentProduct('TRIBES', '', 'TRIBES_BELAJAR'),
+      await fetchContentProduct('TRIBES', '', 'TRIBES_KERJA'),
     ]);
 
     setLoadingEmergency(false);
@@ -212,7 +212,7 @@ const MainHome = ({navigation, route}) => {
   };
   
 
-  const getMaudiProduct = async (
+  const fetchContentProduct = async (
     productType,
     productCategory,
     productSubCategory,
@@ -235,17 +235,17 @@ const MainHome = ({navigation, route}) => {
     }
 
     const result = await Client.query({
-      query: queryMaudiProduct,
+      query: queryContentProduct,
       variables,
     });
 
     if (
       result &&
       result.data &&
-      result.data.maudiProduct &&
-      Array.isArray(result.data.maudiProduct)
+      result.data.contentProduct &&
+      Array.isArray(result.data.contentProduct)
     ) {
-      return result.data.maudiProduct;
+      return result.data.contentProduct;
     } else {
       return [];
     }

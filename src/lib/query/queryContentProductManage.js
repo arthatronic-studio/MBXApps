@@ -1,10 +1,10 @@
 import gql from 'graphql-tag';
 
-export const queryMaudiProductManage = gql`
+export const queryProductManage = gql`
     query(
-        $products: [MaudiProductManageInput]
+        $products: [ContentProductManageInput]
     ) {
-        maudiProductManage(
+        contentProductManage(
             products: $products
         ){
             id
@@ -35,6 +35,9 @@ export const queryMaudiProductManage = gql`
             ownerId
             fullname
             avatar
+            latitude
+            longitude
+            mainImage
         }
     }
 `;

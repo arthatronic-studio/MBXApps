@@ -343,7 +343,7 @@ const RegisterScreen = ({ navigation, route }) => {
 
           {/* <View style={{width: '100%', paddingVertical: 2, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
             <MaterialIcons size={16} name='check-box-outline-blank' color={Color.theme} style={{marginRight: 4}} />
-            <Text align='left' size={12} color={Color.theme}>Saya ingin menerima berita terbaru MaudiKenal lewat email</Text>
+            <Text align='left' size={12} color={Color.theme}>Saya ingin menerima berita terbaru lewat email</Text>
           </View> */}
 
           {/* <View style={{width: '100%', paddingVertical: 2, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>

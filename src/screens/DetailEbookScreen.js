@@ -8,7 +8,7 @@ import {
 } from '@src/components';
 
 import Client from '@src/lib/apollo';
-import { queryMaudiProduct } from '@src/lib/query';
+import { queryContentProduct } from '@src/lib/query';
 
 import {
     imageBlank,
@@ -30,7 +30,7 @@ const DetailEbookScreen = ({ route, navigation }) => {
     
     useEffect(() => {
         Client.query({
-            query: queryMaudiProduct,
+            query: queryContentProduct,
             variables: {
                 productCode: code
             }
@@ -38,9 +38,9 @@ const DetailEbookScreen = ({ route, navigation }) => {
           .then((res) => {
             console.log(res, 'res detail');
       
-            if (res.data.maudiProduct.length > 0) {
-                setItem(res.data.maudiProduct[0]);
-                Image.getSize(res.data.maudiProduct[0].image, (width, height) => {
+            if (res.data.contentProduct.length > 0) {
+                setItem(res.data.contentProduct[0]);
+                Image.getSize(res.data.contentProduct[0].image, (width, height) => {
                     let result = 0;
                     if (windowWidth > width) {
                         result = height + (windowWidth - width);

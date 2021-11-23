@@ -1,18 +1,26 @@
 import gql from 'graphql-tag';
 
-export const queryMaudiMyProduct = gql`
+export const queryContentProduct = gql`
     query(
         $productCode: String
         $productName: String
         $page: Int
         $itemPerPage: Int
+        $productType: ContentProductType
+        $productCategory: ContentProductCategory
+        $productSubCategory: ContentProductSubCategory
+        $parentProductId: Int
     ){
-        maudiMyProduct(
-            productCode: $productCode,
-            productName: $productName,
-            page: $page,
+        contentProduct(
+            productCode: $productCode
+            productName: $productName
+            page: $page
             itemPerPage: $itemPerPage
-        ) {
+            productType: $productType
+            productCategory: $productCategory
+            productSubCategory: $productSubCategory
+            parentProductId: $parentProductId
+        ){
             id
             code
             productName
@@ -41,6 +49,9 @@ export const queryMaudiMyProduct = gql`
             ownerId
             fullname
             avatar
+            latitude
+            longitude
+            mainImage
         }
     }
 `;

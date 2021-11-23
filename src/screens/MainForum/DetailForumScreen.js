@@ -17,7 +17,7 @@ import {
 } from '@src/components';
 
 import Client from '@src/lib/apollo';
-import { queryMaudiProduct, queryMaudiComment, queryMaudiAddComment, queryMaudiDelComment } from '@src/lib/query';
+import { queryContentProduct, queryComment, queryAddComment, queryDelComment } from '@src/lib/query';
 
 import {
     imageBlank,
@@ -57,15 +57,15 @@ const DetailForumScreen = ({ route, navigation }) => {
     );
 
     useEffect(() => {
-        getMaudiProduct();
+        fetchContentProduct();
     }, []);
 
     useEffect(() => {
         if (refreshComment) {
-            getMaudiProduct();
+            fetchContentProduct();
 
             if (item && item.comment > 0) {
-                getMaudiComment('initial');
+                fetchCommentList('initial');
                 setRefreshComment(false);
             }
         }
@@ -73,7 +73,7 @@ const DetailForumScreen = ({ route, navigation }) => {
 
     // useEffect(() => {
     //     if (item && item.comment > 0) {
-    //         getMaudiComment('initial');
+    //         fetchCommentList('initial');
     //     } else {
     //         setDataComment({
     //             ...dataComment,
@@ -86,13 +86,13 @@ const DetailForumScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         if (dataComment.page !== -1 && item) {
-            getMaudiComment();
+            fetchCommentList();
         }
     }, [dataComment.loadNext]);
 
-    const getMaudiProduct = () => {
+    const fetchContentProduct = () => {
         Client.query({
-            query: queryMaudiProduct,
+            query: queryContentProduct,
             variables: {
                 productCode: params.item.code
             }
@@ -100,8 +100,8 @@ const DetailForumScreen = ({ route, navigation }) => {
           .then((res) => {
             console.log(res, 'res detail');
       
-            if (res.data.maudiProduct.length > 0) {
-                setItem(res.data.maudiProduct[0]);
+            if (res.data.contentProduct.length > 0) {
+                setItem(res.data.contentProduct[0]);
             }
           })
           .catch((err) => {
@@ -109,9 +109,9 @@ const DetailForumScreen = ({ route, navigation }) => {
           });
     }
 
-    const getMaudiComment = (initial) => {
+    const fetchCommentList = (initial) => {
         Client.query({
-            query: queryMaudiComment,
+            query: queryComment,
             variables: {
               page: dataComment.page + 1,
               itemPerPage: 10,
@@ -123,16 +123,16 @@ const DetailForumScreen = ({ route, navigation }) => {
             
             if (initial) {
                 setDataComment({
-                    data: res.data.maudiComment,
+                    data: res.data.contentComment,
                     loading: false,
-                    page: res.data.maudiComment.length === 10 ? 1 : -1,
+                    page: res.data.contentComment.length === 10 ? 1 : -1,
                     loadNext: false,
                 });
             } else {
                 setDataComment({
-                    data: dataComment.data.concat(res.data.maudiComment),
+                    data: dataComment.data.concat(res.data.contentComment),
                     loading: false,
-                    page: res.data.maudiComment.length === 10 ? dataComment.page + 1 : -1,
+                    page: res.data.contentComment.length === 10 ? dataComment.page + 1 : -1,
                     loadNext: false,
                 });
             }
@@ -162,14 +162,14 @@ const DetailForumScreen = ({ route, navigation }) => {
         console.log(variables, 'variables');
         
         Client.query({
-            query: queryMaudiAddComment,
+            query: queryAddComment,
             variables
           })
           .then((res) => {
             console.log(res, 'res add comm');
             
-            if (res.data.maudiAddComment.id) {
-              const arrNew = [res.data.maudiAddComment].concat([]);
+            if (res.data.contentAddComment.id) {
+              const arrNew = [res.data.contentAddComment].concat([]);
             
               setTextComment('');
               setRefreshComment(true);
@@ -183,7 +183,7 @@ const DetailForumScreen = ({ route, navigation }) => {
           })
     }
 
-    const maudiDelComment = () => {
+    const fetchDelComment = () => {
         showLoading();
 
         const variables = {
@@ -192,11 +192,11 @@ const DetailForumScreen = ({ route, navigation }) => {
         };
         
         Client.query({
-          query: queryMaudiDelComment,
+          query: queryDelComment,
           variables,
         })
         .then((res) => {
-          const data = res.data.maudiDelComment;
+          const data = res.data.contentDelComment;
           
           showLoading(data.success ? 'success' : 'error', data.message);
 
@@ -326,7 +326,7 @@ const DetailForumScreen = ({ route, navigation }) => {
                         name: 'Hapus',
                         color: Color.red,
                         onPress: () => {
-                            Alert('Hapus', 'Apakah Anda yakin menghapus konten?', () => maudiDelComment());
+                            Alert('Hapus', 'Apakah Anda yakin menghapus konten?', () => fetchDelComment());
                             modalListActionRef.current.close();
                         },
                     }

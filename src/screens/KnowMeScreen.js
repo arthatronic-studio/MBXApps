@@ -154,7 +154,7 @@ const KnowMeScreen = ({ navigation, route }) => {
           <Tab key={idx} heading={<TabHeading style={{backgroundColor: Color.theme}} />}>
             {/* <Image
               style={{width: '100%', height: '100%', position: 'absolute', backgroundColor: '#000000'}}
-              source={{uri: 'http://maudikenal.com:7070/assets/images-maudi/MAUDIKENAL.jpg'}}
+              source={{uri: ''}}
               resizeMode='cover'
             /> */}
             <MainView style={{backgroundColor: Color.theme}}>

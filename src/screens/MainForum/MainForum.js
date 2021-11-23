@@ -18,7 +18,7 @@ import ListForum from '@src/screens/MainForum/ListForum';
 import { shadowStyle } from '@src/styles';
 
 import Client from '@src/lib/apollo';
-import { queryMaudiProduct } from '@src/lib/query';
+import { queryContentProduct } from '@src/lib/query';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -102,19 +102,19 @@ const MainForum = ({ navigation, route }) => {
   const fecthData = async() => {
     showLoading();
 
-    const newListMostDiscussion = await getMaudiProduct('PODDIUM_FORUM', '', '');
+    const newListMostDiscussion = await fetchContentProduct('PODDIUM_FORUM', '', '');
     setListMostDiscussion(newListMostDiscussion);
 
-    const newListGroupReader = await getMaudiProduct('PODDIUM_FORUM', '', 'FORUM_GROUP_READER');
+    const newListGroupReader = await fetchContentProduct('PODDIUM_FORUM', '', 'FORUM_GROUP_READER');
     setListGroupReader(newListGroupReader);
 
-    const newListFavoriteDiscussion = await getMaudiProduct('PODDIUM_FORUM', '', 'FORUM_DISCUSSION');
+    const newListFavoriteDiscussion = await fetchContentProduct('PODDIUM_FORUM', '', 'FORUM_DISCUSSION');
     setListFavoriteDiscussion(newListFavoriteDiscussion);
 
     hideLoading();
   }
 
-  const getMaudiProduct = async(productType, productCategory, productSubCategory) => {
+  const fetchContentProduct = async(productType, productCategory, productSubCategory) => {
     const variables = {
       page: 0,
       itemPerPage: 6,
@@ -133,12 +133,12 @@ const MainForum = ({ navigation, route }) => {
     }
     
     const result = await Client.query({
-      query: queryMaudiProduct,
+      query: queryContentProduct,
       variables,
     });
 
-    if (result && result.data && result.data.maudiProduct && Array.isArray(result.data.maudiProduct)) {
-      return result.data.maudiProduct;
+    if (result && result.data && result.data.contentProduct && Array.isArray(result.data.contentProduct)) {
+      return result.data.contentProduct;
     } else {
       return [];
     }

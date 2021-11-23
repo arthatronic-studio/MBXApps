@@ -10,7 +10,7 @@ import ModalShowPDF from '@src/components/Modal/ModalShowPDF';
 import CardForum from '@src/screens/MainForum/CardForum';
 
 import Client from '@src/lib/apollo';
-import { queryMaudiProduct } from '@src/lib/query';
+import { queryContentProduct } from '@src/lib/query';
 
 const MainView = Styled(SafeAreaView)`
   flex: 1;
@@ -32,7 +32,7 @@ const ShowAllFromForum = ({ navigation, route }) => {
 
     useEffect(() => {
       if (itemData.page !== -1) {
-        getMaudiProduct();
+        fetchContentProduct();
       }
       
       if (route.params && route.params.popToTop) {
@@ -57,7 +57,7 @@ const ShowAllFromForum = ({ navigation, route }) => {
       }
     }
 
-    const getMaudiProduct = () => {
+    const fetchContentProduct = () => {
       const variables = {
         page: itemData.page + 1,
         itemPerPage: 10,
@@ -76,16 +76,16 @@ const ShowAllFromForum = ({ navigation, route }) => {
       }
 
       Client.query({
-        query: queryMaudiProduct,
+        query: queryContentProduct,
         variables,
       })
       .then((res) => {
         // console.log(res, 'ressss');
 
         setStateItemData({
-          data: itemData.data.concat(res.data.maudiProduct),
+          data: itemData.data.concat(res.data.contentProduct),
           loading: false,
-          page: res.data.maudiProduct.length === 10 ? itemData.page + 1 : -1,
+          page: res.data.contentProduct.length === 10 ? itemData.page + 1 : -1,
           loadNext: false,
         });
       })

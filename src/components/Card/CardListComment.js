@@ -11,7 +11,7 @@ import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Loading, { useLoading } from  '@src/components/Modal/Loading';
 
 import Client from '@src/lib/apollo';
-import { queryMaudiAddComment } from '@src/lib/query';
+import { queryAddComment } from '@src/lib/query';
 import { shadowStyle } from '@src/styles';
 
 const defaultProps = {
@@ -65,18 +65,18 @@ const CardListComment = (props) => {
         console.log(variables, 'variables');
         
         Client.query({
-            query: queryMaudiAddComment,
+            query: queryAddComment,
             variables
           })
           .then((res) => {
             console.log(res, 'res add comm');
             
-            if (res.data.maudiAddComment.id) {
-              const arrNew = [res.data.maudiAddComment].concat(listComment);
+            if (res.data.contentAddComment.id) {
+              const arrNew = [res.data.contentAddComment].concat(listComment);
             
               setTextComment('');
               setListComment(arrNew);
-              onSuccessComment(res.data.maudiAddComment.productId);
+              onSuccessComment(res.data.contentAddComment.productId);
             } else {
               showLoading('error', 'Gagal mengirimkan komentar');
             }

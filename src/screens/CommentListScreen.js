@@ -12,7 +12,7 @@ import {
 import CardListComment from '@src/components/Card/CardListComment';
 
 import Client from '@src/lib/apollo';
-import { queryMaudiComment } from '@src/lib/query';
+import { queryComment } from '@src/lib/query';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -35,7 +35,7 @@ const CommentListScreen = ({ navigation, route }) => {
 
     useEffect(() => {
         if (item && item.comment > 0) {
-            getMaudiComment('initial');
+            fetchCommentList('initial');
         } else {
             setDataComment({
                 ...dataComment,
@@ -48,20 +48,20 @@ const CommentListScreen = ({ navigation, route }) => {
 
     useEffect(() => {
         if (dataComment.page !== -1 && item) {
-            getMaudiComment();
+            fetchCommentList();
         }
     }, [dataComment.loadNext]);
 
     useEffect(() => {
         if (refreshComment && item && item.comment > 0) {
-            getMaudiComment('initial');
+            fetchCommentList('initial');
             setRefreshComment(false);
         }
     }, [refreshComment]);
 
-    const getMaudiComment = (initial) => {
+    const fetchCommentList = (initial) => {
         Client.query({
-            query: queryMaudiComment,
+            query: queryComment,
             variables: {
               page: dataComment.page + 1,
               itemPerPage: 10,
@@ -73,16 +73,16 @@ const CommentListScreen = ({ navigation, route }) => {
             
             if (initial) {
                 setDataComment({
-                    data: res.data.maudiComment,
+                    data: res.data.contentComment,
                     loading: false,
-                    page: res.data.maudiComment.length === 10 ? 1 : -1,
+                    page: res.data.contentComment.length === 10 ? 1 : -1,
                     loadNext: false,
                 });
             } else {
                 setDataComment({
-                    data: dataComment.data.concat(res.data.maudiComment),
+                    data: dataComment.data.concat(res.data.contentComment),
                     loading: false,
-                    page: res.data.maudiComment.length === 10 ? dataComment.page + 1 : -1,
+                    page: res.data.contentComment.length === 10 ? dataComment.page + 1 : -1,
                     loadNext: false,
                 });
             }

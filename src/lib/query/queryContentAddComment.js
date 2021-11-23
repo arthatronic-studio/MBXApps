@@ -1,16 +1,18 @@
 import gql from 'graphql-tag';
 
-export const queryMaudiComment = gql`
+export const queryAddComment = gql`
     query(
-        $page: Int
-        $itemPerPage: Int
+        $comment: String
         $productId: Int
+        $stream: String
+        $image: String
     ){
-        maudiComment(
-            page: $page
-            itemPerPage: $itemPerPage
+        contentAddComment(
             productId: $productId
-        ){
+            comment: $comment
+            stream: $stream
+            image: $image
+        ) {
             id
             userId
             fullname

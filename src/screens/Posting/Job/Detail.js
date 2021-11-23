@@ -17,7 +17,7 @@ import { TouchableOpacity } from '@src/components/Button';
 import { shadowStyle } from '@src/styles';
 
 import Client from '@src/lib/apollo';
-import { queryMaudiAddLike } from '@src/lib/query';
+import { queryAddLike } from '@src/lib/query';
 
 const Example = Styled(View)`
 `;
@@ -38,7 +38,7 @@ export default ({ navigation, route }) => {
 
     // useEffect(() => {
     //     const timeout = trigger ? setTimeout(() => {
-    //         maudiAddLike();
+    //         fetchAddLike();
     //     }, 500) : null;
 
     //     return () => {
@@ -46,19 +46,19 @@ export default ({ navigation, route }) => {
     //     }
     // }, [trigger]);
 
-    const maudiAddLike = () => {
+    const fetchAddLike = () => {
         showLoading();
 
         Client.query({
-          query: queryMaudiAddLike,
+          query: queryAddLike,
           variables: {
             productId: item.id
           }
         })
         .then((res) => {
           console.log(res, 'res add like');
-          if (res.data.maudiAddLike.id) {
-            if (res.data.maudiAddLike.status === 1) {
+          if (res.data.contentAddLike.id) {
+            if (res.data.contentAddLike.status === 1) {
                 showLoading('success', 'Berhasil diikuti');
                 setState({ im_like: true });
             } else {
@@ -148,7 +148,7 @@ export default ({ navigation, route }) => {
             <View style={{height: 60, width: '100%', alignItems: 'center', justifyContent: 'center', backgroundColor: Color.textInput, ...shadowStyle}}>
                 <TouchableOpacity
                     onPress={() => {
-                        maudiAddLike();
+                        fetchAddLike();
                     }}
                     style={{
                         height: 40,
