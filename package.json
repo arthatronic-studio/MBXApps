@@ -6,7 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start --reset-cache",
-    "apk": "cd android && ./gradlew clean && ./gradlew assembleRelease && cd ..",
+    "apk": "cd android && ./gradlew assembleRelease && cd ..",
     "aab": "cd android && ./gradlew clean && ./gradlew bundleRelease && cd ..",
     "pod": "cd ios && pod install && cd ..",
     "test": "jest",
