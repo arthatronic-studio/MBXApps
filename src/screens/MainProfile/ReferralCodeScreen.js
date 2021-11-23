@@ -173,11 +173,12 @@ const ReferralCode = (props) => {
         showLoading('success', 'Thread berhasil dibuat!');
 
         setTimeout(() => {
-          navigation.navigate('ForumSegmentScreen', {
-            ...params,
-            componentType: 'LIST',
-            refresh: true,
-          });
+          // navigation.navigate('ForumSegmentScreen', {
+          //   ...params,
+          //   componentType: 'LIST',
+          //   refresh: true,
+          // });
+          navigation.popToTop();
         }, 2500);
       })
       .catch((err) => {

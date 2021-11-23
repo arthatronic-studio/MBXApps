@@ -138,7 +138,10 @@ export default ({ navigation, route }) => {
                 showHeader={false}
                 showAll={false}
                 data={state.listProduct}
-                onPress={(item) => navigation.navigate('WorkshopDetail', { item })}
+                onPress={(item) => {
+                  // navigation.navigate('WorkshopDetail', { item });
+                  navigation.navigate('PostingDetail', {item});
+                }}
                 style={{
                   paddingBottom: 48
                 }}

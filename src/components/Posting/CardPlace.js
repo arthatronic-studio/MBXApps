@@ -62,7 +62,7 @@ const CardPlace = (props) => {
                             <Text size={12}>{item.like}</Text>
                         </View>
                         <View style={{flexDirection: 'row'}}>
-                            <Text size={12} color={Color.primary}>Lihat Tempat</Text>
+                            <Text size={12}>{item.comment > 0 ? item.comment + ' Komentar' : 'Beri Komentar'}</Text>
                         </View>
                     </View>
                 </View>

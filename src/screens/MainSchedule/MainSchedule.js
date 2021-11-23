@@ -104,9 +104,8 @@ export default ({ navigation, route }) => {
       <ListNews
         data={listProduct}
         onPress={(item) => {
-          navigation.navigate('NewsDetail', {
-            item
-          });
+          // navigation.navigate('NewsDetail', { item });
+          navigation.navigate('PostingDetail', {item});
         }}
         style={{
           paddingBottom: 80

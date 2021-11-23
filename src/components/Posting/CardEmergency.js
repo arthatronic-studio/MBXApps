@@ -140,7 +140,7 @@ const CardEmergency = (props) => {
                             />
                             <Text style={{ paddingLeft: 4, marginBottom: 4}}>{like} </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => navigation.navigate('CommentListScreen', { item })} style={{width: '50%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderLeftWidth:0.5}}>
+                        <TouchableOpacity onPress={() => navigation.navigate('CommentListScreen', { item })} style={{width: '50%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                             <Image
                                 style={{ height:20, width:20 }}
                                 source={iconComment}

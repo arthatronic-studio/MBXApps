@@ -4,6 +4,7 @@ import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Moment from 'moment';
 
 import {
     useLoading,
@@ -18,6 +19,7 @@ import { shadowStyle } from '@src/styles';
 
 import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
+import { Divider } from 'src/styled';
 
 const Example = Styled(View)`
 `;
@@ -59,10 +61,10 @@ export default ({ navigation, route }) => {
           console.log(res, 'res add like');
           if (res.data.contentAddLike.id) {
             if (res.data.contentAddLike.status === 1) {
-                showLoading('success', 'Berhasil diikuti');
+                showLoading('success', 'Berhasil ditandai');
                 setState({ im_like: true });
             } else {
-                showLoading('info', 'Berhasil batal ikuti');
+                hideLoading();
                 setState({ im_like: false });
             }
           }
@@ -72,6 +74,8 @@ export default ({ navigation, route }) => {
             hideLoading();
         })
     }
+
+    console.log(item);
 
     return (
         <Scaffold
@@ -89,7 +93,20 @@ export default ({ navigation, route }) => {
                     style={{width: '100%', aspectRatio: 1.5, backgroundColor: Color.border}}
                 />
 
-                <View style={{padding: 24, marginTop: -16, borderTopLeftRadius: 24, borderTopRightRadius: 24, flexDirection: 'row', justifyContent: 'flex-end', backgroundColor: Color.theme}} />
+                <View style={{padding: 24, marginTop: -16, borderTopLeftRadius: 24, borderTopRightRadius: 24, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: Color.theme}}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            
+                        }}
+                        style={{height: 48, width: 48, borderRadius: 24, position: 'absolute', top: -24, right: 16, backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center'}}
+                    >
+                        <Ionicons
+                            name='pencil'
+                            size={20}
+                            color={Color.textInput}
+                        />
+                    </TouchableOpacity>
+                </View>
 
                 <View style={{paddingHorizontal: 24}}>
                     <View style={{paddingBottom: 12}}>
@@ -98,32 +115,46 @@ export default ({ navigation, route }) => {
                         </Text>
                     </View>
 
+                    {Moment(parseInt(item.created_date)).isValid() && <View style={{paddingBottom: 12}}>
+                        <Text size={12} align='left' style={{opacity: 0.6}}>
+                            {Moment(parseInt(item.created_date)).format('dddd, DD MMM YYYY')}
+                        </Text>
+                    </View>}
+
                     <View style={{paddingBottom: 8}}>
                         <Text align='left'>
                             {item.productDescription}
                         </Text>
                     </View>
-                    
-                    <View style={{paddingBottom: 12}}>
-                        <Text size={12} align='left' style={{opacity: 0.6}}>
-                            Buka Jam 09:00 - 22:00
-                        </Text>
-                    </View>
                 </View>
+
+                <Divider />
 
                 <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
                     <View style={{alignItems: 'center'}}>
-                        <View style={{height: 70, width: 70, borderRadius: 35, backgroundColor: Color.textInput, justifyContent: 'center', alignItems: 'center'}}>
-                            <Text size={22} type='bold'>{item.like}</Text>
-                        </View>
-                        <Text size={12} style={{marginTop: 16}}>Ramah Disabilitas</Text>
+                        <TouchableOpacity
+                            onPress={() => {
+                                fetchAddLike();
+                            }}
+                            style={{height: 70, width: 70, flexDirection: 'row', borderRadius: 35, backgroundColor: Color.textInput, justifyContent: 'center', alignItems: 'center'}}
+                        >
+                            <Ionicons name='rocket-outline' color={state.im_like ? Color.primary : Color.text} size={30} />
+                            {item.like > 0 && <Text color={state.im_like ? Color.primary : Color.text}>{item.like} </Text>}
+                        </TouchableOpacity>
+                        <Text size={12} style={{marginTop: 16}}>{state.im_like ? 'Up' : 'Up'}</Text>
                     </View>
 
                     <View style={{alignItems: 'center'}}>
-                        <View style={{height: 70, width: 70, borderRadius: 35, backgroundColor: Color.textInput, justifyContent: 'center', alignItems: 'center'}}>
-                            <MaterialCommunityIcons name='ticket-percent' size={30} color={Color.green} />
-                        </View>
-                        <Text size={12} style={{marginTop: 16}}>Voucher</Text>
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('CommentListScreen', { item });
+                            }}
+                            style={{height: 70, width: 70, flexDirection: 'row', borderRadius: 35, backgroundColor: Color.textInput, justifyContent: 'center', alignItems: 'center'}}
+                        >
+                            <Ionicons name='chatbubble-ellipses-outline' color={Color.text} size={30} />
+                            {item.comment > 0 && <Text>{item.comment} </Text>}
+                        </TouchableOpacity>
+                        <Text size={12} style={{marginTop: 16}}>Komentar</Text>
                     </View>
 
                     <View style={{alignItems: 'center'}}>
@@ -138,9 +169,9 @@ export default ({ navigation, route }) => {
                             }}
                             style={{height: 70, width: 70, borderRadius: 35, backgroundColor: Color.textInput, justifyContent: 'center', alignItems: 'center'}}
                         >
-                            <Ionicons name='location' size={30} color={Color.primary} />
+                            <Ionicons name='location' size={30} color={Color.text} />
                         </TouchableOpacity>
-                        <Text size={12} style={{marginTop: 16}}>Lihat Lokasi</Text>
+                        <Text size={12} style={{marginTop: 16}}>Lokasi</Text>
                     </View>
                 </View>
             </ScrollView>

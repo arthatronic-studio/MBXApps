@@ -144,7 +144,6 @@ const CreateThreadScreen = (props) => {
 
         console.log(variables, 'variables');
         
-
         Client.query({
             query: queryProductManage,
             variables,
@@ -154,7 +153,8 @@ const CreateThreadScreen = (props) => {
             showLoading('success', 'Thread berhasil dibuat!');
 
             setTimeout(() => {
-                navigation.navigate('ForumSegmentScreen', { ...params, componentType: 'LIST', refresh: true });
+                // navigation.navigate('ForumSegmentScreen', { ...params, componentType: 'LIST', refresh: true });
+                navigation.popToTop();
             }, 2500);
         })
         .catch((err) => {
@@ -233,7 +233,14 @@ const CreateThreadScreen = (props) => {
                     <LabelInput>
                         <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Deskripsi</Text>
                     </LabelInput>
-                    <EmailRoundedView>
+                    <View
+                        style={{
+                            width: '100%',
+                            height: 80,
+                            alignItems: 'flex-start',
+                            justifyContent: 'center',
+                        }}
+                    >
                         <CustomTextInput
                             placeholder=''
                             keyboardType='default'
@@ -245,7 +252,7 @@ const CreateThreadScreen = (props) => {
                             value={userData.description}
                             onBlur={() => isValueError('description')}
                         />
-                    </EmailRoundedView>
+                    </View>
                     <ErrorView>
                         {/* <Text type='medium' color={Color.error}>error</Text> */}
                     </ErrorView>

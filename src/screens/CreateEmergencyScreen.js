@@ -71,7 +71,7 @@ const CreateEmergencyScreen = (props) => {
         type: params.productType,
         category: params.productSubCategory,
         description: '',
-        priority: 'HIGH',
+        priority: 'High',
     });
     const [error, setError] = useState({
         name: null,
@@ -81,7 +81,7 @@ const CreateEmergencyScreen = (props) => {
     const [thumbImage, setThumbImage] = useState('');
     const [mimeImage, setMimeImage] = useState('image/jpeg');
     const [selectedPriority, setSelectedPriority] = useState({
-        id: 3, value: 'HiGH'
+        id: 3, value: 'High'
     });
 
     const [selectedStatus, setSelectedStatus] = useState({
@@ -159,16 +159,16 @@ const CreateEmergencyScreen = (props) => {
         })
         .then((res) => {
             console.log(res, '=== Berhsail ===');
-            showLoading('success', 'Thread berhasil dibuat!');
+            showLoading('success', 'Emergency berhasil dibuat!');
 
             setTimeout(() => {
                 // navigation.navigate('ForumSegmentScreen', { ...params, componentType: 'LIST', refresh: true });
-                navigation.popToTop();
+                navigation.navigate('MainHome');
             }, 2500);
         })
         .catch((err) => {
             console.log(err, 'errrrr');
-            showLoading('error', 'Gagal membuat thread, Harap ulangi kembali');
+            showLoading('error', 'Gagal membuat Emergency, Harap ulangi kembali');
         });
     }
     
@@ -243,7 +243,14 @@ const CreateEmergencyScreen = (props) => {
                     <LabelInput>
                         <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Deskripsi</Text>
                     </LabelInput>
-                    <EmailRoundedView>
+                    <View
+                        style={{
+                            width: '100%',
+                            height: 80,
+                            alignItems: 'flex-start',
+                            justifyContent: 'center',
+                        }}
+                    >
                         <CustomTextInput
                             placeholder=''
                             keyboardType='default'
@@ -254,8 +261,10 @@ const CreateEmergencyScreen = (props) => {
                             selectionColor={Color.text}
                             value={userData.description}
                             onBlur={() => isValueError('description')}
+                            multiline
+                            numberOfLines={8}
                         />
-                    </EmailRoundedView>
+                    </View>
                     <ErrorView>
                         {/* <Text type='medium' color={Color.error}>error</Text> */}
                     </ErrorView>

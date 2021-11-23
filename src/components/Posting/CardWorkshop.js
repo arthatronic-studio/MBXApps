@@ -10,6 +10,7 @@ import {
 } from '@src/components';
 import { shadowStyle } from '@src/styles';
 import { Divider } from '@src/styled';
+import Moment from 'moment';
 
 const { width } = Dimensions.get('window');
 
@@ -56,25 +57,27 @@ const CardWorkshop = (props) => {
                     <View style={{paddingTop: 8}}>
                         <Text type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
                         <Divider height={6} />
-                        <Text type='bold' size={12} align='left' color={Color.primary}>15 Juni 2021</Text>
-                        <Divider height={6} />
-                        <Text size={12} align='left' numberOfLines={2}>{item.productDescription}</Text>
+                        {Moment(parseInt(item.created_date)).isValid() && <>
+                            <Text type='bold' size={12} align='left' color={Color.primary}>{Moment(parseInt(item.created_date)).format('DD MMM YYYY')}</Text>
+                            <Divider height={12} />
+                        </>}
+                        <Text size={12} align='left' numberOfLines={3}>{item.productDescription}</Text>
                     </View>
 
-                    <View style={{paddingTop: 24, flexDirection: 'row'}}>
+                    {/* <View style={{paddingTop: 24, flexDirection: 'row'}}>
                         <Foundation name='calendar' color={Color.yellow} style={{marginRight: 8}} />
                         <Text size={10} align='left'>3 Bulan</Text>
-                    </View>
+                    </View> */}
 
-                    <View style={{paddingTop: 6, flexDirection: 'row'}}>
+                    {/* <View style={{paddingTop: 6, flexDirection: 'row'}}>
                         <Ionicons name='location' color={Color.error} style={{marginRight: 8}} />
                         <Text size={10} align='left'>Cilandak, Jakarta Selatan</Text>
-                    </View>
+                    </View> */}
 
-                    <View style={{paddingTop: 6, flexDirection: 'row'}}>
+                    {/* <View style={{paddingTop: 6, flexDirection: 'row'}}>
                         <Ionicons name='information-circle-outline' color={Color.error} style={{marginRight: 8}} />
                         <Text size={10} align='left'>3 Hari lagi Pendaftaran Ditutup</Text>
-                    </View>
+                    </View> */}
                 </View>
             </View>
         </TouchableOpacity>

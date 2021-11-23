@@ -147,7 +147,7 @@ export default ({ navigation, route }) => {
                 </View>
             </ScrollView>
 
-            <View style={{height: 60, width: '100%', alignItems: 'center', justifyContent: 'center', backgroundColor: Color.textInput, ...shadowStyle}}>
+            {/* <View style={{height: 60, width: '100%', alignItems: 'center', justifyContent: 'center', backgroundColor: Color.textInput, ...shadowStyle}}>
                 <TouchableOpacity
                     onPress={() => {
                         fetchAddLike();
@@ -174,7 +174,7 @@ export default ({ navigation, route }) => {
                         {state.im_like ? 'Applied' : 'Apply Now'}
                     </Text>
                 </TouchableOpacity>
-            </View>
+            </View> */}
         </Scaffold>
     )
 }

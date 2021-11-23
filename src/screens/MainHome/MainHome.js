@@ -475,7 +475,8 @@ const MainHome = ({navigation, route}) => {
           horizontal
           showHeader
           onPress={(item) => {
-            navigation.navigate('EmergencyDetail', {item});
+            // navigation.navigate('EmergencyDetail', {item});
+            navigation.navigate('PostingDetail', {item});
           }}
           style={{paddingLeft: 8}}
         />
@@ -486,7 +487,8 @@ const MainHome = ({navigation, route}) => {
           horizontal
           showHeader
           onPress={(item) => {
-            navigation.navigate('NewsDetail', {item});
+            // navigation.navigate('NewsDetail', {item});
+            navigation.navigate('PostingDetail', {item});
           }}
           style={{paddingLeft: 8}}
         />
@@ -497,7 +499,8 @@ const MainHome = ({navigation, route}) => {
           horizontal
           showHeader
           onPress={(item) => {
-            navigation.navigate('PlaceDetail', {item});
+            // navigation.navigate('PlaceDetail', {item});
+            navigation.navigate('PostingDetail', {item});
           }}
           style={{paddingLeft: 8}}
         />
@@ -508,7 +511,8 @@ const MainHome = ({navigation, route}) => {
           horizontal
           showHeader
           onPress={(item) => {
-            navigation.navigate('WorkshopDetail', {item});
+            // navigation.navigate('WorkshopDetail', {item});
+            navigation.navigate('PostingDetail', {item});
           }}
           style={{paddingLeft: 8}}
         />
@@ -519,7 +523,8 @@ const MainHome = ({navigation, route}) => {
           horizontal
           showHeader
           onPress={(item) => {
-            navigation.navigate('JobDetail', {item});
+            // navigation.navigate('JobDetail', {item});
+            navigation.navigate('PostingDetail', {item});
           }}
           style={{paddingLeft: 8}}
         />

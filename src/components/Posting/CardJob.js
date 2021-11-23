@@ -44,17 +44,17 @@ const CardJob = (props) => {
                 <View style={{width: '80%'}}>
                     <View style={{width: '100%', flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text type='bold' size={16} align='left' numberOfLines={2}>{item.productName}</Text>
-                        <Ionicons name='bookmark-outline' size={20} color={Color.primary} />
+                        {/* <Ionicons name='bookmark-outline' size={20} color={Color.primary} /> */}
                     </View>
 
                     <View style={{paddingTop: 2}}>
                         <Text size={12} align='left' numberOfLines={2}>{item.productDescription}</Text>
                     </View>
 
-                    <View style={{paddingTop: 12, flexDirection: 'row'}}>
+                    {/* <View style={{paddingTop: 12, flexDirection: 'row'}}>
                         <Ionicons name='location' color={Color.error} style={{marginRight: 8}} />
                         <Text size={12} align='left'>Jakarta Selatan</Text>
-                    </View>
+                    </View> */}
 
                     <View style={{paddingTop: 14, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Text size={12} color={Color.info}>{item.like} Pelamar</Text>
