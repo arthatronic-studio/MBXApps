@@ -299,7 +299,7 @@ const DetailForumScreen = ({ route, navigation }) => {
                   <TextInput
                     placeholder='Tulis Tanggapan'
                     placeholderTextColor={Color.text}
-                    style={{fontSize: 12, fontFamily: 'Raleway-Regular', color: Color.text, marginTop: 8, marginBottom: 16, paddingLeft: 16, paddingRight: 40}}
+                    style={{fontSize: 12, fontFamily: 'Inter-Regular', color: Color.text, marginTop: 8, marginBottom: 16, paddingLeft: 16, paddingRight: 40}}
                     value={textComment}
                     multiline
                     onChangeText={(e) => setTextComment(e)}

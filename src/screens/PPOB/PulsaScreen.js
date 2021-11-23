@@ -61,7 +61,7 @@ const InfoNumberView = Styled(View)`
 const TextInputNumber = Styled(TextInputMask)`
   width: 90%;
   alignContent: flex-start;
-  fontFamily: OpenSans-Regular;
+  fontFamily: Inter-Regular;
   letterSpacing: 0.6;
   fontSize: 14;
   height: 45;

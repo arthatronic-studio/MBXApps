@@ -40,7 +40,7 @@ const EmailRoundedView = Styled(View)`
 const CustomTextInput = Styled(TextInput)`
   width: 100%;
   height: 100%;
-  fontFamily: OpenSans-Regular;
+  fontFamily: Inter-Regular;
   backgroundColor: transparent;
   borderBottomWidth: 1px;
   borderColor: #666666;

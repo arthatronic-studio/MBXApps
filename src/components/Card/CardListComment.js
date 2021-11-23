@@ -102,7 +102,7 @@ const CardListComment = (props) => {
                     placeholderTextColor={Color.text}
                     style={{
                       fontSize: 12,
-                      fontFamily: 'Raleway-Regular',
+                      fontFamily: 'Inter-Regular',
                       color: Color.text,
                       paddingVertical: 8,
                       paddingLeft: 8,

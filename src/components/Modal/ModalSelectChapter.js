@@ -84,7 +84,7 @@ const ModalSelectChapter = forwardRef((props, ref) => {
                 placeholder='Cari sesuatu..'
                 autoFocus
                 placeholderTextColor={Color.gray}
-                style={{height: 50, color: Color.gray, fontSize: 12, fontFamily: 'Raleway-Regular', marginLeft: 8}}
+                style={{height: 50, color: Color.gray, fontSize: 12, fontFamily: 'Inter-Regular', marginLeft: 8}}
               />
           </View>
         </View>

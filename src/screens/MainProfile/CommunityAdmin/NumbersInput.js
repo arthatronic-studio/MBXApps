@@ -55,7 +55,7 @@ const NumbersInput = () => {
               height: 50,
               color: Color.gray,
               fontSize: 14,
-              fontFamily: 'Raleway-Regular',
+              fontFamily: 'Inter-Regular',
               marginLeft: 8,
             }}
           />
@@ -82,7 +82,7 @@ const NumbersInput = () => {
                 style={{
                   color: Color.gray,
                   fontSize: 14,
-                  fontFamily: 'Raleway-Regular',
+                  fontFamily: 'Inter-Regular',
                   width: 160,
                   backgroundColor: '#fff',
                   padding: 10,
@@ -125,7 +125,7 @@ const NumbersInput = () => {
                 style={{
                   color: Color.gray,
                   fontSize: 14,
-                  fontFamily: 'Raleway-Regular',
+                  fontFamily: 'Inter-Regular',
                   width: 160,
                   backgroundColor: '#fff',
                   padding: 10,
@@ -168,7 +168,7 @@ const NumbersInput = () => {
                 style={{
                   color: Color.gray,
                   fontSize: 14,
-                  fontFamily: 'Raleway-Regular',
+                  fontFamily: 'Inter-Regular',
                   width: 160,
                   backgroundColor: '#fff',
                   padding: 10,

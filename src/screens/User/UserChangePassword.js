@@ -46,7 +46,7 @@ const CustomTextInput = Styled(TextInput)`
   width: 100%;
   height: 100%;
   fontSize: 14px;
-  fontFamily: OpenSans-Regular;
+  fontFamily: Inter-Regular;
   backgroundColor: transparent;
   borderBottomWidth: 1px;
   borderColor: #666666;

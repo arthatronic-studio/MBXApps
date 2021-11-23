@@ -171,7 +171,7 @@ const CardComponent = (props) => {
                 style={{
                   color: Color.gray,
                   fontSize: 14,
-                  fontFamily: 'Raleway-Regular',
+                  fontFamily: 'Inter-Regular',
                   width: '80%',
                   backgroundColor: '#fff',
                   padding: 12,

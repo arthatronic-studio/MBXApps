@@ -128,7 +128,7 @@ const ApproveMember = () => {
               height: 50,
               color: Color.gray,
               fontSize: 14,
-              fontFamily: 'Raleway-Regular',
+              fontFamily: 'Inter-Regular',
               marginLeft: 8,
             }}
           />

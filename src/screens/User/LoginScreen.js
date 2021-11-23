@@ -79,7 +79,7 @@ const SignRegisterView = Styled(View)`
 const CustomTextInput = Styled(TextInput)`
   width: 100%;
   height: 100%;
-  fontFamily: Raleway-Regular;
+  fontFamily: Inter-Regular;
   backgroundColor: transparent;
   borderRadius: 4px;
   padding: 0px 16px 0px 42px;

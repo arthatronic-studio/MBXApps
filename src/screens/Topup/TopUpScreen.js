@@ -50,7 +50,7 @@ const InputNumberView = Styled(TextInputMask)`
   width: 90%;
   height: 100%;
   alignContent: flex-start;
-  fontFamily: OpenSans-Regular;
+  fontFamily: Inter-Regular;
 `;
 
 const TopUpScreen = ({ navigation, route }) => {

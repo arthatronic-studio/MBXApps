@@ -4,12 +4,12 @@ import Styled from 'styled-components';
 import {useColor} from '@src/components';
 
 const fontFamily = {
-  regular: 'Raleway-Regular',
-  medium: 'Raleway-Medium',
-  semibold: 'Raleway-SemiBold',
-  bold: 'Raleway-Bold',
-  light: 'Raleway-Light',
-  italic: 'Raleway-Italic',
+  regular: 'Inter-Regular',
+  medium: 'Inter-Medium',
+  semibold: 'Inter-SemiBold',
+  bold: 'Inter-Bold',
+  light: 'Inter-Light',
+  italic: 'Inter-Italic',
 };
 
 const BaseText = Styled(ReactText)`

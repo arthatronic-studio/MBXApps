@@ -50,7 +50,7 @@ const InfoNumberView = Styled(View)`
 const TextInputSubsriber = Styled(TextInputMask)`
   width: 100%;
   height: 45;
-  fontFamily: OpenSans-Regular;
+  fontFamily: Inter-Regular;
   alignContent: flex-start;
   letterSpacing: 0.36;
   borderWidth: 0.5px;
@@ -62,7 +62,7 @@ const TextInputSubsriber = Styled(TextInputMask)`
 const TextInputSearch= Styled(TextInput)`
   width: 100%;
   height: 45;
-  fontFamily: OpenSans-Regular;
+  fontFamily: Inter-Regular;
   alignContent: flex-start;
   letterSpacing: 0.36;
   borderWidth: 0.5px;

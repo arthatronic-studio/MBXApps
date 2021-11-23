@@ -27,7 +27,7 @@ export default ({ navigation, route }) => {
                             placeholder='Cari sesuatu..'
                             autoFocus
                             placeholderTextColor={Color.gray}
-                            style={{height: 50, color: Color.gray, fontSize: 14, fontFamily: 'Raleway-Regular', marginLeft: 8}}
+                            style={{height: 50, color: Color.gray, fontSize: 14, fontFamily: 'Inter-Regular', marginLeft: 8}}
                         />
                     </View>
                 </View>

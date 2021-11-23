@@ -7,7 +7,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import {
   Submit,
-  // Text,
   Popup, usePopup,
   Loading,
   HeaderBig,
@@ -51,7 +50,6 @@ const NavigationTextWarpperView = Styled(View)`
 
 const NavigationTextWarpperCaption = Styled(Text)`
   fontSize: 27px;
-  fontFamily: Raleway-Bold;
   paddingBottom: 6px;
   textAlign: left;
   lineHeight: 40px;
@@ -161,7 +159,7 @@ const KnowMeScreen = ({ navigation, route }) => {
             /> */}
             <MainView style={{backgroundColor: Color.theme}}>
               <NavigationTextWarpperView>
-                <NavigationTextWarpperCaption>{item.title}</NavigationTextWarpperCaption>
+                <NavigationTextWarpperCaption type='bold'>{item.title}</NavigationTextWarpperCaption>
                 <NavigationTextWarpperDescription>{item.subTitle}</NavigationTextWarpperDescription>
               </NavigationTextWarpperView>
             </MainView>
