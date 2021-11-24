@@ -191,7 +191,7 @@ const Join = () => {
                 title="Gabung Komunitas"
             />    
             <ScrollView>
-                <View style={{backgroundColor: '#ffffff', marginBottom: 106, paddingBottom: 28}}>
+                <View style={{backgroundColor: Color.theme, marginBottom: 106, paddingBottom: 28}}>
                     <View style={{paddingHorizontal: 16, paddingTop: 35}}>
                         <CustomTouch onPress={() => modalSelectChapterRef.current.open()}>
                             <View style={{marginTop: 6, paddingHorizontal: 12, borderWidth: 1, borderRadius: 4, borderColor: Color.border}}>
@@ -331,7 +331,7 @@ const Join = () => {
                             }}
                             style={{width: '100%', height: 120, borderRadius: 4, marginTop: 28, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
                         >
-                            <Feather name='camera' size={22} style={{marginBottom: 4}}/>
+                            <Feather name='camera' size={22} style={{marginBottom: 4}} color={Color.text} />
                             <Text size={14}>Upload Car Photo Main</Text>
                         </TouchableOpacity>
                     </View>
@@ -364,7 +364,7 @@ const Join = () => {
                             }}
                             style={{width: '100%', height: 120, borderRadius: 4, marginTop: 28, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
                         >
-                            <Feather name='camera' size={22} style={{marginBottom: 4}}/>
+                            <Feather name='camera' size={22} style={{marginBottom: 4}} color={Color.text} />
                             <Text size={14}>Upload Car Photo Front</Text>
                         </TouchableOpacity>
                     </View>
@@ -397,7 +397,7 @@ const Join = () => {
                             }}
                             style={{width: '100%', height: 120, borderRadius: 4, marginTop: 28, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
                         >
-                            <Feather name='camera' size={22} style={{marginBottom: 4}}/>
+                            <Feather name='camera' size={22} style={{marginBottom: 4}} color={Color.text} />
                             <Text size={14}>Upload Car Photo Side</Text>
                         </TouchableOpacity>
                     </View>
@@ -430,7 +430,7 @@ const Join = () => {
                             }}
                             style={{width: '100%', height: 120, borderRadius: 4, marginTop: 28, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
                         >
-                            <Feather name='camera' size={22} style={{marginBottom: 4}}/>
+                            <Feather name='camera' size={22} style={{marginBottom: 4}} color={Color.text} />
                             <Text size={14}>Upload Car Photo Back</Text>
                         </TouchableOpacity>
                     </View>
@@ -463,7 +463,7 @@ const Join = () => {
                             }}
                             style={{width: '100%', height: 120, borderRadius: 4, marginTop: 28, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
                         >
-                            <Feather name='camera' size={22} style={{marginBottom: 4}}/>
+                            <Feather name='camera' size={22} style={{marginBottom: 4}} color={Color.text} />
                             <Text size={14}>Upload Payment Receipt</Text>
                         </TouchableOpacity>
                     </View>
@@ -483,10 +483,10 @@ const Join = () => {
 
             <Submit
                 buttonLabel='Gabung'
-                buttonColor={'#a1a1a1'}
+                buttonColor={Color.primary}
                 type='bottomSingleButton'
                 buttonBorderTopWidth={0}
-                style={{backgroundColor: '#ffffff', paddingTop: 25, paddingBottom: 25}}
+                style={{backgroundColor: Color.theme, paddingTop: 25, paddingBottom: 25}}
                 onPress={()=>{
                     onSubmit()
                 }}

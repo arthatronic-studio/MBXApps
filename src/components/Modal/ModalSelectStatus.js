@@ -60,6 +60,9 @@ const ModalSelectStatus = forwardRef((props, ref) => {
       handleStyle={{width: width / 3, height: handle ? 4 : 4, backgroundColor: Color.primary, marginTop: 8}}
       onPositionChange={handlePosition}
       childrenStyle={{backgroundColor: Color.theme, alignItems: 'center', marginTop: 16, padding: 16, paddingBottom: 32, borderTopLeftRadius: 12, borderTopRightRadius: 12}}
+      modalStyle={{
+        backgroundColor: Color.theme
+      }}
     >
         {renderContent()}
     </Modalize>

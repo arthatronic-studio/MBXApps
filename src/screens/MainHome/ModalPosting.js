@@ -80,6 +80,7 @@ const ModalPosting = forwardRef((props, ref) => {
         <MaterialIcons
           name='post-add'
           size={20}
+          color={Color.text}
         />
         <Divider width={8} />
         <Text size={14} align='left'>
@@ -104,6 +105,9 @@ const ModalPosting = forwardRef((props, ref) => {
         paddingBottom: 32,
         borderTopLeftRadius: 12, 
         borderTopRightRadius: 12,
+      }}
+      modalStyle={{
+        backgroundColor: Color.theme
       }}
     >
       {renderContent()}

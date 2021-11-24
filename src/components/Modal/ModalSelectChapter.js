@@ -76,6 +76,9 @@ const ModalSelectChapter = forwardRef((props, ref) => {
       handleStyle={{width: width / 3, height: handle ? 4 : 4, backgroundColor: Color.primary, marginTop: 8}}
       onPositionChange={handlePosition}
       childrenStyle={{backgroundColor: Color.theme, alignItems: 'center', marginTop: 16, padding: 16, paddingBottom: 32, borderTopLeftRadius: 12, borderTopRightRadius: 12}}
+      modalStyle={{
+        backgroundColor: Color.theme
+      }}
     >
         <View style={{width: '100%', flexDirection: 'row', paddingVertical: 8, paddingHorizontal: 16, backgroundColor: Color.theme, borderTopWidth: 4, borderColor: Color.theme}}>
           <View style={{width: '90%', height: 46, borderRadius: 22.5, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center', backgroundColor: Color.textInput, ...shadowStyle}}>

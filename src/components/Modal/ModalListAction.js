@@ -50,6 +50,9 @@ const ModalListAction = forwardRef((props, ref) => {
       adjustToContentHeight
       handleStyle={{width: width / 6, height: 4, backgroundColor: Color.primary, marginTop: 8}}
       childrenStyle={{backgroundColor: Color.theme, alignItems: 'flex-start', padding: 16, paddingBottom: 32, borderTopLeftRadius: 12, borderTopRightRadius: 12, ...style}}
+      modalStyle={{
+        backgroundColor: Color.theme
+      }}
     >
         {data.length > 0 ? renderContent() : children}
     </Modalize>

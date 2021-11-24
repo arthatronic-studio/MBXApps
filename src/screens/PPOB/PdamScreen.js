@@ -493,6 +493,9 @@ export default ({ navigation, route }) => {
         adjustToContentHeight
         handlePosition='inside'
         handleStyle={{width: '30%', height: 4, marginTop: 8, backgroundColor: Color.border}}
+        modalStyle={{
+          backgroundColor: Color.theme
+        }}
       >
         {renderModalConfirm()}
       </Modalize>

@@ -804,7 +804,9 @@ export default ({ navigation, route }) => {
         adjustToContentHeight
         handlePosition='inside'
         handleStyle={{width: '30%', height: 4, marginTop: 8, backgroundColor: Color.primary}}
-        modalStyle={{backgroundColor: Color.theme}}
+        modalStyle={{
+          backgroundColor: Color.theme
+        }}
       >
         <View style={{paddingTop: 36, paddingHorizontal: 16, paddingBottom: 16}}>
           <View style={{paddingTop: 8, paddingBottom: 8, alignItems: 'flex-start'}}>
