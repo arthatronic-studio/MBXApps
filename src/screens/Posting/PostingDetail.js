@@ -20,12 +20,15 @@ import { shadowStyle } from '@src/styles';
 import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
 import { Divider } from 'src/styled';
+import { useSelector } from 'react-redux';
 
 const Example = Styled(View)`
 `;
 
 export default ({ navigation, route }) => {
     const { item } = route.params;
+
+    const user = useSelector(state => state['user.auth'].login.user);
 
     const [state, changeState] = useState({
         im_like: item.im_like,
@@ -94,9 +97,12 @@ export default ({ navigation, route }) => {
                 />
 
                 <View style={{padding: 24, marginTop: -16, borderTopLeftRadius: 24, borderTopRightRadius: 24, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: Color.theme}}>
-                    <TouchableOpacity
+                    {user && user.userId === item.ownerId && <TouchableOpacity
                         onPress={() => {
-                            
+                            navigation.navigate('EditThreadScreen', {
+                                ...item,
+                                title: 'Edit',
+                            });
                         }}
                         style={{height: 48, width: 48, borderRadius: 24, position: 'absolute', top: -24, right: 16, backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center'}}
                     >
@@ -105,7 +111,7 @@ export default ({ navigation, route }) => {
                             size={20}
                             color={Color.textInput}
                         />
-                    </TouchableOpacity>
+                    </TouchableOpacity>}
                 </View>
 
                 <View style={{paddingHorizontal: 24}}>

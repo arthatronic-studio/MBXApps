@@ -25,6 +25,7 @@ import ShowAllFromForum from '@src/screens/MainForum/ShowAllFromForum';
 import ForumSegmentScreen from '@src/screens/MainForum/ForumSegmentScreen';
 import CreateThreadScreen from '@src/screens/MainForum/CreateThreadScreen';
 import DetailForumScreen from '@src/screens/MainForum/DetailForumScreen';
+import EditThreadScreen from '@src/screens/MainForum/EditThreadScreen';
 
 // profile
 import ChangeProfile from '@src/screens/MainProfile/ChangeProfile';
@@ -129,6 +130,7 @@ function MainStackNavigator() {
             <Screen name='ForumSegmentScreen' component={ForumSegmentScreen} />
             <Screen name='CreateThreadScreen' component={CreateThreadScreen} />
             <Screen name='DetailForumScreen' component={DetailForumScreen} />
+            <Screen name='EditThreadScreen' component={EditThreadScreen} />
             {/* profile */}
             <Screen name='ChangeProfile' component={ChangeProfile} />
             <Screen name='ShowAllFromProfile' component={ShowAllFromProfile} />

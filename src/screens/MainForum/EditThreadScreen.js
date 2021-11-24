@@ -10,7 +10,9 @@ import {
     Loading, useLoading,
     Submit,
     TouchableOpacity,
-    useColor
+    useColor,
+    Button,
+    Alert
   } from '@src/components';
 import { TouchSelect } from '@src/components/Form';
 import ModalSelectStatus from '@src/components/Modal/ModalSelectStatus';
@@ -18,6 +20,7 @@ import validate from '@src/lib/validate';
 
 import Client from '@src/lib/apollo';
 import { queryProductManage } from '@src/lib/query';
+import { Divider } from 'src/styled';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -53,22 +56,24 @@ const ErrorView = Styled(View)`
   alignItems: flex-start;
 `;
 
-const CreateThreadScreen = (props) => {
+const EditThreadScreen = (props) => {
     const { navigation, route } = props;
     const { params } = route;
+
+    console.log(params);
 
     const { height } = useWindowDimensions();
     const { Color } = useColor();
 
     const [userData, setUserData] = useState({
-        code: '',
-        name: '',
+        code: params.code,
+        name: params.productName,
         image: '',
-        status: 'PRIVATE', // PUBLISH | DRAFT | PRIVATE | REMOVE
-        method: 'INSERT', // UPDATE | DELETE
+        status: params.status,
+        method: 'UPDATE',
         type: params.productType,
         category: params.productSubCategory,
-        description: '',
+        description: params.productDescription,
     });
     const [error, setError] = useState({
         name: null,
@@ -78,7 +83,9 @@ const CreateThreadScreen = (props) => {
     const [thumbImage, setThumbImage] = useState('');
     const [mimeImage, setMimeImage] = useState('image/jpeg');
     const [selectedStatus, setSelectedStatus] = useState({
-        id: 2, value: 'PRIVATE', iconName: 'lock-closed'
+        id: params.status === 'PRIVATE' ? 2 : 1,
+        value: params.status,
+        iconName: params.status === 'PRIVATE' ? 'lock-closed' : 'globe',
     });
 
     // ref
@@ -115,13 +122,13 @@ const CreateThreadScreen = (props) => {
         setUserData({ ...userData, [key]: val });
     }
 
-    const onSubmit = () => {
+    const onSubmit = (status) => {
         Keyboard.dismiss();
 
-        if (thumbImage === '') {
-            showPopup('Silahkan pilih gambar terlebih dulu', 'warning');
-            return;
-        }
+        // if (thumbImage === '') {
+        //     showPopup('Silahkan pilih gambar terlebih dulu', 'warning');
+        //     return;
+        // }
 
         if (userData.name === '') {
             showPopup('Silahkan isi judul terlebih dulu', 'warning');
@@ -135,11 +142,12 @@ const CreateThreadScreen = (props) => {
 
         showLoading();
 
+        let objProduct = userData;
+        if (status) objProduct.status = status;
+        if (thumbImage !== '') objProduct.image = thumbImage;
+
         let variables = {
-            products: [{
-                ...userData,
-                image: thumbImage,
-            }],
+            products: [objProduct],
         };
 
         console.log(variables, 'variables');
@@ -150,7 +158,7 @@ const CreateThreadScreen = (props) => {
         })
         .then((res) => {
             console.log(res, '=== Berhsail ===');
-            showLoading('success', 'Thread berhasil dibuat!');
+            showLoading('success', 'Berhasil!');
 
             setTimeout(() => {
                 // navigation.navigate('ForumSegmentScreen', { ...params, componentType: 'LIST', refresh: true });
@@ -159,7 +167,7 @@ const CreateThreadScreen = (props) => {
         })
         .catch((err) => {
             console.log(err, 'errrrr');
-            showLoading('error', 'Gagal membuat thread, Harap ulangi kembali');
+            showLoading('error', 'Gagal, Harap ulangi kembali');
         });
     }
     
@@ -167,6 +175,7 @@ const CreateThreadScreen = (props) => {
         <MainView style={{backgroundColor: Color.theme}}>
             <Header
                 title={params.title}
+                // iconRightButton={<Entypo name='trash' size={18} />}
             />
 
             <ScrollView>
@@ -196,15 +205,27 @@ const CreateThreadScreen = (props) => {
                     </TouchableOpacity>
                 </View>
 
-                {thumbImage !== '' && <TouchableOpacity
-                    onPress={() => {}}
-                    style={{width: '100%', height: height / 3, borderRadius: 4, alignItems: 'center'}}
-                >
-                    <Image
-                        style={{height: '100%', aspectRatio: 1, borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
-                        source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
-                    />
-                </TouchableOpacity>}
+                {thumbImage !== '' ?
+                    <TouchableOpacity
+                        onPress={() => {}}
+                        style={{width: '100%', height: height / 3, borderRadius: 4, alignItems: 'center'}}
+                    >
+                        <Image
+                            style={{height: '100%', aspectRatio: 1, borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
+                            source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
+                        />
+                    </TouchableOpacity>
+                :
+                    <TouchableOpacity
+                        onPress={() => {}}
+                        style={{width: '100%', height: height / 3, borderRadius: 4, alignItems: 'center'}}
+                    >
+                        <Image
+                            style={{height: '100%', aspectRatio: 1, borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
+                            source={{ uri: params.image }}
+                        />
+                    </TouchableOpacity>
+                }
 
                 <View style={{paddingHorizontal: 16, paddingTop: 24}}>
                     <LabelInput>
@@ -266,10 +287,24 @@ const CreateThreadScreen = (props) => {
                     iconName={selectedStatus.iconName}
                     onPress={() => modalSelectStatusRef.current.open()}
                 />
+
+                <Divider />
+
+                <Button
+                    color={Color.theme}
+                    fontColor={Color.error}
+                    onPress={() => {
+                        Alert('Hapus', 'Apakah Anda yakin akan menghapus postingan ini?', () => onSubmit('REMOVE'))
+                    }}
+                >
+                    Hapus Posting
+                </Button>
+
+                <Divider />
             </ScrollView>
 
             <Submit
-                buttonLabel='Buat'
+                buttonLabel='Simpan'
                 buttonColor={Color.green}
                 type='bottomSingleButton'
                 buttonBorderTopWidth={0.5}
@@ -295,4 +330,4 @@ const CreateThreadScreen = (props) => {
     )
 }
 
-export default CreateThreadScreen;
+export default EditThreadScreen;
