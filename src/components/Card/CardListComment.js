@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, TextInput, Image, ActivityIndicator } from 'react-native';
+import { View, FlatList, TextInput, Image, ActivityIndicator, useWindowDimensions } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,6 +34,12 @@ const CardListComment = (props) => {
     const user = useSelector(
       state => state['user.auth'].login.user
     );
+
+    const { height } = useWindowDimensions();
+
+    const [commentImage, setCommentImage] = useState('');
+    const [thumbImage, setThumbImage] = useState('');
+    const [mimeImage, setMimeImage] = useState('image/jpeg');
 
     const [listComment, setListComment] = useState();
     const [textComment, setTextComment] = useState('');
@@ -95,37 +102,78 @@ const CardListComment = (props) => {
                 {showAll && <Text onPress={() => onPressShowAll()} size={12} color={Color.primary}>Lihat Semua</Text>}
             </View>
 
-            <View style={{flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'space-between'}}>
-              <View style={{width: '100%', borderRadius: 4, justifyContent: 'center', backgroundColor: Color.textInput, ...shadowStyle}}>
-                  <TextInput
-                    placeholder='Tulis Komentar..'
-                    placeholderTextColor={Color.text}
-                    style={{
-                      fontSize: 12,
-                      fontFamily: 'Inter-Regular',
-                      color: Color.text,
-                      paddingVertical: 8,
-                      paddingLeft: 8,
-                      paddingRight: 40,
-                      minHeight: 45,
-                    }}
-                    value={textComment}
-                    multiline
-                    onChangeText={(e) => setTextComment(e)}
-                  />
 
-                  <TouchableOpacity
-                    onPress={() => {
-                      submitComment();
-                    }}
-                    style={{width: 40, height: 40, position: 'absolute', bottom: 2, right: 4, alignItems: 'center', justifyContent: 'center'}}
-                  >
-                    <View style={{width: 28, height: 28, borderRadius: 14, backgroundColor: Color.primary, alignItems: 'center', justifyContent: 'center'}}>
-                      <Ionicons name='arrow-forward' color={Color.theme} size={18} />
-                    </View>
-                  </TouchableOpacity>
-              </View>
+            <View style={{width: '100%', borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle, flexDirection:'row', justifyContent: 'space-between'}}>
+                <TextInput
+                  placeholder='Tulis Komentar..'
+                  placeholderTextColor={Color.text}
+                  style={{
+                    fontSize: 12,
+                    fontFamily: 'Inter-Regular',
+                    color: Color.text,
+                    paddingVertical: 8,
+                    paddingLeft: 8,
+                    paddingRight: 40,
+                    minHeight: 45,
+                  }}
+                  value={textComment}
+                  multiline
+                  onChangeText={(e) => setTextComment(e)}
+                  style={{width:'80%'}}
+                />
+
+                <TouchableOpacity
+                  onPress={() => {
+                    const options = {
+                      mediaType: 'photo',
+                      maxWidth: 320,
+                      maxHeight: 320,
+                      quality: 1,
+                      includeBase64: true,
+                    }
+
+                    launchImageLibrary(options, (callback) => {
+                      setThumbImage(callback.base64);
+                      setMimeImage(callback.type);
+                    })
+                  }}
+                >
+                  <View style={{width: 40, height: 40, position:'absolute',right: 50, bottom: 2, alignItems:'center', justifyContent:'center'}}>
+                    <Entypo name="camera" size={20} />
+                  </View>
+                </TouchableOpacity> 
+                   
+                <TouchableOpacity
+                  onPress={() => {
+                    submitComment();
+                  }}
+                  style={{width: 40, height: 40, position: 'absolute', bottom: 2, right: 4, alignItems: 'center', justifyContent: 'center'}}
+                >
+                  <View style={{width: 28, height: 28, borderRadius: 14, backgroundColor: Color.primary, alignItems: 'center', justifyContent: 'center'}}>
+                    <Ionicons name='arrow-forward' color={Color.theme} size={18} />
+                  </View>
+                </TouchableOpacity>
             </View>
+            {thumbImage !== '' && 
+              <View style={{width: '100%', borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle, justifyContent: 'center', alignItems: 'center', paddingVertical: 16}}>
+                <TouchableOpacity 
+                  onPress={()=> {setThumbImage('')}}
+                  style={{position:'absolute', right: 90, top: -1}}
+                >
+                  <Entypo name='circle-with-cross' size={24} color={Color.primary} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {}}
+                  style={{width: '100%', height: height / 4, borderRadius: 4, alignItems: 'center'}}
+                >
+                  <Image
+                    style={{height: '100%', aspectRatio: 1, borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
+                    source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
+                  />
+                </TouchableOpacity>
+              </View>
+            }
+            
           </View>
 
           {loading ?

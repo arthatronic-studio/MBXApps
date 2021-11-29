@@ -66,6 +66,7 @@ const Join = () => {
         carYear: "",
         carIdentity: '',
         reason: '',
+        description: '',
         chapterId: "Bogor",
         carPhotoMain: '',
         carPhotoFront: '',
@@ -80,6 +81,7 @@ const Join = () => {
         carYear: null,
         carIdentity: null,
         reason: null,
+        description: null,
         carPhotoMain: '',
         carPhotoFront: '',
         carPhotoSide: '',
@@ -308,6 +310,27 @@ const Join = () => {
                                     selectionColor={Color.text}
                                     value={userData.reason}
                                     onBlur={() => isValueError('reason')}
+                                />
+                            </EmailRoundedView>
+                        </View>
+                    </View>
+
+                    <View style={{paddingHorizontal: 16, paddingTop: 28}}>
+                        <View style={{marginTop: 6, paddingHorizontal: 12, borderWidth: 1, borderRadius: 4, borderColor: Color.border, height: 90}}>
+                            <LabelInput>
+                                <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Deskipsi</Text>
+                            </LabelInput>
+                            <EmailRoundedView>
+                                <CustomTextInput
+                                    placeholder='Deskripsi...'
+                                    keyboardType='default'
+                                    placeholderTextColor={Color.gray}
+                                    underlineColorAndroid='transparent'
+                                    autoCorrect={false}
+                                    onChangeText={(text) => onChangeUserData('description', text)}
+                                    selectionColor={Color.text}
+                                    value={userData.reason}
+                                    onBlur={() => isValueError('description')}
                                 />
                             </EmailRoundedView>
                         </View>

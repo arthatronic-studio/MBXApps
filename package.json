@@ -7,10 +7,10 @@
     "ios": "react-native run-ios",
     "start": "react-native start --reset-cache",
     "apk": "cd android && ./gradlew assembleRelease && cd ..",
-    "aab": "cd android && ./gradlew clean && ./gradlew bundleRelease && cd ..",
+    "aab": "cd android && ./gradlew bundleRelease && cd ..",
+    "aclean": "cd android && ./gradlew clean && cd ..",
     "pod": "cd ios && pod install && cd ..",
     "test": "jest",
-    "aclean": "cd android && ./gradlew clean && cd ..",
     "lint": "eslint ."
   },
   "dependencies": {

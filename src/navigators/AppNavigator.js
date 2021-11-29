@@ -2,6 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
 // uncanny
+import SplashScreen from 'src/screens/SplashScreen';
 import MainPage from '@src/navigators/BottomTabsNavigator';
 import KnowMeScreen from '@src/screens/KnowMeScreen';
 import CreateEmergencyScreen from '@src/screens/CreateEmergencyScreen';
@@ -85,13 +86,14 @@ const {Navigator, Screen} = createStackNavigator();
 function MainStackNavigator() {
     return (
         <Navigator
-            initialRouteName='KnowMeScreen'
+            initialRouteName='SplashScreen'
             screenOptions={{
                 gestureEnabled: false,
                 headerShown: false,
             }}
         >
             {/* uncanny */}
+            <Screen name='SplashScreen' component={SplashScreen} />
             <Screen name='MainPage' component={MainPage} />
             <Screen name="KnowMeScreen" component={KnowMeScreen} />
             <Screen name='CreateEmergencyScreen' component={CreateEmergencyScreen} />
