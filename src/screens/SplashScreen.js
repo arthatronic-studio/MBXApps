@@ -44,7 +44,7 @@ const SplashScreen = ({ navigation, route }) => {
       <Image
         source={iconSplash}
         style={{
-          width: '80%',
+          width: '60%',
           height: undefined,
           aspectRatio: 8.7,
         }}
