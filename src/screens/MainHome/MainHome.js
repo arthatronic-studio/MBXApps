@@ -3,6 +3,7 @@ import {View, ScrollView, Image, useWindowDimensions} from 'react-native';
 import Styled from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useIsFocused} from '@react-navigation/native';
 
@@ -384,8 +385,8 @@ const MainHome = ({navigation, route}) => {
                   onPress={() => {
                     modalPostingRef.current.open();
                   }}>
-                  <MaterialIcons
-                    name="post-add"
+                  <Entypo
+                    name="add-to-list"
                     color={Color.textInput}
                     size={20}
                   />
