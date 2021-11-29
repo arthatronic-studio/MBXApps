@@ -304,17 +304,11 @@ const [open, setOpen] = useState(false)
                   <EmailRoundedView>
                           <View style={{height: 34, paddingRight: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
                           <Text size={14} style={{marginTop: 2}}></Text>
-                         
-                      
                         <Text>{Moment(userData.date).format('DD-MM-YYYY') ? Moment(userData.date).format('DD-MM-YYYY') : 'Pilih Tanggal '} </Text>
-
-                        
                           <Ionicons name='chevron-down-outline' color={Color.text} />
                       </View>
                   </EmailRoundedView>
-
-              </CustomTouch>
-             
+              </CustomTouch> 
           </EmailRoundedView>
           <ErrorView>
             <Text size={12} color={Color.error} type='medium' align='left'>{errorData.Tanggal_Lahir}</Text>

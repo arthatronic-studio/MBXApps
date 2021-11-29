@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, ScrollView, TextInput, SafeAreaView, Image, Keyboard, BackHandler, useWindowDimensions } from 'react-native';
 import Styled from 'styled-components';
 import Entypo from 'react-native-vector-icons/Entypo';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { launchImageLibrary } from 'react-native-image-picker';
 import {
     Header,
@@ -20,6 +21,8 @@ import validate from '@src/lib/validate';
 import Client from '@src/lib/apollo';
 import { queryProductManage } from '@src/lib/query';
 import { Box, Divider } from 'src/styled';
+import DatePicker from 'react-native-date-picker';
+import Moment from 'moment';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -54,6 +57,9 @@ const ErrorView = Styled(View)`
   paddingVertical: 4px;
   alignItems: flex-start;
 `;
+const CustomTouch = Styled(TouchableOpacity)`
+    backgroundColor: transparent;
+`;
 
 const CreateEmergencyScreen = (props) => {
     const { navigation, route } = props;
@@ -72,11 +78,16 @@ const CreateEmergencyScreen = (props) => {
         category: params.productSubCategory,
         description: '',
         priority: 'High',
+        date: '',
+    
     });
+    console.log('liat userdata',userData)
     const [error, setError] = useState({
         name: null,
         image: null,
         description: null,
+        date: null,
+        
     });
     const [thumbImage, setThumbImage] = useState('');
     const [mimeImage, setMimeImage] = useState('image/jpeg');
@@ -95,6 +106,10 @@ const CreateEmergencyScreen = (props) => {
     // hooks
     const [loadingProps, showLoading, hideLoading] = useLoading();
     const [popupProps, showPopup] = usePopup();
+
+    //Tanggal 
+    const [date, setDate] = useState(new Date())
+    const [open, setOpen] = useState(false)
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', handleBackPress);
@@ -135,11 +150,16 @@ const CreateEmergencyScreen = (props) => {
             showPopup('Silahkan isi judul terlebih dulu', 'warning');
             return;
         }
+        if (userData.date === '') {
+            showPopup('Silahkan isi Tanggal terlebih dulu', 'warning');
+            return;
+        }
 
         if (userData.description === '') {
             showPopup('Silahkan isi deskripsi terlebih dulu', 'warning');
             return;
         }
+        
 
         showLoading();
 
@@ -147,6 +167,7 @@ const CreateEmergencyScreen = (props) => {
             products: [{
                 ...userData,
                 image: thumbImage,
+                CreatedDate:date,
             }],
         };
 
@@ -238,7 +259,6 @@ const CreateEmergencyScreen = (props) => {
                         {/* <Text type='medium' color={Color.error}>error</Text> */}
                     </ErrorView>
                 </View>
-
                 <View style={{paddingHorizontal: 16, paddingTop: 24}}>
                     <LabelInput>
                         <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Deskripsi</Text>
@@ -260,15 +280,54 @@ const CreateEmergencyScreen = (props) => {
                             onChangeText={(text) => onChangeUserData('description', text)}
                             selectionColor={Color.text}
                             value={userData.description}
-                            onBlur={() => isValueError('description')}
-                            multiline
-                            numberOfLines={8}
-                        />
+                                onBlur={() => isValueError('description')}
+                                multiline
+                                numberOfLines={8}
+                            />
+                        </View>
+                        <ErrorView>
+                            {/* <Text type='medium' color={Color.error}>error</Text> */}
+                        </ErrorView>
                     </View>
+                <View style={{paddingHorizontal: 16, paddingTop: 24}}>
+                    <LabelInput>
+                        <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Tanggal</Text>
+                    </LabelInput>
+                    <EmailRoundedView>
+           
+           <CustomTouch title="Open" onPress={() => setOpen(true)}>
+                
+                 <EmailRoundedView>
+                         <View style={{height: 34, paddingRight: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
+                         <Text size={14} style={{marginTop: 2}}></Text>
+                       <Text>{Moment(userData.date).format('DD-MM-YYYY') ? Moment(userData.date).format('DD-MM-YYYY') : 'Pilih Tanggal '} </Text>
+                         <Ionicons name='calendar' color={Color.text} />
+                     </View>
+                 </EmailRoundedView>
+             </CustomTouch>
+            </EmailRoundedView>
                     <ErrorView>
                         {/* <Text type='medium' color={Color.error}>error</Text> */}
                     </ErrorView>
+                    <>                 
+                    <DatePicker
+                        modal
+                        open={open}
+                        date={date}
+                        mode ="date"
+                        onConfirm={(date) => {
+                        setOpen(false)
+                        setDate(date);
+                        onChangeUserData('date', date)
+                        
+                        }}
+                        onCancel={() => {
+                        setOpen(false)
+                        }}
+                    />
+                    </>
                 </View>
+               
 
                 <TouchSelect
                     title='Siapa yang dapat melihat ini?'
