@@ -27,10 +27,7 @@ import validate from '@src/lib/validate';
 
 import { updateCurrentUserProfile } from '@src/state/actions/user/auth';
 import { usePreviousState } from '@src/hooks';
-
-const MainView = Styled(SafeAreaView)`
-  flex: 1;
-`;
+import { Divider, MainView } from 'src/styled';
 
 const Container = Styled(View)`
   width: 100%;
@@ -104,8 +101,6 @@ export default ({ navigation, route }) => {
   // selector
   const user = useSelector(state => state['user.auth'].login.user);
 
-
-  console.log("user dano",user)
   const {
     register,
     loading,
@@ -127,12 +122,9 @@ export default ({ navigation, route }) => {
     idCardNumber: user ? user.idCardNumber : '',
     email: user ? user.email : '',
     phoneNumber: user ? user.phoneNumber : '',
-    date: user ? user.date : new Date(),
+    date: user && user.tanggalLahir ? user.tanggalLahir : new Date('1990'),
     Nomor_ID: user ? user.Nomor_ID :  '',
     Alamat : user ? user.Alamat : '',
-
-  
- 
   });
   const [errorData, setErrorData] = useState({
     fullName: null,
@@ -151,12 +143,14 @@ export default ({ navigation, route }) => {
     return true;
 }
 
+console.log('user', user);
+
 const backToSelectVideo = () => {
     setThumbImage('');
     setMimeImage('image/jpeg');
 }
 //Tanggal Lahir
-const [date, setDate] = useState(new Date())
+const [date, setDate] = useState(new Date('1990'))
 const [open, setOpen] = useState(false)
 
 
@@ -200,7 +194,9 @@ const [open, setOpen] = useState(false)
         
       };
 
-      dispatch(updateCurrentUserProfile(newUserData));
+      console.log('newUserData', newUserData);
+
+      // dispatch(updateCurrentUserProfile(newUserData));
     }
   }, [allValid]);
 
@@ -226,6 +222,8 @@ const [open, setOpen] = useState(false)
     setErrorData(newErrorState);
     setAllValid(valid);
   }
+
+  console.log(userData, 'ini data');
   
   return (
     <MainView style={{backgroundColor: Color.theme}}>
@@ -235,43 +233,42 @@ const [open, setOpen] = useState(false)
       />
 
       <ScrollView keyboardShouldPersistTaps='handled' contentContainerStyle={{paddingBottom: 16}}>
-      
-
         <Container>
-        {thumbImage !== '' && <TouchableOpacity
-                    onPress={() => {}}
-                    style={{width: '100%', height: height / 3, borderRadius: 4, alignItems: 'center'}}
-                >
-                    <Image
-                        style={{height: '100%', aspectRatio: 1, borderRadius: 40, alignItems: 'center', justifyContent: 'center'}}
-                        source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
-                    />
-                </TouchableOpacity>}
-       
-                    <LabelInput>
-                       
-                    </LabelInput>
-                    <TouchableOpacity
-                        onPress={() => {
-                            const options = {
-                                mediaType: 'photo',
-                                maxWidth: 320,
-                                maxHeight: 320,
-                                quality: 1,
-                                includeBase64: true,
-                            }
+          {thumbImage !== '' && <TouchableOpacity
+              onPress={() => {}}
+              style={{width: '100%', height: height / 3, borderRadius: 4, alignItems: 'center'}}
+          >
+              <Image
+                  style={{height: '100%', aspectRatio: 1, borderRadius: 40, alignItems: 'center', justifyContent: 'center'}}
+                  source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
+              />
+          </TouchableOpacity>}
 
-                            launchImageLibrary(options, (callback) => {
-                                setThumbImage(callback.base64);
-                                setMimeImage(callback.type);
-                            })
-                        }}
-                        style={{width: '100%', height: 70, borderRadius: 4, marginTop: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
-                    >
-                        <Entypo name='folder-images' size={22} style={{marginBottom: 4}} />
-                        <Text size={10}>Pilih gambar</Text>
-                    </TouchableOpacity>
-             
+              <LabelInput>
+                  
+              </LabelInput>
+              <TouchableOpacity
+                  onPress={() => {
+                      const options = {
+                          mediaType: 'photo',
+                          maxWidth: 320,
+                          maxHeight: 320,
+                          quality: 1,
+                          includeBase64: true,
+                      }
+
+                      launchImageLibrary(options, (callback) => {
+                          setThumbImage(callback.base64);
+                          setMimeImage(callback.type);
+                      })
+                  }}
+                  style={{width: '100%', height: 70, borderRadius: 4, marginTop: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
+              >
+                  <Entypo name='folder-images' size={22} style={{marginBottom: 4}} />
+                  <Text size={10}>Pilih gambar</Text>
+              </TouchableOpacity>
+
+          <Divider />
                
           <LabelInput>
             <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Nama Lengkap</Text>
@@ -294,17 +291,16 @@ const [open, setOpen] = useState(false)
             <Text size={12} color={Color.error} type='medium' align='left'>{errorData.fullName}</Text>
           </ErrorView>
 
-  <LabelInput>
+          <LabelInput>
             <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Tanggal Lahir</Text>
           </LabelInput>
           <EmailRoundedView>
            
             <CustomTouch onPress={() => setOpen(true)}>
-                 
                   <EmailRoundedView>
                           <View style={{height: 34, paddingRight: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
                           <Text size={14} style={{marginTop: 2}}></Text>
-                        <Text>{Moment(userData.date).format('DD-MM-YYYY') ? Moment(userData.date).format('DD-MM-YYYY') : 'Pilih Tanggal '} </Text>
+                        <Text>{Moment(userData.date).isValid() ? Moment(userData.date).format('DD-MM-YYYY') : 'Pilih Tanggal '} </Text>
                           <Ionicons name='chevron-down-outline' color={Color.text} />
                       </View>
                   </EmailRoundedView>
@@ -313,23 +309,6 @@ const [open, setOpen] = useState(false)
           <ErrorView>
             <Text size={12} color={Color.error} type='medium' align='left'>{errorData.Tanggal_Lahir}</Text>
           </ErrorView>
-           <>                 
-      <DatePicker
-        modal
-        open={open}
-        date={date}
-        mode ="date"
-        onConfirm={(date) => {
-        setOpen(false)
-        setDate(date);
-        onChangeUserData('date', date)
-        console.log('koko',date)
-        }}
-        onCancel={() => {
-          setOpen(false)
-        }}
-      />
-    </>
          
           <LabelInput>
             <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>NIK</Text>
@@ -458,6 +437,22 @@ const [open, setOpen] = useState(false)
       <Loading visible={loading} />
 
       <Popup {...popupProps} />
+
+      {open && <DatePicker
+        modal
+        open={open}
+        date={date}
+        mode="date"
+        onConfirm={(date) => {
+          setOpen(false);
+          setDate(date);
+          onChangeUserData('date', date);
+          console.log('koko',date);
+        }}
+        onCancel={() => {
+          setOpen(false)
+        }}
+      />}
     </MainView>
   );
 };
