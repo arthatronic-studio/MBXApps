@@ -78,10 +78,11 @@ const CreateEmergencyScreen = (props) => {
         category: params.productSubCategory,
         description: '',
         priority: 'High',
-        date: '',
+        date: date ? date : Moment(new Date()).format('DD-MM-YYYY') ,
+        
     
     });
-    console.log('liat userdata',userData)
+    console.log('liat userdata',userData.date)
     const [error, setError] = useState({
         name: null,
         image: null,
@@ -300,7 +301,7 @@ const CreateEmergencyScreen = (props) => {
                  <EmailRoundedView>
                          <View style={{height: 34, paddingRight: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
                          <Text size={14} style={{marginTop: 2}}></Text>
-                       <Text>{Moment(userData.date).format('DD-MM-YYYY') ? Moment(userData.date).format('DD-MM-YYYY') : 'Pilih Tanggal '} </Text>
+                         <Text>{userData.date ? userData.date : 'Pilih Tanggal '} </Text>
                          <Ionicons name='calendar' color={Color.text} />
                      </View>
                  </EmailRoundedView>
@@ -310,21 +311,21 @@ const CreateEmergencyScreen = (props) => {
                         {/* <Text type='medium' color={Color.error}>error</Text> */}
                     </ErrorView>
                     <>                 
-                    <DatePicker
-                        modal
-                        open={open}
-                        date={date}
-                        mode ="date"
-                        onConfirm={(date) => {
-                        setOpen(false)
-                        setDate(date);
-                        onChangeUserData('date', date)
-                        
-                        }}
-                        onCancel={() => {
-                        setOpen(false)
-                        }}
-                    />
+                    {open && <DatePicker
+                    modal
+                    open={open}
+                    date={date}
+                    mode="date"
+                    onConfirm={(date) => {
+                    setOpen(false);
+                    setDate(date);
+                    onChangeUserData('date', Moment(date).format('DD-MM-YYYY'));
+                    console.log('koko',date);
+                    }}
+                    onCancel={() => {
+                    setOpen(false)
+                    }}
+                    />}
                     </>
                 </View>
                

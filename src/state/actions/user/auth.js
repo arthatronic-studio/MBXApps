@@ -167,14 +167,14 @@ export const getCurrentUserProfile = () => async (dispatch, getState) => {
 
 export const updateCurrentUserProfile = (params) => async (dispatch, getState) => {
   const {
-    firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber, Nomor_ID, Alamat,
+    firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber, Nomor_ID, Alamat,tanggalLahir,
   } = params;
 
   dispatch({ type: 'USER.CLEAR_ERROR' });
   dispatch({ type: 'USER.FETCH_PROFILE' });
   Client.mutate({
     mutation: updateUserProfileMutation,
-    variables: { firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber, Nomor_ID, Alamat }
+    variables: { firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber, Nomor_ID, Alamat,tanggalLahir }
   })
   .then(res => {
     dispatch(getCurrentUserProfile());
@@ -237,6 +237,7 @@ export const register = (user) => async (dispatch, getState) => {
         postal_code: '',
         country: '',
         reference_code: user.refCode,
+        tanggalLahir : user.tanggalLahir
        
       };
       const responseRegis = await instanceRegister.post('/api/registration/signup', body);
@@ -339,6 +340,7 @@ mutation inputUserDetails(
   $country: String,
   $idCardNumber: String,
   $nomor_id: String,
+  $tanggalLahir: String,
   $alamat: String,
 ){
     inputUserDetails(
@@ -354,6 +356,7 @@ mutation inputUserDetails(
       idCardNumber : $idCardNumber,
       nomor_id: $nomor_id,
       alamat: $alamat,
+      tanggalLahir: $tanggalLahir
   
     ){
     userId

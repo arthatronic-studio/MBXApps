@@ -90,7 +90,7 @@ const LabelInput = Styled(View)`
   alignItems: flex-start;
 `;
 
-const inputs = ['fullName', 'idCardNumber', 'email', 'phoneNumber','Nomor_ID', 'Alamat'];
+const inputs = ['fullName', 'idCardNumber', 'email', 'phoneNumber','Nomor_ID', 'Alamat','tanggalLahir'];
 
 export default ({ navigation, route }) => {
   // dispatch
@@ -122,10 +122,11 @@ export default ({ navigation, route }) => {
     idCardNumber: user ? user.idCardNumber : '',
     email: user ? user.email : '',
     phoneNumber: user ? user.phoneNumber : '',
-    date: user && user.tanggalLahir ? user.tanggalLahir : new Date('1990'),
+    tanggalLahir: user && user.tanggalLahir ? user.tanggalLahir : Moment(new Date('1990')).format('DD-MM-YYYY'),
     Nomor_ID: user ? user.Nomor_ID :  '',
     Alamat : user ? user.Alamat : '',
   });
+  console.log('tangal', userData.tanggalLahir);
   const [errorData, setErrorData] = useState({
     fullName: null,
     idCardNumber: null,
@@ -133,6 +134,7 @@ export default ({ navigation, route }) => {
     phoneNumber: null,
     Nomor_ID : null,
     Alamat : null,
+    tanggalLahir: null
   });
 
   //Image
@@ -150,7 +152,7 @@ const backToSelectVideo = () => {
     setMimeImage('image/jpeg');
 }
 //Tanggal Lahir
-const [date, setDate] = useState(new Date('1990'))
+const [tanggalLahir, setDate] = useState(new Date('1990'))
 const [open, setOpen] = useState(false)
 
 
@@ -173,7 +175,7 @@ const [open, setOpen] = useState(false)
     if (allValid) {
       setAllValid(false)
 
-      const { fullName, idCardNumber, email, phoneNumber, Nomor_ID, Alamat } = userData;
+      const { fullName, idCardNumber, email, phoneNumber, Nomor_ID, Alamat,tanggalLahir } = userData;
 
       const nameSplit = fullName.split(' ');
       let lastName = '';
@@ -191,6 +193,8 @@ const [open, setOpen] = useState(false)
         phoneNumber,
         nomor_id: Nomor_ID,
         alamat: Alamat,
+        tanggalLahir: tanggalLahir,
+
         
       };
 
@@ -300,14 +304,14 @@ const [open, setOpen] = useState(false)
                   <EmailRoundedView>
                           <View style={{height: 34, paddingRight: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
                           <Text size={14} style={{marginTop: 2}}></Text>
-                        <Text>{Moment(userData.date).isValid() ? Moment(userData.date).format('DD-MM-YYYY') : 'Pilih Tanggal '} </Text>
+                          <Text>{userData.tanggalLahir ? userData.tanggalLahir : 'Pilih Tanggal '} </Text>
                           <Ionicons name='chevron-down-outline' color={Color.text} />
                       </View>
                   </EmailRoundedView>
               </CustomTouch> 
           </EmailRoundedView>
           <ErrorView>
-            <Text size={12} color={Color.error} type='medium' align='left'>{errorData.Tanggal_Lahir}</Text>
+            <Text size={12} color={Color.error} type='medium' align='left'>{errorData.tanggalLahir}</Text>
           </ErrorView>
          
           <LabelInput>
@@ -440,14 +444,14 @@ const [open, setOpen] = useState(false)
 
       {open && <DatePicker
         modal
-        open={open}
-        date={date}
+        open={open}   
+        date={tanggalLahir}
         mode="date"
         onConfirm={(date) => {
           setOpen(false);
           setDate(date);
-          onChangeUserData('date', date);
-          console.log('koko',date);
+          onChangeUserData('tanggalLahir', Moment(date).format('DD-MM-YYYY'));
+          
         }}
         onCancel={() => {
           setOpen(false)
