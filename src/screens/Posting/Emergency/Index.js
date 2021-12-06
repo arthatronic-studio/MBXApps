@@ -52,7 +52,7 @@ export default ({ navigation, route }) => {
           fallback: true,
         });
 
-        const listProduct = await fetchContentProduct('TRIBES', 'SCENE', '');
+        const listProduct = await fetchContentProduct('TRIBES', 'EMERGENCY', '');
     
         setState({
             listProduct,
@@ -110,10 +110,10 @@ export default ({ navigation, route }) => {
                 color={Color.textInput}
                 style={{backgroundColor: Color.primary, paddingTop: 2, paddingBottom: 6}}
                 onPress={() => navigation.navigate('CreateThreadScreen', {
-                  title: 'Tampil',
+                  title: route.params && route.params.title ? route.params.title : '',
                   productType: "TRIBES",
-                  productCategory: 'SCENE',
-                  productSubCategory: '',
+                  productCategory: '',
+                  productSubCategory: 'EMERGENCY',
                 })}
               >
                 Buat

@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, useWindowDimensions } from 'react-native';
 import PropTypes from 'prop-types';
 
-import { useColor } from '@src/components';
+import { ScreenEmptyData, useColor } from '@src/components';
 import CardPlace from 'src/components/Posting/CardPlace';
 import { useNavigation } from '@react-navigation/core';
 import PostingHeader from './PostingHeader';
@@ -39,6 +39,7 @@ const ListPlace = (props) => {
 
     const {Color} = useColor();
     const navigation = useNavigation();
+    const { width } = useWindowDimensions();
 
     let extraProps = { numColumns: 2 };
     if (horizontal) extraProps = {};
@@ -87,6 +88,14 @@ const ListPlace = (props) => {
                                 numColumns={2}
                                 horizontal={horizontal}
                                 onPress={() => onPress(item)}
+                            />
+                        )
+                    }}
+                    ListEmptyComponent={() => {
+                        return (
+                            <ScreenEmptyData
+                                message='Tempat belum tersedia'
+                                style={{width: width - 16}}
                             />
                         )
                     }}

@@ -92,10 +92,10 @@ export default ({ navigation, route }) => {
         color={Color.textInput}
         style={{backgroundColor: Color.primary, paddingTop: 2, paddingBottom: 6}}
         onPress={() => navigation.navigate('CreateThreadScreen', {
-          title: 'Tampil',
+          title: 'Artikel',
           productType: "TRIBES",
           productCategory: '',
-          productSubCategory: 'TRIBES_TAMPIL',
+          productSubCategory: 'POSTING',
         })}
       >
         Buat

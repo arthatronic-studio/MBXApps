@@ -21,7 +21,7 @@ const defaultProps = {
     style: {},
 };
 
-const CardWorkshop = (props) => {
+const CardEvent = (props) => {
     const { item, numColumns, onPress, horizontal, style } = props;
 
     const { Color } = useColor();
@@ -84,5 +84,5 @@ const CardWorkshop = (props) => {
     )
 }
 
-CardWorkshop.defaultProps = defaultProps;
-export default CardWorkshop;
+CardEvent.defaultProps = defaultProps;
+export default CardEvent;

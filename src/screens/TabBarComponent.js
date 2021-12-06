@@ -97,8 +97,8 @@ const TabBarComponent = (props) => {
                             routeIndex: 1, 
                             title: 'Emergency Area',
                             productType: 'TRIBES',
-                            productCategory: 'SCENE',
-                            productSubCategory: 'SURPRISE', 
+                            productCategory: '',
+                            productSubCategory: 'EMERGENCY', 
                         });
                     }}
                     style={{width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center'}}

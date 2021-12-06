@@ -19,7 +19,7 @@ import {
 import {FormatMoney} from '@src/utils';
 import ListNews from 'src/components/Posting/ListNews';
 import ListPlace from 'src/components/Posting/ListPlace';
-import ListWorkshop from 'src/components/Posting/ListWorkshop';
+import ListEvent from 'src/components/Posting/ListEvent';
 import ListJob from 'src/components/Posting/ListJob';
 import {shadowStyle} from '@src/styles';
 import {Box, Divider, MainView} from '@src/styled';
@@ -189,11 +189,11 @@ const MainHome = ({navigation, route}) => {
 
   const fetchData = async () => {
     const result = await Promise.all([
-      await fetchContentProduct('TRIBES', 'SCENE', ''),
-      await fetchContentProduct('TRIBES', '', 'TRIBES_TAMPIL'),
-      await fetchContentProduct('TRIBES', '', 'TRIBES_JALAN_JALAN'),
-      await fetchContentProduct('TRIBES', '', 'TRIBES_BELAJAR'),
-      await fetchContentProduct('TRIBES', '', 'TRIBES_KERJA'),
+      await fetchContentProduct('TRIBES', 'EMERGENCY', ''),
+      await fetchContentProduct('TRIBES', 'POSTING', ''),
+      await fetchContentProduct('TRIBES', 'NEARBY_PLACE', ''),
+      await fetchContentProduct('TRIBES', 'EVENT', ''),
+      await fetchContentProduct('TRIBES', 'JOBS', ''),
     ]);
 
     setLoadingEmergency(false);
@@ -506,13 +506,13 @@ const MainHome = ({navigation, route}) => {
           style={{paddingLeft: 8}}
         />
 
-        <ListWorkshop
+        <ListEvent
           data={listBelajar}
           loading={loadingBelajar}
           horizontal
           showHeader
           onPress={(item) => {
-            // navigation.navigate('WorkshopDetail', {item});
+            // navigation.navigate('EventDetail', {item});
             navigation.navigate('PostingDetail', {item});
           }}
           style={{paddingLeft: 8}}

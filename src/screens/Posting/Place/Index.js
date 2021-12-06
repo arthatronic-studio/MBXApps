@@ -23,7 +23,6 @@ const Example = Styled(View)`
 export default ({ navigation, route }) => {
     const [state, changeState] = useState({
         fallback: true,
-        listCategory: [],
         listProduct: [],
     });
 
@@ -52,12 +51,10 @@ export default ({ navigation, route }) => {
           fallback: true,
         });
     
-        const listCategory = await fetchContentProduct('TRIBES', '', '');
-        const listProduct = await fetchContentProduct('TRIBES', '', 'TRIBES_JALAN_JALAN');
+        const listProduct = await fetchContentProduct('TRIBES', 'NEARBY_PLACE', '');
     
         setState({
             fallback: false,
-            listCategory,
             listProduct,
         });
     }
@@ -94,7 +91,7 @@ export default ({ navigation, route }) => {
     
     return (
         <Scaffold
-            headerTitle='Tempat'
+            headerTitle={route.params && route.params.title ? route.params.title : ''}
             iconRightButton={
               <Ionicons
                 name='search'
@@ -112,10 +109,10 @@ export default ({ navigation, route }) => {
                 color={Color.textInput}
                 style={{backgroundColor: Color.primary, paddingTop: 2, paddingBottom: 6}}
                 onPress={() => navigation.navigate('CreateThreadScreen', {
-                  title: 'Jalan Jalan',
+                  title: route.params && route.params.title ? route.params.title : '',
                   productType: "TRIBES",
                   productCategory: '',
-                  productSubCategory: 'TRIBES_JALAN_JALAN',
+                  productSubCategory: 'NEARBY_PLACE',
                 })}
               >
                 Buat

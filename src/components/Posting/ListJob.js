@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, useWindowDimensions } from 'react-native';
 import PropTypes from 'prop-types';
 
-import { useColor } from '@src/components';
+import { ScreenEmptyData, useColor } from '@src/components';
 import CardJob from 'src/components/Posting/CardJob';
 import { useNavigation } from '@react-navigation/core';
 import PostingHeader from './PostingHeader';
@@ -39,6 +39,7 @@ const ListJob = (props) => {
 
     const { Color } = useColor();
     const navigation = useNavigation();
+    const { width } = useWindowDimensions();
 
     const renderHeader = () => {
         return (
@@ -83,6 +84,14 @@ const ListJob = (props) => {
                                 item={item}
                                 numColumns={1}
                                 onPress={() => onPress(item)}
+                            />
+                        )
+                    }}
+                    ListEmptyComponent={() => {
+                        return (
+                            <ScreenEmptyData
+                                message='Loker belum tersedia'
+                                style={{width: width - 16}}
                             />
                         )
                     }}

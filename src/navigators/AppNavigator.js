@@ -54,9 +54,9 @@ import NewsDetail from 'src/screens/Posting/News/Detail';
 import PlaceScreen from 'src/screens/Posting/Place/Index';
 import PlaceDetail from 'src/screens/Posting/Place/Detail';
 
-// Workshop
-import WorkshopScreen from 'src/screens/Posting/Workshop/Index';
-import WorkshopDetail from 'src/screens/Posting/Workshop/Detail';
+// Event
+import EventScreen from 'src/screens/Posting/Event/Index';
+import EventDetail from 'src/screens/Posting/Event/Detail';
 
 // Job
 import JobScreen from 'src/screens/Posting/Job/Index';
@@ -116,9 +116,9 @@ function MainStackNavigator() {
             {/* Place */}
             <Screen name='PlaceScreen' component={PlaceScreen} />
             <Screen name='PlaceDetail' component={PlaceDetail} />
-            {/* Workshop */}
-            <Screen name='WorkshopScreen' component={WorkshopScreen} />
-            <Screen name='WorkshopDetail' component={WorkshopDetail} />
+            {/* Event */}
+            <Screen name='EventScreen' component={EventScreen} />
+            <Screen name='EventDetail' component={EventDetail} />
             {/* Job */}
             <Screen name='JobScreen' component={JobScreen} />
             <Screen name='JobDetail' component={JobDetail} />

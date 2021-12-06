@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, useWindowDimensions } from 'react-native';
 import PropTypes from 'prop-types';
 
-import { useColor } from '@src/components';
-import CardWorkshop from 'src/components/Posting/CardWorkshop';
+import { ScreenEmptyData, useColor } from '@src/components';
+import CardEvent from 'src/components/Posting/CardEvent';
 import { useNavigation } from '@react-navigation/core';
 import PostingHeader from './PostingHeader';
 import { Container, Row } from 'src/styled';
@@ -27,7 +27,7 @@ const defaultProps = {
     loading: false,
 }
 
-const ListWorkshop = (props) => {
+const ListEvent = (props) => {
     const {
         data,
         horizontal,
@@ -39,13 +39,14 @@ const ListWorkshop = (props) => {
 
     const { Color } = useColor();
     const navigation = useNavigation();
+    const { width } = useWindowDimensions();
 
     const renderHeader = () => {
         return (
             <PostingHeader
                 title='Event Terbaru'
                 onSeeAllPress={() => {
-                    navigation.navigate('WorkshopScreen', {title: 'Event Terbaru'})
+                    navigation.navigate('EventScreen', {title: 'Event Terbaru'})
                 }}
             />
         )
@@ -70,7 +71,7 @@ const ListWorkshop = (props) => {
                 renderSkeleton()
             :
                 <FlatList
-                    key='ListWorkshop'
+                    key='List'
                     keyExtractor={(item, index) => item.toString() + index}
                     data={data}
                     numColumns={1}
@@ -79,11 +80,19 @@ const ListWorkshop = (props) => {
                     contentContainerStyle={{paddingTop: 16, paddingHorizontal: 8, ...style}}
                     renderItem={({ item, index }) => {
                         return (
-                            <CardWorkshop
+                            <CardEvent
                                 item={item}
                                 numColumns={1}
                                 horizontal={horizontal}
                                 onPress={() => onPress(item)}
+                            />
+                        )
+                    }}
+                    ListEmptyComponent={() => {
+                        return (
+                            <ScreenEmptyData
+                                message='Event belum tersedia'
+                                style={{width: width - 16}}
                             />
                         )
                     }}
@@ -93,6 +102,6 @@ const ListWorkshop = (props) => {
     )
 }
 
-ListWorkshop.propTypes = propTypes;
-ListWorkshop.defaultProps = defaultProps;
-export default ListWorkshop;
+ListEvent.propTypes = propTypes;
+ListEvent.defaultProps = defaultProps;
+export default ListEvent;

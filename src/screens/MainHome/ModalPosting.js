@@ -27,25 +27,25 @@ const data = [
     title: 'Posting Artikel',
     productType: "TRIBES",
     productCategory: '',
-    productSubCategory: 'TRIBES_TAMPIL'
+    productSubCategory: 'POSTING'
   } },
   { id: 2, name: 'Posting Tempat Terdekat', nav: 'CreateThreadScreen', params: {
     title: 'Posting Tempat Terdekat',
     productType: "TRIBES",
     productCategory: '',
-    productSubCategory: 'TRIBES_JALAN_JALAN',
+    productSubCategory: 'NEARBY_PLACE',
   } },
   { id: 3, name: 'Posting Event', nav: 'CreateThreadScreen', params: {
     title: 'Posting Event',
     productType: "TRIBES",
     productCategory: '',
-    productSubCategory: 'TRIBES_BELAJAR',
+    productSubCategory: 'EVENT',
   } },
   { id: 4, name: 'Posting Loker', nav: 'CreateThreadScreen', params: {
     title: 'Posting Loker',
     productType: "TRIBES",
     productCategory: '',
-    productSubCategory: 'TRIBES_KERJA',
+    productSubCategory: 'JOBS',
   } },
 ];
 

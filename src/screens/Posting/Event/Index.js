@@ -13,7 +13,7 @@ import {
 import Text from '@src/components/Text';
 import { TouchableOpacity } from '@src/components/Button';
 import Scaffold from '@src/components/Scaffold';
-import ListWorkshop from 'src/components/Posting/ListWorkshop';
+import ListEvent from 'src/components/Posting/ListEvent';
 
 import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
@@ -26,7 +26,6 @@ const Example = Styled(View)`
 export default ({ navigation, route }) => {
     const [state, changeState] = useState({
         fallback: true,
-        listCategory: [],
         listProduct: [],
     });
 
@@ -55,12 +54,10 @@ export default ({ navigation, route }) => {
           fallback: true,
         });
     
-        const listCategory = await fetchContentProduct('TRIBES', '', '');
-        const listProduct = await fetchContentProduct('TRIBES', '', 'TRIBES_BELAJAR');
+        const listProduct = await fetchContentProduct('TRIBES', 'EVENT', '');
     
         setState({
             fallback: false,
-            listCategory,
             listProduct,
         });
     }
@@ -97,7 +94,7 @@ export default ({ navigation, route }) => {
 
     return (
         <Scaffold
-            headerTitle='Event Terbaru'
+            headerTitle={route.params && route.params.title ? route.params.title : ''}
             iconRightButton={
               <Ionicons
                 name='search'
@@ -115,10 +112,10 @@ export default ({ navigation, route }) => {
                 color={Color.textInput}
                 style={{backgroundColor: Color.primary, paddingTop: 2, paddingBottom: 6}}
                 onPress={() => navigation.navigate('CreateThreadScreen', {
-                  title: 'Belajar',
+                  title: route.params && route.params.title ? route.params.title : '',
                   productType: "TRIBES",
                   productCategory: '',
-                  productSubCategory: 'TRIBES_BELAJAR',
+                  productSubCategory: 'EVENT',
                 })}
               >
                 Buat
@@ -134,12 +131,12 @@ export default ({ navigation, route }) => {
                 </TouchableOpacity>
             </View> */}
 
-            <ListWorkshop
+            <ListEvent
                 showHeader={false}
                 showAll={false}
                 data={state.listProduct}
                 onPress={(item) => {
-                  // navigation.navigate('WorkshopDetail', { item });
+                  // navigation.navigate('EventDetail', { item });
                   navigation.navigate('PostingDetail', {item});
                 }}
                 style={{

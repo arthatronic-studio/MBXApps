@@ -1,6 +1,7 @@
 import React from 'react';
 import Styled from 'styled-components';
 import { View, Image } from 'react-native';
+import PropTypes from 'prop-types';
 
 import Text from '@src/components/Text';
 import { useColor } from '@src/components';
@@ -35,13 +36,27 @@ const BodyText = Styled(View)`
   justify-content: center;
 `;
 
+const propTypes = {
+  message: PropTypes.string,
+  type: PropTypes.string,
+  transparent: PropTypes.bool,
+  style: PropTypes.object,
+}
+
+const defaultProps = {
+  message: 'Data tidak tersedia',
+  type: 'big',
+  transparent: false,
+  style: {},
+}
+
 const ScreenEmptyData = (props) => {
-    const { message, type, transparent } = props;
+    const { message, type, transparent, style } = props;
 
     const { Color } = useColor();
 
     return (
-      <Wrapper transparent={transparent} backgroundColor={Color.theme}>
+      <Wrapper transparent={transparent} backgroundColor={Color.theme} {...style}>
         <Body type={type} transparent={transparent} backgroundColor={Color.theme}>
           <ContainerIndicator>
             <Image style={{height: 60, aspectRatio: 1}} resizeMode='contain' source={imageEmpty} />
@@ -54,4 +69,6 @@ const ScreenEmptyData = (props) => {
     );
 }
 
+ScreenEmptyData.propTypes = propTypes;
+ScreenEmptyData.defaultProps = defaultProps;
 export default ScreenEmptyData;

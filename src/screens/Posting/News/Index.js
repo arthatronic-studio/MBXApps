@@ -22,7 +22,6 @@ const Example = Styled(View)`
 
 export default ({ navigation, route }) => {
     const [state, changeState] = useState({
-        listCategory: [],
         listProduct: [],
         fallback: true,
     });
@@ -52,11 +51,9 @@ export default ({ navigation, route }) => {
           fallback: true,
         });
 
-        const listCategory = await fetchContentProduct('TRIBES', '', '');
-        const listProduct = await fetchContentProduct('TRIBES', '', 'TRIBES_TAMPIL');
+        const listProduct = await fetchContentProduct('TRIBES', 'POSTING', '');
     
         setState({
-            listCategory,
             listProduct,
             fallback: false,
         });
@@ -112,10 +109,10 @@ export default ({ navigation, route }) => {
                 color={Color.textInput}
                 style={{backgroundColor: Color.primary, paddingTop: 2, paddingBottom: 6}}
                 onPress={() => navigation.navigate('CreateThreadScreen', {
-                  title: 'Tampil',
+                  title: route.params && route.params.title ? route.params.title : '',
                   productType: "TRIBES",
                   productCategory: '',
-                  productSubCategory: 'TRIBES_TAMPIL',
+                  productSubCategory: 'POSTING',
                 })}
               >
                 Buat

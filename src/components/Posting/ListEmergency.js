@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, useWindowDimensions } from 'react-native';
 import PropTypes from 'prop-types';
 
-import { useColor } from '@src/components';
+import { ScreenEmptyData, useColor } from '@src/components';
 import CardEmergency from './CardEmergency';
 import { useNavigation } from '@react-navigation/core';
 import PostingHeader from './PostingHeader';
@@ -39,6 +39,7 @@ const ListEmergency = (props) => {
 
     const { Color } = useColor();
     const navigation = useNavigation();
+    const { width } = useWindowDimensions();
 
     const renderHeader = () => {
         return (
@@ -84,6 +85,14 @@ const ListEmergency = (props) => {
                                 numColumns={1}
                                 horizontal={horizontal}
                                 onPress={() => onPress(item)}
+                            />
+                        )
+                    }}
+                    ListEmptyComponent={() => {
+                        return (
+                            <ScreenEmptyData
+                                message='Emergency belum tersedia'
+                                style={{width: width - 16}}
                             />
                         )
                     }}
