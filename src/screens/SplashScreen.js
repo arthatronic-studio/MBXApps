@@ -45,9 +45,9 @@ const SplashScreen = ({ navigation, route }) => {
         source={iconSplash}
         style={{
           width: '60%',
-          height: undefined,
-          aspectRatio: 8.7,
+          aspectRatio: 9/16,
         }}
+        resizeMode='contain'
       />
     </SafeAreaView>
   );

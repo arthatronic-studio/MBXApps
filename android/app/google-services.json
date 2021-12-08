@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "559476656127",
-    "project_id": "komoto-74a11",
-    "storage_bucket": "komoto-74a11.appspot.com"
+    "project_number": "650083720470",
+    "project_id": "tribes-social",
+    "storage_bucket": "tribes-social.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:559476656127:android:8eef93d1a142bf573e49ca",
+        "mobilesdk_app_id": "1:650083720470:android:d0f842d36a6e8bce848437",
         "android_client_info": {
-          "package_name": "com.komoto"
+          "package_name": "com.tribes"
         }
       },
       "oauth_client": [
         {
-          "client_id": "559476656127-9stht1kcicb1cmpk3v32g0skssto9nvn.apps.googleusercontent.com",
+          "client_id": "650083720470-4aiu0iq4ossoa9b2orusi91lopb32tkc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCVD-1e4HMDvbOa4cPDa-Vicwnx6-nG55I"
+          "current_key": "AIzaSyA_S_7U5Mr0E5FSnUK4RoaOW6epSlSnKkI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "559476656127-9stht1kcicb1cmpk3v32g0skssto9nvn.apps.googleusercontent.com",
+              "client_id": "650083720470-4aiu0iq4ossoa9b2orusi91lopb32tkc.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

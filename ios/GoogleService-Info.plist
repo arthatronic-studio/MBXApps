@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>559476656127-cojtr13hf4dbcr85mr3daeh0bfcnsq9e.apps.googleusercontent.com</string>
+	<string>650083720470-50ri3k6fka7ucicrrp3mil1pue3l70mp.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.559476656127-cojtr13hf4dbcr85mr3daeh0bfcnsq9e</string>
+	<string>com.googleusercontent.apps.650083720470-50ri3k6fka7ucicrrp3mil1pue3l70mp</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDDbj8hIdTXgdtM_jO4KjrKFI9FXo3fWsE</string>
+	<string>AIzaSyCenGXX-EeG7x4IoPv45BJY5ZEg0pjs5xQ</string>
 	<key>GCM_SENDER_ID</key>
-	<string>559476656127</string>
+	<string>650083720470</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.komoto</string>
+	<string>com.tribes</string>
 	<key>PROJECT_ID</key>
-	<string>komoto-74a11</string>
+	<string>tribes-social</string>
 	<key>STORAGE_BUCKET</key>
-	<string>komoto-74a11.appspot.com</string>
+	<string>tribes-social.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:559476656127:ios:86f87346e736dbd63e49ca</string>
+	<string>1:650083720470:ios:be694ce99070bb6a848437</string>
 </dict>
 </plist>

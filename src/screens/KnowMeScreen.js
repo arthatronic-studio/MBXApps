@@ -70,10 +70,10 @@ const DotIndicator = Styled(View)`
 `;
 
 const sliderData = [
-  { title: 'Komoto', subTitle: 'Komoto Community adalah ...' },
-  { title: 'Komoto', subTitle: 'Komoto Community adalah ...' },
-  { title: 'Komoto', subTitle: 'Komoto Community adalah ...' },
-  { title: 'Komoto', subTitle: 'Komoto Community adalah ...' },
+  { title: 'Tribes Social', subTitle: '...' },
+  { title: 'Tribes Social', subTitle: '...' },
+  { title: 'Tribes Social', subTitle: '...' },
+  { title: 'Tribes Social', subTitle: '...' },
 ];
 
 const KnowMeScreen = ({ navigation, route }) => {

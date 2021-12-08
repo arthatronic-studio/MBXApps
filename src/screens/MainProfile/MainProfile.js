@@ -222,7 +222,7 @@ const MainProfile = ({navigation, route}) => {
           <TouchableOpacity
             onPress={() =>
               Linking.openURL(
-                'mailto:bummitbs@gmail.com?subject=Kritik dan saran untuk Komoto&Body',
+                'mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body',
               )
             }>
             <Row>
