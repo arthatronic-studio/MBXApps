@@ -9,6 +9,10 @@ import { queryComment } from './queryContentComment';
 import { queryJoinCommunity } from './queryJoinCommunity';
 import { queryGetChapterList } from './queyGetChapterList'
 import { queryCheckVersion } from './queryCheckVersion';
+import { queryContentChatRooms } from './queryContentChatRooms';
+import { queryContentChatRoomManage } from './queryContentChatRoomManage';
+import { queryContentChatRoomDetail } from './queryContentChatRoomDetail';
+import { queryContentChatMessage } from './queryContentChatMessage';
 
 export {
     queryContentProduct,
@@ -22,4 +26,8 @@ export {
     queryJoinCommunity,
     queryGetChapterList,
     queryCheckVersion,
+    queryContentChatRooms,
+    queryContentChatRoomManage,
+    queryContentChatRoomDetail,
+    queryContentChatMessage,
 };

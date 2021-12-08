@@ -6,6 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useIsFocused} from '@react-navigation/native';
+import firestore from '@react-native-firebase/firestore';
 
 import {
   Text,
@@ -22,7 +23,8 @@ import ListPlace from 'src/components/Posting/ListPlace';
 import ListEvent from 'src/components/Posting/ListEvent';
 import ListJob from 'src/components/Posting/ListJob';
 import {shadowStyle} from '@src/styles';
-import {Box, Divider, MainView} from '@src/styled';
+import {Box, Divider, Circle} from '@src/styled';
+import { playNotificationSounds } from '@src/utils/notificationSounds';
 
 import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
@@ -40,6 +42,7 @@ import {
 } from '@assets/images/home';
 import ModalPosting from './ModalPosting';
 import ListEmergency from 'src/components/Posting/ListEmergency';
+import { usePreviousState } from 'src/hooks';
 
 const ContentView = Styled(View)`
   width: 100%;
@@ -133,6 +136,9 @@ const MainHome = ({navigation, route}) => {
   // state
   const [vestaAmount, setVestaAmount] = useState(0);
   const [wallet, setWallet] = useState('CLOSE');
+  const [firebaseData, setFirebaseData] = useState([]);
+  const [firebaseNotifierLastChatCount, setFirebaseNotifierLastChatCount] = useState(0);
+  const [notifierCount, setNotifierCount] = useState(0);
 
   const [loadingEmergency, setLoadingEmergency] = useState(true);
   const [listEmergencyArea, setListEmergencyArea] = useState([]);
@@ -157,6 +163,59 @@ const MainHome = ({navigation, route}) => {
   const {width} = useWindowDimensions();
   const isFocused = useIsFocused();
   const modalPostingRef = useRef();
+  const prevFirebaseNotifierLastChatCount = usePreviousState(firebaseNotifierLastChatCount);
+
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('maudiChatNotifier')
+      .orderBy('id', 'desc')
+      .where('member', 'array-contains-any', [user.userId.toString()])
+      .onSnapshot((res) => {
+        // console.log('res chat notifier', res);
+        
+        if (res) {
+          let newData = [];
+
+          res.docs.map((i) => {
+            newData.push(i.data());
+          });
+
+          setFirebaseData(newData);
+        }
+      }, (error) => {
+        console.log('error fstore', error);
+      });
+
+      return () => subscriber();
+  }, []);
+
+  useEffect(() => {
+    if (firebaseData.length > 0) {
+      let result = 0;
+      let lastChatCount = 0;
+
+      if (firebaseData.length > 0) {
+        for (let i = 0; i < firebaseData.length; i++) {
+          const idxOf = firebaseData[i].read && firebaseData[i].read.indexOf(user.userId.toString());
+          
+          if (idxOf === -1) {
+            result += 1;
+          }
+
+          lastChatCount += firebaseData[i].lastChatCount;
+        }
+      }
+      
+      if (result > 0) setFirebaseNotifierLastChatCount(lastChatCount);
+      setNotifierCount(result);
+    }
+  }, [firebaseData]);
+
+  useEffect(() => {
+    if (firebaseNotifierLastChatCount > 0 && prevFirebaseNotifierLastChatCount !== firebaseNotifierLastChatCount) {
+      playNotificationSounds();
+    }
+  }, [firebaseNotifierLastChatCount]);
 
   useEffect(() => {
     if (isFocused) {
@@ -305,15 +364,20 @@ const MainHome = ({navigation, route}) => {
                   color={Color.text}
                 />
               </TouchableOpacity>
-              {/* <TouchableOpacity
-                onPress={() => {}}
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('ChatRoomsScreen');
+                }}
                 style={{
                   width: '20%',
                   justifyContent: 'flex-start',
                   alignItems: 'flex-end',
                 }}>
                 <Ionicons name="chatbox-outline" size={22} color={Color.text} />
-              </TouchableOpacity> */}
+                {notifierCount > 0 && <Circle size={12} color={Color.error} style={{position: 'absolute', top: -4, right: -4}}>
+                <Text size={8} color={Color.white}>{notifierCount > 99 ? '99' : notifierCount}</Text>
+              </Circle>}
+              </TouchableOpacity>
             </View>
           }
         />

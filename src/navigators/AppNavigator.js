@@ -81,6 +81,12 @@ import OrderListPerProduct from '@src/screens/MyBooking/OrderListPerProduct';
 import NotificationScreen from '@src/screens/Notification/NotificationScreen';
 import NotificationDetail from '@src/screens/Notification/NotificationDetail';
 
+// content-chat
+import ChatRoomsScreen from '@src/screens/Chat/ChatRoomsScreen';
+import ChatDetailScreen from '@src/screens/Chat/ChatDetailScreen';
+import ChatUserListScreen from '@src/screens/Chat/ChatUserListScreen';
+import ChatInfoScreen from '@src/screens/Chat/ChatInfoScreen';
+
 const {Navigator, Screen} = createStackNavigator();
 
 function MainStackNavigator() {
@@ -158,6 +164,12 @@ function MainStackNavigator() {
             {/* notification */}
             <Screen name='NotificationScreen' component={NotificationScreen} />
             <Screen name='NotificationDetail' component={NotificationDetail} />
+
+            {/* content-chat */}
+            <Screen name='ChatRoomsScreen' component={ChatRoomsScreen} />
+            <Screen name='ChatDetailScreen' component={ChatDetailScreen} />
+            <Screen name='ChatUserListScreen' component={ChatUserListScreen} />
+            <Screen name='ChatInfoScreen' component={ChatInfoScreen} />
         </Navigator>
     );
 }
