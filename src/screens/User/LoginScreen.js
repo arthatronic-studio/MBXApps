@@ -8,9 +8,6 @@ import { useIsFocused } from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
 
 import {
-  // Button,
-  // TouchableOpacity,
-  // Text,
   Popup, usePopup,
   Loading,
   useColor
