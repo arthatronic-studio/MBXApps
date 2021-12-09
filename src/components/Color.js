@@ -7,7 +7,6 @@ const staticColors = {
   primarySoft: '#DAEBF2',
   secondary: '#FB9850',
   disabled: '#A1A1A1',
-  overflow: 'rgba(0, 0, 0, 0.3)',
   success: '#0BBC2E',
   info: '#0787D7',
   warning: '#F5B72C',
@@ -16,10 +15,15 @@ const staticColors = {
   gray: '#666666',
   red: '#D83030',
   yellow: '#FFD35B',
+  timer: '#F94918',
+  icon: '#667786',
+  bid: '#E6E9EA'
 };
 
 export const lightModeColors = {
   ...staticColors,
+  overflow: 'rgba(0, 0, 0, 0.3)',
+  reverseOverflow: 'rgba(f, f, f, 0.3)',
   colorDominant: 'light',
   theme: '#EEF2E6', // '#F4F4F4',
   text: '#0D0006',
@@ -29,6 +33,8 @@ export const lightModeColors = {
 
 export const darkModeColors = {
   ...staticColors,
+  overflow: 'rgba(f, f, f, 0.3)',
+  reverseOverflow: 'rgba(0, 0, 0, 0.3)',
   colorDominant: 'dark',
   theme: '#161c00',
   text: '#FFFFFF',

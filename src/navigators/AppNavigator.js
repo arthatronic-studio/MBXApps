@@ -87,6 +87,10 @@ import ChatDetailScreen from '@src/screens/Chat/ChatDetailScreen';
 import ChatUserListScreen from '@src/screens/Chat/ChatUserListScreen';
 import ChatInfoScreen from '@src/screens/Chat/ChatInfoScreen';
 
+// auction
+import AuctionDetail from '@src/screens/Posting/Auction/Detail';
+import Bid from '@src/screens/Posting/Auction/Bid';
+
 const {Navigator, Screen} = createStackNavigator();
 
 function MainStackNavigator() {
@@ -170,6 +174,10 @@ function MainStackNavigator() {
             <Screen name='ChatDetailScreen' component={ChatDetailScreen} />
             <Screen name='ChatUserListScreen' component={ChatUserListScreen} />
             <Screen name='ChatInfoScreen' component={ChatInfoScreen} />
+
+            {/* auction */}
+            <Screen name='AuctionDetail' component={AuctionDetail} />
+            <Screen name='Bid' component={Bid} />
         </Navigator>
     );
 }

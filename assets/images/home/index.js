@@ -11,6 +11,10 @@ const iconCategory = require('./category.png');
 const iconComment = require('./comment.png');
 const iconLiked = require('./liked.png');
 const iconLike = require('./like.png');
+const iconScale = require('./scales.png')
+const iconClock = require('./clock.png')
+const iconFish = require('./fishSimple.png')
+const iconTimer = require('./timer.png')
 
 export {
     iconBPJS,
@@ -26,4 +30,8 @@ export {
     iconComment,
     iconLiked,
     iconLike,
+    iconScale,
+    iconClock,
+    iconFish,
+    iconTimer
 };

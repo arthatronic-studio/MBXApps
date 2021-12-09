@@ -18,6 +18,8 @@ import {
   Scaffold,
 } from '@src/components';
 import {FormatMoney} from '@src/utils';
+import ListAuction from 'src/components/Posting/ListAuction';
+import ListSoonAuction from 'src/components/Posting/ListSoonAuction';
 import ListNews from 'src/components/Posting/ListNews';
 import ListPlace from 'src/components/Posting/ListPlace';
 import ListEvent from 'src/components/Posting/ListEvent';
@@ -140,6 +142,10 @@ const MainHome = ({navigation, route}) => {
   const [firebaseNotifierLastChatCount, setFirebaseNotifierLastChatCount] = useState(0);
   const [notifierCount, setNotifierCount] = useState(0);
 
+  const [loadingAuction, setLoadingAuction] = useState(true);
+
+  const [loadingSoonAuction, setLoadingSoonAuction] = useState(true);
+
   const [loadingEmergency, setLoadingEmergency] = useState(true);
   const [listEmergencyArea, setListEmergencyArea] = useState([]);
 
@@ -254,6 +260,10 @@ const MainHome = ({navigation, route}) => {
       await fetchContentProduct('TRIBES', 'EVENT', ''),
       await fetchContentProduct('TRIBES', 'JOBS', ''),
     ]);
+
+    setLoadingAuction(false);
+
+    setLoadingSoonAuction(false);
 
     setLoadingEmergency(false);
     setListEmergencyArea(result[0]);
@@ -533,6 +543,28 @@ const MainHome = ({navigation, route}) => {
         </ContentView>
 
         <Divider height={24} />
+
+        <ListAuction
+          data={listEmergencyArea}
+          loading={loadingAuction}
+          horizontal
+          showHeader={false}
+          onPress={(item) => {
+            navigation.navigate('DetailAuction', {item});
+          }}
+          style={{paddingLeft: 8}}
+        />
+
+        <ListSoonAuction
+          data={listEmergencyArea}
+          loading={loadingSoonAuction}
+          horizontal
+          showHeader
+          onPress={(item) => {
+            navigation.navigate('DetailAuction', {item});
+          }}
+          style={{paddingLeft: 8}}
+        />
 
         <ListEmergency
           data={listEmergencyArea}
