@@ -30,73 +30,73 @@ const CardAuction = (props) => {
                     width: width / numColumns + 18,
                     paddingHorizontal: 8,
                     marginBottom: 1,
-                    // flex:1,
                     ...style,
                 },
                 style
             ]}
         >
-            <View style={{ flex: 1 }}>
-                <ImageBackground 
-                    source={{ uri: item.image }} 
-                    resizeMode="cover" 
-                    style={{ 
-                        justifyContent: "center",
-                        width: '100%',
-                        aspectRatio: 3/4,
-                        justifyContent: 'flex-start',
-                        alignItems: 'flex-start',
-                    }}
-                    imageStyle={{ borderRadius: 10}}
-                    >
-                        <View 
-                            style={{ 
-                                justifyContent: "center",
-                                width: '100%',
-                                aspectRatio: 3/4,
-                                justifyContent: 'flex-start',
-                                alignItems: 'flex-start',
-                                borderRadius: 10, 
-                                backgroundColor: Color.overflow
+            <ImageBackground 
+                source={{ uri: item.image }} 
+                resizeMode="cover" 
+                style={{ 
+                    justifyContent: "center",
+                    width: '100%',
+                    aspectRatio: 3/4,
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                }}
+                imageStyle={{ borderRadius: 10}}
+                >
+                    <View 
+                        style={{ 
+                            flexDirection:'column',
+                            justifyContent: 'space-between',
+                            width: '100%',
+                            aspectRatio: 3/4,
+                            alignItems: 'flex-start',
+                            borderRadius: 10, 
+                            backgroundColor: Color.overflow
+                        }}>
+                        <View
+                        style={{ flexDirection: 'row', paddingTop: 10, width: '100%', aspectRatio:7, justifyContent:'flex-end'}}>
+                            <View
+                                style={{
+                                    marginHorizontal: 10,
+                                    justifyContent: 'center',
+                                    backgroundColor: Color.timer,
+                                    width: '60%',
+                                    height: '100%',
+                                    alignItems:'center',
+                                    borderRadius: 120,
                             }}>
+                                <Text style={{ color: Color.textInput, paddingleft: 3}} size={12} numberOfLines={1}>Tersisa {FormatDuration.getMinutesFromSeconds(10920)}</Text>
+                            </View>
+                        </View>
+                        <View style={{ marginBottom: 10, flexDirection: 'column', justifyContent: 'space-between', alignItems:'flex-start' }}>
                             <View
-                            style={{ flexDirection: 'row', paddingTop: 10, width: '100%', height:30, paddingRight: 10, justifyContent:'flex-end'}}>
-                                <View
-                                    style={{
-                                        justifyContent: 'center',
-                                        backgroundColor: Color.timer,
-                                        width: '60%',
-                                        height: '100%',
-                                        borderRadius: 120,
-                                }}>
-                                    <Text style={{ color: Color.textInput, paddingBottom: 4, paddingleft: 6}} size={12}>Tersisa {FormatDuration.getMinutesFromSeconds(10920)}</Text>
-                                </View>
+                            style={{ flexDirection: 'row', paddingHorizontal: 15, width: '100%', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+                                <Text size={18} color={Color.textInput} type='bold' align='left' numberOfLines={2}>testing 1 2 3 4 5 6 8 9 10 11 12 13 14 15 16 17 18</Text>
                             </View>
                             <View
-                            style={{ flexDirection: 'row', paddingTop: 135, paddingHorizontal: 15, width: '100%', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-                                <Text size={18} color={Color.textInput} type='bold' align='left' numberOfLines={1}>{item.productName}</Text>
-                            </View>
-                            <View
-                            style={{ flexDirection: 'row', paddingTop: 10, paddingHorizontal: 15, width: '100%', alignItems:'flex-end'}}>
+                            style={{ flexDirection: 'row', paddingTop: 10, paddingHorizontal: 15, width: '100%', alignItems:'center', justifyContent:'space-between'}}>
                                 <View
-                                style={{ flexDirection: 'column', alignItems: 'flex-start'}}>
+                                style={{ flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between', width: '60%'}}>
                                     <Text style={{ color: Color.textInput, opacity: 0.7}} size={10}>Harga Permulaan</Text>
-                                    <Text style={{ color: Color.textInput, fontWeight: 'bold', marginTop: 2}} size={18}>{FormatMoney.getFormattedMoney(50000)}</Text>
+                                    <Text style={{ color: Color.textInput, fontWeight: 'bold', marginTop: 2}} size={18} numberOfLines={1}>{FormatMoney.getFormattedMoney(500000)}</Text>
                                 </View>
                                 <TouchableOpacity onPress={() => onPress(item)}
                                 style={{ 
                                     backgroundColor: Color.primary,
-                                    width: '40%',
-                                    height: '80%',
-                                    borderRadius: 4,
-                                    marginLeft: 23 
+                                    width: '35%',
+                                    height: '60%',
+                                    borderRadius: 4, 
                                 }}>
                                     <Text color={Color.textInput} size={16}>Lihat</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
-                </ImageBackground>
-            </View>
+                    </View>
+            </ImageBackground>
         </View>
     )
 }
