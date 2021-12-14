@@ -44,7 +44,6 @@ const CustomTextInput = Styled(TextInput)`
   width: 100%;
   height: 100%;
   fontFamily: Inter-Regular;
-  backgroundColor: transparent;
   borderBottomWidth: 1px;
   borderColor: #666666;
   fontSize: 14px;
@@ -274,6 +273,7 @@ const EditThreadScreen = (props) => {
                             onBlur={() => isValueError('description')}
                             multiline
                             numberOfLines={8}
+                            style={{color: Color.text, textAlignVertical: 'top'}}
                         />
                     </View>
                     <ErrorView>

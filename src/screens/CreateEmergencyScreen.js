@@ -46,7 +46,6 @@ const CustomTextInput = Styled(TextInput)`
   width: 100%;
   height: 100%;
   fontFamily: Inter-Regular;
-  backgroundColor: transparent;
   borderBottomWidth: 1px;
   borderColor: #666666;
   fontSize: 14px;
@@ -281,54 +280,52 @@ const CreateEmergencyScreen = (props) => {
                             onChangeText={(text) => onChangeUserData('description', text)}
                             selectionColor={Color.text}
                             value={userData.description}
-                                onBlur={() => isValueError('description')}
-                                multiline
-                                numberOfLines={8}
-                            />
+                            onBlur={() => isValueError('description')}
+                            multiline
+                            numberOfLines={8}
+                            style={{color: Color.text, textAlignVertical: 'top'}}
+                        />
                         </View>
-                        <ErrorView>
-                            {/* <Text type='medium' color={Color.error}>error</Text> */}
-                        </ErrorView>
-                    </View>
+                    <ErrorView>
+                        {/* <Text type='medium' color={Color.error}>error</Text> */}
+                    </ErrorView>
+                </View>
                 <View style={{paddingHorizontal: 16, paddingTop: 24}}>
                     <LabelInput>
                         <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Tanggal</Text>
                     </LabelInput>
                     <EmailRoundedView>
-           
-           <CustomTouch title="Open" onPress={() => setOpen(true)}>
-                
-                 <EmailRoundedView>
-                         <View style={{height: 34, paddingRight: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
-                         <Text size={14} style={{marginTop: 2}}></Text>
-                         <Text>{userData.date ? userData.date : 'Pilih Tanggal '} </Text>
-                         <Ionicons name='calendar' color={Color.text} />
-                     </View>
-                 </EmailRoundedView>
-             </CustomTouch>
-            </EmailRoundedView>
+                        <CustomTouch title="Open" onPress={() => setOpen(true)}>
+                            <EmailRoundedView>
+                                <View style={{height: 34, paddingRight: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
+                                    <Text size={14} style={{marginTop: 2}}></Text>
+                                    <Text>{userData.date ? userData.date : 'Pilih Tanggal '} </Text>
+                                    <Ionicons name='calendar' color={Color.text} />
+                                </View>
+                            </EmailRoundedView>
+                        </CustomTouch>
+                    </EmailRoundedView>
+
                     <ErrorView>
                         {/* <Text type='medium' color={Color.error}>error</Text> */}
                     </ErrorView>
-                    <>                 
+
                     {open && <DatePicker
-                    modal
-                    open={open}
-                    date={date}
-                    mode="date"
-                    onConfirm={(date) => {
-                    setOpen(false);
-                    setDate(date);
-                    onChangeUserData('date', Moment(date).format('DD-MM-YYYY'));
-                    console.log('koko',date);
-                    }}
-                    onCancel={() => {
-                    setOpen(false)
-                    }}
+                        modal
+                        open={open}
+                        date={date}
+                        mode="date"
+                        onConfirm={(date) => {
+                            setOpen(false);
+                            setDate(date);
+                            onChangeUserData('date', Moment(date).format('DD-MM-YYYY'));
+                            console.log('koko',date);
+                        }}
+                        onCancel={() => {
+                            setOpen(false)
+                        }}
                     />}
-                    </>
                 </View>
-               
 
                 <TouchSelect
                     title='Siapa yang dapat melihat ini?'
