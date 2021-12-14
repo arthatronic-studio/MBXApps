@@ -24,7 +24,8 @@ const CardAuction = (props) => {
     const navigation = useNavigation();
 
     return (
-        <View
+        <TouchableOpacity
+            onPress={() => onPress(item)}
             style={[
                 {
                     width: width / numColumns + 18,
@@ -69,22 +70,22 @@ const CardAuction = (props) => {
                                     alignItems:'center',
                                     borderRadius: 120,
                             }}>
-                                <Text style={{ color: Color.textInput, paddingleft: 3}} size={12} numberOfLines={1}>Tersisa {FormatDuration.getMinutesFromSeconds(10920)}</Text>
+                                <Text style={{ color: Color.textInput}} size={12} numberOfLines={1}>Tersisa {FormatDuration.getMinutesFromSeconds(10920)}</Text>
                             </View>
                         </View>
                         <View style={{ marginBottom: 10, flexDirection: 'column', justifyContent: 'space-between', alignItems:'flex-start' }}>
                             <View
                             style={{ flexDirection: 'row', paddingHorizontal: 15, width: '100%', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-                                <Text size={18} color={Color.textInput} type='bold' align='left' numberOfLines={2}>testing 1 2 3 4 5 6 8 9 10 11 12 13 14 15 16 17 18</Text>
+                                <Text size={14} color={Color.textInput} type='bold' align='left' numberOfLines={2}>testing 1 2 3 4 5 6 8 9 10 11 12 13 14 15 16 17 18</Text>
                             </View>
                             <View
-                            style={{ flexDirection: 'row', paddingTop: 10, paddingHorizontal: 15, width: '100%', alignItems:'center', justifyContent:'space-between'}}>
+                            style={{ flexDirection: 'row', paddingTop: 8, paddingHorizontal: 15, width: '100%', alignItems:'center', justifyContent:'space-between'}}>
                                 <View
-                                style={{ flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between', width: '60%'}}>
+                                style={{ flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between', width: '100%'}}>
                                     <Text style={{ color: Color.textInput, opacity: 0.7}} size={10}>Harga Permulaan</Text>
-                                    <Text style={{ color: Color.textInput, fontWeight: 'bold', marginTop: 2}} size={18} numberOfLines={1}>{FormatMoney.getFormattedMoney(500000)}</Text>
+                                    <Text style={{ color: Color.textInput, fontWeight: 'bold', marginTop: 2}} size={14}>{FormatMoney.getFormattedMoney(500000000000)}</Text>
                                 </View>
-                                <TouchableOpacity onPress={() => onPress(item)}
+                                {/* <TouchableOpacity onPress={() => onPress(item)}
                                 style={{ 
                                     backgroundColor: Color.primary,
                                     width: '35%',
@@ -92,12 +93,12 @@ const CardAuction = (props) => {
                                     borderRadius: 4, 
                                 }}>
                                     <Text color={Color.textInput} size={16}>Lihat</Text>
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
                             </View>
                         </View>
                     </View>
             </ImageBackground>
-        </View>
+        </TouchableOpacity>
     )
 }
 
