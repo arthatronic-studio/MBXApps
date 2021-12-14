@@ -12,7 +12,6 @@ import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 const MainView = Styled(View)`
     width: 100%;
     height: 100%;
-    backgroundColor: ${Color.dark};
 `;
 
 const ChatInfoScreen = ({ navigation, route }) => {

@@ -173,7 +173,7 @@ const MainHome = ({navigation, route}) => {
 
   useEffect(() => {
     const subscriber = firestore()
-      .collection('maudiChatNotifier')
+      .collection('contentChatNotifier')
       .orderBy('id', 'desc')
       .where('member', 'array-contains-any', [user.userId.toString()])
       .onSnapshot((res) => {
@@ -417,7 +417,7 @@ const MainHome = ({navigation, route}) => {
             </Text>
             <Text size={18} type="bold" lineHeight={22} letterSpacing={0.45}>
               {user && !user.guest
-                ? user.firstName + ' ' + user.lastName
+                ? user.firstName.trim() + (user.lastName ? ' ' + user.lastName.trim() : '')
                 : 'Tamu'}
             </Text>
           </View>
@@ -545,10 +545,10 @@ const MainHome = ({navigation, route}) => {
         <Divider height={24} />
 
         <ListAuction
-          data={listEmergencyArea}
+          data={[0, 1]}
           loading={loadingAuction}
           horizontal
-          showHeader={false}
+          showHeader
           onPress={(item) => {
             navigation.navigate('DetailAuction', {item});
           }}
@@ -556,7 +556,7 @@ const MainHome = ({navigation, route}) => {
         />
 
         <ListSoonAuction
-          data={listEmergencyArea}
+          data={[0, 1]}
           loading={loadingSoonAuction}
           horizontal
           showHeader

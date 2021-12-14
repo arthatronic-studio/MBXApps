@@ -19,23 +19,18 @@ import { queryContentChatRoomManage, queryContentChatRoomDetail, queryContentCha
 
 const MainView = Styled(View)`
     flex: 1;
-    backgroundColor: ${Color.dark};
 `;
 
 const BottomSection = Styled(View)`
   width: 100%;
   padding: 16px;
-  backgroundColor: ${Color.dark};
   borderTopWidth: 0.5px;
-  borderColor: ${Color.theme};
 `;
 
 const BoxInput = Styled(View)`
   width: 100%;
   minHeight: 48px;
-  backgroundColor: ${Color.theme};
   padding: 0px 42px 0px 16px;
-  borderColor: ${Color.border};
   borderRadius: 8px;
   borderWidth: 0.5px;
   justifyContent: center;
@@ -43,10 +38,9 @@ const BoxInput = Styled(View)`
 
 const TextInputNumber = Styled(TextInput)`
   width: 100%;
-  fontFamily: Poppins-Regular;
+  fontFamily: Inter-Regular;
   letterSpacing: 0.23;
   fontSize: 12px;
-  color: ${Color.white};
   backgroundColor: transparent;
 `;
 
@@ -57,7 +51,6 @@ const CircleSend = Styled(TouchableOpacity)`
   width: 30px;
   height: 30px;
   borderRadius: 15px;
-  backgroundColor: ${Color.secondary};
   justifyContent: center;
   alignItems: center;
 `;
@@ -562,8 +555,8 @@ const ChatDetailScreen = ({ navigation, route }) => {
                 }}
             />
 
-            <BottomSection>
-                <BoxInput>
+            <BottomSection style={{borderColor: Color.theme}}>
+                <BoxInput style={{borderColor: Color.border}}>
                     <TextInputNumber
                         name="text"
                         placeholder='Masukan teks...'
@@ -586,7 +579,10 @@ const ChatDetailScreen = ({ navigation, route }) => {
                         }}
                     />
 
-                    <CircleSend onPress={() => onCreateComment()}>
+                    <CircleSend
+                        onPress={() => onCreateComment()}
+                        style={{backgroundColor: Color.primary}}
+                    >
                         <Ionicons name='send' color={Color.white} />
                     </CircleSend>
                 </BoxInput>

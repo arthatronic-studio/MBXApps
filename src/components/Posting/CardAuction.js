@@ -91,7 +91,7 @@ const CardAuction = (props) => {
                                     borderRadius: 4,
                                     marginLeft: 23 
                                 }}>
-                                    <Text style={{ color: Color.textInput, marginVertical: 2, marginHorizonal: 5}} size={16}>Lihat</Text>
+                                    <Text color={Color.textInput} size={16}>Lihat</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>

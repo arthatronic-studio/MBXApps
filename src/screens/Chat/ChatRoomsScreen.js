@@ -20,7 +20,6 @@ import { queryContentChatRooms } from '@src/lib/query';
 
 const MainView = Styled(View)`
     flex: 1;
-    backgroundColor: ${Color.dark};
 `;
 
 const BottomSection = Styled(View)`
@@ -31,14 +30,12 @@ const BottomSection = Styled(View)`
   flexDirection: row;
   alignItems: center;
   borderTopWidth: 0.5px;
-  borderColor: ${Color.border};
 `;
 
 const BoxInput = Styled(View)`
   width: 100%;
   backgroundColor: #FFFFFF;
   padding: 8px 16px 8px 16px;
-  borderColor: ${Color.border};
   borderRadius: 32px;
   borderWidth: 0.5px;
   flexDirection: row;
@@ -47,7 +44,7 @@ const BoxInput = Styled(View)`
 const TextInputNumber = Styled(TextInput)`
   width: 90%;
   alignContent: flex-start;
-  fontFamily: Poppins-Regular;
+  fontFamily: Inter-Regular;
   letterSpacing: 0.23;
   height: 40px;
 `;
@@ -56,7 +53,6 @@ const CircleSend = Styled(TouchableOpacity)`
   width: 40px;
   height: 40px;
   borderRadius: 20px;
-  backgroundColor: ${Color.theme};
   justifyContent: center;
   alignItems: center;
 `;
@@ -273,8 +269,8 @@ const ChatRoomsScreen = ({ navigation, route }) => {
     return (
         <MainView>
             <Header title='Chat' color={Color.white} />
-            {/* <BottomSection>
-                <BoxInput style={false && {borderColor: Color.error}}>
+            {/* <BottomSection style={{borderColor: Color.border}}>
+                <BoxInput style={true ? {borderColor: Color.border} : {borderColor: Color.error}}>
                     <TextInputNumber
                         name="text"
                         placeholder='Masukan teks..'
@@ -288,7 +284,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                             // this.isValueErrorPrepaid('prepaidNumber')
                         }}
                     />
-                    <CircleSend>
+                    <CircleSend style={{backgroundColor: Color.primary}}>
                         <Ionicons name='search' size={16} color={Color.white} />
                     </CircleSend>
                 </BoxInput>

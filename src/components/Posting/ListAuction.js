@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, FlatList, useWindowDimensions } from 'react-native';
 
-import { ScreenEmptyData } from '@src/components';
+import { ScreenEmptyData, Text } from '@src/components';
 import CardAuction from 'src/components/Posting/CardAuction';
 import { Container, Row } from 'src/styled';
 import PostingSkeleton from './PostingSkeleton';
@@ -26,6 +26,22 @@ const ListAuction = (props) => {
 
     const { width } = useWindowDimensions();
 
+    const renderHeader = () => {
+        return (
+            <Container
+                width='100%'
+                align='center'
+                justify='space-between'
+                paddingHorizontal={16}
+                style={{
+                    flexDirection: 'row',
+                }}
+            >
+                <Text type="bold">Pelelangan Saat ini</Text>
+            </Container>
+        )
+    }
+
     const renderskeleton = () => {
         return (
             <Container paddingLeft={16} paddingTop={16} paddingRight={32}>
@@ -42,6 +58,8 @@ const ListAuction = (props) => {
 
     return (
         <View style={{flex: 1, paddingBottom: 8, paddingTop: showHeader ? 0 : 8, flexDirection: 'column'}}>
+            {showHeader && renderHeader()}
+
             {loading ? 
                 renderskeleton()
             :    

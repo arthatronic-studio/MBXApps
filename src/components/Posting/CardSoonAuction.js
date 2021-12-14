@@ -37,7 +37,7 @@ const CardSoonAuction = (props) => {
                 {
                     width: width / numColumns,
                     height: width / 4 + 12,
-                    paddingHorizontal: 16,
+                    paddingHorizontal: 8,
                     marginBottom: 8,
                     // flex:1,
                     ...style,

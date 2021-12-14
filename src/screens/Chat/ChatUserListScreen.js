@@ -17,7 +17,6 @@ import { queryLike } from '@src/lib/query';
 const MainView = Styled(View)`
     width: 100%;
     height: 100%;
-    backgroundColor: ${Color.dark};
 `;
 
 const ChatUserListScreen = ({ navigation, route }) => {
