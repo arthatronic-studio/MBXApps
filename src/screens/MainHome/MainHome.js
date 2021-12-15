@@ -550,7 +550,7 @@ const MainHome = ({navigation, route}) => {
           horizontal
           showHeader
           onPress={(item) => {
-            navigation.navigate('DetailAuction', {item});
+            navigation.navigate('AuctionDetail', {item});
           }}
           style={{paddingLeft: 8}}
         />
@@ -561,7 +561,7 @@ const MainHome = ({navigation, route}) => {
           horizontal
           showHeader
           onPress={(item) => {
-            navigation.navigate('DetailAuction', {item});
+            navigation.navigate('AuctionDetail', {item});
           }}
           style={{paddingLeft: 8}}
         />
