@@ -37,6 +37,7 @@ import ReferralCodeScreen from '@src/screens/MainProfile/ReferralCodeScreen';
 import CommunityAdminPage from '@src/screens/MainProfile/CommunityAdmin/CommunityAdminPage';
 import NumbersInput from 'src/screens/MainProfile/CommunityAdmin/NumbersInput';
 import ApproveMember from 'src/screens/MainProfile/CommunityAdmin/ApproveMember';
+import CardDetail from 'src/screens/MainProfile/CommunityAdmin/CardDetail';
 
 // Posting
 // import PostingScreen from 'src/screens/Posting/PostingScreen';
@@ -152,6 +153,7 @@ function MainStackNavigator() {
             <Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />
             <Screen name="NumbersInput" component={NumbersInput} />
             <Screen name="ApproveMember" component={ApproveMember} />
+            <Screen name="CardDetail" component={CardDetail}/>
             {/* payment */}
             <Screen name='PaymentScreen' component={PaymentScreen} />
             <Screen name='PaymentDetail' component={PaymentDetail} />
@@ -169,8 +171,9 @@ function MainStackNavigator() {
             <Screen name='NotificationScreen' component={NotificationScreen} />
             <Screen name='NotificationDetail' component={NotificationDetail} />
 
-            {/* content-chat */}
-            <Screen name='ChatRoomsScreen' component={ChatRoomsScreen} />
+
+{/* content-chat */}
+<Screen name='ChatRoomsScreen' component={ChatRoomsScreen} />
             <Screen name='ChatDetailScreen' component={ChatDetailScreen} />
             <Screen name='ChatUserListScreen' component={ChatUserListScreen} />
             <Screen name='ChatInfoScreen' component={ChatInfoScreen} />
@@ -178,7 +181,7 @@ function MainStackNavigator() {
             {/* auction */}
             <Screen name='AuctionDetail' component={AuctionDetail} />
             <Screen name='Bid' component={Bid} />
-        </Navigator>
+                    </Navigator>
     );
 }
 

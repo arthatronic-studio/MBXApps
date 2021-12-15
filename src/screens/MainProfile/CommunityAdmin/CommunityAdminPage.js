@@ -52,7 +52,7 @@ const CommunityAdminPage = ({navigation}) => {
   const renderTabBar = (props) => (
     <TabBar
       {...props}
-      indicatorStyle={{backgroundColor: 'red'}}
+      indicatorStyle={{backgroundColor: Color.primary}}
       style={{backgroundColor: 'white'}}
       activeColor={Color.secondary}
       inactiveColor="black"
