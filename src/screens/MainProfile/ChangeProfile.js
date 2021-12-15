@@ -102,7 +102,6 @@ export default ({ navigation, route }) => {
   const user = useSelector(state => state['user.auth'].login.user);
 
   const {
-    register,
     loading,
     error,
   } = useSelector(state => state['user.auth']);
@@ -126,7 +125,6 @@ export default ({ navigation, route }) => {
     Nomor_ID: user ? user.Nomor_ID :  '',
     Alamat : user ? user.Alamat : '',
   });
-  console.log('tangal', userData.tanggalLahir);
   const [errorData, setErrorData] = useState({
     fullName: null,
     idCardNumber: null,
@@ -140,36 +138,22 @@ export default ({ navigation, route }) => {
   //Image
   const [thumbImage, setThumbImage] = useState('');
   const [mimeImage, setMimeImage] = useState('image/jpeg');
-  const handleBackPress = () => {
-    backToSelectVideo();
-    return true;
-}
 
-console.log('user', user);
-
-const backToSelectVideo = () => {
-    setThumbImage('');
-    setMimeImage('image/jpeg');
-}
-//Tanggal Lahir
-const [tanggalLahir, setDate] = useState(new Date('1990'))
-const [open, setOpen] = useState(false)
-
+  //Tanggal Lahir
+  const [tanggalLahir, setDate] = useState(new Date('1990'));
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (isFocused) {
       if (prevLoading && user && loading === false) {
         navigation.pop();
         showPopup('Data berhasil diubah', 'success');
-      }
-      if (!register.status && error) {
-        showPopup('Terjadi Kesalaha, silahkan coba kembali', 'error');
+      } else if (error) {
+        // showPopup('Terjadi Kesalaha, silahkan coba kembali', 'error');
         console.log(JSON.stringify(error), 'error');
-        
-        dispatch({ type: 'USER.LOGOUT' });
       }
     }
-  }, [user, error, isFocused]);
+  }, [user, loading, error, isFocused]);
 
   useEffect(() => {
     if (allValid) {
@@ -194,13 +178,11 @@ const [open, setOpen] = useState(false)
         nomor_id: Nomor_ID,
         alamat: Alamat,
         tanggalLahir: tanggalLahir,
-
-        
       };
 
       console.log('newUserData', newUserData);
 
-      // dispatch(updateCurrentUserProfile(newUserData));
+      dispatch(updateCurrentUserProfile(newUserData));
     }
   }, [allValid]);
 
