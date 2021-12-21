@@ -583,7 +583,8 @@ const MainHome = ({navigation, route}) => {
         <Divider height={24} />
 
         <ListAuction
-          data={[0, 1]}
+          // use the listBelajar for the test
+          data={listBelajar}
           loading={loadingAuction}
           horizontal
           showHeader
@@ -594,7 +595,8 @@ const MainHome = ({navigation, route}) => {
         />
 
         <ListSoonAuction
-          data={[0, 1]}
+          // use the listBelajar for the test
+          data={listBelajar}
           loading={loadingSoonAuction}
           horizontal
           showHeader
