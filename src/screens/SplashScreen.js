@@ -45,7 +45,7 @@ const SplashScreen = ({ navigation, route }) => {
         source={iconSplash}
         style={{
           width: '60%',
-          aspectRatio: 9/16,
+          height: '30%',
         }}
         resizeMode='contain'
       />
