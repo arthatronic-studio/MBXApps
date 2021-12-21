@@ -172,8 +172,8 @@ function MainStackNavigator() {
             <Screen name='NotificationDetail' component={NotificationDetail} />
 
 
-{/* content-chat */}
-<Screen name='ChatRoomsScreen' component={ChatRoomsScreen} />
+            {/* content-chat */}
+            <Screen name='ChatRoomsScreen' component={ChatRoomsScreen} />
             <Screen name='ChatDetailScreen' component={ChatDetailScreen} />
             <Screen name='ChatUserListScreen' component={ChatUserListScreen} />
             <Screen name='ChatInfoScreen' component={ChatInfoScreen} />
@@ -181,7 +181,7 @@ function MainStackNavigator() {
             {/* auction */}
             <Screen name='AuctionDetail' component={AuctionDetail} />
             <Screen name='Bid' component={Bid} />
-                    </Navigator>
+        </Navigator>
     );
 }
 
