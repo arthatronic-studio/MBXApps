@@ -440,7 +440,7 @@ const MainHome = ({navigation, route}) => {
           </View>
         </View>
 
-        <View style={{width: width - 32, marginHorizontal: 16}}>
+        <View style={{width: width - 32, marginHorizontal: 16, marginBottom:16}}>
           <CarouselView
             delay={4000}
             showIndicator
@@ -461,7 +461,7 @@ const MainHome = ({navigation, route}) => {
             />
           </CarouselView>
         </View>
-        {/* <ContentView>
+        <ContentView>
           <BalanceView
             style={{...shadowStyle, backgroundColor: Color.textInput}}>
             <View style={{justifyContent: 'center', alignItems: 'flex-start'}}>
@@ -545,7 +545,7 @@ const MainHome = ({navigation, route}) => {
               </View>
             </View>
           </BalanceView>
-        </ContentView> */}
+        </ContentView>
 
         <Divider height={8} />
 
