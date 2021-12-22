@@ -29,16 +29,15 @@ const CustomTextInput = Styled(TextInput)`
 `;
 
 const InputNumberView = Styled(TextInputMask)`
-  width: 95%;
-  height: 100%;
+  width: 100%;
   fontFamily: OpenSans-Regular;
   alignContent: flex-start;
-  fontSize: 18px;
+  fontSize: 14px;
 `;
 
 const EmailRoundedView = Styled(View)`
   width: ${width - 32};
-  height: 50px;
+  paddingHorizontal: 10;
   alignItems: center;
   justifyContent: center;
   flexDirection: column;
@@ -136,7 +135,7 @@ const ModalBid = forwardRef((props, ref) => {
                     isSelected && {borderWidth: 2}
                   ]}
                 >
-                  <Text size={18} lineHeight={20} color={isSelected ? Color.primary : Color.text}>{FormatMoney.getFormattedMoney(item.bid)}</Text>
+                  <Text size={14} color={isSelected ? Color.primary : Color.text}>{FormatMoney.getFormattedMoney(item.bid)}</Text>
                 </TouchableOpacity>
             )
           }}
@@ -167,9 +166,9 @@ const ModalBid = forwardRef((props, ref) => {
       }}
     >
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10, alignItems:'center'}}>
-        <Text size={15} lineHeight={17} color={Color.text} style={{ fontWeight: 'bold' }}>Pasang Tawaran</Text>
+        <Text size={11} color={Color.text} style={{ fontWeight: 'bold' }}>Pasang Tawaran</Text>
         <TouchableOpacity style={{ marginRight: 7 }} onPress={() => {combinedRef.current.close();}}>
-          <Ionicons name='chevron-down-outline' color={Color.text} size={24}/>
+          <Ionicons name='chevron-down-outline' color={Color.text} size={18}/>
         </TouchableOpacity>
       </View>
       <EmailRoundedView style={{ borderWidth: 1, borderColor: Color.primary, alignSelf: 'center'}}>
@@ -204,7 +203,7 @@ const ModalBid = forwardRef((props, ref) => {
         onPress={() => submit()}
         style={{ backgroundColor: Color.primary }}
       >
-        <Text color={Color.textInput} size={18} lineHeight={20}>Pasang Tawaran</Text>
+        <Text color={Color.textInput} size={16}>Pasang Tawaran</Text>
       </SubmitButton>
 
       <Loading {...loadingProps} />

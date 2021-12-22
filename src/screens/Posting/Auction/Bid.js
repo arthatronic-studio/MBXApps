@@ -8,6 +8,7 @@ import Scaffold from '@src/components/Scaffold';
 import { Divider } from '@src/styled';
 import ListBidder from 'src/components/Posting/ListBidder';
 import ModalBid from 'src/components/Modal/ModalBid';
+import { FormatMoney } from 'src/utils';
 
 const { width } = Dimensions.get('window');
 
@@ -20,17 +21,18 @@ const ButtonView = Styled(View)`
     paddingHorizontal: 16;
     paddingVertical: 16;
     flexDirection: column;
-    alignItems: center;
-    justifyContent: space-between;
+    justifyContent: flex-start;
+    alignItems: flex-start;
+    borderTopLeftRadius: 16;
+    borderTopRightRadius: 16;
 `;
 
 const EnterButton = Styled(TouchableOpacity)`
     width: 40%;
-    height: 45px;
+    paddingVertical: 13;
     borderRadius: 120px;
     justifyContent: center;
     alignItems: center;
-    paddingHorizontal: 16;
 `;
 
 const ContentView = Styled(View)`
@@ -84,25 +86,25 @@ export default ({ navigation, route }) => {
             popupProps={popupProps}
             loadingProps={loadingProps}
         >
-            <MainView style={{ backgroundColor: Color.theme}}>
+            <MainView style={{ backgroundColor: Color.textInput}}>
                 <ListBidder
                     data={data}
                     item={item}
                 />
+                <View style={{ backgroundColor: Color.theme }}>
                 <ButtonView
-                    style={{ ...shadowStyle, backgroundColor: Color.textInput, justifyContent: 'flex-start', alignItems: 'flex-start',
-                        borderTopLeftRadius: 16, borderTopRightRadius: 16 }}>
-                    <Text size={15} lineHeight={17} style={{ color: Color.text }}>Pasang Tawaran</Text>
+                    style={{ ...shadowStyle, backgroundColor: Color.theme }}>
+                    <Text size={11} style={{ color: Color.text }}>Pasang Tawaran</Text>
                     <Divider height={10}/>
                     <View
                         style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
                         <EnterButton 
                             style={{ borderColor: Color.primary, borderWidth: 1}}>
-                            <Text size={16} letterSpacing={0.02} color={Color.primary}>+Rp 5.000</Text>
+                            <Text size={14} letterSpacing={0.02} color={Color.primary}>+{FormatMoney.getFormattedMoney(5000)}</Text>
                         </EnterButton>
                         <EnterButton 
                             style={{ borderColor: Color.primary, borderWidth: 1, marginLeft: 10}}>
-                            <Text size={16} letterSpacing={0.02} color={Color.primary}>+Rp 10.000</Text>
+                            <Text size={14} letterSpacing={0.02} color={Color.primary}>+{FormatMoney.getFormattedMoney(10000)}</Text>
                         </EnterButton>
                         <TouchableOpacity
                             style={{ width: '15%', backgroundColor: Color.primary, aspectRatio: 1, marginLeft: 10, borderRadius: 120, alignItems:'center', justifyContent:'center'}}
@@ -114,6 +116,7 @@ export default ({ navigation, route }) => {
                         </TouchableOpacity>
                     </View>
                 </ButtonView>
+                </View>
             </MainView>
             <ModalBid
                 ref={modalBidRef}
