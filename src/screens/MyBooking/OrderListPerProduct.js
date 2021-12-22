@@ -332,7 +332,7 @@ class OrderListPerProduct extends Component {
           navigation={this.props.navigation}
           style={{
             paddingHorizontal: 16,
-            backgroundColor: Color.white,
+            backgroundColor: Color.theme,
             paddingTop: dataUserBookings.currentUserBookings.length > 0 ? 16 : 0,
           }}
         />}

@@ -291,7 +291,7 @@ export default ({ navigation, route }) => {
         <ImageBackground source={imagePaymentBanner} style={{width: '100%', height: 289}}>
             <AbsoluteView>
                 <View style={{paddingLeft: 16, alignItems: 'flex-start'}}>
-                    <Text size={20} type='semibold' align='left' color={Color.textInput}>{productName} <Text color={Color.white}>{batchPayment && batchPayment.name}</Text></Text>
+                    <Text size={20} type='semibold' align='left' color={Color.textInput}>{productName} <Text color={Color.textInput}>{batchPayment && batchPayment.name}</Text></Text>
                     <Text size={15} color={Color.textInput}>{labelDate}</Text>
                 </View>
                 <BackgroundView style={{backgroundColor: Color.theme}} />

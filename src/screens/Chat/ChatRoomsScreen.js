@@ -196,7 +196,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
     if (dataRooms.loading) {
         return (
             <MainView>
-                <Header title='Chat' color={Color.white} />
+                <Header title='Chat' />
                 <ScreenIndicator visible transparent />
             </MainView>
         )
@@ -205,10 +205,10 @@ const ChatRoomsScreen = ({ navigation, route }) => {
     if (dataRooms.data.length === 0) {
         return (
             <MainView>
-                <Header title='Chat' color={Color.white} />
+                <Header title='Chat' />
                 <ScreenEmptyData transparent message='Kamu belum memiliki riwayat chat' />
                 <TouchableOpacity onPress={() => navigation.navigate('ChatUserListScreen')} style={{height: 50, width: 50, borderRadius: 25, position: 'absolute', bottom: 16, right: 16, backgroundColor: Color.secondary, justifyContent: 'center', alignItems: 'center'}}>
-                    <Ionicons name='add' color={Color.white} size={30} />
+                    <Ionicons name='add' color={Color.text} size={30} />
                 </TouchableOpacity>
             </MainView>
         )
@@ -268,7 +268,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
 
     return (
         <MainView>
-            <Header title='Chat' color={Color.white} />
+            <Header title='Chat' />
             {/* <BottomSection style={{borderColor: Color.border}}>
                 <BoxInput style={true ? {borderColor: Color.border} : {borderColor: Color.error}}>
                     <TextInputNumber
@@ -285,7 +285,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                         }}
                     />
                     <CircleSend style={{backgroundColor: Color.primary}}>
-                        <Ionicons name='search' size={16} color={Color.white} />
+                        <Ionicons name='search' size={16} color={Color.text} />
                     </CircleSend>
                 </BoxInput>
             </BottomSection> */}
@@ -309,18 +309,17 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                             }}
                             style={{height: 60, paddingHorizontal: 16, marginBottom: 16, flexDirection: 'row', alignItems: 'center'}}
                         >
-                            <View style={{width: '12%', height: '100%', alignItems: 'center', justifyContent: 'center', borderBottomWidth: 0.5, borderColor: Color.white}}>
+                            <View style={{width: '12%', height: '100%', alignItems: 'center', justifyContent: 'center', borderBottomWidth: 0.5, borderColor: Color.text}}>
                                 <Image
                                     source={{uri: item.image}}
                                     style={{width: '100%', aspectRatio: 1, borderRadius: 30, backgroundColor: Color.theme}}
                                 />
                             </View>
-                            <View style={{width: '70%', height: '100%', alignItems: 'flex-start', justifyContent: 'space-around', paddingHorizontal: 16, paddingVertical: 4, borderBottomWidth: 0.5, borderColor: Color.white}}>
+                            <View style={{width: '70%', height: '100%', alignItems: 'flex-start', justifyContent: 'space-around', paddingHorizontal: 16, paddingVertical: 4, borderBottomWidth: 0.5, borderColor: Color.text}}>
                                 <Text
                                     size={12}
                                     type='semibold'
                                     numberOfLines={1}
-                                    color={Color.white}
                                 >
                                     {item.name !== '' ? item.name : typeof item.memberDetail !== 'undefined' ? getTitleFirebaseData(item.memberDetail) : getTitle(item.member)}
                                 </Text>
@@ -328,16 +327,15 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                                     size={10}
                                     type={isUserTyping(item.typing) ? 'italic' : isNotRead(item.read) ? 'bold' : 'regular'}
                                     numberOfLines={1}
-                                    color={isUserTyping(item.typing) ? Color.success : Color.white}
+                                    color={isUserTyping(item.typing) ? Color.success : Color.text}
                                     style={{opacity: 0.6}}
                                 >
                                     {isUserTyping(item.typing) ? 'Sedang mengetik...' : item.lastChat ? item.lastChat.message : ''}
                                 </Text>
                             </View>
-                            <View style={{width: '18%', height: '100%', alignItems: 'flex-end', justifyContent: 'space-around', paddingVertical: 4, borderBottomWidth: 0.5, borderColor: Color.white}}>
+                            <View style={{width: '18%', height: '100%', alignItems: 'flex-end', justifyContent: 'space-around', paddingVertical: 4, borderBottomWidth: 0.5, borderColor: Color.text}}>
                                 <Text
                                     size={8}
-                                    color={Color.white}
                                 >
                                     {managedDate(item.lastChat.messageDate)}
                                 </Text>
@@ -345,7 +343,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                                     size={10}
                                     color={isNotRead(item.read) ? Color.error : 'transparent'}
                                 >
-                                    {/* {isNotRead(item.read) && item.lastChatCount > 0 && <Text size={8} color={Color.white}>{item.lastChatCount}</Text>} */}
+                                    {/* {isNotRead(item.read) && item.lastChatCount > 0 && <Text size={8}>{item.lastChatCount}</Text>} */}
                                 </Circle>
                             </View>
                         </TouchableOpacity>
@@ -354,7 +352,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
             />
 
             <TouchableOpacity onPress={() => navigation.navigate('ChatUserListScreen')} style={{height: 50, width: 50, borderRadius: 25, position: 'absolute', bottom: 16, right: 16, backgroundColor: Color.secondary, justifyContent: 'center', alignItems: 'center'}}>
-                <Ionicons name='add' color={Color.white} size={30} />
+                <Ionicons name='add' color={Color.text} size={30} />
             </TouchableOpacity>
         </MainView>
     )

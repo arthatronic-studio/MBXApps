@@ -36,12 +36,11 @@ const BoxInput = Styled(View)`
   justifyContent: center;
 `;
 
-const TextInputNumber = Styled(TextInput)`
+const CustomTextInput = Styled(TextInput)`
   width: 100%;
   fontFamily: Inter-Regular;
   letterSpacing: 0.23;
   fontSize: 12px;
-  backgroundColor: transparent;
 `;
 
 const CircleSend = Styled(TouchableOpacity)`
@@ -387,11 +386,15 @@ const ChatDetailScreen = ({ navigation, route }) => {
             });
         });
 
+        console.log('variables', variables);
+
         Client.query({
             query: queryContentChatMessage,
             variables,
         })
         .then((res) => {
+            console.log('res kirim chat', res);
+
             const data = res.data.contentChatMessage;
             setTextComment('');
 
@@ -399,6 +402,8 @@ const ChatDetailScreen = ({ navigation, route }) => {
             firestoreSubmitNotifier(data, member, memberDetail);
         })
         .catch((err) => {
+            console.log('err kirim chat', JSON.stringify(err));
+
             showPopup('Chat gagal dikirim, silakan coba lagi', 'error');
         });
     }
@@ -475,12 +480,11 @@ const ChatDetailScreen = ({ navigation, route }) => {
                 <Header
                     title={getTitle()}
                     centerTitle
-                    color={Color.white}
                     iconRightButton={
                         <Ionicons
                             name='information-circle-outline'
                             size={22}
-                            color={Color.white}
+                            color={Color.text}
                             onPress={() => navigation.navigate('ChatInfoScreen', { member: params.selected, isNewArrival: params.isNewArrival })}
                         />
                     }
@@ -497,12 +501,11 @@ const ChatDetailScreen = ({ navigation, route }) => {
                 subTitle={userTyping && 'sedang mengetik...'}
                 subTitleColor={userTyping && Color.success}
                 centerTitle
-                color={Color.white}
                 iconRightButton={
                     <Ionicons
                         name='information-circle-outline'
                         size={22}
-                        color={Color.white}
+                        color={Color.text}
                         onPress={() => navigation.navigate('ChatInfoScreen', { member: params.selected, isNewArrival: params.isNewArrival })}
                     />
                 }
@@ -522,7 +525,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
                     if (isAdmin) {
                         return (
                             <View style={{width, marginTop: 16, paddingHorizontal: 16, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
-                                <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.white, borderRadius: 16, borderBottomRightRadius: 0, alignItems: 'flex-end'}}>
+                                <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.textInput, borderRadius: 16, borderBottomRightRadius: 0, alignItems: 'flex-end'}}>
                                     <Text size={10} type='semibold' align='right' color={Color.secondary}>{item.name}</Text>
                                     <Text size={12} align='right'>{item.message}</Text>
                                     <Text size={8} align='right' style={{opacity: 0.6, marginTop: 4}}>{getDate(item.messageDate)}</Text>
@@ -547,8 +550,8 @@ const ChatDetailScreen = ({ navigation, route }) => {
                             </View>
                             <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.theme, borderRadius: 16, borderBottomLeftRadius: 0, alignItems: 'flex-start'}}>
                                 <Text size={10} type='semibold' align='left' color={Color.primary}>{item.name}</Text>
-                                <Text size={12} align='left' color={Color.white}>{item.message}</Text>
-                                <Text size={8} align='left' color={Color.white} style={{opacity: 0.6, marginTop: 4}}>{getDate(item.messageDate)}</Text>
+                                <Text size={12} align='left' color={Color.text}>{item.message}</Text>
+                                <Text size={8} align='left' color={Color.text} style={{opacity: 0.6, marginTop: 4}}>{getDate(item.messageDate)}</Text>
                             </View>
                         </View>
                     )
@@ -556,11 +559,11 @@ const ChatDetailScreen = ({ navigation, route }) => {
             />
 
             <BottomSection style={{borderColor: Color.theme}}>
-                <BoxInput style={{borderColor: Color.border}}>
-                    <TextInputNumber
+                <BoxInput style={{borderColor: Color.text}}>
+                    <CustomTextInput
                         name="text"
                         placeholder='Masukan teks...'
-                        placeholderTextColor={Color.border}
+                        placeholderTextColor={Color.text}
                         selectionColor={Color.primary}
                         returnKeyType="done"
                         returnKeyLabel="Done"
@@ -577,13 +580,14 @@ const ChatDetailScreen = ({ navigation, route }) => {
 
                             setTextComment(text);
                         }}
+                        style={{color: Color.text}}
                     />
 
                     <CircleSend
                         onPress={() => onCreateComment()}
                         style={{backgroundColor: Color.primary}}
                     >
-                        <Ionicons name='send' color={Color.white} />
+                        <Ionicons name='send' color={Color.textInput} />
                     </CircleSend>
                 </BoxInput>
             </BottomSection>

@@ -29,7 +29,6 @@ const ChatInfoScreen = ({ navigation, route }) => {
         <MainView>
             <Header
               title='Info Chat'
-              color={Color.white}
             />
             
             <FlatList
@@ -45,8 +44,8 @@ const ChatInfoScreen = ({ navigation, route }) => {
                                     style={{width: 50, height: 50, marginRight: 8, borderRadius: 25, backgroundColor: Color.border}}
                                 />
                                 <View style={{height: 60, alignItems: 'flex-start', justifyContent: 'space-around'}}>
-                                    <Text size={12} type='semibold' color={user.userId == item.userId ? Color.secondary : Color.white} numberOfLines={1}>{user.userId == item.userId ? 'Kamu' : item.firstName || item.fullname} {item.lastName}</Text>
-                                    {/* <Text size={10} color={Color.white}>Available</Text> */}
+                                    <Text size={12} type='semibold' color={user.userId == item.userId ? Color.secondary : Color.text} numberOfLines={1}>{user.userId == item.userId ? 'Kamu' : item.firstName || item.fullname} {item.lastName}</Text>
+                                    {/* <Text size={10}>Available</Text> */}
                                 </View>
                             </View>
                         </TouchableOpacity>

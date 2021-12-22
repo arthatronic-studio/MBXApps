@@ -385,7 +385,7 @@ const MainHome = ({navigation, route}) => {
                 }}>
                 <Ionicons name="chatbox-outline" size={22} color={Color.text} />
                 {notifierCount > 0 && <Circle size={12} color={Color.error} style={{position: 'absolute', top: -4, right: -4}}>
-                <Text size={8} color={Color.white}>{notifierCount > 99 ? '99' : notifierCount}</Text>
+                <Text size={8}>{notifierCount > 99 ? '99' : notifierCount}</Text>
               </Circle>}
               </TouchableOpacity>
             </View>
