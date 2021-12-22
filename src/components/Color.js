@@ -5,6 +5,7 @@ const staticColors = {
   primary: '#96C63B',
   primaryDark: '#033F59',
   primarySoft: '#DAEBF2',
+  primaryYellow: '#FAC255',
   secondary: '#FB9850',
   disabled: '#A1A1A1',
   success: '#0BBC2E',
@@ -13,11 +14,14 @@ const staticColors = {
   error: '#D83030',
   green: '#59A12F',
   gray: '#666666',
+  black: '#252525',
+  blackContent: '#363636',
   red: '#D83030',
   yellow: '#FFD35B',
   timer: '#F94918',
   icon: '#667786',
-  bid: '#E6E9EA'
+  bid: '#E6E9EA',
+  white: '#FFFFFF'
 };
 
 export const lightModeColors = {

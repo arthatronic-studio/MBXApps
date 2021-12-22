@@ -44,13 +44,14 @@ const Scaffold = ({
     empty,
     emptyTitle,
     popupProps,
+    color,
     loadingProps
 }) => {
     const { Color } = useColor();
     const navigation = useNavigation();
 
     return (
-        <MainView style={{backgroundColor: Color.theme}}>
+        <MainView style={{backgroundColor: color ? Color[color] : Color.theme }}>
             {header ?
                 header
             :

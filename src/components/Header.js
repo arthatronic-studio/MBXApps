@@ -3,7 +3,7 @@ import { View, TouchableOpacity } from 'react-native';
 import Styled from 'styled-components';
 import { withNavigation } from '@react-navigation/compat';
 import Fontisto from 'react-native-vector-icons/Fontisto';
-
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import {
   Row, Col,
   Text,
@@ -128,20 +128,23 @@ const Header = (props) => {
   }
 
   const renderNormalMode = () => {
-    const { showLeftButton, showIconLeftButton, iconLeftButton, iconRightButton, titleRight, color, title, children,
+    const { showLeftButton, showIconLeftButton,customIcon, backgroundColor, type, iconLeftButton, iconRightButton, titleRight, color, title, children,
       centerTitle, ...style } = props;
     
     return (
-      <MainView style={{backgroundColor: Color.textInput, borderColor: Color.theme, ...style}}>
+      <MainView style={{backgroundColor: backgroundColor ? Color[backgroundColor] : Color.textInput, borderColor: Color.theme, ...style}}>
         <RowView>
           <ColumnView size={2}>
             {showLeftButton ? <LeftButton onPress={onPressLeftButton}>
-              {showIconLeftButton && <Fontisto name={iconLeftButton} color={color || Color.primary} size={18} />}
+              {showIconLeftButton && <>
+                {customIcon ? <AntDesign name={'arrowleft'} color={color || Color.primary} size={18} /> :
+                <Fontisto name={iconLeftButton} color={color || Color.primary} size={18} /> }
+              </>}
             </LeftButton> : <View />}
           </ColumnView>
 
           <ColumnView size={7.8} style={{alignItems: centerTitle ? 'center' : 'flex-start'}}>
-            {children || <Text size={16} type='bold' align='left' letterSpacing={0.23} color={color || Color.text } style={{ paddingTop: showLeftButton ? 0 : '7%' }}>{title}</Text>}
+            {children || <Text size={16} type={type ? type : 'bold'} align='left' letterSpacing={0.23} color={color || Color.text } style={{ paddingTop: showLeftButton ? 0 : '7%' }}>{title}</Text>}
           </ColumnView>
 
           <ColumnView size={2.2}>
