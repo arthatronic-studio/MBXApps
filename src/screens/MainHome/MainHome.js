@@ -26,10 +26,11 @@ import ListEvent from 'src/components/Posting/ListEvent';
 import ListJob from 'src/components/Posting/ListJob';
 import {shadowStyle} from '@src/styles';
 import {Box, Divider, Circle} from '@src/styled';
-import { playNotificationSounds } from '@src/utils/notificationSounds';
+import {playNotificationSounds} from '@src/utils/notificationSounds';
+import CarouselView from 'src/components/CarouselView';
 
 import Client from '@src/lib/apollo';
-import { queryContentProduct } from '@src/lib/query';
+import {queryContentProduct} from '@src/lib/query';
 import {queryVestaBalance, queryVestaOpenBalance} from '@src/lib/query/payment';
 
 import {
@@ -44,7 +45,7 @@ import {
 } from '@assets/images/home';
 import ModalPosting from './ModalPosting';
 import ListEmergency from 'src/components/Posting/ListEmergency';
-import { usePreviousState } from 'src/hooks';
+import {usePreviousState} from 'src/hooks';
 
 const ContentView = Styled(View)`
   width: 100%;
@@ -107,17 +108,16 @@ const ComingSoonView = Styled(View)`
 `;
 
 const sambatanMenus = [
-  
   {id: 0, name: 'Pulsa', images: iconPulsa, nav: 'PulsaScreen', params: {}},
   {id: 1, name: 'Listrik', images: iconPLN, nav: 'PlnScreen', params: {}},
   // {id: 2, name: 'Game', images: iconGames, nav: '', params: {}},
   {id: 3, name: 'PDAM', images: iconPDAM, nav: 'PdamScreen', params: {}},
   // {id: 4, name: 'BPJS', images: iconBPJS, nav: '', params: {}},
   // {
-  //   id: 5, 
-  //   name: 'Internet', 
-  //   images: iconInternet, 
-  //   nav: '', 
+  //   id: 5,
+  //   name: 'Internet',
+  //   images: iconInternet,
+  //   nav: '',
   //   params: {title: 'Iuran Non-wajib', type: 'ACTIVE', productType: 'SAMBATAN_O',}},
   {
     id: 6,
@@ -127,10 +127,10 @@ const sambatanMenus = [
     params: {title: 'Iuran', type: 'ACTIVE', productType: 'ALL_SAMBATAN'},
   },
   // {
-  //   id: 7, 
-  //   name: 'Semua', 
-  //   images: iconSemua, 
-  //   nav: '', 
+  //   id: 7,
+  //   name: 'Semua',
+  //   images: iconSemua,
+  //   nav: '',
   //   params: {title: 'Iuran Non-wajib', type: 'ACTIVE', productType: 'SAMBATAN_O',}},
 ];
 
@@ -139,7 +139,8 @@ const MainHome = ({navigation, route}) => {
   const [vestaAmount, setVestaAmount] = useState(0);
   const [wallet, setWallet] = useState('CLOSE');
   const [firebaseData, setFirebaseData] = useState([]);
-  const [firebaseNotifierLastChatCount, setFirebaseNotifierLastChatCount] = useState(0);
+  const [firebaseNotifierLastChatCount, setFirebaseNotifierLastChatCount] =
+    useState(0);
   const [notifierCount, setNotifierCount] = useState(0);
 
   const [loadingAuction, setLoadingAuction] = useState(true);
@@ -161,7 +162,7 @@ const MainHome = ({navigation, route}) => {
   const [loadingKerja, setLoadingKerja] = useState(true);
   const [listKerja, setListKerja] = useState([]);
 
-  const user = useSelector((state) => state['user.auth'].login.user);
+  const user = useSelector(state => state['user.auth'].login.user);
   const dispatch = useDispatch();
 
   const {Color} = useColor();
@@ -169,30 +170,35 @@ const MainHome = ({navigation, route}) => {
   const {width} = useWindowDimensions();
   const isFocused = useIsFocused();
   const modalPostingRef = useRef();
-  const prevFirebaseNotifierLastChatCount = usePreviousState(firebaseNotifierLastChatCount);
+  const prevFirebaseNotifierLastChatCount = usePreviousState(
+    firebaseNotifierLastChatCount,
+  );
 
   useEffect(() => {
     const subscriber = firestore()
       .collection('contentChatNotifier')
       .orderBy('id', 'desc')
       .where('member', 'array-contains-any', [user.userId.toString()])
-      .onSnapshot((res) => {
-        // console.log('res chat notifier', res);
-        
-        if (res) {
-          let newData = [];
+      .onSnapshot(
+        res => {
+          // console.log('res chat notifier', res);
 
-          res.docs.map((i) => {
-            newData.push(i.data());
-          });
+          if (res) {
+            let newData = [];
 
-          setFirebaseData(newData);
-        }
-      }, (error) => {
-        console.log('error fstore', error);
-      });
+            res.docs.map(i => {
+              newData.push(i.data());
+            });
 
-      return () => subscriber();
+            setFirebaseData(newData);
+          }
+        },
+        error => {
+          console.log('error fstore', error);
+        },
+      );
+
+    return () => subscriber();
   }, []);
 
   useEffect(() => {
@@ -202,8 +208,10 @@ const MainHome = ({navigation, route}) => {
 
       if (firebaseData.length > 0) {
         for (let i = 0; i < firebaseData.length; i++) {
-          const idxOf = firebaseData[i].read && firebaseData[i].read.indexOf(user.userId.toString());
-          
+          const idxOf =
+            firebaseData[i].read &&
+            firebaseData[i].read.indexOf(user.userId.toString());
+
           if (idxOf === -1) {
             result += 1;
           }
@@ -211,14 +219,17 @@ const MainHome = ({navigation, route}) => {
           lastChatCount += firebaseData[i].lastChatCount;
         }
       }
-      
+
       if (result > 0) setFirebaseNotifierLastChatCount(lastChatCount);
       setNotifierCount(result);
     }
   }, [firebaseData]);
 
   useEffect(() => {
-    if (firebaseNotifierLastChatCount > 0 && prevFirebaseNotifierLastChatCount !== firebaseNotifierLastChatCount) {
+    if (
+      firebaseNotifierLastChatCount > 0 &&
+      prevFirebaseNotifierLastChatCount !== firebaseNotifierLastChatCount
+    ) {
       playNotificationSounds();
     }
   }, [firebaseNotifierLastChatCount]);
@@ -241,12 +252,12 @@ const MainHome = ({navigation, route}) => {
     // showLoading();
 
     Client.query({query: queryVestaBalance})
-      .then((res) => {
+      .then(res => {
         // hideLoading();
         setVestaAmount(res.data.vestaBalance.amount || 0);
         setWallet(res.data.vestaBalance.wallet);
       })
-      .catch((reject) => {
+      .catch(reject => {
         console.log(reject, 'err get vesta balance');
         // hideLoading();
       });
@@ -280,7 +291,6 @@ const MainHome = ({navigation, route}) => {
     setLoadingKerja(false);
     setListKerja(result[4]);
   };
-  
 
   const fetchContentProduct = async (
     productType,
@@ -325,7 +335,7 @@ const MainHome = ({navigation, route}) => {
     showLoading();
 
     Client.query({query: queryVestaOpenBalance})
-      .then((res) => {
+      .then(res => {
         if (res.data.vestaOpenBalance.success) {
           setWallet('OPEN');
         }
@@ -333,7 +343,7 @@ const MainHome = ({navigation, route}) => {
         hideLoading();
         navigation.navigate('TopUpScreen');
       })
-      .catch((reject) => {
+      .catch(reject => {
         console.log(reject);
         hideLoading();
       });
@@ -384,15 +394,21 @@ const MainHome = ({navigation, route}) => {
                   alignItems: 'flex-end',
                 }}>
                 <Ionicons name="chatbox-outline" size={22} color={Color.text} />
-                {notifierCount > 0 && <Circle size={12} color={Color.error} style={{position: 'absolute', top: -4, right: -4}}>
-                <Text size={8}>{notifierCount > 99 ? '99' : notifierCount}</Text>
-              </Circle>}
+                {notifierCount > 0 && (
+                  <Circle
+                    size={12}
+                    color={Color.error}
+                    style={{position: 'absolute', top: -4, right: -4}}>
+                    <Text size={8}>
+                      {notifierCount > 99 ? '99' : notifierCount}
+                    </Text>
+                  </Circle>
+                )}
               </TouchableOpacity>
             </View>
           }
         />
-      }
-    >
+      }>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
@@ -417,12 +433,34 @@ const MainHome = ({navigation, route}) => {
             </Text>
             <Text size={18} type="bold" lineHeight={22} letterSpacing={0.45}>
               {user && !user.guest
-                ? user.firstName.trim() + (user.lastName ? ' ' + user.lastName.trim() : '')
+                ? user.firstName.trim() +
+                  (user.lastName ? ' ' + user.lastName.trim() : '')
                 : 'Tamu'}
             </Text>
           </View>
         </View>
 
+        <View style={{width: width - 32, marginHorizontal: 16, marginBottom:16}}>
+          <CarouselView
+            delay={4000}
+            showIndicator
+            style={{width: '100%', aspectRatio: 12 / 7}}>
+            <View
+              style={{
+                width: '100%',
+                height: '100%',
+                backgroundColor: Color.disabled,
+              }}
+            />
+            <View
+              style={{
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'red',
+              }}
+            />
+          </CarouselView>
+        </View>
         <ContentView>
           <BalanceView
             style={{...shadowStyle, backgroundColor: Color.textInput}}>
@@ -545,22 +583,24 @@ const MainHome = ({navigation, route}) => {
         <Divider height={24} />
 
         <ListAuction
-          data={[0, 1]}
+          // use the listBelajar for the test
+          data={listBelajar}
           loading={loadingAuction}
           horizontal
           showHeader
-          onPress={(item) => {
+          onPress={item => {
             navigation.navigate('AuctionDetail', {item});
           }}
           style={{paddingLeft: 8}}
         />
 
         <ListSoonAuction
-          data={[0, 1]}
+          // use the listBelajar for the test
+          data={listBelajar}
           loading={loadingSoonAuction}
           horizontal
           showHeader
-          onPress={(item) => {
+          onPress={item => {
             navigation.navigate('AuctionDetail', {item});
           }}
           style={{paddingLeft: 8}}
@@ -571,7 +611,7 @@ const MainHome = ({navigation, route}) => {
           loading={loadingEmergency}
           horizontal
           showHeader
-          onPress={(item) => {
+          onPress={item => {
             // navigation.navigate('EmergencyDetail', {item});
             navigation.navigate('PostingDetail', {item});
           }}
@@ -583,7 +623,7 @@ const MainHome = ({navigation, route}) => {
           loading={loadingTampil}
           horizontal
           showHeader
-          onPress={(item) => {
+          onPress={item => {
             // navigation.navigate('NewsDetail', {item});
             navigation.navigate('PostingDetail', {item});
           }}
@@ -595,7 +635,7 @@ const MainHome = ({navigation, route}) => {
           loading={loadingJalanJalan}
           horizontal
           showHeader
-          onPress={(item) => {
+          onPress={item => {
             // navigation.navigate('PlaceDetail', {item});
             navigation.navigate('PostingDetail', {item});
           }}
@@ -607,7 +647,7 @@ const MainHome = ({navigation, route}) => {
           loading={loadingBelajar}
           horizontal
           showHeader
-          onPress={(item) => {
+          onPress={item => {
             // navigation.navigate('EventDetail', {item});
             navigation.navigate('PostingDetail', {item});
           }}
@@ -619,7 +659,7 @@ const MainHome = ({navigation, route}) => {
           loading={loadingKerja}
           horizontal
           showHeader
-          onPress={(item) => {
+          onPress={item => {
             // navigation.navigate('JobDetail', {item});
             navigation.navigate('PostingDetail', {item});
           }}
@@ -628,19 +668,16 @@ const MainHome = ({navigation, route}) => {
       </ScrollView>
 
       {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}
-      <Box
-          size={70}
-          style={{position: 'absolute', bottom: -40}}
-      />
+      <Box size={70} style={{position: 'absolute', bottom: -40}} />
       {/*  */}
 
       <ModalPosting
-          ref={modalPostingRef}
-          selected={null}
-          onPress={(e) => {
-            navigation.navigate(e.nav, e.params);
-            modalPostingRef.current.close();
-          }}
+        ref={modalPostingRef}
+        selected={null}
+        onPress={e => {
+          navigation.navigate(e.nav, e.params);
+          modalPostingRef.current.close();
+        }}
       />
     </Scaffold>
   );
