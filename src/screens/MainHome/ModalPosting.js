@@ -1,7 +1,7 @@
 import React, { useRef, forwardRef, useState } from 'react';
 import { Dimensions, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {
   Text,
@@ -77,8 +77,8 @@ const ModalPosting = forwardRef((props, ref) => {
           alignItems: 'center',
         }}
       >
-        <MaterialIcons
-          name='post-add'
+        <MaterialCommunityIcons
+          name='post-outline'
           size={20}
           color={Color.text}
         />
