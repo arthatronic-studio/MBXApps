@@ -8,7 +8,7 @@ import {
 } from '@src/components';
 import { shadowStyle } from '@src/styles';
 import { Divider } from '@src/styled';
-import { FormatMoney } from 'src/utils';
+import { FormatMoney, FormatDuration } from 'src/utils';
 import Styled from 'styled-components';
 
 import {
@@ -29,8 +29,9 @@ const ContentView = Styled(View)`
 `;
 
 const BalanceView = Styled(View)`
-    paddingTop: 16;
+    paddingVertical: 16;
     flexDirection: row;
+    alignItems: flex-start;
 `;
 
 const HeaderBid = (props) => {
@@ -40,30 +41,27 @@ const HeaderBid = (props) => {
 
     return (
         <View>
-                <ContentView style={{...shadowStyle, backgroundColor: Color.textInput}}>
-                    <BalanceView 
-                        style={{backgroundColor: Color.textInput, paddingBottom: 19}}>
+                <ContentView style={{...shadowStyle, backgroundColor: Color.theme}}>
+                    <BalanceView>
                         <Image source={{uri: item.image}} style={{width: '23%', borderRadius: 4, aspectRatio: 1, borderRadius: 10}} />
                         <View
                             style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', paddingHorizontal: 16, width: '55%'}}>
-                            <Text size={20} type='bold' color={Color.text} align='left'>{item.productName}</Text>
-                            <Divider height={5}/>
+                            <Text size={14} type='bold' color={Color.text} align='left'>{item.productName}</Text>
+                            <Divider height={8}/>
                             <View
                                 style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', width: '100%'}}>
-                                <Image source={iconLocation} style={{ width: 16, height: 16, tintColor: Color.text}}/>
-                                <Text size={15} color={Color.text} style={{ paddingLeft: 3 }}>Tangerang, Banten</Text>
+                                <Image source={iconLocation} style={{ width: 8, height: 10, tintColor: Color.text}}/>
+                                <Text size={11} color={Color.text} style={{ marginLeft: 3 }}>Tangerang, Banten</Text>
                             </View>
                         </View>
                         <View 
                             style={{
-                                aspectRatio: 3,
-                                width: '20%', 
                                 borderRadius: 120,
                                 backgroundColor: '#001C35',
-                                paddingHorizontal: 6, 
-                                paddingBottom: 6, 
+                                paddingHorizontal: 18, 
+                                paddingVertical: 6, 
                                 justifyContent: 'center'}}>
-                            <Text size={15} color='white'>13:05</Text>
+                            <Text size={11} color='white'>{FormatDuration.getMinutesFromSeconds(11100)}</Text>
                         </View>
                     </BalanceView>
                     <View
@@ -77,34 +75,37 @@ const HeaderBid = (props) => {
                             backgroundColor: Color.reverseOverflow,
                             paddingHorizontal: 10,
                             paddingVertical: 15,
-                            paddingTop: 16,
                             justifyContent: 'flex-start',
                             flexDirection: 'row',
+                            alignItems: 'flex-end',
                             borderRadius: 8,
                         }}>
                             <View
                                 style={{ flexDirection: 'column', justifyContent:'flex-start', alignItems: 'flex-start' }}>
-                                <Text size={12} color={Color.text} style={{ opacity:0.7 }}>Penawaran saat ini</Text>
-                                <Text lineHeight={24} size={22} type='bold' color={Color.text}>{FormatMoney.getFormattedMoney(150000)}</Text>
+                                <Text size={8} color={Color.text} style={{ opacity:0.7 }}>Penawaran saat ini</Text>
+                                <Divider height={2}/>
+                                <Text size={18} type='bold' color={Color.text}>{FormatMoney.getFormattedMoney(150000)}</Text>
                             </View>
-                            <Divider height={3}/>
+                            <Divider height={20}/>
                             <View
                                 style={{ flexDirection: 'column', justifyContent:'flex-start', alignItems: 'flex-start' }}>
-                                <Text size={12} color={Color.text} style={{ opacity:0.7 }}>Penawaran awal</Text>
-                                <Text lineHeight={22} size={16} color={Color.text}>{FormatMoney.getFormattedMoney(50000)}</Text>
+                                <Text size={8} color={Color.text} style={{ opacity:0.7 }}>Penawaran awal</Text>
+                                <Divider height={2}/>
+                                <Text size={14} color={Color.text}>{FormatMoney.getFormattedMoney(50000)}</Text>
                             </View>
-                            <Divider height={3}/>
+                            <Divider height={20}/>
                             <View
                                 style={{ flexDirection: 'column', justifyContent:'flex-start', alignItems: 'flex-start' }}>
-                                <Text size={12} color={Color.text} style={{ opacity:0.7 }}>Penawaranmu</Text>
-                                <Text lineHeight={22} size={16} color={Color.text}>Rp 0</Text>
+                                <Text size={8} color={Color.text} style={{ opacity:0.7 }}>Penawaranmu</Text>
+                                <Divider height={2}/>
+                                <Text size={14} color={Color.text}>Rp 0</Text>
                             </View>
                         </View>
                     </View>
                 </ContentView>
                 <View 
                     style={{ flexDirection: 'row', paddingVertical: 16, justifyContent:'flex-start', paddingHorizontal: 16}}>
-                    <Text lineHeight={17} size={15} color={Color.text} type='bold'>Penawar</Text>
+                    <Text size={11} color={Color.text} type='bold'>Penawar</Text>
                 </View>
         </View>
     )

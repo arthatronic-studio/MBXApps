@@ -64,21 +64,21 @@ export default ({ navigation, route }, props) => {
                 contentContainerStyle={{paddingBottom: 16, paddingHorizontal: 16}}
             >
                 <View
-                style={{ paddingTop: 10, alignItems: 'flex-start'}}>
-                    <Text size={22} type='bold' color={Color.text} align='left'>{item.productName}</Text>
+                style={{ marginTop: 10, alignItems: 'flex-start'}}>
+                    <Text size={18} type='bold' color={Color.text} align='left'>{item.productName}</Text>
                 </View>
                 <View
-                style={{ paddingTop: 20, flexDirection: 'row', justifyContent:'flex-start' }}>
+                style={{ marginTop: 24, flexDirection: 'row', justifyContent:'flex-start' }}>
                     <View
                     style={{ flexDirection: 'column', justifyContent:'flex-start', alignItems: 'flex-start' }}>
-                        <Text size={12} color={Color.text} style={{ opacity:0.7 }}>Harga Saat ini</Text>
-                        <Text size={22} type='bold' color={Color.text}>{FormatMoney.getFormattedMoney(150000)}</Text>
+                        <Text size={8} color={Color.text}>Harga Saat ini</Text>
+                        <Text size={18} type='bold' color={Color.text}>{FormatMoney.getFormattedMoney(150000)}</Text>
                     </View>
                     <Divider width={25} />
                     <View
                     style={{ flexDirection: 'column', justifyContent:'flex-start', alignItems: 'flex-start' }}>
-                        <Text size={12} color={Color.text} style={{ opacity:0.7 }}>Harga Permulaan</Text>
-                        <Text size={18} color={Color.text}>{FormatMoney.getFormattedMoney(50000)}</Text>
+                        <Text size={8} color={Color.text} >Harga Permulaan</Text>
+                        <Text size={14} color={Color.text}>{FormatMoney.getFormattedMoney(50000)}</Text>
                     </View>
                 </View>
                 <View style={{ 
@@ -89,7 +89,7 @@ export default ({ navigation, route }, props) => {
                     <View style={{ 
                         backgroundColor: Color.reverseOverflow,
                         flexDirection: 'row', 
-                        justifyContent: 'flex-start', 
+                        justifyContent: 'space-between', 
                         paddingVertical: 15, 
                         paddingHorizontal: 10,
                         borderRadius: 8,
@@ -97,34 +97,31 @@ export default ({ navigation, route }, props) => {
                     }}>
                         <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems:'flex-start'}}>
                             <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                                <Image source={iconFish} style={{ width: 13, height: 13, tintColor: Color.icon}}/>
-                                <Text size={12} color={Color.text} style={{ opacity:0.7 }}>Jenis Barang</Text>
+                                <Image source={iconFish} style={{ width: 10, height: 10, tintColor: Color.icon}}/>
+                                <Text size={8} color={Color.text} style={{ opacity:0.7 }}>Jenis Barang</Text>
                             </View>
-                            <Text size={15} color={Color.text}>Ikan Tuna</Text>
+                            <Text size={11} color={Color.text}>Ikan Tuna</Text>
                         </View>
-                        <Divider width={22} />
                         <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems:'flex-start'}}>
                             <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                                <Image source={iconScale} style={{ width: 13, height: 13, tintColor: Color.icon}}/>
-                                <Text size={12} color={Color.text} style={{ opacity:0.7 }}>Satuan</Text>
+                                <Image source={iconScale} style={{ width: 10, height: 10, tintColor: Color.icon}}/>
+                                <Text size={8} color={Color.text} style={{ opacity:0.7 }}>Satuan</Text>
                             </View>
-                            <Text size={15} color={Color.text}>Per Ekor</Text>
+                            <Text size={11} color={Color.text}>Per Ekor</Text>
                         </View>
-                        <Divider width={22} />
                         <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems:'flex-start'}}>
                             <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                                <Image source={iconClock} style={{ width: 13, height: 13, tintColor: Color.icon}}/>
-                                <Text size={12} color={Color.text} style={{ opacity:0.7 }}>Jam Mulai</Text>
+                                <Image source={iconClock} style={{ width: 10, height: 10, tintColor: Color.icon}}/>
+                                <Text size={8} color={Color.text} style={{ opacity:0.7 }}>Jam Mulai</Text>
                             </View>
-                            <Text size={15} color={Color.text}>13:05 WIB</Text>
+                            <Text size={11} color={Color.text}>13:05 WIB</Text>
                         </View>
-                        <Divider width={22} />
                         <View style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems:'flex-start'}}>
                             <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                                <Image source={iconTimer} style={{ width: 13, height: 13, tintColor: Color.icon}}/>
-                                <Text size={12} color={Color.text} style={{ opacity:0.7 }}>Durasi</Text>
+                                <Image source={iconTimer} style={{ width: 10, height: 10, tintColor: Color.icon}}/>
+                                <Text size={8} color={Color.text} style={{ opacity:0.7 }}>Durasi</Text>
                             </View>
-                            <Text size={15} color={Color.text}>15 Menit</Text>
+                            <Text size={11} color={Color.text}>15 Menit</Text>
                         </View>
                     </View>
                 </View>
@@ -137,14 +134,8 @@ export default ({ navigation, route }, props) => {
                     justifyContent: 'flex-start',
                     alignItems: 'flex-start',
                  }}>
-                    <Text size={12} color={Color.text} style={{ opacity:0.7 }}>Deskripsi</Text>
-                    <Text size={15} color={Color.text} align='left'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                    Aenean vulputate, sapien ut blandit tristique, leo tellus congue eros, at lacinia lorem tellus a nisi. 
-                    Nullam nec iaculis quam. Fusce vel sodales nisi, sagittis pulvinar odio. Mauris finibus dui in tellus 
-                    pulvinar, et fringilla mauris venenatis. Proin nec tincidunt lacus. Proin vitae neque eu nisi pretium 
-                    tempus. Praesent consectetur consequat molestie. Donec lacus sem, semper vel lacus vel, euismod fringilla 
-                    eros. Morbi convallis, risus ut faucibus sollicitudin, velit nibh ornare est, fermentum eleifend augue 
-                    odio ac justo.</Text>
+                    <Text size={8} color={Color.text}>Deskripsi</Text>
+                    <Text size={14} color={Color.text} align='left' style={{ marginTop:8 }}>{item.productDescription}</Text>
                 </View>
             </ScrollView>
             <ButtonView>

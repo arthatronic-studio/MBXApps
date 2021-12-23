@@ -9,7 +9,7 @@ const Container = Styled(View)`
 
 const Row = (props) => {
     return (
-        <Container>
+        <Container {...props}>
             {props.children}
         </Container>
     )

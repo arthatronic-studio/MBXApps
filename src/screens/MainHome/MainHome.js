@@ -399,7 +399,7 @@ const MainHome = ({navigation, route}) => {
                     size={12}
                     color={Color.error}
                     style={{position: 'absolute', top: -4, right: -4}}>
-                    <Text size={8} color={Color.white}>
+                    <Text size={8}>
                       {notifierCount > 99 ? '99' : notifierCount}
                     </Text>
                   </Circle>
@@ -440,7 +440,7 @@ const MainHome = ({navigation, route}) => {
           </View>
         </View>
 
-        <View style={{width: width - 32, marginHorizontal: 16}}>
+        <View style={{width: width - 32, marginHorizontal: 16, marginBottom:16}}>
           <CarouselView
             delay={4000}
             showIndicator
@@ -461,7 +461,7 @@ const MainHome = ({navigation, route}) => {
             />
           </CarouselView>
         </View>
-        {/* <ContentView>
+        <ContentView>
           <BalanceView
             style={{...shadowStyle, backgroundColor: Color.textInput}}>
             <View style={{justifyContent: 'center', alignItems: 'flex-start'}}>
@@ -545,7 +545,7 @@ const MainHome = ({navigation, route}) => {
               </View>
             </View>
           </BalanceView>
-        </ContentView> */}
+        </ContentView>
 
         <Divider height={8} />
 

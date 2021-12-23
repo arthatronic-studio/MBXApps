@@ -120,7 +120,6 @@ const ChatUserListScreen = ({ navigation, route }) => {
         <MainView>
             <Header
               title='Buat Room Chat'
-              color={Color.white}
               actions={selected.length > 0 ? 
                 <TouchableOpacity
                   style={{flex: 1, justifyContent: 'center', paddingHorizontal: 16}}
@@ -157,8 +156,8 @@ const ChatUserListScreen = ({ navigation, route }) => {
                                   <MaterialIcons name='check-circle' color={Color.success} size={22} />
                                 </ImageBackground>
                                 <View style={{height: 60, alignItems: 'flex-start', justifyContent: 'space-around'}}>
-                                    <Text size={12} type='semibold' color={Color.white} numberOfLines={1}>{item.fullname}</Text>
-                                    {/* <Text size={10} color={Color.white}>Available</Text> */}
+                                    <Text size={12} type='semibold' numberOfLines={1}>{item.fullname}</Text>
+                                    {/* <Text size={10}>Available</Text> */}
                                 </View>
                             </TouchableOpacity>
                           )
@@ -172,8 +171,8 @@ const ChatUserListScreen = ({ navigation, route }) => {
                                 style={{width: 50, height: 50, borderRadius: 25, marginRight: 8, backgroundColor: Color.border}}
                             />
                             <View style={{height: 60, alignItems: 'flex-start', justifyContent: 'space-around'}}>
-                                <Text size={12} type='semibold' color={Color.white} numberOfLines={1}>{item.fullname}</Text>
-                                {/* <Text size={10} color={Color.white}>Available</Text> */}
+                                <Text size={12} type='semibold' numberOfLines={1}>{item.fullname}</Text>
+                                {/* <Text size={10}>Available</Text> */}
                             </View>
                           </View>
                         </TouchableOpacity>

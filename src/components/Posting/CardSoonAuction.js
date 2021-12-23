@@ -43,12 +43,12 @@ const CardSoonAuction = (props) => {
                     borderRadius: 8,
                     flexDirection: 'row',
                     alignItems: 'center',
-                    borderColor: 'black',
+                    borderColor: Color.border,
                     // flex:1,
                     ...style,
                 }
             ]}>
-            <Image source={{ uri: item.image }} style={{width: '25%', aspectRatio: 9/13, borderTopLeftRadius: 4, borderBottomLeftRadius: 4, backgroundColor: Color.border}} />
+            <Image source={{ uri: item.image }} style={{width: '25%', aspectRatio: 9/13, borderTopLeftRadius: 8, borderBottomLeftRadius: 8, backgroundColor: Color.border}} />
             <View style={{ flexDirection: 'column', marginVertical: 5, marginHorizontal: 6, alignSelf: 'flex-start', width: '70%'}}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%'}}>
                     <Text style={{ width:'60%' }} size={12} color={Color.text} type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
@@ -57,12 +57,12 @@ const CardSoonAuction = (props) => {
                     </View>
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'flex-start'}}>
-                    <Image source={iconScale} style={{ width: '6%', aspectRatio:3/4, tintColor: Color.icon}}/>
+                    <Image source={iconScale} style={{ width: '6%', aspectRatio:4/5, tintColor: Color.icon}}/>
                     <View style={{ marginLeft: 3}}>
                         <Text size={8}>kilogram</Text>
                     </View>
                     <Divider width={10} />
-                    <Image source={iconClock} style={{ width: '6%', aspectRatio:3/4, tintColor: Color.icon}}/>
+                    <Image source={iconClock} style={{ width: '6%', aspectRatio:4/5, tintColor: Color.icon}}/>
                     <View style={{ marginLeft: 3}}>
                         <Text size={8}>13:05</Text>
                     </View>
