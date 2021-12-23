@@ -429,7 +429,7 @@ const MainHome = ({navigation, route}) => {
           />
           <View style={{paddingLeft: 16, alignItems: 'flex-start'}}>
             <Text lineHeight={18} letterSpacing={0.45}>
-              Halo,
+              Halo ,
             </Text>
             <Text size={18} type="bold" lineHeight={22} letterSpacing={0.45}>
               {user && !user.guest

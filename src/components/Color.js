@@ -17,7 +17,9 @@ const staticColors = {
   yellow: '#FFD35B',
   timer: '#F94918',
   icon: '#667786',
-  bid: '#E6E9EA'
+  bid: '#E6E9EA',
+  text: '#FFFFFF',
+  infosecond: '#DAE9F2',
 };
 
 export const lightModeColors = {
@@ -42,10 +44,10 @@ export const darkModeColors = {
   border: '#707070',
 };
 
-export const useColor = (isRoot) => {
+export const useColor = isRoot => {
   const theme = isRoot
     ? store.getState()['theme'].theme
-    : useSelector((state) => state['theme'].theme);
+    : useSelector(state => state['theme'].theme);
 
   const Color = theme === 'dark' ? darkModeColors : lightModeColors;
   return {Color};
