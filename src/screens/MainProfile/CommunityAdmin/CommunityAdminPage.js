@@ -56,7 +56,7 @@ const CommunityAdminPage = ({navigation}) => {
       style={{backgroundColor: 'white'}}
       activeColor={Color.secondary}
       inactiveColor="black"
-      labelStyle={{fontWeight: 'bold', textAlign: 'center'}}
+      labelStyle={{fontWeight: 'bold', textAlign: 'center',fontSize:13, textTransform:'capitalize'}}
     />
   );
   
