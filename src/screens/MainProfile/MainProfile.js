@@ -131,7 +131,7 @@ const MainProfile = ({navigation, route}) => {
             )}
           </TouchableOpacity>
         </View> */}
-        <ContentView>
+        {/* <ContentView>
           <View
             style={{
               ...shadowStyle,
@@ -232,78 +232,84 @@ const MainProfile = ({navigation, route}) => {
               </TouchableOpacity>
             </View>
           </View>
-        </ContentView>
+        </ContentView> */}
 
-        <View style={{alignItems: 'center'}}>
-          <ImageBackground
-            source={bannerCard}
-            resizeMode="cover"
-            style={{
-              width: 358,
-              height: 162,
-            }}
-            imageStyle={{borderRadius: 10}}>
-            <View
+        <ContentView>
+          <View>
+            <ImageBackground
+              source={bannerCard}
+              resizeMode="cover"
               style={{
-                flexDirection: 'row',
-                width: '100%',
-                aspectRatio: 7,
-                justifyContent: 'flex-start',
-              }}>
-              <Image
-                style={{width: 65, height: 25, marginLeft: 16, marginTop: 16}}
-                source={iconSplash}
-              />
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                width: '100%',
-                aspectRatio: 7,
-                justifyContent: 'space-between',
-                marginTop: 43,
-                Color: Color.text,
-              }}>
-              <View>
-                {user && !user.guest ? (
-                  <>
-                    <Text
-                      style={{marginLeft: 29}}
-                      color={Color.border}
-                      type="bold"
-                      letterSpacing={0.18}>
-                      {user.idCardNumber || '1000078964512'}
-                    </Text>
-
-                    <Text color={Color.border} size={12} letterSpacing={0.18}>
-                      {user.firstName} {user.lastName}
-                    </Text>
-                  </>
-                ) : (
-                  <Text type="bold" letterSpacing={0.18}>
-                    Halo Tamu, Silakan Login
-                  </Text>
-                )}
+                marginTop: 12,
+                height: 162,
+              }}
+              imageStyle={{borderRadius: 10}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: '100%',
+                  aspectRatio: 7,
+                  justifyContent: 'flex-start',
+                }}>
+                <Image
+                  style={{width: 65, height: 25, marginLeft: 16, marginTop: 16}}
+                  source={iconSplash}
+                />
               </View>
-              <TouchableOpacity onPress={() => setModalVirtual(true)}>
-                <View
-                  style={{
-                    backgroundColor: Color.border,
-                    width: 55,
-                    height: 55,
-                    marginRight: 16,
-                    borderRadius: 8,
-                    alignItems: 'center',
-                    alignContent: 'center',
-                  }}>
-                  <View style={{alignContent: 'center', marginTop: 5}}>
-                    {user && <QRCode value={user.code} size={45} />}
-                  </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  width: '100%',
+                  aspectRatio: 7,
+                  justifyContent: 'space-between',
+                  marginTop: 43,
+                  Color: Color.text,
+                }}>
+                <View>
+                  {user && !user.guest ? (
+                    <>
+                      <Text
+                        style={{marginLeft: 16}}
+                        color={Color.border}
+                        type="bold"
+                        letterSpacing={0.18}>
+                        {user.idCardNumber || '1000078964512'}
+                      </Text>
+
+                      <Text 
+                        style={{marginLeft: 16}}
+                        color={Color.border} 
+                        size={12} 
+                        letterSpacing={0.18}>
+                        {user.firstName} {user.lastName}
+                      </Text>
+                    </>
+                  ) : (
+                    <Text type="bold" letterSpacing={0.18}>
+                      Halo Tamu, Silakan Login
+                    </Text>
+                  )}
                 </View>
-              </TouchableOpacity>
-            </View>
-          </ImageBackground>
-        </View>
+                <TouchableOpacity onPress={() => setModalVirtual(true)}>
+                  <View
+                    style={{
+                      backgroundColor: Color.border,
+                      width: 55,
+                      height: 55,
+                      marginRight: 16,
+                      borderRadius: 8,
+                      alignItems: 'center',
+                      alignContent: 'center',
+                    }}>
+                    <View style={{alignContent: 'center', marginTop: 5}}>
+                      {user && <QRCode value={user.code} size={45} />}
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </ImageBackground>
+          </View>
+        </ContentView>
         <ContentView>
           <View
             style={{
