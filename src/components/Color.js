@@ -6,6 +6,7 @@ const staticColors = {
   primaryDark: '#033F59',
   primarySoft: '#DAEBF2',
   primaryYellow: '#FAC255',
+  primaryBlack: '#999999',
   secondary: '#FB9850',
   disabled: '#A1A1A1',
   success: '#0BBC2E',
