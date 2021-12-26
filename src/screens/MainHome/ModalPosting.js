@@ -3,7 +3,7 @@ import { Dimensions, TouchableOpacity, useWindowDimensions } from 'react-native'
 import { Modalize } from 'react-native-modalize';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { Newspaper, MapPinLine, Confetti, Briefcase } from 'phosphor-react-native';
+import { Newspaper, MapPinLine, Calendar, Briefcase } from 'phosphor-react-native';
 import {
   Text,
   // TouchableOpacity,
@@ -36,7 +36,7 @@ const data = [
     productCategory: '',
     productSubCategory: 'NEARBY_PLACE',
   } },
-  { id: 3, name: 'Event', icon: <Newspaper color='#6246C7' size={20} /> , nav: 'CreateThreadScreen', params: {
+  { id: 3, name: 'Event', icon: <Calendar color='#6246C7' size={20} /> , nav: 'CreateThreadScreen', params: {
     title: 'Posting Event',
     productType: "TRIBES",
     productCategory: '',
