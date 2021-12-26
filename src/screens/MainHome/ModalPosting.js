@@ -3,6 +3,7 @@ import { Dimensions, TouchableOpacity, useWindowDimensions } from 'react-native'
 import { Modalize } from 'react-native-modalize';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { Newspaper, MapPinLine, Confetti, Briefcase } from 'phosphor-react-native';
 import {
   Text,
   // TouchableOpacity,
@@ -23,25 +24,25 @@ const defaultProps = {
 };
 
 const data = [
-  { id: 1, name: 'Posting Artikel', nav: 'CreateThreadScreen', params: {
+  { id: 1, name: 'Artikel', icon: <Newspaper color='#B0DE59' size={20} /> , nav: 'CreateThreadScreen', params: {
     title: 'Posting Artikel',
     productType: "TRIBES",
     productCategory: '',
     productSubCategory: 'POSTING'
   } },
-  { id: 2, name: 'Posting Tempat Terdekat', nav: 'CreateThreadScreen', params: {
+  { id: 2, name: 'Tempat', icon: <MapPinLine color='#ED5596' size={20} /> , nav: 'CreateThreadScreen', params: {
     title: 'Posting Tempat Terdekat',
     productType: "TRIBES",
     productCategory: '',
     productSubCategory: 'NEARBY_PLACE',
   } },
-  { id: 3, name: 'Posting Event', nav: 'CreateThreadScreen', params: {
+  { id: 3, name: 'Event', icon: <Newspaper color='#6246C7' size={20} /> , nav: 'CreateThreadScreen', params: {
     title: 'Posting Event',
     productType: "TRIBES",
     productCategory: '',
     productSubCategory: 'EVENT',
   } },
-  { id: 4, name: 'Posting Loker', nav: 'CreateThreadScreen', params: {
+  { id: 4, name: 'Loker', icon: <Briefcase color='#1E89FC' size={20} /> , nav: 'CreateThreadScreen', params: {
     title: 'Posting Loker',
     productType: "TRIBES",
     productCategory: '',
@@ -71,21 +72,26 @@ const ModalPosting = forwardRef((props, ref) => {
           onPress(item);
         }}
         style={{
-          width,
+          borderWidth: 1,
+          borderColor: '#bcbcbc',
+          borderRadius: 8,
+          // width,
           paddingVertical: 8,
-          flexDirection: 'row',
+          height: 70,
+          width: 70,
+          justifyContent: 'center',
           alignItems: 'center',
         }}
       >
-        <MaterialCommunityIcons
-          name='post-outline'
-          size={20}
-          color={Color.text}
-        />
-        <Divider width={8} />
-        <Text size={14} align='left'>
-          {item.name}
-        </Text>
+        {item.icon}
+          {/* <MaterialCommunityIcons
+            name='post-outline'
+            size={20}
+            color={Color.text}
+          /> */}
+          <Text size={14} align='center'>
+            {item.name}
+          </Text>
       </TouchableOpacity>
     )
   }
@@ -96,13 +102,13 @@ const ModalPosting = forwardRef((props, ref) => {
       withHandle={handle}
       handlePosition="inside"
       adjustToContentHeight
-      handleStyle={{width: width / 3, height: handle ? 4 : 4, backgroundColor: Color.primary, marginTop: 8}}
+      handleStyle={{width: width / 3, height: handle ? 8 : 8, backgroundColor: Color.primary+'30', marginTop: 8}}
       onPositionChange={handlePosition}
       childrenStyle={{
         alignItems: 'center',
         marginTop: 16,
-        padding: 16,
-        paddingBottom: 32,
+        paddingTop: 16,
+        paddingBottom: 50,
         borderTopLeftRadius: 12, 
         borderTopRightRadius: 12,
       }}
@@ -110,7 +116,12 @@ const ModalPosting = forwardRef((props, ref) => {
         backgroundColor: Color.theme
       }}
     >
-      {renderContent()}
+      <View style={{ flexDirection: 'row', paddingLeft: 12, marginVertical: 14 }}>
+        <Text type='bold' textAlign='left'>Buat Postingan</Text>
+      </View>
+      <View style={{ flexDirection: 'row', width,  justifyContent: 'space-around',  }}>
+        {renderContent()}
+      </View>
     </Modalize>
   );
 });
