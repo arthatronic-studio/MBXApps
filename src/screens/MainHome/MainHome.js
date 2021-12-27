@@ -1,5 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, ScrollView, Image, useWindowDimensions} from 'react-native';
+import {
+  View,
+  ScrollView,
+  Image,
+  useWindowDimensions,
+  ImageBackground,
+} from 'react-native';
 import Styled from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -43,6 +49,7 @@ import {
   iconPulsa,
   iconSemua,
 } from '@assets/images/home';
+import {imageCarousel} from '@assets/images';
 import ModalPosting from './ModalPosting';
 import ListEmergency from 'src/components/Posting/ListEmergency';
 import {usePreviousState} from 'src/hooks';
@@ -440,24 +447,32 @@ const MainHome = ({navigation, route}) => {
           </View>
         </View>
 
-        <View style={{width: width - 32, marginHorizontal: 16, marginBottom:16}}>
+        <View
+          style={{width: width - 32, marginHorizontal: 16, marginBottom: 16}}>
           <CarouselView
             delay={4000}
             showIndicator
-            style={{width: '100%', aspectRatio: 12 / 7}}>
-            <View
+            style={{aspectRatio: 12 / 7}}>
+            <ImageBackground
               style={{
                 width: '100%',
                 height: '100%',
-                backgroundColor: Color.disabled,
               }}
+              source={imageCarousel}
             />
-            <View
+            <ImageBackground
               style={{
                 width: '100%',
                 height: '100%',
-                backgroundColor: 'red',
               }}
+              source={imageCarousel}
+            />
+            <ImageBackground
+              style={{
+                width: '100%',
+                height: '100%',
+              }}
+              source={imageCarousel}
             />
           </CarouselView>
         </View>
@@ -477,7 +492,6 @@ const MainHome = ({navigation, route}) => {
                 justifyContent: 'center',
                 alignItems: 'flex-end',
               }}>
-
               <View
                 style={{
                   justifyContent: 'center',
@@ -531,11 +545,7 @@ const MainHome = ({navigation, route}) => {
                       ? openVesta()
                       : navigation.navigate('TopUpScreen')
                   }>
-                  <Ionicons
-                    name="add"
-                    color={Color.textInput}
-                    size={24}
-                  />
+                  <Ionicons name="add" color={Color.textInput} size={24} />
                 </TouchableOpacity>
                 <View style={{width: '100%', alignItems: 'center'}}>
                   <Text size={9} type="medium" color={Color.text}>

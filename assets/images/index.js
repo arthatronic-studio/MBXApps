@@ -6,6 +6,7 @@ const imagePaymentBanner = require('./image-payment-banner.png');
 const imagePaymentSuccess = require('./image-payment-success.png');
 const bannerCard = require('./bannerCard.png');
 const qrCode = require('./qrCode.jpeg');
+const imageCarousel = require('./image-carousel.jpeg')
 export {
   iconApp,
   iconSplash,
@@ -15,4 +16,5 @@ export {
   imagePaymentSuccess,
   bannerCard,
   qrCode,
+  imageCarousel,
 };
