@@ -150,7 +150,7 @@ const MainProfile = ({navigation, route}) => {
                   justifyContent: 'flex-start',
                 }}>
                 <Image
-                  style={{width: 65, height: 25, marginLeft: 16, marginTop: 16}}
+                  style={{width: '20%', height: '50%', marginLeft: 16, marginTop: 16}}
                   source={iconSplash}
                 />
               </View>
@@ -163,12 +163,16 @@ const MainProfile = ({navigation, route}) => {
                   marginTop: 43,
                   Color: Color.text,
                 }}>
-                <View>
+                <View
+                  style={{
+                    alignItems: 'flex-start'
+                  }}
+                  >
                   {user && !user.guest ? (
                     <>
                       <Text
                         style={{marginLeft: 16}}
-                        color={Color.border}
+                        color={Color.textInput}
                         type="bold"
                         letterSpacing={0.18}>
                         {user.idCardNumber || '1000078964512'}
@@ -176,7 +180,7 @@ const MainProfile = ({navigation, route}) => {
 
                       <Text 
                         style={{marginLeft: 16}}
-                        color={Color.border} 
+                        color={Color.textInput} 
                         size={12} 
                         letterSpacing={0.18}>
                         {user.firstName} {user.lastName}
@@ -191,7 +195,7 @@ const MainProfile = ({navigation, route}) => {
                 <TouchableOpacity onPress={() => setModalVirtual(true)}>
                   <View
                     style={{
-                      backgroundColor: Color.border,
+                      backgroundColor: Color.textInput,
                       width: 55,
                       height: 55,
                       marginRight: 16,
