@@ -7,20 +7,18 @@ import gql from 'graphql-tag';
 import qs from 'qs';
 import Client from '../../../lib/apollo';
 
-const clientId = Platform.OS === 'ios' ? Config.CLIENT_ID_IOS : Config.CLIENT_ID_ANDROID;
-const secret = Platform.OS === 'ios' ? Config.CLIENT_SECRET_IOS : Config.CLIENT_SECRET_ANDROID;
-// const encodeData = new Buffer(clientId + ':' + secret).toString('base64');
-const encodeData = new Buffer(`${clientId}:${secret}`).toString('base64');
-
+const client_id = Platform.OS === 'ios' ? Config.CLIENT_ID_IOS : Config.CLIENT_ID_ANDROID;
+const client_secret = Platform.OS === 'ios' ? Config.CLIENT_SECRET_IOS : Config.CLIENT_SECRET_ANDROID;
+const encodeData = new Buffer(`${client_id}:${client_secret}`).toString('base64');
 const instance = axios.create({ baseURL: Config.AUTH_API_URL, headers: { 'Content-Type': 'application/x-www-form-urlencoded', Authorization: `Basic ${encodeData}` } });
 
 export const callAuthApi = async (tempEmail, password, refreshToken, fcm_token) => {
   const email = tempEmail ? tempEmail.toLowerCase() : tempEmail;
   let body = { scope: Config.SCOPE, };
   try {
-    if (email && password) body = { ...body, grant_type: 'password', client_id: clientId, secret, username: email, password, fcm_token };
+    if (email && password) body = { ...body, grant_type: 'password', client_id, client_secret, username: email, password, fcm_token };
     else if (refreshToken) body = { ...body, grant_type: 'refresh_token', refresh_token: refreshToken };
-    else body = { ...body, grant_type: Config.GRANT_TYPE, client_id: clientId, secret, };
+    else body = { ...body, grant_type: Config.GRANT_TYPE, client_id, client_secret };
 
     console.log('body auth', body);
 
@@ -315,14 +313,12 @@ const getUserProfileQuery = gql`
     organizationId
     organizationName
     userCode
-    isDirector
     idCardNumber
+    idNumber
+    isDirector
     image
-    qr_code
     photoProfile
-    nomor_id
-    alamat
-    tanggalLahir
+    birthDate
   }
 }`;
 

@@ -192,7 +192,12 @@ const MainProfile = ({navigation, route}) => {
                     </Text>
                   )}
                 </View>
-                <TouchableOpacity onPress={() => setModalVirtual(true)}>
+                <TouchableOpacity
+                  activeOpacity={1}
+                  onPress={() => {
+                    //setModalVirtual(true);
+                  }}
+                >
                   <View
                     style={{
                       backgroundColor: Color.textInput,
@@ -229,7 +234,12 @@ const MainProfile = ({navigation, route}) => {
                 borderTopWidth: 0.5,
                 borderColor: Color.border,
               }}>
-              <TouchableOpacity onPress={() => setModalVirtual(true)}>
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => {
+                  // setModalVirtual(true);
+                }}
+              >
                 <Row>
                   <Col justify="center" size={0.75}>
                     <FontAwesome

@@ -370,7 +370,6 @@ export default ({ navigation, route }) => {
       };
     }
 
-
     console.log(variables);
 
     Client.query({
@@ -382,7 +381,7 @@ export default ({ navigation, route }) => {
       let pulsaList = [];
       let paketDataList = [];
 
-      if (data.length > 0) {
+      if (data && data.length > 0) {
         for (var i = 0; i < data.length; i++) {
           if (data[i] !== null) {
             if (segmentType === 'PULSA_HP') pulsaList.push(data[i]);
