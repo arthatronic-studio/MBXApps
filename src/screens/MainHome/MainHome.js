@@ -53,6 +53,7 @@ import {imageCarousel} from '@assets/images';
 import ModalPosting from './ModalPosting';
 import ListEmergency from 'src/components/Posting/ListEmergency';
 import {usePreviousState} from 'src/hooks';
+import MerchScreen from '../Ecommerce/MerchScreen';
 
 const ContentView = Styled(View)`
   width: 100%;
