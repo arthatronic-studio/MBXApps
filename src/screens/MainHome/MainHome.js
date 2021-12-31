@@ -54,6 +54,8 @@ import ModalPosting from './ModalPosting';
 import ListEmergency from 'src/components/Posting/ListEmergency';
 import {usePreviousState} from 'src/hooks';
 import MerchScreen from '../Ecommerce/MerchScreen';
+import DetailProduct from '../Ecommerce/DetailProduct';
+import TopTab from '../Ecommerce/TopTab';
 
 const ContentView = Styled(View)`
   width: 100%;
@@ -370,6 +372,7 @@ const MainHome = ({navigation, route}) => {
   const isWalletClose = wallet === 'CLOSE';
 
   return (
+    
     <Scaffold
       loadingProps={loadingProps}
       header={
