@@ -1,5 +1,13 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, ScrollView, Platform, SafeAreaView, Image, TouchableOpacity, Dimensions} from 'react-native';
+import {
+  View,
+  ScrollView,
+  Platform,
+  SafeAreaView,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import Styled from 'styled-components';
 import {useSelector} from 'react-redux';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -31,18 +39,14 @@ const images = [
   ImagesPath.productImage,
   ImagesPath.productImage,
   ImagesPath.productImage,
-]
+];
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
-
-
 
 const DetailProduct = () => {
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
   const {Color} = useColor();
-
-
 
   return (
     <Scaffold
@@ -64,7 +68,15 @@ const DetailProduct = () => {
         <View
           style={{
             flex: 1,
+            width: '100%',
+            height: '50%',
+            position: 'absolute',
+            backgroundColor: 'white',
           }}>
+          <Image
+            source={ImagesPath.productImage}
+            style={{width: 420, height: 420}}
+          />
         </View>
         <View
           style={{
@@ -197,9 +209,13 @@ const DetailProduct = () => {
               alignItems: 'center',
               paddingHorizontal: 10,
               marginHorizontal: 10,
-              flexDirection: 'row'
+              flexDirection: 'row',
             }}>
-            <FontAwesome5 name={"shopping-cart"} size={13} style={{paddingHorizontal: 5}} />
+            <FontAwesome5
+              name={'shopping-cart'}
+              size={13}
+              style={{paddingHorizontal: 5}}
+            />
             <Text
               style={{
                 fontSize: 13,
