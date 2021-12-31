@@ -372,7 +372,6 @@ const MainHome = ({navigation, route}) => {
   const isWalletClose = wallet === 'CLOSE';
 
   return (
-    
     <Scaffold
       loadingProps={loadingProps}
       header={

@@ -1,8 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, ScrollView, Platform, SafeAreaView, Image} from 'react-native';
+import {View, ScrollView, Platform, SafeAreaView, Image, TouchableOpacity, Dimensions} from 'react-native';
 import Styled from 'styled-components';
 import {useSelector} from 'react-redux';
-import {NavigationContainer} from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -20,22 +19,31 @@ import {
 } from '@src/components';
 import TopBar from './TopTab';
 import ImagesPath from 'src/components/ImagesPath';
+import Carousel from 'react-native-snap-carousel';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
 `;
 
+const images = [
+  ImagesPath.productImage,
+  ImagesPath.productImage,
+  ImagesPath.productImage,
+  ImagesPath.productImage,
+  ImagesPath.productImage,
+]
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
+
+
+
 const DetailProduct = () => {
-  const [selectedItem, setSelectedItem] = useState(null);
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
-
-  const [loadingProps, showLoading, hideLoading] = useLoading();
   const {Color} = useColor();
 
-  const onSelect = item => {
-    setSelectedItem(item);
-  };
+
+
   return (
     <Scaffold
       header={
@@ -55,14 +63,8 @@ const DetailProduct = () => {
       <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
         <View
           style={{
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'white',
-            position: 'absolute',
+            flex: 1,
           }}>
-          <Image
-            source={require('../../components/Images/productImage.png')}
-            style={{width: 420, height: 420}}></Image>
         </View>
         <View
           style={{
@@ -156,7 +158,7 @@ const DetailProduct = () => {
             alignItems: 'center',
             paddingVertical: 10,
           }}>
-          <View
+          <TouchableOpacity
             style={{
               width: '40%',
               height: 40,
@@ -184,8 +186,8 @@ const DetailProduct = () => {
                 Beli Langsung
               </Text>
             </View>
-          </View>
-          <View
+          </TouchableOpacity>
+          <TouchableOpacity
             style={{
               width: '50%',
               height: 40,
@@ -207,7 +209,7 @@ const DetailProduct = () => {
               }}>
               Tambah Keranjang
             </Text>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
       {/* <View

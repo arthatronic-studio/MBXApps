@@ -5,4 +5,5 @@ export default {
   productImage: require('../components/Images/productImage.png'),
   star: require('../components/Images/baseline_star_white_18.png'),
   unfavorited: require('../components/Images/baseline_favorite_border_white_18.png'),
+  
 };

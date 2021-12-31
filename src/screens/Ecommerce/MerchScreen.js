@@ -67,42 +67,44 @@ const MerchScreen = () => {
       }
       color="black"
       onPressLeftButton={() => navigation.pop()}>
-      <View style={{flexDirection: 'row', marginTop: 12}}>
-        <Filter value={selectedItem} data={filter} onSelect={onSelect} />
-        <Category />
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          width: '100%',
-          height: 40,
-          paddingVertical: 10,
-          paddingHorizontal: 15,
-        }}>
-        <Text>Terbaru</Text>
-        <View style={{width: '72%'}}></View>
-        <View style={{flexDirection: 'row'}}>
-          <View style={{paddingHorizontal: 3}}>
-            <TouchableOpacity>
-              <Image
-                source={ImagesPath.icDashboard}
-                style={{width: 20, height: 20}}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={{paddingHorizontal: 3}}>
-            <TouchableOpacity>
-              <Image
-                source={ImagesPath.icList}
-                style={{width: 22, height: 22}}
-              />
-            </TouchableOpacity>
+      <ScrollView style={{backgroundColor: '#141414'}}>
+        <View style={{flexDirection: 'row', marginTop: 12}}>
+          <Filter value={selectedItem} data={filter} onSelect={onSelect} />
+          <Category />
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            width: '100%',
+            height: 40,
+            paddingVertical: 10,
+            paddingHorizontal: 15,
+          }}>
+          <Text>Terbaru</Text>
+          <View style={{width: '72%'}}></View>
+          <View style={{flexDirection: 'row'}}>
+            <View style={{paddingHorizontal: 3}}>
+              <TouchableOpacity>
+                <Image
+                  source={ImagesPath.icDashboard}
+                  style={{width: 20, height: 20}}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={{paddingHorizontal: 3}}>
+              <TouchableOpacity>
+                <Image
+                  source={ImagesPath.icList}
+                  style={{width: 22, height: 22}}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-      <View>
-        <CardListProduk />
-      </View>
+        <View>
+          <CardListProduk />
+        </View>
+      </ScrollView>
     </Scaffold>
   );
 };
