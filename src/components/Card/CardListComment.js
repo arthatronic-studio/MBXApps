@@ -106,23 +106,23 @@ const CardListComment = (props) => {
             <View style={{width: '100%', borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle, flexDirection:'row', justifyContent: 'space-between'}}>
                 <TextInput
                   placeholder='Tulis Komentar..'
-                  placeholderTextColor={Color.text}
+                  placeholderTextColor={Color.border}
+                  value={textComment}
+                  multiline
+                  onChangeText={(e) => setTextComment(e)}
                   style={{
+                    width:'80%',
                     fontSize: 12,
                     fontFamily: 'Inter-Regular',
                     color: Color.text,
                     paddingVertical: 8,
                     paddingLeft: 8,
                     paddingRight: 40,
-                    minHeight: 45,
+                    minHeight: 45
                   }}
-                  value={textComment}
-                  multiline
-                  onChangeText={(e) => setTextComment(e)}
-                  style={{width:'80%'}}
                 />
 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   onPress={() => {
                     const options = {
                       mediaType: 'photo',
@@ -141,7 +141,7 @@ const CardListComment = (props) => {
                   <View style={{width: 40, height: 40, position:'absolute',right: 50, bottom: 2, alignItems:'center', justifyContent:'center'}}>
                     <Entypo name="camera" size={20} />
                   </View>
-                </TouchableOpacity> 
+                </TouchableOpacity>  */}
                    
                 <TouchableOpacity
                   onPress={() => {

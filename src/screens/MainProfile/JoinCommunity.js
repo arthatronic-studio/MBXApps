@@ -66,7 +66,7 @@ const Join = () => {
         carYear: "",
         carIdentity: '',
         reason: '',
-        description: '',
+        note: '',
         chapterId: "Bogor",
         carPhotoMain: '',
         carPhotoFront: '',
@@ -81,7 +81,7 @@ const Join = () => {
         carYear: null,
         carIdentity: null,
         reason: null,
-        description: null,
+        note: null,
         carPhotoMain: '',
         carPhotoFront: '',
         carPhotoSide: '',
@@ -167,11 +167,11 @@ const Join = () => {
                 carPhotoSide: 'data:image/png;base64,' + thumbImage3,
                 carPhotoBack: 'data:image/png;base64,' + thumbImage4,
                 transactionProof: 'data:image/png;base64,' + thumbImage5,
+                note: userData.note,
             },
         };
 
-        console.log('variables', variables);
-        
+        console.log('variables', variables);        
 
         Client.query({
             query: queryJoinCommunity,
@@ -246,6 +246,7 @@ const Join = () => {
                                     selectionColor={Color.text}
                                     value={userData.carColor}
                                     onBlur={() => isValueError('carColor')}
+                                    style={{color: Color.text}}
                                 />
                             </EmailRoundedView>
                         </View>
@@ -268,6 +269,7 @@ const Join = () => {
                                     value={userData.carYear}
                                     onBlur={() => isValueError('carYear')}
                                     keyboardType='numeric'
+                                    style={{color: Color.text}}
                                 />
                             </EmailRoundedView>
                         </View>
@@ -289,6 +291,7 @@ const Join = () => {
                                     selectionColor={Color.text}
                                     value={userData.carIdentity}
                                     onBlur={() => isValueError('carIdentity')}
+                                    style={{color: Color.text}}
                                 />
                             </EmailRoundedView>
                         </View>
@@ -310,6 +313,7 @@ const Join = () => {
                                     selectionColor={Color.text}
                                     value={userData.reason}
                                     onBlur={() => isValueError('reason')}
+                                    style={{color: Color.text}}
                                 />
                             </EmailRoundedView>
                         </View>
@@ -327,10 +331,11 @@ const Join = () => {
                                     placeholderTextColor={Color.gray}
                                     underlineColorAndroid='transparent'
                                     autoCorrect={false}
-                                    onChangeText={(text) => onChangeUserData('description', text)}
+                                    onChangeText={(text) => onChangeUserData('note', text)}
                                     selectionColor={Color.text}
-                                    value={userData.reason}
-                                    onBlur={() => isValueError('description')}
+                                    value={userData.note}
+                                    onBlur={() => isValueError('note')}
+                                    style={{color: Color.text}}
                                 />
                             </EmailRoundedView>
                         </View>
