@@ -4,8 +4,8 @@ import Moment from 'moment';
 
 import { Scaffold, TouchableOpacity, Text, useColor } from "src/components";
 import { Divider } from "src/styled";
-
-const objDummy = { id: 1, title: 'Pembayaran', body: 'halo semua, lorem ipsum dolor sit amet amet woi cak cuk cik cok' };
+import client from "src/lib/apollo";
+import { queryGetNotificationHistory } from "src/lib/query";
 
 const NotificationScreen = ({ navigation, route }) => {
   const { Color } = useColor();
@@ -13,7 +13,13 @@ const NotificationScreen = ({ navigation, route }) => {
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
-    setHistory(new Array(10).fill(objDummy));
+    client.query({
+      query: queryGetNotificationHistory
+    })
+      .then((res) => {
+        setHistory(res.data.getNotificationHistory.id)
+        console.log(history, res)
+      })
   }, []);
 
   const renderPopUpNavigation = () => {
@@ -68,9 +74,9 @@ const NotificationScreen = ({ navigation, route }) => {
                 borderWidth: 0.5,
               }}
             >
-              <Text align='left' type='bold'>{item.title}</Text>
+              <Text align='left' type='bold'>{item.notification_title}</Text>
               <Divider height={4} />
-              <Text align='left'>{item.body}</Text>
+              <Text align='left'>{item.notification_text}</Text>
               <Divider height={4} />
               <Text align='left' size={12}>{Moment().format('HH:mm')}</Text>
             </TouchableOpacity>
