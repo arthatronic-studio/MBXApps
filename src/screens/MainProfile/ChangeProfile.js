@@ -121,9 +121,9 @@ export default ({ navigation, route }) => {
     idCardNumber: user ? user.idCardNumber : '',
     email: user ? user.email : '',
     phoneNumber: user ? user.phoneNumber : '',
-    tanggalLahir: user && user.tanggalLahir ? user.tanggalLahir : Moment(new Date('1990')).format('DD-MM-YYYY'),
-    Nomor_ID: user ? user.Nomor_ID :  '',
-    Alamat : user ? user.Alamat : '',
+    tanggalLahir: user && user.birthDate ? user.birthDate : Moment(new Date('1990')).format('DD-MM-YYYY'),
+    Nomor_ID: user ? user.idNumber :  '',
+    Alamat : user ? user.address : '',
   });
   const [errorData, setErrorData] = useState({
     fullName: null,
@@ -140,7 +140,7 @@ export default ({ navigation, route }) => {
   const [mimeImage, setMimeImage] = useState('image/jpeg');
 
   //Tanggal Lahir
-  const [tanggalLahir, setDate] = useState(new Date('1990'));
+  const [tanggalLahir, setDate] = useState(user && user.birthDate ? new Date(...user.birthDate.split("-").reverse()) : new Date('1990'));
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -175,9 +175,10 @@ export default ({ navigation, route }) => {
         idCardNumber,
         email,
         phoneNumber,
-        nomor_id: Nomor_ID,
-        alamat: Alamat,
-        tanggalLahir: tanggalLahir,
+        idNumber: Nomor_ID,
+        address: Alamat,
+        birthDate: tanggalLahir,
+        photoProfile : user && thumbImage === '' ? '' : 'data:image/png;base64,' + thumbImage
       };
 
       console.log('newUserData', newUserData);
@@ -230,29 +231,26 @@ export default ({ navigation, route }) => {
               />
           </TouchableOpacity>}
 
-              <LabelInput>
-                  
-              </LabelInput>
-              <TouchableOpacity
-                  onPress={() => {
-                      const options = {
-                          mediaType: 'photo',
-                          maxWidth: 320,
-                          maxHeight: 320,
-                          quality: 1,
-                          includeBase64: true,
-                      }
+            <TouchableOpacity
+              onPress={() => {
+                const options = {
+                    mediaType: 'photo',
+                    maxWidth: 320,
+                    maxHeight: 320,
+                    quality: 1,
+                    includeBase64: true,
+                }
 
-                      launchImageLibrary(options, (callback) => {
-                          setThumbImage(callback.base64);
-                          setMimeImage(callback.type);
-                      })
-                  }}
-                  style={{width: '100%', height: 70, borderRadius: 4, marginTop: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
-              >
-                  <Entypo name='folder-images' size={22} style={{marginBottom: 4}} />
-                  <Text size={10}>Pilih gambar</Text>
-              </TouchableOpacity>
+                launchImageLibrary(options, (callback) => {
+                    setThumbImage(callback.base64);
+                    setMimeImage(callback.type);
+                })
+              }}
+              style={{width: '100%', height: 70, borderRadius: 4, marginTop: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
+            >
+              <Entypo name='folder-images' size={22} style={{marginBottom: 4}} />
+              <Text size={10}>Pilih gambar</Text>
+            </TouchableOpacity>
 
           <Divider />
                

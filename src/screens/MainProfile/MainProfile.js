@@ -195,7 +195,7 @@ const MainProfile = ({navigation, route}) => {
                 <TouchableOpacity
                   activeOpacity={1}
                   onPress={() => {
-                    //setModalVirtual(true);
+                    setModalVirtual(true);
                   }}
                 >
                   <View
@@ -237,7 +237,7 @@ const MainProfile = ({navigation, route}) => {
               <TouchableOpacity
                 activeOpacity={1}
                 onPress={() => {
-                  // setModalVirtual(true);
+                  setModalVirtual(true);
                 }}
               >
                 <Row>
@@ -556,7 +556,7 @@ const MainProfile = ({navigation, route}) => {
                 flexDirection: 'row',
                 borderRadius: 16,
                 marginBottom: 16,
-                padding: 4,
+                paddingVertical: 4,
                 backgroundColor: Color.textInput,
                 alignItems: 'center',
                 justifyContent: 'center',

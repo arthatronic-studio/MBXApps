@@ -16,6 +16,7 @@ import validate from '@src/lib/validate';
 
 import { callChangePassword } from '@src/state/actions/user/auth';
 import { redirectTo } from '@src/utils';
+import { Divider } from 'src/styled';
 
 const MainView = Styled(SafeAreaView)`
   flex: 1;
@@ -143,10 +144,10 @@ const UserChangePassword = ({ navigation, route }) => {
           redirectTo('MainPage');
         }, 2500);
       }
-      else if (error) {
-        showPopup('Gagal Merubah Password', 'error');
-        dispatch({ type: 'USER.LOGOUT' });
-      }
+      // else if (error) {
+      //   showPopup('Gagal Merubah Password', 'error');
+      //   dispatch({ type: 'USER.LOGOUT' });
+      // }
     }
   }, [changePassword, error, isFocused]);
 
@@ -297,6 +298,8 @@ const UserChangePassword = ({ navigation, route }) => {
             </SignButton>
           </View>}
         </Container>
+
+        <Divider />
       </ScrollView>
 
       <Loading visible={loading} />

@@ -429,7 +429,7 @@ const MainHome = ({navigation, route}) => {
             paddingVertical: 20,
           }}>
           <Image
-            source={{uri: user ? user.image : ''}}
+            source={{uri: user ? user.photoProfile : ''}}
             style={{
               width: '14%',
               aspectRatio: 1,

@@ -165,20 +165,22 @@ export const getCurrentUserProfile = () => async (dispatch, getState) => {
 
 export const updateCurrentUserProfile = (params) => async (dispatch, getState) => {
   const {
-    firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber, Nomor_ID, Alamat,tanggalLahir,
+    firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber, externalCode, idNumber, photoProfile, birthDate, street, block, space
   } = params;
 
   dispatch({ type: 'USER.CLEAR_ERROR' });
   dispatch({ type: 'USER.FETCH_PROFILE' });
   Client.mutate({
     mutation: updateUserProfileMutation,
-    variables: { firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber, Nomor_ID, Alamat,tanggalLahir }
+    variables: { firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber, externalCode, idNumber, photoProfile, birthDate, street, block, space }
   })
   .then(res => {
+    console.log("res ini", res);
     dispatch(getCurrentUserProfile());
   })
   .catch(error => {
-   dispatch({ type: 'USER.PROFILE_ERROR', error });
+    console.log("error ini", error);
+    dispatch({ type: 'USER.PROFILE_ERROR', error });
  });
 };
 
@@ -228,14 +230,13 @@ export const register = (user) => async (dispatch, getState) => {
         phone_country_code: user.phoneCountryCode,
         phone_number: user.phoneNumber,
         idCardNumber : user.idCardNumber,
-        Nomor_ID : user.Nomor_ID,
-        Alamat : user.Alamat,
-        address: '',
+        Nomor_ID : user.idNumber,
+        Alamat : user.address,
         city: '',
         postal_code: '',
         country: '',
         reference_code: user.refCode,
-        tanggalLahir : user.tanggalLahir
+        tanggalLahir : user.birthDate
        
       };
       const responseRegis = await instanceRegister.post('/api/registration/signup', body);
@@ -325,36 +326,43 @@ const getUserProfileQuery = gql`
 
 const updateUserProfileMutation = gql`
 mutation inputUserDetails(
-  $firstName: String!,
-  $lastName: String,
-  $phoneCountryCode: String,
-  $phoneNumber: String,
-  $email: String,
-  $address: String,
-  $city: String,
-  $postalCode: String,
-  $country: String,
-  $idCardNumber: String,
-  $nomor_id: String,
-  $tanggalLahir: String,
-  $alamat: String,
+  $firstName: String!
+  $lastName: String
+  $email: String
+  $phoneCountryCode: String
+  $phoneNumber: String
+  $address: String
+  $city: String
+  $postalCode: String
+  $country: String
+  $idCardNumber: String
+  $externalCode: String
+  $idNumber: String
+  $photoProfile: String
+  $birthDate: String
+  $street: String
+  $block: String
+  $space: String
 ){
-    inputUserDetails(
-      firstName: $firstName,
-      lastName: $lastName,
-      phoneCountryCode: $phoneCountryCode,
-      phoneNumber: $phoneNumber,
-      email: $email,
-      address: $address,
-      city: $city,
-      postalCode: $postalCode,
-      country: $country,
-      idCardNumber : $idCardNumber,
-      nomor_id: $nomor_id,
-      alamat: $alamat,
-      tanggalLahir: $tanggalLahir
-  
-    ){
+  inputUserDetails(
+    firstName: $firstName
+    lastName: $lastName
+    email: $email
+    phoneCountryCode: $phoneCountryCode
+    phoneNumber: $phoneNumber
+    address: $address
+    city: $city
+    postalCode: $postalCode
+    country: $country
+    idCardNumber: $idCardNumber
+    externalCode: $externalCode
+    idNumber: $idNumber
+    photoProfile: $photoProfile
+    birthDate: $birthDate
+    street: $street
+    block: $block
+    space: $space
+  ){
     userId
     userName
     firstName
@@ -366,10 +374,14 @@ mutation inputUserDetails(
     city
     postalCode
     country
+    organizationId
+    organizationName
+    userCode
     idCardNumber
+    idNumber
+    isDirector
+    image
     photoProfile
-    nomor_id
-    alamat
-    tanggalLahir
+    birthDate
   }
 }`;

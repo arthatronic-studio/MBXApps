@@ -1,9 +1,11 @@
 import * as React from 'react';
-import {View, useWindowDimensions, SafeAreaView, Text} from 'react-native';
+import {View, useWindowDimensions, SafeAreaView, Text, Dimensions} from 'react-native';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import Styled from 'styled-components';
 import {Header, useColor} from '@src/components';
 import CardComponent from './CardComponent';
+
+const { width } = Dimensions.get('window');
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -52,6 +54,7 @@ const CommunityAdminPage = ({navigation}) => {
   const renderTabBar = (props) => (
     <TabBar
       {...props}
+      tabStyle={{width: width/3}}
       indicatorStyle={{backgroundColor: Color.primary}}
       style={{backgroundColor: 'white'}}
       activeColor={Color.secondary}
