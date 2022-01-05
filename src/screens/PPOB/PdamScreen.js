@@ -140,6 +140,8 @@ export default ({ navigation, route }) => {
   const [popupProps, showPopup] = usePopup();
   const { Color } = useColor();
 
+  console.log('state', state);
+
   useEffect(() => {
     getListArea();
   }, []);
@@ -148,7 +150,7 @@ export default ({ navigation, route }) => {
     const timeout = state.pdamNumber !== '' && state.selectedArea ?
       setTimeout(() => {
         getInquiryPdamPascabayar(state.pdamNumber);
-      }, 1000) : null;
+      }, 500) : null;
 
     return () => {
       clearTimeout(timeout);
@@ -158,7 +160,7 @@ export default ({ navigation, route }) => {
   useEffect(() => {
     const timeout = state.tempTextSearch !== '' ? setTimeout(() => {
       searchFilter(state.tempTextSearch);
-    }, 3000) : null;
+    }, 500) : null;
 
     return () => {
       clearTimeout(timeout);
@@ -216,18 +218,20 @@ export default ({ navigation, route }) => {
       .then(res => {
         const data = res.data.Inquiry_PascaBayar_PDAM;
 
+        console.log('data', data);
+
         if (data && data.tr_id) {
-          setState({ inquiryPostpaid: data, loadingPascabayar: false });
+          setState({ inquiryPostpaid: data, isEmptyBill: false, loadingPascabayar: false });
         } else {
-          setState({ isEmptyBill: true, loadingPascabayar: false });
+          setState({ inquiryPostpaid: null, isEmptyBill: true, loadingPascabayar: false });
         }
       })
       .catch(err => {
         console.log(err, 'err');
-        setState({ inquiryPostpaid: null, loadingPascabayar: false, isEmptyBill: true });
+        setState({ inquiryPostpaid: null, isEmptyBill: true, loadingPascabayar: false });
       })
     } else {
-      setState({ inquiryPostpaid: null, loadingPascabayar: false, isEmptyBill: false });
+      setState({ inquiryPostpaid: null, isEmptyBill: false, loadingPascabayar: false });
     }
   }
 
@@ -338,6 +342,7 @@ export default ({ navigation, route }) => {
           data={tempTextSearch.length > 0 ? tempListArea : listArea}
           style={{backgroundColor: Color.theme}}
           contentContainerStyle={{paddingTop: 8, paddingHorizontal: 16, paddingBottom: 110, backgroundColor: Color.themr}}
+          keyboardShouldPersistTaps='handled'
           renderItem={({ item }) => {
             const isSelected = selectedArea && selectedArea.id === item.id;
             return (
@@ -410,7 +415,7 @@ export default ({ navigation, route }) => {
         iconRightButton={<MaterialIcons name='history' size={22} color={Color.gray} />}
       />
       <ScrollView>
-        <Container>
+        <Container paddingHorizontal={16}>
           <InfoNumberView>
             <Text>Area</Text>
           </InfoNumberView>

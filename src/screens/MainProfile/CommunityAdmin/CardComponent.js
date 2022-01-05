@@ -1,40 +1,35 @@
 import React, {useState, useEffect} from 'react';
 import {View, FlatList, TextInput, Image} from 'react-native';
-import Styled from 'styled-components';
 import {
   Text,
   TouchableOpacity,
   useColor,
   usePopup,
-  Popup,
   Scaffold,
   Alert,
 } from '@src/components';
-import Fontisto from 'react-native-vector-icons/Fontisto';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {shadowStyle} from '@src/styles';
-import {useSelector, useDispatch} from 'react-redux';
+import {useNavigation, useIsFocused} from '@react-navigation/core';
 
 import Client from '@src/lib/apollo';
 import {joinCommunityManage} from '@src/lib/query/joinCommunityManage';
 import {joinCommunityMember} from 'src/lib/query/joinCommunityMember';
 import {Divider} from 'src/styled';
-import {navigationRef} from 'App';
-import {useNavigation} from '@react-navigation/core';
 
-const CardComponent = props => {
-  const {type} = props;
+const CardComponent = (props) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [popupProps, showPopup] = usePopup();
   const {Color} = useColor();
-
+  const isFocused = useIsFocused();
   const navigation = useNavigation();
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (isFocused) {
+      fetchData();
+    }
+  }, [isFocused]);
 
   const fetchData = () => {
     let status = 2;
@@ -50,12 +45,12 @@ const CardComponent = props => {
         status: status,
       },
     })
-      .then(res => {
+      .then((res) => {
         setData(res.data.joinCommunityMember);
         setLoading(false);
       })
-      .catch(err => {
-        console.log('catch', 'warning');
+      .catch((err) => {
+        console.log('err', err);
         setLoading(false);
       });
   };
@@ -70,12 +65,12 @@ const CardComponent = props => {
         id: id,
       },
     })
-      .then(res => {
+      .then((res) => {
         showPopup('Akun selesai di Approve', 'success');
         fetchData();
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         showPopup(err.message, 'warning');
         setLoading(false);
       });
@@ -91,12 +86,12 @@ const CardComponent = props => {
         id: id,
       },
     })
-      .then(res => {
+      .then((res) => {
         showPopup('Akun berhasil ditolak', 'success');
         fetchData();
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         showPopup('catch', 'warning');
         setLoading(false);
       });
@@ -113,12 +108,12 @@ const CardComponent = props => {
         customIdNumber: item.userDetail.idNumber,
       },
     })
-      .then(res => {
+      .then((res) => {
         showPopup('Akun berhasil diubah', 'success');
         fetchData();
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         showPopup('catch', 'error');
         setLoading(false);
       });
@@ -126,12 +121,12 @@ const CardComponent = props => {
 
   const renderItem = (item, index) => {
     if (index === 0) {
-      console.log(item);
+      // console.log(item);
     }
 
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate('CardDetail', {item, type, props})}
+        onPress={() => navigation.navigate('CardDetail', {item, props})}
         style={{
           borderWidth: 0.5,
           borderRadius: 15,
@@ -182,13 +177,13 @@ const CardComponent = props => {
                   setData(newData);
                 }}
                 style={{
-                  color: Color.gray,
+                  color: Color.text,
                   fontSize: 14,
                   fontFamily: 'Inter-Regular',
                   width: '80%',
-                  backgroundColor: '#fff',
-                  padding: 12,
+                  backgroundColor: Color.textInput,
                   borderRadius: 4,
+                  includeFontPadding: false,
                 }}
               />
 
@@ -213,8 +208,13 @@ const CardComponent = props => {
                       'Apakah Anda yakin akan mengubah data anggota ini?',
                       () => fetchUpdateMember(item),
                     );
-                  }}>
-                  <Ionicons name="save" color={Color.theme} size={16} />
+                  }}
+                >
+                  <Ionicons
+                    name="save"
+                    color={Color.theme}
+                    size={16}
+                  />
                 </TouchableOpacity>
               </View>
             </View>
@@ -265,7 +265,11 @@ const CardComponent = props => {
   };
 
   return (
-    <Scaffold fallback={loading} header={<View />} popupProps={popupProps}>
+    <Scaffold
+      header={<View />}
+      fallback={loading}
+      popupProps={popupProps}
+    >
       {data.length > 0 ? (
         <FlatList
           keyExtractor={(item, index) => item.id + index.toString()}

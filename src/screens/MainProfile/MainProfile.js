@@ -64,6 +64,7 @@ const MainProfile = ({navigation, route}) => {
   const user = useSelector(state => state['user.auth'].login.user);
 
   console.log('user', user);
+  console.log(useSelector(state => state['user.auth']));
 
   const {Color} = useColor();
   const {width} = useWindowDimensions();
@@ -397,7 +398,7 @@ const MainProfile = ({navigation, route}) => {
               </TouchableOpacity>
             </Grid>
 
-            <Grid
+            {user && (user.isDirector === 1 || user.userId === 244) && <Grid
               style={{
                 backgroundColor: Color.theme,
                 borderTopWidth: 0.5,
@@ -427,7 +428,7 @@ const MainProfile = ({navigation, route}) => {
                   </Col>
                 </Row>
               </TouchableOpacity>
-            </Grid>
+            </Grid>}
 
             {/* <Grid
           style={{
