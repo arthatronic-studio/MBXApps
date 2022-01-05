@@ -3,7 +3,7 @@ import { Dimensions, TouchableOpacity, useWindowDimensions } from 'react-native'
 import { Modalize } from 'react-native-modalize';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { Newspaper, MapPinLine, Calendar, Briefcase } from 'phosphor-react-native';
+// import { Newspaper, MapPinLine, Calendar, Briefcase } from 'phosphor-react-native';
 import {
   Text,
   // TouchableOpacity,
@@ -24,30 +24,54 @@ const defaultProps = {
 };
 
 const data = [
-  { id: 1, name: 'Artikel', icon: <Newspaper color='#B0DE59' size={20} /> , nav: 'CreateThreadScreen', params: {
-    title: 'Posting Artikel',
-    productType: "TRIBES",
-    productCategory: '',
-    productSubCategory: 'POSTING'
-  } },
-  { id: 2, name: 'Tempat', icon: <MapPinLine color='#ED5596' size={20} /> , nav: 'CreateThreadScreen', params: {
-    title: 'Posting Tempat Terdekat',
-    productType: "TRIBES",
-    productCategory: '',
-    productSubCategory: 'NEARBY_PLACE',
-  } },
-  { id: 3, name: 'Event', icon: <Calendar color='#6246C7' size={20} /> , nav: 'CreateThreadScreen', params: {
-    title: 'Posting Event',
-    productType: "TRIBES",
-    productCategory: '',
-    productSubCategory: 'EVENT',
-  } },
-  { id: 4, name: 'Loker', icon: <Briefcase color='#1E89FC' size={20} /> , nav: 'CreateThreadScreen', params: {
-    title: 'Posting Loker',
-    productType: "TRIBES",
-    productCategory: '',
-    productSubCategory: 'JOBS',
-  } },
+  {
+    id: 1,
+    name: 'Artikel',
+    // icon: <Newspaper color='#B0DE59' size={20} />,
+    icon: null,
+    nav: 'CreateThreadScreen', params: {
+      title: 'Posting Artikel',
+      productType: "TRIBES",
+      productCategory: '',
+      productSubCategory: 'POSTING'
+    }
+  },
+  {
+    id: 2,
+    name: 'Tempat',
+    // icon: <MapPinLine color='#ED5596' size={20} />,
+    icon: null,
+    nav: 'CreateThreadScreen', params: {
+      title: 'Posting Tempat Terdekat',
+      productType: "TRIBES",
+      productCategory: '',
+      productSubCategory: 'NEARBY_PLACE',
+    }
+  },
+  {
+    id: 3,
+    name: 'Event',
+    // icon: <Calendar color='#6246C7' size={20} />,
+    icon: null,
+    nav: 'CreateThreadScreen', params: {
+      title: 'Posting Event',
+      productType: "TRIBES",
+      productCategory: '',
+      productSubCategory: 'EVENT',
+    }
+  },
+  {
+    id: 4,
+    name: 'Loker',
+    // icon: <Briefcase color='#1E89FC' size={20} />,
+    icon: null,
+    nav: 'CreateThreadScreen', params: {
+      title: 'Posting Loker',
+      productType: "TRIBES",
+      productCategory: '',
+      productSubCategory: 'JOBS',
+    }
+  },
 ];
 
 const ModalPosting = forwardRef((props, ref) => {

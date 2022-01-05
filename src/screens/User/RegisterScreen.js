@@ -118,7 +118,6 @@ const RegisterScreen = ({ navigation, route }) => {
       password2: '',
       phoneCountryCode: '62',
       phoneNumber: '',
-      refCode: '',
     },
     error: {
       fullName: null,
@@ -162,7 +161,7 @@ const RegisterScreen = ({ navigation, route }) => {
     if (state.allValid) {
       setState({ allValid: false });
 
-      const { fullName, username, email, password, phoneCountryCode, phoneNumber, refCode } = state.userData;
+      const { fullName, username, email, password, phoneCountryCode, phoneNumber } = state.userData;
 
       const nameSplit = fullName.split(' ');
       let lastName = '';
@@ -180,7 +179,6 @@ const RegisterScreen = ({ navigation, route }) => {
         password,
         phoneCountryCode,
         phoneNumber,
-        refCode,
       };
 
       dispatch(onRegister(newUserData));

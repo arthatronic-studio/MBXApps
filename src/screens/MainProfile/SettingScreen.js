@@ -42,7 +42,7 @@ const SettingScreen = ({ navigation, route }) => {
                 onPressLeftButton={() => navigation.navigate('MainProfile', { refresh: true })}
             />
 
-            <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
+            {/* <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
                 <Row>
                     <Col align='flex-start' size={8} justify='center'>
                         <Text size={12} type='medium'>Dark Mode</Text>
@@ -61,7 +61,7 @@ const SettingScreen = ({ navigation, route }) => {
                         </TouchableOpacity>
                     </Col>
                 </Row>
-            </Grid>
+            </Grid> */}
 
             {/* <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
                 <Row>

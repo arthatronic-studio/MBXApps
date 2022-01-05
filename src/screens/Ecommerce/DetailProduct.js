@@ -27,7 +27,6 @@ import {
 } from '@src/components';
 import TopBar from './TopTab';
 import ImagesPath from 'src/components/ImagesPath';
-import Carousel from 'react-native-snap-carousel';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;

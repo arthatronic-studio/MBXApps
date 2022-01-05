@@ -229,15 +229,15 @@ export const register = (user) => async (dispatch, getState) => {
         email,
         phone_country_code: user.phoneCountryCode,
         phone_number: user.phoneNumber,
+        reference_code: 'TRIBESASIA',
+        initial_code: 'TRIBESASIA',
         idCardNumber : user.idCardNumber,
         Nomor_ID : user.idNumber,
         Alamat : user.address,
         city: '',
         postal_code: '',
         country: '',
-        reference_code: user.refCode,
-        tanggalLahir : user.birthDate
-       
+        tanggalLahir : user.tanggalLahir,
       };
       const responseRegis = await instanceRegister.post('/api/registration/signup', body);
       
