@@ -99,7 +99,8 @@ const DATA = [
   },
 ];
 
-const CardListProduk = () => {
+const CardListProduk = (props) => {
+  const { onPress } = props;
   const {Color} = useColor();
   const renderItem = ({item}) => (
     <View
@@ -109,7 +110,7 @@ const CardListProduk = () => {
         marginHorizontal: 5,
         marginVertical: 5,
       }}>
-      <TouchableOpacity style={styles.btnCategory}>
+      <TouchableOpacity onPress={() => onPress()} style={styles.btnCategory}>
         <Image
           source={item.image}
           style={{

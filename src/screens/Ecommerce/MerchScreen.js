@@ -40,7 +40,8 @@ let filter = [
   {id: 2, name: 'Rating'},
 ];
 
-const MerchScreen = () => {
+const MerchScreen = ({ route, navigation }) => {
+  console.log(navigation)
   const [selectedItem, setSelectedItem] = useState(null);
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
@@ -102,7 +103,7 @@ const MerchScreen = () => {
           </View>
         </View>
         <View>
-          <CardListProduk />
+          <CardListProduk onPress={() => navigation.navigate('DetailProduct')} />
         </View>
       </ScrollView>
     </Scaffold>
