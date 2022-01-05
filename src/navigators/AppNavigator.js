@@ -95,6 +95,8 @@ import Bid from '@src/screens/Posting/Auction/Bid';
 //Ecommerce
 import CartScreen from '@src/screens/Ecommerce/CartScreen';
 import CheckoutScreen from '@src/screens/Ecommerce/CheckoutScreen';
+import MerchScreen from 'src/screens/Ecommerce/MerchScreen';
+import DetailProduct from 'src/screens/Ecommerce/DetailProduct';
 
 const {Navigator, Screen} = createStackNavigator();
 
@@ -113,6 +115,8 @@ function MainStackNavigator() {
             <Screen name="KnowMeScreen" component={KnowMeScreen} />
             <Screen name='CreateEmergencyScreen' component={CreateEmergencyScreen} />
             {/* Ecommerce */}
+            <Screen name='MerchScreen' component={MerchScreen} />
+            <Screen name='DetailProduct' component={DetailProduct} />
             <Screen name='CartScreen' component={CartScreen} />
             <Screen name='CheckoutScreen' component={CheckoutScreen} />
             {/* user */}

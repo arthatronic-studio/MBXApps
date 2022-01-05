@@ -95,7 +95,7 @@ const CartScreen = ({ navigation, route }) => {
                 <Text type='bold' color={Color.white} >Rp. 160.000</Text>
             </Col>
             <Col>
-                <TouchableOpacity style={{ backgroundColor: Color.primaryYellow, borderRadius: 8, paddingVertical: 10 }}>
+                <TouchableOpacity onPress={() => navigation.navigate('CheckoutScreen')} style={{ backgroundColor: Color.primaryYellow, borderRadius: 8, paddingVertical: 10 }}>
                     <Text type='semibold'>Checkout</Text>
                 </TouchableOpacity>
             </Col>

@@ -20,6 +20,7 @@ import ImagesPath from './ImagesPath';
 const MainView = Styled(View)`
     width: 100%;
     height: 60px;
+    marginTop: -4px
     elevation: 0;
     borderTopWidth: 4px;
 `;
