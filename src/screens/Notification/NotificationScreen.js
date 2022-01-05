@@ -11,14 +11,25 @@ const NotificationScreen = ({ navigation, route }) => {
   const { Color } = useColor();
 
   const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     client.query({
       query: queryGetNotificationHistory
     })
       .then((res) => {
-        setHistory(res.data.getNotificationHistory.id)
-        console.log(history, res)
+        const data = res.data.getNotificationHistory;
+        let newArr = [];
+
+        if (data) {
+          newArr = data;
+        }
+
+        setHistory(newArr);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
       })
   }, []);
 
@@ -50,13 +61,16 @@ const NotificationScreen = ({ navigation, route }) => {
   }
 
   const onSelectNotif = (item) => {
-    navigation.navigate('NotificationDetail', { id: item.id });
+    navigation.navigate('NotificationDetail', { item });
   }
     
   return (
     <Scaffold
       headerTitle='Notifikasi'
-    >
+      fallback={loading}
+      empty={history.length === 0}
+      emptyTitle="Notifikasi belum tersedia"
+    >      
       <FlatList
         keyExtractor={(item, index) => item.id+index.toString()}
         data={history}
@@ -78,13 +92,13 @@ const NotificationScreen = ({ navigation, route }) => {
               <Divider height={4} />
               <Text align='left'>{item.notification_text}</Text>
               <Divider height={4} />
-              <Text align='left' size={12}>{Moment().format('HH:mm')}</Text>
+              <Text align='left' size={12}>{Moment(item.notification_date).format('HH:mm')}</Text>
             </TouchableOpacity>
           )
         }}
       />
 
-      {renderPopUpNavigation()}
+      {history.length > 0 && renderPopUpNavigation()}
     </Scaffold>
   );
 }

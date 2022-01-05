@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
   View,
-  SafeAreaView,
   TouchableOpacity,
   Modal,
   Image,
@@ -10,7 +9,6 @@ import {
   ImageBackground,
   ScrollView,
 } from 'react-native';
-import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -23,38 +21,14 @@ import {
   Grid,
   Row,
   Col,
-  // TouchableOpacity,
   HeaderBig,
   useColor,
+  Scaffold,
 } from '@src/components';
-
-import {redirectTo, loginRequired} from '@src/utils';
+import {redirectTo} from '@src/utils';
 import {shadowStyle} from '@src/styles';
-
-import {iconSplash, bannerCard, qrCode} from '@assets/images';
-import {Box, Divider} from 'src/styled';
-
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
-
-const BottomView = Styled(View)`
-    width: 100%;
-    padding: 0px 16px;
-`;
-
-const ExitButton = Styled(TouchableOpacity)`
-    width: 100%;
-    height: 40px;
-    justifyContent: flex-start;
-    alignItems: center;
-    flexDirection: row;
-`;
-
-const ContentView = Styled(View)`
-  width: 100%;
-  paddingHorizontal: 16px;
-`;
+import {iconSplash, bannerCard} from '@assets/images';
+import {Box, Container, Divider} from 'src/styled';
 
 const MainProfile = ({navigation, route}) => {
   const [modalVirtual, setModalVirtual] = useState(false);
@@ -63,8 +37,8 @@ const MainProfile = ({navigation, route}) => {
 
   const user = useSelector(state => state['user.auth'].login.user);
 
-  console.log('user', user);
-  console.log(useSelector(state => state['user.auth']));
+  // console.log('user', user);
+  // console.log(useSelector(state => state['user.auth']));
 
   const {Color} = useColor();
   const {width} = useWindowDimensions();
@@ -85,9 +59,9 @@ const MainProfile = ({navigation, route}) => {
   };
 
   return (
-    <MainView style={{backgroundColor: Color.theme}}>
-      <HeaderBig title="Profile" style={{paddingTop: 16}} />
-
+    <Scaffold
+      header={<HeaderBig title="Profile" style={{paddingTop: 16}} />}
+    >
       <ScrollView>
         {/* <View style={{alignItems: 'center'}}>
           <TouchableOpacity onPress={() => setModalVirtual(true)}>
@@ -133,26 +107,28 @@ const MainProfile = ({navigation, route}) => {
           </TouchableOpacity>
         </View> */}
         
-        <ContentView>
+        <Container paddingHorizontal={16}>
           <View>
             <ImageBackground
               source={bannerCard}
-              resizeMode="cover"
               style={{
                 marginTop: 12,
                 height: 162,
               }}
-              imageStyle={{borderRadius: 10}}>
+              imageStyle={{borderRadius: 10}}
+            >
               <View
                 style={{
                   flexDirection: 'row',
                   width: '100%',
                   aspectRatio: 7,
                   justifyContent: 'flex-start',
-                }}>
+                }}
+              >
                 <Image
-                  style={{width: '20%', height: '50%', marginLeft: 16, marginTop: 16}}
                   source={iconSplash}
+                  resizeMode='contain'
+                  style={{width: '20%', height: '50%', marginLeft: 16, marginTop: 16}}
                 />
               </View>
               <View
@@ -210,15 +186,15 @@ const MainProfile = ({navigation, route}) => {
                       alignContent: 'center',
                     }}>
                     <View style={{alignContent: 'center', marginTop: 5}}>
-                      {user && <QRCode value={user.code} size={45} />}
+                      {user && <QRCode value={user.userCode} size={45} />}
                     </View>
                   </View>
                 </TouchableOpacity>
               </View>
             </ImageBackground>
           </View>
-        </ContentView>
-        <ContentView>
+        </Container>
+        <Container paddingHorizontal={16}>
           <View
             style={{
               ...shadowStyle,
@@ -525,84 +501,62 @@ const MainProfile = ({navigation, route}) => {
               </Grid>
             )}
           </View>
-        </ContentView>
+        </Container>
 
         <Divider />
       </ScrollView>
 
       {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}
       <Box size={70} style={{position: 'absolute', bottom: -40}} />
-      {/*  */}
 
       <Modal
         visible={modalVirtual}
         transparent
         animationType="slide"
-        onRequestClose={() => setModalVirtual(false)}>
+        onRequestClose={() => setModalVirtual(false)}
+      >
         <View
-          style={{flex: 1, padding: 16, backgroundColor: 'rgba(0, 0, 0, 0.4)'}}>
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 16,
+            backgroundColor: Color.overflow,
+          }}
+        >
           <View
             style={{
               width: '100%',
-              flexDirection: 'row',
-              flexWrap: 'wrap',
+              aspectRatio: 1,
               padding: 16,
+              backgroundColor: Color.theme,
               borderRadius: 8,
-              alignItems: 'flex-start',
-              backgroundColor: Color.primary,
-            }}>
-            <View
-              style={{
-                width: '100%',
-                flexDirection: 'row',
-                borderRadius: 16,
-                marginBottom: 16,
-                paddingVertical: 4,
-                backgroundColor: Color.textInput,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Image source={iconSplash} style={{width: 100, height: 32}} />
-              <AntDesign
-                name="close"
-                color={Color.textInput}
-                size={20}
-                onPress={() => setModalVirtual(false)}
-                style={{
-                  position: 'absolute',
-                  right: 6,
-                  backgroundColor: Color.error,
-                  borderRadius: 50,
-                }}
-              />
-            </View>
-
-            <View
-              style={{
-                width: width - 90 - 64,
-                height: 90,
-                justifyContent: 'space-between',
-              }}>
-              <View>
-                <Text
-                  align="left"
-                  type="bold"
-                  size={20}
-                  color={Color.textInput}>
-                  {user && user.firstName} {user && user.lastName}
-                </Text>
-                <Text align="left" size={18} color={Color.textInput}>
-                  {(user && user.userName) || '082216981621'}
-                </Text>
-              </View>
-            </View>
-            <View style={{width: 20, height: 90}}>
-              {user && <QRCode value={user.code} />}
-            </View>
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <QRCode value={user ? user.userCode : ''} size={width - 70} />
           </View>
+
+          <Divider height={32} />
+
+          <TouchableOpacity
+            onPress={() => setModalVirtual(false)}
+            style={{
+              padding: 12,
+              backgroundColor: Color.error,
+              borderRadius: 50,
+            }}
+          >
+            <AntDesign
+              name="close"
+              color={Color.textInput}
+              size={24}
+            />
+          </TouchableOpacity>
         </View>
       </Modal>
-    </MainView>
+    </Scaffold>
   );
 };
 
