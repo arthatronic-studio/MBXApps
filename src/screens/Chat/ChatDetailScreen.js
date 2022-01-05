@@ -194,12 +194,12 @@ const ChatDetailScreen = ({ navigation, route }) => {
     // insert/update chat
     const firestoreSubmitChat = (item) => {
         const values = {
-            id: item.id,
-            message: item.message,
-            messageDate: item.messageDate,
-            name: item.name,
-            roomId: item.roomId,
-            userId: item.userId,
+            id: item.id || '',
+            message: item.message || '',
+            messageDate: item.messageDate || '',
+            name: item.name || '',
+            roomId: item.roomId || '',
+            userId: item.userId || '',
             isNewArrival: true,
         };
 
@@ -222,17 +222,17 @@ const ChatDetailScreen = ({ navigation, route }) => {
     // insert/update notifier
     const firestoreSubmitNotifier = (item, member, memberDetail) => {
         const values = {
-            id: item.id,
+            id: item.id || '',
             name: member.length > 1 ? '' : user.firstName + ' ' + user.lastName,
-            type: item.type,
-            roomId: item.roomId,
-            roomDate: item.roomDate,
+            type: item.type || '',
+            roomId: item.roomId || '',
+            roomDate: item.roomDate || '',
             member,
             memberDetail,
             read: [user.userId.toString()],
             lastChat: {
-                message: item.message,
-                messageDate: item.messageDate,
+                message: item.message || '',
+                messageDate: item.messageDate || '',
             },
             lastChatCount: firebaseNotiferLastChatCount + 1,
             typing: [],
@@ -402,8 +402,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
             firestoreSubmitNotifier(data, member, memberDetail);
         })
         .catch((err) => {
-            console.log('err kirim chat', JSON.stringify(err));
-
+            console.log('err kirim chat', err);
             showPopup('Chat gagal dikirim, silakan coba lagi', 'error');
         });
     }

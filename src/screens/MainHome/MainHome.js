@@ -455,21 +455,8 @@ const MainHome = ({navigation, route}) => {
           <CarouselView
             delay={4000}
             showIndicator
-            style={{aspectRatio: 12 / 7}}>
-            <ImageBackground
-              style={{
-                width: '100%',
-                height: '100%',
-              }}
-              source={imageCarousel}
-            />
-            <ImageBackground
-              style={{
-                width: '100%',
-                height: '100%',
-              }}
-              source={imageCarousel}
-            />
+            style={{aspectRatio: 12 / 7}}
+          >
             <ImageBackground
               style={{
                 width: '100%',

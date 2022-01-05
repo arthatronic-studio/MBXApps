@@ -78,7 +78,7 @@ const WebViewScreen = (props) => {
   return (
     <SafeAreaView style={{ backgroundColor: Color.theme, flex: 1 }}>
       <MainView>
-        <CustomHeader title="Ashefa App Content" showLeftButton onPressLeftButton={onClose} iconLeftButton='close' />
+        <CustomHeader title="App Content" showLeftButton onPressLeftButton={onClose} iconLeftButton='close' />
         <WebView
           source={{ uri: url }}
           onNavigationStateChange={onNavigationStateChange}

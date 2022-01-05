@@ -114,12 +114,12 @@ const CardEmergency = (props) => {
                             style={{ height: 10, width: 10, aspectRatio: 1 }}
                             source={iconCategory}
                         />
-                        <Text style={{ marginLeft:4 }} size={8}>{item.productCategory}</Text>
+                        <Text style={{ marginLeft:4 }} size={12}>{item.productCategory}</Text>
                         {/* <Image
                             style={{ height: 10, width: 10, marginLeft: 9 }}
                             source={iconLocation}
                         /> */}
-                        {/* <Text style={{ marginLeft:6 }} size={8}>Kebon Jeruk, Jakarta</Text> */}
+                        {/* <Text style={{ marginLeft:6 }} size={12}>Kebon Jeruk, Jakarta</Text> */}
                     </View>
                     <View style={{marginTop: 16, height:60}}>
                         <Text size={11} align='left' numberOfLines={3} >
