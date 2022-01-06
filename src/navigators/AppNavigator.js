@@ -94,16 +94,19 @@ import Bid from '@src/screens/Posting/Auction/Bid';
 
 //Ecommerce
 import CartScreen from '@src/screens/Ecommerce/CartScreen';
+import CartShop from '@src/screens/Ecommerce/CartShop';
 import CheckoutScreen from '@src/screens/Ecommerce/CheckoutScreen';
+import FormPayment from '@src/screens/Ecommerce/FormPayment';
 import MerchScreen from 'src/screens/Ecommerce/MerchScreen';
 import DetailProduct from 'src/screens/Ecommerce/DetailProduct';
+import CartAuction from 'src/screens/Auction/CartAuction';
 
 const {Navigator, Screen} = createStackNavigator();
 
 function MainStackNavigator() {
     return (
         <Navigator
-            initialRouteName='SplashScreen'
+            initialRouteName='CartScreen'
             screenOptions={{
                 gestureEnabled: false,
                 headerShown: false,
@@ -114,10 +117,15 @@ function MainStackNavigator() {
             <Screen name='MainPage' component={MainPage} />
             <Screen name="KnowMeScreen" component={KnowMeScreen} />
             <Screen name='CreateEmergencyScreen' component={CreateEmergencyScreen} />
+            {/* Auction */}
+            <Screen name='CartAuction' component={CartAuction} />
+
             {/* Ecommerce */}
             <Screen name='MerchScreen' component={MerchScreen} />
             <Screen name='DetailProduct' component={DetailProduct} />
             <Screen name='CartScreen' component={CartScreen} />
+            <Screen name='CartShop' component={CartShop} />
+            <Screen name='FormPayment' component={FormPayment} />
             <Screen name='CheckoutScreen' component={CheckoutScreen} />
             {/* user */}
             <Screen name='LoginScreen' component={LoginScreen} />
