@@ -4,8 +4,11 @@ import {
   FlatList,
   Image,
   ImageBackground,
+  TextInput,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Styled from 'styled-components';
 
 import Text from '@src/components/Text';
 import { useColor } from '@src/components/Color';
@@ -17,6 +20,41 @@ import {queryLike} from '@src/lib/query';
 import {queryGetUserOrganizationRef} from '@src/lib/query';
 import { Scaffold } from 'src/components';
 
+const BottomSection = Styled(View)`
+  width: 100%;
+  paddingHorizontal: 16px;
+  paddingTop: 8px;
+  paddingBottom: 4px;
+  flexDirection: row;
+  alignItems: center;
+  borderTopWidth: 0.5px;
+`;
+
+const BoxInput = Styled(View)`
+  width: 100%;
+  backgroundColor: #FFFFFF;
+  padding: 8px 16px 8px 16px;
+  borderRadius: 32px;
+  borderWidth: 0.5px;
+  flexDirection: row;
+`;
+
+const TextInputNumber = Styled(TextInput)`
+  width: 90%;
+  alignContent: flex-start;
+  fontFamily: Inter-Regular;
+  letterSpacing: 0.23;
+  height: 40px;
+`;
+
+const CircleSend = Styled(TouchableOpacity)`
+  width: 40px;
+  height: 40px;
+  borderRadius: 20px;
+  justifyContent: center;
+  alignItems: center;
+`;
+
 const ChatUserListScreen = ({navigation, route}) => {
   const [itemData, setItemData] = useState({
     data: [],
@@ -25,6 +63,9 @@ const ChatUserListScreen = ({navigation, route}) => {
     loadNext: false,
   });
   const [selected, setSelected] = useState([]);
+
+  const [search, setSearch] = useState("")
+  const [filterData, setFilterData] = useState(null)
 
   const { Color } = useColor();
 
@@ -74,6 +115,8 @@ const ChatUserListScreen = ({navigation, route}) => {
           page: data.length === 10 ? itemData.page + 1 : -1,
           loadNext: false,
         });
+
+        setFilterData(newArr)
       })
       .catch(err => {
         console.log(err, 'errrrr');
@@ -120,6 +163,22 @@ const ChatUserListScreen = ({navigation, route}) => {
     }
   };
 
+  const searchFilter = (text) => {
+        if (text) {
+            const newData = itemData.data.filter((item) => {
+                const itemData = item.firstName ? item.firstName.toUpperCase() 
+                            : ''.toUpperCase()
+                const textData = text.toUpperCase
+                return itemData.indexOf(textData) > -1
+            })
+            setFilterData(newData)
+            setSearch(text)
+        } else {
+            setFilterData(itemData.data)
+            setSearch(text)
+        }
+  }
+
   return (
     <Scaffold
       fallback={itemData.loading}
@@ -143,9 +202,32 @@ const ChatUserListScreen = ({navigation, route}) => {
         />
       }
     >
+      
+      <BottomSection style={{borderColor: Color.border, marginTop: 12}}>
+        <BoxInput style={true ? {borderColor: Color.border} : {borderColor: Color.error}}>
+          <TextInputNumber
+            name="text"
+            placeholder='Search Here...'
+            returnKeyType="done"
+            returnKeyLabel="Done"
+            blurOnSubmit={false}
+            onBlur={() => {}}
+            error={null}
+            onChangeText={(text) => {
+              setSearch(text)
+            }}
+          />
+          <CircleSend style={{backgroundColor: Color.primary}} onPress={() => searchFilter(search)}>
+            <Ionicons name='search' size={16} color={Color.text} />
+          </CircleSend>
+        </BoxInput>
+      </BottomSection>
+
+      <Text>{console.log(filterData)}</Text>
+      
       <FlatList
         keyExtractor={(item, index) => item.toString() + index}
-        data={itemData.data}
+        data={filterData}
         contentContainerStyle={{paddingHorizontal: 16, paddingTop: 8}}
         renderItem={({item}) => {
           const isSelected = selected.filter(
