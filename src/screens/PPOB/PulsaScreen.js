@@ -240,7 +240,7 @@ export default ({ navigation, route }) => {
   useEffect(() => {
     const timeout = prepaidNumber !== '' ? setTimeout(() => {
       validateTypingNumber(prepaidNumber, 'prepaid');
-    }, 3000) : null;
+    }, 500) : null;
 
     return () => {
       clearTimeout(timeout);
@@ -250,7 +250,7 @@ export default ({ navigation, route }) => {
   useEffect(() => {
     const timeout = subscriberNumber !== '' ? setTimeout(() => {
       validateTypingNumber(subscriberNumber, 'postpaid');
-    }, 3000) : null;
+    }, 500) : null;
 
     return () => {
       clearTimeout(timeout);

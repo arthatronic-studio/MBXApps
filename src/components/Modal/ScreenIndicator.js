@@ -54,7 +54,7 @@ const ScreenIndicator = (props) => {
     }
 
     return (
-      <Wrapper transparent={transparent} backgroundColor={Color.primarySoft}>
+      <Wrapper transparent={transparent} backgroundColor={Color.theme}>
         <Body type={type} transparent={transparent} backgroundColor={Color.theme}>
           <ContainerIndicator style={{borderColor: Color.theme}}>
             <ActivityIndicator size={Platform.OS === 'android' ? 60 : type} color={Color.primary} style={{position: 'absolute'}} />

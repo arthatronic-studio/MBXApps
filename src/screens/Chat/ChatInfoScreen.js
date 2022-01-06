@@ -1,18 +1,12 @@
 
 import React from 'react';
 import { View, FlatList, Image } from 'react-native';
-import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
 import Text from '@src/components/Text';
-import Color from '@src/components/Color';
-import Header from '@src/components/Header';
+import { useColor } from '@src/components/Color';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
-
-const MainView = Styled(View)`
-    width: 100%;
-    height: 100%;
-`;
+import { Scaffold } from 'src/components';
 
 const ChatInfoScreen = ({ navigation, route }) => {
     // params
@@ -23,14 +17,14 @@ const ChatInfoScreen = ({ navigation, route }) => {
         state => state['user.auth'].login.user
     );
 
+    const { Color } = useColor();
+
     const rawData = params.isNewArrival ? [] : [{ id: 0, firstName: 'Kamu' }];
     
     return (
-        <MainView>
-            <Header
-              title='Info Chat'
-            />
-            
+        <Scaffold
+            headerTitle='Info Chat'
+        >
             <FlatList
                 keyExtractor={(item, index) => item.toString() + index}
                 data={rawData.concat(params.member)}
@@ -52,7 +46,7 @@ const ChatInfoScreen = ({ navigation, route }) => {
                     )
                 }}
             />
-        </MainView>
+        </Scaffold>
     )
 }
 

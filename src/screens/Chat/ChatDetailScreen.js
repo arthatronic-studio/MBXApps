@@ -7,19 +7,14 @@ import { useSelector } from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 
 import Text from '@src/components/Text';
-import Color from '@src/components/Color';
+import { useColor } from '@src/components/Color';
 import Header from '@src/components/Header';
-import Popup, { usePopup } from '@src/components/Modal/Popup';
+import { usePopup } from '@src/components/Modal/Popup';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
-import ScreenIndicator from '@src/components/Modal/ScreenIndicator';
-import ScreenEmptyData from '@src/components/Modal/ScreenEmptyData';
+import Scaffold from '@src/components/Scaffold';
 
 import Client from '@src/lib/apollo';
 import { queryContentChatRoomManage, queryContentChatRoomDetail, queryContentChatMessage } from '@src/lib/query';
-
-const MainView = Styled(View)`
-    flex: 1;
-`;
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -85,6 +80,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
     // hooks
     const [popupProps, showPopup] = usePopup();
     const { width } = useWindowDimensions();
+    const { Color } = useColor();
 
     // handle appstate
     useEffect(() => {
@@ -472,12 +468,16 @@ const ChatDetailScreen = ({ navigation, route }) => {
 
         return newData;
     }
-
-    if (dataChat.loading) {
-        return (
-            <MainView>
+    
+    return (
+        <Scaffold
+            fallback={dataChat.loading}
+            popupProps={popupProps}
+            header={
                 <Header
                     title={getTitle()}
+                    subTitle={userTyping && 'sedang mengetik...'}
+                    subTitleColor={userTyping && Color.success}
                     centerTitle
                     iconRightButton={
                         <Ionicons
@@ -488,28 +488,8 @@ const ChatDetailScreen = ({ navigation, route }) => {
                         />
                     }
                 />
-                <ScreenIndicator visible transparent />
-            </MainView>
-        )
-    }
-    
-    return (
-        <MainView>
-            <Header
-                title={getTitle()}
-                subTitle={userTyping && 'sedang mengetik...'}
-                subTitleColor={userTyping && Color.success}
-                centerTitle
-                iconRightButton={
-                    <Ionicons
-                        name='information-circle-outline'
-                        size={22}
-                        color={Color.text}
-                        onPress={() => navigation.navigate('ChatInfoScreen', { member: params.selected, isNewArrival: params.isNewArrival })}
-                    />
-                }
-            />
-
+            }
+        >
             <FlatList
                 keyExtractor={(item, index) => item.id + index.toString()}
                 data={compareData(firebaseData.concat(dataChat.data)).reverse()}
@@ -590,9 +570,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
                     </CircleSend>
                 </BoxInput>
             </BottomSection>
-
-            <Popup { ...popupProps } />
-        </MainView>
+        </Scaffold>
     )
 }
 

@@ -34,9 +34,9 @@ import SettingScreen from '@src/screens/MainProfile/SettingScreen';
 import ShowAllFromProfile from '@src/screens/MainProfile/ShowAllFromProfile';
 import JoinCommunity from 'src/screens/MainProfile/JoinCommunity'
 import ReferralCodeScreen from '@src/screens/MainProfile/ReferralCodeScreen';
+
+// community admin
 import CommunityAdminPage from '@src/screens/MainProfile/CommunityAdmin/CommunityAdminPage';
-import NumbersInput from 'src/screens/MainProfile/CommunityAdmin/NumbersInput';
-import ApproveMember from 'src/screens/MainProfile/CommunityAdmin/ApproveMember';
 import CardDetail from 'src/screens/MainProfile/CommunityAdmin/CardDetail';
 
 // Posting
@@ -168,10 +168,9 @@ function MainStackNavigator() {
             <Screen name='ShowAllFromProfile' component={ShowAllFromProfile} />
             <Screen name='SettingScreen' component={SettingScreen} />
             <Screen name='JoinCommunity' component={JoinCommunity} />
-            <Screen name="CommunityAdminPage" component={CommunityAdminPage} />
             <Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />
-            <Screen name="NumbersInput" component={NumbersInput} />
-            <Screen name="ApproveMember" component={ApproveMember} />
+            {/* community admin */}
+            <Screen name="CommunityAdminPage" component={CommunityAdminPage} />
             <Screen name="CardDetail" component={CardDetail}/>
             {/* payment */}
             <Screen name='PaymentScreen' component={PaymentScreen} />

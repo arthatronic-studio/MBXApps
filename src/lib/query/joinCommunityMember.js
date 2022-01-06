@@ -9,6 +9,7 @@ export const joinCommunityMember = gql`
       car_year
       car_identity
       reason
+      # note
       chapter_id
       car_photo_main
       car_photo_front
@@ -16,6 +17,7 @@ export const joinCommunityMember = gql`
       car_photo_back
       transaction_proof
       status
+      user_id
       chapter{
         id
         name
@@ -40,12 +42,10 @@ export const joinCommunityMember = gql`
         idNumber
         isDirector
         image
-        qr_code
         photoProfile
-        nomor_id
-        alamat
-        tanggalLahir
+        birthDate
       }
+      photo_profile
     }
   }
 `;
