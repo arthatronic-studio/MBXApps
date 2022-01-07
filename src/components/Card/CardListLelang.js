@@ -15,6 +15,7 @@ import {
   // TouchableOpacity,
   useColor,
 } from '@src/components';
+import { navigationRef } from 'App';
 
 const DATA = [
   {
@@ -61,7 +62,7 @@ const DATA = [
   },
 ];
 
-const CardListLelang = () => {
+const CardListLelang = (props) => {
   const {Color} = useColor();
   const renderItem = ({item}) => (
     <View

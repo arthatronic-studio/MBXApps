@@ -142,6 +142,20 @@ const sambatanMenus = [
   //   images: iconSemua,
   //   nav: '',
   //   params: {title: 'Iuran Non-wajib', type: 'ACTIVE', productType: 'SAMBATAN_O',}},
+  {
+    id: 7,
+    name: 'Lelang',
+    images: iconIuran,
+    nav: 'Lelang',
+    params: {title: 'Iuran', type: 'ACTIVE', productType: 'ALL_SAMBATAN'},
+  },
+  {
+    id: 8,
+    name: 'Ecommerce',
+    images: iconPulsa,
+    nav: 'MerchScreen',
+    params: {title: 'Iuran', type: 'ACTIVE', productType: 'ALL_SAMBATAN'},
+  },
 ];
 
 const MainHome = ({navigation, route}) => {
