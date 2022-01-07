@@ -53,8 +53,9 @@ import {imageCarousel} from '@assets/images';
 import ModalPosting from './ModalPosting';
 import ListEmergency from 'src/components/Posting/ListEmergency';
 import {usePreviousState} from 'src/hooks';
-import JoinLelang from '../JoinLelang';
-import Lelang from '../Lelang';
+import MerchScreen from '../Ecommerce/MerchScreen';
+import DetailProduct from '../Ecommerce/DetailProduct';
+import TopTab from '../Ecommerce/TopTab';
 
 const ContentView = Styled(View)`
   width: 100%;
@@ -371,328 +372,313 @@ const MainHome = ({navigation, route}) => {
   const isWalletClose = wallet === 'CLOSE';
 
   return (
-    <Lelang />
-    // <Scaffold
-    //   loadingProps={loadingProps}
-    //   header={
-    //     <HeaderBig
-    //       style={{paddingTop: 8}}
-    //       actions={
-    //         <View style={{flexDirection: 'row'}}>
-    //           <TouchableOpacity
-    //             onPress={() => {
-    //               navigation.navigate('NotificationScreen');
-    //             }}
-    //             style={{
-    //               width: '20%',
-    //               justifyContent: 'flex-start',
-    //               alignItems: 'flex-end',
-    //             }}>
-    //             <Ionicons
-    //               name="notifications-outline"
-    //               size={22}
-    //               color={Color.text}
-    //             />
-    //           </TouchableOpacity>
-    //           <TouchableOpacity
-    //             onPress={() => {
-    //               navigation.navigate('ChatRoomsScreen');
-    //             }}
-    //             style={{
-    //               width: '20%',
-    //               justifyContent: 'flex-start',
-    //               alignItems: 'flex-end',
-    //             }}>
-    //             <Ionicons name="chatbox-outline" size={22} color={Color.text} />
-    //             {notifierCount > 0 && (
-    //               <Circle
-    //                 size={12}
-    //                 color={Color.error}
-    //                 style={{position: 'absolute', top: -4, right: -4}}>
-    //                 <Text size={8}>
-    //                   {notifierCount > 99 ? '99' : notifierCount}
-    //                 </Text>
-    //               </Circle>
-    //             )}
-    //           </TouchableOpacity>
-    //         </View>
-    //       }
-    //     />
-    //   }>
-    //   <ScrollView showsVerticalScrollIndicator={false}>
-    //     <View
-    //       style={{
-    //         flexDirection: 'row',
-    //         width: '100%',
-    //         alignItems: 'center',
-    //         paddingHorizontal: 16,
-    //         paddingVertical: 20,
-    //       }}>
-    //       <Image
-    //         source={{uri: user ? user.image : ''}}
-    //         style={{
-    //           width: '14%',
-    //           aspectRatio: 1,
-    //           borderRadius: 50,
-    //           backgroundColor: Color.border,
-    //         }}
-    //       />
-    //       <View style={{paddingLeft: 16, alignItems: 'flex-start'}}>
-    //         <Text lineHeight={18} letterSpacing={0.45}>
-    //           Halo ,
-    //         </Text>
-    //         <Text size={18} type="bold" lineHeight={22} letterSpacing={0.45}>
-    //           {user && !user.guest
-    //             ? user.firstName.trim() +
-    //               (user.lastName ? ' ' + user.lastName.trim() : '')
-    //             : 'Tamu'}
-    //         </Text>
-    //       </View>
-    //     </View>
+    <Scaffold
+      loadingProps={loadingProps}
+      header={
+        <HeaderBig
+          style={{paddingTop: 8}}
+          actions={
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('NotificationScreen');
+                }}
+                style={{
+                  width: '20%',
+                  justifyContent: 'flex-start',
+                  alignItems: 'flex-end',
+                }}>
+                <Ionicons
+                  name="notifications-outline"
+                  size={22}
+                  color={Color.text}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('ChatRoomsScreen');
+                }}
+                style={{
+                  width: '20%',
+                  justifyContent: 'flex-start',
+                  alignItems: 'flex-end',
+                }}>
+                <Ionicons name="chatbox-outline" size={22} color={Color.text} />
+                {notifierCount > 0 && (
+                  <Circle
+                    size={12}
+                    color={Color.error}
+                    style={{position: 'absolute', top: -4, right: -4}}>
+                    <Text size={8}>
+                      {notifierCount > 99 ? '99' : notifierCount}
+                    </Text>
+                  </Circle>
+                )}
+              </TouchableOpacity>
+            </View>
+          }
+        />
+      }>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View
+          style={{
+            flexDirection: 'row',
+            width: '100%',
+            alignItems: 'center',
+            paddingHorizontal: 16,
+            paddingVertical: 20,
+          }}>
+          <Image
+            source={{uri: user ? user.photoProfile : ''}}
+            style={{
+              width: '14%',
+              aspectRatio: 1,
+              borderRadius: 50,
+              backgroundColor: Color.border,
+            }}
+          />
+          <View style={{paddingLeft: 16, alignItems: 'flex-start'}}>
+            <Text lineHeight={18} letterSpacing={0.45}>
+              Halo ,
+            </Text>
+            <Text size={18} type="bold" lineHeight={22} letterSpacing={0.45}>
+              {user && !user.guest
+                ? user.firstName.trim() +
+                  (user.lastName ? ' ' + user.lastName.trim() : '')
+                : 'Tamu'}
+            </Text>
+          </View>
+        </View>
 
-    //     <View
-    //       style={{width: width - 32, marginHorizontal: 16, marginBottom: 16}}>
-    //       <CarouselView
-    //         delay={4000}
-    //         showIndicator
-    //         style={{aspectRatio: 12 / 7}}>
-    //         <ImageBackground
-    //           style={{
-    //             width: '100%',
-    //             height: '100%',
-    //           }}
-    //           source={imageCarousel}
-    //         />
-    //         <ImageBackground
-    //           style={{
-    //             width: '100%',
-    //             height: '100%',
-    //           }}
-    //           source={imageCarousel}
-    //         />
-    //         <ImageBackground
-    //           style={{
-    //             width: '100%',
-    //             height: '100%',
-    //           }}
-    //           source={imageCarousel}
-    //         />
-    //       </CarouselView>
-    //     </View>
-    //     <ContentView>
-    //       <BalanceView
-    //         style={{...shadowStyle, backgroundColor: Color.textInput}}>
-    //         <View style={{justifyContent: 'center', alignItems: 'flex-start'}}>
-    //           <Text size={10}>Saldoku</Text>
-    //           <Text size={18} type="semibold" style={{marginTop: 2}}>
-    //             {FormatMoney.getFormattedMoney(vestaAmount)}
-    //           </Text>
-    //         </View>
+        <View
+          style={{width: width - 32, marginHorizontal: 16, marginBottom: 16}}>
+          <CarouselView
+            delay={4000}
+            showIndicator
+            style={{aspectRatio: 12 / 7}}>
+            <ImageBackground
+              style={{
+                width: '100%',
+                height: '100%',
+              }}
+              source={imageCarousel}
+            />
+          </CarouselView>
+        </View>
+        <ContentView>
+          <BalanceView
+            style={{...shadowStyle, backgroundColor: Color.textInput}}>
+            <View style={{justifyContent: 'center', alignItems: 'flex-start'}}>
+              <Text size={10}>Saldoku</Text>
+              <Text size={18} type="semibold" style={{marginTop: 2}}>
+                {FormatMoney.getFormattedMoney(vestaAmount)}
+              </Text>
+            </View>
 
-    //         <View
-    //           style={{
-    //             flexDirection: 'row',
-    //             justifyContent: 'center',
-    //             alignItems: 'flex-end',
-    //           }}>
-    //           <View
-    //             style={{
-    //               justifyContent: 'center',
-    //               alignItems: 'center',
-    //               marginLeft: 16,
-    //             }}>
-    //             <TouchableOpacity
-    //               style={{
-    //                 aspectRatio: 1,
-    //                 height: 30,
-    //                 borderRadius: 4,
-    //                 backgroundColor: Color.info,
-    //                 alignItems: 'center',
-    //                 justifyContent: 'center',
-    //                 marginBottom: 4,
-    //               }}
-    //               onPress={() => {
-    //                 modalPostingRef.current.open();
-    //               }}>
-    //               <Entypo
-    //                 name="add-to-list"
-    //                 color={Color.textInput}
-    //                 size={20}
-    //               />
-    //             </TouchableOpacity>
-    //             <View style={{width: '100%', alignItems: 'center'}}>
-    //               <Text size={9} type="medium" color={Color.text}>
-    //                 Posting
-    //               </Text>
-    //             </View>
-    //           </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+              }}>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginLeft: 16,
+                }}>
+                <TouchableOpacity
+                  style={{
+                    aspectRatio: 1,
+                    height: 30,
+                    borderRadius: 4,
+                    backgroundColor: Color.info,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: 4,
+                  }}
+                  onPress={() => {
+                    modalPostingRef.current.open();
+                  }}>
+                  <Entypo
+                    name="add-to-list"
+                    color={Color.textInput}
+                    size={20}
+                  />
+                </TouchableOpacity>
+                <View style={{width: '100%', alignItems: 'center'}}>
+                  <Text size={9} type="medium" color={Color.text}>
+                    Posting
+                  </Text>
+                </View>
+              </View>
 
-    //           <View
-    //             style={{
-    //               justifyContent: 'center',
-    //               alignItems: 'center',
-    //               marginLeft: 16,
-    //             }}>
-    //             <TouchableOpacity
-    //               style={{
-    //                 aspectRatio: 1,
-    //                 height: 30,
-    //                 borderRadius: 4,
-    //                 backgroundColor: Color.green,
-    //                 alignItems: 'center',
-    //                 justifyContent: 'center',
-    //                 marginBottom: 4,
-    //               }}
-    //               onPress={() =>
-    //                 isWalletClose
-    //                   ? openVesta()
-    //                   : navigation.navigate('TopUpScreen')
-    //               }>
-    //               <Ionicons name="add" color={Color.textInput} size={24} />
-    //             </TouchableOpacity>
-    //             <View style={{width: '100%', alignItems: 'center'}}>
-    //               <Text size={9} type="medium" color={Color.text}>
-    //                 Top Up
-    //               </Text>
-    //             </View>
-    //           </View>
-    //         </View>
-    //       </BalanceView>
-    //     </ContentView>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginLeft: 16,
+                }}>
+                <TouchableOpacity
+                  style={{
+                    aspectRatio: 1,
+                    height: 30,
+                    borderRadius: 4,
+                    backgroundColor: Color.green,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: 4,
+                  }}
+                  onPress={() =>
+                    isWalletClose
+                      ? openVesta()
+                      : navigation.navigate('TopUpScreen')
+                  }>
+                  <Ionicons name="add" color={Color.textInput} size={24} />
+                </TouchableOpacity>
+                <View style={{width: '100%', alignItems: 'center'}}>
+                  <Text size={9} type="medium" color={Color.text}>
+                    Top Up
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </BalanceView>
+        </ContentView>
 
-    //     <Divider height={8} />
+        <Divider height={8} />
 
-    //     <ContentView>
-    //       <SambatanMenuView
-    //         style={{...shadowStyle, backgroundColor: Color.textInput}}>
-    //         {sambatanMenus.map((menu, idx) => {
-    //           if (Platform.OS === 'ios' && menu.comingsoon) {
-    //             return null;
-    //           }
+        <ContentView>
+          <SambatanMenuView
+            style={{...shadowStyle, backgroundColor: Color.textInput}}>
+            {sambatanMenus.map((menu, idx) => {
+              if (Platform.OS === 'ios' && menu.comingsoon) {
+                return null;
+              }
 
-    //           return (
-    //             <PerUserIcons
-    //               key={idx}
-    //               activeOpacity={0.75}
-    //               disabled={menu.comingsoon}
-    //               onPress={() => navigation.navigate(menu.nav, menu.params)}>
-    //               <UserIcon>
-    //                 <ImageProperty
-    //                   style={menu.comingsoon && {opacity: 0.3}}
-    //                   resizeMode="contain"
-    //                   source={menu.images}
-    //                 />
-    //                 <Text size={12} style={menu.comingsoon && {opacity: 0.3}}>
-    //                   {menu.name}
-    //                 </Text>
-    //                 {(menu.comingsoon || menu.nav === '') && renderComingSoon()}
-    //               </UserIcon>
-    //             </PerUserIcons>
-    //           );
-    //         })}
-    //       </SambatanMenuView>
-    //     </ContentView>
+              return (
+                <PerUserIcons
+                  key={idx}
+                  activeOpacity={0.75}
+                  disabled={menu.comingsoon}
+                  onPress={() => navigation.navigate(menu.nav, menu.params)}>
+                  <UserIcon>
+                    <ImageProperty
+                      style={menu.comingsoon && {opacity: 0.3}}
+                      resizeMode="contain"
+                      source={menu.images}
+                    />
+                    <Text size={12} style={menu.comingsoon && {opacity: 0.3}}>
+                      {menu.name}
+                    </Text>
+                    {(menu.comingsoon || menu.nav === '') && renderComingSoon()}
+                  </UserIcon>
+                </PerUserIcons>
+              );
+            })}
+          </SambatanMenuView>
+        </ContentView>
 
-    //     <Divider height={24} />
+        <Divider height={24} />
 
-    //     <ListAuction
-    //       // use the listBelajar for the test
-    //       data={listBelajar}
-    //       loading={loadingAuction}
-    //       horizontal
-    //       showHeader
-    //       onPress={item => {
-    //         navigation.navigate('AuctionDetail', {item});
-    //       }}
-    //       style={{paddingLeft: 8}}
-    //     />
+        <ListAuction
+          // use the listBelajar for the test
+          data={listBelajar}
+          loading={loadingAuction}
+          horizontal
+          showHeader
+          onPress={item => {
+            navigation.navigate('AuctionDetail', {item});
+          }}
+          style={{paddingLeft: 8}}
+        />
 
-    //     <ListSoonAuction
-    //       // use the listBelajar for the test
-    //       data={listBelajar}
-    //       loading={loadingSoonAuction}
-    //       horizontal
-    //       showHeader
-    //       onPress={item => {
-    //         navigation.navigate('AuctionDetail', {item});
-    //       }}
-    //       style={{paddingLeft: 8}}
-    //     />
+        <ListSoonAuction
+          // use the listBelajar for the test
+          data={listBelajar}
+          loading={loadingSoonAuction}
+          horizontal
+          showHeader
+          onPress={item => {
+            navigation.navigate('AuctionDetail', {item});
+          }}
+          style={{paddingLeft: 8}}
+        />
 
-    //     <ListEmergency
-    //       data={listEmergencyArea}
-    //       loading={loadingEmergency}
-    //       horizontal
-    //       showHeader
-    //       onPress={item => {
-    //         // navigation.navigate('EmergencyDetail', {item});
-    //         navigation.navigate('PostingDetail', {item});
-    //       }}
-    //       style={{paddingLeft: 8}}
-    //     />
+        <ListEmergency
+          data={listEmergencyArea}
+          loading={loadingEmergency}
+          horizontal
+          showHeader
+          onPress={item => {
+            // navigation.navigate('EmergencyDetail', {item});
+            navigation.navigate('PostingDetail', {item});
+          }}
+          style={{paddingLeft: 8}}
+        />
 
-    //     <ListNews
-    //       data={listTampil}
-    //       loading={loadingTampil}
-    //       horizontal
-    //       showHeader
-    //       onPress={item => {
-    //         // navigation.navigate('NewsDetail', {item});
-    //         navigation.navigate('PostingDetail', {item});
-    //       }}
-    //       style={{paddingLeft: 8}}
-    //     />
+        <ListNews
+          data={listTampil}
+          loading={loadingTampil}
+          horizontal
+          showHeader
+          onPress={item => {
+            // navigation.navigate('NewsDetail', {item});
+            navigation.navigate('PostingDetail', {item});
+          }}
+          style={{paddingLeft: 8}}
+        />
 
-    //     <ListPlace
-    //       data={listJalanJalan}
-    //       loading={loadingJalanJalan}
-    //       horizontal
-    //       showHeader
-    //       onPress={item => {
-    //         // navigation.navigate('PlaceDetail', {item});
-    //         navigation.navigate('PostingDetail', {item});
-    //       }}
-    //       style={{paddingLeft: 8}}
-    //     />
+        <ListPlace
+          data={listJalanJalan}
+          loading={loadingJalanJalan}
+          horizontal
+          showHeader
+          onPress={item => {
+            // navigation.navigate('PlaceDetail', {item});
+            navigation.navigate('PostingDetail', {item});
+          }}
+          style={{paddingLeft: 8}}
+        />
 
-    //     <ListEvent
-    //       data={listBelajar}
-    //       loading={loadingBelajar}
-    //       horizontal
-    //       showHeader
-    //       onPress={item => {
-    //         // navigation.navigate('EventDetail', {item});
-    //         navigation.navigate('PostingDetail', {item});
-    //       }}
-    //       style={{paddingLeft: 8}}
-    //     />
+        <ListEvent
+          data={listBelajar}
+          loading={loadingBelajar}
+          horizontal
+          showHeader
+          onPress={item => {
+            // navigation.navigate('EventDetail', {item});
+            navigation.navigate('PostingDetail', {item});
+          }}
+          style={{paddingLeft: 8}}
+        />
 
-    //     <ListJob
-    //       data={listKerja}
-    //       loading={loadingKerja}
-    //       horizontal
-    //       showHeader
-    //       onPress={item => {
-    //         // navigation.navigate('JobDetail', {item});
-    //         navigation.navigate('PostingDetail', {item});
-    //       }}
-    //       style={{paddingLeft: 8}}
-    //     />
-    //   </ScrollView>
+        <ListJob
+          data={listKerja}
+          loading={loadingKerja}
+          horizontal
+          showHeader
+          onPress={item => {
+            // navigation.navigate('JobDetail', {item});
+            navigation.navigate('PostingDetail', {item});
+          }}
+          style={{paddingLeft: 8}}
+        />
+      </ScrollView>
 
-    //   {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}
-    //   <Box size={70} style={{position: 'absolute', bottom: -40}} />
-    //   {/*  */}
+      {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}
+      <Box size={70} style={{position: 'absolute', bottom: -40}} />
+      {/*  */}
 
-    //   <ModalPosting
-    //     ref={modalPostingRef}
-    //     selected={null}
-    //     onPress={e => {
-    //       navigation.navigate(e.nav, e.params);
-    //       modalPostingRef.current.close();
-    //     }}
-    //   />
-    // </Scaffold>
+      <ModalPosting
+        ref={modalPostingRef}
+        selected={null}
+        onPress={e => {
+          navigation.navigate(e.nav, e.params);
+          modalPostingRef.current.close();
+        }}
+      />
+    </Scaffold>
   );
 };
 

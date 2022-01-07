@@ -30,7 +30,6 @@ const MainView = Styled(SafeAreaView)`
 `;
 
 const Content = Styled(View)`
-    backgroundColor: #363636
     margin: 16px
     padding: 12px
     borderRadius: 8px
@@ -50,59 +49,61 @@ const CheckoutScreen = ({ navigation, route }) => {
 
   return (
     <Scaffold
-          header={<Header customIcon title='Checkout' type='regular' color={Color.white} backgroundColor='blackContent' centerTitle={false} />}
-          color='black'
+          header={<Header customIcon title='Checkout' type='regular' color={Color.white} backgroundColor='primary' centerTitle={false} />}
           onPressLeftButton={() => navigation.pop()}
         >
 
       <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
-            <Content>
+            <Content style={{ backgroundColor: Color.textInput }}>
                 <Row style={{ alignItems: 'center' }}>
                     <Col alignItems='flex-start'>
-                        <Text size={11} color={Color.white}>Alamat Pengiriman</Text>
+                        <Text size={11} color={Color.text} type='bold'>Alamat Pengiriman</Text>
                     </Col>
                     <Col alignItems='flex-end'>
-                        <Text color={Color.white} size={10}>Ubah Alamat</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('FormPayment')}>
+                            <Text color={'#6EC3F5'} size={10}>Ubah Alamat</Text>
+                        </TouchableOpacity>
                     </Col>
                 </Row>
                 <View style={{ backgroundColor: '#rgba(255, 255, 254, 0.2)', height: 2, marginVertical: 12 }} />
                 <View style={{ alignItems: 'flex-start' }}>
                     <Row style={{ alignItems: 'center' }}>
                         <Fontisto name='map-marker-alt' color='#FF7373' size={13} style={{ marginRight: 6 }} />
-                        <Text color={Color.white} type='bold'>Rumah</Text>
+                        <Text color={Color.text} type='bold'>Rumah</Text>
                     </Row>
-                    <Text color={Color.white} size={10} style={{ marginTop: 8 }} align='left'>Jl. Kembar Timur I No.11A, Bandung, Jawa Barat, Indonesia 40264</Text>
+                    <Text color={Color.text} size={10} style={{ marginTop: 8 }} align='left'>Jl. Kembar Timur I No.11A, Bandung, Jawa Barat, Indonesia 40264</Text>
                 </View>
             </Content>
-            <Content>
+            <Content style={{ backgroundColor: Color.textInput }}>
                 <Row style={{ marginBottom: 30 }}>
-                    <View style={{ height: 74, width: 74, marginRight: 14, backgroundColor: Color.white, borderRadius: 8 }} />
+                    <View style={{ height: 74, width: 74, marginRight: 14, backgroundColor: Color.text, borderRadius: 8 }} />
                     <Col alignItems='flex-start'>
-                        <Text color={Color.white} textAlign='left'>Pashmina Pink</Text>
-                        <Text color={Color.white} textAlign='left' size={10}>Jumlah : 1 Buah</Text>
-                        <View style={{ justifyContent: 'flex-end', flex: 1 }}>
-                            <Text type='bold' color={Color.white}>Rp. 100.000</Text>
+                        <Text color={Color.text} size={14} type='bold' textAlign='left'>Pashmina Pink</Text>
+                        <Text color={Color.text} textAlign='left' size={10}>Jumlah : 1 Buah</Text>
+                        <View style={{ justifyContent: 'flex-end', flex: 1, alignItems: 'flex-start' }}>
+                            <Text size={10} color={Color.primaryBlack} >Harga</Text>
+                            <Text type='bold' color={Color.text}>Rp. 100.000</Text>
                         </View>
                     </Col>
                 </Row>
-                <Row style={{ borderColor: '#rgba(255, 255, 254, 0.2)', alignItems: 'center', borderWidth: 1, padding: 12, borderRadius: 8 }}>
-                    <MaterialCommunityIcons name='truck' color={Color.white} size={18}   />
-                    <Text color={Color.white} type='semiBold' style={{ marginHorizontal: 10 }}>Pilih Pengiriman</Text>
+                <Row style={{ backgroundColor: '#12121210', alignItems: 'center', padding: 12, borderRadius: 8 }}>
+                    <MaterialCommunityIcons name='truck' color={Color.text} size={18}   />
+                    <Text color={Color.text} type='semiBold' style={{ marginHorizontal: 10 }}>Pilih Pengiriman</Text>
                     <Col alignItems='flex-end'>
-                        <AntDesign name='right' size={18} color={Color.white} />
+                        <AntDesign name='right' size={18} color={Color.text} />
                     </Col>
                 </Row>
             </Content>
-            <Content>
+            <Content style={{ backgroundColor: Color.textInput }}>
                 <Row style={{ alignItems: 'center' }}>
                     <Col alignItems='flex-start'>
-                        <Text color={Color.white} type='bold'>Subtotal</Text>
+                        <Text color={Color.text} type='bold'>Subtotal</Text>
                     </Col>
                     <Col alignItems='flex-end'>
-                        <Text color={Color.white} type='bold'>Rp 176.000</Text>
+                        <Text color={Color.text} type='bold'>Rp 176.000</Text>
                     </Col>
                 </Row>
-                <View style={{ backgroundColor: '#rgba(255, 255, 254, 0.2)', height: 2, marginVertical: 12 }} />
+                <View style={{ backgroundColor: 'rgba(18, 18, 18, 0.2)', height: 1, marginVertical: 12 }} />
 
                 <Row style={{ alignItems: 'center', marginBottom: 8 }}>
                     <Col alignItems='flex-start'>
@@ -130,26 +131,26 @@ const CheckoutScreen = ({ navigation, route }) => {
                 </Row>
             </Content>
 
-            <Content style={{ backgroundColor: '#363636' }}>
-                <View style={{ backgroundColor: '#FFFFFE11', borderRadius: 8, padding: 10}}>
+            <Content style={{ backgroundColor: Color.white }}>
+                <View style={{ backgroundColor: '#12121210', borderRadius: 8, padding: 10}}>
                     <Row style={{ alignItems: 'center' }}>
-                        <FontAwesome5 name='ticket-alt' color={Color.white} size={18}   />
-                        <Text color={Color.white} type='semiBold' style={{ marginHorizontal: 10 }}>Masukkan Promo</Text>
+                        <FontAwesome5 name='ticket-alt' color={Color.text} size={18}   />
+                        <Text color={Color.text} type='semiBold' style={{ marginHorizontal: 10 }}>Masukkan Promo</Text>
                         <Col alignItems='flex-end'>
-                            <AntDesign name='right' size={18} color={Color.white} />
+                            <AntDesign name='right' size={18} color={Color.text} />
                         </Col>
                     </Row>
                 </View>
             </Content>
         </ScrollView>
-        <Row style={{ backgroundColor: Color.blackContent, padding: 16 }}>
+        <Row style={{ backgroundColor: Color.white, padding: 16 }}>
             <Col align='flex-start' justify='center'>
-                <Text size={10} color={Color.white}>Total Harga</Text>
-                <Text type='bold' color={Color.white} >Rp. 160.000</Text>
+                <Text size={10} color={Color.text}>Total Harga</Text>
+                <Text type='bold' color={Color.text} size={18} >Rp. 160.000</Text>
             </Col>
             <Col>
-                <TouchableOpacity style={{ backgroundColor: Color.primaryYellow, borderRadius: 8, paddingVertical: 10 }}>
-                    <Text type='semibold'>Lanjut</Text>
+                <TouchableOpacity style={{ backgroundColor: Color.blue, borderRadius: 30, paddingVertical: 10 }}>
+                    <Text type='semibold' color={Color.white}>Checkout</Text>
                 </TouchableOpacity>
             </Col>
         </Row>

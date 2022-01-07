@@ -12,13 +12,12 @@ import {
     Loading, useLoading,
     Submit,
     useColor
-  } from '@src/components';
+} from '@src/components';
 
 import { queryJoinCommunity } from 'src/lib/query';
 import ModalSelectChapter from 'src/components/Modal/ModalSelectChapter'
 import validate from '@src/lib/validate';
 import Client from '@src/lib/apollo';
-import { State } from 'react-native-gesture-handler';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -51,7 +50,7 @@ const CustomTouch = Styled(TouchableOpacity)`
 `;
 
 
-const Join = () => {
+const JoinCommunity = ({ navigation, route }) => {
     const { height } = useWindowDimensions();
     const { Color } = useColor();
 
@@ -66,7 +65,7 @@ const Join = () => {
         carYear: "",
         carIdentity: '',
         reason: '',
-        description: '',
+        note: '',
         chapterId: "Bogor",
         carPhotoMain: '',
         carPhotoFront: '',
@@ -81,7 +80,7 @@ const Join = () => {
         carYear: null,
         carIdentity: null,
         reason: null,
-        description: null,
+        note: null,
         carPhotoMain: '',
         carPhotoFront: '',
         carPhotoSide: '',
@@ -167,11 +166,11 @@ const Join = () => {
                 carPhotoSide: 'data:image/png;base64,' + thumbImage3,
                 carPhotoBack: 'data:image/png;base64,' + thumbImage4,
                 transactionProof: 'data:image/png;base64,' + thumbImage5,
+                note: userData.note,
             },
         };
 
         console.log('variables', variables);
-        
 
         Client.query({
             query: queryJoinCommunity,
@@ -179,7 +178,18 @@ const Join = () => {
         })
         .then((res) => {
             console.log(res, '=== Berhsail ===');
-            showLoading('success', 'Berhasil Join Komunitas');
+
+            const data = res.data.joinCommunity;
+
+            if (data) {
+                showLoading('success', 'Berhasil Join Komunitas');
+                
+                setTimeout(() => {
+                    navigation.popToTop();
+                }, 2500);
+            } else {
+                showLoading('error', 'Gagal Join Komunitas');
+            }
         })
         .catch((err) => {
             console.log(err, 'errrrr');
@@ -246,6 +256,7 @@ const Join = () => {
                                     selectionColor={Color.text}
                                     value={userData.carColor}
                                     onBlur={() => isValueError('carColor')}
+                                    style={{color: Color.text}}
                                 />
                             </EmailRoundedView>
                         </View>
@@ -268,6 +279,7 @@ const Join = () => {
                                     value={userData.carYear}
                                     onBlur={() => isValueError('carYear')}
                                     keyboardType='numeric'
+                                    style={{color: Color.text}}
                                 />
                             </EmailRoundedView>
                         </View>
@@ -289,6 +301,7 @@ const Join = () => {
                                     selectionColor={Color.text}
                                     value={userData.carIdentity}
                                     onBlur={() => isValueError('carIdentity')}
+                                    style={{color: Color.text}}
                                 />
                             </EmailRoundedView>
                         </View>
@@ -310,6 +323,7 @@ const Join = () => {
                                     selectionColor={Color.text}
                                     value={userData.reason}
                                     onBlur={() => isValueError('reason')}
+                                    style={{color: Color.text}}
                                 />
                             </EmailRoundedView>
                         </View>
@@ -318,7 +332,7 @@ const Join = () => {
                     <View style={{paddingHorizontal: 16, paddingTop: 28}}>
                         <View style={{marginTop: 6, paddingHorizontal: 12, borderWidth: 1, borderRadius: 4, borderColor: Color.border, height: 90}}>
                             <LabelInput>
-                                <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Deskipsi</Text>
+                                <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Deskripsi</Text>
                             </LabelInput>
                             <EmailRoundedView>
                                 <CustomTextInput
@@ -327,10 +341,11 @@ const Join = () => {
                                     placeholderTextColor={Color.gray}
                                     underlineColorAndroid='transparent'
                                     autoCorrect={false}
-                                    onChangeText={(text) => onChangeUserData('description', text)}
+                                    onChangeText={(text) => onChangeUserData('note', text)}
                                     selectionColor={Color.text}
-                                    value={userData.reason}
-                                    onBlur={() => isValueError('description')}
+                                    value={userData.note}
+                                    onBlur={() => isValueError('note')}
+                                    style={{color: Color.text}}
                                 />
                             </EmailRoundedView>
                         </View>
@@ -528,11 +543,8 @@ const Join = () => {
                     modalSelectChapterRef.current.close();
                 }}
             />
-
-            
-
         </MainView>
     )
 }
 
-export default Join
+export default JoinCommunity;

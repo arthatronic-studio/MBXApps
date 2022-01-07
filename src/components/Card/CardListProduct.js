@@ -99,22 +99,23 @@ const DATA = [
   },
 ];
 
-const CardListProduk = () => {
+const CardListProduk = (props) => {
+  const { onPress } = props;
   const {Color} = useColor();
   const renderItem = ({item}) => (
     <View
       style={{
         width: '46%',
-        height: 260,
+        height: 270,
         marginHorizontal: 5,
         marginVertical: 5,
       }}>
-      <TouchableOpacity style={styles.btnCategory}>
+      <TouchableOpacity onPress={() => onPress()} style={styles.btnCategory}>
         <Image
           source={item.image}
           style={{
             width: 160,
-            height: 120,
+            height: 140,
             borderRadius: 10,
             alignSelf: 'center',
           }}
@@ -136,6 +137,7 @@ const CardListProduk = () => {
             </View>
           </View>
           <View style={{marginVertical: 5}}>
+            <Text style={{ fontSize: 10 }}>Harga</Text>
             <Text style={styles.txtPrice}>Rp {item.price}</Text>
           </View>
         </View>
@@ -177,6 +179,7 @@ const CardListProduk = () => {
     <View style={{alignItems: 'center'}}>
       <FlatList
         numColumns={2}
+        keyExtractor={(item, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
         data={DATA}
         renderItem={renderItem}
@@ -192,13 +195,14 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 10,
-    paddingVertical: 10,
+    paddingBottom: 10,
     marginHorizontal: 5,
     paddingHorizontal: 10,
-    backgroundColor: '#363636',
+    elevation: 1,
+    backgroundColor: '#fff',
   },
   txtTitle: {
-    color: 'white',
+    color: '#111',
     fontWeight: '700',
     fontSize: 14,
   },
@@ -220,7 +224,7 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
   },
   txtPrice: {
-    color: 'white',
+    color: '#111',
     fontWeight: '700',
     fontSize: 14,
   },

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, FlatList, TextInput, Image } from 'react-native';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -8,19 +8,14 @@ import firestore from '@react-native-firebase/firestore';
 import { useIsFocused } from '@react-navigation/native';
 
 import Text from '@src/components/Text';
-import Color from '@src/components/Color';
-import Header from '@src/components/Header';
-import ScreenIndicator from '@src/components/Modal/ScreenIndicator';
+import { useColor } from '@src/components/Color';
 import ScreenEmptyData from '@src/components/Modal/ScreenEmptyData';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import { Circle } from '@src/styled';
 
 import Client from '@src/lib/apollo';
 import { queryContentChatRooms } from '@src/lib/query';
-
-const MainView = Styled(View)`
-    flex: 1;
-`;
+import { Scaffold } from 'src/components';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -74,6 +69,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
 
     // hooks
     const isFocused = useIsFocused();
+    const { Color } = useColor();
 
     useEffect(() => {
         if (!isFocused) {
@@ -193,27 +189,6 @@ const ChatRoomsScreen = ({ navigation, route }) => {
         return title;
     }
 
-    if (dataRooms.loading) {
-        return (
-            <MainView>
-                <Header title='Chat' />
-                <ScreenIndicator visible transparent />
-            </MainView>
-        )
-    }
-
-    if (dataRooms.data.length === 0) {
-        return (
-            <MainView>
-                <Header title='Chat' />
-                <ScreenEmptyData transparent message='Kamu belum memiliki riwayat chat' />
-                <TouchableOpacity onPress={() => navigation.navigate('ChatUserListScreen')} style={{height: 50, width: 50, borderRadius: 25, position: 'absolute', bottom: 16, right: 16, backgroundColor: Color.secondary, justifyContent: 'center', alignItems: 'center'}}>
-                    <Ionicons name='add' color={Color.text} size={30} />
-                </TouchableOpacity>
-            </MainView>
-        )
-    }
-
     const managedDate = (d) => {
         const origin = parseInt(d);
         const date = Moment(origin).format('YYYY-MM-DD');
@@ -266,9 +241,25 @@ const ChatRoomsScreen = ({ navigation, route }) => {
         return result;
     }
 
+    if (dataRooms.data.length === 0) {
+        return (
+            <Scaffold
+                headerTitle='Chat'
+                fallback={dataRooms.loading}
+            >
+                <ScreenEmptyData transparent message='Kamu belum memiliki riwayat chat' />
+                <TouchableOpacity onPress={() => navigation.navigate('ChatUserListScreen')} style={{height: 50, width: 50, borderRadius: 25, position: 'absolute', bottom: 16, right: 16, backgroundColor: Color.secondary, justifyContent: 'center', alignItems: 'center'}}>
+                    <Ionicons name='add' color={Color.text} size={30} />
+                </TouchableOpacity>
+            </Scaffold>
+        )
+    }
+
     return (
-        <MainView>
-            <Header title='Chat' />
+        <Scaffold
+            headerTitle='Chat'
+            fallback={dataRooms.loading}
+        >
             {/* <BottomSection style={{borderColor: Color.border}}>
                 <BoxInput style={true ? {borderColor: Color.border} : {borderColor: Color.error}}>
                     <TextInputNumber
@@ -354,7 +345,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
             <TouchableOpacity onPress={() => navigation.navigate('ChatUserListScreen')} style={{height: 50, width: 50, borderRadius: 25, position: 'absolute', bottom: 16, right: 16, backgroundColor: Color.secondary, justifyContent: 'center', alignItems: 'center'}}>
                 <Ionicons name='add' color={Color.text} size={30} />
             </TouchableOpacity>
-        </MainView>
+        </Scaffold>
     )
 }
 

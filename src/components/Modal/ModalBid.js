@@ -13,6 +13,7 @@ import { useCombinedRefs } from 'src/hooks';
 import { FormatMoney } from 'src/utils';
 import { TextInputMask } from 'react-native-masked-text';
 import {useSelector} from 'react-redux';
+import { navigationRef } from 'App';
 
 const { width } = Dimensions.get('window');
 
@@ -90,6 +91,7 @@ const ModalBid = forwardRef((props, ref) => {
       }else{
         data.push({ name: user.firstName, bid:amountBid.current.getRawValue() });
         combinedRef.current.close();
+        navigationRef.current.navigate('CartScreen');
       } 
     } else {
       showPopup('Silakan masukan nominal bid terlebih dulu', 'warning');

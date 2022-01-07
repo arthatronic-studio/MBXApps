@@ -27,7 +27,6 @@ import {
 } from '@src/components';
 import TopBar from './TopTab';
 import ImagesPath from 'src/components/ImagesPath';
-import Carousel from 'react-native-snap-carousel';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -43,7 +42,7 @@ const images = [
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
-const DetailProduct = () => {
+const DetailProduct = ({ route, navigation }) => {
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
   const {Color} = useColor();
@@ -171,6 +170,7 @@ const DetailProduct = () => {
             paddingVertical: 10,
           }}>
           <TouchableOpacity
+            onPress={() => navigation.navigate('CheckoutScreen')}
             style={{
               width: '40%',
               height: 40,
@@ -200,6 +200,7 @@ const DetailProduct = () => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => navigation.navigate('CartScreen')}
             style={{
               width: '50%',
               height: 40,

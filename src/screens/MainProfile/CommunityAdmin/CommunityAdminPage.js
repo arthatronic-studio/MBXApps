@@ -1,13 +1,10 @@
-import * as React from 'react';
-import {View, useWindowDimensions, SafeAreaView, Text} from 'react-native';
+import React from 'react';
+import {useWindowDimensions} from 'react-native';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
-import Styled from 'styled-components';
+
 import {Header, useColor} from '@src/components';
 import CardComponent from './CardComponent';
-
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
+import {MainView} from '@src/styled';
 
 const AnggotaBaruRoute = () => (
   <CardComponent
@@ -39,24 +36,24 @@ const renderScene = SceneMap({
 
 const CommunityAdminPage = ({navigation}) => {
   const {Color} = useColor();
-
-  const layout = useWindowDimensions();
+  const { width } = useWindowDimensions();
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    {key: 'AnggotaBaru', title: 'Anggota Baru'},
+    {key: 'AnggotaBaru', title: 'Baru'},
     {key: 'Anggota', title: 'Anggota'},
-    {key: 'AnggotaDitolak', title: 'Anggota Ditolak'},
+    {key: 'AnggotaDitolak', title: 'Ditolak'},
   ]);
 
   const renderTabBar = (props) => (
     <TabBar
       {...props}
+      tabStyle={{width: width / 3}}
       indicatorStyle={{backgroundColor: Color.primary}}
-      style={{backgroundColor: 'white'}}
-      activeColor={Color.secondary}
+      style={{backgroundColor: Color.theme}}
+      activeColor={Color.primary}
       inactiveColor="black"
-      labelStyle={{fontWeight: 'bold', textAlign: 'center',fontSize:13, textTransform:'capitalize'}}
+      labelStyle={{fontWeight: 'bold', textAlign: 'center', fontSize: 16, textTransform: 'none'}}
     />
   );
   
@@ -67,7 +64,7 @@ const CommunityAdminPage = ({navigation}) => {
         navigationState={{index, routes}}
         renderScene={renderScene}
         onIndexChange={setIndex}
-        initialLayout={{width: layout.width}}
+        initialLayout={{width}}
         renderTabBar={renderTabBar}
       />
     </MainView>

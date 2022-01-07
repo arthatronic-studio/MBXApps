@@ -107,28 +107,28 @@ const CardEmergency = (props) => {
                     style={{marginTop:6, width: '25%', height: '50%', borderRadius: 8, backgroundColor: Color.border}}
                 />
 
-                <View style={{height: '100%', width: '75%', paddingLeft: 16}}>
-                    <Text size={16} type='bold' align='left' numberOfLines={1}>{item.productName}</Text>
-                    <View style={{alignItems: 'center', flexDirection: 'row', width: '100%', paddingTop: 8}}>
+                <View style={{height: '100%', width: '75%', marginLeft: 16}}>
+                    <Text size={14} type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
+                    <View style={{alignItems: 'center', flexDirection: 'row', width: '100%', marginTop: 8}}>
                         <Image 
                             style={{ height: 10, width: 10, aspectRatio: 1 }}
                             source={iconCategory}
                         />
                         <Text style={{ marginLeft:4 }} size={12}>{item.productCategory}</Text>
-                        <Image
+                        {/* <Image
                             style={{ height: 10, width: 10, marginLeft: 9 }}
                             source={iconLocation}
-                        />
-                        <Text style={{ marginLeft:6 }} size={12}>Kebon Jeruk, Jakarta</Text>
+                        /> */}
+                        {/* <Text style={{ marginLeft:6 }} size={12}>Kebon Jeruk, Jakarta</Text> */}
                     </View>
-                    <View style={{paddingTop: 16, height:60}}>
-                        <Text size={12} align='left' numberOfLines={3} >
+                    <View style={{marginTop: 16, height:60}}>
+                        <Text size={11} align='left' numberOfLines={3} >
                             {item.productDescription}
                         </Text>
                     </View>
 
-                    <View style={{width: '100%', flexDirection: 'row', paddingTop: 16}}>
-                        <TouchableOpacity onPress={() => onSubmitLike(item)} style={{width: '50%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRightWidth:0.5}}>
+                    <View style={{width: '100%', flexDirection: 'row', marginTop: 16}}>
+                        <TouchableOpacity onPress={() => onSubmitLike(item)} style={{width: '50%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRightWidth:1,  borderColor: Color.border}}>
                             {/* <Image
                                 style={{ height:20, width:20 }}
                                 source={im_like ? iconLiked : iconLike}
@@ -136,16 +136,16 @@ const CardEmergency = (props) => {
                             <MaterialCommunityIcons
                                 name={im_like ? 'rocket-launch' : 'rocket-launch-outline'}
                                 color={im_like ? Color.success : Color.text}
-                                size={18}
+                                size={17}
                             />
-                            <Text style={{ paddingLeft: 4, marginBottom: 4}}>{like} </Text>
+                            <Text style={{ marginLeft: 4, marginBottom: 4}} size={14}>{like} </Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => navigation.navigate('CommentListScreen', { item })} style={{width: '50%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                             <Image
-                                style={{ height:20, width:20 }}
+                                style={{ height:17, width:17, tintColor:Color.text}}
                                 source={iconComment}
                             />
-                            <Text style={{paddingLeft:4, marginBottom: 4}}>{item.comment} </Text>
+                            <Text style={{marginLeft:4, marginBottom: 4}} size={14}>{item.comment} </Text>
                         </TouchableOpacity>
                     </View>
                 </View>

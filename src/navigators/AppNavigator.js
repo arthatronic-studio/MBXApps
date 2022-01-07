@@ -34,9 +34,9 @@ import SettingScreen from '@src/screens/MainProfile/SettingScreen';
 import ShowAllFromProfile from '@src/screens/MainProfile/ShowAllFromProfile';
 import JoinCommunity from 'src/screens/MainProfile/JoinCommunity';
 import ReferralCodeScreen from '@src/screens/MainProfile/ReferralCodeScreen';
+
+// community admin
 import CommunityAdminPage from '@src/screens/MainProfile/CommunityAdmin/CommunityAdminPage';
-import NumbersInput from 'src/screens/MainProfile/CommunityAdmin/NumbersInput';
-import ApproveMember from 'src/screens/MainProfile/CommunityAdmin/ApproveMember';
 import CardDetail from 'src/screens/MainProfile/CommunityAdmin/CardDetail';
 
 // Posting
@@ -94,11 +94,13 @@ import Bid from '@src/screens/Posting/Auction/Bid';
 
 //Ecommerce
 import CartScreen from '@src/screens/Ecommerce/CartScreen';
+import CartShop from '@src/screens/Ecommerce/CartShop';
 import CheckoutScreen from '@src/screens/Ecommerce/CheckoutScreen';
-
-// Lelang
-import Lelang from 'src/screens/Lelang';
-import LiveLelangScreen from 'src/screens/LiveLelangScreen';
+import FormPayment from '@src/screens/Ecommerce/FormPayment';
+import MyShop from '@src/screens/Ecommerce/MyShop';
+import MerchScreen from 'src/screens/Ecommerce/MerchScreen';
+import DetailProduct from 'src/screens/Ecommerce/DetailProduct';
+import CartAuction from 'src/screens/Auction/CartAuction';
 
 const {Navigator, Screen} = createStackNavigator();
 
@@ -115,12 +117,17 @@ function MainStackNavigator() {
       <Screen name="MainPage" component={MainPage} />
       <Screen name="KnowMeScreen" component={KnowMeScreen} />
       <Screen name="CreateEmergencyScreen" component={CreateEmergencyScreen} />
+      {/* Auction */}
+      <Screen name="CartAuction" component={CartAuction} />
+
       {/* Ecommerce */}
+      <Screen name="MerchScreen" component={MerchScreen} />
+      <Screen name="DetailProduct" component={DetailProduct} />
       <Screen name="CartScreen" component={CartScreen} />
+      <Screen name="CartShop" component={CartShop} />
+      <Screen name="FormPayment" component={FormPayment} />
+      <Screen name="MyShop" component={MyShop} />
       <Screen name="CheckoutScreen" component={CheckoutScreen} />
-      {/* Lelang */}
-      <Screen name="Lelang" component={Lelang} />
-      <Screen name="LiveLelangScreen" component={LiveLelangScreen} />
       {/* user */}
       <Screen name="LoginScreen" component={LoginScreen} />
       <Screen name="RegisterScreen" component={RegisterScreen} />
@@ -162,10 +169,9 @@ function MainStackNavigator() {
       <Screen name="ShowAllFromProfile" component={ShowAllFromProfile} />
       <Screen name="SettingScreen" component={SettingScreen} />
       <Screen name="JoinCommunity" component={JoinCommunity} />
-      <Screen name="CommunityAdminPage" component={CommunityAdminPage} />
       <Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />
-      <Screen name="NumbersInput" component={NumbersInput} />
-      <Screen name="ApproveMember" component={ApproveMember} />
+      {/* community admin */}
+      <Screen name="CommunityAdminPage" component={CommunityAdminPage} />
       <Screen name="CardDetail" component={CardDetail} />
       {/* payment */}
       <Screen name="PaymentScreen" component={PaymentScreen} />
