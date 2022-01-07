@@ -149,7 +149,7 @@ const CheckoutScreen = ({ navigation, route }) => {
                 <Text type='bold' color={Color.text} size={18} >Rp. 160.000</Text>
             </Col>
             <Col>
-                <TouchableOpacity style={{ backgroundColor: Color.blue, borderRadius: 30, paddingVertical: 10 }}>
+                <TouchableOpacity onPress={() => navigation.popToTop()} style={{ backgroundColor: Color.blue, borderRadius: 30, paddingVertical: 10 }}>
                     <Text type='semibold' color={Color.white}>Checkout</Text>
                 </TouchableOpacity>
             </Col>
