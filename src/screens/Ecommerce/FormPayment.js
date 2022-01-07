@@ -135,7 +135,7 @@ const FormPayment = ({ navigation, route }) => {
           </View>
         </ScrollView>
         <View style={{ backgroundColor: Color.white }}>
-          <TouchableOpacity style={{ backgroundColor: Color.blue, borderRadius: 30, margin: 15, paddingVertical: 10 }}>
+          <TouchableOpacity onPress={() => navigation.pop()} style={{ backgroundColor: Color.blue, borderRadius: 30, margin: 15, paddingVertical: 10 }}>
               <Text type='semibold' color={Color.white}>Checkout</Text>
           </TouchableOpacity>
         </View>
