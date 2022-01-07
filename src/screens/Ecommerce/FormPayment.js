@@ -136,7 +136,7 @@ const FormPayment = ({ navigation, route }) => {
         </ScrollView>
         <View style={{ backgroundColor: Color.white }}>
           <TouchableOpacity onPress={() => navigation.pop()} style={{ backgroundColor: Color.blue, borderRadius: 30, margin: 15, paddingVertical: 10 }}>
-              <Text type='semibold' color={Color.white}>Checkout</Text>
+              <Text type='semibold' color={Color.white}>Lanjutkan</Text>
           </TouchableOpacity>
         </View>
       {/* <Loading {...loadingProps} /> */}
