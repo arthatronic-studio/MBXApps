@@ -25,6 +25,7 @@ const staticColors = {
   white: '#FFFFFF',
   text: '#FFFFFF',
   infosecond: '#DAE9F2',
+  semiwhite: '#E5E5E5',
 };
 
 export const lightModeColors = {
