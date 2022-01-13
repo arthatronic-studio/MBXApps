@@ -1,14 +1,21 @@
 import React, { useRef, forwardRef, useState } from 'react';
-import { Dimensions, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { Dimensions, TouchableOpacity, useWindowDimensions, Image } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 // import { Newspaper, MapPinLine, Calendar, Briefcase } from 'phosphor-react-native';
+
 import {
   Text,
   // TouchableOpacity,
   useColor
 } from '@src/components';
+
+import {
+  iconArtikel,
+  iconTempat,
+  iconEvent,
+  iconLoker
+} from '@assets/images/home'
 
 import { View, TextInput } from 'react-native';
 
@@ -16,6 +23,7 @@ import { shadowStyle } from '@src/styles';
 
 import { useCombinedRefs } from '@src/hooks';
 import { Divider } from 'src/styled';
+import { from } from 'apollo-link';
 
 const { width } = Dimensions.get('window');
 
@@ -27,8 +35,7 @@ const data = [
   {
     id: 1,
     name: 'Artikel',
-    // icon: <Newspaper color='#B0DE59' size={20} />,
-    icon: null,
+    icon: <Image source={iconArtikel} style={{width: '50%', height: '50%', marginBottom: 4}}/>,
     nav: 'CreateThreadScreen', params: {
       title: 'Posting Artikel',
       productType: "TRIBES",
@@ -39,8 +46,7 @@ const data = [
   {
     id: 2,
     name: 'Tempat',
-    // icon: <MapPinLine color='#ED5596' size={20} />,
-    icon: null,
+    icon: <Image source={iconTempat} style={{width: '45%', height: '50%', marginBottom: 4}}/>,
     nav: 'CreateThreadScreen', params: {
       title: 'Posting Tempat Terdekat',
       productType: "TRIBES",
@@ -51,8 +57,7 @@ const data = [
   {
     id: 3,
     name: 'Event',
-    // icon: <Calendar color='#6246C7' size={20} />,
-    icon: null,
+    icon: <Image source={iconEvent} style={{width: '50%', height: '50%', marginBottom: 4}}/>,
     nav: 'CreateThreadScreen', params: {
       title: 'Posting Event',
       productType: "TRIBES",
@@ -63,8 +68,7 @@ const data = [
   {
     id: 4,
     name: 'Loker',
-    // icon: <Briefcase color='#1E89FC' size={20} />,
-    icon: null,
+    icon: <Image source={iconLoker} style={{width: '50%', height: '50%', marginBottom: 4}}/>,
     nav: 'CreateThreadScreen', params: {
       title: 'Posting Loker',
       productType: "TRIBES",
@@ -108,14 +112,9 @@ const ModalPosting = forwardRef((props, ref) => {
         }}
       >
         {item.icon}
-          {/* <MaterialCommunityIcons
-            name='post-outline'
-            size={20}
-            color={Color.text}
-          /> */}
-          <Text size={14} align='center'>
-            {item.name}
-          </Text>
+        <Text size={14} align='center'>
+          {item.name}
+        </Text>
       </TouchableOpacity>
     )
   }
