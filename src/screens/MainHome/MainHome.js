@@ -36,9 +36,10 @@ import {shadowStyle} from '@src/styles';
 import {Box, Divider, Circle} from '@src/styled';
 import {playNotificationSounds} from '@src/utils/notificationSounds';
 import CarouselView from 'src/components/CarouselView';
+import BannerHome from 'src/components/BannerHome';
 
 import Client from '@src/lib/apollo';
-import {queryContentProduct} from '@src/lib/query';
+import {queryContentProduct, queryBannerList} from '@src/lib/query';
 import {queryVestaBalance, queryVestaOpenBalance} from '@src/lib/query/payment';
 
 import {
@@ -165,8 +166,7 @@ const MainHome = ({navigation, route}) => {
   const [vestaAmount, setVestaAmount] = useState(0);
   const [wallet, setWallet] = useState('CLOSE');
   const [firebaseData, setFirebaseData] = useState([]);
-  const [firebaseNotifierLastChatCount, setFirebaseNotifierLastChatCount] =
-    useState(0);
+  const [firebaseNotifierLastChatCount, setFirebaseNotifierLastChatCount] = useState(0);
   const [notifierCount, setNotifierCount] = useState(0);
 
   const [loadingAuction, setLoadingAuction] = useState(true);
@@ -187,6 +187,9 @@ const MainHome = ({navigation, route}) => {
 
   const [loadingKerja, setLoadingKerja] = useState(true);
   const [listKerja, setListKerja] = useState([]);
+
+  const [loadingBanner, setLoadingBanner] = useState(true);
+  const [listBanner, setListBanner] = useState([]);
 
   const user = useSelector(state => state['user.auth'].login.user);
   const dispatch = useDispatch();
@@ -269,6 +272,19 @@ const MainHome = ({navigation, route}) => {
       fetchData();
     }
   }, [isFocused]);
+
+  useEffect(() => {
+    Client.query({
+      query: queryBannerList
+    }).then((res) => {
+      console.log(res);
+      console.log(res.data.bannerList);
+      setListBanner(res.data.bannerList);
+      setLoadingBanner(false);
+    }).catch((err) => {
+      console.log(err, 'err banner list');
+    })
+  }, []);
 
   const componentWillFocus = () => {
     if (user && !user.guest) {
@@ -486,21 +502,11 @@ const MainHome = ({navigation, route}) => {
           </View>
         </View>
 
-        <View
-          style={{width: width - 32, marginHorizontal: 16, marginBottom: 16}}>
-          <CarouselView
-            delay={4000}
-            showIndicator
-            style={{aspectRatio: 12 / 7}}>
-            <ImageBackground
-              style={{
-                width: '100%',
-                height: '100%',
-              }}
-              source={imageCarousel}
-            />
-          </CarouselView>
-        </View>
+        <BannerHome
+          loading={loadingBanner}
+          data={listBanner}
+        />
+
         <ContentView>
           <BalanceView
             style={{...shadowStyle, backgroundColor: Color.textInput}}>

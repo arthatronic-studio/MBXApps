@@ -15,6 +15,7 @@ import { queryContentChatRoomDetail } from './queryContentChatRoomDetail';
 import { queryContentChatMessage } from './queryContentChatMessage';
 import { queryGetNotificationHistory } from './queryGetNotificationHistory';
 import { queryGetUserOrganizationRef } from './queryGetUserOrganizationRef';
+import { queryBannerList } from './queryBannerList';
 
 export {
     queryContentProduct,
@@ -33,5 +34,6 @@ export {
     queryContentChatRoomDetail,
     queryContentChatMessage,
     queryGetNotificationHistory,
-    queryGetUserOrganizationRef
+    queryGetUserOrganizationRef,
+    queryBannerList
 };
