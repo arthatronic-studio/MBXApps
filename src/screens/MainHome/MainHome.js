@@ -13,6 +13,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useIsFocused} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
+import Modal from 'react-native-modal';
+import ImagesPath from 'src/components/ImagesPath';
 
 import {
   Text,
@@ -197,6 +199,8 @@ const MainHome = ({navigation, route}) => {
   const prevFirebaseNotifierLastChatCount = usePreviousState(
     firebaseNotifierLastChatCount,
   );
+
+  const [isModalVisible, setModalVisible] = useState(true);
 
   useEffect(() => {
     const subscriber = firestore()
@@ -433,6 +437,24 @@ const MainHome = ({navigation, route}) => {
           }
         />
       }>
+      <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={() => setModalVisible(false)}>
+        <View style={{height: '75%'}}>
+          <ImageBackground
+            source={ImagesPath.popUpSabyan}
+            imageStyle={{ borderRadius: 13}}
+            style={{height: '100%', resizeMode: 'contain', width: '100%'}}>
+            <TouchableOpacity
+              onPress={() => setModalVisible(false)}
+              style={{alignSelf: 'flex-end', padding:3,margin:10, backgroundColor:Color.gray, borderRadius:12}}>
+              <Image
+                source={ImagesPath.icClose}
+                style={{width: 20, height: 20, top: 0}}></Image>
+            </TouchableOpacity>
+          </ImageBackground>
+        </View>
+      </Modal>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
