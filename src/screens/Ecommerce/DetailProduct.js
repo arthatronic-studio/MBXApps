@@ -11,6 +11,8 @@ import {
 import Styled from 'styled-components';
 import {useSelector} from 'react-redux';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Entypo from 'react-native-vector-icons/Entypo';
+import ImageSlider from '../../components/ImageSlider';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {
@@ -42,7 +44,7 @@ const images = [
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
-const DetailProduct = ({ route, navigation }) => {
+const DetailProduct = ({navigation}) => {
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
   const {Color} = useColor();
@@ -54,7 +56,7 @@ const DetailProduct = ({ route, navigation }) => {
           customIcon
           type="regular"
           color={Color.white}
-          backgroundColor="blackContent"
+          backgroundColor="primary"
           centerTitle={false}
           searchbar
           cartIcon
@@ -72,14 +74,11 @@ const DetailProduct = ({ route, navigation }) => {
             position: 'absolute',
             backgroundColor: 'white',
           }}>
-          <Image
-            source={ImagesPath.productImage}
-            style={{width: 420, height: 420}}
-          />
+          <ImageSlider />
         </View>
         <View
           style={{
-            backgroundColor: '#252525',
+            backgroundColor: Color.white,
             borderRadius: 25,
             width: '100%',
             height: 700,
@@ -90,7 +89,7 @@ const DetailProduct = ({ route, navigation }) => {
               marginTop: 10,
               width: '100%',
               height: 20,
-              backgroundColor: '#252525',
+              backgroundColor: Color.white,
               borderRadius: 15,
             }}></View>
           <View>
@@ -98,7 +97,7 @@ const DetailProduct = ({ route, navigation }) => {
               style={{
                 width: '100%',
                 height: 5,
-                backgroundColor: '#252525',
+                backgroundColor: Color.white,
               }}>
               {/* Mulai */}
             </View>
@@ -107,28 +106,35 @@ const DetailProduct = ({ route, navigation }) => {
                 <Text
                   style={{
                     fontSize: 14,
-                    color: Color.white,
+                    color: Color.black,
                     fontWeight: 'bold',
                     width: 128,
                     paddingHorizontal: 11,
-                    paddingVertical: 5,
                   }}>
                   Pashmina Pink
                 </Text>
-                <View style={{flexDirection: 'row', paddingHorizontal: 10}}>
-                  <Text
-                    style={{
-                      fontSize: 11,
-                      color: Color.gray,
-                      paddingHorizontal: 5,
-                      fontWeight: 'bold',
-                    }}>
-                    Hijab |
-                  </Text>
-                  <Image
-                    source={ImagesPath.star}
-                    style={{width: 15, height: 15}}
-                  />
+                <Text
+                  style={{
+                    fontSize: 11,
+                    color: Color.gray,
+                    fontWeight: 'bold',
+                    textAlign: 'left',
+                    paddingHorizontal: 15,
+                  }}>
+                  Fashion
+                </Text>
+                <View style={{height: 15}}></View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    paddingVertical: 10,
+                    paddingHorizontal: 10,
+                  }}>
+                  <Entypo name={'star'} style={{color: Color.yellow}} />
+                  <Entypo name={'star'} style={{color: Color.yellow}} />
+                  <Entypo name={'star'} style={{color: Color.yellow}} />
+                  <Entypo name={'star'} style={{color: Color.yellow}} />
+                  <Entypo name={'star'} style={{color: Color.gray}} />
                   <Text
                     style={{
                       fontSize: 12,
@@ -136,15 +142,24 @@ const DetailProduct = ({ route, navigation }) => {
                       paddingHorizontal: 5,
                       fontWeight: 'bold',
                     }}>
-                    4.5
+                    4.0 |
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: Color.gray,
+                      paddingHorizontal: 5,
+                      fontWeight: 'bold',
+                    }}>
+                    120 Terjual
                   </Text>
                 </View>
               </View>
               <View style={{paddingVertical: 8}}>
                 <Text
                   style={{
-                    width: 370,
-                    color: Color.white,
+                    width: 300,
+                    color: Color.black,
                     fontWeight: 'bold',
                     fontSize: 20,
                   }}>
@@ -160,7 +175,7 @@ const DetailProduct = ({ route, navigation }) => {
         style={{
           width: '100%',
           height: '10%',
-          backgroundColor: '#363636',
+          backgroundColor: Color.white,
         }}>
         <View
           style={{
@@ -175,7 +190,7 @@ const DetailProduct = ({ route, navigation }) => {
               width: '40%',
               height: 40,
               borderWidth: 1,
-              borderColor: '#FAC255',
+              borderColor: Color.blue,
               borderRadius: 10,
               justifyContent: 'center',
               alignItems: 'center',
@@ -186,12 +201,12 @@ const DetailProduct = ({ route, navigation }) => {
               <MaterialCommunityIcons
                 name={'shopping-outline'}
                 size={17}
-                style={{paddingHorizontal: 5, color: '#FAC255'}}
+                style={{paddingHorizontal: 5, color: Color.blue}}
               />
               <Text
                 style={{
                   fontSize: 13,
-                  color: '#FAC255',
+                  color: Color.blue,
                   fontWeight: 'bold',
                   paddingHorizontal: 5,
                 }}>
@@ -204,7 +219,7 @@ const DetailProduct = ({ route, navigation }) => {
             style={{
               width: '50%',
               height: 40,
-              backgroundColor: '#FAC255',
+              backgroundColor: Color.blue,
               borderRadius: 10,
               justifyContent: 'center',
               alignItems: 'center',
@@ -215,12 +230,12 @@ const DetailProduct = ({ route, navigation }) => {
             <FontAwesome5
               name={'shopping-cart'}
               size={13}
-              style={{paddingHorizontal: 5}}
+              style={{paddingHorizontal: 5, color: Color.white}}
             />
             <Text
               style={{
                 fontSize: 13,
-                color: Color.blackContent,
+                color: Color.white,
                 fontWeight: 'bold',
                 paddingHorizontal: 5,
               }}>

@@ -56,6 +56,8 @@ import {usePreviousState} from 'src/hooks';
 import MerchScreen from '../Ecommerce/MerchScreen';
 import DetailProduct from '../Ecommerce/DetailProduct';
 import TopTab from '../Ecommerce/TopTab';
+import LiveLelangScreen from '../LiveLelangScreen';
+import CardListProduk from '../../components/Card/CardListProduct';
 
 const ContentView = Styled(View)`
   width: 100%;
