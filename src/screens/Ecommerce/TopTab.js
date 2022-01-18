@@ -5,16 +5,17 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import {useColor} from '@src/components';
 
 function Description() {
+  const {Color} = useColor();
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: '#252525',
+        backgroundColor: Color.white,
       }}>
       <Text
         style={{
           fontSize: 14,
-          color: '#FFFFFF',
+          color: Color.black,
           fontWeight: '400',
           paddingVertical: 20,
           paddingHorizontal: 20,
@@ -50,15 +51,16 @@ function Description() {
 }
 
 function Review() {
+  const {Color} = useColor();
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: '#252525',
+        backgroundColor: Color.white,
         paddingVertical: 14,
         paddingHorizontal: 20,
       }}>
-      <Text style={{fontSize: 14, color: '#FFFFFF', fontWeight: '400'}}>
+      <Text style={{fontSize: 14, color: Color.black, fontWeight: '400'}}>
         Cupcake ipsum dolor sit amet jelly cookie. Chocolate cake gingerbread
         gummi bears chocolate cake muffin toffee pastry. Sweet brownie bonbon
         lollipop pie biscuit candy canes cake. Carrot cake sesame snaps
@@ -92,13 +94,14 @@ function Review() {
 const Tab = createMaterialTopTabNavigator();
 
 function MyTabs() {
+  const {Color} = useColor();
   return (
     <Tab.Navigator
       initialRouteName="Description"
       tabBarOptions={{
-        activeTintColor: '#FFD35B',
+        activeTintColor: Color.blue,
         labelStyle: {fontSize: 12, fontWeight: 'bold'},
-        style: {backgroundColor: '#252525'},
+        style: {backgroundColor: Color.white},
       }}>
       <Tab.Screen
         name="Description"

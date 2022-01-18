@@ -40,8 +40,8 @@ let filter = [
   {id: 2, name: 'Rating'},
 ];
 
-const MerchScreen = ({ route, navigation }) => {
-  console.log(navigation)
+const MerchScreen = ({navigation}) => {
+  console.log(navigation);
   const [selectedItem, setSelectedItem] = useState(null);
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
@@ -58,7 +58,7 @@ const MerchScreen = ({ route, navigation }) => {
         <Header
           type="regular"
           color={Color.white}
-          backgroundColor="blackContent"
+          backgroundColor="primary"
           centerTitle={false}
           searchbar
           cartIcon
@@ -68,7 +68,7 @@ const MerchScreen = ({ route, navigation }) => {
       }
       color="black"
       onPressLeftButton={() => navigation.pop()}>
-      <ScrollView style={{backgroundColor: '#141414'}}>
+      <ScrollView style={{backgroundColor: Color.white}}>
         <View style={{flexDirection: 'row', marginTop: 12}}>
           <Filter value={selectedItem} data={filter} onSelect={onSelect} />
           <Category />
@@ -81,7 +81,7 @@ const MerchScreen = ({ route, navigation }) => {
             paddingVertical: 10,
             paddingHorizontal: 15,
           }}>
-          <Text>Terbaru</Text>
+          <Text style={{fontWeight: 'bold'}}>Terbaru</Text>
           <View style={{width: '72%'}}></View>
           <View style={{flexDirection: 'row'}}>
             <View style={{paddingHorizontal: 3}}>
@@ -103,7 +103,7 @@ const MerchScreen = ({ route, navigation }) => {
           </View>
         </View>
         <View>
-          <CardListProduk onPress={() => navigation.navigate('DetailProduct')} />
+          <CardListProduk />
         </View>
       </ScrollView>
     </Scaffold>

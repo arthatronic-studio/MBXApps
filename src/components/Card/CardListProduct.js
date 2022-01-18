@@ -9,6 +9,7 @@ import {
   Pressable,
 } from 'react-native';
 import ImagesPath from '../ImagesPath';
+import Entypo from 'react-native-vector-icons/Entypo';
 import {
   Row,
   Col,
@@ -99,8 +100,7 @@ const DATA = [
   },
 ];
 
-const CardListProduk = (props) => {
-  const { onPress } = props;
+const CardListProduk = ({navigation}) => {
   const {Color} = useColor();
   const renderItem = ({item}) => (
     <View
@@ -110,7 +110,9 @@ const CardListProduk = (props) => {
         marginHorizontal: 5,
         marginVertical: 5,
       }}>
-      <TouchableOpacity onPress={() => onPress()} style={styles.btnCategory}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('DetailProduct')}
+        style={styles.btnCategory}>
         <Image
           source={item.image}
           style={{
@@ -132,47 +134,47 @@ const CardListProduk = (props) => {
             <Text style={styles.txtCategory}>{item.category}</Text>
             <View style={{flexDirection: 'row'}}>
               <Text style={styles.txtRating}>{item.rating}</Text>
-              <Image source={ImagesPath.star} style={{width: 13, height: 13}} />
+              <Entypo name={'star'} style={{color: '#F1D946'}} />
               <Text style={styles.txtSold}>{item.sold} Terjual</Text>
             </View>
           </View>
           <View style={{marginVertical: 5}}>
-            <Text style={{ fontSize: 10 }}>Harga</Text>
+            <Text style={{fontSize: 10}}>Harga</Text>
             <Text style={styles.txtPrice}>Rp {item.price}</Text>
           </View>
         </View>
-      </TouchableOpacity>
-      <View
-        style={{
-          width: '17%',
-          position: 'absolute',
-          flexDirection: 'row',
-          marginVertical: 110,
-          alignSelf: 'flex-end',
-        }}>
-        <TouchableOpacity
+        <View
           style={{
-            width: 30,
-            height: 30,
+            width: '17%',
+            position: 'absolute',
+            flexDirection: 'row',
+            marginVertical: 110,
+            alignSelf: 'flex-end',
           }}>
-          <View>
-            <View
-              style={{
-                backgroundColor: 'grey',
-                width: 30,
-                height: 30,
-                borderRadius: 50,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Image
-                source={ImagesPath.unfavorited}
-                style={{width: 20, height: 20}}
-              />
+          <TouchableOpacity
+            style={{
+              width: 30,
+              height: 30,
+            }}>
+            <View>
+              <View
+                style={{
+                  backgroundColor: 'grey',
+                  width: 30,
+                  height: 30,
+                  borderRadius: 50,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  source={ImagesPath.unfavorited}
+                  style={{width: 20, height: 20}}
+                />
+              </View>
             </View>
-          </View>
-        </TouchableOpacity>
-      </View>
+          </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
     </View>
   );
   return (
