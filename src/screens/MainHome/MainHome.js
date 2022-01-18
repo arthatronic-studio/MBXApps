@@ -161,6 +161,13 @@ const sambatanMenus = [
   },
 ];
 
+const dataSabyan = {
+  productName: 'New Sabyan Album',
+  productCategory: 'Promo',
+  image: ImagesPath.popUpSabyan,
+  productDescription: 'Cupcake ipsum dolor sit amet tart. Cookie carrot cake bear claw jujubes muffin. Cotton candy sweet candy chocolate muffin bonbon. Tart donut apple pie cupcake tart tart. Jelly-o chocolate cake ice cream shortbread biscuit chupa chups dessert. Macaroon cotton candy lollipop marshmallow dragée toffee shortbread macaroon dessert. Bear claw gummi bears pie apple pie tiramisu soufflé bonbon. Tiramisu tart candy croissant jujubes marshmallow lemon drops. Ice cream muffin pastry halvah chocolate bar bear claw. Tart icing pudding jelly-o fruitcake fruitcake. Tiramisu sweet pastry caramels sugar plum sweet gingerbread. Macaroon powder gummies tootsie roll muffin. Cookie danish candy jelly beans biscuit. Soufflé cake pudding fruitcake macaroon jelly beans.'
+}
+
 const MainHome = ({navigation, route}) => {
   // state
   const [vestaAmount, setVestaAmount] = useState(0);
@@ -457,18 +464,20 @@ const MainHome = ({navigation, route}) => {
         isVisible={isModalVisible}
         onBackdropPress={() => setModalVisible(false)}>
         <View style={{height: '75%'}}>
-          <ImageBackground
-            source={ImagesPath.popUpSabyan}
-            imageStyle={{ borderRadius: 13}}
-            style={{height: '100%', resizeMode: 'contain', width: '100%'}}>
-            <TouchableOpacity
-              onPress={() => setModalVisible(false)}
-              style={{alignSelf: 'flex-end', padding:3,margin:10, backgroundColor:Color.gray, borderRadius:12}}>
-              <Image
-                source={ImagesPath.icClose}
-                style={{width: 20, height: 20, top: 0}}></Image>
-            </TouchableOpacity>
-          </ImageBackground>
+          <TouchableOpacity onPress={() => {setModalVisible(false); navigation.navigate('DetailPromo',{item: dataSabyan})}}>
+            <ImageBackground
+              source={ImagesPath.popUpSabyan}
+              imageStyle={{ borderRadius: 13}}
+              style={{height: '100%', resizeMode: 'contain', width: '100%'}}>
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                style={{alignSelf: 'flex-end', padding:3,margin:10, backgroundColor:Color.gray, borderRadius:12}}>
+                <Image
+                  source={ImagesPath.icClose}
+                  style={{width: 20, height: 20, top: 0}}></Image>
+              </TouchableOpacity>
+            </ImageBackground>
+          </TouchableOpacity>
         </View>
       </Modal>
       <ScrollView showsVerticalScrollIndicator={false}>

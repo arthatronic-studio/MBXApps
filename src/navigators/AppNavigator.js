@@ -104,6 +104,8 @@ import CartAuction from 'src/screens/Auction/CartAuction';
 import Lelang from 'src/screens/Lelang';
 import LiveLelangScreen from 'src/screens/LiveLelangScreen';
 import DetailLelang from 'src/screens/DetailLelang';
+import DetailPromo from 'src/screens/Promo/DetailPromo';
+
 
 const {Navigator, Screen} = createStackNavigator();
 
@@ -125,6 +127,11 @@ function MainStackNavigator() {
       <Screen name="Lelang" component={Lelang} />
       <Screen name="DetailLelang" component={DetailLelang} />
       <Screen name="LiveLelangScreen" component={LiveLelangScreen} />
+
+      
+      {/* Promo Popup */}
+      <Screen name="DetailPromo" component={DetailPromo} />
+
 
       {/* Ecommerce */}
       <Screen name="MerchScreen" component={MerchScreen} />
