@@ -6,7 +6,7 @@ import {Scaffold, useColor, Header} from '@src/components';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import CardListLelang from 'src/components/Card/CardListLelang';
 
-const Lelang = () => {
+const Lelang = ({ navigation, route }) => {
   const {Color} = useColor();
   const renderItem = ({item}) => (
     <Image
@@ -92,7 +92,7 @@ const Lelang = () => {
                 width: '40%',
                 justifyContent: 'center',
               }}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('LiveLelangScreen')}>
                 <Text
                   style={{
                     textAlign: 'right',
@@ -109,7 +109,7 @@ const Lelang = () => {
         </View>
         {/* Bagian Card List */}
         <View>
-          <CardListLelang />
+          <CardListLelang navigation />
         </View>
         <View style={{paddingHorizontal: 20, paddingVertical: 20}}>
           <Text style={{fontSize: 16, fontWeight: 'bold'}}>Pelelangan</Text>

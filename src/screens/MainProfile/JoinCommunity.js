@@ -121,8 +121,8 @@ const JoinCommunity = ({ navigation, route }) => {
     const onSubmit = () => {
         Keyboard.dismiss();
 
-        if (thumbImage === '') {
-            showPopup('Silahkan pilih gambar terlebih dulu', 'warning');
+        if (userData.chapterId === '') {
+            showPopup('Silahkan isi chapter terlebih dulu', 'warning');
             return;
         }
 
@@ -141,13 +141,23 @@ const JoinCommunity = ({ navigation, route }) => {
             return;
         }
 
-        if (userData.reason === '') {
-            showPopup('Silahkan alasan gabung terlebih dulu', 'warning');
+        if (userData.carIdentity === '') {
+            showPopup('Silahkan isi plat nomor terlebih dulu', 'warning');
             return;
         }
 
-        if (userData.chapterId === '') {
-            showPopup('Silahkan isi chapter terlebih dulu', 'warning');
+        if (userData.reason === '') {
+            showPopup('Silahkan isi alasan gabung terlebih dulu', 'warning');
+            return;
+        }
+
+        if (userData.note === '') {
+            showPopup('Silahkan isi deskripsi terlebih dulu', 'warning');
+            return;
+        }
+
+        if (thumbImage === '' || thumbImage2 === '' || thumbImage3 === '' || thumbImage4 === '' || thumbImage5 === '' ) {
+            showPopup('Silahkan pilih gambar terlebih dulu', 'warning');
             return;
         }
 

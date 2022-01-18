@@ -13,6 +13,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useIsFocused} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
+import Modal from 'react-native-modal';
+import ImagesPath from 'src/components/ImagesPath';
 
 import {
   Text,
@@ -34,9 +36,10 @@ import {shadowStyle} from '@src/styles';
 import {Box, Divider, Circle} from '@src/styled';
 import {playNotificationSounds} from '@src/utils/notificationSounds';
 import CarouselView from 'src/components/CarouselView';
+import BannerHome from 'src/components/BannerHome';
 
 import Client from '@src/lib/apollo';
-import {queryContentProduct} from '@src/lib/query';
+import {queryContentProduct, queryBannerList} from '@src/lib/query';
 import {queryVestaBalance, queryVestaOpenBalance} from '@src/lib/query/payment';
 
 import {
@@ -144,6 +147,20 @@ const sambatanMenus = [
   //   images: iconSemua,
   //   nav: '',
   //   params: {title: 'Iuran Non-wajib', type: 'ACTIVE', productType: 'SAMBATAN_O',}},
+  {
+    id: 7,
+    name: 'Lelang',
+    images: iconIuran,
+    nav: 'Lelang',
+    params: {title: 'Iuran', type: 'ACTIVE', productType: 'ALL_SAMBATAN'},
+  },
+  {
+    id: 8,
+    name: 'Ecommerce',
+    images: iconPulsa,
+    nav: 'MerchScreen',
+    params: {title: 'Iuran', type: 'ACTIVE', productType: 'ALL_SAMBATAN'},
+  },
 ];
 
 const MainHome = ({navigation, route}) => {
@@ -151,8 +168,7 @@ const MainHome = ({navigation, route}) => {
   const [vestaAmount, setVestaAmount] = useState(0);
   const [wallet, setWallet] = useState('CLOSE');
   const [firebaseData, setFirebaseData] = useState([]);
-  const [firebaseNotifierLastChatCount, setFirebaseNotifierLastChatCount] =
-    useState(0);
+  const [firebaseNotifierLastChatCount, setFirebaseNotifierLastChatCount] = useState(0);
   const [notifierCount, setNotifierCount] = useState(0);
 
   const [loadingAuction, setLoadingAuction] = useState(true);
@@ -174,6 +190,9 @@ const MainHome = ({navigation, route}) => {
   const [loadingKerja, setLoadingKerja] = useState(true);
   const [listKerja, setListKerja] = useState([]);
 
+  const [loadingBanner, setLoadingBanner] = useState(true);
+  const [listBanner, setListBanner] = useState([]);
+
   const user = useSelector(state => state['user.auth'].login.user);
   const dispatch = useDispatch();
 
@@ -185,6 +204,8 @@ const MainHome = ({navigation, route}) => {
   const prevFirebaseNotifierLastChatCount = usePreviousState(
     firebaseNotifierLastChatCount,
   );
+
+  const [isModalVisible, setModalVisible] = useState(true);
 
   useEffect(() => {
     const subscriber = firestore()
@@ -253,6 +274,19 @@ const MainHome = ({navigation, route}) => {
       fetchData();
     }
   }, [isFocused]);
+
+  useEffect(() => {
+    Client.query({
+      query: queryBannerList
+    }).then((res) => {
+      console.log(res);
+      console.log(res.data.bannerList);
+      setListBanner(res.data.bannerList);
+      setLoadingBanner(false);
+    }).catch((err) => {
+      console.log(err, 'err banner list');
+    })
+  }, []);
 
   const componentWillFocus = () => {
     if (user && !user.guest) {
@@ -421,6 +455,24 @@ const MainHome = ({navigation, route}) => {
           }
         />
       }>
+      <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={() => setModalVisible(false)}>
+        <View style={{height: '75%'}}>
+          <ImageBackground
+            source={ImagesPath.popUpSabyan}
+            imageStyle={{ borderRadius: 13}}
+            style={{height: '100%', resizeMode: 'contain', width: '100%'}}>
+            <TouchableOpacity
+              onPress={() => setModalVisible(false)}
+              style={{alignSelf: 'flex-end', padding:3,margin:10, backgroundColor:Color.gray, borderRadius:12}}>
+              <Image
+                source={ImagesPath.icClose}
+                style={{width: 20, height: 20, top: 0}}></Image>
+            </TouchableOpacity>
+          </ImageBackground>
+        </View>
+      </Modal>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
@@ -452,21 +504,11 @@ const MainHome = ({navigation, route}) => {
           </View>
         </View>
 
-        <View
-          style={{width: width - 32, marginHorizontal: 16, marginBottom: 16}}>
-          <CarouselView
-            delay={4000}
-            showIndicator
-            style={{aspectRatio: 12 / 7}}>
-            <ImageBackground
-              style={{
-                width: '100%',
-                height: '100%',
-              }}
-              source={imageCarousel}
-            />
-          </CarouselView>
-        </View>
+        <BannerHome
+          loading={loadingBanner}
+          data={listBanner}
+        />
+
         <ContentView>
           <BalanceView
             style={{...shadowStyle, backgroundColor: Color.textInput}}>
