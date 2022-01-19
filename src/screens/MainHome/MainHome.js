@@ -461,61 +461,34 @@ const MainHome = ({navigation, route}) => {
             </View>
           }
         />
-      }>
-      <Modal
-        isVisible={isModalVisible}
-        onBackdropPress={() => setModalVisible(false)}>
-        <View style={{height: '75%'}}>
-          <TouchableOpacity onPress={() => {setModalVisible(false); navigation.navigate('DetailPromo',{item: dataSabyan})}}>
-            <ImageBackground
-              source={ImagesPath.popUpSabyan}
-              imageStyle={{ borderRadius: 13}}
-              style={{height: '100%', resizeMode: 'contain', width: '100%'}}>
-              <TouchableOpacity
-                onPress={() => setModalVisible(false)}
-                style={{alignSelf: 'flex-end', padding:3,margin:10, backgroundColor:Color.gray, borderRadius:12}}>
-                <Image
-                  source={ImagesPath.icClose}
-                  style={{width: 20, height: 20, top: 0}}></Image>
-              </TouchableOpacity>
-            </ImageBackground>
-          </TouchableOpacity>
-        </View>
-      </Modal>
+      }
+    >
       <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
             flexDirection: 'row',
             width: '100%',
             alignItems: 'center',
-            paddingHorizontal: 16,
             paddingVertical: 20,
-          }}>
-          <Image
-            source={{uri: user ? user.photoProfile : ''}}
-            style={{
-              width: '14%',
-              aspectRatio: 1,
-              borderRadius: 50,
-              backgroundColor: Color.border,
-            }}
-          />
+          }}
+        >
           <View style={{paddingLeft: 16, alignItems: 'flex-start'}}>
             <Text lineHeight={18} letterSpacing={0.45}>
-              Halo ,
+              Halo,
             </Text>
-            <Text size={18} type="bold" lineHeight={22} letterSpacing={0.45}>
+            <Divider height={4} />
+            <Text size={24} type="bold" letterSpacing={0.45}>
               {user && !user.guest
                 ? user.firstName.trim() +
                   (user.lastName ? ' ' + user.lastName.trim() : '')
-                : 'Tamu'}
+                : 'Tamu'}!
             </Text>
           </View>
         </View>
 
         <BannerHome
-          loading={loadingBanner}
           data={listBanner}
+          loading={loadingBanner}
         />
 
         <ContentView>
@@ -731,6 +704,35 @@ const MainHome = ({navigation, route}) => {
           modalPostingRef.current.close();
         }}
       />
+
+      <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={() => setModalVisible(false)}
+        animationIn='slideInUp'
+        animationOut='slideOutDown'
+      >
+        <View style={{height: '75%'}}>
+          <TouchableOpacity
+            onPress={() => {
+              setModalVisible(false);
+              navigation.navigate('DetailPromo', {item: dataSabyan});
+            }}
+          >
+            <ImageBackground
+              source={ImagesPath.popUpSabyan}
+              imageStyle={{ borderRadius: 13}}
+              style={{height: '100%', resizeMode: 'contain', width: '100%'}}>
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                style={{alignSelf: 'flex-end', padding:3,margin:10, backgroundColor:Color.gray, borderRadius:12}}>
+                <Image
+                  source={ImagesPath.icClose}
+                  style={{width: 20, height: 20, top: 0}}></Image>
+              </TouchableOpacity>
+            </ImageBackground>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </Scaffold>
   );
 };

@@ -11,7 +11,7 @@ const URL = require('url-parse');
 const MainView = Styled(View)`
   flexDirection: column;
   width: 100%;
-  backgroundColor: white;
+  backgroundColor: ${Color.textInput};
   flex: 1
 `;
 

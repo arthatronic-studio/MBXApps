@@ -55,16 +55,14 @@ const DetailProduct = ({navigation}) => {
         <Header
           customIcon
           type="regular"
-          color={Color.white}
-          backgroundColor="primary"
           centerTitle={false}
           searchbar
           cartIcon
           favoriteIcon
         />
       }
-      color="black"
-      onPressLeftButton={() => navigation.pop()}>
+      onPressLeftButton={() => navigation.pop()}
+    >
       <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
         <View
           style={{
@@ -72,13 +70,13 @@ const DetailProduct = ({navigation}) => {
             width: '100%',
             height: '50%',
             position: 'absolute',
-            backgroundColor: 'white',
+            backgroundColor: Color.theme,
           }}>
           <ImageSlider />
         </View>
         <View
           style={{
-            backgroundColor: Color.white,
+            backgroundColor: Color.theme,
             borderRadius: 25,
             width: '100%',
             height: 700,
@@ -89,7 +87,7 @@ const DetailProduct = ({navigation}) => {
               marginTop: 10,
               width: '100%',
               height: 20,
-              backgroundColor: Color.white,
+              backgroundColor: Color.theme,
               borderRadius: 15,
             }}></View>
           <View>
@@ -97,30 +95,16 @@ const DetailProduct = ({navigation}) => {
               style={{
                 width: '100%',
                 height: 5,
-                backgroundColor: Color.white,
+                backgroundColor: Color.theme,
               }}>
               {/* Mulai */}
             </View>
-            <View style={{flexDirection: 'row'}}>
+            <View style={{flexDirection: 'row', paddingHorizontal: 16, justifyContent: 'space-between'}}>
               <View>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: Color.black,
-                    fontWeight: 'bold',
-                    width: 128,
-                    paddingHorizontal: 11,
-                  }}>
+                <Text type='bold' align='left'>
                   Pashmina Pink
                 </Text>
-                <Text
-                  style={{
-                    fontSize: 11,
-                    color: Color.gray,
-                    fontWeight: 'bold',
-                    textAlign: 'left',
-                    paddingHorizontal: 15,
-                  }}>
+                <Text align='left' size={11} color={Color.gray}>
                   Fashion
                 </Text>
                 <View style={{height: 15}}></View>
@@ -128,7 +112,6 @@ const DetailProduct = ({navigation}) => {
                   style={{
                     flexDirection: 'row',
                     paddingVertical: 10,
-                    paddingHorizontal: 10,
                   }}>
                   <Entypo name={'star'} style={{color: Color.yellow}} />
                   <Entypo name={'star'} style={{color: Color.yellow}} />
@@ -158,8 +141,7 @@ const DetailProduct = ({navigation}) => {
               <View style={{paddingVertical: 8}}>
                 <Text
                   style={{
-                    width: 300,
-                    color: Color.black,
+                    color: Color.text,
                     fontWeight: 'bold',
                     fontSize: 20,
                   }}>
@@ -175,7 +157,7 @@ const DetailProduct = ({navigation}) => {
         style={{
           width: '100%',
           height: '10%',
-          backgroundColor: Color.white,
+          backgroundColor: Color.theme,
         }}>
         <View
           style={{
@@ -190,7 +172,7 @@ const DetailProduct = ({navigation}) => {
               width: '40%',
               height: 40,
               borderWidth: 1,
-              borderColor: Color.blue,
+              borderColor: Color.info,
               borderRadius: 10,
               justifyContent: 'center',
               alignItems: 'center',
@@ -201,12 +183,12 @@ const DetailProduct = ({navigation}) => {
               <MaterialCommunityIcons
                 name={'shopping-outline'}
                 size={17}
-                style={{paddingHorizontal: 5, color: Color.blue}}
+                style={{paddingHorizontal: 5, color: Color.info}}
               />
               <Text
                 style={{
                   fontSize: 13,
-                  color: Color.blue,
+                  color: Color.info,
                   fontWeight: 'bold',
                   paddingHorizontal: 5,
                 }}>
@@ -219,7 +201,7 @@ const DetailProduct = ({navigation}) => {
             style={{
               width: '50%',
               height: 40,
-              backgroundColor: Color.blue,
+              backgroundColor: Color.info,
               borderRadius: 10,
               justifyContent: 'center',
               alignItems: 'center',
@@ -230,12 +212,12 @@ const DetailProduct = ({navigation}) => {
             <FontAwesome5
               name={'shopping-cart'}
               size={13}
-              style={{paddingHorizontal: 5, color: Color.white}}
+              style={{paddingHorizontal: 5, color: Color.theme}}
             />
             <Text
               style={{
                 fontSize: 13,
-                color: Color.white,
+                color: Color.textInput,
                 fontWeight: 'bold',
                 paddingHorizontal: 5,
               }}>
@@ -244,8 +226,6 @@ const DetailProduct = ({navigation}) => {
           </TouchableOpacity>
         </View>
       </View>
-      {/* <View
-        style={{backgroundColor: 'white', width: '100%', height: 50}}></View> */}
     </Scaffold>
   );
 };

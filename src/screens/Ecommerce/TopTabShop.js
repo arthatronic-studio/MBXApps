@@ -11,21 +11,21 @@ function Description() {
     <View
       style={{
         flex: 1,
-        backgroundColor: Color.white
+        backgroundColor: Color.theme
       }}>
         <View style={{ paddingTop: 10 }}>
             <CardListProduk />
         </View>
-        <Row style={{ backgroundColor: Color.white, padding: 16 }}>
+        <Row style={{ backgroundColor: Color.theme, padding: 16 }}>
             <Col size={5}>
-                <TouchableOpacity onPress={() => navigation.navigate('CheckoutScreen')} style={{ backgroundColor: Color.white, borderWidth: 1, borderColor: Color.blue, borderRadius: 20, paddingVertical: 10 }}>
-                    <Text type='semibold' color={Color.blue}>Hapus Produk</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('CheckoutScreen')} style={{ backgroundColor: Color.theme, borderWidth: 1, borderColor: Color.info, borderRadius: 20, paddingVertical: 10 }}>
+                    <Text type='semibold' color={Color.info}>Hapus Produk</Text>
                 </TouchableOpacity>
             </Col>
             <Col size={0.5} />
             <Col>
-                <TouchableOpacity onPress={() => navigation.navigate('CheckoutScreen')} style={{ backgroundColor: Color.blue, borderRadius: 20, paddingVertical: 10 }}>
-                    <Text type='semibold' color={Color.white}>Tambah Produk</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('CheckoutScreen')} style={{ backgroundColor: Color.info, borderRadius: 20, paddingVertical: 10 }}>
+                    <Text type='semibold' color={Color.textInput}>Tambah Produk</Text>
                 </TouchableOpacity>
             </Col>
         </Row>
@@ -34,25 +34,26 @@ function Description() {
 }
 
 function Review() {
-    const { Color } = useColor();
+  const { Color } = useColor();
+
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: Color.white
+        backgroundColor: Color.theme
       }}>
         <View style={{ marginTop: 15 }}>
             {['Semua Produk', 'Fashion', 'Gedget', 'Frozen Food'].map((val,id) => (
                 <View>
-                    <Row style={{ marginHorizontal: 15, paddingVertical: 15, backgroundColor: Color.white, borderBottomWidth: 1, borderBottomColor: '#12121230' }}>
+                    <Row style={{ marginHorizontal: 15, paddingVertical: 15, backgroundColor: Color.theme, borderBottomWidth: 1, borderBottomColor: Color.secondary }}>
                         <Col>
                             <Text align='left'>{val}</Text>
                         </Col>
                     </Row>
                 </View>
             ))}
-            <TouchableOpacity style={{ borderColor: Color.blue, borderWidth: 1, marginTop: 20, paddingVertical: 10, paddingHorizontal: 20, borderRadius: 20, alignSelf: 'center' }}>
-                <Text color={Color.blue}>Tambah Kategori</Text>
+            <TouchableOpacity style={{ borderColor: Color.info, borderWidth: 1, marginTop: 20, paddingVertical: 10, paddingHorizontal: 20, borderRadius: 20, alignSelf: 'center' }}>
+                <Text color={Color.info}>Tambah Kategori</Text>
             </TouchableOpacity>
         </View>
     </View>
@@ -62,14 +63,16 @@ function Review() {
 const Tab = createMaterialTopTabNavigator();
 
 function MyTabs() {
+  const { Color } = useColor();
+
   return (
     <Tab.Navigator
       initialRouteName="Description"
       tabBarOptions={{
-        indicatorStyle: {backgroundColor: '#96C63B', height: '100%'},
-        activeTintColor: '#fff',
+        indicatorStyle: {backgroundColor: Color.primary, height: '100%'},
+        activeTintColor: Color.textInput,
         labelStyle: {fontSize: 12, fontWeight: 'bold'},
-        style: {backgroundColor: '#CCCCCC' , borderRadius: 30, marginVertical: 0, overflow: 'hidden', marginHorizontal: 16},
+        style: {borderRadius: 30, marginVertical: 0, overflow: 'hidden', marginHorizontal: 16},
       }}>
       <Tab.Screen
         name="Description"

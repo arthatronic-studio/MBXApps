@@ -50,10 +50,15 @@ const FormPayment = ({ navigation, route }) => {
 
   return (
     <Scaffold
-          header={<Header customIcon title='Ubah Alamat' type='regular' color={Color.white} backgroundColor='primary' centerTitle={false} />}
+          header={
+            <Header 
+            customIcon 
+            title='Ubah Alamat' 
+            type='regular' 
+            centerTitle={false} />
+          }
           onPressLeftButton={() => navigation.pop()}
         >
-
         <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, }}>
           <View style={{ backgroundColor: '#fff', marginBottom: 40 }}>
             <Text align='left' style={{ paddingLeft: 16, marginTop: 15 }} type='bold'>Detail Alamat</Text>
@@ -134,9 +139,9 @@ const FormPayment = ({ navigation, route }) => {
             />
           </View>
         </ScrollView>
-        <View style={{ backgroundColor: Color.white }}>
-          <TouchableOpacity onPress={() => navigation.pop()} style={{ backgroundColor: Color.blue, borderRadius: 30, margin: 15, paddingVertical: 10 }}>
-              <Text type='semibold' color={Color.white}>Lanjutkan</Text>
+        <View style={{ backgroundColor: Color.theme }}>
+          <TouchableOpacity onPress={() => navigation.pop()} style={{ backgroundColor: Color.info, borderRadius: 30, margin: 15, paddingVertical: 10 }}>
+              <Text type='semibold' color={Color.textInput}>Lanjutkan</Text>
           </TouchableOpacity>
         </View>
       {/* <Loading {...loadingProps} /> */}

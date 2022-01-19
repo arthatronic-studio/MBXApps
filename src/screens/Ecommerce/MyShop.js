@@ -52,11 +52,18 @@ const MyShop = ({ navigation, route }) => {
 
   return (
     <Scaffold
-          header={<Header customIcon title='Toko Kamu' type='regular' color={Color.white} backgroundColor='primary' centerTitle={false} />}
+          header={
+            <Header 
+              customIcon 
+              title='Toko Kamu' 
+              type='regular'
+              centerTitle={false}
+            />
+          }
           onPressLeftButton={() => navigation.pop()}
         >
 
-        <View showsVerticalScrollIndicator={false} style={{ flex: 1, backgroundColor: Color.white }}>
+        <View showsVerticalScrollIndicator={false} style={{ flex: 1, backgroundColor: Color.theme }}>
           <View style={{  paddingBottom: 20, flex: 1 }}>
             <View style={{ height: 68, backgroundColor: Color.oldGreen }} />
             <View style={{ height: 72, backgroundColor: '#fff', position: 'absolute', elevation: 1, top: 36, zIndex: 1, left: 16, width: 72, borderRadius: 8 }} />

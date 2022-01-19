@@ -70,10 +70,9 @@ const DotIndicator = Styled(View)`
 `;
 
 const sliderData = [
-  { title: 'Tribes Social', subTitle: '...' },
-  { title: 'Tribes Social', subTitle: '...' },
-  { title: 'Tribes Social', subTitle: '...' },
-  { title: 'Tribes Social', subTitle: '...' },
+  { title: 'Smart Technology', subTitle: 'Tribesocial is an intelligent community platform that delivers personalized content recommendations to every user based on their interests.' },
+  { title: 'Diversified Community', subTitle: 'Users are actively engaged on Tribesocial, they like to express, discuss, show their attitudes and share content with others.' },
+  { title: 'High Quality Users', subTitle: 'Users are loyal to our platform, they use Tribesocial frequently.' },
 ];
 
 const KnowMeScreen = ({ navigation, route }) => {

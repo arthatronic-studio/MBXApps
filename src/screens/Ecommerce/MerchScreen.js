@@ -57,8 +57,6 @@ const MerchScreen = ({navigation}) => {
       header={
         <Header
           type="regular"
-          color={Color.white}
-          backgroundColor="primary"
           centerTitle={false}
           searchbar
           cartIcon
@@ -66,11 +64,13 @@ const MerchScreen = ({navigation}) => {
           notifIcon
         />
       }
-      color="black"
       onPressLeftButton={() => navigation.pop()}>
-      <ScrollView style={{backgroundColor: Color.white}}>
         <View style={{flexDirection: 'row', marginTop: 12}}>
-          <Filter value={selectedItem} data={filter} onSelect={onSelect} />
+          <Filter
+            value={selectedItem}
+            data={filter}
+            onSelect={onSelect}
+          />
           <Category />
         </View>
         <View
@@ -105,7 +105,6 @@ const MerchScreen = ({navigation}) => {
         <View>
           <CardListProduk />
         </View>
-      </ScrollView>
     </Scaffold>
   );
 };

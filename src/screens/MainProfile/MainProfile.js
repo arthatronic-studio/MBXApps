@@ -14,6 +14,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useDispatch, useSelector} from 'react-redux';
 import QRCode from 'react-native-qrcode-svg';
+import messaging from '@react-native-firebase/messaging';
 
 import {
   Alert,
@@ -29,6 +30,8 @@ import {redirectTo} from '@src/utils';
 import {shadowStyle} from '@src/styles';
 import {iconSplash, bannerCard} from '@assets/images';
 import {Box, Container, Divider} from 'src/styled';
+import Clipboard from '@react-native-community/clipboard';
+import { listPrivilegeUser } from 'src/utils/constants';
 
 const MainProfile = ({navigation, route}) => {
   const [modalVirtual, setModalVirtual] = useState(false);
@@ -38,7 +41,7 @@ const MainProfile = ({navigation, route}) => {
   const user = useSelector(state => state['user.auth'].login.user);
 
   // console.log('user', user);
-  // console.log(useSelector(state => state['user.auth']));
+  console.log(useSelector(state => state['user.auth']));
 
   const {Color} = useColor();
   const {width} = useWindowDimensions();
@@ -374,7 +377,7 @@ const MainProfile = ({navigation, route}) => {
               </TouchableOpacity>
             </Grid>
 
-            {user && (user.isDirector === 1 || user.userId === 244) && <Grid
+            {user && (user.isDirector === 1 || listPrivilegeUser.includes(user.userId)) && <Grid
               style={{
                 backgroundColor: Color.theme,
                 borderTopWidth: 0.5,
@@ -393,6 +396,43 @@ const MainProfile = ({navigation, route}) => {
                   <Col align="flex-start" size={8} justify="center">
                     <Text size={12} type="medium">
                       Community Admin
+                    </Text>
+                  </Col>
+                  <Col align="flex-end" size={3.25} justify="center">
+                    <FontAwesome
+                      name="angle-right"
+                      color={Color.text}
+                      size={20}
+                    />
+                  </Col>
+                </Row>
+              </TouchableOpacity>
+            </Grid>}
+
+            {user && <Grid
+              style={{
+                backgroundColor: Color.theme,
+                borderTopWidth: 0.5,
+                borderColor: Color.border,
+              }}>
+              <TouchableOpacity
+                onPress={async() => {
+                  const token = await messaging().getToken();
+                  console.log(token);
+                  Clipboard.setString(token);
+                  Alert('Berhasil disalin', token);
+                }}>
+                <Row>
+                  <Col size={0.75} justify="center">
+                    <AntDesign
+                      name="form"
+                      color={Color.text}
+                      style={{marginTop: 2}}
+                    />
+                  </Col>
+                  <Col align="flex-start" size={8} justify="center">
+                    <Text size={12} type="medium">
+                      Device Token
                     </Text>
                   </Col>
                   <Col align="flex-end" size={3.25} justify="center">

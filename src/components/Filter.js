@@ -1,10 +1,13 @@
 import React, {useState} from 'react';
-import {Text, View, TouchableOpacity, Image, StyleSheet} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
+
 import imagesPath from '../components/ImagesPath';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {Text, useColor} from 'src/components';
 
 const Filter = ({data = [], value = {}, onSelect = () => {}}) => {
-  console.log('selected value', !!value);
+  const { Color } = useColor();
+
   const [showOption, setShowOption] = useState(false);
 
   const onSelectedItem = val => {
@@ -15,19 +18,29 @@ const Filter = ({data = [], value = {}, onSelect = () => {}}) => {
   return (
     <View>
       <TouchableOpacity
-        style={styles.picker}
+        style={{
+          width: 110,
+          height: 35,
+          borderWidth: 1,
+          borderColor: Color.info,
+          borderRadius: 50,
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          flexDirection: 'row',
+          marginHorizontal: 10,
+        }}
         activeOpacity={0.8}
         onPress={() => setShowOption(!showOption)}>
         <Text
           style={{
-            color: '#027BC9',
+            color: Color.info,
           }}>
           {!!value ? value?.name : ' Filter'}
         </Text>
         <MaterialIcons
           name={'keyboard-arrow-down'}
           size={15}
-          style={{color: '#027BC9'}}
+          style={{color: Color.info}}
         />
         {/* <Image
           style={{transform: [{rotate: showOption ? '180deg' : '0deg'}]}}
@@ -42,7 +55,6 @@ const Filter = ({data = [], value = {}, onSelect = () => {}}) => {
                 key={String(i)}
                 onPress={() => onSelectedItem(val)}
                 style={{
-                  backgroundColor: 'white',
                   paddingVertical: 8,
                   width: 120,
                   borderRadius: 4,
@@ -57,17 +69,4 @@ const Filter = ({data = [], value = {}, onSelect = () => {}}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  picker: {
-    width: 110,
-    height: 35,
-    borderWidth: 1,
-    borderColor: '#027BC9',
-    borderRadius: 50,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginHorizontal: 10,
-  },
-});
 export default Filter;

@@ -1,11 +1,12 @@
 import React from 'react';
-import {View, Text, Image, FlatList, StatusBar} from 'react-native';
+import {View, Image, FlatList, StatusBar} from 'react-native';
 import Banner from 'src/components/Banner';
 import ImagesPath from 'src/components/ImagesPath';
-import {Scaffold, useColor, Header} from '@src/components';
+import {Scaffold, useColor, Header, Text} from '@src/components';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import CardListLelang from 'src/components/Card/CardListLelang';
 import LiveProductList from 'src/components/LiveProductList';
+import { Divider } from 'src/styled';
 
 const DetailLelang = () => {
   const {Color} = useColor();
@@ -14,8 +15,7 @@ const DetailLelang = () => {
       header={
         <Header
           type="regular"
-          color={Color.black}
-          backgroundColor="white"
+          color={Color.text}
           centerTitle={false}
           customIcon
         />
@@ -33,7 +33,7 @@ const DetailLelang = () => {
               justifyContent: 'center',
               paddingHorizontal: 15,
             }}>
-            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+            <Text size={18} type='bold' align='left'>
               Pashmina Pink Nissa Sabyan
             </Text>
           </View>
@@ -46,7 +46,7 @@ const DetailLelang = () => {
             }}>
             <View
               style={{
-                backgroundColor: 'black',
+                backgroundColor: Color.text,
                 width: 90,
                 height: 40,
                 borderRadius: 25,
@@ -54,8 +54,8 @@ const DetailLelang = () => {
                 justifyContent: 'center',
               }}>
               <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                <Text style={{color: 'white', fontSize: 5}}>Sisa Waktu</Text>
-                <Text style={{color: 'white', fontSize: 14}}>12:53</Text>
+                <Text size={8} color={Color.textInput}>Sisa Waktu</Text>
+                <Text color={Color.textInput}>12:53</Text>
               </View>
             </View>
           </View>
@@ -64,27 +64,30 @@ const DetailLelang = () => {
         <View
           style={{
             width: '100%',
-            height: 60,
             flexDirection: 'row',
-          }}>
+            paddingVertical: 8,
+            paddingHorizontal: 16,
+          }}
+        >
           <View
             style={{
-              width: '35%',
+              width: '50%',
               justifyContent: 'center',
-              paddingHorizontal: 15,
             }}>
-            <Text style={{fontSize: 9, color: '#666666', fontWeight: 'bold'}}>
+            <Text align='left'>
               Harga saat ini
             </Text>
-            <Text style={{fontSize: 18, color: 'black', fontWeight: 'bold'}}>
+            <Divider height={4} />
+            <Text size={16} type='bold' align='left'>
               Rp. 150.000
             </Text>
           </View>
-          <View style={{width: '65%', justifyContent: 'center'}}>
-            <Text style={{fontSize: 9, color: '#666666', fontWeight: 'bold'}}>
+          <View style={{width: '50%', justifyContent: 'center'}}>
+            <Text align='right'>
               Harga permulaan
             </Text>
-            <Text style={{fontSize: 14, color: '#666666', fontWeight: 'bold'}}>
+            <Divider height={4} />
+            <Text size={16} type='bold' align='right'>
               Rp. 10.000
             </Text>
           </View>
@@ -93,15 +96,15 @@ const DetailLelang = () => {
         <View
           style={{
             width: '100%',
-            height: 60,
             justifyContent: 'center',
             alignItems: 'center',
+            marginTop: 8,
           }}>
           <View
             style={{
               width: '94%',
               height: 60,
-              backgroundColor: '#e9e7e4',
+              backgroundColor: Color.semiwhite,
               flexDirection: 'row',
             }}>
             <View
@@ -110,8 +113,8 @@ const DetailLelang = () => {
                 justifyContent: 'center',
                 paddingHorizontal: 10,
               }}>
-              <Text style={{fontSize: 10, color: '#666666'}}>Jenis Barang</Text>
-              <Text style={{fontSize: 11, color: '#121212'}}>Hijab</Text>
+              <Text size={10} color={Color.gray}>Jenis Barang</Text>
+              <Text size={10} type='medium'>Hijab</Text>
             </View>
             <View
               style={{
@@ -119,8 +122,8 @@ const DetailLelang = () => {
                 justifyContent: 'center',
                 paddingHorizontal: 10,
               }}>
-              <Text style={{fontSize: 10, color: '#666666'}}>Jumlah</Text>
-              <Text style={{fontSize: 11, color: '#121212'}}>1 Unit</Text>
+              <Text size={10} color={Color.gray}>Jumlah</Text>
+              <Text size={10} type='medium'>1 Unit</Text>
             </View>
             <View
               style={{
@@ -128,8 +131,8 @@ const DetailLelang = () => {
                 justifyContent: 'center',
                 paddingHorizontal: 10,
               }}>
-              <Text style={{fontSize: 10, color: '#666666'}}>Jam Mulai</Text>
-              <Text style={{fontSize: 11, color: '#121212'}}>13:05 WIB</Text>
+              <Text size={10} color={Color.gray}>Jam Mulai</Text>
+              <Text size={10} type='medium'>13:05 WIB</Text>
             </View>
             <View
               style={{
@@ -137,8 +140,8 @@ const DetailLelang = () => {
                 justifyContent: 'center',
                 paddingHorizontal: 10,
               }}>
-              <Text style={{fontSize: 10, color: '#666666'}}>Durasi</Text>
-              <Text style={{fontSize: 11, color: '#121212'}}>15 Menit</Text>
+              <Text size={10} color={Color.gray}>Durasi</Text>
+              <Text size={10} type='medium'>15 Menit</Text>
             </View>
           </View>
         </View>
@@ -163,25 +166,20 @@ const DetailLelang = () => {
             width: '100%',
             height: 20,
             paddingHorizontal: 15,
-          }}>
+          }}
+        >
           <Text
-            style={{
-              width: '100%',
-              height: 20,
-              fontSize: 10,
-              color: '#666666',
-            }}>
+            color={Color.gray}
+            align='left'
+          >
             Deskripsi
           </Text>
         </View>
-        <View style={{width: '100%', height: 400}}>
+        <View style={{width: '100%', marginTop: 8, paddingHorizontal: 16}}>
           <Text
-            style={{
-              color: '#121212',
-              fontSize: 14,
-              paddingHorizontal: 15,
-              lineHeight: 22,
-            }}>
+            align='left'
+            lineHeight={20}
+          >
             Cupcake donut caramels gummi bears cheesecake powder pie lollipop
             marzipan. Chocolate cake liquorice chocolate bar pudding lemon drops
             lollipop ice cream sweet. Candy cake wafer topping sweet roll tart.
@@ -206,12 +204,12 @@ const DetailLelang = () => {
           style={{
             width: '92%',
             height: 45,
-            backgroundColor: '#027BC9',
+            backgroundColor: Color.info,
             borderRadius: 30,
             marginHorizontal: 15,
             paddingVertical: 10,
           }}>
-          <Text style={{textAlign: 'center', color: 'white'}}>
+          <Text color={Color.textInput}>
             Ikuti Lelang
           </Text>
         </TouchableOpacity>

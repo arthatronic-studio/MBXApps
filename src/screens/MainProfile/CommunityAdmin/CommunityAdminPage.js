@@ -52,7 +52,7 @@ const CommunityAdminPage = ({navigation}) => {
       indicatorStyle={{backgroundColor: Color.primary}}
       style={{backgroundColor: Color.theme}}
       activeColor={Color.primary}
-      inactiveColor="black"
+      inactiveColor={Color.text}
       labelStyle={{fontWeight: 'bold', textAlign: 'center', fontSize: 16, textTransform: 'none'}}
     />
   );

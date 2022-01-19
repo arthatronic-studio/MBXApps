@@ -1,5 +1,7 @@
 import React from 'react';
-import {View, Text, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
+
+import { Text, useColor } from 'src/components';
 
 const DATA = [
   {
@@ -33,13 +35,16 @@ const DATA = [
 ];
 
 const Category = () => {
+  const { Color } = useColor();
+
   const renderItem = ({item}) => (
     <View>
-      <TouchableOpacity style={styles.btnCategory}>
-        <Text style={styles.txtCategory}>{item.category}</Text>
+      <TouchableOpacity style={[styles.btnCategory, { backgroundColor: Color.gray, borderColor: Color.gray }]}>
+        <Text color={Color.textInput}>{item.category}</Text>
       </TouchableOpacity>
     </View>
   );
+
   return (
     <View>
       <FlatList
@@ -62,14 +67,9 @@ const styles = StyleSheet.create({
     width: 110,
     height: 35,
     borderWidth: 1,
-    borderColor: 'grey',
     borderRadius: 15,
-    backgroundColor: 'grey',
     marginHorizontal: 5,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  txtCategory: {
-    color: 'white',
   },
 });

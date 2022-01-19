@@ -1,16 +1,17 @@
 import * as React from 'react';
-import {Text, View, Button} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import {View} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+
 import {useColor} from '@src/components';
 import CardListLelang from './Card/CardListLelang';
 
 function Semua() {
+  const {Color} = useColor();
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: '#E5E5E5',
+        backgroundColor: Color.semiwhite,
       }}>
       <View style={{marginVertical: 10}}>
         <CardListLelang />
@@ -20,13 +21,12 @@ function Semua() {
 }
 
 function Seharihari() {
+  const {Color} = useColor();
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: '#E5E5E5',
-        paddingVertical: 14,
-        paddingHorizontal: 20,
+        backgroundColor: Color.semiwhite,
       }}>
       <View style={{marginVertical: 10}}>
         <CardListLelang />
@@ -35,13 +35,12 @@ function Seharihari() {
   );
 }
 function BendaKoleksi() {
+  const {Color} = useColor();
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: '#E5E5E5',
-        paddingVertical: 14,
-        paddingHorizontal: 20,
+        backgroundColor: Color.semiwhite,
       }}>
       <View style={{marginVertical: 10}}>
         <CardListLelang />
@@ -51,13 +50,12 @@ function BendaKoleksi() {
 }
 
 function Perhiasan() {
+  const {Color} = useColor();
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: '#E5E5E5',
-        paddingVertical: 14,
-        paddingHorizontal: 20,
+        backgroundColor: Color.semiwhite,
       }}>
       <View style={{marginVertical: 10}}>
         <CardListLelang />
@@ -69,13 +67,15 @@ function Perhiasan() {
 const Tab = createMaterialTopTabNavigator();
 
 function MyTabs() {
+  const { Color } = useColor();
+
   return (
     <Tab.Navigator
       initialRouteName="Description"
       tabBarOptions={{
-        activeTintColor: 'black',
+        activeTintColor: Color.text,
         labelStyle: {fontSize: 11, fontWeight: 'bold'},
-        style: {backgroundColor: 'white'},
+        style: {backgroundColor: Color.textInput},
       }}>
       <Tab.Screen
         name="Semua"

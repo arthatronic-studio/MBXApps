@@ -44,8 +44,14 @@ const CartScreen = ({ navigation, route }) => {
 
   return (
     <Scaffold
-          header={<Header customIcon title='Keranjang' type='regular' color={Color.white} backgroundColor='primary' centerTitle={false} />}
-          color='white'
+          header={
+            <Header
+              customIcon
+              title='Keranjang'
+              type='regular'
+              centerTitle={false}
+            />
+          }
           onPressLeftButton={() => navigation.pop()}
         >
         <TopBar style={{borderRadius: 10}} />

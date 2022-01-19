@@ -61,7 +61,7 @@ const HeaderBid = (props) => {
                                 paddingHorizontal: 18, 
                                 paddingVertical: 6, 
                                 justifyContent: 'center'}}>
-                            <Text size={11} color='white'>{FormatDuration.getMinutesFromSeconds(11100)}</Text>
+                            <Text size={11} color={Color.textInput}>{FormatDuration.getMinutesFromSeconds(11100)}</Text>
                         </View>
                     </BalanceView>
                     <View

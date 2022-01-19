@@ -16,6 +16,7 @@ import {
   useColor,
 } from '@src/components';
 import ImagesPath from './ImagesPath';
+import { shadowStyle } from 'src/styles';
 
 const MainView = Styled(View)`
     width: 100%;
@@ -51,8 +52,7 @@ const TransparentBackView = Styled(View)`
 `;
 
 const SearchBar = Styled(TextInput)`
-marginVertical: 6;
-marginHorizontal : 10
+
 `;
 
 const LeftButton = Styled(TouchableOpacity)`
@@ -221,31 +221,35 @@ const Header = props => {
           {searchbar ? (
             <>
               {
-                <View style={{width: '75%', justifyContent: 'center'}}>
-                  {
-                    <SearchBar
-                      placeholder="Cari apa hari ini ..."
-                      style={{
-                        backgroundColor: 'white',
-                        width: '92%',
-                        height: '70%',
-                        borderRadius: 8,
-                        paddingHorizontal: 10,
-                      }}
-                    />
-                  }
-                  {
-                    <AntDesign
-                      name={'search1'}
-                      color={Color.gray}
-                      size={13}
-                      style={{
-                        position: 'absolute',
-                        alignSelf: 'flex-end',
-                        paddingHorizontal: 35,
-                      }}
-                    />
-                  }
+                <View
+                  style={{
+                    width: '75%',
+                    justifyContent: 'center',
+                    padding: 16,
+                  }}
+                >
+                  <SearchBar
+                    placeholder="Cari apa hari ini ..."
+                    placeholderTextColor={Color.gray}
+                    style={{
+                      backgroundColor: Color.textInput,
+                      width: '100%',
+                      height: 45,
+                      borderRadius: 8,
+                      paddingHorizontal: 10,
+                      ...shadowStyle,
+                    }}
+                  />
+                  
+                  <AntDesign
+                    name={'search1'}
+                    color={Color.gray}
+                    size={13}
+                    style={{
+                      position: 'absolute',
+                      right: 0,
+                    }}
+                  />
                 </View>
               }
             </>
@@ -281,7 +285,7 @@ const Header = props => {
             {cartIcon ? (
               <MaterialCOmmunityIcons
                 name={'shopping-outline'}
-                color={Color.white}
+                color={Color.gray}
                 size={18}
               />
             ) : (
@@ -292,7 +296,7 @@ const Header = props => {
             {favoriteIcon ? (
               <Image
                 source={ImagesPath.unfavorited}
-                style={{width: 18, height: 18}}
+                style={{width: 18, height: 18, tintColor: Color.gray}}
               />
             ) : (
               <></>
@@ -302,7 +306,7 @@ const Header = props => {
             {notifIcon ? (
               <Ionicons
                 name={'notifications-outline'}
-                color={Color.white}
+                color={Color.gray}
                 size={18}
               />
             ) : (
@@ -358,5 +362,4 @@ const Header = props => {
 };
 
 Header.defaultProps = defaultProps;
-
 export default withNavigation(Header);

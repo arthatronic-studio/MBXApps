@@ -101,7 +101,6 @@ const VoucherRoundedView = Styled(View)`
   justifyContent: flex-start;
   marginTop: 10;
   padding: 0px 15px 0px 15px;
-  backgroundColor: white;
 `;
 const HeaderVoucher = Styled(View)`
   minWidth: 1;

@@ -10,12 +10,12 @@ function Description() {
     <View
       style={{
         flex: 1,
-        backgroundColor: Color.white,
+        backgroundColor: Color.theme,
       }}>
       <Text
         style={{
           fontSize: 14,
-          color: Color.black,
+          color: Color.text,
           fontWeight: '400',
           paddingVertical: 20,
           paddingHorizontal: 20,
@@ -56,11 +56,11 @@ function Review() {
     <View
       style={{
         flex: 1,
-        backgroundColor: Color.white,
+        backgroundColor: Color.theme,
         paddingVertical: 14,
         paddingHorizontal: 20,
       }}>
-      <Text style={{fontSize: 14, color: Color.black, fontWeight: '400'}}>
+      <Text style={{fontSize: 14, color: Color.text, fontWeight: '400'}}>
         Cupcake ipsum dolor sit amet jelly cookie. Chocolate cake gingerbread
         gummi bears chocolate cake muffin toffee pastry. Sweet brownie bonbon
         lollipop pie biscuit candy canes cake. Carrot cake sesame snaps
@@ -99,9 +99,9 @@ function MyTabs() {
     <Tab.Navigator
       initialRouteName="Description"
       tabBarOptions={{
-        activeTintColor: Color.blue,
+        activeTintColor: Color.info,
         labelStyle: {fontSize: 12, fontWeight: 'bold'},
-        style: {backgroundColor: Color.white},
+        style: {backgroundColor: Color.theme},
       }}>
       <Tab.Screen
         name="Description"

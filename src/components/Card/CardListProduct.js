@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  Pressable,
+  useWindowDimensions,
 } from 'react-native';
 import ImagesPath from '../ImagesPath';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -16,6 +16,8 @@ import {
   // TouchableOpacity,
   useColor,
 } from '@src/components';
+import { useNavigation } from '@react-navigation/native';
+import { shadowStyle } from 'src/styles';
 
 const DATA = [
   {
@@ -100,91 +102,113 @@ const DATA = [
   },
 ];
 
-const CardListProduk = ({navigation}) => {
+const CardListProduk = (props) => {
   const {Color} = useColor();
+  const navigation = useNavigation();
+  const { height, width } = useWindowDimensions();
+
   const renderItem = ({item}) => (
     <View
       style={{
-        width: '46%',
-        height: 270,
-        marginHorizontal: 5,
-        marginVertical: 5,
-      }}>
+        width: '50%',
+        aspectRatio: 10/16,
+        paddingHorizontal: 8,
+        marginBottom: 16,
+      }}
+    >
       <TouchableOpacity
         onPress={() => navigation.navigate('DetailProduct')}
-        style={styles.btnCategory}>
-        <Image
-          source={item.image}
+        style={{
+          width: '100%',
+          height: '100%',
+          borderRadius: 10,
+          paddingBottom: 10,
+          backgroundColor: Color.theme,
+          ...shadowStyle,
+        }}
+      >
+        <View
           style={{
-            width: 160,
-            height: 140,
-            borderRadius: 10,
-            alignSelf: 'center',
+            width: '100%',
+            height: (width - 16) / 2,
           }}
-        />
+        >
+          <Image
+            source={item.image}
+            style={{
+              width: '100%',
+              height: (width - 16) / 2,
+              borderRadius: 10,
+              alignSelf: 'center',
+            }}
+          />
+
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 8,
+              right: 8,
+            }}>
+            <TouchableOpacity
+              style={{
+                width: 30,
+                height: 30,
+              }}>
+              <View>
+                <View
+                  style={{
+                    backgroundColor: Color.gray,
+                    width: 30,
+                    height: 30,
+                    borderRadius: 50,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Image
+                    source={ImagesPath.unfavorited}
+                    style={{width: 20, height: 20}}
+                  />
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
 
         <View
           style={{
             width: '100%',
-            height: '45%',
-            marginVertical: 10,
+            paddingHorizontal: 8,
           }}>
-          <View style={{paddingVertical: 15}}>
-            <Text style={styles.txtTitle}>{item.title}</Text>
-            <Text style={styles.txtCategory}>{item.category}</Text>
+          <View style={{marginTop: 8}}>
+            <Text style={[styles.txtTitle, { color: Color.text }]}>{item.title}</Text>
+            <Text style={[styles.txtCategory, { color: Color.gray }]}>{item.category}</Text>
             <View style={{flexDirection: 'row'}}>
-              <Text style={styles.txtRating}>{item.rating}</Text>
-              <Entypo name={'star'} style={{color: '#F1D946'}} />
-              <Text style={styles.txtSold}>{item.sold} Terjual</Text>
+              <Text style={[styles.txtRating, { color: Color.gray }]}>{item.rating}</Text>
+              <Entypo name={'star'} style={{color: Color.secondary}} />
+              <Text style={[styles.txtSold, { color: Color.gray }]}>{item.sold} Terjual</Text>
             </View>
           </View>
-          <View style={{marginVertical: 5}}>
+          <View style={{marginVertical: 8}}>
             <Text style={{fontSize: 10}}>Harga</Text>
-            <Text style={styles.txtPrice}>Rp {item.price}</Text>
+            <Text style={[styles.txtPrice, { color: Color.text }]}>Rp {item.price}</Text>
           </View>
-        </View>
-        <View
-          style={{
-            width: '17%',
-            position: 'absolute',
-            flexDirection: 'row',
-            marginVertical: 110,
-            alignSelf: 'flex-end',
-          }}>
-          <TouchableOpacity
-            style={{
-              width: 30,
-              height: 30,
-            }}>
-            <View>
-              <View
-                style={{
-                  backgroundColor: 'grey',
-                  width: 30,
-                  height: 30,
-                  borderRadius: 50,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Image
-                  source={ImagesPath.unfavorited}
-                  style={{width: 20, height: 20}}
-                />
-              </View>
-            </View>
-          </TouchableOpacity>
         </View>
       </TouchableOpacity>
     </View>
   );
+
   return (
     <View style={{alignItems: 'center'}}>
       <FlatList
         numColumns={2}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item, index) => (Math.random() + 1).toString(36).substring(7) + index.toString()}
         showsHorizontalScrollIndicator={false}
         data={DATA}
         renderItem={renderItem}
+        contentContainerStyle={{
+          paddingHorizontal: 8,
+          paddingBottom: (width - 32) / 2,
+        }}
       />
     </View>
   );
@@ -193,40 +217,25 @@ const CardListProduk = ({navigation}) => {
 export default CardListProduk;
 
 const styles = StyleSheet.create({
-  btnCategory: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 10,
-    paddingBottom: 10,
-    marginHorizontal: 5,
-    paddingHorizontal: 10,
-    elevation: 1,
-    backgroundColor: '#fff',
-  },
   txtTitle: {
-    color: '#111',
     fontWeight: '700',
     fontSize: 14,
   },
   txtCategory: {
-    color: '#666666',
     fontWeight: '400',
     fontSize: 11,
   },
   txtRating: {
-    color: '#A39CA0',
     fontWeight: '400',
     fontSize: 11,
     paddingRight: 5,
   },
   txtSold: {
-    color: '#A39CA0',
     fontWeight: '400',
     fontSize: 11,
     paddingLeft: 5,
   },
   txtPrice: {
-    color: '#111',
     fontWeight: '700',
     fontSize: 14,
   },

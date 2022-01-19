@@ -14,13 +14,12 @@ const LiveLelangScreen = () => {
       header={
         <Header
           type="regular"
-          color={Color.white}
-          backgroundColor="green"
           centerTitle={false}
           customIcon
           title="Sedang Berlangsung"
         />
-      }>
+      }
+    >
       <View style={{width: '100%', height: '100%'}}>
         <LiveProductList />
       </View>

@@ -73,6 +73,8 @@ const CardNews = (props) => {
         setTrigger(true);
     }
 
+    console.log(item);
+
     return (
         <View
             style={[
@@ -96,13 +98,20 @@ const CardNews = (props) => {
                 }}
             >
                 <View style={{flexDirection: 'row', height: '20%', width: '100%', paddingBottom: 16}}>
-                    <View style={{width: '80%', height: '100%', flexDirection: 'row', alignItems: 'center'}}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('UserProfileScreen', { userId: item.ownerId });
+                        }}
+                        style={{
+                            width: '80%', height: '100%', flexDirection: 'row', alignItems: 'center',
+                        }}
+                    >
                         <Image source={{uri: item.avatar}} style={{height: '100%', aspectRatio: 1, borderRadius: 50, backgroundColor: Color.border}} />
                         <View style={{paddingLeft: 16, alignItems: 'flex-start'}}>
                             <Text type='bold' style={{marginBottom: 4}}>{item.fullname}</Text>
                             <Text size={10}>Post {Moment(parseInt(item.created_date)).fromNow()}</Text>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                     <TouchableOpacity style={{width: '20%', justifyContent: 'center', alignItems: 'flex-end'}}>
                         <View style={{height: 20, width: '100%', paddingHorizontal: 4, marginBottom: 2, borderWidth: 0.5, borderRadius: 4, borderColor: Color.primary, justifyContent: 'center'}}>
                             <Text size={10} color={Color.primary} numberOfLines={1}>{item.productCategory}</Text>

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { View, SafeAreaView, Image, Animated, useWindowDimensions } from 'react-native';
 import { TouchableOpacity as TouchableOpacityAbs } from 'react-native-gesture-handler';
+import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -15,6 +16,12 @@ import { CommonActions } from '@react-navigation/routers';
 import { startAnimation } from '@src/utils/animations';
 import { Divider, Line } from 'src/styled';
 
+const Scaler = Styled(View)`
+    flexDirection: row;
+    height: 100%;
+    width: 100%;
+`;
+
 const TabBarComponent = (props) => {
     const { state } = props;
 
@@ -22,7 +29,7 @@ const TabBarComponent = (props) => {
         
     const [menus] = useState([
         {id: 'ber', name: 'Beranda', iconName: 'home', iconType: 'Entypo', nav: 'MainHome', ref: useRef(new Animated.Value(1)).current, viewRef: useRef(new Animated.Value(0)).current },
-        {id: 'mer', name: 'Merch', iconName: 'store', iconType: 'MaterialIcons', nav: 'MainMerch', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
+        {id: 'eme', name: 'Emergency', iconName: 'vibration', iconType: 'MaterialIcons', nav: 'CreateEmergencyScreen', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
         {id: 'pro', name: 'Profil', iconName: 'person', iconType: 'Ionicons', nav: 'MainProfile', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
     ]);
     
@@ -58,24 +65,55 @@ const TabBarComponent = (props) => {
     const getIconMenu = (iconType, iconName, isRouteActive) => {
         switch(iconType) {
             case 'MaterialIcons':
-                return <MaterialIcons name={iconName} size={32} color={isRouteActive ? Color.primary : Color.gray} />
+                return <MaterialIcons name={iconName} size={33} color={isRouteActive ? Color.textInput : Color.textInput} />
             case 'AntDesign':
-                return <AntDesign name={iconName} size={28} color={isRouteActive ? Color.primary : Color.gray} />
+                return <AntDesign name={iconName} size={20} color={isRouteActive ? Color.primary : Color.gray} />
             case 'Ionicons': 
-                return <Ionicons name={iconName} size={28} color={isRouteActive ? Color.primary : Color.gray} />
+                return <Ionicons name={iconName} size={20} color={isRouteActive ? Color.primary : Color.gray} />
             case 'Entypo':
-                return <Entypo name={iconName} size={30} color={isRouteActive ? Color.primary : Color.gray} />
+                return <Entypo name={iconName} size={22} color={isRouteActive ? Color.primary : Color.gray} />
         }
+    }
+
+    const renderFloatingMenu = () => {
+        const isRouteActive = 1 === activeRouteIndex;
+
+        return (
+            <View
+                style={{
+                    bottom: 106,
+                    height: width / 5 - 8,
+                    width: width / 5 - 8,
+                    borderRadius: width / 5 - 8,
+                    backgroundColor: Color.primary,
+                    alignSelf: 'center',
+                    ...shadowStyle,
+                }}
+            >
+                <TouchableOpacityAbs
+                    onPress={() => {
+                        props.navigation.navigate('CreateEmergencyScreen', { 
+                            routeIndex: 1, 
+                            title: 'Emergency Area',
+                            productType: 'TRIBES',
+                            productCategory: '',
+                            productSubCategory: 'EMERGENCY', 
+                        });
+                    }}
+                    style={{width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center'}}
+                >
+                    {getIconMenu('MaterialIcons', 'vibration', isRouteActive)}
+                </TouchableOpacityAbs>
+            </View>
+        )
     }
 
     return (
         <SafeAreaView
             style={{
                 width,
-                height: 106,
+                height: 70,
                 backgroundColor: Color.theme,
-                paddingVertical: 16,
-                paddingHorizontal: 16,
             }}
         >
             {activeRouteIndex < menus.length && <Animated.View
@@ -83,7 +121,7 @@ const TabBarComponent = (props) => {
                     height: 30,
                     width: 30,
                     position: 'absolute',
-                    left: (width / menus.length) / 2 - 15 - 32,
+                    left: (width / menus.length) / 2 - 15,
                     top: 12,
                     borderRadius: 8,
                     alignItems: 'center',
@@ -99,22 +137,9 @@ const TabBarComponent = (props) => {
                 />}
             </Animated.View>}
 
-            <Line
-                width={width}
-                height={0.5}
-                color={Color.border}
-                style={{position: 'absolute', top: 0}}
-            />
+            <Line width={width - 32} color={Color.border} style={{position: 'absolute', top: 0}} />
 
-            <View
-                style={{
-                    flexDirection: 'row',
-                    height: '100%',
-                    width: '100%',
-                    backgroundColor: Color.semiwhite,
-                    borderRadius: 120,
-                }}
-            >
+            <Scaler>
                 {menus.map((route, routeIndex) => {
                     const isRouteActive = routeIndex === activeRouteIndex;
 
@@ -123,7 +148,7 @@ const TabBarComponent = (props) => {
                             key={routeIndex}
                             activeOpacity={1}
                             style={{
-                                width: (width - 32) / menus.length,
+                                width: width / menus.length,
                                 alignItems: 'center',
                             }}
                             onPress={() => {
@@ -148,14 +173,18 @@ const TabBarComponent = (props) => {
                                     // opacity: route.viewRef,
                                 }}
                             >
-                                {getIconMenu(route.iconType, route.iconName, isRouteActive)}
+                                {route.id !== 'eme' ?
+                                        getIconMenu(route.iconType, route.iconName, isRouteActive)
+                                    : 
+                                        <Divider />
+                                }
                             </Animated.View>
 
                             <Animated.Text
                                 style={{
-                                    fontSize: 14,
+                                    fontSize: 10,
                                     fontWeight: '500',
-                                    color: isRouteActive ? Color.primary : Color.text,
+                                    color: Color.text,
                                     position: 'absolute',
                                     bottom: 12,
                                     opacity: route.ref,
@@ -166,7 +195,9 @@ const TabBarComponent = (props) => {
                         </TouchableOpacity>
                     )
                 })}
-            </View>
+            </Scaler>
+
+            {renderFloatingMenu()}
         </SafeAreaView>
     )
 }

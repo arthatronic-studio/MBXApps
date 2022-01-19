@@ -6,7 +6,6 @@ const staticColors = {
   primaryDark: '#033F59',
   primarySoft: '#DAEBF2',
   primaryYellow: '#FAC255',
-  primaryBlack: '#999999',
   oldGreen: '#557D09',
   secondary: '#FB9850',
   disabled: '#A1A1A1',
@@ -16,18 +15,14 @@ const staticColors = {
   error: '#D83030',
   green: '#59A12F',
   gray: '#666666',
-  black: '#252525',
-  blackContent: '#363636',
   red: '#D83030',
   yellow: '#FFD35B',
   blue: '#027BC9',
   timer: '#F94918',
   icon: '#667786',
   bid: '#E6E9EA',
-  white: '#FFFFFF',
   text: '#FFFFFF',
   infosecond: '#DAE9F2',
-  semiwhite: '#E5E5E5',
 };
 
 export const lightModeColors = {
@@ -35,10 +30,11 @@ export const lightModeColors = {
   overflow: 'rgba(0, 0, 0, 0.3)',
   reverseOverflow: 'rgba(f, f, f, 0.3)',
   colorDominant: 'light',
-  theme: '#EEF2E6', // '#F4F4F4',
+  theme: '#FFFFFF', // '#EEF2E6', // '#F4F4F4',
   text: '#0D0006',
   textInput: '#FFFFFF',
   border: '#DDDDDD',
+  semiwhite: '#E5E5E5',
 };
 
 export const darkModeColors = {
@@ -50,6 +46,7 @@ export const darkModeColors = {
   text: '#FFFFFF',
   textInput: '#0D0006',
   border: '#707070',
+  semiwhite: '#353535',
 };
 
 export const useColor = isRoot => {

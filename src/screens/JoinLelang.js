@@ -30,15 +30,13 @@ const JoinLelang = () => {
       header={
         <Header
           type="regular"
-          color={Color.white}
-          backgroundColor="green"
           centerTitle={false}
           customIcon
           title="Lelang"
         />
       }>
       <View style={{width: '100%', height: 180}}>
-        <View style={{backgroundColor: 'white', flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row'}}>
           <View
             style={{
               width: '25%',
@@ -52,14 +50,14 @@ const JoinLelang = () => {
             />
           </View>
           <View style={{width: '40%', height: 100, paddingVertical: 10}}>
-            <Text style={{fontSize: 14, fontWeight: 'bold', color: '#121212'}}>
+            <Text style={{fontSize: 14, fontWeight: 'bold', color: Color.text}}>
               Pashmina Pink Nissa Sabyan
             </Text>
             <Text
               style={{
                 fontSize: 10,
                 fontWeight: 'bold',
-                color: 'grey',
+                color: Color.gray,
                 paddingVertical: 5,
               }}>
               Hijab
@@ -74,15 +72,15 @@ const JoinLelang = () => {
             }}>
             <View
               style={{
-                backgroundColor: 'black',
+                backgroundColor: Color.text,
                 width: 75,
                 height: 35,
                 borderRadius: 20,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Text style={{color: 'white', fontSize: 8}}>Sisa waktu</Text>
-              <Text style={{color: 'white', fontSize: 12}}>12:05</Text>
+              <Text color={Color.textInput} size={8}>Sisa waktu</Text>
+              <Text color={Color.textInput} size={12}>12:05</Text>
             </View>
           </View>
         </View>
@@ -99,27 +97,27 @@ const JoinLelang = () => {
               width: '95%',
               height: '90%',
               borderRadius: 10,
-              backgroundColor: '#e9e7e4',
+              backgroundColor: Color.semiwhite,
               flexDirection: 'row',
               alignItems: 'center',
               paddingHorizontal: 20,
             }}>
             <View style={{width: '35%'}}>
-              <Text style={{color: 'grey', fontSize: 9}}>
+              <Text style={{color: Color.gray, fontSize: 9}}>
                 Penawaran saat ini
               </Text>
               <Text
-                style={{color: '#121212', fontSize: 18, fontWeight: 'bold'}}>
+                style={{color: Color.text, fontSize: 18, fontWeight: 'bold'}}>
                 Rp. 150.000
               </Text>
             </View>
             <View style={{width: '30%'}}>
-              <Text style={{color: 'grey', fontSize: 9}}>Penawaranmu</Text>
-              <Text style={{color: 'grey', fontSize: 14}}>Rp.0</Text>
+              <Text style={{color: Color.gray, fontSize: 9}}>Penawaranmu</Text>
+              <Text style={{color: Color.gray, fontSize: 14}}>Rp.0</Text>
             </View>
             <View style={{width: '35%'}}>
-              <Text style={{color: 'grey', fontSize: 9}}>Penawaran Awal</Text>
-              <Text style={{color: 'grey', fontSize: 14, fontWeight: 'bold'}}>
+              <Text style={{color: Color.gray, fontSize: 9}}>Penawaran Awal</Text>
+              <Text style={{color: Color.gray, fontSize: 14, fontWeight: 'bold'}}>
                 Rp. 50.000
               </Text>
             </View>
@@ -130,12 +128,12 @@ const JoinLelang = () => {
         style={{
           width: '100%',
           height: 55,
-          backgroundColor: '#96C63B',
+          backgroundColor: Color.primary,
         }}>
         <Text
           style={{
             fontWeight: 'bold',
-            color: 'white',
+            color: Color.textInput,
             width: '30%',
             height: '100%',
             paddingHorizontal: 15,

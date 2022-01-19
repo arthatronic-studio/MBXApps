@@ -1,21 +1,30 @@
 import React from 'react';
 import {
   View,
-  Text,
   FlatList,
   StyleSheet,
   TouchableOpacity,
   Image,
-  Pressable,
 } from 'react-native';
+import PropTypes from 'prop-types';
+
 import ImagesPath from '../ImagesPath';
 import {
-  Row,
-  Col,
-  // TouchableOpacity,
+  Text,
   useColor,
 } from '@src/components';
-import { navigationRef } from 'App';
+import Banner from 'src/components/Banner';
+import { statusBarHeight } from 'src/utils/constants';
+import { Divider } from 'src/styled';
+import { useNavigation } from '@react-navigation/native';
+
+const propTypes = {
+  ListHeaderComponent: PropTypes.func,
+}
+
+const defaultProps = {
+  ListHeaderComponent: () => <View />,
+}
 
 const DATA = [
   {
@@ -63,7 +72,11 @@ const DATA = [
 ];
 
 const CardListLelang = (props) => {
+  const { ListHeaderComponent } = props;
+
   const {Color} = useColor();
+  const navigation = useNavigation();
+
   const renderItem = ({item}) => (
     <View
       style={{
@@ -71,8 +84,14 @@ const CardListLelang = (props) => {
         height: 260,
         marginHorizontal: 5,
         marginVertical: 5,
-      }}>
-      <TouchableOpacity style={styles.btnCategory}>
+      }}
+    >
+      <TouchableOpacity
+        style={[styles.btnCategory, {backgroundColor: Color.textInput}]}
+        onPress={() => {
+          navigation.navigate('DetailLelang');
+        }}
+      >
         <Image
           source={item.image}
           style={{
@@ -89,11 +108,12 @@ const CardListLelang = (props) => {
             height: '45%',
           }}>
           <View style={{paddingVertical: 8}}>
-            <Text style={styles.txtTitle}>{item.title}</Text>
+            <Text align='left' type='bold'>{item.title}</Text>
           </View>
           <View style={{marginVertical: 5}}>
-            <Text style={styles.txtCategory}>Harga Awal</Text>
-            <Text style={styles.txtPrice}>Rp {item.firstPrice}</Text>
+            <Text align='left' size={12} color={Color.disabled}>Harga Awal</Text>
+            <Divider height={4} />
+            <Text align='left' type='bold'>Rp {item.firstPrice}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -112,32 +132,48 @@ const CardListLelang = (props) => {
           <View>
             <View
               style={{
-                backgroundColor: '#FF3434',
+                backgroundColor: Color.error,
                 width: 53,
                 height: 23,
                 borderRadius: 50,
                 justifyContent: 'center',
                 alignItems: 'center',
-              }}>
-              <Text style={{color: 'white', fontSize: 10}}>{item.time}</Text>
+              }}
+            >
+              <Text color={Color.textInput} size={10}>{item.time}</Text>
             </View>
           </View>
         </TouchableOpacity>
       </View>
     </View>
   );
+
+  const renderHeader = () => {
+    if (typeof ListHeaderComponent !== 'undefined') {
+      return <ListHeaderComponent />;
+    }
+
+    return <View />;
+  }
+
   return (
     <View style={{alignItems: 'center'}}>
       <FlatList
         numColumns={2}
         showsHorizontalScrollIndicator={false}
         data={DATA}
+        ListHeaderComponent={() => renderHeader()}
         renderItem={renderItem}
+        contentContainerStyle={{
+          paddingBottom: statusBarHeight
+        }}
       />
     </View>
   );
 };
 
+CardListLelang.propTypes = propTypes;
+CardListLelang.defaultProps = defaultProps;
 export default CardListLelang;
 
 const styles = StyleSheet.create({
@@ -148,33 +184,5 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginHorizontal: 5,
     paddingHorizontal: 10,
-    backgroundColor: 'white',
-  },
-  txtTitle: {
-    color: 'black',
-    fontWeight: 'bold',
-    fontSize: 14,
-  },
-  txtCategory: {
-    color: '#666666',
-    fontWeight: '400',
-    fontSize: 11,
-  },
-  txtRating: {
-    color: '#A39CA0',
-    fontWeight: '400',
-    fontSize: 11,
-    paddingRight: 5,
-  },
-  txtSold: {
-    color: '#A39CA0',
-    fontWeight: '400',
-    fontSize: 11,
-    paddingLeft: 5,
-  },
-  txtPrice: {
-    color: 'black',
-    fontWeight: '700',
-    fontSize: 14,
   },
 });
