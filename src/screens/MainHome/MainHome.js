@@ -10,7 +10,7 @@ import Styled from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useIsFocused} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import Modal from 'react-native-modal';
@@ -24,6 +24,9 @@ import {
   useLoading,
   useColor,
   Scaffold,
+  Row,
+  Col,
+  Button,
 } from '@src/components';
 import {FormatMoney} from '@src/utils';
 import ListAuction from 'src/components/Posting/ListAuction';
@@ -654,6 +657,28 @@ const MainHome = ({navigation, route}) => {
           }}
           style={{paddingLeft: 8}}
         />
+
+        <View style={{ marginBottom: 30 }}>
+          <Row>
+            <Col size={6}>
+              <Image 
+                resizeMode='contain'
+                source={ImagesPath.logolelanghome} 
+                style={{ height:150, width: 140, marginLeft: 15 }} />
+            </Col>
+            <Col justifyContent='center'>
+              <Text size={12} align='left'>Sekarang di TRIBESOCIAL {'\n'} udah ada fitur <Text type='bold'>lelang</Text> loh !</Text>
+              <Button onPress={() => navigation.navigate('Lelang')} style={{ backgroundColor: '#f58645', minHeight: 25, width: 120, marginTop: 8,  borderRadius: 20 }}>
+                <Row>
+                  <Text color={Color.white} size={10}>Selengkapnya</Text>
+                  <View style={{ justifyContent: 'center' }}>
+                    <AntDesign name='arrowright' color={Color.white} style={{ marginLeft: 8 }} />
+                  </View>
+                </Row>
+              </Button>
+            </Col>
+          </Row>
+        </View>
 
         <ListPlace
           data={listJalanJalan}

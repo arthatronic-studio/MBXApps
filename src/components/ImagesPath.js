@@ -12,5 +12,6 @@ export default {
   produklelang5: require('../components/Images/produklelang5.png'),
   produklelang6: require('../components/Images/produklelang6.png'),
   popUpSabyan : require('../components/Images/sabyan_popup.png'),
+  logolelanghome : require('../components/Images/logolelanghome.png'),
   icClose : require('../components/Images/ic_close.png'),
 };

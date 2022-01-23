@@ -22,6 +22,7 @@ const staticColors = {
   icon: '#667786',
   bid: '#E6E9EA',
   text: '#FFFFFF',
+  white: '#FFFFFF',
   infosecond: '#DAE9F2',
 };
 
