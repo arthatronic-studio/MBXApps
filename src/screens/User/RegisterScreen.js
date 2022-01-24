@@ -1,27 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, TouchableOpacity as NativeTouchable, ScrollView, SafeAreaView } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  TextInput,
+  TouchableOpacity as NativeTouchable,
+  ScrollView,
+  SafeAreaView,
+  Image,
+} from 'react-native';
 import Styled from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { useIsFocused } from '@react-navigation/native';
-
+import {useIsFocused} from '@react-navigation/native';
+import {iconApp} from '@assets/images';
 import {
   // Button,
   // TouchableOpacity,
   Text,
-  Popup, usePopup,
+  Popup,
+  usePopup,
   Loading,
   HeaderBig,
-  useColor
+  useColor,
 } from '@src/components';
-import {
-  Button,
-  TouchableOpacity,
-} from '@src/components/Button';
+import {Button, TouchableOpacity} from '@src/components/Button';
 import validate from '@src/lib/validate';
 
-import { register as onRegister } from '@src/state/actions/user/auth';
+import {register as onRegister} from '@src/state/actions/user/auth';
 
 const MainView = Styled(SafeAreaView)`
   flex: 1;
@@ -108,7 +113,7 @@ const LabelInput = Styled(View)`
 
 const inputs = ['fullName', 'email', 'username', 'password', 'password2'];
 
-const RegisterScreen = ({ navigation, route }) => {
+const RegisterScreen = ({navigation, route}) => {
   const [state, changeState] = useState({
     userData: {
       fullName: '',
@@ -130,18 +135,14 @@ const RegisterScreen = ({ navigation, route }) => {
     allValid: false,
   });
 
-  const setState = (obj) => {
-    changeState({ ...state, ...obj });
-  }
+  const setState = obj => {
+    changeState({...state, ...obj});
+  };
 
   const dispatch = useDispatch();
-  const {
-    register,
-    loading,
-    error,
-  } = useSelector(state => state['user.auth']);
+  const {register, loading, error} = useSelector(state => state['user.auth']);
 
-  const { Color } = useColor();
+  const {Color} = useColor();
   const isFocused = useIsFocused();
   const [popupProps, showPopup] = usePopup();
 
@@ -149,26 +150,32 @@ const RegisterScreen = ({ navigation, route }) => {
     if (isFocused) {
       if (register.status) {
         navigation.pop();
-      }
-      else if (!register.status && error) {
+      } else if (!register.status && error) {
         showPopup(error.trim(), 'error');
-        dispatch({ type: 'USER.LOGOUT' });
+        dispatch({type: 'USER.LOGOUT'});
       }
     }
   }, [register, error, isFocused]);
 
   useEffect(() => {
     if (state.allValid) {
-      setState({ allValid: false });
+      setState({allValid: false});
 
-      const { fullName, username, email, password, phoneCountryCode, phoneNumber } = state.userData;
+      const {
+        fullName,
+        username,
+        email,
+        password,
+        phoneCountryCode,
+        phoneNumber,
+      } = state.userData;
 
       const nameSplit = fullName.split(' ');
       let lastName = '';
       if (nameSplit[1]) {
         nameSplit.map((e, i) => {
           if (i !== 0) lastName += e + ' ';
-        })
+        });
       }
 
       const newUserData = {
@@ -185,19 +192,19 @@ const RegisterScreen = ({ navigation, route }) => {
     }
   }, [state.allValid]);
 
-  const isValueError = (name) => {
+  const isValueError = name => {
     const error = validate(name, state.userData[name]);
-    setState({ error: { ...state.error, [name]: error } });
-  }
+    setState({error: {...state.error, [name]: error}});
+  };
 
   const onChangeUserData = (key, val) => {
-    setState({ userData: { ...state.userData, [key]: val } });
-  }
+    setState({userData: {...state.userData, [key]: val}});
+  };
 
   const onSubmit = () => {
     let valid = true;
     const newErrorState = {};
-    const { password, password2 } = state.userData;
+    const {password, password2} = state.userData;
 
     for (const input of inputs) {
       const error = validate(input, state.userData[input]);
@@ -210,29 +217,44 @@ const RegisterScreen = ({ navigation, route }) => {
       newErrorState.password2 = 'Konfirmasi password tidak sama';
     }
 
-    setState({ error: newErrorState, allValid: valid });
-  }
+    setState({error: newErrorState, allValid: valid});
+  };
 
   return (
     <MainView style={{backgroundColor: Color.theme}}>
-      <ScrollView keyboardShouldPersistTaps='handled' contentContainerStyle={{paddingBottom: 16}}>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{paddingBottom: 16}}>
         <HeaderBig style={{paddingTop: 16}} />
         <Container>
+          <Image
+            source={iconApp}
+            style={{resizeMode: 'contain', height: '30%', width: '60%'}}
+          />
           <TextTitleView>
-            <Text type='semibold' color={Color.primary} size={24} lineHeight={31} letterSpacing={0.36}>Daftar Akun</Text>
+            <Text
+              type="semibold"
+              color={Color.primary}
+              size={24}
+              lineHeight={31}
+              letterSpacing={0.36}>
+              Daftar Akun
+            </Text>
           </TextTitleView>
 
           <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Nama Lengkap</Text>
+            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>
+              Nama Lengkap
+            </Text>
           </LabelInput>
           <EmailRoundedView>
             <CustomTextInput
-              placeholder='Masukan nama lengkap'
-              keyboardType='default'
+              placeholder="Masukan nama lengkap"
+              keyboardType="default"
               placeholderTextColor={Color.gray}
-              underlineColorAndroid='transparent'
+              underlineColorAndroid="transparent"
               autoCorrect={false}
-              onChangeText={(text) => onChangeUserData('fullName', text)}
+              onChangeText={text => onChangeUserData('fullName', text)}
               selectionColor={Color.text}
               value={state.userData.fullName}
               onBlur={() => isValueError('fullName')}
@@ -240,20 +262,24 @@ const RegisterScreen = ({ navigation, route }) => {
             />
           </EmailRoundedView>
           <ErrorView>
-            <Text size={12} color={Color.error} type='medium' align='left'>{state.error.fullName}</Text>
+            <Text size={12} color={Color.error} type="medium" align="left">
+              {state.error.fullName}
+            </Text>
           </ErrorView>
 
           <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Email</Text>
+            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>
+              Email
+            </Text>
           </LabelInput>
           <EmailRoundedView>
             <CustomTextInput
-              placeholder='Masukan email'
-              keyboardType='email-address'
+              placeholder="Masukan email"
+              keyboardType="email-address"
               placeholderTextColor={Color.gray}
-              underlineColorAndroid='transparent'
+              underlineColorAndroid="transparent"
               autoCorrect={false}
-              onChangeText={(text) => onChangeUserData('email', text)}
+              onChangeText={text => onChangeUserData('email', text)}
               selectionColor={Color.text}
               value={state.userData.email}
               onBlur={() => isValueError('email')}
@@ -261,20 +287,24 @@ const RegisterScreen = ({ navigation, route }) => {
             />
           </EmailRoundedView>
           <ErrorView>
-            <Text size={12} color={Color.error} type='medium' align='left'>{state.error.email}</Text>
+            <Text size={12} color={Color.error} type="medium" align="left">
+              {state.error.email}
+            </Text>
           </ErrorView>
 
           <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Nomor Telepon</Text>
+            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>
+              Nomor Telepon
+            </Text>
           </LabelInput>
           <EmailRoundedView>
             <CustomTextInput
-              placeholder='Masukan nomor telepon'
-              keyboardType='default'
+              placeholder="Masukan nomor telepon"
+              keyboardType="default"
               placeholderTextColor={Color.gray}
-              underlineColorAndroid='transparent'
+              underlineColorAndroid="transparent"
               autoCorrect={false}
-              onChangeText={(text) => onChangeUserData('username', text)}
+              onChangeText={text => onChangeUserData('username', text)}
               selectionColor={Color.text}
               value={state.userData.username}
               onBlur={() => isValueError('username')}
@@ -282,61 +312,101 @@ const RegisterScreen = ({ navigation, route }) => {
             />
           </EmailRoundedView>
           <ErrorView>
-            <Text size={12} color={Color.error} type='medium' align='left'>{state.error.username}</Text>
+            <Text size={12} color={Color.error} type="medium" align="left">
+              {state.error.username}
+            </Text>
           </ErrorView>
 
           <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Kata Sandi</Text>
+            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>
+              Kata Sandi
+            </Text>
           </LabelInput>
           <PasswordRoundedView>
             <CustomTextInput
-              placeholder='Masukan kata sandi'
+              placeholder="Masukan kata sandi"
               placeholderTextColor={Color.gray}
-              keyboardType='default'
-              underlineColorAndroid='transparent'
+              keyboardType="default"
+              underlineColorAndroid="transparent"
               autoCorrect={false}
               secureTextEntry={!state.showPassword}
-              onChangeText={(text) => onChangeUserData('password', text)}
+              onChangeText={text => onChangeUserData('password', text)}
               selectionColor={Color.text}
               value={state.userData.password}
               onBlur={() => isValueError('password')}
               style={{color: Color.text}}
             />
-            <View style={{position: 'absolute', bottom: 0, right: 0, paddingRight: 8, height: '100%', width: '10%', justifyContent: 'center', alignItems: 'flex-end'}}>
-              <EyeIconView onPress={() => setState({ showPassword: !state.showPassword })}>
-                <Ionicons size={16} name={state.showPassword ? 'eye-off' : 'eye'} color={Color.gray} />
+            <View
+              style={{
+                position: 'absolute',
+                bottom: 0,
+                right: 0,
+                paddingRight: 8,
+                height: '100%',
+                width: '10%',
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+              }}>
+              <EyeIconView
+                onPress={() => setState({showPassword: !state.showPassword})}>
+                <Ionicons
+                  size={16}
+                  name={state.showPassword ? 'eye-off' : 'eye'}
+                  color={Color.gray}
+                />
               </EyeIconView>
             </View>
           </PasswordRoundedView>
           <ErrorView>
-            <Text size={12} color={Color.error} type='medium' align='left'>{state.error.password}</Text>
+            <Text size={12} color={Color.error} type="medium" align="left">
+              {state.error.password}
+            </Text>
           </ErrorView>
 
           <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Konfirmasi Kata Sandi</Text>
+            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>
+              Konfirmasi Kata Sandi
+            </Text>
           </LabelInput>
           <PasswordRoundedView>
             <CustomTextInput
-              placeholder='Konfirmasi kata sandi'
+              placeholder="Konfirmasi kata sandi"
               placeholderTextColor={Color.gray}
-              keyboardType='default'
-              underlineColorAndroid='transparent'
+              keyboardType="default"
+              underlineColorAndroid="transparent"
               autoCorrect={false}
               secureTextEntry={!state.showPassword}
-              onChangeText={(text) => onChangeUserData('password2', text)}
+              onChangeText={text => onChangeUserData('password2', text)}
               selectionColor={Color.text}
               value={state.userData.password2}
               onBlur={() => isValueError('password2')}
               style={{color: Color.text}}
             />
-            <View style={{position: 'absolute', bottom: 0, right: 0, paddingRight: 8, height: '100%', width: '10%', justifyContent: 'center', alignItems: 'flex-end'}}>
-              <EyeIconView onPress={() => setState({ showPassword: !state.showPassword })}>
-                <Ionicons size={16} name={state.showPassword ? 'eye-off' : 'eye'} color={Color.gray} />
+            <View
+              style={{
+                position: 'absolute',
+                bottom: 0,
+                right: 0,
+                paddingRight: 8,
+                height: '100%',
+                width: '10%',
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+              }}>
+              <EyeIconView
+                onPress={() => setState({showPassword: !state.showPassword})}>
+                <Ionicons
+                  size={16}
+                  name={state.showPassword ? 'eye-off' : 'eye'}
+                  color={Color.gray}
+                />
               </EyeIconView>
             </View>
           </PasswordRoundedView>
           <ErrorView>
-            <Text size={12} color={Color.error} type='medium' align='left'>{state.error.password2}</Text>
+            <Text size={12} color={Color.error} type="medium" align="left">
+              {state.error.password2}
+            </Text>
           </ErrorView>
 
           {/* <View style={{width: '100%', paddingVertical: 2, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
@@ -350,18 +420,14 @@ const RegisterScreen = ({ navigation, route }) => {
           </View> */}
 
           <SignRegisterView>
-            <SignButton
-              onPress={() => onSubmit()}
-            >
-              Register
-            </SignButton>
+            <SignButton onPress={() => onSubmit()}>Register</SignButton>
           </SignRegisterView>
 
           <CopyrightView>
-              <Text>Sudah punya akun?</Text>
-              <RegisterButton onPress={() => navigation.navigate('LoginScreen')}>
-                  <Text type='semibold'>Masuk Sekarang!</Text>
-              </RegisterButton>
+            <Text>Sudah punya akun?</Text>
+            <RegisterButton onPress={() => navigation.navigate('LoginScreen')}>
+              <Text type="semibold">Masuk Sekarang!</Text>
+            </RegisterButton>
           </CopyrightView>
         </Container>
       </ScrollView>
@@ -371,6 +437,6 @@ const RegisterScreen = ({ navigation, route }) => {
       <Popup {...popupProps} />
     </MainView>
   );
-}
+};
 
 export default RegisterScreen;
