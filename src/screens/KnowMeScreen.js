@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { View, TouchableOpacity, Image, SafeAreaView } from 'react-native';
-import { CommonActions, useIsFocused } from '@react-navigation/native';
-import { Tabs, Tab, TabHeading } from 'native-base';
+import React, {useState, useEffect} from 'react';
+import {View, TouchableOpacity, Image, SafeAreaView} from 'react-native';
+import {CommonActions, useIsFocused} from '@react-navigation/native';
+import {Tabs, Tab, TabHeading} from 'native-base';
 import Styled from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import {
   Submit,
-  Popup, usePopup,
+  Popup,
+  usePopup,
   Loading,
   HeaderBig,
-  useColor
+  useColor,
 } from '@src/components';
 import Text from '@src/components/Text';
 
-import { guestLogin } from '@src/state/actions/user/auth';
+import {guestLogin} from '@src/state/actions/user/auth';
+import ImagesPath from 'src/components/ImagesPath';
 
 const MainView = Styled(View)`
   flex: 1;
@@ -70,23 +72,38 @@ const DotIndicator = Styled(View)`
 `;
 
 const sliderData = [
-  { title: 'Smart Technology', subTitle: 'Tribesocial is an intelligent community platform that delivers personalized content recommendations to every user based on their interests.' },
-  { title: 'Diversified Community', subTitle: 'Users are actively engaged on Tribesocial, they like to express, discuss, show their attitudes and share content with others.' },
-  { title: 'High Quality Users', subTitle: 'Users are loyal to our platform, they use Tribesocial frequently.' },
+  {
+    title: 'Smart Technology',
+    image: ImagesPath.iconOnBoard1,
+    subTitle:
+      'Tribesocial is an intelligent community platform that delivers personalized content recommendations to every user based on their interests.',
+  },
+  {
+    title: 'Diversified Community',
+    image: ImagesPath.iconOnBoard2,
+    subTitle:
+      'Users are actively engaged on Tribesocial, they like to express, discuss, show their attitudes and share content with others.',
+  },
+  {
+    title: 'High Quality Users',
+    image: ImagesPath.iconOnBoard3,
+    subTitle:
+      'Users are loyal to our platform, they use Tribesocial frequently.',
+  },
 ];
 
-const KnowMeScreen = ({ navigation, route }) => {
+const KnowMeScreen = ({navigation, route}) => {
   const [tabPage, setTabPage] = useState(0);
 
   const [popupProps, showPopup] = usePopup();
-  const { Color } = useColor();
+  const {Color} = useColor();
 
   const user = useSelector(state => state['user.auth'].login.user);
-  const { loading, error } = useSelector(state => state['user.auth']);
+  const {loading, error} = useSelector(state => state['user.auth']);
 
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
-  
+
   useEffect(() => {
     if (isFocused) {
       if (user) {
@@ -95,39 +112,36 @@ const KnowMeScreen = ({ navigation, route }) => {
     }
   }, [user, error, isFocused]);
 
-  const redirectTo = (nav) => {
+  const redirectTo = nav => {
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
-        routes: [
-          { name: nav }
-        ],
-      })
+        routes: [{name: nav}],
+      }),
     );
-  }
+  };
 
   const renderNavigationFooter = () => {
     return (
       <AbsoluteBottomView>
         <NavgationFooterView>
           <WarpperNavigationBottom>
-            {sliderData.map((_, idx) =>
-              <TouchableOpacity
-                key={idx}
-                onPress={() => setTabPage(idx)}
-              >
+            {sliderData.map((_, idx) => (
+              <TouchableOpacity key={idx} onPress={() => setTabPage(idx)}>
                 <DotIndicator
-                  backgroundColor={tabPage === idx ? Color.primary : Color.primarySoft}
+                  backgroundColor={
+                    tabPage === idx ? Color.primary : Color.primarySoft
+                  }
                 />
               </TouchableOpacity>
-            )}
+            ))}
           </WarpperNavigationBottom>
         </NavgationFooterView>
 
         <Submit
-          buttonLabel='Mulai'
+          buttonLabel="Selanjutnya"
           buttonColor={Color.primary}
-          type='bottomSingleButton'
+          type="bottomSingleButton"
           buttonBorderTopWidth={0}
           onPress={() => {
             // dispatch(guestLogin());
@@ -137,43 +151,55 @@ const KnowMeScreen = ({ navigation, route }) => {
         />
       </AbsoluteBottomView>
     );
-  }
+  };
 
   const renderTabContent = () => {
     return (
       <Tabs
         page={tabPage}
         prerenderingSiblingsNumber={Infinity}
-        tabContainerStyle={{elevation: 0, height: 0, backgroundColor: Color.theme}}
+        tabContainerStyle={{
+          elevation: 0,
+          height: 0,
+          backgroundColor: Color.theme,
+        }}
         tabBarUnderlineStyle={{backgroundColor: Color.theme, height: 0}}
-        tabBarPosition='bottom'
-        onChangeTab={({i}) => setTabPage(i)}
-      >
-        {sliderData.map((item, idx) =>
-          <Tab key={idx} heading={<TabHeading style={{backgroundColor: Color.theme}} />}>
-            {/* <Image
-              style={{width: '100%', height: '100%', position: 'absolute', backgroundColor: '#000000'}}
-              source={{uri: ''}}
-              resizeMode='cover'
-            /> */}
+        tabBarPosition="bottom"
+        onChangeTab={({i}) => setTabPage(i)}>
+        {sliderData.map((item, idx) => (
+          <Tab
+            key={idx}
+            heading={<TabHeading style={{backgroundColor: Color.theme}} />}>
             <MainView style={{backgroundColor: Color.theme}}>
+              <Image
+                style={{
+                  width: '70%',
+                  height: '70%',
+                }}
+                source={item.image}
+                resizeMode="contain"
+              />
               <NavigationTextWarpperView>
-                <NavigationTextWarpperCaption type='bold'>{item.title}</NavigationTextWarpperCaption>
-                <NavigationTextWarpperDescription>{item.subTitle}</NavigationTextWarpperDescription>
+                <NavigationTextWarpperCaption type="bold">
+                  {item.title}
+                </NavigationTextWarpperCaption>
+                <NavigationTextWarpperDescription>
+                  {item.subTitle}
+                </NavigationTextWarpperDescription>
               </NavigationTextWarpperView>
             </MainView>
           </Tab>
-        )}
+        ))}
       </Tabs>
     );
-  }
+  };
 
   if (user) {
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: Color.theme}}>
         <Loading visible />
       </SafeAreaView>
-    )
+    );
   }
 
   return (
@@ -191,9 +217,8 @@ const KnowMeScreen = ({ navigation, route }) => {
       <Loading visible={loading} />
 
       <Popup {...popupProps} />
-
     </SafeAreaView>
   );
-}
+};
 
 export default KnowMeScreen;

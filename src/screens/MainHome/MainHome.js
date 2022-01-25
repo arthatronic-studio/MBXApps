@@ -64,6 +64,7 @@ import DetailProduct from '../Ecommerce/DetailProduct';
 import TopTab from '../Ecommerce/TopTab';
 import LiveLelangScreen from '../LiveLelangScreen';
 import CardListProduk from '../../components/Card/CardListProduct';
+import SplashScreen from '../SplashScreen';
 
 const ContentView = Styled(View)`
   width: 100%;
@@ -170,15 +171,17 @@ const dataSabyan = {
   productName: 'New Sabyan Album',
   productCategory: 'Promo',
   image: ImagesPath.popUpSabyan,
-  productDescription: 'Cupcake ipsum dolor sit amet tart. Cookie carrot cake bear claw jujubes muffin. Cotton candy sweet candy chocolate muffin bonbon. Tart donut apple pie cupcake tart tart. Jelly-o chocolate cake ice cream shortbread biscuit chupa chups dessert. Macaroon cotton candy lollipop marshmallow dragée toffee shortbread macaroon dessert. Bear claw gummi bears pie apple pie tiramisu soufflé bonbon. Tiramisu tart candy croissant jujubes marshmallow lemon drops. Ice cream muffin pastry halvah chocolate bar bear claw. Tart icing pudding jelly-o fruitcake fruitcake. Tiramisu sweet pastry caramels sugar plum sweet gingerbread. Macaroon powder gummies tootsie roll muffin. Cookie danish candy jelly beans biscuit. Soufflé cake pudding fruitcake macaroon jelly beans.'
-}
+  productDescription:
+    'Cupcake ipsum dolor sit amet tart. Cookie carrot cake bear claw jujubes muffin. Cotton candy sweet candy chocolate muffin bonbon. Tart donut apple pie cupcake tart tart. Jelly-o chocolate cake ice cream shortbread biscuit chupa chups dessert. Macaroon cotton candy lollipop marshmallow dragée toffee shortbread macaroon dessert. Bear claw gummi bears pie apple pie tiramisu soufflé bonbon. Tiramisu tart candy croissant jujubes marshmallow lemon drops. Ice cream muffin pastry halvah chocolate bar bear claw. Tart icing pudding jelly-o fruitcake fruitcake. Tiramisu sweet pastry caramels sugar plum sweet gingerbread. Macaroon powder gummies tootsie roll muffin. Cookie danish candy jelly beans biscuit. Soufflé cake pudding fruitcake macaroon jelly beans.',
+};
 
 const MainHome = ({navigation, route}) => {
   // state
   const [vestaAmount, setVestaAmount] = useState(0);
   const [wallet, setWallet] = useState('CLOSE');
   const [firebaseData, setFirebaseData] = useState([]);
-  const [firebaseNotifierLastChatCount, setFirebaseNotifierLastChatCount] = useState(0);
+  const [firebaseNotifierLastChatCount, setFirebaseNotifierLastChatCount] =
+    useState(0);
   const [notifierCount, setNotifierCount] = useState(0);
 
   const [loadingAuction, setLoadingAuction] = useState(true);
@@ -287,15 +290,17 @@ const MainHome = ({navigation, route}) => {
 
   useEffect(() => {
     Client.query({
-      query: queryBannerList
-    }).then((res) => {
-      console.log(res);
-      console.log(res.data.bannerList);
-      setListBanner(res.data.bannerList);
-      setLoadingBanner(false);
-    }).catch((err) => {
-      console.log(err, 'err banner list');
+      query: queryBannerList,
     })
+      .then(res => {
+        console.log(res);
+        console.log(res.data.bannerList);
+        setListBanner(res.data.bannerList);
+        setLoadingBanner(false);
+      })
+      .catch(err => {
+        console.log(err, 'err banner list');
+      });
   }, []);
 
   const componentWillFocus = () => {
@@ -464,8 +469,7 @@ const MainHome = ({navigation, route}) => {
             </View>
           }
         />
-      }
-    >
+      }>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
@@ -473,8 +477,7 @@ const MainHome = ({navigation, route}) => {
             width: '100%',
             alignItems: 'center',
             paddingVertical: 20,
-          }}
-        >
+          }}>
           <View style={{paddingLeft: 16, alignItems: 'flex-start'}}>
             <Text lineHeight={18} letterSpacing={0.45}>
               Halo,
@@ -484,15 +487,13 @@ const MainHome = ({navigation, route}) => {
               {user && !user.guest
                 ? user.firstName.trim() +
                   (user.lastName ? ' ' + user.lastName.trim() : '')
-                : 'Tamu'}!
+                : 'Tamu'}
+              !
             </Text>
           </View>
         </View>
 
-        <BannerHome
-          data={listBanner}
-          loading={loadingBanner}
-        />
+        <BannerHome data={listBanner} loading={loadingBanner} />
 
         <ContentView>
           <BalanceView
@@ -658,21 +659,39 @@ const MainHome = ({navigation, route}) => {
           style={{paddingLeft: 8}}
         />
 
-        <View style={{ marginBottom: 30 }}>
+        <View style={{marginBottom: 30}}>
           <Row>
             <Col size={6}>
-              <Image 
-                resizeMode='contain'
-                source={ImagesPath.logolelanghome} 
-                style={{ height:150, width: 140, marginLeft: 15 }} />
+              <Image
+                resizeMode="contain"
+                source={ImagesPath.logolelanghome}
+                style={{height: 150, width: 140, marginLeft: 15}}
+              />
             </Col>
-            <Col justifyContent='center'>
-              <Text size={12} align='left'>Sekarang di TRIBESOCIAL {'\n'} udah ada fitur <Text type='bold'>lelang</Text> loh !</Text>
-              <Button onPress={() => navigation.navigate('Lelang')} style={{ backgroundColor: '#f58645', minHeight: 25, width: 120, marginTop: 8,  borderRadius: 20 }}>
+            <Col justifyContent="center">
+              <Text size={12} align="left">
+                Sekarang di TRIBESOCIAL {'\n'} udah ada fitur{' '}
+                <Text type="bold">lelang</Text> loh !
+              </Text>
+              <Button
+                onPress={() => navigation.navigate('Lelang')}
+                style={{
+                  backgroundColor: '#f58645',
+                  minHeight: 25,
+                  width: 120,
+                  marginTop: 8,
+                  borderRadius: 20,
+                }}>
                 <Row>
-                  <Text color={Color.textInput} size={10}>Selengkapnya</Text>
-                  <View style={{ justifyContent: 'center' }}>
-                    <AntDesign name='arrowright' color={Color.textInput} style={{ marginLeft: 8 }} />
+                  <Text color={Color.white} size={10}>
+                    Selengkapnya
+                  </Text>
+                  <View style={{justifyContent: 'center'}}>
+                    <AntDesign
+                      name="arrowright"
+                      color={Color.white}
+                      style={{marginLeft: 8}}
+                    />
                   </View>
                 </Row>
               </Button>
@@ -733,23 +752,27 @@ const MainHome = ({navigation, route}) => {
       <Modal
         isVisible={isModalVisible}
         onBackdropPress={() => setModalVisible(false)}
-        animationIn='slideInUp'
-        animationOut='slideOutDown'
-      >
+        animationIn="slideInUp"
+        animationOut="slideOutDown">
         <View style={{height: '75%'}}>
           <TouchableOpacity
             onPress={() => {
               setModalVisible(false);
               navigation.navigate('DetailPromo', {item: dataSabyan});
-            }}
-          >
+            }}>
             <ImageBackground
-              source={ImagesPath.popUpSabyan}
-              imageStyle={{ borderRadius: 13}}
+              source={ImagesPath.popUpTribes}
+              imageStyle={{borderRadius: 13}}
               style={{height: '100%', resizeMode: 'contain', width: '100%'}}>
               <TouchableOpacity
                 onPress={() => setModalVisible(false)}
-                style={{alignSelf: 'flex-end', padding:3,margin:10, backgroundColor:Color.gray, borderRadius:12}}>
+                style={{
+                  alignSelf: 'flex-end',
+                  padding: 3,
+                  margin: 10,
+                  backgroundColor: Color.gray,
+                  borderRadius: 12,
+                }}>
                 <Image
                   source={ImagesPath.icClose}
                   style={{width: 20, height: 20, top: 0}}></Image>

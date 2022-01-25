@@ -1,23 +1,19 @@
-import React, { useEffect } from 'react';
-import { Image, SafeAreaView, Dimensions } from 'react-native';
-import { CommonActions } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import React, {useEffect} from 'react';
+import {Image, SafeAreaView, Dimensions} from 'react-native';
+import {CommonActions} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 
-import {
-  useColor
-} from '@src/components';
+import {useColor} from '@src/components';
 
-import {
-  iconSplash,
-} from '@assets/images';
+import {imageSplashScreen} from '@assets/images';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
-const SplashScreen = ({ navigation, route }) => {
-  const { Color } = useColor();
+const SplashScreen = ({navigation, route}) => {
+  const {Color} = useColor();
 
   const user = useSelector(state => state['user.auth'].login.user);
-  
+
   useEffect(() => {
     setTimeout(() => {
       if (user) {
@@ -28,29 +24,34 @@ const SplashScreen = ({ navigation, route }) => {
     }, 3000);
   }, []);
 
-  const redirectTo = (nav) => {
+  const redirectTo = nav => {
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
-        routes: [
-          { name: nav }
-        ],
-      })
+        routes: [{name: nav}],
+      }),
     );
-  }
+  };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: Color.theme, width: width, alignItems: 'center', justifyContent:'center'}}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: Color.theme,
+        width: width,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
       <Image
-        source={iconSplash}
+        source={imageSplashScreen}
         style={{
-          width: '60%',
-          height: '30%',
+          width: '100%',
+          height: '100%',
         }}
-        resizeMode='contain'
+        resizeMode="contain"
       />
     </SafeAreaView>
   );
-}
+};
 
 export default SplashScreen;
