@@ -52,22 +52,22 @@ const FormPayment = ({ navigation, route }) => {
     <Scaffold
           header={
             <Header 
-            customIcon 
-            title='Ubah Alamat' 
-            type='regular' 
-            centerTitle={false} />
+              customIcon 
+              title='Ubah Alamat' 
+              type='regular' 
+              centerTitle={false}
+            />
           }
-          onPressLeftButton={() => navigation.pop()}
         >
         <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, }}>
-          <View style={{ backgroundColor: '#fff', marginBottom: 40 }}>
+          <View style={{ marginBottom: 40 }}>
             <Text align='left' style={{ paddingLeft: 16, marginTop: 15 }} type='bold'>Detail Alamat</Text>
             <TextInput
               placeholder='Adang Susanyo'
               title='Nama Penerima'
               color={Color.text}
               placeholderTextColor={Color.gray}
-              textInputStyle={{ borderWidth: 2, borderColor: '#CCCCCC', borderRadius: 5, paddingLeft: 10 }}
+              textInputStyle={{ borderWidth: 2, borderColor: Color.border, borderRadius: 5, paddingLeft: 10 }}
               style={{height: 50, color: Color.gray, fontSize: 14, borderWidth: 1, fontFamily: 'Inter-Regular', marginLeft: 8}}
             />
             <TextInput
@@ -76,10 +76,10 @@ const FormPayment = ({ navigation, route }) => {
               keyboardType='numeric'
               color={Color.text}
               placeholderTextColor={Color.gray}
-              textInputStyle={{ borderWidth: 2, borderColor: '#CCCCCC', borderRadius: 5, paddingLeft: 10 }}
+              textInputStyle={{ borderWidth: 2, borderColor: Color.border, borderRadius: 5, paddingLeft: 10 }}
               style={{height: 50, color: Color.gray, fontSize: 14, borderWidth: 1, fontFamily: 'Inter-Regular', marginLeft: 8}}
             />
-            <Text align='left' style={{ marginTop: 15,  marginLeft: 16, color: '#666666' }} size={13}>Alamat Lengkap</Text>
+            <Text align='left' style={{ marginTop: 15,  marginLeft: 16, color: Color.gray }} size={13}>Alamat Lengkap</Text>
             <TextInputs
               placeholder='Tuliskan Alamat . . . '
               numberOfLines={3}
@@ -87,43 +87,43 @@ const FormPayment = ({ navigation, route }) => {
               color={Color.text}
               multiline
               placeholderTextColor={Color.gray}
-              style={{ borderWidth: 2, borderColor: '#CCCCCC', marginHorizontal: 16, borderRadius: 5, paddingLeft: 10 }}
+              style={{ borderWidth: 2, borderColor: Color.border, marginHorizontal: 16, borderRadius: 5, paddingLeft: 10 }}
             />
             <View>
-              <Text align='left' style={{ marginTop: 15, marginLeft: 16, color: '#666666' }} size={13}>Provinsi</Text>
-              <TouchableOpacity style={{ borderWidth: 2, borderColor: '#CCCCCC', marginHorizontal: 16, paddingVertical: 15, borderRadius: 5, paddingHorizontal: 10 }}>
+              <Text align='left' style={{ marginTop: 15, marginLeft: 16, color: Color.gray }} size={13}>Provinsi</Text>
+              <TouchableOpacity style={{ borderWidth: 2, borderColor: Color.border, marginHorizontal: 16, paddingVertical: 15, borderRadius: 5, paddingHorizontal: 10 }}>
                 <Row>
                   <Col size={8}>
                     <Text align='left'>- PILIH PROVINSI -</Text>
                   </Col>
                   <Col alignItems='flex-end' justifyContent='center'>
-                    <AntDesign name='down' color='#111' size={15} />
+                    <AntDesign name='down' color={Color.text} size={15} />
                   </Col>
                 </Row>
               </TouchableOpacity>
             </View>
             <View>
-              <Text align='left' style={{ marginTop: 15, marginLeft: 16, color: '#666666' }} size={13}>Kota / Kabupaten</Text>
-              <TouchableOpacity style={{ borderWidth: 2, borderColor: '#CCCCCC', marginHorizontal: 16, paddingVertical: 15, borderRadius: 5, paddingHorizontal: 10 }}>
+              <Text align='left' style={{ marginTop: 15, marginLeft: 16, color: Color.gray }} size={13}>Kota / Kabupaten</Text>
+              <TouchableOpacity style={{ borderWidth: 2, borderColor: Color.border, marginHorizontal: 16, paddingVertical: 15, borderRadius: 5, paddingHorizontal: 10 }}>
                 <Row>
                   <Col size={8}>
                     <Text align='left'>- PILIH KOTA/KABUPATEN -</Text>
                   </Col>
                   <Col alignItems='flex-end' justifyContent='center'>
-                    <AntDesign name='down' color='#111' size={15} />
+                    <AntDesign name='down' color={Color.text} size={15} />
                   </Col>
                 </Row>
               </TouchableOpacity>
             </View>
             <View>
-              <Text align='left' style={{ marginTop: 15, marginLeft: 16, color: '#666666' }} size={13}>Kecamatan</Text>
-              <TouchableOpacity style={{ borderWidth: 2, borderColor: '#CCCCCC', marginHorizontal: 16, paddingVertical: 15, borderRadius: 5, paddingHorizontal: 10 }}>
+              <Text align='left' style={{ marginTop: 15, marginLeft: 16, color: Color.gray }} size={13}>Kecamatan</Text>
+              <TouchableOpacity style={{ borderWidth: 2, borderColor: Color.border, marginHorizontal: 16, paddingVertical: 15, borderRadius: 5, paddingHorizontal: 10 }}>
                 <Row>
                   <Col size={8}>
                     <Text align='left'>- PILIH KECAMATAN -</Text>
                   </Col>
                   <Col alignItems='flex-end' justifyContent='center'>
-                    <AntDesign name='down' color='#111' size={15} />
+                    <AntDesign name='down' color={Color.text} size={15} />
                   </Col>
                 </Row>
               </TouchableOpacity>
@@ -134,7 +134,7 @@ const FormPayment = ({ navigation, route }) => {
               keyboardType='numeric'
               color={Color.text}
               placeholderTextColor={Color.gray}
-              textInputStyle={{ borderWidth: 2, borderColor: '#CCCCCC', borderRadius: 5, paddingLeft: 10 }}
+              textInputStyle={{ borderWidth: 2, borderColor: Color.border, borderRadius: 5, paddingLeft: 10 }}
               style={{height: 50, color: Color.gray, fontSize: 14, borderWidth: 1, fontFamily: 'Inter-Regular', marginLeft: 8}}
             />
           </View>

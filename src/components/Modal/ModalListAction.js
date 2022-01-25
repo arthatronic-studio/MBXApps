@@ -27,7 +27,10 @@ const ModalListAction = forwardRef((props, ref) => {
   const { Color } = useColor();
 
   const renderContent = () => {
-    return data.map((item, idx) =>
+    
+    return data.map((item, idx) => {
+      console.log(item);
+      return (
         <TouchableOpacity
             key={idx}
             onPress={() => {
@@ -35,11 +38,12 @@ const ModalListAction = forwardRef((props, ref) => {
             }}
             style={{flexDirection: 'row', alignItems: 'flex-start', marginTop: 24}}
         >
-            <Text size={12} align='left' color={item.color ? item.color : selected && selected.id === item.id ? Color.secondary : Color.theme}>
+            <Text size={12} align='left' color={item.color ? item.color : selected && selected.id === item.id ? Color.secondary : Color.text}>
                 {item.name}
             </Text>
         </TouchableOpacity>
-    )
+      )
+    })
   }
   
   return (

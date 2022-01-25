@@ -5,6 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Octicons from 'react-native-vector-icons/Octicons';
 import { useDispatch, useSelector } from 'react-redux';
 // import Orientation from 'react-native-orientation-locker';
 
@@ -285,11 +286,18 @@ const UserProfileScreen = ({ navigation, route }) => {
                         <Ionicons name='person-circle' color={Color.primary} size={56} />
                     </View>
                     <View style={{marginLeft: 8}}>
-                        <View style={{flexDirection: 'row'}}>
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
                             <Text size={12} align='left' letterSpacing={0.18}>
                                 {userContent.firstName} {userContent.lastName}
                             </Text>
-                            {(userContent.isDirector === 1 || listPrivilegeUser.includes(userContent.userId)) && <MaterialIcons name='verified' color={Color.info} size={12} style={{transform: [{ rotateY: '0deg' }]}} />}
+                            {(userContent.isDirector === 1 || listPrivilegeUser.includes(userContent.userId)) &&
+                                <Octicons
+                                    name='verified'
+                                    color={Color.info}
+                                    size={14}
+                                    style={{transform: [{ rotateY: '0deg' }]}}
+                                />
+                            }
                         </View>
                         <Text size={10} align='left' letterSpacing={0.18} style={{marginTop: 2, opacity: 0.6}}>
                             {userContent.userName || userContent.email}
@@ -595,7 +603,6 @@ const UserProfileScreen = ({ navigation, route }) => {
                     {
                         id: 'edit',
                         name: 'Edit',
-                        color: Color.text,
                         onPress: () => {
                             navigation.navigate('EditContentScreen', { item: selectedCasting, prevScreen: 'Profile' });
                             modalListActionRef.current.close();
@@ -604,7 +611,6 @@ const UserProfileScreen = ({ navigation, route }) => {
                     {
                         id: 'change',
                         name: `Ubah ke ${selectedCasting && selectedCasting.status === 'PUBLISH' ? 'Privasi' : 'Publik'}`,
-                        color: Color.text,
                         onPress: () => {
                             Alert(
                                 'Ubah',

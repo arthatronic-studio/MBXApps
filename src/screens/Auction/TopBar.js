@@ -1,43 +1,22 @@
 import * as React from 'react';
-import {Text, View, Button} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+
 import {useColor} from '@src/components';
 import CartShop from '@src/screens/Ecommerce/CartShop';
 import CartAuction from '@src/screens/Auction/CartAuction';
 
-function Shop() {
-  return (
-    <View
-      style={{
-        flex: 1,
-      }}>
-          <CartShop />
-    </View>
-  );
-}
-
-function Auction() {
-  return (
-    <View
-      style={{
-        flex: 1,
-      }}>
-      <CartAuction />
-    </View>
-  );
-}
-
 const Tab = createMaterialTopTabNavigator();
 
 function MyTabs() {
+  const { Color } = useColor();
+  
   return (
     <Tab.Navigator
       initialRouteName="Shop"
       tabBarOptions={{
-        activeTintColor: '#121212',
+        activeTintColor: Color.primary,
         labelStyle: {fontSize: 12, },
-        style: {backgroundColor: '#fff'},
+        style: {backgroundColor: Color.theme},
       }}>
       <Tab.Screen
         name="Shop"

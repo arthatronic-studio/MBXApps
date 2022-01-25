@@ -670,9 +670,9 @@ const MainHome = ({navigation, route}) => {
               <Text size={12} align='left'>Sekarang di TRIBESOCIAL {'\n'} udah ada fitur <Text type='bold'>lelang</Text> loh !</Text>
               <Button onPress={() => navigation.navigate('Lelang')} style={{ backgroundColor: '#f58645', minHeight: 25, width: 120, marginTop: 8,  borderRadius: 20 }}>
                 <Row>
-                  <Text color={Color.white} size={10}>Selengkapnya</Text>
+                  <Text color={Color.textInput} size={10}>Selengkapnya</Text>
                   <View style={{ justifyContent: 'center' }}>
-                    <AntDesign name='arrowright' color={Color.white} style={{ marginLeft: 8 }} />
+                    <AntDesign name='arrowright' color={Color.textInput} style={{ marginLeft: 8 }} />
                   </View>
                 </Row>
               </Button>

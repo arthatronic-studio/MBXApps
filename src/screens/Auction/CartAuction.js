@@ -42,8 +42,9 @@ const CartAuction = ({ navigation, route }) => {
   }, []);
 
   return (
-    <View style={{ flex: 1 }}>
-
+    <Scaffold
+        header={<View />}
+    >
       <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
           {[1,2,3,4].map((val, id) => (
             <View style={{marginHorizontal: 15, marginTop: 10, padding: 15, borderRadius: 10 }}>
@@ -81,7 +82,7 @@ const CartAuction = ({ navigation, route }) => {
             
         </ScrollView>
       {/* <Loading {...loadingProps} /> */}
-    </View>
+    </Scaffold>
   );
 }
 
