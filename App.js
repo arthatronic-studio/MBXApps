@@ -159,7 +159,7 @@ const App = () => {
       <PersistGate persistor={persistor}>
         <SafeAreaView style={{flex: 1, backgroundColor: Color.theme}}>
           <StatusBar
-            backgroundColor={Color.primary}
+            backgroundColor={Color.theme}
             barStyle={Color.colorDominant === 'dark' ? 'light-content' : 'dark-content'}
           />
           <NavigationContainer

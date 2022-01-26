@@ -298,9 +298,11 @@ const ChatDetailScreen = ({ navigation, route }) => {
 
         const variables = {
             method: 'INSERT',
-            type: params.selected.length > 1 ? 'GROUP' : 'PERSONAL',
+            type: params.selected.length > 1 ? 'GROUP' : 'INBOX', // 'PERSONAL',
             userId,
         };
+
+        console.log(variables);
         
         Client.query({
             query: queryContentChatRoomManage,
@@ -315,7 +317,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
             }
         })
         .catch((err) => {
-            console.log(err, 'err');
+            console.log(err, 'err send chat');
         });
     }
 
@@ -325,6 +327,8 @@ const ChatDetailScreen = ({ navigation, route }) => {
             page: 1 + dataChat.page,
             itemPerPage: 50,
         };
+
+        console.log(variables);
 
         Client.query({
             query: queryContentChatRoomDetail,
@@ -345,7 +349,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
             }
         })
         .catch((err) => {
-            console.log(err, 'err');
+            console.log(err, 'chat room err');
             setStateDataChat({
                 loading: false,
                 page: -1,
