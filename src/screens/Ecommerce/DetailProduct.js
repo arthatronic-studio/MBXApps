@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Styled from 'styled-components';
 import {useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
 import ImageSlider from '../../components/ImageSlider';
@@ -29,6 +30,9 @@ import {
 } from '@src/components';
 import TopBar from './TopTab';
 import ImagesPath from 'src/components/ImagesPath';
+import { queryAddCart, queryDetailProduct } from 'src/lib/query/ecommerce';
+import Client from 'src/lib/apollo';
+import { FormatMoney } from 'src/utils';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -44,13 +48,64 @@ const images = [
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
-const DetailProduct = ({navigation}) => {
+const DetailProduct = ({route, navigation}) => {
+  const [detail, setDetail] = useState([]);
+  const [loadingProps, showLoading, hideLoading] = useLoading();
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
   const {Color} = useColor();
+  const isFocused = useIsFocused();
+
+
+    useEffect(() => {
+      getDetail();
+  // });
+  }, [isFocused]);
+
+    const getDetail = () => {
+      console.log(route,navigation, 'props')
+      // showLoading();
+      let variables = {
+        id: route.params.item.id,
+      }
+      Client.query({query: queryDetailProduct, variables})
+        .then(res => {
+          console.log(res)
+          if (res.data.ecommerceProductDetail) {
+            setDetail(res.data.ecommerceProductDetail[0]);
+          }
+        })
+        .catch(reject => {
+          console.log(reject);
+        });
+    };
+
+    const addToCart = () => {
+      console.log(route, 'props')
+      showLoading();
+      let variables = {
+        productId: route.params.item.id,
+        quantity: 1
+      }
+      console.log(variables)
+      Client.mutate({mutation: queryAddCart, variables})
+        .then(res => {
+          hideLoading()
+          console.log(res)
+          if (res.data.ecommerceProductDetail) {
+            alert('Success add to cart')
+          }
+        })
+        .catch(reject => {
+          hideLoading()
+          alert(reject.message)
+          console.log(reject.message, 'reject');
+        });
+    };
 
   return (
     <Scaffold
+      loadingProps={loadingProps}
       header={
         <Header
           customIcon
@@ -102,7 +157,7 @@ const DetailProduct = ({navigation}) => {
             <View style={{flexDirection: 'row', paddingHorizontal: 16, justifyContent: 'space-between'}}>
               <View>
                 <Text type='bold' align='left'>
-                  Pashmina Pink
+                  {detail.name}
                 </Text>
                 <Text align='left' size={11} color={Color.gray}>
                   Fashion
@@ -134,7 +189,7 @@ const DetailProduct = ({navigation}) => {
                       paddingHorizontal: 5,
                       fontWeight: 'bold',
                     }}>
-                    120 Terjual
+                    {/* 120 Terjual */}
                   </Text>
                 </View>
               </View>
@@ -145,12 +200,12 @@ const DetailProduct = ({navigation}) => {
                     fontWeight: 'bold',
                     fontSize: 20,
                   }}>
-                  Rp. 150.000
+                  {FormatMoney.getFormattedMoney(detail.price)}
                 </Text>
               </View>
             </View>
           </View>
-          <TopBar style={{borderRadius: 10}} />
+          {detail && <TopBar style={{borderRadius: 10}} detail={detail} />}
         </View>
       </ScrollView>
       <View
@@ -197,7 +252,7 @@ const DetailProduct = ({navigation}) => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.navigate('CartScreen')}
+            onPress={() => addToCart()}
             style={{
               width: '50%',
               height: 40,

@@ -4,7 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {useColor} from '@src/components';
 
-function Description() {
+function Description(props) {
   const {Color} = useColor();
   return (
     <View
@@ -50,7 +50,7 @@ function Description() {
   );
 }
 
-function Review() {
+function Review(props) {
   const {Color} = useColor();
   return (
     <View
@@ -93,7 +93,7 @@ function Review() {
 
 const Tab = createMaterialTopTabNavigator();
 
-function MyTabs() {
+function MyTabs(props) {
   const {Color} = useColor();
   return (
     <Tab.Navigator
@@ -117,6 +117,6 @@ function MyTabs() {
   );
 }
 
-export default function TopBar() {
-  return <MyTabs />;
+export default function TopBar(props) {
+  return <MyTabs detail={props.detail} />;
 }

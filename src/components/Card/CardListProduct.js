@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Text,
@@ -17,7 +17,10 @@ import {
   useColor,
 } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import { shadowStyle } from 'src/styles';
+import { queryGetProduct } from 'src/lib/query/ecommerce';
+import Client from 'src/lib/apollo';
 
 const DATA = [
   {
@@ -103,9 +106,37 @@ const DATA = [
 ];
 
 const CardListProduk = (props) => {
+  const [listProduct, setListProduct] = useState([]);
   const {Color} = useColor();
   const navigation = useNavigation();
   const { height, width } = useWindowDimensions();
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+      getProduct();
+  // });
+  }, [isFocused]);
+
+  const getProduct = () => {
+    // showLoading();
+    let variables = {
+      page: 1,
+      itemPerPage: 10
+    }
+    Client.query({query: queryGetProduct, variables})
+      .then(res => {
+        console.log(res)
+        if (res.data.ecommerceProductList) {
+          setListProduct(res.data.ecommerceProductList);
+        }
+
+        // hideLoading();
+        // navigation.navigate('TopUpScreen');
+      })
+      .catch(reject => {
+        console.log(reject);
+      });
+  };
 
   const renderItem = ({item}) => (
     <View
@@ -117,7 +148,7 @@ const CardListProduk = (props) => {
       }}
     >
       <TouchableOpacity
-        onPress={() => navigation.navigate('DetailProduct')}
+        onPress={() => navigation.navigate('DetailProduct',{item})}
         style={{
           width: '100%',
           height: '100%',
@@ -134,7 +165,7 @@ const CardListProduk = (props) => {
           }}
         >
           <Image
-            source={item.image}
+            source={item.imageUrl}
             style={{
               width: '100%',
               height: (width - 16) / 2,
@@ -180,12 +211,12 @@ const CardListProduk = (props) => {
             paddingHorizontal: 8,
           }}>
           <View style={{marginTop: 8}}>
-            <Text style={[styles.txtTitle, { color: Color.text }]}>{item.title}</Text>
+            <Text style={[styles.txtTitle, { color: Color.text }]}>{item.name}</Text>
             <Text style={[styles.txtCategory, { color: Color.gray }]}>{item.category}</Text>
             <View style={{flexDirection: 'row'}}>
-              <Text style={[styles.txtRating, { color: Color.gray }]}>{item.rating}</Text>
+              {/* <Text style={[styles.txtRating, { color: Color.gray }]}>{item.rating}</Text> */}
               <Entypo name={'star'} style={{color: Color.secondary}} />
-              <Text style={[styles.txtSold, { color: Color.gray }]}>{item.sold} Terjual</Text>
+              {/* <Text style={[styles.txtSold, { color: Color.gray }]}>{item.sold} Terjual</Text> */}
             </View>
           </View>
           <View style={{marginVertical: 8}}>
@@ -196,14 +227,14 @@ const CardListProduk = (props) => {
       </TouchableOpacity>
     </View>
   );
-
+    console.log(listProduct, 'listproduct')
   return (
     <View style={{alignItems: 'center'}}>
       <FlatList
         numColumns={2}
-        keyExtractor={(item, index) => (Math.random() + 1).toString(36).substring(7) + index.toString()}
+        keyExtractor={(item, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
-        data={DATA}
+        data={listProduct}
         renderItem={renderItem}
         contentContainerStyle={{
           paddingHorizontal: 8,

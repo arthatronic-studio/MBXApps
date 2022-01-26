@@ -73,7 +73,6 @@ const CardNews = (props) => {
         setTrigger(true);
     }
 
-    console.log(item);
 
     return (
         <View
