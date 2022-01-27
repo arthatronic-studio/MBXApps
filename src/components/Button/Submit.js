@@ -30,7 +30,7 @@ const OutlineButton = Styled(TouchableOpacity)`
     height: 40px;
     borderColor: ${props => props.twinButtonBorderColor};
     borderWidth: 1px;
-    borderRadius: 4px;
+    borderRadius: 45px;
     justifyContent: center;
     alignItems: center;
     marginBottom: ${props => props.marginBottom};
@@ -40,7 +40,7 @@ const PayButton = Styled(TouchableOpacity)`
     width: ${props => props.width || '100%'};
     height: 45px;
     backgroundColor: ${props => props.backgroundColor};
-    borderRadius: 4px;
+    borderRadius: 45px;
     justifyContent: center;
     alignItems: center;
 

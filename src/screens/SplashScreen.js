@@ -4,8 +4,7 @@ import {CommonActions} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 
 import {useColor} from '@src/components';
-
-import {imageSplashScreen} from '@assets/images';
+import {iconSplash} from '@assets/images';
 
 const {width} = Dimensions.get('window');
 
@@ -43,12 +42,12 @@ const SplashScreen = ({navigation, route}) => {
         justifyContent: 'center',
       }}>
       <Image
-        source={imageSplashScreen}
+        source={iconSplash}
         style={{
-          width: '100%',
-          height: '100%',
+          width: '60%',
+          height: '30%',
         }}
-        resizeMode="contain"
+        resizeMode='contain'
       />
     </SafeAreaView>
   );

@@ -23,6 +23,8 @@ const MainView = Styled(View)`
 
 const RowView = Styled(Row)`
     height: 100%;
+    alignItems: center;
+    justifyContent: center;
 `;
 
 const SideButton = Styled(TouchableOpacity)`
@@ -43,6 +45,7 @@ const HeaderBig = (props) => {
   const {
     title,
     titleRight,
+    titleRightColor,
     actions,
     style,
     iconRightButton,
@@ -57,7 +60,7 @@ const HeaderBig = (props) => {
         <Col size={6} justify='center' align='flex-start' style={{height: '100%'}}>
           {title === '' ?
             <View style={{flexDirection: 'row'}}>
-              <Image source={iconApp} style={{width: 80, height: 40}} resizeMode='contain' />
+              <Image source={iconApp} style={{width: 90, height: 40}} resizeMode='contain' />
             </View>
           :
             <Text size={18} type='bold'>{title}</Text>
@@ -72,9 +75,9 @@ const HeaderBig = (props) => {
           </SideButton>}
 
           {titleRight !== '' && <Text
-            size={12}
+            type='medium'
             align='left'
-            color={Color.primary}
+            color={titleRightColor || Color.primary}
             onPress={() => onPressRightButton &&  onPressRightButton()}
           >
               {titleRight}

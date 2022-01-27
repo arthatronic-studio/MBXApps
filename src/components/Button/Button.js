@@ -11,7 +11,7 @@ const CustomButton = Styled(TouchableOpacity)`
   backgroundColor: ${(props) => (props.disabled ? '#E7CE3E' : props.color)};
   width: 100%;
   minHeight: 35px;
-  borderRadius: 4px;
+  borderRadius: 45px;
   alignItems: center;
   justifyContent: center;
   flexDirection: row;

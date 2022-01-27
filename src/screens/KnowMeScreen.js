@@ -17,6 +17,7 @@ import Text from '@src/components/Text';
 
 import {guestLogin} from '@src/state/actions/user/auth';
 import ImagesPath from 'src/components/ImagesPath';
+import { Divider } from 'src/styled';
 
 const MainView = Styled(View)`
   flex: 1;
@@ -46,21 +47,8 @@ const WarpperNavigationBottom = Styled(View)`
 const NavigationTextWarpperView = Styled(View)`
   justifyContent: center;
   width: 100%;
-  alignItems: flex-start;
+  alignItems: center;
   paddingHorizontal: 16px;
-`;
-
-const NavigationTextWarpperCaption = Styled(Text)`
-  fontSize: 27px;
-  paddingBottom: 6px;
-  textAlign: left;
-  lineHeight: 40px;
-`;
-
-const NavigationTextWarpperDescription = Styled(Text)`
-  fontSize: 12px;
-  textAlign: left;
-  opacity: 0.6;
 `;
 
 const DotIndicator = Styled(View)`
@@ -121,6 +109,8 @@ const KnowMeScreen = ({navigation, route}) => {
     );
   };
 
+  const isFinish = tabPage === (sliderData.length - 1);
+
   const renderNavigationFooter = () => {
     return (
       <AbsoluteBottomView>
@@ -130,7 +120,7 @@ const KnowMeScreen = ({navigation, route}) => {
               <TouchableOpacity key={idx} onPress={() => setTabPage(idx)}>
                 <DotIndicator
                   backgroundColor={
-                    tabPage === idx ? Color.primary : Color.primarySoft
+                    tabPage === idx ? Color.secondary : Color.grayLight
                   }
                 />
               </TouchableOpacity>
@@ -139,13 +129,18 @@ const KnowMeScreen = ({navigation, route}) => {
         </NavgationFooterView>
 
         <Submit
-          buttonLabel="Selanjutnya"
-          buttonColor={Color.primary}
+          buttonLabel={isFinish ? "Lewati" : "Selanjutnya"}
+          buttonColor={Color.secondary}
           type="bottomSingleButton"
           buttonBorderTopWidth={0}
           onPress={() => {
             // dispatch(guestLogin());
-            redirectTo('LoginScreen');
+
+            if (isFinish) {
+              redirectTo('LoginScreen');
+            } else {
+              setTabPage(tabPage + 1);
+            }
           }}
           style={{backgroundColor: 'transparent'}}
         />
@@ -180,12 +175,13 @@ const KnowMeScreen = ({navigation, route}) => {
                 resizeMode="contain"
               />
               <NavigationTextWarpperView>
-                <NavigationTextWarpperCaption type="bold">
+                <Text size={22} type="bold">
                   {item.title}
-                </NavigationTextWarpperCaption>
-                <NavigationTextWarpperDescription>
+                </Text>
+                <Divider height={8} />
+                <Text size={12}>
                   {item.subTitle}
-                </NavigationTextWarpperDescription>
+                </Text>
               </NavigationTextWarpperView>
             </MainView>
           </Tab>
@@ -205,8 +201,9 @@ const KnowMeScreen = ({navigation, route}) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: Color.theme}}>
       <HeaderBig
-        // titleRight='Masuk'
-        // onPressRightButton={() => navigation.navigate('LoginScreen')}
+        titleRight='Lewati'
+        titleRightColor={Color.secondary}
+        onPressRightButton={() => redirectTo('LoginScreen')}
         style={{backgroundColor: 'transparent', paddingTop: 16}}
       />
 

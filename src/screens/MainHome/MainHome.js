@@ -54,6 +54,8 @@ import {
   iconPLN,
   iconPulsa,
   iconSemua,
+  iconLelang,
+  iconMediaPlayer,
 } from '@assets/images/home';
 import {imageCarousel} from '@assets/images';
 import ModalPosting from './ModalPosting';
@@ -116,7 +118,7 @@ const ComingSoonContainer = Styled(View)`
   left: 0;
   bottom: 0;
   right: 0;
-  top: -33;
+  top: -24;
 `;
 
 const ComingSoonView = Styled(View)`
@@ -127,6 +129,22 @@ const ComingSoonView = Styled(View)`
 `;
 
 const sambatanMenus = [
+  {
+    id: 8,
+    name: 'Media Player',
+    images: iconMediaPlayer,
+    nav: '',
+    params: {},
+    badge: true,
+  },
+  {
+    id: 7,
+    name: 'Lelang',
+    images: iconLelang,
+    nav: 'Lelang',
+    params: {},
+    badge: true,
+  },
   {id: 0, name: 'Pulsa', images: iconPulsa, nav: 'PulsaScreen', params: {}},
   {id: 1, name: 'Listrik', images: iconPLN, nav: 'PlnScreen', params: {}},
   // {id: 2, name: 'Game', images: iconGames, nav: '', params: {}},
@@ -151,20 +169,6 @@ const sambatanMenus = [
   //   images: iconSemua,
   //   nav: '',
   //   params: {title: 'Iuran Non-wajib', type: 'ACTIVE', productType: 'SAMBATAN_O',}},
-  {
-    id: 7,
-    name: 'Lelang',
-    images: iconIuran,
-    nav: 'Lelang',
-    params: {title: 'Iuran', type: 'ACTIVE', productType: 'ALL_SAMBATAN'},
-  },
-  {
-    id: 8,
-    name: 'Ecommerce',
-    images: iconPulsa,
-    nav: 'MerchScreen',
-    params: {title: 'Iuran', type: 'ACTIVE', productType: 'ALL_SAMBATAN'},
-  },
 ];
 
 const dataSabyan = {
@@ -420,6 +424,24 @@ const MainHome = ({navigation, route}) => {
     );
   };
 
+  const renderMenuBadge = () => {
+    return (
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'absolute',
+          top: -6,
+          right: 16,
+        }}
+      >
+        <ComingSoonView style={{backgroundColor: Color.red}}>
+          <Text size={8} color={Color.textInput}>New</Text>
+        </ComingSoonView>
+      </View>
+    );
+  }
+
   const isWalletClose = wallet === 'CLOSE';
 
   return (
@@ -591,7 +613,11 @@ const MainHome = ({navigation, route}) => {
                   key={idx}
                   activeOpacity={0.75}
                   disabled={menu.comingsoon}
-                  onPress={() => navigation.navigate(menu.nav, menu.params)}>
+                  onPress={() => {
+                    if (menu.nav === '') return;
+                    navigation.navigate(menu.nav, menu.params);
+                  }}
+                >
                   <UserIcon>
                     <ImageProperty
                       style={menu.comingsoon && {opacity: 0.3}}
@@ -601,7 +627,8 @@ const MainHome = ({navigation, route}) => {
                     <Text size={12} style={menu.comingsoon && {opacity: 0.3}}>
                       {menu.name}
                     </Text>
-                    {(menu.comingsoon || menu.nav === '') && renderComingSoon()}
+                    {/* {(menu.comingsoon || menu.nav === '') && renderComingSoon()} */}
+                    {menu.badge && renderMenuBadge()}
                   </UserIcon>
                 </PerUserIcons>
               );
@@ -683,13 +710,13 @@ const MainHome = ({navigation, route}) => {
                   borderRadius: 20,
                 }}>
                 <Row>
-                  <Text color={Color.white} size={10}>
+                  <Text color={Color.textInput} size={10}>
                     Selengkapnya
                   </Text>
                   <View style={{justifyContent: 'center'}}>
                     <AntDesign
                       name="arrowright"
-                      color={Color.white}
+                      color={Color.textInput}
                       style={{marginLeft: 8}}
                     />
                   </View>
