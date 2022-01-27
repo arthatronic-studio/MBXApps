@@ -8,7 +8,7 @@ const staticColors = {
   primaryYellow: '#FAC255',
   secondary: '#F3771D',
   oldGreen: '#557D09',
-  disabled: '#A1A1A1',
+  disabled: '#6A7479',
   success: '#0BBC2E',
   info: '#0787D7',
   warning: '#F5B72C',
@@ -23,6 +23,7 @@ const staticColors = {
   icon: '#667786',
   bid: '#E6E9EA',
   infosecond: '#DAE9F2',
+  placeholder: '#6A7479',
 };
 
 export const lightModeColors = {
