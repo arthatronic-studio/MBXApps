@@ -110,7 +110,7 @@ const Header = props => {
                   {showIconLeftButton && (
                     <Fontisto
                       name={iconLeftButton}
-                      color={Color.primary}
+                      color={Color.text}
                       size={18}
                     />
                   )}
@@ -166,7 +166,7 @@ const Header = props => {
                 {showIconLeftButton && (
                   <Fontisto
                     name={iconLeftButton}
-                    color={color || Color.primary}
+                    color={color || Color.text}
                     size={18}
                   />
                 )}
@@ -262,13 +262,13 @@ const Header = props => {
                       {customIcon ? (
                         <AntDesign
                           name={'arrowleft'}
-                          color={color || Color.primary}
+                          color={color || Color.text}
                           size={18}
                         />
                       ) : (
                         <Fontisto
                           name={iconLeftButton}
-                          color={color || Color.primary}
+                          color={color || Color.text}
                           size={18}
                         />
                       )}

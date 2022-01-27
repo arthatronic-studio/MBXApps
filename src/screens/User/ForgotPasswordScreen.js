@@ -1,97 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, ScrollView, SafeAreaView } from 'react-native';
-import Styled from 'styled-components';
+import { ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
 
 import {
-  Button,
-  // Text,
-  Popup, usePopup,
-  Loading,
-  useColor
+  usePopup,
+  useColor,
+  Scaffold,
 } from '@src/components';
 import Text from '@src/components/Text';
+import { Button } from '@src/components/Button';
 import validate from '@src/lib/validate';
-
 import { callForgetPassword } from '@src/state/actions/user/auth';
-
-const MainView = Styled(SafeAreaView)`
-  flex: 1;
-`;
-
-const Container = Styled(View)`
-  width: 100%;
-  height: 100%;
-  alignItems: center;
-  justifyContent: center;
-  padding: 92px 16px 0px;
-`;
-
-const EmailRoundedView = Styled(View)`
-  width: 100%;
-  height: 50;
-  alignItems: flex-start;
-  justifyContent: center;
-  flexDirection: column;
-`;
-
-const CustomTextInput = Styled(TextInput)`
-  width: 100%;
-  height: 100%;
-  fontFamily: Inter-Regular;
-  backgroundColor: transparent;
-  borderBottomWidth: 1px;
-  borderColor: #666666;
-  fontSize: 17px;
-`;
-
-const SignRegisterView = Styled(View)`
-  width: 100%;
-  marginTop: 70px;
-`;
-
-const BackView = Styled(View)`
-  width: 100%;
-  marginTop: 16px;
-`;
-
-const ErrorView = Styled(View)`
-  width: 100%;
-  paddingVertical: 4px;
-  alignItems: flex-start;
-`;
-
-const SignButton = Styled(Button)`
-  width: 100%;
-  height: 45px;
-  borderRadius: 4px;
-`;
-
-const BackButton = Styled(Button)`
-  width: 100%;
-  height: 40px;
-  borderRadius: 8px;
-  backgroundColor: transparent;
-`;
-
-const TextTitleView = Styled(View)`
-  width: 100%;
-  marginBottom: 16px;
-  alignItems: flex-start;
-`;
-
-const TextDescView = Styled(View)`
-  width: 100%;
-  marginBottom: 40px;
-  alignItems: flex-start;
-`;
-
-const LabelInput = Styled(View)`
-  width: 100%;
-  justifyContent: flex-start;
-  alignItems: flex-start;
-`;
+import FormInput from 'src/components/FormInput';
+import { Container, Divider } from 'src/styled';
 
 const inputs = ['email'];
 
@@ -159,59 +81,44 @@ const ForgotPasswordScreen = ({ navigation, route }) => {
   }
 
   return (
-    <MainView style={{backgroundColor: Color.theme}}>
+    <Scaffold
+      headerTitle=''
+      popupProps={popupProps}
+      fallback={loading}
+    >
       <ScrollView>
-        <Container>
-          <TextTitleView>
-            <Text type='semibold' size={24} color={Color.primary} lineHeight={25} letterSpacing={0.3}>Lupa Kata Sandi</Text>
-          </TextTitleView>
+        <Container padding={16} marginTop={36}>
+          <Container marginBottom={16}>
+            <Text type='semibold' size={24} align='left' lineHeight={25} letterSpacing={0.3}>Lupa Kata Sandi</Text>
+          </Container>
 
-          <TextDescView>
-            <Text size={12} align='left' lineHeight={19} letterSpacing={0.23}>Masukan alamat email yang Anda gunakan untuk login dan kami akan mengirimkan link atur ulang password.</Text>
-          </TextDescView>
+          <Container marginBottom={16}>
+            <Text align='left' lineHeight={22.4} letterSpacing={0.23}>Masukkan alamat email untuk melakukan pengaturan ulang kata sandi.</Text>
+          </Container>
 
-          <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Email</Text>
-          </LabelInput>
-          <EmailRoundedView>
-            <CustomTextInput
-              placeholder='Masukan Email'
-              keyboardType='email-address'
-              placeholderTextColor={Color.gray}
-              underlineColorAndroid='transparent'
-              autoCorrect={false}
-              onChangeText={(text) => setState({ ...state, email: text })}
-              selectionColor={Color.text}
-              value={state.email}
-              onBlur={() => isValueError('email')}
-              returnKeyType='done'
-              onSubmitEditing={() => onSubmit()}
-              blurOnSubmit={false}
-              style={{color: Color.text}}
-            />
-          </EmailRoundedView>
-          <ErrorView>
-            <Text color={12} type='medium' color={Color.error} align='left'>{state.error.email}</Text>
-          </ErrorView>
+          <FormInput
+            label='Email'
+            placeholder='contoh@gmail.com'
+            value={state.email}
+            onChangeText={(text) => setState({ ...state, email: text })}
+            onBlur={() => isValueError('email')}
+            keyboardType='email-address'
+            returnKeyType='done'
+            onSubmitEditing={() => onSubmit()}
+            error={state.error.email}
+          />
 
-          <SignRegisterView>
-            <SignButton
-              onPress={() => onSubmit()}
-            >
-              Kirim
-            </SignButton>
-          </SignRegisterView>
+          <Divider height={24} />
 
-          <BackView>
-            <BackButton type='regular' fontColor={Color.primary} onPress={() => navigation.pop()}>Kembali</BackButton>
-          </BackView>
+          <Button
+            color={Color.disabled}
+            onPress={() => onSubmit()}
+          >
+            Lanjutkan
+          </Button>
         </Container>
       </ScrollView>
-
-      <Loading visible={loading} />
-
-      <Popup {...popupProps} />
-    </MainView>
+    </Scaffold>
   );
 }
 
