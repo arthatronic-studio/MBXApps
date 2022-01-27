@@ -271,14 +271,13 @@ const LoginScreen = ({navigation, route}) => {
                   alignItems: 'flex-end',
                 }}
               >
-                <Text type="semibold" color={Color.secondary}>
+                <Text type="semibold" color={Color.primary}>
                   Lupa Kata Sandi?
                 </Text>
               </TouchableOpacity>
             </Container>
 
             <Button
-              color={Color.secondary}
               onPress={() => signIn()}
             >
               Masuk
@@ -293,7 +292,7 @@ const LoginScreen = ({navigation, route}) => {
             </Container>
 
             <Button
-              color={Color.disabled}
+              color={Color.secondary}
               onPress={() => navigation.navigate('RegisterScreen')}
             >
               Daftar

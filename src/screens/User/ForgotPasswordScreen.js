@@ -86,7 +86,9 @@ const ForgotPasswordScreen = ({ navigation, route }) => {
       popupProps={popupProps}
       fallback={loading}
     >
-      <ScrollView>
+      <ScrollView
+        keyboardShouldPersistTaps='handled'
+      >
         <Container padding={16} marginTop={36}>
           <Container marginBottom={16}>
             <Text type='semibold' size={24} align='left' lineHeight={25} letterSpacing={0.3}>Lupa Kata Sandi</Text>
@@ -111,7 +113,7 @@ const ForgotPasswordScreen = ({ navigation, route }) => {
           <Divider height={24} />
 
           <Button
-            color={Color.disabled}
+            color={Color.secondary}
             onPress={() => onSubmit()}
           >
             Lanjutkan

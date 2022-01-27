@@ -291,13 +291,12 @@ const RegisterScreen = ({navigation, route}) => {
 
             {/* <View style={{width: '100%', paddingVertical: 2, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
               <MaterialIcons size={16} name='check-box-outline-blank' color={Color.theme} style={{marginRight: 4}} />
-              <Text align='left' size={12} color={Color.theme}>Saya setuju dengan <Text color={Color.secondary}>Syarat & Ketentuan</Text> yang berlaku.</Text>
+              <Text align='left' size={12} color={Color.theme}>Saya setuju dengan <Text color={Color.primary}>Syarat & Ketentuan</Text> yang berlaku.</Text>
             </View> */}
 
             <Divider height={24} />
 
             <Button
-              color={Color.secondary}
               onPress={() => onSubmit()}
             >
               Daftar

@@ -118,7 +118,7 @@ const KnowMeScreen = ({navigation, route}) => {
               <TouchableOpacity key={idx} onPress={() => setTabPage(idx)}>
                 <DotIndicator
                   backgroundColor={
-                    tabPage === idx ? Color.secondary : Color.grayLight
+                    tabPage === idx ? Color.primary : Color.grayLight
                   }
                 />
               </TouchableOpacity>
@@ -128,7 +128,7 @@ const KnowMeScreen = ({navigation, route}) => {
 
         <Submit
           buttonLabel={isFinish ? "Lewati" : "Selanjutnya"}
-          buttonColor={Color.secondary}
+          buttonColor={Color.primary}
           type="bottomSingleButton"
           buttonBorderTopWidth={0}
           onPress={() => {
@@ -196,7 +196,7 @@ const KnowMeScreen = ({navigation, route}) => {
         :
           <HeaderBig
             titleRight='Lewati'
-            titleRightColor={Color.secondary}
+            titleRightColor={Color.primary}
             onPressRightButton={() => redirectTo('LoginScreen')}
             style={{backgroundColor: 'transparent', paddingTop: 16}}
           />

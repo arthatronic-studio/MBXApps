@@ -65,7 +65,9 @@ const Scaffold = ({
             {fallback ?
                 <ScreenIndicator transparent />
             : empty || emptyTitle ?
-                <ScreenEmptyData message={emptyTitle || 'Data tidak tersedia'} />
+                <>
+                    <ScreenEmptyData message={emptyTitle || 'Data tidak tersedia'} />
+                </>
             :
                 children
             }

@@ -15,7 +15,7 @@ import { Circle } from '@src/styled';
 
 import Client from '@src/lib/apollo';
 import { queryContentChatRooms } from '@src/lib/query';
-import { Scaffold } from 'src/components';
+import { Header, Scaffold } from 'src/components';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -241,24 +241,23 @@ const ChatRoomsScreen = ({ navigation, route }) => {
         return result;
     }
 
-    if (dataRooms.data.length === 0) {
-        return (
-            <Scaffold
-                headerTitle='Chat'
-                fallback={dataRooms.loading}
-            >
-                <ScreenEmptyData transparent message='Kamu belum memiliki riwayat chat' />
-                <TouchableOpacity onPress={() => navigation.navigate('ChatUserListScreen')} style={{height: 50, width: 50, borderRadius: 25, position: 'absolute', bottom: 16, right: 16, backgroundColor: Color.secondary, justifyContent: 'center', alignItems: 'center'}}>
-                    <Ionicons name='add' color={Color.text} size={30} />
-                </TouchableOpacity>
-            </Scaffold>
-        )
-    }
-
     return (
         <Scaffold
-            headerTitle='Chat'
             fallback={dataRooms.loading}
+            header={
+                <Header
+                    title='Obrolan'
+                    iconRightButton={
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('ChatUserListScreen')}
+                            style={{justifyContent: 'center', alignItems: 'center'}}
+                        >
+                            <Ionicons name='add' color={Color.text} size={30} />
+                        </TouchableOpacity>
+                    }
+                />
+            }
+            empty={!dataRooms.loading && dataRooms.data.length === 0}
         >
             {/* <BottomSection style={{borderColor: Color.border}}>
                 <BoxInput style={true ? {borderColor: Color.border} : {borderColor: Color.error}}>
@@ -300,22 +299,20 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                             }}
                             style={{height: 60, paddingHorizontal: 16, marginBottom: 16, flexDirection: 'row', alignItems: 'center'}}
                         >
-                            <View style={{width: '12%', height: '100%', alignItems: 'center', justifyContent: 'center', borderBottomWidth: 0.5, borderColor: Color.text}}>
+                            <View style={{width: '12%', height: '100%', alignItems: 'center', justifyContent: 'center'}}>
                                 <Image
                                     source={{uri: item.image}}
-                                    style={{width: '100%', aspectRatio: 1, borderRadius: 30, backgroundColor: Color.theme}}
+                                    style={{width: '100%', aspectRatio: 1, borderRadius: 30, backgroundColor: Color.border}}
                                 />
                             </View>
-                            <View style={{width: '70%', height: '100%', alignItems: 'flex-start', justifyContent: 'space-around', paddingHorizontal: 16, paddingVertical: 4, borderBottomWidth: 0.5, borderColor: Color.text}}>
+                            <View style={{width: '70%', height: '100%', alignItems: 'flex-start', justifyContent: 'space-around', paddingLeft: 8, paddingRight: 16, paddingVertical: 4}}>
                                 <Text
-                                    size={12}
                                     type='semibold'
                                     numberOfLines={1}
                                 >
                                     {item.name !== '' ? item.name : typeof item.memberDetail !== 'undefined' ? getTitleFirebaseData(item.memberDetail) : getTitle(item.member)}
                                 </Text>
                                 <Text
-                                    size={10}
                                     type={isUserTyping(item.typing) ? 'italic' : isNotRead(item.read) ? 'bold' : 'regular'}
                                     numberOfLines={1}
                                     color={isUserTyping(item.typing) ? Color.success : Color.text}
@@ -324,7 +321,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                                     {isUserTyping(item.typing) ? 'Sedang mengetik...' : item.lastChat ? item.lastChat.message : ''}
                                 </Text>
                             </View>
-                            <View style={{width: '18%', height: '100%', alignItems: 'flex-end', justifyContent: 'space-around', paddingVertical: 4, borderBottomWidth: 0.5, borderColor: Color.text}}>
+                            <View style={{width: '18%', height: '100%', alignItems: 'flex-end', justifyContent: 'space-around', paddingVertical: 4}}>
                                 <Text
                                     size={8}
                                 >
@@ -341,10 +338,6 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                     )
                 }}
             />
-
-            <TouchableOpacity onPress={() => navigation.navigate('ChatUserListScreen')} style={{height: 50, width: 50, borderRadius: 25, position: 'absolute', bottom: 16, right: 16, backgroundColor: Color.secondary, justifyContent: 'center', alignItems: 'center'}}>
-                <Ionicons name='add' color={Color.text} size={30} />
-            </TouchableOpacity>
         </Scaffold>
     )
 }

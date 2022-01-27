@@ -1,16 +1,14 @@
-import React, {useEffect} from 'react';
-import {Image, SafeAreaView, Dimensions} from 'react-native';
+import React, { useEffect } from 'react';
+import {View, Image, useWindowDimensions} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 
-import {useColor} from '@src/components';
+import {Scaffold} from '@src/components';
 import {iconSplash} from '@assets/images';
-
-const {width} = Dimensions.get('window');
+import { Container } from 'src/styled';
 
 const SplashScreen = ({navigation, route}) => {
-  const {Color} = useColor();
-
+  const {width, height} = useWindowDimensions();
   const user = useSelector(state => state['user.auth'].login.user);
 
   useEffect(() => {
@@ -33,23 +31,25 @@ const SplashScreen = ({navigation, route}) => {
   };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: Color.theme,
-        width: width,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-      <Image
-        source={iconSplash}
-        style={{
-          height: '30%',
-          width: '60%',
-        }}
-        resizeMode='contain'
-      />
-    </SafeAreaView>
+    <Scaffold
+      header={<View />}
+    >
+      <Container
+        height={height}
+        width={width}
+        align='center'
+        justify='center'
+      >
+        <Image
+          source={iconSplash}
+          style={{
+            height: '30%',
+            width: '60%',
+          }}
+          resizeMode='contain'
+        />
+      </Container>
+    </Scaffold>
   );
 };
 
