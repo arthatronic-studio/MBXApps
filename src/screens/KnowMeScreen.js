@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, TouchableOpacity, Image, SafeAreaView} from 'react-native';
+import {View, TouchableOpacity, Image} from 'react-native';
 import {CommonActions, useIsFocused} from '@react-navigation/native';
 import {Tabs, Tab, TabHeading} from 'native-base';
 import Styled from 'styled-components';
@@ -7,14 +7,12 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {
   Submit,
-  Popup,
   usePopup,
-  Loading,
   HeaderBig,
   useColor,
+  Scaffold,
 } from '@src/components';
 import Text from '@src/components/Text';
-
 import {guestLogin} from '@src/state/actions/user/auth';
 import ImagesPath from 'src/components/ImagesPath';
 import { Divider } from 'src/styled';
@@ -120,7 +118,7 @@ const KnowMeScreen = ({navigation, route}) => {
               <TouchableOpacity key={idx} onPress={() => setTabPage(idx)}>
                 <DotIndicator
                   backgroundColor={
-                    tabPage === idx ? Color.secondary : Color.grayLight
+                    tabPage === idx ? Color.primary : Color.grayLight
                   }
                 />
               </TouchableOpacity>
@@ -130,7 +128,7 @@ const KnowMeScreen = ({navigation, route}) => {
 
         <Submit
           buttonLabel={isFinish ? "Lewati" : "Selanjutnya"}
-          buttonColor={Color.secondary}
+          buttonColor={Color.primary}
           type="bottomSingleButton"
           buttonBorderTopWidth={0}
           onPress={() => {
@@ -190,31 +188,26 @@ const KnowMeScreen = ({navigation, route}) => {
     );
   };
 
-  if (user) {
-    return (
-      <SafeAreaView style={{flex: 1, backgroundColor: Color.theme}}>
-        <Loading visible />
-      </SafeAreaView>
-    );
-  }
-
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: Color.theme}}>
-      <HeaderBig
-        titleRight='Lewati'
-        titleRightColor={Color.secondary}
-        onPressRightButton={() => redirectTo('LoginScreen')}
-        style={{backgroundColor: 'transparent', paddingTop: 16}}
-      />
-
+    <Scaffold
+      header={
+        user ?
+          <View />
+        :
+          <HeaderBig
+            titleRight='Lewati'
+            titleRightColor={Color.primary}
+            onPressRightButton={() => redirectTo('LoginScreen')}
+            style={{backgroundColor: 'transparent', paddingTop: 16}}
+          />
+      }
+      fallback={user || loading}
+      popupProps={popupProps}
+    >
       {renderTabContent()}
 
       {renderNavigationFooter()}
-
-      <Loading visible={loading} />
-
-      <Popup {...popupProps} />
-    </SafeAreaView>
+    </Scaffold>
   );
 };
 

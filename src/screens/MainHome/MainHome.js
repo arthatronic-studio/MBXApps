@@ -181,6 +181,8 @@ const dataSabyan = {
     'Cupcake ipsum dolor sit amet tart. Cookie carrot cake bear claw jujubes muffin. Cotton candy sweet candy chocolate muffin bonbon. Tart donut apple pie cupcake tart tart. Jelly-o chocolate cake ice cream shortbread biscuit chupa chups dessert. Macaroon cotton candy lollipop marshmallow dragée toffee shortbread macaroon dessert. Bear claw gummi bears pie apple pie tiramisu soufflé bonbon. Tiramisu tart candy croissant jujubes marshmallow lemon drops. Ice cream muffin pastry halvah chocolate bar bear claw. Tart icing pudding jelly-o fruitcake fruitcake. Tiramisu sweet pastry caramels sugar plum sweet gingerbread. Macaroon powder gummies tootsie roll muffin. Cookie danish candy jelly beans biscuit. Soufflé cake pudding fruitcake macaroon jelly beans.',
 };
 
+let tempShowPopupAds = true;
+
 const MainHome = ({navigation, route}) => {
   // state
   const [vestaAmount, setVestaAmount] = useState(0);
@@ -189,6 +191,7 @@ const MainHome = ({navigation, route}) => {
   const [firebaseNotifierLastChatCount, setFirebaseNotifierLastChatCount] =
     useState(0);
   const [notifierCount, setNotifierCount] = useState(0);
+  const [showPopupAds, setShowPopupAds] = useState(true);
 
   const [loadingAuction, setLoadingAuction] = useState(true);
 
@@ -223,8 +226,6 @@ const MainHome = ({navigation, route}) => {
   const prevFirebaseNotifierLastChatCount = usePreviousState(
     firebaseNotifierLastChatCount,
   );
-
-  const [isModalVisible, setModalVisible] = useState(true);
 
   useEffect(() => {
     const subscriber = firestore()
@@ -781,14 +782,18 @@ const MainHome = ({navigation, route}) => {
       />
 
       <Modal
-        isVisible={isModalVisible}
-        onBackdropPress={() => setModalVisible(false)}
+        isVisible={tempShowPopupAds && showPopupAds}
+        onBackdropPress={() => {
+          tempShowPopupAds = false;
+          setShowPopupAds(false);
+        }}
         animationIn="slideInUp"
         animationOut="slideOutDown">
         <View style={{height: '75%'}}>
           <TouchableOpacity
             onPress={() => {
-              setModalVisible(false);
+              tempShowPopupAds = false;
+              setShowPopupAds(false);
               navigation.navigate('DetailPromo', {item: dataSabyan});
             }}>
             <ImageBackground
@@ -796,7 +801,10 @@ const MainHome = ({navigation, route}) => {
               imageStyle={{borderRadius: 13}}
               style={{height: '100%', resizeMode: 'contain', width: '100%'}}>
               <TouchableOpacity
-                onPress={() => setModalVisible(false)}
+                onPress={() => {
+                  tempShowPopupAds = false;
+                  setShowPopupAds(false);
+                }}
                 style={{
                   alignSelf: 'flex-end',
                   padding: 3,

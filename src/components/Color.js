@@ -2,11 +2,11 @@ import {store} from '@src/state/redux';
 import {useSelector} from 'react-redux';
 
 const staticColors = {
-  primary: '#96C63B',
+  primary: '#F3771D',
   primaryDark: '#033F59',
-  primarySoft: '#DAEBF2',
+  primarySoft: '#FDE4D2',
   primaryYellow: '#FAC255',
-  secondary: '#F3771D',
+  secondary: '#6A7479',
   oldGreen: '#557D09',
   disabled: '#A1A1A1',
   success: '#0BBC2E',
@@ -23,6 +23,7 @@ const staticColors = {
   icon: '#667786',
   bid: '#E6E9EA',
   infosecond: '#DAE9F2',
+  placeholder: '#6A7479',
 };
 
 export const lightModeColors = {

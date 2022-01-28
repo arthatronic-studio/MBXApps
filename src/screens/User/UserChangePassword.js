@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, TextInput, ScrollView, TouchableOpacity, BackHandler, SafeAreaView } from 'react-native';
-import Styled from 'styled-components';
+import { View, ScrollView, TouchableOpacity as NativeTouchable, BackHandler } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -8,80 +7,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   Button,
   Text,
-  Popup, usePopup,
-  Loading,
-  useColor
+  usePopup,
+  useColor,
+  Scaffold
 } from '@src/components';
 import validate from '@src/lib/validate';
-
 import { callChangePassword } from '@src/state/actions/user/auth';
 import { redirectTo } from '@src/utils';
-import { Divider } from 'src/styled';
-
-const MainView = Styled(SafeAreaView)`
-  flex: 1;
-`;
-
-const Container = Styled(View)`
-  width: 100%;
-  height: 100%;
-  alignItems: center;
-  justifyContent: center;
-  padding: 92px 16px 0px;
-`;
-
-const TextTitleView = Styled(View)`
-  width: 100%;
-  marginBottom: 32px;
-  alignItems: flex-start;
-`;
-
-const InputView = Styled(View)`
-  width: 100%;
-  height: 50px;
-  alignItems: flex-start;
-  justifyContent: center;
-`;
- 
-const CustomTextInput = Styled(TextInput)`
-  width: 100%;
-  height: 100%;
-  fontSize: 14px;
-  fontFamily: Inter-Regular;
-  backgroundColor: transparent;
-  borderBottomWidth: 1px;
-  borderColor: #666666;
-`;
-
-const ErrorView = Styled(View)`
-  width: 100%;
-  paddingVertical: 4px;
-  alignItems: flex-start;
-`;
-
-const EyeIconView = Styled(TouchableOpacity)`
-  height: 15px;
-  width: 15px;
-  justifyContent: center;
-  alignItems: flex-end;
-`;
-
-const SignRegisterView = Styled(View)`
-  width: 100%;
-  marginTop: 70px;
-`;
-
-const SignButton = Styled(Button)`
-  width: 100%;
-  height: 45px;
-  borderRadius: 4px;
-`;
-
-const LabelInput = Styled(View)`
-  width: 100%;
-  justifyContent: flex-start;
-  alignItems: flex-start;
-`;
+import { Container, Divider } from 'src/styled';
+import FormInput from 'src/components/FormInput';
 
 const UserChangePassword = ({ navigation, route }) => {
   const [state, changeState] = useState({
@@ -186,126 +120,119 @@ const UserChangePassword = ({ navigation, route }) => {
   }
     
   return (
-    <MainView style={{backgroundColor: Color.theme}}>
-      <ScrollView keyboardShouldPersistTaps='handled'>
-        <Container>
-          <TextTitleView>
-            <Text type='semibold' size={24} lineHeight={31} letterSpacing={0.36}>Ubah Password</Text>
-          </TextTitleView>
+    <Scaffold
+      headerTitle=''
+      popupProps={popupProps}
+      fallback={loading}
+    >
+      <ScrollView
+        keyboardShouldPersistTaps='handled'
+      >
+        <Container padding={16} marginTop={36}>
+          <Container marginBottom={32}>
+            <Text type='semibold' size={24} align='left' lineHeight={31} letterSpacing={0.36}>Ubah Password</Text>
+          </Container>
 
-          <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Kata Sandi Lama</Text>
-          </LabelInput>
-          <InputView>
-            <CustomTextInput
-              placeholder='Masukan kata sandi lama'
-              placeholderTextColor={Color.gray}
-              keyboardType='default'
-              underlineColorAndroid='transparent'
-              secureTextEntry={!state.showPasswordOld}
-              autoCorrect={false}
-              onChangeText={(password0) => setState({ password0 })}
-              value={state.password0}
-              selectionColor={Color.text}
-              onBlur={() => isValueError('password0')}
-              returnKeyType='next'
-              onSubmitEditing={() => passwordRef.current.focus()}
-              blurOnSubmit={false}
-              style={{color: Color.text}}
-            />
-            <View style={{position: 'absolute', bottom: 0, right: 0, paddingRight: 8, height: '100%', width: '10%', justifyContent: 'center', alignItems: 'flex-end'}}>
-              <EyeIconView onPress={() => setState({ showPasswordOld: !state.showPasswordOld })}>
-                <Ionicons size={16} name={state.showPasswordOld ? 'eye-off' : 'eye'} color={Color.gray} />
-              </EyeIconView>
-            </View>
-          </InputView>
-          <ErrorView>
-            <Text size={12} type='medium' color={Color.error} align='left'>{state.error.password0}</Text>
-          </ErrorView>
+          <FormInput
+            secureTextEntry={!state.showPasswordOld}
+            label='Kata Sandi Lama'
+            placeholder='******'
+            value={state.password0}
+            onChangeText={(password0) => setState({ password0 })}
+            onBlur={() => isValueError('password0')}
+            returnKeyType='next'
+            keyboardType='default'
+            onSubmitEditing={() => passwordRef.current.focus()}
+            error={state.error.password0}
+            suffixIcon={
+              <View style={{width: '10%', justifyContent: 'center', alignItems: 'flex-end'}}>
+                <NativeTouchable
+                  onPress={() => setState({ showPasswordOld: !state.showPasswordOld })}
+                  style={{
+                    height: 15,
+                    width: 15,
+                    justifyContent: 'center',
+                    alignItems: 'flex-end',
+                  }}
+                >
+                  <Ionicons size={16} name={state.showPasswordOld ? 'eye-off' : 'eye'} color={Color.gray} />
+                </NativeTouchable>
+              </View>
+            }
+          />
 
-          <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Kata Sandi Baru</Text>
-          </LabelInput>
-          <InputView>
-            <CustomTextInput
-              ref={passwordRef}
-              placeholder='Masukan kata sandi baru'
-              placeholderTextColor={Color.gray}
-              keyboardType='default'
-              secureTextEntry={!state.showPasswordNew}
-              underlineColorAndroid='transparent'
-              autoCorrect={false}
-              onChangeText={(password) => setState({ password })}
-              value={state.password}
-              selectionColor={Color.text}
-              onBlur={() => isValueError('password')}
-              returnKeyType='next'
-              onSubmitEditing={() => password2Ref.current.focus()}
-              blurOnSubmit={false}
-              style={{color: Color.text}}
-            />
-            <View style={{position: 'absolute', bottom: 0, right: 0, paddingRight: 8, height: '100%', width: '10%', justifyContent: 'center', alignItems: 'flex-end'}}>
-              <EyeIconView onPress={() => setState({ showPasswordNew: !state.showPasswordNew })}>
-                <Ionicons size={16} name={state.showPasswordNew ? 'eye-off' : 'eye'} color={Color.gray} />
-              </EyeIconView>
-            </View>
-          </InputView>
-          <ErrorView>
-            <Text size={12} type='medium' color={Color.error} align='left'>{state.error.password}</Text>
-          </ErrorView>
+          <FormInput
+            ref={passwordRef}
+            secureTextEntry={!state.showPasswordNew}
+            label='Kata Sandi Baru'
+            placeholder='******'
+            value={state.password}
+            onChangeText={(password) => setState({ password })}
+            onBlur={() => isValueError('password')}
+            returnKeyType='next'
+            keyboardType='default'
+            onSubmitEditing={() => password2Ref.current.focus()}
+            error={state.error.password}
+            suffixIcon={
+              <View style={{width: '10%', justifyContent: 'center', alignItems: 'flex-end'}}>
+                <NativeTouchable
+                  onPress={() => setState({ showPasswordNew: !state.showPasswordNew })}
+                  style={{
+                    height: 15,
+                    width: 15,
+                    justifyContent: 'center',
+                    alignItems: 'flex-end',
+                  }}
+                >
+                  <Ionicons size={16} name={state.showPasswordNew ? 'eye-off' : 'eye'} color={Color.gray} />
+                </NativeTouchable>
+              </View>
+            }
+          />
 
-          <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Konfirmasi Kata Sandi</Text>
-          </LabelInput>
-          <InputView>
-            <CustomTextInput
-              ref={password2Ref}
-              placeholder='Masukan ulang kata sandi baru'
-              placeholderTextColor={Color.gray}
-              keyboardType='default'
-              secureTextEntry={!state.showPasswordConfirm}
-              underlineColorAndroid='transparent'
-              autoCorrect={false}
-              onChangeText={(password2) => setState({ password2 })}
-              value={state.password2}
-              selectionColor={Color.text}
-              onBlur={() => isValueError('password2')}
-              returnKeyType='done'
-              onSubmitEditing={() => onSubmit()}
-              blurOnSubmit={false}
-              style={{color: Color.text}}
-            />
-            <View style={{position: 'absolute', bottom: 0, right: 0, paddingRight: 8, height: '100%', width: '10%', justifyContent: 'center', alignItems: 'flex-end'}}>
-              <EyeIconView onPress={() => setState({ showPasswordConfirm: !state.showPasswordConfirm })}>
-                <Ionicons size={16} name={state.showPasswordConfirm ? 'eye-off' : 'eye'} color={Color.gray} />
-              </EyeIconView>
-            </View>
-          </InputView>
-          <ErrorView>
-            <Text size={12} type='medium' color={Color.error} align='left'>{state.error.password2}</Text>
-          </ErrorView>
+          <FormInput
+            ref={password2Ref}
+            secureTextEntry={!state.showPasswordConfirm}
+            label='Konfirmasi Kata Sandi'
+            placeholder='******'
+            value={state.password2}
+            onChangeText={(password2) => setState({ password2 })}
+            onBlur={() => isValueError('password2')}
+            returnKeyType='done'
+            keyboardType='default'
+            onSubmitEditing={() => onSubmit()}
+            error={state.error.password2}
+            suffixIcon={
+              <View style={{width: '10%', justifyContent: 'center', alignItems: 'flex-end'}}>
+                <NativeTouchable
+                  onPress={() => setState({ showPasswordConfirm: !state.showPasswordConfirm })}
+                  style={{
+                    height: 15,
+                    width: 15,
+                    justifyContent: 'center',
+                    alignItems: 'flex-end',
+                  }}
+                >
+                  <Ionicons size={16} name={state.showPasswordConfirm ? 'eye-off' : 'eye'} color={Color.gray} />
+                </NativeTouchable>
+              </View>
+            }
+          />
 
-          <SignRegisterView>
-            <SignButton
-              onPress={() => onSubmit()}
-            >
-              Ubah
-            </SignButton>
-          </SignRegisterView>
-          {user && state.canGoBack && <View style={{width: '100%', marginTop: 12}}>
+          <Divider height={24} />
+
+          <Button onPress={() => onSubmit()}>
+            Ubah
+          </Button>
+
+          {/* {user && state.canGoBack && <View style={{width: '100%', marginTop: 12}}>
             <SignButton style={{backgroundColor: 'transparent'}} onPress={() => navigation.pop()}>
               <Text color={Color.primary}>Kembali</Text>
             </SignButton>
-          </View>}
+          </View>} */}
         </Container>
-
-        <Divider />
       </ScrollView>
-
-      <Loading visible={loading} />
-
-      <Popup {...popupProps} />
-    </MainView>
+    </Scaffold>
   );
 }
 

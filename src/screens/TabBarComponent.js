@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { View, SafeAreaView, Image, Animated, useWindowDimensions } from 'react-native';
+import { View, SafeAreaView, Image, Animated, useWindowDimensions, LayoutAnimation, UIManager, } from 'react-native';
 import { TouchableOpacity as TouchableOpacityAbs } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -14,6 +14,9 @@ import { shadowStyle } from 'src/styles';
 import { CommonActions } from '@react-navigation/routers';
 import { startAnimation } from '@src/utils/animations';
 import { Divider, Line } from 'src/styled';
+import { isIphoneNotch, statusBarHeight } from 'src/utils/constants';
+
+const sizePerMenu = 24;
 
 const TabBarComponent = (props) => {
     const { state } = props;
@@ -58,13 +61,13 @@ const TabBarComponent = (props) => {
     const getIconMenu = (iconType, iconName, isRouteActive) => {
         switch(iconType) {
             case 'MaterialIcons':
-                return <MaterialIcons name={iconName} size={32} color={isRouteActive ? Color.primary : Color.gray} />
+                return <MaterialIcons name={iconName} size={32} color={isRouteActive ? Color.textInput : Color.secondary} />
             case 'AntDesign':
-                return <AntDesign name={iconName} size={28} color={isRouteActive ? Color.primary : Color.gray} />
+                return <AntDesign name={iconName} size={28} color={isRouteActive ? Color.textInput : Color.secondary} />
             case 'Ionicons': 
-                return <Ionicons name={iconName} size={28} color={isRouteActive ? Color.primary : Color.gray} />
+                return <Ionicons name={iconName} size={28} color={isRouteActive ? Color.textInput : Color.secondary} />
             case 'Entypo':
-                return <Entypo name={iconName} size={30} color={isRouteActive ? Color.primary : Color.gray} />
+                return <Entypo name={iconName} size={30} color={isRouteActive ? Color.textInput : Color.secondary} />
         }
     }
 
@@ -72,33 +75,13 @@ const TabBarComponent = (props) => {
         <SafeAreaView
             style={{
                 width,
-                height: 106,
+                height: 45 + 16 + (isIphoneNotch() ? 0 : 16),
                 backgroundColor: Color.theme,
-                paddingVertical: 16,
                 paddingHorizontal: 16,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
             }}
         >
-            {activeRouteIndex < menus.length && <Animated.View
-                style={{
-                    height: 30,
-                    width: 30,
-                    position: 'absolute',
-                    left: (width / menus.length) / 2 - 15 - 32,
-                    top: 12,
-                    borderRadius: 8,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    // backgroundColor: activeRouteIndex === 2 ? 'transparent' : Color.primary,
-                    transform: [{ translateX: bgAnimatedRef }],
-                }}
-            >
-                {menus[activeRouteIndex].image !== '' && <Image
-                    source={menus[activeRouteIndex].image}
-                    style={{height: 20, width: 20, transform: [{ rotate: '330deg' }]}}
-                    resizeMode='contain'
-                />}
-            </Animated.View>}
-
             <Line
                 width={width}
                 height={0.5}
@@ -106,67 +89,64 @@ const TabBarComponent = (props) => {
                 style={{position: 'absolute', top: 0}}
             />
 
-            <View
-                style={{
-                    flexDirection: 'row',
-                    height: '100%',
-                    width: '100%',
-                    backgroundColor: Color.semiwhite,
-                    borderRadius: 120,
-                }}
-            >
-                {menus.map((route, routeIndex) => {
-                    const isRouteActive = routeIndex === activeRouteIndex;
+            {menus.map((route, routeIndex) => {
+                const isRouteActive = routeIndex === activeRouteIndex;
 
-                    return (
-                        <TouchableOpacity
-                            key={routeIndex}
-                            activeOpacity={1}
+                return (
+                    <TouchableOpacity
+                        key={routeIndex}
+                        activeOpacity={1}
+                        style={{
+                            width: isRouteActive ? `${100 - ((menus.length - 1) * sizePerMenu)}%` : `${sizePerMenu}%`,
+                            alignItems: 'center',
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            paddingTop: 16,
+                            paddingBottom: isIphoneNotch() ? 0 : 16,
+                        }}
+                        onPress={() => {
+                            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                            UIManager.setLayoutAnimationEnabledExperimental &&
+                                UIManager.setLayoutAnimationEnabledExperimental(true);
+
+                            if (route.nav === 'MainHome') {
+                                redirectTo(route.nav);
+                                return;                                    
+                            }
+
+                            props.navigation.navigate(route.nav, { routeIndex });
+                        }}
+                    >
+                        <Animated.View
                             style={{
-                                width: (width - 32) / menus.length,
+                                height: '100%',
+                                width: '100%',
+                                borderRadius: 120,
                                 alignItems: 'center',
-                            }}
-                            onPress={() => {
-                                if (route.nav === 'MainHome') {
-                                    redirectTo(route.nav);
-                                    return;                                    
-                                }
-
-                                props.navigation.navigate(route.nav, { routeIndex });
+                                paddingLeft: isRouteActive ? 16 : 0,
+                                justifyContent: isRouteActive ? 'flex-start' : 'center',
+                                flexDirection: 'row',
+                                backgroundColor: isRouteActive ? Color.primary : 'transparent',
+                                // opacity: route.viewRef,
+                                opacity: route.ref,
                             }}
                         >
-                            <Animated.View
-                                style={{
-                                    height: 30,
-                                    width: 30,
-                                    position: 'absolute',
-                                    top: 12,
-                                    borderRadius: 8,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    // backgroundColor: routeIndex === 2 ? 'transparent' : Color.primary,
-                                    // opacity: route.viewRef,
-                                }}
-                            >
-                                {getIconMenu(route.iconType, route.iconName, isRouteActive)}
-                            </Animated.View>
-
-                            <Animated.Text
+                            {getIconMenu(route.iconType, route.iconName, isRouteActive)}
+                            {isRouteActive && <Divider width={8} />}
+                            {isRouteActive && <Animated.Text
                                 style={{
                                     fontSize: 14,
                                     fontWeight: '500',
-                                    color: isRouteActive ? Color.primary : Color.text,
-                                    position: 'absolute',
-                                    bottom: 12,
+                                    color: isRouteActive ? Color.textInput : Color.secondary,
                                     opacity: route.ref,
                                 }}
                             >
                                 {route.name}
-                            </Animated.Text>
-                        </TouchableOpacity>
-                    )
-                })}
-            </View>
+                            </Animated.Text>}
+                        </Animated.View>
+                    </TouchableOpacity>
+                )
+            })}
         </SafeAreaView>
     )
 }

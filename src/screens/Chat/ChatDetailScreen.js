@@ -15,6 +15,7 @@ import Scaffold from '@src/components/Scaffold';
 
 import Client from '@src/lib/apollo';
 import { queryContentChatRoomManage, queryContentChatRoomDetail, queryContentChatMessage } from '@src/lib/query';
+import { Divider } from 'src/styled';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -477,6 +478,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
         <Scaffold
             fallback={dataChat.loading}
             popupProps={popupProps}
+            color={Color.semiwhite}
             header={
                 <Header
                     title={getTitle()}
@@ -508,15 +510,17 @@ const ChatDetailScreen = ({ navigation, route }) => {
                     if (isAdmin) {
                         return (
                             <View style={{width, marginTop: 16, paddingHorizontal: 16, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
-                                <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.textInput, borderRadius: 16, borderBottomRightRadius: 0, alignItems: 'flex-end'}}>
+                                <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.textInput, borderRadius: 8, borderBottomRightRadius: 0, alignItems: 'flex-end'}}>
                                     <Text size={10} type='semibold' align='right' color={Color.secondary}>{item.name}</Text>
-                                    <Text size={12} align='right'>{item.message}</Text>
-                                    <Text size={8} align='right' style={{opacity: 0.6, marginTop: 4}}>{getDate(item.messageDate)}</Text>
+                                    <Divider height={4} />
+                                    <Text align='right'>{item.message}</Text>
+                                    <Divider height={4} />
+                                    <Text size={8} align='right' style={{opacity: 0.6}}>{getDate(item.messageDate)}</Text>
                                 </View>
-                                <View style={{width: 30, height: 30, marginLeft: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.secondary}}>
+                                <View style={{width: 30, height: 30, marginLeft: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.disabled}}>
                                     <Image
                                         source={{uri: item.image}}
-                                        style={{width: '100%', aspectRatio: 1, borderRadius: 30, backgroundColor: Color.theme}}
+                                        style={{width: '100%', aspectRatio: 1, borderRadius: 30, backgroundColor: Color.disabled}}
                                     />
                                 </View>
                             </View>
@@ -528,13 +532,15 @@ const ChatDetailScreen = ({ navigation, route }) => {
                             <View style={{width: 30, height: 30, marginRight: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.primary}}>
                             <Image
                                 source={{uri: item.image}}
-                                style={{width: '100%', aspectRatio: 1, borderRadius: 15, backgroundColor: Color.theme}}
+                                style={{width: '100%', aspectRatio: 1, borderRadius: 15, backgroundColor: Color.primary}}
                             />
                             </View>
-                            <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.theme, borderRadius: 16, borderBottomLeftRadius: 0, alignItems: 'flex-start'}}>
+                            <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.primarySoft, borderRadius: 8, borderBottomLeftRadius: 0, alignItems: 'flex-start'}}>
                                 <Text size={10} type='semibold' align='left' color={Color.primary}>{item.name}</Text>
-                                <Text size={12} align='left' color={Color.text}>{item.message}</Text>
-                                <Text size={8} align='left' color={Color.text} style={{opacity: 0.6, marginTop: 4}}>{getDate(item.messageDate)}</Text>
+                                <Divider height={4} />
+                                <Text align='left' color={Color.text}>{item.message}</Text>
+                                <Divider height={4} />
+                                <Text size={8} align='left' color={Color.text} style={{opacity: 0.6}}>{getDate(item.messageDate)}</Text>
                             </View>
                         </View>
                     )
