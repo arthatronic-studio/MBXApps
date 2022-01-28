@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, ScrollView, Platform, SafeAreaView } from 'react-native';
 import Styled from 'styled-components';
+import { connect } from 'react-redux';
+import {useIsFocused, useRoute} from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -24,6 +26,7 @@ import { shadowStyle } from '@src/styles';
 
 import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
+import { FormatMoney } from 'src/utils';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -35,7 +38,12 @@ const Content = Styled(View)`
     borderRadius: 8px
 `;
 
-const CheckoutScreen = ({ navigation, route }) => {
+const CheckoutScreen = ({ navigation }) => {
+    const route = useRoute()
+    console.log(route)
+    const {item} =  route.params
+    const [address, setAddress] = useState({});
+    const isFocused = useIsFocused();
   // selector
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
@@ -45,7 +53,34 @@ const CheckoutScreen = ({ navigation, route }) => {
 
   
   useEffect(() => {
-  }, []);
+      console.log(route.params, 'address focus')
+      const {saveAddress} = route.params
+      if(saveAddress) setAddress(saveAddress)
+  }, [isFocused]);
+
+
+  const submit = () => {
+    console.log(route, 'props')
+    showLoading();
+    let variables = {
+      productId: route.params.item.id,
+      quantity: 1
+    }
+    console.log(variables)
+    Client.mutate({mutation: queryAddCart, variables})
+      .then(res => {
+        hideLoading()
+        console.log(res)
+        if (res.data.ecommerceProductDetail) {
+          alert('Success add to cart')
+        }
+      })
+      .catch(reject => {
+        hideLoading()
+        alert(reject.message)
+        console.log(reject.message, 'reject');
+      });
+  };
 
   return (
     <Scaffold
@@ -67,7 +102,7 @@ const CheckoutScreen = ({ navigation, route }) => {
                         <Text size={11} color={Color.text} type='bold'>Alamat Pengiriman</Text>
                     </Col>
                     <Col alignItems='flex-end'>
-                        <TouchableOpacity onPress={() => navigation.navigate('FormPayment')}>
+                        <TouchableOpacity style={{ backgroundColor: 'red' }} onPress={() => navigation.navigate('FormPayment')}>
                             <Text color={Color.info} size={10}>Ubah Alamat</Text>
                         </TouchableOpacity>
                     </Col>
@@ -78,18 +113,18 @@ const CheckoutScreen = ({ navigation, route }) => {
                         <Fontisto name='map-marker-alt' color={Color.error} size={13} style={{ marginRight: 6 }} />
                         <Text color={Color.text} type='bold'>Rumah</Text>
                     </Row>
-                    <Text color={Color.text} size={10} style={{ marginTop: 8 }} align='left'>Jl. Kembar Timur I No.11A, Bandung, Jawa Barat, Indonesia 40264</Text>
+                    <Text color={Color.text} size={10} style={{ marginTop: 8 }} align='left'>{address.address}</Text>
                 </View>
             </Content>
             <Content style={{ backgroundColor: Color.textInput }}>
                 <Row style={{ marginBottom: 30 }}>
                     <View style={{ height: 74, width: 74, marginRight: 14, backgroundColor: Color.text, borderRadius: 8 }} />
                     <Col alignItems='flex-start'>
-                        <Text color={Color.text} size={14} type='bold' textAlign='left'>Pashmina Pink</Text>
-                        <Text color={Color.text} textAlign='left' size={10}>Jumlah : 1 Buah</Text>
+                        <Text color={Color.text} size={14} type='bold' textAlign='left'>{item.name}</Text>
+                        <Text color={Color.text} textAlign='left' size={10}>Jumlah : {item.qty} Buah</Text>
                         <View style={{ justifyContent: 'flex-end', flex: 1, alignItems: 'flex-start' }}>
                             <Text size={10} color={Color.text} >Harga</Text>
-                            <Text type='bold' color={Color.text}>Rp. 100.000</Text>
+                            <Text type='bold' color={Color.text}>{FormatMoney.getFormattedMoney(item.price)}</Text>
                         </View>
                     </Col>
                 </Row>
@@ -107,7 +142,7 @@ const CheckoutScreen = ({ navigation, route }) => {
                         <Text color={Color.text} type='bold'>Subtotal</Text>
                     </Col>
                     <Col alignItems='flex-end'>
-                        <Text color={Color.text} type='bold'>Rp 176.000</Text>
+                        <Text color={Color.text} type='bold'>{FormatMoney.getFormattedMoney(item.qty*item.price)}</Text>
                     </Col>
                 </Row>
                 <View style={{ backgroundColor: 'rgba(18, 18, 18, 0.2)', height: 1, marginVertical: 12 }} />
@@ -117,7 +152,7 @@ const CheckoutScreen = ({ navigation, route }) => {
                         <Text color={Color.text} size={10}>Harga (1 Barang)</Text>
                     </Col>
                     <Col alignItems='flex-end'>
-                        <Text color={Color.text} size={10}>Rp 150.000</Text>
+                        <Text color={Color.text} size={10}>{FormatMoney.getFormattedMoney(item.price)}</Text>
                     </Col>
                 </Row>
                 <Row style={{ alignItems: 'center', marginBottom: 8 }}>
@@ -166,4 +201,12 @@ const CheckoutScreen = ({ navigation, route }) => {
   );
 }
 
-export default CheckoutScreen;
+const mapStateToProps = (state) => ({
+
+});
+
+const mapDispatchToProps = (dispatch, props) => ({
+  addBooking: (data) => dispatch({ type: 'BOOKING.ADD_BOOKING', data }),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CheckoutScreen);

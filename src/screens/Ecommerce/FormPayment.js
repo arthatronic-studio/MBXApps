@@ -36,7 +36,15 @@ const Content = Styled(View)`
     borderRadius: 8px
 `;
 
-const FormPayment = ({ navigation, route }) => {
+const FormPayment = ({ route, navigation  }) => {
+  console.log(route)
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+  const [postalCode, setCode] = useState('');
+  const [prov, setProv] = useState(null);
+  const [kota, setKota] = useState(null);
+  const [kec, setKec] = useState(null);
   // selector
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
@@ -46,7 +54,24 @@ const FormPayment = ({ navigation, route }) => {
 
   
   useEffect(() => {
-  }, []);
+    console.log(route.params)
+  
+    return () => {
+    }
+  }, [])
+
+  const submit = () => {
+    const data = {
+      name,
+      phone,
+      address,
+      postalCode,
+      prov,
+      kota,
+      kec
+    }
+    navigation.navigate('CheckoutScreen',{saveAddress: { ...data } })
+  }
 
   return (
     <Scaffold
@@ -66,6 +91,8 @@ const FormPayment = ({ navigation, route }) => {
               placeholder='Adang Susanyo'
               title='Nama Penerima'
               color={Color.text}
+              onChangeText={(e) => setName(e)}
+              value={name}
               placeholderTextColor={Color.gray}
               textInputStyle={{ borderWidth: 2, borderColor: Color.border, borderRadius: 5, paddingLeft: 10 }}
               style={{height: 50, color: Color.gray, fontSize: 14, borderWidth: 1, fontFamily: 'Inter-Regular', marginLeft: 8}}
@@ -75,6 +102,8 @@ const FormPayment = ({ navigation, route }) => {
               title='No Telpon'
               keyboardType='numeric'
               color={Color.text}
+              onChangeText={(e) => setPhone(e)}
+              value={phone}
               placeholderTextColor={Color.gray}
               textInputStyle={{ borderWidth: 2, borderColor: Color.border, borderRadius: 5, paddingLeft: 10 }}
               style={{height: 50, color: Color.gray, fontSize: 14, borderWidth: 1, fontFamily: 'Inter-Regular', marginLeft: 8}}
@@ -85,6 +114,8 @@ const FormPayment = ({ navigation, route }) => {
               numberOfLines={3}
               title='Alamat Lengkap'
               color={Color.text}
+              onChangeText={(e) => setAddress(e)}
+              value={address}
               multiline
               placeholderTextColor={Color.gray}
               style={{ borderWidth: 2, borderColor: Color.border, marginHorizontal: 16, borderRadius: 5, paddingLeft: 10 }}
@@ -140,7 +171,7 @@ const FormPayment = ({ navigation, route }) => {
           </View>
         </ScrollView>
         <View style={{ backgroundColor: Color.theme }}>
-          <TouchableOpacity onPress={() => navigation.pop()} style={{ backgroundColor: Color.info, borderRadius: 30, margin: 15, paddingVertical: 10 }}>
+          <TouchableOpacity onPress={() => submit()} style={{ backgroundColor: Color.info, borderRadius: 30, margin: 15, paddingVertical: 10 }}>
               <Text type='semibold' color={Color.textInput}>Lanjutkan</Text>
           </TouchableOpacity>
         </View>

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Styled from 'styled-components';
 import {useSelector} from 'react-redux';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useRoute} from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
 import ImageSlider from '../../components/ImageSlider';
@@ -48,7 +48,9 @@ const images = [
 const WIDTH = Dimensions.get('window').width;
 const HEIGHT = Dimensions.get('window').height;
 
-const DetailProduct = ({route, navigation}) => {
+const DetailProduct = ({navigation}) => {
+  const route = useRoute()
+  console.log(route, 'route')
   const [detail, setDetail] = useState([]);
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const user = useSelector(state => state['user.auth'].login.user);
@@ -63,7 +65,6 @@ const DetailProduct = ({route, navigation}) => {
   }, [isFocused]);
 
     const getDetail = () => {
-      console.log(route,navigation, 'props')
       // showLoading();
       let variables = {
         id: route.params.item.id,
@@ -222,7 +223,7 @@ const DetailProduct = ({route, navigation}) => {
             paddingVertical: 10,
           }}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('CheckoutScreen')}
+            onPress={() => navigation.navigate('CheckoutScreen', {item: {...detail, qty: 1}})}
             style={{
               width: '40%',
               height: 40,

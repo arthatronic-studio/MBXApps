@@ -283,11 +283,13 @@ const Header = props => {
 
           <ColumnView>
             {cartIcon ? (
-              <MaterialCOmmunityIcons
-                name={'shopping-outline'}
-                color={Color.gray}
-                size={18}
-              />
+              <TouchableOpacity onPress={() => props.navigation.navigate('CartScreen')}>
+                <MaterialCOmmunityIcons
+                  name={'shopping-outline'}
+                  color={Color.gray}
+                  size={18}
+                />
+              </TouchableOpacity>
             ) : (
               <></>
             )}
