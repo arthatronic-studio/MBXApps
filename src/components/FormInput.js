@@ -137,6 +137,7 @@ const FormInput = forwardRef((props, ref) => {
                                 marginTop: multiline ? 8 : 0,
                                 color: Color.text,
                                 includeFontPadding: false,
+                                padding: 0,
                             }}
                             secureTextEntry={secureTextEntry}
                             multiline={multiline}
