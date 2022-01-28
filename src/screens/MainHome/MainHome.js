@@ -67,6 +67,8 @@ import TopTab from '../Ecommerce/TopTab';
 import LiveLelangScreen from '../LiveLelangScreen';
 import CardListProduk from '../../components/Card/CardListProduct';
 import SplashScreen from '../SplashScreen';
+import MusikTerbaru from 'src/components/MusikTerbaru';
+import MondayAccoustic from './MondayAccoustic';
 
 const ContentView = Styled(View)`
   width: 100%;
@@ -433,14 +435,15 @@ const MainHome = ({navigation, route}) => {
           position: 'absolute',
           top: -6,
           right: 16,
-        }}
-      >
+        }}>
         <ComingSoonView style={{backgroundColor: Color.red}}>
-          <Text size={8} color={Color.textInput}>New</Text>
+          <Text size={8} color={Color.textInput}>
+            New
+          </Text>
         </ComingSoonView>
       </View>
     );
-  }
+  };
 
   const isWalletClose = wallet === 'CLOSE';
 
@@ -616,8 +619,7 @@ const MainHome = ({navigation, route}) => {
                   onPress={() => {
                     if (menu.nav === '') return;
                     navigation.navigate(menu.nav, menu.params);
-                  }}
-                >
+                  }}>
                   <UserIcon>
                     <ImageProperty
                       style={menu.comingsoon && {opacity: 0.3}}
@@ -761,6 +763,8 @@ const MainHome = ({navigation, route}) => {
           }}
           style={{paddingLeft: 8}}
         />
+        <MusikTerbaru />
+        <MondayAccoustic />
       </ScrollView>
 
       {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}

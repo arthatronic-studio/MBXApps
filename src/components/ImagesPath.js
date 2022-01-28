@@ -20,4 +20,6 @@ export default {
   iconOnBoard2: require('../components/Images/icon-onboard2.png'),
   iconOnBoard3: require('../components/Images/icon-onboard3.png'),
   icClose: require('../components/Images/ic_close.png'),
+  sabyanMusic: require('../components/Images/SabyanMusic.png'),
+  sabyanLive: require('../components/Images/SabyanLive.png'),
 };
