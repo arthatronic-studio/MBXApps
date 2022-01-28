@@ -1,6 +1,6 @@
 import React from 'react';
 import Styled from 'styled-components';
-import { View, Image } from 'react-native';
+import { View, Image, useWindowDimensions } from 'react-native';
 import PropTypes from 'prop-types';
 
 import Text from '@src/components/Text';
@@ -54,12 +54,13 @@ const ScreenEmptyData = (props) => {
     const { message, type, transparent, style } = props;
 
     const { Color } = useColor();
+    const { width } = useWindowDimensions();
 
     return (
       <Wrapper transparent={transparent} backgroundColor={Color.theme} {...style}>
         <Body type={type} transparent={transparent} backgroundColor={Color.theme}>
           <ContainerIndicator>
-            <Image style={{height: 60, aspectRatio: 1}} resizeMode='contain' source={imageEmpty} />
+            <Image style={{height: width / 5, aspectRatio: 1}} resizeMode='contain' source={imageEmpty} />
           </ContainerIndicator>
           {message && <BodyText>
             <Text>{message}</Text>
