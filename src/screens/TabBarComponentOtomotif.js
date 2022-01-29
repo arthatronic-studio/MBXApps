@@ -6,6 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
+import Config from 'react-native-config';
 
 import Text from '@src/components/Text';
 import TouchableOpacity from 'src/components/Button/TouchableDebounce';
@@ -95,7 +96,7 @@ const TabBarComponent = (props) => {
                         props.navigation.navigate('CreateEmergencyScreen', { 
                             routeIndex: 1, 
                             title: 'Emergency Area',
-                            productType: 'TRIBES',
+                            productType: Config.PRODUCT_TYPE,
                             productCategory: '',
                             productSubCategory: 'EMERGENCY', 
                         });

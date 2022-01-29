@@ -14,6 +14,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useIsFocused} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import Modal from 'react-native-modal';
+import Config from 'react-native-config';
 import ImagesPath from 'src/components/ImagesPath';
 
 import {
@@ -333,11 +334,11 @@ const MainHome = ({navigation, route}) => {
 
   const fetchData = async () => {
     const result = await Promise.all([
-      await fetchContentProduct('TRIBES', 'EMERGENCY', ''),
-      await fetchContentProduct('TRIBES', 'POSTING', ''),
-      await fetchContentProduct('TRIBES', 'NEARBY_PLACE', ''),
-      await fetchContentProduct('TRIBES', 'EVENT', ''),
-      await fetchContentProduct('TRIBES', 'JOBS', ''),
+      await fetchContentProduct(Config.PRODUCT_TYPE, 'EMERGENCY', ''),
+      await fetchContentProduct(Config.PRODUCT_TYPE, 'POSTING', ''),
+      await fetchContentProduct(Config.PRODUCT_TYPE, 'NEARBY_PLACE', ''),
+      await fetchContentProduct(Config.PRODUCT_TYPE, 'EVENT', ''),
+      await fetchContentProduct(Config.PRODUCT_TYPE, 'JOBS', ''),
     ]);
 
     setLoadingAuction(false);
@@ -519,8 +520,6 @@ const MainHome = ({navigation, route}) => {
           </View>
         </View>
 
-        <BannerHome data={listBanner} loading={loadingBanner} />
-
         <ContentView>
           <BalanceView
             style={{...shadowStyle, backgroundColor: Color.textInput}}>
@@ -602,7 +601,9 @@ const MainHome = ({navigation, route}) => {
           </BalanceView>
         </ContentView>
 
-        <Divider height={8} />
+        <Divider />
+
+        <BannerHome data={listBanner} loading={loadingBanner} />
 
         <ContentView>
           <SambatanMenuView
@@ -765,6 +766,7 @@ const MainHome = ({navigation, route}) => {
           style={{paddingLeft: 8}}
         />
         <MusikTerbaru />
+        <Divider />
         <MondayAccoustic />
       </ScrollView>
 

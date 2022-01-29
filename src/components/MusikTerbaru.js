@@ -1,15 +1,17 @@
+import React from 'react';
 import {
   View,
-  Text,
   FlatList,
   SafeAreaView,
   Image,
   TouchableOpacity,
+  useWindowDimensions,
+  ImageBackground,
 } from 'react-native';
-import React from 'react';
-import ImagesPath from './ImagesPath';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {useColor} from '@src/components';
+
+import ImagesPath from './ImagesPath';
+import {Text, useColor} from '@src/components';
 
 const DATA = [
   {
@@ -28,62 +30,74 @@ const DATA = [
 
 const MusikTerbaru = () => {
   const {Color} = useColor();
+  const {width} = useWindowDimensions();
+
   const renderItem = ({item}) => (
     <View
       style={{
-        flex: 1,
+        paddingLeft: 8,
+        paddingRight: 8,
       }}>
       <TouchableOpacity>
-        <Image
+        <ImageBackground
           source={item.music}
           style={{
-            width: 250,
-            height: 250,
-            marginHorizontal: 5,
-            position: 'relative',
+            width: width / 1.7,
+            height: width / 1.7,
           }}
-        />
-        <TouchableOpacity
-          style={{
-            position: 'absolute',
-            alignSelf: 'center',
-            marginVertical: '35%',
-          }}>
-          <Entypo
-            name={'controller-play'}
-            size={70}
-            style={{
-              color: 'white',
-            }}
-          />
-        </TouchableOpacity>
-        <View
-          style={{
-            position: 'absolute',
-            flexDirection: 'column',
-            paddingHorizontal: 20,
-            paddingVertical: 170,
-          }}>
+        >
           <View
             style={{
-              backgroundColor: Color.oldGreen,
-              width: 55,
-              height: 25,
-              borderRadius: 12,
-              alignItems: 'center',
-              justifyContent: 'center',
+              flex: 1,
+              padding: 16,
+              justifyContent: 'flex-end',
             }}>
-            <Text style={{fontSize: 10, color: Color.theme}}>Baru</Text>
+            <View
+              style={{
+                backgroundColor: Color.oldGreen,
+                width: 55,
+                height: 25,
+                borderRadius: 12,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Text
+                align='left'
+                style={{fontSize: 10, color: Color.theme}}
+              >
+                Baru
+              </Text>
+            </View>
+            <Text
+              align='left'
+              style={{fontSize: 18, color: Color.textInput, fontWeight: 'bold'}}
+            >
+              Deen Assalam
+            </Text>
+            <Text
+              align='left'
+              style={{fontSize: 10, color: Color.textInput, fontWeight: 'bold'}}
+            >
+              Ya Maulana
+            </Text>
           </View>
-          <Text
-            style={{fontSize: 18, color: Color.textInput, fontWeight: 'bold'}}>
-            Deen Assalam
-          </Text>
-          <Text
-            style={{fontSize: 10, color: Color.textInput, fontWeight: 'bold'}}>
-            Ya Maulana
-          </Text>
-        </View>
+
+          <View
+            style={{
+              position: 'absolute',
+              alignSelf: 'center',
+              marginVertical: '35%',
+            }}>
+            <Entypo
+              name={'controller-play'}
+              size={70}
+              style={{
+                color: Color.textInput,
+              }}
+            />
+          </View>
+        </ImageBackground>
       </TouchableOpacity>
     </View>
   );
@@ -92,12 +106,15 @@ const MusikTerbaru = () => {
     <SafeAreaView>
       <View>
         <Text
+          align='left'
+          type='bold'
           style={{
             fontSize: 18,
             color: Color.text,
-            fontWeight: 'bold',
-            paddingHorizontal: 10,
-          }}>
+            paddingHorizontal: 16,
+            marginBottom: 8
+          }}
+        >
           Musik Terbaru
         </Text>
       </View>
@@ -106,9 +123,10 @@ const MusikTerbaru = () => {
         renderItem={renderItem}
         keyExtractor={item => item.id}
         horizontal
+        showsHorizontalScrollIndicator={false}
         style={{
-          paddingHorizontal: 5,
-          paddingVertical: 5,
+          paddingHorizontal: 8,
+          paddingVertical: 8,
         }}
       />
     </SafeAreaView>
