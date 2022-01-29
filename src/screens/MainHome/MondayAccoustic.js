@@ -22,7 +22,7 @@ const MondayAccoustic = () => {
         <ImageBackground
           source={ImagesPath.sabyanLive}
           imageStyle={{
-            borderRadius: 8,
+            borderRadius: 10,
           }}
           style={{
             width: width - 32,
