@@ -380,7 +380,14 @@ const MainHome = ({navigation, route}) => {
 
           <Divider />
 
-          <WidgetMenuHome />
+          <WidgetMenuHome
+            onPress={(item) => {
+              console.log(item, 'ittt');
+              if (item.code === 'post') {
+                modalPostingRef.current.open();
+              }
+            }}
+          />
 
           <Divider height={24} />
 

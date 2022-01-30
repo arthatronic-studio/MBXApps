@@ -2,11 +2,13 @@ import React, { } from 'react';
 import { View, StatusBar, Platform, SafeAreaView, useWindowDimensions, Animated } from 'react-native';
 import PropTypes from 'prop-types';
 import { useNavigation } from '@react-navigation/native';
+import { Portal } from 'react-native-portalize';
 
 import Header from '@src/components/Header';
 import ScreenIndicator from 'src/components/Modal/ScreenIndicator';
 import ScreenEmptyData from 'src/components/Modal/ScreenEmptyData';
 import Popup from 'src/components/Modal/Popup';
+import Loading from 'src/components/Modal/Loading';
 import { useColor } from '@src/components/Color';
 import { isIphoneNotch, statusBarHeight } from 'src/utils/constants';
 
@@ -25,6 +27,7 @@ const propTypes = {
     emptyButtonPress: PropTypes.func,
 
     popupProps: PropTypes.object,
+    loadingProps: PropTypes.object,
     isLoading: PropTypes.bool,
     style: PropTypes.object,
     useSafeArea: PropTypes.bool,
@@ -47,6 +50,9 @@ const defaultProps = {
 
     popupProps: {
         visible: false
+    },
+    loadingProps: {
+        visible: false,
     },
     isLoading: false,
     style: {},
@@ -74,6 +80,7 @@ const Scaffold = ({
     emptyButtonPress,
 
     popupProps,
+    loadingProps,
     isLoading,
     style,
     floatingActionButton,
@@ -134,21 +141,24 @@ const Scaffold = ({
                 children
             }
 
-            {isLoading && <View style={{
-                position: 'absolute',
-                alignSelf: 'flex-end',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width,
-                height: translucent ?
-                    height + statusBarHeight
-                :
-                    height - (showHeader ? 60 + (isIphoneNotch() ? statusBarHeight : 0) : 0),
-                top: showHeader ? 60 + (isIphoneNotch() ? statusBarHeight : 0) : 0,
-                backgroundColor: Color.overflow,
-            }}>
-                <ScreenIndicator transparent={false} />
-            </View>}
+            {isLoading && <Portal>
+                <View style={{
+                    zIndex: 99,
+                    position: 'absolute',
+                    alignSelf: 'flex-end',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width,
+                    height: translucent ?
+                        height + statusBarHeight
+                    :
+                        height - (showHeader ? 60 + (isIphoneNotch() ? statusBarHeight : 0) : 0),
+                    top: showHeader ? 60 + (isIphoneNotch() ? statusBarHeight : 0) : 0,
+                    backgroundColor: Color.overflow,
+                }}>
+                    <ScreenIndicator transparent  />
+                </View>
+            </Portal>}
 
             {/* {translucent && <View style={{height: isIphoneNotch() ? statusBarHeight : 0}} />} */}
 
@@ -159,6 +169,8 @@ const Scaffold = ({
             }
 
             <Popup { ...popupProps } />
+
+            <Loading { ...loadingProps } />
         </MainView>
     )
 };
