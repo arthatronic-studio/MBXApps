@@ -31,7 +31,7 @@ export const lightModeColors = {
   overflow: 'rgba(0, 0, 0, 0.3)',
   reverseOverflow: 'rgba(f, f, f, 0.3)',
   colorDominant: 'light',
-  theme: '#FFFFFF', // '#EEF2E6', // '#F4F4F4',
+  theme: '#FFFFFE',
   text: '#0D0006',
   textInput: '#FFFFFF',
   border: '#DDDDDD',

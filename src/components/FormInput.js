@@ -1,5 +1,5 @@
 import React, { useState, useEffect, forwardRef } from 'react';
-import { View, TextInput } from 'react-native';
+import { View, TextInput, Platform } from 'react-native';
 import PropTypes from 'prop-types';
 // import CurrencyInput from 'react-native-currency-input';
 
@@ -60,7 +60,7 @@ const FormInput = forwardRef((props, ref) => {
                     borderRadius: 6,
                     borderWidth: 0.5,
                     borderColor: Color.disabled,
-                    paddingVertical: 12,
+                    paddingVertical: Platform.OS === 'ios' ? 12 : 6,
                     paddingHorizontal: 12,
                 }}
             >
@@ -69,7 +69,7 @@ const FormInput = forwardRef((props, ref) => {
                         width: '100%',
                         justifyContent: 'flex-start',
                         alignItems: 'flex-start',
-                        marginBottom: 4,
+                        marginBottom: Platform.OS === 'ios' ? 4 : 2,
                     }}
                 >
                     <Text size={8} color={Color.placeholder}>{label}</Text>

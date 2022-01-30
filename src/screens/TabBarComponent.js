@@ -74,12 +74,9 @@ const TabBarComponent = (props) => {
     return (
         <SafeAreaView
             style={{
-                width,
-                height: 45 + 16 + (isIphoneNotch() ? 0 : 16),
+                width: '100%',
+                height: 45 + 16 + (isIphoneNotch() ? 32 : 16),
                 backgroundColor: Color.theme,
-                paddingHorizontal: 16,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
             }}
         >
             <Line
@@ -89,64 +86,74 @@ const TabBarComponent = (props) => {
                 style={{position: 'absolute', top: 0}}
             />
 
-            {menus.map((route, routeIndex) => {
-                const isRouteActive = routeIndex === activeRouteIndex;
+            <View
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    paddingHorizontal: 16
+                }}
+            >
+                {menus.map((route, routeIndex) => {
+                    const isRouteActive = routeIndex === activeRouteIndex;
 
-                return (
-                    <TouchableOpacity
-                        key={routeIndex}
-                        activeOpacity={1}
-                        style={{
-                            width: isRouteActive ? `${100 - ((menus.length - 1) * sizePerMenu)}%` : `${sizePerMenu}%`,
-                            alignItems: 'center',
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                            paddingTop: 16,
-                            paddingBottom: isIphoneNotch() ? 0 : 16,
-                        }}
-                        onPress={() => {
-                            LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-                            UIManager.setLayoutAnimationEnabledExperimental &&
-                                UIManager.setLayoutAnimationEnabledExperimental(true);
-
-                            if (route.nav === 'MainHome') {
-                                redirectTo(route.nav);
-                                return;                                    
-                            }
-
-                            props.navigation.navigate(route.nav, { routeIndex });
-                        }}
-                    >
-                        <Animated.View
+                    return (
+                        <TouchableOpacity
+                            key={routeIndex}
+                            activeOpacity={1}
                             style={{
-                                height: '100%',
-                                width: '100%',
-                                borderRadius: 120,
+                                width: isRouteActive ? `${100 - ((menus.length - 1) * sizePerMenu)}%` : `${sizePerMenu}%`,
                                 alignItems: 'center',
-                                paddingLeft: isRouteActive ? 16 : 0,
-                                justifyContent: isRouteActive ? 'flex-start' : 'center',
                                 flexDirection: 'row',
-                                backgroundColor: isRouteActive ? Color.primary : 'transparent',
-                                // opacity: route.viewRef,
-                                opacity: route.ref,
+                                justifyContent: 'center',
+                                paddingTop: 16,
+                                paddingBottom: isIphoneNotch() ? 0 : 16,
+                            }}
+                            onPress={() => {
+                                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                                UIManager.setLayoutAnimationEnabledExperimental &&
+                                    UIManager.setLayoutAnimationEnabledExperimental(true);
+
+                                if (route.nav === 'MainHome') {
+                                    redirectTo(route.nav);
+                                    return;                                    
+                                }
+
+                                props.navigation.navigate(route.nav, { routeIndex });
                             }}
                         >
-                            {getIconMenu(route.iconType, route.iconName, isRouteActive)}
-                            {isRouteActive && <Divider width={8} />}
-                            {isRouteActive && <Animated.Text
+                            <Animated.View
                                 style={{
-                                    fontSize: 14,
-                                    fontWeight: '500',
-                                    color: isRouteActive ? Color.textInput : Color.secondary,
+                                    height: '100%',
+                                    width: '100%',
+                                    borderRadius: 120,
+                                    alignItems: 'center',
+                                    paddingLeft: isRouteActive ? 16 : 0,
+                                    justifyContent: isRouteActive ? 'flex-start' : 'center',
+                                    flexDirection: 'row',
+                                    backgroundColor: isRouteActive ? Color.primary : 'transparent',
+                                    // opacity: route.viewRef,
                                     opacity: route.ref,
                                 }}
                             >
-                                {route.name}
-                            </Animated.Text>}
-                        </Animated.View>
-                    </TouchableOpacity>
-                )
-            })}
+                                {getIconMenu(route.iconType, route.iconName, isRouteActive)}
+                                {isRouteActive && <Divider width={15} />}
+                                {isRouteActive && <Animated.Text
+                                    style={{
+                                        fontSize: 14,
+                                        fontWeight: '500',
+                                        color: isRouteActive ? Color.textInput : Color.secondary,
+                                        opacity: route.ref,
+                                    }}
+                                >
+                                    {route.name}
+                                </Animated.Text>}
+                            </Animated.View>
+                        </TouchableOpacity>
+                    )
+                })}
+            </View>
         </SafeAreaView>
     )
 }

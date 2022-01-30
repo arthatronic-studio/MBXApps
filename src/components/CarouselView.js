@@ -340,7 +340,7 @@ class CarouselView extends Component {
             {this.props.showIndicator && <CarouselIndicator
                 count={childrenLength}
                 currentIndex={this.state.currentPage}
-                containerStyle={{marginTop: 16}}
+                containerStyle={{marginTop: -24}}
             />}
         </>
     );

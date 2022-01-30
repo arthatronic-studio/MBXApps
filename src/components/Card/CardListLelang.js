@@ -13,7 +13,6 @@ import {
   Text,
   useColor,
 } from '@src/components';
-import Banner from 'src/components/Banner';
 import { statusBarHeight } from 'src/utils/constants';
 import { Divider } from 'src/styled';
 import { useNavigation } from '@react-navigation/native';

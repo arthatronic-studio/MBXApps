@@ -2,7 +2,6 @@ import React from 'react';
 import {
   View,
   FlatList,
-  SafeAreaView,
   Image,
   TouchableOpacity,
   useWindowDimensions,
@@ -103,7 +102,7 @@ const MusikTerbaru = () => {
   );
 
   return (
-    <SafeAreaView>
+    <View>
       <View>
         <Text
           align='left'
@@ -129,7 +128,7 @@ const MusikTerbaru = () => {
           paddingVertical: 8,
         }}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 

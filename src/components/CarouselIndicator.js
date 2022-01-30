@@ -15,7 +15,7 @@ const Indicator = ({ currentIndex, containerStyle, count }) => {
 
   useEffect(() => {
     Animated.spring(bgAnimatedRef, {
-      toValue: currentIndex * 14,
+      toValue: currentIndex * 16,
       velocity: 10,
       useNativeDriver: true,
     }).start();
@@ -35,13 +35,14 @@ const Indicator = ({ currentIndex, containerStyle, count }) => {
           <View
             key={idx}
             style={{
-              width: 6,
-              height: 6,
+              width: currentIndex === idx ? 16 : 8,
+              height: 8,
               borderRadius: 3,
               marginRight: 8,
-              backgroundColor: Color.theme,
+              backgroundColor: Color.textInput,
               borderWidth: 0.5,
-              borderColor: Color.primary,
+              borderColor: Color.textInput,
+              opacity: 0.4,
             }}
           />
         )
@@ -49,15 +50,15 @@ const Indicator = ({ currentIndex, containerStyle, count }) => {
 
       <Animated.View
         style={{
-          width: 6,
-          height: 6,
+          width: 16,
+          height: 8,
           position: 'absolute',
           left: 0,
           borderRadius: 3,
           marginRight: 8,
-          backgroundColor: Color.primary,
+          backgroundColor: Color.textInput,
           borderWidth: 0.5,
-          borderColor: Color.primary,
+          borderColor: Color.textInput,
           transform: [{ translateX: bgAnimatedRef }],
         }}
       />

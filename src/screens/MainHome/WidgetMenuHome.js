@@ -29,14 +29,13 @@ import {
 const SambatanMenuView = Styled(View)`
   width: 100%;
   borderRadius: 8px;
-  marginTop: 16px;
-  paddingTop: 30px;
+  paddingTop: 24px;
   paddingHorizontal: 8px;
   flexDirection: row;
   flexWrap: wrap;
 `;
 
-const PerUserIcons = Styled(TouchableOpacity)`
+const CardMenu = Styled(TouchableOpacity)`
   width: 25%;
   aspectRatio: 1.5;
   flexDirection: column;
@@ -50,9 +49,9 @@ const UserIcon = Styled(View)`
 `;
 
 const ImageProperty = Styled(Image)`
-  height: 40%;
+  height: 50%;
   aspectRatio: 1;
-  marginBottom: 8;
+  marginBottom: 6;
 `;
 
 const ComingSoonContainer = Styled(View)`
@@ -114,6 +113,13 @@ const menuHome = [
   //   images: iconSemua,
   //   nav: '',
   //   params: {title: 'Iuran Non-wajib', type: 'ACTIVE', productType: 'SAMBATAN_O',}},
+  {
+    id: 9,
+    name: 'Lainnya',
+    images: iconIuran,
+    nav: '',
+    params: {},
+  },
 ];
 
 const WidgetMenuHome = (props) => {
@@ -159,7 +165,7 @@ const WidgetMenuHome = (props) => {
           }
 
           return (
-            <PerUserIcons
+            <CardMenu
               key={idx}
               activeOpacity={0.75}
               disabled={menu.comingsoon}
@@ -169,7 +175,7 @@ const WidgetMenuHome = (props) => {
               }}>
               <UserIcon>
                 <ImageProperty
-                  style={menu.comingsoon && {opacity: 0.3}}
+                  style={menu.comingsoon ? {opacity: 0.3} : {} }
                   resizeMode="contain"
                   source={menu.images}
                 />
@@ -179,7 +185,7 @@ const WidgetMenuHome = (props) => {
                 {/* {(menu.comingsoon || menu.nav === '') && renderComingSoon()} */}
                 {menu.badge && renderMenuBadge()}
               </UserIcon>
-            </PerUserIcons>
+            </CardMenu>
           );
         })}
       </SambatanMenuView>
