@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, FlatList, TextInput, Image } from 'react-native';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -9,13 +9,14 @@ import { useIsFocused } from '@react-navigation/native';
 
 import Text from '@src/components/Text';
 import { useColor } from '@src/components/Color';
+import { usePopup } from '@src/components';
 import ScreenEmptyData from '@src/components/Modal/ScreenEmptyData';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import { Circle } from '@src/styled';
 
 import Client from '@src/lib/apollo';
-import { queryContentChatRooms } from '@src/lib/query';
-import { Header, Scaffold } from 'src/components';
+import { queryContentChatRooms, queryContentChatRoomManage } from '@src/lib/query';
+import { Header, ModalListAction, Scaffold, Alert } from 'src/components';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -52,15 +53,22 @@ const CircleSend = Styled(TouchableOpacity)`
   alignItems: center;
 `;
 
+const initialDataRooms = {
+    data: [],
+    loading: true,
+    page: 0,
+    loadNext: false,
+    refresh: false,
+}
+
 const ChatRoomsScreen = ({ navigation, route }) => {
     // state
-    const [dataRooms, setDataRooms] = useState({
-        data: [],
-        loading: true,
-        page: 0,
-        loadNext: false,
-    });
+    const [dataRooms, setDataRooms] = useState(initialDataRooms);
     const [firebaseData, setFirebaseData] = useState([]);
+    const [selectedRoom, setSelectedRoom] = useState();
+    const [isLoading, setIsLoading] = useState(false);
+
+    const modalListActionRef = useRef();
 
     // selector
     const user = useSelector(
@@ -70,6 +78,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
     // hooks
     const isFocused = useIsFocused();
     const { Color } = useColor();
+    const [popupProps, showPopup] = usePopup();
 
     useEffect(() => {
         if (!isFocused) {
@@ -108,6 +117,12 @@ const ChatRoomsScreen = ({ navigation, route }) => {
         }
     }, [dataRooms.loadNext]);
 
+    useEffect(() => {
+        if (dataRooms.page !== -1 && dataRooms.refresh) {
+            fetchContentChatRooms();
+        }
+    }, [dataRooms.refresh]);
+
     const fetchContentChatRooms = () => {
         const variables = {
             page: dataRooms.page + 1,
@@ -131,25 +146,70 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                 newPage = data.length === 50 ? dataRooms.page + 1 : -1;
             }
             
-            setStateDataRooms({
+            setDataRooms({
+                ...dataRooms,
                 data: newData,
                 loading: false,
                 page: newPage,
                 loadNext: false,
+                refresh: false,
             });
         })
         .catch((err) => {
             console.log(err, 'err');
-            setStateDataRooms({
+
+            setDataRooms({
+                ...dataRooms,
                 loading: false,
                 page: -1,
                 loadNext: false,
+                refresh: false,
             });
-        })
+        });
     }
 
-    const setStateDataRooms = (obj) => {
-        setDataRooms({ ...dataRooms, ...obj });
+    const fetchChatRoomManage = (method) => {
+        setIsLoading(true);
+
+        const variables = {
+            method,
+            roomId: selectedRoom.roomId,
+        };
+
+        Client.query({
+            query: queryContentChatRoomManage,
+            variables,
+        })
+        .then((res) => {
+            console.log('res chat manage', res);
+
+            const data = res.data.contentChatRoomManage;
+
+            if (data && data.id) {
+                showPopup('Berhasil menghapus obrolan', 'success');
+            } else {
+                showPopup('Gagal menghapus obrolan', 'error');
+            }
+
+            refreshDataRooms();
+            
+            setSelectedRoom();
+            setIsLoading(false);
+        })
+        .catch((err) => {
+            console.log(err, 'err chat manage');
+
+            showPopup(err.message, 'error');
+            setSelectedRoom();
+            setIsLoading(false);
+        });
+    }
+
+    const refreshDataRooms = () => {
+        setDataRooms({
+            ...initialDataRooms,
+            refresh: true,
+        });
     }
 
     const getTitle = (member) => {
@@ -244,12 +304,16 @@ const ChatRoomsScreen = ({ navigation, route }) => {
     return (
         <Scaffold
             fallback={dataRooms.loading}
+            isLoading={isLoading}
+            popupProps={popupProps}
             header={
                 <Header
                     title='Obrolan'
                     iconRightButton={
                         <TouchableOpacity
-                            onPress={() => navigation.navigate('ChatUserListScreen')}
+                            onPress={() => {
+                                navigation.navigate('ChatUserListScreen');
+                            }}
                             style={{justifyContent: 'center', alignItems: 'center'}}
                         >
                             <Ionicons name='add' color={Color.text} size={30} />
@@ -286,8 +350,10 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                 keyboardShouldPersistTaps='handled'
                 contentContainerStyle={{paddingTop: 8}}
                 onEndReachedThreshold={0.3}
-                onEndReached={() => dataRooms.page !== -1 && setStateDataRooms({ loadNext: true })}
+                onEndReached={() => dataRooms.page !== -1 && setDataRooms({ ...dataRooms, loadNext: true })}
                 renderItem={({ item }) => {
+                    const isSelected = selectedRoom && selectedRoom.id === item.id;
+
                     return (
                         <TouchableOpacity
                             onPress={() => {
@@ -297,7 +363,18 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                                     isNewArrival: item.isNewArrival,
                                 });
                             }}
-                            style={{height: 60, paddingHorizontal: 16, marginBottom: 16, flexDirection: 'row', alignItems: 'center'}}
+                            onLongPress={() => {
+                                modalListActionRef.current.open();
+                                setSelectedRoom(item);
+                            }}
+                            style={{
+                                height: 60,
+                                paddingHorizontal: 16,
+                                marginBottom: 16,
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                backgroundColor: isSelected ? Color.primarySoft : Color.textInput,
+                            }}
                         >
                             <View style={{width: '12%', height: '100%', alignItems: 'center', justifyContent: 'center'}}>
                                 <Image
@@ -337,6 +414,27 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                         </TouchableOpacity>
                     )
                 }}
+            />
+
+            <ModalListAction
+                ref={modalListActionRef}
+                onClose={() => {
+                    setSelectedRoom();
+                }}
+                data={[
+                    {
+                        id: 0,
+                        name: 'Hapus',
+                        color: Color.red,
+                        onPress: () => {
+                            Alert('Hapus', 'Apakah Anda yakin menghapus konten?', () => {
+                                fetchChatRoomManage('DELETE');
+                            });
+                            modalListActionRef.current.close();
+                            setSelectedRoom();
+                        },
+                    }
+                ]}
             />
         </Scaffold>
     )
