@@ -129,7 +129,7 @@ const menuHome = [
   {
     id: 9,
     code: '',
-    name: 'Lainnya',
+    name: 'Lainnya', // 'Tagihan &\n Isi Ulang',
     images: iconIuran,
     nav: '',
     params: {},
