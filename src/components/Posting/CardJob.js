@@ -38,7 +38,16 @@ const CardJob = (props) => {
         >
             <View style={{width: '100%', flexDirection: 'row', padding: 16, borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle}}>
                 <View style={{width: '20%'}}>
-                    <Image source={{uri: item.image}} style={{width: '80%', aspectRatio: 1, borderRadius: 50}} />
+                    <Image
+                        source={{uri: item.image}}
+                        style={{
+                            width: '80%',
+                            aspectRatio: 1,
+                            borderRadius: 8,
+                            ...shadowStyle,
+                        }}
+                        resizeMode='contain'
+                    />
                 </View>
 
                 <View style={{width: '80%'}}>

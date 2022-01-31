@@ -7,6 +7,7 @@ import {
   useWindowDimensions,
   Animated,
   RefreshControl,
+  Platform,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -46,6 +47,8 @@ import MusikTerbaru from 'src/components/MusikTerbaru';
 import MondayAccoustic from './MondayAccoustic';
 import WidgetBalance from 'src/components/WidgetBalance';
 import WidgetMenuHome from './WidgetMenuHome';
+import PostingHeader from 'src/components/Posting/PostingHeader';
+import { shadowStyle } from 'src/styles';
 
 const dataSabyan = {
   productName: 'New Sabyan Album',
@@ -264,7 +267,7 @@ const MainHome = ({navigation, route}) => {
     extrapolate: 'clamp',
   });
 
-  if (!isFocused) {
+  if (!isFocused && Platform.OS === 'android') {
     return <View />;
   }
 
@@ -338,9 +341,9 @@ const MainHome = ({navigation, route}) => {
             style={{backgroundColor: '#FDE4D2'}}
           />
         }
-        style={{
-          backgroundColor: '#FDE4D2'
-        }}
+        // style={{
+        //   backgroundColor: '#FDE4D2'
+        // }}
       >
         <Container color={Color.theme}>
           <Animated.View 
@@ -382,7 +385,8 @@ const MainHome = ({navigation, route}) => {
 
           <WidgetMenuHome
             onPress={(item) => {
-              console.log(item, 'ittt');
+              console.log(item, 'item');
+
               if (item.code === 'post') {
                 modalPostingRef.current.open();
               }
@@ -443,44 +447,71 @@ const MainHome = ({navigation, route}) => {
             style={{paddingLeft: 8}}
           />
 
-          <View style={{marginBottom: 30}}>
-            <Row>
-              <Col size={6}>
-                <Image
-                  resizeMode="contain"
-                  source={ImagesPath.logolelanghome}
-                  style={{height: 150, width: 140, marginLeft: 15}}
-                />
-              </Col>
-              <Col justifyContent="center">
-                <Text size={12} align="left">
-                  Sekarang di TRIBESOCIAL {'\n'} udah ada fitur{' '}
-                  <Text type="bold">lelang</Text> loh !
-                </Text>
-                <Button
-                  onPress={() => navigation.navigate('Lelang')}
-                  style={{
-                    backgroundColor: '#f58645',
-                    minHeight: 25,
-                    width: 120,
-                    marginTop: 8,
-                    borderRadius: 20,
-                  }}>
-                  <Row>
-                    <Text color={Color.textInput} size={10}>
-                      Selengkapnya
-                    </Text>
-                    <View style={{justifyContent: 'center'}}>
-                      <AntDesign
-                        name="arrowright"
-                        color={Color.textInput}
-                        style={{marginLeft: 8}}
-                      />
-                    </View>
-                  </Row>
-                </Button>
-              </Col>
-            </Row>
+          <View style={{marginBottom: 40}}>
+            <PostingHeader
+                title='Promo Untukmu'
+                showSeeAllText={false}
+            />
+            <Divider height={8} />
+            <CarouselView
+              delay={5000}
+              showIndicator
+              style={{width, aspectRatio: 21/9}}
+            >
+              {[0,0].map((e, idx) => {
+                return (
+                  <View
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      paddingHorizontal: 16,
+                    }}
+                  >
+                    <Container
+                      padding={16}
+                      radius={16}
+                      color={Color.textInput}
+                      style={{...shadowStyle}}
+                    >
+                      <Row>
+                        <Col size={5} align='flex-start'>
+                          <Image
+                            source={ImagesPath.logolelanghome}
+                            style={{height: width / 3, width: '100%'}}
+                            resizeMode='contain'
+                          />
+                        </Col>
+                        <Col size={7} align='flex-start' justifyContent='center'>
+                          <Text size={12} align="left">
+                            Sekarang di TRIBESOCIAL {'\n'} udah ada fitur{' '}
+                            <Text type="bold">lelang</Text> loh !
+                          </Text>
+                          <Button
+                            onPress={() => navigation.navigate('Lelang')}
+                            style={{
+                              backgroundColor: '#f58645',
+                              minHeight: 25,
+                              marginTop: 8,
+                              borderRadius: 20,
+                            }}>
+                            <Row>
+                              <Text color={Color.textInput} size={10}>
+                                Selengkapnya
+                                <AntDesign
+                                  name="arrowright"
+                                  color={Color.textInput}
+                                  style={{alignSelf: 'center'}}
+                                />
+                              </Text>
+                            </Row>
+                          </Button>
+                        </Col>
+                      </Row>
+                    </Container>
+                  </View>
+                )
+              })}
+            </CarouselView>
           </View>
 
           <ListPlace
