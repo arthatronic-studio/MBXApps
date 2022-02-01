@@ -113,7 +113,7 @@ const {Navigator, Screen} = createStackNavigator();
 function MainStackNavigator() {
   return (
     <Navigator
-      initialRouteName="CartScreen"
+      initialRouteName="SplashScreen"
       screenOptions={{
         gestureEnabled: true,
         headerShown: false,
