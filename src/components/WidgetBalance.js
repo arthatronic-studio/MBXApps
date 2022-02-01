@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
 import { useSelector } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
@@ -24,6 +24,7 @@ const WidgetBalance = (props) => {
     const { Color } = useColor();
     const isFocused = useIsFocused();
     const navigation = useNavigation();
+    const {width} = useWindowDimensions();
 
     useEffect(() => {
         if (isFocused) {
@@ -96,7 +97,7 @@ const WidgetBalance = (props) => {
                         <TouchableOpacity
                             style={{
                                 aspectRatio: 1,
-                                height: 30,
+                                height: width * 0.07,
                                 borderRadius: 4,
                                 backgroundColor: Color.primary,
                                 alignItems: 'center',

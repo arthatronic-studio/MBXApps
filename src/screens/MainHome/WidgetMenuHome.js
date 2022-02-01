@@ -29,14 +29,13 @@ import {
 const SambatanMenuView = Styled(View)`
   width: 100%;
   borderRadius: 8px;
-  marginTop: 16px;
-  paddingTop: 30px;
+  paddingTop: 24px;
   paddingHorizontal: 8px;
   flexDirection: row;
   flexWrap: wrap;
 `;
 
-const PerUserIcons = Styled(TouchableOpacity)`
+const CardMenu = Styled(TouchableOpacity)`
   width: 25%;
   aspectRatio: 1.5;
   flexDirection: column;
@@ -50,9 +49,9 @@ const UserIcon = Styled(View)`
 `;
 
 const ImageProperty = Styled(Image)`
-  height: 40%;
+  height: 50%;
   aspectRatio: 1;
-  marginBottom: 8;
+  marginBottom: 6;
 `;
 
 const ComingSoonContainer = Styled(View)`
@@ -76,6 +75,7 @@ const ComingSoonView = Styled(View)`
 const menuHome = [
   {
     id: 8,
+    code: '',
     name: 'Media Player',
     images: iconMediaPlayer,
     nav: '',
@@ -84,25 +84,36 @@ const menuHome = [
   },
   {
     id: 7,
+    code: '',
     name: 'Lelang',
     images: iconLelang,
     nav: 'Lelang',
     params: {},
     badge: true,
   },
-  {id: 0, name: 'Pulsa', images: iconPulsa, nav: 'PulsaScreen', params: {}},
-  {id: 1, name: 'Listrik', images: iconPLN, nav: 'PlnScreen', params: {}},
-  // {id: 2, name: 'Game', images: iconGames, nav: '', params: {}},
-  {id: 3, name: 'PDAM', images: iconPDAM, nav: 'PdamScreen', params: {}},
-  // {id: 4, name: 'BPJS', images: iconBPJS, nav: '', params: {}},
+  {
+    id: 10,
+    code: 'post',
+    name: 'Posting',
+    images: iconIuran,
+    nav: '',
+    params: {},
+  },
+  {id: 0, code: '', name: 'Pulsa', images: iconPulsa, nav: 'PulsaScreen', params: {}},
+  {id: 1, code: '', name: 'Listrik', images: iconPLN, nav: 'PlnScreen', params: {}},
+  // {id: 2, code: '', name: 'Game', images: iconGames, nav: '', params: {}},
+  {id: 3, code: '', name: 'PDAM', images: iconPDAM, nav: 'PdamScreen', params: {}},
+  // {id: 4, code: '', name: 'BPJS', images: iconBPJS, nav: '', params: {}},
   // {
   //   id: 5,
+  //   code: '',
   //   name: 'Internet',
   //   images: iconInternet,
   //   nav: '',
   //   params: {title: 'Iuran Non-wajib', type: 'ACTIVE', productType: 'SAMBATAN_O',}},
   {
     id: 6,
+    code: '',
     name: 'Iuran',
     images: iconIuran,
     nav: 'OrderListPerProduct',
@@ -110,10 +121,19 @@ const menuHome = [
   },
   // {
   //   id: 7,
+  //   code: '',
   //   name: 'Semua',
   //   images: iconSemua,
   //   nav: '',
   //   params: {title: 'Iuran Non-wajib', type: 'ACTIVE', productType: 'SAMBATAN_O',}},
+  {
+    id: 9,
+    code: '',
+    name: 'Lainnya', // 'Tagihan &\n Isi Ulang',
+    images: iconIuran,
+    nav: '',
+    params: {},
+  },
 ];
 
 const WidgetMenuHome = (props) => {
@@ -159,17 +179,19 @@ const WidgetMenuHome = (props) => {
           }
 
           return (
-            <PerUserIcons
+            <CardMenu
               key={idx}
               activeOpacity={0.75}
               disabled={menu.comingsoon}
               onPress={() => {
+                props.onPress(menu);
+
                 if (menu.nav === '') return;
                 navigation.navigate(menu.nav, menu.params);
               }}>
               <UserIcon>
                 <ImageProperty
-                  style={menu.comingsoon && {opacity: 0.3}}
+                  style={menu.comingsoon ? {opacity: 0.3} : {} }
                   resizeMode="contain"
                   source={menu.images}
                 />
@@ -179,7 +201,7 @@ const WidgetMenuHome = (props) => {
                 {/* {(menu.comingsoon || menu.nav === '') && renderComingSoon()} */}
                 {menu.badge && renderMenuBadge()}
               </UserIcon>
-            </PerUserIcons>
+            </CardMenu>
           );
         })}
       </SambatanMenuView>

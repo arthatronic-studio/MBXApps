@@ -118,7 +118,6 @@ const CardListProduk = (props) => {
   }, [isFocused]);
 
   const getProduct = () => {
-    // showLoading();
     let variables = {
       page: 1,
       itemPerPage: 10

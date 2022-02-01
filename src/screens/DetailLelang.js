@@ -1,11 +1,9 @@
 import React from 'react';
 import {View, Image, FlatList, StatusBar} from 'react-native';
-import Banner from 'src/components/Banner';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+
 import ImagesPath from 'src/components/ImagesPath';
 import {Scaffold, useColor, Header, Text} from '@src/components';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import CardListLelang from 'src/components/Card/CardListLelang';
-import LiveProductList from 'src/components/LiveProductList';
 import { Divider } from 'src/styled';
 
 const DetailLelang = () => {

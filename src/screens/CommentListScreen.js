@@ -6,6 +6,7 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import {
     Header,
     ModalListAction,
+    Scaffold,
     Text,
     useColor
 } from '@src/components';
@@ -13,10 +14,6 @@ import CardListComment from '@src/components/Card/CardListComment';
 
 import Client from '@src/lib/apollo';
 import { queryComment } from '@src/lib/query';
-
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
 
 const CommentListScreen = ({ navigation, route }) => {
     const { item } = route.params;
@@ -100,18 +97,11 @@ const CommentListScreen = ({ navigation, route }) => {
 
     // const canManageComment = user && !user.guest && user.userId === item.userId;
 
-    if (!item) {
-        return (
-            <MainView style={{backgroundColor: Color.theme}}>
-                <Header title='' />
-            </MainView>
-        )
-    }
-
     return (
-        <MainView style={{backgroundColor: Color.theme}}>
-            <Header title='Komentar' />
-
+        <Scaffold
+            headerTitle='Komentar'
+            empty={!item}
+        >
             <View style={{width: '100%', height: 70, marginVertical: 16, paddingHorizontal: 16, flexDirection: 'row'}}>
                 <View style={{width: '20%', height: '100%'}}>
                     <Image source={{uri: item.image}} style={{height: 70, width: 70, borderTopLeftRadius: 8, borderBottomLeftRadius: 8}} />
@@ -157,7 +147,7 @@ const CommentListScreen = ({ navigation, route }) => {
                     }
                 ]}
             />
-        </MainView>
+        </Scaffold>
     )
 }
 

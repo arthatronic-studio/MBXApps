@@ -126,8 +126,8 @@ const CardListComment = (props) => {
                   onPress={() => {
                     const options = {
                       mediaType: 'photo',
-                      maxWidth: 320,
-                      maxHeight: 320,
+                      maxWidth: 640,
+                      maxHeight: 640,
                       quality: 1,
                       includeBase64: true,
                     }

@@ -80,12 +80,12 @@ function MyTabs(props) {
       }}>
       <Tab.Screen
         name="Description"
-        component={Description}
+        component={() => <Description />}
         options={{tabBarLabel: 'Description'}}
       />
       <Tab.Screen
         name="Review"
-        component={Review}
+        component={() => <Review />}
         options={{tabBarLabel: 'Review'}}
       />
     </Tab.Navigator>

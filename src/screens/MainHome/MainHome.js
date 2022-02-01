@@ -4,6 +4,10 @@ import {
   ScrollView,
   Image,
   ImageBackground,
+  useWindowDimensions,
+  Animated,
+  RefreshControl,
+  Platform,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -33,7 +37,7 @@ import ListJob from 'src/components/Posting/ListJob';
 import {Box, Divider, Circle, Container} from '@src/styled';
 import {playNotificationSounds} from '@src/utils/notificationSounds';
 import CarouselView from 'src/components/CarouselView';
-import BannerHome from 'src/components/BannerHome';
+import Banner from 'src/components/Banner';
 import Client from '@src/lib/apollo';
 import {queryContentProduct, queryBannerList} from '@src/lib/query';
 import ModalPosting from './ModalPosting';
@@ -43,6 +47,8 @@ import MusikTerbaru from 'src/components/MusikTerbaru';
 import MondayAccoustic from './MondayAccoustic';
 import WidgetBalance from 'src/components/WidgetBalance';
 import WidgetMenuHome from './WidgetMenuHome';
+import PostingHeader from 'src/components/Posting/PostingHeader';
+import { shadowStyle } from 'src/styles';
 
 const dataSabyan = {
   productName: 'New Sabyan Album',
@@ -84,15 +90,19 @@ const MainHome = ({navigation, route}) => {
   const [loadingBanner, setLoadingBanner] = useState(true);
   const [listBanner, setListBanner] = useState([]);
 
-  const user = useSelector(state => state['user.auth'].login.user);
-  const dispatch = useDispatch();
+  const [animationValue] = useState(new Animated.Value(0));
+  const [refreshing, setRefreshing] = useState(false);
 
-  const {Color} = useColor();
-  const isFocused = useIsFocused();
-  const modalPostingRef = useRef();
   const prevFirebaseNotifierLastChatCount = usePreviousState(
     firebaseNotifierLastChatCount,
   );
+
+  const user = useSelector(state => state['user.auth'].login.user);
+  const dispatch = useDispatch();
+  const {Color} = useColor();
+  const isFocused = useIsFocused();
+  const modalPostingRef = useRef();
+  const {width} = useWindowDimensions();
 
   useEffect(() => {
     const subscriber = firestore()
@@ -244,11 +254,35 @@ const MainHome = ({navigation, route}) => {
     }
   };
 
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }
+
+  const backgroundInterpolate = animationValue.interpolate({
+    inputRange : [0, 100],
+    outputRange : ["#FDE4D2" , Color.theme],
+    extrapolate: 'clamp',
+  });
+
+  if (!isFocused && Platform.OS === 'android') {
+    return <View />;
+  }
+
   return (
     <Scaffold
+      translucent
+      useSafeArea={false}
+      statusBarAnimatedStyle={{backgroundColor: backgroundInterpolate}}
       header={
         <HeaderBig
-          style={{paddingTop: 8}}
+          useAnimated
+          style={{
+            paddingTop: 8,
+            backgroundColor: backgroundInterpolate
+          }}
           actions={
             <View style={{flexDirection: 'row'}}>
               <TouchableOpacity
@@ -291,172 +325,241 @@ const MainHome = ({navigation, route}) => {
           }
         />
       }>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            flexDirection: 'row',
-            width: '100%',
-            alignItems: 'center',
-            paddingVertical: 20,
-          }}>
-          <View style={{paddingLeft: 16, alignItems: 'flex-start'}}>
-            <Text lineHeight={18} letterSpacing={0.45}>
-              Halo,
-            </Text>
-            <Divider height={4} />
-            <Text size={24} type="bold" letterSpacing={0.45}>
-              {user && !user.guest
-                ? user.firstName.trim() +
-                  (user.lastName ? ' ' + user.lastName.trim() : '')
-                : 'Tamu'}
-              !
-            </Text>
-          </View>
-        </View>
+      <ScrollView
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [{ nativeEvent : {
+            contentOffset: { y : animationValue }
+          }}],
+          {useNativeDriver: false}
+        )}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            style={{backgroundColor: '#FDE4D2'}}
+          />
+        }
+        // style={{
+        //   backgroundColor: '#FDE4D2'
+        // }}
+      >
+        <Container color={Color.theme}>
+          <Animated.View 
+            style={{
+              width,
+              height: width / 3,
+              position: 'absolute',
+              borderBottomLeftRadius: 24,
+              borderBottomRightRadius: 24,
+              backgroundColor: backgroundInterpolate,
+            }}
+          />
 
-        <WidgetBalance />
-
-        <Divider />
-
-        <BannerHome data={listBanner} loading={loadingBanner} />
-
-        <WidgetMenuHome />
-
-        <Divider height={24} />
-
-        <ListAuction
-          // use the listBelajar for the test
-          data={listBelajar}
-          loading={loadingAuction}
-          horizontal
-          showHeader
-          onPress={item => {
-            navigation.navigate('AuctionDetail', {item});
-          }}
-          style={{paddingLeft: 8}}
-        />
-
-        <ListSoonAuction
-          // use the listBelajar for the test
-          data={listBelajar}
-          loading={loadingSoonAuction}
-          horizontal
-          showHeader
-          onPress={item => {
-            navigation.navigate('AuctionDetail', {item});
-          }}
-          style={{paddingLeft: 8}}
-        />
-
-        <ListEmergency
-          data={listEmergencyArea}
-          loading={loadingEmergency}
-          horizontal
-          showHeader
-          onPress={item => {
-            // navigation.navigate('EmergencyDetail', {item});
-            navigation.navigate('PostingDetail', {item});
-          }}
-          style={{paddingLeft: 8}}
-        />
-
-        <ListNews
-          data={listTampil}
-          loading={loadingTampil}
-          horizontal
-          showHeader
-          onPress={item => {
-            // navigation.navigate('NewsDetail', {item});
-            navigation.navigate('PostingDetail', {item});
-          }}
-          style={{paddingLeft: 8}}
-        />
-
-        <View style={{marginBottom: 30}}>
-          <Row>
-            <Col size={6}>
-              <Image
-                resizeMode="contain"
-                source={ImagesPath.logolelanghome}
-                style={{height: 150, width: 140, marginLeft: 15}}
-              />
-            </Col>
-            <Col justifyContent="center">
-              <Text size={12} align="left">
-                Sekarang di TRIBESOCIAL {'\n'} udah ada fitur{' '}
-                <Text type="bold">lelang</Text> loh !
+          <View
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+              alignItems: 'center',
+              paddingTop: 16,
+              paddingBottom: 24,
+            }}>
+            <View style={{paddingLeft: 16, alignItems: 'flex-start'}}>
+              <Text size={10} type='medium' lineHeight={18} letterSpacing={0.45}>
+                Halo
               </Text>
-              <Button
-                onPress={() => navigation.navigate('Lelang')}
-                style={{
-                  backgroundColor: '#f58645',
-                  minHeight: 25,
-                  width: 120,
-                  marginTop: 8,
-                  borderRadius: 20,
-                }}>
-                <Row>
-                  <Text color={Color.textInput} size={10}>
-                    Selengkapnya
-                  </Text>
-                  <View style={{justifyContent: 'center'}}>
-                    <AntDesign
-                      name="arrowright"
+              <Text size={18} type="bold" letterSpacing={0.45}>
+                {user && !user.guest
+                  ? user.firstName.trim() +
+                    (user.lastName ? ' ' + user.lastName.trim() : '')
+                  : 'Tamu'}
+                !
+              </Text>
+            </View>
+          </View>
+
+          <WidgetBalance />
+
+          <Divider />
+
+          <WidgetMenuHome
+            onPress={(item) => {
+              console.log(item, 'item');
+
+              if (item.code === 'post') {
+                modalPostingRef.current.open();
+              }
+            }}
+          />
+
+          <Divider height={24} />
+
+          <Banner data={listBanner.concat(listBanner.concat(listBanner))} loading={loadingBanner} />
+
+          <Divider height={24} />
+
+          <ListAuction
+            // use the listBelajar for the test
+            data={listBelajar}
+            loading={loadingAuction}
+            horizontal
+            showHeader
+            onPress={item => {
+              navigation.navigate('AuctionDetail', {item});
+            }}
+            style={{paddingLeft: 8}}
+          />
+
+          <ListSoonAuction
+            // use the listBelajar for the test
+            data={listBelajar}
+            loading={loadingSoonAuction}
+            horizontal
+            showHeader
+            onPress={item => {
+              navigation.navigate('AuctionDetail', {item});
+            }}
+            style={{paddingLeft: 8}}
+          />
+
+          <ListEmergency
+            data={listEmergencyArea}
+            loading={loadingEmergency}
+            horizontal
+            showHeader
+            onPress={item => {
+              // navigation.navigate('EmergencyDetail', {item});
+              navigation.navigate('PostingDetail', {item});
+            }}
+            style={{paddingLeft: 8}}
+          />
+
+          <ListNews
+            data={listTampil}
+            loading={loadingTampil}
+            horizontal
+            showHeader
+            onPress={item => {
+              // navigation.navigate('NewsDetail', {item});
+              navigation.navigate('PostingDetail', {item});
+            }}
+            style={{paddingLeft: 8}}
+          />
+
+          <View style={{marginBottom: 40}}>
+            <PostingHeader
+                title='Promo Untukmu'
+                showSeeAllText={false}
+            />
+            <Divider height={8} />
+            <CarouselView
+              delay={5000}
+              showIndicator
+              style={{width, aspectRatio: 21/9}}
+            >
+              {[0,0].map((e, idx) => {
+                return (
+                  <View
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      paddingHorizontal: 16,
+                    }}
+                  >
+                    <Container
+                      padding={16}
+                      radius={16}
                       color={Color.textInput}
-                      style={{marginLeft: 8}}
-                    />
+                      style={{...shadowStyle}}
+                    >
+                      <Row>
+                        <Col size={5} align='flex-start'>
+                          <Image
+                            source={ImagesPath.logolelanghome}
+                            style={{height: width / 3, width: '100%'}}
+                            resizeMode='contain'
+                          />
+                        </Col>
+                        <Col size={7} align='flex-start' justifyContent='center'>
+                          <Text size={12} align="left">
+                            Sekarang di TRIBESOCIAL {'\n'} udah ada fitur{' '}
+                            <Text type="bold">lelang</Text> loh !
+                          </Text>
+                          <Button
+                            onPress={() => navigation.navigate('Lelang')}
+                            style={{
+                              backgroundColor: '#f58645',
+                              minHeight: 25,
+                              marginTop: 8,
+                              borderRadius: 20,
+                            }}>
+                            <Row>
+                              <Text color={Color.textInput} size={10}>
+                                Selengkapnya
+                                <AntDesign
+                                  name="arrowright"
+                                  color={Color.textInput}
+                                  style={{alignSelf: 'center'}}
+                                />
+                              </Text>
+                            </Row>
+                          </Button>
+                        </Col>
+                      </Row>
+                    </Container>
                   </View>
-                </Row>
-              </Button>
-            </Col>
-          </Row>
-        </View>
+                )
+              })}
+            </CarouselView>
+          </View>
 
-        <ListPlace
-          data={listJalanJalan}
-          loading={loadingJalanJalan}
-          horizontal
-          showHeader
-          onPress={item => {
-            // navigation.navigate('PlaceDetail', {item});
-            navigation.navigate('PostingDetail', {item});
-          }}
-          style={{paddingLeft: 8}}
-        />
+          <ListPlace
+            data={listJalanJalan}
+            loading={loadingJalanJalan}
+            horizontal
+            showHeader
+            onPress={item => {
+              // navigation.navigate('PlaceDetail', {item});
+              navigation.navigate('PostingDetail', {item});
+            }}
+            style={{paddingLeft: 8}}
+          />
 
-        <ListEvent
-          data={listBelajar}
-          loading={loadingBelajar}
-          horizontal
-          showHeader
-          onPress={item => {
-            // navigation.navigate('EventDetail', {item});
-            navigation.navigate('PostingDetail', {item});
-          }}
-          style={{paddingLeft: 8}}
-        />
+          <ListEvent
+            data={listBelajar}
+            loading={loadingBelajar}
+            horizontal
+            showHeader
+            onPress={item => {
+              // navigation.navigate('EventDetail', {item});
+              navigation.navigate('PostingDetail', {item});
+            }}
+            style={{paddingLeft: 8}}
+          />
 
-        <ListJob
-          data={listKerja}
-          loading={loadingKerja}
-          horizontal
-          showHeader
-          onPress={item => {
-            // navigation.navigate('JobDetail', {item});
-            navigation.navigate('PostingDetail', {item});
-          }}
-          style={{paddingLeft: 8}}
-        />
+          <ListJob
+            data={listKerja}
+            loading={loadingKerja}
+            horizontal
+            showHeader
+            onPress={item => {
+              // navigation.navigate('JobDetail', {item});
+              navigation.navigate('PostingDetail', {item});
+            }}
+            style={{paddingLeft: 8}}
+          />
 
-        <MusikTerbaru />
+          <MusikTerbaru />
 
-        <Divider />
-        
-        <MondayAccoustic />
+          <Divider />
+          
+          <MondayAccoustic />
+        </Container>
       </ScrollView>
 
       {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}
-      <Box size={70} style={{position: 'absolute', bottom: -40}} />
+      {/* <Box size={70} style={{position: 'absolute', bottom: -40}} /> */}
       {/*  */}
 
       <ModalPosting
