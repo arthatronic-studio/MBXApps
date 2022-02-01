@@ -93,7 +93,7 @@ const DetailProduct = ({navigation}) => {
         .then(res => {
           hideLoading()
           console.log(res)
-          if (res.data.ecommerceProductDetail) {
+          if (res.data.ecommerceCartAdd) {
             alert('Success add to cart')
           }
         })
