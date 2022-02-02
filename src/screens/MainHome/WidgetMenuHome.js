@@ -126,14 +126,14 @@ const menuHome = [
   //   images: iconSemua,
   //   nav: '',
   //   params: {title: 'Iuran Non-wajib', type: 'ACTIVE', productType: 'SAMBATAN_O',}},
-  {
-    id: 9,
-    code: '',
-    name: 'Lainnya', // 'Tagihan &\n Isi Ulang',
-    images: iconIuran,
-    nav: '',
-    params: {},
-  },
+  // {
+  //   id: 9,
+  //   code: '',
+  //   name: 'Lainnya', // 'Tagihan &\n Isi Ulang',
+  //   images: iconIuran,
+  //   nav: '',
+  //   params: {},
+  // },
 ];
 
 const WidgetMenuHome = (props) => {

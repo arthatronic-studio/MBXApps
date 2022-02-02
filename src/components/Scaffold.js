@@ -98,7 +98,7 @@ const Scaffold = ({
         <MainView style={{flex: 1, backgroundColor: Color.theme, ...style}}>
             {Platform.OS === 'android' && statusBarAnimatedStyle ?
                 <AndroidStatusBarAnimated
-                    translucent
+                    translucent={false}
                     backgroundColor={statusBarAnimatedStyle.backgroundColor}
                     barStyle={Color.colorDominant === 'dark' ? 'light-content' : 'dark-content'}
                 />
@@ -110,7 +110,7 @@ const Scaffold = ({
                 />
             }
 
-            {translucent && <BarView
+            {Platform.OS === 'ios' && translucent && <BarView
                 style={{
                     height: statusBarHeight,
                     backgroundColor: statusBarColor || Color.theme,

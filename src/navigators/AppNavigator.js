@@ -1,4 +1,5 @@
 import React from 'react';
+import { Platform } from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 // uncanny
@@ -115,7 +116,7 @@ function MainStackNavigator() {
     <Navigator
       initialRouteName="SplashScreen"
       screenOptions={{
-        gestureEnabled: true,
+        gestureEnabled: Platform.OS === 'ios',
         headerShown: false,
       }}>
       {/* uncanny */}

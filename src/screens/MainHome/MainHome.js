@@ -267,15 +267,13 @@ const MainHome = ({navigation, route}) => {
     extrapolate: 'clamp',
   });
 
-  if (!isFocused && Platform.OS === 'android') {
-    return <View />;
-  }
-
   return (
     <Scaffold
-      translucent
-      useSafeArea={false}
-      statusBarAnimatedStyle={{backgroundColor: backgroundInterpolate}}
+      translucent={Platform.OS === 'ios' ? true : isFocused}
+      useSafeArea={Platform.OS === 'ios' ? false : isFocused ? false : true}
+      statusBarAnimatedStyle={
+        Platform.OS === 'ios' ? {backgroundColor: backgroundInterpolate} :
+        isFocused && {backgroundColor: backgroundInterpolate}}
       header={
         <HeaderBig
           useAnimated

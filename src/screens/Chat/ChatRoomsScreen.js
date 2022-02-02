@@ -94,15 +94,18 @@ const ChatRoomsScreen = ({ navigation, route }) => {
             .where('isNewArrival', '==', true)
             // .limit(1)
             .onSnapshot((res) => {
-                if (res) {
-                    if (res.docs.length > 0) {
-                        let newData = [];
-                        res.docs.map((doc) => {
-                            newData.push(doc.data());
+                if (res && res.docs.length > 0) {
+                    let newData = [];
+                    res.docs.map((doc) => {
+                        const docID = doc.ref.path.split('/')[1];
+                        newData.push({
+                            docID,
+                            ...doc.data()
                         });
-                        console.log('newData chat notifier', newData);
-                        setFirebaseData(newData);
-                    }
+                    });
+
+                    console.log('newData chat notifier', newData);
+                    setFirebaseData(newData);
                 }
             }, (error) => {
                 console.log(error);
@@ -176,6 +179,8 @@ const ChatRoomsScreen = ({ navigation, route }) => {
             roomId: selectedRoom.roomId,
         };
 
+        console.log('variables', variables);
+
         Client.query({
             query: queryContentChatRoomManage,
             variables,
@@ -185,8 +190,9 @@ const ChatRoomsScreen = ({ navigation, route }) => {
 
             const data = res.data.contentChatRoomManage;
 
-            if (data && data.id) {
+            if (data) {
                 showPopup('Berhasil menghapus obrolan', 'success');
+                firestoreDeletedPerUser(selectedRoom);
             } else {
                 showPopup('Gagal menghapus obrolan', 'error');
             }
@@ -204,6 +210,20 @@ const ChatRoomsScreen = ({ navigation, route }) => {
             setIsLoading(false);
         });
     }
+
+    // fb delete msg per user
+    const firestoreDeletedPerUser = (room) => {
+        let deleteArr = room.deleted || [];
+        deleteArr.push(user.userId.toString());
+
+        if (room.docID !== '') {
+            firestore()
+                .collection('contentChatNotifier')
+                .doc(room.docID)
+                .update({ deleted: deleteArr })
+                .catch((err) => console.log(err, 'err'));
+        }
+    };
 
     const refreshDataRooms = () => {
         setDataRooms({
@@ -267,18 +287,26 @@ const ChatRoomsScreen = ({ navigation, route }) => {
         return title;
     }
 
-    const sortData = () => {
-        let data = dataRooms.data;
+    const remapData = () => {
         let newData = [];
-
-        data.map((i) => {
-            const selected = firebaseData.filter((e) => e.roomId === i.roomId)[0];
-            if (selected) {
-            } else {
-                newData.push(i);
-            }
+        dataRooms.data.forEach((k,v) => {
+            const isExist = firebaseData.filter((e) => e.roomId === k.roomId)[0];
+            newData.push({
+                ...k,
+                ...isExist,
+            });
         });
-        return firebaseData.concat(newData);
+
+        return newData;
+        
+        // dataRooms.data.map((i) => {
+        //     const selected = firebaseData.filter((e) => e.roomId === i.roomId)[0];
+        //     if (selected) {
+        //     } else {
+        //         newData.push(i);
+        //     }
+        // });
+        // return firebaseData.concat(newData);
     }
 
     const isNotRead = (arr) => {
@@ -346,7 +374,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
 
             <FlatList
                 keyExtractor={(item, index) => item.id.toString() + index.toString()}
-                data={sortData()}
+                data={remapData()}
                 keyboardShouldPersistTaps='handled'
                 contentContainerStyle={{paddingTop: 8}}
                 onEndReachedThreshold={0.3}

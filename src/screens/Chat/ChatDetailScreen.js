@@ -109,8 +109,12 @@ const ChatDetailScreen = ({ navigation, route }) => {
                 if (res) {
                     let docID = '';
                     if (res.docs.length > 0) {
+                        console.log('res contentChatRoomDetail',res.docs[0].data());
                         docID = res.docs[0].ref.path.split('/')[1];
+                    } else {
+                        console.log('res contentChatRoomDetail',res.docs);
                     }
+
                     setFirebaseChatDocId(docID);
 
                     if (isInitial.current === false && res.docs.length > 0) {
@@ -128,7 +132,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
             });
     
         return () => subscriber();
-    }, []);
+    }, [roomId]);
 
     // realtime notifier
     useEffect(() => {
@@ -144,7 +148,10 @@ const ChatDetailScreen = ({ navigation, route }) => {
                     let data = { typing: [] };
                     
                     if (res.docs.length > 0) {
+                        console.log('res contentChatNotifier', res.docs[0].data());
                         data = res.docs[0].data();
+                    } else {
+                        console.log('res contentChatNotifier', res.docs);
                     }
                     
                     if (Array.isArray(data.typing) && data.typing.length > 0) {
@@ -161,7 +168,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
             });
 
         return () => subscriber();
-    }, []);
+    }, [roomId]);
 
     // handdle user is typing
     useEffect(() => {
@@ -299,7 +306,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
 
         const variables = {
             method: 'INSERT',
-            type: params.selected.length > 1 ? 'GROUP' : 'INBOX', // 'PERSONAL',
+            type: params.selected.length > 1 ? 'GROUP' : 'PERSONAL',
             userId,
         };
 
@@ -310,6 +317,8 @@ const ChatDetailScreen = ({ navigation, route }) => {
             variables,
         })
         .then((res) => {
+            console.log('res create room', res);
+
             const data = res.data.contentChatRoomManage;
 
             if (data) {
@@ -341,7 +350,8 @@ const ChatDetailScreen = ({ navigation, route }) => {
             const newData = dataChat.data.concat(data);
             
             if (data) {
-                setStateDataChat({
+                setDataChat({
+                    ...dataChat,
                     loading: false,
                     data: newData,
                     page: data.length === 50 ? dataChat.page + 1 : -1,
@@ -351,7 +361,9 @@ const ChatDetailScreen = ({ navigation, route }) => {
         })
         .catch((err) => {
             console.log(err, 'chat room err');
-            setStateDataChat({
+
+            setDataChat({
+                ...dataChat,
                 loading: false,
                 page: -1,
                 loadNext: false,
@@ -359,7 +371,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
         })
     }
     
-    const onCreateComment = () => {
+    const onSendChat = () => {
         if (textComment === '') {
             showPopup('Teks komentar tidak boleh kosong', 'warning');
             return;
@@ -406,10 +418,6 @@ const ChatDetailScreen = ({ navigation, route }) => {
             console.log('err kirim chat', err);
             showPopup('Chat gagal dikirim, silakan coba lagi', 'error');
         });
-    }
-
-    const setStateDataChat = (obj) => {
-        setDataChat({ ...dataChat, ...obj });
     }
     
     const getTitle = () => {
@@ -459,7 +467,8 @@ const ChatDetailScreen = ({ navigation, route }) => {
         return title;
     }
 
-    const compareData = (arr) => {
+    const compareData = () => {
+        const arr = firebaseData.concat(dataChat.data);
         let obj = {};
         let newData = [];
 
@@ -498,12 +507,12 @@ const ChatDetailScreen = ({ navigation, route }) => {
         >
             <FlatList
                 keyExtractor={(item, index) => item.id + index.toString()}
-                data={compareData(firebaseData.concat(dataChat.data)).reverse()}
+                data={compareData().reverse()}
                 inverted
                 keyboardShouldPersistTaps='handled'
                 contentContainerStyle={{paddingTop: 16}}
                 onEndReachedThreshold={0.3}
-                onEndReached={() => dataChat.page !== -1 && setStateDataChat({ loadNext: true })}
+                onEndReached={() => dataChat.page !== -1 && setDataChat({ ...dataChat, loadNext: true })}
                 renderItem={({ item }) => {
                     const isAdmin = user && user.userId === item.userId;
 
@@ -573,7 +582,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
                     />
 
                     <CircleSend
-                        onPress={() => onCreateComment()}
+                        onPress={() => onSendChat()}
                         style={{backgroundColor: Color.primary}}
                     >
                         <Ionicons name='send' color={Color.textInput} />
