@@ -22,4 +22,13 @@ export default {
   icClose: require('../components/Images/ic_close.png'),
   sabyanMusic: require('../components/Images/SabyanMusic.png'),
   sabyanLive: require('../components/Images/SabyanLive.png'),
+  logoTribes: require('../components/Images/logoTribes.png'),
+  imageBackground: require('../components/Images/image-background.png'),
+  tempat1: require('../components/Images/tempat1.png'),
+  tempat2: require('../components/Images/tempat2.png'),
+  loker1: require('../components/Images/loker1.png'),
+  loker2: require('../components/Images/loker2.png'),
+  loker3: require('../components/Images/loker3.png'),
+  bantu1: require('../components/Images/bantu1.png'),
+  bantu2: require('../components/Images/bantu2.png'),
 };
