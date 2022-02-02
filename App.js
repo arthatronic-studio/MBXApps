@@ -1,8 +1,7 @@
 import React, { useEffect, createRef } from 'react';
 import 'react-native-gesture-handler';
-import { StatusBar, Platform, Appearance, SafeAreaView } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Provider } from 'react-redux';
-// import RNBootSplash from "react-native-bootsplash";
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { NavigationContainer } from "@react-navigation/native";
 import { Host } from 'react-native-portalize';
@@ -19,9 +18,7 @@ export let navigationRef = createRef();
 const App = () => {
   const { Color } = useColor('root');
 
-  const onReady = () => {
-    // RNBootSplash.hide({ fade: true });
-  }
+  const onReady = () => {}
 
   // ===========================================
   // ========== START FIREBASE NOTIFICATION ==========
@@ -152,16 +149,10 @@ const App = () => {
   // ========== END FIREBASE NOTIFICATION ==========
   // ==========================================
 
-  const colorScheme = Appearance.getColorScheme();
-
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <SafeAreaView style={{flex: 1, backgroundColor: Color.theme}}>
-          <StatusBar
-            backgroundColor={Color.theme}
-            barStyle={Color.colorDominant === 'dark' ? 'light-content' : 'dark-content'}
-          />
+        <View style={{flex: 1, backgroundColor: Color.theme}}>
           <NavigationContainer
             ref={navigationRef}
             onReady={onReady}
@@ -170,7 +161,7 @@ const App = () => {
               <AppNavigator />
             </Host>
           </NavigationContainer>
-        </SafeAreaView>
+        </View>
       </PersistGate>
     </Provider>
   );

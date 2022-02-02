@@ -3,6 +3,7 @@ import { Dimensions, TouchableOpacity, useWindowDimensions, Image } from 'react-
 import { Modalize } from 'react-native-modalize';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 // import { Newspaper, MapPinLine, Calendar, Briefcase } from 'phosphor-react-native';
+import Config from 'react-native-config';
 
 import {
   Text,
@@ -38,7 +39,7 @@ const data = [
     icon: <Image source={iconArtikel} style={{width: '50%', height: '50%', marginBottom: 4}}/>,
     nav: 'CreateThreadScreen', params: {
       title: 'Posting Artikel',
-      productType: "TRIBES",
+      productType: Config.PRODUCT_TYPE,
       productCategory: '',
       productSubCategory: 'POSTING'
     }
@@ -49,7 +50,7 @@ const data = [
     icon: <Image source={iconTempat} style={{width: '45%', height: '50%', marginBottom: 4}}/>,
     nav: 'CreateThreadScreen', params: {
       title: 'Posting Tempat Terdekat',
-      productType: "TRIBES",
+      productType: Config.PRODUCT_TYPE,
       productCategory: '',
       productSubCategory: 'NEARBY_PLACE',
     }
@@ -60,7 +61,7 @@ const data = [
     icon: <Image source={iconEvent} style={{width: '50%', height: '50%', marginBottom: 4}}/>,
     nav: 'CreateThreadScreen', params: {
       title: 'Posting Event',
-      productType: "TRIBES",
+      productType: Config.PRODUCT_TYPE,
       productCategory: '',
       productSubCategory: 'EVENT',
     }
@@ -71,7 +72,7 @@ const data = [
     icon: <Image source={iconLoker} style={{width: '50%', height: '50%', marginBottom: 4}}/>,
     nav: 'CreateThreadScreen', params: {
       title: 'Posting Loker',
-      productType: "TRIBES",
+      productType: Config.PRODUCT_TYPE,
       productCategory: '',
       productSubCategory: 'JOBS',
     }

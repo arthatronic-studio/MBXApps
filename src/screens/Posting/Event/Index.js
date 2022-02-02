@@ -4,6 +4,7 @@ import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useSelector } from 'react-redux';
+import Config from 'react-native-config';
 
 import {
     useLoading,
@@ -54,7 +55,7 @@ export default ({ navigation, route }) => {
           fallback: true,
         });
     
-        const listProduct = await fetchContentProduct('TRIBES', 'EVENT', '');
+        const listProduct = await fetchContentProduct(Config.PRODUCT_TYPE, 'EVENT', '');
     
         setState({
             fallback: false,
@@ -113,7 +114,7 @@ export default ({ navigation, route }) => {
                 style={{backgroundColor: Color.primary, paddingTop: 2, paddingBottom: 6}}
                 onPress={() => navigation.navigate('CreateThreadScreen', {
                   title: route.params && route.params.title ? route.params.title : '',
-                  productType: "TRIBES",
+                  productType: Config.PRODUCT_TYPE,
                   productCategory: '',
                   productSubCategory: 'EVENT',
                 })}

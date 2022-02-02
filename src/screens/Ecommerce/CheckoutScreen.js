@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, ScrollView, Platform, SafeAreaView } from 'react-native';
+import { View, ScrollView, Image, SafeAreaView } from 'react-native';
 import Styled from 'styled-components';
 import { connect } from 'react-redux';
 import {useIsFocused, useRoute} from '@react-navigation/native';
@@ -27,6 +27,7 @@ import { shadowStyle } from '@src/styles';
 import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
 import { FormatMoney } from 'src/utils';
+import ImagesPath from 'src/components/ImagesPath';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -82,6 +83,17 @@ const CheckoutScreen = ({ navigation }) => {
       });
   };
 
+  const totalProduct = (item) => {
+    let total = 0
+    if(item){
+        item.forEach((element, index) => {
+          total = total + (element.price * element['quantity'])
+        });
+        return total
+    }
+    
+  }
+
   return (
     <Scaffold
         header={
@@ -102,7 +114,7 @@ const CheckoutScreen = ({ navigation }) => {
                         <Text size={11} color={Color.text} type='bold'>Alamat Pengiriman</Text>
                     </Col>
                     <Col alignItems='flex-end'>
-                        <TouchableOpacity style={{ backgroundColor: 'red' }} onPress={() => navigation.navigate('FormPayment')}>
+                        <TouchableOpacity style={{ }} onPress={() => navigation.navigate('FormPayment')}>
                             <Text color={Color.info} size={10}>Ubah Alamat</Text>
                         </TouchableOpacity>
                     </Col>
@@ -113,21 +125,23 @@ const CheckoutScreen = ({ navigation }) => {
                         <Fontisto name='map-marker-alt' color={Color.error} size={13} style={{ marginRight: 6 }} />
                         <Text color={Color.text} type='bold'>Rumah</Text>
                     </Row>
-                    <Text color={Color.text} size={10} style={{ marginTop: 8 }} align='left'>{address.address}</Text>
+                    <Text color={Color.text} size={10} style={{ marginTop: 8 }} align='left'>{address.address ? address.address : 'Alamat belum tersedia'}</Text>
                 </View>
             </Content>
             <Content style={{ backgroundColor: Color.textInput }}>
-                <Row style={{ marginBottom: 30 }}>
-                    <View style={{ height: 74, width: 74, marginRight: 14, backgroundColor: Color.text, borderRadius: 8 }} />
-                    <Col alignItems='flex-start'>
-                        <Text color={Color.text} size={14} type='bold' textAlign='left'>{item.name}</Text>
-                        <Text color={Color.text} textAlign='left' size={10}>Jumlah : {item.qty} Buah</Text>
-                        <View style={{ justifyContent: 'flex-end', flex: 1, alignItems: 'flex-start' }}>
-                            <Text size={10} color={Color.text} >Harga</Text>
-                            <Text type='bold' color={Color.text}>{FormatMoney.getFormattedMoney(item.price)}</Text>
-                        </View>
-                    </Col>
-                </Row>
+                {item.tempData.map((val, id) => (
+                    <Row style={{ marginBottom: 30 }}>
+                        <Image source={ImagesPath.productImage} style={{ height: 74, width: 74, marginRight: 14, backgroundColor: Color.text, borderRadius: 8 }} />
+                        <Col alignItems='flex-start'>
+                            <Text color={Color.text} size={14} type='bold' textAlign='left'>{val.name}</Text>
+                            <Text color={Color.text} textAlign='left' size={10}>Jumlah : {val.qty} Buah</Text>
+                            <View style={{ justifyContent: 'flex-end', flex: 1, alignItems: 'flex-start' }}>
+                                <Text size={10} color={Color.text} >Harga</Text>
+                                <Text type='bold' color={Color.text}>{FormatMoney.getFormattedMoney(val.price)}</Text>
+                            </View>
+                        </Col>
+                    </Row>
+                ))}
                 <Row style={{ backgroundColor: Color.semiwhite, alignItems: 'center', padding: 12, borderRadius: 8 }}>
                     <MaterialCommunityIcons name='truck' color={Color.text} size={18}   />
                     <Text color={Color.text} type='semiBold' style={{ marginHorizontal: 10 }}>Pilih Pengiriman</Text>
@@ -142,19 +156,19 @@ const CheckoutScreen = ({ navigation }) => {
                         <Text color={Color.text} type='bold'>Subtotal</Text>
                     </Col>
                     <Col alignItems='flex-end'>
-                        <Text color={Color.text} type='bold'>{FormatMoney.getFormattedMoney(item.qty*item.price)}</Text>
+                        <Text color={Color.text} type='bold'>{FormatMoney.getFormattedMoney(totalProduct(item.tempData))}</Text>
                     </Col>
                 </Row>
                 <View style={{ backgroundColor: 'rgba(18, 18, 18, 0.2)', height: 1, marginVertical: 12 }} />
 
-                <Row style={{ alignItems: 'center', marginBottom: 8 }}>
+                {/* <Row style={{ alignItems: 'center', marginBottom: 8 }}>
                     <Col alignItems='flex-start'>
                         <Text color={Color.text} size={10}>Harga (1 Barang)</Text>
                     </Col>
                     <Col alignItems='flex-end'>
                         <Text color={Color.text} size={10}>{FormatMoney.getFormattedMoney(item.price)}</Text>
                     </Col>
-                </Row>
+                </Row> */}
                 <Row style={{ alignItems: 'center', marginBottom: 8 }}>
                     <Col alignItems='flex-start'>
                         <Text color={Color.text} size={10}>Ongkos Kirim</Text>
@@ -188,7 +202,7 @@ const CheckoutScreen = ({ navigation }) => {
         <Row style={{ padding: 16 }}>
             <Col align='flex-start' justify='center'>
                 <Text size={10} color={Color.text}>Total Harga</Text>
-                <Text type='bold' color={Color.text} size={18} >Rp. 160.000</Text>
+                <Text type='bold' color={Color.text} size={18} >{FormatMoney.getFormattedMoney(totalProduct(item.tempData)+10000+16000)}</Text>
             </Col>
             <Col>
                 <TouchableOpacity onPress={() => navigation.popToTop()} style={{ backgroundColor: Color.info, borderRadius: 30, paddingVertical: 10 }}>

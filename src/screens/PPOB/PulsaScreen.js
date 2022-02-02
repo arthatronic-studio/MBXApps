@@ -34,6 +34,7 @@ import {
   iconThree,
   iconXL,
 } from '@assets/images/operator';
+import { Scaffold } from 'src/components';
 
 const MainView = Styled(View)`
   flex: 1;
@@ -747,13 +748,15 @@ export default ({ navigation, route }) => {
   const { selectedProvider, modalProvider, inquiryPostpaid } = state;
 
   return (
-    <MainView>
-      <Header
-        title='Pulsa'
-        onPressRightButton={() => onPressRightButton(activeTab === 0 ? 'PREPAID' : 'POSTPAID')}
-        iconRightButton={<MaterialIcons name='history' size={22} color={Color.gray} />}
-      />
-
+    <Scaffold
+      header={
+        <Header
+          title='Pulsa'
+          onPressRightButton={() => onPressRightButton(activeTab === 0 ? 'PREPAID' : 'POSTPAID')}
+          iconRightButton={<MaterialIcons name='history' size={22} color={Color.gray} />}
+        />
+      }
+    >
       {renderPulsaPrepaid()}
 
       <Modal
@@ -844,6 +847,6 @@ export default ({ navigation, route }) => {
 
       <Popup {...popupProps} />
 
-    </MainView>
+    </Scaffold>
   )
 }

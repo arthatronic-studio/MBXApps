@@ -9,7 +9,7 @@ const fontFamily = {
   semibold: 'Inter-SemiBold',
   bold: 'Inter-Bold',
   light: 'Inter-Light',
-  italic: 'Inter-Italic',
+  italic: 'Inter-Regular',
 };
 
 const BaseText = Styled(ReactText)`
@@ -42,14 +42,17 @@ const Text = (props) => {
 
   return (
     <BaseText
-      style={[letterSpacing && {letterSpacing}]}
+      style={[
+        letterSpacing && {letterSpacing},
+      ]}
       {...style}
       align={align}
       type={type}
       size={size}
       lineHeight={lineHeight}
       allowFontScaling={false}
-      color={color || Color.text}>
+      color={color || Color.text}
+    >
       {children}
     </BaseText>
   );

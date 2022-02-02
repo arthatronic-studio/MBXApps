@@ -35,19 +35,33 @@ export const queryGetCart = gql`
      page: $page
      limit: $limit
    ) {
-      id totalProducts productCartInfo { productId quantity } products { name categoryId description price initialPrice imageUrl stock }
+      id totalProducts productCartInfo { productId quantity } products { id name categoryId description price initialPrice imageUrl stock }
    }
   }
 `;
 
 export const queryDeleteItemCart = gql`
-  query(
-    $id: Int!
+  mutation ecommerceCartDelete(
+    $productId: Int!
   ) {
-    ecommerceProductDelete(
-     id: $id
+    ecommerceCartDelete(
+     productId: $productId
    ) {
     success
+   }
+  }
+`;
+
+export const queryUpdateItemCart = gql`
+  mutation ecommerceCartUpdate(
+    $productId: Int!
+    $quantity: Int!
+  ) {
+    ecommerceCartUpdate(
+     productId: $productId
+     quantity: $quantity
+   ) {
+    id
    }
   }
 `;

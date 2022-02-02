@@ -1,6 +1,7 @@
 import React from 'react';
 import Styled from 'styled-components';
 import { View, ActivityIndicator, Platform } from 'react-native';
+import PropTypes from 'prop-types';
 
 import { useColor } from '@src/components';
 import Text from '@src/components/Text';
@@ -37,6 +38,13 @@ const BodyText = Styled(View)`
   justify-content: center;
 `;
 
+const propTypes = {
+  visible: PropTypes.bool,
+  message: PropTypes.string,
+  type: PropTypes.string,
+  transparent: PropTypes.bool,
+}
+
 const defaultProps = {
   visible: true,
   message: 'Mohon Tunggu',
@@ -67,6 +75,6 @@ const ScreenIndicator = (props) => {
     );
 }
 
+ScreenIndicator.propTypes = propTypes;
 ScreenIndicator.defaultProps = defaultProps;
-
 export default ScreenIndicator;

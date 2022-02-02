@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { SafeAreaView, View, StatusBar } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 
@@ -8,7 +8,8 @@ import {
     Text,
     Header,
     TouchableOpacity,
-    useColor
+    useColor,
+    Scaffold,
 } from '@src/components';
 
 const SettingScreen = ({ navigation, route }) => {
@@ -18,30 +19,11 @@ const SettingScreen = ({ navigation, route }) => {
     
     const dispatch = useDispatch();
 
-    // const timeoutRef = useRef(null);
-
-    // useEffect(() => {
-    //     if (timeoutRef.current) {
-    //         clearTimeout(timeoutRef.current);
-    //     }
-
-    //     timeoutRef.current = setTimeout(() => {
-    //         clearTimeout(timeoutRef.current);
-    //     }, 500);
-    // }, [options])
-
     return (
-        <SafeAreaView style={{flex: 1, backgroundColor: Color.theme}}>
-            <StatusBar
-                backgroundColor={Color.primary}
-                barStyle={Color.colorDominant === 'dark' ? 'light-content' : 'dark-content'}
-            />
-
-            <Header
-                title='Pengaturan'
-                onPressLeftButton={() => navigation.navigate('MainProfile', { refresh: true })}
-            />
-
+        <Scaffold
+            headerTitle='Pengaturan'
+            onPressLeftButton={() => navigation.navigate('MainProfile', { refresh: true })}
+        >
             {/* <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
                 <Row>
                     <Col align='flex-start' size={8} justify='center'>
@@ -108,7 +90,7 @@ const SettingScreen = ({ navigation, route }) => {
                     </Row>
                 </TouchableOpacity>
             </Grid>
-        </SafeAreaView>
+        </Scaffold>
     );
 }
 

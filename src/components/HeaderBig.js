@@ -1,25 +1,17 @@
 import React from 'react';
-import { View, Image, TouchableOpacity } from 'react-native';
+import { View, Image, TouchableOpacity, Animated } from 'react-native';
 import Styled from 'styled-components';
+import PropTypes from 'prop-types';
+
 import {
   Row, Col,
   Text,
-  // TouchableOpacity,
   useColor
 } from '@src/components';
-
 import {
   iconSplash,
   iconApp
 } from '@assets/images';
-
-const MainView = Styled(View)`
-    width: 100%;
-    height: 60px;
-    elevation: 0;
-    borderBottomWidth: 0px;
-    paddingHorizontal: 16px;
-`;
 
 const RowView = Styled(Row)`
     height: 100%;
@@ -34,11 +26,20 @@ const SideButton = Styled(TouchableOpacity)`
     justifyContent: center;
 `;
 
+const propTypes = {
+  title: PropTypes.string,
+  titleRight: PropTypes.string,
+  actions: PropTypes.node,
+  style: PropTypes.object,
+  useAnimated: PropTypes.bool,
+};
+
 const defaultProps = {
     title: '',
     titleRight: '',
     actions: null,
     style: {},
+    useAnimated: false,
 };
 
 const HeaderBig = (props) => {
@@ -48,14 +49,28 @@ const HeaderBig = (props) => {
     titleRightColor,
     actions,
     style,
+    useAnimated,
     iconRightButton,
     onPressRightButton,
   } = props;
 
   const { Color } = useColor();
 
+  const MainContainer = useAnimated ? Animated.View : View;
+
   return (
-    <MainView style={{backgroundColor: Color.theme, borderColor: Color.border, ...style}}>
+    <MainContainer
+      style={{
+        width: '100%',
+        height: 60,
+        elevation: 0,
+        borderBottomWidth: 0,
+        paddingHorizontal: 16,
+        backgroundColor: Color.theme,
+        borderColor: Color.border,
+        ...style,
+      }}
+    >
       <RowView>
         <Col size={6} justify='center' align='flex-start' style={{height: '100%'}}>
           {title === '' ?
@@ -86,10 +101,10 @@ const HeaderBig = (props) => {
           {actions && actions}
         </Col>
       </RowView>
-    </MainView>
+    </MainContainer>
   );
 }
 
+HeaderBig.propTypes = propTypes;
 HeaderBig.defaultProps = defaultProps;
-
 export default HeaderBig;

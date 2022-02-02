@@ -65,7 +65,7 @@ const ChatUserListScreen = ({navigation, route}) => {
   const [selected, setSelected] = useState([]);
 
   const [search, setSearch] = useState("")
-  const [filterData, setFilterData] = useState(null)
+  const [filterData, setFilterData] = useState([])
 
   const { Color } = useColor();
 
@@ -93,10 +93,6 @@ const ChatUserListScreen = ({navigation, route}) => {
   const fetchGetUserOrganizationRef = () => {
     Client.query({
       query: queryGetUserOrganizationRef,
-      variables: {
-        page: 1,
-        firstName: 'excel',
-      },
     })
       .then(res => {
         console.log(res, 'ressss');
@@ -116,7 +112,7 @@ const ChatUserListScreen = ({navigation, route}) => {
           loadNext: false,
         });
 
-        setFilterData(newArr)
+        setFilterData(newArr);
       })
       .catch(err => {
         console.log(err, 'errrrr');
@@ -163,20 +159,33 @@ const ChatUserListScreen = ({navigation, route}) => {
     }
   };
 
-  const searchFilter = (text) => {
-        if (text) {
-            const newData = itemData.data.filter((item) => {
-                const itemData = item.firstName ? item.firstName.toUpperCase() 
-                            : ''.toUpperCase()
-                const textData = text.toUpperCase
-                return itemData.indexOf(textData) > -1
-            })
-            setFilterData(newData)
-            setSearch(text)
-        } else {
-            setFilterData(itemData.data)
-            setSearch(text)
+  const searchFilter = (v) => {
+    let val = v.replace(/\s/g, '');
+    let text = val.toLowerCase();
+    let newArr = [];
+
+    if (text !== '') {
+      let newData = [];
+      itemData.data.map((item) => {
+        let fullname = item.firstName.toLowerCase().replace(/\s/g, '') + item.lastName.toLowerCase().replace(/\s/g, '');
+        let arrOfName = [
+          item.firstName.toLowerCase().replace(/\s/g, ''),
+          item.lastName.toLowerCase().replace(/\s/g, ''),
+          fullname,
+          fullname.substr(0, text.length)
+        ];
+        
+        if (arrOfName.includes(text)) {
+          newData.push(item);
         }
+      });
+
+      newArr = newData;
+    } else {
+      newArr = itemData.data;
+    }
+
+    setFilterData(newArr);
   }
 
   return (
@@ -214,10 +223,11 @@ const ChatUserListScreen = ({navigation, route}) => {
             onBlur={() => {}}
             error={null}
             onChangeText={(text) => {
-              setSearch(text)
+              setSearch(text);
+              searchFilter(text);
             }}
           />
-          <CircleSend style={{backgroundColor: Color.primary}} onPress={() => searchFilter(search)}>
+          <CircleSend style={{backgroundColor: Color.primary}} onPress={() => {}}>
             <Ionicons name='search' size={16} color={Color.text} />
           </CircleSend>
         </BoxInput>
@@ -250,7 +260,7 @@ const ChatUserListScreen = ({navigation, route}) => {
                   alignItems: 'center',
                 }}>
                 <ImageBackground
-                  source={{uri: item.image}}
+                  source={{uri: item.photoProfile}}
                   style={{
                     width: 50,
                     height: 50,
@@ -272,7 +282,7 @@ const ChatUserListScreen = ({navigation, route}) => {
                     justifyContent: 'space-around',
                   }}>
                   <Text size={12} type="semibold" numberOfLines={1}>
-                    {item.fullname}
+                    {item.firstName} {item.lastName}
                   </Text>
                   {/* <Text size={10}>Available</Text> */}
                 </View>
@@ -294,7 +304,7 @@ const ChatUserListScreen = ({navigation, route}) => {
               }}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Image
-                  source={{uri: item.image}}
+                  source={{uri: item.photoProfile}}
                   style={{
                     width: 50,
                     height: 50,
@@ -310,7 +320,7 @@ const ChatUserListScreen = ({navigation, route}) => {
                     justifyContent: 'space-around',
                   }}>
                   <Text size={12} type="semibold" numberOfLines={1}>
-                    {item.fullname}
+                    {item.firstName} {item.lastName}
                   </Text>
                   {/* <Text size={10}>Available</Text> */}
                 </View>

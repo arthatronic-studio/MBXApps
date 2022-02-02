@@ -1,11 +1,11 @@
 import React from 'react';
 import {View, Image, FlatList, StatusBar} from 'react-native';
 
-import Banner from 'src/components/Banner';
 import {Scaffold, useColor, Header, Text} from '@src/components';
 import TouchableOpacity from 'src/components/Button/TouchableDebounce';
 import CardListLelang from 'src/components/Card/CardListLelang';
 import { Divider } from 'src/styled';
+import Banner from 'src/components/Banner';
 
 const Lelang = ({ navigation, route }) => {
   const {Color} = useColor();
@@ -13,18 +13,7 @@ const Lelang = ({ navigation, route }) => {
   const renderHeader = () => {
     return (
       <>
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '100%',
-            paddingHorizontal: 16,
-          }}
-        >
-          <Banner />
-        </View>
-
-        <Divider height={24} />
+        <Banner data={[0, 0]} showHeader={false} />
 
         <View
           style={{
