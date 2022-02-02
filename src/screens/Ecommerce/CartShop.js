@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, ScrollView, FlatList, SafeAreaView } from 'react-native';
+import { View, ScrollView, FlatList, SafeAreaView, Image } from 'react-native';
 import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import {useIsFocused, useRoute} from '@react-navigation/native';
@@ -28,6 +28,7 @@ import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
 import { queryDeleteItemCart, queryCheckout, queryUpdateItemCart, queryGetCart } from 'src/lib/query/ecommerce';
 import { FormatMoney } from 'src/utils';
+import ImagesPath from 'src/components/ImagesPath';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -37,7 +38,10 @@ const CartShop = ({ navigation, route }) => {
   const { Color } = useColor();
 
   const [list, setList] = useState([]);
-  const [cart, setCart] = useState(true);
+  const [checked, setChecked] = useState([]);
+  const [cart, setCart] = useState(0);
+  const [refresh, setRefresh] = useState(0);
+  
   const isFocused = useIsFocused();
   let temp = []
 
@@ -66,6 +70,7 @@ const CartShop = ({ navigation, route }) => {
                 temp.push({...items, checked: false, ...res.data.ecommerceCartList.productCartInfo[index]})
             });
             setList(temp)
+            setChecked(temp)
         }
       })
       .catch(reject => {
@@ -123,87 +128,111 @@ const CartShop = ({ navigation, route }) => {
       });
   };
 
-  const submit = (item, qty) => {
+  const submit = () => {
     console.log(route, 'props')
-    // showLoading();
-    let variables = {
-        productId: item.id,
+    let tempData = []
+    list.forEach(element => {
+        if(element.checked) tempData.push(element)
+    });
+    const item = {
+        tempData,
+        dataCart:{
+            cartId: cart.id,
+            totalProducts: cart.totalProducts
+        }
     }
-    console.log(variables)
-    Client.mutate({mutation: queryCheckout, variables})
-      .then(res => {
-        getCart()
-        // hideLoading()
-        console.log(res)
-        // if (res.data.ecommerceCartList) {
-        //     setList(res.data.ecommerceCartList)
-        // }
-      })
-      .catch(reject => {
-        // hideLoading()
-        alert(reject.message)
-        console.log(reject.message, 'reject');
-      });
+    console.log(item)
+    navigation.navigate('CheckoutScreen',{item})
+    // // showLoading();
+    // let variables = {
+    //     productId: list[0].id,
+    // }
+    // console.log(variables)
+    // Client.mutate({mutation: queryCheckout, variables})
+    //   .then(res => {
+    //     getCart()
+    //     // hideLoading()
+    //     console.log(res)
+    //     // if (res.data.ecommerceCartList) {
+    //     //     setList(res.data.ecommerceCartList)
+    //     // }
+    //   })
+    //   .catch(reject => {
+    //     // hideLoading()
+    //     alert(reject.message)
+    //     console.log(reject.message, 'reject');
+    //   });
   };
 
   function onChecked(index, value){
-      console.log(index, value)
       const tempx = list
-      console.log(tempx)
       tempx[index]['checked'] = !value
       console.log(tempx, 111)
       setList(tempx)
-      setCart(!value)
+      setRefresh(refresh+1)
   }
 
   const renderItem = ({item, index}) => (
-        <Row style={{ paddingHorizontal: 16, paddingVertical: 20 }}>
-            {console.log(item)}
+    <View>
+        <Row style={{ paddingHorizontal: 16, paddingTop: 20 }}>
             <View style={{ justifyContent: 'center' }}>
-                <TouchableOpacity onPress={() => onChecked(index, item.checked)} style={{ height: 13, width: 13, marginRight: 16, borderColor: Color.text, borderWidth: 1, borderRadius: 2 }}>
+                <TouchableOpacity onPress={() => onChecked(index, item.checked)} style={{ height: 16, width: 16, justifyContent: 'center', alignItems: 'center', marginRight: 16, borderColor: Color.text, borderWidth: 1, borderRadius: 4 }}>
                     {item.checked && <AntDesign name='check' />}
                 </TouchableOpacity>
             </View>
-            <View style={{ height: 56, width: 56, marginRight: 14, backgroundColor: Color.text, borderRadius: 8 }} />
+            <View style={{ height: 56, width: 56, marginRight: 14 }}>
+                <Image
+                source={ImagesPath.productImage}
+                style={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: 10,
+                  alignSelf: 'center',
+                }}
+              />
+            </View>
             <Col>
                 <View style={{ alignItems: 'flex-start' }}>
-                    <Text color={Color.text} style={{ textAlign: 'left', marginBottom: 10 }} type='bold'>{item.name}</Text>
+                    <Text size={14} color={Color.text} style={{ textAlign: 'left', marginBottom: 10 }} type='bold'>{item.name}</Text>
                 </View>
                 <View style={{ justifyContent: 'flex-end', flex: 1 }}>
-                    <Row>
-                        <View>
-                            <Text size={10} color={Color.text} align='left'>Total Harga</Text>
-                            <Text size={13} color={Color.text} type='bold'>{FormatMoney.getFormattedMoney(item.price)}</Text>
-                        </View>
-                        <Col style={{ flex: 1,  }}>
-                            <Text size={10} color={Color.text} align='left' />
-                            <Row style={{  justifyContent: 'flex-end', alignItems: 'center' }}>
-                                <TouchableOpacity onPress={() => deleteProduct(item.id)}>
-                                    <FontAwesome name='trash-o' size={15} color={Color.error} />
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => updateQty(item, -1)} style={{ marginLeft: 24 }}>
-                                    <AntDesign name='minuscircleo' color={Color.disabled} size={15} />
-                                </TouchableOpacity>
-                                <View>
-                                    <Text color={Color.text} style={{ marginHorizontal: 8 }}>{item.quantity}</Text>
-                                </View>
-                                <TouchableOpacity onPress={() => updateQty(item, 1)}>
-                                    <AntDesign name='pluscircleo' color={Color.secondary} size={15} />  
-                                </TouchableOpacity>
-
-                            </Row>
-                        </Col>
-                    </Row>
+                    
                 </View>
             </Col>
         </Row>
+        <Row>
+            <Col size={4} />
+            <View>
+                <Text size={10} color={Color.text} align='left'>Total Harga</Text>
+                <Text size={12} color={Color.text} type='bold'>{FormatMoney.getFormattedMoney(item.price)}</Text>
+            </View>
+            <Col style={{ flex: 1,  }}>
+                <Text size={10} color={Color.text} align='left' />
+                <Row style={{  justifyContent: 'flex-end', alignItems: 'center' }}>
+                    <TouchableOpacity onPress={() => deleteProduct(item.id)}>
+                        <FontAwesome name='trash-o' size={17} color={Color.error} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => updateQty(item, -1)} style={{ marginLeft: 24 }}>
+                        <AntDesign name='minuscircleo' color={Color.disabled} size={17} />
+                    </TouchableOpacity>
+                    <View>
+                        <Text color={Color.text} style={{ marginHorizontal: 8 }}>{item.quantity}</Text>
+                    </View>
+                    <TouchableOpacity onPress={() => updateQty(item, 1)}>
+                        <AntDesign name='pluscircleo' color={Color.secondary} size={17} />  
+                    </TouchableOpacity>
+
+                </Row>
+            </Col>
+        </Row>
+    </View>
   );
 
   const totalProduct = (item) => {
     let total = 0
     if(item){
         item.forEach((element, index) => {
-            total = total + (element.price * element['quantity'])
+          if(element.checked)  total = total + (element.price * element['quantity'])
         });
         return total
     }
@@ -216,7 +245,7 @@ const CartShop = ({ navigation, route }) => {
           <View>
           {list && <FlatList
                 numColumns={1}
-                extraData={list}
+                extraData={refresh}
                 keyExtractor={(item, index) => index.toString()}
                 showsHorizontalScrollIndicator={false}
                 data={list}
@@ -237,7 +266,7 @@ const CartShop = ({ navigation, route }) => {
                 <Text type='bold' color={Color.text} >{list ? FormatMoney.getFormattedMoney(totalProduct(list)) : 0}</Text>
             </Col>
             <Col>
-                <TouchableOpacity onPress={() => submit(list[0])} style={{ backgroundColor: Color.info, borderRadius: 20, paddingVertical: 10 }}>
+                <TouchableOpacity onPress={() => submit()} style={{ backgroundColor: Color.info, borderRadius: 20, paddingVertical: 10 }}>
                     <Text type='semibold' color={Color.textInput}>Checkout</Text>
                 </TouchableOpacity>
             </Col>

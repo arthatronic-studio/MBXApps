@@ -13,6 +13,7 @@ import {useSelector} from 'react-redux';
 import {useIsFocused, useRoute} from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import ImageSlider from '../../components/ImageSlider';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -52,6 +53,7 @@ const DetailProduct = ({navigation}) => {
   const route = useRoute()
   console.log(route, 'route')
   const [detail, setDetail] = useState([]);
+  const [liked, setLike] = useState(false);
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
@@ -181,7 +183,7 @@ const DetailProduct = ({navigation}) => {
                       paddingHorizontal: 5,
                       fontWeight: 'bold',
                     }}>
-                    4.0 |
+                    4.0 
                   </Text>
                   <Text
                     style={{
@@ -192,6 +194,7 @@ const DetailProduct = ({navigation}) => {
                     }}>
                     {/* 120 Terjual */}
                   </Text>
+
                 </View>
               </View>
               <View style={{paddingVertical: 8}}>
@@ -203,7 +206,12 @@ const DetailProduct = ({navigation}) => {
                   }}>
                   {FormatMoney.getFormattedMoney(detail.price)}
                 </Text>
+
+                <TouchableOpacity onPress={() => setLike(!liked)} style={{  marginTop: 25, alignItems: 'flex-end' }}>
+                      <AntDesign name={liked ? 'heart' : 'hearto'} color={liked ? 'red' : '#111'} size={19} />
+                  </TouchableOpacity>
               </View>
+              
             </View>
           </View>
           {detail && <TopBar style={{borderRadius: 10}} detail={detail} />}

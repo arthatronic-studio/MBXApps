@@ -21,6 +21,7 @@ import {useIsFocused} from '@react-navigation/native';
 import { shadowStyle } from 'src/styles';
 import { queryGetProduct } from 'src/lib/query/ecommerce';
 import Client from 'src/lib/apollo';
+import { FormatMoney } from 'src/utils';
 
 const DATA = [
   {
@@ -164,7 +165,7 @@ const CardListProduk = (props) => {
           }}
         >
           <Image
-            source={item.imageUrl}
+            source={ImagesPath.productImage}
             style={{
               width: '100%',
               height: (width - 16) / 2,
@@ -184,7 +185,7 @@ const CardListProduk = (props) => {
                 width: 30,
                 height: 30,
               }}>
-              <View>
+              {/* <View>
                 <View
                   style={{
                     backgroundColor: Color.gray,
@@ -199,7 +200,7 @@ const CardListProduk = (props) => {
                     style={{width: 20, height: 20}}
                   />
                 </View>
-              </View>
+              </View> */}
             </TouchableOpacity>
           </View>
         </View>
@@ -220,7 +221,7 @@ const CardListProduk = (props) => {
           </View>
           <View style={{marginVertical: 8}}>
             <Text style={{fontSize: 10}}>Harga</Text>
-            <Text style={[styles.txtPrice, { color: Color.text }]}>Rp {item.price}</Text>
+            <Text style={[styles.txtPrice, { color: Color.text }]}>{FormatMoney.getFormattedMoney(item.price)}</Text>
           </View>
         </View>
       </TouchableOpacity>

@@ -5,6 +5,7 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import {useColor} from '@src/components';
 
 function Description({props}) {
+  console.log(props)
   const {Color} = useColor();
   return (
     <View
@@ -80,12 +81,12 @@ function MyTabs(props) {
       }}>
       <Tab.Screen
         name="Description"
-        component={() => <Description />}
+        component={() => <Description props={props} />}
         options={{tabBarLabel: 'Description'}}
       />
       <Tab.Screen
         name="Review"
-        component={() => <Review />}
+        component={() => <Review props={props} />}
         options={{tabBarLabel: 'Review'}}
       />
     </Tab.Navigator>
