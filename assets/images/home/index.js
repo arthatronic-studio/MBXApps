@@ -21,6 +21,10 @@ const iconEvent = require('./event.png');
 const iconLoker = require('./loker.png');
 const iconLelang = require('./lelang.png');
 const iconMediaPlayer = require('./media-player.png');
+const iconMenuArtikel = require('./menu_article.png');
+const iconMenuEvent = require('./menu_event.png');
+const iconMenuLoker = require('./menu_loker.png');
+const iconMenuTempat = require('./menu_tempat.png');
 
 export {
     iconBPJS,
@@ -46,4 +50,8 @@ export {
     iconLoker,
     iconLelang,
     iconMediaPlayer,
+    iconMenuArtikel,
+    iconMenuEvent,
+    iconMenuLoker,
+    iconMenuTempat,
 };
