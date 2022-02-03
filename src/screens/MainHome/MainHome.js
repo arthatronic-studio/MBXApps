@@ -403,10 +403,7 @@ const MainHome = ({navigation, route}) => {
 
           <Divider height={24} />
 
-          <Banner
-            data={listBanner}
-            loading={loadingBanner}
-          />
+          <Banner data={listBanner} loading={loadingBanner} />
 
           <Divider height={24} />
 
