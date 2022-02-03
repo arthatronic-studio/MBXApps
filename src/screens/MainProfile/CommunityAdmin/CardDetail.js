@@ -404,16 +404,17 @@ const CardDetail = ({ navigation, route }) => {
                 color: Color.text,
                 fontSize: 14,
                 fontFamily: 'Inter-Regular',
-                width: '80%',
-                backgroundColor: Color.textInput,
+                width: '85%',
+                backgroundColor: Color.semiwhite,
                 borderRadius: 4,
                 includeFontPadding: false,
+                paddingLeft: 4,
               }}
             />
 
             <View
               style={{
-                width: '20%',
+                width: '15%',
                 height: '100%',
                 alignItems: 'flex-end',
               }}

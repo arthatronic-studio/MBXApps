@@ -585,7 +585,7 @@ const MainHome = ({navigation, route}) => {
           tempShowPopupAds = false;
           setShowPopupAds(false);
         }}
-        animationIn="slideInUp"
+        animationIn="slideInDown"
         animationOut="slideOutDown">
         <View style={{height: '75%'}}>
           <TouchableOpacity
