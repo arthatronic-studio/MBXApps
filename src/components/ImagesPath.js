@@ -31,4 +31,7 @@ export default {
   loker3: require('../components/Images/loker3.png'),
   bantu1: require('../components/Images/bantu1.png'),
   bantu2: require('../components/Images/bantu2.png'),
+  briefCase: require('../components/Images/Briefcase.png'),
+  buildings: require('../components/Images/Buildings.png'),
+  mapPin: require('../components/Images/MapPin.png'),
 };

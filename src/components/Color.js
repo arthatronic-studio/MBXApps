@@ -19,6 +19,7 @@ const staticColors = {
   red: '#D83030',
   yellow: '#FFD35B',
   blue: '#027BC9',
+  blueLight: '#D5E2FD',
   timer: '#F94918',
   icon: '#667786',
   bid: '#E6E9EA',

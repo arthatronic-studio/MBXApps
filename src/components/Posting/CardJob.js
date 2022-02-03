@@ -10,6 +10,8 @@ import {
 } from '@src/components';
 import { shadowStyle } from '@src/styles';
 
+import ImagesPath from 'src/components/ImagesPath';
+
 const { width } = Dimensions.get('window');
 
 const defaultProps = {
@@ -51,24 +53,34 @@ const CardJob = (props) => {
                 </View>
 
                 <View style={{width: '80%'}}>
-                    <View style={{width: '100%', flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text type='bold' size={16} align='left' numberOfLines={2}>{item.productName}</Text>
+                    <View style={{width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <Text type='bold' size={14} align='left' numberOfLines={2}>Front End Developer</Text>
+                        <Text align='left' size={10} color={Color.gray} >{Moment(parseInt(item.created_date)).fromNow()}</Text>
                         {/* <Ionicons name='bookmark-outline' size={20} color={Color.primary} /> */}
                     </View>
 
-                    <View style={{paddingTop: 2}}>
-                        <Text size={12} align='left' numberOfLines={2}>{item.productDescription}</Text>
+                    <View style={{marginTop: 2, marginBottom: 8}}>
+                        <Text size={10} align='left' numberOfLines={2}>{item.productName}</Text>
+                    </View>
+
+                    <View style={{marginBottom: 8, flexDirection: 'row', alignItems: 'center'}}>
+                        <Image 
+                            source={ImagesPath.briefCase}
+                            width={16}
+                            height={16}
+                            style={{marginRight: 5}}
+                        />
+                        <Text size={10} align='left'>Purna Waktu - Fresh Graduate</Text>
+                    </View>
+
+                    <View>
+                        <Text align='left' size={10} color={Color.gray}>Ciledug, Tanggerang</Text>
                     </View>
 
                     {/* <View style={{paddingTop: 12, flexDirection: 'row'}}>
                         <Ionicons name='location' color={Color.error} style={{marginRight: 8}} />
                         <Text size={12} align='left'>Jakarta Selatan</Text>
                     </View> */}
-
-                    <View style={{paddingTop: 14, flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <Text size={12} color={Color.info}>{item.like} Pelamar</Text>
-                        <Text size={12}>{Moment(parseInt(item.created_date)).fromNow()}</Text>
-                    </View>
                 </View>
             </View>
         </TouchableOpacity>
