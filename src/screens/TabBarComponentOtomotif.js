@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { View, SafeAreaView, Image, Animated, useWindowDimensions } from 'react-native';
+import { View, SafeAreaView, Image, Animated, useWindowDimensions, Platform } from 'react-native';
 import { TouchableOpacity as TouchableOpacityAbs } from 'react-native-gesture-handler';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
-import Config from 'react-native-config';
 
 import Text from '@src/components/Text';
 import TouchableOpacity from 'src/components/Button/TouchableDebounce';
@@ -16,6 +15,8 @@ import { shadowStyle } from 'src/styles';
 import { CommonActions } from '@react-navigation/routers';
 import { startAnimation } from '@src/utils/animations';
 import { Divider, Line } from 'src/styled';
+import { statusBarHeight } from 'src/utils/constants';
+import Config from 'react-native-config';
 
 const Scaler = Styled(View)`
     flexDirection: row;
@@ -113,7 +114,7 @@ const TabBarComponent = (props) => {
         <SafeAreaView
             style={{
                 width,
-                height: 70,
+                height: 70 + (Platform.OS === 'ios' ? statusBarHeight : 0),
                 backgroundColor: Color.theme,
             }}
         >
@@ -153,9 +154,12 @@ const TabBarComponent = (props) => {
                                 alignItems: 'center',
                             }}
                             onPress={() => {
-                                if (route.nav === 'MainHome') {
+                                if (route.id === 'ber') {
                                     redirectTo(route.nav);
                                     return;                                    
+                                }
+                                else if (route.id === 'eme') {
+                                    return;
                                 }
 
                                 props.navigation.navigate(route.nav, { routeIndex });
@@ -170,7 +174,7 @@ const TabBarComponent = (props) => {
                                     borderRadius: 8,
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    // backgroundColor: routeIndex === 2 ? 'transparent' : Color.primary,
+                                    // backgroundColor: routeIndex === 2 ? 'transparent' : Color.blueStroke,
                                     // opacity: route.viewRef,
                                 }}
                             >

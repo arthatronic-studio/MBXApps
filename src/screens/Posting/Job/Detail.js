@@ -11,6 +11,7 @@ import {
     useColor,
     Header,
     Submit,
+    Alert,
 } from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
@@ -65,17 +66,17 @@ export default ({ navigation, route }) => {
           console.log(res, 'res add like');
           if (res.data.contentAddLike.id) {
             if (res.data.contentAddLike.status === 1) {
-                showLoading('success', 'Berhasil diikuti');
+                showLoading('success', 'Lamaran didaftarkan');
                 setState({ im_like: true });
             } else {
-                showLoading('info', 'Berhasil batal ikuti');
+                showLoading('info', 'Batal melamar');
                 setState({ im_like: false });
             }
           }
         })
         .catch((err) => {
             console.log(err, 'err add like');
-            hideLoading();
+            showLoading('error', 'Terjadi kesalahan');
         })
     }
 
@@ -95,7 +96,7 @@ export default ({ navigation, route }) => {
                 contentContainerStyle={{paddingBottom: 16}}
             >
                 <View 
-                    style={{width: '100%', height: 100, backgroundColor: Color.blueLight}}
+                    style={{width: '100%', height: 100, backgroundColor: Color.primarySoft}}
                 />
                 <View style={{width: '20%', marginHorizontal: 24, position: 'absolute', top: 70}}>
                     <Image
@@ -108,15 +109,15 @@ export default ({ navigation, route }) => {
                 {/* <View style={{padding: 24, marginTop: -16, borderTopLeftRadius: 24, borderTopRightRadius: 24, flexDirection: 'row', justifyContent: 'flex-end', backgroundColor: Color.theme}} /> */}
 
                 <View style={{paddingHorizontal: 24, paddingTop: 30}}>
-                    <View style={{paddingBottom: 16, flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={{marginTop: 8, paddingBottom: 16, flexDirection: 'row', alignItems: 'center'}}>
                         <View style={{marginRight: 12}}>
-                            <Text size={18} type='bold' align='left'>UI/UX Designer</Text>
+                            <Text size={18} type='bold' align='left'>{item.productName}</Text>
                         </View>
                         <View>
                             <Text size={10} align='left' color={Color.gray}>{Moment(parseInt(item.created_date)).fromNow()}</Text>
                         </View>
                     </View>
-                    <View style={{paddingBottom: 8, flexDirection: 'row', alignItems: 'center'}}>
+                    {/* <View style={{paddingBottom: 8, flexDirection: 'row', alignItems: 'center'}}>
                             <Image 
                                 source={ImagesPath.buildings}
                                 width={16}
@@ -126,8 +127,8 @@ export default ({ navigation, route }) => {
                         <Text size={10} align='left'>
                             {item.productName}
                         </Text>
-                    </View>
-                    <View style={{paddingBottom: 8, flexDirection: 'row', alignItems: 'center'}}>
+                    </View> */}
+                    {/* <View style={{paddingBottom: 8, flexDirection: 'row', alignItems: 'center'}}>
                         <Image 
                             source={ImagesPath.mapPin}
                             width={16}
@@ -137,8 +138,8 @@ export default ({ navigation, route }) => {
                         <Text size={10} align='left'>
                             Tangerang, Banten
                         </Text>
-                    </View>
-                    <View style={{paddingBottom: 24, flexDirection: 'row', alignItems: 'center'}}>
+                    </View> */}
+                    {/* <View style={{paddingBottom: 24, flexDirection: 'row', alignItems: 'center'}}>
                         <Image 
                             source={ImagesPath.briefCase}
                             width={16}
@@ -148,7 +149,7 @@ export default ({ navigation, route }) => {
                         <Text size={10} align='left'>
                             Purna Waktu - Fresh Graduate
                         </Text>
-                    </View>
+                    </View> */}
 
                     <View style={{paddingBottom: 8}}>
                         <Text align='left' size={12}>Deskripsi</Text>
@@ -160,7 +161,7 @@ export default ({ navigation, route }) => {
                         </Text>
                     </View>
                     
-                    <View style={{paddingBottom: 8}}>
+                    {/* <View style={{paddingBottom: 8}}>
                         <Text size={12} align='left'>
                             Jobdesk
                         </Text>
@@ -182,17 +183,29 @@ export default ({ navigation, route }) => {
                         <Text align='left'>
                             Pudding cheesecake jelly-o cake cheesecake. Tart cheesecake biscuit candy canes toffee. Chocolate 
                         </Text>
-                    </View>
-
+                    </View> */}
                 </View>
-                <Submit
-                    buttonLabel='Lamar Sekarang'
-                    buttonColor={Color.primary}
-                    type='bottomSingleButton'
-                    buttonBorderTopWidth={0}
-                    style={{backgroundColor: Color.theme, paddingTop: 25, paddingBottom: 25}}
-                />
             </ScrollView>
+
+            <Submit
+                onPress={() => {
+                    if (state.im_like) {
+                        Alert(
+                          'Konfirmasi',
+                          'Apakah Anda yakin akan membatalkan?',
+                          () => fetchAddLike()
+                        );
+                        return;
+                    }
+
+                    fetchAddLike();
+                }}
+                buttonLabel={state.im_like ? 'Batalkan' : 'Lamar Sekarang'}
+                buttonColor={state.im_like ? Color.error : Color.primary}
+                type='bottomSingleButton'
+                buttonBorderTopWidth={0}
+                style={{backgroundColor: Color.theme, paddingTop: 25, paddingBottom: 25}}
+            />
         </Scaffold>
     )
 }

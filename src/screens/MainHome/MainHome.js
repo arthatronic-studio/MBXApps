@@ -274,7 +274,8 @@ const MainHome = ({navigation, route}) => {
       statusBarAnimatedStyle={
         Platform.OS === 'ios'
           ? {backgroundColor: backgroundInterpolate}
-          : isFocused && {backgroundColor: backgroundInterpolate}
+          : isFocused ? {backgroundColor: backgroundInterpolate}
+          : {}
       }
       header={
         <HeaderBig
@@ -407,7 +408,7 @@ const MainHome = ({navigation, route}) => {
 
           <Divider height={24} />
 
-          <ListAuction
+          {/* <ListAuction
             // use the listBelajar for the test
             data={listBelajar}
             loading={loadingAuction}
@@ -417,9 +418,9 @@ const MainHome = ({navigation, route}) => {
               navigation.navigate('AuctionDetail', {item});
             }}
             style={{paddingLeft: 8}}
-          />
+          /> */}
 
-          <ListSoonAuction
+          {/* <ListSoonAuction
             // use the listBelajar for the test
             data={listBelajar}
             loading={loadingSoonAuction}
@@ -429,7 +430,7 @@ const MainHome = ({navigation, route}) => {
               navigation.navigate('AuctionDetail', {item});
             }}
             style={{paddingLeft: 8}}
-          />
+          /> */}
 
           <ListEmergency
             data={listEmergencyArea}
@@ -437,8 +438,8 @@ const MainHome = ({navigation, route}) => {
             horizontal
             showHeader
             onPress={item => {
-              navigation.navigate('EmergencyDetail', {item});
-              // navigation.navigate('PostingDetail', {item});
+              // navigation.navigate('EmergencyDetail', {item});
+              navigation.navigate('PostingDetail', {item});
             }}
             style={{paddingLeft: 8}}
           />
@@ -462,9 +463,10 @@ const MainHome = ({navigation, route}) => {
               delay={5000}
               showIndicator
               style={{width, aspectRatio: 21 / 9}}>
-              {[0, 0].map((e, idx) => {
+              {[0].map((e, idx) => {
                 return (
                   <View
+                    key={idx}
                     style={{
                       width: '100%',
                       height: '100%',

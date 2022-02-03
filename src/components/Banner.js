@@ -75,11 +75,11 @@ const Banner = props => {
             {data.map((e, idx) => {
               return (
                 <Container
+                  key={idx}
                   width='100%'
                   paddingHorizontal={16}
                 >
                   <Image
-                    key={idx}
                     source={ImagesPath.imageBanner2 || {uri: e.image}}
                     style={{
                       width: '100%',

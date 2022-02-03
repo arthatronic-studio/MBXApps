@@ -77,7 +77,7 @@ const CreateThreadScreen = (props) => {
     const [thumbImage, setThumbImage] = useState('');
     const [mimeImage, setMimeImage] = useState('image/jpeg');
     const [selectedStatus, setSelectedStatus] = useState({
-        id: 2, value: 'PRIVATE', iconName: 'lock-closed'
+        label: 'Privasi', value: 'PRIVATE', iconName: 'lock-closed'
     });
 
     // ref
@@ -262,7 +262,7 @@ const CreateThreadScreen = (props) => {
 
                 <TouchSelect
                     title='Siapa yang dapat melihat ini?'
-                    value={userData.status}
+                    value={selectedStatus.label}
                     iconName={selectedStatus.iconName}
                     onPress={() => modalSelectStatusRef.current.open()}
                 />
@@ -270,7 +270,7 @@ const CreateThreadScreen = (props) => {
 
             <Submit
                 buttonLabel='Buat'
-                buttonColor={Color.green}
+                buttonColor={Color.primary}
                 type='bottomSingleButton'
                 buttonBorderTopWidth={0.5}
                 onPress={() => {

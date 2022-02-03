@@ -9,6 +9,7 @@ import {shadowStyle} from '@src/styles';
 
 import Client from '@src/lib/apollo';
 import {queryAddLike} from '@src/lib/query';
+import moment from 'moment';
 
 const {width} = Dimensions.get('window');
 
@@ -101,7 +102,6 @@ const CardNews = props => {
 
               aspectRatio: 1,
               borderRadius: 8,
-              ...shadowStyle,
             }}
             resizeMode="cover"
           />
@@ -136,35 +136,34 @@ const CardNews = props => {
               alignItems: 'flex-end',
               flexDirection: 'row',
             }}>
-            <View style={{flexDirection: 'row'}}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <Text
                 style={{
                   color: Color.gray,
                   fontSize: 13,
-                  marginStart: -85,
                   fontSize: 11,
                   paddingTop: 10,
                   paddingEnd: 23,
                 }}>
-                Murianews.com | 17 januari 2021
+                {moment(parseInt(item.created_date)).format('DD MMMM YYYY')}
               </Text>
             </View>
 
-            <TouchableOpacity size={10} style={{flexDirection: 'row'}}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Text
-                size="11"
+                size={11}
                 style={{
                   color: Color.primary,
-                  paddingHorizontal: 10,
+                  paddingHorizontal: 4,
                 }}>
-                Baca Selengkapnya
+                Selengkapnya
               </Text>
               <Ionicons
                 name={'arrow-forward'}
-                size={14}
+                size={12}
                 style={{color: Color.primary}}
               />
-            </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>

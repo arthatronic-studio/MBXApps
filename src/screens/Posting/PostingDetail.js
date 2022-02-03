@@ -144,10 +144,15 @@ export default ({ navigation, route }) => {
                             }}
                             style={{height: 70, width: 70, flexDirection: 'row', borderRadius: 35, backgroundColor: Color.textInput, justifyContent: 'center', alignItems: 'center'}}
                         >
-                            <Ionicons name='rocket-outline' color={state.im_like ? Color.primary : Color.text} size={30} />
+                            <Ionicons name='heart-outline' color={state.im_like ? Color.primary : Color.text} size={30} />
                             {item.like > 0 && <Text color={state.im_like ? Color.primary : Color.text}>{item.like} </Text>}
                         </TouchableOpacity>
-                        <Text size={12} style={{marginTop: 16}}>{state.im_like ? 'Up' : 'Up'}</Text>
+                        <Text
+                            size={12}
+                            color={state.im_like ? Color.primary : Color.text}
+                        >
+                            {state.im_like ? 'Disukai' : 'Suka'}
+                        </Text>
                     </View>
 
                     <View style={{alignItems: 'center'}}>
@@ -160,7 +165,7 @@ export default ({ navigation, route }) => {
                             <Ionicons name='chatbubble-ellipses-outline' color={Color.text} size={30} />
                             {item.comment > 0 && <Text>{item.comment} </Text>}
                         </TouchableOpacity>
-                        <Text size={12} style={{marginTop: 16}}>Komentar</Text>
+                        <Text size={12}>Komentar</Text>
                     </View>
 
                     <View style={{alignItems: 'center'}}>
@@ -177,7 +182,7 @@ export default ({ navigation, route }) => {
                         >
                             <Ionicons name='location' size={30} color={Color.text} />
                         </TouchableOpacity>
-                        <Text size={12} style={{marginTop: 16}}>Lokasi</Text>
+                        <Text size={12}>Lokasi</Text>
                     </View>
                 </View>
             </ScrollView>

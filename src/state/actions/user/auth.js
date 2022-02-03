@@ -230,7 +230,7 @@ export const register = (user) => async (dispatch, getState) => {
         phone_country_code: user.phoneCountryCode,
         phone_number: user.phoneNumber,
         reference_code: '',
-        initial_code: Config.INITIAL_CODE,
+        initial_code: '',
         idCardNumber : user.idCardNumber,
         Nomor_ID : user.idNumber,
         Alamat : user.address,

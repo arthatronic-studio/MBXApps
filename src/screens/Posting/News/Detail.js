@@ -14,6 +14,10 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import {iconWarning, iconHeart, iconShare, iconBookmarks} from '@assets/images/home';
+import { useSelector } from 'react-redux';
+
+import Client from '@src/lib/apollo';
+import { queryAddLike } from '@src/lib/query';
 
 const Example = Styled(View)`
 `;
@@ -21,30 +25,66 @@ const Example = Styled(View)`
 export default ({navigation, route}) => {
   const {item} = route.params;
 
-  const [state, setState] = useState();
+  const user = useSelector(state => state['user.auth'].login.user);
+
+  const [state, changeState] = useState({
+    im_like: item.im_like,
+  });
+
+  const setState = (obj) => changeState({ ...state, ...obj });
 
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading] = useLoading();
 
-  const [liked, setLike] = useState(false);
-
   const {Color} = useColor();
 
-  const ref = useRef();
+  // useEffect(() => {
+    //     const timeout = trigger ? setTimeout(() => {
+    //         fetchAddLike();
+    //     }, 500) : null;
 
-  useEffect(() => {}, []);
+    //     return () => {
+    //         clearTimeout(timeout);
+    //     }
+    // }, [trigger]);
 
-  console.log('routeeeee', route);
-  console.log(item);
+    const fetchAddLike = () => {
+      showLoading();
+
+      Client.query({
+        query: queryAddLike,
+        variables: {
+          productId: item.id
+        }
+      })
+      .then((res) => {
+        console.log(res, 'res add like');
+        if (res.data.contentAddLike.id) {
+          if (res.data.contentAddLike.status === 1) {
+              showLoading('success', 'Berhasil disukai');
+              setState({ im_like: true });
+          } else {
+              showLoading('info', 'Batal disukai');
+              setState({ im_like: false });
+          }
+        }
+      })
+      .catch((err) => {
+          console.log(err, 'err add like');
+          hideLoading();
+      })
+  }
+
+  console.log('detail posting', item);
 
   return (
     <Scaffold
       fallback={false}
       empty={false}
       popupProps={popupProps}
-      iconRightButton={
-          <Image source={iconBookmarks} height={70} width={70}/>
-      }
+      // iconRightButton={
+      //     <Image source={iconBookmarks} height={70} width={70}/>
+      // }
       loadingProps={loadingProps}>
       
       <ScrollView>
@@ -63,35 +103,56 @@ export default ({navigation, route}) => {
 
         {/* <Divider /> */}
 
-        <ImageBackground
-          source={{uri: item.image}}
+        <View
           style={{
             width: '100%',
-            aspectRatio: 1.5,
-            backgroundColor: Color.border,
-            justifyContent: 'flex-end',
-            alignItems: 'flex-start',
-          }}>
+            aspectRatio: 16/9,
+          }}
+        >
+          <Image
+            source={{uri: item.image}}
+            style={{
+              width: '100%',
+              height: '100%',
+              position: 'absolute',
+            }} />
+            
           <View
             style={{
-              flexDirection: 'column',
-              justifyContent: 'space-between',
+              width: '100%',
+              height: '100%',
+              backgroundColor: Color.overflow,
+              position: 'absolute',
+            }} />
+
+          <View
+            style={{
+              width: '100%',
+              height: '100%',
+              justifyContent: 'flex-end',
               alignItems: 'flex-start',
-              width: '70%',
-              paddingLeft: 10,
-              paddingBottom: 20,
             }}>
-            <Text
-              style={{fontWeight: 'bold', color: Color.textInput}}
-              align="left"
-              size={19}>
-              {item.productName}
-            </Text>
-            <Text style={{color: Color.textInput}} align="left" size={11}>
-              Ditulis oleh {item.fullname}
-            </Text>
+            <View
+              style={{
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                width: '100%',
+                paddingHorizontal: 16,
+                paddingBottom: 16,
+              }}>
+              <Text
+                style={{fontWeight: 'bold', color: Color.textInput}}
+                align="left"
+                size={19}>
+                {item.productName}
+              </Text>
+              <Text style={{color: Color.textInput}} align="left" size={11}>
+                Ditulis oleh {item.fullname}
+              </Text>
+            </View>
           </View>
-        </ImageBackground>
+        </View>
 
         <View style={{padding: 16}}>
           <Text lineHeight={24} align="left">
@@ -102,32 +163,37 @@ export default ({navigation, route}) => {
 
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
           <View style={{alignItems: 'center'}}>
-            <View
-              style={{
-                height: 70,
-                width: 70,
-                borderRadius: 35,
-                backgroundColor: Color.textInput,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <TouchableOpacity
-                onPress={() => setLike(!liked)}
-                style={{
-                  height: 70,
-                  width: 70,
-                  borderRadius: 35,
-                  backgroundColor: Color.textInput,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Image source={iconHeart} />
-              </TouchableOpacity>
-            </View>
-            <Text size={12}>Suka</Text>
-          </View>
+            <TouchableOpacity
+                onPress={() => {
+                    fetchAddLike();
+                }}
+                style={{height: 70, width: 70, flexDirection: 'row', borderRadius: 35, backgroundColor: Color.textInput, justifyContent: 'center', alignItems: 'center'}}
+            >
+                <Ionicons name='heart-outline' color={state.im_like ? Color.primary : Color.text} size={30} />
+                {item.like > 0 && <Text color={state.im_like ? Color.primary : Color.text}>{item.like} </Text>}
+            </TouchableOpacity>
+            <Text
+                size={12}
+                color={state.im_like ? Color.primary : Color.text}
+            >
+                {state.im_like ? 'Disukai' : 'Suka'}
+            </Text>
+        </View>
 
-          <View style={{alignItems: 'center'}}>
+        <View style={{alignItems: 'center'}}>
+            <TouchableOpacity
+                onPress={() => {
+                    navigation.navigate('CommentListScreen', { item });
+                }}
+                style={{height: 70, width: 70, flexDirection: 'row', borderRadius: 35, backgroundColor: Color.textInput, justifyContent: 'center', alignItems: 'center'}}
+            >
+                {item.comment > 0 && <Text>{item.comment} </Text>}
+                <Ionicons name='chatbubble-ellipses-outline' color={Color.text} size={30} />
+            </TouchableOpacity>
+            <Text size={12}>Komentar</Text>
+        </View>
+
+          {/* <View style={{alignItems: 'center'}}>
             <TouchableOpacity
               style={{
                 height: 70,
@@ -140,9 +206,9 @@ export default ({navigation, route}) => {
               <Image source={iconShare} />
             </TouchableOpacity>
             <Text size={12}>Share</Text>
-          </View>
+          </View> */}
 
-          <View style={{alignItems: 'center'}}>
+          {/* <View style={{alignItems: 'center'}}>
             <TouchableOpacity
               onPress={() => {}}
               style={{
@@ -156,15 +222,10 @@ export default ({navigation, route}) => {
               <Image source={iconWarning} />
             </TouchableOpacity>
             <Text size={12}>Lapor</Text>
-          </View>
+          </View> */}
         </View>
         <Divider />
       </ScrollView>
-
-      {/* <View style={{padding: 24, borderTopLeftRadius: 24, borderTopRightRadius: 24, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: Color.textInput, ...shadowStyle, shadowOpacity: 0.2}}>
-                <SimpleLineIcons name='share' size={20} color={Color.text} />
-                <Ionicons name='heart-outline' size={24} color={Color.text} />
-            </View> */}
     </Scaffold>
   );
 };

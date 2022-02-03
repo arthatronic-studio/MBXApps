@@ -32,7 +32,7 @@ import {shadowStyle} from '@src/styles';
 import {iconSplash, bannerCard, imageCardOrnament} from '@assets/images';
 import {Box, Container, Divider} from 'src/styled';
 import Clipboard from '@react-native-community/clipboard';
-import { listPrivilegeUser } from 'src/utils/constants';
+import { listInitialCode, listPrivilegeUser } from 'src/utils/constants';
 import ModalinputCode from 'src/components/ModalInputCode';
 import Client from '@src/lib/apollo';
 import { queryOrganizationMemberManage } from '@src/lib/query/organization';
@@ -51,7 +51,7 @@ const MainProfile = ({navigation, route}) => {
   const [loadingProps, showLoading] = useLoading();
   const user = useSelector(state => state['user.auth'].login.user);
 
-  console.log('user', user);
+  console.log('user', useSelector(state => state['user.auth']));
 
   const {Color} = useColor();
   const {width} = useWindowDimensions();
@@ -173,7 +173,7 @@ const MainProfile = ({navigation, route}) => {
       title: 'Keluar',
       show: user && !user.guest,
       icon: <Ionicons name="exit-outline" size={20} color={Color.error} style={{}} />,
-      onPress: () => onPressLogout(),
+      onPress: () => onPressExit(),
     },
     {
       code: 'login',
@@ -254,7 +254,7 @@ const MainProfile = ({navigation, route}) => {
                 justifyContent: 'flex-start',
               }}
             >
-              <Image
+              {user && <Image
                 source={{ uri: user.image }}
                 resizeMode='contain'
                 style={{
@@ -263,10 +263,13 @@ const MainProfile = ({navigation, route}) => {
                   backgroundColor: Color.border,
                   borderRadius: 50,
                 }}
-              />
+              />}
             </View>
 
-            <View
+            <TouchableOpacity
+              onPress={() => {
+                
+              }}
               style={{
                 width: '100%',
                 marginTop: 16,
@@ -329,7 +332,7 @@ const MainProfile = ({navigation, route}) => {
                   <Text size={12} type='bold' color={Color.textInput}>Gabung Komunitas</Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </TouchableOpacity>
           </View>
         </Container>
         
@@ -395,12 +398,13 @@ const MainProfile = ({navigation, route}) => {
                       letterSpacing={0.18}>
                       {user.firstName} {user.lastName}
                     </Text>
-                    <Divider height={2} />
-                    <Text
+                    {user.idCardNumber !== '' && user.idCardNumber !== null && <Text
                       type="bold"
-                      letterSpacing={0.9}>
-                      {user.idCardNumber || '1000078964512'}
-                    </Text>
+                      letterSpacing={0.9}
+                      style={{marginTop: 2}}
+                    >
+                      {user.idCardNumber}
+                    </Text>}
                   </>
                 ) : (
                   <Text type="bold" letterSpacing={0.18}>

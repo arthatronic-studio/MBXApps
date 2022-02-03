@@ -22,7 +22,7 @@ import {listPrivilegeUser} from 'src/utils/constants';
 import Banner from 'src/components/Banner';
 import ImagesPath from 'src/components/ImagesPath';
 import CarouselView from 'src/components/CarouselView';
-import {Container, Divider} from 'src/styled';
+import {Container, Row, Divider} from 'src/styled';
 import {ScrollView} from 'react-native-gesture-handler';
 import {iconBookmarks} from '@assets/images/home';
 
@@ -115,10 +115,38 @@ export default ({navigation, route}) => {
 
   return (
     <Scaffold
-      headerTitle={route.params && route.params.title ? route.params.title : ''}
-      iconRightButton={<Image source={iconBookmarks} />}
+      header={
+        <Header
+          title={route.params && route.params.title ? route.params.title : ''}
+          actions={
+            <Row justify='center' align='center'>
+              {/* <Ionicons
+                name='search'
+                color={Color.primary}
+                size={22}
+                onPress={() => navigation.navigate('MainSearch')}
+              />
+              <Divider /> */}
+              <MaterialIcons
+                name='add'
+                color={Color.primary}
+                size={26}
+                onPress={() =>
+                  navigation.navigate('CreateThreadScreen', {
+                    title:
+                      route.params && route.params.title ? route.params.title : '',
+                    productType: Config.PRODUCT_TYPE,
+                    productCategory: '',
+                    productSubCategory: 'POSTING',
+                  })
+                }
+              />
+            </Row>
+          }
+        />
+      }
       fallback={state.fallback}
-      empty={false}
+      empty={!state.fallback && state.listProduct.length === 0}
       popupProps={popupProps}
       loadingProps={loadingProps}
     >

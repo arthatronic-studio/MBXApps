@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Dimensions, Image } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
@@ -21,7 +22,7 @@ import {
     iconLiked,
     iconLike,
 } from '@assets/images/home';
-import { Container } from 'src/styled';
+import { Container, Divider, Row } from 'src/styled';
 
 const { width } = Dimensions.get('window');
 
@@ -113,7 +114,12 @@ const CardEmergency = (props) => {
                 <View style={{height: '100%', width: '75%', justifyContent: 'space-between', paddingLeft: 16}}>
                     <Container>
                         <Text size={14} type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
-                        <View style={{alignItems: 'center', flexDirection: 'row', width: '100%', marginTop: 8}}>
+                        <Divider height={4} />
+                        <Row>
+                            <Ionicons name='person' color={Color.text} />
+                            <Text size={12} align='left' numberOfLines={1}>{item.fullname}</Text>
+                        </Row>
+                        <View style={{alignItems: 'center', flexDirection: 'row', width: '100%', marginTop: 4}}>
                             <Image 
                                 style={{ height: 10, width: 10, aspectRatio: 1 }}
                                 source={iconCategory}

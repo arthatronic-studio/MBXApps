@@ -90,9 +90,8 @@ const CreateEmergencyScreen = (props) => {
     const [selectedPriority, setSelectedPriority] = useState({
         id: 3, value: 'High'
     });
-
     const [selectedStatus, setSelectedStatus] = useState({
-        id: 2, value: 'PRIVATE', iconName: 'lock-closed'
+        label: 'Privasi', value: 'PRIVATE', iconName: 'lock-closed'
     });
 
     // ref
@@ -324,7 +323,7 @@ const CreateEmergencyScreen = (props) => {
 
                 <TouchSelect
                     title='Siapa yang dapat melihat ini?'
-                    value={userData.status}
+                    value={selectedStatus.label}
                     iconName={selectedStatus.iconName}
                     onPress={() => modalSelectStatusRef.current.open()}
                 />

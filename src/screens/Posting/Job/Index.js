@@ -98,25 +98,28 @@ export default ({ navigation, route }) => {
         <Scaffold
             header={
               <Header
-                title= "Lowongan Pekerjaan"
+                title={route.params && route.params.title ? route.params.title : ''}
                 actions={
                   <Row justify='center' align='center'>
                     {/* <Ionicons
                       name='search'
+                      color={Color.primary}
                       size={22}
                       onPress={() => navigation.navigate('MainSearch')}
-                    /> */}
-                    {/* <Divider /> */}
+                    />
+                    <Divider /> */}
                     <MaterialIcons
                       name='add'
                       size={26}
-                      onPress={() => navigation.navigate('CreateThreadScreen', {
-                        title: route.params && route.params.title ? route.params.title : '',
-                        productType: Config.PRODUCT_TYPE,
-                        productCategory: '',
-                        productSubCategory: 'JOBS',
-                      })}
-                      style={{marginLeft: 20}}
+                      onPress={() =>
+                        navigation.navigate('CreateThreadScreen', {
+                          title:
+                            route.params && route.params.title ? route.params.title : '',
+                          productType: Config.PRODUCT_TYPE,
+                          productCategory: '',
+                          productSubCategory: 'JOBS',
+                        })
+                      }
                     />
                   </Row>
                 }

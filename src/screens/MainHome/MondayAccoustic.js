@@ -125,7 +125,7 @@ const MondayAccoustic = () => {
       <FlatList
         data={DATA}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={(item, index) => item.id + index.toString()}
         horizontal
         showsHorizontalScrollIndicator={false}
         style={{
