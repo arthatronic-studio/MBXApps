@@ -263,7 +263,7 @@ const MainHome = ({navigation, route}) => {
 
   const backgroundInterpolate = animationValue.interpolate({
     inputRange: [0, 100],
-    outputRange: ['#FDE4D2', Color.theme],
+    outputRange: [Color.primarySoft, Color.theme],
     extrapolate: 'clamp',
   });
 
@@ -315,7 +315,7 @@ const MainHome = ({navigation, route}) => {
                     size={12}
                     color={Color.error}
                     style={{position: 'absolute', top: -4, right: -4}}>
-                    <Text size={8}>
+                    <Text size={8} color={Color.textInput}>
                       {notifierCount > 99 ? '99' : notifierCount}
                     </Text>
                   </Circle>
@@ -342,11 +342,11 @@ const MainHome = ({navigation, route}) => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            style={{backgroundColor: '#FDE4D2'}}
+            style={{backgroundColor: Color.primarySoft}}
           />
         }
         // style={{
-        //   backgroundColor: '#FDE4D2'
+        //   backgroundColor: Color.primarySoft
         // }}
       >
         <Container color={Color.theme}>
@@ -404,7 +404,7 @@ const MainHome = ({navigation, route}) => {
           <Divider height={24} />
 
           <Banner
-            data={listBanner.concat(listBanner.concat(listBanner))}
+            data={listBanner}
             loading={loadingBanner}
           />
 

@@ -31,7 +31,7 @@ const Home = () => {
       <ScrollView>
         <View
           style={{
-            backgroundColor: '#FDE4D2',
+            backgroundColor: Color.primarySoft,
             width: '100%',
             height: '5.5%',
             position: 'absolute',

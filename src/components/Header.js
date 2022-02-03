@@ -7,6 +7,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCOmmunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
+import PropTypes from 'prop-types';
 
 import {
   Row,
@@ -70,6 +71,14 @@ const RightButton = Styled(TouchableOpacity)`
     alignItems: flex-end;
     justifyContent: center;
 `;
+
+const propTypes = {
+  centerTitle: PropTypes.bool,
+  showLeftButton: PropTypes.bool,
+  showIconLeftButton: PropTypes.bool,
+  iconLeftButton: PropTypes.string,
+  actions: PropTypes.node,
+};
 
 const defaultProps = {
   centerTitle: true,
@@ -149,6 +158,7 @@ const Header = props => {
       children,
       centerTitle,
       actions,
+      type,
       ...style
     } = props;
 
@@ -160,7 +170,7 @@ const Header = props => {
           ...style,
         }}>
         <RowView>
-          <ColumnView size={2}>
+          <ColumnView size={centerTitle ? 4 : 2}>
             {showLeftButton ? (
               <LeftButton onPress={onPressLeftButton}>
                 {showIconLeftButton && (
@@ -177,7 +187,23 @@ const Header = props => {
           </ColumnView>
 
           <ColumnView
-            size={10}
+            size={centerTitle ? 4 : 7}
+            style={{alignItems: centerTitle ? 'center' : 'flex-start'}}>
+            {children || (
+              <Text
+                size={16}
+                type={type ? type : 'bold'}
+                align="left"
+                letterSpacing={0.23}
+                color={color || Color.text}
+                style={{paddingTop: showLeftButton ? 0 : '7%'}}>
+                {title}
+              </Text>
+            )}
+          </ColumnView>
+
+          <ColumnView
+            size={centerTitle ? 4 : 3}
             style={{alignItems: 'flex-end', paddingRight: 16}}>
             {actions}
           </ColumnView>
@@ -363,5 +389,6 @@ const Header = props => {
   return renderNormalMode();
 };
 
+Header.propTypes = propTypes;
 Header.defaultProps = defaultProps;
 export default withNavigation(Header);
