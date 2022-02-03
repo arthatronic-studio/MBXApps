@@ -437,8 +437,8 @@ const MainHome = ({navigation, route}) => {
             horizontal
             showHeader
             onPress={item => {
-              // navigation.navigate('EmergencyDetail', {item});
-              navigation.navigate('PostingDetail', {item});
+              navigation.navigate('EmergencyDetail', {item});
+              // navigation.navigate('PostingDetail', {item});
             }}
             style={{paddingLeft: 8}}
           />
@@ -449,8 +449,8 @@ const MainHome = ({navigation, route}) => {
             horizontal
             showHeader
             onPress={item => {
-              // navigation.navigate('NewsDetail', {item});
-              navigation.navigate('PostingDetail', {item});
+              navigation.navigate('NewsDetail', {item});
+              // navigation.navigate('PostingDetail', {item});
             }}
             style={{paddingLeft: 8}}
           />
@@ -537,8 +537,8 @@ const MainHome = ({navigation, route}) => {
             horizontal
             showHeader
             onPress={item => {
-              // navigation.navigate('EventDetail', {item});
-              navigation.navigate('PostingDetail', {item});
+              navigation.navigate('EventDetail', {item});
+              // navigation.navigate('PostingDetail', {item});
             }}
             style={{paddingLeft: 8}}
           />
@@ -549,8 +549,8 @@ const MainHome = ({navigation, route}) => {
             horizontal
             showHeader
             onPress={item => {
-              // navigation.navigate('JobDetail', {item});
-              navigation.navigate('PostingDetail', {item});
+              navigation.navigate('JobDetail', {item});
+              // navigation.navigate('PostingDetail', {item});
             }}
             style={{paddingLeft: 8}}
           />
@@ -576,7 +576,7 @@ const MainHome = ({navigation, route}) => {
         }}
       />
 
-      <Modal
+      {/* <Modal
         isVisible={tempShowPopupAds && showPopupAds}
         onBackdropPress={() => {
           tempShowPopupAds = false;
@@ -614,7 +614,7 @@ const MainHome = ({navigation, route}) => {
             </ImageBackground>
           </TouchableOpacity>
         </View>
-      </Modal>
+      </Modal> */}
     </Scaffold>
   );
 };

@@ -101,11 +101,11 @@ export default ({ navigation, route }) => {
                 title= "Lowongan Pekerjaan"
                 actions={
                   <Row justify='center' align='center'>
-                    <Ionicons
+                    {/* <Ionicons
                       name='search'
                       size={22}
                       onPress={() => navigation.navigate('MainSearch')}
-                    />
+                    /> */}
                     {/* <Divider /> */}
                     <MaterialIcons
                       name='add'

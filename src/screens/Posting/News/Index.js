@@ -24,8 +24,6 @@ import ImagesPath from 'src/components/ImagesPath';
 import CarouselView from 'src/components/CarouselView';
 import {Container, Divider} from 'src/styled';
 import {ScrollView} from 'react-native-gesture-handler';
-
-import { Divider, Row } from 'src/styled';
 import {iconBookmarks} from '@assets/images/home';
 
 const Example = Styled(View)`
@@ -122,8 +120,9 @@ export default ({navigation, route}) => {
       fallback={state.fallback}
       empty={false}
       popupProps={popupProps}
-      loadingProps={loadingProps}>
-      {user && listPrivilegeUser.includes(user.userId) && (
+      loadingProps={loadingProps}
+    >
+      {/* {user && listPrivilegeUser.includes(user.userId) && (
         <Text
           color={Color.textInput}
           style={{
@@ -187,10 +186,10 @@ export default ({navigation, route}) => {
         })}
       </CarouselView>
 
-      <Divider height={30} />
+      <Divider height={30} /> */}
 
-      <ScrollView>
-        <Text
+      {/* <ScrollView> */}
+        {/* <Text
           style={{
             fontWeight: 'bold',
             alignSelf: 'flex-start',
@@ -198,7 +197,7 @@ export default ({navigation, route}) => {
             marginStart: 10,
           }}>
           Berita Terbaru
-        </Text>
+        </Text> */}
         <ListNews
           data={state.listProduct}
           showHeader={false}
@@ -210,7 +209,7 @@ export default ({navigation, route}) => {
             paddingBottom: 76,
           }}
         />
-      </ScrollView>
+      {/* </ScrollView> */}
     </Scaffold>
   );
 };
