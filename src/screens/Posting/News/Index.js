@@ -25,7 +25,7 @@ import CarouselView from 'src/components/CarouselView';
 import {Container, Divider} from 'src/styled';
 import {ScrollView} from 'react-native-gesture-handler';
 
-import { Divider, Row } from 'src/styled';
+import {Row } from 'src/styled';
 import {iconBookmarks} from '@assets/images/home';
 
 const Example = Styled(View)`
