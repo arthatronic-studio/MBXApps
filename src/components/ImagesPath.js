@@ -34,4 +34,6 @@ export default {
   briefCase: require('../components/Images/Briefcase.png'),
   buildings: require('../components/Images/Buildings.png'),
   mapPin: require('../components/Images/MapPin.png'),
+  detailEvent: require('../components/Images/DetailEvent.png'),
+  newsImage: require('../components/Images/news-image.png'),
 };

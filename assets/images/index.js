@@ -8,6 +8,8 @@ const imageSplashScreen = require('./image-splashscreen.png');
 const bannerCard = require('./bannerCard.png');
 const qrCode = require('./qrCode.jpeg');
 const imageCarousel = require('./image-carousel.jpeg');
+const imageCardOrnament = require('./image_card_ornament.png');
+
 export {
   iconApp,
   iconSplash,
@@ -19,4 +21,5 @@ export {
   bannerCard,
   qrCode,
   imageCarousel,
+  imageCardOrnament,
 };

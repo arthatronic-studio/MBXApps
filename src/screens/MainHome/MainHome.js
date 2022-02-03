@@ -403,10 +403,7 @@ const MainHome = ({navigation, route}) => {
 
           <Divider height={24} />
 
-          <Banner
-            data={listBanner}
-            loading={loadingBanner}
-          />
+          <Banner data={listBanner} loading={loadingBanner} />
 
           <Divider height={24} />
 
@@ -585,7 +582,7 @@ const MainHome = ({navigation, route}) => {
           tempShowPopupAds = false;
           setShowPopupAds(false);
         }}
-        animationIn="slideInUp"
+        animationIn="slideInDown"
         animationOut="slideOutDown">
         <View style={{height: '75%'}}>
           <TouchableOpacity

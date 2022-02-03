@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -25,23 +25,33 @@ import {
   HeaderBig,
   useColor,
   Scaffold,
+  useLoading,
 } from '@src/components';
 import {redirectTo} from '@src/utils';
 import {shadowStyle} from '@src/styles';
-import {iconSplash, bannerCard} from '@assets/images';
+import {iconSplash, bannerCard, imageCardOrnament} from '@assets/images';
 import {Box, Container, Divider} from 'src/styled';
 import Clipboard from '@react-native-community/clipboard';
 import { listPrivilegeUser } from 'src/utils/constants';
+import ModalinputCode from 'src/components/ModalInputCode';
+import Client from '@src/lib/apollo';
+import { queryOrganizationMemberManage } from '@src/lib/query/organization';
+import { getCurrentUserProfile } from 'src/state/actions/user/auth';
 
 const MainProfile = ({navigation, route}) => {
   const [modalVirtual, setModalVirtual] = useState(false);
+  const [modalInputCode, setModalInputCode] = useState(false);
+  const [responseMemberManage, setResponseMemberManage] = useState({
+    data: null,
+    success: false,
+    message: '',
+  });
 
   const dispatch = useDispatch();
-
+  const [loadingProps, showLoading] = useLoading();
   const user = useSelector(state => state['user.auth'].login.user);
 
-  // console.log('user', user);
-  console.log(useSelector(state => state['user.auth']));
+  console.log('user', user);
 
   const {Color} = useColor();
   const {width} = useWindowDimensions();
@@ -61,11 +71,128 @@ const MainProfile = ({navigation, route}) => {
     redirectTo('LoginScreen');
   };
 
+  const fetchOrganizationMemberManage = (code) => {
+    const variables = {
+      "userId": user.userId,
+      "organizationInitialCode": code,
+      "type": "INSERT"
+    };
+
+    console.log(variables);
+
+    Client.mutate({
+      mutation: queryOrganizationMemberManage,
+      variables,
+    }).then((res) => {
+      console.log('res', res);
+
+      setModalInputCode(false);
+
+      const data = res.data.organizationMemberManage;
+
+      setResponseMemberManage({
+        data: data,
+        success: data ? true : false,
+        message: '',
+      });
+
+      showLoading(
+        data ? 'success' : 'error',
+        data ? 'Berhasil bergaung ke komunitas ' + data.organization.name : 'Gagal untuk bergabung'
+      );
+
+      // hit cuurent user profile
+      dispatch(getCurrentUserProfile());
+    }).catch((err) => {
+      console.log('err', err);
+
+      setResponseMemberManage({
+        data: null,
+        success: false,
+        message: Array.isArray(err.graphQLErrors) && err.graphQLErrors[0].message ? err.graphQLErrors[0].message : 'Terjadi kesalahan'
+      });
+    });
+  }
+
+  const menuList = [
+    {
+      code: 'change_profile',
+      title: 'Ubah Profil',
+      show: user && !user.guest,
+      icon: <FontAwesome name="edit" size={20} color={Color.text} style={{}} />,
+      onPress: () => navigation.navigate('ChangeProfile'),
+    },
+    {
+      code: 'setting',
+      title: 'Pengaturan',
+      show: user && !user.guest,
+      icon: <AntDesign name="setting" size={20} color={Color.text} style={{}} />,
+      onPress: () => navigation.navigate('SettingScreen'),
+    },
+    {
+      code: 'critics_opinion',
+      title: 'Kritik & Saran',
+      show: true,
+      icon: <AntDesign name="carryout" size={20} color={Color.text} style={{}} />,
+      onPress: () => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
+    },
+    {
+      code: 'join_community',
+      title: 'Gabung Komunitas',
+      show: true,
+      icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
+      onPress: () => navigation.navigate('JoinCommunity'),
+    },
+    {
+      code: 'community_admin',
+      title: 'Community Admin',
+      show: user && (user.isDirector === 1 || listPrivilegeUser.includes(user.userId)),
+      icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
+      onPress: () => navigation.navigate('CommunityAdminPage'),
+    },
+    {
+      code: 'ref_code',
+      title: 'Kode Referal',
+      show: true,
+      icon: <AntDesign name="user" size={20} color={Color.text} style={{}} />,
+      onPress: () => navigation.navigate('ReferralCodeScreen'),
+    },
+    {
+      code: 'device_token',
+      title: 'Device Token',
+      show: true,
+      icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
+      onPress: async() => {
+        const token = await messaging().getToken();
+        Clipboard.setString(token);
+        Alert('Berhasil disalin', token);
+      },
+    },
+    {
+      code: 'logout',
+      title: 'Keluar',
+      show: user && !user.guest,
+      icon: <Ionicons name="exit-outline" size={20} color={Color.error} style={{}} />,
+      onPress: () => onPressLogout(),
+    },
+    {
+      code: 'login',
+      title: 'Masuk',
+      show: user && user.guest,
+      icon: <Ionicons name="exit-outline" size={20} color={Color.info} style={{}} />,
+      onPress: () => navigation.navigate('LoginScreen'),
+    },
+    // wekdor
+  ];
+
   return (
     <Scaffold
+      loadingProps={loadingProps}
       header={<HeaderBig title="Profile" style={{paddingTop: 16}} />}
     >
-      <ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+      >
         {/* <View style={{alignItems: 'center'}}>
           <TouchableOpacity onPress={() => setModalVirtual(true)}>
             <View
@@ -109,94 +236,205 @@ const MainProfile = ({navigation, route}) => {
             )}
           </TouchableOpacity>
         </View> */}
-        
-        <Container paddingHorizontal={16}>
-          <View>
-            <ImageBackground
-              source={bannerCard}
+
+        {/* user fast info */}
+        <Container paddingHorizontal={16} marginTop={16}>
+          <View
+            style={{
+              backgroundColor: Color.textInput,
+              borderRadius: 8,
+              padding: 16,
+              ...shadowStyle,
+            }}
+          >
+            <View
               style={{
-                marginTop: 12,
-                height: 162,
+                flexDirection: 'row',
+                width: '100%',
+                justifyContent: 'flex-start',
               }}
-              imageStyle={{borderRadius: 10}}
+            >
+              <Image
+                source={{ uri: user.image }}
+                resizeMode='contain'
+                style={{
+                  width: '12%',
+                  aspectRatio: 1,
+                  backgroundColor: Color.border,
+                  borderRadius: 50,
+                }}
+              />
+            </View>
+
+            <View
+              style={{
+                width: '100%',
+                marginTop: 16,
+                flexDirection: 'row',
+              }}
             >
               <View
                 style={{
-                  flexDirection: 'row',
-                  width: '100%',
-                  aspectRatio: 7,
-                  justifyContent: 'flex-start',
+                  flex: 1,
+                  alignItems: 'flex-start',
+                  justifyContent: 'space-between',
                 }}
               >
-                <Image
-                  source={iconSplash}
-                  resizeMode='contain'
-                  style={{width: '20%', height: '50%', marginLeft: 16, marginTop: 16}}
-                />
+                {user && !user.guest ? (
+                  <Text
+                    type='bold'
+                    letterSpacing={0.18}
+                  >
+                    {user.firstName} {user.lastName}
+                  </Text>
+                ) : (
+                  <Text type="bold" letterSpacing={0.18}>
+                    Halo Tamu, Silakan Login
+                  </Text>
+                )}
+
+                {user && !user.guest && (
+                  <Text
+                    size={8} 
+                    letterSpacing={0.18}
+                  >
+                    Status Member:&nbsp;
+                    <Text
+                      size={8}
+                      letterSpacing={0.18}
+                      color={user.organizationId ? Color.success : Color.error}
+                    >
+                      {user.organizationId ? 'Anggota ' + user.organizationName : 'Belum Terdaftar'}
+                    </Text>
+                  </Text>
+                )}
               </View>
+
               <View
                 style={{
-                  flexDirection: 'row',
-                  width: '100%',
-                  aspectRatio: 7,
-                  justifyContent: 'space-between',
-                  marginTop: 43,
-                  Color: Color.text,
-                }}>
-                <View
-                  style={{
-                    alignItems: 'flex-start'
-                  }}
-                  >
-                  {user && !user.guest ? (
-                    <>
-                      <Text
-                        style={{marginLeft: 16}}
-                        color={Color.textInput}
-                        type="bold"
-                        letterSpacing={0.18}>
-                        {user.idCardNumber || '1000078964512'}
-                      </Text>
-
-                      <Text 
-                        style={{marginLeft: 16}}
-                        color={Color.textInput} 
-                        size={12} 
-                        letterSpacing={0.18}>
-                        {user.firstName} {user.lastName}
-                      </Text>
-                    </>
-                  ) : (
-                    <Text type="bold" letterSpacing={0.18}>
-                      Halo Tamu, Silakan Login
-                    </Text>
-                  )}
-                </View>
+                  flex: 1,
+                  paddingLeft: 16,
+                }}
+              >
                 <TouchableOpacity
-                  activeOpacity={1}
                   onPress={() => {
-                    setModalVirtual(true);
+                    setModalInputCode(true);
+                  }}
+                  style={{
+                    paddingVertical: 10,
+                    borderRadius: 120,
+                    backgroundColor: Color.primary,
                   }}
                 >
-                  <View
-                    style={{
-                      backgroundColor: Color.textInput,
-                      width: 55,
-                      height: 55,
-                      marginRight: 16,
-                      borderRadius: 8,
-                      alignItems: 'center',
-                      alignContent: 'center',
-                    }}>
-                    <View style={{alignContent: 'center', marginTop: 5}}>
-                      {user && <QRCode value={user.userCode} size={45} />}
-                    </View>
-                  </View>
+                  <Text size={12} type='bold' color={Color.textInput}>Gabung Komunitas</Text>
                 </TouchableOpacity>
               </View>
-            </ImageBackground>
+            </View>
           </View>
         </Container>
+        
+        {/* card */}
+        <Container paddingHorizontal={16} marginTop={16}>
+          <View
+            style={{
+              width: '100%',
+              aspectRatio: 16/9,
+              justifyContent: 'space-between',
+              backgroundColor: Color.textInput,
+              borderRadius: 8,
+              padding: 16,
+              ...shadowStyle,
+            }}
+          >
+            <Image
+              source={imageCardOrnament}
+              style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                borderTopRightRadius: 8,
+                height: Image.resolveAssetSource(imageCardOrnament).height,
+                width: Image.resolveAssetSource(imageCardOrnament).width,
+              }}
+            />
+
+            <View
+              style={{
+                flexDirection: 'row',
+                width: '100%',
+                justifyContent: 'flex-start',
+              }}
+            >
+              <Image
+                source={iconSplash}
+                resizeMode='contain'
+                style={{
+                  width: Image.resolveAssetSource(iconSplash).width / 2,
+                  height: Image.resolveAssetSource(iconSplash).height / 2,
+                }}
+              />
+            </View>
+
+            <View
+              style={{
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}
+            >
+              <View
+                style={{
+                  alignItems: 'flex-start',
+                  justifyContent: 'flex-end',
+                }}
+              >
+                {user && !user.guest ? (
+                  <>
+                    <Text
+                      size={12} 
+                      letterSpacing={0.18}>
+                      {user.firstName} {user.lastName}
+                    </Text>
+                    <Divider height={2} />
+                    <Text
+                      type="bold"
+                      letterSpacing={0.9}>
+                      {user.idCardNumber || '1000078964512'}
+                    </Text>
+                  </>
+                ) : (
+                  <Text type="bold" letterSpacing={0.18}>
+                    Halo Tamu, Silakan Login
+                  </Text>
+                )}
+              </View>
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => {
+                  setModalVirtual(true);
+                }}
+              >
+                <View
+                  style={{
+                    backgroundColor: Color.textInput,
+                    width: width / 6 + 16,
+                    height: width / 6 + 16,
+                    borderRadius: 8,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    ...shadowStyle,
+                  }}
+                >
+                  {user && <QRCode
+                    value={user.userCode}
+                    size={width / 6}
+                  />}
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Container>
+
         <Container paddingHorizontal={16}>
           <View
             style={{
@@ -205,341 +443,52 @@ const MainProfile = ({navigation, route}) => {
               marginHorizontal: 1,
               borderTopLeftRadius: 8,
               borderTopRightRadius: 8,
-              marginBottom: 20,
-              marginTop: 20,
-            }}>
-            {/* <Grid
-              style={{
-                backgroundColor: Color.theme,
-                borderTopWidth: 0.5,
-                borderColor: Color.border,
-              }}>
-              <TouchableOpacity
-                activeOpacity={1}
-                onPress={() => {
-                  setModalVirtual(true);
-                }}
-              >
-                <Row>
-                  <Col justify="center" size={0.75}>
-                    <FontAwesome
-                      name="credit-card"
-                      color={Color.text}
-                      style={{marginTop: 2}}
-                    />
-                  </Col>
-                  <Col align="flex-start" size={8} justify="center">
-                    <Text size={12} type="medium">
-                      Virtual Card
-                    </Text>
-                  </Col>
-                  <Col align="flex-end" size={3.25} justify="center">
-                    <FontAwesome
-                      name="angle-right"
-                      color={Color.text}
-                      size={20}
-                    />
-                  </Col>
-                </Row>
-              </TouchableOpacity>
-            </Grid> */}
-            {user && !user.guest && (
-              <Grid
-                style={{
-                  backgroundColor: Color.theme,
-                  borderTopWidth: 0.5,
-                  borderColor: Color.border,
-                }}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('ChangeProfile')}>
-                  <Row>
-                    <Col justify="center" size={0.75}>
-                      <FontAwesome
-                        name="edit"
-                        color={Color.text}
-                        style={{marginTop: 2}}
-                      />
-                    </Col>
-                    <Col align="flex-start" size={8} justify="center">
-                      <Text size={12} type="medium">
-                        Ubah Profil
-                      </Text>
-                    </Col>
-                    <Col align="flex-end" size={3.25} justify="center">
-                      <FontAwesome
-                        name="angle-right"
-                        color={Color.text}
-                        size={20}
-                      />
-                    </Col>
-                  </Row>
-                </TouchableOpacity>
-              </Grid>
-            )}
+              marginBottom: 16,
+              marginTop: 16,
+              paddingTop: 16,
+            }}
+          >
+            {menuList.map((item, idx) => {
+              if (!item.show) return <View key={idx} />;
 
-            <Grid
-              style={{
-                backgroundColor: Color.theme,
-                borderTopWidth: 0.5,
-                borderColor: Color.border,
-              }}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('SettingScreen')}>
-                <Row>
-                  <Col size={0.75} justify="center">
-                    <AntDesign
-                      name="setting"
-                      color={Color.text}
-                      style={{marginTop: 2}}
-                    />
-                  </Col>
-                  <Col align="flex-start" size={8} justify="center">
-                    <Text size={12} type="medium">
-                      Setting
-                    </Text>
-                  </Col>
-                  <Col align="flex-end" size={3.25} justify="center">
-                    <FontAwesome
-                      name="angle-right"
-                      color={Color.text}
-                      size={20}
-                    />
-                  </Col>
-                </Row>
-              </TouchableOpacity>
-            </Grid>
-
-            <Grid
-              style={{
-                backgroundColor: Color.theme,
-                borderTopWidth: 0.5,
-                borderColor: Color.border,
-              }}>
-              <TouchableOpacity
-                onPress={() =>
-                  Linking.openURL(
-                    'mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body',
-                  )
-                }>
-                <Row>
-                  <Col size={0.75} justify="center">
-                    <AntDesign
-                      name="carryout"
-                      color={Color.text}
-                      style={{marginTop: 2}}
-                    />
-                  </Col>
-                  <Col align="flex-start" size={8} justify="center">
-                    <Text size={12} type="medium">
-                      Kritik dan saran
-                    </Text>
-                  </Col>
-                  <Col align="flex-end" size={3.25} justify="center">
-                    <FontAwesome
-                      name="angle-right"
-                      color={Color.text}
-                      size={20}
-                    />
-                  </Col>
-                </Row>
-              </TouchableOpacity>
-            </Grid>
-
-            <Grid
-              style={{
-                backgroundColor: Color.theme,
-                borderTopWidth: 0.5,
-                borderColor: Color.border,
-              }}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('JoinCommunity')}>
-                <Row>
-                  <Col size={0.75} justify="center">
-                    <AntDesign
-                      name="form"
-                      color={Color.text}
-                      style={{marginTop: 2}}
-                    />
-                  </Col>
-                  <Col align="flex-start" size={8} justify="center">
-                    <Text size={12} type="medium">
-                      Gabung Komunitas
-                    </Text>
-                  </Col>
-                  <Col align="flex-end" size={3.25} justify="center">
-                    <FontAwesome
-                      name="angle-right"
-                      color={Color.text}
-                      size={20}
-                    />
-                  </Col>
-                </Row>
-              </TouchableOpacity>
-            </Grid>
-
-            {user && (user.isDirector === 1 || listPrivilegeUser.includes(user.userId)) && <Grid
-              style={{
-                backgroundColor: Color.theme,
-                borderTopWidth: 0.5,
-                borderColor: Color.border,
-              }}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('CommunityAdminPage')}>
-                <Row>
-                  <Col size={0.75} justify="center">
-                    <AntDesign
-                      name="form"
-                      color={Color.text}
-                      style={{marginTop: 2}}
-                    />
-                  </Col>
-                  <Col align="flex-start" size={8} justify="center">
-                    <Text size={12} type="medium">
-                      Community Admin
-                    </Text>
-                  </Col>
-                  <Col align="flex-end" size={3.25} justify="center">
-                    <FontAwesome
-                      name="angle-right"
-                      color={Color.text}
-                      size={20}
-                    />
-                  </Col>
-                </Row>
-              </TouchableOpacity>
-            </Grid>}
-
-            {user && <Grid
-              style={{
-                backgroundColor: Color.theme,
-                borderTopWidth: 0.5,
-                borderColor: Color.border,
-              }}>
-              <TouchableOpacity
-                onPress={async() => {
-                  const token = await messaging().getToken();
-                  console.log(token);
-                  Clipboard.setString(token);
-                  Alert('Berhasil disalin', token);
-                }}>
-                <Row>
-                  <Col size={0.75} justify="center">
-                    <AntDesign
-                      name="form"
-                      color={Color.text}
-                      style={{marginTop: 2}}
-                    />
-                  </Col>
-                  <Col align="flex-start" size={8} justify="center">
-                    <Text size={12} type="medium">
-                      Device Token
-                    </Text>
-                  </Col>
-                  <Col align="flex-end" size={3.25} justify="center">
-                    <FontAwesome
-                      name="angle-right"
-                      color={Color.text}
-                      size={20}
-                    />
-                  </Col>
-                </Row>
-              </TouchableOpacity>
-            </Grid>}
-
-            {/* <Grid
-          style={{
-            backgroundColor: Color.theme,
-            borderTopWidth: 0.5,
-            borderColor: Color.border,
-          }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ReferralCodeScreen')}>
-            <Row>
-              <Col size={0.75} justify="center">
-                <AntDesign
-                  name="user"
-                  color={Color.text}
-                  style={{marginTop: 2}}
-                />
-              </Col>
-              <Col align="flex-start" size={8} justify="center">
-                <Text size={12} type="medium">
-                  Masuk Komunitas
-                </Text>
-              </Col>
-              <Col align="flex-end" size={3.25} justify="center">
-                <FontAwesome name="angle-right" color={Color.text} size={20} />
-              </Col>
-            </Row>
-          </TouchableOpacity>
-        </Grid> */}
-
-            {user && !user.guest && (
-              <Grid
-                style={{
-                  backgroundColor: Color.theme,
-                  borderTopWidth: 0.5,
-                  borderColor: Color.border,
-                }}>
-                <TouchableOpacity onPress={() => onPressExit()}>
-                  <Row>
-                    <Col justify="center" size={0.75}>
-                      <Ionicons
-                        name="exit-outline"
-                        color={Color.error}
-                        style={{marginTop: 2}}
-                      />
-                    </Col>
-                    <Col align="flex-start" size={8} justify="center">
-                      <Text size={12} type="medium" color={Color.error}>
-                        Logout
-                      </Text>
-                    </Col>
-                    <Col align="flex-end" size={3.25} justify="center">
-                      <FontAwesome
-                        name="angle-right"
-                        color={Color.text}
-                        size={20}
-                      />
-                    </Col>
-                  </Row>
-                </TouchableOpacity>
-              </Grid>
-            )}
-
-            {user && user.guest && (
-              <Grid
-                style={{
-                  backgroundColor: Color.theme,
-                  borderTopWidth: 0.5,
-                  borderColor: Color.border,
-                }}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('LoginScreen')}>
-                  <Row>
-                    <Col justify="center" size={0.75}>
-                      <Ionicons
-                        name="exit-outline"
-                        color={Color.info}
-                        style={{marginTop: 2}}
-                      />
-                    </Col>
-                    <Col align="flex-start" size={8} justify="center">
-                      <Text size={12} type="medium" color={Color.info}>
-                        Login
-                      </Text>
-                    </Col>
-                    <Col align="flex-end" size={3.25} justify="center">
-                      <FontAwesome
-                        name="angle-right"
-                        color={Color.text}
-                        size={20}
-                      />
-                    </Col>
-                  </Row>
-                </TouchableOpacity>
-              </Grid>
-            )}
+              return (
+                <Container
+                  key={idx}
+                  paddingHorizontal={16}
+                  marginTop={8}
+                  marginBottom={16}
+                >
+                  <TouchableOpacity
+                    onPress={() => item.onPress()}
+                  >
+                    <Row style={{borderBottomWidth: 0.5, borderColor: Color.placeholder, paddingBottom: 16}}>
+                      <Col justify="center" size={0.75}>
+                        {item.icon}
+                      </Col>
+                      <Col size={0.25} />
+                      <Col align="flex-start" size={9} justify="center">
+                        <Text
+                          color={
+                            item.code === 'logout' ? Color.error :
+                            item.code === 'login' ? Color.info : Color.text
+                          }
+                        >
+                          {item.title}
+                        </Text>
+                      </Col>
+                      <Col align="flex-end" size={2} justify="center">
+                        <FontAwesome
+                          name="angle-right"
+                          color={Color.text}
+                          size={20}
+                        />
+                      </Col>
+                    </Row>
+                  </TouchableOpacity>
+                </Container>
+              )
+            })}
+            {/* wekdor */}
           </View>
         </Container>
 
@@ -548,6 +497,15 @@ const MainProfile = ({navigation, route}) => {
 
       {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}
       <Box size={70} style={{position: 'absolute', bottom: -40}} />
+
+      <ModalinputCode
+        visible={modalInputCode}
+        onClose={() => setModalInputCode(false)}
+        onSubmit={(text) => {
+          fetchOrganizationMemberManage(text);
+        }}
+        errorMessage={responseMemberManage.message}
+      />
 
       <Modal
         visible={modalVirtual}
