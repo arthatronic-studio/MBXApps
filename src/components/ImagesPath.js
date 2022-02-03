@@ -31,4 +31,5 @@ export default {
   loker3: require('../components/Images/loker3.png'),
   bantu1: require('../components/Images/bantu1.png'),
   bantu2: require('../components/Images/bantu2.png'),
+  detailEvent: require('../components/Images/DetailEvent.png'),
 };
