@@ -120,7 +120,12 @@ const CardNews = props => {
             {/* <Ionicons name='bookmark-outline' size={20} color={Color.primary} /> */}
           </View>
 
-          <View style={{paddingTop: 2}}>
+          <View style={{paddingTop: 4, flexDirection: 'row'}}>
+              <Text size={12} align='left'>Oleh:&nbsp;</Text>
+              <Text size={12} align='left'>{item.fullname}</Text>
+          </View>
+
+          <View style={{paddingTop: 4}}>
             <Text size={12} align="left" numberOfLines={2} style={{width:'80%'}}>
               {item.productDescription}
             </Text>

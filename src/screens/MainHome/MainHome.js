@@ -438,8 +438,8 @@ const MainHome = ({navigation, route}) => {
             horizontal
             showHeader
             onPress={item => {
-              // navigation.navigate('EmergencyDetail', {item});
-              navigation.navigate('PostingDetail', {item});
+              navigation.navigate('EmergencyDetail', {item});
+              // navigation.navigate('PostingDetail', {item});
             }}
             style={{paddingLeft: 8}}
           />

@@ -145,7 +145,15 @@ export default ({ navigation, route }) => {
                     <View style={{alignItems: 'center'}}>
                         <TouchableOpacity
                             onPress={() => {
-                                const daddr = `-6.311272,106.793541`;
+                                let daddr = `-6.311272,106.793541`;
+
+                                if (!item.latitude || !item.longitude) {
+                                    alert('Alamat tidak valid');
+                                    return;
+                                }
+
+                                daddr = item.latitude + ',' + item.longitude;
+
                                 if (Platform.OS === 'ios') {
                                     Linking.openURL('http://maps.apple.com/maps?daddr=' + daddr);
                                 } else {

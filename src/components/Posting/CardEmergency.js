@@ -116,23 +116,30 @@ const CardEmergency = (props) => {
                         <Text size={14} type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
                         <Divider height={4} />
                         <Row>
-                            <Ionicons name='person' color={Color.text} />
+                            <Container width={16}>
+                                <Ionicons name='person' color={Color.text} />
+                            </Container>
                             <Text size={12} align='left' numberOfLines={1}>{item.fullname}</Text>
                         </Row>
-                        <View style={{alignItems: 'center', flexDirection: 'row', width: '100%', marginTop: 4}}>
-                            <Image 
-                                style={{ height: 10, width: 10, aspectRatio: 1 }}
-                                source={iconCategory}
-                            />
-                            <Text style={{ marginLeft:4 }} size={12}>{item.productCategory}</Text>
-                            {/* <Image
-                                style={{ height: 10, width: 10, marginLeft: 9 }}
+                        <Divider height={4} />
+                        <Row>
+                            <Container width={16}>
+                                <Image 
+                                    style={{ height: 10, width: 10}}
+                                    source={iconCategory}
+                                />
+                            </Container>
+                            <Text size={12}>{item.productCategory}</Text>
+                        </Row>
+                        {/* <Row>
+                            <Image
+                                style={{ height: 10, width: 10}}
                                 source={iconLocation}
-                            /> */}
-                            {/* <Text style={{ marginLeft:6 }} size={12}>Kebon Jeruk, Jakarta</Text> */}
-                        </View>
+                            />
+                            <Text size={12}>Kebon Jeruk, Jakarta</Text>
+                        </Row> */}
 
-                        <View style={{marginTop: 16}}>
+                        <View style={{marginTop: 8}}>
                             <Text size={11} align='left' numberOfLines={3} >
                                 {item.productDescription}
                             </Text>

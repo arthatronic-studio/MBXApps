@@ -18,6 +18,7 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Octions from 'react-native-vector-icons/Octicons';
 import moment from 'moment';
+import { Divider } from 'src/styled';
 
 const Example = Styled(View)`
 `;
@@ -125,7 +126,15 @@ export default ({navigation, route}) => {
     //                 <View style={{alignItems: 'center'}}>
     //                     <TouchableOpacity
     //                         onPress={() => {
-    //                             const daddr = `-6.311272,106.793541`;
+    //                             let daddr = `-6.311272,106.793541`;
+
+                                  //   if (!item.latitude || !item.longitude) {
+                                  //     alert('Alamat tidak valid');
+                                  //     return;
+                                  // }
+
+                                  // daddr = item.latitude + ',' + item.longitude;
+
     //                             if (Platform.OS === 'ios') {
     //                                 Linking.openURL('http://maps.apple.com/maps?daddr=' + daddr);
     //                             } else {
@@ -393,7 +402,7 @@ export default ({navigation, route}) => {
           </View> */}
         </View>
       </ScrollView>
-      <View style={{alignItems: 'center', padding: 16}}>
+      <View style={{flexDirection: 'row', alignItems: 'center', padding: 16}}>
         <TouchableOpacity
           onPress={() => {
             if (state.im_like) {
@@ -409,7 +418,7 @@ export default ({navigation, route}) => {
           }}
           style={{
             backgroundColor: state.im_like ? Color.error : Color.primary,
-            width: '100%',
+            width: '48%',
             height: 45,
             borderRadius: 25,
             justifyContent: 'center',
@@ -417,7 +426,38 @@ export default ({navigation, route}) => {
           <Text
             style={{color: Color.textInput, fontSize: 16, fontWeight: 'bold'}}
           >
-            {state.im_like ? 'Batalkan' : 'Pesan Tiket'}
+            {state.im_like ? 'Batalkan' : 'Akan Datang'}
+          </Text>
+        </TouchableOpacity>
+        <Divider />
+        <TouchableOpacity
+          onPress={() => {
+            let daddr = `-6.311272,106.793541`;
+
+            if (!item.latitude || !item.longitude) {
+                alert('Alamat tidak valid');
+                return;
+            }
+
+            daddr = item.latitude + ',' + item.longitude;
+            
+            if (Platform.OS === 'ios') {
+                Linking.openURL('http://maps.apple.com/maps?daddr=' + daddr);
+            } else {
+                Linking.openURL('http://maps.google.com/maps?daddr=' + daddr);
+            }
+          }}
+          style={{
+            backgroundColor: Color.secondary,
+            width: '48%',
+            height: 45,
+            borderRadius: 25,
+            justifyContent: 'center',
+          }}>
+          <Text
+            style={{color: Color.textInput, fontSize: 16, fontWeight: 'bold'}}
+          >
+            Lokasi
           </Text>
         </TouchableOpacity>
       </View>

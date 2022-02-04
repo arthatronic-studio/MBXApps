@@ -72,7 +72,9 @@ const App = () => {
   }, []);
 
   const requestLocationPermission = async () => {
-    await geoLocationPermission();
+    const isGranted = await geoLocationPermission();
+
+    console.log('isGranted',isGranted);
 
     geoCurrentPosition(
       (res) => {

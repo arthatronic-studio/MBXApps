@@ -23,6 +23,7 @@ import { queryProductManage } from '@src/lib/query';
 import { Box, Divider } from 'src/styled';
 import DatePicker from 'react-native-date-picker';
 import Moment from 'moment';
+import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -79,6 +80,8 @@ const CreateEmergencyScreen = (props) => {
         description: '',
         priority: 'High',
         // createdDate: Moment().format('DD-MM-YYYY'),
+        latitude: '',
+        longitude: '',
     });
     const [error, setError] = useState({
         name: null,
@@ -108,11 +111,35 @@ const CreateEmergencyScreen = (props) => {
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+        requestLocationPermission();
   
         return () => {
             BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
         }
     }, []);
+
+    const requestLocationPermission = async () => {
+        const isGranted = await geoLocationPermission();
+    
+        console.log('isGranted',isGranted);
+    
+        geoCurrentPosition(
+          (res) => {
+            console.log(res, 'res location');
+            if (res.coords) {
+                setUserData({
+                    ...userData,
+                    latitude: res.coords.latitude.toString(),
+                    longitude: res.coords.longitude.toString(),
+                });
+            }
+          },
+          (err) => {
+            console.log(err, 'err location');
+          }
+        );
+    }
   
     const handleBackPress = () => {
         backToSelectVideo();
@@ -154,7 +181,6 @@ const CreateEmergencyScreen = (props) => {
             showPopup('Silahkan isi deskripsi terlebih dulu', 'warning');
             return;
         }
-        
 
         showLoading();
 

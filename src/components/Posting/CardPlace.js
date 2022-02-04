@@ -7,7 +7,8 @@ import {
     useColor
 } from '@src/components';
 import { shadowStyle } from '@src/styles';
-import { Divider } from '@src/styled';
+import { Divider, Row } from '@src/styled';
+import { Container } from 'native-base';
 
 const { width } = Dimensions.get('window');
 
@@ -54,7 +55,12 @@ const CardPlace = (props) => {
                 <View style={{width: '100%', padding: 16, backgroundColor: Color.textInput, borderBottomLeftRadius: 4, borderBottomRightRadius: 4}}>
                     <Text type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
                     <Divider height={4} />
-                    <Text size={12} align='left' numberOfLines={2} lineHeight={16}>{item.productDescription}</Text>
+                    <Row>
+                        <View style={{width: 16}}>
+                            <Ionicons name='person' color={Color.text} />
+                        </View>
+                        <Text size={12} align='left' numberOfLines={2} lineHeight={16}>{item.fullname}</Text>
+                    </Row>
                     <Divider />
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                         <View style={{flexDirection: 'row'}}>
