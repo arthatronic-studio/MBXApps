@@ -32,11 +32,12 @@ import {shadowStyle} from '@src/styles';
 import {iconSplash, bannerCard, imageCardOrnament} from '@assets/images';
 import {Box, Container, Divider} from 'src/styled';
 import Clipboard from '@react-native-community/clipboard';
-import { listInitialCode, listPrivilegeUser } from 'src/utils/constants';
+import { listInitialCode, listKomotoFamily, listPrivilegeUser } from 'src/utils/constants';
 import ModalinputCode from 'src/components/ModalInputCode';
 import Client from '@src/lib/apollo';
 import { queryOrganizationMemberManage } from '@src/lib/query/organization';
 import { getCurrentUserProfile } from 'src/state/actions/user/auth';
+import Config from 'react-native-config';
 
 const MainProfile = ({navigation, route}) => {
   const [modalVirtual, setModalVirtual] = useState(false);
@@ -139,7 +140,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'join_community',
       title: 'Gabung Komunitas',
-      show: true,
+      show: user && user.organizationId ? false : true,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('JoinCommunity'),
     },
@@ -160,7 +161,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'device_token',
       title: 'Device Token',
-      show: true,
+      show: false,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: async() => {
         const token = await messaging().getToken();
@@ -313,7 +314,7 @@ const MainProfile = ({navigation, route}) => {
                 )}
               </View>
 
-              <View
+              {(user && !user.organizationId) || !listKomotoFamily.includes(Config.INITIAL_CODE) && <View
                 style={{
                   flex: 1,
                   paddingLeft: 16,
@@ -331,7 +332,7 @@ const MainProfile = ({navigation, route}) => {
                 >
                   <Text size={12} type='bold' color={Color.textInput}>Gabung Komunitas</Text>
                 </TouchableOpacity>
-              </View>
+              </View>}
             </TouchableOpacity>
           </View>
         </Container>
