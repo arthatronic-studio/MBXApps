@@ -8,13 +8,20 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {
     useLoading,
     usePopup,
-    useColor
+    useColor,
+    Header,
+    Submit,
+    Alert,
 } from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
 import { TouchableOpacity } from '@src/components/Button';
 
 import { shadowStyle } from '@src/styles';
+
+import ImagesPath from 'src/components/ImagesPath';
+
+import Moment from 'moment';
 
 import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
@@ -59,23 +66,27 @@ export default ({ navigation, route }) => {
           console.log(res, 'res add like');
           if (res.data.contentAddLike.id) {
             if (res.data.contentAddLike.status === 1) {
-                showLoading('success', 'Berhasil diikuti');
+                showLoading('success', 'Lamaran didaftarkan');
                 setState({ im_like: true });
             } else {
-                showLoading('info', 'Berhasil batal ikuti');
+                showLoading('info', 'Batal melamar');
                 setState({ im_like: false });
             }
           }
         })
         .catch((err) => {
             console.log(err, 'err add like');
-            hideLoading();
+            showLoading('error', 'Terjadi kesalahan');
         })
     }
 
     return (
         <Scaffold
-            headerTitle=''
+            header={
+                <Header
+                    title="Detail"
+                />
+            }
             fallback={false}
             empty={false}
             popupProps={popupProps}
@@ -84,66 +95,117 @@ export default ({ navigation, route }) => {
             <ScrollView
                 contentContainerStyle={{paddingBottom: 16}}
             >
-                <Image
-                    source={{uri: item.image}}
-                    style={{width: '100%', aspectRatio: 1.5, backgroundColor: Color.border}}
+                <View 
+                    style={{width: '100%', height: 100, backgroundColor: Color.primarySoft}}
                 />
+                <View style={{width: '20%', marginHorizontal: 24, position: 'absolute', top: 70}}>
+                    <Image
+                        source={{uri: item.image}}
+                        style={{width: '80%', aspectRatio: 1, borderRadius: 8, ...shadowStyle,}}
+                        resizeMode='contain'
+                    />
+                </View>
 
-                <View style={{padding: 24, marginTop: -16, borderTopLeftRadius: 24, borderTopRightRadius: 24, flexDirection: 'row', justifyContent: 'flex-end', backgroundColor: Color.theme}} />
+                {/* <View style={{padding: 24, marginTop: -16, borderTopLeftRadius: 24, borderTopRightRadius: 24, flexDirection: 'row', justifyContent: 'flex-end', backgroundColor: Color.theme}} /> */}
 
-                <View style={{paddingHorizontal: 24}}>
-                    <View style={{paddingBottom: 12}}>
-                        <Text size={24} type='bold' align='left'>
+                <View style={{paddingHorizontal: 24, paddingTop: 30}}>
+                    <View style={{marginTop: 8, paddingBottom: 16, flexDirection: 'row', alignItems: 'center'}}>
+                        <View style={{marginRight: 12}}>
+                            <Text size={18} type='bold' align='left'>{item.productName}</Text>
+                        </View>
+                        <View>
+                            <Text size={10} align='left' color={Color.gray}>{Moment(parseInt(item.created_date)).fromNow()}</Text>
+                        </View>
+                    </View>
+                    {/* <View style={{paddingBottom: 8, flexDirection: 'row', alignItems: 'center'}}>
+                            <Image 
+                                source={ImagesPath.buildings}
+                                width={16}
+                                height={16}
+                                style={{marginRight: 5}}
+                            />
+                        <Text size={10} align='left'>
                             {item.productName}
                         </Text>
-                    </View>
+                    </View> */}
+                    {/* <View style={{paddingBottom: 8, flexDirection: 'row', alignItems: 'center'}}>
+                        <Image 
+                            source={ImagesPath.mapPin}
+                            width={16}
+                            height={16}
+                            style={{marginRight: 5}}
+                        />
+                        <Text size={10} align='left'>
+                            Tangerang, Banten
+                        </Text>
+                    </View> */}
+                    {/* <View style={{paddingBottom: 24, flexDirection: 'row', alignItems: 'center'}}>
+                        <Image 
+                            source={ImagesPath.briefCase}
+                            width={16}
+                            height={16}
+                            style={{marginRight: 5}}
+                        />
+                        <Text size={10} align='left'>
+                            Purna Waktu - Fresh Graduate
+                        </Text>
+                    </View> */}
 
                     <View style={{paddingBottom: 8}}>
-                        <Text align='left'>
+                        <Text align='left' size={12}>Deskripsi</Text>
+                    </View>
+
+                    <View style={{paddingBottom: 24}}>
+                        <Text align='left' size={14}>
                             {item.productDescription}
                         </Text>
                     </View>
                     
-                    <View style={{paddingBottom: 12}}>
-                        <Text size={12} align='left' style={{opacity: 0.6}}>
-                            Buka Jam 09:00 - 22:00
+                    {/* <View style={{paddingBottom: 8}}>
+                        <Text size={12} align='left'>
+                            Jobdesk
                         </Text>
                     </View>
-                </View>
 
-                <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-                    <View style={{alignItems: 'center'}}>
-                        <View style={{height: 70, width: 70, borderRadius: 35, backgroundColor: Color.textInput, justifyContent: 'center', alignItems: 'center'}}>
-                            <Text size={22} type='bold'>{item.like}</Text>
-                        </View>
-                        <Text size={12} style={{marginTop: 16}}>Ramah Disabilitas</Text>
-                    </View>
-
-                    <View style={{alignItems: 'center'}}>
-                        <View style={{height: 70, width: 70, borderRadius: 35, backgroundColor: Color.textInput, justifyContent: 'center', alignItems: 'center'}}>
-                            <MaterialCommunityIcons name='ticket-percent' size={30} color={Color.green} />
-                        </View>
-                        <Text size={12} style={{marginTop: 16}}>Voucher</Text>
-                    </View>
-
-                    <View style={{alignItems: 'center'}}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                const daddr = `-6.311272,106.793541`;
-                                if (Platform.OS === 'ios') {
-                                    Linking.openURL('http://maps.apple.com/maps?daddr=' + daddr);
-                                } else {
-                                    Linking.openURL('http://maps.google.com/maps?daddr=' + daddr);
-                                }
-                            }}
-                            style={{height: 70, width: 70, borderRadius: 35, backgroundColor: Color.textInput, justifyContent: 'center', alignItems: 'center'}}
-                        >
-                            <Ionicons name='location' size={30} color={Color.primary} />
-                        </TouchableOpacity>
-                        <Text size={12} style={{marginTop: 16}}>Lihat Lokasi</Text>
-                    </View>
+                    <View style={{paddingBottom: 32}}>
+                        <Text align='left'>
+                            Cotton candy tootsie roll jelly-o tiramisu jelly beans halvah.
+                        </Text>
+                        <Text align='left'>
+                            Cotton candy icing candy canes chupa chups lollipop chocolate cake biscuit.
+                        </Text>
+                        <Text align='left'>
+                            Icing pudding cheesecake jelly-o cake cheesecake.
+                        </Text>
+                        <Text align='left'>
+                            Jelly oat cake marshmallow pastry tootsie roll jelly. Tiramisu chupa chups
+                        </Text>
+                        <Text align='left'>
+                            Pudding cheesecake jelly-o cake cheesecake. Tart cheesecake biscuit candy canes toffee. Chocolate 
+                        </Text>
+                    </View> */}
                 </View>
             </ScrollView>
+
+            <Submit
+                onPress={() => {
+                    if (state.im_like) {
+                        Alert(
+                          'Konfirmasi',
+                          'Apakah Anda yakin akan membatalkan?',
+                          () => fetchAddLike()
+                        );
+                        return;
+                    }
+
+                    fetchAddLike();
+                }}
+                buttonLabel={state.im_like ? 'Batalkan' : 'Lamar Sekarang'}
+                buttonColor={state.im_like ? Color.error : Color.primary}
+                type='bottomSingleButton'
+                buttonBorderTopWidth={0}
+                style={{backgroundColor: Color.theme, paddingTop: 25, paddingBottom: 25}}
+            />
         </Scaffold>
     )
 }

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { View, ScrollView, Image, Platform } from 'react-native';
+import React, {Component} from 'react';
+import {View, ScrollView, Image, Platform} from 'react-native';
 import PropTypes from 'prop-types';
 
 import CarouselIndicator from '@src/components/CarouselIndicator';
@@ -8,6 +8,7 @@ const propTypes = {
   children: PropTypes.node.isRequired,
   showIndicator: PropTypes.bool,
   style: PropTypes.object.isRequired,
+  leftIndicator: PropTypes.bool,
 };
 
 class CarouselView extends Component {
@@ -20,6 +21,7 @@ class CarouselView extends Component {
     // data
     // childrenWidth
     // childrenHeight
+    leftIndicator: false,
     showIndicator: false,
     delay: 4000,
     autoplay: true,
@@ -33,7 +35,7 @@ class CarouselView extends Component {
 
   constructor(props) {
     super(props);
-    const size = { width: 0, height: 0 };
+    const size = {width: 0, height: 0};
 
     // let kontenDiDalem = props.data.map((e, idx) => {
     //     return (
@@ -72,17 +74,18 @@ class CarouselView extends Component {
     this._clearTimer && this._clearTimer();
   }
 
-  componentDidUpdate({ children }) {
+  componentDidUpdate({children}) {
     // !isEqual
     if (this.props.children !== children) {
-      const { currentPage } = this.state;
+      const {currentPage} = this.state;
       this._clearTimer && this._clearTimer();
       let childrenLength = 0;
       if (children) {
         childrenLength = React.Children.count(children) || 1;
       }
-      const nextPage = currentPage >= childrenLength ? childrenLength - 1 : currentPage;
-      this.setState({ childrenLength }, () => {
+      const nextPage =
+        currentPage >= childrenLength ? childrenLength - 1 : currentPage;
+      this.setState({childrenLength}, () => {
         this.animateToPage(nextPage);
         this._setUpTimer();
       });
@@ -90,10 +93,10 @@ class CarouselView extends Component {
   }
 
   _setUpPages() {
-    const { size } = this.state;
-    const { children: propsChildren, isLooped, style } = this.props;
+    const {size} = this.state;
+    const {children: propsChildren, isLooped, style} = this.props;
     const children = React.Children.toArray(propsChildren);
-    
+
     // const children = this.state.kontenDiDalem;
 
     const pages = [];
@@ -110,13 +113,11 @@ class CarouselView extends Component {
     } else if (children) {
       pages.push(children[0]);
     } else {
-      pages.push(
-        <View />
-      );
+      pages.push(<View />);
     }
 
     return pages.map((page, i) => (
-      <View style={[{ ...size }, style, { alignItems: 'center' }]} key={`page${i}`}>
+      <View style={[{...size}, style, {alignItems: 'center'}]} key={`page${i}`}>
         {page}
       </View>
     ));
@@ -126,8 +127,8 @@ class CarouselView extends Component {
     return this.state.currentPage;
   }
 
-  _setCurrentPage = (currentPage) => {
-    this.setState({ currentPage }, () => {
+  _setCurrentPage = currentPage => {
+    this.setState({currentPage}, () => {
       if (this.props.onAnimateNextPage) {
         // FIXME: called twice on ios with auto-scroll
         this.props.onAnimateNextPage(currentPage);
@@ -139,15 +140,15 @@ class CarouselView extends Component {
     this._clearTimer && this._clearTimer();
   };
 
-  _onScrollEnd = (event) => {
-    const offset = { ...event.nativeEvent.contentOffset };
+  _onScrollEnd = event => {
+    const offset = {...event.nativeEvent.contentOffset};
     const page = this._calculateCurrentPage(offset.x);
     this._placeCritical(page);
     this._setCurrentPage(page);
     this._setUpTimer();
   };
 
-  _onScroll = (event) => {
+  _onScroll = event => {
     const currentOffset = event.nativeEvent.contentOffset.x;
     const direction = currentOffset > this.offset ? 'right' : 'left';
     this.offset = currentOffset;
@@ -160,9 +161,9 @@ class CarouselView extends Component {
     }
   };
 
-  _onLayout = (event) => {
-    const { height, width } = event.nativeEvent.layout;
-    this.setState({ size: { width, height } });
+  _onLayout = event => {
+    const {height, width} = event.nativeEvent.layout;
+    this.setState({size: {width, height}});
     // remove setTimeout wrapper when https://github.com/facebook/react-native/issues/6849 is resolved.
     this._placeCritical(this.state.currentPage);
     // setTimeout(() => this._placeCritical(this.state.currentPage as number), 0);
@@ -180,19 +181,19 @@ class CarouselView extends Component {
     }
   };
 
-  _scrollTo = ({ offset, animated, nofix }) => {
+  _scrollTo = ({offset, animated, nofix}) => {
     if (this.scrollView) {
-      this.scrollView.scrollTo({ y: 0, x: offset, animated });
+      this.scrollView.scrollTo({y: 0, x: offset, animated});
 
       // Fix bug #50
       if (!nofix && Platform.OS === 'android' && !animated) {
-        this.scrollView.scrollTo({ y: 0, x: offset, animated: true });
+        this.scrollView.scrollTo({y: 0, x: offset, animated: true});
       }
     }
   };
 
   _animateNextPage = () => {
-    const { currentPage } = this.state;
+    const {currentPage} = this.state;
     const nextPage = this._normalizePageNumber(currentPage + 1);
 
     // prevent from looping
@@ -203,7 +204,7 @@ class CarouselView extends Component {
   };
 
   _animatePreviousPage = () => {
-    const { currentPage } = this.state;
+    const {currentPage} = this.state;
     const nextPage = this._normalizePageNumber(currentPage - 1);
 
     // prevent from looping
@@ -213,13 +214,13 @@ class CarouselView extends Component {
     this.animateToPage(nextPage);
   };
 
-  animateToPage = (page) => {
+  animateToPage = page => {
     const {
       currentPage,
       childrenLength,
-      size: { width },
+      size: {width},
     } = this.state;
-    const { isLooped } = this.props;
+    const {isLooped} = this.props;
     const nextPage = this._normalizePageNumber(page);
     this._clearTimer();
     if (nextPage === currentPage) {
@@ -234,33 +235,33 @@ class CarouselView extends Component {
             nofix: true,
           });
         }
-        this._scrollTo({ offset: childrenLength * width, animated: true });
+        this._scrollTo({offset: childrenLength * width, animated: true});
       } else {
-        this._scrollTo({ offset: 0, animated: true });
+        this._scrollTo({offset: 0, animated: true});
       }
     } else if (nextPage === 1) {
       // To properly animate from the first page we need to move view
       // to its original position first (not needed if not looped)
       if (currentPage === 0 && isLooped) {
-        this._scrollTo({ offset: 0, animated: false, nofix: true });
+        this._scrollTo({offset: 0, animated: false, nofix: true});
       }
-      this._scrollTo({ offset: width, animated: true });
+      this._scrollTo({offset: width, animated: true});
     } else {
       // Last page is allowed to jump to the first through the "border"
       if (currentPage === 0 && nextPage !== childrenLength - 1) {
-        this._scrollTo({ offset: 0, animated: false, nofix: true });
+        this._scrollTo({offset: 0, animated: false, nofix: true});
       }
-      this._scrollTo({ offset: nextPage * width, animated: true });
+      this._scrollTo({offset: nextPage * width, animated: true});
     }
     this._setCurrentPage(nextPage);
     this._setUpTimer();
   };
 
-  _placeCritical = (page) => {
-    const { isLooped } = this.props;
+  _placeCritical = page => {
+    const {isLooped} = this.props;
     const {
       childrenLength,
-      size: { width },
+      size: {width},
     } = this.state;
     let offset = 0;
     // if page number is bigger then length - something is incorrect
@@ -273,11 +274,11 @@ class CarouselView extends Component {
       }
     }
 
-    this._scrollTo({ offset, animated: false });
+    this._scrollTo({offset, animated: false});
   };
 
-  _normalizePageNumber = (page) => {
-    const { childrenLength } = this.state;
+  _normalizePageNumber = page => {
+    const {childrenLength} = this.state;
 
     if (page === childrenLength) {
       return 0;
@@ -289,14 +290,14 @@ class CarouselView extends Component {
     return page;
   };
 
-  _calculateCurrentPage = (offset) => {
-    const { width } = this.state.size;
+  _calculateCurrentPage = offset => {
+    const {width} = this.state.size;
     const page = Math.round(offset / width);
     return this._normalizePageNumber(page);
   };
 
-  _calculateNextPage = (direction) => {
-    const { width } = this.state.size;
+  _calculateNextPage = direction => {
+    const {width} = this.state.size;
     const ratio = this.offset / width;
     const page = direction === 'right' ? Math.ceil(ratio) : Math.floor(ratio);
     return this._normalizePageNumber(page);
@@ -305,44 +306,62 @@ class CarouselView extends Component {
   render() {
     const contents = this._setUpPages();
 
-    const { size, childrenLength } = this.state;
+    const {size, childrenLength} = this.state;
 
     return (
-        <>
-            <View onLayout={this._onLayout} style={[this.props.style]}>
-                <ScrollView
-                    ref={(c) => this.scrollView = c}
-                    onScrollBeginDrag={this._onScrollBegin}
-                    onMomentumScrollEnd={this._onScrollEnd}
-                    onScroll={this._onScroll}
-                    alwaysBounceHorizontal={false}
-                    alwaysBounceVertical={false}
-                    contentInset={{ top: 0 }}
-                    automaticallyAdjustContentInsets={false}
-                    showsHorizontalScrollIndicator={false}
-                    horizontal
-                    pagingEnabled
-                    bounces={false}
-                    scrollEnabled={this.props.swipe}
-                    scrollEventThrottle={16}
-                    contentContainerStyle={[
-                        {
-                            position: 'absolute',
-                            width: size.width * (childrenLength + (childrenLength > 1 && this.props.isLooped ? 2 : 0)),
-                            height: size.height,
-                        },
-                    ]}
-                >
-                    {contents}
-                </ScrollView>
-            </View>
+      <>
+        <View onLayout={this._onLayout} style={[this.props.style]}>
+          <ScrollView
+            ref={c => (this.scrollView = c)}
+            onScrollBeginDrag={this._onScrollBegin}
+            onMomentumScrollEnd={this._onScrollEnd}
+            onScroll={this._onScroll}
+            alwaysBounceHorizontal={false}
+            alwaysBounceVertical={false}
+            contentInset={{top: 0}}
+            automaticallyAdjustContentInsets={false}
+            showsHorizontalScrollIndicator={false}
+            horizontal
+            pagingEnabled
+            bounces={false}
+            scrollEnabled={this.props.swipe}
+            scrollEventThrottle={16}
+            contentContainerStyle={[
+              {
+                position: 'absolute',
+                width:
+                  size.width *
+                  (childrenLength +
+                    (childrenLength > 1 && this.props.isLooped ? 2 : 0)),
+                height: size.height,
+              },
+            ]}>
+            {contents}
+          </ScrollView>
+        </View>
 
-            {this.props.showIndicator && <CarouselIndicator
-                count={childrenLength}
-                currentIndex={this.state.currentPage}
-                containerStyle={{marginTop: -24}}
-            />}
-        </>
+        {/* {this.props.showIndicator && (
+          <CarouselIndicator
+            count={childrenLength}
+            currentIndex={this.state.currentPage}
+            containerStyle={{marginTop: -24}}
+          />
+        )} */}
+
+        {this.props.showIndicator && this.props.leftIndicator ? (
+          <CarouselIndicator
+            count={childrenLength}
+            currentIndex={this.state.currentPage}
+            containerStyle={{marginTop: -24, marginEnd: 300}}
+          />
+        ) : (
+          <CarouselIndicator
+            count={childrenLength}
+            currentIndex={this.state.currentPage}
+            containerStyle={{marginTop: -24}}
+          />
+        )}
+      </>
     );
   }
 }

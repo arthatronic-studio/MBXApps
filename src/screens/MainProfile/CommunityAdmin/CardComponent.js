@@ -15,6 +15,8 @@ import Client from '@src/lib/apollo';
 import {joinCommunityManage} from '@src/lib/query/joinCommunityManage';
 import {joinCommunityMember} from 'src/lib/query/joinCommunityMember';
 import {Divider} from 'src/styled';
+import { queryOrganizationMemberManage } from 'src/lib/query/organization';
+import Config from 'react-native-config';
 
 const CardComponent = (props) => {
   const [data, setData] = useState([]);
@@ -55,7 +57,7 @@ const CardComponent = (props) => {
       });
   };
 
-  const handleSuccess = id => {
+  const handleSuccess = (id, userId) => {
     setLoading(true);
 
     Client.query({
@@ -66,15 +68,38 @@ const CardComponent = (props) => {
       },
     })
       .then((res) => {
+        console.log('res join', res);
+        const data = res.data.joinCommunityManage;
         showPopup('Akun selesai di Approve', 'success');
         fetchData();
         setLoading(false);
+
+        fetchOrganizationMemberManage(userId);
       })
       .catch((err) => {
-        showPopup(err.message, 'warning');
+        showPopup(err.message, 'error');
         setLoading(false);
       });
   };
+
+  const fetchOrganizationMemberManage = (userId) => {
+    const variables = {
+      "userId": userId,
+      "organizationInitialCode": Config.INITIAL_CODE,
+      "type": "INSERT"
+    };
+
+    console.log(variables);
+
+    Client.mutate({
+      mutation: queryOrganizationMemberManage,
+      variables,
+    }).then((res) => {
+      console.log('res organization manage', res);
+    }).catch((err) => {
+      console.log('err organization manage', err);
+    });
+  }
 
   const handleRemove = id => {
     setLoading(true);
@@ -92,7 +117,7 @@ const CardComponent = (props) => {
         setLoading(false);
       })
       .catch((err) => {
-        showPopup('catch', 'warning');
+        showPopup('Terjadi kesalahan', 'error');
         setLoading(false);
       });
   };
@@ -120,10 +145,6 @@ const CardComponent = (props) => {
   };
 
   const renderItem = (item, index) => {
-    if (index === 0) {
-      // console.log(item);
-    }
-
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate('CardDetail', {item, props})}
@@ -181,9 +202,10 @@ const CardComponent = (props) => {
                   fontSize: 14,
                   fontFamily: 'Inter-Regular',
                   width: '80%',
-                  backgroundColor: Color.textInput,
+                  backgroundColor: Color.semiwhite,
                   borderRadius: 4,
                   includeFontPadding: false,
+                  paddingLeft: 6,
                 }}
               />
 
@@ -225,7 +247,7 @@ const CardComponent = (props) => {
                   Alert(
                     'Terima',
                     'Apakah Anda yakin akan menerima anggota ini?',
-                    () => handleSuccess(item.id),
+                    () => handleSuccess(item.id, item.user_id),
                   );
                 }}
                 style={{
@@ -263,6 +285,8 @@ const CardComponent = (props) => {
       </TouchableOpacity>
     );
   };
+
+  // console.log(data);
 
   return (
     <Scaffold

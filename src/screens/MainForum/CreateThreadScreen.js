@@ -18,6 +18,7 @@ import validate from '@src/lib/validate';
 
 import Client from '@src/lib/apollo';
 import { queryProductManage } from '@src/lib/query';
+import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -68,6 +69,8 @@ const CreateThreadScreen = (props) => {
         type: params.productType,
         category: params.productSubCategory,
         description: '',
+        latitude: '',
+        longitude: '',
     });
     const [error, setError] = useState({
         name: null,
@@ -77,7 +80,7 @@ const CreateThreadScreen = (props) => {
     const [thumbImage, setThumbImage] = useState('');
     const [mimeImage, setMimeImage] = useState('image/jpeg');
     const [selectedStatus, setSelectedStatus] = useState({
-        id: 2, value: 'PRIVATE', iconName: 'lock-closed'
+        label: 'Privasi', value: 'PRIVATE', iconName: 'lock-closed'
     });
 
     // ref
@@ -89,11 +92,35 @@ const CreateThreadScreen = (props) => {
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+        requestLocationPermission();
   
         return () => {
             BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
         }
     }, []);
+
+    const requestLocationPermission = async () => {
+        const isGranted = await geoLocationPermission();
+    
+        console.log('isGranted',isGranted);
+    
+        geoCurrentPosition(
+          (res) => {
+            console.log(res, 'res location');
+            if (res.coords) {
+                setUserData({
+                    ...userData,
+                    latitude: res.coords.latitude.toString(),
+                    longitude: res.coords.longitude.toString(),
+                });
+            }
+          },
+          (err) => {
+            console.log(err, 'err location');
+          }
+        );
+    }
   
     const handleBackPress = () => {
         backToSelectVideo();
@@ -262,7 +289,7 @@ const CreateThreadScreen = (props) => {
 
                 <TouchSelect
                     title='Siapa yang dapat melihat ini?'
-                    value={userData.status}
+                    value={selectedStatus.label}
                     iconName={selectedStatus.iconName}
                     onPress={() => modalSelectStatusRef.current.open()}
                 />
@@ -270,7 +297,7 @@ const CreateThreadScreen = (props) => {
 
             <Submit
                 buttonLabel='Buat'
-                buttonColor={Color.green}
+                buttonColor={Color.primary}
                 type='bottomSingleButton'
                 buttonBorderTopWidth={0.5}
                 onPress={() => {

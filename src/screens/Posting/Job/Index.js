@@ -110,14 +110,16 @@ export default ({ navigation, route }) => {
                     <Divider /> */}
                     <MaterialIcons
                       name='add'
-                      color={Color.primary}
                       size={26}
-                      onPress={() => navigation.navigate('CreateThreadScreen', {
-                        title: route.params && route.params.title ? route.params.title : '',
-                        productType: Config.PRODUCT_TYPE,
-                        productCategory: '',
-                        productSubCategory: 'JOBS',
-                      })}
+                      onPress={() =>
+                        navigation.navigate('CreateThreadScreen', {
+                          title:
+                            route.params && route.params.title ? route.params.title : '',
+                          productType: Config.PRODUCT_TYPE,
+                          productCategory: '',
+                          productSubCategory: 'JOBS',
+                        })
+                      }
                     />
                   </Row>
                 }
@@ -146,12 +148,13 @@ export default ({ navigation, route }) => {
                 showHeader={false}
                 onPress={(item) => {
                   // navigation.navigate('JobDetail', { item });
-                  navigation.navigate('PostingDetail', {item});
+                  navigation.navigate('JobDetail', {item});
                 }}
                 style={{
                   paddingBottom: 45
                 }}
             />
+            {/* {console.log(state.listProduct)} */}
         </Scaffold>
     )
 }

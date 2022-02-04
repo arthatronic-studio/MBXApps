@@ -115,8 +115,7 @@ const DetailProduct = ({navigation}) => {
           type="regular"
           centerTitle={false}
           searchbar
-          cartIcon
-          favoriteIcon
+          
         />
       }
       onPressLeftButton={() => navigation.pop()}

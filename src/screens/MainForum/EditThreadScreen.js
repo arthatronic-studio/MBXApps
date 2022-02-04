@@ -21,6 +21,7 @@ import validate from '@src/lib/validate';
 import Client from '@src/lib/apollo';
 import { queryProductManage } from '@src/lib/query';
 import { Divider } from 'src/styled';
+import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -73,6 +74,8 @@ const EditThreadScreen = (props) => {
         type: params.productType,
         category: params.productSubCategory,
         description: params.productDescription,
+        latitude: '',
+        longitude: '',
     });
     const [error, setError] = useState({
         name: null,
@@ -96,11 +99,35 @@ const EditThreadScreen = (props) => {
 
     useEffect(() => {
         BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+        requestLocationPermission();
   
         return () => {
             BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
         }
     }, []);
+
+    const requestLocationPermission = async () => {
+        const isGranted = await geoLocationPermission();
+    
+        console.log('isGranted',isGranted);
+    
+        geoCurrentPosition(
+          (res) => {
+            console.log(res, 'res location');
+            if (res.coords) {
+                setUserData({
+                    ...userData,
+                    latitude: res.coords.latitude.toString(),
+                    longitude: res.coords.longitude.toString(),
+                });
+            }
+          },
+          (err) => {
+            console.log(err, 'err location');
+          }
+        );
+    }
   
     const handleBackPress = () => {
         backToSelectVideo();

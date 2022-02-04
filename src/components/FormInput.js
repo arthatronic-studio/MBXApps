@@ -43,10 +43,11 @@ const defaultProps = {
     multiline: false,
     editable: true,
     format: '', // currency
+    style: {},
 };
 
 const FormInput = forwardRef((props, ref) => {
-    const { label, placeholder, onChangeText, value, onBlur, returnKeyType, onSubmitEditing, keyboardType, error, secureTextEntry, prefixIcon, suffixIcon, multiline, editable, format } = props;
+    const { label, placeholder, onChangeText, value, onBlur, returnKeyType, onSubmitEditing, keyboardType, error, secureTextEntry, prefixIcon, suffixIcon, multiline, editable, format, style } = props;
 
     const { Color } = useColor();
 
@@ -64,7 +65,7 @@ const FormInput = forwardRef((props, ref) => {
                     paddingHorizontal: 12,
                 }}
             >
-                <View
+                {label !== '' && <View
                     style={{
                         width: '100%',
                         justifyContent: 'flex-start',
@@ -73,7 +74,7 @@ const FormInput = forwardRef((props, ref) => {
                     }}
                 >
                     <Text size={8} color={Color.placeholder}>{label}</Text>
-                </View>
+                </View>}
 
                 <Row>
                     {prefixIcon}
@@ -138,6 +139,7 @@ const FormInput = forwardRef((props, ref) => {
                                 color: Color.text,
                                 includeFontPadding: false,
                                 padding: 0,
+                                ...style,
                             }}
                             secureTextEntry={secureTextEntry}
                             multiline={multiline}
