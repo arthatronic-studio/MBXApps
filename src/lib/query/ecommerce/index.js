@@ -21,10 +21,27 @@ export const queryCheckout = gql`
     ecommerceCreateNewOrder(
       productId: $productId
     ) {
-      orderId orderNumber totalPrice
+      orderId 
+      orderNumber 
+      totalPrice
     }
   }
-  `;
+`;
+
+  export const queryDeleteItemCart = gql`
+  mutation ecommerceCartDelete(
+    $productId: Int!
+  ) {
+      ecommerceCartDelete(
+      productId: $productId
+    ) {
+      id
+      product_id
+      cart_id
+      quantity
+    }
+  }
+`;
 
 export const queryGetCart = gql`
   query(
@@ -40,17 +57,7 @@ export const queryGetCart = gql`
   }
 `;
 
-export const queryDeleteItemCart = gql`
-  mutation ecommerceCartDelete(
-    $productId: Int!
-  ) {
-    ecommerceCartDelete(
-     productId: $productId
-   ) {
-    success
-   }
-  }
-`;
+
 
 export const queryUpdateItemCart = gql`
   mutation ecommerceCartUpdate(
