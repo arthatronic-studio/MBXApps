@@ -67,6 +67,8 @@ const Banner = props => {
     )
   }
 
+  // console.log('data', data);
+
   return (
     <View style={{marginBottom: 16}}>
       {showHeader && renderHeader()}
@@ -76,30 +78,47 @@ const Banner = props => {
       ) : (
         <>
           <Divider />
-          <CarouselView
-            delay={3000}
-            showIndicator
-            style={{width, aspectRatio: 16/9}}
-          >
-            {data.map((e, idx) => {
-              return (
-                <Container
-                  key={idx}
-                  width='100%'
-                  paddingHorizontal={16}
-                >
-                  <Image
-                    source={ImagesPath.imageBanner2 || {uri: e.image}}
-                    style={{
-                      width: '100%',
-                      height:'100%',
-                      borderRadius: 16
-                    }}
-                  />
-                </Container>
-              )
-            })}
-          </CarouselView>
+          {data.length > 0 ?
+            <CarouselView
+              delay={3000}
+              showIndicator
+              style={{width, aspectRatio: 16/9}}
+            >
+              {data.map((e, idx) => {
+                return (
+                  <Container
+                    key={idx}
+                    width='100%'
+                    paddingHorizontal={16}
+                  >
+                    <Image
+                      source={{uri: e.image}}
+                      style={{
+                        width: '100%',
+                        height:'100%',
+                        borderRadius: 16
+                      }}
+                    />
+                  </Container>
+                )
+              })}
+            </CarouselView>
+          :
+            <Container
+              width={width}
+              paddingHorizontal={16}
+              style={{aspectRatio: 16/9}}
+            >
+              <Image
+                source={ImagesPath.imageBanner2}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: 16
+                }}
+              />
+            </Container>
+          }
         </>
       )}
     </View>

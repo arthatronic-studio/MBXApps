@@ -17,7 +17,7 @@ import Scaffold from '@src/components/Scaffold';
 import ListNews from 'src/components/Posting/ListNews';
 
 import Client from '@src/lib/apollo';
-import {queryBannerList, queryContentProduct} from '@src/lib/query';
+import {queryContentProduct} from '@src/lib/query';
 import {listPrivilegeUser} from 'src/utils/constants';
 import Banner from 'src/components/Banner';
 import ImagesPath from 'src/components/ImagesPath';

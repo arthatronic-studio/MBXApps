@@ -14,8 +14,8 @@ import {
 } from '@src/components';
 import Text from '@src/components/Text';
 import {guestLogin} from '@src/state/actions/user/auth';
-import ImagesPath from 'src/components/ImagesPath';
 import { Divider } from 'src/styled';
+import {listBoarding} from '@assets/images/onboarding';
 
 const MainView = Styled(View)`
   flex: 1;
@@ -57,27 +57,6 @@ const DotIndicator = Styled(View)`
   backgroundColor: ${props => props.backgroundColor};
 `;
 
-const sliderData = [
-  {
-    title: 'Smart Technology',
-    image: ImagesPath.iconOnBoard1,
-    subTitle:
-      'Tribesocial is an intelligent community platform that delivers personalized content recommendations to every user based on their interests.',
-  },
-  {
-    title: 'Diversified Community',
-    image: ImagesPath.iconOnBoard2,
-    subTitle:
-      'Users are actively engaged on Tribesocial, they like to express, discuss, show their attitudes and share content with others.',
-  },
-  {
-    title: 'High Quality Users',
-    image: ImagesPath.iconOnBoard3,
-    subTitle:
-      'Users are loyal to our platform, they use Tribesocial frequently.',
-  },
-];
-
 const KnowMeScreen = ({navigation, route}) => {
   const [tabPage, setTabPage] = useState(0);
 
@@ -107,14 +86,14 @@ const KnowMeScreen = ({navigation, route}) => {
     );
   };
 
-  const isFinish = tabPage === (sliderData.length - 1);
+  const isFinish = tabPage === (listBoarding.length - 1);
 
   const renderNavigationFooter = () => {
     return (
       <AbsoluteBottomView>
         <NavgationFooterView>
           <WarpperNavigationBottom>
-            {sliderData.map((_, idx) => (
+            {listBoarding.map((_, idx) => (
               <TouchableOpacity key={idx} onPress={() => setTabPage(idx)}>
                 <DotIndicator
                   backgroundColor={
@@ -127,7 +106,7 @@ const KnowMeScreen = ({navigation, route}) => {
         </NavgationFooterView>
 
         <Submit
-          buttonLabel={isFinish ? "Lewati" : "Selanjutnya"}
+          buttonLabel={isFinish ? "Login" : "Selanjutnya"}
           buttonColor={Color.primary}
           type="bottomSingleButton"
           buttonBorderTopWidth={0}
@@ -159,7 +138,7 @@ const KnowMeScreen = ({navigation, route}) => {
         tabBarUnderlineStyle={{backgroundColor: Color.theme, height: 0}}
         tabBarPosition="bottom"
         onChangeTab={({i}) => setTabPage(i)}>
-        {sliderData.map((item, idx) => (
+        {listBoarding.map((item, idx) => (
           <Tab
             key={idx}
             heading={<TabHeading style={{backgroundColor: Color.theme}} />}>
@@ -169,7 +148,7 @@ const KnowMeScreen = ({navigation, route}) => {
                   width: '70%',
                   height: '70%',
                 }}
-                source={item.image}
+                source={item.imageAsset}
                 resizeMode="contain"
               />
               <NavigationTextWarpperView>

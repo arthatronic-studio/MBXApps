@@ -39,7 +39,8 @@ import {playNotificationSounds} from '@src/utils/notificationSounds';
 import CarouselView from 'src/components/CarouselView';
 import Banner from 'src/components/Banner';
 import Client from '@src/lib/apollo';
-import {queryContentProduct, queryBannerList} from '@src/lib/query';
+import {queryContentProduct} from '@src/lib/query';
+import {queryBannerList, queryPromoBanners} from '@src/lib/query/banner';
 import ModalPosting from './ModalPosting';
 import ListEmergency from 'src/components/Posting/ListEmergency';
 import {usePreviousState} from 'src/hooks';
@@ -66,7 +67,8 @@ const MainHome = ({navigation, route}) => {
   const [firebaseNotifierLastChatCount, setFirebaseNotifierLastChatCount] =
     useState(0);
   const [notifierCount, setNotifierCount] = useState(0);
-  const [showPopupAds, setShowPopupAds] = useState(true);
+  const [dataPopupAds, setDataPopupAds] = useState();
+  const [showPopupAds, setShowPopupAds] = useState(false);
 
   const [loadingAuction, setLoadingAuction] = useState(true);
 
@@ -105,6 +107,8 @@ const MainHome = ({navigation, route}) => {
   const {width} = useWindowDimensions();
 
   useEffect(() => {
+    fetchPromoBanners();
+
     const subscriber = firestore()
       .collection('contentChatNotifier')
       .orderBy('id', 'desc')
@@ -167,24 +171,41 @@ const MainHome = ({navigation, route}) => {
   useEffect(() => {
     if (isFocused) {
       dispatch({type: 'BOOKING.CLEAR_BOOKING'});
+      fetchBannerList();
       fetchData();
     }
   }, [isFocused]);
 
-  useEffect(() => {
+  const fetchBannerList = () => {
     Client.query({
       query: queryBannerList,
     })
-      .then(res => {
-        console.log(res);
-        console.log(res.data.bannerList);
-        setListBanner(res.data.bannerList);
-        setLoadingBanner(false);
-      })
-      .catch(err => {
-        console.log(err, 'err banner list');
-      });
-  }, []);
+    .then(res => {
+      console.log('res banner list', res);
+      setListBanner(res.data.bannerList);
+      setLoadingBanner(false);
+    })
+    .catch(err => {
+      console.log(err, 'err banner list');
+    });
+  }
+
+  // Popup Banners
+  const fetchPromoBanners = () => {
+    Client.query({
+      query: queryPromoBanners,
+    })
+    .then(res => {
+      console.log('res Promo Banners', res);
+      setDataPopupAds(res.data.promoBanners);
+      setShowPopupAds(true);
+    })
+    .catch(err => {
+      console.log(err, 'err Promo Banners');
+      setDataPopupAds();
+      setShowPopupAds(true);
+    });
+  }
 
   const fetchData = async () => {
     const result = await Promise.all([
@@ -578,14 +599,15 @@ const MainHome = ({navigation, route}) => {
         }}
       />
 
-      {/* <Modal
+      <Modal
         isVisible={tempShowPopupAds && showPopupAds}
         onBackdropPress={() => {
           tempShowPopupAds = false;
           setShowPopupAds(false);
         }}
         animationIn="slideInDown"
-        animationOut="slideOutDown">
+        animationOut="slideOutDown"
+      >
         <View style={{height: '75%'}}>
           <TouchableOpacity
             onPress={() => {
@@ -594,9 +616,14 @@ const MainHome = ({navigation, route}) => {
               navigation.navigate('DetailPromo', {item: dataSabyan});
             }}>
             <ImageBackground
-              source={ImagesPath.popUpTribes}
-              imageStyle={{borderRadius: 13}}
-              style={{height: '100%', resizeMode: 'contain', width: '100%'}}>
+              source={
+                dataPopupAds && dataPopupAds.picture && dataPopupAds.picture.url ?
+                dataPopupAds.picture.url :
+                ImagesPath.popUpTribes
+              }
+              imageStyle={{borderRadius: 12}}
+              style={{height: '100%', resizeMode: 'contain', width: '100%'}}
+            >
               <TouchableOpacity
                 onPress={() => {
                   tempShowPopupAds = false;
@@ -604,19 +631,19 @@ const MainHome = ({navigation, route}) => {
                 }}
                 style={{
                   alignSelf: 'flex-end',
-                  padding: 3,
-                  margin: 10,
-                  backgroundColor: Color.gray,
-                  borderRadius: 12,
+                  padding: 4,
+                  margin: 8,
+                  backgroundColor: Color.error,
+                  borderRadius: 50,
                 }}>
                 <Image
                   source={ImagesPath.icClose}
-                  style={{width: 20, height: 20, top: 0}}></Image>
+                  style={{width: 20, height: 20}} />
               </TouchableOpacity>
             </ImageBackground>
           </TouchableOpacity>
         </View>
-      </Modal> */}
+      </Modal>
     </Scaffold>
   );
 };

@@ -13,6 +13,7 @@ import {
 import { shadowStyle } from '@src/styles';
 import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
+import { Divider } from 'src/styled';
 
 const { width } = Dimensions.get('window');
 

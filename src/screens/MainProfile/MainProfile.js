@@ -29,7 +29,7 @@ import {
 } from '@src/components';
 import {redirectTo} from '@src/utils';
 import {shadowStyle} from '@src/styles';
-import {iconSplash, bannerCard, imageCardOrnament} from '@assets/images';
+import {iconSplash, imageCardOrnament} from '@assets/images';
 import {Box, Container, Divider} from 'src/styled';
 import Clipboard from '@react-native-community/clipboard';
 import { listInitialCode, listKomotoFamily, listPrivilegeUser } from 'src/utils/constants';
