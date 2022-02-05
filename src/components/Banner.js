@@ -34,16 +34,25 @@ const Banner = props => {
     return (
       <View
         style={{
-          width: width - 32,
-          aspectRatio: 12 / 7,
-          marginBottom: 16,
-          backgroundColor: Color.textInput,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <ActivityIndicator size="large" color={Color.primary} />
-        <Divider />
-        <Text>Memuat</Text>
+          width: width,
+          aspectRatio: 16/9,
+          paddingHorizontal: 16,
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            width: '100%',
+            borderRadius: 12,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: Color.textInput,
+          }}
+        >
+          <ActivityIndicator size="large" color={Color.primary} />
+          <Divider />
+          <Text>Memuat</Text>
+        </View>
       </View>
     );
   };

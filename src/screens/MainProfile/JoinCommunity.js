@@ -66,7 +66,7 @@ const JoinCommunity = ({ navigation, route }) => {
         carIdentity: '',
         reason: '',
         note: '',
-        chapterId: "Bogor",
+        chapterId: "",
         carPhotoMain: '',
         carPhotoFront: '',
         carPhotoSide: '',
@@ -97,11 +97,7 @@ const JoinCommunity = ({ navigation, route }) => {
         setUserData({ ...userData, [key]: val });
     };
 
-    const [selectedChapter, setSelectedChapter] = useState({
-        id: 1, name: 'Bogor', community_id: 1, code: "BGR",
-    });
-
-    console.log(selectedChapter)
+    const [selectedChapter, setSelectedChapter] = useState();
 
     const [thumbImage, setThumbImage] = useState('');
     const [mimeImage, setMimeImage] = useState('image/jpeg');
@@ -213,15 +209,15 @@ const JoinCommunity = ({ navigation, route }) => {
                 title="Gabung Komunitas"
             />    
             <ScrollView>
-                <View style={{backgroundColor: Color.theme, marginBottom: 106, paddingBottom: 28}}>
+                <View style={{backgroundColor: Color.theme, paddingBottom: 16}}>
                     <View style={{paddingHorizontal: 16, paddingTop: 35}}>
                         <CustomTouch onPress={() => modalSelectChapterRef.current.open()}>
                             <View style={{marginTop: 6, paddingHorizontal: 12, borderWidth: 1, borderRadius: 4, borderColor: Color.border}}>
                                 <LabelInput>
                                     <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Pilih Chapter</Text>
                                 </LabelInput>
-                                <View style={{height: 34, paddingRight: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                                    <Text size={14} style={{marginTop: 2}}>{userData.chapterId}</Text>
+                                <View style={{height: 34, paddingRight: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                                    <Text size={14} style={{marginTop: 2}}>{userData.chapterId || 'Pilih'}</Text>
                                     <Ionicons name='chevron-down-outline' color={Color.text} />
                                 </View>
                             </View>
@@ -526,7 +522,6 @@ const JoinCommunity = ({ navigation, route }) => {
                         />
                     </TouchableOpacity>}
                 </View>
-
             </ScrollView>
 
             <Submit

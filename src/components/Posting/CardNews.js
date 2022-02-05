@@ -92,14 +92,13 @@ const CardNews = props => {
           borderRadius: 4,
           backgroundColor: Color.textInput,
           ...shadowStyle,
-        }}>
-        <View style={{width: '20%'}}>
+        }}
+      >
+        <View style={{width: '25%'}}>
           <Image
             source={{uri: item.image}}
             style={{
-              width: '80%',
-              height: 70,
-
+              width: '100%',
               aspectRatio: 1,
               borderRadius: 8,
             }}
@@ -107,14 +106,14 @@ const CardNews = props => {
           />
         </View>
 
-        <View style={{width: '80%', marginStart: 15}}>
+        <View style={{width: '75%', paddingLeft: 16}}>
           <View
             style={{
               width: '100%',
               flexDirection: 'row',
               justifyContent: 'space-between',
             }}>
-            <Text type="bold" size={16} align="left" numberOfLines={2}>
+            <Text type="bold" align="left" numberOfLines={2}>
               {item.productName}
             </Text>
             {/* <Ionicons name='bookmark-outline' size={20} color={Color.primary} /> */}

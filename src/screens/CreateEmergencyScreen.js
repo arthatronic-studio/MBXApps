@@ -110,12 +110,12 @@ const CreateEmergencyScreen = (props) => {
     const [open, setOpen] = useState(false)
 
     useEffect(() => {
-        BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+        // BackHandler.addEventListener('hardwareBackPress', handleBackPress);
 
         requestLocationPermission();
   
         return () => {
-            BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+            // BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
         }
     }, []);
 

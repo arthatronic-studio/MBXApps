@@ -25,12 +25,15 @@ import Moment from 'moment';
 
 import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
+import { useSelector } from 'react-redux';
 
 const Example = Styled(View)`
 `;
 
 export default ({ navigation, route }) => {
     const { item } = route.params;
+
+    const user = useSelector(state => state['user.auth'].login.user);
 
     const [state, changeState] = useState({
         im_like: item.im_like,
@@ -93,6 +96,7 @@ export default ({ navigation, route }) => {
             loadingProps={loadingProps}
         >
             <ScrollView
+                showsVerticalScrollIndicator={false}
                 contentContainerStyle={{paddingBottom: 16}}
             >
                 <View 
@@ -106,7 +110,23 @@ export default ({ navigation, route }) => {
                     />
                 </View>
 
-                {/* <View style={{padding: 24, marginTop: -16, borderTopLeftRadius: 24, borderTopRightRadius: 24, flexDirection: 'row', justifyContent: 'flex-end', backgroundColor: Color.theme}} /> */}
+                <View style={{padding: 24, marginTop: -16, borderTopLeftRadius: 24, borderTopRightRadius: 24, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: Color.theme}}>
+                    {user && user.userId === item.ownerId && <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('EditThreadScreen', {
+                                ...item,
+                                title: 'Edit',
+                            });
+                        }}
+                        style={{height: 48, width: 48, borderRadius: 24, position: 'absolute', top: -24, right: 16, backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center'}}
+                    >
+                        <Ionicons
+                            name='pencil'
+                            size={20}
+                            color={Color.textInput}
+                        />
+                    </TouchableOpacity>}
+                </View>
 
                 <View style={{paddingHorizontal: 24, paddingTop: 30}}>
                     <View style={{marginTop: 8, paddingBottom: 16, flexDirection: 'row', alignItems: 'center'}}>

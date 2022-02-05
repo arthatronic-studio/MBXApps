@@ -85,7 +85,7 @@ const menuHome = [
     images: iconMenuLoker,
     nav: 'JobScreen',
     params: { title: 'Loker' },
-    badge: true,
+    badge: false,
   },
   {
     id: 2,
@@ -94,7 +94,7 @@ const menuHome = [
     images: iconMenuTempat,
     nav: 'PlaceScreen',
     params: { title: 'Tempat' },
-    badge: true,
+    badge: false,
   },
   {
     id: 3,
@@ -103,7 +103,7 @@ const menuHome = [
     images: iconMenuEvent,
     nav: 'EventScreen',
     params: { title: 'Event' },
-    badge: true,
+    badge: false,
   },
   {
     id: 4,
@@ -112,7 +112,7 @@ const menuHome = [
     images: iconMenuArtikel,
     nav: 'NewsScreen',
     params: { title: 'Artikel' },
-    badge: true,
+    badge: false,
   },
 
   // menu tribes

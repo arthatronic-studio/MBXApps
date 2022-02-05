@@ -19,6 +19,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Octions from 'react-native-vector-icons/Octicons';
 import moment from 'moment';
 import { Divider } from 'src/styled';
+import { useSelector } from 'react-redux';
 
 const Example = Styled(View)`
 `;
@@ -27,14 +28,16 @@ export default ({navigation, route}) => {
   const {Color} = useColor();
   const {item} = route.params;
 
-    const [state, changeState] = useState({
-      im_like: item.im_like,
-    });
+  const user = useSelector(state => state['user.auth'].login.user);
 
-    const setState = obj => changeState({...state, ...obj});
+  const [state, changeState] = useState({
+    im_like: item.im_like,
+  });
 
-    const [popupProps, showPopup] = usePopup();
-    const [loadingProps, showLoading, hideLoading] = useLoading();
+  const setState = obj => changeState({...state, ...obj});
+
+  const [popupProps, showPopup] = usePopup();
+  const [loadingProps, showLoading, hideLoading] = useLoading();
 
   //   // useEffect(() => {
   //   //     const timeout = trigger ? setTimeout(() => {
@@ -46,32 +49,32 @@ export default ({navigation, route}) => {
   //   //     }
   //   // }, [trigger]);
 
-    const fetchAddLike = () => {
-      showLoading();
+  const fetchAddLike = () => {
+    showLoading();
 
-      Client.query({
-        query: queryAddLike,
-        variables: {
-          productId: item.id,
-        },
-      })
-        .then(res => {
-          console.log(res, 'res add like');
-          if (res.data.contentAddLike.id) {
-            if (res.data.contentAddLike.status === 1) {
-              showLoading('success', 'Berhasil dipesan');
-              setState({im_like: true});
-            } else {
-              showLoading('info', 'Berhasil membatalkan');
-              setState({im_like: false});
-            }
+    Client.query({
+      query: queryAddLike,
+      variables: {
+        productId: item.id,
+      },
+    })
+      .then(res => {
+        console.log(res, 'res add like');
+        if (res.data.contentAddLike.id) {
+          if (res.data.contentAddLike.status === 1) {
+            showLoading('success', 'Berhasil dipesan');
+            setState({im_like: true});
+          } else {
+            showLoading('info', 'Berhasil membatalkan');
+            setState({im_like: false});
           }
-        })
-        .catch(err => {
-          console.log(err, 'err add like');
-          hideLoading();
-        });
-    };
+        }
+      })
+      .catch(err => {
+        console.log(err, 'err add like');
+        hideLoading();
+      });
+  };
 
   return (
     // <Scaffold
@@ -179,6 +182,7 @@ export default ({navigation, route}) => {
     //             </TouchableOpacity>
     //         </View> */}
     // </Scaffold>
+
     <Scaffold
       headerTitle="Detail"
       fallback={false}
@@ -186,22 +190,32 @@ export default ({navigation, route}) => {
       popupProps={popupProps}
       loadingProps={loadingProps}
     >
-      <ScrollView>
-        <View>
-          <Image
-            source={{uri: item.image}}
-            style={{width: '100%', aspectRatio: 16/9}}
-          />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+      >
+        <Image
+          source={{uri: item.image}}
+          style={{width: '100%', aspectRatio: 16/9}}
+        />
+
+        <View style={{padding: 24, marginTop: -16, borderTopLeftRadius: 24, borderTopRightRadius: 24, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: Color.theme}}>
+            {user && user.userId === item.ownerId && <TouchableOpacity
+                onPress={() => {
+                    navigation.navigate('EditThreadScreen', {
+                        ...item,
+                        title: 'Edit',
+                    });
+                }}
+                style={{height: 48, width: 48, borderRadius: 24, position: 'absolute', top: -24, right: 16, backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center'}}
+            >
+                <Ionicons
+                    name='pencil'
+                    size={20}
+                    color={Color.textInput}
+                />
+            </TouchableOpacity>}
         </View>
-        {/* <View
-          style={{
-            backgroundColor: Color.theme,
-            width: '100%',
-            height: 30,
-            borderRadius: 20,
-            position: 'absolute',
-            marginVertical: '44%',
-          }}></View> */}
+
         <View
           style={{
             backgroundColor: Color.theme,
@@ -216,7 +230,6 @@ export default ({navigation, route}) => {
                 fontSize: 11,
                 textAlign: 'left',
                 paddingHorizontal: 20,
-                marginVertical: 10,
               }}>
               OFFICIAL EVENT
             </Text>
@@ -236,14 +249,29 @@ export default ({navigation, route}) => {
               style={{
                 flexDirection: 'row',
                 paddingHorizontal: 10,
-                width: '40%',
+                width: '50%',
               }}>
               <Foundation
                 name={'calendar'}
                 size={22}
                 style={{paddingHorizontal: 15}}
+                color={Color.text}
               />
               <Text style={{fontWeight: 'bold'}}>{moment(parseInt(item.updated_date)).format('DD MMM YYYY')}</Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                paddingHorizontal: 10,
+                width: '50%',
+              }}>
+              <Ionicons
+                name='person'
+                size={20}
+                style={{paddingHorizontal: 15}}
+                color={Color.text}
+              />
+              <Text style={{fontWeight: 'bold'}}>{item.fullname}</Text>
             </View>
             {/* <View
               style={{

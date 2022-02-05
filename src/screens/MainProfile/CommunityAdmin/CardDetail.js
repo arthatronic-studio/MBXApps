@@ -177,7 +177,7 @@ const CardDetail = ({ navigation, route }) => {
               </Text>
 
               <View style={{height: 120, aspectRatio: 1/1, borderRadius: 8, backgroundColor: Color.disabled}}>
-                {userDetail.image === null ? (
+                {userDetail.photoProfile === null ? (
                   <View
                     style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}
                   >
@@ -185,8 +185,8 @@ const CardDetail = ({ navigation, route }) => {
                   </View>
                 ) : (
                   <Image
-                    source={{uri: userDetail.image}}
-                    style={{height: 120, width: 120}}
+                    source={{uri: userDetail.photoProfile}}
+                    style={{height: 120, width: 120, borderRadius: 8}}
                   />
                 )}
               </View>

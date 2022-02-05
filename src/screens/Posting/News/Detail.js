@@ -18,6 +18,7 @@ import { useSelector } from 'react-redux';
 
 import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
+import moment from 'moment';
 
 const Example = Styled(View)`
 `;
@@ -75,7 +76,7 @@ export default ({navigation, route}) => {
       })
   }
 
-  console.log('detail posting', item);
+  console.log('user', item);
 
   return (
     <Scaffold
@@ -85,9 +86,11 @@ export default ({navigation, route}) => {
       // iconRightButton={
       //     <Image source={iconBookmarks} height={70} width={70}/>
       // }
-      loadingProps={loadingProps}>
-      
-      <ScrollView>
+      loadingProps={loadingProps}
+    >
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+      >
         {/* <View style={{padding: 16}}>
                     <Text size={24} type='bold' align='left' lineHeight={32}>
                         {item.productName}
@@ -114,18 +117,18 @@ export default ({navigation, route}) => {
             style={{
               width: '100%',
               height: '100%',
-              position: 'absolute',
+              // position: 'absolute',
             }} />
             
-          <View
+          {/* <View
             style={{
               width: '100%',
               height: '100%',
-              backgroundColor: Color.overflow,
+              backgroundColor: Color.reverseOverflow,
               position: 'absolute',
-            }} />
+            }} /> */}
 
-          <View
+          {/* <View
             style={{
               width: '100%',
               height: '100%',
@@ -142,17 +145,71 @@ export default ({navigation, route}) => {
                 paddingBottom: 16,
               }}>
               <Text
-                style={{fontWeight: 'bold', color: Color.textInput}}
+                style={{fontWeight: 'bold', color: Color.text}}
                 align="left"
                 size={19}>
                 {item.productName}
               </Text>
-              <Text style={{color: Color.textInput}} align="left" size={11}>
+              <Text style={{color: Color.text}} align="left" size={11}>
+                Ditulis oleh {item.fullname}
+              </Text>
+            </View>
+          </View> */}
+
+          <View style={{padding: 24, marginTop: -16, borderTopLeftRadius: 24, borderTopRightRadius: 24, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: Color.theme}}>
+            {user && user.userId === item.ownerId && <View
+              style={{height: 48, width: 48, borderRadius: 24, position: 'absolute', top: -24, right: 16, backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center'}}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('EditThreadScreen', {
+                    ...item,
+                    title: 'Edit',
+                  });
+                }}
+              >
+                <Ionicons
+                  name='pencil'
+                  size={20}
+                  color={Color.textInput}
+                />
+              </TouchableOpacity>
+            </View>}
+          </View>
+        </View>
+
+        <View
+            style={{
+              width: '100%',
+              // height: '100%',
+              marginTop: 16,
+              justifyContent: 'flex-end',
+              alignItems: 'flex-start',
+            }}>
+            <View
+              style={{
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                width: '100%',
+                paddingHorizontal: 16,
+                paddingBottom: 16,
+              }}>
+              <Text
+                type='bold'
+                align="left"
+                size={19}>
+                {item.productName}
+              </Text>
+              <Divider height={4} />
+              <Text align="left" size={11}>
+                {moment(parseInt(item.created_date)).format('DD MMM YYYY')}
+              </Text>
+              <Text align="left" size={11}>
                 Ditulis oleh {item.fullname}
               </Text>
             </View>
           </View>
-        </View>
 
         <View style={{padding: 16}}>
           <Text lineHeight={24} align="left">
@@ -187,8 +244,8 @@ export default ({navigation, route}) => {
                 }}
                 style={{height: 70, width: 70, flexDirection: 'row', borderRadius: 35, backgroundColor: Color.textInput, justifyContent: 'center', alignItems: 'center'}}
             >
-                {item.comment > 0 && <Text>{item.comment} </Text>}
                 <Ionicons name='chatbubble-ellipses-outline' color={Color.text} size={30} />
+                {item.comment > 0 && <Text>{item.comment} </Text>}
             </TouchableOpacity>
             <Text size={12}>Komentar</Text>
         </View>

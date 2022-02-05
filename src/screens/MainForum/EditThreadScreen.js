@@ -98,13 +98,13 @@ const EditThreadScreen = (props) => {
     const [popupProps, showPopup] = usePopup();
 
     useEffect(() => {
-        BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+        // BackHandler.addEventListener('hardwareBackPress', handleBackPress);
 
         requestLocationPermission();
   
-        return () => {
-            BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
-        }
+        // return () => {
+        //     BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+        // }
     }, []);
 
     const requestLocationPermission = async () => {

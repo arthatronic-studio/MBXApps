@@ -89,6 +89,7 @@ export default ({ navigation, route }) => {
             loadingProps={loadingProps}
         >
             <ScrollView
+                showsVerticalScrollIndicator={false}
                 contentContainerStyle={{paddingBottom: 16}}
             >
                 <Image
@@ -126,7 +127,7 @@ export default ({ navigation, route }) => {
                     <Row justify='space-between' align='center'>
                         <Text type='semibold'>{item.fullname}</Text>
 
-                        {Moment(parseInt(item.created_date)).isValid() && <View style={{paddingBottom: 12}}>
+                        {Moment(parseInt(item.created_date)).isValid() && <View>
                             <Text size={12} align='left' style={{opacity: 0.6}}>
                                 {Moment(parseInt(item.created_date)).format('dddd, DD MMM YYYY')}
                             </Text>

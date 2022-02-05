@@ -11,8 +11,6 @@ import DatePicker from 'react-native-date-picker';
 import Moment from 'moment';
 
 import {
-  // Button,
-  // TouchableOpacity,
   Text,
   Popup, usePopup,
   Loading,
@@ -24,7 +22,6 @@ import {
   TouchableOpacity,
 } from '@src/components/Button';
 import validate from '@src/lib/validate';
-
 import { updateCurrentUserProfile } from '@src/state/actions/user/auth';
 import { usePreviousState } from '@src/hooks';
 import { Divider, MainView } from 'src/styled';
@@ -47,12 +44,6 @@ const EmailRoundedView = Styled(View)`
   flexDirection: column;
 `;
 
-const SignRegisterView = Styled(View)`
-  width: 100%;
-  marginTop: 36px;
-  marginBottom: 24px;
-`;
-
 const CustomTextInput = Styled(TextInput)`
   width: 100%;
   height: 100%;
@@ -65,22 +56,6 @@ const CustomTextInput = Styled(TextInput)`
 const ErrorView = Styled(View)`
   width: 100%;
   paddingVertical: 4px;
-  alignItems: flex-start;
-`;
-
-const SignButton = Styled(Button)`
-  width: 100%;
-  height: 45px;
-  borderRadius: 4px;
-`;
-
-const RegisterButton = Styled(TouchableOpacity)`
-  marginLeft: 4px;
-`;
-
-const TextTitleView = Styled(View)`
-  width: 100%;
-  marginBottom: 43px;
   alignItems: flex-start;
 `;
 
@@ -407,16 +382,14 @@ export default ({ navigation, route }) => {
             <MaterialIcons size={16} name='check-box-outline-blank' color={Color.theme} style={{marginRight: 4}} />
             <Text align='left' size={12} color={Color.theme}>Saya setuju dengan <Text color={Color.secondary}>Syarat & Ketentuan</Text> yang berlaku.</Text>
           </View> */}
-
-          <SignRegisterView>
-            <SignButton
-              onPress={() => onSubmit()}
-            >
-              Simpan
-            </SignButton>
-          </SignRegisterView>
         </Container>
       </ScrollView>
+
+      <View style={{padding: 16}}>
+        <Button onPress={() => onSubmit()}>
+          Simpan
+        </Button>
+      </View>
 
       <Loading visible={loading} />
 

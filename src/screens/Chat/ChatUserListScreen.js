@@ -22,9 +22,7 @@ import { Scaffold } from 'src/components';
 
 const BottomSection = Styled(View)`
   width: 100%;
-  paddingHorizontal: 16px;
-  paddingTop: 8px;
-  paddingBottom: 4px;
+  padding: 16px;
   flexDirection: row;
   alignItems: center;
   borderTopWidth: 0.5px;
@@ -33,7 +31,7 @@ const BottomSection = Styled(View)`
 const BoxInput = Styled(View)`
   width: 100%;
   backgroundColor: #FFFFFF;
-  padding: 8px 16px 8px 16px;
+  padding: 4px 16px 4px 16px;
   borderRadius: 32px;
   borderWidth: 0.5px;
   flexDirection: row;
@@ -211,12 +209,12 @@ const ChatUserListScreen = ({navigation, route}) => {
         />
       }
     >
-      
-      <BottomSection style={{borderColor: Color.border, marginTop: 12}}>
-        <BoxInput style={true ? {borderColor: Color.border} : {borderColor: Color.error}}>
+      <BottomSection style={{borderColor: Color.border}}>
+        <BoxInput style={{backgroundColor: Color.textInput, borderColor: Color.border}}>
           <TextInputNumber
             name="text"
-            placeholder='Search Here...'
+            placeholder='Cari anggota'
+            placeholderTextColor={Color.placeholder}
             returnKeyType="done"
             returnKeyLabel="Done"
             blurOnSubmit={false}
@@ -226,14 +224,16 @@ const ChatUserListScreen = ({navigation, route}) => {
               setSearch(text);
               searchFilter(text);
             }}
+            style={{
+              backgroundColor: Color.textInput,
+              color: Color.text,
+            }}
           />
           <CircleSend style={{backgroundColor: Color.primary}} onPress={() => {}}>
             <Ionicons name='search' size={16} color={Color.text} />
           </CircleSend>
         </BoxInput>
       </BottomSection>
-
-      <Text>{console.log(filterData)}</Text>
       
       <FlatList
         keyExtractor={(item, index) => item.toString() + index}
@@ -250,7 +250,6 @@ const ChatUserListScreen = ({navigation, route}) => {
                 onPress={() => onPress(item)}
                 onLongPress={() => onSelected(item)}
                 style={{
-                  height: 70,
                   width: '100%',
                   borderRadius: 4,
                   backgroundColor: Color.theme,
@@ -295,7 +294,6 @@ const ChatUserListScreen = ({navigation, route}) => {
               onPress={() => onPress(item)}
               onLongPress={() => onSelected(item)}
               style={{
-                height: 70,
                 width: '100%',
                 marginBottom: 8,
                 flexDirection: 'row',

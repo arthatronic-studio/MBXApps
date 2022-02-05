@@ -19,7 +19,7 @@ import { shadowStyle } from '@src/styles';
 
 import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
-import { Divider } from 'src/styled';
+import { Divider, Row } from 'src/styled';
 import { useSelector } from 'react-redux';
 
 const Example = Styled(View)`
@@ -115,19 +115,25 @@ export default ({ navigation, route }) => {
                 </View>
 
                 <View style={{paddingHorizontal: 24}}>
-                    <View style={{paddingBottom: 12}}>
+                    <View style={{paddingBottom: 16}}>
                         <Text size={24} type='bold' align='left'>
                             {item.productName}
                         </Text>
                     </View>
 
-                    {Moment(parseInt(item.created_date)).isValid() && <View style={{paddingBottom: 12}}>
-                        <Text size={12} align='left' style={{opacity: 0.6}}>
-                            {Moment(parseInt(item.created_date)).format('dddd, DD MMM YYYY')}
+                    <Row align='center' justify='space-between'>
+                        <Text align='left'>
+                            {item.fullname}
                         </Text>
-                    </View>}
 
-                    <View style={{paddingBottom: 8}}>
+                        {Moment(parseInt(item.created_date)).isValid() && <View>
+                            <Text size={12} align='left' style={{opacity: 0.6}}>
+                                {Moment(parseInt(item.created_date)).format('dddd, DD MMM YYYY')}
+                            </Text>
+                        </View>}
+                    </Row>
+
+                    <View style={{paddingTop: 16}}>
                         <Text align='left'>
                             {item.productDescription}
                         </Text>

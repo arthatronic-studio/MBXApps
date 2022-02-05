@@ -154,7 +154,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'ref_code',
       title: 'Kode Referal',
-      show: true,
+      show: false,
       icon: <AntDesign name="user" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('ReferralCodeScreen'),
     },
@@ -256,11 +256,10 @@ const MainProfile = ({navigation, route}) => {
               }}
             >
               {user && <Image
-                source={{ uri: user.image }}
-                resizeMode='contain'
+                source={{ uri: user.photoProfile }}
                 style={{
-                  width: '12%',
-                  aspectRatio: 1,
+                  width: width * 0.12,
+                  height: width * 0.12,
                   backgroundColor: Color.border,
                   borderRadius: 50,
                 }}
@@ -373,8 +372,8 @@ const MainProfile = ({navigation, route}) => {
                 source={iconSplash}
                 resizeMode='contain'
                 style={{
-                  width: Image.resolveAssetSource(iconSplash).width / 2,
-                  height: Image.resolveAssetSource(iconSplash).height / 2,
+                  width: width / 6,
+                  height: width / 6,
                 }}
               />
             </View>
@@ -446,8 +445,7 @@ const MainProfile = ({navigation, route}) => {
               ...shadowStyle,
               backgroundColor: Color.textInput,
               marginHorizontal: 1,
-              borderTopLeftRadius: 8,
-              borderTopRightRadius: 8,
+              borderRadius: 8,
               marginBottom: 16,
               marginTop: 16,
               paddingTop: 16,
