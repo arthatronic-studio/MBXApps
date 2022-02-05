@@ -12,13 +12,14 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {
   Text,
   // TouchableOpacity,
-  Loading, useLoading,
+  useLoading,
   Scaffold,
   Row, Col,
   HeaderBig,
   useColor,
   Header
 } from '@src/components';
+import Loading from 'src/components/Modal/Loading';
 import { TouchableOpacity } from '@src/components/Button';
 import ListForum from '@src/screens/MainForum/ListForum';
 
@@ -41,6 +42,7 @@ const CartShop = ({ navigation, route }) => {
   const [checked, setChecked] = useState([]);
   const [cart, setCart] = useState(0);
   const [refresh, setRefresh] = useState(0);
+  const [loadingProps, showLoading, hideLoading] = useLoading();
   
   const isFocused = useIsFocused();
   let temp = []
@@ -105,14 +107,50 @@ const CartShop = ({ navigation, route }) => {
 
   const updateQty = (item, qty) => {
     console.log(route, 'props')
-    if(item.quantity + qty == 0) return deleteProduct()
-    // showLoading();
+    if(item.quantity + qty == 0) return deleteProduct(item.id)
+    showLoading();
     let variables = {
         productId: item.id,
         quantity: item.quantity + qty
     }
     console.log(variables)
     Client.mutate({mutation: queryUpdateItemCart, variables})
+      .then(res => {
+        getCart()
+        hideLoading()
+        console.log(res)
+        // if (res.data.ecommerceCartList) {
+        //     setList(res.data.ecommerceCartList)
+        // }
+      })
+      .catch(reject => {
+        hideLoading()
+        alert(reject.message)
+        console.log(reject.message, 'reject');
+      });
+  };
+
+  const submit = () => {
+    console.log(route, 'props')
+    // let tempData = []
+    // list.forEach(element => {
+    //     if(element.checked) tempData.push(element)
+    // });
+    // const item = {
+    //     tempData,
+    //     dataCart:{
+    //         cartId: cart.id,
+    //         totalProducts: cart.totalProducts
+    //     }
+    // }
+    // console.log(item)
+    // navigation.navigate('CheckoutScreen',{item})
+    // // showLoading();
+    let variables = {
+        productId: list[0].id,
+    }
+    console.log(variables)
+    Client.mutate({mutation: queryCheckout, variables})
       .then(res => {
         getCart()
         // hideLoading()
@@ -126,42 +164,6 @@ const CartShop = ({ navigation, route }) => {
         alert(reject.message)
         console.log(reject.message, 'reject');
       });
-  };
-
-  const submit = () => {
-    console.log(route, 'props')
-    let tempData = []
-    list.forEach(element => {
-        if(element.checked) tempData.push(element)
-    });
-    const item = {
-        tempData,
-        dataCart:{
-            cartId: cart.id,
-            totalProducts: cart.totalProducts
-        }
-    }
-    console.log(item)
-    navigation.navigate('CheckoutScreen',{item})
-    // // showLoading();
-    // let variables = {
-    //     productId: list[0].id,
-    // }
-    // console.log(variables)
-    // Client.mutate({mutation: queryCheckout, variables})
-    //   .then(res => {
-    //     getCart()
-    //     // hideLoading()
-    //     console.log(res)
-    //     // if (res.data.ecommerceCartList) {
-    //     //     setList(res.data.ecommerceCartList)
-    //     // }
-    //   })
-    //   .catch(reject => {
-    //     // hideLoading()
-    //     alert(reject.message)
-    //     console.log(reject.message, 'reject');
-    //   });
   };
 
   function onChecked(index, value){
@@ -271,7 +273,7 @@ const CartShop = ({ navigation, route }) => {
                 </TouchableOpacity>
             </Col>
         </Row>
-      {/* <Loading {...loadingProps} /> */}
+      <Loading {...loadingProps} />
     </View>
   );
 }
