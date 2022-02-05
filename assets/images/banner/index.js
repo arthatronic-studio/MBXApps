@@ -27,7 +27,7 @@ const listRRIDBanner = [
 ];
 
 const listDummyBanner =
-    Config.INITIAL_CODE === 'TRIBESASIA' || Config.INITIAL_CODE === 'TRIBESXRRID' ?
+    Config.INITIAL_CODE === 'TRIBESXRRID' ?
         listRRIDBanner :
     Config.INITIAL_CODE === 'TRIBESXSABYAN' ?
         listTribesSabyan :

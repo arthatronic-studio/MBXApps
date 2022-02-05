@@ -13,7 +13,7 @@ const listDefaultBoarding = [
 ];
 
 const listBoarding =
-    Config.INITIAL_CODE === 'TRIBESASIA' || Config.INITIAL_CODE === 'TRIBESXRRID' ?
+    Config.INITIAL_CODE === 'TRIBESXRRID' ?
     listRRIDBoarding:
     listDefaultBoarding;
 

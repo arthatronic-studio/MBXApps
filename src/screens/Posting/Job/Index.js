@@ -110,6 +110,7 @@ export default ({ navigation, route }) => {
                     <Divider /> */}
                     <MaterialIcons
                       name='add'
+                      color={Color.primary}
                       size={26}
                       onPress={() =>
                         navigation.navigate('CreateThreadScreen', {
