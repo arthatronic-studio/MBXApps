@@ -50,11 +50,12 @@ import WidgetBalance from 'src/components/WidgetBalance';
 import WidgetMenuHome from './WidgetMenuHome';
 import PostingHeader from 'src/components/Posting/PostingHeader';
 import {shadowStyle} from 'src/styles';
+import { adsPopup } from 'assets/images/popup';
 
-const dataSabyan = {
-  productName: 'New Sabyan Album',
+const dataPromoDummy = {
+  productName: 'Halo selamat datang!',
   productCategory: 'Promo',
-  image: ImagesPath.popUpSabyan,
+  image: adsPopup,
   productDescription:
     'Cupcake ipsum dolor sit amet tart. Cookie carrot cake bear claw jujubes muffin. Cotton candy sweet candy chocolate muffin bonbon. Tart donut apple pie cupcake tart tart. Jelly-o chocolate cake ice cream shortbread biscuit chupa chups dessert. Macaroon cotton candy lollipop marshmallow dragée toffee shortbread macaroon dessert. Bear claw gummi bears pie apple pie tiramisu soufflé bonbon. Tiramisu tart candy croissant jujubes marshmallow lemon drops. Ice cream muffin pastry halvah chocolate bar bear claw. Tart icing pudding jelly-o fruitcake fruitcake. Tiramisu sweet pastry caramels sugar plum sweet gingerbread. Macaroon powder gummies tootsie roll muffin. Cookie danish candy jelly beans biscuit. Soufflé cake pudding fruitcake macaroon jelly beans.',
 };
@@ -613,13 +614,13 @@ const MainHome = ({navigation, route}) => {
             onPress={() => {
               tempShowPopupAds = false;
               setShowPopupAds(false);
-              navigation.navigate('DetailPromo', {item: dataSabyan});
+              navigation.navigate('DetailPromo', {item: dataPromoDummy});
             }}>
             <ImageBackground
               source={
                 dataPopupAds && dataPopupAds.picture && dataPopupAds.picture.url ?
-                dataPopupAds.picture.url :
-                ImagesPath.popUpTribes
+                {uri: dataPopupAds.picture.url} :
+                adsPopup
               }
               imageStyle={{borderRadius: 12}}
               style={{height: '100%', resizeMode: 'contain', width: '100%'}}

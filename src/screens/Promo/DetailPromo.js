@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Image, ScrollView } from 'react-native';
+import { View, Image, ScrollView, useWindowDimensions } from 'react-native';
 import Styled from 'styled-components';
 import ImagesPath from 'src/components/ImagesPath';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -13,8 +13,9 @@ import {
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
 
-import { Divider } from '@src/styled';
+import { Container, Divider } from '@src/styled';
 import { shadowStyle } from '@src/styles';
+import { adsPopup } from 'assets/images/popup';
 
 const Example = Styled(View)`
 `;
@@ -28,6 +29,7 @@ export default ({ navigation, route }) => {
     const [loadingProps, showLoading] = useLoading();
 
     const { Color } = useColor();
+    const {width, height} = useWindowDimensions();
 
     const ref = useRef();
 
@@ -39,7 +41,7 @@ export default ({ navigation, route }) => {
 
     return (
         <Scaffold
-            headerTitle={'Sabyan'}
+            headerTitle={''}
             fallback={false}
             empty={false}
             popupProps={popupProps}
@@ -59,13 +61,17 @@ export default ({ navigation, route }) => {
                     </View>
                 </View>
 
-                <Divider />
-
-                <Image
-                    source={ImagesPath.popUpSabyan}
-                    resizeMode='cover'
-                    style={{width: '100%', height: 230, backgroundColor: Color.border}}
-                />
+                <Container width={width} height={width * 1.3} padding={16}>
+                    <Image
+                        source={adsPopup}
+                        resizeMode='cover'
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            borderRadius: 16,
+                        }}
+                    />
+                </Container>
 
                 <View style={{padding: 16}}>
                     <Text lineHeight={24} align='left'>
