@@ -8,6 +8,7 @@ import {Container, Divider} from 'src/styled';
 import {useColor} from '@src/components';
 import TouchableOpacity from 'src/components/Button/TouchableDebounce';
 import ImagesPath from 'src/components/ImagesPath';
+import {tribesBanner} from 'assets/images/banner';
 import {useNavigation} from '@react-navigation/native';
 import PostingHeader from './Posting/PostingHeader';
 
@@ -92,7 +93,7 @@ const Banner = props => {
                     paddingHorizontal={16}
                   >
                     <Image
-                      source={{uri: e.image}}
+                      source={e.imageAsset || {uri: e.image}}
                       style={{
                         width: '100%',
                         height:'100%',
@@ -110,7 +111,7 @@ const Banner = props => {
               style={{aspectRatio: 16/9}}
             >
               <Image
-                source={ImagesPath.imageBanner2}
+                source={tribesBanner}
                 style={{
                   width: '100%',
                   height: '100%',

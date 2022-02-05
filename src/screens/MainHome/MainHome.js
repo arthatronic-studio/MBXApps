@@ -51,6 +51,7 @@ import WidgetMenuHome from './WidgetMenuHome';
 import PostingHeader from 'src/components/Posting/PostingHeader';
 import {shadowStyle} from 'src/styles';
 import { adsPopup } from 'assets/images/popup';
+import { listDummyBanner } from 'assets/images/banner';
 
 const dataPromoDummy = {
   productName: 'Halo selamat datang!',
@@ -426,7 +427,11 @@ const MainHome = ({navigation, route}) => {
 
           <Divider height={24} />
 
-          <Banner data={listBanner} loading={loadingBanner} />
+          <Banner
+            isDummy
+            data={listDummyBanner || listBanner}
+            loading={loadingBanner}
+          />
 
           <Divider height={24} />
 
@@ -614,7 +619,7 @@ const MainHome = ({navigation, route}) => {
             onPress={() => {
               tempShowPopupAds = false;
               setShowPopupAds(false);
-              navigation.navigate('DetailPromo', {item: dataPromoDummy});
+              // navigation.navigate('DetailPromo', {item: dataPromoDummy});
             }}>
             <ImageBackground
               source={

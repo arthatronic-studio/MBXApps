@@ -3,6 +3,7 @@ import {AppRegistry, StyleSheet, Text, View, Image} from 'react-native';
 
 import Swiper from 'react-native-swiper';
 import ImagesPath from 'src/components/ImagesPath';
+import { tribesBanner } from 'assets/images/banner';
 
 const styles = StyleSheet.create({
   slide1: {
@@ -41,7 +42,7 @@ export default class Promo extends Component {
         <Swiper showsPagination={false} showsButtons={false}>
           <View>
             <Image
-              source={ImagesPath.imageBanner1}
+              source={tribesBanner}
               style={{
                 width: '100%',
                 height: 250,
@@ -51,13 +52,13 @@ export default class Promo extends Component {
           </View>
           <View>
             <Image
-              source={ImagesPath.imageBanner2}
+              source={tribesBanner}
               style={{width: '100%', height: 300, resizeMode: 'contain'}}
             />
           </View>
           <View>
             <Image
-              source={ImagesPath.imageBanner1}
+              source={tribesBanner}
               style={{width: '100%', height: 300, resizeMode: 'contain'}}
             />
           </View>
