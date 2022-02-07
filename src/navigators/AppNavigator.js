@@ -7,6 +7,7 @@ import SplashScreen from 'src/screens/SplashScreen';
 import MainPage from '@src/navigators/BottomTabsNavigator';
 import KnowMeScreen from '@src/screens/KnowMeScreen';
 import CreateEmergencyScreen from '@src/screens/CreateEmergencyScreen';
+import PDFReaderScreen from 'src/screens/PDFReaderScreen';
 
 // user
 import LoginScreen from '@src/screens/User/LoginScreen';
@@ -124,12 +125,13 @@ function MainStackNavigator() {
       <Screen name="MainPage" component={MainPage} />
       <Screen name="KnowMeScreen" component={KnowMeScreen} />
       <Screen name="CreateEmergencyScreen" component={CreateEmergencyScreen} />
+      <Screen name="PDFReaderScreen" component={PDFReaderScreen} />
+      
       {/* Auction */}
       <Screen name="CartAuction" component={CartAuction} />
       <Screen name="Lelang" component={Lelang} />
       <Screen name="DetailLelang" component={DetailLelang} />
       <Screen name="LiveLelangScreen" component={LiveLelangScreen} />
-
       
       {/* Promo Popup */}
       <Screen name="DetailPromo" component={DetailPromo} />

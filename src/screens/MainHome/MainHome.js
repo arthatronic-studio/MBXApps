@@ -425,6 +425,8 @@ const MainHome = ({navigation, route}) => {
             }}
           />
 
+          <Text color={Color.red} style={{marginTop: 24}} onPress={() => navigation.navigate('PDFReaderScreen', { file: 'http://samples.leanpub.com/thereactnativebook-sample.pdf' })}>Tes Open PDF</Text>
+
           <Divider height={24} />
 
           <Banner
