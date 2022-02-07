@@ -29,6 +29,8 @@ import {
   iconMenuLoker,
   iconMenuTempat,
 } from '@assets/images/home';
+import { listKomotoFamily } from 'src/utils/constants';
+import Config from 'react-native-config';
 
 const SambatanMenuView = Styled(View)`
   width: 100%;
@@ -40,7 +42,6 @@ const SambatanMenuView = Styled(View)`
 `;
 
 const CardMenu = Styled(TouchableOpacity)`
-  width: 25%;
   aspectRatio: 1.5;
   flexDirection: column;
   marginBottom: 12px;
@@ -76,7 +77,7 @@ const ComingSoonView = Styled(View)`
   alignItems: center;
 `;
 
-const menuHome = [
+const listMenuHome = [
   // menu komoto
   {
     id: 1,
@@ -86,6 +87,7 @@ const menuHome = [
     nav: 'JobScreen',
     params: { title: 'Loker' },
     badge: false,
+    show: listKomotoFamily.includes(Config.INITIAL_CODE) ? false : true,
   },
   {
     id: 2,
@@ -95,6 +97,7 @@ const menuHome = [
     nav: 'PlaceScreen',
     params: { title: 'Tempat' },
     badge: false,
+    show: true,
   },
   {
     id: 3,
@@ -104,6 +107,7 @@ const menuHome = [
     nav: 'EventScreen',
     params: { title: 'Event' },
     badge: false,
+    show: true,
   },
   {
     id: 4,
@@ -113,6 +117,7 @@ const menuHome = [
     nav: 'NewsScreen',
     params: { title: 'Artikel' },
     badge: false,
+    show: true,
   },
 
   // menu tribes
@@ -124,6 +129,7 @@ const menuHome = [
   //   nav: '',
   //   params: {},
   //   badge: true,
+  //   show: true,
   // },
   // {
   //   id: 7,
@@ -133,6 +139,7 @@ const menuHome = [
   //   nav: 'Lelang',
   //   params: {},
   //   badge: true,
+  //   show: true,
   // },
   // {
   //   id: 10,
@@ -141,6 +148,8 @@ const menuHome = [
   //   images: iconIuran,
   //   nav: '',
   //   params: {},
+  //   badge: true,
+  //   show: true,
   // },
   // {id: 0, code: '', name: 'Pulsa', images: iconPulsa, nav: 'PulsaScreen', params: {}},
   // {id: 1, code: '', name: 'Listrik', images: iconPLN, nav: 'PlnScreen', params: {}},
@@ -216,8 +225,8 @@ const WidgetMenuHome = (props) => {
     <Container paddingHorizontal={16}>
       <SambatanMenuView
         style={{...shadowStyle, backgroundColor: Color.textInput}}>
-        {menuHome.map((menu, idx) => {
-          if (Platform.OS === 'ios' && menu.comingsoon) {
+        {listMenuHome.map((menu, idx) => {
+          if (!menu.show || (Platform.OS === 'ios' && menu.comingsoon)) {
             return null;
           }
 
@@ -231,7 +240,11 @@ const WidgetMenuHome = (props) => {
 
                 if (menu.nav === '') return;
                 navigation.navigate(menu.nav, menu.params);
-              }}>
+              }}
+              style={{
+                width: '33.33%',
+              }}
+            >
               <UserIcon>
                 <ImageProperty
                   style={menu.comingsoon ? {opacity: 0.3} : {} }

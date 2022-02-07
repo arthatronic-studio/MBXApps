@@ -24,6 +24,8 @@ import { Box, Divider } from 'src/styled';
 import DatePicker from 'react-native-date-picker';
 import Moment from 'moment';
 import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
+import { listKomotoFamily } from 'src/utils/constants';
+import Config from 'react-native-config';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -73,7 +75,7 @@ const CreateEmergencyScreen = (props) => {
         code: '',
         name: '',
         image: '',
-        status: 'PRIVATE', // PUBLISH | DRAFT | PRIVATE | REMOVE
+        status: 'PUBLISH', // PUBLISH | DRAFT | PRIVATE | REMOVE
         method: 'INSERT', // UPDATE | DELETE
         type: params.productType,
         category: params.productSubCategory,
@@ -94,7 +96,7 @@ const CreateEmergencyScreen = (props) => {
         id: 3, value: 'High'
     });
     const [selectedStatus, setSelectedStatus] = useState({
-        label: 'Privasi', value: 'PRIVATE', iconName: 'lock-closed'
+        label: 'Publik', value: 'PUBLISH', iconName: 'globe'
     });
 
     // ref
@@ -236,8 +238,10 @@ const CreateEmergencyScreen = (props) => {
                             }
 
                             launchImageLibrary(options, (callback) => {
-                                setThumbImage(callback.base64);
-                                setMimeImage(callback.type);
+                                if (callback.base64) {
+                                    setThumbImage(callback.base64);
+                                    setMimeImage(callback.type);
+                                }
                             })
                         }}
                         style={{width: '100%', height: 70, borderRadius: 4, marginTop: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
@@ -347,12 +351,12 @@ const CreateEmergencyScreen = (props) => {
                     />}
                 </View> */}
 
-                <TouchSelect
+                {!listKomotoFamily.includes(Config.INITIAL_CODE) && <TouchSelect
                     title='Siapa yang dapat melihat ini?'
                     value={selectedStatus.label}
                     iconName={selectedStatus.iconName}
                     onPress={() => modalSelectStatusRef.current.open()}
-                />
+                />}
 
                 <TouchSelect
                     title='Priority'

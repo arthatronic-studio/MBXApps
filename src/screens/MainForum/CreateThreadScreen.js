@@ -19,6 +19,8 @@ import validate from '@src/lib/validate';
 import Client from '@src/lib/apollo';
 import { queryProductManage } from '@src/lib/query';
 import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
+import { listKomotoFamily } from 'src/utils/constants';
+import Config from 'react-native-config';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -64,7 +66,7 @@ const CreateThreadScreen = (props) => {
         code: '',
         name: '',
         image: '',
-        status: 'PRIVATE', // PUBLISH | DRAFT | PRIVATE | REMOVE
+        status: 'PUBLISH', // PUBLISH | DRAFT | PRIVATE | REMOVE
         method: 'INSERT', // UPDATE | DELETE
         type: params.productType,
         category: params.productSubCategory,
@@ -80,7 +82,7 @@ const CreateThreadScreen = (props) => {
     const [thumbImage, setThumbImage] = useState('');
     const [mimeImage, setMimeImage] = useState('image/jpeg');
     const [selectedStatus, setSelectedStatus] = useState({
-        label: 'Privasi', value: 'PRIVATE', iconName: 'lock-closed'
+        label: 'Publik', value: 'PUBLISH', iconName: 'globe'
     });
 
     // ref
@@ -211,8 +213,10 @@ const CreateThreadScreen = (props) => {
                             }
 
                             launchImageLibrary(options, (callback) => {
-                                setThumbImage(callback.base64);
-                                setMimeImage(callback.type);
+                                if (callback.base64) {
+                                    setThumbImage(callback.base64);
+                                    setMimeImage(callback.type);
+                                }
                             })
                         }}
                         style={{width: '100%', height: 70, borderRadius: 4, marginTop: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
@@ -287,12 +291,12 @@ const CreateThreadScreen = (props) => {
                     </ErrorView>
                 </View>
 
-                <TouchSelect
+                {!listKomotoFamily.includes(Config.INITIAL_CODE) && <TouchSelect
                     title='Siapa yang dapat melihat ini?'
                     value={selectedStatus.label}
                     iconName={selectedStatus.iconName}
                     onPress={() => modalSelectStatusRef.current.open()}
-                />
+                />}
             </ScrollView>
 
             <Submit

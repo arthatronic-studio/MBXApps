@@ -17,6 +17,10 @@ import { startAnimation } from '@src/utils/animations';
 import { Divider, Line } from 'src/styled';
 import { statusBarHeight } from 'src/utils/constants';
 import Config from 'react-native-config';
+import { useSelector } from 'react-redux';
+import { login } from 'src/state/actions/user/auth';
+import { Popup, usePopup } from 'src/components';
+import { Loading, useLoading } from 'src/components';
 
 const Scaler = Styled(View)`
     flexDirection: row;
@@ -37,6 +41,10 @@ const TabBarComponent = (props) => {
     
     const { Color } = useColor();
     const { width } = useWindowDimensions();
+    const [popupProps, showPopup] = usePopup();
+    const [loadingProps, showLoading] = useLoading();
+    const user = useSelector(state => state['user.auth'].login.user);
+    const isJoinMember = user && user.organizationId;
     
     const bgAnimatedRef = useRef(new Animated.Value(width / menus.length)).current;
 
@@ -94,6 +102,11 @@ const TabBarComponent = (props) => {
             >
                 <TouchableOpacityAbs
                     onPress={() => {
+                        if (!isJoinMember) {
+                            showLoading('error', 'Fitur ini hanya untuk anggota komunitas');
+                            return;
+                        }
+
                         props.navigation.navigate('CreateEmergencyScreen', { 
                             routeIndex: 1, 
                             title: 'Emergency Area',
@@ -203,6 +216,9 @@ const TabBarComponent = (props) => {
             </Scaler>
 
             {renderFloatingMenu()}
+
+            <Popup { ...popupProps } />
+            <Loading { ...loadingProps } />
         </SafeAreaView>
     )
 }
