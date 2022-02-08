@@ -27,6 +27,8 @@ import {
   Row,
   Col,
   Button,
+  PopupEbook,
+  Submit,
 } from '@src/components';
 import ListAuction from 'src/components/Posting/ListAuction';
 import ListSoonAuction from 'src/components/Posting/ListSoonAuction';
@@ -291,6 +293,27 @@ const MainHome = ({navigation, route}) => {
     extrapolate: 'clamp',
   });
 
+  const [isModalVisible, setIsModalVisible] = useState(false)
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible)
+  }
+
+  const onClickBaca = () => {
+    setIsModalVisible(!isModalVisible)
+    navigation.navigate('PDFReaderScreen', { file: 'http://samples.leanpub.com/thereactnativebook-sample.pdf' })
+  }
+
+  // const ModalPopupEbook = () => {
+  //     return (
+  //       <View style={{flex: 1}}>
+  //         <Modal isVisible='true'>
+
+  //         </Modal>
+  //       </View>
+  //     )
+  // }
+
   return (
     <Scaffold
       translucent={Platform.OS === 'ios' ? true : isFocused}
@@ -432,11 +455,86 @@ const MainHome = ({navigation, route}) => {
             onPress={() => navigation.navigate('PDFReaderScreen', { file: 'http://samples.leanpub.com/thereactnativebook-sample.pdf' })}>
               Tes Open PDF
           </Text>}
+          
+          {!listKomotoFamily.includes(Config.INITIAL_CODE) && <Text color={Color.red} style={{marginTop: 24}} onPress={() => toggleModal()}>Popup E book</Text>}
 
-          <Divider height={24} />
+          <View style={{flex: 1}}>
+            <Modal
+              isVisible={isModalVisible}
+              onBackdropPress={() => setIsModalVisible(false)}
+              animationIn="slideInDown"
+              animationOut="slideOutDown"
+              style={{borderRadius: 16}}
+            >
+              <View style={{backgroundColor: '#fff'}}>
+                <View style={{width: '100%', paddingHorizontal: 16, paddingVertical: 24}}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        toggleModal()
+                      }}
+                      style={{
+                        alignSelf: 'flex-end',
+                        backgroundColor: Color.error,
+                        borderRadius: 50,
+                        marginBottom: 12
+                      }}>
+                      <Image
+                        source={ImagesPath.icClose}
+                        style={{width: 16, height: 16}} />
+                    </TouchableOpacity>
+                    <View style={{flexDirection: 'row'}}>
+                        <View style={{marginRight: 16}}>
+                            <Image source={ImagesPath.eBook} />
+                        </View>
+                        <View>  
+                            <View style={{width: '86%'}}>
+                                <Text align='left' size={14} style={{fontWeight: 'bold'}}>Seni Berlorem Ipsum Dulur Sit Amet</Text>
+
+                            </View>
+                            <Text align='left' size={10}>Karya Esa Riski Hari Utama</Text>
+                            <View style={{flexDirection: 'row'}}>
+                                <View style={{flexDirection: 'row', marginTop: 12, marginRight: 20}}>
+                                    <Image source={ImagesPath.eye} style={{width: 16, height: 16, marginRight: 9}} />
+                                    <Text align='left' size={10}>1.7K</Text>
+                                </View>
+                                <View style={{flexDirection: 'row', marginTop: 12}}>
+                                    <Image source={ImagesPath.thumbsUp} style={{width: 16, height: 16, marginRight: 9}} />
+                                    <Text align='left' size={10}>240</Text>
+                                </View>
+                            </View>
+                            <View style={{marginTop: 16}}>
+                                <Text align='left' size={11} style={{fontWeight: 'bold'}}>Sinopsis</Text>
+                            </View>
+                            <View style={{width: '80%'}}>
+                                <Text align='left' size={10} numberOfLines={4}>
+                                    Cookie toffee pie cupcake sesame snaps. Cupcake cupcake soufflé gummies croissant jelly beans candy canes fruitcake. Dessert cotton candy tart donut tiramisu cookie dragée wafer marzipan.
+                                </Text>
+                            </View>
+                        </View>
+                    </View>
+                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
+                        <View style={{width: 44, height: 44, borderRadius: 21, borderWidth: 0.3, alignItems:'center', justifyContent: 'center'}}>
+                            <Image source={ImagesPath.thumbsUp} style={{width: 22, height: 22}} />
+                        </View>
+                        <Submit
+                            buttonLabel='Baca Sekarang'
+                            buttonColor={Color.primary}
+                            type='bottomSingleButton'
+                            buttonBorderTopWidth={0}
+                            style={{backgroundColor: Color.theme, paddingTop: 25, paddingBottom: 25, width: 250}}
+                            onPress={() => onClickBaca() }
+                        />
+                    </View>
+                </View>
+              </View>
+            </Modal>
+          </View>
+          
+          <Divider />
 
           <Banner
             isDummy
+            showHeader={!listKomotoFamily.includes(Config.INITIAL_CODE)}
             data={listDummyBanner || listBanner}
             loading={loadingBanner}
           />

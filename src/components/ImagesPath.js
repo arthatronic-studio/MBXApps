@@ -29,4 +29,7 @@ export default {
   mapPin: require('../components/Images/MapPin.png'),
   detailEvent: require('../components/Images/DetailEvent.png'),
   newsImage: require('../components/Images/news-image.png'),
+  eBook: require('../components/Images/Ebook.png'),
+  eye: require('../components/Images/Eye.png'),
+  thumbsUp: require('../components/Images/ThumbsUp.png'),
 };
