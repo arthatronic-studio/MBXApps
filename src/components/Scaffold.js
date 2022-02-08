@@ -80,6 +80,7 @@ const Scaffold = ({
   showHeader,
   iconRightButton,
   onPressLeftButton,
+  iconLike,
   fallback,
   option,
 
@@ -140,11 +141,12 @@ const Scaffold = ({
         header
       ) : showHeader ? (
         <Header
-          title={headerTitle}
-          onPressLeftButton={() =>
-            onPressLeftButton ? onPressLeftButton() : navigation.pop()
-          }
-          iconRightButton={iconRightButton}
+            title={headerTitle}
+            onPressLeftButton={() =>
+              onPressLeftButton ? onPressLeftButton() : navigation.pop()
+            }
+            iconRightButton={iconRightButton}
+            iconlike={iconLike}
         />
       ) : null}
 

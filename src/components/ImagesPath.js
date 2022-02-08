@@ -32,4 +32,5 @@ export default {
   eBook: require('../components/Images/Ebook.png'),
   eye: require('../components/Images/Eye.png'),
   thumbsUp: require('../components/Images/ThumbsUp.png'),
+  Aa: require('../components/Images/Aa2.png'),
 };
