@@ -113,6 +113,7 @@ const LoginScreen = ({navigation, route}) => {
             navigation.navigate('UserChangePassword', {
               password: state.password,
             });
+            dispatch({ action: 'USER.CHANGE_PASSWORD', status: false });
           } else {
             redirectTo('MainPage');
           }
@@ -265,7 +266,10 @@ const LoginScreen = ({navigation, route}) => {
             <Container paddingTop={4} paddingBottom={30}>
               <TouchableOpacity
                 activeOpacity={1}
-                onPress={() => navigation.navigate('ForgotPasswordScreen')}
+                onPress={() => {
+                  navigation.navigate('ForgotPasswordScreen');
+                  dispatch({ type: 'USER.FORGET_PASSWORD', status: false });
+                }}
                 style={{
                   width: '100%',
                   alignItems: 'flex-end',
@@ -293,7 +297,10 @@ const LoginScreen = ({navigation, route}) => {
 
             <Button
               color={Color.secondary}
-              onPress={() => navigation.navigate('RegisterScreen')}
+              onPress={() => {
+                navigation.navigate('RegisterScreen');
+                dispatch({ type: 'USER.REGISTER', status: false });
+              }}
             >
               Daftar
             </Button>

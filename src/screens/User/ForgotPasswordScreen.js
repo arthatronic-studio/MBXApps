@@ -59,6 +59,7 @@ const ForgotPasswordScreen = ({ navigation, route }) => {
   useEffect(() => {
     if (state.allValid) {
       dispatch(callForgetPassword(state.email));
+      setState({ ...state, allValid: false });
     }
   }, [state.allValid]);
 

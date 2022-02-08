@@ -78,7 +78,12 @@ const SettingScreen = ({ navigation, route }) => {
             </Grid> */}
 
             <Grid style={{backgroundColor: Color.theme, borderColor: Color.border}}>
-                <TouchableOpacity onPress={() => navigation.navigate('UserChangePassword', { canGoBack: true })}>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate('UserChangePassword', { canGoBack: true });
+                        dispatch({ action: 'USER.CHANGE_PASSWORD', status: false });
+                    }}
+                >
                     <Row>
                         <Col align='flex-start' size={8} justify='center'>
                             <Text size={12} type='medium' style={{marginBottom: 4}}>Ubah Password</Text>

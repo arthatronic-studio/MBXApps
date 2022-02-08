@@ -187,7 +187,7 @@ const CardComponent = (props) => {
           <Divider height={12} />
 
           {props.type === 'Anggota' ? (
-            <View style={{flexDirection: 'row', width: '100%', height: 33}}>
+            <View style={{flexDirection: 'row', width: '100%', height: 45}}>
               <TextInput
                 placeholder={item.userDetail.idNumber || 'Input Nomor ID'}
                 placeholderTextColor={Color.gray}
@@ -205,7 +205,7 @@ const CardComponent = (props) => {
                   backgroundColor: Color.semiwhite,
                   borderRadius: 4,
                   includeFontPadding: false,
-                  paddingLeft: 6,
+                  paddingLeft: 8,
                 }}
               />
 

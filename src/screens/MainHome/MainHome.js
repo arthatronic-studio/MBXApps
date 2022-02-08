@@ -52,6 +52,7 @@ import PostingHeader from 'src/components/Posting/PostingHeader';
 import {shadowStyle} from 'src/styles';
 import { adsPopup } from 'assets/images/popup';
 import { listDummyBanner } from 'assets/images/banner';
+import { listKomotoFamily } from 'src/utils/constants';
 
 const dataPromoDummy = {
   productName: 'Halo selamat datang!',
@@ -324,7 +325,7 @@ const MainHome = ({navigation, route}) => {
                   color={Color.text}
                 />
               </TouchableOpacity>
-              <TouchableOpacity
+              {!listKomotoFamily.includes(Config.INITIAL_CODE) && <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('ChatRoomsScreen');
                 }}
@@ -344,7 +345,7 @@ const MainHome = ({navigation, route}) => {
                     </Text>
                   </Circle>
                 )}
-              </TouchableOpacity>
+              </TouchableOpacity>}
             </View>
           }
         />
@@ -425,7 +426,12 @@ const MainHome = ({navigation, route}) => {
             }}
           />
 
-          <Text color={Color.red} style={{marginTop: 24}} onPress={() => navigation.navigate('PDFReaderScreen', { file: 'http://samples.leanpub.com/thereactnativebook-sample.pdf' })}>Tes Open PDF</Text>
+          {!listKomotoFamily.includes(Config.INITIAL_CODE) && <Text
+            color={Color.red}
+            style={{marginTop: 24}}
+            onPress={() => navigation.navigate('PDFReaderScreen', { file: 'http://samples.leanpub.com/thereactnativebook-sample.pdf' })}>
+              Tes Open PDF
+          </Text>}
 
           <Divider height={24} />
 
@@ -574,7 +580,7 @@ const MainHome = ({navigation, route}) => {
             style={{paddingLeft: 8}}
           />
 
-          <ListJob
+          {!listKomotoFamily.includes(Config.INITIAL_CODE) && <ListJob
             data={listKerja}
             loading={loadingKerja}
             horizontal
@@ -584,7 +590,7 @@ const MainHome = ({navigation, route}) => {
               // navigation.navigate('PostingDetail', {item});
             }}
             style={{paddingLeft: 8}}
-          />
+          />}
 
           <MusikTerbaru />
 

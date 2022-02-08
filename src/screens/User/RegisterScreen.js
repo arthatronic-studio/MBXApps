@@ -72,7 +72,7 @@ const RegisterScreen = ({navigation, route}) => {
 
   useEffect(() => {
     if (state.allValid) {
-      setState({allValid: false});
+      setState({ allValid: false });
 
       const {
         fullName,
