@@ -33,4 +33,9 @@ export default {
   eye: require('../components/Images/Eye.png'),
   thumbsUp: require('../components/Images/ThumbsUp.png'),
   Aa: require('../components/Images/Aa2.png'),
+  avatar1: require('../components/Images/avatar1.png'),
+  avatar2: require('../components/Images/avatar2.png'),
+  avatar3: require('../components/Images/avatar3.png'),
+  avatar4: require('../components/Images/avatar4.png'),
+  avatar5: require('../components/Images/avatar5.png'),
 };

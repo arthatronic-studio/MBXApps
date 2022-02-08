@@ -48,12 +48,12 @@ const CommunityAdminPage = ({navigation}) => {
   const renderTabBar = (props) => (
     <TabBar
       {...props}
-      tabStyle={{width: width / 3}}
       indicatorStyle={{backgroundColor: Color.primary}}
       style={{backgroundColor: Color.theme}}
       activeColor={Color.primary}
       inactiveColor={Color.text}
-      labelStyle={{fontWeight: 'bold', textAlign: 'center', fontSize: 16, textTransform: 'none'}}
+      scrollEnabled
+      labelStyle={{fontWeight: 'bold', textAlign: 'center', fontSize: 14, textTransform: 'none'}}
     />
   );
   

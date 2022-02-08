@@ -88,6 +88,7 @@ const UserChangePassword = ({ navigation, route }) => {
   useEffect(() => {
     if (state.allValid) {
       dispatch(callChangePassword(user.email, state.password0, state.password));
+      setState({ allValid: false });
     }
   }, [state.allValid]);
 

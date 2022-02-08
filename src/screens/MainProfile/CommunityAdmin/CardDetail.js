@@ -394,7 +394,7 @@ const CardDetail = ({ navigation, route }) => {
         }}
       >
         {props.type === 'Anggota' ? (
-          <View style={{flexDirection: 'row', width: '100%', height: 33}}>
+          <View style={{flexDirection: 'row', width: '100%', height: 45}}>
             <TextInput
               placeholder='Input Nomor ID'
               placeholderTextColor={Color.gray}
@@ -408,7 +408,7 @@ const CardDetail = ({ navigation, route }) => {
                 backgroundColor: Color.semiwhite,
                 borderRadius: 4,
                 includeFontPadding: false,
-                paddingLeft: 4,
+                paddingLeft: 8,
               }}
             />
 

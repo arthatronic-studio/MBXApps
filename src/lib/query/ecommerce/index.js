@@ -15,17 +15,17 @@ export const queryAddCart = gql`
   `;
 
 export const queryCheckout = gql`
-  mutation ecommerceCreateNewOrder(
-    $productId: Int!
-  ){
-    ecommerceCreateNewOrder(
-      productId: $productId
+    mutation ecommerceCreateNewOrder(
+      $productIds: [EcommerceOrderProductInput]
+      $isFromCart: Boolean
     ) {
-      orderId 
-      orderNumber 
-      totalPrice
+      ecommerceCreateNewOrder(
+        productIds: $productIds
+        isFromCart: $isFromCart
+      ) {
+        id userId 
+      }
     }
-  }
 `;
 
   export const queryDeleteItemCart = gql`

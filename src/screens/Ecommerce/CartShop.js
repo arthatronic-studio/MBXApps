@@ -82,7 +82,7 @@ const CartShop = ({ navigation, route }) => {
       });
   };
 
-  const deleteProduct = (id) => {
+  const deleteProduct = (id, index) => {
     console.log(route, 'props')
     // showLoading();
     let variables = {
@@ -91,7 +91,11 @@ const CartShop = ({ navigation, route }) => {
     console.log(variables)
     Client.mutate({mutation: queryDeleteItemCart, variables})
       .then(res => {
-        getCart()
+        const tempx = list
+        tempx.splice(index, 1)
+        setList(tempx)
+        setRefresh(refresh+1)
+        // getCart()
         // hideLoading()
         console.log(res)
         // if (res.data.ecommerceCartList) {
@@ -105,7 +109,7 @@ const CartShop = ({ navigation, route }) => {
       });
   };
 
-  const updateQty = (item, qty) => {
+  const updateQty = (item, qty, index) => {
     console.log(route, 'props')
     if(item.quantity + qty == 0) return deleteProduct(item.id)
     showLoading();
@@ -116,7 +120,11 @@ const CartShop = ({ navigation, route }) => {
     console.log(variables)
     Client.mutate({mutation: queryUpdateItemCart, variables})
       .then(res => {
-        getCart()
+          const tempx = list
+          tempx[index]['quantity'] = item.quantity + qty
+          console.log(tempx, 111)
+          setList(tempx)
+          setRefresh(refresh+1)
         hideLoading()
         console.log(res)
         // if (res.data.ecommerceCartList) {
@@ -132,27 +140,24 @@ const CartShop = ({ navigation, route }) => {
 
   const submit = () => {
     console.log(route, 'props')
-    // let tempData = []
-    // list.forEach(element => {
-    //     if(element.checked) tempData.push(element)
-    // });
-    // const item = {
-    //     tempData,
-    //     dataCart:{
-    //         cartId: cart.id,
-    //         totalProducts: cart.totalProducts
-    //     }
-    // }
-    // console.log(item)
-    // navigation.navigate('CheckoutScreen',{item})
-    // // showLoading();
-    let variables = {
-        productId: list[0].id,
+    let productIds = []
+    list.forEach(element => {
+        if(element.checked) productIds.push({id: element.id, qty: element.quantity})
+    });
+    const item = {
+        isFromCart: true,
+        productIds
     }
-    console.log(variables)
-    Client.mutate({mutation: queryCheckout, variables})
+    console.log(item)
+    // navigation.navigate('CheckoutScreen',{item})
+    // // // showLoading();
+    // let variables = {
+    //     productId: list[0].id,
+    // }
+    // console.log(variables)
+    Client.mutate({mutation: queryCheckout, ...item})
       .then(res => {
-        getCart()
+        // getCart()
         // hideLoading()
         console.log(res)
         // if (res.data.ecommerceCartList) {
@@ -173,6 +178,7 @@ const CartShop = ({ navigation, route }) => {
       setList(tempx)
       setRefresh(refresh+1)
   }
+  
 
   const renderItem = ({item, index}) => (
     <View>
@@ -211,16 +217,16 @@ const CartShop = ({ navigation, route }) => {
             <Col style={{ flex: 1,  }}>
                 <Text size={10} color={Color.text} align='left' />
                 <Row style={{  justifyContent: 'flex-end', alignItems: 'center' }}>
-                    <TouchableOpacity onPress={() => deleteProduct(item.id)}>
+                    <TouchableOpacity onPress={() => deleteProduct(item.id, index)}>
                         <FontAwesome name='trash-o' size={17} color={Color.error} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => updateQty(item, -1)} style={{ marginLeft: 24 }}>
+                    <TouchableOpacity onPress={() => updateQty(item, -1, index)} style={{ marginLeft: 24 }}>
                         <AntDesign name='minuscircleo' color={Color.disabled} size={17} />
                     </TouchableOpacity>
                     <View>
                         <Text color={Color.text} style={{ marginHorizontal: 8 }}>{item.quantity}</Text>
                     </View>
-                    <TouchableOpacity onPress={() => updateQty(item, 1)}>
+                    <TouchableOpacity onPress={() => updateQty(item, 1, index)}>
                         <AntDesign name='pluscircleo' color={Color.secondary} size={17} />  
                     </TouchableOpacity>
 
