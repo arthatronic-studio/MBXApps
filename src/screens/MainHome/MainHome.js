@@ -52,6 +52,8 @@ import PostingHeader from 'src/components/Posting/PostingHeader';
 import {shadowStyle} from 'src/styles';
 import { adsPopup } from 'assets/images/popup';
 import { listDummyBanner } from 'assets/images/banner';
+import Ebook from '../Posting/Ebook/Ebook';
+
 
 const dataPromoDummy = {
   productName: 'Halo selamat datang!',
@@ -653,6 +655,7 @@ const MainHome = ({navigation, route}) => {
         </View>
       </Modal>
     </Scaffold>
+    
   );
 };
 

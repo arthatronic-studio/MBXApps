@@ -29,4 +29,12 @@ export default {
   mapPin: require('../components/Images/MapPin.png'),
   detailEvent: require('../components/Images/DetailEvent.png'),
   newsImage: require('../components/Images/news-image.png'),
+  ebook1: require('../components/Images/ebook1.png'),
+  ebook2: require('../components/Images/ebook2.png'),
+  release1: require('../components/Images/release1.png'),
+  release2: require('../components/Images/release2.png'),
+  release3: require('../components/Images/release3.png'),
+  release4: require('../components/Images/release4.png'),
+  ebookbanner: require('../components/Images/ebookbanner.png'),
+  
 };
