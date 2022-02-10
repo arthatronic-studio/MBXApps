@@ -415,31 +415,30 @@ const MainHome = ({ navigation, route }) => {
 							>
 								<Ionicons name="notifications-outline" size={22} color={Color.text} />
 							</TouchableOpacity>
-							{!listKomotoFamily.includes(Config.INITIAL_CODE) && (
-								<TouchableOpacity
-									onPress={() => {
-										navigation.navigate('ChatRoomsScreen');
-									}}
-									style={{
-										width: '20%',
-										justifyContent: 'flex-start',
-										alignItems: 'flex-end'
-									}}
-								>
-									<Ionicons name="chatbox-outline" size={22} color={Color.text} />
-									{notifierCount > 0 && (
-										<Circle
-											size={12}
-											color={Color.error}
-											style={{ position: 'absolute', top: -4, right: -4 }}
-										>
-											<Text size={8} color={Color.textInput}>
-												{notifierCount > 99 ? '99' : notifierCount}
-											</Text>
-										</Circle>
-									)}
-								</TouchableOpacity>
-							)}
+							
+							<TouchableOpacity
+								onPress={() => {
+									navigation.navigate('ChatRoomsScreen');
+								}}
+								style={{
+									width: '20%',
+									justifyContent: 'flex-start',
+									alignItems: 'flex-end'
+								}}
+							>
+								<Ionicons name="chatbox-outline" size={22} color={Color.text} />
+								{notifierCount > 0 && (
+									<Circle
+										size={12}
+										color={Color.error}
+										style={{ position: 'absolute', top: -4, right: -4 }}
+									>
+										<Text size={8} color={Color.textInput}>
+											{notifierCount > 99 ? '99' : notifierCount}
+										</Text>
+									</Circle>
+								)}
+							</TouchableOpacity>
 						</View>
 					}
 				/>
