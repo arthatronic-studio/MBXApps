@@ -52,9 +52,12 @@ import WidgetBalance from 'src/components/WidgetBalance';
 import WidgetMenuHome from './WidgetMenuHome';
 import PostingHeader from 'src/components/Posting/PostingHeader';
 import {shadowStyle} from 'src/styles';
-import { adsPopup } from 'assets/images/popup';
-import { listDummyBanner } from 'assets/images/banner';
-import { listKomotoFamily } from 'src/utils/constants';
+import {adsPopup} from 'assets/images/popup';
+import {listDummyBanner} from 'assets/images/banner';
+import {listKomotoFamily} from 'src/utils/constants';
+import Ebook from '../Posting/Ebook/Ebook';
+
+import Geolocation from 'react-native-geolocation-service';
 
 const dataPromoDummy = {
   productName: 'Halo selamat datang!',
@@ -181,36 +184,105 @@ const MainHome = ({navigation, route}) => {
     }
   }, [isFocused]);
 
+  useEffect(() => {
+    const successCallback = res => {
+      // if (res.coords) {
+      //   const getUserLocationKey = firestore()
+      //     .collection('location-community')
+      //     .where('userId', '==', 249)
+
+      // .update({
+      //   position: [res.coords.latitude, res.coords.longitude],
+      //   userId: 1,
+      // })
+
+      //   .onSnapshot(
+      //      snap => {
+      //       let subscriber = {};
+      //       if (snap.docs.length === 0) {
+      //         console.log("ini if")
+      //         subscriber =  firestore()
+      //           .collection('location-community')
+      //           .add({
+      //             position: [res.coords.latitude, res.coords.longitude],
+      //             userId: user.userId,
+      //           })
+      //           .then(() => console.log('selesai'));
+      //       } else {
+      //         console.log("ini else")
+      //         subscriber =  firestore()
+      //           .collection('location-community')
+      //           .doc(snap.docs[0]._ref._documentPath._parts[1])
+
+      //           .update({
+      //             position: [res.coords.latitude, res.coords.longitude],
+      //             userId: user.userId,
+      //           });
+      //       }
+
+      //       return subscriber;
+      //     },
+      //     error => {
+      //       console.log('error fstore', error);
+      //     },
+      //   );
+
+    
+
+      const addLocation = firestore()
+        .collection('location-community')
+        .add({
+          position: [res.coords.latitude, res.coords.longitude],
+          userId: user.userId,
+        })
+        .then(() => console.log('selesai'));
+
+      // return () => getUserLocationKey();
+      return () => addLocation();
+    };
+
+
+
+    const errorCallback = err => {
+      console.log('ini err', err);
+    };
+
+    const option = {
+      enableHighAccuracy: true,
+    };
+    Geolocation.watchPosition(successCallback, errorCallback, option);
+  }, []);
+
   const fetchBannerList = () => {
     Client.query({
       query: queryBannerList,
     })
-    .then(res => {
-      console.log('res banner list', res);
-      setListBanner(res.data.bannerList);
-      setLoadingBanner(false);
-    })
-    .catch(err => {
-      console.log(err, 'err banner list');
-    });
-  }
+      .then(res => {
+        console.log('res banner list', res);
+        setListBanner(res.data.bannerList);
+        setLoadingBanner(false);
+      })
+      .catch(err => {
+        console.log(err, 'err banner list');
+      });
+  };
 
   // Popup Banners
   const fetchPromoBanners = () => {
     Client.query({
       query: queryPromoBanners,
     })
-    .then(res => {
-      console.log('res Promo Banners', res);
-      setDataPopupAds(res.data.promoBanners);
-      setShowPopupAds(true);
-    })
-    .catch(err => {
-      console.log(err, 'err Promo Banners');
-      setDataPopupAds();
-      setShowPopupAds(true);
-    });
-  }
+      .then(res => {
+        console.log('res Promo Banners', res);
+        setDataPopupAds(res.data.promoBanners);
+        setShowPopupAds(true);
+      })
+      .catch(err => {
+        console.log(err, 'err Promo Banners');
+        setDataPopupAds();
+        setShowPopupAds(true);
+      });
+  };
 
   const fetchData = async () => {
     const result = await Promise.all([
@@ -293,16 +365,18 @@ const MainHome = ({navigation, route}) => {
     extrapolate: 'clamp',
   });
 
-  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const toggleModal = () => {
-    setIsModalVisible(!isModalVisible)
-  }
+    setIsModalVisible(!isModalVisible);
+  };
 
   const onClickBaca = () => {
-    setIsModalVisible(!isModalVisible)
-    navigation.navigate('PDFReaderScreen', { file: 'http://samples.leanpub.com/thereactnativebook-sample.pdf' })
-  }
+    setIsModalVisible(!isModalVisible);
+    navigation.navigate('PDFReaderScreen', {
+      file: 'http://samples.leanpub.com/thereactnativebook-sample.pdf',
+    });
+  };
 
   // const ModalPopupEbook = () => {
   //     return (
@@ -322,7 +396,8 @@ const MainHome = ({navigation, route}) => {
       statusBarAnimatedStyle={
         Platform.OS === 'ios'
           ? {backgroundColor: backgroundInterpolate}
-          : isFocused ? {backgroundColor: backgroundInterpolate}
+          : isFocused
+          ? {backgroundColor: backgroundInterpolate}
           : {}
       }
       header={
@@ -349,27 +424,33 @@ const MainHome = ({navigation, route}) => {
                   color={Color.text}
                 />
               </TouchableOpacity>
-              {!listKomotoFamily.includes(Config.INITIAL_CODE) && <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('ChatRoomsScreen');
-                }}
-                style={{
-                  width: '20%',
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-end',
-                }}>
-                <Ionicons name="chatbox-outline" size={22} color={Color.text} />
-                {notifierCount > 0 && (
-                  <Circle
-                    size={12}
-                    color={Color.error}
-                    style={{position: 'absolute', top: -4, right: -4}}>
-                    <Text size={8} color={Color.textInput}>
-                      {notifierCount > 99 ? '99' : notifierCount}
-                    </Text>
-                  </Circle>
-                )}
-              </TouchableOpacity>}
+              {!listKomotoFamily.includes(Config.INITIAL_CODE) && (
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('ChatRoomsScreen');
+                  }}
+                  style={{
+                    width: '20%',
+                    justifyContent: 'flex-start',
+                    alignItems: 'flex-end',
+                  }}>
+                  <Ionicons
+                    name="chatbox-outline"
+                    size={22}
+                    color={Color.text}
+                  />
+                  {notifierCount > 0 && (
+                    <Circle
+                      size={12}
+                      color={Color.error}
+                      style={{position: 'absolute', top: -4, right: -4}}>
+                      <Text size={8} color={Color.textInput}>
+                        {notifierCount > 99 ? '99' : notifierCount}
+                      </Text>
+                    </Circle>
+                  )}
+                </TouchableOpacity>
+              )}
             </View>
           }
         />
@@ -450,19 +531,27 @@ const MainHome = ({navigation, route}) => {
             }}
           />
 
-          {!listKomotoFamily.includes(Config.INITIAL_CODE) && <Text
-            color={Color.red}
-            style={{marginTop: 24}}
-            onPress={() => navigation.navigate('PDFReaderScreen', { file: 'http://samples.leanpub.com/thereactnativebook-sample.pdf' })}>
+          {!listKomotoFamily.includes(Config.INITIAL_CODE) && (
+            <Text
+              color={Color.red}
+              style={{marginTop: 24}}
+              onPress={() =>
+                navigation.navigate('PDFReaderScreen', {
+                  file: 'http://samples.leanpub.com/thereactnativebook-sample.pdf',
+                })
+              }>
               Tes Open PDF
-          </Text>}
-          
-          {!listKomotoFamily.includes(Config.INITIAL_CODE) && <Text
-            color={Color.red}
-            style={{marginTop: 24}}
-            onPress={() => toggleModal()}>
+            </Text>
+          )}
+
+          {!listKomotoFamily.includes(Config.INITIAL_CODE) && (
+            <Text
+              color={Color.red}
+              style={{marginTop: 24}}
+              onPress={() => toggleModal()}>
               Popup E book
-          </Text>}
+            </Text>
+          )}
 
           <View style={{flex: 1}}>
             <Modal
@@ -470,72 +559,127 @@ const MainHome = ({navigation, route}) => {
               onBackdropPress={() => setIsModalVisible(false)}
               animationIn="slideInDown"
               animationOut="slideOutDown"
-              style={{borderRadius: 16}}
-            >
+              style={{borderRadius: 16}}>
               <View style={{backgroundColor: '#fff'}}>
-                <View style={{width: '100%', paddingHorizontal: 16, paddingVertical: 24}}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        toggleModal()
-                      }}
+                <View
+                  style={{
+                    width: '100%',
+                    paddingHorizontal: 16,
+                    paddingVertical: 24,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      toggleModal();
+                    }}
+                    style={{
+                      alignSelf: 'flex-end',
+                      backgroundColor: Color.error,
+                      borderRadius: 50,
+                      marginBottom: 12,
+                    }}>
+                    <Image
+                      source={ImagesPath.icClose}
+                      style={{width: 16, height: 16}}
+                    />
+                  </TouchableOpacity>
+                  <View style={{flexDirection: 'row'}}>
+                    <View style={{marginRight: 16}}>
+                      <Image source={ImagesPath.eBook} />
+                    </View>
+                    <View>
+                      <View style={{width: '86%'}}>
+                        <Text
+                          align="left"
+                          size={14}
+                          style={{fontWeight: 'bold'}}>
+                          Seni Berlorem Ipsum Dulur Sit Amet
+                        </Text>
+                      </View>
+                      <Text align="left" size={10}>
+                        Karya Esa Riski Hari Utama
+                      </Text>
+                      <View style={{flexDirection: 'row'}}>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            marginTop: 12,
+                            marginRight: 20,
+                          }}>
+                          <Image
+                            source={ImagesPath.eye}
+                            style={{width: 16, height: 16, marginRight: 9}}
+                          />
+                          <Text align="left" size={10}>
+                            1.7K
+                          </Text>
+                        </View>
+                        <View style={{flexDirection: 'row', marginTop: 12}}>
+                          <Image
+                            source={ImagesPath.thumbsUp}
+                            style={{width: 16, height: 16, marginRight: 9}}
+                          />
+                          <Text align="left" size={10}>
+                            240
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={{marginTop: 16}}>
+                        <Text
+                          align="left"
+                          size={11}
+                          style={{fontWeight: 'bold'}}>
+                          Sinopsis
+                        </Text>
+                      </View>
+                      <View style={{width: '80%'}}>
+                        <Text align="left" size={10} numberOfLines={4}>
+                          Cookie toffee pie cupcake sesame snaps. Cupcake
+                          cupcake soufflé gummies croissant jelly beans candy
+                          canes fruitcake. Dessert cotton candy tart donut
+                          tiramisu cookie dragée wafer marzipan.
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-around',
+                    }}>
+                    <View
                       style={{
-                        alignSelf: 'flex-end',
-                        backgroundColor: Color.error,
-                        borderRadius: 50,
-                        marginBottom: 12
+                        width: 44,
+                        height: 44,
+                        borderRadius: 21,
+                        borderWidth: 0.3,
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}>
                       <Image
-                        source={ImagesPath.icClose}
-                        style={{width: 16, height: 16}} />
-                    </TouchableOpacity>
-                    <View style={{flexDirection: 'row'}}>
-                        <View style={{marginRight: 16}}>
-                            <Image source={ImagesPath.eBook} />
-                        </View>
-                        <View>  
-                            <View style={{width: '86%'}}>
-                                <Text align='left' size={14} style={{fontWeight: 'bold'}}>Seni Berlorem Ipsum Dulur Sit Amet</Text>
-
-                            </View>
-                            <Text align='left' size={10}>Karya Esa Riski Hari Utama</Text>
-                            <View style={{flexDirection: 'row'}}>
-                                <View style={{flexDirection: 'row', marginTop: 12, marginRight: 20}}>
-                                    <Image source={ImagesPath.eye} style={{width: 16, height: 16, marginRight: 9}} />
-                                    <Text align='left' size={10}>1.7K</Text>
-                                </View>
-                                <View style={{flexDirection: 'row', marginTop: 12}}>
-                                    <Image source={ImagesPath.thumbsUp} style={{width: 16, height: 16, marginRight: 9}} />
-                                    <Text align='left' size={10}>240</Text>
-                                </View>
-                            </View>
-                            <View style={{marginTop: 16}}>
-                                <Text align='left' size={11} style={{fontWeight: 'bold'}}>Sinopsis</Text>
-                            </View>
-                            <View style={{width: '80%'}}>
-                                <Text align='left' size={10} numberOfLines={4}>
-                                    Cookie toffee pie cupcake sesame snaps. Cupcake cupcake soufflé gummies croissant jelly beans candy canes fruitcake. Dessert cotton candy tart donut tiramisu cookie dragée wafer marzipan.
-                                </Text>
-                            </View>
-                        </View>
+                        source={ImagesPath.thumbsUp}
+                        style={{width: 22, height: 22}}
+                      />
                     </View>
-                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
-                        <View style={{width: 44, height: 44, borderRadius: 21, borderWidth: 0.3, alignItems:'center', justifyContent: 'center'}}>
-                            <Image source={ImagesPath.thumbsUp} style={{width: 22, height: 22}} />
-                        </View>
-                        <Submit
-                            buttonLabel='Baca Sekarang'
-                            buttonColor={Color.primary}
-                            type='bottomSingleButton'
-                            buttonBorderTopWidth={0}
-                            style={{backgroundColor: Color.theme, paddingTop: 25, paddingBottom: 25, width: 250}}
-                            onPress={() => onClickBaca() }
-                        />
-                    </View>
+                    <Submit
+                      buttonLabel="Baca Sekarang"
+                      buttonColor={Color.primary}
+                      type="bottomSingleButton"
+                      buttonBorderTopWidth={0}
+                      style={{
+                        backgroundColor: Color.theme,
+                        paddingTop: 25,
+                        paddingBottom: 25,
+                        width: 250,
+                      }}
+                      onPress={() => onClickBaca()}
+                    />
+                  </View>
                 </View>
               </View>
             </Modal>
           </View>
-          
+
           <Divider />
 
           <Banner
@@ -684,17 +828,19 @@ const MainHome = ({navigation, route}) => {
             style={{paddingLeft: 8}}
           />
 
-          {!listKomotoFamily.includes(Config.INITIAL_CODE) && <ListJob
-            data={listKerja}
-            loading={loadingKerja}
-            horizontal
-            showHeader
-            onPress={item => {
-              navigation.navigate('JobDetail', {item});
-              // navigation.navigate('PostingDetail', {item});
-            }}
-            style={{paddingLeft: 8}}
-          />}
+          {!listKomotoFamily.includes(Config.INITIAL_CODE) && (
+            <ListJob
+              data={listKerja}
+              loading={loadingKerja}
+              horizontal
+              showHeader
+              onPress={item => {
+                navigation.navigate('JobDetail', {item});
+                // navigation.navigate('PostingDetail', {item});
+              }}
+              style={{paddingLeft: 8}}
+            />
+          )}
 
           <MusikTerbaru />
 
@@ -736,13 +882,12 @@ const MainHome = ({navigation, route}) => {
             }}>
             <ImageBackground
               source={
-                dataPopupAds && dataPopupAds.picture && dataPopupAds.picture.url ?
-                {uri: dataPopupAds.picture.url} :
-                adsPopup
+                dataPopupAds && dataPopupAds.picture && dataPopupAds.picture.url
+                  ? {uri: dataPopupAds.picture.url}
+                  : adsPopup
               }
               imageStyle={{borderRadius: 12}}
-              style={{height: '100%', resizeMode: 'contain', width: '100%'}}
-            >
+              style={{height: '100%', resizeMode: 'contain', width: '100%'}}>
               <TouchableOpacity
                 onPress={() => {
                   tempShowPopupAds = false;
@@ -757,13 +902,15 @@ const MainHome = ({navigation, route}) => {
                 }}>
                 <Image
                   source={ImagesPath.icClose}
-                  style={{width: 20, height: 20}} />
+                  style={{width: 20, height: 20}}
+                />
               </TouchableOpacity>
             </ImageBackground>
           </TouchableOpacity>
         </View>
       </Modal>
     </Scaffold>
+    
   );
 };
 

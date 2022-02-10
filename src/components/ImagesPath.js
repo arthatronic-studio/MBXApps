@@ -32,4 +32,18 @@ export default {
   eBook: require('../components/Images/Ebook.png'),
   eye: require('../components/Images/Eye.png'),
   thumbsUp: require('../components/Images/ThumbsUp.png'),
+  Aa: require('../components/Images/Aa2.png'),
+  avatar1: require('../components/Images/avatar1.png'),
+  avatar2: require('../components/Images/avatar2.png'),
+  avatar3: require('../components/Images/avatar3.png'),
+  avatar4: require('../components/Images/avatar4.png'),
+  avatar5: require('../components/Images/avatar5.png'),
+  ebook1: require('../components/Images/ebook1.png'),
+  ebook2: require('../components/Images/ebook2.png'),
+  release1: require('../components/Images/release1.png'),
+  release2: require('../components/Images/release2.png'),
+  release3: require('../components/Images/release3.png'),
+  release4: require('../components/Images/release4.png'),
+  ebookbanner: require('../components/Images/ebookbanner.png'),
+  
 };

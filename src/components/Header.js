@@ -247,36 +247,34 @@ const Header = props => {
           {searchbar ? (
             <>
               {
-                <View
+                <Row
                   style={{
-                    width: '75%',
+                    width: '73%',
                     justifyContent: 'center',
-                    padding: 16,
+                    marginTop: 2,
+                    marginLeft: 2,
+                    backgroundColor: Color.textInput,
+                    ...shadowStyle,
+                    alignItems: 'center',
+                    paddingHorizontal: 10,
                   }}
                 >
                   <SearchBar
                     placeholder="Cari apa hari ini ..."
                     placeholderTextColor={Color.gray}
                     style={{
-                      backgroundColor: Color.textInput,
-                      width: '100%',
-                      height: 45,
+                      width: '80%',
                       borderRadius: 8,
-                      paddingHorizontal: 10,
-                      ...shadowStyle,
                     }}
                   />
-                  
-                  <AntDesign
-                    name={'search1'}
-                    color={Color.gray}
-                    size={13}
-                    style={{
-                      position: 'absolute',
-                      right: 0,
-                    }}
-                  />
-                </View>
+                    <AntDesign
+                      name={'search1'}
+                      color={Color.gray}
+                      size={18}
+                      style={{
+                      }}
+                    />
+                </Row>
               }
             </>
           ) : (
