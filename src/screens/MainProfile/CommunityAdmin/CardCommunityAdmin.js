@@ -18,7 +18,7 @@ import {Divider} from 'src/styled';
 import { queryOrganizationMemberManage } from 'src/lib/query/organization';
 import Config from 'react-native-config';
 
-const CardComponent = (props) => {
+const CardCommunityAdmin = (props) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,6 +30,7 @@ const CardComponent = (props) => {
   useEffect(() => {
     if (isFocused) {
       fetchData();
+      console.log('here');
     }
   }, [isFocused]);
 
@@ -57,24 +58,34 @@ const CardComponent = (props) => {
       });
   };
 
-  const handleSuccess = (id, userId) => {
+  const fetchJoinCommunityManage = (id, userId, status) => {
     setLoading(true);
+
+    let resMessage =
+      status === 1 ? 'Diterima' :
+      status === 2 ? 'Ditolak' : 'Dihapus';
 
     Client.query({
       query: joinCommunityManage,
       variables: {
-        status: 1,
-        id: id,
+        status,
+        id,
       },
     })
       .then((res) => {
         console.log('res join', res);
-        const data = res.data.joinCommunityManage;
-        showPopup('Akun selesai di Approve', 'success');
-        fetchData();
-        setLoading(false);
 
-        fetchOrganizationMemberManage(userId);
+        const data = res.data.joinCommunityManage;
+        const success = data && data.id;
+
+        if (success) {
+          fetchData();
+          showPopup(`Akun berhasil ${resMessage}`, 'success');
+          setLoading(false);
+        } else {
+          showPopup(`Akun gagal ${resMessage}`, 'error');
+          setLoading(false);
+        }
       })
       .catch((err) => {
         showPopup(err.message, 'error');
@@ -82,11 +93,18 @@ const CardComponent = (props) => {
       });
   };
 
-  const fetchOrganizationMemberManage = (userId) => {
+  const fetchOrganizationMemberManage = (id, userId, status) => {
+    let resMessage =
+      status === 1 ? 'Diterima' :
+      status === 2 ? 'Ditolak' : 'Dihapus';
+    let method =
+      status === 1 ? 'INSERT' :
+      status === 2 ? 'REJECT' : 'DELETE';
+
     const variables = {
       "userId": userId,
       "organizationInitialCode": Config.INITIAL_CODE,
-      "type": "INSERT"
+      "type": method,
     };
 
     console.log(variables);
@@ -96,31 +114,22 @@ const CardComponent = (props) => {
       variables,
     }).then((res) => {
       console.log('res organization manage', res);
+
+      const data = res.data.organizationMemberManage;
+      const success = data;
+
+      if (success) {
+        fetchJoinCommunityManage(id, userId, status);
+      } else {
+        showPopup(`Sync gagal ${resMessage}`, 'error');
+        setLoading(false);
+      }
     }).catch((err) => {
       console.log('err organization manage', err);
+      showPopup(err.message, 'error');
+      setLoading(false);
     });
   }
-
-  const handleRemove = id => {
-    setLoading(true);
-
-    Client.query({
-      query: joinCommunityManage,
-      variables: {
-        status: 2,
-        id: id,
-      },
-    })
-      .then((res) => {
-        showPopup('Akun berhasil ditolak', 'success');
-        fetchData();
-        setLoading(false);
-      })
-      .catch((err) => {
-        showPopup('Terjadi kesalahan', 'error');
-        setLoading(false);
-      });
-  };
 
   const fetchUpdateMember = item => {
     setLoading(true);
@@ -150,7 +159,8 @@ const CardComponent = (props) => {
         onPress={() => navigation.navigate('CardDetail', {item, props})}
         style={{
           borderWidth: 0.5,
-          borderRadius: 15,
+          borderRadius: 8,
+          borderColor: Color.placeholder,
           width: '100%',
           flexDirection: 'row',
           alignItems: 'center',
@@ -247,7 +257,7 @@ const CardComponent = (props) => {
                   Alert(
                     'Terima',
                     'Apakah Anda yakin akan menerima anggota ini?',
-                    () => handleSuccess(item.id, item.user_id),
+                    () => fetchOrganizationMemberManage(item.id, item.user_id, 1),
                   );
                 }}
                 style={{
@@ -257,7 +267,7 @@ const CardComponent = (props) => {
                   alignItems: 'center',
                   borderRadius: 4,
                 }}>
-                <Text color={Color.textInput}>{props.handleSuccess}</Text>
+                <Text color={Color.textInput}>Approve</Text>
               </TouchableOpacity>
               {props.type !== 'notAnggota' && <Divider />}
               {props.type !== 'notAnggota' && (
@@ -266,7 +276,7 @@ const CardComponent = (props) => {
                     Alert(
                       'Tolak',
                       'Apakah Anda yakin akan menolak anggota ini?',
-                      () => handleRemove(item.id),
+                      () => fetchOrganizationMemberManage(item.id, item.user_id, 2),
                     );
                   }}
                   style={{
@@ -276,17 +286,40 @@ const CardComponent = (props) => {
                     alignItems: 'center',
                     borderRadius: 4,
                   }}>
-                  <Text color={Color.textInput}>{props.handleRemove}</Text>
+                  <Text color={Color.textInput}>Reject</Text>
                 </TouchableOpacity>
               )}
             </View>
           )}
         </View>
+
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            backgroundColor: Color.error,
+            borderTopRightRadius: 8,
+            borderBottomLeftRadius: 8,
+          }}
+          onPress={() => {
+            Alert('Hapus', 'Apakah anda yakin akan menghapus member ini?', () => fetchOrganizationMemberManage(item.id, item.user_id, 2))
+          }}
+        >
+          <Ionicons
+            name='close'
+            color={Color.textInput}
+            size={18}
+            style={{
+              padding: 2
+            }}
+          />
+        </TouchableOpacity>
       </TouchableOpacity>
     );
   };
 
-  // console.log(data);
+  console.log(props);
 
   return (
     <Scaffold
@@ -312,4 +345,4 @@ const CardComponent = (props) => {
   );
 };
 
-export default CardComponent;
+export default CardCommunityAdmin;

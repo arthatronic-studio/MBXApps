@@ -3,28 +3,24 @@ import {useWindowDimensions} from 'react-native';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 
 import {Header, useColor} from '@src/components';
-import CardComponent from './CardComponent';
+import CardCommunityAdmin from './CardCommunityAdmin';
 import {MainView} from '@src/styled';
 
 const AnggotaBaruRoute = () => (
-  <CardComponent
+  <CardCommunityAdmin
     type="newAnggota"
-    handleSuccess="Approve"
-    handleRemove="Reject"
   />
 );
 
 const AnggotaRoute = () => (
-  <CardComponent
+  <CardCommunityAdmin
     type="Anggota"
   />
 );
 
 const AnggotaDitolakRoute = () => (
-  <CardComponent
+  <CardCommunityAdmin
     type="notAnggota"
-    handleSuccess="Approve"
-    handleRemove="Reject"
   />
 );
 
@@ -48,12 +44,21 @@ const CommunityAdminPage = ({navigation}) => {
   const renderTabBar = (props) => (
     <TabBar
       {...props}
-      indicatorStyle={{backgroundColor: Color.primary}}
-      style={{backgroundColor: Color.theme}}
       activeColor={Color.primary}
       inactiveColor={Color.text}
       scrollEnabled
-      labelStyle={{fontWeight: 'bold', textAlign: 'center', fontSize: 14, textTransform: 'none'}}
+      labelStyle={{
+        fontWeight: 'bold',
+        textAlign: 'center',
+        fontSize: 14,
+        textTransform: 'none',
+      }}
+      indicatorStyle={{
+        backgroundColor: Color.primary,
+      }}
+      style={{
+        backgroundColor: Color.theme,
+      }}
     />
   );
   
