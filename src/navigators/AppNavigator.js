@@ -19,6 +19,7 @@ import UserChangePassword from '@src/screens/User/UserChangePassword';
 import TopUpScreen from '@src/screens/Topup/TopUpScreen';
 
 // screen
+
 import CommentListScreen from '@src/screens/CommentListScreen';
 import DetailEbookScreen from '@src/screens/DetailEbookScreen';
 import MainSearch from '@src/screens/MainHome/MainSearch';
@@ -108,6 +109,7 @@ import Lelang from 'src/screens/Lelang';
 import LiveLelangScreen from 'src/screens/LiveLelangScreen';
 import DetailLelang from 'src/screens/DetailLelang';
 import DetailPromo from 'src/screens/Promo/DetailPromo';
+import Ebook from 'src/screens/Posting/Ebook/Ebook';
 
 
 const {Navigator, Screen} = createStackNavigator();
@@ -172,6 +174,7 @@ function MainStackNavigator() {
       <Screen name="JobDetail" component={JobDetail} />
 
       {/* screen */}
+      <Screen name="Ebook" component={Ebook} />
       <Screen name="CommentListScreen" component={CommentListScreen} />
       <Screen name="DetailEbookScreen" component={DetailEbookScreen} />
       <Screen name="MainSearch" component={MainSearch} />
