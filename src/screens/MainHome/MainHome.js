@@ -317,7 +317,8 @@ const MainHome = ({navigation, route}) => {
   return (
     <Scaffold
       translucent={Platform.OS === 'ios' ? true : isFocused}
-      useSafeArea={Platform.OS === 'ios' ? false : isFocused ? false : true}
+      // useSafeArea={Platform.OS === 'ios' ? false : isFocused ? false : true}
+      useSafeArea={Platform.OS === 'ios' ? false : true}
       statusBarAnimatedStyle={
         Platform.OS === 'ios'
           ? {backgroundColor: backgroundInterpolate}
@@ -456,7 +457,12 @@ const MainHome = ({navigation, route}) => {
               Tes Open PDF
           </Text>}
           
-          {!listKomotoFamily.includes(Config.INITIAL_CODE) && <Text color={Color.red} style={{marginTop: 24}} onPress={() => toggleModal()}>Popup E book</Text>}
+          {!listKomotoFamily.includes(Config.INITIAL_CODE) && <Text
+            color={Color.red}
+            style={{marginTop: 24}}
+            onPress={() => toggleModal()}>
+              Popup E book
+          </Text>}
 
           <View style={{flex: 1}}>
             <Modal
@@ -719,8 +725,9 @@ const MainHome = ({navigation, route}) => {
         }}
         animationIn="slideInDown"
         animationOut="slideOutDown"
+        backdropColor={Color.semiwhite}
       >
-        <View style={{height: '75%'}}>
+        <View style={{width: '90%', aspectRatio: 9/16, alignSelf: 'center'}}>
           <TouchableOpacity
             onPress={() => {
               tempShowPopupAds = false;

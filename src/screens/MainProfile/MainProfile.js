@@ -147,7 +147,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'community_admin',
       title: 'Community Admin',
-      show: user && (user.isDirector === 1 || listPrivilegeUser.includes(user.userId)),
+      show: user && user.isDirector === 1,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('CommunityAdminPage'),
     },
