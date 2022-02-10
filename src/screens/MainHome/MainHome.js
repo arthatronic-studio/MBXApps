@@ -55,6 +55,7 @@ import {shadowStyle} from 'src/styles';
 import {adsPopup} from 'assets/images/popup';
 import {listDummyBanner} from 'assets/images/banner';
 import {listKomotoFamily} from 'src/utils/constants';
+import Ebook from '../Posting/Ebook/Ebook';
 
 import Geolocation from 'react-native-geolocation-service';
 
@@ -906,6 +907,7 @@ const MainHome = ({navigation, route}) => {
         </View>
       </Modal>
     </Scaffold>
+    
   );
 };
 
