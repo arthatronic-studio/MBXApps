@@ -138,6 +138,13 @@ const MainProfile = ({navigation, route}) => {
       onPress: () => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
     },
     {
+      code: 'Terms_condition',
+      title: 'Syarat & Ketentuan',
+      show: true,
+      icon: <Ionicons name="newspaper-outline" size={20} color={Color.text} style={{}} />,
+      onPress: () => navigation.navigate('TermsnCondition'),
+    },
+    {
       code: 'join_community',
       title: 'Gabung Komunitas',
       show: user && user.organizationId ? false : true,

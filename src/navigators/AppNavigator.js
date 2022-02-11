@@ -37,7 +37,7 @@ import ShowAllFromProfile from '@src/screens/MainProfile/ShowAllFromProfile';
 import JoinCommunity from 'src/screens/MainProfile/JoinCommunity';
 import ReferralCodeScreen from '@src/screens/MainProfile/ReferralCodeScreen';
 import UserProfileScreen from '@src/screens/MainProfile/UserProfileScreen';
-
+import TermsnCondition from 'src/screens/MainProfile/TermsnCondition';
 // community admin
 import CommunityAdminPage from '@src/screens/MainProfile/CommunityAdmin/CommunityAdminPage';
 import CardDetail from 'src/screens/MainProfile/CommunityAdmin/CardDetail';
@@ -188,6 +188,7 @@ function MainStackNavigator() {
       <Screen name="JoinCommunity" component={JoinCommunity} />
       <Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />
       <Screen name="UserProfileScreen" component={UserProfileScreen} />
+      <Screen name="TermsnCondition" component={TermsnCondition} />
       {/* community admin */}
       <Screen name="CommunityAdminPage" component={CommunityAdminPage} />
       <Screen name="CardDetail" component={CardDetail} />
