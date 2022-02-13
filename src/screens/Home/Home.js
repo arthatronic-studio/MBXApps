@@ -363,7 +363,7 @@ const Home = () => {
               width: '65%',
               paddingHorizontal: 15,
             }}>
-            Tempat Terdekat
+            Tempat Favorit
           </Text>
           <TouchableOpacity style={{flexDirection: 'row', paddingVertical: 3}}>
             <Text

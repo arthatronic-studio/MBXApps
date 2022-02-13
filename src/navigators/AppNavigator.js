@@ -4,7 +4,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 // uncanny
 import SplashScreen from 'src/screens/SplashScreen';
-import MainPage from '@src/navigators/BottomTabsNavigator';
+import BottomTabsNavigator from '@src/navigators/BottomTabsNavigator';
+import BottomTabsNavigatorKomoto from '@src/navigators/BottomTabsNavigatorKomoto';
 import KnowMeScreen from '@src/screens/KnowMeScreen';
 import CreateEmergencyScreen from '@src/screens/CreateEmergencyScreen';
 import PDFReaderScreen from 'src/screens/PDFReaderScreen';
@@ -19,6 +20,7 @@ import UserChangePassword from '@src/screens/User/UserChangePassword';
 import TopUpScreen from '@src/screens/Topup/TopUpScreen';
 
 // screen
+
 import CommentListScreen from '@src/screens/CommentListScreen';
 import DetailEbookScreen from '@src/screens/DetailEbookScreen';
 import MainSearch from '@src/screens/MainHome/MainSearch';
@@ -108,9 +110,11 @@ import Lelang from 'src/screens/Lelang';
 import LiveLelangScreen from 'src/screens/LiveLelangScreen';
 import DetailLelang from 'src/screens/DetailLelang';
 import DetailPromo from 'src/screens/Promo/DetailPromo';
-
+import Ebook from 'src/screens/Posting/Ebook/Ebook';
+import { accessClient } from 'src/utils/access_client';
 
 const {Navigator, Screen} = createStackNavigator();
+const MainPage = accessClient.BottomTabsNavigator.type === 'komoto' ? BottomTabsNavigatorKomoto : BottomTabsNavigator;
 
 function MainStackNavigator() {
   return (
@@ -172,6 +176,7 @@ function MainStackNavigator() {
       <Screen name="JobDetail" component={JobDetail} />
 
       {/* screen */}
+      <Screen name="Ebook" component={Ebook} />
       <Screen name="CommentListScreen" component={CommentListScreen} />
       <Screen name="DetailEbookScreen" component={DetailEbookScreen} />
       <Screen name="MainSearch" component={MainSearch} />

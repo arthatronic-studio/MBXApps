@@ -85,10 +85,10 @@ const ChatDetailScreen = ({ navigation, route }) => {
 
     // handle appstate
     useEffect(() => {
-        AppState.addEventListener('change', handleChange);  
+        const subAppState = AppState.addEventListener('change', handleChange);  
 
         return () => {
-            AppState.removeEventListener('change', handleChange);  
+            subAppState();
         }
     }, []);
 
@@ -322,8 +322,8 @@ const ChatDetailScreen = ({ navigation, route }) => {
             const data = res.data.contentChatRoomManage;
 
             if (data) {
-                fetchContentChatRoomDetail(data.roomId);
-                setRoomId(data.roomId);
+                fetchContentChatRoomDetail(data.id);
+                setRoomId(data.id);
             }
         })
         .catch((err) => {

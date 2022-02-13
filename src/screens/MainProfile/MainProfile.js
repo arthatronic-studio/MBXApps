@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -6,7 +6,6 @@ import {
   Image,
   useWindowDimensions,
   Linking,
-  ImageBackground,
   ScrollView,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -19,7 +18,6 @@ import messaging from '@react-native-firebase/messaging';
 import {
   Alert,
   Text,
-  Grid,
   Row,
   Col,
   HeaderBig,
@@ -32,12 +30,11 @@ import {shadowStyle} from '@src/styles';
 import {iconSplash, imageCardOrnament} from '@assets/images';
 import {Box, Container, Divider} from 'src/styled';
 import Clipboard from '@react-native-community/clipboard';
-import { listInitialCode, listKomotoFamily, listPrivilegeUser } from 'src/utils/constants';
 import ModalinputCode from 'src/components/ModalInputCode';
 import Client from '@src/lib/apollo';
 import { queryOrganizationMemberManage } from '@src/lib/query/organization';
 import { getCurrentUserProfile } from 'src/state/actions/user/auth';
-import Config from 'react-native-config';
+import { accessClient } from 'src/utils/access_client';
 
 const MainProfile = ({navigation, route}) => {
   const [modalVirtual, setModalVirtual] = useState(false);
@@ -147,14 +144,14 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'join_community',
       title: 'Gabung Komunitas',
-      show: user && user.organizationId ? false : true,
+      show: accessClient.MainProfile.showMenuJoinCommunity && user && !user.organizationId,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('JoinCommunity'),
     },
     {
       code: 'community_admin',
       title: 'Community Admin',
-      show: user && (user.isDirector === 1 || listPrivilegeUser.includes(user.userId)),
+      show: accessClient.MainProfile.showMenuCommunityAdmin && user && user.isDirector === 1,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('CommunityAdminPage'),
     },
@@ -320,7 +317,7 @@ const MainProfile = ({navigation, route}) => {
                 )}
               </View>
 
-              {(user && !user.organizationId) || !listKomotoFamily.includes(Config.INITIAL_CODE) && <View
+              {accessClient.MainProfile.showButtonJoinCommunity && user && !user.organizationId && <View
                 style={{
                   flex: 1,
                   paddingLeft: 16,

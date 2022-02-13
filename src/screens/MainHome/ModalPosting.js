@@ -49,7 +49,7 @@ const data = [
     name: 'Tempat',
     icon: <Image source={iconTempat} style={{width: '45%', height: '50%', marginBottom: 4}}/>,
     nav: 'CreateThreadScreen', params: {
-      title: 'Posting Tempat Terdekat',
+      title: 'Posting Tempat Favorit',
       productType: Config.PRODUCT_TYPE,
       productCategory: '',
       productSubCategory: 'NEARBY_PLACE',
