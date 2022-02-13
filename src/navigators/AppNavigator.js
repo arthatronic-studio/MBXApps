@@ -190,7 +190,10 @@ function MainStackNavigator() {
       <Screen name="TermsnCondition" component={TermsnCondition} />
       <Screen name="UserProfileScreen" component={UserProfileScreen} />
       
+<<<<<<< HEAD
       <Screen name="TermsCondition" component={TermsCondition} />
+=======
+>>>>>>> 133cd6a41ca286c989b64bba22f6495648bd411f
       {/* community admin */}
       <Screen name="CommunityAdminPage" component={CommunityAdminPage} />
       <Screen name="CardDetail" component={CardDetail} />
