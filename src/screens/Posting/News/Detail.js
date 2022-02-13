@@ -8,7 +8,7 @@ import {useLoading, usePopup, useColor} from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
 
-import {Divider} from '@src/styled';
+import {Container, Divider} from '@src/styled';
 import {shadowStyle} from '@src/styles';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
 import moment from 'moment';
+import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 
 const Example = Styled(View)`
 `;
@@ -210,6 +211,12 @@ export default ({navigation, route}) => {
               </Text>
             </View>
           </View>
+          
+          {item.like > 0 &&
+            <Container paddingHorizontal={16}>
+              <WidgetUserLikes id={item.id} title='Disukai' />
+            </Container>
+          }
 
         <View style={{padding: 16}}>
           <Text lineHeight={24} align="left">

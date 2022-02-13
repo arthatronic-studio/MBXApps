@@ -40,13 +40,11 @@ import JoinCommunity from 'src/screens/MainProfile/JoinCommunity';
 import ReferralCodeScreen from '@src/screens/MainProfile/ReferralCodeScreen';
 import TermsnCondition from 'src/screens/MainProfile/TermsnCondition';
 import UserProfileScreen from '@src/screens/MainProfile/UserProfileScreen';
+import TermsCondition from 'src/screens/MainProfile/TermCondition';
+
 // community admin
 import CommunityAdminPage from '@src/screens/MainProfile/CommunityAdmin/CommunityAdminPage';
 import CardDetail from 'src/screens/MainProfile/CommunityAdmin/CardDetail';
-
-// Posting
-// import PostingScreen from 'src/screens/Posting/PostingScreen';
-import PostingDetail from 'src/screens/Posting/PostingDetail';
 
 // Emergency
 import EmergencyScreen from 'src/screens/Posting/Emergency/Index';
@@ -156,9 +154,6 @@ function MainStackNavigator() {
       <Screen name="UserChangePassword" component={UserChangePassword} />
       {/* topup */}
       <Screen name="TopUpScreen" component={TopUpScreen} />
-      {/* Posting */}
-      {/* <Screen name='PostingScreen' component={PostingScreen} /> */}
-      <Screen name="PostingDetail" component={PostingDetail} />
       {/* Emergency */}
       <Screen name="EmergencyScreen" component={EmergencyScreen} />
       <Screen name="EmergencyDetail" component={EmergencyDetail} />
@@ -195,6 +190,7 @@ function MainStackNavigator() {
       <Screen name="TermsnCondition" component={TermsnCondition} />
       <Screen name="UserProfileScreen" component={UserProfileScreen} />
       
+      <Screen name="TermsCondition" component={TermsCondition} />
       {/* community admin */}
       <Screen name="CommunityAdminPage" component={CommunityAdminPage} />
       <Screen name="CardDetail" component={CardDetail} />

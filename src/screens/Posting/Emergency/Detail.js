@@ -21,6 +21,7 @@ import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
 import { Divider, Row } from 'src/styled';
 import { useSelector } from 'react-redux';
+import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 
 const Example = Styled(View)`
 `;
@@ -133,6 +134,13 @@ export default ({ navigation, route }) => {
                             </Text>
                         </View>}
                     </Row>
+
+                    <Divider />
+
+                    {item.like > 0 && <WidgetUserLikes
+                        id={item.id}
+                        title='Akan Berangkat'
+                    />}
 
                     <Divider />
 

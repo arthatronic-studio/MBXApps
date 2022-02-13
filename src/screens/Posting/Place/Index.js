@@ -144,8 +144,7 @@ export default ({ navigation, route }) => {
                 data={state.listProduct}
                 showHeader={false}
                 onPress={(item) => {
-                  // navigation.navigate('PlaceDetail', { item });
-                  navigation.navigate('PostingDetail', {item});
+                  navigation.navigate('PlaceDetail', { item });
                 }}
             />
         </Scaffold>

@@ -146,7 +146,6 @@ export default ({ navigation, route }) => {
                 showHeader={false}
                 onPress={(item) => {
                   navigation.navigate('EmergencyDetail', { item });
-                  // navigation.navigate('PostingDetail', {item});
                 }}
                 style={{
                   paddingBottom: 76

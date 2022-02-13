@@ -168,7 +168,6 @@ export default ({navigation, route}) => {
         data={state.listProduct}
         onPress={item => {
           navigation.navigate('EventDetail', { item });
-          // navigation.navigate('PostingDetail', {item});
         }}
         style={{
           paddingBottom: 48,
