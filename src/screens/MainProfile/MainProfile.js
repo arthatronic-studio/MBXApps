@@ -134,6 +134,7 @@ const MainProfile = ({navigation, route}) => {
       icon: <AntDesign name="carryout" size={20} color={Color.text} style={{}} />,
       onPress: () => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
     },
+   
     {
       code: 'Terms_condition',
       title: 'Syarat & Ketentuan',
