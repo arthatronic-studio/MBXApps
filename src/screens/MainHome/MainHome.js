@@ -514,23 +514,12 @@ const MainHome = ({navigation, route}) => {
             }}
           />
 
-          <Text
-            color={Color.red}
-            style={{marginTop: 24}}
-            onPress={() =>
-              navigation.navigate('PDFReaderScreen', {
-                file: 'http://samples.leanpub.com/thereactnativebook-sample.pdf',
-              })
-            }>
-            Tes Open PDF
-          </Text>
-
-          <Text
+          {accessClient.MainHome.showListEbookNewer && <Text
             color={Color.red}
             style={{marginTop: 24}}
             onPress={() => toggleModal()}>
             Popup E book
-          </Text>
+          </Text>}
 
           <View style={{flex: 1}}>
             <Modal
