@@ -3,6 +3,7 @@ import { View, ScrollView, TextInput, SafeAreaView, Image, Keyboard, BackHandler
 import Styled from 'styled-components';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { launchImageLibrary } from 'react-native-image-picker';
+
 import {
     Header,
     Text,
@@ -15,12 +16,10 @@ import {
 import { TouchSelect } from '@src/components/Form';
 import ModalSelectStatus from '@src/components/Modal/ModalSelectStatus';
 import validate from '@src/lib/validate';
-
 import Client from '@src/lib/apollo';
 import { queryProductManage } from '@src/lib/query';
 import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
-import { listKomotoFamily } from 'src/utils/constants';
-import Config from 'react-native-config';
+import { accessClient } from 'src/utils/access_client';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -291,7 +290,7 @@ const CreateThreadScreen = (props) => {
                     </ErrorView>
                 </View>
 
-                {!listKomotoFamily.includes(Config.INITIAL_CODE) && <TouchSelect
+                {accessClient.CreatePosting.showPrivacy && <TouchSelect
                     title='Siapa yang dapat melihat ini?'
                     value={selectedStatus.label}
                     iconName={selectedStatus.iconName}

@@ -37,7 +37,7 @@ import ListNews from 'src/components/Posting/ListNews';
 import ListPlace from 'src/components/Posting/ListPlace';
 import ListEvent from 'src/components/Posting/ListEvent';
 import ListJob from 'src/components/Posting/ListJob';
-import {Box, Divider, Circle, Container} from '@src/styled';
+import {Divider, Circle, Container} from '@src/styled';
 import {playNotificationSounds} from '@src/utils/notificationSounds';
 import CarouselView from 'src/components/CarouselView';
 import Banner from 'src/components/Banner';
@@ -55,10 +55,9 @@ import PostingHeader from 'src/components/Posting/PostingHeader';
 import {shadowStyle} from 'src/styles';
 import {adsPopup} from 'assets/images/popup';
 import {listDummyBanner} from 'assets/images/banner';
-import {listKomotoFamily} from 'src/utils/constants';
-import Ebook from '../Posting/Ebook/Ebook';
 
 import Geolocation from 'react-native-geolocation-service';
+import { accessClient } from 'src/utils/access_client';
 
 const dataPromoDummy = {
   productName: 'Halo selamat datang!',
@@ -515,27 +514,23 @@ const MainHome = ({navigation, route}) => {
             }}
           />
 
-          {!listKomotoFamily.includes(Config.INITIAL_CODE) && (
-            <Text
-              color={Color.red}
-              style={{marginTop: 24}}
-              onPress={() =>
-                navigation.navigate('PDFReaderScreen', {
-                  file: 'http://samples.leanpub.com/thereactnativebook-sample.pdf',
-                })
-              }>
-              Tes Open PDF
-            </Text>
-          )}
+          <Text
+            color={Color.red}
+            style={{marginTop: 24}}
+            onPress={() =>
+              navigation.navigate('PDFReaderScreen', {
+                file: 'http://samples.leanpub.com/thereactnativebook-sample.pdf',
+              })
+            }>
+            Tes Open PDF
+          </Text>
 
-          {!listKomotoFamily.includes(Config.INITIAL_CODE) && (
-            <Text
-              color={Color.red}
-              style={{marginTop: 24}}
-              onPress={() => toggleModal()}>
-              Popup E book
-            </Text>
-          )}
+          <Text
+            color={Color.red}
+            style={{marginTop: 24}}
+            onPress={() => toggleModal()}>
+            Popup E book
+          </Text>
 
           <View style={{flex: 1}}>
             <Modal
@@ -668,14 +663,14 @@ const MainHome = ({navigation, route}) => {
 
           <Banner
             isDummy
-            showHeader={!listKomotoFamily.includes(Config.INITIAL_CODE)}
+            showHeader={accessClient.MainHome.showBannerHeader}
             data={listDummyBanner || listBanner}
             loading={loadingBanner}
           />
 
           <Divider height={24} />
 
-          {/* <ListAuction
+          {accessClient.MainHome.showListAuction && <ListAuction
             // use the listBelajar for the test
             data={listBelajar}
             loading={loadingAuction}
@@ -685,9 +680,9 @@ const MainHome = ({navigation, route}) => {
               navigation.navigate('AuctionDetail', {item});
             }}
             style={{paddingLeft: 8}}
-          /> */}
+          />}
 
-          {/* <ListSoonAuction
+          {accessClient.MainHome.showListSoonAuction && <ListSoonAuction
             // use the listBelajar for the test
             data={listBelajar}
             loading={loadingSoonAuction}
@@ -697,7 +692,7 @@ const MainHome = ({navigation, route}) => {
               navigation.navigate('AuctionDetail', {item});
             }}
             style={{paddingLeft: 8}}
-          /> */}
+          />}
 
           <ListEmergency
             data={listEmergencyArea}
@@ -723,7 +718,7 @@ const MainHome = ({navigation, route}) => {
             style={{paddingLeft: 8}}
           />
 
-          <View style={{marginBottom: 40}}>
+          {accessClient.MainHome.showListPromo && <View style={{marginBottom: 40}}>
             <PostingHeader title="Promo Untukmu" showSeeAllText={false} />
             <Divider height={8} />
             <CarouselView
@@ -786,7 +781,7 @@ const MainHome = ({navigation, route}) => {
                 );
               })}
             </CarouselView>
-          </View>
+          </View>}
 
           <ListPlace
             data={listJalanJalan}
@@ -812,7 +807,7 @@ const MainHome = ({navigation, route}) => {
             style={{paddingLeft: 8}}
           />
 
-          {!listKomotoFamily.includes(Config.INITIAL_CODE) && (
+          {accessClient.MainHome.showListJob && (
             <ListJob
               data={listKerja}
               loading={loadingKerja}
@@ -826,12 +821,13 @@ const MainHome = ({navigation, route}) => {
             />
           )}
 
-          <MusikTerbaru />
+          {accessClient.MainHome.showListMusicNewer && <MusikTerbaru />}
 
           <Divider />
 
-          <MondayAccoustic />
-          <View>
+          {accessClient.MainHome.showListYoutube && <MondayAccoustic />}
+
+          {accessClient.MainHome.showListEbookNewer && <View>
             <View>
               <Text
                 style={{
@@ -873,7 +869,7 @@ const MainHome = ({navigation, route}) => {
                 </Text>
               </TouchableOpacity>
             </View>
-          </View>
+          </View>}
         </Container>
       </ScrollView>
 

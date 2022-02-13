@@ -28,7 +28,7 @@ const Scaler = Styled(View)`
     width: 100%;
 `;
 
-const TabBarComponent = (props) => {
+const TabBarComponentKomoto = (props) => {
     const { state } = props;
 
     const { index: activeRouteIndex } = state;
@@ -223,4 +223,4 @@ const TabBarComponent = (props) => {
     )
 }
 
-export default TabBarComponent;
+export default TabBarComponentKomoto;

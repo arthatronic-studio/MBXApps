@@ -22,15 +22,3 @@ export const listPrivilegeUser = [
     // 244, // muhlis
     // 264, //della
 ];
-
-export const listKomotoFamily = [
-    'TRIBESXKOMOTO',
-    'TRIBESXRRID',
-];
-
-export const listInitialCode = [
-    ...listKomotoFamily,
-    'TRIBESASIA',
-    'TRIBESXSABYAN',
-    'TRIBESXGOFISH',
-];

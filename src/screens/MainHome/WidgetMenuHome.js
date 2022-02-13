@@ -29,8 +29,7 @@ import {
   iconMenuLoker,
   iconMenuTempat,
 } from '@assets/images/home';
-import { listKomotoFamily } from 'src/utils/constants';
-import Config from 'react-native-config';
+import { accessClient } from 'src/utils/access_client';
 
 const SambatanMenuView = Styled(View)`
   width: 100%;
@@ -87,7 +86,7 @@ const listMenuHome = [
     nav: 'JobScreen',
     params: { title: 'Loker' },
     badge: false,
-    show: listKomotoFamily.includes(Config.INITIAL_CODE) ? false : true,
+    show: accessClient.MenuHome.showJob,
   },
   {
     id: 2,

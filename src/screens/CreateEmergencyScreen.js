@@ -4,6 +4,9 @@ import Styled from 'styled-components';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { launchImageLibrary } from 'react-native-image-picker';
+import DatePicker from 'react-native-date-picker';
+import Moment from 'moment';
+
 import {
     Header,
     Text,
@@ -17,15 +20,11 @@ import { TouchSelect } from '@src/components/Form';
 import ModalSelectPriority from '@src/components/Modal/ModalSelectPriority';
 import ModalSelectStatus from '@src/components/Modal/ModalSelectStatus';
 import validate from '@src/lib/validate';
-
 import Client from '@src/lib/apollo';
 import { queryProductManage } from '@src/lib/query';
 import { Box, Divider } from 'src/styled';
-import DatePicker from 'react-native-date-picker';
-import Moment from 'moment';
 import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
-import { listKomotoFamily } from 'src/utils/constants';
-import Config from 'react-native-config';
+import { accessClient } from 'src/utils/access_client';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -351,7 +350,7 @@ const CreateEmergencyScreen = (props) => {
                     />}
                 </View> */}
 
-                {!listKomotoFamily.includes(Config.INITIAL_CODE) && <TouchSelect
+                {accessClient.CreatePosting.showPrivacy && <TouchSelect
                     title='Siapa yang dapat melihat ini?'
                     value={selectedStatus.label}
                     iconName={selectedStatus.iconName}
