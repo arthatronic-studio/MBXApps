@@ -192,8 +192,9 @@ function MainStackNavigator() {
       <Screen name="SettingScreen" component={SettingScreen} />
       <Screen name="JoinCommunity" component={JoinCommunity} />
       <Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />
-      <Screen name="UserProfileScreen" component={UserProfileScreen} />
       <Screen name="TermsnCondition" component={TermsnCondition} />
+      <Screen name="UserProfileScreen" component={UserProfileScreen} />
+      
       {/* community admin */}
       <Screen name="CommunityAdminPage" component={CommunityAdminPage} />
       <Screen name="CardDetail" component={CardDetail} />
