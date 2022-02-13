@@ -26,6 +26,8 @@ import Moment from 'moment';
 import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
 import { useSelector } from 'react-redux';
+import { Container } from 'src/styled';
+import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 
 const Example = Styled(View)`
 `;
@@ -102,13 +104,6 @@ export default ({ navigation, route }) => {
                 <View 
                     style={{width: '100%', height: 100, backgroundColor: Color.primarySoft}}
                 />
-                <View style={{width: '20%', marginHorizontal: 24, position: 'absolute', top: 70}}>
-                    <Image
-                        source={{uri: item.image}}
-                        style={{width: '80%', aspectRatio: 1, borderRadius: 8, ...shadowStyle,}}
-                        resizeMode='contain'
-                    />
-                </View>
 
                 <View style={{padding: 24, marginTop: -16, borderTopLeftRadius: 24, borderTopRightRadius: 24, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: Color.theme}}>
                     {user && user.userId === item.ownerId && <TouchableOpacity
@@ -127,6 +122,12 @@ export default ({ navigation, route }) => {
                         />
                     </TouchableOpacity>}
                 </View>
+
+                {item.like > 0 &&
+                    <Container paddingHorizontal={16}>
+                        <WidgetUserLikes id={item.id} title='Daftar Pelamar' />
+                    </Container>
+                }
 
                 <View style={{paddingHorizontal: 24, paddingTop: 30}}>
                     <View style={{marginTop: 8, paddingBottom: 16, flexDirection: 'row', alignItems: 'center'}}>
@@ -204,6 +205,14 @@ export default ({ navigation, route }) => {
                             Pudding cheesecake jelly-o cake cheesecake. Tart cheesecake biscuit candy canes toffee. Chocolate 
                         </Text>
                     </View> */}
+                </View>
+
+                <View style={{width: '20%', marginHorizontal: 24, position: 'absolute', top: 55}}>
+                    <Image
+                        source={{uri: item.image}}
+                        style={{width: '80%', aspectRatio: 1, borderRadius: 8, ...shadowStyle,}}
+                        resizeMode='contain'
+                    />
                 </View>
             </ScrollView>
 

@@ -16,7 +16,6 @@ import Header from '@src/components/Header';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 
 import Client from '@src/lib/apollo';
-import {queryLike} from '@src/lib/query';
 import {queryGetUserOrganizationRef} from '@src/lib/query';
 import { Scaffold } from 'src/components';
 

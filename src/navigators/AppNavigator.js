@@ -44,10 +44,6 @@ import UserProfileScreen from '@src/screens/MainProfile/UserProfileScreen';
 import CommunityAdminPage from '@src/screens/MainProfile/CommunityAdmin/CommunityAdminPage';
 import CardDetail from 'src/screens/MainProfile/CommunityAdmin/CardDetail';
 
-// Posting
-// import PostingScreen from 'src/screens/Posting/PostingScreen';
-import PostingDetail from 'src/screens/Posting/PostingDetail';
-
 // Emergency
 import EmergencyScreen from 'src/screens/Posting/Emergency/Index';
 import EmergencyDetail from 'src/screens/Posting/Emergency/Detail';
@@ -156,9 +152,6 @@ function MainStackNavigator() {
       <Screen name="UserChangePassword" component={UserChangePassword} />
       {/* topup */}
       <Screen name="TopUpScreen" component={TopUpScreen} />
-      {/* Posting */}
-      {/* <Screen name='PostingScreen' component={PostingScreen} /> */}
-      <Screen name="PostingDetail" component={PostingDetail} />
       {/* Emergency */}
       <Screen name="EmergencyScreen" component={EmergencyScreen} />
       <Screen name="EmergencyDetail" component={EmergencyDetail} />

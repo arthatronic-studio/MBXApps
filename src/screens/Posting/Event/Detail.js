@@ -4,13 +4,12 @@ import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useLoading, usePopup, useColor, Alert, ListUserEvent} from '@src/components';
+
+import {useLoading, usePopup, useColor, Alert} from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
 import {TouchableOpacity} from '@src/components/Button';
-
 import {shadowStyle} from '@src/styles';
-
 import Client from '@src/lib/apollo';
 import {queryAddLike} from '@src/lib/query';
 import ImagesPath from 'src/components/ImagesPath';
@@ -18,13 +17,9 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Octions from 'react-native-vector-icons/Octicons';
 import moment from 'moment';
-import { Divider } from 'src/styled';
+import { Container, Divider } from 'src/styled';
 import { useSelector } from 'react-redux';
-
-import Modal from 'react-native-modal';
-
-const Example = Styled(View)`
-`;
+import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 
 export default ({navigation, route}) => {
   const {Color} = useColor();
@@ -40,6 +35,8 @@ export default ({navigation, route}) => {
 
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
+
+  console.log(item);
 
   //   // useEffect(() => {
   //   //     const timeout = trigger ? setTimeout(() => {
@@ -77,12 +74,6 @@ export default ({navigation, route}) => {
         hideLoading();
       });
   };
-
-  const [isModalVisible, setIsModalVisible] = useState(false)
-
-  const toggleModal = () => {
-    setIsModalVisible(!isModalVisible)
-  }
 
   return (
     // <Scaffold
@@ -256,15 +247,16 @@ export default ({navigation, route}) => {
             <View
               style={{
                 flexDirection: 'row',
-                paddingHorizontal: 10,
+                paddingHorizontal: 20,
                 width: '50%',
+                alignItems: 'center',
               }}>
               <Foundation
                 name={'calendar'}
                 size={22}
-                style={{paddingHorizontal: 15}}
-                color={Color.text}
+                color={Color.primary}
               />
+              <Divider width={8} />
               <Text style={{fontWeight: 'bold'}}>{moment(parseInt(item.updated_date)).format('DD MMM YYYY')}</Text>
             </View>
             <View
@@ -272,13 +264,14 @@ export default ({navigation, route}) => {
                 flexDirection: 'row',
                 paddingHorizontal: 10,
                 width: '50%',
+                alignItems: 'center',
               }}>
               <Ionicons
                 name='person'
                 size={20}
-                style={{paddingHorizontal: 15}}
-                color={Color.text}
+                color={Color.secondary}
               />
+              <Divider width={8} />
               <Text style={{fontWeight: 'bold'}}>{item.fullname}</Text>
             </View>
             {/* <View
@@ -294,54 +287,12 @@ export default ({navigation, route}) => {
               <Text style={{fontWeight: 'bold'}}>Jakarta Selatan</Text>
             </View> */}
           </View>
-          <TouchableOpacity style={{flexDirection: 'row', paddingHorizontal: 20}} onPress={() => setIsModalVisible(true)}>
-            <View style={{width: 36, height: 36, borderRadius: 18, zIndex: 5, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff'}}>
-              <Image source={ImagesPath.avatar1} />
-            </View>
-            <View style={{width: 36, height: 36, borderRadius: 18, zIndex: 4, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff', position: 'relative', right: 15}}>
-              <Image source={ImagesPath.avatar2} />
-            </View>
-            <View style={{width: 36, height: 36, borderRadius: 18, zIndex: 3, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff', position: 'relative', right: 30}}>
-              <Image source={ImagesPath.avatar3} />
-            </View>
-            <View style={{width: 36, height: 36, borderRadius: 18, zIndex: 2, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff', position: 'relative', right: 45}}>
-              <Image source={ImagesPath.avatar4} />
-            </View>
-            <View style={{width: 36, height: 36, borderRadius: 18, zIndex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff', position: 'relative', right: 60}}>
-              <Image source={ImagesPath.avatar5} />
-            </View>
-          </TouchableOpacity>
           
-            <Modal
-              isVisible={isModalVisible}
-              onBackdropPress={() => setIsModalVisible(false)}
-              animationIn="slideInUp"
-              animationOut="slideOutDown"
-            >
-            
-                
-                <TouchableOpacity
-                  onPress={() => {
-                    setIsModalVisible(false)
-                  }}
-                  style={{
-                    alignSelf: 'flex-end',
-                    backgroundColor: Color.error,
-                    borderRadius: 50,
-                    marginBottom: 12,
-                    position: 'relative',
-                    top: '7%',
-                    right: '4%',
-                    zIndex: 5
-                  }}>
-                  <Image
-                    source={ImagesPath.icClose}
-                    style={{width: 16, height: 16}} 
-                  />
-                </TouchableOpacity>
-                <ListUserEvent />
-              
-            </Modal>
+          {item.like > 0 &&
+            <Container paddingHorizontal={16}>
+                <WidgetUserLikes id={item.id} title='Akan Hadir' />
+            </Container>
+          }
 
           <View>
             <Text
