@@ -47,9 +47,9 @@ const ListPlace = (props) => {
     const renderHeader = () => {
         return (
             <PostingHeader
-                title='Tempat Terdekat'
+                title='Tempat Favorit'
                 onSeeAllPress={() => {
-                    navigation.navigate('PlaceScreen', {title: 'Tempat Terdekat'})
+                    navigation.navigate('PlaceScreen', {title: 'Tempat Favorit'})
                 }}
             />
         )
