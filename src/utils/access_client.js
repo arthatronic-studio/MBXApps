@@ -21,6 +21,7 @@ export const accessClient = {
         showPrivacy: listKomotoFamily.includes(Config.INITIAL_CODE) ? false : true,
     },
     MainHome: {
+        showWidgetBalance: listKomotoFamily.includes(Config.INITIAL_CODE) ? false : true,
         showBannerHeader: listKomotoFamily.includes(Config.INITIAL_CODE) ? false : true,
         showListJob: listKomotoFamily.includes(Config.INITIAL_CODE) ? false : true,
         showListAuction: listKomotoFamily.includes(Config.INITIAL_CODE) ? false : true,

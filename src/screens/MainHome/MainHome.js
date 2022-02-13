@@ -500,9 +500,12 @@ const MainHome = ({navigation, route}) => {
             </View>
           </View>
 
-          <WidgetBalance />
-
-          <Divider />
+          {accessClient.MainHome.showWidgetBalance && 
+            <>
+              <WidgetBalance />
+              <Divider />
+            </>
+          }
 
           <WidgetMenuHome
             onPress={item => {
