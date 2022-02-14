@@ -1,6 +1,7 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
+import { accessClient } from 'src/utils/access_client';
 
 // uncanny
 import SplashScreen from 'src/screens/SplashScreen';
@@ -108,7 +109,11 @@ import LiveLelangScreen from 'src/screens/LiveLelangScreen';
 import DetailLelang from 'src/screens/DetailLelang';
 import DetailPromo from 'src/screens/Promo/DetailPromo';
 import Ebook from 'src/screens/Posting/Ebook/Ebook';
-import { accessClient } from 'src/utils/access_client';
+import MyShopHomepage from 'src/screens/Ecommerce/MyShopHomepage';
+import AddProduct from 'src/screens/Ecommerce/AddProduct';
+import StepTwo from 'src/screens/Ecommerce/StepTwo';
+import StepThree from 'src/screens/Ecommerce/StepThree';
+
 
 const {Navigator, Screen} = createStackNavigator();
 const MainPage = accessClient.BottomTabsNavigator.type === 'komoto' ? BottomTabsNavigatorKomoto : BottomTabsNavigator;
@@ -146,6 +151,12 @@ function MainStackNavigator() {
       <Screen name="FormPayment" component={FormPayment} />
       <Screen name="MyShop" component={MyShop} />
       <Screen name="CheckoutScreen" component={CheckoutScreen} />
+      <Screen name="MyShopHomepage" component={MyShopHomepage} />
+      <Screen name="AddProduct" component={AddProduct} />
+      <Screen name="StepTwo" component={StepTwo} />
+      <Screen name="StepThree" component={StepThree} />
+
+
       {/* user */}
       <Screen name="LoginScreen" component={LoginScreen} />
       <Screen name="RegisterScreen" component={RegisterScreen} />

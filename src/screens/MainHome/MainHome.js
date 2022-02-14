@@ -522,6 +522,8 @@ const MainHome = ({navigation, route}) => {
             }}
           />
 
+          <Text onPress={() => navigation.navigate('AddProduct')}>E-commerce</Text>
+
           {accessClient.MainHome.showListEbookNewer && <Text
             color={Color.red}
             style={{marginTop: 24}}
