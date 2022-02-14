@@ -532,6 +532,8 @@ const MainHome = ({ navigation, route }) => {
 						</Text>
 					)}
 
+					<Text onPress={() => navigation.navigate('AddProduct')}>E-commerce</Text>
+
 					{!listKomotoFamily.includes(Config.INITIAL_CODE) && (
 						<Text color={Color.red} style={{ marginTop: 24 }} onPress={() => toggleModal()}>
 							Popup E book

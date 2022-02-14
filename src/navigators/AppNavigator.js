@@ -110,6 +110,10 @@ import LiveLelangScreen from 'src/screens/LiveLelangScreen';
 import DetailLelang from 'src/screens/DetailLelang';
 import DetailPromo from 'src/screens/Promo/DetailPromo';
 import Ebook from 'src/screens/Posting/Ebook/Ebook';
+import MyShopHomepage from 'src/screens/Ecommerce/MyShopHomepage';
+import AddProduct from 'src/screens/Ecommerce/AddProduct';
+import StepTwo from 'src/screens/Ecommerce/StepTwo';
+import StepThree from 'src/screens/Ecommerce/StepThree';
 
 
 const {Navigator, Screen} = createStackNavigator();
@@ -147,6 +151,12 @@ function MainStackNavigator() {
       <Screen name="FormPayment" component={FormPayment} />
       <Screen name="MyShop" component={MyShop} />
       <Screen name="CheckoutScreen" component={CheckoutScreen} />
+      <Screen name="MyShopHomepage" component={MyShopHomepage} />
+      <Screen name="AddProduct" component={AddProduct} />
+      <Screen name="StepTwo" component={StepTwo} />
+      <Screen name="StepThree" component={StepThree} />
+
+
       {/* user */}
       <Screen name="LoginScreen" component={LoginScreen} />
       <Screen name="RegisterScreen" component={RegisterScreen} />
