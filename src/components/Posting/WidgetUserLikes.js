@@ -108,7 +108,7 @@ const WidgetUserLikes = ({ id, title }) => {
                 animationIn="slideInDown"
                 animationOut="slideOutDown"
             >                
-                <View style={{backgroundColor: '#fff', padding: 16, borderRadius: 8}}>
+                <View style={{backgroundColor: Color.semiwhite, padding: 16, borderRadius: 8}}>
                     <Row justify='space-between'>
                         <Text align='left' size={12} type='bold'>{title}</Text>
                         <TouchableOpacity

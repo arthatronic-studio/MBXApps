@@ -347,9 +347,14 @@ const MainHome = ({navigation, route}) => {
     }, 2000);
   };
 
+  const colorOutputRange = [
+    accessClient.MainHome.type === 'komoto' ? Color.theme : Color.primarySoft,
+    Color.theme
+  ];
+
   const backgroundInterpolate = animationValue.interpolate({
     inputRange: [0, 100],
-    outputRange: [Color.primarySoft, Color.theme],
+    outputRange: colorOutputRange,
     extrapolate: 'clamp',
   });
 
@@ -455,11 +460,11 @@ const MainHome = ({navigation, route}) => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            style={{backgroundColor: Color.primarySoft}}
+            style={{backgroundColor: colorOutputRange[0]}}
           />
         }
         // style={{
-        //   backgroundColor: Color.primarySoft
+        //   backgroundColor: colorOutputRange[0]
         // }}
       >
         <Container color={Color.theme}>
@@ -693,7 +698,6 @@ const MainHome = ({navigation, route}) => {
             showHeader
             onPress={item => {
               navigation.navigate('EmergencyDetail', {item});
-              // navigation.navigate('PostingDetail', {item});
             }}
             style={{paddingLeft: 8}}
           />
@@ -705,7 +709,6 @@ const MainHome = ({navigation, route}) => {
             showHeader
             onPress={item => {
               navigation.navigate('NewsDetail', {item});
-              // navigation.navigate('PostingDetail', {item});
             }}
             style={{paddingLeft: 8}}
           />
@@ -782,7 +785,6 @@ const MainHome = ({navigation, route}) => {
             showHeader
             onPress={item => {
               navigation.navigate('PlaceDetail', {item});
-              // navigation.navigate('PostingDetail', {item});
             }}
             style={{paddingLeft: 8}}
           />
@@ -794,7 +796,6 @@ const MainHome = ({navigation, route}) => {
             showHeader
             onPress={item => {
               navigation.navigate('EventDetail', {item});
-              // navigation.navigate('PostingDetail', {item});
             }}
             style={{paddingLeft: 8}}
           />
@@ -807,7 +808,6 @@ const MainHome = ({navigation, route}) => {
               showHeader
               onPress={item => {
                 navigation.navigate('JobDetail', {item});
-                // navigation.navigate('PostingDetail', {item});
               }}
               style={{paddingLeft: 8}}
             />

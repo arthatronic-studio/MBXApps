@@ -229,6 +229,7 @@ export default ({navigation, route}) => {
                 fontSize: 11,
                 textAlign: 'left',
                 paddingHorizontal: 20,
+                marginBottom: 2,
               }}>
               OFFICIAL EVENT
             </Text>
@@ -438,7 +439,21 @@ export default ({navigation, route}) => {
           </View> */}
         </View>
       </ScrollView>
-      <View style={{flexDirection: 'row', alignItems: 'center', padding: 16}}>
+      <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16}}>
+      <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('CommentListScreen', { item });
+          }}
+          style={{
+            backgroundColor: Color.info,
+            width: '12%',
+            height: 45,
+            borderRadius: 8,
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            <Ionicons name='chatbubble-ellipses-outline' color={Color.text} size={24} />
+        </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             if (state.im_like) {
@@ -454,7 +469,7 @@ export default ({navigation, route}) => {
           }}
           style={{
             backgroundColor: state.im_like ? Color.error : Color.primary,
-            width: '48%',
+            width: '40%',
             height: 45,
             borderRadius: 25,
             justifyContent: 'center',
@@ -465,7 +480,6 @@ export default ({navigation, route}) => {
             {state.im_like ? 'Batalkan' : 'Akan Datang'}
           </Text>
         </TouchableOpacity>
-        <Divider />
         <TouchableOpacity
           onPress={() => {
             let daddr = `-6.311272,106.793541`;
@@ -485,7 +499,7 @@ export default ({navigation, route}) => {
           }}
           style={{
             backgroundColor: Color.secondary,
-            width: '48%',
+            width: '40%',
             height: 45,
             borderRadius: 25,
             justifyContent: 'center',
