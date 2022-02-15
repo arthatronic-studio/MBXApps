@@ -58,6 +58,7 @@ import {listDummyBanner} from 'assets/images/banner';
 
 import Geolocation from 'react-native-geolocation-service';
 import { accessClient } from 'src/utils/access_client';
+import VideoCardList from 'src/components/VideoCardList';
 
 const dataPromoDummy = {
   productName: 'Halo selamat datang!',
@@ -820,6 +821,8 @@ const MainHome = ({navigation, route}) => {
           <Divider />
 
           {accessClient.MainHome.showListYoutube && <MondayAccoustic />}
+
+          {accessClient.MainHome.showListYoutube && <VideoCardList />}
 
           {accessClient.MainHome.showListEbookNewer && <View>
             <View>
