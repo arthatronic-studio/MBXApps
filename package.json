@@ -5,6 +5,8 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "ios_55": "react-native run-ios --simulator='iPhone 8 Plus'",
+    "ios_65": "react-native run-ios --simulator='iPhone 11 Pro Max'",
     "start": "react-native start --reset-cache",
     "apk": "cd android && ./gradlew assembleRelease && cd ..",
     "aab": "cd android && ./gradlew bundleRelease && cd ..",
@@ -23,6 +25,7 @@
     "@react-native-firebase/app": "12.9.3",
     "@react-native-firebase/firestore": "12.9.3",
     "@react-native-firebase/messaging": "12.9.3",
+    "@react-native-picker/picker": "^2.2.1",
     "@react-navigation/bottom-tabs": "^5.11.1",
     "@react-navigation/compat": "^5.2.5",
     "@react-navigation/material-top-tabs": "^6.0.6",

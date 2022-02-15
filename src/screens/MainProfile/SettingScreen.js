@@ -81,7 +81,7 @@ const SettingScreen = ({ navigation, route }) => {
                 <TouchableOpacity
                     onPress={() => {
                         navigation.navigate('UserChangePassword', { canGoBack: true });
-                        dispatch({ action: 'USER.CHANGE_PASSWORD', status: false });
+                        dispatch({ type: 'USER.CHANGE_PASSWORD', status: false });
                     }}
                 >
                     <Row>

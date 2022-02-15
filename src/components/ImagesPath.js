@@ -45,5 +45,9 @@ export default {
   release3: require('../components/Images/release3.png'),
   release4: require('../components/Images/release4.png'),
   ebookbanner: require('../components/Images/ebookbanner.png'),
+  stepone: require('../components/Images/stepone.png'),
+  steptwo: require('../components/Images/steptwo.png'),
+  stepthree: require('../components/Images/stepthree.png'),
+  checkCircle: require('../components/Images/CheckCircle.png')
   
 };

@@ -224,16 +224,6 @@ export default ({navigation, route}) => {
           <View>
             <Text
               style={{
-                color: Color.info,
-                fontWeight: 'bold',
-                fontSize: 11,
-                textAlign: 'left',
-                paddingHorizontal: 20,
-              }}>
-              OFFICIAL EVENT
-            </Text>
-            <Text
-              style={{
                 color: Color.text,
                 fontSize: 18,
                 fontWeight: 'bold',
@@ -438,7 +428,21 @@ export default ({navigation, route}) => {
           </View> */}
         </View>
       </ScrollView>
-      <View style={{flexDirection: 'row', alignItems: 'center', padding: 16}}>
+      <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16}}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('CommentListScreen', { item });
+          }}
+          style={{
+            backgroundColor: Color.info,
+            width: '12%',
+            height: 45,
+            borderRadius: 8,
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            <Ionicons name='chatbubble-ellipses-outline' color={Color.text} size={24} />
+        </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             if (state.im_like) {
@@ -454,7 +458,7 @@ export default ({navigation, route}) => {
           }}
           style={{
             backgroundColor: state.im_like ? Color.error : Color.primary,
-            width: '48%',
+            width: '40%',
             height: 45,
             borderRadius: 25,
             justifyContent: 'center',
@@ -462,10 +466,9 @@ export default ({navigation, route}) => {
           <Text
             style={{color: Color.textInput, fontSize: 16, fontWeight: 'bold'}}
           >
-            {state.im_like ? 'Batalkan' : 'Akan Datang'}
+            {state.im_like ? 'Batal Suka' : 'Suka'}
           </Text>
         </TouchableOpacity>
-        <Divider />
         <TouchableOpacity
           onPress={() => {
             let daddr = `-6.311272,106.793541`;
@@ -485,7 +488,7 @@ export default ({navigation, route}) => {
           }}
           style={{
             backgroundColor: Color.secondary,
-            width: '48%',
+            width: '40%',
             height: 45,
             borderRadius: 25,
             justifyContent: 'center',
