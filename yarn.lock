@@ -6574,11 +6574,6 @@ react-native-date-picker@4.0.0:
   resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-4.0.0.tgz#bc05e80b61d67e178653091a0a9220012e406fe3"
   integrity sha512-KbGn6rfR6vlxKwts4n9YPAdRd8RoVTlxTRv9wKFe4amPgGN7ddv/GfyMrp3UbKDy6xWNrtnzkbBWja5neg8URg==
 
-react-native-device-settings@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/react-native-device-settings/-/react-native-device-settings-1.2.0.tgz#2d978c7654e18e8654c5dc5379faca82c748895b"
-  integrity sha512-h1bD0d+9AMYGmoG2yJaOPwv5ux2KLkZur0/hKlSYBrb7hbz1YZZs5mOYK/jBNR9/sO+C2oSRJ3zy8cSOU6t5BA==
-
 react-native-drawer@2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/react-native-drawer/-/react-native-drawer-2.5.1.tgz#08b9314184f48c724f1b467f8859797369798654"

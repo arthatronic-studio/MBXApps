@@ -63,8 +63,6 @@ import { trackPlayerPlay } from 'src/utils/track-player-play';
 import NetInfo from '@react-native-community/netinfo';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-import DeviceSettings from 'react-native-device-settings';
-
 const dataPromoDummy = {
   productName: 'Halo selamat datang!',
   productCategory: 'Promo',
@@ -398,7 +396,7 @@ const MainHome = ({navigation, route}) => {
   const goToSettings = () => {
     Platform.OS === 'ios'
       ? Linking.openURL('app-settings:')
-      : DeviceSettings.open();
+      : {};
   };
 
   // const ModalPopupEbook = () => {
@@ -552,23 +550,15 @@ const MainHome = ({navigation, route}) => {
             }}
           />
 
-          {accessClient.MainHome.showListEbookNewer && (
-            <Text
-              color={Color.red}
-              style={{marginTop: 24}}
-              onPress={() => toggleModal()}>
-              Popup E book
-            </Text>
-          )}
-
           <View style={{flex: 1}}>
             <Modal
               isVisible={isModalVisible}
               onBackdropPress={() => setIsModalVisible(false)}
               animationIn="slideInDown"
               animationOut="slideOutDown"
-              style={{borderRadius: 16}}>
-              <View style={{backgroundColor: '#fff'}}>
+              style={{borderRadius: 16}}
+            >
+              <View style={{backgroundColor: Color.theme}}>
                 <View
                   style={{
                     width: '100%',
@@ -790,7 +780,7 @@ const MainHome = ({navigation, route}) => {
                             <Button
                               onPress={() => navigation.navigate('Lelang')}
                               style={{
-                                backgroundColor: '#f58645',
+                                backgroundColor: Color.primary,
                                 minHeight: 25,
                                 marginTop: 8,
                                 borderRadius: 20,
@@ -865,51 +855,34 @@ const MainHome = ({navigation, route}) => {
           {accessClient.MainHome.showListYoutube && <MondayAccoustic />}
 
           {accessClient.MainHome.showListEbookNewer && (
-            <View>
-              <View>
-                <Text
-                  style={{
-                    textAlign: 'left',
-                    fontWeight: 'bold',
-                    fontSize: 18,
-                    paddingHorizontal: 15,
-                    paddingVertical: 15,
-                  }}>
-                  Rilisan Terbaru
-                </Text>
-                <FlatList
-                  data={[
-                    {image: ImagesPath.ebook1},
-                    {image: ImagesPath.ebook2},
-                    {image: ImagesPath.ebook1},
-                    {image: ImagesPath.ebook2},
-                    {image: ImagesPath.ebook1},
-                    {image: ImagesPath.ebook2},
-                  ]}
-                  renderItem={({item}) => (
-                    <TouchableOpacity>
-                      <Image
-                        source={item.image}
-                        style={{marginHorizontal: 15}}
-                      />
-                    </TouchableOpacity>
-                  )}
-                  horizontal={true}
-                />
-              </View>
-              <View>
-                <TouchableOpacity onPress={() => navigation.navigate('Ebook')}>
-                  <Text
-                    style={{
-                      color: Color.info,
-                      paddingVertical: 20,
-                      textAlign: 'right',
-                      paddingHorizontal: 20,
-                    }}>
-                    Selengkapnya
-                  </Text>
-                </TouchableOpacity>
-              </View>
+            <View style={{marginTop: 32}}>
+              <PostingHeader title="Rilisan Terbaru" showSeeAllText onSeeAllPress={() => navigation.navigate('Ebook')} />
+              <FlatList
+                data={[
+                  {image: ImagesPath.ebook1},
+                  {image: ImagesPath.ebook2},
+                  {image: ImagesPath.ebook1},
+                  {image: ImagesPath.ebook2},
+                  {image: ImagesPath.ebook1},
+                  {image: ImagesPath.ebook2},
+                ]}
+                contentContainerStyle={{
+                  marginTop: 16
+                }}
+                renderItem={({item}) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      toggleModal();
+                    }}
+                  >
+                    <Image
+                      source={item.image}
+                      style={{marginHorizontal: 15}}
+                    />
+                  </TouchableOpacity>
+                )}
+                horizontal={true}
+              />
             </View>
           )}
         </Container>
