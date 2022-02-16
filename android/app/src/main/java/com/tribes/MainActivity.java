@@ -1,6 +1,7 @@
 package com.tribes;
 
 import com.facebook.react.ReactActivity;
+import com.rjblopes.opensettings.OpenSettingsPackage;
 // import com.facebook.react.ReactActivityDelegate;
 // import com.zoontek.rnbootsplash.RNBootSplash;
 

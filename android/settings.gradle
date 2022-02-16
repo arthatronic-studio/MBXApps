@@ -1,3 +1,4 @@
 rootProject.name = 'TribesSocial'
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
-include ':app'
+include ':app',':react-native-device-settings'
+project(':react-native-device-settings').projectDir = new File(settingsDir, '../node_modules/react-native-device-settings/android')
