@@ -9,6 +9,7 @@ import {
   RefreshControl,
   Platform,
   FlatList,
+  Linking,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -57,8 +58,12 @@ import {adsPopup} from 'assets/images/popup';
 import {listDummyBanner} from 'assets/images/banner';
 
 import Geolocation from 'react-native-geolocation-service';
-import { accessClient } from 'src/utils/access_client';
+import {accessClient} from 'src/utils/access_client';
 import { trackPlayerPlay } from 'src/utils/track-player-play';
+import NetInfo from '@react-native-community/netinfo';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+
+import DeviceSettings from 'react-native-device-settings';
 
 const dataPromoDummy = {
   productName: 'Halo selamat datang!',
@@ -105,6 +110,9 @@ const MainHome = ({navigation, route}) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const [firebaseLocationDocId, setFirebaseLocationDocId] = useState('');
+
+  const [netInfo, setNetInfo] = useState(true);
+  const [showPopupNetInfo, setShowPopupNetInfo] = useState(false);
 
   const prevFirebaseNotifierLastChatCount = usePreviousState(
     firebaseNotifierLastChatCount,
@@ -242,6 +250,21 @@ const MainHome = ({navigation, route}) => {
     }, 5000);
   }, []);
 
+  useEffect(() => {
+    NetInfo.fetch().then(state => {
+      console.log('Connection typeeeeeeeeeeee', state.type);
+      console.log('Is connected???????????', state.isConnected);
+
+      if (!state.isConnected) {
+        setNetInfo(false);
+        setShowPopupNetInfo(true);
+      } else {
+        setNetInfo(true);
+        setShowPopupNetInfo(false);
+      }
+    });
+  }, []);
+
   const fetchBannerList = () => {
     Client.query({
       query: queryBannerList,
@@ -350,7 +373,7 @@ const MainHome = ({navigation, route}) => {
 
   const colorOutputRange = [
     accessClient.MainHome.type === 'komoto' ? Color.theme : Color.primarySoft,
-    Color.theme
+    Color.theme,
   ];
 
   const backgroundInterpolate = animationValue.interpolate({
@@ -370,6 +393,12 @@ const MainHome = ({navigation, route}) => {
     navigation.navigate('PDFReaderScreen', {
       file: 'http://samples.leanpub.com/thereactnativebook-sample.pdf',
     });
+  };
+
+  const goToSettings = () => {
+    Platform.OS === 'ios'
+      ? Linking.openURL('app-settings:')
+      : DeviceSettings.open();
   };
 
   // const ModalPopupEbook = () => {
@@ -506,12 +535,12 @@ const MainHome = ({navigation, route}) => {
             </View>
           </View>
 
-          {accessClient.MainHome.showWidgetBalance && 
+          {accessClient.MainHome.showWidgetBalance && (
             <>
               <WidgetBalance />
               <Divider />
             </>
-          }
+          )}
 
           <WidgetMenuHome
             onPress={item => {
@@ -523,14 +552,18 @@ const MainHome = ({navigation, route}) => {
             }}
           />
 
-          <Text onPress={() => navigation.navigate('AddProduct')}>E-commerce</Text>
+          <Text onPress={() => navigation.navigate('AddProduct')}>
+            E-commerce
+          </Text>
 
-          {accessClient.MainHome.showListEbookNewer && <Text
-            color={Color.red}
-            style={{marginTop: 24}}
-            onPress={() => toggleModal()}>
-            Popup E book
-          </Text>}
+          {accessClient.MainHome.showListEbookNewer && (
+            <Text
+              color={Color.red}
+              style={{marginTop: 24}}
+              onPress={() => toggleModal()}>
+              Popup E book
+            </Text>
+          )}
 
           <View style={{flex: 1}}>
             <Modal
@@ -670,29 +703,33 @@ const MainHome = ({navigation, route}) => {
 
           <Divider height={24} />
 
-          {accessClient.MainHome.showListAuction && <ListAuction
-            // use the listBelajar for the test
-            data={listBelajar}
-            loading={loadingAuction}
-            horizontal
-            showHeader
-            onPress={item => {
-              navigation.navigate('AuctionDetail', {item});
-            }}
-            style={{paddingLeft: 8}}
-          />}
+          {accessClient.MainHome.showListAuction && (
+            <ListAuction
+              // use the listBelajar for the test
+              data={listBelajar}
+              loading={loadingAuction}
+              horizontal
+              showHeader
+              onPress={item => {
+                navigation.navigate('AuctionDetail', {item});
+              }}
+              style={{paddingLeft: 8}}
+            />
+          )}
 
-          {accessClient.MainHome.showListSoonAuction && <ListSoonAuction
-            // use the listBelajar for the test
-            data={listBelajar}
-            loading={loadingSoonAuction}
-            horizontal
-            showHeader
-            onPress={item => {
-              navigation.navigate('AuctionDetail', {item});
-            }}
-            style={{paddingLeft: 8}}
-          />}
+          {accessClient.MainHome.showListSoonAuction && (
+            <ListSoonAuction
+              // use the listBelajar for the test
+              data={listBelajar}
+              loading={loadingSoonAuction}
+              horizontal
+              showHeader
+              onPress={item => {
+                navigation.navigate('AuctionDetail', {item});
+              }}
+              style={{paddingLeft: 8}}
+            />
+          )}
 
           <ListEmergency
             data={listEmergencyArea}
@@ -716,70 +753,72 @@ const MainHome = ({navigation, route}) => {
             style={{paddingLeft: 8}}
           />
 
-          {accessClient.MainHome.showListPromo && <View style={{marginBottom: 40}}>
-            <PostingHeader title="Promo Untukmu" showSeeAllText={false} />
-            <Divider height={8} />
-            <CarouselView
-              delay={5000}
-              showIndicator
-              style={{width, aspectRatio: 21 / 9}}>
-              {[0].map((e, idx) => {
-                return (
-                  <View
-                    key={idx}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      paddingHorizontal: 16,
-                    }}>
-                    <Container
-                      padding={16}
-                      radius={16}
-                      color={Color.textInput}
-                      style={{...shadowStyle}}>
-                      <Row>
-                        <Col size={5} align="flex-start">
-                          <Image
-                            source={ImagesPath.logolelanghome}
-                            style={{height: width / 3, width: '100%'}}
-                            resizeMode="contain"
-                          />
-                        </Col>
-                        <Col
-                          size={7}
-                          align="flex-start"
-                          justifyContent="center">
-                          <Text size={12} align="left">
-                            Sekarang di TRIBESOCIAL {'\n'} udah ada fitur{' '}
-                            <Text type="bold">lelang</Text> loh !
-                          </Text>
-                          <Button
-                            onPress={() => navigation.navigate('Lelang')}
-                            style={{
-                              backgroundColor: '#f58645',
-                              minHeight: 25,
-                              marginTop: 8,
-                              borderRadius: 20,
-                            }}>
-                            <Row>
-                              <Text color={Color.textInput} size={10}>
-                                Selengkapnya
-                                <AntDesign
-                                  name="arrowright"
-                                  color={Color.textInput}
-                                  style={{alignSelf: 'center'}}
-                                />
-                              </Text>
-                            </Row>
-                          </Button>
-                        </Col>
-                      </Row>
-                    </Container>
-                  </View>
-                );
-              })}
-            </CarouselView>
-          </View>}
+          {accessClient.MainHome.showListPromo && (
+            <View style={{marginBottom: 40}}>
+              <PostingHeader title="Promo Untukmu" showSeeAllText={false} />
+              <Divider height={8} />
+              <CarouselView
+                delay={5000}
+                showIndicator
+                style={{width, aspectRatio: 21 / 9}}>
+                {[0].map((e, idx) => {
+                  return (
+                    <View
+                      key={idx}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        paddingHorizontal: 16,
+                      }}>
+                      <Container
+                        padding={16}
+                        radius={16}
+                        color={Color.textInput}
+                        style={{...shadowStyle}}>
+                        <Row>
+                          <Col size={5} align="flex-start">
+                            <Image
+                              source={ImagesPath.logolelanghome}
+                              style={{height: width / 3, width: '100%'}}
+                              resizeMode="contain"
+                            />
+                          </Col>
+                          <Col
+                            size={7}
+                            align="flex-start"
+                            justifyContent="center">
+                            <Text size={12} align="left">
+                              Sekarang di TRIBESOCIAL {'\n'} udah ada fitur{' '}
+                              <Text type="bold">lelang</Text> loh !
+                            </Text>
+                            <Button
+                              onPress={() => navigation.navigate('Lelang')}
+                              style={{
+                                backgroundColor: '#f58645',
+                                minHeight: 25,
+                                marginTop: 8,
+                                borderRadius: 20,
+                              }}>
+                              <Row>
+                                <Text color={Color.textInput} size={10}>
+                                  Selengkapnya
+                                  <AntDesign
+                                    name="arrowright"
+                                    color={Color.textInput}
+                                    style={{alignSelf: 'center'}}
+                                  />
+                                </Text>
+                              </Row>
+                            </Button>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </View>
+                  );
+                })}
+              </CarouselView>
+            </View>
+          )}
 
           <ListPlace
             data={listJalanJalan}
@@ -829,49 +868,54 @@ const MainHome = ({navigation, route}) => {
 
           {accessClient.MainHome.showListYoutube && <MondayAccoustic />}
 
-          {accessClient.MainHome.showListEbookNewer && <View>
+          {accessClient.MainHome.showListEbookNewer && (
             <View>
-              <Text
-                style={{
-                  textAlign: 'left',
-                  fontWeight: 'bold',
-                  fontSize: 18,
-                  paddingHorizontal: 15,
-                  paddingVertical: 15,
-                }}>
-                Rilisan Terbaru
-              </Text>
-              <FlatList
-                data={[
-                  {image: ImagesPath.ebook1},
-                  {image: ImagesPath.ebook2},
-                  {image: ImagesPath.ebook1},
-                  {image: ImagesPath.ebook2},
-                  {image: ImagesPath.ebook1},
-                  {image: ImagesPath.ebook2},
-                ]}
-                renderItem={({item}) => (
-                  <TouchableOpacity>
-                    <Image source={item.image} style={{marginHorizontal: 15}} />
-                  </TouchableOpacity>
-                )}
-                horizontal={true}
-              />
-            </View>
-            <View>
-              <TouchableOpacity onPress={() => navigation.navigate('Ebook')}>
+              <View>
                 <Text
                   style={{
-                    color: Color.info,
-                    paddingVertical: 20,
-                    textAlign: 'right',
-                    paddingHorizontal: 20,
+                    textAlign: 'left',
+                    fontWeight: 'bold',
+                    fontSize: 18,
+                    paddingHorizontal: 15,
+                    paddingVertical: 15,
                   }}>
-                  Selengkapnya
+                  Rilisan Terbaru
                 </Text>
-              </TouchableOpacity>
+                <FlatList
+                  data={[
+                    {image: ImagesPath.ebook1},
+                    {image: ImagesPath.ebook2},
+                    {image: ImagesPath.ebook1},
+                    {image: ImagesPath.ebook2},
+                    {image: ImagesPath.ebook1},
+                    {image: ImagesPath.ebook2},
+                  ]}
+                  renderItem={({item}) => (
+                    <TouchableOpacity>
+                      <Image
+                        source={item.image}
+                        style={{marginHorizontal: 15}}
+                      />
+                    </TouchableOpacity>
+                  )}
+                  horizontal={true}
+                />
+              </View>
+              <View>
+                <TouchableOpacity onPress={() => navigation.navigate('Ebook')}>
+                  <Text
+                    style={{
+                      color: Color.info,
+                      paddingVertical: 20,
+                      textAlign: 'right',
+                      paddingHorizontal: 20,
+                    }}>
+                    Selengkapnya
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>}
+          )}
         </Container>
       </ScrollView>
 
@@ -933,6 +977,60 @@ const MainHome = ({navigation, route}) => {
           </TouchableOpacity>
         </View>
       </Modal>
+
+      {!netInfo && (
+        <Modal
+          isVisible={showPopupNetInfo}
+          onBackdropPress={() => {
+            setShowPopupNetInfo(false);
+          }}
+          animationIn="slideInDown"
+          animationOut="slideOutDown"
+          backdropColor={Color.semiwhite}>
+          <View
+            style={{
+              width: '95%',
+              aspectRatio: 1 / 1,
+              alignSelf: 'center',
+            }}>
+            <View
+              style={{
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'space-evenly',
+                backgroundColor: Color.textInput,
+                borderRadius: 15,
+                height: '100%',
+                padding: 30,
+              }}>
+              <Image source={ImagesPath.lostConnection}></Image>
+              <View>
+                <Text style={{fontWeight: 'bold', fontSize: 18}}>
+                  Oops, Internetmu Terputus
+                </Text>
+                <Text style={{color: Color.gray, fontSize: 12}}>
+                  Kayaknya koneksi internetmu terputus. Coba muat ulang
+                  aplikasi.
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={{
+                  width: '92%',
+                  height: 45,
+                  backgroundColor: Color.primary,
+                  borderRadius: 30,
+                  marginHorizontal: 15,
+                  paddingVertical: 10,
+                }}
+                onPress={() => {
+                  goToSettings();
+                }}>
+                <Text color={Color.textInput}>Pengaturan</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      )}
     </Scaffold>
   );
 };

@@ -37,7 +37,7 @@ export default {
   avatar2: require('../components/Images/avatar2.png'),
   avatar3: require('../components/Images/avatar3.png'),
   avatar4: require('../components/Images/avatar4.png'),
-  avatar5: require('../components/Images/avatar5.png'),
+avatar5: require('../components/Images/avatar5.png'),
   ebook1: require('../components/Images/ebook1.png'),
   ebook2: require('../components/Images/ebook2.png'),
   release1: require('../components/Images/release1.png'),
@@ -48,6 +48,6 @@ export default {
   stepone: require('../components/Images/stepone.png'),
   steptwo: require('../components/Images/steptwo.png'),
   stepthree: require('../components/Images/stepthree.png'),
-  checkCircle: require('../components/Images/CheckCircle.png')
-  
+  checkCircle: require('../components/Images/CheckCircle.png'),
+  lostConnection: require('../components/Images/lostConnection.png'),
 };
