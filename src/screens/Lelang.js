@@ -1,14 +1,19 @@
-import React from 'react';
-import {View, Image, FlatList, StatusBar} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {View, Image, FlatList, useWindowDimensions} from 'react-native';
 
 import {Scaffold, useColor, Header, Text} from '@src/components';
 import TouchableOpacity from 'src/components/Button/TouchableDebounce';
 import CardListLelang from 'src/components/Card/CardListLelang';
 import { Divider } from 'src/styled';
 import Banner from 'src/components/Banner';
+import { queryGetAuction } from 'src/lib/query/auction';
+import client from 'src/lib/apollo';
 
 const Lelang = ({ navigation, route }) => {
   const {Color} = useColor();
+
+  const { height, width } = useWindowDimensions();
+
 
   const renderHeader = () => {
     return (

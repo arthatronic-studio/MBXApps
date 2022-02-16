@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState, useEffect} from 'react';
 import {
   View,
   FlatList,
@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 
+import {useIsFocused} from '@react-navigation/native';
 import ImagesPath from '../ImagesPath';
 import {
   Text,
@@ -16,6 +17,9 @@ import {
 import { statusBarHeight } from 'src/utils/constants';
 import { Divider } from 'src/styled';
 import { useNavigation } from '@react-navigation/native';
+import { queryGetAuction } from 'src/lib/query/auction';
+import client from 'src/lib/apollo';
+import { FormatMoney } from 'src/utils';
 
 const propTypes = {
   ListHeaderComponent: PropTypes.func,
@@ -73,8 +77,36 @@ const DATA = [
 const CardListLelang = (props) => {
   const { ListHeaderComponent } = props;
 
-  const {Color} = useColor();
   const navigation = useNavigation();
+  const {Color} = useColor();
+
+  const [listProduct, setListProduct] = useState([]);
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    getAuction();
+// });
+}, [isFocused]);
+
+const getAuction = () => {
+    let variables = {
+      page: 1,
+      limit: 10
+    }
+    client.query({query: queryGetAuction, variables})
+      .then(res => {
+        console.log(res)
+        if (res.data.auctionProduct) {
+          setListProduct(res.data.auctionProduct.data);
+        }
+
+        // hideLoading();
+        // navigation.navigate('TopUpScreen');
+      })
+      .catch(reject => {
+        console.log(reject);
+      });
+  };
 
   const renderItem = ({item}) => (
     <View
@@ -88,11 +120,11 @@ const CardListLelang = (props) => {
       <TouchableOpacity
         style={[styles.btnCategory, {backgroundColor: Color.textInput}]}
         onPress={() => {
-          navigation.navigate('DetailLelang');
+          navigation.navigate('DetailLelang', {item});
         }}
       >
         <Image
-          source={item.image}
+          source={{ uri: item.image_url }}
           style={{
             width: 160,
             height: 150,
@@ -112,7 +144,7 @@ const CardListLelang = (props) => {
           <View style={{marginVertical: 5}}>
             <Text align='left' size={12} color={Color.disabled}>Harga Awal</Text>
             <Divider height={4} />
-            <Text align='left' type='bold'>Rp {item.firstPrice}</Text>
+            <Text align='left' type='bold'>{FormatMoney.getFormattedMoney(item.start_price)}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -160,7 +192,7 @@ const CardListLelang = (props) => {
       <FlatList
         numColumns={2}
         showsHorizontalScrollIndicator={false}
-        data={DATA}
+        data={listProduct}
         ListHeaderComponent={() => renderHeader()}
         renderItem={renderItem}
         contentContainerStyle={{

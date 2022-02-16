@@ -1,10 +1,14 @@
-import React from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { View, FlatList, useWindowDimensions } from 'react-native';
 
-import { ScreenEmptyData, Text } from '@src/components';
+import {useIsFocused} from '@react-navigation/native';
+import { ScreenEmptyData, Text, useColor } from '@src/components';
+import { useNavigation } from '@react-navigation/native';
 import CardAuction from 'src/components/Posting/CardAuction';
 import { Container, Row } from 'src/styled';
 import PostingSkeleton from './PostingSkeleton';
+import { queryGetAuction } from 'src/lib/query/auction';
+import Client from 'src/lib/apollo';
 
 const defaultProps = {
     data: [],
@@ -23,8 +27,37 @@ const ListAuction = (props) => {
     const {
         data, horizontal, style, onPress, showHeader, loading
     } = props;
+    const [listProduct, setListProduct] = useState([]);
+    const {Color} = useColor();
+    const navigation = useNavigation();
+    const { height, width } = useWindowDimensions();
+    const isFocused = useIsFocused();
 
-    const { width } = useWindowDimensions();
+    useEffect(() => {
+        getAuction();
+    // });
+    }, []);
+
+    const getAuction = () => {
+        let variables = {
+          page: 1,
+          limit: 10
+        }
+        
+        Client.query({query: queryGetAuction, variables})
+          .then(res => {
+            console.log(res)
+            // if (res.data.ecommerceProductList) {
+            //   setListProduct(res.data.ecommerceProductList);
+            // }
+    
+            // hideLoading();
+            // navigation.navigate('TopUpScreen');
+          })
+          .catch(reject => {
+            console.log(reject);
+          });
+      };
 
     const renderHeader = () => {
         return (
