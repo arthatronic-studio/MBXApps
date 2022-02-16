@@ -62,6 +62,7 @@ import {accessClient} from 'src/utils/access_client';
 import { trackPlayerPlay } from 'src/utils/track-player-play';
 import NetInfo from '@react-native-community/netinfo';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import AddProduct from '../Ecommerce/AddProduct';
 
 const dataPromoDummy = {
   productName: 'Halo selamat datang!',
@@ -506,7 +507,7 @@ const MainHome = ({navigation, route}) => {
               backgroundColor: backgroundInterpolate,
             }}
           />
-
+          <Text onPress={() => navigation.navigate('AddProduct')}>E-Commerce</Text>
           <View
             style={{
               flexDirection: 'row',
