@@ -124,21 +124,6 @@ const MainHome = ({navigation, route}) => {
   const modalPostingRef = useRef();
   const {width} = useWindowDimensions();
 
-  const handleGetNetInfo = () => {
-    NetInfo.fetch().then(state => {
-      console.log('Connection typeeeeeeeeeeee', state.type);
-      console.log('Is connected???????????', state.isConnected);
-
-      if (!state.isConnected) {
-        setNetInfo(false);
-        setShowPopupNetInfo(true);
-      } else {
-        setNetInfo(true);
-        setShowPopupNetInfo(false);
-      }
-    });
-  };
-
   useEffect(() => {
     fetchPromoBanners();
 
@@ -262,6 +247,21 @@ const MainHome = ({navigation, route}) => {
       };
       Geolocation.watchPosition(successCallback, errorCallback, option);
     }, 5000);
+  }, []);
+
+  useEffect(() => {
+    NetInfo.fetch().then(state => {
+      console.log('Connection typeeeeeeeeeeee', state.type);
+      console.log('Is connected???????????', state.isConnected);
+
+      if (!state.isConnected) {
+        setNetInfo(false);
+        setShowPopupNetInfo(true);
+      } else {
+        setNetInfo(true);
+        setShowPopupNetInfo(false);
+      }
+    });
   }, []);
 
   const fetchBannerList = () => {
@@ -563,14 +563,6 @@ const MainHome = ({navigation, route}) => {
               Popup E book
             </Text>
           )}
-
-          <Text
-            style={{marginTop: 24}}
-            onPress={() => {
-              handleGetNetInfo();
-            }}>
-            popup lost connection
-          </Text>
 
           <View style={{flex: 1}}>
             <Modal
