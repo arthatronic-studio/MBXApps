@@ -55,6 +55,11 @@ const MainProfile = ({navigation, route}) => {
   const {width} = useWindowDimensions();
 
   useEffect(() => {
+    // hit cuurent user profile
+    dispatch(getCurrentUserProfile());
+  }, []);
+
+  useEffect(() => {
     if (route.params && route.params.refresh) {
       navigation.setParams({refresh: false});
     }

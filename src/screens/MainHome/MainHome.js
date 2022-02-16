@@ -58,6 +58,7 @@ import {listDummyBanner} from 'assets/images/banner';
 
 import Geolocation from 'react-native-geolocation-service';
 import { accessClient } from 'src/utils/access_client';
+import { trackPlayerPlay } from 'src/utils/track-player-play';
 
 const dataPromoDummy = {
   productName: 'Halo selamat datang!',
@@ -815,7 +816,14 @@ const MainHome = ({navigation, route}) => {
             />
           )}
 
-          {accessClient.MainHome.showListMusicNewer && <MusikTerbaru />}
+          {accessClient.MainHome.showListMusicNewer &&
+            <MusikTerbaru
+              onPress={() => {
+                trackPlayerPlay();
+                navigation.navigate('MusicPlayerScreen');
+              }}
+            />
+          }
 
           <Divider />
 

@@ -10,6 +10,7 @@ import BottomTabsNavigatorKomoto from '@src/navigators/BottomTabsNavigatorKomoto
 import KnowMeScreen from '@src/screens/KnowMeScreen';
 import CreateEmergencyScreen from '@src/screens/CreateEmergencyScreen';
 import PDFReaderScreen from 'src/screens/PDFReaderScreen';
+import MusicPlayerScreen from 'src/screens/MusicPlayerScreen';
 
 // user
 import LoginScreen from '@src/screens/User/LoginScreen';
@@ -21,7 +22,6 @@ import UserChangePassword from '@src/screens/User/UserChangePassword';
 import TopUpScreen from '@src/screens/Topup/TopUpScreen';
 
 // screen
-
 import CommentListScreen from '@src/screens/CommentListScreen';
 import DetailEbookScreen from '@src/screens/DetailEbookScreen';
 import MainSearch from '@src/screens/MainHome/MainSearch';
@@ -114,7 +114,6 @@ import AddProduct from 'src/screens/Ecommerce/AddProduct';
 import StepTwo from 'src/screens/Ecommerce/StepTwo';
 import StepThree from 'src/screens/Ecommerce/StepThree';
 
-
 const {Navigator, Screen} = createStackNavigator();
 const MainPage = accessClient.BottomTabsNavigator.type === 'komoto' ? BottomTabsNavigatorKomoto : BottomTabsNavigator;
 
@@ -132,6 +131,7 @@ function MainStackNavigator() {
       <Screen name="KnowMeScreen" component={KnowMeScreen} />
       <Screen name="CreateEmergencyScreen" component={CreateEmergencyScreen} />
       <Screen name="PDFReaderScreen" component={PDFReaderScreen} />
+      <Screen name="MusicPlayerScreen" component={MusicPlayerScreen} />
       
       {/* Auction */}
       <Screen name="CartAuction" component={CartAuction} />
