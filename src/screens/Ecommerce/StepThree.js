@@ -17,6 +17,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Picker } from '@react-native-picker/picker';
+import DropDownPicker from 'react-native-dropdown-picker';
 import Modal from 'react-native-modal';
 import {
 	Text,
@@ -63,6 +64,31 @@ const StepThree = ({ navigation }) => {
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
 	const { Color } = useColor();
 
+
+	const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    {label: 'Hijab', value: 'hijab'},
+    {label: 'Fashion', value: 'fashion'},
+	{label: 'Music', value: 'music'},
+	{label: 'Buku', value: 'buku'},
+	{label: 'Banana', value: 'banana'},
+	{label: 'Banana', value: 'banana'},
+	{label: 'Hai', value: 'hai'}
+  ]);
+
+  const [etalase, setEtalase] = useState(false);
+  const [valueEtalase, setValueEtalase] = useState(null);
+  const [itemsEtalase, setItemsEtalase] = useState([
+    {label: 'Hijab', value: 'hijab'},
+    {label: 'Fashion', value: 'fashion'},
+	{label: 'Music', value: 'music'},
+	{label: 'Buku', value: 'buku'},
+	{label: 'Banana', value: 'banana'},
+	{label: 'Banana', value: 'banana'},
+	{label: 'Hai', value: 'hai'}
+  ]);
+
 	useEffect(() => {}, []);
 
 	return (
@@ -72,6 +98,7 @@ const StepThree = ({ navigation }) => {
 			onPressLeftButton={() => navigation.pop()}
 		>
 			<ScrollView>
+
 				<View style={{ flexDirection: 'row', paddingHorizontal: 20, paddingVertical: 10 }}>
 					<Image source={ImagesPath.stepthree} />
 					<View style={{ paddingVertical: 5, alignItems: 'flex-start', paddingHorizontal: 20 }}>
@@ -122,88 +149,93 @@ const StepThree = ({ navigation }) => {
 							position: 'absolute'
 						}}
 					>
-						Stock Barang
+						Harga Produk
 					</Text>
 				</View>
-				<View>
-					<View
-						style={{
-							borderRadius: 5,
-							marginHorizontal: 20,
-							marginVertical: 10,
-							borderWidth: 1,
-							borderColor: Color.secondary,
-							width: '90%',
-							height: 45
-						}}
-					>
-						<View>
-							<Picker style={{ height: 10, marginVertical: 2 }}>
-								<Picker.Item style={{ fontSize: 12 }} label="- Pilih Potongan Harga -" value="java" />
-								<Picker.Item label="ada" value="ada" />
-								<Picker.Item label="tidak ada" value="tidakada" />
-							</Picker>
-
-							<Text
-								style={{
-									paddingHorizontal: 12,
-									paddingVertical: 5,
-									color: Color.secondary,
-									fontSize: 8,
-									fontWeight: '400',
-									position: 'absolute'
-								}}
-							>
-								Satuan Barang
-							</Text>
-						</View>
-					</View>
-				</View>
-				<View>
+				
+				<View style={{height: 300, width: '90%', marginHorizontal: 20, marginVertical: 10}}>
+				<Text style={{
+								paddingHorizontal: 15,
+								paddingTop: 5,
+								color: Color.secondary,
+								fontSize: 8,
+								fontWeight: '400',
+								textAlign: 'left'
+							}}>Satuan Barang</Text>
+				<DropDownPicker
+					zIndex={3000}
+					zIndexInverse={1000}
+					placeholder='- Potongan Harga -'
+					open={open}
+					value={value}
+					items={items}
+					setOpen={setOpen}
+					setValue={setValue}
+					setItems={setItems}
+					dropDownContainerStyle={{height: 165}}
+					style={{height: 28, width: '99%', marginHorizontal: 2, borderWidth: 0}}
+					/>
+				<View style={{position: 'absolute',width: '100%',height: 47, 
+				borderWidth: 1, borderColor: Color.secondary, borderRadius: 5}}/>
+				<View style={{flexDirection: 'row'}}>
 					<Text
 						style={{
 							textAlign: 'left',
 							fontSize: 10,
-							paddingHorizontal: 20,
+							paddingHorizontal: 5,
 							paddingVertical: 12,
-							fontWeight: 'bold'
+							fontWeight: 'bold',
+							width: '50%'
 						}}
 					>
 						Etalase Produk
 					</Text>
-				</View>
-				<View
-					style={{
-						borderRadius: 5,
-						marginHorizontal: 20,
-						marginVertical: 10,
-						borderWidth: 1,
-						borderColor: Color.secondary,
-						width: '90%',
-						height: 45
-					}}
-				>
-					<View>
-						<Picker style={{ height: 10, marginVertical: 2 }}>
-							<Picker.Item style={{ fontSize: 12 }} label="- Pilih Etalase -" value="java" />
-							<Picker.Item label="Produk Terbaru" value="terbaru" />
-							<Picker.Item label="Produk Terlaris" value="terlaris" />
-						</Picker>
-
+					<Pressable style={{width: '50%'}}>
 						<Text
 							style={{
-								paddingHorizontal: 12,
-								paddingVertical: 5,
+								textAlign: 'left',
+								fontSize: 10,
+								paddingHorizontal: 5,
+								paddingVertical: 12,
+								fontWeight: 'bold',
+								color: Color.primary,
+								textAlign: 'right'
+							}}
+						>
+							+ Tambah Etalase
+						</Text>
+					</Pressable>
+				</View>
+				<View>
+				<Text style={{
+								paddingHorizontal: 15,
+								paddingTop: 5,
 								color: Color.secondary,
 								fontSize: 8,
 								fontWeight: '400',
-								position: 'absolute'
-							}}
-						>
-							Etalase Produk
-						</Text>
-					</View>
+								textAlign: 'left'
+							}}>Etalase Produk</Text>
+				<DropDownPicker
+					zIndex={2000}
+					zIndexInverse={2000}
+					placeholder='- Pilih Etalase -'
+					open={etalase}
+					value={valueEtalase}
+					items={itemsEtalase}
+					setOpen={setEtalase}
+					setValue={setValueEtalase}
+					setItems={setItemsEtalase}
+					dropDownContainerStyle={{height: 165}}
+					style={{height: 28, width: '99%', marginHorizontal: 2, borderWidth: 0,}}
+					/>
+				<View style={{position: 'absolute',width: '100%',height: 47, 
+						borderWidth: 1, borderColor: Color.secondary, borderRadius: 5}}/>
 				</View>
+				</View>
+				
+				
+				
+
 			</ScrollView>
 			<View
 				style={{

@@ -24,7 +24,7 @@ const TermsCondition = ({navigation}) => {
             <ScrollView>
                 <Container padding={16}>
                     <Text align='left' type='bold' size={18}>
-                        1. Disclaimer
+                        Dilarang Menyebarkan
                     </Text>
                     <Divider />
                     <Text align='center'>

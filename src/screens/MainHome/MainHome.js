@@ -58,10 +58,14 @@ import {adsPopup} from 'assets/images/popup';
 import {listDummyBanner} from 'assets/images/banner';
 
 import Geolocation from 'react-native-geolocation-service';
+import { accessClient } from 'src/utils/access_client';
+import VideoCardList from 'src/components/VideoCardList';
+// import PopupTermsCondition from 'src/components/PopupTermsCondition';
 import {accessClient} from 'src/utils/access_client';
 import { trackPlayerPlay } from 'src/utils/track-player-play';
 import NetInfo from '@react-native-community/netinfo';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
+import AddProduct from '../Ecommerce/AddProduct';
 
 const dataPromoDummy = {
   productName: 'Halo selamat datang!',
@@ -73,7 +77,7 @@ const dataPromoDummy = {
 
 let tempShowPopupAds = true;
 
-const MainHome = ({navigation, route}) => {
+const MainHome = ({ navigation, route }) => {
   // state
   const [firebaseData, setFirebaseData] = useState([]);
   const [firebaseNotifierLastChatCount, setFirebaseNotifierLastChatCount] =
@@ -118,10 +122,10 @@ const MainHome = ({navigation, route}) => {
 
   const user = useSelector(state => state['user.auth'].login.user);
   const dispatch = useDispatch();
-  const {Color} = useColor();
+  const { Color } = useColor();
   const isFocused = useIsFocused();
   const modalPostingRef = useRef();
-  const {width} = useWindowDimensions();
+  const { width } = useWindowDimensions();
 
   useEffect(() => {
     fetchPromoBanners();
@@ -187,7 +191,7 @@ const MainHome = ({navigation, route}) => {
 
   useEffect(() => {
     if (isFocused) {
-      dispatch({type: 'BOOKING.CLEAR_BOOKING'});
+      dispatch({ type: 'BOOKING.CLEAR_BOOKING' });
       fetchBannerList();
       fetchData();
     }
@@ -506,7 +510,7 @@ const MainHome = ({navigation, route}) => {
               backgroundColor: backgroundInterpolate,
             }}
           />
-
+          <Text onPress={() => navigation.navigate('AddProduct')}>E-Commerce</Text>
           <View
             style={{
               flexDirection: 'row',
@@ -738,6 +742,7 @@ const MainHome = ({navigation, route}) => {
             }}
             style={{paddingLeft: 8}}
           />
+        
 
           {accessClient.MainHome.showListPromo && (
             <View style={{marginBottom: 40}}>
@@ -854,6 +859,9 @@ const MainHome = ({navigation, route}) => {
 
           {accessClient.MainHome.showListYoutube && <MondayAccoustic />}
 
+          {accessClient.MainHome.showListYoutube && <VideoCardList />}
+          {/* {accessClient.MainHome.type && <PopupTermsConditionS/>} */}
+          
           {accessClient.MainHome.showListEbookNewer && (
             <View style={{marginTop: 32}}>
               <PostingHeader title="Rilisan Terbaru" showSeeAllText onSeeAllPress={() => navigation.navigate('Ebook')} />
@@ -900,7 +908,7 @@ const MainHome = ({navigation, route}) => {
           modalPostingRef.current.close();
         }}
       />
-
+      
       <Modal
         isVisible={tempShowPopupAds && showPopupAds}
         onBackdropPress={() => {
@@ -947,6 +955,58 @@ const MainHome = ({navigation, route}) => {
         </View>
       </Modal>
 
+
+      <Modal
+        isVisible={tempShowPopupAds && showPopupAds}
+        onBackdropPress={() => {
+          tempShowPopupAds = false;
+          setShowPopupAds(false);
+        }}
+        animationIn="slideInDown"
+        animationOut="slideOutDown"
+        backdropColor={Color.semiwhite}>
+        <View style={{backgroundColor:'#FFFFFF',width: '90%', aspectRatio: 9 / 16, alignSelf: 'center',borderRadius:8}}>
+          <TouchableOpacity
+            onPress={() => {
+              tempShowPopupAds = false;
+              setShowPopupAds(false);
+            }}>
+           
+          </TouchableOpacity>
+          <Text style={{ fontSize:26,fontWeight:'bold' ,marginTop:10}}>
+            Syarat & Ketentuan
+          </Text>
+          <View style={{paddingHorizontal:12,paddingTop:10 }}>  
+            <Text  align="left" style={{ fontWeight:'bold',fontSize:20 }}>
+              Larangan Komunitas
+            </Text>
+            <Text  align="left" style={{marginLeft:8 ,fontSize:14,marginTop:4 }}>
+            Dilarang keras membuat, menyebarkan serta ikut berkonstribusi dalam kegiatan berikut ini :
+           
+            </Text>
+            <Text align="left" style={{ marginLeft: 8, fontSize: 14, marginTop: 4 }}>
+              1. Pornografi {'\n'}2. Perjudian {'\n'}3. Pemerasan {'\n'}4. Penipuan {'\n'}5. Kekerasan {'\n'}6. Fitnah/pencemaran nama baik {'\n'}7. Pelanggaran kekayaan intelektual {'\n'}8. Provokasi SARA {'\n'}9. Berita HOAX (Bohong) {'\n'}10. Terorisme/Radikalisme {'\n'}11. Informasi/dokumen elektronik pribadi yag bersifat rahasia
+          
+            </Text>
+            <Text  align="left" style={{marginLeft:8 ,fontSize:14,marginTop:4 }}>
+            Jika ada anggota yang melanggar salah satu/beberapa ketentuan diatas, maka akan diberikan sanksi berupa pengeluaran anggota dari aplikasi
+           
+            </Text>
+            <Submit
+                    buttonLabel='Tutup'
+                    buttonColor={Color.gray}
+                    type='bottomSingleButton'
+                    buttonBorderTopWidth={0}
+                    style={{backgroundColor: Color.theme, paddingTop: 25, paddingBottom: 25, width: 300}}
+                    onPress={() => {
+                      tempShowPopupAds = false;
+                      setShowPopupAds(false);
+                    }}
+                />
+            
+          </View>
+        </View>
+      </Modal>
       {!netInfo && (
         <Modal
           isVisible={showPopupNetInfo}

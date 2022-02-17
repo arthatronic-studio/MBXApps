@@ -15,7 +15,10 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Picker } from '@react-native-picker/picker';
+import DropDownPicker from 'react-native-dropdown-picker';
+
+
+    
 import {
 	Text,
 	// TouchableOpacity,
@@ -26,7 +29,8 @@ import {
 	Col,
 	HeaderBig,
 	useColor,
-	Header
+	Header,
+	ModalListAction
 } from '@src/components';
 import { TouchableOpacity } from '@src/components/Button';
 import ListForum from '@src/screens/MainForum/ListForum';
@@ -38,6 +42,7 @@ import { queryContentProduct } from '@src/lib/query';
 import CardListProduk from 'src/components/Card/CardListProduct';
 import TopTabShop from './TopTabShop';
 import ImagesPath from 'src/components/ImagesPath';
+import { updateCurrentUserProfile } from 'src/state/actions/user/auth';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -55,6 +60,20 @@ const AddProduct = ({ navigation }) => {
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
 	const { Color } = useColor();
+	const modalListActionRef = useRef();
+
+	const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    {label: 'Apple', value: 'apple'},
+    {label: 'Banana', value: 'banana'},
+	{label: 'Pear', value: 'apple'},
+    {label: 'Manggo', value: 'banana'},
+	{label: 'Melon', value: 'apple'},
+    {label: 'Manggosteen', value: 'banana'},
+	{label: 'Pineaple', value: 'apple'},
+    {label: 'Rambutans', value: 'banana'}
+  ]);
 
 	useEffect(() => {}, []);
 
@@ -63,8 +82,10 @@ const AddProduct = ({ navigation }) => {
         style
 			header={<Header customIcon title="Tambah Produk" type="regular" centerTitle={false} />}
 			onPressLeftButton={() => navigation.pop()}
+			
 		>
 			<ScrollView>
+			
 				<View style={{ flexDirection: 'row', paddingHorizontal: 20, paddingVertical: 10 }}>
 					<Image source={ImagesPath.stepone} />
 					<View style={{ paddingVertical: 5, alignItems: 'flex-start', paddingHorizontal: 20 }}>
@@ -179,40 +200,33 @@ const AddProduct = ({ navigation }) => {
 							</Text>
 						</View>
 					</View>
-					<View
-						style={{
-							borderRadius: 5,
-							marginHorizontal: 20,
-							marginVertical: 10,
-							borderWidth: 1,
-							borderColor: Color.secondary,
-							width: '90%',
-							height: 45
-						}}
-					>
-						<View>
-							<Picker style={{ height: 10, marginVertical: 2 }}>
-								<Picker.Item style={{ fontSize: 12 }} label="- Pilih Kategori -" value="java" />
-								<Picker.Item label="Kategori 1" value="js" />
-								<Picker.Item label="Kategori 2" value="js" />
-								<Picker.Item label="Kategori 3" value="js" />
-							</Picker>
-
-							<Text
-								style={{
-									paddingHorizontal: 12,
-									paddingVertical: 5,
-									color: Color.secondary,
-									fontSize: 8,
-									fontWeight: '400',
-									position: 'absolute'
-								}}
-							>
-								Kategori Barang
-							</Text>
-						</View>
-					</View>
 				</View>
+				
+				
+					<View style={{height: 250, width: '90%',marginHorizontal: 20, marginVertical: 20}}>
+						<Text 
+							style={{
+								paddingHorizontal: 15,
+								paddingTop: 5,
+								color: Color.secondary,
+								fontSize: 8,
+								fontWeight: '400',
+								textAlign: 'left'
+							}}>Kategori Barang</Text>
+						<DropDownPicker
+							placeholder='- Pilih Kategori -'
+							open={open}
+							value={value}
+							items={items}
+							setOpen={setOpen}
+							setValue={setValue}
+							setItems={setItems}
+							style={{paddingHorizontal: 12, paddingBottom: 5,marginHorizontal: 1,borderWidth: 0, width: '99%', height: 28}}
+							/>
+						<View style={{position: 'absolute',width: '100%',height: 47, 
+						borderWidth: 1, borderColor: Color.secondary, borderRadius: 5}}/>
+					</View>
+				
 			</ScrollView>
 			<View
 				style={{
@@ -237,6 +251,9 @@ const AddProduct = ({ navigation }) => {
 					<Text style={{color: Color.textInput, fontWeight: 'bold'}}>Lanjut</Text>
 				</TouchableOpacity>
 			</View>
+
+
+			
 		</Scaffold>
 	);
 };

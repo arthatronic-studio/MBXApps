@@ -49,5 +49,8 @@ avatar5: require('../components/Images/avatar5.png'),
   steptwo: require('../components/Images/steptwo.png'),
   stepthree: require('../components/Images/stepthree.png'),
   checkCircle: require('../components/Images/CheckCircle.png'),
+  bananaisart: require('../components/Images/bananaisart2.png'),
+  bananaauthor: require('../components/Images/bananaauthor.jpg'),
+  bananaart: require('../components/Images/bananaisart.png'),
   lostConnection: require('../components/Images/lostConnection.png'),
 };
