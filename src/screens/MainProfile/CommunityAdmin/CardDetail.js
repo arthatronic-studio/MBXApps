@@ -22,6 +22,8 @@ import Popup, {usePopup} from '@src/components/Modal/Popup';
 import Client from '@src/lib/apollo';
 import {joinCommunityManage} from '@src/lib/query/joinCommunityManage';
 import {Divider} from 'src/styled';
+import Config from 'react-native-config';
+import { queryOrganizationMemberManage } from 'src/lib/query/organization';
 
 const EmailRoundedView = Styled(View)`
   width: 100%;
@@ -65,54 +67,6 @@ const CardDetail = ({ navigation, route }) => {
     setIdNumber(userDetail.idNumber);
   }, []);
 
-  const handleSuccess = (id) => {
-    setLoading(true);
-
-    Client.query({
-      query: joinCommunityManage,
-      variables: {
-        status: 1,
-        id: id,
-      },
-    })
-    .then((res) => {
-      showPopup('Akun selesai di Approve', 'success');
-      setLoading(false);
-      
-      setTimeout(() => {
-        navigation.pop();
-      }, 3000);
-    })
-    .catch((err) => {
-      showPopup(err.message, 'warning');
-      setLoading(false);
-    });
-  };
-
-  const handleRemove = (id) => {
-    setLoading(true);
-
-    Client.query({
-      query: joinCommunityManage,
-      variables: {
-        status: 2,
-        id: id,
-      },
-    })
-    .then((res) => {
-      showPopup('Akun berhasil ditolak', 'success');
-      setLoading(false);
-
-      setTimeout(() => {
-        navigation.pop();
-      }, 3000);
-    })
-    .catch((err) => {
-      showPopup('catch', 'warning');
-      setLoading(false);
-    });
-  };
-
   const fetchUpdateMember = () => {
     setLoading(true);
 
@@ -134,10 +88,86 @@ const CardDetail = ({ navigation, route }) => {
     });
   };
 
+  const fetchJoinCommunityManage = (id, userId, status) => {
+    setLoading(true);
+
+    let resMessage =
+      status === 1 ? 'Diterima' :
+      status === 2 ? 'Ditolak' : 'Dihapus';
+
+    Client.query({
+      query: joinCommunityManage,
+      variables: {
+        status,
+        id,
+      },
+    })
+      .then((res) => {
+        console.log('res join', res);
+
+        const data = res.data.joinCommunityManage;
+        const success = data && data.id;
+
+        if (success) {
+          showPopup(`Akun berhasil ${resMessage}`, 'success');
+          setLoading(false);
+          setTimeout(() => {
+            navigation.pop();
+          }, 3000);
+        } else {
+          showPopup(`Akun gagal ${resMessage}`, 'error');
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        showPopup(err.message, 'error');
+        setLoading(false);
+      });
+  };
+
+  const fetchOrganizationMemberManage = (id, userId, status) => {
+    let resMessage =
+      status === 1 ? 'Diterima' :
+      status === 2 ? 'Ditolak' : 'Dihapus';
+    let method =
+      status === 1 ? 'INSERT' :
+      status === 2 ? 'REJECT' : 'DELETE';
+
+    const variables = {
+      "userId": userId,
+      "organizationInitialCode": Config.INITIAL_CODE,
+      "type": method,
+    };
+
+    console.log(variables);
+
+    Client.mutate({
+      mutation: queryOrganizationMemberManage,
+      variables,
+    }).then((res) => {
+      console.log('res organization manage', res);
+
+      const data = res.data.organizationMemberManage;
+      const success = data;
+
+      if (success) {
+        fetchJoinCommunityManage(id, userId, status);
+      } else {
+        showPopup(`Sync gagal ${resMessage}`, 'error');
+        setLoading(false);
+      }
+    }).catch((err) => {
+      console.log('err organization manage', err);
+      showPopup(err.message, 'error');
+      setLoading(false);
+    });
+  }
+
   return (
     <Scaffold
       headerTitle='Member Detail'
       fallback={loading}
+      popupProps={popupProps}
     >
       <ScrollView>
         <CarouselView
@@ -456,7 +486,7 @@ const CardDetail = ({ navigation, route }) => {
                 Alert(
                   'Terima',
                   'Apakah Anda yakin akan menerima anggota ini?',
-                  () => handleSuccess(item.id),
+                  () => fetchOrganizationMemberManage(item.id, item.user_id, 1),
                 );
               }}
               style={{
@@ -466,7 +496,7 @@ const CardDetail = ({ navigation, route }) => {
                 alignItems: 'center',
                 borderRadius: 4,
               }}>
-              <Text color={Color.textInput}>{props.handleSuccess}</Text>
+              <Text color={Color.textInput}>Approve</Text>
             </TouchableOpacity>
             {props.type !== 'notAnggota' && <Divider />}
             {props.type !== 'notAnggota' && (
@@ -475,7 +505,7 @@ const CardDetail = ({ navigation, route }) => {
                   Alert(
                     'Tolak',
                     'Apakah Anda yakin akan menolak anggota ini?',
-                    () => handleRemove(item.id),
+                    () => fetchOrganizationMemberManage(item.id, item.user_id, 2),
                   );
                 }}
                 style={{
@@ -485,13 +515,12 @@ const CardDetail = ({ navigation, route }) => {
                   alignItems: 'center',
                   borderRadius: 4,
                 }}>
-                <Text color={Color.textInput}>{props.handleRemove}</Text>
+                <Text color={Color.textInput}>Reject</Text>
               </TouchableOpacity>
             )}
           </View>
         )}
       </View>
-      <Popup {...popupProps} />
     </Scaffold>
   );
 };

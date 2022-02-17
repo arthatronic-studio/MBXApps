@@ -220,6 +220,10 @@ const WidgetMenuHome = (props) => {
     );
   };
 
+  let menuRealLength = 0;
+  listMenuHome.map((e) => e.show ? menuRealLength +=1 : null);
+  let widthMenu = menuRealLength < 4 ? 100 / menuRealLength : 25;
+
   return (
     <Container paddingHorizontal={16}>
       <SambatanMenuView
@@ -241,7 +245,7 @@ const WidgetMenuHome = (props) => {
                 navigation.navigate(menu.nav, menu.params);
               }}
               style={{
-                width: '33.33%',
+                width: `${widthMenu}%`,
               }}
             >
               <UserIcon>

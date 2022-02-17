@@ -12,6 +12,7 @@ import { persistor, store } from '@src/state/redux';
 import { useColor } from '@src/components';
 import { localPushNotification } from '@src/lib/pushNotification';
 import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
+import { trackPlayerInit } from '@src/utils/track-player-init';
 
 export let navigationRef = createRef();
 
@@ -19,6 +20,14 @@ const App = () => {
   const { Color } = useColor('root');
 
   const onReady = () => {}
+
+  useEffect(() => {
+    initTrackPlayer();
+  }, []);
+
+  const initTrackPlayer = async () => {
+    await trackPlayerInit();
+  }
 
   // ===========================================
   // ========== START FIREBASE NOTIFICATION ==========

@@ -1,12 +1,16 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {View, Image, FlatList, StatusBar} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 
 import ImagesPath from 'src/components/ImagesPath';
 import {Scaffold, useColor, Header, Text} from '@src/components';
 import { Divider } from 'src/styled';
+import { FormatMoney } from 'src/utils';
+import moment from 'moment';
 
-const DetailLelang = () => {
+const DetailLelang = ({route, navigation}) => {
+  const [product, setProduct] = useState(route.params.item);
+  console.log(product)
   const {Color} = useColor();
   return (
     <Scaffold
@@ -53,7 +57,7 @@ const DetailLelang = () => {
               }}>
               <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 <Text size={8} color={Color.textInput}>Sisa Waktu</Text>
-                <Text color={Color.textInput}>12:53</Text>
+                <Text color={Color.textInput} size={12}>{moment.unix((product.time_end/1000) - moment().unix()).format("DD") > 0 ? moment.unix((product.time_end/1000) - moment().unix()).format("DD")+'Hari ' : ''}{moment.unix((product.time_end/1000) - moment().unix()).format("HH:mm")}</Text>
               </View>
             </View>
           </View>
@@ -77,7 +81,7 @@ const DetailLelang = () => {
             </Text>
             <Divider height={4} />
             <Text size={16} type='bold' align='left'>
-              Rp. 150.000
+              {FormatMoney.getFormattedMoney(product.buy_now_price)}
             </Text>
           </View>
           <View style={{width: '50%', justifyContent: 'center'}}>
@@ -86,7 +90,7 @@ const DetailLelang = () => {
             </Text>
             <Divider height={4} />
             <Text size={16} type='bold' align='right'>
-              Rp. 10.000
+              {FormatMoney.getFormattedMoney(product.start_price)}
             </Text>
           </View>
         </View>
@@ -121,7 +125,7 @@ const DetailLelang = () => {
                 paddingHorizontal: 10,
               }}>
               <Text size={10} color={Color.gray}>Jumlah</Text>
-              <Text size={10} type='medium'>1 Unit</Text>
+              <Text size={10} type='medium'>{product.quantity} Unit</Text>
             </View>
             <View
               style={{
@@ -130,7 +134,7 @@ const DetailLelang = () => {
                 paddingHorizontal: 10,
               }}>
               <Text size={10} color={Color.gray}>Jam Mulai</Text>
-              <Text size={10} type='medium'>13:05 WIB</Text>
+              <Text size={10} type='medium'>{moment.unix(product.time_start/1000).format("HH:mm")} WIB</Text>
             </View>
             <View
               style={{
@@ -139,7 +143,8 @@ const DetailLelang = () => {
                 paddingHorizontal: 10,
               }}>
               <Text size={10} color={Color.gray}>Durasi</Text>
-              <Text size={10} type='medium'>15 Menit</Text>
+              {console.log( (product.time_end / 1000) - moment().unix()  )}
+              <Text size={10} type='medium'>{moment.unix((product.time_start/1000) + moment().unix()).format("HH:mm")}</Text>
             </View>
           </View>
         </View>
@@ -178,22 +183,7 @@ const DetailLelang = () => {
             align='left'
             lineHeight={20}
           >
-            Cupcake donut caramels gummi bears cheesecake powder pie lollipop
-            marzipan. Chocolate cake liquorice chocolate bar pudding lemon drops
-            lollipop ice cream sweet. Candy cake wafer topping sweet roll tart.
-            Cotton candy fruitcake donut muffin muffin gingerbread. Lollipop
-            gingerbread candy canes topping candy canes. Cake muffin shortbread
-            soufflé pie cake. Gingerbread danish chocolate cake powder jujubes.
-            Bear claw cotton candy biscuit cheesecake ice cream sweet roll bear
-            claw. Dragée wafer pastry lollipop bear claw fruitcake tiramisu
-            toffee chocolate. Dragée danish carrot cake cake toffee. Cake oat
-            cake dessert shortbread pastry fruitcake lollipop danish. Pudding
-            oat cake gingerbread icing pie pudding shortbread. Wafer topping
-            chocolate bar marshmallow sugar plum muffin cheesecake chocolate.
-            Jelly beans tootsie roll danish shortbread candy powder bear claw
-            marzipan brownie. Jelly beans carrot cake cookie pie lollipop candy
-            canes chupa chups. Cupcake ice cream marshmallow apple pie apple pie
-            ice cream.
+           {product.description}
           </Text>
         </View>
       </ScrollView>

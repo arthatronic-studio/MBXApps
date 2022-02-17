@@ -37,7 +37,7 @@ export default {
   avatar2: require('../components/Images/avatar2.png'),
   avatar3: require('../components/Images/avatar3.png'),
   avatar4: require('../components/Images/avatar4.png'),
-  avatar5: require('../components/Images/avatar5.png'),
+avatar5: require('../components/Images/avatar5.png'),
   ebook1: require('../components/Images/ebook1.png'),
   ebook2: require('../components/Images/ebook2.png'),
   release1: require('../components/Images/release1.png'),
@@ -51,7 +51,8 @@ export default {
   checkCircle: require('../components/Images/CheckCircle.png'),
   bananaisart: require('../components/Images/bananaisart2.png'),
   bananaauthor: require('../components/Images/bananaauthor.jpg'),
-  bananaart: require('../components/Images/bananaisart.png')
+  bananaart: require('../components/Images/bananaisart.png'),
 
   
+  lostConnection: require('../components/Images/lostConnection.png'),
 };

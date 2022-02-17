@@ -55,6 +55,11 @@ const MainProfile = ({navigation, route}) => {
   const {width} = useWindowDimensions();
 
   useEffect(() => {
+    // hit cuurent user profile
+    dispatch(getCurrentUserProfile());
+  }, []);
+
+  useEffect(() => {
     if (route.params && route.params.refresh) {
       navigation.setParams({refresh: false});
     }
@@ -133,14 +138,6 @@ const MainProfile = ({navigation, route}) => {
       show: true,
       icon: <AntDesign name="carryout" size={20} color={Color.text} style={{}} />,
       onPress: () => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
-    },
-   
-    {
-      code: 'Terms_condition',
-      title: 'Syarat & Ketentuan',
-      show: true,
-      icon: <Ionicons name="newspaper-outline" size={20} color={Color.text} style={{}} />,
-      onPress: () => navigation.navigate('TermsnCondition'),
     },
     {
       code: 'terms_condition',

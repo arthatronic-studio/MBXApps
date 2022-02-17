@@ -16,6 +16,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Picker } from '@react-native-picker/picker';
+import DropDownPicker from 'react-native-dropdown-picker';
 import {
 	Text,
 	// TouchableOpacity,
@@ -56,6 +57,18 @@ const StepTwo = ({ navigation }) => {
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
 	const { Color } = useColor();
 
+	const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    {label: 'Hijab', value: 'hijab'},
+    {label: 'Fashion', value: 'fashion'},
+	{label: 'Music', value: 'music'},
+	{label: 'Buku', value: 'buku'},
+	{label: 'Banana', value: 'banana'},
+	{label: 'Banana', value: 'banana'},
+	{label: 'Hai', value: 'hai'}
+  ]);
+
 	useEffect(() => {}, []);
 
 	return (
@@ -82,45 +95,34 @@ const StepTwo = ({ navigation }) => {
 								textAlign: 'left',
 								fontSize: 10,
 								paddingHorizontal: 20,
-								paddingVertical: 12,
+								paddingVertical: 5,
 								fontWeight: 'bold'
 							}}
 						>
 							Detail Produk
 						</Text>
 					</View>
-					<View
-						style={{
-							borderRadius: 5,
-							marginHorizontal: 20,
-							marginVertical: 10,
-							borderWidth: 1,
-							borderColor: Color.secondary,
-							width: '90%',
-							height: 45
-						}}
-					>
-						<View>
-							<Picker style={{ height: 10, marginVertical: 2 }}>
-								<Picker.Item style={{ fontSize: 12 }} label="- Pilih Satuan -" value="java" />
-								<Picker.Item label="pcs" value="js" />
-								<Picker.Item label="box" value="js" />
-								<Picker.Item label="kodi" value="js" />
-							</Picker>
-
-							<Text
-								style={{
-									paddingHorizontal: 12,
-									paddingVertical: 5,
-									color: Color.secondary,
-									fontSize: 8,
-									fontWeight: '400',
-									position: 'absolute'
-								}}
-							>
-								Satuan Barang
-							</Text>
-						</View>
+					<View style={{marginVertical: 10, width: '90%', marginHorizontal: 20}}>
+						<Text style={{
+								paddingHorizontal: 15,
+								paddingTop: 5,
+								color: Color.secondary,
+								fontSize: 8,
+								fontWeight: '400',
+								textAlign: 'left'
+							}}>Satuan Barang</Text>
+						<DropDownPicker
+							placeholder='- Pilih Satuan -'
+							open={open}
+							value={value}
+							items={items}
+							setOpen={setOpen}
+							setValue={setValue}
+							setItems={setItems}
+							style={{height: 28, borderWidth: 0, width: '99%', marginHorizontal: 2}}
+						/>
+						<View style={{position: 'absolute',width: '100%',height: 47, 
+						borderWidth: 1, borderColor: Color.secondary, borderRadius: 5}}/>
 					</View>
 					<View>
 						<TextInput

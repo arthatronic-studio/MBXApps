@@ -27,7 +27,11 @@ const DATA = [
   },
 ];
 
-const MusikTerbaru = () => {
+const defaultProps = {
+  onPress: () => {}
+}
+
+const MusikTerbaru = ({ onPress }) => {
   const {Color} = useColor();
   const {width} = useWindowDimensions();
 
@@ -37,7 +41,9 @@ const MusikTerbaru = () => {
         paddingLeft: 8,
         paddingRight: 8,
       }}>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => onPress()}
+      >
         <ImageBackground
           source={item.music}
           style={{
@@ -132,4 +138,5 @@ const MusikTerbaru = () => {
   );
 };
 
+MusikTerbaru.defaultProps = defaultProps;
 export default MusikTerbaru;

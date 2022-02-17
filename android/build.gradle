@@ -38,6 +38,19 @@ allprojects {
         }
 
         google()
+        jcenter() {
+            content {
+                // however, react-native-video's native packages have not been migrated yet, so we keep this config for now
+                includeModule("com.yqritc", "android-scalablevideoview")
+                includeModule("com.google.android.exoplayer", "extension-okhttp")
+                includeModule("com.google.android.exoplayer", "exoplayer")
+                includeModule("com.google.android.exoplayer", "exoplayer-core")
+                includeModule("com.google.android.exoplayer", "exoplayer-dash")
+                includeModule("com.google.android.exoplayer", "exoplayer-hls")
+                includeModule("com.google.android.exoplayer", "exoplayer-smoothstreaming")
+                includeModule("com.google.android.exoplayer", "exoplayer-ui")
+            }
+        }
         maven { url 'https://www.jitpack.io' }
     }
 }
