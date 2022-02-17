@@ -48,6 +48,10 @@ export default {
   stepone: require('../components/Images/stepone.png'),
   steptwo: require('../components/Images/steptwo.png'),
   stepthree: require('../components/Images/stepthree.png'),
-  checkCircle: require('../components/Images/CheckCircle.png')
+  checkCircle: require('../components/Images/CheckCircle.png'),
+  bananaisart: require('../components/Images/bananaisart2.png'),
+  bananaauthor: require('../components/Images/bananaauthor.jpg'),
+  bananaart: require('../components/Images/bananaisart.png')
+
   
 };
