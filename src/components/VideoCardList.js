@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Video from 'react-native-video';
 
 import {Text, useColor} from '@src/components';
 import ImagesPath from 'src/components/ImagesPath';
@@ -27,6 +28,8 @@ const VideoCardList = () => {
 
   const [playing, setPlaying] = useState(false);
 
+  const [paused, setPaused] = useState(true);
+
   const onStateChange = useCallback(state => {
     if (state === 'ended') {
       setPlaying(false);
@@ -43,18 +46,32 @@ const VideoCardList = () => {
       <View style={{paddingHorizontal: 8}}>
         <Image source={ImagesPath.sabyanLive} style={{ width: width - 32, height: 220, borderRadius: 8 }} />
 
+        <Video
+          source={require('@assets/videoplayback.mp4')}
+          paused={paused}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: 0,
+          }}
+        />
+
         <Text style={{ backgroundColor:'#00000099',height: 25, width: 50, justifyContent: 'center', alignItems: 'center', borderRadius: 4, position: 'absolute', right: 16, bottom: 5,color: Color.textInput, }} >
           15:35
         </Text>
 
         <View style={{position: 'absolute', width: width - 32, height: 220, justifyContent: 'center', alignItems: 'center'}}>
-          <TouchableOpacity style={{height: 50, width: 50, backgroundColor: Color.error, borderRadius: 25, alignItems: 'center', justifyContent: 'center'}}>
-            <Ionicons name='play' size={30} />
+          <TouchableOpacity
+            onPress={() => setPaused(!paused)}
+            style={{height: 50, width: 50, backgroundColor: Color.error, borderRadius: 25, alignItems: 'center', justifyContent: 'center'}}
+          >
+            <Ionicons name={paused ? 'play' : 'pause'} size={30} />
           </TouchableOpacity>
         </View>
       </View>
-       );
-       
+    );
   }
 
   return (
@@ -99,9 +116,7 @@ const VideoCardList = () => {
         <Text align="left"
           style={{
             fontSize: 12,
-           
             color: Color.gray,
-            
             paddingLeft:5
             
           }}>Sabyan Official
