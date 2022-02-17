@@ -12,32 +12,43 @@ const listInitialCode = [
     'TRIBESXGOFISH',
 ];
 
+const isKomoto = listKomotoFamily.includes(Config.INITIAL_CODE);
+const isSabyan = Config.INITIAL_CODE === 'TRIBESXSABYAN';
+
 export const accessClient = {
     InitialCode: Config.INITIAL_CODE,
     BottomTabsNavigator: {
-        type: listKomotoFamily.includes(Config.INITIAL_CODE) ? 'komoto' : 'default',
+        type:
+            isKomoto ? 'komoto' :
+            isSabyan ? 'sabyan' :
+            'default',
     },
     CreatePosting: {
-        showPrivacy: listKomotoFamily.includes(Config.INITIAL_CODE) ? false : true,
+        showPrivacy: isKomoto ? false : true,
     },
     MainHome: {
-        type: listKomotoFamily.includes(Config.INITIAL_CODE) ? 'komoto' : 'default',
-        showWidgetBalance: listKomotoFamily.includes(Config.INITIAL_CODE) ? false : true,
-        showBannerHeader: listKomotoFamily.includes(Config.INITIAL_CODE) ? false : true,
-        showListJob: listKomotoFamily.includes(Config.INITIAL_CODE) ? false : true,
-        showListAuction: listKomotoFamily.includes(Config.INITIAL_CODE) ? false : true,
-        showListSoonAuction: listKomotoFamily.includes(Config.INITIAL_CODE) ? false : true,
-        showListPromo: listKomotoFamily.includes(Config.INITIAL_CODE) ? false : true,
-        showListMusicNewer: listKomotoFamily.includes(Config.INITIAL_CODE) ? false : true,
-        showListYoutube: listKomotoFamily.includes(Config.INITIAL_CODE) ? false : true,
-        showListEbookNewer: listKomotoFamily.includes(Config.INITIAL_CODE) ? false : true,
+        type:
+            isKomoto ? 'komoto' :
+            isSabyan ? 'sabyan' :
+            'default',
+        showWidgetBalance: isKomoto || isSabyan ? false : true,
+        showBannerHeader: isKomoto || isSabyan ? false : true,
+        showListEmergency: isKomoto,
+        showListJob: isKomoto || isSabyan ? false : true,
+        showListAuction: isKomoto || isSabyan ? false : true,
+        showListSoonAuction: isKomoto || isSabyan ? false : true,
+        showListPromo: isKomoto || isSabyan ? false : true,
+        showListMusicNewer: isKomoto ? false : true,
+        showListYoutube: isKomoto ? false : true,
+        showListEbookNewer: isKomoto || isSabyan ? false : true,
     },
     MenuHome: {
-        showJob: listKomotoFamily.includes(Config.INITIAL_CODE) ? false : true,
+        showJob: isKomoto || isSabyan ? false : true,
     },
     MainProfile: {
-        showButtonJoinCommunity: listKomotoFamily.includes(Config.INITIAL_CODE) ? false : true,
-        showMenuJoinCommunity: listKomotoFamily.includes(Config.INITIAL_CODE) ? true : false,
-        showMenuCommunityAdmin: listKomotoFamily.includes(Config.INITIAL_CODE) ? true : false,
+        showButtonJoinCommunity: isKomoto ? false : true,
+        showMenuJoinCommunity: isKomoto ? true : false,
+        showMenuCommunityAdmin: isKomoto ? true : false,
+        showStatusMember: isSabyan ? false : true,
     }
 };

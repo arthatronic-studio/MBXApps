@@ -305,7 +305,7 @@ const MainProfile = ({navigation, route}) => {
                   </Text>
                 )}
 
-                {user && !user.guest && (
+                {accessClient.MainProfile.showStatusMember && user && !user.guest && (
                   <Text
                     size={8} 
                     letterSpacing={0.18}

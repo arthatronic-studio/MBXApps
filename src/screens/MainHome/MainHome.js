@@ -681,9 +681,9 @@ const MainHome = ({navigation, route}) => {
           <Divider />
 
           <Banner
-            isDummy
+            isDummy={accessClient.MainHome.type === 'sabyan' ? false : true}
             showHeader={accessClient.MainHome.showBannerHeader}
-            data={listDummyBanner || listBanner}
+            data={accessClient.MainHome.type === 'sabyan' ? listBanner || listDummyBanner : listDummyBanner || listBanner}
             loading={loadingBanner}
           />
 
@@ -717,7 +717,7 @@ const MainHome = ({navigation, route}) => {
             />
           )}
 
-          <ListEmergency
+          {accessClient.MainHome.showListEmergency && <ListEmergency
             data={listEmergencyArea}
             loading={loadingEmergency}
             horizontal
@@ -726,7 +726,7 @@ const MainHome = ({navigation, route}) => {
               navigation.navigate('EmergencyDetail', {item});
             }}
             style={{paddingLeft: 8}}
-          />
+          />}
 
           <ListNews
             data={listTampil}

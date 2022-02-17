@@ -7,6 +7,7 @@ import { accessClient } from 'src/utils/access_client';
 import SplashScreen from 'src/screens/SplashScreen';
 import BottomTabsNavigator from '@src/navigators/BottomTabsNavigator';
 import BottomTabsNavigatorKomoto from '@src/navigators/BottomTabsNavigatorKomoto';
+import BottomTabsNavigatorsabyan from '@src/navigators/BottomTabsNavigatorSabyan';
 import KnowMeScreen from '@src/screens/KnowMeScreen';
 import CreateEmergencyScreen from '@src/screens/CreateEmergencyScreen';
 import PDFReaderScreen from 'src/screens/PDFReaderScreen';
@@ -115,7 +116,12 @@ import StepTwo from 'src/screens/Ecommerce/StepTwo';
 import StepThree from 'src/screens/Ecommerce/StepThree';
 
 const {Navigator, Screen} = createStackNavigator();
-const MainPage = accessClient.BottomTabsNavigator.type === 'komoto' ? BottomTabsNavigatorKomoto : BottomTabsNavigator;
+const MainPage =
+  accessClient.BottomTabsNavigator.type === 'komoto' ?
+    BottomTabsNavigatorKomoto :
+  accessClient.BottomTabsNavigator.type === 'sabyan' ?
+    BottomTabsNavigatorsabyan :
+    BottomTabsNavigator;
 
 function MainStackNavigator() {
   return (
