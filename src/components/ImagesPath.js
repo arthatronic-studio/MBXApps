@@ -51,7 +51,11 @@ avatar5: require('../components/Images/avatar5.png'),
   checkCircle: require('../components/Images/CheckCircle.png'),
   bananaisart: require('../components/Images/bananaisart2.png'),
   bananaauthor: require('../components/Images/bananaauthor.jpg'),
+<<<<<<< HEAD
   bananaart: require('../components/Images/bananaisart.png'),
+=======
+  bananaart: require('../components/Images/bananaisart.png')
+>>>>>>> 79ddfa4f40939e6272bd8ec96edd52098d518490
 
   
   lostConnection: require('../components/Images/lostConnection.png'),

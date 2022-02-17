@@ -60,12 +60,15 @@ import {listDummyBanner} from 'assets/images/banner';
 import Geolocation from 'react-native-geolocation-service';
 import { accessClient } from 'src/utils/access_client';
 import VideoCardList from 'src/components/VideoCardList';
+<<<<<<< HEAD
 // import PopupTermsCondition from 'src/components/PopupTermsCondition';
 import {accessClient} from 'src/utils/access_client';
 import { trackPlayerPlay } from 'src/utils/track-player-play';
 import NetInfo from '@react-native-community/netinfo';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import AddProduct from '../Ecommerce/AddProduct';
+=======
+>>>>>>> 79ddfa4f40939e6272bd8ec96edd52098d518490
 
 const dataPromoDummy = {
   productName: 'Halo selamat datang!',
@@ -860,7 +863,11 @@ const MainHome = ({ navigation, route }) => {
           {accessClient.MainHome.showListYoutube && <MondayAccoustic />}
 
           {accessClient.MainHome.showListYoutube && <VideoCardList />}
+<<<<<<< HEAD
           {/* {accessClient.MainHome.type && <PopupTermsConditionS/>} */}
+=======
+
+>>>>>>> 79ddfa4f40939e6272bd8ec96edd52098d518490
           {accessClient.MainHome.showListEbookNewer && <View>
             <View>
               <Text
