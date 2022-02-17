@@ -40,15 +40,23 @@ const VideoCardList = () => {
 
   const renderItem = () => {
     return (
-      <View style={{paddingHorizontal: 1}}>
-        <Image source={ImagesPath.bananaart} style={{ width: 380, height: 220 }} />
-        <Text style={{ backgroundColor:'#00000099',height: 25, width: 50, justifyContent: 'center', alignItems: 'center', borderRadius: 4, position: 'absolute', right: 5, bottom: 5,color: Color.textInput, }} >
-        15:35
-      </Text>
+      <View style={{paddingHorizontal: 8}}>
+        <Image source={ImagesPath.sabyanLive} style={{ width: width - 32, height: 220, borderRadius: 8 }} />
+
+        <Text style={{ backgroundColor:'#00000099',height: 25, width: 50, justifyContent: 'center', alignItems: 'center', borderRadius: 4, position: 'absolute', right: 16, bottom: 5,color: Color.textInput, }} >
+          15:35
+        </Text>
+
+        <View style={{position: 'absolute', width: width - 32, height: 220, justifyContent: 'center', alignItems: 'center'}}>
+          <TouchableOpacity style={{height: 50, width: 50, backgroundColor: Color.error, borderRadius: 25, alignItems: 'center', justifyContent: 'center'}}>
+            <Ionicons name='play' size={30} />
+          </TouchableOpacity>
+        </View>
       </View>
        );
        
   }
+
   return (
     <View style={{ backgroundColor:Color.disabled, paddingVertical: 12,}}>
       <Text
@@ -60,7 +68,7 @@ const VideoCardList = () => {
           marginBottom: 8,
           color: Color.textInput,
         }}>
-        VIdeo Card
+        Video Terbaru
       </Text>
 
       <FlatList
@@ -72,13 +80,11 @@ const VideoCardList = () => {
         style={{
           paddingHorizontal: 8,
           paddingVertical: 8,
-          
         }}
       />
       
       <View style={{flexDirection:'row' }}>
-      <Image source={ImagesPath.bananaauthor} style={{borderRadius: 500, width:40,height:40,marginLeft:10,flexDirection:'row'}}/>
-        
+      <Image source={ImagesPath.sabyanLive} style={{borderRadius: 500, width:40,height:40,marginLeft:10,flexDirection:'row', backgroundColor: Color.primary}}/>
         <View>
         <Text align="left"
           type="bold"
@@ -87,10 +93,8 @@ const VideoCardList = () => {
             fontSize: 14,
             marginBottom: 4,
             color: Color.textInput,
-           
             paddingLeft:5
-            
-          }}>KENAPA PISANG DILAKBAN KETEMBOK
+          }}>Sabyan Gambus New Album
         </Text>
         <Text align="left"
           style={{
@@ -100,16 +104,16 @@ const VideoCardList = () => {
             
             paddingLeft:5
             
-          }}>Tangan belang 21 rb x ditonton 1 hari yang lalu
+          }}>Sabyan Official
           </Text>
           
         </View>
-        <Entypo
+        {/* <Entypo
             name={'dots-three-vertical'}
             color={Color.text}
             size={12}
             style={{paddingLeft: 40}}
-          />
+          /> */}
      </View>
     </View>
    
