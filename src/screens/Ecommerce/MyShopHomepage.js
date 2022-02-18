@@ -132,7 +132,7 @@ const MyShopHomepage = ({ navigation }) => {
 					<Text style={{textAlign: 'left', fontSize: 10, color: Color.primary, fontWeight: 'bold',
 							paddingHorizontal: 10, paddingVertical: 10}}
 							onPress={() => navigation.navigate('AddProduct')}>+ Tambah Produk</Text>
-					<View style={{backgroundColor: Color.semiwhite, width: '95%', height: '55%',
+					<Pressable style={{backgroundColor: Color.semiwhite, width: '95%', height: '55%',
 							alignSelf: 'center', borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
 						<FontAwesome5 name={'box'} size={20} style={{color: Color.text, paddingHorizontal: 20,}}/>
 						<View style={{width: '70%'}}>
@@ -140,31 +140,31 @@ const MyShopHomepage = ({ navigation }) => {
 							<Text style={{fontSize: 10, fontWeight: 'normal', textAlign: 'left'}}>2 Produk Terdaftar</Text>
 						</View>
 						<MaterialIcons name={'keyboard-arrow-right'} size={30} style={{color: Color.text, width: '13%'}}/>
-					</View>
+					</Pressable>
 				</View>
 				<View style={{backgroundColor: Color.textInput, width: '92%', height: 125, alignSelf: 'center', borderRadius: 5}}>
 					<Text style={{fontSize: 11, fontWeight: 'bold', textAlign: 'left', paddingHorizontal: 10, paddingVertical: 10}}>Kata Pembeli</Text>
 					<View style={{width: '95%', height: 1, backgroundColor: Color.border, alignSelf: 'center'}}></View>
-					<View style={{flexDirection: 'row', marginVertical: 10}}>
+					<Pressable style={{flexDirection: 'row', marginVertical: 10}}>
 						<Text style={{textAlign: 'left', width: '90%', fontSize: 14, paddingHorizontal: 10}}>Ulasan</Text>
 						<MaterialIcons name={'keyboard-arrow-right'} size={20} style={{color: Color.text, width: '13%'}}/>
-					</View>
-					<View style={{flexDirection: 'row', marginVertical: 10}}>
+					</Pressable>
+					<Pressable style={{flexDirection: 'row', marginVertical: 10}}>
 						<Text style={{textAlign: 'left', width: '90%', fontSize: 14, paddingHorizontal: 10}}>Pesanan dikomplain</Text>
 						<MaterialIcons name={'keyboard-arrow-right'} size={20} style={{color: Color.text, width: '13%'}}/>
-					</View>
+					</Pressable>
 				</View>
 				<View style={{marginVertical: 10, backgroundColor: Color.textInput, width: '92%', height: 125, alignSelf: 'center', borderRadius: 5}}>
-					<Text style={{fontSize: 11, fontWeight: 'bold', textAlign: 'left', paddingHorizontal: 10, paddingVertical: 10}}>Kata Pembeli</Text>
+					<Text style={{fontSize: 11, fontWeight: 'bold', textAlign: 'left', paddingHorizontal: 10, paddingVertical: 10}}>Bantuan Toko</Text>
 					<View style={{width: '95%', height: 1, backgroundColor: Color.border, alignSelf: 'center'}}></View>
-					<View style={{flexDirection: 'row', marginVertical: 10}}>
-						<Text style={{textAlign: 'left', width: '90%', fontSize: 14, paddingHorizontal: 10}}>Ulasan</Text>
+					<Pressable style={{flexDirection: 'row', marginVertical: 10}}>
+						<Text style={{textAlign: 'left', width: '90%', fontSize: 14, paddingHorizontal: 10}}>Pengaturan Toko</Text>
 						<MaterialIcons name={'keyboard-arrow-right'} size={20} style={{color: Color.text, width: '13%'}}/>
-					</View>
-					<View style={{flexDirection: 'row', marginVertical: 10}}>
-						<Text style={{textAlign: 'left', width: '90%', fontSize: 14, paddingHorizontal: 10}}>Pesanan dikomplain</Text>
+					</Pressable>
+					<Pressable style={{flexDirection: 'row', marginVertical: 10}}>
+						<Text style={{textAlign: 'left', width: '90%', fontSize: 14, paddingHorizontal: 10}}>Bantuan</Text>
 						<MaterialIcons name={'keyboard-arrow-right'} size={20} style={{color: Color.text, width: '13%'}}/>
-					</View>
+					</Pressable>
 				</View>
 			</ScrollView>
 		</Scaffold>
