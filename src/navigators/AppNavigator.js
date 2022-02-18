@@ -67,6 +67,9 @@ import EventDetail from 'src/screens/Posting/Event/Detail';
 import JobScreen from 'src/screens/Posting/Job/Index';
 import JobDetail from 'src/screens/Posting/Job/Detail';
 
+// Video
+import VideoDetail from 'src/screens/Posting/Video/Detail'
+
 // payment
 import PaymentScreen from '@src/screens/Payment/PaymentScreen';
 import PaymentDetail from '@src/screens/Payment/PaymentDetail';
@@ -185,6 +188,8 @@ function MainStackNavigator() {
       {/* Job */}
       <Screen name="JobScreen" component={JobScreen} />
       <Screen name="JobDetail" component={JobDetail} />
+      {/* Video */}
+      <Screen name="VideoDetail" component={VideoDetail} />
 
       {/* screen */}
       <Screen name="Ebook" component={Ebook} />

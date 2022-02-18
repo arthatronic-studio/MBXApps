@@ -551,6 +551,16 @@ const MainHome = ({ navigation, route }) => {
             }}
           />
 
+            <View>
+              <Text
+                size={14}
+                color={Color.red}
+                onPress={() => navigation.navigate('VideoDetail')}
+              >
+                Video Detail
+              </Text>
+            </View>
+
           <View style={{flex: 1}}>
             <Modal
               isVisible={isModalVisible}
