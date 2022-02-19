@@ -962,7 +962,7 @@ const MainHome = ({ navigation, route }) => {
         animationIn="slideInDown"
         animationOut="slideOutDown"
         backdropColor={Color.semiwhite}>
-        <View style={{backgroundColor:'#FFFFFF',width: '90%', aspectRatio: 9 / 16, alignSelf: 'center',borderRadius:8}}>
+        <View style={{backgroundColor: Color.theme, width: '90%', aspectRatio: 9 / 16, alignSelf: 'center',borderRadius:8}}>
           <TouchableOpacity
             onPress={() => {
               tempShowPopupAds = false;
@@ -994,7 +994,7 @@ const MainHome = ({ navigation, route }) => {
                     buttonColor={Color.gray}
                     type='bottomSingleButton'
                     buttonBorderTopWidth={0}
-                    style={{backgroundColor: Color.theme, paddingTop: 25, paddingBottom: 25, width: 300}}
+                    style={{backgroundColor: Color.theme, paddingTop: 25, paddingBottom: 25}}
                     onPress={() => {
                       tempShowPopupAds = false;
                       setShowPopupAds(false);
