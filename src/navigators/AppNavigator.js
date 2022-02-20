@@ -118,6 +118,9 @@ import AddProduct from 'src/screens/Ecommerce/AddProduct';
 import StepTwo from 'src/screens/Ecommerce/StepTwo';
 import StepThree from 'src/screens/Ecommerce/StepThree';
 
+// Media Player
+import MediaPlayerScreen from 'src/screens/MediaPlayer/MediaPlayerScreen';
+
 const {Navigator, Screen} = createStackNavigator();
 const MainPage =
   accessClient.BottomTabsNavigator.type === 'komoto' ?
@@ -240,6 +243,9 @@ function MainStackNavigator() {
       {/* auction */}
       <Screen name="AuctionDetail" component={AuctionDetail} />
       <Screen name="Bid" component={Bid} />
+
+      {/* media player */}
+      <Screen name='MediaPlayerScreen' component={MediaPlayerScreen} />
     </Navigator>
   );
 }

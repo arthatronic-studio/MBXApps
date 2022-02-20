@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, ScrollView, TextInput, SafeAreaView, TouchableOpacity, Image, Keyboard, BackHandler, useWindowDimensions } from 'react-native';
+import { View, ScrollView, TextInput, SafeAreaView, TouchableOpacity, Image, Keyboard, BackHandler, useWindowDimensions, Platform } from 'react-native';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -22,6 +22,8 @@ import Client from '@src/lib/apollo';
 import Video from 'react-native-video';
 
 import ImagesPath from 'src/components/ImagesPath';
+import { VideoPlayerAndroid } from 'src/components/VideoPlayerAndroid';
+import WebView from 'react-native-webview';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -64,10 +66,38 @@ const Detail = () => {
                     title=""
                 />
                 <ScrollView>
-                        <Video source={{uri: "http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"}} style={{width: '100%', height: 211}} controls={true} fullscreen={true} paused={false} resizeMode='cover' />
+                        {Platform.OS === 'ios' ?
+                            <Video
+                                source={{uri: "https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/videoplayback.mp4?alt=media&token=658dc8f3-d360-4fe1-9a89-8822f3c88035"}}
+                                style={{
+                                    width: '100%',
+                                    aspectRatio: 3/2
+                                }}
+                                controls
+                                fullscreen={false}
+                                paused={false}
+                                resizeMode='cover'
+                            />
+                        :
+                            // <VideoPlayerAndroid
+                            //     item={{
+                            //         videoFilename: "http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
+                            //     }}
+                            //     autoplay={false}
+                            // />
+                            <WebView
+                                source={{uri: "https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/videoplayback.mp4?alt=media&token=658dc8f3-d360-4fe1-9a89-8822f3c88035"}}
+                                style={{
+                                    width: '100%',
+                                    aspectRatio: 3/2,
+                                }}
+                                allowsFullscreenVideo
+                                injectedJavaScript={`document.getElementsByTagName("video")[0].controlsList="nodownload";`}
+                            />
+                        }
 
-                        <View style={{marginTop: 30, marginHorizontal: 16}}>
-                            <Text align='left' size={18} color={Color.text}>
+                        <View style={{marginHorizontal: 16, paddingTop: 16}}>
+                            <Text align='left' size={18}>
                                 Big Buck Bunny
                             </Text>
                         </View>
@@ -130,9 +160,9 @@ const Detail = () => {
                             </View>
                         </View>
 
-                        <View style={{marginTop: 32, marginHorizontal: 16}}>
+                        <View style={{marginTop: 24, marginHorizontal: 16}}>
                             <Text align='left' size={14} color={Color.primary}>Deskripsi</Text>
-                            <View style={{marginTop: 32}}>
+                            <View style={{marginTop: 16}}>
                                 <Text align= 'left' size={14}>
                                     Cupcake ipsum dolor sit amet tart. Cookie carrot cake bear claw jujubes muffin. Cotton candy sweet candy chocolate muffin bonbon. Tart donut apple pie cupcake tart tart. Jelly-o chocolate cake ice cream shortbread biscuit chupa chups dessert. Macaroon cotton candy lollipop marshmallow dragée toffee shortbread macaroon dessert.
                                 </Text>

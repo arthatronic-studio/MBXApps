@@ -1,4 +1,4 @@
-import React, { useEffect, createRef } from 'react';
+import React, { useState, useEffect, createRef } from 'react';
 import 'react-native-gesture-handler';
 import { Platform, View } from 'react-native';
 import { Provider } from 'react-redux';
@@ -6,6 +6,7 @@ import { PersistGate } from 'redux-persist/lib/integration/react';
 import { NavigationContainer } from "@react-navigation/native";
 import { Host } from 'react-native-portalize';
 import messaging from '@react-native-firebase/messaging';
+import NetInfo from '@react-native-community/netinfo';
 
 import AppNavigator from '@src/navigators/AppNavigator';
 import { persistor, store } from '@src/state/redux';
@@ -13,16 +14,33 @@ import { useColor } from '@src/components';
 import { localPushNotification } from '@src/lib/pushNotification';
 import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
 import { trackPlayerInit } from '@src/utils/track-player-init';
+import ModalNetInfo from '@src/components/ModalNetInfo';
 
 export let navigationRef = createRef();
 
 const App = () => {
   const { Color } = useColor('root');
 
+  const [modalNetInfo, setModalNetInfo] = useState(false);
+
   const onReady = () => {}
 
   useEffect(() => {
     initTrackPlayer();
+
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      console.log("Connection Info", state);
+
+      if (!state.isConnected) {
+        setModalNetInfo(true);
+      } else {
+        setModalNetInfo(false);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    }
   }, []);
 
   const initTrackPlayer = async () => {
@@ -170,6 +188,19 @@ const App = () => {
           >
             <Host>
               <AppNavigator />
+              <ModalNetInfo
+                visible={modalNetInfo}
+                onRefresh={async() => {
+                  setModalNetInfo(false);
+                  const state = await NetInfo.fetch();
+                  console.log('state', state);
+                  if (!state.isConnected) {
+                    setModalNetInfo(true);
+                  } else {
+                    setModalNetInfo(false);
+                  }
+                }}
+              />
             </Host>
           </NavigationContainer>
         </View>

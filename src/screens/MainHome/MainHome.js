@@ -29,7 +29,6 @@ import {
   Row,
   Col,
   Button,
-  PopupEbook,
   Submit,
 } from '@src/components';
 import ListAuction from 'src/components/Posting/ListAuction';
@@ -60,9 +59,7 @@ import {listDummyBanner} from 'assets/images/banner';
 import Geolocation from 'react-native-geolocation-service';
 import {accessClient} from 'src/utils/access_client';
 import VideoCardList from 'src/components/VideoCardList';
-// import PopupTermsCondition from 'src/components/PopupTermsCondition';
 import {trackPlayerPlay} from 'src/utils/track-player-play';
-import NetInfo from '@react-native-community/netinfo';
 
 const dataPromoDummy = {
   productName: 'Halo selamat datang!',
@@ -87,29 +84,26 @@ const MainHome = ({navigation, route}) => {
 
   const [loadingSoonAuction, setLoadingSoonAuction] = useState(true);
 
-  const [loadingEmergency, setLoadingEmergency] = useState(true);
+  const [loadingEmergency, setLoadingEmergencyArea] = useState(true);
   const [listEmergencyArea, setListEmergencyArea] = useState([]);
 
-  const [loadingTampil, setLoadingTampil] = useState(true);
-  const [listTampil, setListTampil] = useState([]);
+  const [loadingPosting, setLoadingPosting] = useState(true);
+  const [listPosting, setListPosting] = useState([]);
 
-  const [loadingJalanJalan, setLoadingJalanJalan] = useState(true);
-  const [listJalanJalan, setListJalanJalan] = useState([]);
+  const [loadingNearbyPlace, setLoadingNearbyPlace] = useState(true);
+  const [listNearbyPlace, setListNearbyPlace] = useState([]);
 
-  const [loadingBelajar, setLoadingBelajar] = useState(true);
-  const [listBelajar, setListBelajar] = useState([]);
+  const [loadingEvent, setLoadingEvent] = useState(true);
+  const [listEvent, setListEvent] = useState([]);
 
-  const [loadingKerja, setLoadingKerja] = useState(true);
-  const [listKerja, setListKerja] = useState([]);
+  const [loadingJobs, setLoadingJobs] = useState(true);
+  const [listJobs, setListJobs] = useState([]);
 
   const [loadingBanner, setLoadingBanner] = useState(true);
   const [listBanner, setListBanner] = useState([]);
 
   const [animationValue] = useState(new Animated.Value(0));
   const [refreshing, setRefreshing] = useState(false);
-
-  const [netInfo, setNetInfo] = useState(true);
-  const [showPopupNetInfo, setShowPopupNetInfo] = useState(false);
 
   const prevFirebaseNotifierLastChatCount = usePreviousState(
     firebaseNotifierLastChatCount,
@@ -246,21 +240,6 @@ const MainHome = ({navigation, route}) => {
     }, 5000);
   }, []);
 
-  useEffect(() => {
-    NetInfo.fetch().then(state => {
-      console.log('Connection typeeeeeeeeeeee', state.type);
-      console.log('Is connected???????????', state.isConnected);
-
-      if (!state.isConnected) {
-        setNetInfo(false);
-        setShowPopupNetInfo(true);
-      } else {
-        setNetInfo(true);
-        setShowPopupNetInfo(false);
-      }
-    });
-  }, []);
-
   const fetchBannerList = () => {
     Client.query({
       query: queryBannerList,
@@ -293,32 +272,29 @@ const MainHome = ({navigation, route}) => {
   };
 
   const fetchData = async () => {
-    const result = await Promise.all([
-      await fetchContentProduct(Config.PRODUCT_TYPE, 'EMERGENCY', ''),
-      await fetchContentProduct(Config.PRODUCT_TYPE, 'POSTING', ''),
-      await fetchContentProduct(Config.PRODUCT_TYPE, 'NEARBY_PLACE', ''),
-      await fetchContentProduct(Config.PRODUCT_TYPE, 'EVENT', ''),
-      await fetchContentProduct(Config.PRODUCT_TYPE, 'JOBS', ''),
-    ]);
+    const resultEmergency = await fetchContentProduct(Config.PRODUCT_TYPE, 'EMERGENCY', '');
+    setListEmergencyArea(resultEmergency);
+    setLoadingEmergencyArea(false);
 
+    const resultPosting = await fetchContentProduct(Config.PRODUCT_TYPE, 'POSTING', '');
+    setListPosting(resultPosting);
+    setLoadingPosting(false);
+
+    const resultNearbyPlace = await fetchContentProduct(Config.PRODUCT_TYPE, 'NEARBY_PLACE', '');
+    setListNearbyPlace(resultNearbyPlace);
+    setLoadingNearbyPlace(false);
+
+    const resultEvent = await fetchContentProduct(Config.PRODUCT_TYPE, 'EVENT', '');
+    setListEvent(resultEvent);
+    setLoadingEvent(false);
+
+    const resultJobs = await fetchContentProduct(Config.PRODUCT_TYPE, 'JOBS', '');
+    setListJobs(resultJobs);
+    setLoadingJobs(false);
+
+    // not yet
     setLoadingAuction(false);
-
     setLoadingSoonAuction(false);
-
-    setLoadingEmergency(false);
-    setListEmergencyArea(result[0]);
-
-    setLoadingTampil(false);
-    setListTampil(result[1]);
-
-    setLoadingJalanJalan(false);
-    setListJalanJalan(result[2]);
-
-    setLoadingBelajar(false);
-    setListBelajar(result[3]);
-
-    setLoadingKerja(false);
-    setListKerja(result[4]);
   };
 
   const fetchContentProduct = async (
@@ -389,10 +365,6 @@ const MainHome = ({navigation, route}) => {
     navigation.navigate('PDFReaderScreen', {
       file: 'http://samples.leanpub.com/thereactnativebook-sample.pdf',
     });
-  };
-
-  const goToSettings = () => {
-    Platform.OS === 'ios' ? Linking.openURL('app-settings:') : {};
   };
 
   // const ModalPopupEbook = () => {
@@ -546,16 +518,6 @@ const MainHome = ({navigation, route}) => {
             }}
           />
 
-            <View>
-              <Text
-                size={14}
-                color={Color.red}
-                onPress={() => navigation.navigate('VideoDetail')}
-              >
-                Video Detail
-              </Text>
-            </View>
-
           <View style={{flex: 1}}>
             <Modal
               isVisible={isModalVisible}
@@ -700,8 +662,7 @@ const MainHome = ({navigation, route}) => {
 
           {accessClient.MainHome.showListAuction && (
             <ListAuction
-              // use the listBelajar for the test
-              data={listBelajar}
+              data={listEvent}
               loading={loadingAuction}
               horizontal
               showHeader
@@ -714,8 +675,7 @@ const MainHome = ({navigation, route}) => {
 
           {accessClient.MainHome.showListSoonAuction && (
             <ListSoonAuction
-              // use the listBelajar for the test
-              data={listBelajar}
+              data={listEvent}
               loading={loadingSoonAuction}
               horizontal
               showHeader
@@ -740,8 +700,8 @@ const MainHome = ({navigation, route}) => {
           )}
 
           <ListNews
-            data={listTampil}
-            loading={loadingTampil}
+            data={listPosting}
+            loading={loadingPosting}
             horizontal
             showHeader
             onPress={item => {
@@ -818,8 +778,8 @@ const MainHome = ({navigation, route}) => {
           )}
 
           <ListPlace
-            data={listJalanJalan}
-            loading={loadingJalanJalan}
+            data={listNearbyPlace}
+            loading={loadingNearbyPlace}
             horizontal
             showHeader
             onPress={item => {
@@ -829,8 +789,8 @@ const MainHome = ({navigation, route}) => {
           />
 
           <ListEvent
-            data={listBelajar}
-            loading={loadingBelajar}
+            data={listEvent}
+            loading={loadingEvent}
             horizontal
             showHeader
             onPress={item => {
@@ -841,8 +801,8 @@ const MainHome = ({navigation, route}) => {
 
           {accessClient.MainHome.showListJob && (
             <ListJob
-              data={listKerja}
-              loading={loadingKerja}
+              data={listJobs}
+              loading={loadingJobs}
               horizontal
               showHeader
               onPress={item => {
@@ -863,9 +823,16 @@ const MainHome = ({navigation, route}) => {
 
           <Divider />
 
-          {accessClient.MainHome.showListYoutube && <MondayAccoustic />}
+          {accessClient.MainHome.showListYoutube &&
+            <MondayAccoustic />
+          }
 
-          {accessClient.MainHome.showListYoutube && <VideoCardList />}
+          {accessClient.MainHome.showListYoutube &&
+            <VideoCardList
+              onPress={() => navigation.navigate('VideoDetail')}
+            />
+          }
+
           {/* {accessClient.MainHome.type && <PopupTermsConditionS/>} */}
 
           {accessClient.MainHome.showListEbookNewer && (
@@ -960,120 +927,6 @@ const MainHome = ({navigation, route}) => {
           </TouchableOpacity>
         </View>
       </Modal>
-
-      <Modal
-        isVisible={tempShowPopupAds && showPopupAds}
-        onBackdropPress={() => {
-          tempShowPopupAds = false;
-          setShowPopupAds(false);
-        }}
-        animationIn="slideInDown"
-        animationOut="slideOutDown"
-        backdropColor={Color.semiwhite}>
-        <View style={{backgroundColor: Color.theme, width: '90%', aspectRatio: 9 / 16, alignSelf: 'center',borderRadius:8}}>
-          <TouchableOpacity
-            onPress={() => {
-              tempShowPopupAds = false;
-              setShowPopupAds(false);
-            }}></TouchableOpacity>
-          <Text style={{fontSize: 26, fontWeight: 'bold', marginTop: 10}}>
-            Syarat & Ketentuan
-          </Text>
-          <View style={{paddingHorizontal: 12, paddingTop: 10}}>
-            <Text align="left" style={{fontWeight: 'bold', fontSize: 20}}>
-              Larangan Komunitas
-            </Text>
-            <Text
-              align="left"
-              style={{marginLeft: 8, fontSize: 14, marginTop: 4}}>
-              Dilarang keras membuat, menyebarkan serta ikut berkonstribusi
-              dalam kegiatan berikut ini :
-            </Text>
-            <Text
-              align="left"
-              style={{marginLeft: 8, fontSize: 14, marginTop: 4}}>
-              1. Pornografi {'\n'}2. Perjudian {'\n'}3. Pemerasan {'\n'}4.
-              Penipuan {'\n'}5. Kekerasan {'\n'}6. Fitnah/pencemaran nama baik{' '}
-              {'\n'}7. Pelanggaran kekayaan intelektual {'\n'}8. Provokasi SARA{' '}
-              {'\n'}9. Berita HOAX (Bohong) {'\n'}10. Terorisme/Radikalisme{' '}
-              {'\n'}11. Informasi/dokumen elektronik pribadi yag bersifat
-              rahasia
-            </Text>
-            <Text
-              align="left"
-              style={{marginLeft: 8, fontSize: 14, marginTop: 4}}>
-              Jika ada anggota yang melanggar salah satu/beberapa ketentuan
-              diatas, maka akan diberikan sanksi berupa pengeluaran anggota dari
-              aplikasi
-            </Text>
-            <Submit
-                    buttonLabel='Tutup'
-                    buttonColor={Color.gray}
-                    type='bottomSingleButton'
-                    buttonBorderTopWidth={0}
-                    style={{backgroundColor: Color.theme, paddingTop: 25, paddingBottom: 25}}
-                    onPress={() => {
-                      tempShowPopupAds = false;
-                      setShowPopupAds(false);
-                    }}
-                />
-            
-          </View>
-        </View>
-      </Modal>
-      {!netInfo && (
-        <Modal
-          isVisible={showPopupNetInfo}
-          onBackdropPress={() => {
-            setShowPopupNetInfo(false);
-          }}
-          animationIn="slideInDown"
-          animationOut="slideOutDown"
-          backdropColor={Color.semiwhite}>
-          <View
-            style={{
-              width: '95%',
-              aspectRatio: 1 / 1,
-              alignSelf: 'center',
-            }}>
-            <View
-              style={{
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'space-evenly',
-                backgroundColor: Color.textInput,
-                borderRadius: 15,
-                height: '100%',
-                padding: 30,
-              }}>
-              <Image source={ImagesPath.lostConnection}></Image>
-              <View>
-                <Text style={{fontWeight: 'bold', fontSize: 18}}>
-                  Oops, Internetmu Terputus
-                </Text>
-                <Text style={{color: Color.gray, fontSize: 12}}>
-                  Kayaknya koneksi internetmu terputus. Coba muat ulang
-                  aplikasi.
-                </Text>
-              </View>
-              <TouchableOpacity
-                style={{
-                  width: '92%',
-                  height: 45,
-                  backgroundColor: Color.primary,
-                  borderRadius: 30,
-                  marginHorizontal: 15,
-                  paddingVertical: 10,
-                }}
-                onPress={() => {
-                  goToSettings();
-                }}>
-                <Text color={Color.textInput}>Pengaturan</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-      )}
     </Scaffold>
   );
 };

@@ -24,6 +24,7 @@ import {redirectTo} from '@src//utils';
 import {iconApp} from '@assets/images';
 import FormInput from 'src/components/FormInput';
 import { Container, Row, Line } from 'src/styled';
+import PopupTermCondition from 'src/components/PopupTermCondition';
 
 const inputs = ['username', 'password'];
 
@@ -37,6 +38,8 @@ const LoginScreen = ({navigation, route}) => {
     isSucceddForgot: false,
     allValid: false,
   });
+
+  const [modalTerm, setModalTerm] = useState(false);
 
   const setState = obj => {
     changeState({...state, ...obj});
@@ -115,7 +118,14 @@ const LoginScreen = ({navigation, route}) => {
             });
             dispatch({ action: 'USER.CHANGE_PASSWORD', status: false });
           } else {
-            redirectTo('MainPage');
+            // redirectTo('MainPage');
+            showPopup(
+              'Berhasil masuk',
+              'success',
+            );
+            setTimeout(() => {
+              setModalTerm(true);
+            }, 1000);
           }
         }
       } else if (!user && error !== '') {
@@ -307,6 +317,18 @@ const LoginScreen = ({navigation, route}) => {
           </Container>
         </View>
       </ScrollView>
+
+      <PopupTermCondition
+        visible={modalTerm}
+        onClose={() => {
+          setModalTerm(false);
+          redirectTo('MainPage');
+        }}
+        onSubmit={() => {
+          setModalTerm(false);
+          redirectTo('MainPage');
+        }}
+      />
     </Scaffold>
   );
 };
