@@ -74,7 +74,7 @@ const VideoCardList = ({ onPress }) => {
                 color: Color.textInput,
               }}
             >
-                Sabyan Gambus New Album
+                Sabyan New Album
             </Text>
             <Text align="left"
               style={{
