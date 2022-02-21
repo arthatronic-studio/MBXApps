@@ -302,7 +302,7 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
                 /> */}
             </View>
 
-            <View style={{paddingHorizontal: 26, marginTop: 16}}>
+            {/* <View style={{paddingHorizontal: 26, marginTop: 16}}>
                 <View style={{width: '100%', height: 60, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', backgroundColor: Color.primary, borderRadius: 12}}>
                     <TouchableOpacity
                       // onPress={() => fetchContentAddLike(item.id)}
@@ -339,11 +339,11 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
                       />
                     </TouchableOpacity>
 
-                    {/* <TouchableOpacity onPress={() => setShowPlaylist(true)}>
-                        <MaterialIcons name='playlist-play' size={30} color={Color.text} style={{marginBottom: 4}} />
-                    </TouchableOpacity> */}
+                    // <TouchableOpacity onPress={() => setShowPlaylist(true)}>
+                    //     <MaterialIcons name='playlist-play' size={30} color={Color.text} style={{marginBottom: 4}} />
+                    // </TouchableOpacity>
                 </View>
-            </View>
+            </View> */}
       </View>
     )
   };

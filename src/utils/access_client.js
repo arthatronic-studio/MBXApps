@@ -17,6 +17,7 @@ const isSabyan = Config.INITIAL_CODE === 'TRIBESXSABYAN';
 
 export const accessClient = {
     InitialCode: Config.INITIAL_CODE,
+    IsAutoJoinMember: isSabyan ? true : false,
     BottomTabsNavigator: {
         type:
             isKomoto ? 'komoto' :
@@ -24,7 +25,9 @@ export const accessClient = {
             'default',
     },
     CreatePosting: {
-        showPrivacy: isKomoto ? false : true,
+        showPrivacy:
+            isKomoto || isSabyan ? false :
+            true,
     },
     MainHome: {
         type:
@@ -39,7 +42,7 @@ export const accessClient = {
         showListSoonAuction: isKomoto || isSabyan ? false : true,
         showListPromo: isKomoto || isSabyan ? false : true,
         showListMusicNewer: isKomoto ? false : true,
-        showListYoutube: isKomoto ? false : true,
+        showListYoutube: isKomoto || isSabyan ? false : true,
         showListEbookNewer: isKomoto || isSabyan ? false : true,
     },
     MenuHome: {
@@ -50,5 +53,8 @@ export const accessClient = {
         showMenuJoinCommunity: isKomoto ? true : false,
         showMenuCommunityAdmin: isKomoto ? true : false,
         showStatusMember: isSabyan ? false : true,
-    }
+    },
+    ChangeProfile: {
+        showIdNumber: isKomoto ? true : false,
+    },
 };
