@@ -120,6 +120,8 @@ import StepThree from 'src/screens/Ecommerce/StepThree';
 
 // Media Player
 import MediaPlayerScreen from 'src/screens/MediaPlayer/MediaPlayerScreen';
+import UploadMusicScreen from 'src/screens/MediaPlayer/UploadMusicScreen';
+import UploadVideoScreen from 'src/screens/MediaPlayer/UploadVideoScreen';
 
 const {Navigator, Screen} = createStackNavigator();
 const MainPage =
@@ -246,6 +248,8 @@ function MainStackNavigator() {
 
       {/* media player */}
       <Screen name='MediaPlayerScreen' component={MediaPlayerScreen} />
+      <Screen name='UploadMusicScreen' component={UploadMusicScreen} />
+      <Screen name='UploadVideoScreen' component={UploadVideoScreen} />
     </Navigator>
   );
 }

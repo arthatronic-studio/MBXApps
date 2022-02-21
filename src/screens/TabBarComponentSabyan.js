@@ -6,6 +6,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 import Text from '@src/components/Text';
 import TouchableOpacity from 'src/components/Button/TouchableDebounce';
@@ -15,6 +16,7 @@ import { shadowStyle } from 'src/styles';
 import { CommonActions } from '@react-navigation/routers';
 import { startAnimation } from '@src/utils/animations';
 import { Divider, Line } from 'src/styled';
+import { isIphoneNotch } from 'src/utils/constants';
 
 const TabBarComponentSabyan = (props) => {
     const { state } = props;
@@ -24,7 +26,7 @@ const TabBarComponentSabyan = (props) => {
     const [menus] = useState([
         {id: 'ber', name: 'Beranda', iconName: 'home', iconType: 'Entypo', nav: 'MainHome', ref: useRef(new Animated.Value(1)).current, viewRef: useRef(new Animated.Value(0)).current },
         // {id: 'mer', name: 'Merch', iconName: 'store', iconType: 'MaterialIcons', nav: 'MyShopHomepage', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
-        {id: 'med', name: 'Media Player', iconName: 'play-circle', iconType: 'Feather', nav: 'MainMediaPlayer', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
+        {id: 'med', name: 'Media Player', iconName: 'play', iconType: 'EvilIcons', nav: 'MainMediaPlayer', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
         {id: 'pro', name: 'Profil', iconName: 'person', iconType: 'Ionicons', nav: 'MainProfile', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
     ]);
     
@@ -69,6 +71,8 @@ const TabBarComponentSabyan = (props) => {
                 return <Entypo name={iconName} size={30} color={isRouteActive ? Color.primary : Color.gray} />
             case 'Feather':
                 return <Feather name={iconName} size={30} color={isRouteActive ? Color.primary : Color.gray} />
+            case 'EvilIcons':
+                return <EvilIcons name={iconName} size={40} color={isRouteActive ? Color.primary : Color.gray} />
         }
     }
 
@@ -76,14 +80,15 @@ const TabBarComponentSabyan = (props) => {
         <SafeAreaView
             style={{
                 width,
-                height: 106 + 16,
+                height: 112 + (isIphoneNotch() ? 16 : 0),
                 backgroundColor: Color.theme,
+                paddingBottom: 16,
             }}
         >
             {activeRouteIndex < menus.length && <Animated.View
                 style={{
-                    height: 30,
-                    width: 30,
+                    // height: 30,
+                    // width: 30,
                     position: 'absolute',
                     left: (width / menus.length) / 2 - 15 - 32,
                     top: 12,
@@ -108,7 +113,7 @@ const TabBarComponentSabyan = (props) => {
                 style={{position: 'absolute', top: 0}}
             />
 
-            <View style={{paddingHorizontal: 16, paddingTop: 8, paddingBottom: 2}}>
+            <View style={{paddingHorizontal: 16, paddingTop: 16, paddingBottom: 2}}>
                 <View
                     style={{
                         flexDirection: 'row',
@@ -141,8 +146,8 @@ const TabBarComponentSabyan = (props) => {
                             >
                                 <Animated.View
                                     style={{
-                                        height: 30,
-                                        width: 30,
+                                        // height: 30,
+                                        // width: 30,
                                         position: 'absolute',
                                         top: 12,
                                         borderRadius: 8,

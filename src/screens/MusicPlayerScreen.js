@@ -109,7 +109,7 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
       
       if (newCurrent != null && newQueue.length > 0) {
         // const newCurrentPlaying = newQueue.filter((e) => e.id === newCurrent)[0];
-        const newCurrentPlaying = newQueue.filter((e) => e.id === "trackId")[0];
+        const newCurrentPlaying = newQueue[newCurrent];
 
         // console.log('======= newCurrentPlaying =======', newCurrentPlaying);
         setCurrentPlaying(newCurrentPlaying);
@@ -350,6 +350,8 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
 
   if (orientation === 'landscape' || keyboardShow) return <View />;
 
+  console.log(currentPlaying);
+
   return (
     <Scaffold
       loadingProps={loadingProps}
@@ -358,8 +360,13 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
 
       <View style={{flex: 0.8, padding: 16, alignItems: 'center'}}>
           <Image
-              source={{uri: currentPlaying && currentPlaying.artwork ? currentPlaying.artwork.uri : ''}}
-              style={{height: '100%', aspectRatio: 1}}
+              source={{uri: currentPlaying ? currentPlaying.artwork : ''}}
+              style={{
+                height: '100%',
+                aspectRatio: 1,
+                borderRadius: 16,
+                backgroundColor: Color.border,
+              }}
           />
       </View>
 

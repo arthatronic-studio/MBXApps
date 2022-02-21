@@ -60,6 +60,7 @@ import Geolocation from 'react-native-geolocation-service';
 import {accessClient} from 'src/utils/access_client';
 import VideoCardList from 'src/components/VideoCardList';
 import {trackPlayerPlay} from 'src/utils/track-player-play';
+import FloatingMusicPlayer from 'src/components/FloatingMusicPlayer';
 
 const dataPromoDummy = {
   productName: 'Halo selamat datang!',
@@ -68,6 +69,23 @@ const dataPromoDummy = {
   productDescription:
     'Cupcake ipsum dolor sit amet tart. Cookie carrot cake bear claw jujubes muffin. Cotton candy sweet candy chocolate muffin bonbon. Tart donut apple pie cupcake tart tart. Jelly-o chocolate cake ice cream shortbread biscuit chupa chups dessert. Macaroon cotton candy lollipop marshmallow dragée toffee shortbread macaroon dessert. Bear claw gummi bears pie apple pie tiramisu soufflé bonbon. Tiramisu tart candy croissant jujubes marshmallow lemon drops. Ice cream muffin pastry halvah chocolate bar bear claw. Tart icing pudding jelly-o fruitcake fruitcake. Tiramisu sweet pastry caramels sugar plum sweet gingerbread. Macaroon powder gummies tootsie roll muffin. Cookie danish candy jelly beans biscuit. Soufflé cake pudding fruitcake macaroon jelly beans.',
 };
+
+const dataDummyMusic = [
+  {
+    id: 'd',
+    productName: 'Deen Assalam',
+    productDescription: 'Bismillah',
+    image: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/nissa.png?alt=media&token=664063c5-fc42-458c-b02e-596cca8b18dc',
+    videoFilename: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/Sabyan%20Gambus%20-%20Deen%20Assalam.mp3?alt=media&token=ba7e5d58-4d81-4639-9758-cc7bf67aa43a'
+  },
+  {
+    id: 'y',
+    productName: 'Ya Habibal Qolbi',
+    productDescription: 'Bismillah',
+    image: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/nissa.png?alt=media&token=664063c5-fc42-458c-b02e-596cca8b18dc',
+    videoFilename: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/Sabyan%20Gambus%20-%20Ya%20Habibal%20Qolbi.mp3?alt=media&token=5d3154b8-9f01-4eee-8ebb-76d83ae31bf2'
+  },
+];
 
 let tempShowPopupAds = true;
 
@@ -114,6 +132,7 @@ const MainHome = ({navigation, route}) => {
   const {Color} = useColor();
   const isFocused = useIsFocused();
   const modalPostingRef = useRef();
+  const floatingMusicPlayerRef = useRef();
   const {width} = useWindowDimensions();
 
   useEffect(() => {
@@ -814,8 +833,9 @@ const MainHome = ({navigation, route}) => {
 
           {accessClient.MainHome.showListMusicNewer && (
             <MusikTerbaru
-              onPress={() => {
-                trackPlayerPlay();
+              data={dataDummyMusic}
+              onPress={(item, index) => {
+                trackPlayerPlay(dataDummyMusic, item);
                 navigation.navigate('MusicPlayerScreen');
               }}
             />
@@ -872,6 +892,10 @@ const MainHome = ({navigation, route}) => {
       {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}
       {/* <Box size={70} style={{position: 'absolute', bottom: -40}} /> */}
       {/*  */}
+
+      <FloatingMusicPlayer
+        ref={floatingMusicPlayerRef}
+      />
 
       <ModalPosting
         ref={modalPostingRef}

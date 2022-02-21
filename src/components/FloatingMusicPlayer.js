@@ -4,7 +4,7 @@ import { Modalize } from 'react-native-modalize';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import Slider from 'react-native-slider';
+import Slider from '@react-native-community/slider';
 import TrackPlayer, {
   useProgress,
   useTrackPlayerEvents,
@@ -19,7 +19,7 @@ import Moment from 'moment';
 import { useColor } from '@src/components/Color';
 import Text from '@src/components/Text';
 // import MusicPlaylist from './MusicPlaylist';
-import { useLoading } from '@src/components/Modal/Loading';
+import Loading, { useLoading } from '@src/components/Modal/Loading';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 
 // import { useCombinedRefs } from '@src/utils/useCombinedRefs';
@@ -70,15 +70,15 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
   const dispatch = useDispatch();
 
   // selector
-  const playNowData = useSelector(state => state.playNow.data);
+  // const playNowData = useSelector(state => state.playNow.data);
 
   // unstate
   const isPlaying = playerState === State.Playing;
   let item = null;
 
-  if (currentPlaying && playNowData.length > 0) {
-    item = playNowData.filter((e) => e.id == currentPlaying.id)[0];
-  }
+  // if (currentPlaying && playNowData.length > 0) {
+  //   item = playNowData.filter((e) => e.id == currentPlaying.id)[0];
+  // }
   
   // useEffect(() => {
   //   Orientation.addOrientationListener(handleOrientation);
@@ -117,8 +117,9 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
       // console.log('======= state =======', state);
       setPlayerState(state);
       
-      if (newCurrent && newQueue.length > 0) {
-        const newCurrentPlaying = newQueue.filter((e) => e.id === newCurrent)[0];
+      if (newCurrent !== null && newQueue.length > 0) {
+        // const newCurrentPlaying = newQueue.filter((e) => e.id === newCurrent)[0];
+        const newCurrentPlaying = newQueue[newCurrent];
 
         // console.log('======= count =======');
         setCurrentPlaying(newCurrentPlaying);
@@ -230,7 +231,13 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
       {/* ==================== +++++++++++ ==================== */}
       {/* ==================== mini player ==================== */}
       {/* ==================== +++++++++++ ==================== */}
-      <Animated.View style={{width: '100%', height: height / 2, alignItems: handle ? 'center' : 'flex-start'}}>
+      <Animated.View
+        style={{
+          width: '100%',
+          height: height / 2,
+          alignItems: handle ? 'center' : 'flex-start',
+        }}
+      >
         <TouchableOpacity
           disabled
           onPress={() => {
@@ -415,7 +422,7 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
         </View>
 
         <View style={{paddingHorizontal: 26, marginTop: 16}}>
-          <View style={{width: '100%', height: 60, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', backgroundColor: Color.primary, borderRadius: 12}}>
+          {/* <View style={{width: '100%', height: 60, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', backgroundColor: Color.primary, borderRadius: 12}}>
             <TouchableOpacity onPress={() => fetchContentAddLike(item.id)} style={{flexDirection: 'row'}}>
               <SimpleLineIcons name='emotsmile' color={item && item.im_like ? Color.secondary : Color.text} size={20} />
               <Text color={item && item.im_like ? Color.secondary : Color.text}> {item && item.like ? item.like : 0}</Text>
@@ -445,7 +452,7 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
             <TouchableOpacity onPress={() => setShowPlaylist(true)}>
               <MaterialIcons name='playlist-play' size={30} color={Color.text} style={{marginBottom: 4}} />
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       </View>
     </>
