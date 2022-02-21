@@ -27,9 +27,10 @@ import { navigationRef } from 'App';
 
 import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
+import { Divider } from 'src/styled';
 
 const { width, height } = Dimensions.get('window');
-const HEADER_HEIGHT = 85;
+const HEADER_HEIGHT = 75;
 
 const playIcon = require('@assets/images/video_control/play.png');
 const pauseIcon = require('@assets/images/video_control/pause.png');
@@ -275,6 +276,7 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
         style={{
           position: 'absolute',
           left: HEADER_HEIGHT - 15,
+          top: 8.5,
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -291,7 +293,8 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
                 outputRange: [1, 0]
               })
             },
-          ]
+          ],
+          paddingLeft: 8,
         }}
       >
         <TouchableOpacity
@@ -301,8 +304,8 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
             
           }}
         >
-          <Text align='left' numberOfLines={2} color={Color.text}>{currentPlaying ? currentPlaying.title : ''}</Text>
-          <Text size={12} color={Color.border}>{currentPlaying ? currentPlaying.artist : ''}</Text>
+          <Text align='left' numberOfLines={2}>{currentPlaying ? currentPlaying.title : ''}</Text>
+          <Text size={12} color={Color.placeholder}>{currentPlaying ? currentPlaying.artist : ''}</Text>
         </TouchableOpacity>
 
         <View style={{flex: 4, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginRight: 12}}>
@@ -312,7 +315,11 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
             }}
             activeOpacity={0.75}
           >
-            <Image source={isPlaying ? pauseIcon : playIcon} style={{height: 28, width: 28}} resizeMode='contain' />
+            <Image
+              source={isPlaying ? pauseIcon : playIcon}
+              style={{height: 34, width: 34}}
+              resizeMode='contain'
+            />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => {
@@ -322,18 +329,23 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
             activeOpacity={0.75}
             style={{marginLeft: 10}}
           >
-            <Image source={forwardIcon} style={{height: 14, width: 14}} resizeMode='contain' />
+            <Image
+              source={forwardIcon}
+              style={{height: 14, width: 14, tintColor: Color.text}}
+              resizeMode='contain'
+            />
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => {
               TrackPlayer.stop();
+              setCurrentPlaying();
               dispatch({ type: 'PLAYNOW.RESET_DATA' });
             }}
             activeOpacity={0.75}
             style={{marginLeft: 10}}
           >
-            <Ionicons name='close-outline' size={32} color={Color.border} />
+            <Ionicons name='close-outline' size={32} color={Color.placeholder} />
           </TouchableOpacity>
         </View>
       </Animated.View>
@@ -341,12 +353,22 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
       {/* ==================== +++++++++++ ==================== */}
       {/* ==================== show player ==================== */}
       {/* ==================== +++++++++++ ==================== */}
-      <View style={{height: height / 3.2, justifyContent: 'space-between'}}>
+      <View style={{height: height / 3.0, justifyContent: 'space-between'}}>
         <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <Text size={18} color={Color.text}>{currentPlaying ? currentPlaying.title : ''}</Text>
-            <Text size={12} color={Color.border}>{currentPlaying ? currentPlaying.artist : ''}</Text>
+            <Text size={18}>{currentPlaying ? currentPlaying.title : ''}</Text>
+            <Text size={12} color={Color.placeholder}>{currentPlaying ? currentPlaying.artist : ''}</Text>
         </View>
+        <Divider />
         <View style={{paddingHorizontal: 28, justifyContent: 'center'}}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text size={12}>
+                  {getDurationString('seconds', position, 'ss')}
+                </Text>
+                <Text size={12}>
+                  {getDurationString('seconds', duration)}
+                </Text>
+            </View>
+            <Divider height={8} />
             <Slider
                 style={{width: width - 56, height: 40}}
                 minimumValue={0}
@@ -354,20 +376,12 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
                 value={sliderValue}
                 onSlidingStart={slidingStarted}
                 onSlidingComplete={slidingCompleted}
-                minimumTrackTintColor={Color.secondary}
+                minimumTrackTintColor={Color.primary}
                 maximumTrackTintColor={Color.border}
-                thumbTintColor={Color.text}
+                thumbTintColor={Color.primary}
                 thumbStyle={{height: 14, width: 14, borderRadius: 7}}
                 trackStyle={{height: 4}}
             />
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text size={12} color={Color.text}>
-                  {getDurationString('seconds', position, 'ss')}
-                </Text>
-                <Text size={12} color={Color.text}>
-                  {getDurationString('seconds', duration)}
-                </Text>
-            </View>
         </View>
 
         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 28}}>
@@ -391,14 +405,14 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
                   size={18}
                   color={Color.text}
                 />
-                <View style={{height: 36, width: 36, backgroundColor: Color.text, borderRadius: 18, justifyContent: 'center', alignItems: 'center', marginHorizontal: 16}}>
+                <View style={{height: '50%', aspectRatio: 1, borderRadius: 50, backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center', marginHorizontal: 16}}>
                     <Ionicons
                       onPress={() => {
                         isPlaying ? TrackPlayer.pause() : TrackPlayer.play();
                       }}
                       name={isPlaying ? 'pause' : 'play'}
                       color={Color.theme}
-                      size={18}
+                      size={28}
                     />
                 </View>
                 <Ionicons
@@ -465,7 +479,7 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
       <View style={{height: HEADER_HEIGHT}} />
       <Modalize
         ref={ref}
-        alwaysOpen={HEADER_HEIGHT}
+        alwaysOpen={currentPlaying ? HEADER_HEIGHT : 0}
         panGestureAnimatedValue={animated}
         snapPoint={HEADER_HEIGHT}
         withHandle={handle}

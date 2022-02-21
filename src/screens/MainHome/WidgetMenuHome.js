@@ -30,6 +30,7 @@ import {
   iconMenuTempat,
 } from '@assets/images/home';
 import { accessClient } from 'src/utils/access_client';
+import { GALogEvent } from 'src/utils/analytics';
 
 const SambatanMenuView = Styled(View)`
   width: 100%;
@@ -242,6 +243,7 @@ const WidgetMenuHome = (props) => {
                 props.onPress(menu);
 
                 if (menu.nav === '') return;
+                GALogEvent(menu.name, {menu});
                 navigation.navigate(menu.nav, menu.params);
               }}
               style={{
