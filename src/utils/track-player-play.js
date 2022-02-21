@@ -6,19 +6,19 @@ import ImagesPath from 'src/components/ImagesPath';
 export const trackPlayerPlay = async (data, selected) => {
     // const playNow = store.getState()['playNow'];
     
-    // const result = await Promise.all(
-    //   data.map((play) => {
-    //     return {
-    //       id: play.id.toString(),
-    //       url: play.videoFilename,
-    //       type: 'default',
-    //       title: play.productName,
-    //       album: play.productDescription,
-    //       artist: play.productDescription,
-    //       artwork: play.image,
-    //     }
-    //   })
-    // );
+    const result = await Promise.all(
+      data.map((play) => {
+        return {
+          id: play.id.toString(),
+          url: play.videoFilename,
+          // type: 'default',
+          title: play.productName,
+          // album: play.productDescription,
+          artist: play.productDescription,
+          artwork: play.image,
+        }
+      })
+    );
 
     // if (playNow.productCategory !== selected.productCategory || playNow.data.length === 0) {
       await TrackPlayer.reset();
@@ -32,13 +32,6 @@ export const trackPlayerPlay = async (data, selected) => {
     //   await TrackPlayer.skip(selected.id.toString());
     //   await TrackPlayer.play();
     // } else {
-      const result = {
-        id: 'trackId',
-        url: require('@assets/musicplayback.mp3'),
-        title: 'Deen Assalam',
-        artist: 'Sabyan Gambus',
-        artwork: ImagesPath.sabyanMusic,
-      }
       await TrackPlayer.add(result);
       // await TrackPlayer.skip(selected.id.toString());
       await TrackPlayer.play();

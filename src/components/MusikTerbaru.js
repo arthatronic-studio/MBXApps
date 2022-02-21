@@ -12,40 +12,26 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import ImagesPath from './ImagesPath';
 import {Text, useColor} from '@src/components';
 
-const DATA = [
-  {
-    id: 1,
-    music: ImagesPath.sabyanMusic,
-  },
-  {
-    id: 2,
-    music: ImagesPath.sabyanMusic,
-  },
-  {
-    id: 3,
-    music: ImagesPath.sabyanMusic,
-  },
-];
-
 const defaultProps = {
+  data: [],
   onPress: () => {}
 }
 
-const MusikTerbaru = ({ onPress }) => {
+const MusikTerbaru = ({ data, onPress }) => {
   const {Color} = useColor();
   const {width} = useWindowDimensions();
 
-  const renderItem = ({item}) => (
+  const renderItem = ({ item, index }) => (
     <View
       style={{
         paddingLeft: 8,
-        paddingRight: 8,
+        marginRight: 16,
       }}>
       <TouchableOpacity
-        onPress={() => onPress()}
+        onPress={() => onPress(item, index)}
       >
         <ImageBackground
-          source={item.music}
+          source={{ uri: item.image }}
           style={{
             width: width / 1.7,
             height: width / 1.7,
@@ -78,7 +64,7 @@ const MusikTerbaru = ({ onPress }) => {
               align='left'
               style={{fontSize: 18, color: Color.textInput, fontWeight: 'bold'}}
             >
-              Deen Assalam
+              {item.productName}
             </Text>
             <Text
               align='left'
@@ -124,9 +110,9 @@ const MusikTerbaru = ({ onPress }) => {
         </Text>
       </View>
       <FlatList
-        data={DATA}
+        data={data}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={(item, index) => item.id + index.toString()}
         horizontal
         showsHorizontalScrollIndicator={false}
         style={{
