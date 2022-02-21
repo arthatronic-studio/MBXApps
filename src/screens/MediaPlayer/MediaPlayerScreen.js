@@ -43,7 +43,13 @@ const MediaPlayerScreen = ({ navigation, route }) => {
             popupProps={popupProps}
             loadingProps={loadingProps}
         >
-            {/* <Divider /> */}
+            {/* <Text align='left' onPress={() => navigation.navigate('UploadMusicScreen')}>
+                Upload Music
+            </Text>
+            <Divider />
+            <Text align='left' onPress={() => navigation.navigate('UploadVideoScreen')}>
+                Upload Video
+            </Text> */}
 
             <Navigator
                 initialRouteName="TabMusic"

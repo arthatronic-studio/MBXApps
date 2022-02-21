@@ -19,7 +19,7 @@ import Moment from 'moment';
 import { useColor } from '@src/components/Color';
 import Text from '@src/components/Text';
 // import MusicPlaylist from './MusicPlaylist';
-import { useLoading } from '@src/components/Modal/Loading';
+import Loading, { useLoading } from '@src/components/Modal/Loading';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 
 // import { useCombinedRefs } from '@src/utils/useCombinedRefs';
