@@ -25,6 +25,7 @@ import validate from '@src/lib/validate';
 import { updateCurrentUserProfile } from '@src/state/actions/user/auth';
 import { usePreviousState } from '@src/hooks';
 import { Divider, MainView } from 'src/styled';
+import { accessClient } from 'src/utils/access_client';
 
 const Container = Styled(View)`
   width: 100%;
@@ -289,26 +290,29 @@ export default ({ navigation, route }) => {
           <ErrorView>
             <Text size={12} color={Color.error} type='medium' align='left'>{errorData.idCardNumber}</Text>
           </ErrorView>
-          <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Nomor Punggung</Text>
-          </LabelInput>
-          <EmailRoundedView>
-            <CustomTextInput
-              placeholder=' Masukan nomor punggung '
-              keyboardType='number-pad'
-              placeholderTextColor={Color.gray}
-              underlineColorAndroid='transparent'
-              autoCorrect={false}
-              onChangeText={(text) => onChangeUserData('Nomor_ID', text)}
-              selectionColor={Color.text}
-              value={userData.Nomor_ID}
-              onBlur={() => isValueError('Nomor_ID')}
-              style={{color: Color.text}}
-              />
-          </EmailRoundedView>
-          <ErrorView>
-            <Text size={12} color={Color.error} type='medium' align='left'>{errorData.Nomor_ID}</Text>
-          </ErrorView>
+
+          {accessClient.ChangeProfile.showIdNumber && <>
+            <LabelInput>
+              <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Nomor Punggung</Text>
+            </LabelInput>
+            <EmailRoundedView>
+              <CustomTextInput
+                placeholder=' Masukan nomor punggung '
+                keyboardType='number-pad'
+                placeholderTextColor={Color.gray}
+                underlineColorAndroid='transparent'
+                autoCorrect={false}
+                onChangeText={(text) => onChangeUserData('Nomor_ID', text)}
+                selectionColor={Color.text}
+                value={userData.Nomor_ID}
+                onBlur={() => isValueError('Nomor_ID')}
+                style={{color: Color.text}}
+                />
+            </EmailRoundedView>
+            <ErrorView>
+              <Text size={12} color={Color.error} type='medium' align='left'>{errorData.Nomor_ID}</Text>
+            </ErrorView>
+          </>}
 
           <LabelInput>
             <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Email</Text>

@@ -6,6 +6,7 @@ import Moment from 'moment';
 import gql from 'graphql-tag';
 import qs from 'qs';
 import Client from '../../../lib/apollo';
+import { accessClient } from 'src/utils/access_client';
 
 const client_id = Platform.OS === 'ios' ? Config.CLIENT_ID_IOS : Config.CLIENT_ID_ANDROID;
 const client_secret = Platform.OS === 'ios' ? Config.CLIENT_SECRET_IOS : Config.CLIENT_SECRET_ANDROID;
@@ -230,7 +231,7 @@ export const register = (user) => async (dispatch, getState) => {
         phone_country_code: user.phoneCountryCode,
         phone_number: user.phoneNumber,
         reference_code: '',
-        initial_code: '',
+        initial_code: accessClient.IsAutoJoinMember ? accessClient.InitialCode : '',
         idCardNumber : user.idCardNumber,
         Nomor_ID : user.idNumber,
         Alamat : user.address,

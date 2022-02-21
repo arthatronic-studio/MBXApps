@@ -89,6 +89,7 @@ const WidgetUserLikes = ({ id, title }) => {
                         >
                             <Image
                                 source={
+                                    item.image ? { uri: item.image } :
                                     idx === 0 ? ImagesPath.avatar1 :
                                     idx === 1 ? ImagesPath.avatar2 :
                                     idx === 2 ? ImagesPath.avatar3 :
