@@ -7,6 +7,7 @@ import gql from 'graphql-tag';
 import qs from 'qs';
 import Client from '../../../lib/apollo';
 import { accessClient } from 'src/utils/access_client';
+import { GALogLogin, GALogSignUp } from 'src/utils/analytics';
 
 const client_id = Platform.OS === 'ios' ? Config.CLIENT_ID_IOS : Config.CLIENT_ID_ANDROID;
 const client_secret = Platform.OS === 'ios' ? Config.CLIENT_SECRET_IOS : Config.CLIENT_SECRET_ANDROID;
@@ -196,6 +197,8 @@ export const login = (tempEmail, password, fcm_token) => async (dispatch, getSta
   if (response.success) {
     await setToken(dispatch, response.data);
 
+    GALogLogin();
+
     Client.query({ query: getUserQuery })
     .then(res => {
       console.log(res, 'res getUserQuery');
@@ -244,8 +247,13 @@ export const register = (user) => async (dispatch, getState) => {
       
       // console.log(responseRegis, 'responseRegis');
       
-      if (responseRegis.data.Success) dispatch({ type: 'USER.REGISTER', status: responseRegis.data.Success });
-      else dispatch({ type: 'USER.REGISTER_ERROR', status: responseRegis.data.Success, error: responseRegis.data.Message });
+      if (responseRegis.data.Success) {
+        dispatch({ type: 'USER.REGISTER', status: responseRegis.data.Success });
+        GALogSignUp();
+      }
+      else {
+        dispatch({ type: 'USER.REGISTER_ERROR', status: responseRegis.data.Success, error: responseRegis.data.Message });
+      }
     }
     catch (error) {
       dispatch({ type: 'USER.REGISTER_ERROR', error });
