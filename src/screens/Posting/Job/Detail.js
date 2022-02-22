@@ -1,39 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Image, ScrollView, Platform, Linking } from 'react-native';
-import Styled from 'styled-components';
+import { View, Image, ScrollView, } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Feather from 'react-native-vector-icons/Feather';
+import Moment from 'moment';
 
 import {
     useLoading,
     usePopup,
     useColor,
-    Header,
     Submit,
     Alert,
 } from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
 import { TouchableOpacity } from '@src/components/Button';
-
 import { shadowStyle } from '@src/styles';
-
-import ImagesPath from 'src/components/ImagesPath';
-
-import Moment from 'moment';
-
 import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
 import { useSelector } from 'react-redux';
 import { Container } from 'src/styled';
 import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
+import ModalContentOptions from 'src/components/ModalContentOptions';
 
-const Example = Styled(View)`
-`;
-
-export default ({ navigation, route }) => {
+const JobDetail = ({ navigation, route }) => {
     const { item } = route.params;
+    const modalOptionsRef = useRef();
 
     const user = useSelector(state => state['user.auth'].login.user);
 
@@ -87,11 +78,11 @@ export default ({ navigation, route }) => {
 
     return (
         <Scaffold
-            header={
-                <Header
-                    title="Detail"
-                />
-            }
+            headerTitle='Detail'
+            iconRightButton={<Feather name='more-vertical' size={20} />}
+            onPressRightButton={() => {
+                modalOptionsRef.current.open();
+            }}
             fallback={false}
             empty={false}
             popupProps={popupProps}
@@ -235,6 +226,14 @@ export default ({ navigation, route }) => {
                 buttonBorderTopWidth={0}
                 style={{backgroundColor: Color.theme, paddingTop: 25, paddingBottom: 25}}
             />
+
+            <ModalContentOptions
+                ref={modalOptionsRef}
+                isOwner={user && user.userId === item.ownerId}
+                item={item}
+            />
         </Scaffold>
     )
 }
+
+export default JobDetail;

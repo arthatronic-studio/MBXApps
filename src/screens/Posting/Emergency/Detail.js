@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Image, ScrollView, Platform, Linking } from 'react-native';
-import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Feather from 'react-native-vector-icons/Feather';
 import Moment from 'moment';
 
 import {
@@ -14,20 +12,16 @@ import {
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
 import { TouchableOpacity } from '@src/components/Button';
-
-import { shadowStyle } from '@src/styles';
-
 import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
 import { Divider, Row } from 'src/styled';
 import { useSelector } from 'react-redux';
 import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
+import ModalContentOptions from 'src/components/ModalContentOptions';
 
-const Example = Styled(View)`
-`;
-
-export default ({ navigation, route }) => {
+const EmergencyDetail = ({ navigation, route }) => {
     const { item } = route.params;
+    const modalOptionsRef = useRef();
 
     const user = useSelector(state => state['user.auth'].login.user);
 
@@ -83,7 +77,11 @@ export default ({ navigation, route }) => {
 
     return (
         <Scaffold
-            headerTitle=''
+            headerTitle='Detail'
+            iconRightButton={<Feather name='more-vertical' size={20} />}
+            onPressRightButton={() => {
+                modalOptionsRef.current.open();
+            }}
             fallback={false}
             empty={false}
             popupProps={popupProps}
@@ -214,6 +212,14 @@ export default ({ navigation, route }) => {
                     </View>
                 </View>
             </ScrollView>
+
+            <ModalContentOptions
+                ref={modalOptionsRef}
+                isOwner={user && user.userId === item.ownerId}
+                item={item}
+            />
         </Scaffold>
     )
 }
+
+export default EmergencyDetail;

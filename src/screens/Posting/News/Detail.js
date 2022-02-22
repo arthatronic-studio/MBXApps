@@ -1,31 +1,24 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Image, ScrollView, ImageBackground} from 'react-native';
-import Styled from 'styled-components';
+import {View, Image, ScrollView} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Feather from 'react-native-vector-icons/Feather';
+import moment from 'moment';
 
 import {useLoading, usePopup, useColor} from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
-
 import {Container, Divider} from '@src/styled';
-import {shadowStyle} from '@src/styles';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-
 import {iconWarning, iconHeart, iconShare, iconBookmarks} from '@assets/images/home';
 import { useSelector } from 'react-redux';
-
 import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
-import moment from 'moment';
 import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
+import ModalContentOptions from 'src/components/ModalContentOptions';
 
-const Example = Styled(View)`
-`;
-
-export default ({navigation, route}) => {
+const NewsDetail = ({navigation, route}) => {
   const {item} = route.params;
+  const modalOptionsRef = useRef();
 
   const user = useSelector(state => state['user.auth'].login.user);
 
@@ -84,9 +77,10 @@ export default ({navigation, route}) => {
       fallback={false}
       empty={false}
       popupProps={popupProps}
-      // iconRightButton={
-      //     <Image source={iconBookmarks} height={70} width={70}/>
-      // }
+      iconRightButton={<Feather name='more-vertical' size={20} />}
+      onPressRightButton={() => {
+        modalOptionsRef.current.open();
+      }}
       loadingProps={loadingProps}
     >
       <ScrollView
@@ -290,6 +284,14 @@ export default ({navigation, route}) => {
         </View>
         <Divider />
       </ScrollView>
+
+      <ModalContentOptions
+        ref={modalOptionsRef}
+        isOwner={user && user.userId === item.ownerId}
+        item={item}
+      />
     </Scaffold>
   );
 };
+
+export default NewsDetail;

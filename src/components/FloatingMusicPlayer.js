@@ -474,12 +474,14 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
 
   if (orientation === 'landscape' || keyboardShow) return <View />;
 
+  if (!currentPlaying) return <View />;
+
   return (
     <>
       <View style={{height: HEADER_HEIGHT}} />
       <Modalize
         ref={ref}
-        alwaysOpen={currentPlaying ? HEADER_HEIGHT : 0}
+        alwaysOpen={HEADER_HEIGHT}
         panGestureAnimatedValue={animated}
         snapPoint={HEADER_HEIGHT}
         withHandle={handle}

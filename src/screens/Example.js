@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View } from 'react-native';
-import Styled from 'styled-components';
 
 import {
     useLoading,
@@ -10,10 +9,7 @@ import {
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
 
-const Example = Styled(View)`
-`;
-
-export default ({ navigation, route }) => {
+const ExampleScreen = ({ navigation, route }) => {
     const [state, setState] = useState();
 
     const [popupProps, showPopup] = usePopup();
@@ -38,3 +34,5 @@ export default ({ navigation, route }) => {
         </Scaffold>
     )
 }
+
+export default ExampleScreen;

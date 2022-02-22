@@ -1,5 +1,5 @@
 import React, { useRef, forwardRef } from 'react';
-import { TouchableOpacity, useWindowDimensions } from 'react-native';
+import { View, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import {
   Text,
@@ -28,6 +28,8 @@ const ModalListAction = forwardRef((props, ref) => {
 
   const renderContent = () => {
     return data.map((item, idx) => {
+      if (item.show === false) return <View key={idx} />;
+      
       return (
         <TouchableOpacity
             key={idx}
@@ -82,5 +84,4 @@ const ModalListAction = forwardRef((props, ref) => {
 });
 
 ModalListAction.defaultProps = defaultProps;
-
 export default ModalListAction;

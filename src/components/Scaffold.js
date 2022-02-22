@@ -28,6 +28,8 @@ const propTypes = {
   iconRightButton: PropTypes.node,
   fallback: PropTypes.bool,
   option: PropTypes.bool,
+  onPressLeftButton: PropTypes.func,
+  onPressRightButton: PropTypes.func,
 
   empty: PropTypes.bool,
   emptyTitle: PropTypes.string,
@@ -80,6 +82,7 @@ const Scaffold = ({
   showHeader,
   iconRightButton,
   onPressLeftButton,
+  onPressRightButton,
   iconLike,
   fallback,
   option,
@@ -146,6 +149,9 @@ const Scaffold = ({
               onPressLeftButton ? onPressLeftButton() : navigation.pop()
             }
             iconRightButton={iconRightButton}
+            onPressRightButton={() =>
+              onPressRightButton ? onPressRightButton() : {}
+            }
             iconlike={iconLike}
         />
       ) : null}
