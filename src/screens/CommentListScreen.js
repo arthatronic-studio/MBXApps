@@ -15,6 +15,8 @@ import CardListComment from '@src/components/Card/CardListComment';
 import Client from '@src/lib/apollo';
 import { queryComment } from '@src/lib/query';
 
+import {GALogEvent} from 'src/utils/analytics';
+
 const CommentListScreen = ({ navigation, route }) => {
     const { item } = route.params;
 
@@ -123,6 +125,12 @@ const CommentListScreen = ({ navigation, route }) => {
               showAll={item.comment > 3 ? true : false}
               onSuccessComment={(id) => {
                 setRefreshComment(true);
+                GALogEvent('Tempat', {
+                    id: item.id,
+                    product_name: item.productName,
+                    user_id: item.ownerId,
+                    method: 'comment',
+                  });
                 // onSuccessComment(id)
               }}
               onPressShowAll={() => {

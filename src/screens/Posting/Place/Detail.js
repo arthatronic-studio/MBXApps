@@ -3,7 +3,7 @@ import {View, Image, ScrollView, Platform, Linking} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Foundation from 'react-native-vector-icons/Foundation';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import moment from 'moment';
 
 import {useLoading, usePopup, useColor, Alert} from '@src/components';
@@ -12,9 +12,10 @@ import Scaffold from '@src/components/Scaffold';
 import {TouchableOpacity} from '@src/components/Button';
 import Client from '@src/lib/apollo';
 import {queryAddLike} from '@src/lib/query';
-import { Container, Divider } from 'src/styled';
+import {Container, Divider} from 'src/styled';
 import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 import ModalContentOptions from 'src/components/ModalContentOptions';
+import {GALogEvent} from 'src/utils/analytics';
 
 const PlaceDetail = ({navigation, route}) => {
   const {Color} = useColor();
@@ -74,39 +75,52 @@ const PlaceDetail = ({navigation, route}) => {
   return (
     <Scaffold
       headerTitle="Detail"
-      iconRightButton={<Feather name='more-vertical' size={20} />}
+      iconRightButton={<Feather name="more-vertical" size={20} />}
       onPressRightButton={() => {
         modalOptionsRef.current.open();
       }}
       fallback={false}
       empty={false}
       popupProps={popupProps}
-      loadingProps={loadingProps}
-    >
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-      >
+      loadingProps={loadingProps}>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Image
           source={{uri: item.image}}
-          style={{width: '100%', aspectRatio: 16/9}}
+          style={{width: '100%', aspectRatio: 16 / 9}}
         />
 
-        <View style={{padding: 24, marginTop: -16, borderTopLeftRadius: 24, borderTopRightRadius: 24, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: Color.theme}}>
-            {user && user.userId === item.ownerId && <TouchableOpacity
-                onPress={() => {
-                    navigation.navigate('EditThreadScreen', {
-                        ...item,
-                        title: 'Edit',
-                    });
-                }}
-                style={{height: 48, width: 48, borderRadius: 24, position: 'absolute', top: -24, right: 16, backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center'}}
-            >
-                <Ionicons
-                    name='pencil'
-                    size={20}
-                    color={Color.textInput}
-                />
-            </TouchableOpacity>}
+        <View
+          style={{
+            padding: 24,
+            marginTop: -16,
+            borderTopLeftRadius: 24,
+            borderTopRightRadius: 24,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            backgroundColor: Color.theme,
+          }}>
+          {user && user.userId === item.ownerId && (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('EditThreadScreen', {
+                  ...item,
+                  title: 'Edit',
+                });
+              }}
+              style={{
+                height: 48,
+                width: 48,
+                borderRadius: 24,
+                position: 'absolute',
+                top: -24,
+                right: 16,
+                backgroundColor: Color.primary,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Ionicons name="pencil" size={20} color={Color.textInput} />
+            </TouchableOpacity>
+          )}
         </View>
 
         <View
@@ -135,13 +149,11 @@ const PlaceDetail = ({navigation, route}) => {
                 width: '50%',
                 alignItems: 'center',
               }}>
-              <Foundation
-                name={'calendar'}
-                size={22}
-                color={Color.primary}
-              />
+              <Foundation name={'calendar'} size={22} color={Color.primary} />
               <Divider width={8} />
-              <Text style={{fontWeight: 'bold'}}>{moment(parseInt(item.updated_date)).format('DD MMM YYYY')}</Text>
+              <Text style={{fontWeight: 'bold'}}>
+                {moment(parseInt(item.updated_date)).format('DD MMM YYYY')}
+              </Text>
             </View>
             <View
               style={{
@@ -150,11 +162,7 @@ const PlaceDetail = ({navigation, route}) => {
                 width: '50%',
                 alignItems: 'center',
               }}>
-              <Ionicons
-                name='person'
-                size={20}
-                color={Color.secondary}
-              />
+              <Ionicons name="person" size={20} color={Color.secondary} />
               <Divider width={8} />
               <Text style={{fontWeight: 'bold'}}>{item.fullname}</Text>
             </View>
@@ -171,12 +179,12 @@ const PlaceDetail = ({navigation, route}) => {
               <Text style={{fontWeight: 'bold'}}>Jakarta Selatan</Text>
             </View> */}
           </View>
-          
-          {item.like > 0 &&
+
+          {item.like > 0 && (
             <Container paddingHorizontal={16}>
-                <WidgetUserLikes id={item.id} title='Disukai' />
+              <WidgetUserLikes id={item.id} title="Disukai" />
             </Container>
-          }
+          )}
 
           <View>
             <Text
@@ -322,10 +330,16 @@ const PlaceDetail = ({navigation, route}) => {
           </View> */}
         </View>
       </ScrollView>
-      <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: 16,
+        }}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('CommentListScreen', { item });
+            navigation.navigate('CommentListScreen', {item});
           }}
           style={{
             backgroundColor: Color.info,
@@ -333,17 +347,25 @@ const PlaceDetail = ({navigation, route}) => {
             height: 45,
             borderRadius: 8,
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
           }}>
-            <Ionicons name='chatbubble-ellipses-outline' color={Color.text} size={24} />
+          <Ionicons
+            name="chatbubble-ellipses-outline"
+            color={Color.text}
+            size={24}
+          />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
+            GALogEvent('Tempat', {
+              id: item.id,
+              product_name: item.productName,
+              user_id: item.ownerId,
+              method: 'like',
+            });
             if (state.im_like) {
-              Alert(
-                'Konfirmasi',
-                'Apakah Anda yakin akan membatalkan?',
-                () => fetchAddLike()
+              Alert('Konfirmasi', 'Apakah Anda yakin akan membatalkan?', () =>
+                fetchAddLike(),
               );
               return;
             }
@@ -358,8 +380,7 @@ const PlaceDetail = ({navigation, route}) => {
             justifyContent: 'center',
           }}>
           <Text
-            style={{color: Color.textInput, fontSize: 16, fontWeight: 'bold'}}
-          >
+            style={{color: Color.textInput, fontSize: 16, fontWeight: 'bold'}}>
             {state.im_like ? 'Batal Suka' : 'Suka'}
           </Text>
         </TouchableOpacity>
@@ -368,16 +389,16 @@ const PlaceDetail = ({navigation, route}) => {
             let daddr = `-6.311272,106.793541`;
 
             if (!item.latitude || !item.longitude) {
-                alert('Alamat tidak valid');
-                return;
+              alert('Alamat tidak valid');
+              return;
             }
 
             daddr = item.latitude + ',' + item.longitude;
-            
+
             if (Platform.OS === 'ios') {
-                Linking.openURL('http://maps.apple.com/maps?daddr=' + daddr);
+              Linking.openURL('http://maps.apple.com/maps?daddr=' + daddr);
             } else {
-                Linking.openURL('http://maps.google.com/maps?daddr=' + daddr);
+              Linking.openURL('http://maps.google.com/maps?daddr=' + daddr);
             }
           }}
           style={{
@@ -388,8 +409,7 @@ const PlaceDetail = ({navigation, route}) => {
             justifyContent: 'center',
           }}>
           <Text
-            style={{color: Color.textInput, fontSize: 16, fontWeight: 'bold'}}
-          >
+            style={{color: Color.textInput, fontSize: 16, fontWeight: 'bold'}}>
             Lokasi
           </Text>
         </TouchableOpacity>

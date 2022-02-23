@@ -87,7 +87,13 @@ const ListPlace = props => {
                 horizontal={horizontal}
                 onPress={() => {
                   onPress(item);
-                  GALogEvent('Tempat', {item});
+                  GALogEvent('Tempat', {
+                    id: item.id,
+                    product_name: item.productName,
+                    user_id: item.ownerId,
+                    method: 'view',
+                  });
+                  console.log('ini item', item);
                 }}
               />
             );
