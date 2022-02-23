@@ -25,6 +25,8 @@ import {iconApp} from '@assets/images';
 import FormInput from 'src/components/FormInput';
 import { Container, Row, Line } from 'src/styled';
 import PopupTermCondition from 'src/components/PopupTermCondition';
+import { statusBarHeight } from 'src/utils/constants';
+import WidgetBgFixIcon from './WidgetBgFixIcon';
 
 const inputs = ['username', 'password'];
 
@@ -165,21 +167,14 @@ const LoginScreen = ({navigation, route}) => {
 
   return (
     <Scaffold
-      header={<View />}
+      showHeader={false}
       popupProps={popupProps}
       fallback={loading}
+      statusBarColor={Color.primarySoft}
+      translucent={Platform.OS === 'ios' ? true : isFocused}
+      useSafeArea={Platform.OS === 'ios' ? false : true}
     >
-      <Image
-        source={iconApp}
-        style={{
-          resizeMode: 'contain',
-          height: '30%',
-          width: '60%',
-          marginTop: '10%',
-          alignSelf: 'center',
-          position: 'absolute',
-        }}
-      />
+      <WidgetBgFixIcon />
 
       <ScrollView
         keyboardShouldPersistTaps="handled"

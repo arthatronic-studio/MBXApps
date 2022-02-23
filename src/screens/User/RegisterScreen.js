@@ -5,6 +5,7 @@ import {
   ScrollView,
   Image,
   useWindowDimensions,
+  Platform,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -16,12 +17,15 @@ import {
   usePopup,
   useColor,
   Scaffold,
+  Header,
 } from '@src/components';
 import {Button, TouchableOpacity} from '@src/components/Button';
 import validate from '@src/lib/validate';
 import {register as onRegister} from '@src/state/actions/user/auth';
 import { Container, Divider } from 'src/styled';
 import FormInput from 'src/components/FormInput';
+import WidgetBgFixIcon from './WidgetBgFixIcon';
+import { statusBarHeight } from 'src/utils/constants';
 
 const inputs = ['fullName', 'email', 'username', 'password', 'password2'];
 
@@ -135,21 +139,14 @@ const RegisterScreen = ({navigation, route}) => {
 
   return (
     <Scaffold
-      headerTitle=''
+      showHeader={false}
       popupProps={popupProps}
       fallback={loading}
+      statusBarColor={Color.primarySoft}
+      translucent={Platform.OS === 'ios' ? true : isFocused}
+      useSafeArea={Platform.OS === 'ios' ? false : true}
     >
-      <Image
-        source={iconApp}
-        style={{
-          resizeMode: 'contain',
-          height: '30%',
-          width: '60%',
-          marginTop: '10%',
-          alignSelf: 'center',
-          position: 'absolute',
-        }}
-      />
+      <WidgetBgFixIcon />
 
       <ScrollView
         keyboardShouldPersistTaps="handled"
@@ -304,6 +301,14 @@ const RegisterScreen = ({navigation, route}) => {
           </Container>
         </View>
       </ScrollView>
+
+      <Header
+        style={{
+          position: 'absolute',
+          backgroundColor: 'transparent',
+          top: statusBarHeight,
+        }}
+      />
     </Scaffold>
   );
 };

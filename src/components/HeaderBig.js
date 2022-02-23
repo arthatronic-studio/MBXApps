@@ -75,7 +75,7 @@ const HeaderBig = (props) => {
         <Col size={6} justify='center' align='flex-start' style={{height: '100%'}}>
           {title === '' ?
             <View style={{flexDirection: 'row'}}>
-              <Image source={iconApp} style={{width: 90, height: 40}} resizeMode='contain' />
+              <Image source={iconSplash} style={{width: 90, height: 40}} resizeMode='contain' />
             </View>
           :
             <Text size={18} type='bold'>{title}</Text>

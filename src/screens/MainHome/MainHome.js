@@ -363,7 +363,7 @@ const MainHome = ({navigation, route}) => {
   };
 
   const colorOutputRange = [
-    accessClient.MainHome.type === 'komoto' ? Color.theme : Color.primarySoft,
+    Color[accessClient.MainHome.backgroundParallaxColor],
     Color.theme,
   ];
 
@@ -667,13 +667,9 @@ const MainHome = ({navigation, route}) => {
           <Divider />
 
           <Banner
-            isDummy={accessClient.MainHome.type === 'sabyan' ? false : true}
+            isDummy={accessClient.MainHome.dummyBanner}
             showHeader={accessClient.MainHome.showBannerHeader}
-            data={
-              accessClient.MainHome.type === 'sabyan'
-                ? listBanner || listDummyBanner
-                : listDummyBanner || listBanner
-            }
+            data={accessClient.MainHome.dummyBanner ? listDummyBanner : listBanner}
             loading={loadingBanner}
           />
 
@@ -852,8 +848,6 @@ const MainHome = ({navigation, route}) => {
               onPress={() => navigation.navigate('VideoDetail')}
             />
           }
-
-          {/* {accessClient.MainHome.type && <PopupTermsConditionS/>} */}
 
           {accessClient.MainHome.showListEbookNewer && (
             <View style={{marginTop: 32}}>

@@ -24,7 +24,6 @@ const MainView = Styled(View)`
     height: 60px;
     marginTop: -4px
     elevation: 0;
-    borderTopWidth: 4px;
 `;
 
 const TransparentMainView = Styled(MainView)`
@@ -107,7 +106,7 @@ const Header = props => {
       iconLeftButton,
       iconRightButton,
       children,
-      ...style
+      style
     } = props;
     return (
       <TransparentMainView style={{borderColor: Color.theme, ...style}}>
@@ -159,7 +158,7 @@ const Header = props => {
       centerTitle,
       actions,
       type,
-      ...style
+      style
     } = props;
 
     return (
@@ -231,7 +230,7 @@ const Header = props => {
       title,
       children,
       centerTitle,
-      ...style
+      style
     } = props;
 
     return (
