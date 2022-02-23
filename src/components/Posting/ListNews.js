@@ -9,6 +9,8 @@ import PostingHeader from './PostingHeader';
 import { Container, Row } from 'src/styled';
 import PostingSkeleton from './PostingSkeleton';
 
+import { GALogEvent } from 'src/utils/analytics';
+
 const propTypes = {
     data: PropTypes.array,
     horizontal: PropTypes.bool,
@@ -84,7 +86,10 @@ const ListNews = (props) => {
                                 item={item}
                                 numColumns={1}
                                 horizontal={horizontal}
-                                onPress={() => onPress(item)}
+                                onPress={() => 
+                                    {onPress(item);
+                                    GALogEvent('Artikel', {item})}
+                                }
                             />
                         )
                     }}
