@@ -142,60 +142,6 @@ const CommentListScreen = ({navigation, route}) => {
         {/* <View style={{width: '10%', height: '100%', justifyContent: 'center', alignItems: 'center', borderTopRightRadius: 8, borderBottomRightRadius: 8, backgroundColor: Color.textInput}}>
                     <Fontisto name='angle-right' size={20} color={Color.text} style={{opacity: 0.6}} />
                 </View> */}
-<<<<<<< HEAD
-            </View>
-
-            <CardListComment
-              data={dataComment.data}
-              item={item}
-              title={item.comment && item.comment > 0 ? `Komentar ${item.comment}` : 'Belum Ada Komentar'}
-              loading={dataComment.loading}
-              showAll={item.comment > 3 ? true : false}
-              onSuccessComment={(id) => {
-                setRefreshComment(true);
-                GALogEvent('Tempat', {
-                    id: item.id,
-                    product_name: item.productName,
-                    user_id: item.ownerId,
-                    method: 'comment',
-                });
-                GALogEvent('Event', {
-                    id: item.id,
-                    product_name: item.productName,
-                    user_id: item.ownerId,
-                    method: 'comment',
-                });
-                  
-                // onSuccessComment(id)
-              }}
-              onPressShowAll={() => {
-                // onPressShowAll(true);
-              }}
-              onPressDots={() => {
-                modalListActionRef.current.open();
-              }}
-            />
-
-            <ModalListAction
-                ref={modalListActionRef}
-                data={[
-                    {
-                        id: 0,
-                        name: 'Hapus',
-                        color: Color.red,
-                        onPress: () => {
-                            Alert('Hapus', 'Apakah Anda yakin menghapus konten?', () => {});
-                            modalListActionRef.current.close();
-                        },
-                    }
-                ]}
-            />
-        </Scaffold>
-    )
-}
-
-export default CommentListScreen;
-=======
       </View>
 
       <CardListComment
@@ -255,4 +201,3 @@ export default CommentListScreen;
 };
 
 export default CommentListScreen;
->>>>>>> d03ddda60f6c7c763286386f668593ad74a5e8f2
