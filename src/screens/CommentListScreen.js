@@ -19,7 +19,6 @@ import {GALogEvent} from 'src/utils/analytics';
 
 const CommentListScreen = ({navigation, route}) => {
   const {item} = route.params;
-
   const [dataComment, setDataComment] = useState({
     data: [],
     loading: true,
@@ -170,6 +169,13 @@ const CommentListScreen = ({navigation, route}) => {
               user_id: item.ownerId, 
               method: "comment" 
             });
+          }else if(item.productCategory === 'EVENT') {
+            GALogEvent('Event', { 
+              id: item.id, 
+              product_name: item.productName, 
+              user_id: item.ownerId, 
+              method: "comment" 
+            });
           }
 
           // onSuccessComment(id)
@@ -196,8 +202,10 @@ const CommentListScreen = ({navigation, route}) => {
           },
         ]}
       />
-    </Scaffold>
+      </Scaffold>
+      
   );
+
 };
 
 export default CommentListScreen;
