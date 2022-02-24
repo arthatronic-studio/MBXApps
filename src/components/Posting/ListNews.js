@@ -82,15 +82,17 @@ const ListNews = (props) => {
                     contentContainerStyle={{paddingTop: 16, paddingHorizontal: 8, ...style}}
                     renderItem={({ item, index }) => {
                         return (
+                            <>
                             <CardNews
                                 item={item}
                                 numColumns={1}
                                 horizontal={horizontal}
                                 onPress={() => 
                                     {onPress(item);
-                                    GALogEvent('Artikel', {item})}
+                                    GALogEvent('Artikel', { id: item.id, product_name: item.productName, user_id: item.ownerId, method: "view" })}
                                 }
-                            />
+                                />
+                            </>
                         )
                     }}
                     ListEmptyComponent={() => {
