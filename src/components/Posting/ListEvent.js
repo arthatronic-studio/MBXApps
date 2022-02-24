@@ -87,7 +87,13 @@ const ListEvent = (props) => {
                                 horizontal={horizontal}
                                 onPress={() => {
                                     onPress(item);
-                                    GALogEvent("Event", { item });
+                                    GALogEvent('Event', {
+                                        id: item.id,
+                                        product_name: item.productName,
+                                        user_id: item.ownerId,
+                                        method: 'view',
+                                    });
+                                    console.log('ini item', item);
                                 }}
                                 
                             />

@@ -351,6 +351,13 @@ const EventDetail = ({navigation, route}) => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
+            GALogEvent('Event', {
+              id: item.id,
+              product_name: item.productName,
+              user_id: item.ownerId,
+              method: 'like',
+            });
+
             if (state.im_like) {
               Alert(
                 'Konfirmasi',

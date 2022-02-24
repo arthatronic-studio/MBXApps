@@ -130,7 +130,14 @@ const CommentListScreen = ({ navigation, route }) => {
                     product_name: item.productName,
                     user_id: item.ownerId,
                     method: 'comment',
-                  });
+                });
+                GALogEvent('Event', {
+                    id: item.id,
+                    product_name: item.productName,
+                    user_id: item.ownerId,
+                    method: 'comment',
+                });
+                  
                 // onSuccessComment(id)
               }}
               onPressShowAll={() => {
