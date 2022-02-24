@@ -217,6 +217,13 @@ export default CommentListScreen;
               user_id: item.ownerId,
               method: 'comment',
             });
+          } else if(item.productCategory === 'POSTING') {
+            GALogEvent('Artikel', { 
+              id: item.id, 
+              product_name: item.productName, 
+              user_id: item.ownerId, 
+              method: "comment" 
+            });
           }
 
           // onSuccessComment(id)
