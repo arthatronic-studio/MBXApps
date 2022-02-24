@@ -38,7 +38,7 @@ export const accessClient = {
             isSabyan ? 'primary' : 'primarySoft',
         dummyBanner:
             isKomoto ? true :
-            isSabyan ? false : true,
+            isSabyan ? true : true,
         showWidgetBalance: isKomoto || isSabyan ? false : true,
         showBannerHeader: isKomoto || isSabyan ? false : true,
         showListEmergency: isKomoto,

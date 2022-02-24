@@ -1,37 +1,29 @@
-import Config from 'react-native-config';
+import { accessClient } from 'src/utils/access_client';
 
 const tribesBanner = require('./tribes-banner.png');
 
-const RRIDBanner1 = require('./rrid/banner-home.png');
-const RRIDBanner2 = require('./rrid/banner-bantuan.png');
-const RRIDBanner3 = require('./rrid/banner-jobs.png');
-const RRIDBanner4 = require('./rrid/banner-jualbeli.png');
-const RRIDBanner5 = require('./rrid/banner-lelang.png');
-const RRIDBanner6 = require('./rrid/banner-lokasi.png');
-const RRIDBanner7 = require('./rrid/banner-shop.png');
+const bannerType = {
+    'TRIBESASIA': [
+        {imageAsset: tribesBanner}
+    ],
+    'TRIBESXSABYAN': [
+        {imageAsset: require('./sabyan/banner-1.png')},
+        {imageAsset: require('./sabyan/banner-2.png')},
+        {imageAsset: require('./sabyan/banner-3.png')},
+    ],
+    'TRIBESXRRID': [
+        {imageAsset: require('./rrid/banner-home.png')},
+        {imageAsset: require('./rrid/banner-bantuan.png')},
+        {imageAsset: require('./rrid/banner-jobs.png')},
+        {imageAsset: require('./rrid/banner-jualbeli.png')},
+        {imageAsset: require('./rrid/banner-lelang.png')},
+        {imageAsset: require('./rrid/banner-lokasi.png')},
+        {imageAsset: require('./rrid/banner-shop.png')},
+    ],
+}
 
-const listTribesBanner = [
-    {imageAsset: tribesBanner}
-];
-
-const listTribesSabyan = [];
-
-const listRRIDBanner = [
-    {imageAsset: RRIDBanner1},
-    {imageAsset: RRIDBanner2},
-    {imageAsset: RRIDBanner3},
-    {imageAsset: RRIDBanner4},
-    {imageAsset: RRIDBanner5},
-    {imageAsset: RRIDBanner6},
-    {imageAsset: RRIDBanner7},
-];
-
-const listDummyBanner =
-    Config.INITIAL_CODE === 'TRIBESXRRID' ?
-        listRRIDBanner :
-    Config.INITIAL_CODE === 'TRIBESXSABYAN' ?
-        listTribesSabyan :
-        listTribesBanner;
+const listDummyBanner = bannerType[accessClient.InitialCode] ?
+    bannerType[accessClient.InitialCode] : [];
 
 export {
     listDummyBanner,
