@@ -15,6 +15,7 @@ import { localPushNotification } from '@src/lib/pushNotification';
 import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
 import { trackPlayerInit } from '@src/utils/track-player-init';
 import ModalNetInfo from '@src/components/ModalNetInfo';
+import { requestTrackingPermission } from 'react-native-tracking-transparency';
 
 export let navigationRef = createRef();
 
@@ -27,6 +28,7 @@ const App = () => {
 
   useEffect(() => {
     initTrackPlayer();
+    initRequestTracking();
 
     const unsubscribe = NetInfo.addEventListener((state) => {
       console.log("Connection Info", state);
@@ -45,6 +47,10 @@ const App = () => {
 
   const initTrackPlayer = async () => {
     await trackPlayerInit();
+  }
+
+  const initRequestTracking = async () => {
+    await requestTrackingPermission();
   }
 
   // ===========================================
