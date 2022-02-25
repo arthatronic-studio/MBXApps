@@ -665,7 +665,7 @@ const MainHome = ({navigation, route}) => {
           </View>
 
           <Divider />
-
+          <Text onPress={() => navigation.navigate('SurveyFirst')}>Survey</Text>
           <Banner
             isDummy={accessClient.MainHome.dummyBanner}
             showHeader={accessClient.MainHome.showBannerHeader}

@@ -123,6 +123,10 @@ import MediaPlayerScreen from 'src/screens/MediaPlayer/MediaPlayerScreen';
 import UploadMusicScreen from 'src/screens/MediaPlayer/UploadMusicScreen';
 import UploadVideoScreen from 'src/screens/MediaPlayer/UploadVideoScreen';
 
+// Survey
+import SurveyFirst from 'src/screens/Survey/SurveyFirst';
+import SurveySecond from 'src/screens/Survey/SurveySecond';
+
 const {Navigator, Screen} = createStackNavigator();
 const MainPage =
   accessClient.BottomTabsNavigator.type === 'komoto' ?
@@ -250,6 +254,10 @@ function MainStackNavigator() {
       <Screen name='MediaPlayerScreen' component={MediaPlayerScreen} />
       <Screen name='UploadMusicScreen' component={UploadMusicScreen} />
       <Screen name='UploadVideoScreen' component={UploadVideoScreen} />
+
+      {/* Survey */}
+      <Screen name='SurveyFirst' component={SurveyFirst} />
+      <Screen name='SurveySecond' component={SurveySecond} />
     </Navigator>
   );
 }
