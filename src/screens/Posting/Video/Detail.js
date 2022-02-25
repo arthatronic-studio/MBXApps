@@ -17,7 +17,7 @@ import FormInput from 'src/components/FormInput';
 import { Divider } from 'src/styled';
 
 const Detail = () => {
-    const { height } = useWindowDimensions();
+    const { height, width } = useWindowDimensions();
     const { Color } = useColor();
 
     return (
@@ -46,7 +46,7 @@ const Detail = () => {
                 <WebView
                     source={{ uri: "https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/videoplayback.mp4?alt=media&token=658dc8f3-d360-4fe1-9a89-8822f3c88035" }}
                     style={{
-                        width: '100%',
+                        width,
                         aspectRatio: 3 / 2,
                     }}
                     allowsFullscreenVideo

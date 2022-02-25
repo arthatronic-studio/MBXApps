@@ -41,6 +41,7 @@ const SplashScreen = ({navigation, route}) => {
       style={{
         backgroundColor: Color[accessClient.SplashScreen.backgroundColor]
       }}
+      statusBarColor={Color[accessClient.SplashScreen.backgroundColor]}
     >
       <Container
         height={height}

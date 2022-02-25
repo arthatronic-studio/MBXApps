@@ -7,10 +7,10 @@ const indexing = {
         {imageAsset: require('./icon-3.png'), title: 'High Quality Users', subTitle: 'Users are loyal to our platform, they use Tribesocial frequently.'},
     ],
     'TRIBESXSABYAN': [
-        {imageAsset: require('./rrid/icon-1.png'), title: 'Selamat datang di Aplikasi Sabyan', subTitle: ''},
+        {imageAsset: require('./sabyan/icon-1.png'), title: 'Selamat Datang di Aplikasi Sabyan', subTitle: ''},
         {imageAsset: require('./sabyan/icon-2.png'), title: 'Dengar Lagu Sabyan Secara Eksklusif', subTitle: 'Dengarkan semua lagu sabyan favoritmu disini tanpa iklan dan tanpa ribet.'},
         {imageAsset: require('./sabyan/icon-3.png'), title: 'Temukan Kalender Event Sabyan', subTitle: 'Kamu bisa menemukan kalender event terbaru dari Sabyan supaya kamu bisa datang langsung ke konsernya.'},
-        {imageAsset: require('./rrid/icon-4.png'), title: 'LOGIN SEKARANG', subTitle: ''},
+        {imageAsset: require('./sabyan/icon-4.png'), title: 'LOGIN SEKARANG', subTitle: ''},
     ],
     'TRIBESXRRID': [
         {imageAsset: require('./rrid/icon-1.png'), title: 'SELAMAT DATANG DI APLIKASI', subTitle: ''},
