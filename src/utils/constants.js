@@ -19,6 +19,6 @@ export function isIphoneNotch() {
 
 export const listPrivilegeUser = [
     // 999, 2, 802, //lama
-    // 244, // muhlis
-    // 264, //della
+    244, // muhlis
+    // 264, //dela
 ];

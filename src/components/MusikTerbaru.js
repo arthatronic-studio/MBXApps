@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   FlatList,
@@ -11,6 +11,11 @@ import Entypo from 'react-native-vector-icons/Entypo';
 
 import ImagesPath from './ImagesPath';
 import {Text, useColor} from '@src/components';
+import client from 'src/lib/apollo';
+import { queryContentProduct } from 'src/lib/query';
+import { accessClient } from 'src/utils/access_client';
+import { trackPlayerPlay } from 'src/utils/track-player-play';
+import { useNavigation } from '@react-navigation/native';
 
 const defaultProps = {
   data: [],
@@ -20,6 +25,56 @@ const defaultProps = {
 const MusikTerbaru = ({ data, onPress }) => {
   const {Color} = useColor();
   const {width} = useWindowDimensions();
+  const navigation = useNavigation();
+
+  const [list, setList] = useState({
+    data: [],
+    loading: false,
+    message: 'error',
+  });
+
+  useEffect(() => {
+    fetchContentProduct();
+  }, []);
+
+  const fetchContentProduct = () => {
+    const variables = {
+      page: 1,
+      itemPerPage: 50,
+      productType: accessClient.InitialCode,
+      productCategory: "NEWEST_MUSIC",
+      // productSubCategory: "NEWEST_MUSIC"
+    };
+
+    client.query({
+      query: queryContentProduct,
+      variables,
+    })
+    .then((res) => {
+      console.log('res', res);
+
+      let newData = [];
+      if (res.data.contentProduct) {
+        newData = res.data.contentProduct;
+      }
+
+      setList({
+        ...list,
+        data: newData,
+        loading: false,
+        message: ''
+      });
+    })
+    .catch((err) => {
+      console.log('err', err);
+
+      setList({
+        ...list,
+        loading: false,
+        message: ''
+      });
+    })
+  }
 
   const renderItem = ({ item, index }) => (
     <View
@@ -28,13 +83,20 @@ const MusikTerbaru = ({ data, onPress }) => {
         marginRight: 16,
       }}>
       <TouchableOpacity
-        onPress={() => onPress(item, index)}
+        onPress={() => {
+          // onPress(item, index);
+          trackPlayerPlay(list.data, item);
+          navigation.navigate('MusicPlayerScreen');
+        }}
       >
         <ImageBackground
           source={{ uri: item.image }}
           style={{
             width: width / 1.7,
             height: width / 1.7,
+          }}
+          imageStyle={{
+            borderRadius: 16,
           }}
         >
           <View
@@ -45,9 +107,9 @@ const MusikTerbaru = ({ data, onPress }) => {
             }}>
             <View
               style={{
-                backgroundColor: Color.oldGreen,
+                backgroundColor: Color.error,
                 width: 55,
-                height: 25,
+                height: 20,
                 borderRadius: 12,
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -63,14 +125,16 @@ const MusikTerbaru = ({ data, onPress }) => {
             <Text
               align='left'
               style={{fontSize: 18, color: Color.textInput, fontWeight: 'bold'}}
+              numberOfLines={1}
             >
               {item.productName}
             </Text>
             <Text
               align='left'
               style={{fontSize: 10, color: Color.textInput, fontWeight: 'bold'}}
+              numberOfLines={1}
             >
-              Ya Maulana
+              {item.productDescription}
             </Text>
           </View>
 
@@ -103,19 +167,20 @@ const MusikTerbaru = ({ data, onPress }) => {
             fontSize: 18,
             color: Color.text,
             paddingHorizontal: 16,
-            marginBottom: 8
+            marginTop: 8,
+            marginBottom: 4,
           }}
         >
           Musik Terbaru
         </Text>
       </View>
       <FlatList
-        data={data}
+        data={list.data}
         renderItem={renderItem}
         keyExtractor={(item, index) => item.id + index.toString()}
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={{
+        contentContainerStyle={{
           paddingHorizontal: 8,
           paddingVertical: 8,
         }}

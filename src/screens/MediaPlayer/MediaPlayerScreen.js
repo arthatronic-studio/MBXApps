@@ -13,10 +13,15 @@ import Scaffold from '@src/components/Scaffold';
 import { Divider } from 'src/styled';
 import TabMusic from './TabMusic';
 import TabVideo from './TabVideo';
+import { useSelector } from 'react-redux';
+import { listPrivilegeUser } from 'src/utils/constants';
+import FloatingMusicPlayer from 'src/components/FloatingMusicPlayer';
 
 const { Navigator, Screen } = createMaterialTopTabNavigator();
 
 const MediaPlayerScreen = ({ navigation, route }) => {
+    const user = useSelector(state => state['user.auth'].login.user);
+
     const [state, setState] = useState();
 
     const [popupProps, showPopup] = usePopup();
@@ -24,7 +29,7 @@ const MediaPlayerScreen = ({ navigation, route }) => {
 
     const { Color } = useColor();
 
-    const ref = useRef();
+    const floatingMusicPlayerRef = useRef();
 
     useEffect(() => {
 
@@ -43,15 +48,16 @@ const MediaPlayerScreen = ({ navigation, route }) => {
             popupProps={popupProps}
             loadingProps={loadingProps}
         >
-            {/* <Text align='left' onPress={() => navigation.navigate('UploadMusicScreen')}>
+            {user && listPrivilegeUser.includes(user.userId) && <Text onPress={() => navigation.navigate('UploadMusicScreen')}>
                 Upload Music
-            </Text>
-            <Divider />
-            <Text align='left' onPress={() => navigation.navigate('UploadVideoScreen')}>
+            </Text>}
+            {/* <Text align='left' onPress={() => navigation.navigate('UploadVideoScreen')}>
                 Upload Video
             </Text> */}
 
-            <Navigator
+            <TabMusic />
+
+            {/* <Navigator
                 initialRouteName="TabMusic"
                 tabBarOptions={{
                     activeTintColor: Color.text,
@@ -74,7 +80,11 @@ const MediaPlayerScreen = ({ navigation, route }) => {
                     component={TabVideo}
                     options={{tabBarLabel: 'Video'}}
                 />
-            </Navigator>
+            </Navigator> */}
+
+            <FloatingMusicPlayer
+                ref={floatingMusicPlayerRef}
+            />
         </Scaffold>
     )
 }

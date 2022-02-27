@@ -16,6 +16,23 @@ import ImagesPath from 'src/components/ImagesPath';
 import MusikTerbaru from 'src/components/MusikTerbaru';
 import { trackPlayerPlay } from 'src/utils/track-player-play';
 
+const dataDummyMusic = [
+    {
+      id: 'd',
+      productName: 'Deen Assalam',
+      productDescription: 'Bismillah',
+      image: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/nissa.png?alt=media&token=664063c5-fc42-458c-b02e-596cca8b18dc',
+      videoFilename: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/Sabyan%20Gambus%20-%20Deen%20Assalam.mp3?alt=media&token=ba7e5d58-4d81-4639-9758-cc7bf67aa43a'
+    },
+    {
+      id: 'y',
+      productName: 'Ya Habibal Qolbi',
+      productDescription: 'Bismillah',
+      image: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/nissa.png?alt=media&token=664063c5-fc42-458c-b02e-596cca8b18dc',
+      videoFilename: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/Sabyan%20Gambus%20-%20Ya%20Habibal%20Qolbi.mp3?alt=media&token=5d3154b8-9f01-4eee-8ebb-76d83ae31bf2'
+    },
+];
+
 const TabMusic = ({ }) => {
     const [state, setState] = useState();
 
@@ -49,6 +66,7 @@ const TabMusic = ({ }) => {
                 <Divider />
 
                 <MusikTerbaru
+                    data={dataDummyMusic}
                     onPress={() => {
                         trackPlayerPlay();
                         navigation.navigate('MusicPlayerScreen');

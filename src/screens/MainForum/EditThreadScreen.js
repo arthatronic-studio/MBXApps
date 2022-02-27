@@ -22,6 +22,7 @@ import Client from '@src/lib/apollo';
 import { queryProductManage } from '@src/lib/query';
 import { Divider } from 'src/styled';
 import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
+import { accessClient } from 'src/utils/access_client';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -85,7 +86,7 @@ const EditThreadScreen = (props) => {
     const [thumbImage, setThumbImage] = useState('');
     const [mimeImage, setMimeImage] = useState('image/jpeg');
     const [selectedStatus, setSelectedStatus] = useState({
-        id: params.status === 'PRIVATE' ? 2 : 1,
+        label: params.status === 'PRIVATE' ? 'Privasi' : 'Publik',
         value: params.status,
         iconName: params.status === 'PRIVATE' ? 'lock-closed' : 'globe',
     });
@@ -308,12 +309,12 @@ const EditThreadScreen = (props) => {
                     </ErrorView>
                 </View>
 
-                <TouchSelect
+                {accessClient.CreatePosting.showPrivacy && <TouchSelect
                     title='Siapa yang dapat melihat ini?'
-                    value={userData.status}
+                    value={selectedStatus.label}
                     iconName={selectedStatus.iconName}
                     onPress={() => modalSelectStatusRef.current.open()}
-                />
+                />}
 
                 <Divider />
 

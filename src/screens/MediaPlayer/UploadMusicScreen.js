@@ -24,8 +24,10 @@ import ModalSelectStatus from '@src/components/Modal/ModalSelectStatus';
 // import { getObjSubCategoryByCode } from '../../utils/rawSubCategory';
 
 import Client from '@src/lib/apollo';
-import { queryMaudiProductManage } from '@src/lib/query';
+import { queryProductManage } from '@src/lib/query';
 import { accessClient } from 'src/utils/access_client';
+import { Scaffold } from 'src/components';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 const MainView = Styled(View)`
     flex: 1;
@@ -49,7 +51,7 @@ const EmailRoundedView = Styled(View)`
 const CustomTextInput = Styled(TextInput)`
   width: 100%;
   height: 100%;
-  fontFamily: Poppins-Regular;
+  fontFamily: Inter-Regular;
   color: ${Color.white};
   backgroundColor: transparent;
   borderBottomWidth: 1px;
@@ -126,27 +128,28 @@ const UploadMusicScreen = (props) => {
         Keyboard.dismiss();
 
         if (encodedDocument === '') {
+            console.log('encodedDocument');
             showPopup('Silahkan pilih konten terlebih dulu', 'warning');
             return;
         }
 
         if (userData.name === '') {
+            console.log('userData.name');
             showPopup('Silahkan isi judul terlebih dulu', 'warning');
             return;
         }
 
         if (userData.description === '') {
+            console.log('userData.description');
             showPopup('Silahkan isi deskripsi terlebih dulu', 'warning');
             return;
         }
-
-        showLoading();
 
         let variables = {
             products: [{
                 ...userData,
                 image: thumbImage,
-                category: route.params.uploadParams.subCategory,
+                category: 'NEWEST_MUSIC', // route.params.uploadParams.subCategory,
                 stream: encodedDocument,
             }]
         };
@@ -155,19 +158,25 @@ const UploadMusicScreen = (props) => {
             variables.products[0].parentProductId = route.params.item.id;
         }
 
-        // console.log(variables, 'variables');
+        console.log(variables, 'variables');
+
+        showLoading();
 
         Client.query({
-            query: queryMaudiProductManage,
+            query: queryProductManage,
             variables,
         })
         .then((res) => {
-            // console.log(res, 'ressss');
+            console.log(res, 'ressss');
 
             showLoading(
                 'success',
                 'Berhasil Mengupload',
-                () => {}
+                () => {
+                    setTimeout(() => {
+                        navigation.popToTop();
+                    }, timeout);
+                }
             );
 
             // navigation.navigate('ShowAllScreen', {
@@ -180,7 +189,8 @@ const UploadMusicScreen = (props) => {
             // )
         })
         .catch((err) => {
-            // console.log(err, 'errrrr');
+            console.log(err, 'errrrr');
+
             showLoading('error', 'Gagal Upload, Harap ulangi kembali');
         })
     }
@@ -199,23 +209,42 @@ const UploadMusicScreen = (props) => {
     const getDocument = async() => {
         const res = await DocumentPicker.pick({
             type: [DocumentPicker.types.audio],
+            allowMultiSelection: false,
         });
 
-        let objOrigin = {
-            id: res.type,
-            path: res.uri,
-            title: res.name,
-            album: "",
-            artist: "",
-            cover: "",
-        };
+        console.log(res, 'res get document');
 
-        showLoading();
+        let objOrigin;
+        let uri;
 
-        let uri = res.uri;
+        if (Array.isArray(res) && res.length > 0) {
+            objOrigin = {
+                id: res[0].type,
+                path: res[0].uri,
+                title: res[0].name,
+                album: "",
+                artist: "",
+                cover: "",
+            };
+
+            uri = res[0].uri;
+        }
+
+        if (!objOrigin) return;
+
+        // let objOrigin = {
+        //     id: res.type,
+        //     path: res.uri,
+        //     title: res.name,
+        //     album: "",
+        //     artist: "",
+        //     cover: "",
+        // };
+
+        // showLoading();
 
         if (Platform.OS === 'ios') {
-            const split = res.uri.split('/');
+            const split = uri.split('/');
             const name = split.pop();
             const path = split.pop();
             const ext = name.split('.').pop();
@@ -276,12 +305,22 @@ const UploadMusicScreen = (props) => {
         setModalImagePicker(false);
     }
 
+    console.log(originDocument, 'originDocument');
+
     return (
-        <MainView>
-            <Header
-                title='Upload'
-                color={Color.white}
-            />
+        <Scaffold
+            header={
+                <Header
+                    title='Upload'
+                    onPressLeftButton={() => {
+                        // backToSelectVideo();
+                        navigation.pop();
+                    }}
+                />
+            }
+            loadingProps={loadingProps}
+            popupProps={popupProps}
+        >
             <ScrollView>
                 <View style={{paddingHorizontal: 16, paddingTop: 24}}>
                     <LabelInput>
@@ -306,6 +345,8 @@ const UploadMusicScreen = (props) => {
                     />
                 } */}
 
+                {originDocument && <Text>Musik dipilih</Text>}
+
                 <View style={{paddingHorizontal: 16, paddingTop: 24}}>
                     <LabelInput>
                         <Text size={12} letterSpacing={0.08} color={Color.white} style={{opacity: 0.6}}>Cover</Text>
@@ -323,7 +364,23 @@ const UploadMusicScreen = (props) => {
 
                         <TouchableOpacity
                             onPress={() => {
-                                setModalImagePicker(true);
+                                // setModalImagePicker(true);
+
+                                // sementara
+                                const options = {
+                                    mediaType: 'photo',
+                                    maxWidth: 640,
+                                    maxHeight: 640,
+                                    quality: 1,
+                                    includeBase64: true,
+                                }
+    
+                                launchImageLibrary(options, (callback) => {
+                                    if (callback.base64) {
+                                        setThumbImage(callback.base64);
+                                        setMimeImage(callback.type);
+                                    }
+                                })
                             }}
                             style={{height: '100%', aspectRatio: 1, backgroundColor: '#4E4E4E', borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
                         >
@@ -441,10 +498,6 @@ const UploadMusicScreen = (props) => {
                 }}
             />
 
-            <Loading {...loadingProps} />
-
-            <Popup {...popupProps} />
-
             <ModalSelectStatus
                 ref={modalSelectStatusRef}
                 selected={selectedStatus}
@@ -484,7 +537,7 @@ const UploadMusicScreen = (props) => {
                     /> */}
                 </Modal>
             )}
-        </MainView>
+        </Scaffold>
     )
 }
 

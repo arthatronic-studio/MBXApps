@@ -433,7 +433,7 @@ const MainHome = ({navigation, route}) => {
                 />
               </TouchableOpacity>
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('ChatRoomsScreen');
                 }}
@@ -453,7 +453,7 @@ const MainHome = ({navigation, route}) => {
                     </Text>
                   </Circle>
                 )}
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           }
         />
@@ -665,7 +665,7 @@ const MainHome = ({navigation, route}) => {
           </View>
 
           <Divider />
-          <Text onPress={() => navigation.navigate('SurveyFirst')}>Survey</Text>
+
           <Banner
             isDummy={accessClient.MainHome.dummyBanner}
             showHeader={accessClient.MainHome.showBannerHeader}
@@ -792,7 +792,7 @@ const MainHome = ({navigation, route}) => {
             </View>
           )}
 
-          <ListPlace
+          {accessClient.MainHome.showListPlace && <ListPlace
             data={listNearbyPlace}
             loading={loadingNearbyPlace}
             horizontal
@@ -801,7 +801,7 @@ const MainHome = ({navigation, route}) => {
               navigation.navigate('PlaceDetail', {item});
             }}
             style={{paddingLeft: 8}}
-          />
+          />}
 
           <ListEvent
             data={listEvent}

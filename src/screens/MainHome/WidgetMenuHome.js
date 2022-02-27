@@ -97,7 +97,7 @@ const listMenuHome = [
     nav: 'PlaceScreen',
     params: { title: 'Tempat' },
     badge: false,
-    show: true,
+    show: accessClient.MenuHome.showPlace,
   },
   {
     id: 3,

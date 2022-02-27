@@ -16,6 +16,7 @@ import {queryAddLike} from '@src/lib/query';
 import { Container, Divider } from 'src/styled';
 import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 import ModalContentOptions from 'src/components/ModalContentOptions';
+import { GALogEvent } from 'src/utils/analytics';
 
 const EventDetail = ({navigation, route}) => {
   const {Color} = useColor();

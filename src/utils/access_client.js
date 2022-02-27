@@ -43,6 +43,10 @@ export const accessClient = {
         showBannerHeader: isKomoto || isSabyan ? false : true,
         showListEmergency: isKomoto,
         showListJob: isKomoto || isSabyan ? false : true,
+        showListPlace:
+            isKomoto ? true :
+            isSabyan ? false :
+            true,
         showListAuction: isKomoto || isSabyan ? false : true,
         showListSoonAuction: isKomoto || isSabyan ? false : true,
         showListPromo: isKomoto || isSabyan ? false : true,
@@ -51,7 +55,14 @@ export const accessClient = {
         showListEbookNewer: isKomoto || isSabyan ? false : true,
     },
     MenuHome: {
-        showJob: isKomoto || isSabyan ? false : true,
+        showJob:
+            isKomoto ? false :
+            isSabyan ? false :
+            true,
+        showPlace:
+            isKomoto ? true :
+            isSabyan ? false :
+            true,
     },
     CreatePosting: {
         showPrivacy:
