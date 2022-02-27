@@ -17,6 +17,7 @@ import {queryContentProduct} from '@src/lib/query';
 import {shadowStyle} from '@src/styles';
 import {listPrivilegeUser} from 'src/utils/constants';
 import {Divider, Row} from 'src/styled';
+import { accessClient } from 'src/utils/access_client';
 
 const Example = Styled(View)`
 `;
@@ -107,6 +108,9 @@ export default ({navigation, route}) => {
         <Header
           title={route.params && route.params.title ? route.params.title : ''}
           actions={
+            (accessClient.UserGeneratedContent ||
+            user &&
+            listPrivilegeUser.includes(user.userId)) &&
             <Row justify="center" align="center">
               {/* <Ionicons
                       name='search'

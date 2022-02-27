@@ -16,12 +16,21 @@ const isKomoto = listKomotoFamily.includes(Config.INITIAL_CODE);
 const isSabyan = Config.INITIAL_CODE === 'TRIBESXSABYAN';
 
 export const accessClient = {
+    // legacy
     InitialCode: Config.INITIAL_CODE,
     IsAutoJoinMember:
-        isSabyan ? true : false,
+        isKomoto ? false :
+        isSabyan ? true :
+        false,
     Theme:
         isKomoto ? "dark" :
-        isSabyan ? 'light' : 'light',
+        isSabyan ? 'light' :
+        'light',
+    UserGeneratedContent:
+        isKomoto ? true :
+        isSabyan ? false :
+        true,
+    // screen
     SplashScreen: {
         backgroundColor:
             isKomoto ? 'theme' :

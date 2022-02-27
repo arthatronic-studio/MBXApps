@@ -25,6 +25,7 @@ import CarouselView from 'src/components/CarouselView';
 import {Container, Row, Divider} from 'src/styled';
 import {ScrollView} from 'react-native-gesture-handler';
 import {iconBookmarks} from '@assets/images/home';
+import { accessClient } from 'src/utils/access_client';
 
 const Example = Styled(View)`
 `;
@@ -119,6 +120,9 @@ export default ({navigation, route}) => {
         <Header
           title={route.params && route.params.title ? route.params.title : ''}
           actions={
+            (accessClient.UserGeneratedContent ||
+            user &&
+            listPrivilegeUser.includes(user.userId)) &&
             <Row justify='center' align='center'>
               {/* <Ionicons
                 name='search'
