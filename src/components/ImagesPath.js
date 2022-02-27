@@ -60,4 +60,6 @@ export default {
   send: require('../components/Images/Send.png'),
   sabyanBannerMusic: require('../components/Images/sabyan-banner-music.png'),
   sabyanBannerVideo: require('../components/Images/sabyan-banner-video.png'),
+  survey1: require('../components/Images/survey1.png'),
+  survey2: require('../components/Images/survey2.png'),
 };
