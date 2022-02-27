@@ -101,6 +101,7 @@ const Banner = props => {
                         height:'100%',
                         borderRadius: 16
                       }}
+                      resizeMode='contain'
                     />
                   </Container>
                 )
