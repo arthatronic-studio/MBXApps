@@ -62,4 +62,6 @@ export default {
   sabyanBannerVideo: require('../components/Images/sabyan-banner-video.png'),
   survey1: require('../components/Images/survey1.png'),
   survey2: require('../components/Images/survey2.png'),
+  survey3: require('../components/Images/survey3.png'),
+  survey4: require('../components/Images/survey4.png'),
 };

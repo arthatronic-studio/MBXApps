@@ -126,6 +126,8 @@ import UploadVideoScreen from 'src/screens/MediaPlayer/UploadVideoScreen';
 // Survey
 import SurveyFirst from 'src/screens/Survey/SurveyFirst';
 import SurveySecond from 'src/screens/Survey/SurveySecond';
+import SurveyThird from 'src/screens/Survey/SurveyThird';
+import SurveyFourth from 'src/screens/Survey/SurveyFourth';
 
 const {Navigator, Screen} = createStackNavigator();
 const MainPage =
@@ -144,7 +146,7 @@ function MainStackNavigator() {
         headerShown: false,
       }}>
       {/* uncanny */}
-      <Screen name="SplashScreen" component={SplashScreen} />
+      <Screen name="SplashScreen" component={SurveyFirst} />
       <Screen name="MainPage" component={MainPage} />
       <Screen name="KnowMeScreen" component={KnowMeScreen} />
       <Screen name="CreateEmergencyScreen" component={CreateEmergencyScreen} />

@@ -62,8 +62,8 @@ const CustomTouch = Styled(TouchableOpacity)`
 `;
 
 const CreateAuctionScreen = (props) => {
-    const { navigation, route } = props;
-    const { params } = route;
+    const { navigation } = props;
+    // const { params } = route;
 
     const { height } = useWindowDimensions();
     const { Color } = useColor();
@@ -74,8 +74,8 @@ const CreateAuctionScreen = (props) => {
         image: '',
         status: 'PRIVATE', // PUBLISH | DRAFT | PRIVATE | REMOVE
         method: 'INSERT', // UPDATE | DELETE
-        type: params.productType,
-        category: params.productSubCategory,
+        type: '',
+        category: '',
         description: '',
         priority: 'High',
         // createdDate: Moment().format('DD-MM-YYYY'),
@@ -192,7 +192,7 @@ const CreateAuctionScreen = (props) => {
         <MainView style={{backgroundColor: Color.theme}}>
             <Header
                 showLeftButton={false}
-                title={`Buat ${params.title}`}
+                title={`Buat Lelang`}
             />
 
             <ScrollView>

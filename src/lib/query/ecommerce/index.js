@@ -57,6 +57,19 @@ export const queryGetCart = gql`
   }
 `;
 
+export const queryGetCategory = gql`
+  query(
+    $page: Int!
+    $itemPerPage: Int!
+  ) {
+    ecommerceProductCategoryList(
+     page: $page
+     itemPerPage: $itemPerPage
+   ) {
+      id name
+   }
+  }
+`;
 
 
 export const queryUpdateItemCart = gql`

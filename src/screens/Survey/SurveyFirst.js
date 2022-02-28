@@ -30,6 +30,8 @@ import ImagesPath from 'src/components/ImagesPath';
 import Entypo from 'react-native-vector-icons/Entypo'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import axios from 'axios';
+import moment from 'moment';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -40,6 +42,7 @@ const Content = Styled(View)`
     padding: 12px
     borderRadius: 8px
 `;
+const instance =  axios.create({ baseURL: 'http://panel.sw.tribesocial.id', headers: { 'Content-Type': 'application/x-www-form-urlencoded'} });
 
 const SurveyFirst = ({navigation}) => {
     const user = useSelector((state) => state['user.auth'].login.user);
@@ -48,7 +51,33 @@ const SurveyFirst = ({navigation}) => {
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
 	const { Color } = useColor();
 
-	useEffect(() => {}, []);
+	useEffect(() => {
+        getDetail()
+    }, []);
+
+    const getDetail = async () => {
+        const dataq = {
+            "auth": "sha1("+"SURVEY-20220229-163729"+moment().format('YYYY-MM-DD HH:mm:ss')+")", "survey_code": "SURVEY-20220229-163729"+moment().format('YYYY-MM-DD HH:mm:ss'), "timestamps": moment().format('YYYY-MM-DD HH:mm:ss'),
+            "data":[{
+                "block": "1",
+                "index": "0",
+                "name": "Nama Penjual",
+                "value": "Riyan Sugih"
+            },
+            {
+                "block": "1",
+                "index": "1",
+                "name": "Lama Berjualan",
+                "value": "10 tahun"
+            }]
+        }
+        console.log(dataq, 'dataq')
+
+        const response = await instance.post('/submit-survey', dataq);
+        console.log(response, 'response')
+        
+      };
+
   return (
     <Scaffold
 		header={<Header customIcon title="Survey" type="regular" centerTitle={false} />}
