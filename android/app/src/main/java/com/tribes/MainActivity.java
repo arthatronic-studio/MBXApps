@@ -3,7 +3,6 @@ package com.tribes;
 import com.facebook.react.ReactActivity;
 
 // import com.facebook.react.ReactActivityDelegate;
-// import com.zoontek.rnbootsplash.RNBootSplash;
 
 public class MainActivity extends ReactActivity {
 
@@ -21,7 +20,6 @@ public class MainActivity extends ReactActivity {
 
   //     @Override
   //     protected void loadApp(String appKey) {
-  //       RNBootSplash.init(MainActivity.this); // <- initialize the splash screen
   //       super.loadApp(appKey);
   //     }
   //   };
