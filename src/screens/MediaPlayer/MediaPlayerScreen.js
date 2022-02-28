@@ -48,9 +48,9 @@ const MediaPlayerScreen = ({ navigation, route }) => {
             popupProps={popupProps}
             loadingProps={loadingProps}
         >
-            {user && listPrivilegeUser.includes(user.userId) && <Text onPress={() => navigation.navigate('UploadMusicScreen')}>
+            {/* {user && listPrivilegeUser.includes(user.userId) && <Text onPress={() => navigation.navigate('UploadMusicScreen')}>
                 Upload Music
-            </Text>}
+            </Text>} */}
             {/* <Text align='left' onPress={() => navigation.navigate('UploadVideoScreen')}>
                 Upload Video
             </Text> */}

@@ -25,6 +25,7 @@ import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
 import { Scaffold } from 'src/components';
+import client from '@src/lib/apollo';
 
 const HEADER_HEIGHT = 85;
 
@@ -65,6 +66,7 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
   // unstate
   const isPlaying = playerState === State.Playing;
   let item = null;
+  const [thisTrack, setThisTrack] = useState();
 
   // if (currentPlaying && playNowData.length > 0) {
   //   item = playNowData.filter((e) => e.id == currentPlaying.id)[0];
@@ -101,10 +103,13 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
   useEffect(() => {
     const getCurrentPlaying = async() => {
       const newCurrent = await TrackPlayer.getCurrentTrack();
+      if (newCurrent != null) {
+        setThisTrack(await TrackPlayer.getTrack(newCurrent));
+      }
       const newQueue = await TrackPlayer.getQueue();
       const state = await TrackPlayer.getState();
 
-      console.log('=======', newQueue, newCurrent);
+      // console.log('=======', newQueue, newCurrent);
       setPlayerState(state);
       
       if (newCurrent != null && newQueue.length > 0) {
@@ -215,6 +220,8 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
     // ntar validasi total biar flexible nyesuain duration
     return minutes + ':' + seconds;
   }
+
+  // console.log(thisTrack);
   
   const renderContent = () => {
     return (
@@ -272,7 +279,7 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
                     <View style={{height: '50%', aspectRatio: 1, borderRadius: 50, backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center', marginHorizontal: 32}}>
                         <Ionicons
                             onPress={() => {
-                              console.log(currentPlaying);
+                              // console.log(currentPlaying);
                                 isPlaying ? TrackPlayer.pause() : TrackPlayer.play();
                             }}
                             name={isPlaying ? 'pause' : 'play'}
@@ -350,11 +357,28 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
 
   if (orientation === 'landscape' || keyboardShow) return <View />;
 
-  console.log(currentPlaying);
+  // const fetchContentProduct = () => {
+  //   client.query({
+      
+  //   })
+  // }
 
   return (
     <Scaffold
       loadingProps={loadingProps}
+      header={
+        <Header
+          // actions={
+          //   <TouchableOpacity
+          //     onPress={() => thisTrack && navigation.navigate('CommentListScreen', { item: { id: parseInt(thisTrack.id, 1) } })}
+          //     style={{flexDirection: 'row'}}
+          //   >
+          //       <MaterialIcons name='comment' size={22} color={Color.primary} />
+          //       {/* <Text> {item && item.comment ? item.comment : 0}</Text> */}
+          //   </TouchableOpacity>
+          // }
+        />
+      }
     >
       <View style={{flex: 0.2}} />
 

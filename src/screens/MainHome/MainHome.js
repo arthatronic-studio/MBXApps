@@ -831,7 +831,7 @@ const MainHome = ({navigation, route}) => {
             <MusikTerbaru
               data={dataDummyMusic}
               onPress={(item, index) => {
-                trackPlayerPlay(dataDummyMusic, item);
+                trackPlayerPlay(dataDummyMusic, index);
                 navigation.navigate('MusicPlayerScreen');
               }}
             />

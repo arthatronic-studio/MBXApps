@@ -15,6 +15,7 @@ import Banner from 'src/components/Banner';
 import ImagesPath from 'src/components/ImagesPath';
 import MusikTerbaru from 'src/components/MusikTerbaru';
 import { trackPlayerPlay } from 'src/utils/track-player-play';
+import CardListMusic from '@src/screens/MediaPlayer/CardListMusic';
 
 const dataDummyMusic = [
     {
@@ -66,10 +67,28 @@ const TabMusic = ({ }) => {
                 <Divider />
 
                 <MusikTerbaru
+                    // data={dataDummyMusic}
+                    // onPress={() => {
+                    //     trackPlayerPlay();
+                    //     navigation.navigate('MusicPlayerScreen');
+                    // }}
+                />
+
+                <CardListMusic
+                    componentType='POPULAR'
                     data={dataDummyMusic}
-                    onPress={() => {
-                        trackPlayerPlay();
-                        navigation.navigate('MusicPlayerScreen');
+                    title='Lagu Populer'
+                    decimalWidth={0.17}
+                    decimalHeight={0.17}
+                    showAll={false}
+                    onPressShowAll={() => {
+                        // navigation.navigate('ShowAllScreen', {
+                        //     title: '',
+                        //     subTitle: 'Semua Musik',
+                        //     componentType: 'SHOW_ALL_MUSIC',
+                        //     productType: 'MUSIC',
+                        //     productCategory: 'POPULAR'
+                        // });
                     }}
                 />
             </ScrollView>

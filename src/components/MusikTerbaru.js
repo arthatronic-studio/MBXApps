@@ -43,7 +43,7 @@ const MusikTerbaru = ({ data, onPress }) => {
       itemPerPage: 50,
       productType: accessClient.InitialCode,
       productCategory: "NEWEST_MUSIC",
-      // productSubCategory: "NEWEST_MUSIC"
+      // productSubCategory: "NEW"
     };
 
     client.query({
@@ -85,7 +85,7 @@ const MusikTerbaru = ({ data, onPress }) => {
       <TouchableOpacity
         onPress={() => {
           // onPress(item, index);
-          trackPlayerPlay(list.data, item);
+          trackPlayerPlay(list.data, index);
           navigation.navigate('MusicPlayerScreen');
         }}
       >
@@ -164,8 +164,6 @@ const MusikTerbaru = ({ data, onPress }) => {
           align='left'
           type='bold'
           style={{
-            fontSize: 18,
-            color: Color.text,
             paddingHorizontal: 16,
             marginTop: 8,
             marginBottom: 4,

@@ -2,14 +2,15 @@ import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   TouchableOpacity as NativeTouchable,
-  ScrollView,
   useWindowDimensions,
-  Image,
+  Platform,
+  Keyboard,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useIsFocused} from '@react-navigation/native';
 import messaging from '@react-native-firebase/messaging';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {
   usePopup,
@@ -21,11 +22,9 @@ import Text from '@src/components/Text';
 import validate from '@src/lib/validate';
 import {login} from '@src/state/actions/user/auth';
 import {redirectTo} from '@src//utils';
-import {iconApp} from '@assets/images';
 import FormInput from 'src/components/FormInput';
 import { Container, Row, Line } from 'src/styled';
 import PopupTermCondition from 'src/components/PopupTermCondition';
-import { statusBarHeight } from 'src/utils/constants';
 import WidgetBgFixIcon from './WidgetBgFixIcon';
 
 const inputs = ['username', 'password'];
@@ -153,6 +152,8 @@ const LoginScreen = ({navigation, route}) => {
   };
 
   const signIn = () => {
+    Keyboard.dismiss();
+
     let valid = true;
     const newErrorState = {};
 
@@ -176,7 +177,7 @@ const LoginScreen = ({navigation, route}) => {
     >
       <WidgetBgFixIcon />
 
-      <ScrollView
+      <KeyboardAwareScrollView
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
@@ -311,7 +312,7 @@ const LoginScreen = ({navigation, route}) => {
             </Button>
           </Container>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
 
       <PopupTermCondition
         visible={modalTerm}

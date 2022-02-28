@@ -1,17 +1,17 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   TouchableOpacity as NativeTouchable,
-  ScrollView,
-  Image,
   useWindowDimensions,
   Platform,
+  Keyboard,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useIsFocused} from '@react-navigation/native';
-import {iconApp} from '@assets/images';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
 import {
   Text,
   usePopup,
@@ -54,6 +54,11 @@ const RegisterScreen = ({navigation, route}) => {
   const setState = obj => {
     changeState({...state, ...obj});
   };
+
+  const emailRef = useRef();
+  const phoneRef = useRef();
+  const passwordRef = useRef();
+  const passwordConfRef = useRef();
 
   const { height, width } = useWindowDimensions();
   const dispatch = useDispatch();
@@ -119,6 +124,8 @@ const RegisterScreen = ({navigation, route}) => {
   };
 
   const onSubmit = () => {
+    Keyboard.dismiss();
+
     let valid = true;
     const newErrorState = {};
     const {password, password2} = state.userData;
@@ -136,7 +143,7 @@ const RegisterScreen = ({navigation, route}) => {
 
     setState({error: newErrorState, allValid: valid});
   };
-
+  
   return (
     <Scaffold
       showHeader={false}
@@ -148,7 +155,7 @@ const RegisterScreen = ({navigation, route}) => {
     >
       <WidgetBgFixIcon />
 
-      <ScrollView
+      <KeyboardAwareScrollView
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
@@ -179,11 +186,12 @@ const RegisterScreen = ({navigation, route}) => {
               onBlur={() => isValueError('fullName')}
               returnKeyType="next"
               keyboardType="default"
-              onSubmitEditing={() => {}}
+              onSubmitEditing={() => emailRef.current.focus()}
               error={state.error.fullName}
             />
 
             <FormInput
+              ref={emailRef}
               label='Email'
               placeholder='contoh@email.com'
               value={state.userData.email}
@@ -191,11 +199,12 @@ const RegisterScreen = ({navigation, route}) => {
               onBlur={() => isValueError('email')}
               returnKeyType="next"
               keyboardType="email-address"
-              onSubmitEditing={() => {}}
+              onSubmitEditing={() => phoneRef.current.focus()}
               error={state.error.email}
             />
 
             <FormInput
+              ref={phoneRef}
               label='No. Telepon'
               placeholder='081312345678'
               value={state.userData.username}
@@ -203,11 +212,12 @@ const RegisterScreen = ({navigation, route}) => {
               onBlur={() => isValueError('username')}
               returnKeyType="next"
               keyboardType="default"
-              onSubmitEditing={() => {}}
+              onSubmitEditing={() => passwordRef.current.focus()}
               error={state.error.username}
             />
 
-            <FormInput  
+            <FormInput
+              ref={passwordRef}
               secureTextEntry={!state.showPassword}
               label='Kata Sandi'
               placeholder='******'
@@ -216,7 +226,7 @@ const RegisterScreen = ({navigation, route}) => {
               onBlur={() => isValueError('password')}
               returnKeyType="next"
               keyboardType="default"
-              onSubmitEditing={() => {}}
+              onSubmitEditing={() => passwordConfRef.current.focus()}
               error={state.error.password}
               suffixIcon={
                 <View
@@ -245,6 +255,7 @@ const RegisterScreen = ({navigation, route}) => {
             />
 
             <FormInput
+              ref={passwordConfRef}
               secureTextEntry={!state.showPassword}
               label='Ulangi Kata Sandi'
               placeholder='******'
@@ -253,7 +264,7 @@ const RegisterScreen = ({navigation, route}) => {
               onBlur={() => isValueError('password2')}
               returnKeyType="send"
               keyboardType="default"
-              onSubmitEditing={() => {}}
+              onSubmitEditing={() => onSubmit()}
               error={state.error.password2}
               suffixIcon={
                 <View
@@ -300,7 +311,7 @@ const RegisterScreen = ({navigation, route}) => {
             </Button>
           </Container>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
 
       <Header
         style={{
