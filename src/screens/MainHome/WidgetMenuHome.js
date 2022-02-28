@@ -42,7 +42,6 @@ const SambatanMenuView = Styled(View)`
 `;
 
 const CardMenu = Styled(TouchableOpacity)`
-  aspectRatio: 1.5;
   flexDirection: column;
   marginBottom: 12px;
 `;
@@ -248,6 +247,7 @@ const WidgetMenuHome = (props) => {
               }}
               style={{
                 width: `${widthMenu}%`,
+                aspectRatio: menuRealLength,
               }}
             >
               <UserIcon>

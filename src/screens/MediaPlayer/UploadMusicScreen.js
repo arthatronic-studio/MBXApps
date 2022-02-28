@@ -175,7 +175,7 @@ const UploadMusicScreen = (props) => {
                 () => {
                     setTimeout(() => {
                         navigation.popToTop();
-                    }, timeout);
+                    }, 2000);
                 }
             );
 
