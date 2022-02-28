@@ -146,7 +146,7 @@ function MainStackNavigator() {
         headerShown: false,
       }}>
       {/* uncanny */}
-      <Screen name="SplashScreen" component={SurveyFirst} />
+      <Screen name="SplashScreen" component={SplashScreen} />
       <Screen name="MainPage" component={MainPage} />
       <Screen name="KnowMeScreen" component={KnowMeScreen} />
       <Screen name="CreateEmergencyScreen" component={CreateEmergencyScreen} />
@@ -260,6 +260,8 @@ function MainStackNavigator() {
       {/* Survey */}
       <Screen name='SurveyFirst' component={SurveyFirst} />
       <Screen name='SurveySecond' component={SurveySecond} />
+      <Screen name='SurveyThird' component={SurveyThird} />
+      <Screen name='SurveyFourth' component={SurveyFourth} />
     </Navigator>
   );
 }

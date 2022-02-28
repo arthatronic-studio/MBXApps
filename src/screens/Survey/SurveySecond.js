@@ -217,7 +217,7 @@ const SurveySecond = ({navigation}) => {
 			</View>
         </ScrollView>
 		<View style={{width: '100%', height: 70, alignItems: 'center', borderRadius: 10}}>
-            <TouchableOpacity onPress={() => navigation.navigate('SurveySecond')} style={{backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
+            <TouchableOpacity onPress={() => navigation.navigate('SurveyThird')} style={{backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
                 <Text style={{color: Color.textInput}}>Lanjut</Text>
             </TouchableOpacity>
         </View>
