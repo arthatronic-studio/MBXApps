@@ -44,7 +44,7 @@ const Content = Styled(View)`
 
     
 
-const SurveySecond = ({navigation}) => {
+const SurveySecond = ({ route, navigation}) => {
     const user = useSelector((state) => state['user.auth'].login.user);
 	const loading = useSelector((state) => state['user.auth'].loading);
 
@@ -52,19 +52,34 @@ const SurveySecond = ({navigation}) => {
 	const { Color } = useColor();
 
     const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
-    {label: 'Apple', value: 'apple'},
-    {label: 'Banana', value: 'banana'},
-	{label: 'Pear', value: 'apple'},
-    {label: 'Manggo', value: 'banana'},
-	{label: 'Melon', value: 'apple'},
-    {label: 'Manggosteen', value: 'banana'},
-	{label: 'Pineaple', value: 'apple'},
-    {label: 'Rambutans', value: 'banana'}
-  ]);
 
-	useEffect(() => {}, []);
+    const [address, setAddress] = useState('');
+    const [province, setProvince] = useState('');
+    const [city, setCity] = useState('');
+    const [kecamatan, setKecamatan] = useState('');
+    const [kelurahan, setKelurahan] = useState('');
+	
+
+
+	useEffect(() => {submit()}, []);
+
+	const submit = async () => {
+        const label = ['address','province','city','kecamatan','kelurahan']
+        const dataState = [address, province, city, kecamatan, kelurahan]
+        let tempData = []
+        label.forEach((element, index) => {
+            tempData.push({
+                block: '2',
+                index: index,
+                name: element,
+                value: dataState[index]
+            })
+        });
+        // console.log('route', route.params.item.concat(tempData))
+        navigation.navigate('SurveyThird',{item: route.params.item.concat(tempData)})
+        // console.log(dataq, 'dataq')
+      };
+
   return (
     <Scaffold
 		header={<Header customIcon title="Survey" type="regular" centerTitle={false} />}
@@ -81,143 +96,59 @@ const SurveySecond = ({navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginTop: 20, marginBottom: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Masukkan alamat lengkap . . .' style={{borderWidth: 1, borderColor: Color.secondary,
-                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 90}}></TextInput>
+                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 90}}
+						onChangeText={(value) => setAddress(value)}
+                        value={address}
+                    />
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Alamat lengkap</Text>
                 </View>
             </View>
             <View style={{height: 500}}>
-			<View style={{ width: '95%',marginHorizontal: 10, marginBottom: 20, marginTop: 5}}>
-						<Text 
-							style={{
-								paddingHorizontal: 15,
-								paddingTop: 5,
-								color: Color.secondary,
-								fontSize: 8,
-								fontWeight: '400',
-								textAlign: 'left'
-							}}>Provinsi</Text>
-						<DropDownPicker
-                        zIndex={3000}
-                        zIndexInverse={1000}
-							placeholder='- Pilih Provinsi -'
-							open={open}
-							value={value}
-							items={items}
-							setOpen={setOpen}
-							setValue={setValue}
-							setItems={setItems}
-							style={{position: 'absolute', paddingHorizontal: 12, paddingBottom: 5,marginHorizontal: 1,borderWidth: 0, width: '99%', height: 28}}
-							/>
-						<View style={{position: 'absolute',width: '100%',height: 47, 
-						borderWidth: 1, borderColor: Color.secondary, borderRadius: 5}}/>
-			</View>
-            <View style={{width: '95%',marginHorizontal: 10, marginVertical: 20}}>
-						<Text 
-							style={{
-								paddingHorizontal: 15,
-								paddingTop: 5,
-								color: Color.secondary,
-								fontSize: 8,
-								fontWeight: '400',
-								textAlign: 'left'
-							}}>Provinsi</Text>
-						<DropDownPicker
-                        zIndex={2000}
-                        zIndexInverse={2000}
-							placeholder='- Kota/Kabupaten -'
-							open={open}
-							value={value}
-							items={items}
-							setOpen={setOpen}
-							setValue={setValue}
-							setItems={setItems}
-							style={{position: 'absolute',paddingHorizontal: 12, paddingBottom: 5,marginHorizontal: 1,borderWidth: 0, width: '99%', height: 28}}
-							/>
-						<View style={{position: 'absolute',width: '100%',height: 47, 
-						borderWidth: 1, borderColor: Color.secondary, borderRadius: 5}}/>
-			</View>
-			<View style={{width: '95%',marginHorizontal: 10, marginTop: 20, marginBottom: 20}}>
-						<Text 
-							style={{
-								paddingHorizontal: 15,
-								paddingTop: 5,
-								color: Color.secondary,
-								fontSize: 8,
-								fontWeight: '400',
-								textAlign: 'left'
-							}}>Provinsi</Text>
-						<DropDownPicker
-                        zIndex={2000}
-                        zIndexInverse={2000}
-							placeholder='- Pilih Kecamatan -'
-							open={open}
-							value={value}
-							items={items}
-							setOpen={setOpen}
-							setValue={setValue}
-							setItems={setItems}
-							style={{position: 'absolute',paddingHorizontal: 12, paddingBottom: 5,marginHorizontal: 1,borderWidth: 0, width: '99%', height: 28}}
-							/>
-						<View style={{position: 'absolute',width: '100%',height: 47, 
-						borderWidth: 1, borderColor: Color.secondary, borderRadius: 5}}/>
-			</View>
-			<View style={{width: '95%',marginHorizontal: 10, marginVertical: 20}}>
-						<Text 
-							style={{
-								paddingHorizontal: 15,
-								paddingTop: 5,
-								color: Color.secondary,
-								fontSize: 8,
-								fontWeight: '400',
-								textAlign: 'left'
-							}}>Provinsi</Text>
-						<DropDownPicker
-                        zIndex={2000}
-                        zIndexInverse={2000}
-							placeholder='- Pilih Desa/Kelurahan -'
-							open={open}
-							value={value}
-							items={items}
-							setOpen={setOpen}
-							setValue={setValue}
-							setItems={setItems}
-							style={{position: 'absolute',paddingHorizontal: 12, paddingBottom: 5,marginHorizontal: 1,borderWidth: 0, width: '99%', height: 28}}
-							/>
-						<View style={{position: 'absolute',width: '100%',height: 47, 
-						borderWidth: 1, borderColor: Color.secondary, borderRadius: 5}}/>
-			</View>
-			<View style={{width: '95%',marginHorizontal: 10, marginVertical: 20}}>
-						<Text 
-							style={{
-								paddingHorizontal: 15,
-								paddingTop: 5,
-								color: Color.secondary,
-								fontSize: 8,
-								fontWeight: '400',
-								textAlign: 'left'
-							}}>Provinsi</Text>
-						<DropDownPicker
-                        zIndex={2000}
-                        zIndexInverse={2000}
-							placeholder='- Pilih Desa/Kelurahan -'
-							open={open}
-							value={value}
-							items={items}
-							setOpen={setOpen}
-							setValue={setValue}
-							setItems={setItems}
-							style={{position: 'absolute',paddingHorizontal: 12, paddingBottom: 5,marginHorizontal: 1,borderWidth: 0, width: '99%', height: 28}}
-							/>
-						<View style={{position: 'absolute',width: '100%',height: 47, 
-						borderWidth: 1, borderColor: Color.secondary, borderRadius: 5}}/>
-			</View>
-			<View style={{borderRadius: 5, width: '95%',marginHorizontal: 10, marginVertical: 20, borderWidth: 1, borderColor: Color.secondary, height: 200}}>
-				<Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left', paddingHorizontal: 10, paddingVertical: 5,}}>Koordinat Lokasi</Text>
-			</View>
+			<View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
+                <View style={{width: '100%'}}>
+                    <TextInput placeholder='Banten' style={{borderWidth: 1, borderColor: Color.border,
+                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
+                        onChangeText={(value) => setProvince(value)}
+                        value={province}
+                    />
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Provinsi</Text>
+                </View>
+            </View>
+			<View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
+                <View style={{width: '100%'}}>
+                    <TextInput placeholder='Tangerang' style={{borderWidth: 1, borderColor: Color.border,
+                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
+                        onChangeText={(value) => setCity(value)}
+                        value={city}
+                    />
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Kota/Kabupaten</Text>
+                </View>
+            </View>
+			<View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
+                <View style={{width: '100%'}}>
+                    <TextInput placeholder='Jatiuwung' style={{borderWidth: 1, borderColor: Color.border,
+                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
+                        onChangeText={(value) => setKecamatan(value)}
+                        value={kecamatan}
+                    />
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Kecamatan</Text>
+                </View>
+            </View>
+			<View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
+                <View style={{width: '100%'}}>
+                    <TextInput placeholder='Keroncong' style={{borderWidth: 1, borderColor: Color.border,
+                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
+                        onChangeText={(value) => setKelurahan(value)}
+                        value={kelurahan}
+                    />
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Kelurahan</Text>
+                </View>
+            </View>
+
 			</View>
         </ScrollView>
 		<View style={{width: '100%', height: 70, alignItems: 'center', borderRadius: 10}}>
-            <TouchableOpacity onPress={() => navigation.navigate('SurveyThird')} style={{backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
+            <TouchableOpacity onPress={() => submit()} style={{backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
                 <Text style={{color: Color.textInput}}>Lanjut</Text>
             </TouchableOpacity>
         </View>

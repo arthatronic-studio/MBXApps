@@ -49,6 +49,8 @@ const SurveyFourth = ({navigation}) => {
 	const { Color } = useColor();
 
 	useEffect(() => {}, []);
+
+
   return (
     <Scaffold
 		header={<Header customIcon title="Survey" type="regular" centerTitle={false} />}
@@ -69,9 +71,9 @@ const SurveyFourth = ({navigation}) => {
                 </View>
                 <View >
                     <Row style={{ flexWrap: 'wrap' }}>
-                        {[1,2,3,4,5,6,7,8,9].map((val, id) => (
-                            <TouchableOpacity style={{ borderColor: '#111', borderWidth: 2, borderRadius: 20, margin: 10 }}>
-                                <Text style={{ marginHorizontal: 16, marginVertical: 8 }}>Segitiga Biru</Text>
+                        {['Segitiga Biru','Cakra Kembar','Kunci Biru','Mila','Bola Salju','Gatotkaca','Kompas','Kompas','Lainnya'].map((val, id) => (
+                            <TouchableOpacity style={{ borderColor: '#111', borderWidth: 2, borderRadius: 20, margin: 5 }}>
+                                <Text style={{ marginHorizontal: 16, marginVertical: 8 }}>{val}</Text>
                             </TouchableOpacity>
                         ))}
                     </Row>
@@ -91,9 +93,9 @@ const SurveyFourth = ({navigation}) => {
                 </View>
                 <View >
                     <Row style={{ flexWrap: 'wrap' }}>
-                        {[1,2,3,4,5,6,7,8,9].map((val, id) => (
-                            <TouchableOpacity style={{ borderColor: '#111', borderWidth: 2, borderRadius: 20, margin: 10 }}>
-                                <Text style={{ marginHorizontal: 16, marginVertical: 8 }}>Warung</Text>
+                        {['Warung','Minimarket','Supermarket/Mall','Pasar','Online/E-Commerce','Lainnya'].map((val, id) => (
+                            <TouchableOpacity style={{ borderColor: '#111', borderWidth: 2, borderRadius: 20, margin: 5 }}>
+                                <Text style={{ marginHorizontal: 16, marginVertical: 8 }}>{val}</Text>
                             </TouchableOpacity>
                         ))}
                     </Row>

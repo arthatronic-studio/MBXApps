@@ -6,6 +6,7 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import RNSimpleCrypto from "react-native-simple-crypto";
 
 import {
 	Text,
@@ -32,6 +33,10 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import axios from 'axios';
 import moment from 'moment';
+var crypto = require('crypto-js')
+
+function sha1(data) {
+}
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -57,7 +62,7 @@ const SurveyFirst = ({navigation}) => {
     const [phoneKoor, setPhoneKoor] = useState('');
 	const { Color } = useColor();
 
-	useEffect(() => {
+	useEffect( () => {
         // submit()
     }, []);
 
@@ -74,29 +79,31 @@ const SurveyFirst = ({navigation}) => {
             })
         });
         console.log(tempData)
+        const sha1Hash = await RNSimpleCrypto.SHA.sha1("SURVEY-20220229" + moment().format('YYYY-MM-DD HH:mm:ss') + '123!!qweQWE');
         const dataq = {
-            "auth": "sha1("+"SURVEY-20220229-163729"+moment().format('YYYY-MM-DD HH:mm:ss')+")", 
+            "auth": sha1Hash, 
             "survey_code": "SURVEY-20220229", 
             "timestamps": moment().format('YYYY-MM-DD HH:mm:ss'),
             "data": tempData
         }
+        navigation.navigate('SurveySecond',{item: tempData})
         console.log(dataq, 'dataq')
-        try {
-            const response = await axios({
-                baseURL: 'http://panel.sw.tribesocial.id',
-                method: 'post',
-                url: '/submit-survey',
-                data: dataq,
-                headers: {
-                    Accept: 'application/json'
-                },
-                timeout: 5000,
+        // try {
+        //     const response = await axios({
+        //         baseURL: 'http://panel.sw.tribesocial.id',
+        //         method: 'post',
+        //         url: '/submit-survey',
+        //         data: dataq,
+        //         headers: {
+        //             Accept: 'application/json'
+        //         },
+        //         timeout: 5000,
                 
-              });
-              console.log(response, "respon apicall")
-          } catch (error) {
-            console.log(error.response, 'error apicall')
-          }
+        //       });
+        //       console.log(response, "respon apicall")
+        //   } catch (error) {
+        //     console.log(error.response, 'error apicall')
+        //   }
       };
 
   return (

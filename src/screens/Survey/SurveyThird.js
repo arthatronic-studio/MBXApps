@@ -41,14 +41,38 @@ const Content = Styled(View)`
     borderRadius: 8px
 `;
 
-const SurveyThird = ({navigation}) => {
+const SurveyThird = ({route, navigation}) => {
     const user = useSelector((state) => state['user.auth'].login.user);
 	const loading = useSelector((state) => state['user.auth'].loading);
+    const [namePengusaha, setNamePengusaha] = useState('');
+    const [nameUsaha, setNameUsaha] = useState('');
+    const [phoneUsaha, setPhoneUsaha] = useState('');
+    const [productUtama, setProductUtama] = useState('');
+    const [kegiatanUtama, setKegiatanUtama] = useState('');
+    const [tepungTambahan, setTepungTambahan] = useState('');
+    const [kegiatanTambahan, setKegiatanTambahan] = useState('');
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
 	const { Color } = useColor();
 
-	useEffect(() => {}, []);
+	useEffect(() => {submit()}, []);
+
+    const submit = async () => {
+        const label = ['namePengusaha', 'nameUsaha', 'productUtama', 'kegiatanUtama', 'tepungTambahan', 'kegiatanTambahan']
+        const dataState = [namePengusaha, nameUsaha, productUtama, kegiatanUtama, tepungTambahan, kegiatanTambahan]
+        let tempData = []
+        label.forEach((element, index) => {
+            tempData.push({
+                block: '3',
+                index: index,
+                name: element,
+                value: dataState[index]
+            })
+        });
+        navigation.navigate('SurveyFourth',{item: route.params.item.concat(tempData)})
+    //    navigation.navigate('SurveyFourth')
+      };
+
   return (
     <Scaffold
 		header={<Header customIcon title="Survey" type="regular" centerTitle={false} />}
@@ -65,21 +89,30 @@ const SurveyThird = ({navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Adang Susanyo' style={{borderWidth: 1, borderColor: Color.border,
-                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}></TextInput>
+                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
+                        onChangeText={(value) => setNamePengusaha(value)}
+                        value={namePengusaha}
+                    />
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Nama Pengusaha</Text>
                 </View>
             </View>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Adang Susanyo' style={{borderWidth: 1, borderColor: Color.border,
-                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}></TextInput>
+                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
+                        onChangeText={(value) => setNameUsaha(value)}
+                        value={nameUsaha}
+                    />
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Nama Usaha</Text>
                 </View>
             </View>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='813-1234-5678' style={{borderWidth: 1, borderColor: Color.border,
-                        width: '100%', borderRadius: 5, paddingHorizontal: 40, paddingTop: 20, height: 47}}></TextInput>
+                        width: '100%', borderRadius: 5, paddingHorizontal: 40, paddingTop: 20, height: 47}}
+                        onChangeText={(value) => setPhoneUsaha(value)}
+                        value={phoneUsaha}
+                    />
                     <Text style={{position: 'absolute', marginVertical: 17, marginHorizontal: 10, fontSize: 13}}>+62</Text>
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>No Telepon</Text>
                 </View>
@@ -87,14 +120,20 @@ const SurveyThird = ({navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Adang Susanyo' style={{borderWidth: 1, borderColor: Color.border,
-                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}></TextInput>
+                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
+                        onChangeText={(value) => setProductUtama(value)}
+                        value={productUtama}
+                    />
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Produk Utama</Text>
                 </View>
             </View>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginTop: 20, marginBottom: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Masukkan deskripsi usaha . . . . . .' style={{borderWidth: 1, borderColor: Color.secondary,
-                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 90}}></TextInput>
+                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 90}}
+                        onChangeText={(value) => setKegiatanUtama(value)}
+                        value={kegiatanUtama}
+                    />
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Kegiatan Utama</Text>
                 </View>
             </View>
@@ -102,7 +141,10 @@ const SurveyThird = ({navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Adang Susanyo' style={{borderWidth: 1, borderColor: Color.border,
-                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}></TextInput>
+                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
+                        onChangeText={(value) => setTepungTambahan(value)}
+                        value={tepungTambahan}
+                    />
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Tepung Tambahan</Text>
                 </View>
             </View>
@@ -110,7 +152,10 @@ const SurveyThird = ({navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginTop: 20, marginBottom: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Masukkan deskripsi usaha . . . . . .' style={{borderWidth: 1, borderColor: Color.secondary,
-                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 90}}></TextInput>
+                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 90}}
+                        onChangeText={(value) => setKegiatanTambahan(value)}
+                        value={kegiatanTambahan}
+                    />
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Kegiatan Tambahan</Text>
                 </View>
             </View>
@@ -118,7 +163,7 @@ const SurveyThird = ({navigation}) => {
             
         </ScrollView>
         <View style={{width: '100%', height: 70, alignItems: 'center', borderRadius: 10}}>
-            <TouchableOpacity onPress={() => navigation.navigate('SurveyFourth')} style={{backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
+            <TouchableOpacity onPress={() => submit()} style={{backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
                 <Text style={{color: Color.textInput}}>Lanjut</Text>
             </TouchableOpacity>
         </View>
