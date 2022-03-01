@@ -11,8 +11,6 @@ import DatePicker from 'react-native-date-picker';
 import Moment from 'moment';
 
 import {
-  // Button,
-  // TouchableOpacity,
   Text,
   Popup, usePopup,
   Loading,
@@ -24,10 +22,10 @@ import {
   TouchableOpacity,
 } from '@src/components/Button';
 import validate from '@src/lib/validate';
-
 import { updateCurrentUserProfile } from '@src/state/actions/user/auth';
 import { usePreviousState } from '@src/hooks';
 import { Divider, MainView } from 'src/styled';
+import { accessClient } from 'src/utils/access_client';
 
 const Container = Styled(View)`
   width: 100%;
@@ -47,12 +45,6 @@ const EmailRoundedView = Styled(View)`
   flexDirection: column;
 `;
 
-const SignRegisterView = Styled(View)`
-  width: 100%;
-  marginTop: 36px;
-  marginBottom: 24px;
-`;
-
 const CustomTextInput = Styled(TextInput)`
   width: 100%;
   height: 100%;
@@ -65,22 +57,6 @@ const CustomTextInput = Styled(TextInput)`
 const ErrorView = Styled(View)`
   width: 100%;
   paddingVertical: 4px;
-  alignItems: flex-start;
-`;
-
-const SignButton = Styled(Button)`
-  width: 100%;
-  height: 45px;
-  borderRadius: 4px;
-`;
-
-const RegisterButton = Styled(TouchableOpacity)`
-  marginLeft: 4px;
-`;
-
-const TextTitleView = Styled(View)`
-  width: 100%;
-  marginBottom: 43px;
   alignItems: flex-start;
 `;
 
@@ -102,7 +78,6 @@ export default ({ navigation, route }) => {
   const user = useSelector(state => state['user.auth'].login.user);
 
   const {
-    register,
     loading,
     error,
   } = useSelector(state => state['user.auth']);
@@ -122,11 +97,10 @@ export default ({ navigation, route }) => {
     idCardNumber: user ? user.idCardNumber : '',
     email: user ? user.email : '',
     phoneNumber: user ? user.phoneNumber : '',
-    tanggalLahir: user && user.tanggalLahir ? user.tanggalLahir : Moment(new Date('1990')).format('DD-MM-YYYY'),
-    Nomor_ID: user ? user.Nomor_ID :  '',
-    Alamat : user ? user.Alamat : '',
+    tanggalLahir: user && user.birthDate ? user.birthDate : Moment(new Date('1990')).format('DD-MM-YYYY'),
+    Nomor_ID: user ? user.idNumber :  '',
+    Alamat : user ? user.address : '',
   });
-  console.log('tangal', userData.tanggalLahir);
   const [errorData, setErrorData] = useState({
     fullName: null,
     idCardNumber: null,
@@ -140,36 +114,22 @@ export default ({ navigation, route }) => {
   //Image
   const [thumbImage, setThumbImage] = useState('');
   const [mimeImage, setMimeImage] = useState('image/jpeg');
-  const handleBackPress = () => {
-    backToSelectVideo();
-    return true;
-}
 
-console.log('user', user);
-
-const backToSelectVideo = () => {
-    setThumbImage('');
-    setMimeImage('image/jpeg');
-}
-//Tanggal Lahir
-const [tanggalLahir, setDate] = useState(new Date('1990'))
-const [open, setOpen] = useState(false)
-
+  //Tanggal Lahir
+  const [tanggalLahir, setDate] = useState(user && user.birthDate ? new Date(...user.birthDate.split("-").reverse()) : new Date('1990'));
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (isFocused) {
       if (prevLoading && user && loading === false) {
         navigation.pop();
         showPopup('Data berhasil diubah', 'success');
-      }
-      if (!register.status && error) {
-        showPopup('Terjadi Kesalaha, silahkan coba kembali', 'error');
+      } else if (error) {
+        // showPopup('Terjadi Kesalaha, silahkan coba kembali', 'error');
         console.log(JSON.stringify(error), 'error');
-        
-        dispatch({ type: 'USER.LOGOUT' });
       }
     }
-  }, [user, error, isFocused]);
+  }, [user, loading, error, isFocused]);
 
   useEffect(() => {
     if (allValid) {
@@ -191,16 +151,15 @@ const [open, setOpen] = useState(false)
         idCardNumber,
         email,
         phoneNumber,
-        nomor_id: Nomor_ID,
-        alamat: Alamat,
-        tanggalLahir: tanggalLahir,
-
-        
+        idNumber: Nomor_ID,
+        address: Alamat,
+        birthDate: tanggalLahir,
+        photoProfile : user && thumbImage === '' ? '' : 'data:image/png;base64,' + thumbImage
       };
 
       console.log('newUserData', newUserData);
 
-      // dispatch(updateCurrentUserProfile(newUserData));
+      dispatch(updateCurrentUserProfile(newUserData));
     }
   }, [allValid]);
 
@@ -248,29 +207,26 @@ const [open, setOpen] = useState(false)
               />
           </TouchableOpacity>}
 
-              <LabelInput>
-                  
-              </LabelInput>
-              <TouchableOpacity
-                  onPress={() => {
-                      const options = {
-                          mediaType: 'photo',
-                          maxWidth: 320,
-                          maxHeight: 320,
-                          quality: 1,
-                          includeBase64: true,
-                      }
+            <TouchableOpacity
+              onPress={() => {
+                const options = {
+                    mediaType: 'photo',
+                    maxWidth: 640,
+                    maxHeight: 640,
+                    quality: 1,
+                    includeBase64: true,
+                }
 
-                      launchImageLibrary(options, (callback) => {
-                          setThumbImage(callback.base64);
-                          setMimeImage(callback.type);
-                      })
-                  }}
-                  style={{width: '100%', height: 70, borderRadius: 4, marginTop: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
-              >
-                  <Entypo name='folder-images' size={22} style={{marginBottom: 4}} />
-                  <Text size={10}>Pilih gambar</Text>
-              </TouchableOpacity>
+                launchImageLibrary(options, (callback) => {
+                    setThumbImage(callback.base64);
+                    setMimeImage(callback.type);
+                })
+              }}
+              style={{width: '100%', height: 70, borderRadius: 4, marginTop: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
+            >
+              <Entypo name='folder-images' size={22} style={{marginBottom: 4}} />
+              <Text size={10}>Pilih gambar</Text>
+            </TouchableOpacity>
 
           <Divider />
                
@@ -334,26 +290,29 @@ const [open, setOpen] = useState(false)
           <ErrorView>
             <Text size={12} color={Color.error} type='medium' align='left'>{errorData.idCardNumber}</Text>
           </ErrorView>
-          <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Nomor Punggung</Text>
-          </LabelInput>
-          <EmailRoundedView>
-            <CustomTextInput
-              placeholder=' Masukan nomor punggung '
-              keyboardType='number-pad'
-              placeholderTextColor={Color.gray}
-              underlineColorAndroid='transparent'
-              autoCorrect={false}
-              onChangeText={(text) => onChangeUserData('Nomor_ID', text)}
-              selectionColor={Color.text}
-              value={userData.Nomor_ID}
-              onBlur={() => isValueError('Nomor_ID')}
-              style={{color: Color.text}}
-              />
-          </EmailRoundedView>
-          <ErrorView>
-            <Text size={12} color={Color.error} type='medium' align='left'>{errorData.Nomor_ID}</Text>
-          </ErrorView>
+
+          {accessClient.ChangeProfile.showIdNumber && <>
+            <LabelInput>
+              <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Nomor Punggung</Text>
+            </LabelInput>
+            <EmailRoundedView>
+              <CustomTextInput
+                placeholder=' Masukan nomor punggung '
+                keyboardType='number-pad'
+                placeholderTextColor={Color.gray}
+                underlineColorAndroid='transparent'
+                autoCorrect={false}
+                onChangeText={(text) => onChangeUserData('Nomor_ID', text)}
+                selectionColor={Color.text}
+                value={userData.Nomor_ID}
+                onBlur={() => isValueError('Nomor_ID')}
+                style={{color: Color.text}}
+                />
+            </EmailRoundedView>
+            <ErrorView>
+              <Text size={12} color={Color.error} type='medium' align='left'>{errorData.Nomor_ID}</Text>
+            </ErrorView>
+          </>}
 
           <LabelInput>
             <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Email</Text>
@@ -427,16 +386,14 @@ const [open, setOpen] = useState(false)
             <MaterialIcons size={16} name='check-box-outline-blank' color={Color.theme} style={{marginRight: 4}} />
             <Text align='left' size={12} color={Color.theme}>Saya setuju dengan <Text color={Color.secondary}>Syarat & Ketentuan</Text> yang berlaku.</Text>
           </View> */}
-
-          <SignRegisterView>
-            <SignButton
-              onPress={() => onSubmit()}
-            >
-              Simpan
-            </SignButton>
-          </SignRegisterView>
         </Container>
       </ScrollView>
+
+      <View style={{padding: 16}}>
+        <Button onPress={() => onSubmit()}>
+          Simpan
+        </Button>
+      </View>
 
       <Loading visible={loading} />
 

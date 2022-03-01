@@ -21,7 +21,7 @@ const Body = Styled(View)`
   align-items: center;
   justify-content: center;
   padding: 15px;
-  border-radius: 5px;
+  border-radius: 16px;
   ${props => props.type === 'large' && `
     width: 100%;
   `}

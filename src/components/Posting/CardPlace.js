@@ -7,7 +7,8 @@ import {
     useColor
 } from '@src/components';
 import { shadowStyle } from '@src/styles';
-import { Divider } from '@src/styled';
+import { Divider, Row } from '@src/styled';
+import { Container } from 'native-base';
 
 const { width } = Dimensions.get('window');
 
@@ -52,14 +53,22 @@ const CardPlace = (props) => {
                 />
 
                 <View style={{width: '100%', padding: 16, backgroundColor: Color.textInput, borderBottomLeftRadius: 4, borderBottomRightRadius: 4}}>
-                    <Text type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
+                    <Text size={12} type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
                     <Divider height={4} />
-                    <Text size={12} align='left' numberOfLines={2} lineHeight={16}>{item.productDescription}</Text>
+                    <Row>
+                        <View style={{width: 16}}>
+                            <Ionicons name='person' color={Color.text} />
+                        </View>
+                        <Text size={12} align='left' numberOfLines={2}>{item.fullname}</Text>
+                    </Row>
                     <Divider />
                     <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <View style={{flexDirection: 'row'}}>
-                            <Ionicons name='star' color={Color.yellow} />
-                            <Text size={12}>{item.like}</Text>
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Text size={12}>{item.like}&nbsp;</Text>
+                            <Ionicons
+                                name={item.im_like ? 'heart' : 'heart-outline'}
+                                color={Color.primary}
+                            />
                         </View>
                         <View style={{flexDirection: 'row'}}>
                             <Text size={12}>{item.comment > 0 ? item.comment + ' Komentar' : 'Beri Komentar'}</Text>

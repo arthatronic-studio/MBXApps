@@ -8,20 +8,15 @@ import firestore from '@react-native-firebase/firestore';
 import { useIsFocused } from '@react-navigation/native';
 
 import Text from '@src/components/Text';
-import Color from '@src/components/Color';
-import Header from '@src/components/Header';
-import ScreenIndicator from '@src/components/Modal/ScreenIndicator';
+import { useColor } from '@src/components/Color';
+import { usePopup } from '@src/components';
 import ScreenEmptyData from '@src/components/Modal/ScreenEmptyData';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import { Circle } from '@src/styled';
 
 import Client from '@src/lib/apollo';
-import { queryContentChatRooms } from '@src/lib/query';
-
-const MainView = Styled(View)`
-    flex: 1;
-    backgroundColor: ${Color.dark};
-`;
+import { queryContentChatRooms, queryContentChatRoomManage } from '@src/lib/query';
+import { Header, ModalListAction, Scaffold, Alert } from 'src/components';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -31,14 +26,12 @@ const BottomSection = Styled(View)`
   flexDirection: row;
   alignItems: center;
   borderTopWidth: 0.5px;
-  borderColor: ${Color.border};
 `;
 
 const BoxInput = Styled(View)`
   width: 100%;
   backgroundColor: #FFFFFF;
   padding: 8px 16px 8px 16px;
-  borderColor: ${Color.border};
   borderRadius: 32px;
   borderWidth: 0.5px;
   flexDirection: row;
@@ -47,7 +40,7 @@ const BoxInput = Styled(View)`
 const TextInputNumber = Styled(TextInput)`
   width: 90%;
   alignContent: flex-start;
-  fontFamily: Poppins-Regular;
+  fontFamily: Inter-Regular;
   letterSpacing: 0.23;
   height: 40px;
 `;
@@ -56,20 +49,26 @@ const CircleSend = Styled(TouchableOpacity)`
   width: 40px;
   height: 40px;
   borderRadius: 20px;
-  backgroundColor: ${Color.theme};
   justifyContent: center;
   alignItems: center;
 `;
 
+const initialDataRooms = {
+    data: [],
+    loading: true,
+    page: 0,
+    loadNext: false,
+    refresh: false,
+}
+
 const ChatRoomsScreen = ({ navigation, route }) => {
     // state
-    const [dataRooms, setDataRooms] = useState({
-        data: [],
-        loading: true,
-        page: 0,
-        loadNext: false,
-    });
+    const [dataRooms, setDataRooms] = useState(initialDataRooms);
     const [firebaseData, setFirebaseData] = useState([]);
+    const [selectedRoom, setSelectedRoom] = useState();
+    const [isLoading, setIsLoading] = useState(false);
+
+    const modalListActionRef = useRef();
 
     // selector
     const user = useSelector(
@@ -78,6 +77,8 @@ const ChatRoomsScreen = ({ navigation, route }) => {
 
     // hooks
     const isFocused = useIsFocused();
+    const { Color } = useColor();
+    const [popupProps, showPopup] = usePopup();
 
     useEffect(() => {
         if (!isFocused) {
@@ -93,15 +94,18 @@ const ChatRoomsScreen = ({ navigation, route }) => {
             .where('isNewArrival', '==', true)
             // .limit(1)
             .onSnapshot((res) => {
-                if (res) {
-                    if (res.docs.length > 0) {
-                        let newData = [];
-                        res.docs.map((doc) => {
-                            newData.push(doc.data());
+                if (res && res.docs.length > 0) {
+                    let newData = [];
+                    res.docs.map((doc) => {
+                        const docID = doc.ref.path.split('/')[1];
+                        newData.push({
+                            docID,
+                            ...doc.data()
                         });
-                        console.log('newData chat notifier', newData);
-                        setFirebaseData(newData);
-                    }
+                    });
+
+                    console.log('newData chat notifier', newData);
+                    setFirebaseData(newData);
                 }
             }, (error) => {
                 console.log(error);
@@ -115,6 +119,12 @@ const ChatRoomsScreen = ({ navigation, route }) => {
             fetchContentChatRooms();
         }
     }, [dataRooms.loadNext]);
+
+    useEffect(() => {
+        if (dataRooms.page !== -1 && dataRooms.refresh) {
+            fetchContentChatRooms();
+        }
+    }, [dataRooms.refresh]);
 
     const fetchContentChatRooms = () => {
         const variables = {
@@ -139,25 +149,87 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                 newPage = data.length === 50 ? dataRooms.page + 1 : -1;
             }
             
-            setStateDataRooms({
+            setDataRooms({
+                ...dataRooms,
                 data: newData,
                 loading: false,
                 page: newPage,
                 loadNext: false,
+                refresh: false,
             });
         })
         .catch((err) => {
             console.log(err, 'err');
-            setStateDataRooms({
+
+            setDataRooms({
+                ...dataRooms,
                 loading: false,
                 page: -1,
                 loadNext: false,
+                refresh: false,
             });
-        })
+        });
     }
 
-    const setStateDataRooms = (obj) => {
-        setDataRooms({ ...dataRooms, ...obj });
+    const fetchChatRoomManage = (method) => {
+        setIsLoading(true);
+
+        const variables = {
+            method,
+            roomId: selectedRoom.roomId,
+        };
+
+        console.log('variables', variables);
+
+        Client.query({
+            query: queryContentChatRoomManage,
+            variables,
+        })
+        .then((res) => {
+            console.log('res chat manage', res);
+
+            const data = res.data.contentChatRoomManage;
+
+            if (data) {
+                showPopup('Berhasil menghapus obrolan', 'success');
+                firestoreDeletedPerUser(selectedRoom);
+            } else {
+                showPopup('Gagal menghapus obrolan', 'error');
+            }
+
+            refreshDataRooms();
+            
+            setSelectedRoom();
+            setIsLoading(false);
+        })
+        .catch((err) => {
+            console.log(err, 'err chat manage');
+
+            showPopup(err.message, 'error');
+            setSelectedRoom();
+            setIsLoading(false);
+        });
+    }
+
+    // fb delete msg per user
+    const firestoreDeletedPerUser = (room) => {
+        let deleteArr = room.deleted || [];
+        deleteArr.push(user.userId.toString());
+
+        if (room.docID !== '') {
+            firestore()
+                .collection('contentChatNotifier')
+                .doc(room.docID)
+                .update({ deleted: deleteArr })
+                .catch((err) => console.log(err, 'err'));
+        }
+    };
+
+    const refreshDataRooms = () => {
+        setDataRooms({
+            ...initialDataRooms,
+            refresh: true,
+        });
     }
 
     const getTitle = (member) => {
@@ -197,27 +269,6 @@ const ChatRoomsScreen = ({ navigation, route }) => {
         return title;
     }
 
-    if (dataRooms.loading) {
-        return (
-            <MainView>
-                <Header title='Chat' color={Color.white} />
-                <ScreenIndicator visible transparent />
-            </MainView>
-        )
-    }
-
-    if (dataRooms.data.length === 0) {
-        return (
-            <MainView>
-                <Header title='Chat' color={Color.white} />
-                <ScreenEmptyData transparent message='Kamu belum memiliki riwayat chat' />
-                <TouchableOpacity onPress={() => navigation.navigate('ChatUserListScreen')} style={{height: 50, width: 50, borderRadius: 25, position: 'absolute', bottom: 16, right: 16, backgroundColor: Color.secondary, justifyContent: 'center', alignItems: 'center'}}>
-                    <Ionicons name='add' color={Color.white} size={30} />
-                </TouchableOpacity>
-            </MainView>
-        )
-    }
-
     const managedDate = (d) => {
         const origin = parseInt(d);
         const date = Moment(origin).format('YYYY-MM-DD');
@@ -236,18 +287,26 @@ const ChatRoomsScreen = ({ navigation, route }) => {
         return title;
     }
 
-    const sortData = () => {
-        let data = dataRooms.data;
+    const remapData = () => {
         let newData = [];
-
-        data.map((i) => {
-            const selected = firebaseData.filter((e) => e.roomId === i.roomId)[0];
-            if (selected) {
-            } else {
-                newData.push(i);
-            }
+        dataRooms.data.forEach((k,v) => {
+            const isExist = firebaseData.filter((e) => e.roomId === k.roomId)[0];
+            newData.push({
+                ...k,
+                ...isExist,
+            });
         });
-        return firebaseData.concat(newData);
+
+        return newData;
+        
+        // dataRooms.data.map((i) => {
+        //     const selected = firebaseData.filter((e) => e.roomId === i.roomId)[0];
+        //     if (selected) {
+        //     } else {
+        //         newData.push(i);
+        //     }
+        // });
+        // return firebaseData.concat(newData);
     }
 
     const isNotRead = (arr) => {
@@ -271,10 +330,29 @@ const ChatRoomsScreen = ({ navigation, route }) => {
     }
 
     return (
-        <MainView>
-            <Header title='Chat' color={Color.white} />
-            {/* <BottomSection>
-                <BoxInput style={false && {borderColor: Color.error}}>
+        <Scaffold
+            fallback={dataRooms.loading}
+            isLoading={isLoading}
+            popupProps={popupProps}
+            header={
+                <Header
+                    title='Obrolan'
+                    iconRightButton={
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('ChatUserListScreen');
+                            }}
+                            style={{justifyContent: 'center', alignItems: 'center'}}
+                        >
+                            <Ionicons name='add' color={Color.text} size={30} />
+                        </TouchableOpacity>
+                    }
+                />
+            }
+            empty={!dataRooms.loading && dataRooms.data.length === 0}
+        >
+            {/* <BottomSection style={{borderColor: Color.border}}>
+                <BoxInput style={true ? {borderColor: Color.border} : {borderColor: Color.error}}>
                     <TextInputNumber
                         name="text"
                         placeholder='Masukan teks..'
@@ -288,20 +366,22 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                             // this.isValueErrorPrepaid('prepaidNumber')
                         }}
                     />
-                    <CircleSend>
-                        <Ionicons name='search' size={16} color={Color.white} />
+                    <CircleSend style={{backgroundColor: Color.primary}}>
+                        <Ionicons name='search' size={16} color={Color.text} />
                     </CircleSend>
                 </BoxInput>
             </BottomSection> */}
 
             <FlatList
                 keyExtractor={(item, index) => item.id.toString() + index.toString()}
-                data={sortData()}
+                data={remapData()}
                 keyboardShouldPersistTaps='handled'
                 contentContainerStyle={{paddingTop: 8}}
                 onEndReachedThreshold={0.3}
-                onEndReached={() => dataRooms.page !== -1 && setStateDataRooms({ loadNext: true })}
+                onEndReached={() => dataRooms.page !== -1 && setDataRooms({ ...dataRooms, loadNext: true })}
                 renderItem={({ item }) => {
+                    const isSelected = selectedRoom && selectedRoom.id === item.id;
+
                     return (
                         <TouchableOpacity
                             onPress={() => {
@@ -311,37 +391,44 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                                     isNewArrival: item.isNewArrival,
                                 });
                             }}
-                            style={{height: 60, paddingHorizontal: 16, marginBottom: 16, flexDirection: 'row', alignItems: 'center'}}
+                            onLongPress={() => {
+                                modalListActionRef.current.open();
+                                setSelectedRoom(item);
+                            }}
+                            style={{
+                                height: 60,
+                                paddingHorizontal: 16,
+                                marginBottom: 16,
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                backgroundColor: isSelected ? Color.primarySoft : Color.textInput,
+                            }}
                         >
-                            <View style={{width: '12%', height: '100%', alignItems: 'center', justifyContent: 'center', borderBottomWidth: 0.5, borderColor: Color.white}}>
+                            <View style={{width: '12%', height: '100%', alignItems: 'center', justifyContent: 'center'}}>
                                 <Image
                                     source={{uri: item.image}}
-                                    style={{width: '100%', aspectRatio: 1, borderRadius: 30, backgroundColor: Color.theme}}
+                                    style={{width: '100%', aspectRatio: 1, borderRadius: 30, backgroundColor: Color.border}}
                                 />
                             </View>
-                            <View style={{width: '70%', height: '100%', alignItems: 'flex-start', justifyContent: 'space-around', paddingHorizontal: 16, paddingVertical: 4, borderBottomWidth: 0.5, borderColor: Color.white}}>
+                            <View style={{width: '70%', height: '100%', alignItems: 'flex-start', justifyContent: 'space-around', paddingLeft: 8, paddingRight: 16, paddingVertical: 4}}>
                                 <Text
-                                    size={12}
                                     type='semibold'
                                     numberOfLines={1}
-                                    color={Color.white}
                                 >
                                     {item.name !== '' ? item.name : typeof item.memberDetail !== 'undefined' ? getTitleFirebaseData(item.memberDetail) : getTitle(item.member)}
                                 </Text>
                                 <Text
-                                    size={10}
                                     type={isUserTyping(item.typing) ? 'italic' : isNotRead(item.read) ? 'bold' : 'regular'}
                                     numberOfLines={1}
-                                    color={isUserTyping(item.typing) ? Color.success : Color.white}
+                                    color={isUserTyping(item.typing) ? Color.success : Color.text}
                                     style={{opacity: 0.6}}
                                 >
                                     {isUserTyping(item.typing) ? 'Sedang mengetik...' : item.lastChat ? item.lastChat.message : ''}
                                 </Text>
                             </View>
-                            <View style={{width: '18%', height: '100%', alignItems: 'flex-end', justifyContent: 'space-around', paddingVertical: 4, borderBottomWidth: 0.5, borderColor: Color.white}}>
+                            <View style={{width: '18%', height: '100%', alignItems: 'flex-end', justifyContent: 'space-around', paddingVertical: 4}}>
                                 <Text
                                     size={8}
-                                    color={Color.white}
                                 >
                                     {managedDate(item.lastChat.messageDate)}
                                 </Text>
@@ -349,7 +436,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                                     size={10}
                                     color={isNotRead(item.read) ? Color.error : 'transparent'}
                                 >
-                                    {/* {isNotRead(item.read) && item.lastChatCount > 0 && <Text size={8} color={Color.white}>{item.lastChatCount}</Text>} */}
+                                    {/* {isNotRead(item.read) && item.lastChatCount > 0 && <Text size={8}>{item.lastChatCount}</Text>} */}
                                 </Circle>
                             </View>
                         </TouchableOpacity>
@@ -357,10 +444,27 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                 }}
             />
 
-            <TouchableOpacity onPress={() => navigation.navigate('ChatUserListScreen')} style={{height: 50, width: 50, borderRadius: 25, position: 'absolute', bottom: 16, right: 16, backgroundColor: Color.secondary, justifyContent: 'center', alignItems: 'center'}}>
-                <Ionicons name='add' color={Color.white} size={30} />
-            </TouchableOpacity>
-        </MainView>
+            <ModalListAction
+                ref={modalListActionRef}
+                onClose={() => {
+                    setSelectedRoom();
+                }}
+                data={[
+                    {
+                        id: 0,
+                        name: 'Hapus',
+                        color: Color.red,
+                        onPress: () => {
+                            Alert('Hapus', 'Apakah Anda yakin menghapus konten?', () => {
+                                fetchChatRoomManage('DELETE');
+                            });
+                            modalListActionRef.current.close();
+                            setSelectedRoom();
+                        },
+                    }
+                ]}
+            />
+        </Scaffold>
     )
 }
 

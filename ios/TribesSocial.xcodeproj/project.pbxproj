@@ -12,8 +12,8 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2D69A316274B8FEE0059D7C5 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D69A315274B8FEE0059D7C5 /* BootSplash.storyboard */; };
 		2DB01DAA274BBEC800890BD8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2DB01DA9274BBEC800890BD8 /* GoogleService-Info.plist */; };
+		2DF6D71227BB394C0029A539 /* dummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6D71127BB394C0029A539 /* dummy.swift */; };
 		65931133C65B4BB49FF03639 /* Inter-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5B32806D66FA4E4AA85BD975 /* Inter-Thin.ttf */; };
 		70CCBF76C2C042F49941C4D2 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C828D64C153D42F3ADA9898F /* Inter-Bold.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -51,8 +51,10 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = TribesSocial/main.m; sourceTree = "<group>"; };
 		20E0CE272AD49DE26FC03234 /* libPods-TribesSocial-TribesSocialTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TribesSocial-TribesSocialTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2348EE6278BA4AD597A3CC90 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/native-base/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
-		2D69A315274B8FEE0059D7C5 /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = TribesSocial/BootSplash.storyboard; sourceTree = "<group>"; };
+		2D5CCE5B27CD2BE900F986C6 /* TribesSocial.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = TribesSocial.entitlements; path = TribesSocial/TribesSocial.entitlements; sourceTree = "<group>"; };
 		2DB01DA9274BBEC800890BD8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		2DF6D71027BB394C0029A539 /* TribesSocial-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TribesSocial-Bridging-Header.h"; sourceTree = "<group>"; };
+		2DF6D71127BB394C0029A539 /* dummy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dummy.swift; sourceTree = "<group>"; };
 		30CEF8FB6A3C407B9B15BA8A /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-SemiBold.ttf"; path = "../assets/fonts/Inter/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		3807C5FC86164864ADF811C3 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		40D8A2612FDC404581A7F87C /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/native-base/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
@@ -127,13 +129,15 @@
 		13B07FAE1A68108700A75B9A /* TribesSocial */ = {
 			isa = PBXGroup;
 			children = (
+				2D5CCE5B27CD2BE900F986C6 /* TribesSocial.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
-				2D69A315274B8FEE0059D7C5 /* BootSplash.storyboard */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				2DF6D71127BB394C0029A539 /* dummy.swift */,
+				2DF6D71027BB394C0029A539 /* TribesSocial-Bridging-Header.h */,
 			);
 			name = TribesSocial;
 			sourceTree = "<group>";
@@ -287,7 +291,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1240;
 					};
 				};
 			};
@@ -325,7 +329,6 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				2DB01DAA274BBEC800890BD8 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				2D69A316274B8FEE0059D7C5 /* BootSplash.storyboard in Resources */,
 				F14F1698D22148FEAEAE966C /* Inter-Black.ttf in Resources */,
 				70CCBF76C2C042F49941C4D2 /* Inter-Bold.ttf in Resources */,
 				CDFDEDC6B5274EE49E986B06 /* Inter-ExtraBold.ttf in Resources */,
@@ -515,6 +518,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				2DF6D71227BB394C0029A539 /* dummy.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -534,6 +538,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F78B7A41B56AC6897FE3F1D6 /* Pods-TribesSocial-TribesSocialTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -561,6 +566,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0003B46F6D9C695626467A3A /* Pods-TribesSocial-TribesSocialTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = TribesSocialTests/Info.plist;
@@ -587,7 +593,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = TribesSocial/TribesSocial.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q8T7C6XX23;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = TribesSocial/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -599,8 +607,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.tribes;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tribesocial;
 				PRODUCT_NAME = TribesSocial;
+				SWIFT_OBJC_BRIDGING_HEADER = "TribesSocial-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -613,7 +622,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = TribesSocial/TribesSocial.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q8T7C6XX23;
 				INFOPLIST_FILE = TribesSocial/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -624,8 +635,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.tribes;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tribesocial;
 				PRODUCT_NAME = TribesSocial;
+				SWIFT_OBJC_BRIDGING_HEADER = "TribesSocial-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

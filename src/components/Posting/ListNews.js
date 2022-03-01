@@ -9,6 +9,8 @@ import PostingHeader from './PostingHeader';
 import { Container, Row } from 'src/styled';
 import PostingSkeleton from './PostingSkeleton';
 
+import { GALogEvent } from 'src/utils/analytics';
+
 const propTypes = {
     data: PropTypes.array,
     horizontal: PropTypes.bool,
@@ -80,12 +82,17 @@ const ListNews = (props) => {
                     contentContainerStyle={{paddingTop: 16, paddingHorizontal: 8, ...style}}
                     renderItem={({ item, index }) => {
                         return (
+                            <>
                             <CardNews
                                 item={item}
                                 numColumns={1}
                                 horizontal={horizontal}
-                                onPress={() => onPress(item)}
-                            />
+                                onPress={() => 
+                                    {onPress(item);
+                                    GALogEvent('Artikel', { id: item.id, product_name: item.productName, user_id: item.ownerId, method: "view" })}
+                                }
+                                />
+                            </>
                         )
                     }}
                     ListEmptyComponent={() => {

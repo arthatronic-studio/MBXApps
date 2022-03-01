@@ -1,192 +1,167 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, ScrollView, Image, useWindowDimensions} from 'react-native';
-import Styled from 'styled-components';
+import {
+  View,
+  ScrollView,
+  Image,
+  ImageBackground,
+  useWindowDimensions,
+  Animated,
+  RefreshControl,
+  Platform,
+  FlatList,
+  Linking,
+} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Entypo from 'react-native-vector-icons/Entypo';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useIsFocused} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
+import Modal from 'react-native-modal';
+import Config from 'react-native-config';
+import ImagesPath from 'src/components/ImagesPath';
 
 import {
   Text,
   TouchableOpacity,
   HeaderBig,
-  Loading,
-  useLoading,
   useColor,
   Scaffold,
+  Row,
+  Col,
+  Button,
+  Submit,
 } from '@src/components';
-import {FormatMoney} from '@src/utils';
+import ListAuction from 'src/components/Posting/ListAuction';
+import ListSoonAuction from 'src/components/Posting/ListSoonAuction';
 import ListNews from 'src/components/Posting/ListNews';
 import ListPlace from 'src/components/Posting/ListPlace';
 import ListEvent from 'src/components/Posting/ListEvent';
 import ListJob from 'src/components/Posting/ListJob';
-import {shadowStyle} from '@src/styles';
-import {Box, Divider, Circle} from '@src/styled';
-import { playNotificationSounds } from '@src/utils/notificationSounds';
-
+import {Divider, Circle, Container} from '@src/styled';
+import {playNotificationSounds} from '@src/utils/notificationSounds';
+import CarouselView from 'src/components/CarouselView';
+import Banner from 'src/components/Banner';
 import Client from '@src/lib/apollo';
-import { queryContentProduct } from '@src/lib/query';
-import {queryVestaBalance, queryVestaOpenBalance} from '@src/lib/query/payment';
-
-import {
-  iconBPJS,
-  iconGames,
-  iconInternet,
-  iconIuran,
-  iconPDAM,
-  iconPLN,
-  iconPulsa,
-  iconSemua,
-} from '@assets/images/home';
+import {queryContentProduct} from '@src/lib/query';
+import {queryBannerList, queryPromoBanners} from '@src/lib/query/banner';
 import ModalPosting from './ModalPosting';
 import ListEmergency from 'src/components/Posting/ListEmergency';
-import { usePreviousState } from 'src/hooks';
+import {usePreviousState} from 'src/hooks';
+import MusikTerbaru from 'src/components/MusikTerbaru';
+import MondayAccoustic from './MondayAccoustic';
+import WidgetBalance from 'src/components/WidgetBalance';
+import WidgetMenuHome from './WidgetMenuHome';
+import PostingHeader from 'src/components/Posting/PostingHeader';
+import {shadowStyle} from 'src/styles';
+import {adsPopup} from 'assets/images/popup';
+import {listDummyBanner} from 'assets/images/banner';
 
-const ContentView = Styled(View)`
-  width: 100%;
-  paddingHorizontal: 16px;
-`;
+import Geolocation from 'react-native-geolocation-service';
+import {accessClient} from 'src/utils/access_client';
+import VideoCardList from 'src/components/VideoCardList';
+import {trackPlayerPlay} from 'src/utils/track-player-play';
+import FloatingMusicPlayer from 'src/components/FloatingMusicPlayer';
 
-const BalanceView = Styled(View)`
-  width: 100%;
-  borderRadius: 8px;
-  flexDirection: row;
-  justifyContent: space-between;
-  padding: 18px 16px 16px;
-`;
+const dataPromoDummy = {
+  productName: 'Halo selamat datang!',
+  productCategory: 'Promo',
+  image: adsPopup,
+  productDescription:
+    'Cupcake ipsum dolor sit amet tart. Cookie carrot cake bear claw jujubes muffin. Cotton candy sweet candy chocolate muffin bonbon. Tart donut apple pie cupcake tart tart. Jelly-o chocolate cake ice cream shortbread biscuit chupa chups dessert. Macaroon cotton candy lollipop marshmallow dragée toffee shortbread macaroon dessert. Bear claw gummi bears pie apple pie tiramisu soufflé bonbon. Tiramisu tart candy croissant jujubes marshmallow lemon drops. Ice cream muffin pastry halvah chocolate bar bear claw. Tart icing pudding jelly-o fruitcake fruitcake. Tiramisu sweet pastry caramels sugar plum sweet gingerbread. Macaroon powder gummies tootsie roll muffin. Cookie danish candy jelly beans biscuit. Soufflé cake pudding fruitcake macaroon jelly beans.',
+};
 
-const SambatanMenuView = Styled(View)`
-  width: 100%;
-  borderRadius: 8px;
-  marginTop: 16px;
-  paddingTop: 30px;
-  paddingHorizontal: 8px;
-  flexDirection: row;
-  flexWrap: wrap;
-`;
-
-const PerUserIcons = Styled(TouchableOpacity)`
-  width: 25%;
-  aspectRatio: 1.5;
-  flexDirection: column;
-  marginBottom: 12px;
-`;
-
-const UserIcon = Styled(View)`
-  height: 100%;
-  justifyContent: flex-start;
-  alignItems: center;
-`;
-
-const ImageProperty = Styled(Image)`
-  height: 40%;
-  aspectRatio: 1;
-  marginBottom: 8;
-`;
-
-const ComingSoonContainer = Styled(View)`
-  width: 100%;
-  justifyContent: center;
-  alignItems: center;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  top: -33;
-`;
-
-const ComingSoonView = Styled(View)`
-  borderRadius: 30;
-  padding: 0px 5px 2px 5px;
-  justifyContent: center;
-  alignItems: center;
-`;
-
-const sambatanMenus = [
-  
-  {id: 0, name: 'Pulsa', images: iconPulsa, nav: 'PulsaScreen', params: {}},
-  {id: 1, name: 'Listrik', images: iconPLN, nav: 'PlnScreen', params: {}},
-  // {id: 2, name: 'Game', images: iconGames, nav: '', params: {}},
-  {id: 3, name: 'PDAM', images: iconPDAM, nav: 'PdamScreen', params: {}},
-  // {id: 4, name: 'BPJS', images: iconBPJS, nav: '', params: {}},
-  // {
-  //   id: 5, 
-  //   name: 'Internet', 
-  //   images: iconInternet, 
-  //   nav: '', 
-  //   params: {title: 'Iuran Non-wajib', type: 'ACTIVE', productType: 'SAMBATAN_O',}},
+const dataDummyMusic = [
   {
-    id: 6,
-    name: 'Iuran',
-    images: iconIuran,
-    nav: 'OrderListPerProduct',
-    params: {title: 'Iuran', type: 'ACTIVE', productType: 'ALL_SAMBATAN'},
+    id: 'd',
+    productName: 'Deen Assalam',
+    productDescription: 'Bismillah',
+    image: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/nissa.png?alt=media&token=664063c5-fc42-458c-b02e-596cca8b18dc',
+    videoFilename: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/Sabyan%20Gambus%20-%20Deen%20Assalam.mp3?alt=media&token=ba7e5d58-4d81-4639-9758-cc7bf67aa43a'
   },
-  // {
-  //   id: 7, 
-  //   name: 'Semua', 
-  //   images: iconSemua, 
-  //   nav: '', 
-  //   params: {title: 'Iuran Non-wajib', type: 'ACTIVE', productType: 'SAMBATAN_O',}},
+  {
+    id: 'y',
+    productName: 'Ya Habibal Qolbi',
+    productDescription: 'Bismillah',
+    image: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/nissa.png?alt=media&token=664063c5-fc42-458c-b02e-596cca8b18dc',
+    videoFilename: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/Sabyan%20Gambus%20-%20Ya%20Habibal%20Qolbi.mp3?alt=media&token=5d3154b8-9f01-4eee-8ebb-76d83ae31bf2'
+  },
 ];
+
+let tempShowPopupAds = true;
 
 const MainHome = ({navigation, route}) => {
   // state
-  const [vestaAmount, setVestaAmount] = useState(0);
-  const [wallet, setWallet] = useState('CLOSE');
   const [firebaseData, setFirebaseData] = useState([]);
-  const [firebaseNotifierLastChatCount, setFirebaseNotifierLastChatCount] = useState(0);
+  const [firebaseNotifierLastChatCount, setFirebaseNotifierLastChatCount] =
+    useState(0);
   const [notifierCount, setNotifierCount] = useState(0);
+  const [dataPopupAds, setDataPopupAds] = useState();
+  const [showPopupAds, setShowPopupAds] = useState(false);
 
-  const [loadingEmergency, setLoadingEmergency] = useState(true);
+  const [loadingAuction, setLoadingAuction] = useState(true);
+
+  const [loadingSoonAuction, setLoadingSoonAuction] = useState(true);
+
+  const [loadingEmergency, setLoadingEmergencyArea] = useState(true);
   const [listEmergencyArea, setListEmergencyArea] = useState([]);
 
-  const [loadingTampil, setLoadingTampil] = useState(true);
-  const [listTampil, setListTampil] = useState([]);
+  const [loadingPosting, setLoadingPosting] = useState(true);
+  const [listPosting, setListPosting] = useState([]);
 
-  const [loadingJalanJalan, setLoadingJalanJalan] = useState(true);
-  const [listJalanJalan, setListJalanJalan] = useState([]);
+  const [loadingNearbyPlace, setLoadingNearbyPlace] = useState(true);
+  const [listNearbyPlace, setListNearbyPlace] = useState([]);
 
-  const [loadingBelajar, setLoadingBelajar] = useState(true);
-  const [listBelajar, setListBelajar] = useState([]);
+  const [loadingEvent, setLoadingEvent] = useState(true);
+  const [listEvent, setListEvent] = useState([]);
 
-  const [loadingKerja, setLoadingKerja] = useState(true);
-  const [listKerja, setListKerja] = useState([]);
+  const [loadingJobs, setLoadingJobs] = useState(true);
+  const [listJobs, setListJobs] = useState([]);
 
-  const user = useSelector((state) => state['user.auth'].login.user);
+  const [loadingBanner, setLoadingBanner] = useState(true);
+  const [listBanner, setListBanner] = useState([]);
+
+  const [animationValue] = useState(new Animated.Value(0));
+  const [refreshing, setRefreshing] = useState(false);
+
+  const prevFirebaseNotifierLastChatCount = usePreviousState(
+    firebaseNotifierLastChatCount,
+  );
+
+  const user = useSelector(state => state['user.auth'].login.user);
   const dispatch = useDispatch();
-
   const {Color} = useColor();
-  const [loadingProps, showLoading, hideLoading] = useLoading();
-  const {width} = useWindowDimensions();
   const isFocused = useIsFocused();
   const modalPostingRef = useRef();
-  const prevFirebaseNotifierLastChatCount = usePreviousState(firebaseNotifierLastChatCount);
+  const floatingMusicPlayerRef = useRef();
+  const {width} = useWindowDimensions();
 
   useEffect(() => {
+    fetchPromoBanners();
+
     const subscriber = firestore()
-      .collection('maudiChatNotifier')
+      .collection('contentChatNotifier')
       .orderBy('id', 'desc')
       .where('member', 'array-contains-any', [user.userId.toString()])
-      .onSnapshot((res) => {
-        // console.log('res chat notifier', res);
-        
-        if (res) {
-          let newData = [];
+      .onSnapshot(
+        res => {
+          // console.log('res chat notifier', res);
 
-          res.docs.map((i) => {
-            newData.push(i.data());
-          });
+          if (res) {
+            let newData = [];
 
-          setFirebaseData(newData);
-        }
-      }, (error) => {
-        console.log('error fstore', error);
-      });
+            res.docs.map(i => {
+              newData.push(i.data());
+            });
 
-      return () => subscriber();
+            setFirebaseData(newData);
+          }
+        },
+        error => {
+          console.log('error fstore', error);
+        },
+      );
+
+    return () => subscriber();
   }, []);
 
   useEffect(() => {
@@ -196,8 +171,10 @@ const MainHome = ({navigation, route}) => {
 
       if (firebaseData.length > 0) {
         for (let i = 0; i < firebaseData.length; i++) {
-          const idxOf = firebaseData[i].read && firebaseData[i].read.indexOf(user.userId.toString());
-          
+          const idxOf =
+            firebaseData[i].read &&
+            firebaseData[i].read.indexOf(user.userId.toString());
+
           if (idxOf === -1) {
             result += 1;
           }
@@ -205,14 +182,17 @@ const MainHome = ({navigation, route}) => {
           lastChatCount += firebaseData[i].lastChatCount;
         }
       }
-      
+
       if (result > 0) setFirebaseNotifierLastChatCount(lastChatCount);
       setNotifierCount(result);
     }
   }, [firebaseData]);
 
   useEffect(() => {
-    if (firebaseNotifierLastChatCount > 0 && prevFirebaseNotifierLastChatCount !== firebaseNotifierLastChatCount) {
+    if (
+      firebaseNotifierLastChatCount > 0 &&
+      prevFirebaseNotifierLastChatCount !== firebaseNotifierLastChatCount
+    ) {
       playNotificationSounds();
     }
   }, [firebaseNotifierLastChatCount]);
@@ -220,57 +200,121 @@ const MainHome = ({navigation, route}) => {
   useEffect(() => {
     if (isFocused) {
       dispatch({type: 'BOOKING.CLEAR_BOOKING'});
-      componentWillFocus();
+      fetchBannerList();
       fetchData();
     }
   }, [isFocused]);
 
-  const componentWillFocus = () => {
-    if (user && !user.guest) {
-      getVestaBalance();
-    }
+  useEffect(() => {
+    setTimeout(() => {
+      const successCallback = res => {
+        firestore()
+          .collection('location-community')
+          .where('userId', '==', user.userId)
+          .limit(1)
+          .get()
+          .then(snap => {
+            if (snap) {
+              const values = {
+                position: [res.coords.latitude, res.coords.longitude],
+                userId: user.userId,
+              };
+              console.log('res gettttt', snap);
+
+              if (snap.docs.length > 0) {
+                docID = snap._docs[0]._ref._documentPath._parts[1];
+
+                console.log('doc', docID);
+                firestore()
+                  .collection('location-community')
+                  .doc(docID)
+                  .update(values)
+                  .then(
+                    console.log(
+                      'ini update',
+                      res.coords.latitude,
+                     
+                    ),
+                  )
+                  .catch(err => console.log('error', err));
+              } else {
+                firestore()
+                  .collection('location-community')
+                  .add(values)
+                  .then(console.log('ini add'))
+                  .catch(err => console.log('error', err));
+              }
+            }
+          });
+      };
+
+      const errorCallback = err => {
+        console.log('ini err', err);
+      };
+
+      const option = {
+        enableHighAccuracy: true,
+      };
+      Geolocation.watchPosition(successCallback, errorCallback, option);
+    }, 5000);
+  }, []);
+
+  const fetchBannerList = () => {
+    Client.query({
+      query: queryBannerList,
+    })
+      .then(res => {
+        console.log('res banner list', res);
+        setListBanner(res.data.bannerList);
+        setLoadingBanner(false);
+      })
+      .catch(err => {
+        console.log(err, 'err banner list');
+      });
   };
 
-  const getVestaBalance = () => {
-    // showLoading();
-
-    Client.query({query: queryVestaBalance})
-      .then((res) => {
-        // hideLoading();
-        setVestaAmount(res.data.vestaBalance.amount || 0);
-        setWallet(res.data.vestaBalance.wallet);
+  // Popup Banners
+  const fetchPromoBanners = () => {
+    Client.query({
+      query: queryPromoBanners,
+    })
+      .then(res => {
+        console.log('res Promo Banners', res);
+        setDataPopupAds(res.data.promoBanners);
+        setShowPopupAds(true);
       })
-      .catch((reject) => {
-        console.log(reject, 'err get vesta balance');
-        // hideLoading();
+      .catch(err => {
+        console.log(err, 'err Promo Banners');
+        setDataPopupAds();
+        setShowPopupAds(true);
       });
   };
 
   const fetchData = async () => {
-    const result = await Promise.all([
-      await fetchContentProduct('TRIBES', 'EMERGENCY', ''),
-      await fetchContentProduct('TRIBES', 'POSTING', ''),
-      await fetchContentProduct('TRIBES', 'NEARBY_PLACE', ''),
-      await fetchContentProduct('TRIBES', 'EVENT', ''),
-      await fetchContentProduct('TRIBES', 'JOBS', ''),
-    ]);
+    const resultEmergency = await fetchContentProduct(Config.PRODUCT_TYPE, 'EMERGENCY', '');
+    setListEmergencyArea(resultEmergency);
+    setLoadingEmergencyArea(false);
 
-    setLoadingEmergency(false);
-    setListEmergencyArea(result[0]);
+    const resultPosting = await fetchContentProduct(Config.PRODUCT_TYPE, 'POSTING', '');
+    setListPosting(resultPosting);
+    setLoadingPosting(false);
 
-    setLoadingTampil(false);
-    setListTampil(result[1]);
+    const resultNearbyPlace = await fetchContentProduct(Config.PRODUCT_TYPE, 'NEARBY_PLACE', '');
+    setListNearbyPlace(resultNearbyPlace);
+    setLoadingNearbyPlace(false);
 
-    setLoadingJalanJalan(false);
-    setListJalanJalan(result[2]);
+    const resultEvent = await fetchContentProduct(Config.PRODUCT_TYPE, 'EVENT', '');
+    setListEvent(resultEvent);
+    setLoadingEvent(false);
 
-    setLoadingBelajar(false);
-    setListBelajar(result[3]);
+    const resultJobs = await fetchContentProduct(Config.PRODUCT_TYPE, 'JOBS', '');
+    setListJobs(resultJobs);
+    setLoadingJobs(false);
 
-    setLoadingKerja(false);
-    setListKerja(result[4]);
+    // not yet
+    setLoadingAuction(false);
+    setLoadingSoonAuction(false);
   };
-  
 
   const fetchContentProduct = async (
     productType,
@@ -311,42 +355,66 @@ const MainHome = ({navigation, route}) => {
     }
   };
 
-  const openVesta = () => {
-    showLoading();
-
-    Client.query({query: queryVestaOpenBalance})
-      .then((res) => {
-        if (res.data.vestaOpenBalance.success) {
-          setWallet('OPEN');
-        }
-
-        hideLoading();
-        navigation.navigate('TopUpScreen');
-      })
-      .catch((reject) => {
-        console.log(reject);
-        hideLoading();
-      });
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
   };
 
-  const renderComingSoon = () => {
-    return (
-      <ComingSoonContainer>
-        <ComingSoonView style={{backgroundColor: Color.border}}>
-          <Text size={8}>Coming Soon</Text>
-        </ComingSoonView>
-      </ComingSoonContainer>
-    );
+  const colorOutputRange = [
+    Color[accessClient.MainHome.backgroundParallaxColor],
+    Color.theme,
+  ];
+
+  const backgroundInterpolate = animationValue.interpolate({
+    inputRange: [0, 100],
+    outputRange: colorOutputRange,
+    extrapolate: 'clamp',
+  });
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
   };
 
-  const isWalletClose = wallet === 'CLOSE';
+  const onClickBaca = () => {
+    setIsModalVisible(!isModalVisible);
+    navigation.navigate('PDFReaderScreen', {
+      file: 'http://samples.leanpub.com/thereactnativebook-sample.pdf',
+    });
+  };
+
+  // const ModalPopupEbook = () => {
+  //     return (
+  //       <View style={{flex: 1}}>
+  //         <Modal isVisible='true'>
+
+  //         </Modal>
+  //       </View>
+  //     )
+  // }
 
   return (
     <Scaffold
-      loadingProps={loadingProps}
+      translucent={Platform.OS === 'ios' ? true : isFocused}
+      // useSafeArea={Platform.OS === 'ios' ? false : isFocused ? false : true}
+      useSafeArea={Platform.OS === 'ios' ? false : true}
+      statusBarAnimatedStyle={
+        Platform.OS === 'ios'
+          ? {backgroundColor: backgroundInterpolate}
+          : isFocused
+          ? {backgroundColor: backgroundInterpolate}
+          : {}
+      }
       header={
         <HeaderBig
-          style={{paddingTop: 8}}
+          useAnimated
+          style={{
+            paddingTop: 8,
+            backgroundColor: backgroundInterpolate,
+          }}
           actions={
             <View style={{flexDirection: 'row'}}>
               <TouchableOpacity
@@ -364,7 +432,8 @@ const MainHome = ({navigation, route}) => {
                   color={Color.text}
                 />
               </TouchableOpacity>
-              <TouchableOpacity
+
+              {/* <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('ChatRoomsScreen');
                 }}
@@ -374,242 +443,508 @@ const MainHome = ({navigation, route}) => {
                   alignItems: 'flex-end',
                 }}>
                 <Ionicons name="chatbox-outline" size={22} color={Color.text} />
-                {notifierCount > 0 && <Circle size={12} color={Color.error} style={{position: 'absolute', top: -4, right: -4}}>
-                <Text size={8} color={Color.white}>{notifierCount > 99 ? '99' : notifierCount}</Text>
-              </Circle>}
-              </TouchableOpacity>
+                {notifierCount > 0 && (
+                  <Circle
+                    size={12}
+                    color={Color.error}
+                    style={{position: 'absolute', top: -4, right: -4}}>
+                    <Text size={8} color={Color.textInput}>
+                      {notifierCount > 99 ? '99' : notifierCount}
+                    </Text>
+                  </Circle>
+                )}
+              </TouchableOpacity> */}
             </View>
           }
         />
-      }
-    >
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            flexDirection: 'row',
-            width: '100%',
-            alignItems: 'center',
-            paddingHorizontal: 16,
-            paddingVertical: 20,
-          }}>
-          <Image
-            source={{uri: user ? user.image : ''}}
+      }>
+      <ScrollView
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: {
+                contentOffset: {y: animationValue},
+              },
+            },
+          ],
+          {useNativeDriver: false},
+        )}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            style={{backgroundColor: colorOutputRange[0]}}
+          />
+        }
+        // style={{
+        //   backgroundColor: colorOutputRange[0]
+        // }}
+      >
+        <Container color={Color.theme}>
+          <Animated.View
             style={{
-              width: '14%',
-              aspectRatio: 1,
-              borderRadius: 50,
-              backgroundColor: Color.border,
+              width,
+              height: width / 3,
+              position: 'absolute',
+              borderBottomLeftRadius: 24,
+              borderBottomRightRadius: 24,
+              backgroundColor: backgroundInterpolate,
             }}
           />
-          <View style={{paddingLeft: 16, alignItems: 'flex-start'}}>
-            <Text lineHeight={18} letterSpacing={0.45}>
-              Halo,
-            </Text>
-            <Text size={18} type="bold" lineHeight={22} letterSpacing={0.45}>
-              {user && !user.guest
-                ? user.firstName + ' ' + user.lastName
-                : 'Tamu'}
-            </Text>
-          </View>
-        </View>
 
-        <ContentView>
-          <BalanceView
-            style={{...shadowStyle, backgroundColor: Color.textInput}}>
-            <View style={{justifyContent: 'center', alignItems: 'flex-start'}}>
-              <Text size={10}>Saldoku</Text>
-              <Text size={18} type="semibold" style={{marginTop: 2}}>
-                {FormatMoney.getFormattedMoney(vestaAmount)}
+          <View
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+              alignItems: 'center',
+              paddingTop: 16,
+              paddingBottom: 24,
+            }}>
+            <View style={{paddingLeft: 16, alignItems: 'flex-start'}}>
+              <Text
+                size={10}
+                type="medium"
+                lineHeight={18}
+                letterSpacing={0.45}>
+                Halo
+              </Text>
+              <Text size={18} type="bold" letterSpacing={0.45}>
+                {user && !user.guest
+                  ? user.firstName.trim() +
+                    (user.lastName ? ' ' + user.lastName.trim() : '')
+                  : 'Tamu'}
+                !
               </Text>
             </View>
+          </View>
 
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'flex-end',
-              }}>
+          {accessClient.MainHome.showWidgetBalance && (
+            <>
+              <WidgetBalance />
+              <Divider />
+            </>
+          )}
 
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginLeft: 16,
-                }}>
-                <TouchableOpacity
-                  style={{
-                    aspectRatio: 1,
-                    height: 30,
-                    borderRadius: 4,
-                    backgroundColor: Color.info,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: 4,
-                  }}
-                  onPress={() => {
-                    modalPostingRef.current.open();
-                  }}>
-                  <Entypo
-                    name="add-to-list"
-                    color={Color.textInput}
-                    size={20}
-                  />
-                </TouchableOpacity>
-                <View style={{width: '100%', alignItems: 'center'}}>
-                  <Text size={9} type="medium" color={Color.text}>
-                    Posting
-                  </Text>
-                </View>
-              </View>
+          <WidgetMenuHome
+            onPress={item => {
+              console.log(item, 'item');
 
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginLeft: 16,
-                }}>
-                <TouchableOpacity
-                  style={{
-                    aspectRatio: 1,
-                    height: 30,
-                    borderRadius: 4,
-                    backgroundColor: Color.green,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: 4,
-                  }}
-                  onPress={() =>
-                    isWalletClose
-                      ? openVesta()
-                      : navigation.navigate('TopUpScreen')
-                  }>
-                  <Ionicons
-                    name="add"
-                    color={Color.textInput}
-                    size={24}
-                  />
-                </TouchableOpacity>
-                <View style={{width: '100%', alignItems: 'center'}}>
-                  <Text size={9} type="medium" color={Color.text}>
-                    Top Up
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </BalanceView>
-        </ContentView>
-
-        <Divider height={8} />
-
-        <ContentView>
-          <SambatanMenuView
-            style={{...shadowStyle, backgroundColor: Color.textInput}}>
-            {sambatanMenus.map((menu, idx) => {
-              if (Platform.OS === 'ios' && menu.comingsoon) {
-                return null;
+              if (item.code === 'post') {
+                modalPostingRef.current.open();
               }
+            }}
+          />
 
-              return (
-                <PerUserIcons
-                  key={idx}
-                  activeOpacity={0.75}
-                  disabled={menu.comingsoon}
-                  onPress={() => navigation.navigate(menu.nav, menu.params)}>
-                  <UserIcon>
-                    <ImageProperty
-                      style={menu.comingsoon && {opacity: 0.3}}
-                      resizeMode="contain"
-                      source={menu.images}
+          <View style={{flex: 1}}>
+            <Modal
+              isVisible={isModalVisible}
+              onBackdropPress={() => setIsModalVisible(false)}
+              animationIn="slideInDown"
+              animationOut="slideOutDown"
+              style={{borderRadius: 16}}>
+              <View style={{backgroundColor: Color.theme}}>
+                <View
+                  style={{
+                    width: '100%',
+                    paddingHorizontal: 16,
+                    paddingVertical: 24,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      toggleModal();
+                    }}
+                    style={{
+                      alignSelf: 'flex-end',
+                      backgroundColor: Color.error,
+                      borderRadius: 50,
+                      marginBottom: 12,
+                    }}>
+                    <Image
+                      source={ImagesPath.icClose}
+                      style={{width: 16, height: 16}}
                     />
-                    <Text size={12} style={menu.comingsoon && {opacity: 0.3}}>
-                      {menu.name}
-                    </Text>
-                    {(menu.comingsoon || menu.nav === '') && renderComingSoon()}
-                  </UserIcon>
-                </PerUserIcons>
-              );
-            })}
-          </SambatanMenuView>
-        </ContentView>
+                  </TouchableOpacity>
+                  <View style={{flexDirection: 'row'}}>
+                    <View style={{marginRight: 16}}>
+                      <Image source={ImagesPath.eBook} />
+                    </View>
+                    <View>
+                      <View style={{width: '86%'}}>
+                        <Text
+                          align="left"
+                          size={14}
+                          style={{fontWeight: 'bold'}}>
+                          Seni Berlorem Ipsum Dulur Sit Amet
+                        </Text>
+                      </View>
+                      <Text align="left" size={10}>
+                        Karya Esa Riski Hari Utama
+                      </Text>
+                      <View style={{flexDirection: 'row'}}>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            marginTop: 12,
+                            marginRight: 20,
+                          }}>
+                          <Image
+                            source={ImagesPath.eye}
+                            style={{width: 16, height: 16, marginRight: 9}}
+                          />
+                          <Text align="left" size={10}>
+                            1.7K
+                          </Text>
+                        </View>
+                        <View style={{flexDirection: 'row', marginTop: 12}}>
+                          <Image
+                            source={ImagesPath.thumbsUp}
+                            style={{width: 16, height: 16, marginRight: 9}}
+                          />
+                          <Text align="left" size={10}>
+                            240
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={{marginTop: 16}}>
+                        <Text
+                          align="left"
+                          size={11}
+                          style={{fontWeight: 'bold'}}>
+                          Sinopsis
+                        </Text>
+                      </View>
+                      <View style={{width: '80%'}}>
+                        <Text align="left" size={10} numberOfLines={4}>
+                          Cookie toffee pie cupcake sesame snaps. Cupcake
+                          cupcake soufflé gummies croissant jelly beans candy
+                          canes fruitcake. Dessert cotton candy tart donut
+                          tiramisu cookie dragée wafer marzipan.
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-around',
+                    }}>
+                    <View
+                      style={{
+                        width: 44,
+                        height: 44,
+                        borderRadius: 21,
+                        borderWidth: 0.3,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
+                      <Image
+                        source={ImagesPath.thumbsUp}
+                        style={{width: 22, height: 22}}
+                      />
+                    </View>
+                    <Submit
+                      buttonLabel="Baca Sekarang"
+                      buttonColor={Color.primary}
+                      type="bottomSingleButton"
+                      buttonBorderTopWidth={0}
+                      style={{
+                        backgroundColor: Color.theme,
+                        paddingTop: 25,
+                        paddingBottom: 25,
+                        width: 250,
+                      }}
+                      onPress={() => onClickBaca()}
+                    />
+                  </View>
+                </View>
+              </View>
+            </Modal>
+          </View>
 
-        <Divider height={24} />
+          <Divider />
 
-        <ListEmergency
-          data={listEmergencyArea}
-          loading={loadingEmergency}
-          horizontal
-          showHeader
-          onPress={(item) => {
-            // navigation.navigate('EmergencyDetail', {item});
-            navigation.navigate('PostingDetail', {item});
-          }}
-          style={{paddingLeft: 8}}
-        />
+          <Banner
+            isDummy={accessClient.MainHome.dummyBanner}
+            showHeader={accessClient.MainHome.showBannerHeader}
+            data={accessClient.MainHome.dummyBanner ? listDummyBanner : listBanner}
+            loading={loadingBanner}
+          />
 
-        <ListNews
-          data={listTampil}
-          loading={loadingTampil}
-          horizontal
-          showHeader
-          onPress={(item) => {
-            // navigation.navigate('NewsDetail', {item});
-            navigation.navigate('PostingDetail', {item});
-          }}
-          style={{paddingLeft: 8}}
-        />
+          <Divider height={24} />
 
-        <ListPlace
-          data={listJalanJalan}
-          loading={loadingJalanJalan}
-          horizontal
-          showHeader
-          onPress={(item) => {
-            // navigation.navigate('PlaceDetail', {item});
-            navigation.navigate('PostingDetail', {item});
-          }}
-          style={{paddingLeft: 8}}
-        />
+          {accessClient.MainHome.showListAuction && (
+            <ListAuction
+              data={listEvent}
+              loading={loadingAuction}
+              horizontal
+              showHeader
+              onPress={item => {
+                navigation.navigate('AuctionDetail', {item});
+              }}
+              style={{paddingLeft: 8}}
+            />
+          )}
 
-        <ListEvent
-          data={listBelajar}
-          loading={loadingBelajar}
-          horizontal
-          showHeader
-          onPress={(item) => {
-            // navigation.navigate('EventDetail', {item});
-            navigation.navigate('PostingDetail', {item});
-          }}
-          style={{paddingLeft: 8}}
-        />
+          {accessClient.MainHome.showListSoonAuction && (
+            <ListSoonAuction
+              data={listEvent}
+              loading={loadingSoonAuction}
+              horizontal
+              showHeader
+              onPress={item => {
+                navigation.navigate('AuctionDetail', {item});
+              }}
+              style={{paddingLeft: 8}}
+            />
+          )}
 
-        <ListJob
-          data={listKerja}
-          loading={loadingKerja}
-          horizontal
-          showHeader
-          onPress={(item) => {
-            // navigation.navigate('JobDetail', {item});
-            navigation.navigate('PostingDetail', {item});
-          }}
-          style={{paddingLeft: 8}}
-        />
+          {accessClient.MainHome.showListEmergency && (
+            <ListEmergency
+              data={listEmergencyArea}
+              loading={loadingEmergency}
+              horizontal
+              showHeader
+              onPress={item => {
+                navigation.navigate('EmergencyDetail', {item});
+              }}
+              style={{paddingLeft: 8}}
+            />
+          )}
+
+          <ListNews
+            data={listPosting}
+            loading={loadingPosting}
+            horizontal
+            showHeader
+            onPress={item => {
+              navigation.navigate('NewsDetail', {item});
+            }}
+            style={{paddingLeft: 8}}
+          />
+
+          {accessClient.MainHome.showListPromo && (
+            <View style={{marginBottom: 40}}>
+              <PostingHeader title="Promo Untukmu" showSeeAllText={false} />
+              <Divider height={8} />
+              <CarouselView
+                delay={5000}
+                showIndicator
+                style={{width, aspectRatio: 21 / 9}}>
+                {[0].map((e, idx) => {
+                  return (
+                    <View
+                      key={idx}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        paddingHorizontal: 16,
+                      }}>
+                      <Container
+                        padding={16}
+                        radius={16}
+                        color={Color.textInput}
+                        style={{...shadowStyle}}>
+                        <Row>
+                          <Col size={5} align="flex-start">
+                            <Image
+                              source={ImagesPath.logolelanghome}
+                              style={{height: width / 3, width: '100%'}}
+                              resizeMode="contain"
+                            />
+                          </Col>
+                          <Col
+                            size={7}
+                            align="flex-start"
+                            justifyContent="center">
+                            <Text size={12} align="left">
+                              Sekarang di TRIBESOCIAL {'\n'} udah ada fitur{' '}
+                              <Text type="bold">lelang</Text> loh !
+                            </Text>
+                            <Button
+                              onPress={() => navigation.navigate('Lelang')}
+                              style={{
+                                backgroundColor: Color.primary,
+                                minHeight: 25,
+                                marginTop: 8,
+                                borderRadius: 20,
+                              }}>
+                              <Row>
+                                <Text color={Color.textInput} size={10}>
+                                  Selengkapnya
+                                  <AntDesign
+                                    name="arrowright"
+                                    color={Color.textInput}
+                                    style={{alignSelf: 'center'}}
+                                  />
+                                </Text>
+                              </Row>
+                            </Button>
+                          </Col>
+                        </Row>
+                      </Container>
+                    </View>
+                  );
+                })}
+              </CarouselView>
+            </View>
+          )}
+
+          {accessClient.MainHome.showListPlace && <ListPlace
+            data={listNearbyPlace}
+            loading={loadingNearbyPlace}
+            horizontal
+            showHeader
+            onPress={item => {
+              navigation.navigate('PlaceDetail', {item});
+            }}
+            style={{paddingLeft: 8}}
+          />}
+
+          <ListEvent
+            data={listEvent}
+            loading={loadingEvent}
+            horizontal
+            showHeader
+            onPress={item => {
+              navigation.navigate('EventDetail', {item});
+            }}
+            style={{paddingLeft: 8}}
+          />
+
+          {accessClient.MainHome.showListJob && (
+            <ListJob
+              data={listJobs}
+              loading={loadingJobs}
+              horizontal
+              showHeader
+              onPress={item => {
+                navigation.navigate('JobDetail', {item});
+              }}
+              style={{paddingLeft: 8}}
+            />
+          )}
+
+          {accessClient.MainHome.showListMusicNewer && (
+            <MusikTerbaru
+              data={dataDummyMusic}
+              onPress={(item, index) => {
+                trackPlayerPlay(dataDummyMusic, index);
+                navigation.navigate('MusicPlayerScreen');
+              }}
+            />
+          )}
+
+          <Divider />
+
+          {accessClient.MainHome.showListYoutube &&
+            <MondayAccoustic />
+          }
+
+          {accessClient.MainHome.showListYoutube &&
+            <VideoCardList
+              onPress={() => navigation.navigate('VideoDetail')}
+            />
+          }
+
+          {accessClient.MainHome.showListEbookNewer && (
+            <View style={{marginTop: 32}}>
+              <PostingHeader
+                title="Rilisan Terbaru"
+                showSeeAllText
+                onSeeAllPress={() => navigation.navigate('Ebook')}
+              />
+              <FlatList
+                data={[
+                  {image: ImagesPath.ebook1},
+                  {image: ImagesPath.ebook2},
+                  {image: ImagesPath.ebook1},
+                  {image: ImagesPath.ebook2},
+                  {image: ImagesPath.ebook1},
+                  {image: ImagesPath.ebook2},
+                ]}
+                contentContainerStyle={{
+                  marginTop: 16,
+                }}
+                renderItem={({item}) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      toggleModal();
+                    }}>
+                    <Image source={item.image} style={{marginHorizontal: 15}} />
+                  </TouchableOpacity>
+                )}
+                horizontal={true}
+              />
+            </View>
+          )}
+        </Container>
       </ScrollView>
 
       {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}
-      <Box
-          size={70}
-          style={{position: 'absolute', bottom: -40}}
-      />
+      {/* <Box size={70} style={{position: 'absolute', bottom: -40}} /> */}
       {/*  */}
 
-      <ModalPosting
-          ref={modalPostingRef}
-          selected={null}
-          onPress={(e) => {
-            navigation.navigate(e.nav, e.params);
-            modalPostingRef.current.close();
-          }}
+      <FloatingMusicPlayer
+        ref={floatingMusicPlayerRef}
       />
+
+      <ModalPosting
+        ref={modalPostingRef}
+        selected={null}
+        onPress={e => {
+          navigation.navigate(e.nav, e.params);
+          modalPostingRef.current.close();
+        }}
+      />
+
+      <Modal
+        isVisible={tempShowPopupAds && showPopupAds}
+        onBackdropPress={() => {
+          tempShowPopupAds = false;
+          setShowPopupAds(false);
+        }}
+        animationIn="slideInDown"
+        animationOut="slideOutDown"
+        backdropColor={Color.semiwhite}>
+        <View style={{width: '90%', aspectRatio: 9 / 16, alignSelf: 'center'}}>
+          <TouchableOpacity
+            onPress={() => {
+              tempShowPopupAds = false;
+              setShowPopupAds(false);
+              // navigation.navigate('DetailPromo', {item: dataPromoDummy});
+            }}>
+            <ImageBackground
+              source={
+                dataPopupAds && dataPopupAds.picture && dataPopupAds.picture.url
+                  ? {uri: dataPopupAds.picture.url}
+                  : adsPopup
+              }
+              imageStyle={{borderRadius: 12}}
+              style={{height: '100%', resizeMode: 'contain', width: '100%'}}>
+              <TouchableOpacity
+                onPress={() => {
+                  tempShowPopupAds = false;
+                  setShowPopupAds(false);
+                }}
+                style={{
+                  alignSelf: 'flex-end',
+                  padding: 4,
+                  margin: 8,
+                  backgroundColor: Color.error,
+                  borderRadius: 50,
+                }}>
+                <Image
+                  source={ImagesPath.icClose}
+                  style={{width: 20, height: 20}}
+                />
+              </TouchableOpacity>
+            </ImageBackground>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </Scaffold>
   );
 };

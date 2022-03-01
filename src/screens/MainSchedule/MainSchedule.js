@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { useSelector } from 'react-redux';
+import Config from 'react-native-config';
 
 import {
     useLoading,
@@ -39,10 +40,10 @@ export default ({ navigation, route }) => {
   const fecthData = async() => {
     setFallback(true);
 
-    const newListCategory = await fetchContentProduct('TRIBES', '', '');
+    const newListCategory = await fetchContentProduct(Config.PRODUCT_TYPE, '', '');
     setListCategory(newListCategory);
 
-    const newListProduct = await fetchContentProduct('TRIBES', '', 'TRIBES_BUSSINESS_DIRECTORY');
+    const newListProduct = await fetchContentProduct(Config.PRODUCT_TYPE, '', 'TRIBES_BUSSINESS_DIRECTORY');
     setListProduct(newListProduct);
 
     setFallback(false);
@@ -93,7 +94,7 @@ export default ({ navigation, route }) => {
         style={{backgroundColor: Color.primary, paddingTop: 2, paddingBottom: 6}}
         onPress={() => navigation.navigate('CreateThreadScreen', {
           title: 'Artikel',
-          productType: "TRIBES",
+          productType: Config.PRODUCT_TYPE,
           productCategory: '',
           productSubCategory: 'POSTING',
         })}
@@ -104,8 +105,7 @@ export default ({ navigation, route }) => {
       <ListNews
         data={listProduct}
         onPress={(item) => {
-          // navigation.navigate('NewsDetail', { item });
-          navigation.navigate('PostingDetail', {item});
+          navigation.navigate('NewsDetail', { item });
         }}
         style={{
           paddingBottom: 80

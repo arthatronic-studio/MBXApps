@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Dimensions, Image } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
@@ -21,6 +22,7 @@ import {
     iconLiked,
     iconLike,
 } from '@assets/images/home';
+import { Container, Divider, Row } from 'src/styled';
 
 const { width } = Dimensions.get('window');
 
@@ -88,6 +90,7 @@ const CardEmergency = (props) => {
                     width: width / numColumns - (horizontal ? 32 : 16),
                     paddingHorizontal: 8,
                     marginBottom: 16,
+                    ...shadowStyle,
                 },
                 style
             ]}
@@ -100,54 +103,72 @@ const CardEmergency = (props) => {
                     padding: 16,
                     backgroundColor: Color.textInput,
                     borderRadius: 8,
+                    aspectRatio: 16/9,
                 }}
             >
                 <Image
                     source={{uri: item.image}}
-                    style={{marginTop:6, width: '25%', height: '50%', borderRadius: 8, backgroundColor: Color.border}}
+                    style={{height: '100%', width: '25%', aspectRatio: 1, borderRadius: 8, backgroundColor: Color.border}}
                 />
 
-                <View style={{height: '100%', width: '75%', paddingLeft: 16}}>
-                    <Text size={16} type='bold' align='left' numberOfLines={1}>{item.productName}</Text>
-                    <View style={{alignItems: 'center', flexDirection: 'row', width: '100%', paddingTop: 8}}>
-                        <Image 
-                            style={{ height: 10, width: 10, aspectRatio: 1 }}
-                            source={iconCategory}
-                        />
-                        <Text style={{ marginLeft:4 }} size={12}>{item.productCategory}</Text>
-                        <Image
-                            style={{ height: 10, width: 10, marginLeft: 9 }}
-                            source={iconLocation}
-                        />
-                        <Text style={{ marginLeft:6 }} size={12}>Kebon Jeruk, Jakarta</Text>
-                    </View>
-                    <View style={{paddingTop: 16, height:60}}>
-                        <Text size={12} align='left' numberOfLines={3} >
-                            {item.productDescription}
-                        </Text>
-                    </View>
-
-                    <View style={{width: '100%', flexDirection: 'row', paddingTop: 16}}>
-                        <TouchableOpacity onPress={() => onSubmitLike(item)} style={{width: '50%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRightWidth:0.5}}>
-                            {/* <Image
-                                style={{ height:20, width:20 }}
-                                source={im_like ? iconLiked : iconLike}
-                            /> */}
-                            <MaterialCommunityIcons
-                                name={im_like ? 'rocket-launch' : 'rocket-launch-outline'}
-                                color={im_like ? Color.success : Color.text}
-                                size={18}
-                            />
-                            <Text style={{ paddingLeft: 4, marginBottom: 4}}>{like} </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => navigation.navigate('CommentListScreen', { item })} style={{width: '50%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                <View style={{height: '100%', width: '75%', justifyContent: 'space-between', paddingLeft: 16}}>
+                    <Container>
+                        <Text size={14} type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
+                        <Divider height={4} />
+                        <Row>
+                            <Container width={16}>
+                                <Ionicons name='person' color={Color.text} />
+                            </Container>
+                            <Text size={12} align='left' numberOfLines={1}>{item.fullname}</Text>
+                        </Row>
+                        <Divider height={4} />
+                        <Row>
+                            <Container width={16}>
+                                <Image 
+                                    style={{ height: 10, width: 10}}
+                                    source={iconCategory}
+                                />
+                            </Container>
+                            <Text size={12}>{item.productCategory}</Text>
+                        </Row>
+                        {/* <Row>
                             <Image
-                                style={{ height:20, width:20 }}
-                                source={iconComment}
+                                style={{ height: 10, width: 10}}
+                                source={iconLocation}
                             />
-                            <Text style={{paddingLeft:4, marginBottom: 4}}>{item.comment} </Text>
-                        </TouchableOpacity>
-                    </View>
+                            <Text size={12}>Kebon Jeruk, Jakarta</Text>
+                        </Row> */}
+
+                        <View style={{marginTop: 8}}>
+                            <Text size={11} align='left' numberOfLines={3} >
+                                {item.productDescription}
+                            </Text>
+                        </View>
+                    </Container>
+
+                    <Container>
+                        <View style={{width: '100%', flexDirection: 'row', marginTop: 16}}>
+                            <TouchableOpacity onPress={() => onSubmitLike(item)} style={{width: '50%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRightWidth:1,  borderColor: Color.border}}>
+                                {/* <Image
+                                    style={{ height:20, width:20 }}
+                                    source={im_like ? iconLiked : iconLike}
+                                /> */}
+                                <MaterialCommunityIcons
+                                    name={im_like ? 'rocket-launch' : 'rocket-launch-outline'}
+                                    color={im_like ? Color.success : Color.text}
+                                    size={17}
+                                />
+                                <Text style={{ marginLeft: 4, marginBottom: 4}} size={14}>{like} </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => navigation.navigate('CommentListScreen', { item })} style={{width: '50%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                                <Image
+                                    style={{ height:17, width:17, tintColor:Color.text}}
+                                    source={iconComment}
+                                />
+                                <Text style={{marginLeft:4, marginBottom: 4}} size={14}>{item.comment} </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </Container>
                 </View>
             </TouchableOpacity>
         </View>

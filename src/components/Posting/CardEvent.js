@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Dimensions, Image } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Foundation from 'react-native-vector-icons/Foundation';
+import Moment from 'moment';
+import { useNavigation } from '@react-navigation/native';
 
 import {
     Text,
@@ -9,8 +11,9 @@ import {
     useColor
 } from '@src/components';
 import { shadowStyle } from '@src/styles';
-import { Divider } from '@src/styled';
-import Moment from 'moment';
+import Client from '@src/lib/apollo';
+import { queryAddLike } from '@src/lib/query';
+import { Divider } from 'src/styled';
 
 const { width } = Dimensions.get('window');
 
@@ -24,7 +27,52 @@ const defaultProps = {
 const CardEvent = (props) => {
     const { item, numColumns, onPress, horizontal, style } = props;
 
+    const [like, setLike] = useState(item.like);
+    const [im_like, setImLike] = useState(item.im_like);
+    const [trigger, setTrigger] = useState(false);
+
     const { Color } = useColor();
+    const navigation = useNavigation();
+
+    useEffect(() => {
+        setLike(item.like);
+        setImLike(item.im_like);
+    }, [item]);
+
+    useEffect(() => {
+        const timeout = trigger ? setTimeout(() => {
+            fetchAddLike();
+        }, 500) : null;
+
+        return () => {
+            clearTimeout(timeout);
+        }
+    }, [trigger]);
+
+    const fetchAddLike = () => {
+        console.log('trigger article');
+
+        Client.query({
+            query: queryAddLike,
+            variables: {
+            productId: item.id
+            }
+        })
+        .then((res) => {
+            console.log(res, 'res add like');
+            setTrigger(false);
+        })
+        .catch((err) => {
+            console.log(err, 'err add like');
+            setTrigger(false);
+        })
+    }
+
+    const onSubmitLike = () => {
+        setLike(!im_like ? like + 1 : like - 1);
+        setImLike(!im_like);
+        setTrigger(true);
+    }
 
     return (
         <TouchableOpacity
@@ -57,11 +105,12 @@ const CardEvent = (props) => {
                     <View style={{paddingTop: 8}}>
                         <Text type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
                         <Divider height={6} />
+                        <Text size={12} align='left' numberOfLines={2}>{item.fullname}</Text>
                         {Moment(parseInt(item.created_date)).isValid() && <>
                             <Text type='bold' size={12} align='left' color={Color.primary}>{Moment(parseInt(item.created_date)).format('DD MMM YYYY')}</Text>
-                            <Divider height={12} />
+                            <Divider height={8} />
                         </>}
-                        <Text size={12} align='left' numberOfLines={3}>{item.productDescription}</Text>
+                        <Text size={12} align='left' numberOfLines={4}>{item.productDescription}</Text>
                     </View>
 
                     {/* <View style={{paddingTop: 24, flexDirection: 'row'}}>

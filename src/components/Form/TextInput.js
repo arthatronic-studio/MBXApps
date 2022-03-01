@@ -59,6 +59,7 @@ const TextInput = (props) => {
     title,
     error,
     value,
+    color,
     placeholder,
     keyboardType,
     onChangeText,
@@ -73,7 +74,7 @@ const TextInput = (props) => {
         <Text
           size={12}
           letterSpacing={0.08}
-          color={Color.theme}
+          color={color ? color : Color.theme}
           style={{opacity: 0.6}}>
           {title}
         </Text>

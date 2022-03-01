@@ -13,13 +13,14 @@ import { useCombinedRefs } from '@src/hooks';
 const { width } = Dimensions.get('window');
 
 const defaultProps = {
-    selected: { id: 2, value: 'PRIVATE', iconName: 'lock-closed' },
+    selected: { label: 'Privasi', value: 'PRIVATE', iconName: 'lock-closed' },
     onPress: () => {},
 };
 
 const data = [
-    { id: 1, value: 'PUBLISH', iconName: 'globe' },
-    { id: 2, value: 'PRIVATE', iconName: 'lock-closed' },
+    { label: 'Publik', value: 'PUBLISH', iconName: 'globe' },
+    { label: 'Teman Komunitas', value: 'PRIVATE_IN_THIS_APP', iconName: 'people' },
+    { label: 'Privasi', value: 'PRIVATE', iconName: 'lock-closed' },
 ];
 
 const ModalSelectStatus = forwardRef((props, ref) => {
@@ -36,19 +37,28 @@ const ModalSelectStatus = forwardRef((props, ref) => {
   };
 
   const renderContent = () => {
-    return data.map((item, idx) =>
+    return data.map((item, idx) => {
+      const isSelected = selected && selected.value === item.value;
+
+      return (
         <TouchableOpacity
-            key={idx}
-            onPress={() => {
-                onPress(item);
-            }}
-            style={{flexDirection: 'row', paddingVertical: 8}}
+          key={idx}
+          onPress={() => {
+            onPress(item);
+          }}
+          style={{
+            flexDirection: 'row',
+            paddingVertical: 8,
+            justifyContent: 'center',
+          }}
         >
-            <Text size={12} color={selected.id === item.id ? Color.primary : Color.text}>
-                <Ionicons name={item.iconName} size={12} />  {item.value}
-            </Text>
+          <Text size={12} color={isSelected ? Color.primary : Color.text}>
+            <Ionicons name={item.iconName} size={12} />
+            &nbsp;&nbsp;{item.label}
+          </Text>
         </TouchableOpacity>
-    )
+      )
+    });
   }
 
   return (
@@ -70,5 +80,4 @@ const ModalSelectStatus = forwardRef((props, ref) => {
 });
 
 ModalSelectStatus.defaultProps = defaultProps;
-
 export default ModalSelectStatus;

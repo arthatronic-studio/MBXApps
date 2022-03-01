@@ -1,6 +1,7 @@
 import React from 'react';
 import Styled from 'styled-components';
 import { View, ActivityIndicator, Platform } from 'react-native';
+import PropTypes from 'prop-types';
 
 import { useColor } from '@src/components';
 import Text from '@src/components/Text';
@@ -37,6 +38,13 @@ const BodyText = Styled(View)`
   justify-content: center;
 `;
 
+const propTypes = {
+  visible: PropTypes.bool,
+  message: PropTypes.string,
+  type: PropTypes.string,
+  transparent: PropTypes.bool,
+}
+
 const defaultProps = {
   visible: true,
   message: 'Mohon Tunggu',
@@ -54,7 +62,7 @@ const ScreenIndicator = (props) => {
     }
 
     return (
-      <Wrapper transparent={transparent} backgroundColor={Color.primarySoft}>
+      <Wrapper transparent={transparent} backgroundColor={Color.theme}>
         <Body type={type} transparent={transparent} backgroundColor={Color.theme}>
           <ContainerIndicator style={{borderColor: Color.theme}}>
             <ActivityIndicator size={Platform.OS === 'android' ? 60 : type} color={Color.primary} style={{position: 'absolute'}} />
@@ -67,6 +75,6 @@ const ScreenIndicator = (props) => {
     );
 }
 
+ScreenIndicator.propTypes = propTypes;
 ScreenIndicator.defaultProps = defaultProps;
-
 export default ScreenIndicator;

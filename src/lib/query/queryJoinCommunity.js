@@ -19,7 +19,11 @@ export const queryJoinCommunity = gql`
             car_photo_side
             car_photo_back
             transaction_proof
+            stnk_photo
+            sim_photo
+            selfie_photo
             status
+            note
         }
     }
 `;

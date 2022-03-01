@@ -1,67 +1,21 @@
 import React, { Component } from 'react';
 import { View, ActivityIndicator, SafeAreaView } from 'react-native';
-import Styled from 'styled-components';
-import gql from 'graphql-tag';
 import Moment from 'moment';
 import { connect } from 'react-redux';
 import { Modalize } from 'react-native-modalize';
 
 import Color from '@src/components/Color';
 import Text from '@src/components/Text';
-import Header from '@src/components/Header';
-import Footer from '@src/components/Footer';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 
 import TabScreenPerProduct from './TabScreenPerProduct';
-import ScreenIndicator from '@src/components/Modal/ScreenIndicator';
 
 import graphClient from '@src/lib/apollo';
 import { getOptionsProduct } from '@src/utils/getOptionsProduct';
 import { queryCurrentUserBookings } from '@src/lib/query/booking';
+import { Scaffold } from 'src/components';
 
-const MainView = Styled(View)`
-    height: 100%;
-    backgroundColor: #FAFAFA;
-`;
-
-const ContentView = Styled(View)`
-    width: 100%;
-    paddingHorizontal: 16px;
-`;
-
-const SafeModalView = Styled(SafeAreaView)`
-    flex: 1;
-    alignItems: center;
-    justifyContent: flex-end;
-    marginBottom: 8px;
-`;
-
-const OptionsContainerModalView = Styled(View)`
-    width: 94%;
-    minHeight: 1;
-    backgroundColor: #FFFFFF;
-    paddingHorizontal: 12;
-    borderRadius: 5;
-`;
-
-const BottomOptionsContainerModalView = Styled(OptionsContainerModalView)`
-    marginTop: 10;
-`;
-
-const OptionModalView = Styled(TouchableOpacity)`
-    width: 100%;
-    height: 60;
-    justifyContent: center;
-    alignItems: center;
-    borderBottomWidth: 0.5;
-    borderColor: #DDDDDD;
-`;
-
-const NormalText = Styled(Text)`
-    fontSize: 14;
-`;
-
-let pureState = {
+const initialBookingState = {
   requestId: 0,
   page: 1,
   itemPerPage: 15,
@@ -82,7 +36,7 @@ class OrderListPerProduct extends Component {
         { title: 'Selesai', children: <View /> },
         { title: 'Dibatalkan', children: <View /> },
       ],
-      dataUserBookings: { ...pureState },
+      dataUserBookings: { ...initialBookingState },
     };
   }
 
@@ -124,6 +78,8 @@ class OrderListPerProduct extends Component {
       loading: true
     };
 
+    console.log('variables', variables);
+
     this.setState({ dataUserBookings: newData }, () => {
       graphClient
       .query({
@@ -159,7 +115,7 @@ class OrderListPerProduct extends Component {
 
   pullToRefresh() {
     this.setState({
-      dataUserBookings: { ...pureState }
+      dataUserBookings: { ...initialBookingState }
     }, () => {
       this.getUserBookings();
     });
@@ -261,23 +217,59 @@ class OrderListPerProduct extends Component {
       activeBooking = true;
     }
 
-    return (
-      <SafeModalView>
-        <OptionsContainerModalView>
-          {activeBooking && <OptionModalView onPress={() => this.payBooking()}>
-            <NormalText type='medium'>Lanjutkan Pembayaran</NormalText>
-          </OptionModalView>}
-          <OptionModalView onPress={() => this.detailBooking()}>
-            <NormalText type='medium'>Detail Pesanan</NormalText>
-          </OptionModalView>
-        </OptionsContainerModalView>
+    const buttonStyle = {
+      borderBottomWidth: 0.5,
+      borderColor: Color.border,
+      paddingVertical: 16,
+    }
 
-        <BottomOptionsContainerModalView>
-          <OptionModalView onPress={() => this.closeModal()}>
-            <NormalText type='medium'>Cancel</NormalText>
-          </OptionModalView>
-        </BottomOptionsContainerModalView>
-      </SafeModalView>
+    return (
+      <SafeAreaView
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          marginBottom: 8,
+        }}
+      >
+        <View
+          style={{
+            width: '100%',
+            paddingHorizontal: 12,
+            borderRadius: 5,
+          }}
+        >
+          {activeBooking && (
+            <TouchableOpacity
+              onPress={() => this.payBooking()}
+              style={buttonStyle}
+            >
+              <Text type='medium'>Lanjutkan Pembayaran</Text>
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity
+            onPress={() => this.detailBooking()}
+            style={buttonStyle}
+          >
+            <Text type='medium'>Detail Pesanan</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View
+          style={{
+            width: '100%',
+            paddingHorizontal: 12,
+            borderRadius: 5,
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => this.closeModal()}
+            style={buttonStyle}
+          >
+            <Text type='medium'>Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
     );
   }
 
@@ -295,8 +287,6 @@ class OrderListPerProduct extends Component {
   modalRef;
 
   render() {
-    console.log(this.props, 'order per product', this.state, this.modalRef);
-    
     const { dataUserBookings } = this.state;
     const { route, navigation } = this.props;
 
@@ -306,22 +296,10 @@ class OrderListPerProduct extends Component {
     const loading = (dataUserBookings.currentUserBookings.length === 0 && dataUserBookings.loading);
 
     return (
-      <MainView>
-        <Header title={title} showLeftButton />
-
-        <ScreenIndicator visible={loading} />
-
-        {/* {!loading && <View style={{width: '100%', marginTop: 16, paddingVertical: 20, backgroundColor: '#FFFFFF', elevation: 4,
-          borderWidth: Platform.OS === 'ios' ? 1 : 0,
-          borderBottomWidth: Platform.OS === 'ios' ? 2 : 0,
-          borderColor: '#00000029'}}
-        >
-          <ContentView style={{justifyContent: 'space-between', flexDirection: 'row', alignItems: 'center'}}>
-              <Text size={17} style={{letterSpacing: 0.26}}>Warga RT 07</Text>
-              <Text size={10}>Bulan ini</Text>
-          </ContentView>
-        </View>} */}
-
+      <Scaffold
+        headerTitle={title}
+        fallback={loading}
+      >
         {!loading && <TabScreenPerProduct
           getMoreResult={() => this.getMoreResult()}
           bookings={dataUserBookings.currentUserBookings}
@@ -332,23 +310,12 @@ class OrderListPerProduct extends Component {
           navigation={this.props.navigation}
           style={{
             paddingHorizontal: 16,
-            backgroundColor: Color.white,
+            backgroundColor: Color.theme,
             paddingTop: dataUserBookings.currentUserBookings.length > 0 ? 16 : 0,
           }}
         />}
 
         {this.renderLoading()}
-
-        {/* {showCreateBilllingButton && <Footer
-          footerType='button'
-          buttonLabel='Pembayaran Baru'
-          buttonColor={Color.secondary}
-          onPress={() => {
-            navigation.navigate('CreateTagihanScreen', {
-              title: route.params.productType === 'SAMBATAN' ? 'Tagihan Wajib' : 'Tagihan Non-Wajib',
-            });
-          }}
-        />} */}
 
         <Modalize
           ref={(refs) => this.modalRef = refs}
@@ -361,8 +328,7 @@ class OrderListPerProduct extends Component {
         >
           {this.renderModal()}
         </Modalize>
-
-      </MainView>
+      </Scaffold>
     );
   }
 }

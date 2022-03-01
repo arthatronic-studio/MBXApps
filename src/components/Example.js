@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View } from 'react-native';
-import Styled from 'styled-components';
 
 import {
     Alert,
@@ -21,10 +20,6 @@ import {
     useColor
 } from '@src/components';
 
-const MainComponent = Styled(View)`
-    flex: 1;
-`;
-
 const defaultProps = {
 };
 
@@ -38,11 +33,11 @@ const Component = (props) => {
     }, []);
 
     return (
-        <MainComponent>
-        </MainComponent>
+        <View>
+
+        </View>
     )
 }
 
 Component.defaultProps = defaultProps;
-
 export default Component;

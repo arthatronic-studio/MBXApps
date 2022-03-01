@@ -6,21 +6,21 @@ import Moment from 'moment';
 import gql from 'graphql-tag';
 import qs from 'qs';
 import Client from '../../../lib/apollo';
+import { accessClient } from 'src/utils/access_client';
+import { GALogLogin, GALogSignUp } from 'src/utils/analytics';
 
-const clientId = Platform.OS === 'ios' ? Config.CLIENT_ID_IOS : Config.CLIENT_ID_ANDROID;
-const secret = Platform.OS === 'ios' ? Config.CLIENT_SECRET_IOS : Config.CLIENT_SECRET_ANDROID;
-// const encodeData = new Buffer(clientId + ':' + secret).toString('base64');
-const encodeData = new Buffer(`${clientId}:${secret}`).toString('base64');
-
+const client_id = Platform.OS === 'ios' ? Config.CLIENT_ID_IOS : Config.CLIENT_ID_ANDROID;
+const client_secret = Platform.OS === 'ios' ? Config.CLIENT_SECRET_IOS : Config.CLIENT_SECRET_ANDROID;
+const encodeData = new Buffer(`${client_id}:${client_secret}`).toString('base64');
 const instance = axios.create({ baseURL: Config.AUTH_API_URL, headers: { 'Content-Type': 'application/x-www-form-urlencoded', Authorization: `Basic ${encodeData}` } });
 
 export const callAuthApi = async (tempEmail, password, refreshToken, fcm_token) => {
   const email = tempEmail ? tempEmail.toLowerCase() : tempEmail;
   let body = { scope: Config.SCOPE, };
   try {
-    if (email && password) body = { ...body, grant_type: 'password', client_id: clientId, secret, username: email, password, fcm_token };
+    if (email && password) body = { ...body, grant_type: 'password', client_id, client_secret, username: email, password, fcm_token };
     else if (refreshToken) body = { ...body, grant_type: 'refresh_token', refresh_token: refreshToken };
-    else body = { ...body, grant_type: Config.GRANT_TYPE, client_id: clientId, secret, };
+    else body = { ...body, grant_type: Config.GRANT_TYPE, client_id, client_secret };
 
     console.log('body auth', body);
 
@@ -167,20 +167,22 @@ export const getCurrentUserProfile = () => async (dispatch, getState) => {
 
 export const updateCurrentUserProfile = (params) => async (dispatch, getState) => {
   const {
-    firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber, Nomor_ID, Alamat,tanggalLahir,
+    firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber, externalCode, idNumber, photoProfile, birthDate, street, block, space
   } = params;
 
   dispatch({ type: 'USER.CLEAR_ERROR' });
   dispatch({ type: 'USER.FETCH_PROFILE' });
   Client.mutate({
     mutation: updateUserProfileMutation,
-    variables: { firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber, Nomor_ID, Alamat,tanggalLahir }
+    variables: { firstName, lastName, email, phoneCountryCode, phoneNumber, address, city, postalCode, country, idCardNumber, externalCode, idNumber, photoProfile, birthDate, street, block, space }
   })
   .then(res => {
+    console.log("res ini", res);
     dispatch(getCurrentUserProfile());
   })
   .catch(error => {
-   dispatch({ type: 'USER.PROFILE_ERROR', error });
+    console.log("error ini", error);
+    dispatch({ type: 'USER.PROFILE_ERROR', error });
  });
 };
 
@@ -194,6 +196,8 @@ export const login = (tempEmail, password, fcm_token) => async (dispatch, getSta
   
   if (response.success) {
     await setToken(dispatch, response.data);
+
+    GALogLogin();
 
     Client.query({ query: getUserQuery })
     .then(res => {
@@ -229,23 +233,27 @@ export const register = (user) => async (dispatch, getState) => {
         email,
         phone_country_code: user.phoneCountryCode,
         phone_number: user.phoneNumber,
+        reference_code: '',
+        initial_code: accessClient.IsAutoJoinMember ? accessClient.InitialCode : '',
         idCardNumber : user.idCardNumber,
-        Nomor_ID : user.Nomor_ID,
-        Alamat : user.Alamat,
-        address: '',
+        Nomor_ID : user.idNumber,
+        Alamat : user.address,
         city: '',
         postal_code: '',
         country: '',
-        reference_code: user.refCode,
-        tanggalLahir : user.tanggalLahir
-       
+        tanggalLahir : user.tanggalLahir,
       };
       const responseRegis = await instanceRegister.post('/api/registration/signup', body);
       
       // console.log(responseRegis, 'responseRegis');
       
-      if (responseRegis.data.Success) dispatch({ type: 'USER.REGISTER', status: responseRegis.data.Success });
-      else dispatch({ type: 'USER.REGISTER_ERROR', status: responseRegis.data.Success, error: responseRegis.data.Message });
+      if (responseRegis.data.Success) {
+        dispatch({ type: 'USER.REGISTER', status: responseRegis.data.Success });
+        GALogSignUp();
+      }
+      else {
+        dispatch({ type: 'USER.REGISTER_ERROR', status: responseRegis.data.Success, error: responseRegis.data.Message });
+      }
     }
     catch (error) {
       dispatch({ type: 'USER.REGISTER_ERROR', error });
@@ -315,50 +323,55 @@ const getUserProfileQuery = gql`
     organizationId
     organizationName
     userCode
-    isDirector
     idCardNumber
+    idNumber
+    isDirector
     image
-    qr_code
     photoProfile
-    nomor_id
-    alamat
-    tanggalLahir
+    birthDate
   }
 }`;
 
 
 const updateUserProfileMutation = gql`
 mutation inputUserDetails(
-  $firstName: String!,
-  $lastName: String,
-  $phoneCountryCode: String,
-  $phoneNumber: String,
-  $email: String,
-  $address: String,
-  $city: String,
-  $postalCode: String,
-  $country: String,
-  $idCardNumber: String,
-  $nomor_id: String,
-  $tanggalLahir: String,
-  $alamat: String,
+  $firstName: String!
+  $lastName: String
+  $email: String
+  $phoneCountryCode: String
+  $phoneNumber: String
+  $address: String
+  $city: String
+  $postalCode: String
+  $country: String
+  $idCardNumber: String
+  $externalCode: String
+  $idNumber: String
+  $photoProfile: String
+  $birthDate: String
+  $street: String
+  $block: String
+  $space: String
 ){
-    inputUserDetails(
-      firstName: $firstName,
-      lastName: $lastName,
-      phoneCountryCode: $phoneCountryCode,
-      phoneNumber: $phoneNumber,
-      email: $email,
-      address: $address,
-      city: $city,
-      postalCode: $postalCode,
-      country: $country,
-      idCardNumber : $idCardNumber,
-      nomor_id: $nomor_id,
-      alamat: $alamat,
-      tanggalLahir: $tanggalLahir
-  
-    ){
+  inputUserDetails(
+    firstName: $firstName
+    lastName: $lastName
+    email: $email
+    phoneCountryCode: $phoneCountryCode
+    phoneNumber: $phoneNumber
+    address: $address
+    city: $city
+    postalCode: $postalCode
+    country: $country
+    idCardNumber: $idCardNumber
+    externalCode: $externalCode
+    idNumber: $idNumber
+    photoProfile: $photoProfile
+    birthDate: $birthDate
+    street: $street
+    block: $block
+    space: $space
+  ){
     userId
     userName
     firstName
@@ -370,10 +383,14 @@ mutation inputUserDetails(
     city
     postalCode
     country
+    organizationId
+    organizationName
+    userCode
     idCardNumber
+    idNumber
+    isDirector
+    image
     photoProfile
-    nomor_id
-    alamat
-    tanggalLahir
+    birthDate
   }
 }`;

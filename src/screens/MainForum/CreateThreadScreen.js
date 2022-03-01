@@ -3,6 +3,7 @@ import { View, ScrollView, TextInput, SafeAreaView, Image, Keyboard, BackHandler
 import Styled from 'styled-components';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { launchImageLibrary } from 'react-native-image-picker';
+
 import {
     Header,
     Text,
@@ -15,9 +16,10 @@ import {
 import { TouchSelect } from '@src/components/Form';
 import ModalSelectStatus from '@src/components/Modal/ModalSelectStatus';
 import validate from '@src/lib/validate';
-
 import Client from '@src/lib/apollo';
 import { queryProductManage } from '@src/lib/query';
+import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
+import { accessClient } from 'src/utils/access_client';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -41,7 +43,6 @@ const CustomTextInput = Styled(TextInput)`
   width: 100%;
   height: 100%;
   fontFamily: Inter-Regular;
-  backgroundColor: transparent;
   borderBottomWidth: 1px;
   borderColor: #666666;
   fontSize: 14px;
@@ -64,11 +65,13 @@ const CreateThreadScreen = (props) => {
         code: '',
         name: '',
         image: '',
-        status: 'PRIVATE', // PUBLISH | DRAFT | PRIVATE | REMOVE
+        status: 'PUBLISH', // PUBLISH | DRAFT | PRIVATE | REMOVE
         method: 'INSERT', // UPDATE | DELETE
         type: params.productType,
         category: params.productSubCategory,
         description: '',
+        latitude: '',
+        longitude: '',
     });
     const [error, setError] = useState({
         name: null,
@@ -78,7 +81,7 @@ const CreateThreadScreen = (props) => {
     const [thumbImage, setThumbImage] = useState('');
     const [mimeImage, setMimeImage] = useState('image/jpeg');
     const [selectedStatus, setSelectedStatus] = useState({
-        id: 2, value: 'PRIVATE', iconName: 'lock-closed'
+        label: 'Publik', value: 'PUBLISH', iconName: 'globe'
     });
 
     // ref
@@ -89,12 +92,36 @@ const CreateThreadScreen = (props) => {
     const [popupProps, showPopup] = usePopup();
 
     useEffect(() => {
-        BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+        // BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+        requestLocationPermission();
   
-        return () => {
-            BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
-        }
+        // return () => {
+        //     BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+        // }
     }, []);
+
+    const requestLocationPermission = async () => {
+        const isGranted = await geoLocationPermission();
+    
+        console.log('isGranted',isGranted);
+    
+        geoCurrentPosition(
+          (res) => {
+            console.log(res, 'res location');
+            if (res.coords) {
+                setUserData({
+                    ...userData,
+                    latitude: res.coords.latitude.toString(),
+                    longitude: res.coords.longitude.toString(),
+                });
+            }
+          },
+          (err) => {
+            console.log(err, 'err location');
+          }
+        );
+    }
   
     const handleBackPress = () => {
         backToSelectVideo();
@@ -178,15 +205,17 @@ const CreateThreadScreen = (props) => {
                         onPress={() => {
                             const options = {
                                 mediaType: 'photo',
-                                maxWidth: 320,
-                                maxHeight: 320,
+                                maxWidth: 640,
+                                maxHeight: 640,
                                 quality: 1,
                                 includeBase64: true,
                             }
 
                             launchImageLibrary(options, (callback) => {
-                                setThumbImage(callback.base64);
-                                setMimeImage(callback.type);
+                                if (callback.base64) {
+                                    setThumbImage(callback.base64);
+                                    setMimeImage(callback.type);
+                                }
                             })
                         }}
                         style={{width: '100%', height: 70, borderRadius: 4, marginTop: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
@@ -253,6 +282,7 @@ const CreateThreadScreen = (props) => {
                             onBlur={() => isValueError('description')}
                             multiline
                             numberOfLines={8}
+                            style={{color: Color.text, textAlignVertical: 'top'}}
                         />
                     </View>
                     <ErrorView>
@@ -260,17 +290,17 @@ const CreateThreadScreen = (props) => {
                     </ErrorView>
                 </View>
 
-                <TouchSelect
+                {accessClient.CreatePosting.showPrivacy && <TouchSelect
                     title='Siapa yang dapat melihat ini?'
-                    value={userData.status}
+                    value={selectedStatus.label}
                     iconName={selectedStatus.iconName}
                     onPress={() => modalSelectStatusRef.current.open()}
-                />
+                />}
             </ScrollView>
 
             <Submit
                 buttonLabel='Buat'
-                buttonColor={Color.green}
+                buttonColor={Color.primary}
                 type='bottomSingleButton'
                 buttonBorderTopWidth={0.5}
                 onPress={() => {

@@ -4,6 +4,9 @@ import Styled from 'styled-components';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { launchImageLibrary } from 'react-native-image-picker';
+import DatePicker from 'react-native-date-picker';
+import Moment from 'moment';
+
 import {
     Header,
     Text,
@@ -17,12 +20,11 @@ import { TouchSelect } from '@src/components/Form';
 import ModalSelectPriority from '@src/components/Modal/ModalSelectPriority';
 import ModalSelectStatus from '@src/components/Modal/ModalSelectStatus';
 import validate from '@src/lib/validate';
-
 import Client from '@src/lib/apollo';
 import { queryProductManage } from '@src/lib/query';
 import { Box, Divider } from 'src/styled';
-import DatePicker from 'react-native-date-picker';
-import Moment from 'moment';
+import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
+import { accessClient } from 'src/utils/access_client';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -72,32 +74,28 @@ const CreateEmergencyScreen = (props) => {
         code: '',
         name: '',
         image: '',
-        status: 'PRIVATE', // PUBLISH | DRAFT | PRIVATE | REMOVE
+        status: 'PUBLISH', // PUBLISH | DRAFT | PRIVATE | REMOVE
         method: 'INSERT', // UPDATE | DELETE
         type: params.productType,
         category: params.productSubCategory,
         description: '',
         priority: 'High',
-        date: date ? date : Moment(new Date()).format('DD-MM-YYYY') ,
-        
-    
+        // createdDate: Moment().format('DD-MM-YYYY'),
+        latitude: '',
+        longitude: '',
     });
-    console.log('liat userdata',userData.date)
     const [error, setError] = useState({
         name: null,
         image: null,
         description: null,
-        date: null,
-        
     });
     const [thumbImage, setThumbImage] = useState('');
     const [mimeImage, setMimeImage] = useState('image/jpeg');
     const [selectedPriority, setSelectedPriority] = useState({
         id: 3, value: 'High'
     });
-
     const [selectedStatus, setSelectedStatus] = useState({
-        id: 2, value: 'PRIVATE', iconName: 'lock-closed'
+        label: 'Publik', value: 'PUBLISH', iconName: 'globe'
     });
 
     // ref
@@ -113,12 +111,36 @@ const CreateEmergencyScreen = (props) => {
     const [open, setOpen] = useState(false)
 
     useEffect(() => {
-        BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+        // BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+        requestLocationPermission();
   
         return () => {
-            BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+            // BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
         }
     }, []);
+
+    const requestLocationPermission = async () => {
+        const isGranted = await geoLocationPermission();
+    
+        console.log('isGranted',isGranted);
+    
+        geoCurrentPosition(
+          (res) => {
+            console.log(res, 'res location');
+            if (res.coords) {
+                setUserData({
+                    ...userData,
+                    latitude: res.coords.latitude.toString(),
+                    longitude: res.coords.longitude.toString(),
+                });
+            }
+          },
+          (err) => {
+            console.log(err, 'err location');
+          }
+        );
+    }
   
     const handleBackPress = () => {
         backToSelectVideo();
@@ -160,7 +182,6 @@ const CreateEmergencyScreen = (props) => {
             showPopup('Silahkan isi deskripsi terlebih dulu', 'warning');
             return;
         }
-        
 
         showLoading();
 
@@ -168,7 +189,6 @@ const CreateEmergencyScreen = (props) => {
             products: [{
                 ...userData,
                 image: thumbImage,
-                CreatedDate:date,
             }],
         };
 
@@ -210,15 +230,17 @@ const CreateEmergencyScreen = (props) => {
                         onPress={() => {
                             const options = {
                                 mediaType: 'photo',
-                                maxWidth: 320,
-                                maxHeight: 320,
+                                maxWidth: 640,
+                                maxHeight: 640,
                                 quality: 1,
                                 includeBase64: true,
                             }
 
                             launchImageLibrary(options, (callback) => {
-                                setThumbImage(callback.base64);
-                                setMimeImage(callback.type);
+                                if (callback.base64) {
+                                    setThumbImage(callback.base64);
+                                    setMimeImage(callback.type);
+                                }
                             })
                         }}
                         style={{width: '100%', height: 70, borderRadius: 4, marginTop: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
@@ -260,6 +282,7 @@ const CreateEmergencyScreen = (props) => {
                         {/* <Text type='medium' color={Color.error}>error</Text> */}
                     </ErrorView>
                 </View>
+
                 <View style={{paddingHorizontal: 16, paddingTop: 24}}>
                     <LabelInput>
                         <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Deskripsi</Text>
@@ -281,61 +304,58 @@ const CreateEmergencyScreen = (props) => {
                             onChangeText={(text) => onChangeUserData('description', text)}
                             selectionColor={Color.text}
                             value={userData.description}
-                                onBlur={() => isValueError('description')}
-                                multiline
-                                numberOfLines={8}
-                            />
-                        </View>
-                        <ErrorView>
-                            {/* <Text type='medium' color={Color.error}>error</Text> */}
-                        </ErrorView>
+                            onBlur={() => isValueError('description')}
+                            multiline
+                            numberOfLines={8}
+                            style={{color: Color.text}}
+                        />
                     </View>
-                <View style={{paddingHorizontal: 16, paddingTop: 24}}>
-                    <LabelInput>
-                        <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Tanggal</Text>
-                    </LabelInput>
-                    <EmailRoundedView>
-           
-           <CustomTouch title="Open" onPress={() => setOpen(true)}>
-                
-                 <EmailRoundedView>
-                         <View style={{height: 34, paddingRight: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
-                         <Text size={14} style={{marginTop: 2}}></Text>
-                         <Text>{userData.date ? userData.date : 'Pilih Tanggal '} </Text>
-                         <Ionicons name='calendar' color={Color.text} />
-                     </View>
-                 </EmailRoundedView>
-             </CustomTouch>
-            </EmailRoundedView>
                     <ErrorView>
                         {/* <Text type='medium' color={Color.error}>error</Text> */}
                     </ErrorView>
-                    <>                 
-                    {open && <DatePicker
-                    modal
-                    open={open}
-                    date={date}
-                    mode="date"
-                    onConfirm={(date) => {
-                    setOpen(false);
-                    setDate(date);
-                    onChangeUserData('date', Moment(date).format('DD-MM-YYYY'));
-                    console.log('koko',date);
-                    }}
-                    onCancel={() => {
-                    setOpen(false)
-                    }}
-                    />}
-                    </>
                 </View>
-               
 
-                <TouchSelect
+                {/* <View style={{paddingHorizontal: 16, paddingTop: 24}}>
+                    <LabelInput>
+                        <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Tanggal</Text>
+                    </LabelInput>
+                    <EmailRoundedView>           
+                        <CustomTouch title="Open" onPress={() => setOpen(true)}>
+                            <EmailRoundedView>
+                                <View style={{height: 34, paddingRight: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
+                                    <Text size={14} style={{marginTop: 2}}></Text>
+                                    <Text>{userData.createdDate ? userData.createdDate : 'Pilih Tanggal '} </Text>
+                                    <Ionicons name='calendar' color={Color.text} />
+                                </View>
+                            </EmailRoundedView>
+                        </CustomTouch>
+                    </EmailRoundedView>
+
+                    <ErrorView>
+                        <Text type='medium' color={Color.error}></Text>
+                    </ErrorView>
+                    {open && <DatePicker
+                        modal
+                        open={open}
+                        date={date}
+                        mode="date"
+                        onConfirm={(date) => {
+                            setOpen(false);
+                            setDate(date);
+                            onChangeUserData('createdDate', Moment(date).format('DD-MM-YYYY'));
+                        }}
+                        onCancel={() => {
+                            setOpen(false)
+                        }}
+                    />}
+                </View> */}
+
+                {accessClient.CreatePosting.showPrivacy && <TouchSelect
                     title='Siapa yang dapat melihat ini?'
-                    value={userData.status}
+                    value={selectedStatus.label}
                     iconName={selectedStatus.iconName}
                     onPress={() => modalSelectStatusRef.current.open()}
-                />
+                />}
 
                 <TouchSelect
                     title='Priority'

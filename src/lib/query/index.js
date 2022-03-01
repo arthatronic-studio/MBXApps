@@ -13,6 +13,10 @@ import { queryContentChatRooms } from './queryContentChatRooms';
 import { queryContentChatRoomManage } from './queryContentChatRoomManage';
 import { queryContentChatRoomDetail } from './queryContentChatRoomDetail';
 import { queryContentChatMessage } from './queryContentChatMessage';
+import { queryGetNotificationHistory } from './queryGetNotificationHistory';
+import { queryGetUserOrganizationRef } from './queryGetUserOrganizationRef';
+import { queryContentUserProfile } from './queryContentUserProfile';
+import { queryContentUserProduct } from './queryContentUserProduct';
 
 export {
     queryContentProduct,
@@ -30,4 +34,8 @@ export {
     queryContentChatRoomManage,
     queryContentChatRoomDetail,
     queryContentChatMessage,
+    queryGetNotificationHistory,
+    queryGetUserOrganizationRef,
+    queryContentUserProfile,
+    queryContentUserProduct,
 };

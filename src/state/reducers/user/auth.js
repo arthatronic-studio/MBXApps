@@ -50,13 +50,13 @@ const Auth = (state = initialState, action) => {
             register: { status: action.status },
             loading: false,
           };
-       case 'USER.FORGET_PASSWORD':
+        case 'USER.FORGET_PASSWORD':
           return {
             ...state,
             forgetPassword: { status: action.status },
             loading: false,
           };
-         case 'USER.CHANGE_PASSWORD':
+        case 'USER.CHANGE_PASSWORD':
           return {
             ...state,
             changePassword: { status: action.status },
