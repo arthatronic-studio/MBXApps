@@ -58,7 +58,7 @@ const SurveyFirst = ({navigation}) => {
 	const { Color } = useColor();
 
 	useEffect(() => {
-        submit()
+        // submit()
     }, []);
 
     const submit = async () => {
