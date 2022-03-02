@@ -8,7 +8,8 @@ import {useNavigation} from '@react-navigation/core';
 import PostingHeader from './PostingHeader';
 import {Container, Row} from 'src/styled';
 import PostingSkeleton from './PostingSkeleton';
-import {GALogEvent} from 'src/utils/analytics';
+import {analyticMethods, GALogEvent} from 'src/utils/analytics';
+import { useSelector } from 'react-redux';
 
 const propTypes = {
   data: PropTypes.array,
@@ -34,6 +35,7 @@ const ListPlace = props => {
   const {Color} = useColor();
   const navigation = useNavigation();
   const {width} = useWindowDimensions();
+  const user = useSelector(state => state['user.auth'].login.user);
 
   let extraProps = {numColumns: 2};
   if (horizontal) extraProps = {};
@@ -90,10 +92,9 @@ const ListPlace = props => {
                   GALogEvent('Tempat', {
                     id: item.id,
                     product_name: item.productName,
-                    user_id: item.ownerId,
-                    method: 'view',
+                    user_id: user.userId,
+                    method: analyticMethods.view,
                   });
-                  console.log('ini item', item);
                 }}
               />
             );
