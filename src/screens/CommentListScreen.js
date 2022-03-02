@@ -15,10 +15,13 @@ import CardListComment from '@src/components/Card/CardListComment';
 import Client from '@src/lib/apollo';
 import {queryComment} from '@src/lib/query';
 
-import {GALogEvent} from 'src/utils/analytics';
+import {analyticMethods, GALogEvent} from 'src/utils/analytics';
+import { useSelector } from 'react-redux';
+import { listMenuHome } from '@src/screens/MainHome/staticMenuHome';
 
 const CommentListScreen = ({navigation, route}) => {
   const {item} = route.params;
+
   const [dataComment, setDataComment] = useState({
     data: [],
     loading: true,
@@ -30,6 +33,7 @@ const CommentListScreen = ({navigation, route}) => {
   const modalListActionRef = useRef();
 
   const {Color} = useColor();
+  const user = useSelector(state => state['user.auth'].login.user);
 
   useEffect(() => {
     if (item && item.comment > 0) {
@@ -155,28 +159,14 @@ const CommentListScreen = ({navigation, route}) => {
         showAll={item.comment > 3 ? true : false}
         onSuccessComment={id => {
           setRefreshComment(true);
-          if (item.productCategory === 'NEARBY_PLACE') {
-            GALogEvent('Tempat', {
-              id: item.id,
-              product_name: item.productName,
-              user_id: item.ownerId,
-              method: 'comment',
-            });
-          } else if(item.productCategory === 'POSTING') {
-            GALogEvent('Artikel', { 
-              id: item.id, 
-              product_name: item.productName, 
-              user_id: item.ownerId, 
-              method: "comment" 
-            });
-          }else if(item.productCategory === 'EVENT') {
-            GALogEvent('Event', { 
-              id: item.id, 
-              product_name: item.productName, 
-              user_id: item.ownerId, 
-              method: "comment" 
-            });
-          }
+          const getObj = listMenuHome.filter((e => e.code === item.productCategory))[0];
+
+          GALogEvent(getObj ? getObj.name : 'Uncategorized', {
+            id: item.id,
+            product_name: item.productName,
+            user_id: user.userId,
+            method: analyticMethods.comment,
+          });
 
           // onSuccessComment(id)
         }}

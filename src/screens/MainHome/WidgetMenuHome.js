@@ -13,24 +13,9 @@ import {
 } from '@src/components';
 import {shadowStyle} from '@src/styles';
 import {Container} from '@src/styled';
-import {
-  iconBPJS,
-  iconGames,
-  iconInternet,
-  iconIuran,
-  iconPDAM,
-  iconPLN,
-  iconPulsa,
-  iconSemua,
-  iconLelang,
-  iconMediaPlayer,
-  iconMenuArtikel,
-  iconMenuEvent,
-  iconMenuLoker,
-  iconMenuTempat,
-} from '@assets/images/home';
-import { accessClient } from 'src/utils/access_client';
-import { GALogEvent } from 'src/utils/analytics';
+import { analyticMethods, GALogEvent } from 'src/utils/analytics';
+import { listMenuHome } from 'src/screens/MainHome/staticMenuHome';
+import { useSelector } from 'react-redux';
 
 const SambatanMenuView = Styled(View)`
   width: 100%;
@@ -76,120 +61,10 @@ const ComingSoonView = Styled(View)`
   alignItems: center;
 `;
 
-const listMenuHome = [
-  // menu komoto
-  {
-    id: 1,
-    code: 'job',
-    name: 'Loker',
-    images: iconMenuLoker,
-    nav: 'JobScreen',
-    params: { title: 'Loker' },
-    badge: false,
-    show: accessClient.MenuHome.showJob,
-  },
-  {
-    id: 2,
-    code: 'place',
-    name: 'Tempat',
-    images: iconMenuTempat,
-    nav: 'PlaceScreen',
-    params: { title: 'Tempat' },
-    badge: false,
-    show: accessClient.MenuHome.showPlace,
-  },
-  {
-    id: 3,
-    code: 'event',
-    name: 'Event',
-    images: iconMenuEvent,
-    nav: 'EventScreen',
-    params: { title: 'Event' },
-    badge: false,
-    show: true,
-  },
-  {
-    id: 4,
-    code: 'news',
-    name: 'Artikel',
-    images: iconMenuArtikel,
-    nav: 'NewsScreen',
-    params: { title: 'Artikel' },
-    badge: false,
-    show: true,
-  },
-
-  // menu tribes
-  // {
-  //   id: 8,
-  //   code: '',
-  //   name: 'Media Player',
-  //   images: iconMediaPlayer,
-  //   nav: '',
-  //   params: {},
-  //   badge: true,
-  //   show: true,
-  // },
-  // {
-  //   id: 7,
-  //   code: '',
-  //   name: 'Lelang',
-  //   images: iconLelang,
-  //   nav: 'Lelang',
-  //   params: {},
-  //   badge: true,
-  //   show: true,
-  // },
-  // {
-  //   id: 10,
-  //   code: 'post',
-  //   name: 'Posting',
-  //   images: iconIuran,
-  //   nav: '',
-  //   params: {},
-  //   badge: true,
-  //   show: true,
-  // },
-  // {id: 0, code: '', name: 'Pulsa', images: iconPulsa, nav: 'PulsaScreen', params: {}},
-  // {id: 1, code: '', name: 'Listrik', images: iconPLN, nav: 'PlnScreen', params: {}},
-  // // {id: 2, code: '', name: 'Game', images: iconGames, nav: '', params: {}},
-  // {id: 3, code: '', name: 'PDAM', images: iconPDAM, nav: 'PdamScreen', params: {}},
-  // // {id: 4, code: '', name: 'BPJS', images: iconBPJS, nav: '', params: {}},
-  // // {
-  // //   id: 5,
-  // //   code: '',
-  // //   name: 'Internet',
-  // //   images: iconInternet,
-  // //   nav: '',
-  // //   params: {title: 'Iuran Non-wajib', type: 'ACTIVE', productType: 'SAMBATAN_O',}},
-  // {
-  //   id: 6,
-  //   code: '',
-  //   name: 'Iuran',
-  //   images: iconIuran,
-  //   nav: 'OrderListPerProduct',
-  //   params: {title: 'Iuran', type: 'ACTIVE', productType: 'ALL_SAMBATAN'},
-  // },
-  // // {
-  // //   id: 7,
-  // //   code: '',
-  // //   name: 'Semua',
-  // //   images: iconSemua,
-  // //   nav: '',
-  // //   params: {title: 'Iuran Non-wajib', type: 'ACTIVE', productType: 'SAMBATAN_O',}},
-  // // {
-  // //   id: 9,
-  // //   code: '',
-  // //   name: 'Lainnya', // 'Tagihan &\n Isi Ulang',
-  // //   images: iconIuran,
-  // //   nav: '',
-  // //   params: {},
-  // // },
-];
-
 const WidgetMenuHome = (props) => {
   const {Color} = useColor();
   const navigation = useNavigation();
+  const user = useSelector(state => state['user.auth'].login.user);
 
   const renderComingSoon = () => {
     return (
@@ -242,8 +117,13 @@ const WidgetMenuHome = (props) => {
                 props.onPress(menu);
 
                 if (menu.nav === '') return;
-                GALogEvent(menu.name, {menu});
                 navigation.navigate(menu.nav, menu.params);
+                GALogEvent(menu.name, {
+                  id: menu.code,
+                  product_name: menu.name,
+                  user_id: user.userId,
+                  method: analyticMethods.viewAll,
+                });
               }}
               style={{
                 width: `${widthMenu}%`,
