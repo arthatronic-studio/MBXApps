@@ -128,6 +128,10 @@ import SurveyFirst from 'src/screens/Survey/SurveyFirst';
 import SurveySecond from 'src/screens/Survey/SurveySecond';
 import SurveyThird from 'src/screens/Survey/SurveyThird';
 import SurveyFourth from 'src/screens/Survey/SurveyFourth';
+import Ecommerce from 'src/screens/Ecommerce/Ecommerce';
+import Wishlist from 'src/screens/Ecommerce/Wishlist';
+import WishlistEmpty from 'src/screens/Ecommerce/WishlistEmpty';
+import Cart from 'src/screens/Ecommerce/Cart';
 
 const {Navigator, Screen} = createStackNavigator();
 const MainPage =
@@ -175,6 +179,10 @@ function MainStackNavigator() {
       <Screen name="AddProduct" component={AddProduct} />
       <Screen name="StepTwo" component={StepTwo} />
       <Screen name="StepThree" component={StepThree} />
+      <Screen name="Ecommerce" component={Ecommerce} />
+      <Screen name="Wishlist" component={Wishlist} />
+      <Screen name="WishlistEmpty" component={WishlistEmpty} />
+      <Screen name="Cart" component={Cart} />
 
 
       {/* user */}

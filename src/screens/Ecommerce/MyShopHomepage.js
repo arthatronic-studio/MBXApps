@@ -54,8 +54,8 @@ const MyShopHomepage = ({ navigation }) => {
 	useEffect(() => {}, []);
 	return (
 		<Scaffold
-			header={<Header customIcon title="Toko Kamu" type="regular" centerTitle={false} />}
-			onPressLeftButton={() => navigation.pop()}
+		header={<Header customIcon title="Toko Kamu" type="regular" centerTitle={false} />}
+		onPressLeftButton={() => navigation.pop()}
 		>
 			<ScrollView style={{backgroundColor: Color.semiwhite}}>
 				<View style={{backgroundColor: Color.textInput, width: '92%', height: 240,

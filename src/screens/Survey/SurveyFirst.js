@@ -33,6 +33,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import axios from 'axios';
 import moment from 'moment';
+import Ecommerce from '../Ecommerce/Ecommerce';
 var crypto = require('crypto-js')
 
 function sha1(data) {
@@ -112,6 +113,7 @@ const SurveyFirst = ({navigation}) => {
 		onPressLeftButton={() => navigation.pop()}
 	>
         <ScrollView>
+            <Text onPress={() => navigation.navigate('Ecommerce')}>E-commerce</Text>
             <View style={{flexDirection: 'row',}}>
                 <Image source={ImagesPath.survey1} style={{marginHorizontal: 10}}/>
                 <View style={{alignItems: 'flex-start', paddingVertical: 5}}>

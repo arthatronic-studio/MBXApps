@@ -64,4 +64,12 @@ export default {
   survey2: require('../components/Images/survey2.png'),
   survey3: require('../components/Images/survey3.png'),
   survey4: require('../components/Images/survey4.png'),
+  lelangecommerce1: require('../components/Images/lelangecommerce1.png'),
+  lelangecommerce2: require('../components/Images/lelangecommerce2.png'),
+  lelangecommerce3: require('../components/Images/lelangecommerce3.png'),
+  lelangecommerce4: require('../components/Images/lelangecommerce4.png'),
+  lelangecommerce5: require('../components/Images/lelangecommerce5.png'),
+  lelangecommerce6: require('../components/Images/lelangecommerce6.png'),
+  bannerLelangEcommerce : require('../components/Images/bannerLelangEcommerce.png'),
+
 };
