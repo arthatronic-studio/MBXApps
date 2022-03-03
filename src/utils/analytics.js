@@ -2,6 +2,13 @@ import {Platform} from 'react-native';
 import GA from '@react-native-firebase/analytics';
 import { getTrackingStatus } from 'react-native-tracking-transparency';
 
+export const analyticMethods = {
+    view: 'view',
+    viewAll: 'view-all',
+    comment: 'comment',
+    like: 'like',
+};
+
 const handleTrackingStatus = async() => {
     if (Platform.OS) {
         const trackingStatus = await getTrackingStatus();
@@ -13,11 +20,13 @@ const handleTrackingStatus = async() => {
     return true;
 }
 
-export const GALogEvent = async(name, params) => {
+export const GALogEvent = async(param_name, params) => {
     if (await handleTrackingStatus() === false) return false;
 
+    const name = param_name.replace(/\s/g, ''); //remove spaces
+    
     const result = await GA().logEvent(name, params);
-    console.log('GALog Event', result);
+    console.log('GALog Event ' + name, result);
     return result;
 }
 

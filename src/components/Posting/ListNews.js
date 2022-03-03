@@ -9,7 +9,8 @@ import PostingHeader from './PostingHeader';
 import { Container, Row } from 'src/styled';
 import PostingSkeleton from './PostingSkeleton';
 
-import { GALogEvent } from 'src/utils/analytics';
+import { analyticMethods, GALogEvent } from 'src/utils/analytics';
+import { useSelector } from 'react-redux';
 
 const propTypes = {
     data: PropTypes.array,
@@ -42,6 +43,7 @@ const ListNews = (props) => {
     const {Color} = useColor();
     const navigation = useNavigation();
     const { width } = useWindowDimensions();
+    const user = useSelector(state => state['user.auth'].login.user);
 
     const renderHeader = () => {
         return (
@@ -83,14 +85,19 @@ const ListNews = (props) => {
                     renderItem={({ item, index }) => {
                         return (
                             <>
-                            <CardNews
-                                item={item}
-                                numColumns={1}
-                                horizontal={horizontal}
-                                onPress={() => 
-                                    {onPress(item);
-                                    GALogEvent('Artikel', { id: item.id, product_name: item.productName, user_id: item.ownerId, method: "view" })}
-                                }
+                                <CardNews
+                                    item={item}
+                                    numColumns={1}
+                                    horizontal={horizontal}
+                                    onPress={() => {
+                                        onPress(item);
+                                        GALogEvent('Artikel', {
+                                            id: item.id,
+                                            product_name: item.productName,
+                                            user_id: user.userId,
+                                            method: analyticMethods.view,
+                                        })
+                                    }}
                                 />
                             </>
                         )
