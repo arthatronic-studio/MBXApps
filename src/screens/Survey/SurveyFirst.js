@@ -11,7 +11,7 @@ import RNSimpleCrypto from "react-native-simple-crypto";
 import {
 	Text,
 	// TouchableOpacity,
-	Loading,
+	
 	useLoading,
 	Scaffold,
 	Row,
