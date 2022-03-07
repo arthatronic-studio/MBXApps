@@ -63,6 +63,7 @@ import {trackPlayerPlay} from 'src/utils/track-player-play';
 import FloatingMusicPlayer from 'src/components/FloatingMusicPlayer';
 import TrackPlayer, { Event, useTrackPlayerEvents } from 'react-native-track-player';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
+import { Item } from 'native-base';
 
 const dataPromoDummy = {
   productName: 'Halo selamat datang!',
@@ -314,7 +315,7 @@ const MainHome = ({navigation, route}) => {
         console.log(err, 'err banner list');
       });
   };
-
+  
   // Popup Banners
   const fetchPromoBanners = () => {
     Client.query({
