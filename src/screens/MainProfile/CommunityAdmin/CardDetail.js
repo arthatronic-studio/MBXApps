@@ -66,8 +66,30 @@ const CardDetail = ({ navigation, route }) => {
   useEffect(() => {
     setIdNumber(userDetail.idNumber);
   }, []);
+  const fetchData = () => {
+    let status = 2;
+    if (props.type === 'newAnggota') {
+      status = 0;
+    } else if (props.type === 'Anggota') {
+      status = 1;
+    }
 
-  const fetchUpdateMember = () => {
+    Client.query({
+      query: joinCommunityMember,
+      variables: {
+        status: status,
+      },
+    })
+      .then((res) => {
+        setData(res.data.joinCommunityMember);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log('err', err);
+        setLoading(false);
+      });
+  };
+  const fetchUpdateMember = item => {
     setLoading(true);
 
     Client.query({
@@ -75,17 +97,18 @@ const CardDetail = ({ navigation, route }) => {
       variables: {
         status: 1,
         id: item.id,
-        customIdNumber: idNumber,
+        customIdNumber: item.userDetail.idNumber,
       },
     })
-    .then((res) => {
-      showPopup('Akun berhasil diubah', 'success');
-      setLoading(false);
-    })
-    .catch((err) => {
-      showPopup('catch', 'error');
-      setLoading(false);
-    });
+      .then((res) => {
+        showPopup('Akun berhasil diubah', 'success');
+        fetchData();
+        setLoading(false);
+      })
+      .catch((err) => {
+        showPopup('catch', 'error');
+        setLoading(false);
+      });
   };
 
   const fetchJoinCommunityManage = (id, userId, status) => {
@@ -109,11 +132,9 @@ const CardDetail = ({ navigation, route }) => {
         const success = data && data.id;
 
         if (success) {
+          fetchData();
           showPopup(`Akun berhasil ${resMessage}`, 'success');
           setLoading(false);
-          setTimeout(() => {
-            navigation.pop();
-          }, 3000);
         } else {
           showPopup(`Akun gagal ${resMessage}`, 'error');
           setLoading(false);
@@ -133,17 +154,17 @@ const CardDetail = ({ navigation, route }) => {
       status === 1 ? 'INSERT' :
       status === 2 ? 'REJECT' : 'DELETE';
 
-    const variables = {
-      "userId": userId,
-      "organizationInitialCode": Config.INITIAL_CODE,
-      "type": method,
-    };
+    // const variables = {
+    //   "userId": userId,
+    //   "organizationInitialCode": accessClient.InitialCode,
+    //   "type": method,
+    // };
 
-    console.log(variables);
+    // console.log(variables);
 
     Client.mutate({
       mutation: queryOrganizationMemberManage,
-      variables,
+      // variables,
     }).then((res) => {
       console.log('res organization manage', res);
 

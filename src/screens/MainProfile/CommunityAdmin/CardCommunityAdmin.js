@@ -101,17 +101,17 @@ const CardCommunityAdmin = (props) => {
       status === 1 ? 'INSERT' :
       status === 2 ? 'REJECT' : 'DELETE';
 
-    const variables = {
-      "userId": userId,
-      "organizationInitialCode": Config.INITIAL_CODE,
-      "type": method,
-    };
+    // const variables = {
+    //   "userId": userId,
+    //   "organizationInitialCode":accessClient.InitialCode,
+    //   "type": method,
+    // };
 
-    console.log(variables);
+    // console.log(variables);
 
     Client.mutate({
       mutation: queryOrganizationMemberManage,
-      variables,
+      // variables,
     }).then((res) => {
       console.log('res organization manage', res);
 
