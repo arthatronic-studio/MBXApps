@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, ScrollView, Platform, SafeAreaView } from 'react-native';
+import { View, ScrollView, Platform, SafeAreaView, TextInput } from 'react-native';
 import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -101,16 +101,16 @@ const MainForum = ({ navigation, route }) => {
 
   const fecthData = async() => {
     showLoading();
-
-    const newListMostDiscussion = await fetchContentProduct('PODDIUM_FORUM', '', '');
+    
+    const newListMostDiscussion = await fetchContentProduct("TRIBES", "POSTING", "ALL");
     setListMostDiscussion(newListMostDiscussion);
-
-    const newListGroupReader = await fetchContentProduct('PODDIUM_FORUM', '', 'FORUM_GROUP_READER');
+    
+    const newListGroupReader = await fetchContentProduct("TRIBES", "POSTING", "ALL");
     setListGroupReader(newListGroupReader);
-
-    const newListFavoriteDiscussion = await fetchContentProduct('PODDIUM_FORUM', '', 'FORUM_DISCUSSION');
+    
+    const newListFavoriteDiscussion = await fetchContentProduct("TRIBES", "POSTING", "ALL");
     setListFavoriteDiscussion(newListFavoriteDiscussion);
-
+    
     hideLoading();
   }
 
@@ -194,6 +194,18 @@ const MainForum = ({ navigation, route }) => {
 
           <View style={{height: 12}} />
           
+          <TextInput
+            placeholder="Cari topik apa hari ini ..."
+            placeholderTextColor={Color.gray}
+            style={{
+              width: '80%',
+              borderRadius: 8,
+            }}
+            onTouchStart={() => 
+              navigation.navigate("ForumSearch")
+            }
+          />
+
           <ListForum
               componentType='GENERAL'
               data={listMostDiscussion}
