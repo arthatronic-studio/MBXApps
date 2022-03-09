@@ -1,26 +1,56 @@
-import React, { useEffect, createRef } from 'react';
+import React, { useState, useEffect, createRef } from 'react';
 import 'react-native-gesture-handler';
-import { StatusBar, Platform, Appearance, SafeAreaView } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Provider } from 'react-redux';
-// import RNBootSplash from "react-native-bootsplash";
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { NavigationContainer } from "@react-navigation/native";
 import { Host } from 'react-native-portalize';
 import messaging from '@react-native-firebase/messaging';
+import NetInfo from '@react-native-community/netinfo';
 
 import AppNavigator from '@src/navigators/AppNavigator';
 import { persistor, store } from '@src/state/redux';
 import { useColor } from '@src/components';
 import { localPushNotification } from '@src/lib/pushNotification';
 import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
+import { trackPlayerInit } from '@src/utils/track-player-init';
+import ModalNetInfo from '@src/components/ModalNetInfo';
+import { requestTrackingPermission } from 'react-native-tracking-transparency';
 
 export let navigationRef = createRef();
 
 const App = () => {
   const { Color } = useColor('root');
 
-  const onReady = () => {
-    // RNBootSplash.hide({ fade: true });
+  const [modalNetInfo, setModalNetInfo] = useState(false);
+
+  const onReady = () => {}
+
+  useEffect(() => {
+    initTrackPlayer();
+    initRequestTracking();
+
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      console.log("Connection Info", state);
+
+      if (!state.isConnected) {
+        setModalNetInfo(true);
+      } else {
+        setModalNetInfo(false);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    }
+  }, []);
+
+  const initTrackPlayer = async () => {
+    await trackPlayerInit();
+  }
+
+  const initRequestTracking = async () => {
+    await requestTrackingPermission();
   }
 
   // ===========================================
@@ -75,7 +105,9 @@ const App = () => {
   }, []);
 
   const requestLocationPermission = async () => {
-    await geoLocationPermission();
+    const isGranted = await geoLocationPermission();
+
+    console.log('isGranted',isGranted);
 
     geoCurrentPosition(
       (res) => {
@@ -152,25 +184,32 @@ const App = () => {
   // ========== END FIREBASE NOTIFICATION ==========
   // ==========================================
 
-  const colorScheme = Appearance.getColorScheme();
-
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <SafeAreaView style={{flex: 1, backgroundColor: Color.theme}}>
-          <StatusBar
-            backgroundColor={Color.primary}
-            barStyle={Color.colorDominant === 'dark' ? 'light-content' : 'dark-content'}
-          />
+        <View style={{flex: 1, backgroundColor: Color.theme}}>
           <NavigationContainer
             ref={navigationRef}
             onReady={onReady}
           >
             <Host>
               <AppNavigator />
+              <ModalNetInfo
+                visible={modalNetInfo}
+                onRefresh={async() => {
+                  setModalNetInfo(false);
+                  const state = await NetInfo.fetch();
+                  console.log('state', state);
+                  if (!state.isConnected) {
+                    setModalNetInfo(true);
+                  } else {
+                    setModalNetInfo(false);
+                  }
+                }}
+              />
             </Host>
           </NavigationContainer>
-        </SafeAreaView>
+        </View>
       </PersistGate>
     </Provider>
   );

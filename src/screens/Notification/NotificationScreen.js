@@ -4,16 +4,33 @@ import Moment from 'moment';
 
 import { Scaffold, TouchableOpacity, Text, useColor } from "src/components";
 import { Divider } from "src/styled";
-
-const objDummy = { id: 1, title: 'Pembayaran', body: 'halo semua, lorem ipsum dolor sit amet amet woi cak cuk cik cok' };
+import client from "src/lib/apollo";
+import { queryGetNotificationHistory } from "src/lib/query";
 
 const NotificationScreen = ({ navigation, route }) => {
   const { Color } = useColor();
 
   const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setHistory(new Array(10).fill(objDummy));
+    client.query({
+      query: queryGetNotificationHistory
+    })
+      .then((res) => {
+        const data = res.data.getNotificationHistory;
+        let newArr = [];
+
+        if (data) {
+          newArr = data;
+        }
+
+        setHistory(newArr);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+      })
   }, []);
 
   const renderPopUpNavigation = () => {
@@ -44,13 +61,16 @@ const NotificationScreen = ({ navigation, route }) => {
   }
 
   const onSelectNotif = (item) => {
-    navigation.navigate('NotificationDetail', { id: item.id });
+    navigation.navigate('NotificationDetail', { item });
   }
     
   return (
     <Scaffold
       headerTitle='Notifikasi'
-    >
+      fallback={loading}
+      empty={history.length === 0}
+      emptyTitle="Notifikasi belum tersedia"
+    >      
       <FlatList
         keyExtractor={(item, index) => item.id+index.toString()}
         data={history}
@@ -68,17 +88,17 @@ const NotificationScreen = ({ navigation, route }) => {
                 borderWidth: 0.5,
               }}
             >
-              <Text align='left' type='bold'>{item.title}</Text>
+              <Text align='left' type='bold'>{item.notification_title}</Text>
               <Divider height={4} />
-              <Text align='left'>{item.body}</Text>
+              <Text align='left'>{item.notification_text}</Text>
               <Divider height={4} />
-              <Text align='left' size={12}>{Moment().format('HH:mm')}</Text>
+              <Text align='left' size={12}>{Moment(item.notification_date).format('HH:mm')}</Text>
             </TouchableOpacity>
           )
         }}
       />
 
-      {renderPopUpNavigation()}
+      {history.length > 0 && renderPopUpNavigation()}
     </Scaffold>
   );
 }

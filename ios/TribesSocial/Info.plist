@@ -49,6 +49,8 @@
 	<string>$(PRODUCT_NAME) want to add to your gallery</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(PRODUCT_NAME) want to access your gallery</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>$(PRODUCT_NAME) requires your permission to track in order to show you more relevant content.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Inter-Black.ttf</string>
@@ -79,6 +81,12 @@
 		<string>rubicon-icon-font.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+		<string>fetch</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

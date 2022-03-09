@@ -163,7 +163,7 @@ export default ({ navigation, route }) => {
 
       let variables = {
         customerID
-      }
+      };
 
       Client.query({
         query: queryPlnPrepaidSubs,
@@ -278,7 +278,7 @@ export default ({ navigation, route }) => {
 
     const variables = { NomorPelanggan: postpaidText };
 
-    dispatch(plnPostpaid(variables))
+    dispatch(plnPostpaid(variables));
   }
 
   function renderTabHeading(label, index, activeTab) {
@@ -294,7 +294,7 @@ export default ({ navigation, route }) => {
 
     return (
       <>
-        <View style={{paddingHorizontal: 16, paddingVertical: 16, paddingTop: 24, backgroundColor: Color.theme}}>
+        <View style={{paddingHorizontal: 16, paddingVertical: 16, paddingTop: 24}}>
           <Text type='medium' align='left' size={12} style={{color: '#A8A699'}}>No. Meter</Text>
           <TextInputSubsriber
             name="text"
@@ -315,28 +315,38 @@ export default ({ navigation, route }) => {
           />
         </View>
 
-        <FlatList
-          ListHeaderComponent={() => loadingPrepaid ?
-            <ScreenIndicator visible />
-          : isEmptySubs ?
-            <ScreenEmptyData type='large' message='Pelanggan tidak tersedia' />
-          :
-            <SusbcriberView>
+        {loadingPrepaid ?
+          <ScreenIndicator visible />
+        :
+          <SusbcriberView>
+            {isEmptySubs ?
               <RowSubscriberView style={{backgroundColor: Color.secondary}}>
-                <ColSubscriberLeftView>
-                  <SubscriberText color={Color.textInput} type='medium'>No Meter</SubscriberText>
-                  <SubscriberText color={Color.textInput} type='medium'>Nama Pelanggan</SubscriberText>
-                  <SubscriberText color={Color.textInput} type='medium'>Power</SubscriberText>
-                </ColSubscriberLeftView>
+              <ColSubscriberLeftView>
+                <SubscriberText color={Color.textInput} type='medium'>Info</SubscriberText>
+              </ColSubscriberLeftView>
 
-                <ColSubscriberRightView>
-                  <SubscriberText color={Color.textInput} type='medium'>{plnPrepaidSubs ? plnPrepaidSubs.meter_no : '-'}</SubscriberText>
-                  <SubscriberText color={Color.textInput} type='medium'>{plnPrepaidSubs ? plnPrepaidSubs.name : '-'}</SubscriberText>
-                  <SubscriberText color={Color.textInput} type='medium'>{plnPrepaidSubs ? plnPrepaidSubs.segment_power : '-'}</SubscriberText>
-                </ColSubscriberRightView>
-              </RowSubscriberView>
-            </SusbcriberView>
-          }
+              <ColSubscriberRightView>
+                <SubscriberText color={Color.textInput} type='medium' align='left'>Nomor Pelanggan tidak tersedia</SubscriberText>
+              </ColSubscriberRightView>
+            </RowSubscriberView>
+            :
+            <RowSubscriberView style={{backgroundColor: Color.secondary}}>
+              <ColSubscriberLeftView>
+                <SubscriberText color={Color.textInput} type='medium'>No Meter</SubscriberText>
+                <SubscriberText color={Color.textInput} type='medium'>Nama Pelanggan</SubscriberText>
+                <SubscriberText color={Color.textInput} type='medium'>Power</SubscriberText>
+              </ColSubscriberLeftView>
+
+              <ColSubscriberRightView>
+                <SubscriberText color={Color.textInput} type='medium'>{plnPrepaidSubs ? plnPrepaidSubs.meter_no : '-'}</SubscriberText>
+                <SubscriberText color={Color.textInput} type='medium'>{plnPrepaidSubs ? plnPrepaidSubs.name : '-'}</SubscriberText>
+                <SubscriberText color={Color.textInput} type='medium'>{plnPrepaidSubs ? plnPrepaidSubs.segment_power : '-'}</SubscriberText>
+              </ColSubscriberRightView>
+            </RowSubscriberView>}
+          </SusbcriberView>
+        }
+
+        <FlatList
           keyExtractor={(item, index) => item.id+index.toString()}
           data={plnPriceList}
           numColumns={2}
@@ -377,14 +387,14 @@ export default ({ navigation, route }) => {
 
     return (
       <>
-        <View style={{paddingHorizontal: 16, paddingVertical: 16, paddingTop: 24, backgroundColor: Color.theme}}>
+        <View style={{paddingHorizontal: 16, paddingVertical: 16, paddingTop: 24}}>
           <Text align= 'left' type='medium' size={12} style={{color: '#A8A699'}}>No. Pelanggan</Text>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <TextInputSubsriber
               name="text"
               returnKeyType="done"
               returnKeyLabel="Done"
-              type={'only-numbers'}
+              type='only-numbers'
               blurOnSubmit={false}
               error={null}
               value={state.postpaidText}

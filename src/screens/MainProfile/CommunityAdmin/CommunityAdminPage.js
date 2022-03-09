@@ -1,33 +1,26 @@
-import * as React from 'react';
-import {View, useWindowDimensions, SafeAreaView, Text} from 'react-native';
+import React from 'react';
+import {useWindowDimensions} from 'react-native';
 import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
-import Styled from 'styled-components';
-import {Header, useColor} from '@src/components';
-import CardComponent from './CardComponent';
 
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
+import {Header, useColor} from '@src/components';
+import CardCommunityAdmin from './CardCommunityAdmin';
+import {MainView} from '@src/styled';
 
 const AnggotaBaruRoute = () => (
-  <CardComponent
+  <CardCommunityAdmin
     type="newAnggota"
-    handleSuccess="Approve"
-    handleRemove="Reject"
   />
 );
 
 const AnggotaRoute = () => (
-  <CardComponent
+  <CardCommunityAdmin
     type="Anggota"
   />
 );
 
 const AnggotaDitolakRoute = () => (
-  <CardComponent
+  <CardCommunityAdmin
     type="notAnggota"
-    handleSuccess="Approve"
-    handleRemove="Reject"
   />
 );
 
@@ -39,24 +32,33 @@ const renderScene = SceneMap({
 
 const CommunityAdminPage = ({navigation}) => {
   const {Color} = useColor();
-
-  const layout = useWindowDimensions();
+  const { width } = useWindowDimensions();
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    {key: 'AnggotaBaru', title: 'Anggota Baru'},
+    {key: 'AnggotaBaru', title: 'Baru'},
     {key: 'Anggota', title: 'Anggota'},
-    {key: 'AnggotaDitolak', title: 'Anggota Ditolak'},
+    {key: 'AnggotaDitolak', title: 'Ditolak'},
   ]);
 
   const renderTabBar = (props) => (
     <TabBar
       {...props}
-      indicatorStyle={{backgroundColor: 'red'}}
-      style={{backgroundColor: 'white'}}
-      activeColor={Color.secondary}
-      inactiveColor="black"
-      labelStyle={{fontWeight: 'bold', textAlign: 'center'}}
+      activeColor={Color.primary}
+      inactiveColor={Color.text}
+      scrollEnabled
+      labelStyle={{
+        fontWeight: 'bold',
+        textAlign: 'center',
+        fontSize: 14,
+        textTransform: 'none',
+      }}
+      indicatorStyle={{
+        backgroundColor: Color.primary,
+      }}
+      style={{
+        backgroundColor: Color.theme,
+      }}
     />
   );
   
@@ -67,7 +69,7 @@ const CommunityAdminPage = ({navigation}) => {
         navigationState={{index, routes}}
         renderScene={renderScene}
         onIndexChange={setIndex}
-        initialLayout={{width: layout.width}}
+        initialLayout={{width}}
         renderTabBar={renderTabBar}
       />
     </MainView>

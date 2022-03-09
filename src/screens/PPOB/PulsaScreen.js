@@ -34,6 +34,7 @@ import {
   iconThree,
   iconXL,
 } from '@assets/images/operator';
+import { Scaffold } from 'src/components';
 
 const MainView = Styled(View)`
   flex: 1;
@@ -240,7 +241,7 @@ export default ({ navigation, route }) => {
   useEffect(() => {
     const timeout = prepaidNumber !== '' ? setTimeout(() => {
       validateTypingNumber(prepaidNumber, 'prepaid');
-    }, 3000) : null;
+    }, 500) : null;
 
     return () => {
       clearTimeout(timeout);
@@ -250,7 +251,7 @@ export default ({ navigation, route }) => {
   useEffect(() => {
     const timeout = subscriberNumber !== '' ? setTimeout(() => {
       validateTypingNumber(subscriberNumber, 'postpaid');
-    }, 3000) : null;
+    }, 500) : null;
 
     return () => {
       clearTimeout(timeout);
@@ -370,7 +371,6 @@ export default ({ navigation, route }) => {
       };
     }
 
-
     console.log(variables);
 
     Client.query({
@@ -382,7 +382,7 @@ export default ({ navigation, route }) => {
       let pulsaList = [];
       let paketDataList = [];
 
-      if (data.length > 0) {
+      if (data && data.length > 0) {
         for (var i = 0; i < data.length; i++) {
           if (data[i] !== null) {
             if (segmentType === 'PULSA_HP') pulsaList.push(data[i]);
@@ -748,13 +748,15 @@ export default ({ navigation, route }) => {
   const { selectedProvider, modalProvider, inquiryPostpaid } = state;
 
   return (
-    <MainView>
-      <Header
-        title='Pulsa'
-        onPressRightButton={() => onPressRightButton(activeTab === 0 ? 'PREPAID' : 'POSTPAID')}
-        iconRightButton={<MaterialIcons name='history' size={22} color={Color.gray} />}
-      />
-
+    <Scaffold
+      header={
+        <Header
+          title='Pulsa'
+          onPressRightButton={() => onPressRightButton(activeTab === 0 ? 'PREPAID' : 'POSTPAID')}
+          iconRightButton={<MaterialIcons name='history' size={22} color={Color.gray} />}
+        />
+      }
+    >
       {renderPulsaPrepaid()}
 
       <Modal
@@ -845,6 +847,6 @@ export default ({ navigation, route }) => {
 
       <Popup {...popupProps} />
 
-    </MainView>
+    </Scaffold>
   )
 }

@@ -7,47 +7,36 @@ import { useSelector } from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
 
 import Text from '@src/components/Text';
-import Color from '@src/components/Color';
+import { useColor } from '@src/components/Color';
 import Header from '@src/components/Header';
-import Popup, { usePopup } from '@src/components/Modal/Popup';
+import { usePopup } from '@src/components/Modal/Popup';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
-import ScreenIndicator from '@src/components/Modal/ScreenIndicator';
-import ScreenEmptyData from '@src/components/Modal/ScreenEmptyData';
+import Scaffold from '@src/components/Scaffold';
 
 import Client from '@src/lib/apollo';
 import { queryContentChatRoomManage, queryContentChatRoomDetail, queryContentChatMessage } from '@src/lib/query';
-
-const MainView = Styled(View)`
-    flex: 1;
-    backgroundColor: ${Color.dark};
-`;
+import { Divider } from 'src/styled';
 
 const BottomSection = Styled(View)`
   width: 100%;
   padding: 16px;
-  backgroundColor: ${Color.dark};
   borderTopWidth: 0.5px;
-  borderColor: ${Color.theme};
 `;
 
 const BoxInput = Styled(View)`
   width: 100%;
   minHeight: 48px;
-  backgroundColor: ${Color.theme};
   padding: 0px 42px 0px 16px;
-  borderColor: ${Color.border};
   borderRadius: 8px;
   borderWidth: 0.5px;
   justifyContent: center;
 `;
 
-const TextInputNumber = Styled(TextInput)`
+const CustomTextInput = Styled(TextInput)`
   width: 100%;
-  fontFamily: Poppins-Regular;
+  fontFamily: Inter-Regular;
   letterSpacing: 0.23;
   fontSize: 12px;
-  color: ${Color.white};
-  backgroundColor: transparent;
 `;
 
 const CircleSend = Styled(TouchableOpacity)`
@@ -57,7 +46,6 @@ const CircleSend = Styled(TouchableOpacity)`
   width: 30px;
   height: 30px;
   borderRadius: 15px;
-  backgroundColor: ${Color.secondary};
   justifyContent: center;
   alignItems: center;
 `;
@@ -93,13 +81,14 @@ const ChatDetailScreen = ({ navigation, route }) => {
     // hooks
     const [popupProps, showPopup] = usePopup();
     const { width } = useWindowDimensions();
+    const { Color } = useColor();
 
     // handle appstate
     useEffect(() => {
-        AppState.addEventListener('change', handleChange);  
+        const subAppState = AppState.addEventListener('change', handleChange);  
 
         return () => {
-            AppState.removeEventListener('change', handleChange);  
+            subAppState();
         }
     }, []);
 
@@ -120,8 +109,12 @@ const ChatDetailScreen = ({ navigation, route }) => {
                 if (res) {
                     let docID = '';
                     if (res.docs.length > 0) {
+                        console.log('res contentChatRoomDetail',res.docs[0].data());
                         docID = res.docs[0].ref.path.split('/')[1];
+                    } else {
+                        console.log('res contentChatRoomDetail',res.docs);
                     }
+
                     setFirebaseChatDocId(docID);
 
                     if (isInitial.current === false && res.docs.length > 0) {
@@ -139,7 +132,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
             });
     
         return () => subscriber();
-    }, []);
+    }, [roomId]);
 
     // realtime notifier
     useEffect(() => {
@@ -155,7 +148,10 @@ const ChatDetailScreen = ({ navigation, route }) => {
                     let data = { typing: [] };
                     
                     if (res.docs.length > 0) {
+                        console.log('res contentChatNotifier', res.docs[0].data());
                         data = res.docs[0].data();
+                    } else {
+                        console.log('res contentChatNotifier', res.docs);
                     }
                     
                     if (Array.isArray(data.typing) && data.typing.length > 0) {
@@ -172,7 +168,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
             });
 
         return () => subscriber();
-    }, []);
+    }, [roomId]);
 
     // handdle user is typing
     useEffect(() => {
@@ -202,12 +198,12 @@ const ChatDetailScreen = ({ navigation, route }) => {
     // insert/update chat
     const firestoreSubmitChat = (item) => {
         const values = {
-            id: item.id,
-            message: item.message,
-            messageDate: item.messageDate,
-            name: item.name,
-            roomId: item.roomId,
-            userId: item.userId,
+            id: item.id || '',
+            message: item.message || '',
+            messageDate: item.messageDate || '',
+            name: item.name || '',
+            roomId: item.roomId || '',
+            userId: item.userId || '',
             isNewArrival: true,
         };
 
@@ -230,17 +226,17 @@ const ChatDetailScreen = ({ navigation, route }) => {
     // insert/update notifier
     const firestoreSubmitNotifier = (item, member, memberDetail) => {
         const values = {
-            id: item.id,
+            id: item.id || '',
             name: member.length > 1 ? '' : user.firstName + ' ' + user.lastName,
-            type: item.type,
-            roomId: item.roomId,
-            roomDate: item.roomDate,
+            type: item.type || '',
+            roomId: item.roomId || '',
+            roomDate: item.roomDate || '',
             member,
             memberDetail,
             read: [user.userId.toString()],
             lastChat: {
-                message: item.message,
-                messageDate: item.messageDate,
+                message: item.message || '',
+                messageDate: item.messageDate || '',
             },
             lastChatCount: firebaseNotiferLastChatCount + 1,
             typing: [],
@@ -313,21 +309,25 @@ const ChatDetailScreen = ({ navigation, route }) => {
             type: params.selected.length > 1 ? 'GROUP' : 'PERSONAL',
             userId,
         };
+
+        console.log(variables);
         
         Client.query({
             query: queryContentChatRoomManage,
             variables,
         })
         .then((res) => {
+            console.log('res create room', res);
+
             const data = res.data.contentChatRoomManage;
 
             if (data) {
-                fetchContentChatRoomDetail(data.roomId);
-                setRoomId(data.roomId);
+                fetchContentChatRoomDetail(data.id);
+                setRoomId(data.id);
             }
         })
         .catch((err) => {
-            console.log(err, 'err');
+            console.log(err, 'err send chat');
         });
     }
 
@@ -337,6 +337,8 @@ const ChatDetailScreen = ({ navigation, route }) => {
             page: 1 + dataChat.page,
             itemPerPage: 50,
         };
+
+        console.log(variables);
 
         Client.query({
             query: queryContentChatRoomDetail,
@@ -348,7 +350,8 @@ const ChatDetailScreen = ({ navigation, route }) => {
             const newData = dataChat.data.concat(data);
             
             if (data) {
-                setStateDataChat({
+                setDataChat({
+                    ...dataChat,
                     loading: false,
                     data: newData,
                     page: data.length === 50 ? dataChat.page + 1 : -1,
@@ -357,8 +360,10 @@ const ChatDetailScreen = ({ navigation, route }) => {
             }
         })
         .catch((err) => {
-            console.log(err, 'err');
-            setStateDataChat({
+            console.log(err, 'chat room err');
+
+            setDataChat({
+                ...dataChat,
                 loading: false,
                 page: -1,
                 loadNext: false,
@@ -366,7 +371,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
         })
     }
     
-    const onCreateComment = () => {
+    const onSendChat = () => {
         if (textComment === '') {
             showPopup('Teks komentar tidak boleh kosong', 'warning');
             return;
@@ -394,11 +399,15 @@ const ChatDetailScreen = ({ navigation, route }) => {
             });
         });
 
+        console.log('variables', variables);
+
         Client.query({
             query: queryContentChatMessage,
             variables,
         })
         .then((res) => {
+            console.log('res kirim chat', res);
+
             const data = res.data.contentChatMessage;
             setTextComment('');
 
@@ -406,12 +415,9 @@ const ChatDetailScreen = ({ navigation, route }) => {
             firestoreSubmitNotifier(data, member, memberDetail);
         })
         .catch((err) => {
+            console.log('err kirim chat', err);
             showPopup('Chat gagal dikirim, silakan coba lagi', 'error');
         });
-    }
-
-    const setStateDataChat = (obj) => {
-        setDataChat({ ...dataChat, ...obj });
     }
     
     const getTitle = () => {
@@ -461,7 +467,8 @@ const ChatDetailScreen = ({ navigation, route }) => {
         return title;
     }
 
-    const compareData = (arr) => {
+    const compareData = () => {
+        const arr = firebaseData.concat(dataChat.data);
         let obj = {};
         let newData = [];
 
@@ -475,69 +482,54 @@ const ChatDetailScreen = ({ navigation, route }) => {
 
         return newData;
     }
-
-    if (dataChat.loading) {
-        return (
-            <MainView>
+    
+    return (
+        <Scaffold
+            fallback={dataChat.loading}
+            popupProps={popupProps}
+            color={Color.semiwhite}
+            header={
                 <Header
                     title={getTitle()}
+                    subTitle={userTyping && 'sedang mengetik...'}
+                    subTitleColor={userTyping && Color.success}
                     centerTitle
-                    color={Color.white}
                     iconRightButton={
                         <Ionicons
                             name='information-circle-outline'
                             size={22}
-                            color={Color.white}
+                            color={Color.text}
                             onPress={() => navigation.navigate('ChatInfoScreen', { member: params.selected, isNewArrival: params.isNewArrival })}
                         />
                     }
                 />
-                <ScreenIndicator visible transparent />
-            </MainView>
-        )
-    }
-    
-    return (
-        <MainView>
-            <Header
-                title={getTitle()}
-                subTitle={userTyping && 'sedang mengetik...'}
-                subTitleColor={userTyping && Color.success}
-                centerTitle
-                color={Color.white}
-                iconRightButton={
-                    <Ionicons
-                        name='information-circle-outline'
-                        size={22}
-                        color={Color.white}
-                        onPress={() => navigation.navigate('ChatInfoScreen', { member: params.selected, isNewArrival: params.isNewArrival })}
-                    />
-                }
-            />
-
+            }
+        >
             <FlatList
                 keyExtractor={(item, index) => item.id + index.toString()}
-                data={compareData(firebaseData.concat(dataChat.data)).reverse()}
+                data={compareData().reverse()}
                 inverted
                 keyboardShouldPersistTaps='handled'
                 contentContainerStyle={{paddingTop: 16}}
                 onEndReachedThreshold={0.3}
-                onEndReached={() => dataChat.page !== -1 && setStateDataChat({ loadNext: true })}
+                onEndReached={() => dataChat.page !== -1 && setDataChat({ ...dataChat, loadNext: true })}
                 renderItem={({ item }) => {
                     const isAdmin = user && user.userId === item.userId;
 
                     if (isAdmin) {
                         return (
                             <View style={{width, marginTop: 16, paddingHorizontal: 16, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
-                                <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.white, borderRadius: 16, borderBottomRightRadius: 0, alignItems: 'flex-end'}}>
+                                <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.textInput, borderRadius: 8, borderBottomRightRadius: 0, alignItems: 'flex-end'}}>
                                     <Text size={10} type='semibold' align='right' color={Color.secondary}>{item.name}</Text>
-                                    <Text size={12} align='right'>{item.message}</Text>
-                                    <Text size={8} align='right' style={{opacity: 0.6, marginTop: 4}}>{getDate(item.messageDate)}</Text>
+                                    <Divider height={4} />
+                                    <Text align='right'>{item.message}</Text>
+                                    <Divider height={4} />
+                                    <Text size={8} align='right' style={{opacity: 0.6}}>{getDate(item.messageDate)}</Text>
                                 </View>
-                                <View style={{width: 30, height: 30, marginLeft: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.secondary}}>
+                                <View style={{width: 30, height: 30, marginLeft: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.disabled}}>
                                     <Image
                                         source={{uri: item.image}}
-                                        style={{width: '100%', aspectRatio: 1, borderRadius: 30, backgroundColor: Color.theme}}
+                                        style={{width: '100%', aspectRatio: 1, borderRadius: 30, backgroundColor: Color.disabled}}
                                     />
                                 </View>
                             </View>
@@ -549,25 +541,27 @@ const ChatDetailScreen = ({ navigation, route }) => {
                             <View style={{width: 30, height: 30, marginRight: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.primary}}>
                             <Image
                                 source={{uri: item.image}}
-                                style={{width: '100%', aspectRatio: 1, borderRadius: 15, backgroundColor: Color.theme}}
+                                style={{width: '100%', aspectRatio: 1, borderRadius: 15, backgroundColor: Color.primary}}
                             />
                             </View>
-                            <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.theme, borderRadius: 16, borderBottomLeftRadius: 0, alignItems: 'flex-start'}}>
+                            <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.primarySoft, borderRadius: 8, borderBottomLeftRadius: 0, alignItems: 'flex-start'}}>
                                 <Text size={10} type='semibold' align='left' color={Color.primary}>{item.name}</Text>
-                                <Text size={12} align='left' color={Color.white}>{item.message}</Text>
-                                <Text size={8} align='left' color={Color.white} style={{opacity: 0.6, marginTop: 4}}>{getDate(item.messageDate)}</Text>
+                                <Divider height={4} />
+                                <Text align='left' color={Color.text}>{item.message}</Text>
+                                <Divider height={4} />
+                                <Text size={8} align='left' color={Color.text} style={{opacity: 0.6}}>{getDate(item.messageDate)}</Text>
                             </View>
                         </View>
                     )
                 }}
             />
 
-            <BottomSection>
-                <BoxInput>
-                    <TextInputNumber
+            <BottomSection style={{borderColor: Color.theme}}>
+                <BoxInput style={{borderColor: Color.text}}>
+                    <CustomTextInput
                         name="text"
                         placeholder='Masukan teks...'
-                        placeholderTextColor={Color.border}
+                        placeholderTextColor={Color.text}
                         selectionColor={Color.primary}
                         returnKeyType="done"
                         returnKeyLabel="Done"
@@ -584,16 +578,18 @@ const ChatDetailScreen = ({ navigation, route }) => {
 
                             setTextComment(text);
                         }}
+                        style={{color: Color.text}}
                     />
 
-                    <CircleSend onPress={() => onCreateComment()}>
-                        <Ionicons name='send' color={Color.white} />
+                    <CircleSend
+                        onPress={() => onSendChat()}
+                        style={{backgroundColor: Color.primary}}
+                    >
+                        <Ionicons name='send' color={Color.textInput} />
                     </CircleSend>
                 </BoxInput>
             </BottomSection>
-
-            <Popup { ...popupProps } />
-        </MainView>
+        </Scaffold>
     )
 }
 

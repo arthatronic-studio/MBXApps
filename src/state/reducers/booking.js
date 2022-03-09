@@ -1,5 +1,5 @@
 const initialState = {
-    booking: {},
+    booking: null,
     bookingDetail: null,
     bookingHistory: [],
     fetching: false,

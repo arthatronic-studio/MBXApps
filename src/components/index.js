@@ -15,6 +15,7 @@ export {default as Header} from './Header';
 export {default as HeaderBig} from './HeaderBig';
 export {default as Text} from './Text';
 export {default as Scaffold} from './Scaffold';
+export {default as PopupEbook} from './PopupEbook';
 
 // import { Button, Submit, TouchableOpacity } from './Button';
 // import { Col, Grid, Row } from './Grid';

@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, ActivityIndicator, SafeAreaView } from 'react-native';
+import PropTypes from 'prop-types';
 import Styled from 'styled-components';
 import { WebView } from 'react-native-webview';
+import Config from 'react-native-config';
 
 import Color from '@src/components/Color';
 import Header from '@src/components/Header';
@@ -11,7 +13,7 @@ const URL = require('url-parse');
 const MainView = Styled(View)`
   flexDirection: column;
   width: 100%;
-  backgroundColor: white;
+  backgroundColor: ${Color.textInput};
   flex: 1
 `;
 
@@ -29,7 +31,10 @@ const CustomActivityIndicator = Styled(ActivityIndicator)`
   justifyContent: center;
 `;
 
-const baseDomain = 'vesta.id';
+const propTypes = {
+  url: PropTypes.string,
+  onClose: PropTypes.func,
+}
 
 const defaultProps = {
   url: '',
@@ -43,30 +48,25 @@ const WebViewScreen = (props) => {
   } = props;
 
   function isPaid(url, host) {
-    // const hostnamePaymentRouter = host.indexOf(`${baseDomain}/payment-router/callback`);
-    const hostnamePaymentRouter = host.indexOf(`${baseDomain}/static-pages/payment-finish`);
+    // const hostnamePaymentRouter = host.indexOf(`${Config.BASE_DOMAIN}/payment-router/callback`);
+    const hostnamePaymentRouter = host.indexOf(`${Config.BASE_DOMAIN}/static-pages/payment-finish`);
     const paymentPaid = url.query.indexOf('status-payment=PAID');
     if (hostnamePaymentRouter >= 0 && paymentPaid >= 0) onClose('paymentPaid');
   }
 
-  function isTourPage(url, host) {
-    const hostnameTour = host.indexOf(`${baseDomain}/tour/detail`);
-    if (hostnameTour >= 0) {
-      const arrayOfPathname = url.pathname.split('/');
-      onClose('tourPage', arrayOfPathname[3]);
-    }
-  }
+  // function isTourPage(url, host) {
+  //   const hostnameTour = host.indexOf(`${Config.BASE_DOMAIN}/tour/detail`);
+  //   if (hostnameTour >= 0) {
+  //     const arrayOfPathname = url.pathname.split('/');
+  //     onClose('tourPage', arrayOfPathname[3]);
+  //   }
+  // }
 
   function checkURL(web) {
     const url = new URL(web.url);
     const host = url.hostname + url.pathname;
     isPaid(url, host);
-    isTourPage(url, host);
-  }
-
-  const onNavigationStateChange = (webViewState) => {
-    // ini close modal otomatis dari web view
-    checkURL(webViewState);
+    // isTourPage(url, host);
   }
 
   function renderActivityIndicatorLoadingView() {
@@ -78,10 +78,10 @@ const WebViewScreen = (props) => {
   return (
     <SafeAreaView style={{ backgroundColor: Color.theme, flex: 1 }}>
       <MainView>
-        <CustomHeader title="Ashefa App Content" showLeftButton onPressLeftButton={onClose} iconLeftButton='close' />
+        <CustomHeader title="App Content" showLeftButton onPressLeftButton={onClose} iconLeftButton='close' />
         <WebView
           source={{ uri: url }}
-          onNavigationStateChange={onNavigationStateChange}
+          onNavigationStateChange={checkURL}
           renderLoading={renderActivityIndicatorLoadingView}
           javaScriptEnabled
           domStorageEnabled
@@ -92,6 +92,6 @@ const WebViewScreen = (props) => {
   );
 }
 
+WebViewScreen.propTypes = propTypes;
 WebViewScreen.defaultProps = defaultProps;
-
 export default WebViewScreen;

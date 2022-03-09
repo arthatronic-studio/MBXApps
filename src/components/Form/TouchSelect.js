@@ -38,9 +38,8 @@ const CustomTextInput = Styled(ReactTextInput)`
 `;
 
 const CustomTouch = Styled(TouchableOpacity)`
-    width: 33.33%;
+    width: 60%;
     height: 100%;
-    backgroundColor: transparent;
 `;
 
 const ErrorView = Styled(View)`
@@ -124,5 +123,4 @@ const TouchSelect = (props) => {
 }
 
 TouchSelect.defaultProps = defaultProps;
-
 export default TouchSelect;

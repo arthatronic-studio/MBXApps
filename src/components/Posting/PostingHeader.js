@@ -18,16 +18,23 @@ import { Container } from 'src/styled';
 const propTypes = {
     title: PropTypes.string,
     onSeeAllPress: PropTypes.func,
+    showSeeAllText: PropTypes.bool,
+    style: PropTypes.object,
 }
 
 const defaultProps = {
     title: '',
     onSeeAllPress: () => {},
+    showSeeAllText: true,
+    style: {},
 }
 
 const PostingHeader = (props) => {
     const {
-        title, onSeeAllPress,
+        title,
+        onSeeAllPress,
+        showSeeAllText,
+        style,
     } = props;
 
     const {Color} = useColor();
@@ -37,19 +44,20 @@ const PostingHeader = (props) => {
             width='100%'
             align='center'
             justify='space-between'
-            paddingHorizontal={16}
             style={{
                 flexDirection: 'row',
+                paddingHorizontal: 16,
+                ...style,
             }}
         >
             <Text type="bold">{title}</Text>
-            <Text
+            {showSeeAllText && <Text
                 onPress={() => onSeeAllPress()}
                 size={12}
                 color={Color.primary}>
                 Lihat Semua{' '}
                 <Ionicons name="arrow-forward" size={12} color={Color.primary} />
-            </Text>
+            </Text>}
         </Container>
     )
 }

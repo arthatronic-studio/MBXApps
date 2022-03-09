@@ -59,4 +59,3 @@ buck-out/
 /ios/Pods/
 
 *.env
-*.env_sample

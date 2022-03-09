@@ -21,6 +21,8 @@ import validate from '@src/lib/validate';
 import Client from '@src/lib/apollo';
 import { queryProductManage } from '@src/lib/query';
 import { Divider } from 'src/styled';
+import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
+import { accessClient } from 'src/utils/access_client';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -44,7 +46,6 @@ const CustomTextInput = Styled(TextInput)`
   width: 100%;
   height: 100%;
   fontFamily: Inter-Regular;
-  backgroundColor: transparent;
   borderBottomWidth: 1px;
   borderColor: #666666;
   fontSize: 14px;
@@ -74,6 +75,8 @@ const EditThreadScreen = (props) => {
         type: params.productType,
         category: params.productSubCategory,
         description: params.productDescription,
+        latitude: '',
+        longitude: '',
     });
     const [error, setError] = useState({
         name: null,
@@ -83,7 +86,7 @@ const EditThreadScreen = (props) => {
     const [thumbImage, setThumbImage] = useState('');
     const [mimeImage, setMimeImage] = useState('image/jpeg');
     const [selectedStatus, setSelectedStatus] = useState({
-        id: params.status === 'PRIVATE' ? 2 : 1,
+        label: params.status === 'PRIVATE' ? 'Privasi' : 'Publik',
         value: params.status,
         iconName: params.status === 'PRIVATE' ? 'lock-closed' : 'globe',
     });
@@ -96,12 +99,36 @@ const EditThreadScreen = (props) => {
     const [popupProps, showPopup] = usePopup();
 
     useEffect(() => {
-        BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+        // BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+        requestLocationPermission();
   
-        return () => {
-            BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
-        }
+        // return () => {
+        //     BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+        // }
     }, []);
+
+    const requestLocationPermission = async () => {
+        const isGranted = await geoLocationPermission();
+    
+        console.log('isGranted',isGranted);
+    
+        geoCurrentPosition(
+          (res) => {
+            console.log(res, 'res location');
+            if (res.coords) {
+                setUserData({
+                    ...userData,
+                    latitude: res.coords.latitude.toString(),
+                    longitude: res.coords.longitude.toString(),
+                });
+            }
+          },
+          (err) => {
+            console.log(err, 'err location');
+          }
+        );
+    }
   
     const handleBackPress = () => {
         backToSelectVideo();
@@ -187,8 +214,8 @@ const EditThreadScreen = (props) => {
                         onPress={() => {
                             const options = {
                                 mediaType: 'photo',
-                                maxWidth: 320,
-                                maxHeight: 320,
+                                maxWidth: 640,
+                                maxHeight: 640,
                                 quality: 1,
                                 includeBase64: true,
                             }
@@ -274,6 +301,7 @@ const EditThreadScreen = (props) => {
                             onBlur={() => isValueError('description')}
                             multiline
                             numberOfLines={8}
+                            style={{color: Color.text, textAlignVertical: 'top'}}
                         />
                     </View>
                     <ErrorView>
@@ -281,12 +309,12 @@ const EditThreadScreen = (props) => {
                     </ErrorView>
                 </View>
 
-                <TouchSelect
+                {accessClient.CreatePosting.showPrivacy && <TouchSelect
                     title='Siapa yang dapat melihat ini?'
-                    value={userData.status}
+                    value={selectedStatus.label}
                     iconName={selectedStatus.iconName}
                     onPress={() => modalSelectStatusRef.current.open()}
-                />
+                />}
 
                 <Divider />
 

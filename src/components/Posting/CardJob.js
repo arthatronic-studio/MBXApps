@@ -38,7 +38,16 @@ const CardJob = (props) => {
         >
             <View style={{width: '100%', flexDirection: 'row', padding: 16, borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle}}>
                 <View style={{width: '20%'}}>
-                    <Image source={{uri: item.image}} style={{width: '80%', aspectRatio: 1, borderRadius: 50}} />
+                    <Image
+                        source={{uri: item.image}}
+                        style={{
+                            width: '80%',
+                            aspectRatio: 1,
+                            borderRadius: 8,
+                            ...shadowStyle,
+                        }}
+                        resizeMode='contain'
+                    />
                 </View>
 
                 <View style={{width: '80%'}}>
@@ -47,7 +56,12 @@ const CardJob = (props) => {
                         {/* <Ionicons name='bookmark-outline' size={20} color={Color.primary} /> */}
                     </View>
 
-                    <View style={{paddingTop: 2}}>
+                    <View style={{paddingTop: 4, flexDirection: 'row'}}>
+                        <Text size={12} align='left'>Post:&nbsp;</Text>
+                        <Text size={12} align='left'>{item.fullname}</Text>
+                    </View>
+
+                    <View style={{paddingTop: 6}}>
                         <Text size={12} align='left' numberOfLines={2}>{item.productDescription}</Text>
                     </View>
 

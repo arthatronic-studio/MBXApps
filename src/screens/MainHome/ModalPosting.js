@@ -1,13 +1,22 @@
 import React, { useRef, forwardRef, useState } from 'react';
-import { Dimensions, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { Dimensions, TouchableOpacity, useWindowDimensions, Image } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+// import { Newspaper, MapPinLine, Calendar, Briefcase } from 'phosphor-react-native';
+import Config from 'react-native-config';
+
 import {
   Text,
   // TouchableOpacity,
   useColor
 } from '@src/components';
+
+import {
+  iconArtikel,
+  iconTempat,
+  iconEvent,
+  iconLoker
+} from '@assets/images/home'
 
 import { View, TextInput } from 'react-native';
 
@@ -15,6 +24,7 @@ import { shadowStyle } from '@src/styles';
 
 import { useCombinedRefs } from '@src/hooks';
 import { Divider } from 'src/styled';
+import { from } from 'apollo-link';
 
 const { width } = Dimensions.get('window');
 
@@ -23,30 +33,50 @@ const defaultProps = {
 };
 
 const data = [
-  { id: 1, name: 'Posting Artikel', nav: 'CreateThreadScreen', params: {
-    title: 'Posting Artikel',
-    productType: "TRIBES",
-    productCategory: '',
-    productSubCategory: 'POSTING'
-  } },
-  { id: 2, name: 'Posting Tempat Terdekat', nav: 'CreateThreadScreen', params: {
-    title: 'Posting Tempat Terdekat',
-    productType: "TRIBES",
-    productCategory: '',
-    productSubCategory: 'NEARBY_PLACE',
-  } },
-  { id: 3, name: 'Posting Event', nav: 'CreateThreadScreen', params: {
-    title: 'Posting Event',
-    productType: "TRIBES",
-    productCategory: '',
-    productSubCategory: 'EVENT',
-  } },
-  { id: 4, name: 'Posting Loker', nav: 'CreateThreadScreen', params: {
-    title: 'Posting Loker',
-    productType: "TRIBES",
-    productCategory: '',
-    productSubCategory: 'JOBS',
-  } },
+  {
+    id: 1,
+    name: 'Artikel',
+    icon: <Image source={iconArtikel} style={{width: '50%', height: '50%', marginBottom: 4}}/>,
+    nav: 'CreateThreadScreen', params: {
+      title: 'Posting Artikel',
+      productType: Config.PRODUCT_TYPE,
+      productCategory: '',
+      productSubCategory: 'POSTING'
+    }
+  },
+  {
+    id: 2,
+    name: 'Tempat',
+    icon: <Image source={iconTempat} style={{width: '45%', height: '50%', marginBottom: 4}}/>,
+    nav: 'CreateThreadScreen', params: {
+      title: 'Posting Tempat Favorit',
+      productType: Config.PRODUCT_TYPE,
+      productCategory: '',
+      productSubCategory: 'NEARBY_PLACE',
+    }
+  },
+  {
+    id: 3,
+    name: 'Event',
+    icon: <Image source={iconEvent} style={{width: '50%', height: '50%', marginBottom: 4}}/>,
+    nav: 'CreateThreadScreen', params: {
+      title: 'Posting Event',
+      productType: Config.PRODUCT_TYPE,
+      productCategory: '',
+      productSubCategory: 'EVENT',
+    }
+  },
+  {
+    id: 4,
+    name: 'Loker',
+    icon: <Image source={iconLoker} style={{width: '50%', height: '50%', marginBottom: 4}}/>,
+    nav: 'CreateThreadScreen', params: {
+      title: 'Posting Loker',
+      productType: Config.PRODUCT_TYPE,
+      productCategory: '',
+      productSubCategory: 'JOBS',
+    }
+  },
 ];
 
 const ModalPosting = forwardRef((props, ref) => {
@@ -71,19 +101,19 @@ const ModalPosting = forwardRef((props, ref) => {
           onPress(item);
         }}
         style={{
-          width,
+          borderWidth: 1,
+          borderColor: '#bcbcbc',
+          borderRadius: 8,
+          // width,
           paddingVertical: 8,
-          flexDirection: 'row',
+          height: 70,
+          width: 70,
+          justifyContent: 'center',
           alignItems: 'center',
         }}
       >
-        <MaterialIcons
-          name='post-add'
-          size={20}
-          color={Color.text}
-        />
-        <Divider width={8} />
-        <Text size={14} align='left'>
+        {item.icon}
+        <Text size={14} align='center'>
           {item.name}
         </Text>
       </TouchableOpacity>
@@ -96,13 +126,13 @@ const ModalPosting = forwardRef((props, ref) => {
       withHandle={handle}
       handlePosition="inside"
       adjustToContentHeight
-      handleStyle={{width: width / 3, height: handle ? 4 : 4, backgroundColor: Color.primary, marginTop: 8}}
+      handleStyle={{width: width / 3, height: handle ? 8 : 8, backgroundColor: Color.primary+'30', marginTop: 8}}
       onPositionChange={handlePosition}
       childrenStyle={{
         alignItems: 'center',
         marginTop: 16,
-        padding: 16,
-        paddingBottom: 32,
+        paddingTop: 16,
+        paddingBottom: 50,
         borderTopLeftRadius: 12, 
         borderTopRightRadius: 12,
       }}
@@ -110,7 +140,12 @@ const ModalPosting = forwardRef((props, ref) => {
         backgroundColor: Color.theme
       }}
     >
-      {renderContent()}
+      <View style={{ flexDirection: 'row', paddingLeft: 12, marginVertical: 14 }}>
+        <Text type='bold' textAlign='left'>Buat Postingan</Text>
+      </View>
+      <View style={{ flexDirection: 'row', width,  justifyContent: 'space-around',  }}>
+        {renderContent()}
+      </View>
     </Modalize>
   );
 });

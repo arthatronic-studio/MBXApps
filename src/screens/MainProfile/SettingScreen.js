@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { SafeAreaView, View, StatusBar } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 
@@ -8,7 +8,8 @@ import {
     Text,
     Header,
     TouchableOpacity,
-    useColor
+    useColor,
+    Scaffold,
 } from '@src/components';
 
 const SettingScreen = ({ navigation, route }) => {
@@ -18,31 +19,12 @@ const SettingScreen = ({ navigation, route }) => {
     
     const dispatch = useDispatch();
 
-    // const timeoutRef = useRef(null);
-
-    // useEffect(() => {
-    //     if (timeoutRef.current) {
-    //         clearTimeout(timeoutRef.current);
-    //     }
-
-    //     timeoutRef.current = setTimeout(() => {
-    //         clearTimeout(timeoutRef.current);
-    //     }, 500);
-    // }, [options])
-
     return (
-        <SafeAreaView style={{flex: 1, backgroundColor: Color.theme}}>
-            <StatusBar
-                backgroundColor={Color.primary}
-                barStyle={Color.colorDominant === 'dark' ? 'light-content' : 'dark-content'}
-            />
-
-            <Header
-                title='Pengaturan'
-                onPressLeftButton={() => navigation.navigate('MainProfile', { refresh: true })}
-            />
-
-            <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
+        <Scaffold
+            headerTitle='Pengaturan'
+            onPressLeftButton={() => navigation.navigate('MainProfile', { refresh: true })}
+        >
+            {/* <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
                 <Row>
                     <Col align='flex-start' size={8} justify='center'>
                         <Text size={12} type='medium'>Dark Mode</Text>
@@ -61,7 +43,7 @@ const SettingScreen = ({ navigation, route }) => {
                         </TouchableOpacity>
                     </Col>
                 </Row>
-            </Grid>
+            </Grid> */}
 
             {/* <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
                 <Row>
@@ -96,7 +78,12 @@ const SettingScreen = ({ navigation, route }) => {
             </Grid> */}
 
             <Grid style={{backgroundColor: Color.theme, borderColor: Color.border}}>
-                <TouchableOpacity onPress={() => navigation.navigate('UserChangePassword', { canGoBack: true })}>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate('UserChangePassword', { canGoBack: true });
+                        dispatch({ type: 'USER.CHANGE_PASSWORD', status: false });
+                    }}
+                >
                     <Row>
                         <Col align='flex-start' size={8} justify='center'>
                             <Text size={12} type='medium' style={{marginBottom: 4}}>Ubah Password</Text>
@@ -108,7 +95,7 @@ const SettingScreen = ({ navigation, route }) => {
                     </Row>
                 </TouchableOpacity>
             </Grid>
-        </SafeAreaView>
+        </Scaffold>
     );
 }
 
