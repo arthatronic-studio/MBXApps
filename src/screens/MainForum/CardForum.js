@@ -2,8 +2,13 @@ import React from 'react';
 import { View, ImageBackground, Dimensions, Image } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Moment from 'moment';
+import Feather from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import ImagesPath from '../../components/ImagesPath'
 
 import {
+    Col,
     Text,
     TouchableOpacity,
     useColor
@@ -54,42 +59,94 @@ const CardForum = (props) => {
 
     if (componentType === 'LIST') {
         return (
-            <View style={{width, paddingHorizontal: 16, marginBottom: 16}}>
                 <TouchableOpacity
                     onPress={() => onPress(item)}
-                    style={[{width: '100%', flexDirection: 'row', padding: 16, borderRadius: 4, borderWidth: 0.5, borderColor: Color.border}, style]}
+                    style={[{width: width / numColumns - 60, borderRadius: 10, borderWidth: 0.5, borderColor: Color.border, marginRight: 16}]}
                 >
-                    <Image
+                    <Image 
                         source={{uri: item.image}}
-                        style={{
+                        style= {{
                             flex: 1,
-                            aspectRatio: 1,
                             justifyContent: 'flex-end',
                             alignItems: 'center',
-                            borderRadius: 4,
+                            width: '100%',
+                            height: 60,
                             backgroundColor: Color.border,
+                            borderTopLeftRadius: 10,
+                            borderTopRightRadius: 10,
                         }}
+                        
                     />
-                    <View style={{flex: 5, alignItems: 'flex-start', justifyContent: 'center', paddingLeft: 16}}>
-                        <Text size={12} type='semibold'>Pustakawan Podium</Text>
-                        <View style={{flexDirection: 'row', marginTop: 4}}>
-                            <Text size={10} type='medium'>2.708 Anggota</Text>
-                            <Text size={10} type='medium'>20 Kiriman baru minggu ini</Text>
+
+                    <View
+                        style={{
+                            paddingHorizontal: 16,
+                            paddingBottom: 24,
+                        }}
+                    >
+                        <Image 
+                            source={{uri: item.image}}
+                            style= {{
+                                flex: 1,
+                                justifyContent: 'flex-end',
+                                alignItems: 'center',
+                                aspectRatio: 1,
+                                width: 40,
+                                height: 40,
+                                backgroundColor: Color.border,
+                                borderRadius: 20,
+                                position: 'relative',
+                                top: -20,
+                            }}   
+                        />
+
+                        <View>
+                            <Text size={14} type='semibold' align='left'>Pustakawan Podium</Text>
+                            <Text size={10} type='medium' align='left' color={Color.gray} style={{marginTop: 4, marginBottom:10}}>2.708 Anggota</Text>
+                            <Text size={12} align='left'>Carrot cake sweet gummi bears cake powder bonbon lemon drops cheesecake gummi bears. Gingerbread caramels cupcake gummies powder . . .</Text>
                         </View>
-                    </View>
-                    <View style={{flex: 1, justifyContent: 'center'}}>
-                        <Text sie={12} color={Color.primary}>Lihat</Text>
+
                     </View>
                 </TouchableOpacity>
-            </View>
         )
     }
     
     return (
         <TouchableOpacity
             onPress={() => onPress(item)}
-            style={[{width: width / numColumns - 8, paddingHorizontal: 8, marginBottom: 16, borderRadius: 4}, style]}
-        >
+            style={[{width: width / numColumns + 140, padding: 8, marginBottom: 16, marginRight: 12, borderRadius: 4, borderColor: Color.grayLight, borderWidth: 1, borderRadius: 8}, style]}
+        >   
+
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16}}>
+                <View
+                    style={{flexDirection: 'row', alignItems: 'center'}}
+                >
+                    <View style={{backgroundColor: Color.grayLight, width: 40, height: 40, borderRadius: 20, marginRight: 10}}>
+                        <Image 
+                            source={{uri: item.image}}
+                            style={{
+                                aspectRatio: 1
+                            }}
+                        />
+                    </View>
+                    <View>
+                        <Text size={14} type='bold' align='left'>{item.productName}</Text>
+                        <View style={{flexDirection: 'row', marginTop: 4}}>
+                            <Text size={8} align='left'>{item.productName} - </Text>
+                            <Text size={8} align='left'>{Moment(parseInt(item.created_date, 10)).fromNow()}</Text>
+                        </View>
+                    </View>
+                </View>
+                <View style={{backgroundColor: Color.primary, paddingHorizontal: 16, paddingVertical: 6, marginTop: 8, borderRadius: 120, alignSelf: 'flex-start'}}>
+                    <Text size={8} align='left' color={'#ffffff'}>+ Gabung</Text>
+                    
+                </View>
+            </View>
+
+            <View style={{height: 60, marginBottom: 16}}>
+                <Text size={14} align='left' numberOfLines={3}>{item.productDescription}...</Text>
+            </View>
+
             <ImageBackground
                 source={{uri: item.image}}
                 style={{
@@ -97,22 +154,45 @@ const CardForum = (props) => {
                     aspectRatio: 5/6,
                     justifyContent: 'flex-end',
                     alignItems: 'center',
-                    borderRadius: 4,
-                    ...shadowStyle,
+                    marginBottom: 16
                 }}
-                imageStyle={{borderRadius: 4}}
+                imageStyle={{borderRadius:10}}
             >
-                <View style={{position: 'absolute', height: '100%', width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.2)'}} />
-
-                <View style={{alignItems: 'center', position: 'absolute', top: 8, right: 8, flexDirection: 'row'}}>
-                    <Text size={12} type='medium' color={Color.theme}><MaterialCommunityIcons size={10} name='comment-text-multiple-outline' color={Color.theme} /> {item.comment}</Text>
-                </View>
-
-                <View style={{width: '100%', paddingHorizontal: 12, paddingBottom: 12, alignItems: 'flex-start'}}>
-                    <Text size={12} type='bold' color={Color.theme} style={{marginBottom: 6}}>{item.productName}</Text>
-                    <Text size={10} type='medium' color={Color.theme}>{Moment(parseInt(item.created_date, 10)).fromNow()}</Text>
-                </View>
+                <View style={{position: 'absolute', height: '100%', width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: 8}} />    
             </ImageBackground>
+
+            <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <AntDesign 
+                        name={'like2'}
+                        size={24}
+                        color={Color.gray}
+                    />
+                    {/* <Text>{item.like}</Text> */}
+                    <Text size={14} align='left' color={Color.gray} style={{marginLeft: 10}}>5rb</Text>
+                </View>
+                <View>
+                    <Text align='left' size={16} color={Color.gray}>|</Text>
+                </View>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <Image 
+                        source={ImagesPath.chat}
+                    />
+                    <Text size={14} align='left' color={Color.gray} style={{marginLeft: 10}}>251</Text>
+                </View>
+                <View>
+                    <Text align='left' size={16} color={Color.gray}>|</Text>
+                </View>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <AntDesign 
+                        name={'sharealt'}
+                        size={24}
+                        color={Color.gray}
+                    />
+                    <Text size={14} align='left' color={Color.gray} style={{marginLeft: 10}}>Share</Text>
+                </View>
+            </View>
+            
         </TouchableOpacity>
     )
 }

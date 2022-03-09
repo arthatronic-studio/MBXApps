@@ -1,15 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, ScrollView, Platform, SafeAreaView, TextInput } from 'react-native';
+import { View, ScrollView, Platform, Dimensions, SafeAreaView, TextInput, Image } from 'react-native';
 import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
+import ImagesPath from '../../components/ImagesPath'
+
+const { width } = Dimensions.get('window');
 
 import {
   Text,
   // TouchableOpacity,
   Loading, useLoading,
   HeaderBig,
+  Header,
+  Scaffold,
   useColor
 } from '@src/components';
 import { TouchableOpacity } from '@src/components/Button';
@@ -104,12 +111,15 @@ const MainForum = ({ navigation, route }) => {
     
     const newListMostDiscussion = await fetchContentProduct("TRIBES", "NEARBY_PLACE", "ALL");
     setListMostDiscussion(newListMostDiscussion);
+    console.log('most diskusi', newListMostDiscussion)
     
     const newListGroupReader = await fetchContentProduct("TRIBES", "NEARBY_PLACE", "ALL");
     setListGroupReader(newListGroupReader);
+    console.log('group reader', newListGroupReader)
     
     const newListFavoriteDiscussion = await fetchContentProduct("TRIBES", "NEARBY_PLACE", "ALL");
     setListFavoriteDiscussion(newListFavoriteDiscussion);
+    console.log('fav diskusi', newListFavoriteDiscussion)
     
     hideLoading();
   }
@@ -158,13 +168,12 @@ const MainForum = ({ navigation, route }) => {
 
   return (
     <MainView style={{backgroundColor: Color.theme}}>
-      <HeaderBig
-        title='Forum'
-        style={{paddingTop: 16}}
-      />
-
       <ScrollView showsVerticalScrollIndicator={false}>
-          <ContentView style={{backgroundColor: Color.theme}}>
+          <Scaffold
+              header={<Header customIcon title="Forum" type="regular" style={{paddingTop: 16, marginBottom: 10}} centerTitle={false} iconRightButton={<AntDesign name={'plus'} size={24} />} />}
+              onPressLeftButton={() => navigation.pop()}
+          />
+          {/* <ContentView style={{backgroundColor: Color.theme}}>
             <MainMenuView
               style={{...shadowStyle, shadowOpacity: 0.02, backgroundColor: Color.border}}
             >
@@ -192,21 +201,35 @@ const MainForum = ({ navigation, route }) => {
                 )
               })}
             </MainMenuView>
-          </ContentView>
+          </ContentView> */}
 
           <View style={{height: 12}} />
-          
-          <TextInput
-            placeholder="Cari topik apa hari ini ..."
-            placeholderTextColor={Color.gray}
-            style={{
-              width: '80%',
-              borderRadius: 8,
-            }}
-            onTouchStart={() => 
-              navigation.navigate("ForumSearch")
-            }
-          />
+
+          <View style={{paddingHorizontal: 16}}>
+            <TextInput
+              placeholder="Cari topik apa hari ini ..."
+              placeholderTextColor={Color.gray}
+              style={{
+                width: '100%',
+                borderRadius: 8,
+                backgroundColor: '#EEEEEE',
+                padding: 10
+              }}
+              onTouchStart={() => 
+                navigation.navigate("ForumSearch")
+              }
+            />
+          </View> 
+
+          <View style={{height: 24}} />
+
+          <View style={{paddingHorizontal:16, borderRadius: 8}}>
+            <Image 
+              source={ImagesPath.rectangle}
+              style={{borderRadius: 8}}
+              width={'100%'}
+            />
+          </View>
 
           <ListForum
               componentType='GENERAL'
