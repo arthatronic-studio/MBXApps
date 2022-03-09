@@ -12,14 +12,13 @@ import { statusBarHeight } from 'src/utils/constants';
 const defaultProps = {
     data: [],
     selected: null,
-    name: '',
     onPress: () => {},
     onClose: () => {},
     style: {},
 };
 
-const ModalListAction = forwardRef((props, ref) => {
-  const { data, selected, onPress, onClose, children, style, name } = props;
+const ModalProvince = forwardRef((props, ref) => {
+  const { data, selected, onPress, onClose, children, style } = props;
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
@@ -35,7 +34,7 @@ const ModalListAction = forwardRef((props, ref) => {
         <TouchableOpacity
             key={idx}
             onPress={() => {
-              item.onPress ? item.onPress() : onPress(item, name);
+              item.onPress ? item.onPress() : onPress(item);
             }}
             style={{
               width: width - 32,
@@ -84,5 +83,5 @@ const ModalListAction = forwardRef((props, ref) => {
   );
 });
 
-ModalListAction.defaultProps = defaultProps;
-export default ModalListAction;
+ModalProvince.defaultProps = defaultProps;
+export default ModalProvince;

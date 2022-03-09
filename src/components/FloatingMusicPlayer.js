@@ -251,7 +251,7 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
                 width: 54,
                 marginLeft: handle ? 0 : 8,
                 marginTop: handle ? 0 : 8,
-                borderRadius: 2,
+                borderRadius: 4,
                 transform: [
                   {
                     translateY: animated.interpolate({
@@ -379,7 +379,7 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
                 minimumTrackTintColor={Color.primary}
                 maximumTrackTintColor={Color.border}
                 thumbTintColor={Color.primary}
-                thumbStyle={{height: 14, width: 14, borderRadius: 7}}
+                thumbStyle={{height: 14, width: 14, borderRadius: 8}}
                 trackStyle={{height: 4}}
             />
         </View>
