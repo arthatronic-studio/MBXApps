@@ -102,13 +102,13 @@ const MainForum = ({ navigation, route }) => {
   const fecthData = async() => {
     showLoading();
     
-    const newListMostDiscussion = await fetchContentProduct("TRIBES", "POSTING", "ALL");
+    const newListMostDiscussion = await fetchContentProduct("TRIBES", "NEARBY_PLACE", "ALL");
     setListMostDiscussion(newListMostDiscussion);
     
-    const newListGroupReader = await fetchContentProduct("TRIBES", "POSTING", "ALL");
+    const newListGroupReader = await fetchContentProduct("TRIBES", "NEARBY_PLACE", "ALL");
     setListGroupReader(newListGroupReader);
     
-    const newListFavoriteDiscussion = await fetchContentProduct("TRIBES", "POSTING", "ALL");
+    const newListFavoriteDiscussion = await fetchContentProduct("TRIBES", "NEARBY_PLACE", "ALL");
     setListFavoriteDiscussion(newListFavoriteDiscussion);
     
     hideLoading();
@@ -136,6 +136,8 @@ const MainForum = ({ navigation, route }) => {
       query: queryContentProduct,
       variables,
     });
+
+    console.log("resultttt",result)
 
     if (result && result.data && result.data.contentProduct && Array.isArray(result.data.contentProduct)) {
       return result.data.contentProduct;

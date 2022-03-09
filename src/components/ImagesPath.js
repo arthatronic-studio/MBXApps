@@ -70,6 +70,8 @@ export default {
   lelangecommerce4: require('../components/Images/lelangecommerce4.png'),
   lelangecommerce5: require('../components/Images/lelangecommerce5.png'),
   lelangecommerce6: require('../components/Images/lelangecommerce6.png'),
-  bannerLelangEcommerce : require('../components/Images/bannerLelangEcommerce.png'),
-
+  bannerLelangEcommerce: require('../components/Images/bannerLelangEcommerce.png'),
+  trendUp: require('../components/Images/TrendUp.png'),
+  iconTypeG: require('../components/Images/iconTypeG.png'),
+  searchEmpty: require('../components/Images/searchEmpty.png'),
 };
