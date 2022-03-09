@@ -61,6 +61,9 @@ import {accessClient} from 'src/utils/access_client';
 import VideoCardList from 'src/components/VideoCardList';
 import {trackPlayerPlay} from 'src/utils/track-player-play';
 import FloatingMusicPlayer from 'src/components/FloatingMusicPlayer';
+import TrackPlayer, { Event, useTrackPlayerEvents } from 'react-native-track-player';
+import { analyticMethods, GALogEvent } from 'src/utils/analytics';
+import { Item } from 'native-base';
 
 const dataPromoDummy = {
   productName: 'Halo selamat datang!',
@@ -88,6 +91,10 @@ const dataDummyMusic = [
 ];
 
 let tempShowPopupAds = true;
+
+const events = [
+  Event.PlaybackTrackChanged,
+];
 
 const MainHome = ({navigation, route}) => {
   // state
@@ -122,6 +129,7 @@ const MainHome = ({navigation, route}) => {
 
   const [animationValue] = useState(new Animated.Value(0));
   const [refreshing, setRefreshing] = useState(false);
+  const [thisTrack, setThisTrack] = useState();
 
   const prevFirebaseNotifierLastChatCount = usePreviousState(
     firebaseNotifierLastChatCount,
@@ -134,6 +142,41 @@ const MainHome = ({navigation, route}) => {
   const modalPostingRef = useRef();
   const floatingMusicPlayerRef = useRef();
   const {width} = useWindowDimensions();
+
+  // handle music analytics
+  // 
+  useTrackPlayerEvents(events, (event) => {
+    if (event.type === Event.PlaybackTrackChanged) {
+      // console.log('home track changed', event);
+      getCurrentPlaying();
+    }
+  });
+
+  const getCurrentPlaying = async() => {
+    const newCurrent = await TrackPlayer.getCurrentTrack();
+    if (newCurrent != null) {
+      setThisTrack(await TrackPlayer.getTrack(newCurrent));
+    } else {
+      setThisTrack();
+    }
+  }
+
+  useEffect(() => {
+    const timeout = thisTrack ?
+      setTimeout(() => {
+        // console.log('thisTrack', thisTrack);
+        GALogEvent(thisTrack.artist, {
+          id: thisTrack.id,
+          product_name: thisTrack.title,
+          user_id: user.userId,
+          method: analyticMethods.view,
+        })
+      }, 1000) : null;
+
+    return () => clearTimeout(timeout);
+  }, [thisTrack]);
+  // 
+  // end handle music analytics
 
   useEffect(() => {
     fetchPromoBanners();
@@ -272,7 +315,7 @@ const MainHome = ({navigation, route}) => {
         console.log(err, 'err banner list');
       });
   };
-
+  
   // Popup Banners
   const fetchPromoBanners = () => {
     Client.query({
@@ -665,6 +708,13 @@ const MainHome = ({navigation, route}) => {
           </View>
 
           <Divider />
+
+          <TouchableOpacity
+            style={{marginTop: 16, marginBottom: 16}}
+            onPress={() => navigation.navigate("MainForum")}
+          >
+            <Text>Forum</Text>
+          </TouchableOpacity>
 
           <Banner
             isDummy={accessClient.MainHome.dummyBanner}

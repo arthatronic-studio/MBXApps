@@ -57,7 +57,13 @@ const CardDetail = ({ navigation, route }) => {
     item.car_photo_front,
     item.car_photo_side,
     item.car_photo_back,
+    item.selfie_photo,
+    item.sim_photo,
+    item.stnk_photo,
+    item.transaction_proof,
   ];
+
+  
 
   const {width, height} = useWindowDimensions();
   const {Color} = useColor();
@@ -66,8 +72,30 @@ const CardDetail = ({ navigation, route }) => {
   useEffect(() => {
     setIdNumber(userDetail.idNumber);
   }, []);
+  const fetchData = () => {
+    let status = 2;
+    if (props.type === 'newAnggota') {
+      status = 0;
+    } else if (props.type === 'Anggota') {
+      status = 1;
+    }
 
-  const fetchUpdateMember = () => {
+    Client.query({
+      query: joinCommunityMember,
+      variables: {
+        status: status,
+      },
+    })
+      .then((res) => {
+        setData(res.data.joinCommunityMember);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log('err', err);
+        setLoading(false);
+      });
+  };
+  const fetchUpdateMember = item => {
     setLoading(true);
 
     Client.query({
@@ -75,17 +103,18 @@ const CardDetail = ({ navigation, route }) => {
       variables: {
         status: 1,
         id: item.id,
-        customIdNumber: idNumber,
+        customIdNumber: item.userDetail.idNumber,
       },
     })
-    .then((res) => {
-      showPopup('Akun berhasil diubah', 'success');
-      setLoading(false);
-    })
-    .catch((err) => {
-      showPopup('catch', 'error');
-      setLoading(false);
-    });
+      .then((res) => {
+        showPopup('Akun berhasil diubah', 'success');
+        fetchData();
+        setLoading(false);
+      })
+      .catch((err) => {
+        showPopup('catch', 'error');
+        setLoading(false);
+      });
   };
 
   const fetchJoinCommunityManage = (id, userId, status) => {
@@ -109,11 +138,9 @@ const CardDetail = ({ navigation, route }) => {
         const success = data && data.id;
 
         if (success) {
+          fetchData();
           showPopup(`Akun berhasil ${resMessage}`, 'success');
           setLoading(false);
-          setTimeout(() => {
-            navigation.pop();
-          }, 3000);
         } else {
           showPopup(`Akun gagal ${resMessage}`, 'error');
           setLoading(false);
@@ -133,17 +160,17 @@ const CardDetail = ({ navigation, route }) => {
       status === 1 ? 'INSERT' :
       status === 2 ? 'REJECT' : 'DELETE';
 
-    const variables = {
-      "userId": userId,
-      "organizationInitialCode": Config.INITIAL_CODE,
-      "type": method,
-    };
+    // const variables = {
+    //   "userId": userId,
+    //   "organizationInitialCode": accessClient.InitialCode,
+    //   "type": method,
+    // };
 
-    console.log(variables);
+    // console.log(variables);
 
     Client.mutate({
       mutation: queryOrganizationMemberManage,
-      variables,
+      // variables,
     }).then((res) => {
       console.log('res organization manage', res);
 
@@ -220,7 +247,28 @@ const CardDetail = ({ navigation, route }) => {
                   />
                 )}
               </View>
-              
+              <View style={{width: '100%', marginTop: 8}}>
+                <View
+                  style={{
+                    marginTop: 6,
+                    paddingHorizontal: 12,
+                    borderWidth: 1,
+                    borderRadius: 4,
+                    borderColor: Color.border,
+                    width: '100%',
+                  }}>
+                  <LabelInput>
+                    <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>
+                      Domisili
+                    </Text>
+                  </LabelInput>
+                  <EmailRoundedView>
+                    <FieldView>
+                      <Text>{userDetail.city}</Text>
+                    </FieldView>
+                  </EmailRoundedView>
+                </View>
+              </View>
               <View style={{width: '100%', marginTop: 8}}>
                 <View
                   style={{
@@ -408,7 +456,63 @@ const CardDetail = ({ navigation, route }) => {
                   </EmailRoundedView>
                 </View>
               </View>
+
             </View>
+            <View
+              style={{
+                alignItems: 'flex-start',
+                justifyContent: 'flex-start',
+              }}
+            >
+              <Text style={{fontWeight: 'bold', paddingTop: 8}}>
+                Description
+              </Text>
+              <View style={{width: '100%'}}>
+                <View
+                  style={{
+                    marginTop: 6,
+                    paddingHorizontal: 12,
+                    borderWidth: 1,
+                    borderRadius: 4,
+                    borderColor: Color.border,
+                    width: '100%',
+                  }}>
+                  <LabelInput>
+                    <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>
+                      Alasan Gabung
+                    </Text>
+                  </LabelInput>
+                  <EmailRoundedView>
+                    <FieldView>
+                      <Text>{item.reason}</Text>
+                    </FieldView>
+                  </EmailRoundedView>
+                </View>
+              </View>
+              <View style={{width: '100%'}}>
+                <View
+                  style={{
+                    marginTop: 6,
+                    paddingHorizontal: 12,
+                    borderWidth: 1,
+                    borderRadius: 4,
+                    borderColor: Color.border,
+                    width: '100%',
+                  }}>
+                  <LabelInput>
+                    <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>
+                      Deskripsi
+                    </Text>
+                  </LabelInput>
+                  <EmailRoundedView>
+                    <FieldView>
+                      <Text>{item.note}</Text>
+                    </FieldView>
+                  </EmailRoundedView>
+                </View>
+              </View>
+            </View>
+            
           </View>
         </View>
 

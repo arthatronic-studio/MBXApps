@@ -28,6 +28,7 @@ import { navigationRef } from 'App';
 import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
 import { Divider } from 'src/styled';
+import { useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 const HEADER_HEIGHT = 75;
@@ -51,8 +52,7 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
   const animated = useRef(new Animated.Value(0)).current;
   // const combinedRef = useCombinedRefs(ref, modalizeRef);
   const { Color } = useColor();
-
-  // hooks
+  const navigation = useNavigation();
   const { position, duration } = useProgress();
   const [loadingProps, showLoading] = useLoading();
 
@@ -240,9 +240,9 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
         }}
       >
         <TouchableOpacity
-          disabled
+          // disabled
           onPress={() => {
-            
+            navigation.navigate('MusicPlayerScreen');
           }}
         >
           <Animated.Image
@@ -299,9 +299,9 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
       >
         <TouchableOpacity
           style={{flex: 8, alignItems: 'flex-start'}}
-          disabled
+          // disabled
           onPress={() => {
-            
+            navigation.navigate('MusicPlayerScreen');
           }}
         >
           <Text align='left' numberOfLines={2}>{currentPlaying ? currentPlaying.title : ''}</Text>

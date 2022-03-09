@@ -74,20 +74,20 @@ const MainProfile = ({navigation, route}) => {
     redirectTo('LoginScreen');
   };
 
-  const fetchOrganizationMemberManage = (code) => {
-    const variables = {
-      "userId": user.userId,
-      "organizationInitialCode": code,
-      "type": "INSERT"
-    };
+  const fetchOrganizationMemberManage = () => {
+    // const variables = {
+    //   "userId": user.userId,
+    //   "organizationInitialCode": accessClient.InitialCode,
+    //   "type": "INSERT"
+    // };
 
-    console.log(variables);
+    // console.log(variables);
 
     Client.mutate({
       mutation: queryOrganizationMemberManage,
-      variables,
+      // variables,
     }).then((res) => {
-      console.log('res', res);
+      console.log('test', res);
 
       setModalInputCode(false);
 
@@ -156,7 +156,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'community_admin',
       title: 'Community Admin',
-      show: accessClient.MainProfile.showMenuCommunityAdmin && user && user.isDirector === 1,
+      show:  accessClient.MainProfile.showMenuJoinCommunity && user && !user.organizationId,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('CommunityAdminPage'),
     },

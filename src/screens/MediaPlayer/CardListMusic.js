@@ -14,7 +14,7 @@ import client from 'src/lib/apollo';
 import { queryAddLike, queryContentProduct } from 'src/lib/query';
 import { useNavigation } from '@react-navigation/native';
 import { accessClient } from 'src/utils/access_client';
-import { GALogEvent } from 'src/utils/analytics';
+import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { useSelector } from 'react-redux';
 
 const MainView = Styled(View)`
@@ -132,11 +132,11 @@ const CardListMusic = (props) => {
                         newData[selected.idx].like += 1;
                         newData[selected.idx].im_like = true;
 
-                        GALogEvent('Music Populer', {
+                        GALogEvent('Musik Populer', {
                             id: selected.id,
                             product_name: item.name,
                             user_id: user ? user.userId : '',
-                            method: 'like',
+                            method: analyticMethods.like,
                         });
                     } else {
                         // showLoading('info', 'Batal menyukai');

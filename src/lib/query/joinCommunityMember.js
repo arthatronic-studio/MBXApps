@@ -9,12 +9,15 @@ export const joinCommunityMember = gql`
       car_year
       car_identity
       reason
-      # note
+      note
       chapter_id
       car_photo_main
       car_photo_front
       car_photo_side
       car_photo_back
+      selfie_photo
+      sim_photo
+      stnk_photo
       transaction_proof
       status
       user_id

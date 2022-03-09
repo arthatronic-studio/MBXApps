@@ -16,7 +16,7 @@ import { queryAddLike } from '@src/lib/query';
 import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 import ModalContentOptions from 'src/components/ModalContentOptions';
 
-import { GALogEvent } from 'src/utils/analytics';
+import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 
 const NewsDetail = ({navigation, route}) => {
   const {item} = route.params;
@@ -226,7 +226,12 @@ const NewsDetail = ({navigation, route}) => {
             <TouchableOpacity
                 onPress={() => {
                     fetchAddLike();
-                    GALogEvent('Artikel', { id: item.id, product_name: item.productName, user_id: item.ownerId, method: "like" })
+                    GALogEvent('Artikel', {
+                      id: item.id,
+                      product_name: item.productName,
+                      user_id: user.userId,
+                      method: analyticMethods.like,
+                    });
                 }}
                 style={{height: 70, width: 70, flexDirection: 'row', borderRadius: 35, backgroundColor: Color.textInput, justifyContent: 'center', alignItems: 'center'}}
             >
