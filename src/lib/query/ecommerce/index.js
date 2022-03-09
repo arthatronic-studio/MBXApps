@@ -15,15 +15,18 @@ export const queryAddCart = gql`
   `;
 
 export const queryCheckout = gql`
-    mutation ecommerceCreateNewOrder(
-      $productIds: [EcommerceOrderProductInput]
-      $isFromCart: Boolean
+    mutation shipperCreateOrder(
+      $input: ShipperCreateOrderInputType
     ) {
-      ecommerceCreateNewOrder(
-        productIds: $productIds
-        isFromCart: $isFromCart
+      shipperCreateOrder(
+        input: $input
       ) {
-        id userId 
+        order_id
+        courier{ 
+          rate_id
+          amount
+        }
+        external_id
       }
     }
 `;
@@ -39,6 +42,18 @@ export const queryCheckout = gql`
       product_id
       cart_id
       quantity
+    }
+  }
+`;
+
+export const queryGetShipper = gql`
+  mutation shipperGetPriceDomestic(
+    $input: ShipperGetDomestitInput
+  ) {
+      shipperGetPriceDomestic(
+      input: $input
+    ) {
+      pricings{ logistic { id name company_name code logo_url } final_price min_day max_day must_use_insurance discounted_price rate { id name type } }
     }
   }
 `;
@@ -108,6 +123,55 @@ export const queryDetailProduct = gql`
      id: $id
    ) {
     id name categoryId description price initialPrice imageUrl stock
+   }
+  }
+`;
+
+export const queryAddAddress = gql`
+  mutation userAddressAdd(
+    $addresses: [UserAddressInput]
+    ) {
+      userAddressAdd(
+      addresses: $addresses
+    ) {
+      id userId address
+    }
+  }
+`;
+
+export const queryGetProvince = gql`
+  query(
+    $countryCode: Int!
+  ) {
+    shipperGetProvinceList(
+     countryCode: $countryCode
+   ) {
+      id name
+   }
+  }
+`;
+
+
+export const queryGetCity = gql`
+  query(
+    $provinceId: Int!
+  ) {
+    shipperGetCitiesList(
+     provinceId: $provinceId
+   ) {
+      id name
+   }
+  }
+`;
+
+export const queryGetSub = gql`
+  query(
+    $cityId: Int!
+  ) {
+    shipperGetSuburbList(
+     cityId: $cityId
+   ) {
+      id name
    }
   }
 `;

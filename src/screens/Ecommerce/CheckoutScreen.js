@@ -28,6 +28,7 @@ import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
 import { FormatMoney } from 'src/utils';
 import ImagesPath from 'src/components/ImagesPath';
+import { queryCheckout, queryGetShipper } from 'src/lib/query/ecommerce';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -35,45 +36,62 @@ const MainView = Styled(SafeAreaView)`
 
 const Content = Styled(View)`
     margin: 16px
+    marginBottom: 0px
     padding: 12px
     borderRadius: 8px
 `;
 
 const CheckoutScreen = ({ navigation }) => {
+
     const route = useRoute()
     console.log(route)
     const {item} =  route.params
     const [address, setAddress] = useState({});
+    const [shippment, setShipping] = useState({});
     const isFocused = useIsFocused();
   // selector
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
-
+    console.log(user, 'user')
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const { Color } = useColor();
 
   
   useEffect(() => {
       console.log(route.params, 'address focus')
-      const {saveAddress} = route.params
+      const {saveAddress, saveShippment} = route.params
       if(saveAddress) setAddress(saveAddress)
+      if(saveShippment) setShipping(saveShippment)
   }, [isFocused]);
 
-
   const submit = () => {
+    const {saveAddress, saveShippment, item} = route.params
     console.log(route, 'props')
     showLoading();
     let variables = {
-      productId: route.params.item.id,
-      quantity: 1
+        input: {
+            courier: {
+                cod: false,
+                rate_id: 1,
+                use_insurance: false
+            },
+            userAddressIdDestination: 268,
+            userAddressIdOrigin: 3,
+            payment_type: "postpay",
+            product: [{
+                id: 3,
+                qty:2
+            }]
+        }
     }
     console.log(variables)
-    Client.mutate({mutation: queryAddCart, variables})
+    Client.mutate({mutation: queryCheckout, variables})
       .then(res => {
         hideLoading()
         console.log(res)
-        if (res.data.ecommerceProductDetail) {
-          alert('Success add to cart')
+        if (res.data.shipperCreateOrder) {
+          alert('Success order')
+          navigation.popToTop()
         }
       })
       .catch(reject => {
@@ -87,7 +105,7 @@ const CheckoutScreen = ({ navigation }) => {
     let total = 0
     if(item){
         item.forEach((element, index) => {
-          total = total + (element.price * element['quantity'])
+          total = total + (element.price * element['qty'])
         });
         return total
     }
@@ -96,7 +114,7 @@ const CheckoutScreen = ({ navigation }) => {
 
   return (
     <Scaffold
-        header={
+        headeor={
             <Header
                 customIcon
                 title='Checkout'
@@ -130,7 +148,7 @@ const CheckoutScreen = ({ navigation }) => {
             </Content>
             <Content style={{ backgroundColor: Color.textInput }}>
                 {item.tempData.map((val, id) => (
-                    <Row style={{ marginBottom: 30 }}>
+                    <Row style={{ marginBottom: 10 }}>
                         <Image source={ImagesPath.productImage} style={{ height: 74, width: 74, marginRight: 14, backgroundColor: Color.text, borderRadius: 8 }} />
                         <Col alignItems='flex-start'>
                             <Text color={Color.text} size={14} type='bold' textAlign='left'>{val.name}</Text>
@@ -142,13 +160,15 @@ const CheckoutScreen = ({ navigation }) => {
                         </Col>
                     </Row>
                 ))}
-                <Row style={{ backgroundColor: Color.semiwhite, alignItems: 'center', padding: 12, borderRadius: 8 }}>
-                    <MaterialCommunityIcons name='truck' color={Color.text} size={18}   />
-                    <Text color={Color.text} type='semiBold' style={{ marginHorizontal: 10 }}>Pilih Pengiriman</Text>
-                    <Col alignItems='flex-end'>
-                        <AntDesign name='right' size={18} color={Color.text} />
-                    </Col>
-                </Row>
+                <TouchableOpacity onPress={() => navigation.navigate('ListShipping')}>
+                    <Row style={{ backgroundColor: Color.semiwhite, alignItems: 'center', padding: 12, marginTop: 20, borderRadius: 8 }}>
+                        <MaterialCommunityIcons name='truck' color={Color.text} size={18}   />
+                        <Text color={Color.text} type='semiBold' style={{ marginHorizontal: 10 }}>{shippment.logistic ? shippment.logistic.name : 'Pilih Pengiriman'}</Text>
+                        <Col alignItems='flex-end'>
+                            <AntDesign name='right' size={18} color={Color.text} />
+                        </Col>
+                    </Row>
+                </TouchableOpacity>
             </Content>
             <Content style={{ backgroundColor: Color.textInput }}>
                 <Row style={{ alignItems: 'center' }}>
@@ -187,7 +207,7 @@ const CheckoutScreen = ({ navigation }) => {
                 </Row>
             </Content>
 
-            <Content>
+            {/* <Content>
                 <View style={{ backgroundColor: Color.semiwhite, borderRadius: 8, padding: 10}}>
                     <Row style={{ alignItems: 'center' }}>
                         <FontAwesome5 name='ticket-alt' color={Color.text} size={18}   />
@@ -197,7 +217,7 @@ const CheckoutScreen = ({ navigation }) => {
                         </Col>
                     </Row>
                 </View>
-            </Content>
+            </Content> */}
         </ScrollView>
         <Row style={{ padding: 16 }}>
             <Col align='flex-start' justify='center'>
@@ -205,12 +225,12 @@ const CheckoutScreen = ({ navigation }) => {
                 <Text type='bold' color={Color.text} size={18} >{FormatMoney.getFormattedMoney(totalProduct(item.tempData)+10000+16000)}</Text>
             </Col>
             <Col>
-                <TouchableOpacity onPress={() => navigation.popToTop()} style={{ backgroundColor: Color.info, borderRadius: 30, paddingVertical: 10 }}>
+                <TouchableOpacity onPress={() => submit()} style={{ backgroundColor: Color.info, borderRadius: 30, paddingVertical: 10 }}>
                     <Text type='semibold' color={Color.textInput}>Checkout</Text>
                 </TouchableOpacity>
             </Col>
         </Row>
-      {/* <Loading {...loadingProps} /> */}
+      <Loading {...loadingProps} />
     </Scaffold>
   );
 }

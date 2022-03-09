@@ -230,7 +230,7 @@ const DetailProduct = ({navigation}) => {
             paddingVertical: 10,
           }}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('CheckoutScreen', {item: {...detail, qty: 1}})}
+            onPress={() => navigation.navigate('CheckoutScreen', {item: {tempData:[{...detail, qty: 1}]}})}
             style={{
               width: '40%',
               height: 40,

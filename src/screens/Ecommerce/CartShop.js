@@ -140,35 +140,35 @@ const CartShop = ({ navigation, route }) => {
 
   const submit = () => {
     console.log(route, 'props')
-    let productIds = []
+    let tempData = []
     list.forEach(element => {
-        if(element.checked) productIds.push({id: element.id, qty: element.quantity})
+        if(element.checked) tempData.push({id: element.id, price: element.price, qty: element.quantity})
     });
     const item = {
         isFromCart: true,
-        productIds
+        tempData
     }
     console.log(item)
-    // navigation.navigate('CheckoutScreen',{item})
+    navigation.navigate('CheckoutScreen',{item})
     // // // showLoading();
     // let variables = {
     //     productId: list[0].id,
     // }
     // console.log(variables)
-    Client.mutate({mutation: queryCheckout, ...item})
-      .then(res => {
-        // getCart()
-        // hideLoading()
-        console.log(res)
-        // if (res.data.ecommerceCartList) {
-        //     setList(res.data.ecommerceCartList)
-        // }
-      })
-      .catch(reject => {
-        // hideLoading()
-        alert(reject.message)
-        console.log(reject.message, 'reject');
-      });
+    // Client.mutate({mutation: queryCheckout, ...item})
+    //   .then(res => {
+    //     // getCart()
+    //     // hideLoading()
+    //     console.log(res)
+    //     // if (res.data.ecommerceCartList) {
+    //     //     setList(res.data.ecommerceCartList)
+    //     // }
+    //   })
+    //   .catch(reject => {
+    //     // hideLoading()
+    //     alert(reject.message)
+    //     console.log(reject.message, 'reject');
+    //   });
   };
 
   function onChecked(index, value){
