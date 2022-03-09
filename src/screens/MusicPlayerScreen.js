@@ -1,6 +1,5 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Animated, View, Keyboard, Image, useWindowDimensions } from 'react-native';
-import { Modalize } from 'react-native-modalize';
+import React, { useState, useEffect } from 'react';
+import { View, Image, useWindowDimensions } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -12,12 +11,10 @@ import TrackPlayer, {
   State,
 } from 'react-native-track-player';
 import Moment from 'moment';
-// import Orientation from 'react-native-orientation-locker';
 // import Share from 'react-native-share';
 
 import { useColor } from '@src/components/Color';
 import Text from '@src/components/Text';
-import Header from '@src/components/Header';
 // import MusicPlaylist from '../Modal/MusicPlaylist';
 import { useLoading } from '@src/components/Modal/Loading';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
@@ -26,8 +23,6 @@ import { queryAddLike, queryContentProduct } from '@src/lib/query';
 import { Scaffold } from 'src/components';
 import { Divider } from 'src/styled';
 import { shadowStyle } from 'src/styles';
-
-const HEADER_HEIGHT = 85;
 
 // const playIcon = require('../../../assets/images/control/play.png');
 // const pauseIcon = require('../../../assets/images/control/pause.png');
@@ -47,14 +42,10 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
   const { width, height } = useWindowDimensions();
 
   // state
-  const [handle, setHandle] = useState(false);
   const [playerState, setPlayerState] = useState();
-  const [playbackChanged, setPlaybackChanged] = useState(0);
   const [currentPlaying, setCurrentPlaying] = useState();
   const [sliderValue, setSliderValue] = useState(0);
   const [isSeeking, setIsSeeking] = useState(false);
-  const [orientation, setOrientation] = useState('');
-  const [keyboardShow, setKeyboardShow] = useState(false);
   const [showPlaylist, setShowPlaylist] = useState(false);
 
   //
@@ -97,28 +88,6 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
       return null;
     }
   };
-  
-  useEffect(() => {
-    const getCurrentPlaying = async() => {
-      const newCurrent = await TrackPlayer.getCurrentTrack();
-      if (newCurrent != null) {
-        setThisTrack(await TrackPlayer.getTrack(newCurrent));
-      }
-      const newQueue = await TrackPlayer.getQueue();
-      const state = await TrackPlayer.getState();
-
-      // console.log('=======', newQueue, newCurrent);
-      setPlayerState(state);
-      
-      if (newCurrent != null && newQueue.length > 0) {
-        const newCurrentPlaying = newQueue[newCurrent];
-        // console.log('======= newCurrentPlaying =======', newCurrentPlaying);
-        setCurrentPlaying(newCurrentPlaying);
-      }
-    }
-
-    getCurrentPlaying();
-  }, [playerState, playbackChanged]);
 
   useEffect(() => {
     if (!isSeeking && position && duration) {
@@ -126,28 +95,31 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
     }
   }, [position, duration]);
 
+  useEffect(() => {
+    getCurrentPlaying();
+  }, []);
+
   useTrackPlayerEvents(events, (event) => {
-    // console.log(events, event, 'useTrackPlayerEvents');
-    
-    if (event.type === Event.PlaybackError) {
-      console.log('An error occurred while playing the current track.');
-    }
-    if (event.type === Event.PlaybackState) {
-      // console.log(event, STATE_PLAYING, 'useTrackPlayerEvents');
-      setPlayerState(event.state);
-    }
-    if (event.type === Event.PlaybackTrackChanged) {
-      setPlaybackChanged(Math.floor(Math.random() * 1000) + 1);
-    }
+    getCurrentPlaying();
   });
 
-  const handlePosition = position => {
-    if (position === 'initial') {
-      setShowPlaylist(false);
+  const getCurrentPlaying = async() => {
+    const newCurrent = await TrackPlayer.getCurrentTrack();
+    if (newCurrent != null) {
+      setThisTrack(await TrackPlayer.getTrack(newCurrent));
     }
+    const newQueue = await TrackPlayer.getQueue();
+    const state = await TrackPlayer.getState();
+
+    // console.log('=======', newQueue, newCurrent);
+    setPlayerState(state);
     
-    setHandle(position === 'top');
-  };
+    if (newCurrent != null && newQueue.length > 0) {
+      const newCurrentPlaying = newQueue[newCurrent];
+      // console.log('======= newCurrentPlaying =======', newCurrentPlaying);
+      setCurrentPlaying(newCurrentPlaying);
+    }
+  }
 
   const slidingStarted = () => {
     setIsSeeking(true);
@@ -216,8 +188,6 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
     // ntar validasi total biar flexible nyesuain duration
     return minutes + ':' + seconds;
   }
-
-  // console.log(thisTrack);
   
   const renderContent = () => {
     return (
@@ -275,9 +245,8 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
                     />
                     <View style={{height: '50%', aspectRatio: 1, borderRadius: 50, backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center', marginHorizontal: 32}}>
                         <Ionicons
-                            onPress={() => {
-                              // console.log(currentPlaying);
-                                isPlaying ? TrackPlayer.pause() : TrackPlayer.play();
+                            onPress={async() => {
+                              isPlaying ? await TrackPlayer.pause() : await TrackPlayer.play();
                             }}
                             name={isPlaying ? 'pause' : 'play'}
                             color={Color.text}

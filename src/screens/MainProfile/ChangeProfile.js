@@ -12,10 +12,10 @@ import Moment from 'moment';
 
 import {
   Text,
-  Popup, usePopup,
+  usePopup,
   Loading,
-  Header,
-  useColor
+  useColor,
+  Scaffold
 } from '@src/components';
 import {
   Button,
@@ -24,8 +24,9 @@ import {
 import validate from '@src/lib/validate';
 import { updateCurrentUserProfile } from '@src/state/actions/user/auth';
 import { usePreviousState } from '@src/hooks';
-import { Divider, MainView } from 'src/styled';
+import { Divider } from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const Container = Styled(View)`
   width: 100%;
@@ -189,13 +190,14 @@ export default ({ navigation, route }) => {
   console.log(userData, 'ini data');
   
   return (
-    <MainView style={{backgroundColor: Color.theme}}>
-      <Header
-        title='Ubah Profile'
-        style={{paddingTop: 16}}
-      />
-
-      <ScrollView keyboardShouldPersistTaps='handled' contentContainerStyle={{paddingBottom: 16}}>
+    <Scaffold
+      headerTitle='Ubah Profil'
+      popupProps={popupProps}
+    >
+      <KeyboardAwareScrollView
+        keyboardShouldPersistTaps='handled'
+        contentContainerStyle={{paddingBottom: 16}}
+      >
         <Container>
           {thumbImage !== '' && <TouchableOpacity
               onPress={() => {}}
@@ -387,7 +389,7 @@ export default ({ navigation, route }) => {
             <Text align='left' size={12} color={Color.theme}>Saya setuju dengan <Text color={Color.secondary}>Syarat & Ketentuan</Text> yang berlaku.</Text>
           </View> */}
         </Container>
-      </ScrollView>
+      </KeyboardAwareScrollView>
 
       <View style={{padding: 16}}>
         <Button onPress={() => onSubmit()}>
@@ -396,8 +398,6 @@ export default ({ navigation, route }) => {
       </View>
 
       <Loading visible={loading} />
-
-      <Popup {...popupProps} />
 
       {open && <DatePicker
         modal
@@ -408,12 +408,11 @@ export default ({ navigation, route }) => {
           setOpen(false);
           setDate(date);
           onChangeUserData('tanggalLahir', Moment(date).format('DD-MM-YYYY'));
-          
         }}
         onCancel={() => {
           setOpen(false)
         }}
       />}
-    </MainView>
+    </Scaffold>
   );
 };
