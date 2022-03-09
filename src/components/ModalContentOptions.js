@@ -7,6 +7,7 @@ import { useCombinedRefs } from '@src/hooks';
 import ModalListAction from './Modal/ModalListAction';
 import { useNavigation } from '@react-navigation/native';
 import { Alert } from './Modal/Alert';
+import { accessClient } from 'src/utils/access_client';
 
 const defaultProps = {
   isOwner: false,
@@ -47,7 +48,10 @@ const ModalContentOptions = forwardRef((props, ref) => {
         })
       },
     },
-    {
+  ];
+
+  if (accessClient.UserGeneratedContent) {
+    dataOptions.push({
       id: 2,
       name: 'Block User',
       color: Color.error,
@@ -55,8 +59,8 @@ const ModalContentOptions = forwardRef((props, ref) => {
         combinedRef.current.close();
         Alert('Block', 'Apakah Anda yakin akan memblok semua postingan user ini?')
       },
-    }
-  ]
+    });
+  }
   
   return (
     <ModalListAction

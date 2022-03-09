@@ -26,12 +26,12 @@ const TabBarComponentSabyan = (props) => {
     const [menus] = useState([
         {id: 'ber', name: 'Beranda', iconName: 'home', iconType: 'Entypo', nav: 'MainHome', ref: useRef(new Animated.Value(1)).current, viewRef: useRef(new Animated.Value(0)).current },
         // {id: 'mer', name: 'Merch', iconName: 'store', iconType: 'MaterialIcons', nav: 'MyShopHomepage', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
-        {id: 'med', name: 'Media Player', iconName: 'play', iconType: 'EvilIcons', nav: 'MainMediaPlayer', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
+        {id: 'med', name: 'Album', iconName: 'play', iconType: 'EvilIcons', nav: 'MainMediaPlayer', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
         {id: 'pro', name: 'Profil', iconName: 'person', iconType: 'Ionicons', nav: 'MainProfile', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
     ]);
     
     const { Color } = useColor();
-    const { width } = useWindowDimensions();
+    const { width, height } = useWindowDimensions();
     
     const bgAnimatedRef = useRef(new Animated.Value(width / menus.length)).current;
 
@@ -80,7 +80,7 @@ const TabBarComponentSabyan = (props) => {
         <SafeAreaView
             style={{
                 width,
-                height: 112 + (isIphoneNotch() ? 16 : 0),
+                height: height * ((height/width) / 14), // 112 + (isIphoneNotch() ? 16 : 0),
                 backgroundColor: Color.theme,
                 paddingBottom: 16,
             }}

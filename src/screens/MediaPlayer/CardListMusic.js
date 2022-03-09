@@ -14,7 +14,7 @@ import client from 'src/lib/apollo';
 import { queryAddLike, queryContentProduct } from 'src/lib/query';
 import { useNavigation } from '@react-navigation/native';
 import { accessClient } from 'src/utils/access_client';
-import { GALogEvent } from 'src/utils/analytics';
+import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { useSelector } from 'react-redux';
 
 const MainView = Styled(View)`
@@ -32,12 +32,11 @@ const defaultProps = {
     ListHeaderComponent: null,
 }
 
-const CardListMusic = (props) => {
-    const {
-        componentType, title, decimalWidth, decimalHeight, showAll, showHeader, withNumber,
-        onPress, onLongPress, onPressShowAll, stickyHeaderIndices, ListHeaderComponent,
-    } = props;
-
+const CardListMusic = ({
+    activePlayingTrack,
+    componentType, title, decimalWidth, decimalHeight, showAll, showHeader, withNumber,
+    onPress, onLongPress, onPressShowAll, stickyHeaderIndices, ListHeaderComponent,
+}) => {
     const { Color } = useColor();
     const { width } = useWindowDimensions();
     const navigation = useNavigation();
@@ -132,11 +131,11 @@ const CardListMusic = (props) => {
                         newData[selected.idx].like += 1;
                         newData[selected.idx].im_like = true;
 
-                        GALogEvent('Music Populer', {
+                        GALogEvent('Musik Populer', {
                             id: selected.id,
                             product_name: item.name,
                             user_id: user ? user.userId : '',
-                            method: 'like',
+                            method: analyticMethods.like,
                         });
                     } else {
                         // showLoading('info', 'Batal menyukai');
@@ -184,32 +183,40 @@ const CardListMusic = (props) => {
                             return item.header;
                         }
 
+                        const isActive = activePlayingTrack && activePlayingTrack.id === item.code;
+                        const textType = isActive ? 'bold' : 'medium';
+
                         return (
                             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
                                 {withNumber && <View style={{ flex: 1, alignItems: 'flex-start' }}>
-                                    <Text size={18} type='bold'>{index + 1}</Text>
+                                    <Text size={18} type={textType}>{index + 1}</Text>
                                 </View>}
                                 <TouchableOpacity
                                     style={{ flex: 11 }}
-                                    onPress={() => {
-                                        const newData = [];
-                                        list.data.map((e) => {
-                                            if (!e.header) {
-                                                newData.push(e);
-                                            }
-                                        });
-                                        trackPlayerPlay(newData, index);
+                                    onPress={async() => {
+                                        // const newData = [];
+                                        // list.data.map((e) => {
+                                        //     if (!e.header) {
+                                        //         newData.push(e);
+                                        //     }
+                                        // });
+                                        // console.log('here', list.data);
+                                        await trackPlayerPlay(list.data, index);
                                         navigation.navigate('MusicPlayerScreen');
                                     }}
                                     onLongPress={() => onLongPress(item)}
                                 >
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                         <View style={{ flex: 5, flexDirection: 'row', alignItems: 'center' }}>
-                                            <Image source={{ uri: item.image }} style={{ height: width * (decimalHeight || 0.2), width: width * (decimalWidth || 0.2), borderRadius: 8 }} />
+                                            <Image
+                                                source={{ uri: item.image }}
+                                                style={{ height: width * (decimalHeight || 0.2), width: width * (decimalWidth || 0.2), borderRadius: 8, borderWidth: isActive ? 2 : 0, borderColor: Color.primary }}
+                                            />
+                                            
                                             <View style={{ paddingLeft: 16 }}>
-                                                <Text type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
+                                                <Text type={textType} align='left' numberOfLines={2}>{item.productName}</Text>
                                                 <Divider height={2} />
-                                                <Text size={10} type='medium' align='left' numberOfLines={1} style={{ opacity: 0.6 }}>{item.productDescription}</Text>
+                                                <Text size={10} type={textType} align='left' numberOfLines={1} style={{ opacity: 0.6 }}>{item.productDescription}</Text>
 
                                                 <View style={{ flexDirection: 'row' }}>
                                                     {/* <View style={{flexDirection: 'row', alignItems: 'center', marginRight: 12}}>
@@ -268,9 +275,9 @@ const CardListMusic = (props) => {
                 renderItem={({ item, index }) => {
                     return (
                         <TouchableOpacity
-                            onPress={() => {
+                            onPress={async() => {
                                 onPress(item);
-                                trackPlayerPlay(list.data, index);
+                                await trackPlayerPlay(list.data, index);
                                 navigation.navigate('MusicPlayerScreen');
                             }}
                             style={[{ marginRight: 10 }, index === 0 && { marginLeft: 16 }]}

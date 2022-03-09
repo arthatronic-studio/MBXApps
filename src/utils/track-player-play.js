@@ -4,7 +4,7 @@ export const trackPlayerPlay = async (data, index) => {
   const result = await Promise.all(
     data.map((play) => {
       return {
-        id: play.id.toString(),
+        id: play.code,
         url: play.videoFilename,
         // type: 'default',
         title: play.productName,
@@ -17,13 +17,19 @@ export const trackPlayerPlay = async (data, index) => {
 
   const currentTrack = await TrackPlayer.getCurrentTrack();
   const thisTrack = currentTrack != null ? await TrackPlayer.getTrack(currentTrack) : null;
+  
+  const isExist = await result.filter((e) => thisTrack !== null && e.id === thisTrack.id)[0];
 
-  const isExist = result.filter((e) => thisTrack !== null && e.id === thisTrack.id)[0];
-
-  if (isExist) {
+  if (isExist && currentTrack === index) {
+    console.log('exist yes');
+    await TrackPlayer.play();
+  }
+  else if (isExist) {
+    await TrackPlayer.pause();
     await TrackPlayer.skip(index);
     await TrackPlayer.play();
-  } else {
+  }
+  else {
     await TrackPlayer.reset();
     await TrackPlayer.add(result);
     await TrackPlayer.skip(index);

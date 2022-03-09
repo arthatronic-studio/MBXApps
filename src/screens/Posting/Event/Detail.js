@@ -16,7 +16,7 @@ import {queryAddLike} from '@src/lib/query';
 import { Container, Divider } from 'src/styled';
 import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 import ModalContentOptions from 'src/components/ModalContentOptions';
-import { GALogEvent } from 'src/utils/analytics';
+import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 
 const EventDetail = ({navigation, route}) => {
   const {Color} = useColor();
@@ -355,8 +355,8 @@ const EventDetail = ({navigation, route}) => {
             GALogEvent('Event', {
               id: item.id,
               product_name: item.productName,
-              user_id: item.ownerId,
-              method: 'like',
+              user_id: user.userId,
+              method: analyticMethods.like,
             });
 
             if (state.im_like) {

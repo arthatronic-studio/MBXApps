@@ -39,7 +39,7 @@ const MediaPlayerScreen = ({ navigation, route }) => {
         <Scaffold
             header={
                 <Header
-                    title='Media Player'
+                    title='Album'
                     showLeftButton={false}
                 />
             }

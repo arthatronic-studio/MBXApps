@@ -99,7 +99,7 @@ const Banner = props => {
                       style={{
                         width: '100%',
                         height:'100%',
-                        borderRadius: 16
+                        borderRadius: 0, //16
                       }}
                       resizeMode='contain'
                     />
@@ -118,7 +118,7 @@ const Banner = props => {
                 style={{
                   width: '100%',
                   height: '100%',
-                  borderRadius: 16
+                  borderRadius: 0, // 16
                 }}
               />
             </Container>

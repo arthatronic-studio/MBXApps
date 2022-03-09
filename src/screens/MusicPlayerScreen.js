@@ -1,6 +1,5 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Animated, View, Keyboard, Image, useWindowDimensions } from 'react-native';
-import { Modalize } from 'react-native-modalize';
+import React, { useState, useEffect } from 'react';
+import { View, Image, useWindowDimensions } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -11,23 +10,19 @@ import TrackPlayer, {
   Event,
   State,
 } from 'react-native-track-player';
-import { useSelector, useDispatch } from 'react-redux';
 import Moment from 'moment';
-// import Orientation from 'react-native-orientation-locker';
 // import Share from 'react-native-share';
 
 import { useColor } from '@src/components/Color';
 import Text from '@src/components/Text';
-import Header from '@src/components/Header';
 // import MusicPlaylist from '../Modal/MusicPlaylist';
 import { useLoading } from '@src/components/Modal/Loading';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Client from '@src/lib/apollo';
-import { queryAddLike } from '@src/lib/query';
+import { queryAddLike, queryContentProduct } from '@src/lib/query';
 import { Scaffold } from 'src/components';
-import client from '@src/lib/apollo';
-
-const HEADER_HEIGHT = 85;
+import { Divider } from 'src/styled';
+import { shadowStyle } from 'src/styles';
 
 // const playIcon = require('../../../assets/images/control/play.png');
 // const pauseIcon = require('../../../assets/images/control/pause.png');
@@ -47,82 +42,52 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
   const { width, height } = useWindowDimensions();
 
   // state
-  const [handle, setHandle] = useState(false);
   const [playerState, setPlayerState] = useState();
-  const [playbackChanged, setPlaybackChanged] = useState(0);
   const [currentPlaying, setCurrentPlaying] = useState();
   const [sliderValue, setSliderValue] = useState(0);
   const [isSeeking, setIsSeeking] = useState(false);
-  const [orientation, setOrientation] = useState('');
-  const [keyboardShow, setKeyboardShow] = useState(false);
   const [showPlaylist, setShowPlaylist] = useState(false);
 
-  // dispatch
-  const dispatch = useDispatch();
-
-  // selector
-  // const playNowData = useSelector(state => state.playNow.data);
-
-  // unstate
+  //
   const isPlaying = playerState === State.Playing;
-  let item = null;
+  let [item, setItem] = useState();
   const [thisTrack, setThisTrack] = useState();
-
-  // if (currentPlaying && playNowData.length > 0) {
-  //   item = playNowData.filter((e) => e.id == currentPlaying.id)[0];
-  // }
   
   useEffect(() => {
-    // Orientation.addOrientationListener(handleOrientation);
-    // Keyboard.addListener('keyboardDidShow', handleKeyboardShow);
-    // Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
+    const timeout = thisTrack ?
+      setTimeout(() => {
+        fetchData();
+      }, 1000) : null;
 
-    // return () => {
-    //   Orientation.removeOrientationListener(handleOrientation);
-    //   Keyboard.removeListener('keyboardDidShow', handleKeyboardShow);
-    //   Keyboard.removeListener('keyboardDidHide', handleKeyboardHide);
-    // };
-  }, []);
+    return () => clearTimeout(timeout);
+  }, [thisTrack]);
 
-  function handleOrientation(orientation) {
-    if (orientation === 'LANDSCAPE-LEFT' || orientation === 'LANDSCAPE-RIGHT') {
-        setOrientation('landscape');
+  const fetchData = async() => {
+    const result = await fetchContentProduct();
+    if (result) setItem(result);
+  }
+  
+  const fetchContentProduct = async () => {
+    const variables = {
+      productCode: thisTrack.id
+    };
+
+    const result = await Client.query({
+      query: queryContentProduct,
+      variables,
+    });
+
+    if (
+      result &&
+      result.data &&
+      result.data.contentProduct &&
+      Array.isArray(result.data.contentProduct)
+    ) {
+      return result.data.contentProduct[0];
     } else {
-        setOrientation('portrait');
+      return null;
     }
-  }
-
-  const handleKeyboardShow = () => {
-    setKeyboardShow(true);
-  }
-
-  const handleKeyboardHide = () => {
-    setKeyboardShow(false);
-  }
-  
-  useEffect(() => {
-    const getCurrentPlaying = async() => {
-      const newCurrent = await TrackPlayer.getCurrentTrack();
-      if (newCurrent != null) {
-        setThisTrack(await TrackPlayer.getTrack(newCurrent));
-      }
-      const newQueue = await TrackPlayer.getQueue();
-      const state = await TrackPlayer.getState();
-
-      // console.log('=======', newQueue, newCurrent);
-      setPlayerState(state);
-      
-      if (newCurrent != null && newQueue.length > 0) {
-        // const newCurrentPlaying = newQueue.filter((e) => e.id === newCurrent)[0];
-        const newCurrentPlaying = newQueue[newCurrent];
-
-        // console.log('======= newCurrentPlaying =======', newCurrentPlaying);
-        setCurrentPlaying(newCurrentPlaying);
-      }
-    }
-
-    getCurrentPlaying();
-  }, [playerState, playbackChanged]);
+  };
 
   useEffect(() => {
     if (!isSeeking && position && duration) {
@@ -130,28 +95,31 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
     }
   }, [position, duration]);
 
+  useEffect(() => {
+    getCurrentPlaying();
+  }, []);
+
   useTrackPlayerEvents(events, (event) => {
-    // console.log(events, event, 'useTrackPlayerEvents');
-    
-    if (event.type === Event.PlaybackError) {
-      console.log('An error occurred while playing the current track.');
-    }
-    if (event.type === Event.PlaybackState) {
-      // console.log(event, STATE_PLAYING, 'useTrackPlayerEvents');
-      setPlayerState(event.state);
-    }
-    if (event.type === Event.PlaybackTrackChanged) {
-      setPlaybackChanged(Math.floor(Math.random() * 1000) + 1);
-    }
+    getCurrentPlaying();
   });
 
-  const handlePosition = position => {
-    if (position === 'initial') {
-      setShowPlaylist(false);
+  const getCurrentPlaying = async() => {
+    const newCurrent = await TrackPlayer.getCurrentTrack();
+    if (newCurrent != null) {
+      setThisTrack(await TrackPlayer.getTrack(newCurrent));
     }
+    const newQueue = await TrackPlayer.getQueue();
+    const state = await TrackPlayer.getState();
+
+    // console.log('=======', newQueue, newCurrent);
+    setPlayerState(state);
     
-    setHandle(position === 'top');
-  };
+    if (newCurrent != null && newQueue.length > 0) {
+      const newCurrentPlaying = newQueue[newCurrent];
+      // console.log('======= newCurrentPlaying =======', newCurrentPlaying);
+      setCurrentPlaying(newCurrentPlaying);
+    }
+  }
 
   const slidingStarted = () => {
     setIsSeeking(true);
@@ -220,18 +188,17 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
     // ntar validasi total biar flexible nyesuain duration
     return minutes + ':' + seconds;
   }
-
-  // console.log(thisTrack);
   
   const renderContent = () => {
     return (
         <View style={{flex: 1, paddingVertical: 16, justifyContent: 'space-between'}}>
-            <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                 <Text size={18}>{currentPlaying ? currentPlaying.title : ''}</Text>
+                <Divider height={2} />
                 <Text size={12}>{currentPlaying ? currentPlaying.artist : ''}</Text>
             </View>
 
-            <View style={{paddingHorizontal: 28, justifyContent: 'center'}}>
+            <View style={{flex: 1, paddingHorizontal: 28, justifyContent: 'center'}}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Text size={12}>
                     {getDurationString('seconds', position, 'ss')}
@@ -255,7 +222,7 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
                 />
             </View>
 
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 28}}>
+            <View style={{flex: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 28}}>
                 {/* <MaterialIcons
                 onPress={() => {
                     
@@ -278,9 +245,8 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
                     />
                     <View style={{height: '50%', aspectRatio: 1, borderRadius: 50, backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center', marginHorizontal: 32}}>
                         <Ionicons
-                            onPress={() => {
-                              // console.log(currentPlaying);
-                                isPlaying ? TrackPlayer.pause() : TrackPlayer.play();
+                            onPress={async() => {
+                              isPlaying ? await TrackPlayer.pause() : await TrackPlayer.play();
                             }}
                             name={isPlaying ? 'pause' : 'play'}
                             color={Color.text}
@@ -309,25 +275,29 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
                 /> */}
             </View>
 
-            {/* <View style={{paddingHorizontal: 26, marginTop: 16}}>
-                <View style={{width: '100%', height: 60, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', backgroundColor: Color.primary, borderRadius: 12}}>
+            <View style={{flex: 0.8, paddingHorizontal: 16}}>
+                {item && <View style={{width: '100%', height: '100%', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', backgroundColor: Color.theme, borderRadius: 16, ...shadowStyle}}>
                     <TouchableOpacity
-                      // onPress={() => fetchContentAddLike(item.id)}
-                      style={{flexDirection: 'row'}}
+                      onPress={() => fetchContentAddLike(item.id)}
+                      style={{flexDirection: 'row', alignItems: 'center'}}
                     >
-                        <SimpleLineIcons name='heart' color={item && item.im_like ? Color.secondary : Color.text} size={20} />
+                      {item && item.im_like ?
+                          <Ionicons name='heart' color={item && item.im_like ? Color.error : Color.text} size={22} />
+                        :
+                          <SimpleLineIcons name='heart' color={item && item.im_like ? Color.error : Color.text} size={20} />
+                      }
                         <Text color={item && item.im_like ? Color.secondary : Color.text}> {item && item.like ? item.like : 0}</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                      // onPress={() => navigation.navigate('CommentListScreen', { item })}
-                      style={{flexDirection: 'row'}}
+                      onPress={() => navigation.navigate('CommentListScreen', { item })}
+                      style={{flexDirection: 'row', alignItems: 'center'}}
                     >
-                        <MaterialIcons name='comment' size={20} color={Color.text} />
+                        <MaterialIcons name='comment' size={20} color={Color.primary} />
                         <Text> {item && item.comment ? item.comment : 0}</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                       onPress={async() => {
                         // const options = {
                         //     message: '',
@@ -344,45 +314,24 @@ export const MusicPlayerScreen = ({ navigation, route }) => {
                         color={Color.text}
                         style={{marginBottom: 4}}
                       />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
-                    // <TouchableOpacity onPress={() => setShowPlaylist(true)}>
-                    //     <MaterialIcons name='playlist-play' size={30} color={Color.text} style={{marginBottom: 4}} />
-                    // </TouchableOpacity>
-                </View>
-            </View> */}
+                    {/* <TouchableOpacity onPress={() => setShowPlaylist(true)}>
+                      <MaterialIcons name='playlist-play' size={30} color={Color.text} style={{marginBottom: 4}} />
+                    </TouchableOpacity> */}
+                </View>}
+            </View>
       </View>
     )
   };
 
-  if (orientation === 'landscape' || keyboardShow) return <View />;
-
-  // const fetchContentProduct = () => {
-  //   client.query({
-      
-  //   })
-  // }
-
   return (
     <Scaffold
       loadingProps={loadingProps}
-      header={
-        <Header
-          // actions={
-          //   <TouchableOpacity
-          //     onPress={() => thisTrack && navigation.navigate('CommentListScreen', { item: { id: parseInt(thisTrack.id, 1) } })}
-          //     style={{flexDirection: 'row'}}
-          //   >
-          //       <MaterialIcons name='comment' size={22} color={Color.primary} />
-          //       {/* <Text> {item && item.comment ? item.comment : 0}</Text> */}
-          //   </TouchableOpacity>
-          // }
-        />
-      }
     >
       <View style={{flex: 0.2}} />
 
-      <View style={{flex: 0.8, padding: 16, alignItems: 'center'}}>
+      <View style={{flex: 0.8, alignItems: 'center', justifyContent: 'center'}}>
           <Image
               source={{uri: currentPlaying ? currentPlaying.artwork : ''}}
               style={{
