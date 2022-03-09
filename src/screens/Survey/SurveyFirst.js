@@ -80,15 +80,14 @@ const SurveyFirst = ({navigation}) => {
             })
         });
         console.log(tempData)
-        const sha1Hash = await RNSimpleCrypto.SHA.sha1("SURVEY-20220229" + moment().format('YYYY-MM-DD HH:mm:ss') + '123!!qweQWE');
-        const dataq = {
-            "auth": sha1Hash, 
-            "survey_code": "SURVEY-20220229", 
-            "timestamps": moment().format('YYYY-MM-DD HH:mm:ss'),
-            "data": tempData
-        }
+        // const sha1Hash = await RNSimpleCrypto.SHA.sha1("SURVEY-20220229" + moment().format('YYYY-MM-DD HH:mm:ss') + '123!!qweQWE');
+        // const dataq = {
+        //     "auth": sha1Hash, 
+        //     "survey_code": "SURVEY-20220229", 
+        //     "timestamps": moment().format('YYYY-MM-DD HH:mm:ss'),
+        //     "data": tempData
+        // }
         navigation.navigate('SurveySecond',{item: tempData})
-        console.log(dataq, 'dataq')
         // try {
         //     const response = await axios({
         //         baseURL: 'http://panel.sw.tribesocial.id',
@@ -113,7 +112,7 @@ const SurveyFirst = ({navigation}) => {
 		onPressLeftButton={() => navigation.pop()}
 	>
         <ScrollView>
-            <Text onPress={() => navigation.navigate('Ecommerce')}>E-commerce</Text>
+            {/* <Text onPress={() => navigation.navigate('Ecommerce')}>E-commerce</Text> */}
             <View style={{flexDirection: 'row',}}>
                 <Image source={ImagesPath.survey1} style={{marginHorizontal: 10}}/>
                 <View style={{alignItems: 'flex-start', paddingVertical: 5}}>
@@ -202,7 +201,7 @@ const SurveyFirst = ({navigation}) => {
             </View>
         </ScrollView>
         <View style={{width: '100%', height: 70, alignItems: 'center', borderRadius: 10}}>
-            <TouchableOpacity onPress={() => navigation.navigate("MainPage")} style={{backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
+            <TouchableOpacity onPress={() => submit()} style={{backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
                 <Text style={{color: Color.textInput}}>Lanjut</Text>
             </TouchableOpacity>
         </View>

@@ -55,7 +55,7 @@ const SurveyThird = ({route, navigation}) => {
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
 	const { Color } = useColor();
 
-	useEffect(() => {submit()}, []);
+	useEffect(() => {}, []);
 
     const submit = async () => {
         const label = ['namePengusaha', 'nameUsaha', 'productUtama', 'kegiatanUtama', 'tepungTambahan', 'kegiatanTambahan']

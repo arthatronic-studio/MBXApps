@@ -61,7 +61,9 @@ const SurveySecond = ({ route, navigation}) => {
 	
 
 
-	useEffect(() => {submit()}, []);
+	useEffect(() => {
+        console.log('first')
+    }, []);
 
 	const submit = async () => {
         const label = ['address','province','city','kecamatan','kelurahan']

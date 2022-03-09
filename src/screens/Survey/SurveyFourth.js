@@ -44,28 +44,64 @@ const Content = Styled(View)`
     borderRadius: 8px
 `;
 
+let tepung = [{name: 'Segitiga Biru', checked: false},
+{name: 'Cakra Kembar', checked: false},
+{name: 'Kunci Biru', checked: false},
+{name: 'Mila', checked: false},
+{name: 'Bola Salju', checked: false},
+{name: 'Gatotkaca', checked: false},
+{name: 'Kompas', checked: false},
+{name: 'Kompas', checked: false},
+{name: 'Lainnya', checked: false, label: ''}]
+
+let tempaTepung = [{name: 'Warung', checked: false},
+{name: 'Minimarket', checked: false},
+{name: 'Supermarket/Mall', checked: false},
+{name: 'Pasar', checked: false},
+{name: 'Online/E-Commerce', checked: false},
+{name: 'Lainnya', checked: false}]
+
+let temp = []
+let tempTempat = []
 const SurveyFourth = ({route, navigation}) => {
     const user = useSelector((state) => state['user.auth'].login.user);
 	const loading = useSelector((state) => state['user.auth'].loading);
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
-    const [nameTepung, setNameTepung] = useState(['Segitiga Biru','Cakra Kembar']); 
-    const [nameTempatTepung, setNameTempatTepung] = useState(['Warung','Minimarket']);
+    const [nameTepung, setNameTepung] = useState(tepung); 
+    
+    const [refresh, setRefresh] = useState(0);
+    const [nameTempatTepung, setNameTempatTepung] = useState(tempaTepung);
 	const { Color } = useColor();
 
-	useEffect(() => {}, []);
+	useEffect(() => {
+        temp = []
+        tempTempat = []
+    }, []);
 
     const submit = async () => {
         const label = ['nameTempatTepung', 'nameTepung']
-        const dataState = [nameTempatTepung, nameTepung]
         let tempData = []
+        const TempTepung = []
+        nameTepung.forEach(element => {
+            if(element.checked){
+                TempTepung.push(element.name)
+            }
+        });
+        const TempTempatTepung = []
+        nameTempatTepung.forEach(element => {
+            if(element.checked){
+                TempTempatTepung.push(element.name)
+            }
+        });
+        const dataState = [TempTempatTepung, TempTepung]
         label.forEach((element, index) => {
-            tempData.push({
-                block: '4',
-                index: index,
-                name: element,
-                value: dataState[index]
-            })
+                tempData.push({
+                    block: '4',
+                    index: index,
+                    name: element,
+                    value: dataState[index]
+                })
         });
         console.log(tempData)
         const sha1Hash = await RNSimpleCrypto.SHA.sha1("SURVEY-20220229" + moment().format('YYYY-MM-DD HH:mm:ss') + '123!!qweQWE');
@@ -95,6 +131,20 @@ const SurveyFourth = ({route, navigation}) => {
           }
       };
 
+      const onSelected = (data, index) => {
+        let tempx = nameTepung
+        tempx[index].checked=data
+        setNameTepung(tempx)
+        setRefresh(refresh+1)
+      }
+
+      const onSelectedTempat = (data, index) => {
+        let tempx = nameTempatTepung
+        tempx[index].checked=data
+        setNameTempatTepung(tempx)
+        setRefresh(refresh+1)
+      }
+
 
   return (
     <Scaffold
@@ -116,9 +166,9 @@ const SurveyFourth = ({route, navigation}) => {
                 </View>
                 <View >
                     <Row style={{ flexWrap: 'wrap' }}>
-                        {['Segitiga Biru','Cakra Kembar','Kunci Biru','Mila','Bola Salju','Gatotkaca','Kompas','Kompas','Lainnya'].map((val, id) => (
-                            <TouchableOpacity style={{ borderColor: '#111', borderWidth: 2, borderRadius: 20, margin: 5 }}>
-                                <Text style={{ marginHorizontal: 16, marginVertical: 8 }}>{val}</Text>
+                        {nameTepung.map((val, id) => (
+                            <TouchableOpacity key={id} onPress={() => onSelected(!val.checked, id)} style={{ borderColor: val.checked ? '#fff' : '#111', backgroundColor: !val.checked ? '#fff' : 'orange', borderWidth: 2, borderRadius: 20, margin: 5 }}>
+                                <Text style={{ marginHorizontal: 16, marginVertical: 8 }} color={val.checked ? '#fff' : '#000'}>{val.name}</Text>
                             </TouchableOpacity>
                         ))}
                     </Row>
@@ -138,9 +188,9 @@ const SurveyFourth = ({route, navigation}) => {
                 </View>
                 <View >
                     <Row style={{ flexWrap: 'wrap' }}>
-                        {['Warung','Minimarket','Supermarket/Mall','Pasar','Online/E-Commerce','Lainnya'].map((val, id) => (
-                            <TouchableOpacity style={{ borderColor: '#111', borderWidth: 2, borderRadius: 20, margin: 5 }}>
-                                <Text style={{ marginHorizontal: 16, marginVertical: 8 }}>{val}</Text>
+                        {nameTempatTepung.map((val, id) => (
+                            <TouchableOpacity key={id} onPress={() => onSelectedTempat(!val.checked, id)} style={{ borderColor: val.checked ? '#fff' : '#111', backgroundColor: !val.checked ? '#fff' : 'orange', borderWidth: 2, borderRadius: 20, margin: 5 }}>
+                                <Text style={{ marginHorizontal: 16, marginVertical: 8 }} color={val.checked ? '#fff' : '#000'}>{val.name}</Text>
                             </TouchableOpacity>
                         ))}
                     </Row>
