@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Image, Alert, SafeAreaView} from 'react-native';
+import {View, Image, ActivityIndicator, useWindowDimensions} from 'react-native';
 import Styled from 'styled-components';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 
@@ -13,11 +13,20 @@ import {
 import CardListComment from '@src/components/Card/CardListComment';
 
 import Client from '@src/lib/apollo';
-import {queryComment} from '@src/lib/query';
-
+import {queryComment, queryDelComment} from '@src/lib/query';
+import { Alert } from '@src/components';
 import {analyticMethods, GALogEvent} from 'src/utils/analytics';
 import { useSelector } from 'react-redux';
 import { listMenuHome } from '@src/screens/MainHome/staticMenuHome';
+import { Container, Divider } from 'src/styled';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { isIphoneNotch } from 'src/utils/constants';
+
+const itemPerPage = 10;
+const initSelectedComment = {
+  id: 0,
+  index: -1,
+}
 
 const CommentListScreen = ({navigation, route}) => {
   const {item} = route.params;
@@ -29,11 +38,13 @@ const CommentListScreen = ({navigation, route}) => {
     loadNext: false,
   });
   const [refreshComment, setRefreshComment] = useState(false);
+  const [selectedComment, setSelectedComment] = useState(initSelectedComment);
 
   const modalListActionRef = useRef();
 
   const {Color} = useColor();
   const user = useSelector(state => state['user.auth'].login.user);
+  const {height} = useWindowDimensions();
 
   useEffect(() => {
     if (item && item.comment > 0) {
@@ -66,7 +77,7 @@ const CommentListScreen = ({navigation, route}) => {
       query: queryComment,
       variables: {
         page: dataComment.page + 1,
-        itemPerPage: 10,
+        itemPerPage: itemPerPage,
         productId: item.id,
       },
     })
@@ -77,7 +88,7 @@ const CommentListScreen = ({navigation, route}) => {
           setDataComment({
             data: res.data.contentComment,
             loading: false,
-            page: res.data.contentComment.length === 10 ? 1 : -1,
+            page: res.data.contentComment.length === itemPerPage ? 1 : -1,
             loadNext: false,
           });
         } else {
@@ -85,7 +96,7 @@ const CommentListScreen = ({navigation, route}) => {
             data: dataComment.data.concat(res.data.contentComment),
             loading: false,
             page:
-              res.data.contentComment.length === 10 ? dataComment.page + 1 : -1,
+              res.data.contentComment.length === itemPerPage ? dataComment.page + 1 : -1,
             loadNext: false,
           });
         }
@@ -100,6 +111,51 @@ const CommentListScreen = ({navigation, route}) => {
         });
       });
   };
+
+  const fetchDelComment = () => {
+    // showLoading();
+
+    if (selectedComment.id === 0) {
+      return;
+    }
+
+    const variables = {
+      id: selectedComment.id,
+      productId: item.id,
+    };
+
+    console.log('vari', variables);
+    
+    Client.query({
+      query: queryDelComment,
+      variables,
+    })
+    .then((res) => {
+      console.log('res del comment', res);
+
+      const data = res.data.contentDelComment;
+
+      // showLoading(data.success ? 'success' : 'error', data.message);
+
+      setSelectedComment(initSelectedComment);
+
+      let newData = [...dataComment.data];
+      
+      if (data.success) {
+        // setRefreshComment(true);
+        newData.splice(selectedComment.index, 1);
+      }
+
+      setDataComment({
+        ...dataComment,
+        data: newData,
+      });
+    })
+    .catch((err) => {
+        console.log(err, 'err del comment');
+        // showLoading('error', 'Gagal menghapus');
+    })
+  }
 
   // const canManageComment = user && !user.guest && user.userId === item.userId;
 
@@ -143,8 +199,8 @@ const CommentListScreen = ({navigation, route}) => {
           </Text>
         </View>
         {/* <View style={{width: '10%', height: '100%', justifyContent: 'center', alignItems: 'center', borderTopRightRadius: 8, borderBottomRightRadius: 8, backgroundColor: Color.textInput}}>
-                    <Fontisto name='angle-right' size={20} color={Color.text} style={{opacity: 0.6}} />
-                </View> */}
+          <Fontisto name='angle-right' size={20} color={Color.text} style={{opacity: 0.6}} />
+        </View> */}
       </View>
 
       <CardListComment
@@ -173,8 +229,36 @@ const CommentListScreen = ({navigation, route}) => {
         onPressShowAll={() => {
           // onPressShowAll(true);
         }}
-        onPressDots={() => {
+        onPressDots={(item, index) => {
           modalListActionRef.current.open();
+          setSelectedComment({
+            ...selectedComment,
+            id: item.id,
+            index,
+          });
+        }}
+        // onEndReached={() => setDataComment({ ...dataComment, loadNext: true })}
+        ListFooterComponent={() => {
+          if (!dataComment.loading && dataComment.page !== -1) {
+            return (
+              <>
+                {dataComment.loadNext ?
+                  <Container padding={16}>
+                    <ActivityIndicator color={Color.primary} />
+                  </Container>
+                :
+                  <TouchableOpacity
+                    onPress={() => setDataComment({ ...dataComment, loadNext: true })}
+                  >
+                    <Container padding={16}>
+                      <Text size={12}>Lihat lebih banyak</Text>
+                    </Container>
+                  </TouchableOpacity>}
+              </>
+            )
+          }
+
+          return <View />
         }}
       />
 
@@ -186,16 +270,14 @@ const CommentListScreen = ({navigation, route}) => {
             name: 'Hapus',
             color: Color.red,
             onPress: () => {
-              Alert('Hapus', 'Apakah Anda yakin menghapus konten?', () => {});
+              Alert('Hapus', 'Apakah Anda yakin menghapus konten?', () => fetchDelComment());
               modalListActionRef.current.close();
             },
           },
         ]}
       />
-      </Scaffold>
-      
+    </Scaffold>
   );
-
 };
 
 export default CommentListScreen;

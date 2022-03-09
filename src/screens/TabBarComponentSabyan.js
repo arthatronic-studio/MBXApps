@@ -31,7 +31,7 @@ const TabBarComponentSabyan = (props) => {
     ]);
     
     const { Color } = useColor();
-    const { width } = useWindowDimensions();
+    const { width, height } = useWindowDimensions();
     
     const bgAnimatedRef = useRef(new Animated.Value(width / menus.length)).current;
 
@@ -80,7 +80,7 @@ const TabBarComponentSabyan = (props) => {
         <SafeAreaView
             style={{
                 width,
-                height: isIphoneNotch() ? 128 : 98, // 112 + (isIphoneNotch() ? 16 : 0),
+                height: height * ((height/width) / 14), // 112 + (isIphoneNotch() ? 16 : 0),
                 backgroundColor: Color.theme,
                 paddingBottom: 16,
             }}
