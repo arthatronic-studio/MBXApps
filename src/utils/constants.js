@@ -16,9 +16,3 @@ export function isIphoneNotch() {
           || (dimen.height === 926 || dimen.width === 926))
     );
 }
-
-export const listPrivilegeUser = [
-    // 999, 2, 802, //lama
-    244, // muhlis
-    // 264, //dela
-];

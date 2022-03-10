@@ -20,14 +20,11 @@ import ModalListAction from '@src/components/Modal/ModalListAction';
 import { Alert } from '@src/components/Modal/Alert';
 import Popup, { usePopup } from '@src/components/Modal/Popup';
 import Loading, { useLoading } from '@src/components/Modal/Loading';
-
 // import { getObjSubCategoryByCode } from '../../utils/rawSubCategory';
 // import { trackPlayerPlugAndPlay } from '../../utils/track-player-plug-and-play';
-
 import Client from '@src/lib/apollo';
 import { queryProductManage, queryContentUserProfile, queryContentUserProduct } from '@src/lib/query';
 import { Scaffold } from 'src/components';
-import { listPrivilegeUser } from 'src/utils/constants';
 
 const UserProfileScreen = ({ navigation, route }) => {
     // params
@@ -290,7 +287,7 @@ const UserProfileScreen = ({ navigation, route }) => {
                             <Text size={12} align='left' letterSpacing={0.18}>
                                 {userContent.firstName} {userContent.lastName}
                             </Text>
-                            {(userContent.isDirector === 1 || listPrivilegeUser.includes(userContent.userId)) &&
+                            {userContent.isDirector === 1 &&
                                 <Octicons
                                     name='verified'
                                     color={Color.info}

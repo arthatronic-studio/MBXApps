@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View } from 'react-native';
-import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useSelector } from 'react-redux';
@@ -19,13 +18,9 @@ import ListNews from 'src/components/Posting/ListNews';
 
 import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
-import { listPrivilegeUser } from 'src/utils/constants';
 import ListEmergency from 'src/components/Posting/ListEmergency';
 
-const Example = Styled(View)`
-`;
-
-export default ({ navigation, route }) => {
+const EmergencyScreen = ({ navigation, route }) => {
     const [state, changeState] = useState({
         listProduct: [],
         fallback: true,
@@ -128,7 +123,7 @@ export default ({ navigation, route }) => {
             popupProps={popupProps}
             loadingProps={loadingProps}
         >
-            {/* {user && listPrivilegeUser.includes(user.userId) && <Text
+            {/* {user && user.isDirector === 1 && <Text
                 color={Color.textInput}
                 style={{backgroundColor: Color.primary, paddingTop: 2, paddingBottom: 6}}
                 onPress={() => navigation.navigate('CreateThreadScreen', {
@@ -154,3 +149,5 @@ export default ({ navigation, route }) => {
         </Scaffold>
     )
 }
+
+export default EmergencyScreen;
