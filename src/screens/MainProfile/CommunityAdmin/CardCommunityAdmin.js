@@ -12,11 +12,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation, useIsFocused} from '@react-navigation/core';
 
 import Client from '@src/lib/apollo';
-import {joinCommunityManage} from '@src/lib/query/joinCommunityManage';
+import {queryJoinCommunityManage} from '@src/lib/query/joinCommunityManage';
 import {joinCommunityMember} from 'src/lib/query/joinCommunityMember';
 import {Divider} from 'src/styled';
-import { queryOrganizationMemberManage } from 'src/lib/query/organization';
-import Config from 'react-native-config';
+import { accessClient } from 'src/utils/access_client';
 
 const CardCommunityAdmin = (props) => {
   const [data, setData] = useState([]);
@@ -66,10 +65,11 @@ const CardCommunityAdmin = (props) => {
       status === 2 ? 'Ditolak' : 'Dihapus';
 
     Client.query({
-      query: joinCommunityManage,
+      query: queryJoinCommunityManage,
       variables: {
         status,
         id,
+        organizationInitialCode: accessClient.InitialCode,
       },
     })
       .then((res) => {
@@ -93,53 +93,16 @@ const CardCommunityAdmin = (props) => {
       });
   };
 
-  const fetchOrganizationMemberManage = (id, userId, status) => {
-    let resMessage =
-      status === 1 ? 'Diterima' :
-      status === 2 ? 'Ditolak' : 'Dihapus';
-    let method =
-      status === 1 ? 'INSERT' :
-      status === 2 ? 'REJECT' : 'DELETE';
-
-    const variables = {
-      "userId": userId,
-      "organizationInitialCode": Config.INITIAL_CODE,
-      "type": method,
-    };
-
-    console.log(variables);
-
-    Client.mutate({
-      mutation: queryOrganizationMemberManage,
-      variables,
-    }).then((res) => {
-      console.log('res organization manage', res);
-
-      const data = res.data.organizationMemberManage;
-      const success = data;
-
-      if (success) {
-        fetchJoinCommunityManage(id, userId, status);
-      } else {
-        showPopup(`Sync gagal ${resMessage}`, 'error');
-        setLoading(false);
-      }
-    }).catch((err) => {
-      console.log('err organization manage', err);
-      showPopup(err.message, 'error');
-      setLoading(false);
-    });
-  }
-
   const fetchUpdateMember = item => {
     setLoading(true);
 
     Client.query({
-      query: joinCommunityManage,
+      query: queryJoinCommunityManage,
       variables: {
         status: 1,
         id: item.id,
         customIdNumber: item.userDetail.idNumber,
+        organizationInitialCode: accessClient.InitialCode,
       },
     })
       .then((res) => {
@@ -257,7 +220,7 @@ const CardCommunityAdmin = (props) => {
                   Alert(
                     'Terima',
                     'Apakah Anda yakin akan menerima anggota ini?',
-                    () => fetchOrganizationMemberManage(item.id, item.user_id, 1),
+                    () => fetchJoinCommunityManage(item.id, item.user_id, 1),
                   );
                 }}
                 style={{
@@ -276,7 +239,7 @@ const CardCommunityAdmin = (props) => {
                     Alert(
                       'Tolak',
                       'Apakah Anda yakin akan menolak anggota ini?',
-                      () => fetchOrganizationMemberManage(item.id, item.user_id, 2),
+                      () => fetchJoinCommunityManage(item.id, item.user_id, 2),
                     );
                   }}
                   style={{
@@ -303,7 +266,7 @@ const CardCommunityAdmin = (props) => {
             borderBottomLeftRadius: 8,
           }}
           onPress={() => {
-            Alert('Hapus', 'Apakah anda yakin akan menghapus member ini?', () => fetchOrganizationMemberManage(item.id, item.user_id, 2))
+            Alert('Hapus', 'Apakah anda yakin akan menghapus member ini?', () => fetchJoinCommunityManage(item.id, item.user_id, 0))
           }}
         >
           <Ionicons

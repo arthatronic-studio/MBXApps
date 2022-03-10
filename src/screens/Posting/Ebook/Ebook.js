@@ -14,7 +14,6 @@ import ListEvent from 'src/components/Posting/ListEvent';
 import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
 import { shadowStyle } from '@src/styles';
-import { listPrivilegeUser } from 'src/utils/constants';
 import { Divider, Row } from 'src/styled';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import SwiperComponent from 'src/components/ImageSlider';

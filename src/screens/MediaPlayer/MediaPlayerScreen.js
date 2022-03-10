@@ -14,7 +14,6 @@ import { Divider } from 'src/styled';
 import TabMusic from './TabMusic';
 import TabVideo from './TabVideo';
 import { useSelector } from 'react-redux';
-import { listPrivilegeUser } from 'src/utils/constants';
 import FloatingMusicPlayer from 'src/components/FloatingMusicPlayer';
 
 const { Navigator, Screen } = createMaterialTopTabNavigator();
@@ -48,12 +47,12 @@ const MediaPlayerScreen = ({ navigation, route }) => {
             popupProps={popupProps}
             loadingProps={loadingProps}
         >
-            {/* {user && listPrivilegeUser.includes(user.userId) && <Text onPress={() => navigation.navigate('UploadMusicScreen')}>
+            {user && user.isDirector === 1 && <Text onPress={() => navigation.navigate('UploadMusicScreen')}>
                 Upload Music
-            </Text>} */}
-            {/* <Text align='left' onPress={() => navigation.navigate('UploadVideoScreen')}>
+            </Text>}
+            {user && user.isDirector === 1 && <Text align='left' onPress={() => navigation.navigate('UploadVideoScreen')}>
                 Upload Video
-            </Text> */}
+            </Text>}
 
             <TabMusic />
 

@@ -26,6 +26,7 @@ import { Container, Divider } from 'src/styled';
 import FormInput from 'src/components/FormInput';
 import WidgetBgFixIcon from './WidgetBgFixIcon';
 import { statusBarHeight } from 'src/utils/constants';
+import { accessClient } from 'src/utils/access_client';
 
 const inputs = ['fullName', 'email', 'username', 'password', 'password2'];
 
@@ -149,7 +150,7 @@ const RegisterScreen = ({navigation, route}) => {
       showHeader={false}
       popupProps={popupProps}
       fallback={loading}
-      statusBarColor={Color.primarySoft}
+      statusBarColor={Color[accessClient.ColorBgParallax]}
       translucent={Platform.OS === 'ios' ? true : isFocused}
       useSafeArea={Platform.OS === 'ios' ? false : true}
     >

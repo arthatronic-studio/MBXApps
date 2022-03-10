@@ -26,6 +26,10 @@ export const accessClient = {
         isKomoto ? "dark" :
         isSabyan ? 'light' :
         'light',
+    ColorBgParallax:
+        isKomoto ? 'theme' :
+        isSabyan ? 'primary' :
+        'primarySoft',
     UserGeneratedContent:
         isKomoto ? true :
         isSabyan ? false :
@@ -42,9 +46,6 @@ export const accessClient = {
             isSabyan ? 'sabyan' : 'default',
     },
     MainHome: {
-        backgroundParallaxColor:
-            isKomoto ? 'theme' :
-            isSabyan ? 'primary' : 'primarySoft',
         dummyBanner:
             isKomoto ? true :
             isSabyan ? true : true,
