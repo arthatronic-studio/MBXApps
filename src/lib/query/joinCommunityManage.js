@@ -1,8 +1,18 @@
 import gql from 'graphql-tag';
 
-export const joinCommunityManage = gql`
-  query($status: Int!, $id: Int!, $customIdNumber: String,organizationalCode:String!) {
-    joinCommunityManage(status: $status, id: $id, customIdNumber: $customIdNumber,organizationInitionalCode:$accessClient.InitialCode) {
+export const queryJoinCommunityManage = gql`
+query(
+  $status: Int!,
+  $id: Int!,
+  $customIdNumber: String
+  $organizationInitialCode: String!
+) {
+    joinCommunityManage(
+      status: $status,
+      id: $id,
+      customIdNumber: $customIdNumber
+      organizationInitialCode: $organizationInitialCode
+    ) {
       id
       status
       customIdNumber

@@ -26,6 +26,7 @@ import FormInput from 'src/components/FormInput';
 import { Container, Row, Line } from 'src/styled';
 import PopupTermCondition from 'src/components/PopupTermCondition';
 import WidgetBgFixIcon from './WidgetBgFixIcon';
+import { accessClient } from 'src/utils/access_client';
 
 const inputs = ['username', 'password'];
 
@@ -171,7 +172,7 @@ const LoginScreen = ({navigation, route}) => {
       showHeader={false}
       popupProps={popupProps}
       fallback={loading}
-      statusBarColor={Color.primarySoft}
+      statusBarColor={Color[accessClient.ColorBgParallax]}
       translucent={Platform.OS === 'ios' ? true : isFocused}
       useSafeArea={Platform.OS === 'ios' ? false : true}
     >

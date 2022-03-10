@@ -406,7 +406,7 @@ const MainHome = ({navigation, route}) => {
   };
 
   const colorOutputRange = [
-    Color[accessClient.MainHome.backgroundParallaxColor],
+    Color[accessClient.ColorBgParallax],
     Color.theme,
   ];
 
