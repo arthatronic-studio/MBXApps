@@ -18,7 +18,7 @@ const BottomTabsNavigator = () => {
             }
         >
             <Screen name='MainHome' component={MainHome} />
-            <Screen name='MyShopHomepage' component={MyShopHomepage} />
+            <Screen name='MyShopHomepage' component={MerchScreen} />
             <Screen name='MainProfile' component={MainProfile} />
         </Navigator>
     )
