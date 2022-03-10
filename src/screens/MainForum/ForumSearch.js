@@ -1,40 +1,16 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {
-  View,
-  ScrollView,
-  Platform,
-  SafeAreaView,
-  TextInput,
-  Image,
-} from 'react-native';
+import React from 'react';
+import {View, ScrollView, TextInput} from 'react-native';
 import Styled from 'styled-components';
-import {useSelector} from 'react-redux';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import ImagesPath from 'src/components/ImagesPath';
-import {
-  Text,
-  // TouchableOpacity,
-  Loading,
-  useLoading,
-  HeaderBig,
-  Scaffold,
-  Row,
-  Col,
-} from '@src/components';
+
+import {Scaffold} from '@src/components';
 import {TouchableOpacity} from '@src/components/Button';
-import ListForum from '@src/screens/MainForum/ListForum';
-import Header from '@src/components/Header';
 
-import {shadowStyle} from '@src/styles';
-
-import Client from '@src/lib/apollo';
 import {queryContentProduct} from '@src/lib/query';
 import {useColor} from '@src/components/Color';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {FlatList} from 'react-native-gesture-handler';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-import CardPlace from 'src/components/Posting/CardPlace';
-import {Container, Divider} from 'src/styled';
+
+import ListForumSearch from './ListForumSearch';
+import ListForumPopular from './ListForumPopular';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -112,84 +88,12 @@ const DATA_POPULER = [
   },
 ];
 
+// DATA.map((item)=>{
+//   console.log("ini data bos",item.id)
+// })
+
 const ForumSearch = ({navigation, route}) => {
   const {Color} = useColor();
-  // const renderItem = ({item}) => <Text>{item.title}</Text>;
-  const ListSearch = item => {
-    return (
-      <TouchableOpacity
-        style={{
-          borderWidth: 0.5,
-          borderColor: Color.border,
-          paddingHorizontal: 16,
-          paddingVertical: 12,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        }}>
-        <Text size="11">{item.title} </Text>
-        <Ionicons name="arrow-forward" size={14} color={Color.primary} />
-      </TouchableOpacity>
-    );
-  };
-
-  const ListPopular = () => {
-    return (
-      <FlatList
-        data={DATA_POPULER}
-        keyExtractor={() => {
-          DATA_POPULER.id;
-        }}
-        renderItem={({item}) => (
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginBottom: 32,
-              justifyContent: 'space-between',
-            }}>
-            <TouchableOpacity style={{flexDirection: 'row'}}>
-              <View
-                style={{
-                  height: 36,
-                  width: 36,
-                  backgroundColor: Color.grayLight,
-                  borderRadius: 4,
-                  marginRight: 10,
-                }}
-              />
-              <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginBottom: 2,
-                  }}>
-                  <Image
-                    source={ImagesPath.trendUp}
-                    style={{marginRight: 10}}
-                  />
-                  <Text size="11">{item.title}</Text>
-                </View>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Image
-                    style={{height: 16, width: 16, marginRight: 4}}
-                    source={ImagesPath.iconTypeG}
-                  />
-                  <Text size="8"> {item.subtitle}</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text size="11" style={{color: Color.primary}}>
-                Lihat
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      />
-    );
-  };
-
   return (
     <Scaffold
       header={
@@ -224,13 +128,10 @@ const ForumSearch = ({navigation, route}) => {
       }>
       <ScrollView>
         {/* LIST SEARCH */}
-        {DATA.map(item => {
-          return <ListSearch title={item.title} />;
-        })}
-        
+        <ListForumSearch data={DATA} />
 
         {/* EMPTY SEARCH */}
-        
+
         {/* <Col style={{alignItems:'center',justifyContent:'space-around',height:90}}>
           <Row>
             <Image source={ImagesPath.searchEmpty} />
@@ -244,14 +145,8 @@ const ForumSearch = ({navigation, route}) => {
         </Col> */}
 
         <View paddingHorizontal={16}>
-          <Divider height={16} />
-          <View>
-            <Text style={{marginBottom: 24}} align="left" size="11" type="bold">
-              Topik Terpopuler
-            </Text>
-            {/* LIST POPULAR */}
-            <ListPopular />
-          </View>
+          {/* LIST POPULAR */}
+          <ListForumPopular data={DATA_POPULER} />
         </View>
       </ScrollView>
     </Scaffold>
