@@ -33,21 +33,16 @@ const styles = StyleSheet.create({
 
 export default class SwiperComponent extends Component {
   render() {
+    const {data} = this.props
     return (
       <View style={{width: '100%', height: '100%'}}>
         <Swiper style={styles.wrapper} showsButtons={false}>
-          <Image
-            source={ImagesPath.productImage}
-            style={{width: '100%', height: '80%'}}
-          />
-          <Image
-            source={ImagesPath.productImage}
-            style={{width: '100%', height: '80%'}}
-          />
-          <Image
-            source={ImagesPath.productImage}
-            style={{width: '100%', height: '80%'}}
-          />
+          {data.map((val, id) => (
+            <Image
+              source={{ uri: val }}
+              style={{width: '100%', height: '80%'}}
+            />
+          ))}
         </Swiper>
       </View>
     );

@@ -151,7 +151,7 @@ const CheckoutScreen = ({ navigation }) => {
             <Content style={{ backgroundColor: Color.textInput }}>
                 {item.tempData.map((val, id) => (
                     <Row style={{ marginBottom: 10 }}>
-                        <Image source={ImagesPath.productImage} style={{ height: 74, width: 74, marginRight: 14, backgroundColor: Color.text, borderRadius: 8 }} />
+                        <Image source={{ uri: val.imageUrl }} style={{ height: 74, width: 74, marginRight: 14,  borderRadius: 8 }} />
                         <Col alignItems='flex-start'>
                             <Text color={Color.text} size={14} type='bold' textAlign='left'>{val.name}</Text>
                             <Text color={Color.text} textAlign='left' size={10}>Jumlah : {val.qty} Buah</Text>

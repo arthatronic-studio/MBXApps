@@ -66,12 +66,11 @@ const ListShipping = ({ route, navigation  }) => {
     let variables = {
         input:{
             cod: false,
-            productId: 3,
+            productId: route.params.item.product[0].id,
             for_order: true,
-            userAddressIdDestination: 268,
+            userAddressIdDestination: route.params.item.userAddressIdDestination,
             userAddressIdOrigin: 1,
         }
-        
     }
     console.log(variables)
     Client.mutate({mutation: queryGetShipper, variables})

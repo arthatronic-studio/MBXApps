@@ -165,7 +165,7 @@ const CardListProduk = (props) => {
           }}
         >
           <Image
-            source={ImagesPath.productImage}
+            source={{ uri: item.imageUrl }}
             style={{
               width: '100%',
               height: (width - 16) / 2,

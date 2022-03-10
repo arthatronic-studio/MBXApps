@@ -129,7 +129,7 @@ const DetailProduct = ({navigation}) => {
             position: 'absolute',
             backgroundColor: Color.theme,
           }}>
-          <ImageSlider />
+          <ImageSlider data={[detail.imageUrl,detail.imageUrl,detail.imageUrl]} />
         </View>
         <View
           style={{
