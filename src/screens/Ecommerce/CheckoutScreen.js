@@ -60,7 +60,9 @@ const CheckoutScreen = ({ navigation }) => {
   useEffect(() => {
       console.log(route.params, 'address focus')
       const {saveAddress, saveShippment} = route.params
-      if(saveAddress) setAddress(saveAddress)
+      if(saveAddress) {
+          setAddress(saveAddress)
+        }
       if(saveShippment) setShipping(saveShippment)
   }, [isFocused]);
 
@@ -160,7 +162,7 @@ const CheckoutScreen = ({ navigation }) => {
                         </Col>
                     </Row>
                 ))}
-                <TouchableOpacity onPress={() => navigation.navigate('ListShipping')}>
+                <TouchableOpacity onPress={() => {address.address ? navigation.navigate('ListShipping', {item: {...address, product: item.tempData }}) : alert('Isi alamat terlebih dahulu')}}>
                     <Row style={{ backgroundColor: Color.semiwhite, alignItems: 'center', padding: 12, marginTop: 20, borderRadius: 8 }}>
                         <MaterialCommunityIcons name='truck' color={Color.text} size={18}   />
                         <Text color={Color.text} type='semiBold' style={{ marginHorizontal: 10 }}>{shippment.logistic ? shippment.logistic.name : 'Pilih Pengiriman'}</Text>

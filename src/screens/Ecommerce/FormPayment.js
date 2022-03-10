@@ -73,7 +73,7 @@ const FormPayment = ({ route, navigation  }) => {
       countryCode: 228,
       provinceId: value ? value.id : null,
       cityId:  value ? value.id : null,
-      suburbId:  value ? value.id : null
+      suburbId:  value ? value.id : null,
     }
     console.log(variables)
     const queryx = name == 'prov' ? queryGetCity : name == 'city' ? queryGetSub : queryGetProvince
@@ -102,22 +102,25 @@ const FormPayment = ({ route, navigation  }) => {
 
 
   const submit = () => {
+    console.log(user)
     showLoading();
     let variables = {
-      userId: 268,
-      countryId: 228,
-      provinceId: 1,
-      cityId: 1,
-      suburbId: 1,
-      areaId:1,
-      address: "Jalan Kisamaun Bali"
+      addresses:{
+        userId: user.userId,
+        countryId: 228,
+        provinceId: prov ? prov.id : prov,
+        cityId: kota ? kota.id : kota,
+        suburbId: kec ? kec.id : kec,
+        areaId: 1,
+        address: address
+      }
     }
     console.log(variables)
     Client.mutate({mutation: queryAddAddress, variables})
       .then(res => {
         hideLoading()
         console.log(res)
-        if (res.data.userAddressAdd) {
+        if (res.data.userAddressAdd.length > 0) {
           alert('Success Add Address')
           const data = {
             name,
@@ -127,7 +130,7 @@ const FormPayment = ({ route, navigation  }) => {
             prov,
             kota,
             kec,
-            userAddressIdDestination: res.data.userAddressAdd.userId
+            userAddressIdDestination: res.data.userAddressAdd[0].userId
           }
           navigation.navigate('CheckoutScreen',{saveAddress: { ...data } })
         }
@@ -248,6 +251,8 @@ const FormPayment = ({ route, navigation  }) => {
               title='Kode Pos'
               keyboardType='numeric'
               color={Color.text}
+              onChangeText={(e) => setCode(e)}
+              value={postalCode}
               placeholderTextColor={Color.gray}
               textInputStyle={{ borderWidth: 2, borderColor: Color.border, borderRadius: 5, paddingLeft: 10 }}
               style={{height: 50, color: Color.gray, fontSize: 14, borderWidth: 1, fontFamily: 'Inter-Regular', marginLeft: 8}}

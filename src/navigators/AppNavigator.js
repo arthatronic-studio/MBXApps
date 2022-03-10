@@ -134,6 +134,7 @@ import Ecommerce from 'src/screens/Ecommerce/Ecommerce';
 import Wishlist from 'src/screens/Ecommerce/Wishlist';
 import WishlistEmpty from 'src/screens/Ecommerce/WishlistEmpty';
 import Cart from 'src/screens/Ecommerce/Cart';
+import ListShipping from 'src/screens/Ecommerce/ListShipping';
 
 const {Navigator, Screen} = createStackNavigator();
 const MainPage =
@@ -152,7 +153,7 @@ function MainStackNavigator() {
         headerShown: false,
       }}>
       {/* uncanny */}
-      <Screen name="SplashScreen" component={SurveyFirst} />
+      <Screen name="SplashScreen" component={MerchScreen} />
       <Screen name="MainPage" component={MainPage} />
       <Screen name="KnowMeScreen" component={KnowMeScreen} />
       <Screen name="CreateEmergencyScreen" component={CreateEmergencyScreen} />
@@ -185,6 +186,7 @@ function MainStackNavigator() {
       <Screen name="Wishlist" component={Wishlist} />
       <Screen name="WishlistEmpty" component={WishlistEmpty} />
       <Screen name="Cart" component={Cart} />
+      <Screen name="ListShipping" component={ListShipping} />
 
 
       {/* user */}

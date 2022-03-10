@@ -103,7 +103,6 @@ const SurveyFourth = ({route, navigation}) => {
                     value: dataState[index]
                 })
         });
-        console.log(tempData)
         const sha1Hash = await RNSimpleCrypto.SHA.sha1("SURVEY-20220229" + moment().format('YYYY-MM-DD HH:mm:ss') + '123!!qweQWE');
         const dataq = {
             "auth": sha1Hash, 
@@ -114,6 +113,7 @@ const SurveyFourth = ({route, navigation}) => {
         console.log(dataq, 'dataq')
         axios
         try {
+            showLoading()
             const response = await axios({
                 baseURL: 'http://panel.sw.tribesocial.id',
                 method: 'post',
@@ -125,8 +125,12 @@ const SurveyFourth = ({route, navigation}) => {
                 timeout: 5000,
                 
               });
+              hideLoading()
+              alert('Success send survey')
               console.log(response, "respon apicall")
           } catch (error) {
+            hideLoading()
+            alert(error.response.data.message)
             console.log(error.response, 'error apicall')
           }
       };
@@ -218,6 +222,7 @@ const SurveyFourth = ({route, navigation}) => {
                 <Text style={{color: Color.textInput}}>Lanjut</Text>
             </TouchableOpacity>
         </View>
+      <Loading {...loadingProps} />
     </Scaffold>
   )
 }
