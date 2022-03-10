@@ -14,6 +14,7 @@ import Loading, { useLoading } from  '@src/components/Modal/Loading';
 import Client from '@src/lib/apollo';
 import { queryAddComment } from '@src/lib/query';
 import { shadowStyle } from '@src/styles';
+import { isIphoneNotch } from 'src/utils/constants';
 
 const defaultProps = {
     data: [],
@@ -22,10 +23,10 @@ const defaultProps = {
     onSuccessComment: () => {},
     onPressShowAll: () => {},
     onPressDots: () => {},
+    onEndReached: () => {},
 }
 
-const CardListComment = (props) => {
-    const { data, item, title, loading, showAll, onSuccessComment, onPressShowAll, onPressDots } = props;
+const CardListComment = ({ data, item, title, loading, showAll, onSuccessComment, onPressShowAll, onPressDots, onEndReached, ListFooterComponent }) => {
 
     // dispatch
     const dispatch = useDispatch();
@@ -48,14 +49,15 @@ const CardListComment = (props) => {
     const { Color } = useColor();
 
     useEffect(() => {
-      const maxLengthData = data.length <= 3 ? data.length : 3;
+      // const maxLengthData = data.length <= 3 ? data.length : 3;
 
-      let newListComment = [];
-      for (let i = 0; i < maxLengthData; i++) {
-        newListComment.push(data[i]);
-      }
+      // let newListComment = [];
+      // for (let i = 0; i < maxLengthData; i++) {
+      //   newListComment.push(data[i]);
+      // }
       
-      setListComment(newListComment);
+      // setListComment(newListComment);
+      setListComment(data);
     }, [data]);
 
     const submitComment = () => {
@@ -99,9 +101,8 @@ const CardListComment = (props) => {
           <View style={{paddingHorizontal: 16}}>
             <View style={{width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12}}>
                 <Text size={12}>{title}</Text>
-                {showAll && <Text onPress={() => onPressShowAll()} size={12} color={Color.primary}>Lihat Semua</Text>}
+                {/* {showAll && <Text onPress={() => onPressShowAll()} size={12} color={Color.primary}>Lihat Semua</Text>} */}
             </View>
-
 
             <View style={{width: '100%', borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle, flexDirection:'row', justifyContent: 'space-between'}}>
                 <TextInput
@@ -154,6 +155,7 @@ const CardListComment = (props) => {
                   </View>
                 </TouchableOpacity>
             </View>
+            
             {thumbImage !== '' && 
               <View style={{width: '100%', borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle, justifyContent: 'center', alignItems: 'center', paddingVertical: 16}}>
                 <TouchableOpacity 
@@ -184,6 +186,12 @@ const CardListComment = (props) => {
               data={listComment}
               showsVerticalScrollIndicator={false}
               keyboardShouldPersistTaps='handled'
+              onEndReachedThreshold={0.3}
+              onEndReached={() => onEndReached()}
+              contentContainerStyle={{
+                paddingBottom: isIphoneNotch() ? height / 3.5 : height / 2.5,
+              }}
+              ListFooterComponent={() => ListFooterComponent()}
               renderItem={({ item, index }) => {
                   const canManageComment = user && !user.guest && user.userId === item.userId;
                 
@@ -201,7 +209,7 @@ const CardListComment = (props) => {
                               
                               <Text size={12} align='left' type='medium'>{item.comment}</Text>
                           </View>
-                          {canManageComment && <TouchableOpacity onPress={() => onPressDots()} style={{height: 30, width: '5%', alignItems: 'center', justifyContent: 'center'}}>
+                          {canManageComment && <TouchableOpacity onPress={() => onPressDots(item, index)} style={{height: 30, width: '5%', alignItems: 'center', justifyContent: 'center'}}>
                               <Entypo name='dots-three-vertical' />
                           </TouchableOpacity>}
                       </View>
@@ -215,5 +223,4 @@ const CardListComment = (props) => {
 }
 
 CardListComment.defaultProps = defaultProps;
-
 export default CardListComment;
