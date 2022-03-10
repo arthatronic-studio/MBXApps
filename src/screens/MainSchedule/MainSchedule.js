@@ -15,7 +15,6 @@ import ListNews from 'src/components/Posting/ListNews';
 
 import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
-import { listPrivilegeUser } from 'src/utils/constants';
 
 export default ({ navigation, route }) => {
   // state
@@ -89,7 +88,7 @@ export default ({ navigation, route }) => {
       popupProps={popupProps}
       loadingProps={loadingProps}
   >
-      {user && listPrivilegeUser.includes(user.userId) && <Text
+      {user && user.isDirector === 1 && <Text
         color={Color.textInput}
         style={{backgroundColor: Color.primary, paddingTop: 2, paddingBottom: 6}}
         onPress={() => navigation.navigate('CreateThreadScreen', {

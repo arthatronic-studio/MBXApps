@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {Image, ImageBackground, useWindowDimensions, View} from 'react-native';
-import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useSelector } from 'react-redux';
@@ -18,7 +17,6 @@ import ListNews from 'src/components/Posting/ListNews';
 
 import Client from '@src/lib/apollo';
 import {queryContentProduct} from '@src/lib/query';
-import {listPrivilegeUser} from 'src/utils/constants';
 import Banner from 'src/components/Banner';
 import ImagesPath from 'src/components/ImagesPath';
 import CarouselView from 'src/components/CarouselView';
@@ -27,10 +25,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {iconBookmarks} from '@assets/images/home';
 import { accessClient } from 'src/utils/access_client';
 
-const Example = Styled(View)`
-`;
-
-export default ({navigation, route}) => {
+const NewsScreen = ({navigation, route}) => {
   const [state, changeState] = useState({
     listProduct: [],
     fallback: true,
@@ -121,8 +116,7 @@ export default ({navigation, route}) => {
           title={route.params && route.params.title ? route.params.title : ''}
           actions={
             (accessClient.UserGeneratedContent ||
-            user &&
-            listPrivilegeUser.includes(user.userId)) &&
+            (user && user.isDirector === 1)) &&
             <Row justify='center' align='center'>
               {/* <Ionicons
                 name='search'
@@ -154,7 +148,7 @@ export default ({navigation, route}) => {
       popupProps={popupProps}
       loadingProps={loadingProps}
     >
-      {/* {user && listPrivilegeUser.includes(user.userId) && (
+      {/* {user && user.isDirector === 1 && (
         <Text
           color={Color.textInput}
           style={{
@@ -245,3 +239,5 @@ export default ({navigation, route}) => {
     </Scaffold>
   );
 };
+
+export default NewsScreen;

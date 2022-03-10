@@ -20,10 +20,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Popup, {usePopup} from '@src/components/Modal/Popup';
 
 import Client from '@src/lib/apollo';
-import {joinCommunityManage} from '@src/lib/query/joinCommunityManage';
+import {queryJoinCommunityManage} from '@src/lib/query/joinCommunityManage';
 import {Divider} from 'src/styled';
-import Config from 'react-native-config';
-import { queryOrganizationMemberManage } from 'src/lib/query/organization';
+import { accessClient } from 'src/utils/access_client';
 
 const EmailRoundedView = Styled(View)`
   width: 100%;
@@ -72,6 +71,7 @@ const CardDetail = ({ navigation, route }) => {
   useEffect(() => {
     setIdNumber(userDetail.idNumber);
   }, []);
+  
   const fetchData = () => {
     let status = 2;
     if (props.type === 'newAnggota') {
@@ -99,11 +99,12 @@ const CardDetail = ({ navigation, route }) => {
     setLoading(true);
 
     Client.query({
-      query: joinCommunityManage,
+      query: queryJoinCommunityManage,
       variables: {
         status: 1,
         id: item.id,
-        customIdNumber: item.userDetail.idNumber,
+        customIdNumber: idNumber,
+        organizationInitialCode: accessClient.InitialCode,
       },
     })
       .then((res) => {
@@ -125,10 +126,11 @@ const CardDetail = ({ navigation, route }) => {
       status === 2 ? 'Ditolak' : 'Dihapus';
 
     Client.query({
-      query: joinCommunityManage,
+      query: queryJoinCommunityManage,
       variables: {
         status,
         id,
+        organizationInitialCode: accessClient.InitialCode,
       },
     })
       .then((res) => {
@@ -151,44 +153,6 @@ const CardDetail = ({ navigation, route }) => {
         setLoading(false);
       });
   };
-
-  const fetchOrganizationMemberManage = (id, userId, status) => {
-    let resMessage =
-      status === 1 ? 'Diterima' :
-      status === 2 ? 'Ditolak' : 'Dihapus';
-    let method =
-      status === 1 ? 'INSERT' :
-      status === 2 ? 'REJECT' : 'DELETE';
-
-    // const variables = {
-    //   "userId": userId,
-    //   "organizationInitialCode": accessClient.InitialCode,
-    //   "type": method,
-    // };
-
-    // console.log(variables);
-
-    Client.mutate({
-      mutation: queryOrganizationMemberManage,
-      // variables,
-    }).then((res) => {
-      console.log('res organization manage', res);
-
-      const data = res.data.organizationMemberManage;
-      const success = data;
-
-      if (success) {
-        fetchJoinCommunityManage(id, userId, status);
-      } else {
-        showPopup(`Sync gagal ${resMessage}`, 'error');
-        setLoading(false);
-      }
-    }).catch((err) => {
-      console.log('err organization manage', err);
-      showPopup(err.message, 'error');
-      setLoading(false);
-    });
-  }
 
   return (
     <Scaffold
@@ -590,7 +554,7 @@ const CardDetail = ({ navigation, route }) => {
                 Alert(
                   'Terima',
                   'Apakah Anda yakin akan menerima anggota ini?',
-                  () => fetchOrganizationMemberManage(item.id, item.user_id, 1),
+                  () => fetchJoinCommunityManage(item.id, item.user_id, 1),
                 );
               }}
               style={{
@@ -609,7 +573,7 @@ const CardDetail = ({ navigation, route }) => {
                   Alert(
                     'Tolak',
                     'Apakah Anda yakin akan menolak anggota ini?',
-                    () => fetchOrganizationMemberManage(item.id, item.user_id, 2),
+                    () => fetchJoinCommunityManage(item.id, item.user_id, 2),
                   );
                 }}
                 style={{
