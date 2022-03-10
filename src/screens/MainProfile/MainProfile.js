@@ -156,7 +156,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'community_admin',
       title: 'Community Admin',
-      show:  accessClient.MainProfile.showMenuJoinCommunity && user && !user.organizationId,
+      show:  user && !user.guest,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('CommunityAdminPage'),
     },

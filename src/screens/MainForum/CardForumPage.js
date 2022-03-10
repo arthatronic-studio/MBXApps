@@ -83,7 +83,7 @@ const paramsQuotes = {
   productSubCategory: 'FORUM_QUOTES',
 };
 
-const MainForum = ({ navigation, route }) => {
+const CardForumPage = ({ navigation, route }) => {
   // state
   const [listMostDiscussion, setListMostDiscussion] = useState([]);
   const [listGroupReader, setListGroupReader] = useState([]);
@@ -96,11 +96,7 @@ const MainForum = ({ navigation, route }) => {
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const { Color } = useColor();
 
-  const mainMenu = [
-    { id: 0, name: 'Group Baca', images: <MaterialIcons name='group' color={Color.theme} size={22} />, nav: 'ForumSegmentScreen', params: paramsGroupReader },
-    { id: 1, name: 'Diskusi', images: <MaterialCommunityIcons name='comment-text-multiple' color={Color.theme} size={20} />, nav: 'ForumSegmentScreen', params: paramsDiscussion },
-    { id: 2, name: 'Quotes', images: <MaterialCommunityIcons name='format-quote-close-outline' color={Color.theme} size={24} />, nav: 'ForumSegmentScreen', params: paramsQuotes },
-  ];
+  
   
   useEffect(() => {
     fecthData();
@@ -168,68 +164,8 @@ const MainForum = ({ navigation, route }) => {
 
   return (
     <MainView style={{backgroundColor: Color.theme}}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-          <Scaffold
-              header={<Header customIcon title="Forum" type="regular" style={{paddingTop: 16, marginBottom: 10}} centerTitle={false} iconRightButton={<AntDesign name={'plus'} size={24}  onPress={() => navigation.navigate('CardDetailForum')}/>} />}
-              onPressLeftButton={() => navigation.pop()}
-          />
-          {/* <ContentView style={{backgroundColor: Color.theme}}>
-            <MainMenuView
-              style={{...shadowStyle, shadowOpacity: 0.02, backgroundColor: Color.border}}
-            >
-              {mainMenu.map((menu, idx) => {
-                if (Platform.OS === 'ios' && menu.comingsoon) {
-                  return null;
-                }
-
-                return (
-                  <PerUserIcons
-                    key={idx}
-                    activeOpacity={0.75}
-                    disabled={menu.comingsoon}
-                    onPress={() => navigation.navigate(menu.nav, { ...menu.params })}
-                  >
-                    <UserIcon>
-                      <View style={{width: 48, height: 48, borderRadius: 24, backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center', ...shadowStyle}}>
-                          {menu.images}
-                      </View>
-                      <View style={{marginTop: 8}}>
-                        <Text size={12} type='semibold' style={menu.comingsoon && {opacity: 0.3}}>{menu.name}</Text>
-                      </View>
-                    </UserIcon>
-                  </PerUserIcons>
-                )
-              })}
-            </MainMenuView>
-          </ContentView> */}
-
-          <View style={{height: 12}} />
-
-          <View style={{paddingHorizontal: 16}}>
-            <TextInput
-              placeholder="Cari topik apa hari ini ..."
-              placeholderTextColor={Color.gray}
-              style={{
-                width: '100%',
-                borderRadius: 8,
-                backgroundColor: '#EEEEEE',
-                padding: 10
-              }}
-              onTouchStart={() => 
-                navigation.navigate("ForumSearch")
-              }
-            />
-          </View> 
-
-          <View style={{height: 24}} />
-
-          <View style={{paddingHorizontal:16, borderRadius: 8}}>
-            <Image 
-              source={ImagesPath.rectangle}
-              style={{borderRadius: 8}}
-              width={'100%'}
-            />
-          </View>
+      <ScrollView showsVerticalScrollIndicator={true}>
+         
 
           <ListForum
               componentType='GENERAL'
@@ -252,26 +188,7 @@ const MainForum = ({ navigation, route }) => {
               }}
           />
 
-          <ListForum
-              componentType='LIST'
-              data={listGroupReader}
-              title='Rekomendasi Grup Baca'
-              showAll
-              onPressShowAll={() => {
-                navigation.navigate('ShowAllFromForum', {
-                  title: 'Rekomendasi Grup Baca',
-                  subTitle: 'Audio Book',
-                  componentType: 'LIST',
-                  productType: "PODDIUM_FORUM",
-                  productCategory: '',
-                  productSubCategory: 'FORUM_GROUP_READER',
-                });
-              }}
-              onPress={(item) => {
-                onSelected(item);
-                navigation.navigate('DetailForumScreen', { item });
-              }}
-          />
+          
 
           <ListForum
               componentType='GRID'
@@ -301,4 +218,4 @@ const MainForum = ({ navigation, route }) => {
   );
 }
 
-export default MainForum;
+export default CardForumPage;

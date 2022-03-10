@@ -35,7 +35,8 @@ import DetailForumScreen from '@src/screens/MainForum/DetailForumScreen';
 import EditThreadScreen from '@src/screens/MainForum/EditThreadScreen';
 import MainForum from '@src/screens/MainForum/MainForum';
 import ForumSearch from 'src/screens/MainForum/ForumSearch';
-
+import CardDetailForum from 'src/screens/MainForum/CardDetailForum';
+// import CardForumPage from 'src/screens/MainForum/CardForumPage';
 // profile
 import ChangeProfile from '@src/screens/MainProfile/ChangeProfile';
 import SettingScreen from '@src/screens/MainProfile/SettingScreen';
@@ -227,6 +228,8 @@ function MainStackNavigator() {
       <Screen name="EditThreadScreen" component={EditThreadScreen} />
       <Screen name="MainForum" component={MainForum} />
       <Screen name="ForumSearch" component={ForumSearch} />
+      <Screen name="CardDetailForum" component={CardDetailForum} />
+      {/* <Screen name="CardForumPage" component={CardForumPage}/> */}
       {/* profile */}
       <Screen name="ChangeProfile" component={ChangeProfile} />
       <Screen name="ShowAllFromProfile" component={ShowAllFromProfile} />
