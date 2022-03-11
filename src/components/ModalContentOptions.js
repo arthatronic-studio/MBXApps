@@ -1,13 +1,13 @@
-import React, { useRef, forwardRef } from 'react';
+import React, {useRef, forwardRef, useState} from 'react';
 
-import {
-  useColor,
-} from '@src/components';
-import { useCombinedRefs } from '@src/hooks';
+import {useColor} from '@src/components';
+import {useCombinedRefs} from '@src/hooks';
 import ModalListAction from './Modal/ModalListAction';
-import { useNavigation } from '@react-navigation/native';
-import { Alert } from './Modal/Alert';
-import { accessClient } from 'src/utils/access_client';
+import {useNavigation} from '@react-navigation/native';
+import {Alert} from './Modal/Alert';
+import {accessClient} from 'src/utils/access_client';
+import {queryProductReport} from '@src/lib/query';
+import Client from '@src/lib/apollo';
 
 const defaultProps = {
   isOwner: false,
@@ -15,13 +15,33 @@ const defaultProps = {
 };
 
 const ModalContentOptions = forwardRef((props, ref) => {
-  const { isOwner, item } = props;
+  const {isOwner, item} = props;
+
+  console.log('Item kakaaa', item.id);
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
   const navigation = useNavigation();
 
-  const { Color } = useColor();
+  const {Color} = useColor();
+
+  const fetchProductReportCheck = () => {
+    Client.mutate({
+      mutation: queryProductReport,
+      variables: {
+        productId: item.id,
+      },
+    })
+      .then(res => {
+        console.log("res report",res)
+        alert(
+          'Laporan terkirim, Terima kasih telah membantu kami melakukan report',
+        );
+      })
+      .catch(err => {
+        console.log('error', err);
+      });
+  };
 
   const dataOptions = [
     {
@@ -44,8 +64,8 @@ const ModalContentOptions = forwardRef((props, ref) => {
       onPress: () => {
         combinedRef.current.close();
         Alert('Report', 'Laporkan postingan ini?', () => {
-          alert('Laporan terkirim, Terima kasih telah membantu kami melalukan report');
-        })
+          fetchProductReportCheck();
+        });
       },
     },
   ];
@@ -57,17 +77,15 @@ const ModalContentOptions = forwardRef((props, ref) => {
       color: Color.error,
       onPress: () => {
         combinedRef.current.close();
-        Alert('Block', 'Apakah Anda yakin akan memblok semua postingan user ini?')
+        Alert(
+          'Block',
+          'Apakah Anda yakin akan memblok semua postingan user ini?',
+        );
       },
     });
   }
-  
-  return (
-    <ModalListAction
-      ref={combinedRef}
-      data={dataOptions}
-    />
-  );
+
+  return <ModalListAction ref={combinedRef} data={dataOptions} />;
 });
 
 ModalContentOptions.defaultProps = defaultProps;

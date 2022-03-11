@@ -292,7 +292,6 @@ const NewsDetail = ({navigation, route}) => {
         </View>
         <Divider />
       </ScrollView>
-
       <ModalContentOptions
         ref={modalOptionsRef}
         isOwner={user && user.userId === item.ownerId}

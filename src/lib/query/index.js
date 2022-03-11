@@ -17,6 +17,8 @@ import { queryGetNotificationHistory } from './queryGetNotificationHistory';
 import { queryGetUserOrganizationRef } from './queryGetUserOrganizationRef';
 import { queryContentUserProfile } from './queryContentUserProfile';
 import { queryContentUserProduct } from './queryContentUserProduct';
+import { queryProductReport } from './queryProductReport';
+
 
 export {
     queryContentProduct,
@@ -38,4 +40,5 @@ export {
     queryGetUserOrganizationRef,
     queryContentUserProfile,
     queryContentUserProduct,
+    queryProductReport
 };
