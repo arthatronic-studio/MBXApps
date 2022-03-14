@@ -716,6 +716,13 @@ const MainHome = ({navigation, route}) => {
             <Text>Forum</Text>
           </TouchableOpacity>
 
+          <TouchableOpacity
+            style={{marginTop: 16, marginBottom: 16}}
+            onPress={() => navigation.navigate("SurveyFirst")}
+          >
+            <Text>Survey</Text>
+          </TouchableOpacity>
+
           <Banner
             isDummy={accessClient.MainHome.dummyBanner}
             showHeader={accessClient.MainHome.showBannerHeader}
