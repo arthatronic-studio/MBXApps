@@ -11,6 +11,8 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Feather from 'react-native-vector-icons/Feather';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import {useDispatch, useSelector} from 'react-redux';
 import QRCode from 'react-native-qrcode-svg';
 import messaging from '@react-native-firebase/messaging';
@@ -119,11 +121,25 @@ const MainProfile = ({navigation, route}) => {
 
   const menuList = [
     {
-      code: 'change_profile',
-      title: 'Ubah Profil',
+      code: 'history',
+      title: 'Riwayat',
       show: user && !user.guest,
-      icon: <FontAwesome name="edit" size={20} color={Color.text} style={{}} />,
-      onPress: () => navigation.navigate('ChangeProfile'),
+      icon: <Ionicons name="receipt-outline" size={20} color={Color.text} style={{}} />,
+      // onPress: () => navigation.navigate('ChangeProfile'),
+    },
+    {
+      code: 'coupon',
+      title: 'Kuponku',
+      show: user && !user.guest,
+      icon: <MaterialCommunityIcons name="ticket-confirmation-outline" size={20} color={Color.text} style={{}} />,
+      // onPress: () => navigation.navigate('ChangeProfile'),
+    },
+    {
+      code: 'myshop',
+      title: 'Toko Saya',
+      show: user && !user.guest,
+      icon: <MaterialCommunityIcons name="storefront-outline" size={20} color={Color.text} style={{}} />,
+      onPress: () => navigation.navigate('MyShopHomepage'),
     },
     {
       code: 'setting',
@@ -138,6 +154,20 @@ const MainProfile = ({navigation, route}) => {
       show: true,
       icon: <AntDesign name="carryout" size={20} color={Color.text} style={{}} />,
       onPress: () => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
+    },
+    {
+      code: 'help',
+      title: 'Bantuan',
+      show: true,
+      icon: <MaterialCommunityIcons name="headphones" size={20} color={Color.text} style={{}} />,
+      onPress: () => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
+    },
+    {
+      code: 'termandcondition',
+      title: 'Ketentuan Aplikasi',
+      show: true,
+      icon: <Ionicons name="md-information-circle-outline" size={20} color={Color.text} style={{}} />,
+      // onPress: () => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
     },
     // {
     //   code: 'terms_condition',
