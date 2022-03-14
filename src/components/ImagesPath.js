@@ -76,4 +76,5 @@ export default {
   trendUp: require('../components/Images/TrendUp.png'),
   iconTypeG: require('../components/Images/iconTypeG.png'),
   searchEmpty: require('../components/Images/searchEmpty.png'),
+  sabyan: require('../components/Images/sabyan.png'),
 };
