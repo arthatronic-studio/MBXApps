@@ -5,6 +5,7 @@ const WishlistEmpty = ({navigation}) => {
   return (
     <View>
       <Text>WishlistEmpty</Text>
+      <Text>Test</Text>
     </View>
   )
 }

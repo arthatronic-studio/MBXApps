@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';

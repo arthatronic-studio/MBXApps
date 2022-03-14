@@ -10,10 +10,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {
   Text,
   // TouchableOpacity,
-  Loading, useLoading,
+  useLoading,
   Scaffold,
   Row, Col,
-  HeaderBig,
   useColor,
   Header
 } from '@src/components';

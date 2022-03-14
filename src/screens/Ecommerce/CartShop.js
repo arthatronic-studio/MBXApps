@@ -4,7 +4,6 @@ import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import {useIsFocused, useRoute} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import TopBar from '../Auction/TopBar';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';

@@ -8,7 +8,6 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RNSimpleCrypto from "react-native-simple-crypto";
 import Octicons from 'react-native-vector-icons/Octicons'
-import Feather from 'react-native-vector-icons/Feather'
 import Swiper from 'react-native-swiper'
 
 import {

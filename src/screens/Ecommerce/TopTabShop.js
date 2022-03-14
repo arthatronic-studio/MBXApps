@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { View, Button} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Col, Row, TouchableOpacity, useColor, Text} from '@src/components';
 import CardListProduk from 'src/components/Card/CardListProduct';
