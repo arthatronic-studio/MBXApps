@@ -1,7 +1,7 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import {Platform} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
-import { accessClient } from 'src/utils/access_client';
+import {accessClient} from 'src/utils/access_client';
 
 // uncanny
 import SplashScreen from 'src/screens/SplashScreen';
@@ -71,7 +71,7 @@ import JobScreen from 'src/screens/Posting/Job/Index';
 import JobDetail from 'src/screens/Posting/Job/Detail';
 
 // Video
-import VideoDetail from 'src/screens/Posting/Video/Detail'
+import VideoDetail from 'src/screens/Posting/Video/Detail';
 
 // payment
 import PaymentScreen from '@src/screens/Payment/PaymentScreen';
@@ -118,6 +118,9 @@ import DetailPromo from 'src/screens/Promo/DetailPromo';
 import Ebook from 'src/screens/Posting/Ebook/Ebook';
 import MyShopHomepage from 'src/screens/Ecommerce/MyShopHomepage';
 import AddProduct from 'src/screens/Ecommerce/AddProduct';
+import MyProduct from 'src/screens/Ecommerce/MyProduct';
+import Review from 'src/screens/Ecommerce/Review';
+
 import StepTwo from 'src/screens/Ecommerce/StepTwo';
 import StepThree from 'src/screens/Ecommerce/StepThree';
 import MerchantSetting from 'src/screens/Ecommerce/MerchantSetting';
@@ -144,11 +147,11 @@ import TransactionDetailSucces from 'src/screens/Transaction/TransactionDetailSu
 
 const {Navigator, Screen} = createStackNavigator();
 const MainPage =
-  accessClient.BottomTabsNavigator.type === 'komoto' ?
-    BottomTabsNavigatorKomoto :
-  accessClient.BottomTabsNavigator.type === 'sabyan' ?
-    BottomTabsNavigatorsabyan :
-    BottomTabsNavigator;
+  accessClient.BottomTabsNavigator.type === 'komoto'
+    ? BottomTabsNavigatorKomoto
+    : accessClient.BottomTabsNavigator.type === 'sabyan'
+    ? BottomTabsNavigatorsabyan
+    : BottomTabsNavigator;
 
 function MainStackNavigator() {
   return (
@@ -165,16 +168,15 @@ function MainStackNavigator() {
       <Screen name="CreateEmergencyScreen" component={CreateEmergencyScreen} />
       <Screen name="PDFReaderScreen" component={PDFReaderScreen} />
       <Screen name="MusicPlayerScreen" component={MusicPlayerScreen} />
-      
+
       {/* Auction */}
       <Screen name="CartAuction" component={CartAuction} />
       <Screen name="Lelang" component={Lelang} />
       <Screen name="DetailLelang" component={DetailLelang} />
       <Screen name="LiveLelangScreen" component={LiveLelangScreen} />
-      
+
       {/* Promo Popup */}
       <Screen name="DetailPromo" component={DetailPromo} />
-
 
       {/* Ecommerce */}
       <Screen name="MerchScreen" component={MerchScreen} />
@@ -194,7 +196,8 @@ function MainStackNavigator() {
       <Screen name="Cart" component={Cart} />
       <Screen name="ListShipping" component={ListShipping} />
       <Screen name="MerchantSetting" component={MerchantSetting} />
-
+      <Screen name="MyProduct" component={MyProduct} />
+      <Screen name="Review" component={Review} />
 
       {/* user */}
       <Screen name="LoginScreen" component={LoginScreen} />
@@ -244,7 +247,7 @@ function MainStackNavigator() {
       <Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />
       <Screen name="TermsCondition" component={TermsCondition} />
       <Screen name="UserProfileScreen" component={UserProfileScreen} />
-      
+
       {/* community admin */}
       <Screen name="CommunityAdminPage" component={CommunityAdminPage} />
       <Screen name="CardDetail" component={CardDetail} />
@@ -276,9 +279,9 @@ function MainStackNavigator() {
       <Screen name="Bid" component={Bid} />
 
       {/* media player */}
-      <Screen name='MediaPlayerScreen' component={MediaPlayerScreen} />
-      <Screen name='UploadMusicScreen' component={UploadMusicScreen} />
-      <Screen name='UploadVideoScreen' component={UploadVideoScreen} />
+      <Screen name="MediaPlayerScreen" component={MediaPlayerScreen} />
+      <Screen name="UploadMusicScreen" component={UploadMusicScreen} />
+      <Screen name="UploadVideoScreen" component={UploadVideoScreen} />
 
       {/* Survey */}
       <Screen name='SurveyFirst' component={SurveyFirst} />

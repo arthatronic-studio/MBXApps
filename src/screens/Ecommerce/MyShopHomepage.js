@@ -134,10 +134,10 @@ const MyShopHomepage = ({ navigation }) => {
 					<Pressable style={{backgroundColor: Color.semiwhite, width: '95%', height: '55%',
 							alignSelf: 'center', borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
 						<FontAwesome5 name={'box'} size={20} style={{color: Color.text, paddingHorizontal: 20,}}/>
-						<View style={{width: '70%'}}>
+						<TouchableOpacity style={{width: '70%'}} onPress={()=>{navigation.navigate('MyProduct')}}>
 							<Text style={{fontSize: 11, fontWeight: 'bold', textAlign: 'left'}}>Produk Kamu</Text>
 							<Text style={{fontSize: 10, fontWeight: 'normal', textAlign: 'left'}}>2 Produk Terdaftar</Text>
-						</View>
+						</TouchableOpacity>
 						<MaterialIcons name={'keyboard-arrow-right'} size={30} style={{color: Color.text, width: '13%'}}/>
 					</Pressable>
 				</View>
@@ -145,7 +145,7 @@ const MyShopHomepage = ({ navigation }) => {
 					<Text style={{fontSize: 11, fontWeight: 'bold', textAlign: 'left', paddingHorizontal: 10, paddingVertical: 10}}>Kata Pembeli</Text>
 					<View style={{width: '95%', height: 1, backgroundColor: Color.border, alignSelf: 'center'}}></View>
 					<Pressable style={{flexDirection: 'row', marginVertical: 10}}>
-						<Text style={{textAlign: 'left', width: '90%', fontSize: 14, paddingHorizontal: 10}}>Ulasan</Text>
+						<TouchableOpacity onPress={()=>{navigation.navigate('Review')}} style={{textAlign: 'left', width: '90%', fontSize: 14, paddingHorizontal: 10}}><Text style={{textAlign:'left'}}>Ulasan</Text></TouchableOpacity>
 						<MaterialIcons name={'keyboard-arrow-right'} size={20} style={{color: Color.text, width: '13%'}}/>
 					</Pressable>
 					<Pressable style={{flexDirection: 'row', marginVertical: 10}}>

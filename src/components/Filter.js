@@ -5,8 +5,8 @@ import imagesPath from '../components/ImagesPath';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {Text, useColor} from 'src/components';
 
-const Filter = ({data = [], value = {}, onSelect = () => {}}) => {
-  const { Color } = useColor();
+const Filter = ({title, data = [], value = {}, onSelect = () => {}}) => {
+  const {Color} = useColor();
 
   const [showOption, setShowOption] = useState(false);
 
@@ -19,10 +19,11 @@ const Filter = ({data = [], value = {}, onSelect = () => {}}) => {
     <View>
       <TouchableOpacity
         style={{
+          backgroundColor:Color.textInput,
           width: 110,
           height: 35,
           borderWidth: 1,
-          borderColor: Color.info,
+          borderColor: Color.border,
           borderRadius: 50,
           justifyContent: 'space-around',
           alignItems: 'center',
@@ -33,14 +34,14 @@ const Filter = ({data = [], value = {}, onSelect = () => {}}) => {
         onPress={() => setShowOption(!showOption)}>
         <Text
           style={{
-            color: Color.info,
+            color: Color.text,
           }}>
-          {!!value ? value?.name : ' Filter'}
+          {!!value ? value?.name : title ? title : 'Filter'}
         </Text>
         <MaterialIcons
           name={'keyboard-arrow-down'}
           size={15}
-          style={{color: Color.info}}
+          style={{color: Color.text}}
         />
         {/* <Image
           style={{transform: [{rotate: showOption ? '180deg' : '0deg'}]}}

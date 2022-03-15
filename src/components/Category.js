@@ -1,7 +1,13 @@
 import React from 'react';
-import {View, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
-
-import { Text, useColor } from 'src/components';
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
+import ImagesPath from './ImagesPath';
+import {Text, useColor} from 'src/components';
 
 const DATA = [
   {
@@ -34,24 +40,71 @@ const DATA = [
   },
 ];
 
-const Category = () => {
-  const { Color } = useColor();
+const DATA_REVIEW = [
+  {
+    id: 1,
+    rate: 5,
+  },
+  {
+    id: 2,
+    rate: 4,
+  },
+  {
+    id: 3,
+    rate: 3,
+  },
+  {
+    id: 4,
+    rate: 2,
+  },
+  {
+    id: 5,
+    rate: 1,
+  },
+ 
+];
+
+const Category = ({type}) => {
+  const {Color} = useColor();
 
   const renderItem = ({item}) => (
     <View>
-      <TouchableOpacity style={[styles.btnCategory, { backgroundColor: Color.gray, borderColor: Color.gray }]}>
+      <TouchableOpacity
+        style={[
+          styles.btnCategory,
+          {backgroundColor: Color.gray, borderColor: Color.gray},
+        ]}>
         <Text color={Color.textInput}>{item.category}</Text>
       </TouchableOpacity>
     </View>
   );
-
+  const renderItemReview = ({item}) => (
+    <View>
+      <TouchableOpacity
+        style={{
+          backgroundColor: Color.textInput,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingHorizontal: 12,
+          paddingVertical: 5,
+          borderRadius:20,
+          borderWidth:1,
+          borderColor:Color.border,
+          marginRight:10
+        }}>
+        <Image source={ImagesPath.starRate} style={{marginRight:5}}/>
+        <Text color={Color.text}>{item.rate}</Text>
+      </TouchableOpacity>
+    </View>
+  );
   return (
     <View>
       <FlatList
         horizontal
         showsHorizontalScrollIndicator={false}
-        data={DATA}
-        renderItem={renderItem}
+        data={type === 'review' ? DATA_REVIEW : DATA}
+        renderItem={type === 'review' ? renderItemReview : renderItem}
       />
     </View>
   );

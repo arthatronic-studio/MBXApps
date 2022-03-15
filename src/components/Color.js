@@ -25,6 +25,7 @@ const staticColors = {
   bid: '#E6E9EA',
   infosecond: '#DAE9F2',
   placeholder: '#6A7479',
+  danger:'#F73347'
 };
 
 export const lightModeColors = {
