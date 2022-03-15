@@ -48,7 +48,7 @@ export const queryCheckout = gql`
 
 export const queryGetShipper = gql`
   mutation shipperGetPriceDomestic(
-    $input: ShipperGetDomestitInput
+    $input: ShipperGetDomesticInput
   ) {
       shipperGetPriceDomestic(
       input: $input
@@ -126,6 +126,23 @@ export const queryDetailProduct = gql`
    }
   }
 `;
+
+export const queryGetAddress = gql`
+  query(
+    $userId: Int!
+    $page: Int!
+    $itemPerPage: Int!
+  ) {
+    userAddressList(
+      userId: $userId
+      page: $page
+      itemPerPage: $itemPerPage
+   ) {
+    id userId address provinceId cityId suburbId
+   }
+  }
+`;
+
 
 export const queryAddAddress = gql`
   mutation userAddressAdd(

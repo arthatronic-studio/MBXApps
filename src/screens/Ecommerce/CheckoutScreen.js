@@ -27,7 +27,7 @@ import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
 import { FormatMoney } from 'src/utils';
 import ImagesPath from 'src/components/ImagesPath';
-import { queryCheckout, queryGetShipper } from 'src/lib/query/ecommerce';
+import { queryCheckout, queryGetAddress, queryGetShipper } from 'src/lib/query/ecommerce';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -61,9 +61,34 @@ const CheckoutScreen = ({ navigation }) => {
       const {saveAddress, saveShippment} = route.params
       if(saveAddress) {
           setAddress(saveAddress)
+        }else{
+            getAddress()
         }
       if(saveShippment) setShipping(saveShippment)
   }, [isFocused]);
+
+  const getAddress = () => {
+    showLoading();
+    let variables = {
+        userId: user.userId,
+        page: 1,
+        itemPerPage: 10
+    }
+    console.log(variables)
+    Client.query({query: queryGetAddress, variables})
+      .then(res => {
+        hideLoading()
+        console.log(res)
+        if (res.data.userAddressList.length > 0) {
+            setAddress({...res.data.userAddressList[0], userAddressIdDestination: res.data.userAddressList[0]['userId']})
+        }
+      })
+      .catch(reject => {
+        hideLoading()
+        alert(reject.message)
+        console.log(reject.message, 'reject');
+      });
+  }
 
   const submit = () => {
     const {saveAddress, saveShippment, item} = route.params
@@ -195,7 +220,7 @@ const CheckoutScreen = ({ navigation }) => {
                         <Text color={Color.text} size={10}>Ongkos Kirim</Text>
                     </Col>
                     <Col alignItems='flex-end'>
-                        <Text color={Color.text} size={10}>Rp 10.000</Text>
+                        <Text color={Color.text} size={10}>{shippment.final_price ? FormatMoney.getFormattedMoney(shippment.final_price) : ''}</Text>
                     </Col>
                 </Row>
                 <Row style={{ alignItems: 'center', marginBottom: 8 }}>
@@ -203,7 +228,7 @@ const CheckoutScreen = ({ navigation }) => {
                         <Text color={Color.text} size={10}>Ppn 10%</Text>
                     </Col>
                     <Col alignItems='flex-end'>
-                        <Text color={Color.text} size={10}>Rp 16.000</Text>
+                        <Text color={Color.text} size={10}>{FormatMoney.getFormattedMoney(totalProduct(item.tempData)*10/100)}</Text>
                     </Col>
                 </Row>
             </Content>
@@ -223,7 +248,7 @@ const CheckoutScreen = ({ navigation }) => {
         <Row style={{ padding: 16 }}>
             <Col align='flex-start' justify='center'>
                 <Text size={10} color={Color.text}>Total Harga</Text>
-                <Text type='bold' color={Color.text} size={18} >{FormatMoney.getFormattedMoney(totalProduct(item.tempData)+10000+16000)}</Text>
+                <Text type='bold' color={Color.text} size={18} >{FormatMoney.getFormattedMoney(totalProduct(item.tempData)+(totalProduct(item.tempData)*10/100)+(shippment.final_price ? shippment.final_price : 0))}</Text>
             </Col>
             <Col>
                 <TouchableOpacity onPress={() => submit()} style={{ backgroundColor: Color.info, borderRadius: 30, paddingVertical: 10 }}>

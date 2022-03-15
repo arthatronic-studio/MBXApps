@@ -61,11 +61,16 @@ const ListShipping = ({ route, navigation  }) => {
 
 
   const getShipping = () => {
-    showLoading();
+      showLoading();
+    let products = []
+    route.params.item.product.forEach(element => {
+      products.push(element.id)
+    });
+    console.log(products)
     let variables = {
         input:{
             cod: false,
-            productId: route.params.item.product[0].id,
+            productIds: products,
             for_order: true,
             userAddressIdDestination: route.params.item.userAddressIdDestination,
             userAddressIdOrigin: 1,
