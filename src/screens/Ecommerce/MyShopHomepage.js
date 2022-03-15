@@ -156,7 +156,7 @@ const MyShopHomepage = ({ navigation }) => {
 				<View style={{marginVertical: 10, backgroundColor: Color.textInput, width: '92%', height: 125, alignSelf: 'center', borderRadius: 5}}>
 					<Text style={{fontSize: 11, fontWeight: 'bold', textAlign: 'left', paddingHorizontal: 10, paddingVertical: 10}}>Bantuan Toko</Text>
 					<View style={{width: '95%', height: 1, backgroundColor: Color.border, alignSelf: 'center'}}></View>
-					<Pressable style={{flexDirection: 'row', marginVertical: 10}}>
+					<Pressable style={{flexDirection: 'row', marginVertical: 10}} onPress={() => navigation.navigate("MerchantSetting")} >
 						<Text style={{textAlign: 'left', width: '90%', fontSize: 14, paddingHorizontal: 10}}>Pengaturan Toko</Text>
 						<MaterialIcons name={'keyboard-arrow-right'} size={20} style={{color: Color.text, width: '13%'}}/>
 					</Pressable>

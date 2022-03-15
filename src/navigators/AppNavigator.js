@@ -120,6 +120,7 @@ import MyShopHomepage from 'src/screens/Ecommerce/MyShopHomepage';
 import AddProduct from 'src/screens/Ecommerce/AddProduct';
 import StepTwo from 'src/screens/Ecommerce/StepTwo';
 import StepThree from 'src/screens/Ecommerce/StepThree';
+import MerchantSetting from 'src/screens/Ecommerce/MerchantSetting';
 
 // Media Player
 import MediaPlayerScreen from 'src/screens/MediaPlayer/MediaPlayerScreen';
@@ -136,6 +137,10 @@ import Wishlist from 'src/screens/Ecommerce/Wishlist';
 import WishlistEmpty from 'src/screens/Ecommerce/WishlistEmpty';
 import Cart from 'src/screens/Ecommerce/Cart';
 import ListShipping from 'src/screens/Ecommerce/ListShipping';
+ 
+// Transaction
+import TransactionDetail from 'src/screens/Transaction/TransactionDetail';
+import TransactionDetailSucces from 'src/screens/Transaction/TransactionDetailSucces';
 
 const {Navigator, Screen} = createStackNavigator();
 const MainPage =
@@ -188,6 +193,7 @@ function MainStackNavigator() {
       <Screen name="WishlistEmpty" component={WishlistEmpty} />
       <Screen name="Cart" component={Cart} />
       <Screen name="ListShipping" component={ListShipping} />
+      <Screen name="MerchantSetting" component={MerchantSetting} />
 
 
       {/* user */}
@@ -279,6 +285,10 @@ function MainStackNavigator() {
       <Screen name='SurveySecond' component={SurveySecond} />
       <Screen name='SurveyThird' component={SurveyThird} />
       <Screen name='SurveyFourth' component={SurveyFourth} />
+      {/* Transaction */}
+      <Screen name='TransactionDetail' component={TransactionDetail} />
+      <Screen name='TransactionDetailSucces'component={TransactionDetailSucces}/>
+
     </Navigator>
   );
 }

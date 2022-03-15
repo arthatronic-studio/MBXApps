@@ -723,6 +723,19 @@ const MainHome = ({navigation, route}) => {
             <Text>Survey</Text>
           </TouchableOpacity>
 
+          <TouchableOpacity
+            style={{marginTop: 16, marginBottom: 16}}
+            onPress={() => navigation.navigate("TransactionDetail")}
+          >
+            <Text>Detail Pesanan</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{marginTop: 16, marginBottom: 16}}
+            onPress={() => navigation.navigate("TransactionDetailSucces")}
+          >
+            <Text>Detail Pesanan sukses</Text>
+          </TouchableOpacity>
+
           <Banner
             isDummy={accessClient.MainHome.dummyBanner}
             showHeader={accessClient.MainHome.showBannerHeader}
