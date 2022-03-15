@@ -138,11 +138,23 @@ export const queryGetAddress = gql`
       page: $page
       itemPerPage: $itemPerPage
    ) {
-    id userId address provinceId cityId suburbId
+    id userId address provinceId cityId suburbId postalCode
    }
   }
 `;
 
+
+export const queryEditAddress = gql`
+  mutation userAddressEdit(
+    $addresses: [UserAddressInput]
+    ) {
+      userAddressAdd(
+      addresses: $addresses
+    ) {
+      id userId address provinceId cityId suburbId postalCode
+    }
+  }
+`;
 
 export const queryAddAddress = gql`
   mutation userAddressAdd(
@@ -151,7 +163,7 @@ export const queryAddAddress = gql`
       userAddressAdd(
       addresses: $addresses
     ) {
-      id userId address
+      id userId address provinceId cityId suburbId postalCode
     }
   }
 `;

@@ -26,7 +26,7 @@ import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
 import { TextInput } from 'src/components/Form';
 import ModalProvince from 'src/components/Modal/ModalProvince';
-import { queryAddAddress, queryGetCity, queryGetProvince, queryGetSub } from 'src/lib/query/ecommerce';
+import { queryAddAddress, queryEditAddress, queryGetCity, queryGetProvince, queryGetSub } from 'src/lib/query/ecommerce';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -39,7 +39,6 @@ const Content = Styled(View)`
 `;
 
 const FormPayment = ({ route, navigation  }) => {
-  console.log(route)
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
@@ -61,7 +60,9 @@ const FormPayment = ({ route, navigation  }) => {
 
   
   useEffect(() => {
-    getData()
+   
+    console.log(route.params)
+    firstGet()
     return () => {
     }
   }, [])
@@ -99,12 +100,81 @@ const FormPayment = ({ route, navigation  }) => {
       });
   };
 
+  const firstGet = (name, value) => {
+    showLoading();
+    let variables = {
+      countryCode: 228,
+      provinceId: value ? value.id : null,
+      cityId:  value ? value.id : null,
+      suburbId:  value ? value.id : null,
+    }
+    console.log(variables)
+    const queryx = name == 'prov' ? queryGetCity : name == 'city' ? queryGetSub : queryGetProvince
+    Client.query({query: queryx, variables})
+      .then(res => {
+        hideLoading()
+        console.log(res)
+        if(res.data.shipperGetProvinceList){
+          if (res.data.shipperGetProvinceList.length > 0) {
+            setDataProvince(res.data.shipperGetProvinceList)
+            if(route.params.address.address){
+              firstGet('prov', {id: route.params.address.provinceId})
+              const idx = res.data.shipperGetProvinceList.findIndex(val => val.id == route.params.address.provinceId)
+              setProv(res.data.shipperGetProvinceList[idx])
+              firstGet('city', {id: route.params.address.cityId})
+              setCode(route.params.address.postalCode)
+              setAddress(route.params.address.address)
+            }
+          }
+        }
+
+        if(res.data.shipperGetCitiesList){
+          console.log('city')
+          if (res.data.shipperGetCitiesList.length > 0) {
+            setDataCity(res.data.shipperGetCitiesList)
+            if(route.params.address.address){
+              const idx = res.data.shipperGetCitiesList.findIndex(val => val.id == route.params.address.cityId)
+              setKota(res.data.shipperGetCitiesList[idx])
+            }
+          }
+        }
+        
+        if (res.data.shipperGetSuburbList){
+          if (res.data.shipperGetSuburbList.length > 0) {
+            if(route.params.address.address){
+              const idx = res.data.shipperGetSuburbList.findIndex(val => val.id == route.params.address.suburbId)
+              setKec(res.data.shipperGetSuburbList[idx])
+            }
+            setDataSub(res.data.shipperGetSuburbList)
+          }
+        }
+        
+      })
+      .catch(reject => {
+        hideLoading()
+        alert(reject.message)
+        console.log(reject.message, 'reject');
+      });
+  };
+
 
   const submit = () => {
     console.log(user)
+    const quer = route.params.address.address ? queryEditAddress : queryAddAddress
     showLoading();
     let variables = {
-      addresses:{
+      addresses:route.params.address.address ? {
+        id: route.params.address.id,
+        userId: user.userId,
+        countryId: 228,
+        provinceId: prov ? prov.id : prov,
+        cityId: kota ? kota.id : kota,
+        suburbId: kec ? kec.id : kec,
+        areaId: 1,
+        address: address,
+        postalCode: postalCode
+      } :
+      {
         userId: user.userId,
         countryId: 228,
         provinceId: prov ? prov.id : prov,
@@ -115,12 +185,12 @@ const FormPayment = ({ route, navigation  }) => {
       }
     }
     console.log(variables)
-    Client.mutate({mutation: queryAddAddress, variables})
+    Client.mutate({mutation: quer, variables})
       .then(res => {
         hideLoading()
         console.log(res)
         if (res.data.userAddressAdd.length > 0) {
-          alert('Success Add Address')
+          alert(route.params.address.address ? 'Success Edit Address' : 'Success Add Address')
           const data = {
             name,
             phone,
@@ -131,7 +201,7 @@ const FormPayment = ({ route, navigation  }) => {
             kec,
             userAddressIdDestination: res.data.userAddressAdd[0].userId
           }
-          navigation.navigate('CheckoutScreen',{saveAddress: { ...data } })
+          navigation.navigate('CheckoutScreen',{saveAddress: { ...data, ...res.data.userAddressAdd[0] } })
         }
       })
       .catch(reject => {

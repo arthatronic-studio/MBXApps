@@ -101,7 +101,7 @@ const CheckoutScreen = ({ navigation }) => {
                 rate_id: 1,
                 use_insurance: false
             },
-            userAddressIdDestination: 268,
+            userAddressIdDestination: user.userId,
             userAddressIdOrigin: 3,
             payment_type: "postpay",
             product: [{
@@ -158,7 +158,7 @@ const CheckoutScreen = ({ navigation }) => {
                         <Text size={11} color={Color.text} type='bold'>Alamat Pengiriman</Text>
                     </Col>
                     <Col alignItems='flex-end'>
-                        <TouchableOpacity style={{ }} onPress={() => navigation.navigate('FormPayment')}>
+                        <TouchableOpacity style={{ }} onPress={() => navigation.navigate('FormPayment',{address: address}) }>
                             <Text color={Color.info} size={10}>Ubah Alamat</Text>
                         </TouchableOpacity>
                     </Col>
