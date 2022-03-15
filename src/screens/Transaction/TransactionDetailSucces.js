@@ -15,7 +15,7 @@ import ImagesPath from 'src/components/ImagesPath';
 const TransactionDetailSucces = ({ navigation }) => {
     return (
         <Scaffold
-        header={<Header customIcon title="Detail Pesanan" type="regular" style={{paddingTop: 16, marginBottom: 10,fontWeight:"Bold"}}   centerTitle={false}  />}
+        header={<Header customIcon title="Detail Pesanan" type="bold" style={{paddingTop: 16, marginBottom: 10}}   centerTitle={false}  />}
         style={{  backgroundColor:"#E5E5E5",}}
         >
             <ScrollView>
