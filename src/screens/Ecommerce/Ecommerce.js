@@ -36,6 +36,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import axios from 'axios';
 import moment from 'moment';
+import { queryGetAuction } from 'src/lib/query/auction';
+import { FormatMoney } from 'src/utils';
 
 
 const MainView = Styled(SafeAreaView)`
@@ -146,25 +148,51 @@ const Ecommerce = ({navigation}) => {
 	const loading = useSelector((state) => state['user.auth'].loading);
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
-    const [name, setName] = useState('');
+    const [liveAuction, setLiveAuction] = useState([]);
 	const { Color } = useColor();
 
+    useEffect(() => {
+        getAuction();
+    // });
+    }, []);
+
+    const getAuction = () => {
+        let variables = {
+          page: 1,
+          limit: 5
+        }
+        
+        Client.query({query: queryGetAuction, variables})
+          .then(res => {
+            console.log(res)
+            if (res.data.auctionProduct) {
+                setLiveAuction(res.data.auctionProduct.data);
+            }
+    
+            // hideLoading();
+            // navigation.navigate('TopUpScreen');
+          })
+          .catch(reject => {
+            console.log(reject);
+          });
+      };
+
     const renderItem = ({ item }) => (
-        <View style={{marginHorizontal: 6, marginVertical: 10 }}>
-            <Image source={item.image} style={{resizeMode: 'contain', width: 175, height: 200}}/>
+        <TouchableOpacity onPress={() => navigation.navigate('DetailLelang',{item})} style={{marginHorizontal: 6, marginVertical: 10 }}>
+            <Image source={item.image} style={{resizeMode: 'contain', backgroundColor: '#ddd', width: 175, height: 200}}/>
             <View style={{position: 'absolute', marginVertical: 135, marginHorizontal: 20}}>
                 <Text style={{color: Color.textInput}}>{item.namaProduk}</Text>
                 <Text style={{fontSize: 8, color: Color.border, textAlign: 'left'}}>Harga Awal</Text>
                 <View style={{flexDirection: 'row',}}>
-                    <Text style={{fontSize: 14, fontWeight: 'bold', color: Color.textInput,}}>Rp. </Text>
-                    <Text style={{fontSize: 14, fontWeight: 'bold', color: Color.textInput}}>{item.hargaAwal}</Text>
+                    {/* <Text style={{fontSize: 14, fontWeight: 'bold', color: Color.textInput,}}>Rp.</Text> */}
+                    <Text style={{fontSize: 14, fontWeight: 'bold', color: Color.textInput}}>{FormatMoney.getFormattedMoney(item.start_price)}</Text>
                 </View>
             </View>
             <View style={{backgroundColor: Color.error, width: 75, height: 20, position: 'absolute', borderRadius: 10,
                 marginHorizontal: 80, marginVertical: 7}}>
-                <Text style={{fontSize: 8, fontWeight: 'bold', color: Color.textInput, paddingVertical: 5}}>Tersisa {item.waktuSisa}</Text>
+                <Text style={{fontSize: 8, fontWeight: 'bold', color: Color.textInput, paddingVertical: 5}}>Tersisa {moment.unix((item.time_end/1000) - moment().unix()).format("DD") > 0 ? moment.unix((item.time_end/1000) - moment().unix()).format("DD")+' Hari ' : ''}{moment.unix((item.time_end/1000) - moment().unix()).format("HH:mm")}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
       );
 
       const render = ({ item }) => (
@@ -272,7 +300,7 @@ const Ecommerce = ({navigation}) => {
                     <AntDesign name={'arrowright'} style={{marginVertical: 4, color: Color.info,}}/>
                 </View>
                 <FlatList
-                    data={DATA}
+                    data={liveAuction}
                     renderItem={renderItem}
                     keyExtractor={item => item.id}
                     horizontal
@@ -283,7 +311,7 @@ const Ecommerce = ({navigation}) => {
             <View>
                 <View style={{flexDirection: 'row'}}>
                     <Text style={{width: '70%' ,fontWeight: 'bold', textAlign: 'left', paddingHorizontal: 20}}>Rekomendasi</Text>
-                    <Text style={{marginHorizontal: 5, marginVertical: 2,fontSize: 12, color: Color.info, fontWeight: 'bold'}}>Lihat Semua</Text>
+                    <Text onPress={() => navigation.navigate('MerchScreen')} style={{marginHorizontal: 5, marginVertical: 2,fontSize: 12, color: Color.info, fontWeight: 'bold'}}>Lihat Semua</Text>
                     <AntDesign name={'arrowright'} style={{marginVertical: 4, color: Color.info,}}/>
                 </View>
                 <FlatList

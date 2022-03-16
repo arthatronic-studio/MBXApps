@@ -207,7 +207,7 @@ const CartShop = ({ navigation, route }) => {
                 </View>
             </Col>
         </Row>
-        <Row>
+         <Row>
             <Col size={4} />
             <View>
                 <Text size={10} color={Color.text} align='left'>Total Harga</Text>
@@ -267,7 +267,7 @@ const CartShop = ({ navigation, route }) => {
             </View>
             
         </ScrollView>
-        <Row style={{padding: 16 }}>
+        {list.length != 0 && <Row style={{padding: 16 }}>
             <Col align='flex-start' justify='center'>
                 <Text size={10} color={Color.text}>Total Harga</Text>
                 <Text type='bold' color={Color.text} >{list ? FormatMoney.getFormattedMoney(totalProduct(list)) : 0}</Text>
@@ -277,7 +277,7 @@ const CartShop = ({ navigation, route }) => {
                     <Text type='semibold' color={Color.textInput}>Checkout</Text>
                 </TouchableOpacity>
             </Col>
-        </Row>
+        </Row>}
       <Loading {...loadingProps} />
     </View>
   );
