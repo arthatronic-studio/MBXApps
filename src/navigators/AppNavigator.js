@@ -121,6 +121,7 @@ import MyShopHomepage from 'src/screens/Ecommerce/MyShopHomepage';
 import AddProduct from 'src/screens/Ecommerce/AddProduct';
 import MyProduct from 'src/screens/Ecommerce/MyProduct';
 import Review from 'src/screens/Ecommerce/Review';
+import EditMerchantInfo from 'src/screens/Ecommerce/EditMerchantInfo';
 
 import StepTwo from 'src/screens/Ecommerce/StepTwo';
 import StepThree from 'src/screens/Ecommerce/StepThree';
@@ -199,6 +200,7 @@ function MainStackNavigator() {
       <Screen name="MerchantSetting" component={MerchantSetting} />
       <Screen name="MyProduct" component={MyProduct} />
       <Screen name="Review" component={Review} />
+      <Screen name="EditMerchantInfo" component={EditMerchantInfo} />
 
       {/* user */}
       <Screen name="LoginScreen" component={LoginScreen} />
