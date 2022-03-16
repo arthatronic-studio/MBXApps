@@ -36,7 +36,6 @@ const CartScreen = ({ navigation, route }) => {
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const { Color } = useColor();
 
-  
   useEffect(() => {
   }, []);
 

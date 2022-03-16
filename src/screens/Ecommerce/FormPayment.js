@@ -124,6 +124,8 @@ const FormPayment = ({ route, navigation  }) => {
               firstGet('city', {id: route.params.address.cityId})
               setCode(route.params.address.postalCode)
               setAddress(route.params.address.address)
+              setName(route.params.address.penerimaName)
+              setPhone(route.params.address.noTelp)
             }
           }
         }
@@ -170,9 +172,14 @@ const FormPayment = ({ route, navigation  }) => {
         provinceId: prov ? prov.id : prov,
         cityId: kota ? kota.id : kota,
         suburbId: kec ? kec.id : kec,
+        // province: prov ? prov.name : prov,
+        // city: kota ? kota.name : kota,
+        // suburb: kec ? kec.name : kec,
         areaId: 1,
         address: address,
-        postalCode: postalCode
+        postalCode: postalCode,
+        penerimaName: name,
+        noTelp: phone
       } :
       {
         userId: user.userId,
@@ -180,8 +187,14 @@ const FormPayment = ({ route, navigation  }) => {
         provinceId: prov ? prov.id : prov,
         cityId: kota ? kota.id : kota,
         suburbId: kec ? kec.id : kec,
+        province: prov ? prov.name : prov,
+        city: kota ? kota.name : kota,
+        suburb: kec ? kec.name : kec,
         areaId: 1,
-        address: address
+        address: address,
+        postalCode: postalCode,
+        penerimaName: name,
+        noTelp: phone
       }
     }
     console.log(variables)
@@ -189,20 +202,38 @@ const FormPayment = ({ route, navigation  }) => {
       .then(res => {
         hideLoading()
         console.log(res)
-        if (res.data.userAddressAdd.length > 0) {
-          alert(route.params.address.address ? 'Success Edit Address' : 'Success Add Address')
-          const data = {
-            name,
-            phone,
-            address,
-            postalCode,
-            prov,
-            kota,
-            kec,
-            userAddressIdDestination: res.data.userAddressAdd[0].userId
+        if(res.data.userAddressAdd){
+          if (res.data.userAddressAdd.length > 0) {
+            alert(route.params.address.address ? 'Success Edit Address' : 'Success Add Address')
+            const data = {
+              name,
+              phone,
+              address,
+              postalCode,
+              prov,
+              kota,
+              kec,
+              userAddressIdDestination: res.data.userAddressAdd[0].userId
+            }
+            navigation.navigate('CheckoutScreen',{saveAddress: { ...data, ...res.data.userAddressAdd[0] } })
           }
-          navigation.navigate('CheckoutScreen',{saveAddress: { ...data, ...res.data.userAddressAdd[0] } })
+        }else{
+          if (res.data.userAddressEdit.length > 0) {
+            alert(route.params.address.address ? 'Success Edit Address' : 'Success Add Address')
+            const data = {
+              name,
+              phone,
+              address,
+              postalCode,
+              prov,
+              kota,
+              kec,
+              userAddressIdDestination: res.data.userAddressEdit[0].userId
+            }
+            navigation.navigate('CheckoutScreen',{saveAddress: { ...data, ...res.data.userAddressEdit[0] } })
+          }
         }
+        
       })
       .catch(reject => {
         hideLoading()

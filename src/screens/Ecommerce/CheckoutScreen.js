@@ -57,7 +57,6 @@ const CheckoutScreen = ({ navigation }) => {
 
   
   useEffect(() => {
-      console.log(route.params, 'address focus')
       const {saveAddress, saveShippment} = route.params
       if(saveAddress) {
           setAddress(saveAddress)
@@ -96,20 +95,23 @@ const CheckoutScreen = ({ navigation }) => {
     const {saveAddress, saveShippment, item} = route.params
     console.log(route, 'props')
     showLoading();
+    const prod = item.tempData.map((val, id) => {
+        return{
+            id: val.id,
+            qty: val.qty
+        }
+    })
     let variables = {
         input: {
             courier: {
+                rate_id: shippment.rate.id,
                 cod: false,
-                rate_id: 1,
                 use_insurance: false
             },
             userAddressIdDestination: user.userId,
-            userAddressIdOrigin: 3,
+            userAddressIdOrigin: user.userId,
             payment_type: "postpay",
-            product: [{
-                id: 3,
-                qty:2
-            }]
+            products: prod
         }
     }
     console.log(variables)
@@ -118,8 +120,10 @@ const CheckoutScreen = ({ navigation }) => {
         hideLoading()
         console.log(res)
         if (res.data.shipperCreateOrder) {
-          alert('Success order')
-          navigation.popToTop()
+            alert('Success order')
+            setTimeout(() => {
+                navigation.popToTop()
+            }, 1000);
         }
       })
       .catch(reject => {
@@ -253,7 +257,7 @@ const CheckoutScreen = ({ navigation }) => {
                 <Text type='bold' color={Color.text} size={18} >{FormatMoney.getFormattedMoney(totalProduct(item.tempData)+(totalProduct(item.tempData)*10/100)+(shippment.final_price ? shippment.final_price : 0))}</Text>
             </Col>
             <Col>
-                <TouchableOpacity onPress={() => submit()} style={{ backgroundColor: Color.info, borderRadius: 30, paddingVertical: 10 }}>
+                <TouchableOpacity onPress={() => {shippment.final_price ? submit() : alert('Pilih Pengiriman terlebih dahulu')}} style={{ backgroundColor: Color.info, borderRadius: 30, paddingVertical: 10 }}>
                     <Text type='semibold' color={Color.textInput}>Checkout</Text>
                 </TouchableOpacity>
             </Col>

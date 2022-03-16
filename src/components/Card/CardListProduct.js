@@ -227,7 +227,6 @@ const CardListProduk = (props) => {
       </TouchableOpacity>
     </View>
   );
-    console.log(listProduct, 'listproduct')
   return (
     <View style={{alignItems: 'center'}}>
       <FlatList

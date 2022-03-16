@@ -21,13 +21,31 @@ export const queryCheckout = gql`
       shipperCreateOrder(
         input: $input
       ) {
-        order_id
-        courier{ 
-          rate_id
-          amount
-        }
+        coverage
         external_id
-      }
+        order_id
+        payment_type
+        package {
+          items {
+            name
+            qty
+            price
+          }
+        }
+        consignee{
+          name
+          phone_number
+        }
+        consigner{
+          name
+          phone_number
+        }
+        courier{
+          cod
+          rate_id
+          use_insurance
+        }
+      }    
     }
 `;
 
@@ -138,7 +156,7 @@ export const queryGetAddress = gql`
       page: $page
       itemPerPage: $itemPerPage
    ) {
-    id userId address provinceId cityId suburbId postalCode
+    id userId address provinceId cityId suburbId postalCode penerimaName noTelp
    }
   }
 `;
@@ -148,10 +166,10 @@ export const queryEditAddress = gql`
   mutation userAddressEdit(
     $addresses: [UserAddressInput]
     ) {
-      userAddressAdd(
+      userAddressEdit(
       addresses: $addresses
     ) {
-      id userId address provinceId cityId suburbId postalCode
+      id userId address provinceId cityId suburbId postalCode penerimaName noTelp 
     }
   }
 `;
@@ -163,7 +181,7 @@ export const queryAddAddress = gql`
       userAddressAdd(
       addresses: $addresses
     ) {
-      id userId address provinceId cityId suburbId postalCode
+      id userId address provinceId cityId suburbId postalCode penerimaName noTelp
     }
   }
 `;

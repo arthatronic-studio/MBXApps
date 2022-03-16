@@ -73,7 +73,7 @@ const ListShipping = ({ route, navigation  }) => {
             productIds: products,
             for_order: true,
             userAddressIdDestination: route.params.item.userAddressIdDestination,
-            userAddressIdOrigin: 1,
+            userAddressIdOrigin: route.params.item.userAddressIdDestination,
         }
     }
     console.log(variables)
