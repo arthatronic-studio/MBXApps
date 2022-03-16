@@ -33,7 +33,8 @@ import ForumSegmentScreen from '@src/screens/MainForum/ForumSegmentScreen';
 import CreateThreadScreen from '@src/screens/MainForum/CreateThreadScreen';
 import DetailForumScreen from '@src/screens/MainForum/DetailForumScreen';
 import EditThreadScreen from '@src/screens/MainForum/EditThreadScreen';
-import MainForum from '@src/screens/MainForum/MainForum';
+import NewMainForum from 'src/screens/MainForum/NewMainForum';
+import MainForumOld from 'src/screens/MainForum/MainForumOld';
 import ForumSearch from 'src/screens/MainForum/ForumSearch';
 import CardDetailForum from 'src/screens/MainForum/CardDetailForum';
 // import CardForumPage from 'src/screens/MainForum/CardForumPage';
@@ -120,6 +121,7 @@ import MyShopHomepage from 'src/screens/Ecommerce/MyShopHomepage';
 import AddProduct from 'src/screens/Ecommerce/AddProduct';
 import MyProduct from 'src/screens/Ecommerce/MyProduct';
 import Review from 'src/screens/Ecommerce/Review';
+import EditMerchantInfo from 'src/screens/Ecommerce/EditMerchantInfo';
 
 import StepTwo from 'src/screens/Ecommerce/StepTwo';
 import StepThree from 'src/screens/Ecommerce/StepThree';
@@ -198,6 +200,7 @@ function MainStackNavigator() {
       <Screen name="MerchantSetting" component={MerchantSetting} />
       <Screen name="MyProduct" component={MyProduct} />
       <Screen name="Review" component={Review} />
+      <Screen name="EditMerchantInfo" component={EditMerchantInfo} />
 
       {/* user */}
       <Screen name="LoginScreen" component={LoginScreen} />
@@ -235,7 +238,8 @@ function MainStackNavigator() {
       <Screen name="CreateThreadScreen" component={CreateThreadScreen} />
       <Screen name="DetailForumScreen" component={DetailForumScreen} />
       <Screen name="EditThreadScreen" component={EditThreadScreen} />
-      <Screen name="MainForum" component={MainForum} />
+      <Screen name="NewMainForum" component={NewMainForum} />
+      <Screen name="MainForumOld" component={MainForumOld} />
       <Screen name="ForumSearch" component={ForumSearch} />
       <Screen name="CardDetailForum" component={CardDetailForum} />
       {/* <Screen name="CardForumPage" component={CardForumPage}/> */}

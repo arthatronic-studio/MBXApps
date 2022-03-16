@@ -83,7 +83,7 @@ const paramsQuotes = {
   productSubCategory: 'FORUM_QUOTES',
 };
 
-const MainForum = ({ navigation, route }) => {
+const NewMainForum = ({ navigation, route }) => {
   // state
   const [listMostDiscussion, setListMostDiscussion] = useState([]);
   const [listGroupReader, setListGroupReader] = useState([]);
@@ -301,4 +301,4 @@ const MainForum = ({ navigation, route }) => {
   );
 }
 
-export default MainForum;
+export default NewMainForum;

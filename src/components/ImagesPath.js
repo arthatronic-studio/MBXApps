@@ -82,4 +82,5 @@ export default {
   trash: require('../components/Images/Trash.png'),
   plusCircle: require('../components/Images/PlusCircle.png'),
   DotsThree: require('../components/Images/DotsThree.png'),
+  wholeMap: require('../components/Images/wholeMap.png'),
 };

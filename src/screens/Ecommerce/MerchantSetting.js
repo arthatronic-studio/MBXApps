@@ -75,7 +75,7 @@ const MerchantSetting = ({ navigation, route }) => {
                     alignItems: 'center',
                 }}>
                     <Entypo name={'shop'} size={24} style={{marginRight: 16}} />
-                    <Text type='bold' align='left' size={16}>Seputar Toko</Text>
+                    <Text type='bold' align='left' size={14}>Seputar Toko</Text>
                 </View>
 
                 <Pressable style={{
@@ -84,8 +84,8 @@ const MerchantSetting = ({ navigation, route }) => {
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                }}>
-                    <Text align='left' size={16}>Edit Informasi Toko</Text>
+                }} onPress={() => navigation.navigate('EditMerchantInfo')} >
+                    <Text align='left' size={14}>Edit Informasi Toko</Text>
                     <SimpleLineIcons name={'arrow-right'} size={16} />
                 </Pressable>
 
@@ -96,7 +96,7 @@ const MerchantSetting = ({ navigation, route }) => {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                 }}>
-                    <Text align='left' size={16}>Edit Catatan Toko</Text>
+                    <Text align='left' size={14}>Edit Catatan Toko</Text>
                     <SimpleLineIcons name={'arrow-right'} size={16} />
                 </Pressable>
 
@@ -107,7 +107,7 @@ const MerchantSetting = ({ navigation, route }) => {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                 }}>
-                    <Text align='left' size={16}>Atur Jam Operasional</Text>
+                    <Text align='left' size={14}>Atur Jam Operasional</Text>
                     <SimpleLineIcons name={'arrow-right'} size={16} />
                 </Pressable>
 
@@ -119,7 +119,7 @@ const MerchantSetting = ({ navigation, route }) => {
                     justifyContent: 'space-between',
                     marginBottom: 28
                 }}>
-                    <Text align='left' size={16}>Atur Notifikasi Penjual</Text>
+                    <Text align='left' size={14}>Atur Notifikasi Penjual</Text>
                     <SimpleLineIcons name={'arrow-right'} size={16} />
                 </Pressable>
             </View>
