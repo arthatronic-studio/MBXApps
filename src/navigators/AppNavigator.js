@@ -145,7 +145,6 @@ import ListShipping from 'src/screens/Ecommerce/ListShipping';
 // Transaction
 import TransactionDetail from 'src/screens/Transaction/TransactionDetail';
 import TransactionDetailSucces from 'src/screens/Transaction/TransactionDetailSucces';
-import MainForumOld from 'src/screens/MainForum/MainForumOld';
 
 const {Navigator, Screen} = createStackNavigator();
 const MainPage =
