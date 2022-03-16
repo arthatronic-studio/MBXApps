@@ -79,13 +79,15 @@ const CheckoutScreen = ({ navigation }) => {
       .then(res => {
         hideLoading()
         console.log(res)
-        if (res.data.userAddressList.length > 0) {
-            setAddress({...res.data.userAddressList[0], userAddressIdDestination: res.data.userAddressList[0]['userId']})
+        if(res.data.userAddressList){
+            if (res.data.userAddressList.length > 0) {
+                setAddress({...res.data.userAddressList[0], userAddressIdDestination: res.data.userAddressList[0]['userId']})
+            }
         }
+       
       })
       .catch(reject => {
         hideLoading()
-        alert(reject.message)
         console.log(reject.message, 'reject');
       });
   }
