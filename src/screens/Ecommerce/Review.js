@@ -103,7 +103,7 @@ const Review = ({navigation, route}) => {
         <Header customIcon title="Ulasan" type="regular" centerTitle={false} />
       }
       onPressLeftButton={() => navigation.pop()}>
-      <ScrollView style={{backgroundColor: Color.semiwhite}}>
+      <MainView style={{backgroundColor: Color.semiwhite}}>
         <View style={{marginTop: 12, flexDirection: 'row'}}>
           <Filter
             title={'Terbaru'}
@@ -116,7 +116,7 @@ const Review = ({navigation, route}) => {
             <Category type={'review'} />
           </View>
         </View>
-        <View style={{ paddingVertical: 10}}>
+        <View style={{ paddingVertical: 10,flex:1}}>
           <FlatList
             data={DATA}
             keyExtractor={(item, index) => item.toString() + index}
@@ -127,7 +127,7 @@ const Review = ({navigation, route}) => {
         </View>
 
         {/* <Loading {...loadingProps} /> */}
-      </ScrollView>
+      </MainView>
     </Scaffold>
   );
 };

@@ -1,16 +1,13 @@
 import React from 'react';
-import {View, ScrollView, TextInput} from 'react-native';
+import {View, ScrollView, TextInput, Text, FlatList} from 'react-native';
 import Styled from 'styled-components';
-
 import {Scaffold} from '@src/components';
 import {TouchableOpacity} from '@src/components/Button';
-
 import {queryContentProduct} from '@src/lib/query';
 import {useColor} from '@src/components/Color';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-import ListForumSearch from './ListForumSearch';
-import ListForumPopular from './ListForumPopular';
+import CardForumPopular from './CardForumPopular';
+import {MainView} from 'src/styled';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -63,9 +60,30 @@ const DATA = [
     id: 4,
     title: 'Caferacer',
   },
+
 ];
 
 const DATA_POPULER = [
+  {
+    id: 1,
+    title: 'Sabyan',
+    subtitle: 'Gaming Hub & 1 lainnya',
+  },
+  {
+    id: 2,
+    title: 'Tribesocial',
+    subtitle: 'Gaming Hub & 1 lainnya',
+  },
+  {
+    id: 3,
+    title: 'Karang Taruna',
+    subtitle: 'Gaming Hub & 1 lainnya',
+  },
+  {
+    id: 4,
+    title: 'Dunia Paralel',
+    subtitle: 'Gaming Hub & 1 lainnya',
+  },
   {
     id: 1,
     title: 'Sabyan',
@@ -126,9 +144,34 @@ const ForumSearch = ({navigation, route}) => {
           </BoxInput>
         </BottomSection>
       }>
-      <ScrollView>
-        {/* LIST SEARCH */}
-        <ListForumSearch data={DATA} />
+      {/* LIST SEARCH */}
+      <MainView>
+        <View style={{height: 170}}>
+          <FlatList
+            data={DATA}
+            keyExtractor={(item, index) => item.toString() + index}
+            renderItem={({item}) => {
+              return (
+                <TouchableOpacity
+                  style={{
+                    borderWidth: 0.5,
+                    borderColor: Color.border,
+                    paddingHorizontal: 16,
+                    paddingVertical: 12,
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text style={{fontSize:11}}>{item.title} </Text>
+                  <Ionicons
+                    name="arrow-forward"
+                    size={14}
+                    color={Color.primary}
+                  />
+                </TouchableOpacity>
+              );
+            }}
+          />
+        </View>
 
         {/* EMPTY SEARCH */}
 
@@ -144,11 +187,23 @@ const ForumSearch = ({navigation, route}) => {
       
         </Col> */}
 
-        <View paddingHorizontal={16}>
-          {/* LIST POPULAR */}
-          <ListForumPopular data={DATA_POPULER} />
+        {/* LIST POPULAR */}
+        <View style={{marginTop: 16, paddingHorizontal: 16, flex: 1}}>
+          <View style={{marginBottom:16}}>
+            <Text style={{fontSize:11,fontWeight:'bold'}}>
+              Topik Terpopuler
+            </Text>
+          </View>
+
+          <FlatList
+            data={DATA_POPULER}
+            keyExtractor={(item, index) => item.toString() + index}
+            renderItem={({item}) => {
+              return <CardForumPopular item={item} />;
+            }}
+          />
         </View>
-      </ScrollView>
+      </MainView>
     </Scaffold>
   );
 };
