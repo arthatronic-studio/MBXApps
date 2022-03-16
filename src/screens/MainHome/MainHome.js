@@ -961,16 +961,16 @@ const MainHome = ({navigation, route}) => {
         ref={floatingMusicPlayerRef}
       />
 
-      {/* <ModalPosting
+      <ModalPosting
         ref={modalPostingRef}
         selected={null}
         onPress={e => {
           navigation.navigate(e.nav, e.params);
           modalPostingRef.current.close();
         }}
-      /> */}
+      />
 
-      {/* <Modal
+      <Modal
         isVisible={tempShowPopupAds && showPopupAds}
         onBackdropPress={() => {
           tempShowPopupAds = false;
@@ -1014,7 +1014,7 @@ const MainHome = ({navigation, route}) => {
             </ImageBackground>
           </TouchableOpacity>
         </View>
-      </Modal> */}
+      </Modal>
     </Scaffold>
   );
 };

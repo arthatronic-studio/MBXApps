@@ -147,12 +147,6 @@ const Ecommerce = ({navigation}) => {
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
     const [name, setName] = useState('');
-    const [phone, setPhone] = useState('');
-    const [email, setEmail] = useState('');
-    const [namePetugas, setNamePetugas] = useState('');
-    const [phonePetugas, setPhonePetugas] = useState('');
-    const [nameKoor, setNameKoor] = useState('');
-    const [phoneKoor, setPhoneKoor] = useState('');
 	const { Color } = useColor();
 
     const renderItem = ({ item }) => (
