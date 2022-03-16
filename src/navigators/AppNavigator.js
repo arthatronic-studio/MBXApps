@@ -103,7 +103,7 @@ import ChatInfoScreen from '@src/screens/Chat/ChatInfoScreen';
 import AuctionDetail from '@src/screens/Posting/Auction/Detail';
 import Bid from '@src/screens/Posting/Auction/Bid';
 
-//Ecommerce
+//Ecommerce & Tokoku
 import CartScreen from '@src/screens/Ecommerce/CartScreen';
 import CartShop from '@src/screens/Ecommerce/CartShop';
 import CheckoutScreen from '@src/screens/Ecommerce/CheckoutScreen';
