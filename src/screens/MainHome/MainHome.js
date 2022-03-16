@@ -711,7 +711,7 @@ const MainHome = ({navigation, route}) => {
           <Text onPress={() => navigation.navigate('Ecommerce')}>Ecommerce</Text>
           <TouchableOpacity
             style={{marginTop: 16, marginBottom: 16}}
-            onPress={() => navigation.navigate("MainForum")}
+            onPress={() => navigation.navigate("MainForumOld")}
           >
             <Text>Forum</Text>
           </TouchableOpacity>

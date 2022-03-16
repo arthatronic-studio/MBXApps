@@ -33,7 +33,8 @@ import ForumSegmentScreen from '@src/screens/MainForum/ForumSegmentScreen';
 import CreateThreadScreen from '@src/screens/MainForum/CreateThreadScreen';
 import DetailForumScreen from '@src/screens/MainForum/DetailForumScreen';
 import EditThreadScreen from '@src/screens/MainForum/EditThreadScreen';
-import MainForum from '@src/screens/MainForum/MainForum';
+import NewMainForum from 'src/screens/MainForum/NewMainForum';
+import MainForumOld from 'src/screens/MainForum/MainForumOld';
 import ForumSearch from 'src/screens/MainForum/ForumSearch';
 import CardDetailForum from 'src/screens/MainForum/CardDetailForum';
 // import CardForumPage from 'src/screens/MainForum/CardForumPage';
@@ -144,6 +145,7 @@ import ListShipping from 'src/screens/Ecommerce/ListShipping';
 // Transaction
 import TransactionDetail from 'src/screens/Transaction/TransactionDetail';
 import TransactionDetailSucces from 'src/screens/Transaction/TransactionDetailSucces';
+import MainForumOld from 'src/screens/MainForum/MainForumOld';
 
 const {Navigator, Screen} = createStackNavigator();
 const MainPage =
@@ -235,7 +237,8 @@ function MainStackNavigator() {
       <Screen name="CreateThreadScreen" component={CreateThreadScreen} />
       <Screen name="DetailForumScreen" component={DetailForumScreen} />
       <Screen name="EditThreadScreen" component={EditThreadScreen} />
-      <Screen name="MainForum" component={MainForum} />
+      <Screen name="NewMainForum" component={NewMainForum} />
+      <Screen name="MainForumOld" component={MainForumOld} />
       <Screen name="ForumSearch" component={ForumSearch} />
       <Screen name="CardDetailForum" component={CardDetailForum} />
       {/* <Screen name="CardForumPage" component={CardForumPage}/> */}
