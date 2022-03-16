@@ -34,9 +34,7 @@ import {shadowStyle} from '@src/styles';
 
 let rate = 4;
 
-
 const CardReview = ({data}) => {
-    console.log("daaaaaaata",data)
   // selector
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
@@ -51,61 +49,92 @@ const CardReview = ({data}) => {
   useEffect(() => {}, []);
 
   return (
-      <View style={{alignItems:'center'}}>
-
-   
-    <TouchableOpacity
-      style={{
-        width: '92%',
-        padding: 10,
-        borderRadius: 8,
-        backgroundColor: Color.textInput,
-        ...shadowStyle,
-        marginBottom: 13,
-      }}>
-      <View style={{flexDirection: 'row',alignItems:'center',justifyContent:'space-between'}}>
-        <View style={{flexDirection:'row',alignItems:'center'}}>
-          <View style={{borderRadius:20,marginRight:8,height: 32, width: 32,backgroundColor:Color.grayLight}} />
-          <Text size="11" type="bold">{data.buyer}</Text>
-        </View>
-        <Image source={ImagesPath.DotsThree}/>
-      </View>
-      <View style={{width: '100%', height: 1, backgroundColor: Color.border, alignSelf: 'center',marginVertical:16}}></View>
-      <View style={{flexDirection:'row'}}>
-          <Image source={data.image} style={{marginRight:16,height: 48, width: 48,borderRadius:4,backgroundColor:Color.grayLight}}/>
-          <View>
-              <Text type="bold">{data.title}</Text>
-              <View style={{flexDirection:'row',marginTop:4,marginBottom:10}}>
-                  <Image source={ImagesPath.starRate} />
-                  <Image source={ImagesPath.starRate} />
-                  <Image source={ImagesPath.starRate} />
-                  <Image source={ImagesPath.starRate} />
-                  <Image source={ImagesPath.starUnrate} />
-              </View>
-              <Text align="left">Barangnya bagus bangettt</Text>
-          </View>
-      </View>
-      <View
+    <View style={{alignItems: 'center'}}>
+      <TouchableOpacity
         style={{
-          alignSelf: 'flex-end',
-          marginTop: 16,
-
+          width: '92%',
+          padding: 10,
+          borderRadius: 8,
+          backgroundColor: Color.textInput,
+          ...shadowStyle,
+          marginBottom: 13,
         }}>
-        <TouchableOpacity
+        <View
           style={{
-            borderRadius: 20,
-            paddingVertical: 8,
-            paddingHorizontal: 16,
-            borderWidth: 2,
-            borderColor: Color.primary,
-            marginLeft: 20,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}>
-          <TouchableOpacity>
-            <Text size="12" type="bold" style={{color: Color.primary}}>Balas Ulasan</Text>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View
+              style={{
+                borderRadius: 20,
+                marginRight: 8,
+                height: 32,
+                width: 32,
+                backgroundColor: Color.grayLight,
+              }}
+            />
+            <Text size="11" type="bold">
+              {data.buyer}
+            </Text>
+          </View>
+          <Image source={ImagesPath.DotsThree} />
+        </View>
+        <View
+          style={{
+            width: '100%',
+            height: 1,
+            backgroundColor: Color.border,
+            alignSelf: 'center',
+            marginVertical: 16,
+          }}></View>
+        <View style={{flexDirection: 'row'}}>
+          <Image
+            source={data.image}
+            style={{
+              marginRight: 16,
+              height: 48,
+              width: 48,
+              borderRadius: 4,
+              backgroundColor: Color.grayLight,
+            }}
+          />
+          <View>
+            <Text type="bold">{data.title}</Text>
+            <View
+              style={{flexDirection: 'row', marginTop: 4, marginBottom: 10}}>
+              <Image source={ImagesPath.starRate} />
+              <Image source={ImagesPath.starRate} />
+              <Image source={ImagesPath.starRate} />
+              <Image source={ImagesPath.starRate} />
+              <Image source={ImagesPath.starUnrate} />
+            </View>
+            <Text align="left">Barangnya bagus bangettt</Text>
+          </View>
+        </View>
+        <View
+          style={{
+            alignSelf: 'flex-end',
+            marginTop: 16,
+          }}>
+          <TouchableOpacity
+            style={{
+              borderRadius: 20,
+              paddingVertical: 8,
+              paddingHorizontal: 16,
+              borderWidth: 2,
+              borderColor: Color.primary,
+              marginLeft: 20,
+            }}>
+            <TouchableOpacity>
+              <Text size="12" type="bold" style={{color: Color.primary}}>
+                Balas Ulasan
+              </Text>
+            </TouchableOpacity>
           </TouchableOpacity>
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };

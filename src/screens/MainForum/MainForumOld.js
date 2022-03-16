@@ -101,16 +101,19 @@ const MainForumOld = ({ navigation, route }) => {
 
   const fecthData = async() => {
     showLoading();
-
-    const newListMostDiscussion = await fetchContentProduct('PODDIUM_FORUM', '', '');
+    
+    const newListMostDiscussion = await fetchContentProduct("TRIBES", "NEARBY_PLACE", "ALL");
     setListMostDiscussion(newListMostDiscussion);
-
-    const newListGroupReader = await fetchContentProduct('PODDIUM_FORUM', '', 'FORUM_GROUP_READER');
+    console.log('most diskusi', newListMostDiscussion)
+    
+    const newListGroupReader = await fetchContentProduct("TRIBES", "NEARBY_PLACE", "ALL");
     setListGroupReader(newListGroupReader);
-
-    const newListFavoriteDiscussion = await fetchContentProduct('PODDIUM_FORUM', '', 'FORUM_DISCUSSION');
+    console.log('group reader', newListGroupReader)
+    
+    const newListFavoriteDiscussion = await fetchContentProduct("TRIBES", "NEARBY_PLACE", "ALL");
     setListFavoriteDiscussion(newListFavoriteDiscussion);
-
+    console.log('fav diskusi', newListFavoriteDiscussion)
+    
     hideLoading();
   }
 
