@@ -83,4 +83,9 @@ export default {
   plusCircle: require('../components/Images/PlusCircle.png'),
   DotsThree: require('../components/Images/DotsThree.png'),
   wholeMap: require('../components/Images/wholeMap.png'),
+  truck: require('../components/Images/Truck.png'),
+  clock: require('../components/Images/Clock.png'),
+  mappinline: require('../components/Images/MapPinLine.png'),
+  package: require('../components/Images/Package.png'),
+
 };

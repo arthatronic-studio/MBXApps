@@ -146,6 +146,7 @@ import ListShipping from 'src/screens/Ecommerce/ListShipping';
 // Transaction
 import TransactionDetail from 'src/screens/Transaction/TransactionDetail';
 import TransactionDetailSucces from 'src/screens/Transaction/TransactionDetailSucces';
+import Notification from 'src/screens/Ecommerce/Notification';
 
 const {Navigator, Screen} = createStackNavigator();
 const MainPage =
@@ -164,7 +165,7 @@ function MainStackNavigator() {
         headerShown: false,
       }}>
       {/* uncanny */}
-      <Screen name="SplashScreen" component={Ecommerce} />
+      <Screen name="SplashScreen" component={SplashScreen} />
       <Screen name="MainPage" component={MainPage} />
       <Screen name="KnowMeScreen" component={KnowMeScreen} />
       <Screen name="CreateEmergencyScreen" component={CreateEmergencyScreen} />
@@ -201,6 +202,7 @@ function MainStackNavigator() {
       <Screen name="MyProduct" component={MyProduct} />
       <Screen name="Review" component={Review} />
       <Screen name="EditMerchantInfo" component={EditMerchantInfo} />
+      <Screen name="Notification" component={Notification} />
 
       {/* user */}
       <Screen name="LoginScreen" component={LoginScreen} />

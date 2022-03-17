@@ -196,7 +196,7 @@ const Ecommerce = ({navigation}) => {
       );
 
       const render = ({ item }) => (
-        <View style={{marginHorizontal: 10, marginVertical: 10, backgroundColor: Color.textInput, width: '45%', height: 300, borderRadius: 10 }}>
+        <Pressable style={{marginHorizontal: 10, marginVertical: 10, backgroundColor: Color.textInput, width: '45%', height: 300, borderRadius: 10 }}>
             <Image source={item.image} style={{resizeMode: 'contain', width: 175, height: 160, marginVertical: 8}}/>
             <Text style={{fontWeight: 'bold'}}>{item.namaProduk}</Text>
             <View style={{flexDirection: 'row', marginHorizontal: 12, marginVertical: 5}}>
@@ -215,7 +215,7 @@ const Ecommerce = ({navigation}) => {
                 <Text style={{color: Color.textInput, fontSize: 10}}>Diskon</Text>
                 <Text style={{fontSize: 14, fontWeight: 'bold', color: Color.textInput}}>{item.diskon}</Text>
             </View>
-        </View>
+        </Pressable>
       );
 
   return (
@@ -243,12 +243,12 @@ const Ecommerce = ({navigation}) => {
                             <Text style={{fontSize: 5, color: Color.textInput, alignSelf: 'center', paddingVertical: 1}}> +99</Text>
                         </View>
                     </Pressable>
-                    <View>
+                    <Pressable onPress={() => navigation.navigate('Notification')}>
                         <Ionicons name={'notifications-outline'} size={26} style={{marginHorizontal: 3}}/>
                         <View style={{marginHorizontal: 18,marginVertical: 1, position: 'absolute', width: 18, height: 10, backgroundColor: Color.error, borderRadius: 5}}>
                             <Text style={{fontSize: 5, color: Color.textInput, alignSelf: 'center', paddingVertical: 1}}> +99</Text>
                         </View>
-                    </View>
+                    </Pressable>
                 </View>
             </View>
                 <View style={{flexDirection: 'row',backgroundColor: Color.textInput, width: '95%', height: 55, borderRadius: 5,
@@ -303,7 +303,7 @@ const Ecommerce = ({navigation}) => {
                     data={liveAuction}
                     renderItem={renderItem}
                     keyExtractor={item => item.id}
-                    horizontal
+                    horizontalx
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                 />
