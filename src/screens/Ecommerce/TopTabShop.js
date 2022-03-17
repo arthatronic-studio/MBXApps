@@ -1,8 +1,15 @@
 import * as React from 'react';
-import { View, Button} from 'react-native';
+import { View, FlatList, Button} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Col, Row, TouchableOpacity, useColor, Text} from '@src/components';
 import CardListProduk from 'src/components/Card/CardListProduct';
+import ImagesPath from 'src/components/ImagesPath';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import IonIcons from 'react-native-vector-icons/Ionicons'
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import Entypo from 'react-native-vector-icons/Entypo'
+import { ScrollView } from 'react-native-gesture-handler';
 
 function Description() {
     const { Color } = useColor();
@@ -10,24 +17,14 @@ function Description() {
     <View
       style={{
         flex: 1,
-        backgroundColor: Color.theme
+        backgroundColor: Color.semiwhite,
       }}>
+        
+      
         <View style={{ paddingTop: 10 }}>
             <CardListProduk />
         </View>
-        <Row style={{ backgroundColor: Color.theme, padding: 16 }}>
-            <Col size={5}>
-                <TouchableOpacity onPress={() => navigation.navigate('CheckoutScreen')} style={{ backgroundColor: Color.theme, borderWidth: 1, borderColor: Color.info, borderRadius: 20, paddingVertical: 10 }}>
-                    <Text type='semibold' color={Color.info}>Hapus Produk</Text>
-                </TouchableOpacity>
-            </Col>
-            <Col size={0.5} />
-            <Col>
-                <TouchableOpacity onPress={() => navigation.navigate('CheckoutScreen')} style={{ backgroundColor: Color.info, borderRadius: 20, paddingVertical: 10 }}>
-                    <Text type='semibold' color={Color.textInput}>Tambah Produk</Text>
-                </TouchableOpacity>
-            </Col>
-        </Row>
+        
     </View>
   );
 }
@@ -36,26 +33,48 @@ function Review() {
   const { Color } = useColor();
 
   return (
-    <View
+    <ScrollView>
+      <View
       style={{
         flex: 1,
-        backgroundColor: Color.theme
+        backgroundColor: Color.semiwhite,
+        alignItems: 'center'
       }}>
-        <View style={{ marginTop: 15 }}>
-            {['Semua Produk', 'Fashion', 'Gedget', 'Frozen Food'].map((val,id) => (
+        <View style={{marginTop: 15, backgroundColor: Color.theme, width: '95%', borderRadius: 5}}>
+            {/* {['Semua Produk', 'Fashion', 'Gedget', 'Frozen Food', 'Asbak Unik'].map((val,id) => (
                 <View>
-                    <Row style={{ marginHorizontal: 15, paddingVertical: 15, backgroundColor: Color.theme, borderBottomWidth: 1, borderBottomColor: Color.secondary }}>
-                        <Col>
-                            <Text align='left'>{val}</Text>
+                    <Row style={{ marginHorizontal: 10, paddingVertical: 15, backgroundColor: Color.theme, borderBottomWidth: 1, borderBottomColor: Color.secondary }}>
+                        <Col style={{flexDirection: 'row'}}>
+                            <Text>Hello</Text>
+                            <Text align='left' style={{fontSize: 10}}>{val}</Text>
                         </Col>
                     </Row>
                 </View>
-            ))}
-            <TouchableOpacity style={{ borderColor: Color.info, borderWidth: 1, marginTop: 20, paddingVertical: 10, paddingHorizontal: 20, borderRadius: 20, alignSelf: 'center' }}>
-                <Text color={Color.info}>Tambah Kategori</Text>
+            ))} */}
+            <FlatList
+        data={[
+          {etalase: 'Semua Produk', icon: <AntDesign size={18} name={'appstore1'} style={{color: Color.info}}/>},
+          {etalase: 'Produk Diskon' , icon: <MaterialCommunityIcons size={18} name={'sack-percent'} style={{color: Color.primary}}/>},
+          {etalase: 'Fashion', icon: <IonIcons name={'shirt'} size={18} style={{color: Color.error}}/>},
+          {etalase: 'Gadget', icon: <MaterialIcons name={'smartphone'} size={18} style={{color: Color.success}}/>},
+          {etalase: 'Frozen Food', icon: <IonIcons name={'fast-food'} size={18} style={{color: Color.warning}}/>},
+          {etalase: 'Aksesoris', icon: <MaterialCommunityIcons name={'ring'} size={18} style={{color: Color.icon}}/>},
+          {etalase: 'Asbak Unik', icon: <Entypo name={'flickr'} size={16} style={{color: Color.success}}/>},
+        ]}
+        renderItem={({item}) => 
+        <View style={{flexDirection: 'row',paddingVertical: 20,borderBottomWidth: 1, borderBottomColor: Color.border, width: '95%', height: 55,alignSelf: 'center'}}>
+          <Text style={{height: 20, marginHorizontal: 3}}>{item.icon}</Text>
+          <Text style={{fontSize: 12, textAlign: 'left', marginHorizontal: 10}}>{item.etalase}</Text>
+        </View>
+      }
+      />
+            <TouchableOpacity style={{marginVertical: 15,marginHorizontal: 30,borderWidth: 1, borderColor: Color.error, borderStyle: 'dashed',justifyContent: 'center',flexDirection: 'row',backgroundColor: Color.theme, borderRadius: 20, paddingVertical: 10, width: '83%'}}>
+                    <AntDesign name={'pluscircleo'} size={16} style={{color: Color.error, marginHorizontal: 10}}/>
+                    <Text type='semibold' color={Color.error} style={{selfAlign: 'center', fontSize: 12}}>Tambah Kategori</Text>
             </TouchableOpacity>
         </View>
     </View>
+    </ScrollView>
   );
 }
 
@@ -70,18 +89,18 @@ function MyTabs() {
       tabBarOptions={{
         indicatorStyle: {backgroundColor: Color.primary, height: '100%'},
         activeTintColor: Color.textInput,
-        labelStyle: {fontSize: 12, fontWeight: 'bold'},
-        style: {borderRadius: 30, marginVertical: 0, overflow: 'hidden', marginHorizontal: 16},
+        labelStyle: {fontSize: 12, fontWeight: 'bold', color: Color.textInput},
+        style: {backgroundColor: Color.secondary,borderRadius: 30, marginVertical: 0, overflow: 'hidden', marginHorizontal: 16},
       }}>
       <Tab.Screen
         name="Description"
         component={Description}
-        options={{tabBarLabel: 'Etalase'}}
+        options={{tabBarLabel: 'Beranda'}}
       />
       <Tab.Screen
         name="Review"
         component={Review}
-        options={{tabBarLabel: 'Kategori'}}
+        options={{tabBarLabel: 'Etalase'}}
       />
     </Tab.Navigator>
   );

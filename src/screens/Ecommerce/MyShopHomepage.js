@@ -57,7 +57,7 @@ const MyShopHomepage = ({ navigation }) => {
 		onPressLeftButton={() => navigation.pop()}
 		>
 			<ScrollView style={{backgroundColor: Color.semiwhite}}>
-				<View style={{backgroundColor: Color.textInput, width: '92%', height: 240,
+				<Pressable onPress={() => navigation.navigate('MyShop')} style={{backgroundColor: Color.textInput, width: '92%', height: 240,
 						borderRadius: 8, elevation: 5, marginTop: 20, marginHorizontal: 16,
 						}}>
 					<Image source={ImagesPath.shopbanner} style={{width: '100%', resizeMode: 'contain'}}/>
@@ -82,7 +82,7 @@ const MyShopHomepage = ({ navigation }) => {
 							</View>
 						</Pressable>
 					</View>
-				</View>
+				</Pressable>
 				<View style={{flexDirection: 'row', marginVertical: 10, width: '92%', height: 70, backgroundColor: '#3C58C1', borderRadius: 5,
 							alignSelf: 'center', paddingHorizontal: 20, paddingVertical: 22}}>
 					<View style={{width: '90%'}}>

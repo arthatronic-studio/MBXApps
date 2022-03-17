@@ -53,16 +53,17 @@ const MerchScreen = ({navigation}) => {
   };
   return (
     <Scaffold
-      header={
-        <Header
-          type="regular"
-          centerTitle={false}
-          searchbar
-          cartIcon
-          favoriteIcon
-          notifIcon
-        />
-      }
+    loadingProps={loadingProps}
+    header={
+      <Header
+        customIcon
+        type="regular"
+        centerTitle={false}
+        title='Semua Produk'
+        
+      />
+    }
+      
       onPressLeftButton={() => navigation.pop()}>
         <View style={{flexDirection: 'row', marginTop: 12}}>
           <Filter

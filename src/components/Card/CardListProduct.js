@@ -228,8 +228,27 @@ const CardListProduk = (props) => {
     </View>
   );
   return (
-    <View style={{alignItems: 'center'}}>
+    <View style={{alignItems: 'center',}}>
       <FlatList
+      showsHorizontalScrollIndicator={false}
+      style={{height: 35, marginHorizontal: 20}}
+        data={[
+          {kategori: 'Semua Produk'},
+          {kategori: 'Fashion'},
+          {kategori: 'Gadget'},
+          {kategori: 'Semua Produk'},
+          {kategori: 'Frozen Food'},
+          {kategori: 'Electronics'},
+        ]}
+        horizontal
+        renderItem={({item}) => 
+        <TouchableOpacity style={{borderRadius: 20,justifyContent: 'center', alignItems: 'center',width: 90, height: 30, borderWidth: 1, borderColor: Color.secondary, marginHorizontal: 5}}>
+          <Text style={{fontSize: 10}}>{item.kategori}</Text>
+        </TouchableOpacity>  
+      }
+      />
+      <FlatList
+      style={{marginVertical: 10,}}
         numColumns={2}
         keyExtractor={(item, index) => index.toString()}
         showsHorizontalScrollIndicator={false}

@@ -113,7 +113,7 @@ const DetailProduct = ({navigation}) => {
           customIcon
           type="regular"
           centerTitle={false}
-          searchbar
+          title='Detail Produk'
           
         />
       }

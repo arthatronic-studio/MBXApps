@@ -231,7 +231,7 @@ const Ecommerce = ({navigation}) => {
                 <Octicons name={'search'} size={14} style={{color: Color.placeholder,marginHorizontal: 240,
                     marginVertical: 22, position: 'absolute',}}/>
                 <View style={{flexDirection: 'row', marginVertical: 20}}> 
-                    <Pressable onPress={() => navigation.navigate('WishlistEmpty')}>
+                    <Pressable onPress={() => navigation.navigate('Wishlist')}>
                         <MaterialIcons name={'favorite-border'} size={26} style={{marginHorizontal: 3}}/>
                         <View style={{marginHorizontal: 18,marginVertical: 1, position: 'absolute', width: 18, height: 10, backgroundColor: Color.error, borderRadius: 5}}>
                             <Text style={{fontSize: 5, color: Color.textInput, alignSelf: 'center', paddingVertical: 1}}> +99</Text>
