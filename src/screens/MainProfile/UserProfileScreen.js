@@ -304,15 +304,17 @@ const UserProfileScreen = ({ navigation, route }) => {
                 <View style={{flex: 1.5, paddingLeft: 8}}>
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate('ChatDetailScreen', {
-                                roomId: null,
-                                selected: [{
-                                    ...userContent,
-                                    firstName: userContent.firstName,
-                                    lastName: userContent.lastName,
-                                    fullname: userContent.firstName + ' ' + userContent.lastName,
-                                }],
-                            });
+                            // navigation.navigate('ChatDetailScreen', {
+                            //     roomId: null,
+                            //     roomName: "",
+                            //     selected: [{
+                            //         ...userContent,
+                            //         firstName: userContent.firstName,
+                            //         lastName: userContent.lastName,
+                            //         fullname: userContent.firstName + ' ' + userContent.lastName,
+                            //     }],
+                            //     targetIds: [userContent.userId]
+                            // });
                         }}
                         style={{width: '100%', height: 35, borderWidth: 1, borderColor: Color.secondary, borderRadius: 4, justifyContent: 'center'}}
                     >

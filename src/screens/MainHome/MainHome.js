@@ -18,8 +18,9 @@ import {useIsFocused} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import Modal from 'react-native-modal';
 import Config from 'react-native-config';
-import ImagesPath from 'src/components/ImagesPath';
+import { io } from "socket.io-client";
 
+import ImagesPath from 'src/components/ImagesPath';
 import {
   Text,
   TouchableOpacity,
@@ -90,6 +91,8 @@ const dataDummyMusic = [
 ];
 
 let tempShowPopupAds = true;
+
+export let currentSocket;
 
 const events = [
   Event.PlaybackTrackChanged,
@@ -180,30 +183,18 @@ const MainHome = ({navigation, route}) => {
   useEffect(() => {
     fetchPromoBanners();
 
-    const subscriber = firestore()
-      .collection('contentChatNotifier')
-      .orderBy('id', 'desc')
-      .where('member', 'array-contains-any', [user.userId.toString()])
-      .onSnapshot(
-        res => {
-          // console.log('res chat notifier', res);
+    currentSocket = io(Config.SOCKET_API_URL, {
+      extraHeaders: {
+        // Authorization: "Bearer authorization_token_here"
+        // 'Control-Allow-Credentials': true
+      }
+    });
 
-          if (res) {
-            let newData = [];
+    currentSocket.emit('auth', { id: user ? user.userId : 0 });
+    currentSocket.on('auth', (res) => {
+      console.log('res auth', res);
+    });
 
-            res.docs.map(i => {
-              newData.push(i.data());
-            });
-
-            setFirebaseData(newData);
-          }
-        },
-        error => {
-          console.log('error fstore', error);
-        },
-      );
-
-    return () => subscriber();
   }, []);
 
   useEffect(() => {
@@ -297,6 +288,7 @@ const MainHome = ({navigation, route}) => {
       const option = {
         enableHighAccuracy: true,
       };
+      
       Geolocation.watchPosition(successCallback, errorCallback, option);
     }, 5000);
   }, []);
@@ -475,7 +467,7 @@ const MainHome = ({navigation, route}) => {
                 />
               </TouchableOpacity>
 
-              {/* <TouchableOpacity
+              <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('ChatRoomsScreen');
                 }}
@@ -495,7 +487,7 @@ const MainHome = ({navigation, route}) => {
                     </Text>
                   </Circle>
                 )}
-              </TouchableOpacity> */}
+              </TouchableOpacity>
             </View>
           }
         />
