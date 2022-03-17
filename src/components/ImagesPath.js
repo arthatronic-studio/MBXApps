@@ -88,5 +88,6 @@ export default {
   mappinline: require('../components/Images/MapPinLine.png'),
   package: require('../components/Images/Package.png'),
   wishlist: require('../components/Images/wishlist.png'),
+  shoppingcart: require('../components/Images/ShoppingCart.png'),
 
 };
