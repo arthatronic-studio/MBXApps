@@ -237,7 +237,7 @@ const Ecommerce = ({navigation}) => {
                             <Text style={{fontSize: 5, color: Color.textInput, alignSelf: 'center', paddingVertical: 1}}> +99</Text>
                         </View>
                     </Pressable>
-                    <Pressable onPress={() => navigation.navigate('Cart')}>
+                    <Pressable onPress={() => navigation.navigate('CartShop')}>
                         <MaterialCommunityIcons name={'shopping-outline'} size={26} style={{marginHorizontal: 3}}/>
                         <View style={{marginHorizontal: 18,marginVertical: 1, position: 'absolute', width: 18, height: 10, backgroundColor: Color.error, borderRadius: 5}}>
                             <Text style={{fontSize: 5, color: Color.textInput, alignSelf: 'center', paddingVertical: 1}}> +99</Text>

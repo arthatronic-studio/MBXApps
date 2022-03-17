@@ -87,5 +87,6 @@ export default {
   clock: require('../components/Images/Clock.png'),
   mappinline: require('../components/Images/MapPinLine.png'),
   package: require('../components/Images/Package.png'),
+  wishlist: require('../components/Images/wishlist.png'),
 
 };
