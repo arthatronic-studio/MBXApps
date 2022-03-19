@@ -18,6 +18,7 @@ import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Client from '@src/lib/apollo';
 import {queryGetUserOrganizationRef} from '@src/lib/query';
 import { Scaffold } from 'src/components';
+import { currentSocket } from '@src/screens/MainHome/MainHome';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -53,6 +54,8 @@ const CircleSend = Styled(TouchableOpacity)`
 `;
 
 const ChatUserListScreen = ({navigation, route}) => {
+  const { params } = route;
+
   const [itemData, setItemData] = useState({
     data: [],
     loading: true,
@@ -65,6 +68,10 @@ const ChatUserListScreen = ({navigation, route}) => {
   const [filterData, setFilterData] = useState([])
 
   const { Color } = useColor();
+
+  useEffect(() => {
+    
+  }, []);
 
   useEffect(() => {
     if (itemData.page !== -1) {
@@ -145,15 +152,29 @@ const ChatUserListScreen = ({navigation, route}) => {
     setItemData({...itemData, loading: false});
   };
 
-  const onPress = item => {
-    if (selected.length > 0) {
-      onSelected(item);
-    } else {
-      navigation.navigate('ChatDetailScreen', {
-        roomId: null,
-        selected: [item],
-      });
-    }
+  const onPress = (item) => {
+    const args = {
+      my_room_ids: params.myRoomIds,
+      user_id_target: item.userId
+    };
+
+    console.log('args', args);
+
+    currentSocket.emit('room_id_target', args);
+    currentSocket.on('room_id_target', (res) => {
+      console.log('room_id_target', res);
+
+      if (selected.length > 0) {
+        onSelected(item);
+      } else {
+        navigation.navigate('ChatDetailScreen', {
+          roomId: res,
+          roomName: item.firstName,
+          selected: [item],
+          targetIds: [item.userId]
+        });
+      }
+    })
   };
 
   const searchFilter = (v) => {
@@ -191,20 +212,27 @@ const ChatUserListScreen = ({navigation, route}) => {
       header={
         <Header
           title="Buat Room Chat"
-          actions={
-            selected.length > 0 ? (
-              <TouchableOpacity
-                style={{flex: 1, justifyContent: 'center', paddingHorizontal: 16}}
-                onPress={() => {
-                  navigation.navigate('ChatDetailScreen', {
-                    roomId: null,
-                    selected,
-                  });
-                }}>
-                <MaterialIcons name="send" color={Color.secondary} size={22} />
-              </TouchableOpacity>
-            ) : null
-          }
+          // actions={
+          //   selected.length > 0 ? (
+          //     <TouchableOpacity
+          //       style={{flex: 1, justifyContent: 'center', paddingHorizontal: 16}}
+          //       onPress={() => {
+                      // let targetIds = [];
+                      // item.member.map((e) => {
+                      //     if (e['user_id'] != user.userId) targetIds.push(e['user_id']);
+                      // });
+
+          //         navigation.navigate('ChatDetailScreen', {
+          //           roomId: null,
+          //           roomName: "",
+          //           selected,
+          //           targetIds,
+          //         });
+          //       }}>
+          //       <MaterialIcons name="send" color={Color.secondary} size={22} />
+          //     </TouchableOpacity>
+          //   ) : null
+          // }
         />
       }
     >
@@ -247,7 +275,7 @@ const ChatUserListScreen = ({navigation, route}) => {
             return (
               <TouchableOpacity
                 onPress={() => onPress(item)}
-                onLongPress={() => onSelected(item)}
+                // onLongPress={() => onSelected(item)}
                 style={{
                   width: '100%',
                   borderRadius: 4,
@@ -291,7 +319,7 @@ const ChatUserListScreen = ({navigation, route}) => {
           return (
             <TouchableOpacity
               onPress={() => onPress(item)}
-              onLongPress={() => onSelected(item)}
+              // onLongPress={() => onSelected(item)}
               style={{
                 width: '100%',
                 marginBottom: 8,
