@@ -5,10 +5,13 @@ import messaging from '@react-native-firebase/messaging';
 import TrackPlayer from 'react-native-track-player';
 
 const moment = require('moment');
+const momentTZ = require('moment-timezone');
 const momentDurationFormatSetup = require('moment-duration-format');
 import indonesia from 'moment/locale/id';
 
 momentDurationFormatSetup(moment);
+momentTZ(moment);
+momentTZ.tz.setDefault('Etc/UTC');
 moment.locale('id', indonesia);
 typeof moment.duration.fn.format === "function";
 typeof moment.duration.format === "function";
