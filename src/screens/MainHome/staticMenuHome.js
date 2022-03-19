@@ -14,6 +14,7 @@ import {
     iconMenuEvent,
     iconMenuLoker,
     iconMenuTempat,
+    iconMenuForum,
 } from '@assets/images/home';
 
 const listContentProduct = [];
@@ -53,6 +54,15 @@ export const listMenuHome = [
         nav: 'NewsScreen',
         params: { title: 'Artikel' },
         badge: false,
+        show: true,
+    },
+    {
+        code: 'FORUM',
+        name: 'Forum',
+        images: iconMenuForum,
+        nav: 'ForumScreen',
+        params: {},
+        badge: true,
         show: true,
     },
     {

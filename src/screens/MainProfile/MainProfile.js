@@ -124,14 +124,14 @@ const MainProfile = ({navigation, route}) => {
       title: 'Riwayat',
       show: user && !user.guest,
       icon: <Ionicons name="receipt-outline" size={20} color={Color.text} style={{}} />,
-      // onPress: () => navigation.navigate('ChangeProfile'),
+      onPress: () => {},
     },
     {
       code: 'coupon',
       title: 'Kuponku',
       show: user && !user.guest,
       icon: <MaterialCommunityIcons name="ticket-confirmation-outline" size={20} color={Color.text} style={{}} />,
-      // onPress: () => navigation.navigate('ChangeProfile'),
+      onPress: () => {},
     },
     {
       code: 'myshop',
@@ -155,19 +155,26 @@ const MainProfile = ({navigation, route}) => {
       onPress: () => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
     },
     {
+      code: 'survey',
+      title: 'Survei',
+      show: true,
+      icon: <Ionicons name={"ios-receipt" || "ios-reader"} size={20} color={Color.text} style={{}} />,
+      onPress: () => navigation.navigate('SurveyFirst'),
+    },
+    {
       code: 'help',
       title: 'Bantuan',
       show: true,
       icon: <MaterialCommunityIcons name="headphones" size={20} color={Color.text} style={{}} />,
       onPress: () => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
     },
-    {
-      code: 'termandcondition',
-      title: 'Ketentuan Aplikasi',
-      show: true,
-      icon: <Ionicons name="md-information-circle-outline" size={20} color={Color.text} style={{}} />,
-      // onPress: () => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
-    },
+    // {
+    //   code: 'termandcondition',
+    //   title: 'Ketentuan Aplikasi',
+    //   show: true,
+    //   icon: <Ionicons name="md-information-circle-outline" size={20} color={Color.text} style={{}} />,
+    //   onPress: () => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
+    // },
     // {
     //   code: 'terms_condition',
     //   title: 'Syarat & Ketentuan',
@@ -221,7 +228,6 @@ const MainProfile = ({navigation, route}) => {
       icon: <Ionicons name="exit-outline" size={20} color={Color.info} style={{}} />,
       onPress: () => navigation.navigate('LoginScreen'),
     },
-    // wekdor
   ];
 
   return (
@@ -529,7 +535,6 @@ const MainProfile = ({navigation, route}) => {
                 </Container>
               )
             })}
-            {/* wekdor */}
           </View>
         </Container>
 

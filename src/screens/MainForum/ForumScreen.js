@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, ScrollView, Platform, Dimensions, SafeAreaView, TextInput, Image } from 'react-native';
+import { View, FlatList, Platform, Dimensions, SafeAreaView, TextInput, Image } from 'react-native';
 import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-import ImagesPath from '../../components/ImagesPath'
+import ImagesPath from '../../components/ImagesPath';
+import ListForumVertical from '@src/screens/MainForum/ListForumVertical';
 
 const { width } = Dimensions.get('window');
 
@@ -26,6 +28,8 @@ import { shadowStyle } from '@src/styles';
 
 import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
+
+const { Navigator, Screen } = createMaterialTopTabNavigator();
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -83,7 +87,7 @@ const paramsQuotes = {
   productSubCategory: 'FORUM_QUOTES',
 };
 
-const NewMainForum = ({ navigation, route }) => {
+const ForumScreen = ({ navigation, route }) => {
   // state
   const [listMostDiscussion, setListMostDiscussion] = useState([]);
   const [listGroupReader, setListGroupReader] = useState([]);
@@ -101,30 +105,30 @@ const NewMainForum = ({ navigation, route }) => {
     { id: 1, name: 'Diskusi', images: <MaterialCommunityIcons name='comment-text-multiple' color={Color.theme} size={20} />, nav: 'ForumSegmentScreen', params: paramsDiscussion },
     { id: 2, name: 'Quotes', images: <MaterialCommunityIcons name='format-quote-close-outline' color={Color.theme} size={24} />, nav: 'ForumSegmentScreen', params: paramsQuotes },
   ];
-  
+
   useEffect(() => {
     fecthData();
   }, [route]);
 
-  const fecthData = async() => {
+  const fecthData = async () => {
     showLoading();
-    
+
     const newListMostDiscussion = await fetchContentProduct("TRIBES", "NEARBY_PLACE", "ALL");
     setListMostDiscussion(newListMostDiscussion);
     console.log('most diskusi', newListMostDiscussion)
-    
+
     const newListGroupReader = await fetchContentProduct("TRIBES", "NEARBY_PLACE", "ALL");
     setListGroupReader(newListGroupReader);
     console.log('group reader', newListGroupReader)
-    
+
     const newListFavoriteDiscussion = await fetchContentProduct("TRIBES", "NEARBY_PLACE", "ALL");
     setListFavoriteDiscussion(newListFavoriteDiscussion);
     console.log('fav diskusi', newListFavoriteDiscussion)
-    
+
     hideLoading();
   }
 
-  const fetchContentProduct = async(productType, productCategory, productSubCategory) => {
+  const fetchContentProduct = async (productType, productCategory, productSubCategory) => {
     const variables = {
       page: 0,
       itemPerPage: 6,
@@ -141,13 +145,13 @@ const NewMainForum = ({ navigation, route }) => {
     if (productSubCategory !== '') {
       variables.productSubCategory = productSubCategory;
     }
-    
+
     const result = await Client.query({
       query: queryContentProduct,
       variables,
     });
 
-    console.log("resultttt",result)
+    console.log("resultttt", result)
 
     if (result && result.data && result.data.contentProduct && Array.isArray(result.data.contentProduct)) {
       return result.data.contentProduct;
@@ -166,14 +170,80 @@ const NewMainForum = ({ navigation, route }) => {
     // }
   }
 
+  console.log(listMostDiscussion);
+
+  const TabNewPost = () => {
+    return (
+      <ListForumVertical
+        data={listMostDiscussion}
+        showHeader={false}
+        // onPressShowAll={() => {
+        //   navigation.navigate('ShowAllFromForum', {
+        //     title: 'Sedang ramai didiskusikan',
+        //     subTitle: 'Audio Book',
+        //     componentType: 'GRID',
+        //     productType: "PODDIUM_FORUM",
+        //     productCategory: '',
+        //     productSubCategory: '',
+        //   });
+        // }}
+        onPress={(item) => {
+          onSelected(item);
+          navigation.navigate('DetailForumScreen', { item });
+        }}
+      />
+    )
+  }
+
   return (
-    <MainView style={{backgroundColor: Color.theme}}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-          <Scaffold
-              header={<Header customIcon title="Forum" type="regular" style={{paddingTop: 16, marginBottom: 10}} centerTitle={false} iconRightButton={<AntDesign name={'plus'} size={24}  onPress={() => navigation.navigate('CardDetailForum')}/>} />}
-              onPressLeftButton={() => navigation.pop()}
-          />
-          {/* <ContentView style={{backgroundColor: Color.theme}}>
+    <Scaffold
+      header={
+        <Header
+          title='Forum'
+          centerTitle={false}
+          actions={
+            <AntDesign name={'plus'} size={24} onPress={() => navigation.navigate('CardDetailForum')} />
+          }
+        />
+      }
+      loadingProps={loadingProps}
+    >
+      <Navigator
+        initialRouteName="TabNewPost"
+        tabBarOptions={{
+          activeTintColor: Color.text,
+          inactiveColor: Color.border,
+          labelStyle: { fontSize: 12, fontWeight: 'bold' },
+          style: {
+            backgroundColor: Color.textInput,
+          },
+          labelStyle: { textTransform: 'none' },
+          indicatorStyle: { backgroundColor: Color.primary }
+        }}
+      >
+        <Screen
+          name="TabNewPost"
+          component={TabNewPost}
+          options={{ tabBarLabel: 'Postingan Terbaru' }}
+        />
+        <Screen
+          name="TabMyPost"
+          component={View}
+          options={{ tabBarLabel: 'Postingan Saya' }}
+        />
+      </Navigator>
+
+      {/* <FlatList
+        keyExtractor={(item, index) => item.id + index.toString()}
+        data={listMostDiscussion}
+        renderItem={({ item, index }) => {
+          return (
+            <Text>wew</Text>
+          )
+        }}
+      /> */}
+      {/* <ScrollView showsVerticalScrollIndicator={false}>
+          <ContentView style={{backgroundColor: Color.theme}}>
             <MainMenuView
               style={{...shadowStyle, shadowOpacity: 0.02, backgroundColor: Color.border}}
             >
@@ -201,9 +271,7 @@ const NewMainForum = ({ navigation, route }) => {
                 )
               })}
             </MainMenuView>
-          </ContentView> */}
-
-          <View style={{height: 12}} />
+          </ContentView>
 
           <View style={{paddingHorizontal: 16}}>
             <TextInput
@@ -219,9 +287,7 @@ const NewMainForum = ({ navigation, route }) => {
                 navigation.navigate("ForumSearch")
               }
             />
-          </View> 
-
-          <View style={{height: 24}} />
+          </View>
 
           <View style={{paddingHorizontal:16, borderRadius: 8}}>
             <Image 
@@ -294,11 +360,9 @@ const NewMainForum = ({ navigation, route }) => {
               }}
         />
         
-      </ScrollView>
-
-      <Loading {...loadingProps} />
-    </MainView>
+      </ScrollView> */}
+    </Scaffold>
   );
 }
 
-export default NewMainForum;
+export default ForumScreen;

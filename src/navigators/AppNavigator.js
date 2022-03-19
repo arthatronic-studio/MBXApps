@@ -33,8 +33,7 @@ import ForumSegmentScreen from '@src/screens/MainForum/ForumSegmentScreen';
 import CreateThreadScreen from '@src/screens/MainForum/CreateThreadScreen';
 import DetailForumScreen from '@src/screens/MainForum/DetailForumScreen';
 import EditThreadScreen from '@src/screens/MainForum/EditThreadScreen';
-import NewMainForum from 'src/screens/MainForum/NewMainForum';
-import MainForumOld from 'src/screens/MainForum/MainForumOld';
+import ForumScreen from 'src/screens/MainForum/ForumScreen';
 import ForumSearch from 'src/screens/MainForum/ForumSearch';
 import CardDetailForum from 'src/screens/MainForum/CardDetailForum';
 // import CardForumPage from 'src/screens/MainForum/CardForumPage';
@@ -240,8 +239,7 @@ function MainStackNavigator() {
       <Screen name="CreateThreadScreen" component={CreateThreadScreen} />
       <Screen name="DetailForumScreen" component={DetailForumScreen} />
       <Screen name="EditThreadScreen" component={EditThreadScreen} />
-      <Screen name="NewMainForum" component={NewMainForum} />
-      <Screen name="MainForumOld" component={MainForumOld} />
+      <Screen name="ForumScreen" component={ForumScreen} />
       <Screen name="ForumSearch" component={ForumSearch} />
       <Screen name="CardDetailForum" component={CardDetailForum} />
       {/* <Screen name="CardForumPage" component={CardForumPage}/> */}

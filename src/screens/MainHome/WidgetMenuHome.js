@@ -2,9 +2,10 @@ import React from 'react';
 import {
   View,
   Image,
+  useWindowDimensions,
 } from 'react-native';
-import Styled from 'styled-components';
 import {useNavigation} from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 import {
   Text,
@@ -15,66 +16,12 @@ import {shadowStyle} from '@src/styles';
 import {Container} from '@src/styled';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { listMenuHome } from 'src/screens/MainHome/staticMenuHome';
-import { useSelector } from 'react-redux';
-
-const SambatanMenuView = Styled(View)`
-  width: 100%;
-  borderRadius: 8px;
-  paddingTop: 24px;
-  paddingHorizontal: 8px;
-  flexDirection: row;
-  flexWrap: wrap;
-`;
-
-const CardMenu = Styled(TouchableOpacity)`
-  flexDirection: column;
-  marginBottom: 12px;
-`;
-
-const UserIcon = Styled(View)`
-  height: 100%;
-  justifyContent: flex-start;
-  alignItems: center;
-`;
-
-const ImageProperty = Styled(Image)`
-  height: 50%;
-  aspectRatio: 1;
-  marginBottom: 6;
-`;
-
-const ComingSoonContainer = Styled(View)`
-  width: 100%;
-  justifyContent: center;
-  alignItems: center;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  top: -24;
-`;
-
-const ComingSoonView = Styled(View)`
-  borderRadius: 30;
-  padding: 0px 5px 2px 5px;
-  justifyContent: center;
-  alignItems: center;
-`;
 
 const WidgetMenuHome = (props) => {
   const {Color} = useColor();
   const navigation = useNavigation();
   const user = useSelector(state => state['user.auth'].login.user);
-
-  const renderComingSoon = () => {
-    return (
-      <ComingSoonContainer>
-        <ComingSoonView style={{backgroundColor: Color.border}}>
-          <Text size={8}>Coming Soon</Text>
-        </ComingSoonView>
-      </ComingSoonContainer>
-    );
-  };
+  const {width} = useWindowDimensions();
 
   const renderMenuBadge = () => {
     return (
@@ -86,30 +33,48 @@ const WidgetMenuHome = (props) => {
           top: -6,
           right: 16,
         }}>
-        <ComingSoonView style={{backgroundColor: Color.red}}>
+        <View style={{
+          backgroundColor: Color.error,
+          borderRadius: 30,
+          paddingBottom: 1,
+          paddingHorizontal: 5,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
           <Text size={8} color={Color.textInput}>
             New
           </Text>
-        </ComingSoonView>
+        </View>
       </View>
     );
   };
 
   let menuRealLength = 0;
   listMenuHome.map((e) => e.show ? menuRealLength +=1 : null);
-  let widthMenu = menuRealLength < 4 ? 100 / menuRealLength : 25;
+  const widthPerMenu = menuRealLength < 4 ? 100 / menuRealLength : 25;
+  const widthIconMenu = (width / (menuRealLength < 4 ? menuRealLength : 4) - 16) / 2.5;
 
   return (
-    <Container paddingHorizontal={16}>
-      <SambatanMenuView
-        style={{...shadowStyle, backgroundColor: Color.textInput}}>
+    <Container padding={16}>
+      <Container
+        style={{
+          ...shadowStyle,
+          backgroundColor: Color.textInput,
+          width: '100%',
+          borderRadius: 8,
+          paddingHorizontal: 16,
+          paddingTop: 24,
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+        }}
+      >
         {listMenuHome.map((menu, idx) => {
           if (!menu.show || (Platform.OS === 'ios' && menu.comingsoon)) {
             return null;
           }
 
           return (
-            <CardMenu
+            <TouchableOpacity
               key={idx}
               activeOpacity={0.75}
               disabled={menu.comingsoon}
@@ -126,26 +91,37 @@ const WidgetMenuHome = (props) => {
                 });
               }}
               style={{
-                width: `${widthMenu}%`,
-                aspectRatio: menuRealLength,
+                width: `${widthPerMenu}%`,
+                alignItems: 'center',
+                paddingBottom: 24,
               }}
             >
-              <UserIcon>
-                <ImageProperty
-                  style={menu.comingsoon ? {opacity: 0.3} : {} }
+              <View
+                style={{
+                  height: widthIconMenu,
+                  width: widthIconMenu,
+                  paddingBottom: 6,
+                }}
+              >
+                <Image
+                  style={[
+                    {height: '100%', width: '100%'},
+                    menu.comingsoon ? {opacity: 0.3} : {}
+                  ]}
                   resizeMode="contain"
                   source={menu.images}
                 />
-                <Text size={12} style={menu.comingsoon && {opacity: 0.3}}>
-                  {menu.name}
-                </Text>
-                {/* {(menu.comingsoon || menu.nav === '') && renderComingSoon()} */}
-                {menu.badge && renderMenuBadge()}
-              </UserIcon>
-            </CardMenu>
+              </View>
+              
+              <Text size={12} style={menu.comingsoon && {opacity: 0.3}}>
+                {menu.name}
+              </Text>
+
+              {menu.badge && renderMenuBadge()}
+            </TouchableOpacity>
           );
         })}
-      </SambatanMenuView>
+      </Container>
     </Container>
   );
 };
