@@ -788,6 +788,8 @@ PODS:
     - React
   - react-native-safe-area-context (3.4.0):
     - React-Core
+  - react-native-simple-crypto (0.2.15):
+    - React
   - react-native-slider (4.2.0):
     - React-Core
   - react-native-track-player (2.1.2):
@@ -963,6 +965,7 @@ DEPENDENCIES:
   - react-native-pdf (from `../node_modules/react-native-pdf`)
   - "react-native-progress-bar-android (from `../node_modules/@react-native-community/progress-bar-android`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-simple-crypto (from `../node_modules/react-native-simple-crypto`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-track-player (from `../node_modules/react-native-track-player`)
   - react-native-tracking-transparency (from `../node_modules/react-native-tracking-transparency`)
@@ -1094,6 +1097,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/progress-bar-android"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-simple-crypto:
+    :path: "../node_modules/react-native-simple-crypto"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
   react-native-track-player:
@@ -1223,6 +1228,7 @@ SPEC CHECKSUMS:
   react-native-pdf: a6a5a3f0bdf340eb2eed6c96034424d2cc3f84b0
   react-native-progress-bar-android: be43138ab7da30d51fc038bafa98e9ed594d0c40
   react-native-safe-area-context: f4f7cc09d81ae2d39dfd13e764d718969af07080
+  react-native-simple-crypto: 499ddd9f317932677e50393e58e7a72bca2a86e1
   react-native-slider: 37e1cf275dab20d3c015e40969aa9f5c309645a8
   react-native-track-player: 23dd515aacf1d36a0e522ef7fdbc55f13f26d4fb
   react-native-tracking-transparency: b2029ff756f1128b1f2c7c7c7f3003bc3c950f9f
