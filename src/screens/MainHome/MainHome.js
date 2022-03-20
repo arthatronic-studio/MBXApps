@@ -700,6 +700,42 @@ const MainHome = ({navigation, route}) => {
           </View>
 
           <Divider />
+<<<<<<< Updated upstream
+=======
+          <Text onPress={() => navigation.navigate('Ecommerce')}>Ecommerce</Text>
+          <TouchableOpacity
+            style={{marginTop: 16, marginBottom: 16}}
+            onPress={() => navigation.navigate("MainForumOld")}
+          >
+            <Text>Forum</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{marginTop: 16, marginBottom: 16}}
+            onPress={() => navigation.navigate("SurveyFirst")}
+          >
+            <Text>Survey</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{marginTop: 16, marginBottom: 16}}
+            onPress={() => navigation.navigate("TransactionDetail")}
+          >
+            <Text>Detail Pesanan</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{marginTop: 16, marginBottom: 16}}
+            onPress={() => navigation.navigate("TransactionDetailSucces")}
+          >
+            <Text>Detail Pesanan sukses</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{marginTop: 16, marginBottom: 16}}
+            onPress={() => navigation.navigate("KuponKu")}
+          >
+            <Text>KuponKu</Text>
+          </TouchableOpacity>
+>>>>>>> Stashed changes
 
           <Banner
             isDummy={accessClient.MainHome.dummyBanner}

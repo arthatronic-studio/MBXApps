@@ -125,6 +125,8 @@ import EditMerchantInfo from 'src/screens/Ecommerce/EditMerchantInfo';
 import StepTwo from 'src/screens/Ecommerce/StepTwo';
 import StepThree from 'src/screens/Ecommerce/StepThree';
 import MerchantSetting from 'src/screens/Ecommerce/MerchantSetting';
+import KuponKu from 'src/screens/Ecommerce/KuponKu';
+// import PopUpCouponSucces from 'src/screens/Ecommerce/PopUpCouponSucces';
 
 // Media Player
 import MediaPlayerScreen from 'src/screens/MediaPlayer/MediaPlayerScreen';
@@ -201,7 +203,12 @@ function MainStackNavigator() {
       <Screen name="MyProduct" component={MyProduct} />
       <Screen name="Review" component={Review} />
       <Screen name="EditMerchantInfo" component={EditMerchantInfo} />
+<<<<<<< Updated upstream
       <Screen name="Notification" component={Notification} />
+=======
+      <Screen name="KuponKu" component={KuponKu} />
+      {/* <Screen name="PopUpCouponSucces" component={PopUpCouponSucces}/> */}
+>>>>>>> Stashed changes
 
       {/* user */}
       <Screen name="LoginScreen" component={LoginScreen} />
