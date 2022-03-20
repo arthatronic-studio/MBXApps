@@ -27,7 +27,7 @@ import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
 import { FormatMoney } from 'src/utils';
 import ImagesPath from 'src/components/ImagesPath';
-import { queryCheckout, queryGetAddress, queryGetShipper } from 'src/lib/query/ecommerce';
+import { mutationCheckout, queryCheckout, queryGetAddress, queryGetShipper } from 'src/lib/query/ecommerce';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -102,24 +102,25 @@ const CheckoutScreen = ({ navigation }) => {
         }
     })
     let variables = {
-        input: {
-            courier: {
-                rate_id: shippment.rate.id,
-                cod: false,
-                use_insurance: false
-            },
-            userAddressIdDestination: user.userId,
-            userAddressIdOrigin: user.userId,
-            payment_type: "postpay",
-            products: prod
-        }
+        type: "BOOKING",
+        products: [{ id: 17, qty: 1 }],
+        courier: { rate_id: 268, use_insurance: false, cod: false, cost: 20000},
+        destinationAddressId: 2,
+        // courier: {
+        //         rate_id: shippment.rate.id,
+        //         cod: false,
+        //         use_insurance: false,
+        //         cost: shippment.final_price
+        // },
+        // destinationAddressId: user.userId,
+        // type: 'BOOKING',
+        // products: prod
     }
-    console.log(variables)
-    Client.mutate({mutation: queryCheckout, variables})
+    Client.mutate({mutation: mutationCheckout, variables})
       .then(res => {
         hideLoading()
         console.log(res)
-        if (res.data.shipperCreateOrder) {
+        if (res.data.ecommerceOrderManage) {
             alert('Success order')
             setTimeout(() => {
                 navigation.popToTop()
@@ -128,8 +129,8 @@ const CheckoutScreen = ({ navigation }) => {
       })
       .catch(reject => {
         hideLoading()
-        alert(reject.message)
-        console.log(reject.message, 'reject');
+        alert(reject)
+        console.log( reject, 'reject');
       });
   };
 

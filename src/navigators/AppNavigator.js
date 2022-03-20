@@ -203,12 +203,9 @@ function MainStackNavigator() {
       <Screen name="MyProduct" component={MyProduct} />
       <Screen name="Review" component={Review} />
       <Screen name="EditMerchantInfo" component={EditMerchantInfo} />
-<<<<<<< Updated upstream
       <Screen name="Notification" component={Notification} />
-=======
       <Screen name="KuponKu" component={KuponKu} />
       {/* <Screen name="PopUpCouponSucces" component={PopUpCouponSucces}/> */}
->>>>>>> Stashed changes
 
       {/* user */}
       <Screen name="LoginScreen" component={LoginScreen} />

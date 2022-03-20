@@ -700,8 +700,6 @@ const MainHome = ({navigation, route}) => {
           </View>
 
           <Divider />
-<<<<<<< Updated upstream
-=======
           <Text onPress={() => navigation.navigate('Ecommerce')}>Ecommerce</Text>
           <TouchableOpacity
             style={{marginTop: 16, marginBottom: 16}}
@@ -735,7 +733,6 @@ const MainHome = ({navigation, route}) => {
           >
             <Text>KuponKu</Text>
           </TouchableOpacity>
->>>>>>> Stashed changes
 
           <Banner
             isDummy={accessClient.MainHome.dummyBanner}

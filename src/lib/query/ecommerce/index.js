@@ -49,6 +49,26 @@ export const queryCheckout = gql`
     }
 `;
 
+
+export const mutationCheckout = gql`
+    mutation ecommerceOrderManage(
+      $type: ShipperCreateOrderInputType!
+      $products: [EcommerceOrderProductInput]
+      $courier: ShipperCreateOrderCourierInputType
+      $destinationAddressId: Int
+    ) {
+      ecommerceOrderManage(
+        type: $type
+        products: $products
+        courier: $courier
+        destinationAddressId: $destinationAddressId
+      ) {
+        success
+        message
+      } 
+    }
+`;
+
   export const queryDeleteItemCart = gql`
   mutation ecommerceCartDelete(
     $productId: Int!
