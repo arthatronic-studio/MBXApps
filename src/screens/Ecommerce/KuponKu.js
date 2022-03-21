@@ -96,7 +96,7 @@ const KuponKu = ({ navigation, route }) => {
                         
                 </View>
                 
-                <View style={{  width: "95%",backgroundColor:"#FFFFFF" ,alignSelf:'center',padding:10,borderRadius:5,marginBottom:10}}>               
+                <TouchableOpacity style={{  width: "95%",backgroundColor:"#FFFFFF" ,alignSelf:'center',padding:10,borderRadius:5,marginBottom:10}} onPress={() => navigation.navigate("DetailCoupon")}>               
                     <View style={{ borderBottomWidth:1,borderColor:"#E5E5E5" }}>
                         <View style={{ flexDirection:'row', backgroundColor:"#FFFFFF",borderRadius:5,justifyContent:'space-between' }}>
                             <View style={{ backgroundColor: '#2C70F7',paddingHorizontal:10,paddingVertical:8, borderRadius:3, }}>
@@ -122,7 +122,7 @@ const KuponKu = ({ navigation, route }) => {
                         </TouchableOpacity> 
                     </View>
                     
-                </View>
+                </TouchableOpacity>
 
 
                 <View style={{  width: "95%",backgroundColor:"#FFFFFF" ,alignSelf:'center',padding:10,borderRadius:5,marginBottom:10}}>               
