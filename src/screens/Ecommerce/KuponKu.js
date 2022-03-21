@@ -50,11 +50,13 @@ const KuponKu = ({ navigation, route }) => {
     const {Color}= useColor()
     return (
         <Scaffold
-        header={<Header customIcon title="Kuponku" type="bold" style={{paddingTop: 16, marginBottom: 10}}   centerTitle={false}  />}
+        header={<Header customIcon title="Kuponku" type="bold" style={{paddingTop: 16}}   centerTitle={false}  />}
+        style ={{ backgroundColor:"#E5E5E5" }}
         >
             <ScrollView >
-                <MainView style={{ marginBottom:150 }}>
-                    <View style={{alignSelf:'baseline' ,marginLeft:10,marginTop:5}}>
+                
+                <View style={{ backgroundColor:"#FFFFFF" }}>
+                    <View style={{alignSelf:'baseline' ,marginLeft:10,paddingTop:10}}>
                         <Text>Redeem Kode Promo</Text> 
                        
                     </View>
@@ -80,112 +82,108 @@ const KuponKu = ({ navigation, route }) => {
                     </TouchableOpacity>
                 
                     </View>
+                </View>
+                </View>
+                
+                <View style={{ flexDirection: 'row',paddingLeft:16,marginBottom:10,justifyContent:'space-between',}}>
+                        <View style={{paddingTop:20.5 }}>
+                        <Text>Semua KuponKu</Text>
+                        </View>
+                        <TouchableOpacity onPress={() => onPress()} style={{borderColor:"gray",backgroundColor: "white", width: 86, height: 34, borderRadius: 50, alignItems:'center',paddingTop:10,marginRight:16,marginTop:10,}}>
+                            <Text style={{ color: Color.Text, fontSize: 10 }}>Terbaru  <AntDesign name="down" size={12} color={Color.text} /></Text>
+                            
+                        </TouchableOpacity>
+                        
+                </View>
+                
+                <View style={{  width: "95%",backgroundColor:"#FFFFFF" ,alignSelf:'center',padding:10,borderRadius:5,marginBottom:10}}>               
+                    <View style={{ borderBottomWidth:1,borderColor:"#E5E5E5" }}>
+                        <View style={{ flexDirection:'row', backgroundColor:"#FFFFFF",borderRadius:5,justifyContent:'space-between' }}>
+                            <View style={{ backgroundColor: '#2C70F7',paddingHorizontal:10,paddingVertical:8, borderRadius:3, }}>
+                                <Text style={{ fontSize: 8, color: Color.bid }}>Promo Pengguna Baru</Text>
+                               
+                            </View>
+                            <View style={{ marginRight:10 }}>
+                                <Text style={{ fontSize:11,fontWeight:'bold' }}>HELLOWRLD22</Text>            
+                            </View> 
+                        </View>
+                        <View style={{ marginBottom:16,paddingTop:16}}>
+                            <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Cashback 10% Untuk Pengguna Baru</Text>    
+                            <Text style={{ fontSize:10, color:Color.gray }}>Chocolate cake croissant gingerbread oat cake gingerbread jelly-o candy canes gingerbread. </Text>        
+                        </View>
                     </View>
-
-                    <View style={{ backgroundColor: "#E5E5E5" }}>
-                        <View style={{ flexDirection: 'row',paddingLeft:16,justifyContent:'space-between',}}>
-                                <View style={{paddingTop:20.5 }}>
-                                <Text>Semua KuponKu</Text>
-                                </View>
-                                <TouchableOpacity onPress={() => onPress()} style={{borderColor:"gray",backgroundColor: "white", width: 86, height: 34, borderRadius: 50, alignItems:'center',paddingTop:10,marginRight:16,marginTop:10,}}>
-                                    <Text style={{ color: Color.Text, fontSize: 10 }}>Terbaru  <AntDesign name="down" size={12} color={Color.text} /></Text>
-                                    
-                                </TouchableOpacity>
-                                
+                    <View style={{ flexDirection: 'row',justifyContent:'space-between' ,paddingTop:16}}>
+                        <View>
+                            <Text style={{  fontSize:8 ,color:Color.gray}}>Promo Pengguna Baru</Text>
+                            <Text style={{ fontSize: 10,color:Color.red }}>3 Hari Tersisa</Text>
                         </View>
-                        <View style={{ backgroundColor: "#FFFFFF", borderRadius: 8, marginTop: 25 ,paddingBottom:25,width:"95%",alignSelf:'center'}}>
-                            <View style={{ borderBottomWidth: 1,borderColor: "#E5E5E5", }}>
-                                <View style={{ alignItems: 'baseline', marginTop: 10,  flexDirection:'row' ,justifyContent:'space-between'}}>    
-                                    <View style={{ marginLeft: 10, backgroundColor: '#2C70F7', marginBottom: 20, width: 110, height: 26, alignItems: 'center', borderRadius: 4, paddingTop: 8 }}>
-                                    <Text style={{  fontSize:8 ,color:Color.bid}}>Promo Pengguna Baru</Text>
-                                    </View>
-                                    <View style={{ marginRight:10 }}>
-                                        <Text style={{ fontSize:11,fontWeight:'bold' }}>HELLOWRLD22</Text>            
-                                    </View> 
-                                </View> 
-                                <View style={{ marginLeft:10 ,marginBottom:16}}>
-                                    <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Cashback 10% Untuk Pengguna Baru</Text>    
-                                    <Text style={{ fontSize:10, color:Color.gray }}>Chocolate cake croissant gingerbread oat cake gingerbread jelly-o candy canes gingerbread. </Text>        
-                                </View>
+                        <TouchableOpacity onPress={() => onPress()} style={{borderColor:"gray",backgroundColor: "#F3771D", width: 115, height: 39, borderRadius: 50, alignItems:'center',paddingTop:10}}>
+                            <Text style={{color: "white"}}>Lihat Detail</Text>
+                        </TouchableOpacity> 
+                    </View>
+                    
+                </View>
+
+
+                <View style={{  width: "95%",backgroundColor:"#FFFFFF" ,alignSelf:'center',padding:10,borderRadius:5,marginBottom:10}}>               
+                    <View style={{ borderBottomWidth:1,borderColor:"#E5E5E5" }}>
+                        <View style={{ flexDirection:'row', backgroundColor:"#FFFFFF",borderRadius:5,justifyContent:'space-between' }}>
+                            <View style={{ backgroundColor: '#2C70F7',paddingHorizontal:10,paddingVertical:8, borderRadius:3, }}>
+                                <Text style={{ fontSize: 8, color: Color.bid }}>Promo Pengguna Baru</Text>
+                               
                             </View>
-                            <View style={{ alignItems: 'baseline', marginTop: 10,  flexDirection:'row' ,justifyContent:'space-between'}}>    
-                                <View style={{ marginLeft: 10,position:'absolute',marginTop:10}}>
-                                    <Text style={{  fontSize:8 ,color:Color.gray}}>Promo Pengguna Baru</Text>
-                                    <Text style={{ fontSize: 10,color:Color.red }}>3 Hari Tersisa</Text>    
-                                </View>
-                                <View style={{ marginLeft:250,marginRight:10,width: '100%', borderRadius: 10,backgroundColor:'white',paddingTop:5}}>
-                                    <TouchableOpacity onPress={() => onPress()} style={{borderColor:"gray",backgroundColor: "#F3771D", width: 115, height: 39, borderRadius: 50, alignItems:'center',paddingTop:10}}>
-                                        <Text style={{color: "white"}}>Lihat Detail</Text>
-                                    </TouchableOpacity>          
-                                </View> 
+                            <View style={{ marginRight:10 }}>
+                                <Text style={{ fontSize:11,fontWeight:'bold' }}>HELLOWRLD22</Text>            
                             </View> 
-                        
                         </View>
-                        <View style={{ backgroundColor: "#FFFFFF", borderRadius: 8, marginTop: 25 ,paddingBottom:25,width:"95%",alignSelf:'center'}}>
-                            <View style={{ borderBottomWidth: 1,borderColor: "#E5E5E5", }}>
-                                <View style={{ alignItems: 'baseline', marginTop: 10,  flexDirection:'row' ,justifyContent:'space-between'}}>    
-                                    <View style={{ marginLeft: 10, backgroundColor: '#2C70F7', marginBottom: 20, width: 110, height: 26, alignItems: 'center', borderRadius: 4, paddingTop: 8 }}>
-                                    <Text style={{  fontSize:8 ,color:Color.bid}}>Promo OVO</Text>
-                                    </View>
-                                    <View style={{ marginRight:10 }}>
-                                        <Text style={{ fontSize:11,fontWeight:'bold' }}>HELLOWRLD22</Text>            
-                                    </View> 
-                                </View> 
-                                <View style={{ marginLeft:10 ,marginBottom:16}}>
-                                    <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Cashback 10% Untuk OVO</Text>    
-                                    <Text style={{ fontSize:10, color:Color.gray }}>Chocolate cake croissant gingerbread oat cake gingerbread jelly-o candy canes gingerbread. </Text>        
-                                </View>
+                        <View style={{ marginBottom:16,paddingTop:16}}>
+                            <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Cashback 10% Untuk Pengguna Baru</Text>    
+                            <Text style={{ fontSize:10, color:Color.gray }}>Chocolate cake croissant gingerbread oat cake gingerbread jelly-o candy canes gingerbread. </Text>        
+                        </View>
+                    </View>
+                    <View style={{ flexDirection: 'row',justifyContent:'space-between' ,paddingTop:16}}>
+                        <View>
+                            <Text style={{  fontSize:8 ,color:Color.gray}}>Promo Pengguna Baru</Text>
+                            <Text style={{ fontSize: 10,color:Color.red }}>3 Hari Tersisa</Text>
+                        </View>
+                        <TouchableOpacity onPress={() => onPress()} style={{borderColor:"gray",backgroundColor: "#F3771D", width: 115, height: 39, borderRadius: 50, alignItems:'center',paddingTop:10}}>
+                            <Text style={{color: "white"}}>Lihat Detail</Text>
+                        </TouchableOpacity> 
+                    </View>
+                    
+                </View>
+                
+               
+                
+                <View style={{  width: "95%",backgroundColor:"#FFFFFF" ,alignSelf:'center',padding:10,borderRadius:5,marginBottom:10}}>               
+                    <View style={{ borderBottomWidth:1,borderColor:"#E5E5E5" }}>
+                        <View style={{ flexDirection:'row', backgroundColor:"#FFFFFF",borderRadius:5,justifyContent:'space-between' }}>
+                            <View style={{ backgroundColor: '#2C70F7',paddingHorizontal:10,paddingVertical:8, borderRadius:3, }}>
+                                <Text style={{ fontSize: 8, color: Color.bid }}>Promo Pengguna Baru</Text>
+                               
                             </View>
-                            <View style={{ alignItems: 'baseline', marginTop: 10,  flexDirection:'row' ,justifyContent:'space-between'}}>    
-                                <View style={{ marginLeft: 10,position:'absolute',marginTop:10}}>
-                                    <Text style={{  fontSize:8 ,color:Color.gray}}>Promo OVO</Text>
-                                    <Text style={{ fontSize: 10,color:Color.text }}>6 Hari Tersisa</Text>    
-                                </View>
-                                <View style={{ marginLeft:250,marginRight:10,width: '100%', borderRadius: 10,backgroundColor:'white',paddingTop:5}}>
-                                    <TouchableOpacity onPress={() => onPress()} style={{borderColor:"gray",backgroundColor: "#F3771D", width: 115, height: 39, borderRadius: 50, alignItems:'center',paddingTop:10}}>
-                                        <Text style={{color: "white"}}>Lihat Detail</Text>
-                                    </TouchableOpacity>          
-                                </View> 
+                            <View style={{ marginRight:10 }}>
+                                <Text style={{ fontSize:11,fontWeight:'bold' }}>HELLOWRLD22</Text>            
                             </View> 
-                        
                         </View>
-
-
-                        <View style={{ backgroundColor: "#FFFFFF", borderRadius: 8, marginTop: 25 ,paddingBottom:25,width:"95%",alignSelf:'center'}}>
-                            <View style={{ borderBottomWidth: 1,borderColor: "#E5E5E5", }}>
-                                <View style={{ alignItems: 'baseline', marginTop: 10,  flexDirection:'row' ,justifyContent:'space-between'}}>    
-                                    <View style={{ marginLeft: 10, backgroundColor: '#2C70F7', marginBottom: 20, width: 110, height: 26, alignItems: 'center', borderRadius: 4, paddingTop: 8 }}>
-                                    <Text style={{  fontSize:8 ,color:Color.bid}}>Promo Paylater</Text>
-                                    </View>
-                                    <View style={{ marginRight:10 }}>
-                                        <Text style={{ fontSize:11,fontWeight:'bold' }}>HELLOWRLD22</Text>            
-                                    </View> 
-                                </View> 
-                                <View style={{ marginLeft:10 ,marginBottom:16}}>
-                                    <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Cashback 10% Untuk Semua Paylater</Text>    
-                                    <Text style={{ fontSize:10, color:Color.gray }}>Chocolate cake croissant gingerbread oat cake gingerbread jelly-o candy canes gingerbread. </Text>        
-                                </View>
-                            </View>
-                            <View style={{ alignItems: 'baseline', marginTop: 10,  flexDirection:'row' ,justifyContent:'space-between'}}>    
-                                <View style={{ marginLeft: 10,position:'absolute',marginTop:10}}>
-                                    <Text style={{  fontSize:8 ,color:Color.gray}}>Promo Pengguna Baru</Text>
-                                    <Text style={{ fontSize: 10,color:Color.red }}>3 Hari Tersisa</Text>    
-                                </View>
-                                <View style={{ marginLeft:250,marginRight:10,width: '100%', borderRadius: 10,backgroundColor:'white',paddingTop:5}}>
-                                    <TouchableOpacity onPress={() => onPress()} style={{borderColor:"gray",backgroundColor: "#F3771D", width: 115, height: 39, borderRadius: 50, alignItems:'center',paddingTop:10}}>
-                                        <Text style={{color: "white"}}>Lihat Detail</Text>
-                                    </TouchableOpacity>          
-                                </View> 
-                            </View> 
-                        
+                        <View style={{ marginBottom:16,paddingTop:16}}>
+                            <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Cashback 10% Untuk Pengguna Baru</Text>    
+                            <Text style={{ fontSize:10, color:Color.gray }}>Chocolate cake croissant gingerbread oat cake gingerbread jelly-o candy canes gingerbread. </Text>        
                         </View>
+                    </View>
+                    <View style={{ flexDirection: 'row',justifyContent:'space-between' ,paddingTop:16}}>
+                        <View>
+                            <Text style={{  fontSize:8 ,color:Color.gray}}>Promo Pengguna Baru</Text>
+                            <Text style={{ fontSize: 10,color:Color.red }}>3 Hari Tersisa</Text>
+                        </View>
+                        <TouchableOpacity onPress={() => onPress()} style={{borderColor:"gray",backgroundColor: "#F3771D", width: 115, height: 39, borderRadius: 50, alignItems:'center',paddingTop:10}}>
+                            <Text style={{color: "white"}}>Lihat Detail</Text>
+                        </TouchableOpacity> 
+                    </View>
+                    
+                </View>
 
 
-                        
-                       
-                   </View>
- 
-                </MainView>
             </ScrollView>
             
         </Scaffold>
