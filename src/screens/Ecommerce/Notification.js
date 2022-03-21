@@ -34,6 +34,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import axios from 'axios';
 import moment from 'moment';
 import Ecommerce from '../Ecommerce/Ecommerce';
+import {queryListOrder} from 'src/lib/query/ecommerce';
+import { FormatMoney } from 'src/utils';
 var crypto = require('crypto-js')
 
 function sha1(data) {
@@ -50,89 +52,103 @@ const Content = Styled(View)`
     
 `;
 
+const DATA = [
+  {
+    id: 1,
+    namaProduk: 'Tas Laptop Formal Pria',
+    review: '4.5',
+    terjual: 450,
+    hargaCoret: 'Rp. 300.000',
+    hargaAkhir: 'Rp. 278.100',
+    image: ImagesPath.lelangecommerce3,
+    diskon: '10%',
+    status: 'Menang',
+    Recipt: '100003254876',
+    total: 1
+  },
+  {
+      id: 1,
+      namaProduk: 'Tas Laptop Formal Pria',
+      review: '4.5',
+      terjual: 450,
+      hargaCoret: '300.000',
+      hargaAkhir: '278.100',
+      image: ImagesPath.lelangecommerce4,
+      diskon: '10%',
+      status: 'Paket Dikirim',
+      Recipt: '100003254876',
+      total: 1
+    },
+    {
+      id: 1,
+      namaProduk: 'Tas Laptop Formal Pria',
+      review: '4.5',
+      terjual: 450,
+      hargaCoret: '300.000',
+      hargaAkhir: '278.100',
+      image: ImagesPath.lelangecommerce5,
+      diskon: '10%',
+      status: 'Menunggu Pembayaran',
+      Recipt: '100003254876',
+      total: 1
+    },
+    {
+      id: 1,
+      namaProduk: 'Tas Laptop Formal Pria',
+      review: '4.5',
+      terjual: 450,
+      hargaCoret: '300.000',
+      hargaAkhir: '278.100',
+      image: ImagesPath.lelangecommerce6,
+      diskon: '10%',
+      status: 'Paket Dikirim',
+      Recipt: '100003254876',
+      total: 1
+    },
+  
+];
+
 const Notification = () => {
   const user = useSelector((state) => state['user.auth'].login.user);
 	const loading = useSelector((state) => state['user.auth'].loading);
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
-    const [name, setName] = useState('');
-    const [phone, setPhone] = useState('');
-    const [email, setEmail] = useState('');
-    const [namePetugas, setNamePetugas] = useState('');
-    const [phonePetugas, setPhonePetugas] = useState('');
-    const [nameKoor, setNameKoor] = useState('');
-    const [phoneKoor, setPhoneKoor] = useState('');
+  const [listData, setList] = useState('');
 	const { Color } = useColor();
 
 	useEffect( () => {
-        // submit()
+        getProduct()
     }, []);
 
-
-    const DATA = [
-      {
-        id: 1,
-        namaProduk: 'Tas Laptop Formal Pria',
-        review: '4.5',
-        terjual: 450,
-        hargaCoret: 'Rp. 300.000',
-        hargaAkhir: 'Rp. 278.100',
-        image: ImagesPath.lelangecommerce3,
-        diskon: '10%',
-        status: 'Menang',
-        Recipt: '100003254876',
-        total: 1
-      },
-      {
-          id: 1,
-          namaProduk: 'Tas Laptop Formal Pria',
-          review: '4.5',
-          terjual: 450,
-          hargaCoret: '300.000',
-          hargaAkhir: '278.100',
-          image: ImagesPath.lelangecommerce4,
-          diskon: '10%',
-          status: 'Paket Dikirim',
-          Recipt: '100003254876',
-          total: 1
-        },
-        {
-          id: 1,
-          namaProduk: 'Tas Laptop Formal Pria',
-          review: '4.5',
-          terjual: 450,
-          hargaCoret: '300.000',
-          hargaAkhir: '278.100',
-          image: ImagesPath.lelangecommerce5,
-          diskon: '10%',
-          status: 'Menunggu Pembayaran',
-          Recipt: '100003254876',
-          total: 1
-        },
-        {
-          id: 1,
-          namaProduk: 'Tas Laptop Formal Pria',
-          review: '4.5',
-          terjual: 450,
-          hargaCoret: '300.000',
-          hargaAkhir: '278.100',
-          image: ImagesPath.lelangecommerce6,
-          diskon: '10%',
-          status: 'Paket Dikirim',
-          Recipt: '100003254876',
-          total: 1
-        },
-      
-    ];
+    const getProduct = () => {
+      let variables = {
+        page: 1,
+        itemPerPage: 10,
+        status: 'BOOKING'
+      }
+      console.log(variables)
+      Client.query({query: queryListOrder, variables})
+        .then(res => {
+          console.log(res)
+          if (res.data.ecommerceOrderList) {
+            setList(res.data.ecommerceOrderList);
+          }
+  
+          // hideLoading();
+          // navigation.navigate('TopUpScreen');
+        })
+        .catch(reject => {
+          console.log(reject);
+        });
+    };
+    
 
     const FirstRoute = () => (
-      
-
       <View>
           <ScrollView>
           
           <FlatList
-                  data={DATA}
+                  data={listData}
                   renderItem={renderItem}
                   keyExtractor={item => item.id}
                   showsVerticalScrollIndicator={false}
@@ -162,7 +178,7 @@ const Notification = () => {
           <MaterialIcons name={'keyboard-arrow-down'} size={20} style={{marginVertical: 6}}/>
         </TouchableOpacity>
         <FlatList
-                  data={DATA}
+                  data={listData}
                   renderItem={render}
                   keyExtractor={item => item.id}
                   showsVerticalScrollIndicator={false}
@@ -172,6 +188,16 @@ const Notification = () => {
     );
     
     const initialLayout = { width: Dimensions.get('window').width };
+
+    const totalBarang = (data) => {
+      let total = 0
+      if(data){
+        data.forEach(element => {
+          total = total + element.quantity
+        });
+        return total
+      }
+    }
     
     const renderScene = SceneMap({
       sedangdibeli: FirstRoute,
@@ -191,7 +217,7 @@ const Notification = () => {
                 <View style={{flexDirection: 'row'}}>
                   <View style={{width: '65%', marginHorizontal: 10, marginVertical: 10}}>
                     <Text style={{textAlign: 'left', color: Color.secondary, fontSize: 8}}>No Recipt</Text>
-                    <Text style={{textAlign: 'left', fontSize: 10, fontWeight: 'bold'}}>{item.Recipt}</Text>
+                    <Text style={{textAlign: 'left', fontSize: 10, fontWeight: 'bold'}}>{item.orderNumber}</Text>
                   </View>
                   <View>
                     <View style={{backgroundColor: Color.warning, borderRadius: 5, width: 90, marginVertical: 10, height: 20}}>
@@ -203,7 +229,7 @@ const Notification = () => {
                 <View style={{flexDirection: 'row',}}>
                     <Image source={item.image} style={{resizeMode: 'contain', width: 70, height: 70, marginVertical: 8, marginHorizontal: 8, backgroundColor: 'yellow'}}/>
                     <View style={{marginVertical: 8}}>
-                        <Text style={{fontWeight: 'bold', marginHorizontal: 15}}>{item.namaProduk}</Text>
+                        <Text style={{fontWeight: 'bold', marginHorizontal: 15}}>{item.products[0]['id']}</Text>
                         <View style={{flexDirection: 'row', marginHorizontal: 12, marginVertical: 5}}>
                         <Entypo name={'star'} style={{color: Color.yellow,}}/>
                         <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 3}}>{item.review}</Text>
@@ -211,14 +237,14 @@ const Notification = () => {
                         <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 3}}>{item.terjual}</Text>
                         <Text style={{fontSize: 10, color: Color.secondary,}}>Terjual</Text>
                     </View>
-                    <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left', marginHorizontal: 15}}>{item.total} Barang</Text>
+                    <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left', marginHorizontal: 15}}>{item.products[0]['quantity']} Barang</Text>
                     </View>
                     
                 </View>
                 <View style={{marginVertical: 20, flexDirection: 'row'}}>
                       <View style={{marginHorizontal: 10, width: '65%'}}>
                         <Text style={{fontSize: 8, textAlign: 'left', color: Color.secondary}}>Harga Barang</Text>
-                        <Text style={{fontSize: 12, textAlign: 'left', fontWeight: 'bold'}}>{item.hargaAkhir}</Text>
+                        <Text style={{fontSize: 12, textAlign: 'left', fontWeight: 'bold'}}>{FormatMoney.getFormattedMoney(item.products[0]['price'])}</Text>
                       </View>
                       <View style={{backgroundColor: Color.primary, width: 100, borderRadius: 20}}>
                         <TouchableOpacity>
