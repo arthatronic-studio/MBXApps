@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, ScrollView, FlatList ,Platform, Image, SafeAreaView, Dimensions, TextInput, TouchableOpacity } from 'react-native';
+import { View, ScrollView, FlatList ,Platform, Image, SafeAreaView, Dimensions, TextInput, TouchableOpacity, Pressable } from 'react-native';
 import Styled from 'styled-components';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { useSelector } from 'react-redux';
@@ -7,6 +7,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RNSimpleCrypto from "react-native-simple-crypto";
+import { useNavigation } from '@react-navigation/native';
 
 import {
 	Text,
@@ -115,6 +116,7 @@ const Notification = () => {
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
   const [listData, setList] = useState('');
 	const { Color } = useColor();
+  const navigation = useNavigation();
 
 	useEffect( () => {
         getProduct()
@@ -213,7 +215,7 @@ const Notification = () => {
 
           const renderItem = ({ item }) => (
     
-            <View style={{marginHorizontal: 10, marginVertical: 5, backgroundColor: Color.textInput, width: '95%', height: 200, borderRadius: 10 }}>
+            <Pressable onPress={() => navigation.navigate('TransactionDetail')} style={{marginHorizontal: 10, marginVertical: 5, backgroundColor: Color.theme, width: '95%', height: 200, borderRadius: 10 }}>
                 <View style={{flexDirection: 'row'}}>
                   <View style={{width: '65%', marginHorizontal: 10, marginVertical: 10}}>
                     <Text style={{textAlign: 'left', color: Color.secondary, fontSize: 8}}>No Recipt</Text>
@@ -252,7 +254,7 @@ const Notification = () => {
                         </TouchableOpacity>
                       </View>
                     </View>
-            </View>
+            </Pressable>
           );
 
           const render = ({ item }) => (
