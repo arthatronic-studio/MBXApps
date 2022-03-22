@@ -102,19 +102,19 @@ const CheckoutScreen = ({ navigation }) => {
         }
     })
     let variables = {
-        type: "BOOKING",
-        products: [{ id: 17, qty: 1 }],
-        courier: { rate_id: 268, use_insurance: false, cod: false, cost: 20000},
-        destinationAddressId: 2,
-        // courier: {
-        //         rate_id: shippment.rate.id,
-        //         cod: false,
-        //         use_insurance: false,
-        //         cost: shippment.final_price
-        // },
-        // destinationAddressId: user.userId,
-        // type: 'BOOKING',
-        // products: prod
+        // type: "BOOKING",
+        // products: [{ id: 17, qty: 1 }],
+        // courier: { rate_id: 268, use_insurance: false, cod: false, cost: 20000},
+        // destinationAddressId: 2,
+        courier: {
+            rate_id: shippment.rate.id,
+            cod: false,
+            use_insurance: false,
+            cost: shippment.final_price
+        },
+        destinationAddressId: user.userId,
+        type: 'BOOKING',
+        products: prod
     }
     Client.mutate({mutation: mutationCheckout, variables})
       .then(res => {

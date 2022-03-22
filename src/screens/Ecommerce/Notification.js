@@ -214,8 +214,7 @@ const Notification = () => {
 
 
           const renderItem = ({ item }) => (
-    
-            <Pressable onPress={() => navigation.navigate('TransactionDetail')} style={{marginHorizontal: 10, marginVertical: 5, backgroundColor: Color.theme, width: '95%', height: 200, borderRadius: 10 }}>
+            <Pressable onPress={() => navigation.navigate('TransactionDetail', {item})} style={{marginHorizontal: 10, marginVertical: 5, backgroundColor: Color.theme, width: '95%', height: 200, borderRadius: 10 }}>
                 <View style={{flexDirection: 'row'}}>
                   <View style={{width: '65%', marginHorizontal: 10, marginVertical: 10}}>
                     <Text style={{textAlign: 'left', color: Color.secondary, fontSize: 8}}>No Recipt</Text>
