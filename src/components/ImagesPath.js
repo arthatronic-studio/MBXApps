@@ -90,5 +90,9 @@ export default {
   wishlist: require('../components/Images/wishlist.png'),
   shoppingcart: require('../components/Images/ShoppingCart.png'),
   coupon: require('../components/Images/Coupon.png'),
-
+  merchant1: require('../components/Images/Merchant1.png'),
+  merchant2: require('../components/Images/Merchant2.png'),
+  merchant3: require('../components/Images/Merchant3.png'),
+  merchant4: require('../components/Images/Merchant4.png'),
+  merchant5: require('../components/Images/Merchant5.png'),
 };

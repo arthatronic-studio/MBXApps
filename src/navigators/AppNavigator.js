@@ -122,6 +122,8 @@ import MyProduct from 'src/screens/Ecommerce/MyProduct';
 import Review from 'src/screens/Ecommerce/Review';
 import EditMerchantInfo from 'src/screens/Ecommerce/EditMerchantInfo';
 import DetailCoupon from 'src/screens/Ecommerce/DetailCoupon';
+import SearchScreen from 'src/screens/Ecommerce/SearchScreen';
+import SearchResult from 'src/screens/Ecommerce/SearchResult';
 
 import StepTwo from 'src/screens/Ecommerce/StepTwo';
 import StepThree from 'src/screens/Ecommerce/StepThree';
@@ -208,6 +210,8 @@ function MainStackNavigator() {
       <Screen name="KuponKu" component={KuponKu} />
       {/* <Screen name="PopUpCouponSucces" component={PopUpCouponSucces}/> */}
       <Screen name="DetailCoupon" component={DetailCoupon} />
+      <Screen name="SearchScreen" component={SearchScreen} />
+      <Screen name='SearchResult' component={SearchResult} />
 
       {/* user */}
       <Screen name="LoginScreen" component={LoginScreen} />
