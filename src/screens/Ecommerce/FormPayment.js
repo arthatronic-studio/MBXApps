@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, ScrollView, Platform, SafeAreaView, TextInput as TextInputs } from 'react-native';
 import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
+import MapView, {Marker} from 'react-native-maps'
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -274,6 +275,16 @@ const FormPayment = ({ route, navigation  }) => {
         <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, }}>
           <View style={{ marginBottom: 40 }}>
             <Text align='left' style={{ paddingLeft: 16, marginTop: 15 }} type='bold'>Detail Alamat</Text>
+            <View style={{width: '100%', height: 200, marginVertical: 10}}>
+              <MapView style={{width: '100%', height: 200}} initialRegion={{
+                latitude: -6.173696,
+                longitude: 106.824707,
+                latitudeDelta: 0.009,
+                longitudeDelta: 0.009
+              }}>
+                <Marker coordinate={{latitude: -6.175200397040409, longitude: 106.82714206826583}}/>
+              </MapView>
+            </View>
             <TextInput
               placeholder='Adang Susanyo'
               title='Nama Penerima'
