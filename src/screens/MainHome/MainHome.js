@@ -700,7 +700,6 @@ const MainHome = ({navigation, route}) => {
           <Divider />
 
           <Banner
-            isDummy={accessClient.MainHome.dummyBanner}
             showHeader={accessClient.MainHome.showBannerHeader}
             data={listBanner}
             loading={loadingBanner}

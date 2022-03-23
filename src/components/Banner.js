@@ -15,19 +15,15 @@ const propTypes = {
   data: PropTypes.array,
   loading: PropTypes.bool,
   showHeader: PropTypes.bool,
-  isDummy: PropTypes.bool,
 };
 
 const defaultProps = {
   data: [],
   loading: false,
   showHeader: true,
-  isDummy: false,
 };
 
-const Banner = props => {
-  const {data, loading, showHeader, isDummy} = props;
-
+const Banner = ({ data, loading, showHeader }) => {
   const {width} = useWindowDimensions();
   const {Color} = useColor();
   const navigation = useNavigation();

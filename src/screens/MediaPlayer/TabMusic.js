@@ -77,7 +77,6 @@ const TabMusic = ({ }) => {
         >
             <ScrollView>
                 <Banner
-                    isDummy={true}
                     showHeader={false}
                     data={[{ imageAsset: ImagesPath.sabyanBannerMusic }]}
                     loading={false}

@@ -46,9 +46,6 @@ export const accessClient = {
             isSabyan ? 'sabyan' : 'default',
     },
     MainHome: {
-        dummyBanner:
-            isKomoto ? true :
-            isSabyan ? true : true,
         showWidgetBalance: isKomoto || isSabyan ? false : true,
         showBannerHeader: isKomoto || isSabyan ? false : true,
         showListEmergency: isKomoto,
