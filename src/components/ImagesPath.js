@@ -95,4 +95,10 @@ export default {
   merchant3: require('../components/Images/Merchant3.png'),
   merchant4: require('../components/Images/Merchant4.png'),
   merchant5: require('../components/Images/Merchant5.png'),
+  bca: require('../components/Images/bankbca.png'),
+  bni: require('../components/Images/bni.png'),
+  bri: require('../components/Images/bri.png'),
+  mandiri: require('../components/Images/mandiri.png'),
+  permata: require('../components/Images/permata.png'),
+  createshop: require('../components/Images/createshop.png'),
 };
