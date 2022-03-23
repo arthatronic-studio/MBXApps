@@ -147,6 +147,10 @@ import TransactionDetail from 'src/screens/Transaction/TransactionDetail';
 import TransactionDetailSucces from 'src/screens/Transaction/TransactionDetailSucces';
 import Notification from 'src/screens/Ecommerce/Notification';
 
+// gallery
+import GalleryScreen from 'src/screens/Gallery/GalleryScreen';
+import GalleryDetailScreen from 'src/screens/Gallery/GalleryDetailScreen';
+
 const {Navigator, Screen} = createStackNavigator();
 const MainPage =
   accessClient.BottomTabsNavigator.type === 'komoto'
@@ -295,7 +299,9 @@ function MainStackNavigator() {
       {/* Transaction */}
       <Screen name='TransactionDetail' component={TransactionDetail} />
       <Screen name='TransactionDetailSucces'component={TransactionDetailSucces}/>
-
+      {/* gallery */}
+      <Screen name='GalleryScreen' component={GalleryScreen} />
+      <Screen name='GalleryDetailScreen' component={GalleryDetailScreen} />
     </Navigator>
   );
 }

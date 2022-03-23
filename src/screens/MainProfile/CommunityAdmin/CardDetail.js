@@ -21,8 +21,9 @@ import Popup, {usePopup} from '@src/components/Modal/Popup';
 
 import Client from '@src/lib/apollo';
 import {queryJoinCommunityManage} from '@src/lib/query/joinCommunityManage';
-import {Divider} from 'src/styled';
+import {Container, Divider} from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
+import { getSizeByRatio } from 'src/utils/get_ratio';
 
 const EmailRoundedView = Styled(View)`
   width: 100%;
@@ -50,20 +51,6 @@ const CardDetail = ({ navigation, route }) => {
 
   const [idNumber, setIdNumber] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const listCarousel = [
-    item.car_photo_main,
-    item.car_photo_front,
-    item.car_photo_side,
-    item.car_photo_back,
-    item.selfie_photo,
-    item.sim_photo,
-    item.stnk_photo,
-    item.transaction_proof,
-  ];
-
-  
-
   const {width, height} = useWindowDimensions();
   const {Color} = useColor();
   const [popupProps, showPopup] = usePopup();
@@ -154,6 +141,36 @@ const CardDetail = ({ navigation, route }) => {
       });
   };
 
+  console.log(item);
+
+  const renderFotoInfo = (label, image) => {
+    return (
+      <View
+        style={{
+          alignItems: 'flex-start',
+          justifyContent: 'flex-start',
+          paddingBottom: 16,
+        }}
+      >
+        <Text style={{fontWeight: 'bold', paddingBottom: 4}}>
+          {label}
+        </Text>
+        <Divider height={8} />
+        <Container width={width - 32} height={getSizeByRatio({ width: width - 32, ratio: 3/4 }).height}>
+          <Image 
+            source={{uri: image}}
+            style={{
+              width: '100%',
+              height: '100%',
+              borderRadius: 4,
+              backgroundColor: Color.border,
+            }}
+          />
+        </Container>
+      </View>
+    )
+  }
+
   return (
     <Scaffold
       headerTitle='Member Detail'
@@ -161,22 +178,6 @@ const CardDetail = ({ navigation, route }) => {
       popupProps={popupProps}
     >
       <ScrollView>
-        <CarouselView
-          delay={4000}
-          showIndicator
-          style={{width, aspectRatio: 3/2}}
-        >
-          {listCarousel.map((e, idx) => {
-            return (
-              <Image
-                key={idx}
-                source={{uri: e}}
-                style={{width: '100%', height:'100%'}}
-              />
-            )
-          })}
-        </CarouselView>
-
         <View
           style={{
             alignItems: 'flex-start',
@@ -191,7 +192,7 @@ const CardDetail = ({ navigation, route }) => {
               style={{
                 alignItems: 'flex-start',
                 justifyContent: 'flex-start',
-                paddingVertical: 16,
+                paddingBottom: 16,
               }}>
               <Text style={{fontWeight: 'bold', paddingBottom: 10}}>
                 PROFILE
@@ -228,7 +229,7 @@ const CardDetail = ({ navigation, route }) => {
                   </LabelInput>
                   <EmailRoundedView>
                     <FieldView>
-                      <Text>{userDetail.city}</Text>
+                      <Text>{item.chapter ? item.chapter.name : '-'}</Text>
                     </FieldView>
                   </EmailRoundedView>
                 </View>
@@ -250,7 +251,7 @@ const CardDetail = ({ navigation, route }) => {
                   </LabelInput>
                   <EmailRoundedView>
                     <FieldView>
-                      <Text>{userDetail.firstName + userDetail.lastName}</Text>
+                      <Text>{userDetail.firstName + ' ' + userDetail.lastName}</Text>
                     </FieldView>
                   </EmailRoundedView>
                 </View>
@@ -327,6 +328,7 @@ const CardDetail = ({ navigation, route }) => {
               style={{
                 alignItems: 'flex-start',
                 justifyContent: 'flex-start',
+                paddingBottom: 16,
               }}
             >
               <Text style={{fontWeight: 'bold', paddingBottom: 4}}>
@@ -420,16 +422,17 @@ const CardDetail = ({ navigation, route }) => {
                   </EmailRoundedView>
                 </View>
               </View>
-
             </View>
+
             <View
               style={{
                 alignItems: 'flex-start',
                 justifyContent: 'flex-start',
+                paddingBottom: 16,
               }}
             >
               <Text style={{fontWeight: 'bold', paddingTop: 8}}>
-                Description
+                NOTES
               </Text>
               <View style={{width: '100%'}}>
                 <View
@@ -476,6 +479,15 @@ const CardDetail = ({ navigation, route }) => {
                 </View>
               </View>
             </View>
+
+            {renderFotoInfo('Tampilan Utama Mobil', item.car_photo_main)}
+            {renderFotoInfo('Tampak Depan Mobil', item.car_photo_front)}
+            {renderFotoInfo('Tampak Samping Mobil', item.car_photo_side)}
+            {renderFotoInfo('Tampak Belakang Mobil', item.car_photo_back)}
+            {renderFotoInfo('Foto Selfi', item.selfie_photo)}
+            {renderFotoInfo('Foto STNK', item.stnk_photo)}
+            {renderFotoInfo('Foto SIM', item.sim_photo)}
+            {renderFotoInfo('Bukti Transaksi', item.transaction_proof)}
             
           </View>
         </View>

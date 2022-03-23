@@ -84,50 +84,26 @@ const PlaceDetail = ({navigation, route}) => {
       popupProps={popupProps}
       loadingProps={loadingProps}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Image
-          source={{uri: item.image}}
-          style={{width: '100%', aspectRatio: 16 / 9}}
-        />
-
-        <View
-          style={{
-            padding: 24,
-            marginTop: -16,
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            backgroundColor: Color.theme,
-          }}>
-          {user && user.userId === item.ownerId && (
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('EditThreadScreen', {
-                  ...item,
-                  title: 'Edit',
-                });
-              }}
-              style={{
-                height: 48,
-                width: 48,
-                borderRadius: 24,
-                position: 'absolute',
-                top: -24,
-                right: 16,
-                backgroundColor: Color.primary,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Ionicons name="pencil" size={20} color={Color.textInput} />
-            </TouchableOpacity>
-          )}
-        </View>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('GalleryDetailScreen', {
+              id: item.id,
+              image: item.image,
+            });
+          }}
+        >
+          <Image
+            source={{uri: item.image}}
+            style={{width: '100%', aspectRatio: 4/3, backgroundColor: Color.border}}
+          />
+        </TouchableOpacity>
 
         <View
           style={{
             backgroundColor: Color.theme,
             width: '100%',
             height: '100%',
+            paddingTop: 16,
           }}>
           <View>
             <Text

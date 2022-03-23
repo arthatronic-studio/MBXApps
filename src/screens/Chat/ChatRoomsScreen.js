@@ -140,8 +140,8 @@ const ChatRoomsScreen = ({ navigation, route }) => {
         return title;
     }
 
-    const managedDate = (origin) => {
-        const date = Moment(origin);
+    const managedDateUTC = (origin) => {
+        const date = Moment(origin).utc();
         const now = new Moment();
         const diff = now.diff(Moment(date), 'days');
         
@@ -288,7 +288,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                                 <Text
                                     size={8}
                                 >
-                                    {item.last_chat ? managedDate(item.last_chat.created_unix_date) : ''}
+                                    {item.last_chat ? managedDateUTC(item.last_chat.created_unix_date) : ''}
                                 </Text>
                                 <Circle
                                     size={10}

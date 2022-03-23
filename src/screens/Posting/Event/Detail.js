@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import {View, Image, ScrollView, Platform, Linking} from 'react-native';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
@@ -10,10 +10,10 @@ import { useSelector } from 'react-redux';
 import {useLoading, usePopup, useColor, Alert} from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
-import {TouchableOpacity} from '@src/components/Button';
+import {TouchableOpacity, Button} from '@src/components/Button';
 import Client from '@src/lib/apollo';
 import {queryAddLike} from '@src/lib/query';
-import { Container, Divider } from 'src/styled';
+import { Container, Divider, Padding } from 'src/styled';
 import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 import ModalContentOptions from 'src/components/ModalContentOptions';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
@@ -76,7 +76,7 @@ const EventDetail = ({navigation, route}) => {
   return (
     <Scaffold
       headerTitle="Detail"
-      iconRightButton={<Feather name='more-vertical' size={20} />}
+      iconRightButton={<MaterialIcons name='more-vert' size={22} />}
       onPressRightButton={() => {
           modalOptionsRef.current.open();
       }}
@@ -88,34 +88,26 @@ const EventDetail = ({navigation, route}) => {
       <ScrollView
         showsVerticalScrollIndicator={false}
       >
-        <Image
-          source={{uri: item.image}}
-          style={{width: '100%', aspectRatio: 16/9}}
-        />
-
-        <View style={{padding: 24, marginTop: -16, borderTopLeftRadius: 24, borderTopRightRadius: 24, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: Color.theme}}>
-            {user && user.userId === item.ownerId && <TouchableOpacity
-                onPress={() => {
-                    navigation.navigate('EditThreadScreen', {
-                        ...item,
-                        title: 'Edit',
-                    });
-                }}
-                style={{height: 48, width: 48, borderRadius: 24, position: 'absolute', top: -24, right: 16, backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center'}}
-            >
-                <Ionicons
-                    name='pencil'
-                    size={20}
-                    color={Color.textInput}
-                />
-            </TouchableOpacity>}
-        </View>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('GalleryDetailScreen', {
+              id: item.id,
+              image: item.image,
+            });
+          }}
+        >
+          <Image
+            source={{uri: item.image}}
+            style={{width: '100%', aspectRatio: 4/3, backgroundColor: Color.border}}
+          />
+        </TouchableOpacity>
 
         <View
           style={{
             backgroundColor: Color.theme,
             width: '100%',
             height: '100%',
+            paddingTop: 16,
           }}>
           <View>
             <Text
@@ -184,6 +176,16 @@ const EventDetail = ({navigation, route}) => {
               <Text style={{fontWeight: 'bold'}}>Jakarta Selatan</Text>
             </View> */}
           </View>
+
+          <Container paddingHorizontal={32} paddingVertical={16}>
+            <Button
+              onPress={() => {
+                navigation.navigate('GalleryScreen', { item });
+              }}
+            >
+              Lihat Event Galeri
+            </Button>
+          </Container>
           
           {item.like > 0 &&
             <Container paddingHorizontal={16}>
