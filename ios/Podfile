@@ -5,6 +5,8 @@ platform :ios, '11.0'
 
 target 'TribesSocial' do
   pod 'react-native-ffmpeg/full', :podspec => '../node_modules/react-native-ffmpeg/react-native-ffmpeg.podspec'
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => rn_maps_path
   
   config = use_native_modules!
 

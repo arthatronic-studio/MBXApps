@@ -484,6 +484,25 @@ PODS:
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
   - glog (0.3.5)
+  - Google-Maps-iOS-Utils (3.10.3):
+    - Google-Maps-iOS-Utils/Clustering (= 3.10.3)
+    - Google-Maps-iOS-Utils/Geometry (= 3.10.3)
+    - Google-Maps-iOS-Utils/GeometryUtils (= 3.10.3)
+    - Google-Maps-iOS-Utils/Heatmap (= 3.10.3)
+    - Google-Maps-iOS-Utils/QuadTree (= 3.10.3)
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Clustering (3.10.3):
+    - Google-Maps-iOS-Utils/QuadTree
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Geometry (3.10.3):
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/GeometryUtils (3.10.3):
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Heatmap (3.10.3):
+    - Google-Maps-iOS-Utils/QuadTree
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/QuadTree (3.10.3):
+    - GoogleMaps
   - GoogleAppMeasurement (8.8.0):
     - GoogleAppMeasurement/AdIdSupport (= 8.8.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.4)
@@ -508,6 +527,11 @@ PODS:
     - GoogleUtilities/Environment (~> 7.2)
     - nanopb (~> 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
+  - GoogleMaps (5.1.0):
+    - GoogleMaps/Maps (= 5.1.0)
+  - GoogleMaps/Base (5.1.0)
+  - GoogleMaps/Maps (5.1.0):
+    - GoogleMaps/Base
   - GoogleUtilities/AppDelegateSwizzler (7.7.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -774,7 +798,13 @@ PODS:
     - React
   - react-native-geolocation-service (5.2.0):
     - React
+  - react-native-google-maps (0.30.1):
+    - Google-Maps-iOS-Utils (= 3.10.3)
+    - GoogleMaps (= 5.1.0)
+    - React-Core
   - react-native-image-picker (3.8.1):
+    - React-Core
+  - react-native-maps (0.30.1):
     - React-Core
   - react-native-netinfo (8.0.0):
     - React-Core
@@ -960,7 +990,9 @@ DEPENDENCIES:
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-ffmpeg/full (from `../node_modules/react-native-ffmpeg/react-native-ffmpeg.podspec`)
   - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
+  - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - react-native-maps (from `../node_modules/react-native-maps`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-notification-sounds (from `../node_modules/react-native-notification-sounds`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
@@ -1025,8 +1057,10 @@ SPEC REPOS:
     - Flipper-RSocket
     - FlipperKit
     - fmt
+    - Google-Maps-iOS-Utils
     - GoogleAppMeasurement
     - GoogleDataTransport
+    - GoogleMaps
     - GoogleUtilities
     - "gRPC-C++"
     - gRPC-Core
@@ -1086,8 +1120,12 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native-ffmpeg/react-native-ffmpeg.podspec"
   react-native-geolocation-service:
     :path: "../node_modules/react-native-geolocation-service"
+  react-native-google-maps:
+    :path: "../node_modules/react-native-maps"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-maps:
+    :path: "../node_modules/react-native-maps"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-notification-sounds:
@@ -1197,8 +1235,10 @@ SPEC CHECKSUMS:
   FlipperKit: d8d346844eca5d9120c17d441a2f38596e8ed2b9
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 5337263514dd6f09803962437687240c5dc39aa4
+  Google-Maps-iOS-Utils: 95d5ca4d2004314eff88c1819b969db6cac37ab6
   GoogleAppMeasurement: 5ba1164e3c844ba84272555e916d0a6d3d977e91
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
+  GoogleMaps: 086ae1dab659eaa7339bdb30fc88e2f44e7c597c
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   "gRPC-C++": 13d8ccef97d5c3c441b7e3c529ef28ebee86fad2
   gRPC-Core: 4afa11bfbedf7cdecd04de535a9e046893404ed5
@@ -1226,7 +1266,9 @@ SPEC CHECKSUMS:
   react-native-document-picker: 429972f7ece4463aa5bcdd789622b3a674a3c5d1
   react-native-ffmpeg: 587fa045f985d775107f4b8cbb6c79df0ad68e63
   react-native-geolocation-service: 7c9436da6dfdecd9526c62eac62ea2bc3f0cc8ea
+  react-native-google-maps: 17432eb7412df3c65d7c7c52ede085d0f5624f77
   react-native-image-picker: 31971f6184e7c1dcb4fc1f122e1ba2c3fb11ef1e
+  react-native-maps: d752b0dd0e1951d815b1336332835aab6b4a836f
   react-native-netinfo: ba4ea50d836c60580c59079233c400753fe5bcb6
   react-native-notification-sounds: f7f54517cdeb53d67fa8ccf4c3e9cadac23a1628
   react-native-pager-view: 7f00d63688f7df9fad86dfb0154814419cc5eb8d
@@ -1271,6 +1313,6 @@ SPEC CHECKSUMS:
   Yoga: 32a18c0e845e185f4a2a66ec76e1fd1f958f22fa
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: a9dc3f2a6a3677632aef7af1bd90945690afc90f
+PODFILE CHECKSUM: 0c03906641949438da00a2049c1af39ac7d1d704
 
 COCOAPODS: 1.11.2
