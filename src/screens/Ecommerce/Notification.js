@@ -123,6 +123,7 @@ const Notification = () => {
     }, []);
 
     const getProduct = () => {
+      console.log(user)
       let variables = {
         page: 1,
         itemPerPage: 10,

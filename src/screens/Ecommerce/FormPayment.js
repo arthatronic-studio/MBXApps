@@ -214,7 +214,7 @@ const FormPayment = ({ route, navigation  }) => {
               prov,
               kota,
               kec,
-              userAddressIdDestination: res.data.userAddressAdd[0].userId
+              userAddressIdDestination: res.data.userAddressAdd[0].id
             }
             navigation.navigate('CheckoutScreen',{saveAddress: { ...data, ...res.data.userAddressAdd[0] } })
           }

@@ -64,7 +64,8 @@ const ListShipping = ({ route, navigation  }) => {
       showLoading();
     let products = []
     route.params.item.product.forEach(element => {
-      products.push(element.id)
+      products.push({id: element.id, qty: element.qty})
+      // products.push(element.id)
     });
     console.log(products)
     let variables = {

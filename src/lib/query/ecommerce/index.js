@@ -393,6 +393,7 @@ mutation(
   ) {
     success
     message
+    data { bookingId }
   }
 }
 `;
