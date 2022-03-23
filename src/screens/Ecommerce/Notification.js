@@ -126,7 +126,8 @@ const Notification = () => {
       let variables = {
         page: 1,
         itemPerPage: 10,
-        status: 'BOOKING'
+        status: 'BOOKING',
+        userId: user.userId
       }
       console.log(variables)
       Client.query({query: queryListOrder, variables})
@@ -230,7 +231,7 @@ const Notification = () => {
                 <View style={{flexDirection: 'row',}}>
                     <Image source={item.image} style={{resizeMode: 'contain', width: 70, height: 70, marginVertical: 8, marginHorizontal: 8, backgroundColor: 'yellow'}}/>
                     <View style={{marginVertical: 8}}>
-                        <Text style={{fontWeight: 'bold', marginHorizontal: 15}}>{item.products[0]['id']}</Text>
+                        <Text style={{fontWeight: 'bold', marginHorizontal: 15}}>{item.products[0]['name']}</Text>
                         <View style={{flexDirection: 'row', marginHorizontal: 12, marginVertical: 5}}>
                         <Entypo name={'star'} style={{color: Color.yellow,}}/>
                         <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 3}}>{item.review}</Text>

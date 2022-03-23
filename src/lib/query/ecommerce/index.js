@@ -119,6 +119,7 @@ query(
   deletedAt
   products {
     id
+    name
     orderId
     productId
     quantity
@@ -160,14 +161,15 @@ export const queryListOrder = gql`
 query (
   $page: Int
 	$itemPerPage: Int
-	$status: EcommerceOrderManageType
+	$status: EcommerceOrderManageType,
+  $userId: Int
 ){
   ecommerceOrderList(
     page: $page,
     itemPerPage: $itemPerPage,
-    status: $status
+    status: $status,
+    userId: $userId
 	) {
-    id
     userId
     orderNumber
     expiredDate
@@ -278,12 +280,21 @@ query (
     createdAt
     updatedAt
     deletedAt
-    products{
-    	id
+    products {
+      id
       orderId
       productId
       quantity
       price
+      product {
+        name
+        description
+        width
+        height
+        length
+        width
+        price
+      }
     }
     address {
       id
