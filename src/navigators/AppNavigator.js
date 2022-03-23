@@ -121,10 +121,15 @@ import AddProduct from 'src/screens/Ecommerce/AddProduct';
 import MyProduct from 'src/screens/Ecommerce/MyProduct';
 import Review from 'src/screens/Ecommerce/Review';
 import EditMerchantInfo from 'src/screens/Ecommerce/EditMerchantInfo';
+import DetailCoupon from 'src/screens/Ecommerce/DetailCoupon';
+import SearchScreen from 'src/screens/Ecommerce/SearchScreen';
+import SearchResult from 'src/screens/Ecommerce/SearchResult';
 
 import StepTwo from 'src/screens/Ecommerce/StepTwo';
 import StepThree from 'src/screens/Ecommerce/StepThree';
 import MerchantSetting from 'src/screens/Ecommerce/MerchantSetting';
+import KuponKu from 'src/screens/Ecommerce/KuponKu';
+// import PopUpCouponSucces from 'src/screens/Ecommerce/PopUpCouponSucces';
 
 // Media Player
 import MediaPlayerScreen from 'src/screens/MediaPlayer/MediaPlayerScreen';
@@ -146,6 +151,11 @@ import ListShipping from 'src/screens/Ecommerce/ListShipping';
 import TransactionDetail from 'src/screens/Transaction/TransactionDetail';
 import TransactionDetailSucces from 'src/screens/Transaction/TransactionDetailSucces';
 import Notification from 'src/screens/Ecommerce/Notification';
+import PaymentStatus from 'src/screens/Ecommerce/PaymentStatus';
+import PaymentMethod from 'src/screens/Ecommerce/PaymentMethod';
+import PaidPaymentStatus from 'src/screens/Ecommerce/PaidPaymentStatus';
+import SplashCreateShop from 'src/screens/Ecommerce/SplashCreateShop';
+import CreateShop from 'src/screens/Ecommerce/CreateShop';
 
 // gallery
 import GalleryScreen from 'src/screens/Gallery/GalleryScreen';
@@ -206,6 +216,16 @@ function MainStackNavigator() {
       <Screen name="Review" component={Review} />
       <Screen name="EditMerchantInfo" component={EditMerchantInfo} />
       <Screen name="Notification" component={Notification} />
+      <Screen name="KuponKu" component={KuponKu} />
+      {/* <Screen name="PopUpCouponSucces" component={PopUpCouponSucces}/> */}
+      <Screen name="DetailCoupon" component={DetailCoupon} />
+      <Screen name="SearchScreen" component={SearchScreen} />
+      <Screen name='SearchResult' component={SearchResult} />
+      <Screen name='PaymentStatus' component={PaymentStatus} />
+      <Screen name='PaymentMethod' component={PaymentMethod} />
+      <Screen name='PaidPaymentStatus' component={PaidPaymentStatus} />
+      <Screen name='SplashCreateShop' component={SplashCreateShop} />
+      <Screen name='CreateShop' component={CreateShop} />
 
       {/* user */}
       <Screen name="LoginScreen" component={LoginScreen} />

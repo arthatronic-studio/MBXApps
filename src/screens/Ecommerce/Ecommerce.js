@@ -223,7 +223,7 @@ const Ecommerce = ({navigation}) => {
             <View >
             <View style={{position: 'absolute', backgroundColor: Color.primary, width: '100%', height: 130, borderBottomLeftRadius: 40, borderBottomRightRadius: 40}}></View>
             <View style={{flexDirection: 'row'}}>
-                <View style={{width: '72%',}}>
+                <View style={{width: '72%',}} onTouchStart={() => navigation.navigate('SearchScreen')}>
                     <TextInput placeholder='Cari apa hari ini . . .' style={{backgroundColor: Color.textInput, width: '95%',
                     borderRadius: 7, height: 40, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 10}}></TextInput>
                     
@@ -237,7 +237,7 @@ const Ecommerce = ({navigation}) => {
                             <Text style={{fontSize: 5, color: Color.textInput, alignSelf: 'center', paddingVertical: 1}}> +99</Text>
                         </View>
                     </Pressable>
-                    <Pressable onPress={() => navigation.navigate('CartShop')}>
+                    <Pressable onPress={() => navigation.navigate('CartScreen')}>
                         <MaterialCommunityIcons name={'shopping-outline'} size={26} style={{marginHorizontal: 3}}/>
                         <View style={{marginHorizontal: 18,marginVertical: 1, position: 'absolute', width: 18, height: 10, backgroundColor: Color.error, borderRadius: 5}}>
                             <Text style={{fontSize: 5, color: Color.textInput, alignSelf: 'center', paddingVertical: 1}}> +99</Text>

@@ -246,6 +246,19 @@ const CartShop = ({ navigation, route }) => {
     
   }
 
+  const checkButton = (data) => {
+    let valid = true
+    if(data){
+        data.forEach((element, index) => {
+          if(element.checked) {
+            valid = false
+          }
+        });
+        return valid
+    }
+    
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: Color.theme }}>
       <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
@@ -270,10 +283,11 @@ const CartShop = ({ navigation, route }) => {
         {list.length != 0 && <Row style={{padding: 16 }}>
             <Col align='flex-start' justify='center'>
                 <Text size={10} color={Color.text}>Total Harga</Text>
-                <Text type='bold' color={Color.text} >{list ? FormatMoney.getFormattedMoney(totalProduct(list)) : 0}</Text>
+                <Text type='bold' color={Color.text} >{list.length > 0 ? FormatMoney.getFormattedMoney(totalProduct(list)) : 0}</Text>
             </Col>
             <Col>
-                <TouchableOpacity onPress={() => submit()} style={{ backgroundColor: Color.info, borderRadius: 20, paddingVertical: 10 }}>
+            {console.log(checkButton(list), 'check')}
+                <TouchableOpacity disabled={checkButton(list)} onPress={() => submit()} style={{ backgroundColor: checkButton(list) ? '#bcbcbc' : Color.info, borderRadius: 20, paddingVertical: 10 }}>
                     <Text type='semibold' color={Color.textInput}>Checkout</Text>
                 </TouchableOpacity>
             </Col>

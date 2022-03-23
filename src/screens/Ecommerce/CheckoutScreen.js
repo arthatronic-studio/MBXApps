@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, ScrollView, Image, SafeAreaView } from 'react-native';
 import Styled from 'styled-components';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useStore } from 'react-redux';
 import {useIsFocused, useRoute} from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import Fontisto from 'react-native-vector-icons/Fontisto';
+import store from '../../state/redux'
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -27,7 +28,7 @@ import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
 import { FormatMoney } from 'src/utils';
 import ImagesPath from 'src/components/ImagesPath';
-import { queryCheckout, queryGetAddress, queryGetShipper } from 'src/lib/query/ecommerce';
+import { mutationCheckout, queryCheckout, queryGetAddress, queryGetShipper } from 'src/lib/query/ecommerce';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -42,6 +43,8 @@ const Content = Styled(View)`
 
 const CheckoutScreen = ({ navigation }) => {
 
+
+    const dispatch = useDispatch();
     const route = useRoute()
     console.log(route)
     const {item} =  route.params
@@ -80,7 +83,7 @@ const CheckoutScreen = ({ navigation }) => {
         console.log(res)
         if(res.data.userAddressList){
             if (res.data.userAddressList.length > 0) {
-                setAddress({...res.data.userAddressList[0], userAddressIdDestination: res.data.userAddressList[0]['userId']})
+                setAddress({...res.data.userAddressList[0], userAddressIdDestination: res.data.userAddressList[0]['id']})
             }
         }
        
@@ -102,34 +105,43 @@ const CheckoutScreen = ({ navigation }) => {
         }
     })
     let variables = {
-        input: {
-            courier: {
-                rate_id: shippment.rate.id,
-                cod: false,
-                use_insurance: false
-            },
-            userAddressIdDestination: user.userId,
-            userAddressIdOrigin: user.userId,
-            payment_type: "postpay",
-            products: prod
-        }
+        // type: "BOOKING",
+        // products: [{ id: 17, qty: 1 }],
+        // courier: { rate_id: 268, use_insurance: false, cod: false, cost: 20000},
+        // destinationAddressId: 2,
+        courier: {
+            rate_id: shippment.rate.id,
+            cod: false,
+            use_insurance: false,
+            cost: shippment.final_price
+        },
+        destinationAddressId: address.userAddressIdDestination,
+        type: 'BOOKING',
+        products: prod
     }
-    console.log(variables)
-    Client.mutate({mutation: queryCheckout, variables})
+    console.log(variables, 'variables')
+    Client.mutate({mutation: mutationCheckout, variables})
       .then(res => {
         hideLoading()
         console.log(res)
-        if (res.data.shipperCreateOrder) {
+        if (res.data.ecommerceOrderManage) {
+            console.log('datanya nih',{...res.data.ecommerceOrderManage, id: res.data.ecommerceOrderManage.data.bookingId})
             alert('Success order')
+            dispatch({
+                type: 'BOOKING.ADD_BOOKING',
+                data: {...res.data.ecommerceOrderManage, id: res.data.ecommerceOrderManage.data.bookingId}
+              });
+            
             setTimeout(() => {
-                navigation.popToTop()
+                navigation.navigate('PaymentScreen')
+                // navigation.popToTop()
             }, 1000);
         }
       })
       .catch(reject => {
         hideLoading()
-        alert(reject.message)
-        console.log(reject.message, 'reject');
+        alert(reject)
+        console.log( reject, 'reject');
       });
   };
 
