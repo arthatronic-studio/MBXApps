@@ -130,7 +130,7 @@ export default ({ navigation, route }) => {
     const variables = {
       bookingId: booking.id //16
     };
-
+    console.log(booking, 'booking')
     if (batchPayment) {
       variables.batchBookingId = batchPayment.batchId;
     }
@@ -149,7 +149,7 @@ export default ({ navigation, route }) => {
           const isTopupPayment = booking.vestabalance;
           const isMustSambatanPay = booking.prepaidTransaction || booking.postpaidTransaction;
           const isUsedAllPayment = booking.vestaBiller;
-
+          
           if (isTopupPayment && item.id !== 8) {
             newActiveSections.push(0);
             newPaymentMethods.push(item);
@@ -297,7 +297,7 @@ export default ({ navigation, route }) => {
                 <BackgroundView style={{backgroundColor: Color.theme}} />
             </AbsoluteView>
         </ImageBackground>
-
+{console.log(readyPayment, 'ready payment')}
         {readyPayment && paymentData.map((item, idx) => 
           <Accordion
             key={idx}

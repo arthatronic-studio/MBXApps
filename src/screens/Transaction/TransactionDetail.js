@@ -25,7 +25,7 @@ const TransactionDetail = ({ route, navigation }) => {
     }, []);
 
     const cancelButton = () => {
-        const { item} = route.params
+        const { item } = route.params
         showLoading();
         let variables = {
             type: 'CANCEL',
@@ -112,39 +112,37 @@ const TransactionDetail = ({ route, navigation }) => {
                     </View>
                         
                 </View>
-                    
-                <View style={{ marginLeft:9 ,alignItems: 'baseline',marginTop:10,display: 'flex',flexDirection:'row',marginRight:10}}>
-                    <Image source={ImagesPath.sabyan} />
-                    <View style={{ marginLeft: 18, flexDirection: 'column-reverse' }}>
-                        <View style={{paddingRight:150 }}>
-                            <Text style={{ color: 'gray', fontSize: 12 }}>Stok Barang : 150pcs </Text>
-                        </View>
-                        <View>
-                            <Text style={{ color: 'black', fontSize: 21,fontWeight:'bold' }}>Pashmina Pink Nissa Sabyan</Text>
+                {data.products && data.products.map((val, id) => (
+                    <View>
+                    <View style={{ marginLeft:9 ,alignItems: 'baseline',marginTop:10,display: 'flex',flexDirection:'row',marginRight:10}}>
+                        <Image source={ImagesPath.sabyan} />
+                        <View style={{ marginLeft: 18, flexDirection: 'column-reverse' }}>
+                            <View style={{paddingRight:150 }}>
+                                {/* <Text style={{ color: 'gray', fontSize: 12 }}>Stok Barang : {val.quantity}pcs </Text> */}
+                            </View>
+                            <View>
+                                <Text style={{ color: 'black', fontSize: 21,fontWeight:'bold' }}>{val.product.name}</Text>
+                            </View>
                         </View>
                     </View>
-                </View>
-                <View style={{ marginLeft:75 ,alignItems: 'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:10}}>
-                    <Text style={{color: 'gray',fontSize:12}}>Jumlah Pembelian</Text>
-                    <Text style={{color: 'gray',fontSize:12}}>x1</Text>
+                    <View style={{ marginLeft:75 ,alignItems: 'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:10}}>
+                        <Text style={{color: 'gray',fontSize:12}}>Jumlah Pembelian</Text>
+                        <Text style={{color: 'gray',fontSize:12}}>x{val.quantity}</Text>
+                    </View>
+                    <View style={{ marginLeft:75 ,alignItems: 'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:10}}>
+                        <Text style={{color: 'gray',fontSize:12}}>Harga Barang</Text>
+                        <Text style={{color: 'gray',fontSize:12}}>{val.price} poin</Text>
 
-                    
-                    
+                        
+                        
+                    </View>
+                   
                 </View>
-                <View style={{ marginLeft:75 ,alignItems: 'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:10}}>
-                    <Text style={{color: 'gray',fontSize:12}}>Harga Barang</Text>
-                    <Text style={{color: 'gray',fontSize:12}}>10.000 poin</Text>
-
-                    
-                    
-                </View>
-                <View style={{ marginLeft:75 ,alignItems: 'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:10}}>
-                    <Text style={{color: 'gray',fontSize:12}}>Total Pembelian</Text>
-                    <Text style={{color: 'black',fontSize:12,fontWeight:'bold'}}>10.000 poin</Text>
-
-                    
-                    
-                </View>
+                ))}
+                 <View style={{ marginLeft:75 ,alignItems: 'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:10}}>
+                        <Text style={{color: 'gray',fontSize:12}}>Total Pembelian</Text>
+                        <Text style={{color: 'black',fontSize:12,fontWeight:'bold'}}>{data.totalProductPrice} poin</Text>
+                    </View>
             </View>
 
             <View style={{ backgroundColor: "#FFFFFF", borderRadius: 8, marginTop: 25 ,paddingBottom:25,width:"95%",alignSelf:'center'}}>
@@ -155,7 +153,7 @@ const TransactionDetail = ({ route, navigation }) => {
                 </View>
                 <View style={{ marginLeft:9 ,alignItems:'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:70}}>
                     <Text style={{color: 'gray'}}>Nama Pembeli</Text>
-                    <Text style={{color: '#F3771D'}}>Hendra Helinsky</Text>
+                    <Text style={{color: '#F3771D'}}>{data.address && data.address.penerimaName}</Text>
 
                     
                     
@@ -169,7 +167,7 @@ const TransactionDetail = ({ route, navigation }) => {
                 </View>
                 {data.address && <View style={{ marginLeft:9 ,alignItems: 'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:117}}>
                     <Text style={{color: 'gray'}}>Alamat Pengiriman <Ionicons name="copy-outline" size={16} type="entypo"color="orange" /></Text>
-                    <Text >{data.address.address}, {data.suburb && data.address.suburb.name}, {data.city && data.address.city.name}, {data.province && data.address.province.name}</Text>
+                    <Text >{data.address.address}, {data.address && data.address.suburb.name}, {data.address && data.address.city.name}, {data.address && data.address.province.name}</Text>
                 </View>}
             </View>
 

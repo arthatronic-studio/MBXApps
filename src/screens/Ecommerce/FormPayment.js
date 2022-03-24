@@ -155,7 +155,7 @@ const FormPayment = ({ route, navigation  }) => {
       })
       .catch(reject => {
         hideLoading()
-        alert(reject.message)
+        // alert(reject.message)
         console.log(reject.message, 'reject');
       });
   };
@@ -188,9 +188,9 @@ const FormPayment = ({ route, navigation  }) => {
         provinceId: prov ? prov.id : prov,
         cityId: kota ? kota.id : kota,
         suburbId: kec ? kec.id : kec,
-        province: prov ? prov.name : prov,
-        city: kota ? kota.name : kota,
-        suburb: kec ? kec.name : kec,
+        // province: prov ? prov.name : prov,
+        // city: kota ? kota.name : kota,
+        // suburb: kec ? kec.name : kec,
         areaId: 1,
         address: address,
         postalCode: postalCode,
