@@ -128,7 +128,7 @@ const PlaceDetail = ({navigation, route}) => {
               <Foundation name={'calendar'} size={22} color={Color.primary} />
               <Divider width={8} />
               <Text style={{fontWeight: 'bold'}}>
-                {moment(parseInt(item.updated_date)).format('DD MMM YYYY')}
+                {moment(parseInt(item.created_date)).format('DD MMM YYYY')}
               </Text>
             </View>
             <View

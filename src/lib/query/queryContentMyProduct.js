@@ -50,6 +50,7 @@ export const queryContentMyProduct = gql`
             latitude
             longitude
             mainImage
+            eventDate
         }
     }
 `;

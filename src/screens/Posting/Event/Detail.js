@@ -73,6 +73,9 @@ const EventDetail = ({navigation, route}) => {
       });
   };
 
+  let eventDate = !isNaN(parseInt(item.eventDate)) ? parseInt(item.eventDate) : null;
+  if (!eventDate) !isNaN(parseInt(item.updated_date)) ? parseInt(item.updated_date) : null;
+
   return (
     <Scaffold
       headerTitle="Detail"
@@ -133,7 +136,7 @@ const EventDetail = ({navigation, route}) => {
             </Text>
           </View>
           <View style={{flexDirection: 'row', paddingVertical: 18}}>
-            <View
+            {moment(eventDate).isValid() && <View
               style={{
                 flexDirection: 'row',
                 paddingHorizontal: 20,
@@ -145,9 +148,11 @@ const EventDetail = ({navigation, route}) => {
                 size={22}
                 color={Color.primary}
               />
+              
               <Divider width={8} />
-              <Text style={{fontWeight: 'bold'}}>{moment(parseInt(item.updated_date)).format('DD MMM YYYY')}</Text>
-            </View>
+
+              <Text style={{fontWeight: 'bold'}}>{moment(eventDate).format('DD MMM YYYY')}</Text>
+            </View>}
             <View
               style={{
                 flexDirection: 'row',

@@ -41,6 +41,7 @@ query(
         parentProductId
         like
         view
+        director_like
         comment
         im_like
         iconLink
@@ -48,6 +49,10 @@ query(
         ownerId
         fullname
         avatar
+        latitude
+        longitude
+        mainImage
+        eventDate
     }
 }
 `;
