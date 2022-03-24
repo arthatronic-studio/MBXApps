@@ -125,11 +125,11 @@ const CheckoutScreen = ({ navigation }) => {
         hideLoading()
         console.log(res)
         if (res.data.ecommerceOrderManage) {
-            console.log('datanya nih',{...res.data.ecommerceOrderManage, id: res.data.ecommerceOrderManage.data.bookingId})
+            console.log('datanya nih',{...res.data.ecommerceOrderManage, id: res.data.ecommerceOrderManage.data.bookingId, vestaBiller: true})
             alert('Success order')
             dispatch({
                 type: 'BOOKING.ADD_BOOKING',
-                data: {...res.data.ecommerceOrderManage, id: res.data.ecommerceOrderManage.data.bookingId}
+                data: {...res.data.ecommerceOrderManage, id: res.data.ecommerceOrderManage.data.bookingId, vestaBiller: true, finalAmount: res.data.ecommerceOrderManage.data.totalPrice}
               });
             
             setTimeout(() => {

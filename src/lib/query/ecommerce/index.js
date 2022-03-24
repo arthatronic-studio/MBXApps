@@ -397,7 +397,16 @@ mutation(
   ) {
     success
     message
-    data { bookingId }
+    data { 
+      bookingId 
+      orderNumber
+      expiredDate
+      status
+      totalProductPrice
+      shippingCost
+      totalPrice
+    }
+
   }
 }
 `;
