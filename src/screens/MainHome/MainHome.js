@@ -99,10 +99,7 @@ const events = [
 
 const MainHome = ({navigation, route}) => {
   // state
-  const [firebaseData, setFirebaseData] = useState([]);
-  const [firebaseNotifierLastChatCount, setFirebaseNotifierLastChatCount] =
-    useState(0);
-  const [notifierCount, setNotifierCount] = useState(0);
+  const [chatNotifCount, setChatNotifCount] = useState(0);
   const [dataPopupAds, setDataPopupAds] = useState();
   const [showPopupAds, setShowPopupAds] = useState(false);
 
@@ -131,10 +128,6 @@ const MainHome = ({navigation, route}) => {
   const [animationValue] = useState(new Animated.Value(0));
   const [refreshing, setRefreshing] = useState(false);
   const [thisTrack, setThisTrack] = useState();
-
-  const prevFirebaseNotifierLastChatCount = usePreviousState(
-    firebaseNotifierLastChatCount,
-  );
 
   const user = useSelector(state => state['user.auth'].login.user);
   const dispatch = useDispatch();
@@ -194,40 +187,18 @@ const MainHome = ({navigation, route}) => {
       console.log('res auth', res);
     });
 
-  }, []);
-
-  useEffect(() => {
-    if (firebaseData.length > 0) {
-      let result = 0;
-      let lastChatCount = 0;
-
-      if (firebaseData.length > 0) {
-        for (let i = 0; i < firebaseData.length; i++) {
-          const idxOf =
-            firebaseData[i].read &&
-            firebaseData[i].read.indexOf(user.userId.toString());
-
-          if (idxOf === -1) {
-            result += 1;
-          }
-
-          lastChatCount += firebaseData[i].lastChatCount;
+    currentSocket.emit('chat_notification');
+    currentSocket.on('chat_notification', (res) => {
+      console.log('res chat_notification', res);
+      if (res && res.status) {
+        if (chatNotifCount > 0) {
+          playNotificationSounds();
         }
+
+        setChatNotifCount(res.data.count);
       }
-
-      if (result > 0) setFirebaseNotifierLastChatCount(lastChatCount);
-      setNotifierCount(result);
-    }
-  }, [firebaseData]);
-
-  useEffect(() => {
-    if (
-      firebaseNotifierLastChatCount > 0 &&
-      prevFirebaseNotifierLastChatCount !== firebaseNotifierLastChatCount
-    ) {
-      playNotificationSounds();
-    }
-  }, [firebaseNotifierLastChatCount]);
+    });
+  }, []);
 
   useEffect(() => {
     if (isFocused) {
@@ -476,13 +447,13 @@ const MainHome = ({navigation, route}) => {
                   alignItems: 'flex-end',
                 }}>
                 <Ionicons name="chatbox-outline" size={22} color={Color.text} />
-                {notifierCount > 0 && (
+                {chatNotifCount > 0 && (
                   <Circle
                     size={12}
                     color={Color.error}
                     style={{position: 'absolute', top: -4, right: -4}}>
                     <Text size={8} color={Color.textInput}>
-                      {notifierCount > 99 ? '99' : notifierCount}
+                      {chatNotifCount > 99 ? '99' : chatNotifCount}
                     </Text>
                   </Circle>
                 )}

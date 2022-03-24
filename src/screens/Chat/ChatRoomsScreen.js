@@ -158,17 +158,6 @@ const ChatRoomsScreen = ({ navigation, route }) => {
         return title;
     }
 
-    const isNotRead = (arr) => {
-        let result = false;
-        if (!arr) return result;
-        
-        const read = arr.filter((e) => e == user.userId)[0];
-        if (read) result = false;
-        else result = true;
-
-        return result;
-    }
-
     const isUserTyping = (typing) => {
         let result = false;
         if (Array.isArray(typing) && typing.length > 0) {
@@ -230,6 +219,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                 onEndReached={() => {}}
                 renderItem={({ item }) => {
                     const isSelected = selectedRoom && selectedRoom.id === item.id;
+                    const notifBadge = item.unread_count > 0;
 
                     // console.log('item', item);
 
@@ -275,7 +265,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                                     {item.name || getTitle(item.member)}
                                 </Text>
                                 <Text
-                                    type={isUserTyping(item.typing) ? 'italic' : isNotRead(item.read) ? 'bold' : 'regular'}
+                                    type={isUserTyping(item.typing) ? 'italic' : notifBadge ? 'bold' : 'regular'}
                                     numberOfLines={1}
                                     color={isUserTyping(item.typing) ? Color.success : Color.text}
                                     style={{opacity: 0.6}}
@@ -291,10 +281,10 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                                     {item.last_chat ? managedDateUTC(item.last_chat.created_unix_date) : ''}
                                 </Text>
                                 <Circle
-                                    size={10}
-                                    color={isNotRead(item.read) ? Color.error : 'transparent'}
+                                    size={20}
+                                    color={notifBadge ? Color.primary : 'transparent'}
                                 >
-                                    {/* {isNotRead(item.read) && item.lastChatCount > 0 && <Text size={8}>{item.lastChatCount}</Text>} */}
+                                    {notifBadge && <Text color={Color.textInput} size={10}>{item.unread_count}</Text>}
                                 </Circle>
                             </View>
                         </TouchableOpacity>

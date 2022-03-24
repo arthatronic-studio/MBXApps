@@ -80,18 +80,20 @@ const ChatDetailScreen = ({ navigation, route }) => {
     const { Color } = useColor();
 
     useEffect(() => {
-        currentSocket.emit('chat_messages', { room_id: roomId });
-        currentSocket.on('chat_messages', (res) => {
-          console.log('chat_messages', res);
+        if (roomId) {
+            currentSocket.emit('chat_messages', { room_id: roomId });
+            currentSocket.on('chat_messages', (res) => {
+                console.log('chat_messages', res);
 
-          if (Array.isArray(res)) {
-            setDataChat({
-                ...dataChat,
-                data: res
+                if (Array.isArray(res)) {
+                    setDataChat({
+                        ...dataChat,
+                        data: res
+                    });
+                }
             });
-          }
-        });
-    }, []);
+        }
+    }, [roomId]);
 
     // handle appstate
     useEffect(() => {
