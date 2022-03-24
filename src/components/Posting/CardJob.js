@@ -44,7 +44,6 @@ const CardJob = (props) => {
                             width: '80%',
                             aspectRatio: 1,
                             borderRadius: 8,
-                            ...shadowStyle,
                         }}
                         resizeMode='contain'
                     />

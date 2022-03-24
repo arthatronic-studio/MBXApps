@@ -4,13 +4,19 @@ export const queryContentMyProduct = gql`
     query(
         $productCode: String
         $productName: String
+        $productType: ContentProductType
+        $productCategory: ContentProductCategory
+        $productSubCategory: ContentProductSubCategory
         $page: Int
         $itemPerPage: Int
     ){
         contentMyProduct(
-            productCode: $productCode,
-            productName: $productName,
-            page: $page,
+            productCode: $productCode
+            productName: $productName
+            productType: $productType
+            productCategory: $productCategory
+            productSubCategory: $productSubCategory
+            page: $page
             itemPerPage: $itemPerPage
         ) {
             id
@@ -44,6 +50,7 @@ export const queryContentMyProduct = gql`
             latitude
             longitude
             mainImage
+            eventDate
         }
     }
 `;

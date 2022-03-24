@@ -74,6 +74,9 @@ const CardEvent = (props) => {
         setTrigger(true);
     }
 
+    let eventDate = !isNaN(parseInt(item.eventDate)) ? parseInt(item.eventDate) : null;
+    if (!eventDate) !isNaN(parseInt(item.updated_date)) ? parseInt(item.updated_date) : null;
+
     return (
         <TouchableOpacity
             onPress={() => onPress(item)}
@@ -106,8 +109,8 @@ const CardEvent = (props) => {
                         <Text type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
                         <Divider height={6} />
                         <Text size={12} align='left' numberOfLines={2}>{item.fullname}</Text>
-                        {Moment(parseInt(item.created_date)).isValid() && <>
-                            <Text type='bold' size={12} align='left' color={Color.primary}>{Moment(parseInt(item.created_date)).format('DD MMM YYYY')}</Text>
+                        {Moment(eventDate).isValid() && <>
+                            <Text type='bold' size={12} align='left' color={Color.primary}>{Moment(eventDate).format('DD MMM YYYY')}</Text>
                             <Divider height={8} />
                         </>}
                         <Text size={12} align='left' numberOfLines={4}>{item.productDescription}</Text>

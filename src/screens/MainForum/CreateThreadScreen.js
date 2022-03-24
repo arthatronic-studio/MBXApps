@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, ScrollView, TextInput, SafeAreaView, Image, Keyboard, BackHandler, useWindowDimensions } from 'react-native';
 import Styled from 'styled-components';
 import Entypo from 'react-native-vector-icons/Entypo';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { launchImageLibrary } from 'react-native-image-picker';
 
 import {
@@ -11,7 +12,8 @@ import {
     Loading, useLoading,
     Submit,
     TouchableOpacity,
-    useColor
+    useColor,
+    Scaffold
   } from '@src/components';
 import { TouchSelect } from '@src/components/Form';
 import ModalSelectStatus from '@src/components/Modal/ModalSelectStatus';
@@ -20,6 +22,9 @@ import Client from '@src/lib/apollo';
 import { queryProductManage } from '@src/lib/query';
 import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
 import { accessClient } from 'src/utils/access_client';
+import FormSelect from 'src/components/FormSelect';
+import DatePicker from 'react-native-date-picker';
+import Moment from 'moment';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -72,6 +77,7 @@ const CreateThreadScreen = (props) => {
         description: '',
         latitude: '',
         longitude: '',
+        eventDate: new Date(),
     });
     const [error, setError] = useState({
         name: null,
@@ -83,6 +89,7 @@ const CreateThreadScreen = (props) => {
     const [selectedStatus, setSelectedStatus] = useState({
         label: 'Publik', value: 'PUBLISH', iconName: 'globe'
     });
+    const [showDatePicker, setShowDatePicker] = useState(false);
 
     // ref
     const modalSelectStatusRef = useRef();
@@ -166,8 +173,13 @@ const CreateThreadScreen = (props) => {
             products: [{
                 ...userData,
                 image: thumbImage,
+                eventDate: Moment(userData.eventDate).format('YYYY-MM-DD HH:mm:ss'),
             }],
         };
+
+        if (params.parentProductId) {
+            variables.products[0]['parentProductId'] = params.parentProductId;
+        }
 
         console.log(variables, 'variables');
         
@@ -177,27 +189,35 @@ const CreateThreadScreen = (props) => {
         })
         .then((res) => {
             console.log(res, '=== Berhsail ===');
-            showLoading('success', 'Thread berhasil dibuat!');
 
-            setTimeout(() => {
-                // navigation.navigate('ForumSegmentScreen', { ...params, componentType: 'LIST', refresh: true });
-                navigation.popToTop();
-            }, 2500);
+            if (res.data.contentProductManage) {
+                showLoading('success', 'Thread berhasil dibuat!');
+
+                setTimeout(() => {
+                    // navigation.navigate('ForumSegmentScreen', { ...params, componentType: 'LIST', refresh: true });
+                    navigation.popToTop();
+                }, 2500);
+            } else {
+                showLoading('error', 'Thread gagal dibuat!');
+            }
+
         })
         .catch((err) => {
             console.log(err, 'errrrr');
             showLoading('error', 'Gagal membuat thread, Harap ulangi kembali');
         });
     }
+
+    const showEvent = userData.category === 'EVENT';
     
     return (
-        <MainView style={{backgroundColor: Color.theme}}>
-            <Header
-                title={params.title}
-            />
-
+        <Scaffold
+            headerTitle={params.title}
+            loadingProps={loadingProps}
+            popupProps={popupProps}
+        >
             <ScrollView>
-                <View style={{paddingHorizontal: 16, paddingTop: 16, paddingBottom: 12}}>
+                <View style={{paddingHorizontal: 16, paddingTop: 16}}>
                     <LabelInput>
                         <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Gambar</Text>
                     </LabelInput>
@@ -227,15 +247,15 @@ const CreateThreadScreen = (props) => {
 
                 {thumbImage !== '' && <TouchableOpacity
                     onPress={() => {}}
-                    style={{width: '100%', height: height / 3, borderRadius: 4, alignItems: 'center'}}
+                    style={{width: '100%', aspectRatio: 1, padding: 16}}
                 >
                     <Image
-                        style={{height: '100%', aspectRatio: 1, borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
+                        style={{width: '100%', height: '100%', borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
                         source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
                     />
                 </TouchableOpacity>}
 
-                <View style={{paddingHorizontal: 16, paddingTop: 24}}>
+                <View style={{paddingHorizontal: 16, paddingTop: 16}}>
                     <LabelInput>
                         <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Judul</Text>
                     </LabelInput>
@@ -290,6 +310,33 @@ const CreateThreadScreen = (props) => {
                     </ErrorView>
                 </View>
 
+                {/* <View style={{paddingHorizontal: 16, paddingTop: 16}}>
+                    <TouchableOpacity onPress={() => modalSelectChapterRef.current.open()}>
+                        <View style={{marginTop: 6, paddingHorizontal: 12, borderWidth: 1, borderRadius: 4, borderColor: Color.border}}>
+                            <LabelInput>
+                                <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Domisili</Text>
+                            </LabelInput>
+                            <View style={{height: 34, paddingRight: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                                <Text size={14} style={{marginTop: 2}}>{userData.chapterId || 'Pilih Domisili'}</Text>
+                                <Ionicons name='chevron-down-outline' color={Color.text} />
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                </View> */}
+
+                {showEvent && <FormSelect
+                    label='Tanggal Event'
+                    placeholder='Pilih Tanggal'
+                    value={Moment(userData.eventDate).format('DD MMM YYYY')}
+                    onPress={() => setShowDatePicker(true)}
+                    // error={errorUserData.usageType}
+                    suffixIcon={
+                        <View style={{height: '100%', width: '10%', paddingRight: 16, justifyContent: 'center', alignItems: 'flex-end'}}>
+                            <Ionicons name='calendar' />
+                        </View>
+                    }
+                />}
+
                 {accessClient.CreatePosting.showPrivacy && <TouchSelect
                     title='Siapa yang dapat melihat ini?'
                     value={selectedStatus.label}
@@ -308,10 +355,6 @@ const CreateThreadScreen = (props) => {
                 }}
             />
 
-            <Loading {...loadingProps} />
-
-            <Popup {...popupProps} />
-
             <ModalSelectStatus
                 ref={modalSelectStatusRef}
                 selected={selectedStatus}
@@ -321,7 +364,21 @@ const CreateThreadScreen = (props) => {
                     modalSelectStatusRef.current.close();
                 }}
             />
-        </MainView>
+
+            {showDatePicker && <DatePicker
+                modal
+                open={showDatePicker}   
+                date={userData.eventDate}
+                mode="date"
+                onConfirm={(date) => {
+                    setShowDatePicker(false);
+                    onChangeUserData('eventDate', date);
+                }}
+                onCancel={() => {
+                    setShowDatePicker(false)
+                }}
+            />}
+        </Scaffold>
     )
 }
 

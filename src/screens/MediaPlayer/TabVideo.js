@@ -39,7 +39,6 @@ const TabVideo = ({ }) => {
         >
             <ScrollView>
                 <Banner
-                    isDummy={true}
                     showHeader={false}
                     data={[{imageAsset: ImagesPath.sabyanBannerVideo}]}
                     loading={false}

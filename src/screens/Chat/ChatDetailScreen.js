@@ -204,18 +204,19 @@ const ChatDetailScreen = ({ navigation, route }) => {
         });
     }
 
-    const getDate = (origin) => {
-        const date = Moment(origin).format('YYYY-MM-DD');
+    const managedDateUTC = (origin) => {
+        const date = Moment(origin).utc();
         const now = new Moment();
         const diff = now.diff(Moment(date), 'days');
+
         let title = '';
 
         if (diff === 0) {
-            title = 'Hari ini - ' + Moment(origin).format('HH:mm');
+            title = 'Hari ini - ' + date.format('HH:mm');
         } else if (diff === 1) {
-            title = 'Kemarin - ' + Moment(origin).format('HH:mm');
+            title = 'Kemarin - ' + date.format('HH:mm');
         } else {
-            title = Moment(origin).format('dddd, DD/MM/YYYY - HH:mm');;
+            title = date.format('dddd, DD/MM/YYYY - HH:mm');;
         }
         
         return title;
@@ -263,7 +264,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
                                     <Divider height={4} />
                                     <Text align='right'>{item.message}</Text>
                                     <Divider height={4} />
-                                    <Text size={8} align='right' style={{opacity: 0.6}}>{getDate(item.created_unix_date)}</Text>
+                                    <Text size={8} align='right' style={{opacity: 0.6}}>{managedDateUTC(item.created_unix_date)}</Text>
                                 </View>
                                 <View style={{width: 30, height: 30, marginLeft: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.disabled}}>
                                     <Image
@@ -288,7 +289,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
                                 <Divider height={4} />
                                 <Text align='left' color={Color.text}>{item.message}</Text>
                                 <Divider height={4} />
-                                <Text size={8} align='left' color={Color.text} style={{opacity: 0.6}}>{getDate(item.created_unix_date)}</Text>
+                                <Text size={8} align='left' color={Color.text} style={{opacity: 0.6}}>{managedDateUTC(item.created_unix_date)}</Text>
                             </View>
                         </View>
                     )

@@ -16,3 +16,12 @@ export function isIphoneNotch() {
           || (dimen.height === 926 || dimen.width === 926))
     );
 }
+
+export const initialItemState = {
+    data: [],
+    loading: true,
+    message: '',
+    page: 0,
+    loadNext: false,
+    refresh: false,
+};

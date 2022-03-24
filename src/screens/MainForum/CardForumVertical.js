@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ImageBackground, Dimensions, Image } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Moment from 'moment';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import ImagesPath from '../../components/ImagesPath'
+import Share from 'react-native-share';
 
+import ImagesPath from '../../components/ImagesPath';
 import {
     Col,
     Text,
@@ -14,6 +15,8 @@ import {
     useColor
 } from '@src/components';
 import { shadowStyle } from '@src/styles';
+import { queryAddLike } from 'src/lib/query';
+import client from 'src/lib/apollo';
 
 const { width } = Dimensions.get('window');
 
@@ -24,10 +27,53 @@ const defaultProps = {
     style: {},
 };
 
-const CardForumVertical = (props) => {
-    const { componentType, item, numColumns, onPress, style } = props;
+const CardForumVertical = ({ componentType, item, numColumns, onPress, style }) => {
+    const [like, setLike] = useState(item.like);
+    const [im_like, setImLike] = useState(item.im_like);
+    const [trigger, setTrigger] = useState(false);
 
     const { Color } = useColor();
+    // const navigation = useNavigation();
+
+    useEffect(() => {
+        setLike(item.like);
+        setImLike(item.im_like);
+    }, [item]);
+
+    useEffect(() => {
+        const timeout = trigger ? setTimeout(() => {
+            fetchAddLike();
+        }, 500) : null;
+
+        return () => {
+            clearTimeout(timeout);
+        }
+    }, [trigger]);
+
+    const fetchAddLike = () => {
+        console.log('trigger emergency');
+
+        client.query({
+            query: queryAddLike,
+            variables: {
+                productId: item.id
+            }
+        })
+        .then((res) => {
+          console.log(res, 'res add like');
+          setTrigger(false);
+        })
+        .catch((err) => {
+            console.log(err, 'err add like');
+            setTrigger(false);
+        });
+    }
+
+    const onSubmitLike = () => {
+        setLike(!im_like ? like + 1 : like - 1);
+        setImLike(!im_like);
+        setTrigger(true);
+    }
     
     return (
         <TouchableOpacity
@@ -50,9 +96,10 @@ const CardForumVertical = (props) => {
                 >
                     <View style={{backgroundColor: Color.grayLight, width: 40, height: 40, borderRadius: 20, marginRight: 10}}>
                         <Image 
-                            source={{uri: item.image}}
+                            source={{uri: item.avatar}}
                             style={{
-                                aspectRatio: 1
+                                aspectRatio: 1,
+                                borderRadius: 50,
                             }}
                         />
                     </View>
@@ -88,14 +135,17 @@ const CardForumVertical = (props) => {
             </ImageBackground>
 
             <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
-                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                <TouchableOpacity
+                    onPress={() => onSubmitLike()}
+                    style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}
+                >
                     <AntDesign 
-                        name={'like2'}
+                        name='like2'
                         size={24}
-                        color={Color.gray}
+                        color={im_like ? Color.info : Color.gray}
                     />
-                    <Text size={14} align='left' color={Color.gray} style={{marginLeft: 10}}>{item.like}</Text>
-                </View>
+                    <Text size={14} align='left' color={Color.gray} style={{marginLeft: 10}}>{like}</Text>
+                </TouchableOpacity>
                 <View>
                     <Text align='left' size={16} color={Color.gray}>|</Text>
                 </View>
@@ -108,14 +158,21 @@ const CardForumVertical = (props) => {
                 <View>
                     <Text align='left' size={16} color={Color.gray}>|</Text>
                 </View>
-                <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                <TouchableOpacity
+                    onPress={async() => {
+                        await Share.open({
+                            url: item.share_link,
+                        });
+                    }}
+                    style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}
+                >
                     <AntDesign 
-                        name={'sharealt'}
+                        name='sharealt'
                         size={24}
                         color={Color.gray}
                     />
                     <Text size={14} align='left' color={Color.gray} style={{marginLeft: 10}}>Share</Text>
-                </View>
+                </TouchableOpacity>
             </View>
         </TouchableOpacity>
     )

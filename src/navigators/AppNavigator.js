@@ -151,6 +151,15 @@ import ListShipping from 'src/screens/Ecommerce/ListShipping';
 import TransactionDetail from 'src/screens/Transaction/TransactionDetail';
 import TransactionDetailSucces from 'src/screens/Transaction/TransactionDetailSucces';
 import Notification from 'src/screens/Ecommerce/Notification';
+import PaymentStatus from 'src/screens/Ecommerce/PaymentStatus';
+import PaymentMethod from 'src/screens/Ecommerce/PaymentMethod';
+import PaidPaymentStatus from 'src/screens/Ecommerce/PaidPaymentStatus';
+import SplashCreateShop from 'src/screens/Ecommerce/SplashCreateShop';
+import CreateShop from 'src/screens/Ecommerce/CreateShop';
+
+// gallery
+import GalleryScreen from 'src/screens/Gallery/GalleryScreen';
+import GalleryDetailScreen from 'src/screens/Gallery/GalleryDetailScreen';
 
 const {Navigator, Screen} = createStackNavigator();
 const MainPage =
@@ -212,6 +221,11 @@ function MainStackNavigator() {
       <Screen name="DetailCoupon" component={DetailCoupon} />
       <Screen name="SearchScreen" component={SearchScreen} />
       <Screen name='SearchResult' component={SearchResult} />
+      <Screen name='PaymentStatus' component={PaymentStatus} />
+      <Screen name='PaymentMethod' component={PaymentMethod} />
+      <Screen name='PaidPaymentStatus' component={PaidPaymentStatus} />
+      <Screen name='SplashCreateShop' component={SplashCreateShop} />
+      <Screen name='CreateShop' component={CreateShop} />
 
       {/* user */}
       <Screen name="LoginScreen" component={LoginScreen} />
@@ -305,7 +319,9 @@ function MainStackNavigator() {
       {/* Transaction */}
       <Screen name='TransactionDetail' component={TransactionDetail} />
       <Screen name='TransactionDetailSucces'component={TransactionDetailSucces}/>
-
+      {/* gallery */}
+      <Screen name='GalleryScreen' component={GalleryScreen} />
+      <Screen name='GalleryDetailScreen' component={GalleryDetailScreen} />
     </Navigator>
   );
 }

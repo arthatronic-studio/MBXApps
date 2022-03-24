@@ -38,6 +38,7 @@ export const queryProductManage = gql`
             latitude
             longitude
             mainImage
+            eventDate
         }
     }
 `;

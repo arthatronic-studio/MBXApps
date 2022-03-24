@@ -55,8 +55,6 @@ import WidgetMenuHome from './WidgetMenuHome';
 import PostingHeader from 'src/components/Posting/PostingHeader';
 import {shadowStyle} from 'src/styles';
 import {adsPopup} from 'assets/images/popup';
-import {listDummyBanner} from 'assets/images/banner';
-
 import Geolocation from 'react-native-geolocation-service';
 import {accessClient} from 'src/utils/access_client';
 import VideoCardList from 'src/components/VideoCardList';
@@ -64,7 +62,7 @@ import {trackPlayerPlay} from 'src/utils/track-player-play';
 import FloatingMusicPlayer from 'src/components/FloatingMusicPlayer';
 import TrackPlayer, { Event, useTrackPlayerEvents } from 'react-native-track-player';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
-import { Item } from 'native-base';
+import { getSizeByRatio } from 'src/utils/get_ratio';
 
 const dataPromoDummy = {
   productName: 'Halo selamat datang!',
@@ -700,44 +698,10 @@ const MainHome = ({navigation, route}) => {
           </View>
 
           <Divider />
-          <Text onPress={() => navigation.navigate('Ecommerce')}>Ecommerce</Text>
-          <TouchableOpacity
-            style={{marginTop: 16, marginBottom: 16}}
-            onPress={() => navigation.navigate("MainForumOld")}
-          >
-            <Text>Forum</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity
-            style={{marginTop: 16, marginBottom: 16}}
-            onPress={() => navigation.navigate("SurveyFirst")}
-          >
-            <Text>Survey</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{marginTop: 16, marginBottom: 16}}
-            onPress={() => navigation.navigate("TransactionDetail")}
-          >
-            <Text>Detail Pesanan</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{marginTop: 16, marginBottom: 16}}
-            onPress={() => navigation.navigate("TransactionDetailSucces")}
-          >
-            <Text>Detail Pesanan sukses</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{marginTop: 16, marginBottom: 16}}
-            onPress={() => navigation.navigate("KuponKu")}
-          >
-            <Text>KuponKu</Text>
-          </TouchableOpacity>
 
           <Banner
-            isDummy={accessClient.MainHome.dummyBanner}
             showHeader={accessClient.MainHome.showBannerHeader}
-            data={accessClient.MainHome.dummyBanner ? listDummyBanner : listBanner}
+            data={listBanner}
             loading={loadingBanner}
           />
 
@@ -800,7 +764,11 @@ const MainHome = ({navigation, route}) => {
               <CarouselView
                 delay={5000}
                 showIndicator
-                style={{width, aspectRatio: 21 / 9}}>
+                style={{
+                  width,
+                  height: getSizeByRatio({ width: width - 32, ratio: 9/21 }).height,
+                }}
+              >
                 {[0].map((e, idx) => {
                   return (
                     <View

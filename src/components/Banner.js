@@ -7,28 +7,23 @@ import CarouselView from 'src/components/CarouselView';
 import {Container, Divider} from 'src/styled';
 import {useColor} from '@src/components';
 import TouchableOpacity from 'src/components/Button/TouchableDebounce';
-import ImagesPath from 'src/components/ImagesPath';
-import {tribesBanner} from 'assets/images/banner';
 import {useNavigation} from '@react-navigation/native';
 import PostingHeader from './Posting/PostingHeader';
+import { getSizeByRatio } from 'src/utils/get_ratio';
 
 const propTypes = {
   data: PropTypes.array,
   loading: PropTypes.bool,
   showHeader: PropTypes.bool,
-  isDummy: PropTypes.bool,
 };
 
 const defaultProps = {
   data: [],
   loading: false,
   showHeader: true,
-  isDummy: false,
 };
 
-const Banner = props => {
-  const {data, loading, showHeader, isDummy} = props;
-
+const Banner = ({ data, loading, showHeader }) => {
   const {width} = useWindowDimensions();
   const {Color} = useColor();
   const navigation = useNavigation();
@@ -46,7 +41,7 @@ const Banner = props => {
           style={{
             flex: 1,
             width: '100%',
-            borderRadius: 12,
+            borderRadius: 8,
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: Color.textInput,
@@ -70,8 +65,6 @@ const Banner = props => {
     )
   }
 
-  // console.log('data', data);
-
   return (
     <View style={{marginBottom: 16}}>
       {showHeader && renderHeader()}
@@ -81,48 +74,36 @@ const Banner = props => {
       ) : (
         <>
           <Divider />
-          {data.length > 0 ?
             <CarouselView
               delay={3000}
               showIndicator
-              style={{width, aspectRatio: 16/9}}
+              style={{
+                width,
+                height: getSizeByRatio({ width: width - 32, ratio: 9/16 }).height,
+              }}
             >
               {data.map((e, idx) => {
                 return (
                   <Container
                     key={idx}
                     width='100%'
+                    height='100%'
                     paddingHorizontal={16}
                   >
                     <Image
-                      source={e.imageAsset || {uri: e.image}}
+                      source={{uri: e.image}}
                       style={{
                         width: '100%',
-                        height:'100%',
-                        borderRadius: 0, //16
+                        height: '100%',
+                        borderRadius: 8,
+                        backgroundColor: Color.border,
                       }}
-                      resizeMode='contain'
+                      resizeMode='cover'
                     />
                   </Container>
                 )
               })}
             </CarouselView>
-          :
-            <Container
-              width={width}
-              paddingHorizontal={16}
-              style={{aspectRatio: 16/9}}
-            >
-              <Image
-                source={tribesBanner}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: 0, // 16
-                }}
-              />
-            </Container>
-          }
         </>
       )}
     </View>

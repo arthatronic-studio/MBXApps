@@ -106,16 +106,27 @@ const NewsDetail = ({navigation, route}) => {
         <View
           style={{
             width: '100%',
-            aspectRatio: 16/9,
+            aspectRatio: 4/3,
           }}
         >
-          <Image
-            source={{uri: item.image}}
-            style={{
-              width: '100%',
-              height: '100%',
-              // position: 'absolute',
-            }} />
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('GalleryDetailScreen', {
+                id: item.id,
+                image: item.image,
+              });
+            }}
+          >
+            <Image
+              source={{uri: item.image}}
+              style={{
+                width: '100%',
+                height: '100%',
+                backgroundColor: Color.border
+                // position: 'absolute',
+              }}
+            />
+          </TouchableOpacity>
             
           {/* <View
             style={{
@@ -152,34 +163,13 @@ const NewsDetail = ({navigation, route}) => {
               </Text>
             </View>
           </View> */}
-
-          <View style={{padding: 24, marginTop: -16, borderTopLeftRadius: 24, borderTopRightRadius: 24, flexDirection: 'row', justifyContent: 'space-between', backgroundColor: Color.theme}}>
-            {user && user.userId === item.ownerId && <View
-              style={{height: 48, width: 48, borderRadius: 24, position: 'absolute', top: -24, right: 16, backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center'}}
-            >
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('EditThreadScreen', {
-                    ...item,
-                    title: 'Edit',
-                  });
-                }}
-              >
-                <Ionicons
-                  name='pencil'
-                  size={20}
-                  color={Color.textInput}
-                />
-              </TouchableOpacity>
-            </View>}
-          </View>
         </View>
 
         <View
             style={{
               width: '100%',
               // height: '100%',
-              marginTop: 16,
+              paddingTop: 16,
               justifyContent: 'flex-end',
               alignItems: 'flex-start',
             }}>
