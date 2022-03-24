@@ -106,7 +106,6 @@ const DATA = [
       Recipt: '100003254876',
       total: 1
     },
-  
 ];
 
 const Notification = () => {

@@ -119,7 +119,9 @@ query(
   deletedAt
   products {
     id
-    name
+    product{
+      name
+    }
     orderId
     productId
     quantity
@@ -127,6 +129,7 @@ query(
   }
   address {
     id
+    penerimaName
     userId
     address
     postalCode
@@ -170,6 +173,7 @@ query (
     status: $status,
     userId: $userId
 	) {
+    id
     userId
     orderNumber
     expiredDate

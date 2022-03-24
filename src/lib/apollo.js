@@ -26,6 +26,7 @@ const httpLink = new HttpLink({
 const withToken = setContext(async (request, { headers }) => {
   await store.dispatch(getToken());
   const auth = await store.getState()['user.auth'];
+  console.log(auth.data.access_token)
   return { headers: { ...headers, Authorization: `${auth.data.token_type} ${auth.data.access_token}` } };
 });
 
