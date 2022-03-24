@@ -57,11 +57,15 @@ const Banner = ({ data, loading, showHeader }) => {
 
   const renderHeader = () => {
     return (
+      <>
         <PostingHeader
-            title='Tribes Special Deals'
-            onSeeAllPress={() => {}}
-            showSeeAllText={false}
+          title='Tribes Special Deals'
+          onSeeAllPress={() => {}}
+          showSeeAllText={false}
         />
+
+        <Divider />
+      </>
     )
   }
 
@@ -73,37 +77,36 @@ const Banner = ({ data, loading, showHeader }) => {
         renderskeleton()
       ) : (
         <>
-          <Divider />
-            <CarouselView
-              delay={3000}
-              showIndicator
-              style={{
-                width,
-                height: getSizeByRatio({ width: width - 32, ratio: 9/16 }).height,
-              }}
-            >
-              {data.map((e, idx) => {
-                return (
-                  <Container
-                    key={idx}
-                    width='100%'
-                    height='100%'
-                    paddingHorizontal={16}
-                  >
-                    <Image
-                      source={{uri: e.image}}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        borderRadius: 8,
-                        backgroundColor: Color.border,
-                      }}
-                      resizeMode='cover'
-                    />
-                  </Container>
-                )
-              })}
-            </CarouselView>
+          <CarouselView
+            delay={3000}
+            showIndicator
+            style={{
+              width,
+              height: getSizeByRatio({ width: width - 32, ratio: 9/16 }).height,
+            }}
+          >
+            {data.map((e, idx) => {
+              return (
+                <Container
+                  key={idx}
+                  width='100%'
+                  height='100%'
+                  paddingHorizontal={16}
+                >
+                  <Image
+                    source={{uri: e.image}}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      borderRadius: 8,
+                      backgroundColor: Color.border,
+                    }}
+                    resizeMode='cover'
+                  />
+                </Container>
+              )
+            })}
+          </CarouselView>
         </>
       )}
     </View>
