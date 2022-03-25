@@ -5,6 +5,7 @@ import IonIcons from 'react-native-vector-icons/Ionicons'
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import MapView, {Marker} from 'react-native-maps'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { useNavigation } from '@react-navigation/core';
 import Modal from "react-native-modal";
 
 import {
@@ -25,6 +26,7 @@ import TopTabShop from './TopTabShop';
 
 function BelumDibayar() {
     const { Color } = useColor();
+    const navigation = useNavigation();
   return (
     <View
       style={{
@@ -43,7 +45,7 @@ function BelumDibayar() {
                 <Text style={{fontSize: 12,}}>Telah Diproses</Text>
             </Pressable>
         </View>
-        <View style={{paddingHorizontal: 10,paddingVertical: 15,backgroundColor: Color.theme, width: '95%', height: '42%', alignSelf: 'center', borderRadius: 5}}>
+        <Pressable onPress={() => navigation.navigate('TransactionDetail')} style={{paddingHorizontal: 10,paddingVertical: 15,backgroundColor: Color.theme, width: '95%', height: '42%', alignSelf: 'center', borderRadius: 5}}>
             <View style={{flexDirection: 'row'}}>
                     <Image source={ImagesPath.avatar4}/>
                 <View style={{width: '70%', paddingHorizontal: 10, paddingVertical: 2}}>
@@ -87,13 +89,14 @@ function BelumDibayar() {
             <Text style={{fontSize: 8, color: Color.secondary,lineHeight: 12, textAlign:'left'}}>Pembeli sedang melakukan proses pembayaran. Pesanan akan dibatalkan otomatis pada tanggal</Text>
             <Text style={{fontSize: 8, fontWeight: 'bold'}}> 25 Jan 2022</Text>
         </Text>
-        </View>
+        </Pressable>
         
     </View>
   );
 }
 function Dikemas() {
     const { Color } = useColor();
+    const navigation = useNavigation();
   return (
     <View
       style={{
@@ -112,7 +115,7 @@ function Dikemas() {
                 <Text style={{fontSize: 12,}}>Telah Diproses</Text>
             </Pressable>
         </View>
-        <View style={{paddingHorizontal: 10,paddingVertical: 15,backgroundColor: Color.theme, width: '95%', height: '43%', alignSelf: 'center', borderRadius: 5}}>
+        <Pressable onPress={() => navigation.navigate('TransactionDetailSucces')} style={{paddingHorizontal: 10,paddingVertical: 15,backgroundColor: Color.theme, width: '95%', height: '43%', alignSelf: 'center', borderRadius: 5}}>
             <View style={{flexDirection: 'row'}}>
                     <Image source={ImagesPath.avatar4}/>
                 <View style={{width: '70%', paddingHorizontal: 10, paddingVertical: 2}}>
@@ -160,13 +163,14 @@ function Dikemas() {
                 <Text style={{fontSize: 12, fontWeight: 'bold', color: Color.textInput}}>Atur Pengiriman</Text>
             </TouchableOpacity>
         </View>
-        </View>
+        </Pressable>
     </View>
   );
 }
 
 function Dikirim() {
     const { Color } = useColor();
+    const navigation = useNavigation();
   return (
     <View
       style={{
@@ -179,7 +183,7 @@ function Dikirim() {
                 <MaterialIcons style={{paddingVertical: 5}} name={'keyboard-arrow-down'} size={20}/>
             </TouchableOpacity>
         </View>
-        <View style={{paddingHorizontal: 10,paddingVertical: 15,backgroundColor: Color.theme, width: '95%', height: '43%', alignSelf: 'center', borderRadius: 5}}>
+        <Pressable onPress={() => navigation.navigate('TransactionDetailSucces')} style={{paddingHorizontal: 10,paddingVertical: 15,backgroundColor: Color.theme, width: '95%', height: '43%', alignSelf: 'center', borderRadius: 5}}>
             <View style={{flexDirection: 'row'}}>
                     <Image source={ImagesPath.avatar4}/>
                 <View style={{width: '70%', paddingHorizontal: 10, paddingVertical: 2}}>
@@ -225,7 +229,7 @@ function Dikirim() {
                 <Text style={{fontSize: 12, fontWeight: 'bold', color: Color.textInput}}>Lacak Pengiriman</Text>
             </TouchableOpacity>
         </View>
-        </View>
+        </Pressable>
     </View>
   );
 }
@@ -233,6 +237,7 @@ function Dikirim() {
 
 function Selesai() {
     const { Color } = useColor();
+    const navigation = useNavigation();
   return (
     <View
       style={{
@@ -245,7 +250,7 @@ function Selesai() {
                 <MaterialIcons style={{paddingVertical: 5}} name={'keyboard-arrow-down'} size={20}/>
             </TouchableOpacity>
         </View>
-        <View style={{paddingHorizontal: 10,paddingVertical: 15,backgroundColor: Color.theme, width: '95%', height: '43%', alignSelf: 'center', borderRadius: 5}}>
+        <Pressable onPress={() => navigation.navigate('TransactionDetailSucces')}  style={{paddingHorizontal: 10,paddingVertical: 15,backgroundColor: Color.theme, width: '95%', height: '43%', alignSelf: 'center', borderRadius: 5}}>
             <View style={{flexDirection: 'row'}}>
                     <Image source={ImagesPath.avatar4}/>
                 <View style={{width: '78%', paddingHorizontal: 10, paddingVertical: 2}}>
@@ -291,14 +296,14 @@ function Selesai() {
                 <Text style={{fontSize: 12, fontWeight: 'bold', color: Color.textInput}}>Lihat Detail</Text>
             </TouchableOpacity>
         </View>
-        </View>
+        </Pressable>
     </View>
   );
 }
 
 function Komplainan() {
   const { Color } = useColor();
-
+  const navigation = useNavigation();
   return (
     <View
       style={{
@@ -311,7 +316,7 @@ function Komplainan() {
                 <MaterialIcons style={{paddingVertical: 5}} name={'keyboard-arrow-down'} size={20}/>
             </TouchableOpacity>
         </View>
-        <View style={{paddingHorizontal: 10,paddingVertical: 15,backgroundColor: Color.theme, width: '95%', height: '59%', alignSelf: 'center', borderRadius: 5}}>
+        <Pressable onPress={() => navigation.navigate('TransactionDetailSucces')}  style={{paddingHorizontal: 10,paddingVertical: 15,backgroundColor: Color.theme, width: '95%', height: '59%', alignSelf: 'center', borderRadius: 5}}>
             <View style={{flexDirection: 'row'}}>
                     <Image source={ImagesPath.avatar4}/>
                 <View style={{width: '70%', paddingHorizontal: 10, paddingVertical: 2}}>
@@ -360,7 +365,7 @@ function Komplainan() {
         <TouchableOpacity style={{alignSelf: 'flex-end',marginHorizontal: 15,marginVertical: 15,backgroundColor: Color.primary, fontSize: 12, width: '36%', height: 33, borderRadius: 20, justifyContent: 'center'}}>
                 <Text style={{fontSize: 12, fontWeight: 'bold', color: Color.textInput}}>Chat Pembeli</Text>
         </TouchableOpacity>
-        </View>
+        </Pressable>
     </View>
   );
 }

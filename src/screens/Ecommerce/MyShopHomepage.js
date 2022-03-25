@@ -53,7 +53,7 @@ const MyShopHomepage = ({ navigation }) => {
 	useEffect(() => {}, []);
 	return (
 		<Scaffold
-		header={<Header customIcon title="Toko Kamu" type="regular" centerTitle={false} />}
+		header={<Header customIcon title="Toko Saya" type="regular" centerTitle={false} />}
 		onPressLeftButton={() => navigation.pop()}
 		>
 			<ScrollView style={{backgroundColor: Color.semiwhite}}>
@@ -75,7 +75,7 @@ const MyShopHomepage = ({ navigation }) => {
 						</View>
 					</View>
 					<View style={{alignItems: 'center', marginVertical: 20}}>
-						<Pressable style={{borderWidth: 1, borderColor: Color.primary, height: 30, width: '30%', borderRadius: 3}}>
+						<Pressable onPress={() => navigation.navigate('EditMerchantInfo')} style={{borderWidth: 1, borderColor: Color.primary, height: 30, width: '30%', borderRadius: 3}}>
 							<View style={{flexDirection: 'row', paddingVertical: 5, justifyContent: 'center', alignItems: 'center'}}>
 								<AntDesign name={'edit'} size={14} style={{color: Color.primary ,paddingHorizontal: 5}}/>
 								<Text style={{color: Color.primary ,fontSize: 10, paddingHorizontal: 5}}>Edit Toko</Text>
@@ -98,48 +98,49 @@ const MyShopHomepage = ({ navigation }) => {
 					<View style={{flexDirection: 'row'}}>
 						<Text style={{fontSize: 10, fontWeight: 'bold', width: '70%', textAlign: 'left',
 							paddingHorizontal: 10, paddingVertical: 8}}>Penjualan</Text>
-						<Text style={{fontSize: 10, color: Color.primary, paddingVertical: 8, paddingHorizontal: 5, width: '30%'}}>Lihat Riwayat</Text>
+						<Text onPress={()=> navigation.navigate('IncomingOrder')} style={{fontSize: 10, color: Color.primary, paddingVertical: 8, paddingHorizontal: 5, width: '30%'}}>Lihat Riwayat</Text>
 					</View>
 					<View style={{alignItems: 'center', justifyContent: 'center',flexDirection: 'row', borderWidth: 1, borderColor: Color.border, height: '60%', width: '95%',
 							alignSelf: 'center', borderRadius: 5}}>
 						<View style={{marginHorizontal: 5,flexDirection: 'row', borderRadius: 20, width: 30, height: 30, backgroundColor: '#761AAB', alignItems: 'center', justifyContent: 'center'}}>
 							<FontAwesome name={'inbox'} size={20} style={{color: Color.textInput}}/>
 						</View>
-						<View style={{flexDirection: 'column', marginHorizontal: 5}}>
+						<Pressable onPress={()=> navigation.navigate('IncomingOrder')} style={{flexDirection: 'column', marginHorizontal: 5}}>
 							<View style={{flexDirection: 'row'}}>
 								<Text style={{fontWeight: 'bold', fontSize: 11}}>Pesanan Masuk</Text>
 								<View style={{marginHorizontal: 5, marginVertical: 5, backgroundColor: Color.error, width: 5, height: 5, borderRadius: 20}}></View>
 							</View>
 							<Text style={{fontSize: 10, textAlign: 'left'}}>12 Pesanan Baru</Text>
-						</View>
+						</Pressable>
 						<View style={{backgroundColor: Color.border, width: 2, height: 15, marginHorizontal: 25}}></View>
 						<View style={{marginHorizontal: 5,flexDirection: 'row', borderRadius: 20, width: 30, height: 30, backgroundColor: Color.primary, alignItems: 'center', justifyContent: 'center'}}>
 							<FontAwesome5 name={'shopping-cart'} size={15} style={{color: Color.textInput}}/>
 						</View>
-						<View style={{flexDirection: 'column', marginHorizontal: 5}}>
+						<Pressable onPress={()=> navigation.navigate('IncomingOrder')} style={{flexDirection: 'column', marginHorizontal: 5}}>
 							<View style={{flexDirection: 'row',}}>
 								<Text style={{fontWeight: 'bold', fontSize: 11, textAlign: 'left'}}>Siap Dikirim</Text>
 								<View style={{marginHorizontal: 5, marginVertical: 5, backgroundColor: Color.error, width: 5, height: 5, borderRadius: 20}}></View>
 							</View>
 							<Text style={{fontSize: 10, textAlign: 'left', color: Color.secondary}}>8 Barang</Text>
-						</View>
+						</Pressable>
 					</View>
 					
 				</View>
-				<View style={{backgroundColor: Color.textInput, width: '92%', height: 90, marginVertical: 10, alignSelf: 'center',
+				<View style={{backgroundColor: Color.theme, width: '92%', height: 105, marginVertical: 10, alignSelf: 'center',
 						borderRadius: 5}}>
-					<Text style={{textAlign: 'left', fontSize: 10, color: Color.primary, fontWeight: 'bold',
-							paddingHorizontal: 10, paddingVertical: 10}}
-							onPress={() => navigation.navigate('AddProduct')}>+ Tambah Produk</Text>
-					<Pressable style={{backgroundColor: Color.semiwhite, width: '95%', height: '55%',
+					<Pressable style={{marginVertical: 10,backgroundColor: Color.semiwhite, width: '95%', height: '45%',
 							alignSelf: 'center', borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
 						<FontAwesome5 name={'box'} size={20} style={{color: Color.text, paddingHorizontal: 20,}}/>
 						<TouchableOpacity style={{width: '70%'}} onPress={()=>{navigation.navigate('MyProduct')}}>
 							<Text style={{fontSize: 11, fontWeight: 'bold', textAlign: 'left'}}>Produk Kamu</Text>
-							<Text style={{fontSize: 10, fontWeight: 'normal', textAlign: 'left'}}>2 Produk Terdaftar</Text>
+							<Text style={{fontSize: 10, fontWeighxt: 'normal', textAlign: 'left'}}>2 Produk Terdaftar</Text>
 						</TouchableOpacity>
 						<MaterialIcons name={'keyboard-arrow-right'} size={30} style={{color: Color.text, width: '13%'}}/>
 					</Pressable>
+					<View style={{borderRadius: 5,flexDirection: 'row', marginHorizontal: 10, width: '95%', height: '30%', alignItems: 'center'}}>
+						<Text style={{width: '92%', textAlign: 'left'}}>Lelang Produk</Text>
+						<MaterialIcons name={'keyboard-arrow-right'} size={20} style={{color: Color.text, width: '13%'}}/>
+					</View>
 				</View>
 				<View style={{backgroundColor: Color.textInput, width: '92%', height: 125, alignSelf: 'center', borderRadius: 5}}>
 					<Text style={{fontSize: 11, fontWeight: 'bold', textAlign: 'left', paddingHorizontal: 10, paddingVertical: 10}}>Kata Pembeli</Text>
@@ -148,7 +149,7 @@ const MyShopHomepage = ({ navigation }) => {
 						<TouchableOpacity onPress={()=>{navigation.navigate('Review')}} style={{textAlign: 'left', width: '90%', fontSize: 14, paddingHorizontal: 10}}><Text style={{textAlign:'left'}}>Ulasan</Text></TouchableOpacity>
 						<MaterialIcons name={'keyboard-arrow-right'} size={20} style={{color: Color.text, width: '13%'}}/>
 					</Pressable>
-					<Pressable style={{flexDirection: 'row', marginVertical: 10}}>
+					<Pressable onPress={()=> navigation.navigate('IncomingOrder')} style={{flexDirection: 'row', marginVertical: 10}}>
 						<Text style={{textAlign: 'left', width: '90%', fontSize: 14, paddingHorizontal: 10}}>Pesanan dikomplain</Text>
 						<MaterialIcons name={'keyboard-arrow-right'} size={20} style={{color: Color.text, width: '13%'}}/>
 					</Pressable>

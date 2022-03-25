@@ -139,7 +139,7 @@ const EditMerchantInfo = () => {
                                     underlineColorAndroid='transparent'
                                     autoCorrect={false}
                                     selectionColor={Color.text}
-                                    style={{color: Color.text}}
+                                    style={{color: Color.text,}}
                                 />
                             </EmailRoundedView>
                         </View>
