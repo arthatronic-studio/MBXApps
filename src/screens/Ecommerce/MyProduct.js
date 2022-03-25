@@ -146,6 +146,7 @@ const MyProduct = ({navigation, route}) => {
             <Image source={ImagesPath.trash} />
           </TouchableOpacity>
           <TouchableOpacity
+          onPress={() => navigation.navigate('AddProduct')}
             style={{
               flexDirection: 'row',
               backgroundColor: Color.primary,
