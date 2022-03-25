@@ -5,6 +5,7 @@ import IonIcons from 'react-native-vector-icons/Ionicons'
 import MapView, {Marker} from 'react-native-maps'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Modal from "react-native-modal";
+import { useNavigation } from '@react-navigation/native';
 
 import {
   Text,
@@ -21,7 +22,9 @@ import { Divider } from 'src/styled';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const CreateShop = () => {
-    const user = useSelector(state => state['user.auth'].login.user);
+
+  const navigation = useNavigation();
+  const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const { Color } = useColor();

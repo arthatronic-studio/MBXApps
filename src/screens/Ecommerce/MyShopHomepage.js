@@ -32,6 +32,7 @@ import ImagesPath from 'src/components/ImagesPath';
 import Entypo from 'react-native-vector-icons/Entypo'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import MyShopHeader from './MyShopHeader';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -53,7 +54,7 @@ const MyShopHomepage = ({ navigation }) => {
 	useEffect(() => {}, []);
 	return (
 		<Scaffold
-		header={<Header customIcon title="Toko Saya" type="regular" centerTitle={false} />}
+		header={<MyShopHeader/>}
 		onPressLeftButton={() => navigation.pop()}
 		>
 			<ScrollView style={{backgroundColor: Color.semiwhite}}>
@@ -126,9 +127,10 @@ const MyShopHomepage = ({ navigation }) => {
 					</View>
 					
 				</View>
-				<View style={{backgroundColor: Color.theme, width: '92%', height: 105, marginVertical: 10, alignSelf: 'center',
+				<View style={{backgroundColor: Color.theme, width: '92%', height: 130, marginVertical: 10, alignSelf: 'center',
 						borderRadius: 5}}>
-					<Pressable style={{marginVertical: 10,backgroundColor: Color.semiwhite, width: '95%', height: '45%',
+					<Text style={{fontSize: 10, fontWeight: 'bold', textAlign: 'left', paddingHorizontal: 10, paddingVertical: 10}}>Produk</Text>
+					<Pressable style={{backgroundColor: Color.semiwhite, width: '95%', height: '40%',
 							alignSelf: 'center', borderRadius: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
 						<FontAwesome5 name={'box'} size={20} style={{color: Color.text, paddingHorizontal: 20,}}/>
 						<TouchableOpacity style={{width: '70%'}} onPress={()=>{navigation.navigate('MyProduct')}}>
@@ -145,13 +147,19 @@ const MyShopHomepage = ({ navigation }) => {
 				<View style={{backgroundColor: Color.textInput, width: '92%', height: 125, alignSelf: 'center', borderRadius: 5}}>
 					<Text style={{fontSize: 11, fontWeight: 'bold', textAlign: 'left', paddingHorizontal: 10, paddingVertical: 10}}>Kata Pembeli</Text>
 					<View style={{width: '95%', height: 1, backgroundColor: Color.border, alignSelf: 'center'}}></View>
-					<Pressable style={{flexDirection: 'row', marginVertical: 10}}>
-						<TouchableOpacity onPress={()=>{navigation.navigate('Review')}} style={{textAlign: 'left', width: '90%', fontSize: 14, paddingHorizontal: 10}}><Text style={{textAlign:'left'}}>Ulasan</Text></TouchableOpacity>
-						<MaterialIcons name={'keyboard-arrow-right'} size={20} style={{color: Color.text, width: '13%'}}/>
+					<Pressable onPress={()=>{navigation.navigate('Review')}} style={{flexDirection: 'row', marginVertical: 10, alignItems: 'center'}}>
+						<Text style={{paddingHorizontal: 10}}>Ulasan</Text>
+						<View style={{backgroundColor: Color.error,width: 13, height: 13, alignItems: 'center', justifyContent: 'center', borderRadius: 20}}>
+							<Text style={{color: Color.textInput, fontSize: 8}}>9</Text>
+						</View>
+						<MaterialIcons name={'keyboard-arrow-right'} size={20} style={{color: Color.text, width: '74%', textAlign: 'right'}}/>
 					</Pressable>
-					<Pressable onPress={()=> navigation.navigate('IncomingOrder')} style={{flexDirection: 'row', marginVertical: 10}}>
-						<Text style={{textAlign: 'left', width: '90%', fontSize: 14, paddingHorizontal: 10}}>Pesanan dikomplain</Text>
-						<MaterialIcons name={'keyboard-arrow-right'} size={20} style={{color: Color.text, width: '13%'}}/>
+					<Pressable onPress={()=> navigation.navigate('IncomingOrder')} style={{flexDirection: 'row', marginVertical: 10, alignItems: 'center'}}>
+						<Text style={{textAlign: 'left', width: '45%', fontSize: 14, paddingHorizontal: 10}}>Pesanan dikomplain</Text>
+						<View style={{backgroundColor: Color.error,width: 13, height: 13, alignItems: 'center', justifyContent: 'center', borderRadius: 20}}>
+							<Text style={{color: Color.textInput, fontSize: 8}}>9</Text>
+						</View>
+						<MaterialIcons name={'keyboard-arrow-right'} size={20} style={{textAlign: 'right',color: Color.text, width: '47%'}}/>
 					</Pressable>
 				</View>
 				<View style={{marginVertical: 10, backgroundColor: Color.textInput, width: '92%', height: 125, alignSelf: 'center', borderRadius: 5}}>

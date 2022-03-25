@@ -220,6 +220,7 @@ const Header = props => {
       searchbar,
       favoriteIcon,
       cartIcon,
+      chatIcon,
       notifIcon,
       backgroundColor,
       type,
@@ -338,6 +339,7 @@ const Header = props => {
               <></>
             )}
           </ColumnView>
+
 
           <ColumnView
             size={7.8}
