@@ -31,6 +31,7 @@ import MainSearch from '@src/screens/MainHome/MainSearch';
 import ShowAllFromForum from '@src/screens/MainForum/ShowAllFromForum';
 import ForumSegmentScreen from '@src/screens/MainForum/ForumSegmentScreen';
 import CreateThreadScreen from '@src/screens/MainForum/CreateThreadScreen';
+import CreateThreadMultipleScreen from 'src/screens/MainForum/CreateThreadMultipleScreen';
 import DetailForumScreen from '@src/screens/MainForum/DetailForumScreen';
 import EditThreadScreen from '@src/screens/MainForum/EditThreadScreen';
 import ForumScreen from 'src/screens/MainForum/ForumScreen';
@@ -261,6 +262,7 @@ function MainStackNavigator() {
       <Screen name="ShowAllFromForum" component={ShowAllFromForum} />
       <Screen name="ForumSegmentScreen" component={ForumSegmentScreen} />
       <Screen name="CreateThreadScreen" component={CreateThreadScreen} />
+      <Screen name='CreateThreadMultipleScreen' component={CreateThreadMultipleScreen} />
       <Screen name="DetailForumScreen" component={DetailForumScreen} />
       <Screen name="EditThreadScreen" component={EditThreadScreen} />
       <Screen name="ForumScreen" component={ForumScreen} />

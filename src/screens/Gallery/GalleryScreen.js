@@ -119,7 +119,7 @@ const GalleryScreen = ({ navigation, route }) => {
                                     parentProductId: item.id,
                                 };
                 
-                                navigation.navigate('CreateThreadScreen', { ...params });
+                                navigation.navigate('CreateThreadMultipleScreen', { ...params });
                             }}
                         >
                             <AntDesign
@@ -138,14 +138,23 @@ const GalleryScreen = ({ navigation, route }) => {
         >
             <ScrollView>
                 <Container marginBottom={16}>
-                    {item && <Image
-                        source={{uri: item.image}}
-                        style={{
-                            width: '100%',
-                            aspectRatio: 16/9,
-                            backgroundColor: Color.border,
+                    {item && <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('GalleryDetailScreen', {
+                                id: item.id,
+                                image: item.image,
+                            });
                         }}
-                    />}
+                    >
+                        <Image
+                            source={{uri: item.image}}
+                            style={{
+                                width: '100%',
+                                aspectRatio: 4/3,
+                                backgroundColor: Color.border,
+                            }}
+                        />
+                    </TouchableOpacity>}
                 </Container>
 
                 <Container paddingHorizontal={8}>
@@ -164,18 +173,19 @@ const GalleryScreen = ({ navigation, route }) => {
                                         source={{uri: e.image}}
                                         style={{
                                             width: '100%',
-                                            aspectRatio: 3/2,
-                                            borderTopLeftRadius: 8,
-                                            borderTopRightRadius: 8,
+                                            aspectRatio: 4/3,
+                                            // borderTopLeftRadius: 8,
+                                            // borderTopRightRadius: 8,
+                                            borderRadius: 4,
                                             backgroundColor: Color.primary,
                                         }}
                                     />
                                     
-                                    <Container color={Color.primarySoft} paddingVertical={16} style={{borderBottomLeftRadius: 8, borderBottomRightRadius: 8}}>
+                                    {/* <Container color={Color.primarySoft} paddingVertical={16} style={{borderBottomLeftRadius: 8, borderBottomRightRadius: 8}}>
                                         <Text type='bold'>
                                             {e.productName}
                                         </Text>
-                                    </Container>
+                                    </Container> */}
                                 </TouchableOpacity>
                             </Container>
                         )}
