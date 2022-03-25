@@ -346,6 +346,52 @@ export const queryAddCart = gql`
   }
   `;
 
+  export const queryCreateMerchant = gql `
+  mutation ecommerceCreateMerchant(
+    $body: ecommerceMerchantInput
+  ) {
+    ecommerceCreateMerchant(
+      body: $body
+    ) {
+      id
+      userId
+      name
+      noTelp
+      alamat
+      socialMedia {
+        instagram
+      }
+      profileImg
+      isVerified
+      isOfficial
+      createdAt
+      updatedAt
+      user {
+        userId
+        userName
+        firstName
+        lastName
+        email
+        phoneCountryCode
+        phoneNumber
+        address
+        city
+        postalCode
+        country
+        organizationId
+        organizationName
+        userCode
+        idCardNumber
+        isDirector
+        image
+        photoProfile
+        birthDate
+        blockedUser
+      }
+    }
+  }
+`;
+
 export const queryCheckout = gql`
     mutation shipperCreateOrder(
       $input: ShipperCreateOrderInputType
