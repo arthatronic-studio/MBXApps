@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, { useEffect, useCallback, useState} from 'react';
 import {
   View,
   Image,
@@ -13,41 +13,65 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Text, useColor} from '@src/components';
 import ImagesPath from 'src/components/ImagesPath';
 import {Divider} from 'src/styled';
-
 import YoutubePlayer from 'react-native-youtube-iframe';
+import Client from '@src/lib/apollo';
+import {queryContentProduct} from '@src/lib/query';
+import Config from 'react-native-config';
+import { getSizeByRatio } from 'src/utils/get_ratio';
 
-const DATA = [
-  {imageAsset: ImagesPath.sabyanLive},
-  // {imageAsset: ImagesPath.sabyanLive},
-];
-
-const MondayAccoustic = () => {
+const MondayAccoustic = ({  }) => {
   const {Color} = useColor();
   const {width} = useWindowDimensions();
 
+  const [itemData, setItemData] = useState([]);
   const [playing, setPlaying] = useState(false);
 
+  useEffect(() => {
+    fetchContentProduct();
+  }, []);
+
+  const fetchContentProduct = () => {
+    const variables = {
+      page: 0,
+      itemPerPage: 6,
+      productType: Config.PRODUCT_TYPE,
+      productCategory: 'YOUTUBE_VIDEO'
+    };
+
+    Client.query({
+      query: queryContentProduct,
+      variables,
+    })
+    .then((res) => {
+      console.log('res YOUTUBE_VIDEO', res);
+
+      const data = res.data.contentProduct;
+
+      if (data) {
+        setItemData(data);
+      }
+    })
+    .catch((err) => {
+      console.log('err YOUTUBE_VIDEO', err);
+    });
+  }
+
   const onStateChange = useCallback(state => {
-    if (state === 'ended') {
+    console.log('state', state);
+    if (state === 'ended' || state === 'paused') {
       setPlaying(false);
-      Alert.alert('video has finished playing!');
     }
   }, []);
 
-  const togglePlaying = useCallback(() => {
-    setPlaying(prev => !prev);
-  }, []);
-
-  const renderItem = () => {
+  const renderItem = ({ item }) => {
     return (
       <View style={{paddingHorizontal: 6}}>
         <YoutubePlayer
-          height={220}
-          width={365}
+          width={width - 32}
+          height={getSizeByRatio({ width: width - 32, ratio: 9/16 }).height}
           play={playing}
-          videoId='Za5-fvwbPJI' //{'xv60Mo5RsGQ'}
+          videoId={item.productName}
           onChangeState={onStateChange}
-          style={{backgroundColor: 'red'}}
         />
       </View>
 
@@ -157,7 +181,7 @@ const MondayAccoustic = () => {
       </Text>
 
       <FlatList
-        data={DATA}
+        data={itemData}
         renderItem={renderItem}
         keyExtractor={(item, index) => item.id + index.toString()}
         horizontal
