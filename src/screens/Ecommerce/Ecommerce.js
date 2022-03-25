@@ -281,7 +281,7 @@ const Ecommerce = ({navigation}) => {
             </View>
             <View>
                 <Text style={{textAlign: 'left', marginHorizontal: 15, fontWeight: 'bold'}}>Tribes Special Deals</Text>
-                <Swiper showsButtons={true} style={{height: 200, marginHorizontal: 25, marginVertical: 15}} showsButtons={false}>
+                <Swiper showsButtons={true} style={{height: 200, marginHorizontal: 25, marginVertical: 15}}>
                     <View >
                         <Image source={ImagesPath.ebookbanner} style={{resizeMode: 'contain'}}/>
                     </View>
@@ -303,7 +303,7 @@ const Ecommerce = ({navigation}) => {
                     data={liveAuction}
                     renderItem={renderItem}
                     keyExtractor={item => item.id}
-                    horizontalx
+                    horizontal
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                 />
