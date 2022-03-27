@@ -26,67 +26,161 @@ import {TouchableOpacity} from '@src/components/Button';
 import Filter from 'src/components/Filter';
 import CardProduct from './CardProduct';
 import ImagesPath from 'src/components/ImagesPath';
+import Client from '@src/lib/apollo';
+
 
 import {MainView} from 'src/styled';
-import {shadowStyle} from '@src/styles';
+import { shadowStyle } from '@src/styles';
+
+import { mutationMerchant, queryGetCart, queryGetMyProduct } from 'src/lib/query/ecommerce';
 
 let filter = [
   {id: 1, name: 'Category'},
   {id: 2, name: 'Rating'},
 ];
 
-const DATA = [
-  {
-    id: 1,
-    image: ImagesPath.productImage,
-    title: 'Pashmina Pink Nissa Sabyan',
-    category: 'Fashion',
-    stock: 150,
-    rating: 5,
-    sold: 1,
-    price: '10.000',
-  },
-  {
-    id: 2,
-    image: ImagesPath.productImage,
-    title: 'Pashmina Pink Nissa Sabyan',
-    category: 'Fashion',
-    stock: 150,
-    rating: 5,
-    sold: 1,
-    price: '10.000',
-  },
-  {
-    id: 3,
-    image: ImagesPath.productImage,
-    title: 'Pashmina Pink Nissa Sabyan',
-    category: 'Fashion',
-    stock: 150,
-    rating: 5,
-    sold: 1,
-    price: '10.000',
-  },
-  {
-    id: 4,
-    image: ImagesPath.productImage,
-    title: 'Pashmina Pink Nissa Sabyan',
-    category: 'Fashion',
-    stock: 150,
-    rating: 5,
-    sold: 1,
-    price: '10.000',
-  },
-];
+
+
 
 const MyProduct = ({navigation, route}) => {
   // selector
   const {Color} = useColor();
+  const [loadingProps, showLoading, hideLoading] = useLoading();
+  const [data, setData] = useState({
+    "id": 1,
+    "userId": 1,
+    "name": "Preach",
+    "noTelp": "082213231071",
+    "alamat": "bakti murni",
+    "profileImg": ImagesPath.productImage,
+    "isVeriffied": true,
+    "isOfficial": true,
+    "productList": [{
+      "id": 1,
+      "name": "Preach",
+      "catgoryID": 1,
+      "description": "Preach",
+      "price": 10000,
+      "initialPrice": 1000000.0,
+      "imageUrl": ImagesPath.productImage,
+      "stock": 10,
+      "height": 1.5,
+      "width": 1.5,
+      "length": 1.5,
+      "weight": 1.5,
+      "merchantId": 1,
+      "productUnit": "res productUnit",
+      "minimumBuy": 1,
+      "productMassa": "100",
+      "status": "statusss",
+      "Category": "Pakaian",
+    },
+    {
+      "id": 2,
+      "name": "bro",
+      "catgoryID": 2,
+      "description": "bro",
+      "price": 10000,
+      "initialPrice": 1000000.0,
+      "imageUrl": ImagesPath.productImage,
+      "stock": 10,
+      "height": 1.5,
+      "width": 1.5,
+      "length": 1.5,
+      "weight": 1.5,
+      "merchantId": 1,
+      "productUnit": "res productUnit",
+      "minimumBuy": 1,
+      "productMassa": "100",
+      "status": "statusss",
+      "Category": "Pakaian",
+    }],
+  });
+
   const onSelect = item => {
     setSelectedItem(item);
   };
+  const getProductList = (id) => {
+    showLoading();
+    let variables = {
+      merchantId: id,
+    }
+    console.log(variables)
+    Client.query({query: queryGetMyProduct, variables})
+      .then(res => {
+        // hideLoading()
+        console.log(res)
+        if (res.data.ecommerceGetMerchant) {
+          setData(res.data.ecommerceGetMerchant);
+          console.log(res.data.ecommerceGetMerchant.productList);
+        }
+      })
+      .catch(reject => {
+        hideLoading()
+        console.log(reject.message, 'error');
+      });
+  }
 
+  const getProduct = () => {
+    console.log(route, 'props')
+    // showLoading();
+    let variables = {
+      merchantId: 2
+    }
+    console.log(variables)
+    Client.query({query: queryGetMyProduct, variables})
+      .then(res => {
+        // hideLoading()
+        console.log(res)
+        if (res.data.ecommerceCartList) {
+            setCart(res.data.ecommerceCartList)
+            res.data.ecommerceCartList.products.forEach((items, index) => {
+                temp.push({...items, checked: false, ...res.data.ecommerceCartList.productCartInfo[index]})
+            });
+            setList(temp)
+            setChecked(temp)
+        }
+      })
+      .catch(reject => {
+        // hideLoading()
+        alert(reject.message)
+        console.log(reject.message, 'reject');
+      });
+  };
+
+
+
+  const deleteProduct = (id, index) => {
+    console.log(route, 'props')
+    // showLoading();
+    let variables = {
+      body: {
+         userId:id
+      },
+      merchantId:id,
+      type: 'DELETED',
+  }
+    console.log(variables)
+    Client.mutate({mutation: mutationMerchant, variables})
+      .then(res => {
+       
+        console.log(res)
+        if (res.data.ecommerceGetMerchant) {
+          alert('Success delete')
+        }
+      })
+      .catch(reject => {
+        // hideLoading()
+        alert(reject.message)
+        console.log(reject.message, 'reject');
+      });
+  };
+
+  
   const [selectedItem, setSelectedItem] = useState(null);
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getProductList();
+  }, []);
 
   return (
     <Scaffold
@@ -108,9 +202,10 @@ const MyProduct = ({navigation, route}) => {
             onSelect={onSelect}
           />
         </View>
+        
         <View style={{flex: 1}}>
           <FlatList
-            data={DATA}
+            data={data.productList}
             keyExtractor={(item, index) => item.toString() + index}
             renderItem={({item}) => {
               return <CardProduct data={item} />;
@@ -142,7 +237,10 @@ const MyProduct = ({navigation, route}) => {
               paddingVertical: 10,
               paddingHorizontal: 16,
               borderRadius: 120,
-            }}>
+            }}
+            onPress={() => deleteProduct()}
+          >
+            
             <Image source={ImagesPath.trash} />
           </TouchableOpacity>
           <TouchableOpacity
@@ -156,9 +254,13 @@ const MyProduct = ({navigation, route}) => {
               borderRadius: 20,
               alignItems: 'center',
               justifyContent: 'center',
-            }}>
+            }}
+            onPress={() => navigation.navigate('AddProduct')}
+          >
             <Image source={ImagesPath.plusCircle} />
-            <Text style={{color: Color.textInput, marginLeft: 11}}>
+            <Text style={{ color: Color.textInput, marginLeft: 11 }}
+            
+            >
               Tambah Produk
             </Text>
           </TouchableOpacity>

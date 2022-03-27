@@ -512,6 +512,80 @@ export const queryGetCart = gql`
    }
   }
 `;
+export const queryCreateCart = gql`
+  mutation ecommerceCartCreate{
+    ecommerceCartCreate {
+      id user_id  productCartInfo { productId quantity } products { id name categoryId description price initialPrice imageUrl stock } totalProducts
+   }
+  }
+`;
+
+export const queryGetMyProduct = gql`
+query(
+  $merchantId: Int!
+){
+  ecommerceGetMerchant(
+    merchantId: $merchantId
+  )
+  {
+    id
+    userId
+    name
+    noTelp
+    alamat
+    profileImg
+    isVerified
+    isOfficial
+    createdAt
+    updatedAt
+    productList{
+    	id
+      name
+      categoryId
+      description
+      price
+      initialPrice
+      imageUrl
+      stock
+      height
+      width
+      length
+      weight
+      merchantId
+      productUnit
+      minimumBuy
+      productMassa
+      status
+  	}
+  }
+}
+
+`;
+export const mutationMerchant = gql`
+mutation(
+  $type: ecommerceMerchantTypeInput
+  $merchantId: Int!
+	$body: ecommerceMerchantManageInput
+) {
+  ecommerceMerchantManage(
+    type: $type
+    merchantId : $merchantId
+    body: $body
+  ) {
+    id
+    userId
+    name
+    noTelp
+    alamat
+    profileImg
+    isVerified
+    isOfficial
+    createdAt
+    updatedAt
+    user
+  }
+}
+`;
 
 export const queryGetCategory = gql`
   query(
@@ -646,6 +720,7 @@ export const queryGetSub = gql`
   }
 `;
 
+<<<<<<< Updated upstream
 export const queryAddProduct = gql`
   mutation ecommerceProductAdd($products: [EcommerceProductInput]) {
     ecommerceProductAdd(products: $products) {
@@ -667,3 +742,5 @@ export const queryAddProduct = gql`
     }
   }
 `;
+=======
+>>>>>>> Stashed changes
