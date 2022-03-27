@@ -386,7 +386,7 @@ export const queryAddCart = gql`
         image
         photoProfile
         birthDate
-        blockedUser
+        blockedUsers
       }
     }
   }
