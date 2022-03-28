@@ -1,17 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View,Pressable,FlatList,Image, TextInput} from 'react-native';
+import { View, Pressable,FlatList,Image, TextInput, Keyboard} from 'react-native';
 import { useSelector } from 'react-redux';
 import IonIcons from 'react-native-vector-icons/Ionicons'
 import MapView, {Marker} from 'react-native-maps'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Modal from "react-native-modal";
+import { useNavigation } from '@react-navigation/native';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 import {
   Text,
   // TouchableOpacity,
-  useLoading,
+  Loading, useLoading,
   Scaffold,
   Row, Col,
+  Submit,
   useColor,
   Header
 } from '@src/components';
@@ -20,8 +23,48 @@ import ImagesPath from 'src/components/ImagesPath';
 import { Divider } from 'src/styled';
 import { ScrollView } from 'react-native-gesture-handler';
 
+import Client from '@src/lib/apollo';
+
+import { queryCreateMerchant } from 'src/lib/query/ecommerce';
+
 const CreateShop = () => {
-    const user = useSelector(state => state['user.auth'].login.user);
+  const navigation = useNavigation();
+  const user = useSelector(state => state['user.auth'].login.user);
+
+  const [userData, setUserData] = useState({
+    userId: user.userId,
+    name: '',
+    noTelp: '',
+    alamat: '',
+    instagram: '',
+    profileImg: '',
+    isVerified: true,
+    isOfficial: true,
+  });
+
+  const [thumbImage, setThumbImage] = useState('');
+  const [mimeImage, setMimeImage] = useState('image/jpeg');
+
+  const [error, setError] = useState({
+    userId: null,
+    name: null,
+    noTelp: null,
+    alamat: null,
+    instagram: null,
+    profileImg: '',
+    isVerified: null,
+    isOfficial: null,
+  });
+
+  const isValueError = (name) => {
+    const newError = validate(name, userData[name]);
+    setError({ ...error, [name]: newError });
+  }
+
+  const onChangeUserData = (key, val) => {
+    setUserData({ ...userData, [key]: val });
+  };
+
   const loading = useSelector(state => state['user.auth'].loading);
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const { Color } = useColor();
@@ -30,6 +73,43 @@ const CreateShop = () => {
     setModalVisible(!isModalVisible);
   };
 
+  const onSubmit = () => {
+    Keyboard.dismiss();
+
+    showLoading()
+
+    let variables = {
+      body: {
+        userId: userData.userId,
+        name: userData.name,
+        noTelp: userData.noTelp,
+        alamat: userData.alamat,
+        socialMedia: {
+          instagram: userData.instagram,
+        },
+        profileImg: 'data:image/png;base64,' + thumbImage,
+        isVerified: userData.isVerified,
+        isOfficial: userData.isOfficial,
+      }
+    }
+
+    Client.query({query: queryCreateMerchant, variables})
+      .then((res) => {
+        const data = res.data
+
+        if (data) {
+          showLoading('success', 'Berhasil Membuat Toko');
+          
+          setTimeout(() => {
+              navigation.popToTop();
+          }, 2500);
+        } else {
+          showLoading('error', 'Gagal Membuat Toko');
+        }
+      }) .catch((err) => {
+        showLoading('error', 'Gagal membuat toko, Harap ulangi kembali');
+      });
+  }
   
   useEffect(() => {
   }, []);
@@ -47,49 +127,160 @@ const CreateShop = () => {
           }
           onPressLeftButton={() => navigation.pop()}
     >
-        <View style={{flexDirection: 'row', marginHorizontal: 10}}>
-            <View style={{justifyContent: 'center', alignItems: 'center',backgroundColor: Color.border, width: 40, height: 40, borderRadius: 50}}>
-                <IonIcons name={"camera-outline"} size={17}/>
-            </View>
-            <View style={{marginHorizontal: 10}}>
-                <Text style={{fontSize: 11, color: Color.text, fontWeight: 'bold', textAlign: 'left'}}>Unggah Foto Profile Toko</Text>
-                <Text style={{fontSize: 8, color: Color.secondary}}>Ukuran foto maks. 1MB dengan format JPEG, PNG, atau JPG</Text>
-                <Text style={{fontSize: 8, color: Color.primary, textAlign: 'left'}}>Unggah Foto</Text>
-            </View>
-        </View>
-        <Divider/>
-            <Text style={{fontSize: 10, fontWeight: 'bold',marginHorizontal: 10, textAlign: 'left'}}>Informasi Toko</Text>
-            <View>
-                <TextInput placeholder='Toko Sumber Daya Abadi . . .' style={{marginTop: 8,width: '95%', borderWidth: 1, borderColor: Color.border, height: 45, borderRadius: 5, alignSelf: 'center', fontSize: 12, paddingHorizontal: 10, paddingTop: 22}}/>
-                <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left', position: 'absolute', marginVertical: 13, marginHorizontal: 20}}>Nama Toko</Text>
-                <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'right', marginHorizontal: 15, marginVertical: 2}}>0/200</Text>
-            </View>
-            <View>
-                <TextInput placeholder='813-1234-5678' style={{marginVertical: 8,width: '95%', borderWidth: 1, borderColor: Color.border, height: 45, borderRadius: 5, alignSelf: 'center', fontSize: 12, paddingHorizontal: 32, paddingTop: 22}}/>
-                <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left', position: 'absolute', marginVertical: 13, marginHorizontal: 20}}>No. Telpon Toko</Text>
-                <Text style={{fontSize: 12, position: 'absolute', marginVertical: 25.8, marginHorizontal: 15}}>+62</Text>
-            </View>
-            <View>
-                <TextInput placeholder='Masukkan Alamat Toko' style={{marginVertical: 8,width: '95%', borderWidth: 1, borderColor: Color.border, height: 85, borderRadius: 5, alignSelf: 'center', fontSize: 12, paddingHorizontal: 10, paddingTop: 22}}/>
-                <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left', position: 'absolute', marginVertical: 13, marginHorizontal: 20}}>Alamat Toko</Text>
-            </View>
-            <View>
-                <TextInput placeholder='tokojayaabadi' style={{marginVertical: 8,width: '95%', borderWidth: 1, borderColor: Color.border, height: 45, borderRadius: 5, alignSelf: 'center', fontSize: 12, paddingHorizontal: 25, paddingTop: 22}}/>
-                <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left', position: 'absolute', marginVertical: 13, marginHorizontal: 20}}>No. Telpon Toko</Text>
-                <Text style={{fontSize: 12, position: 'absolute', marginVertical: 25, marginHorizontal: 20}}>@</Text>
-            </View>
-            <Divider/>
-            <Text style={{fontSize: 10, fontWeight: 'bold', textAlign: 'left', marginHorizontal: 10}}>Titik Lokasi</Text>
-            <View style={{width: '100%', height: 200, marginVertical: 10, alignItems: 'center'}}>
-              <MapView style={{width: '95%', height: 200}} initialRegion={{
-                latitude: -6.173696,
-                longitude: 106.824707,
-                latitudeDelta: 0.004,
-                longitudeDelta: 0.004
-              }}>
-                <Marker coordinate={{latitude: -6.175200397040409, longitude: 106.82714206826583}}/>
-              </MapView>
-            </View>
+        <ScrollView>
+          <View style={{flexDirection: 'row', marginHorizontal: 10}}>
+              <TouchableOpacity
+                onPress={() => {
+                    const options = {
+                        mediaType: 'photo',
+                        maxWidth: 640,
+                        maxHeight: 640,
+                        quality: 1,
+                        includeBase64: true,
+                    }
+
+                    launchImageLibrary(options, (callback) => {
+                        setThumbImage(callback.base64);
+                        setMimeImage(callback.type);
+                    })
+                }}
+              >
+                {thumbImage!=='' &&
+                  <Image source={{ uri: `data:${mimeImage};base64,${thumbImage}` }} style={{resizeMode: 'contain', width: 40, height: 40, borderRadius: 50}} />
+                }
+                {thumbImage=='' && 
+                  <View style={{justifyContent: 'center', alignItems: 'center',backgroundColor: Color.border, width: 40, height: 40, borderRadius: 50}}>
+                      <IonIcons name={"camera-outline"} size={17}/>
+                  </View>
+                }
+              </TouchableOpacity>
+              <View style={{marginHorizontal: 10}}>
+                  <Text style={{fontSize: 11, color: Color.text, fontWeight: 'bold', textAlign: 'left'}}>Unggah Foto Profile Toko</Text>
+                  <Text style={{fontSize: 8, color: Color.secondary}}>Ukuran foto maks. 1MB dengan format JPEG, PNG, atau JPG</Text>
+                  <Text style={{fontSize: 8, color: Color.primary, textAlign: 'left'}}>Unggah Foto</Text>
+              </View>
+          </View>
+          <Divider/>
+              <Text style={{fontSize: 10, fontWeight: 'bold',marginHorizontal: 10, textAlign: 'left'}}>Informasi Toko</Text>
+              <View>
+                  <TextInput 
+                    placeholder='Toko Sumber Daya Abadi . . .' 
+                    style={{
+                      marginTop: 8,
+                      width: '95%', 
+                      borderWidth: 1, 
+                      borderColor: Color.border, 
+                      height: 45, 
+                      borderRadius: 5, 
+                      alignSelf: 'center', 
+                      fontSize: 12, 
+                      paddingHorizontal: 10, 
+                      paddingTop: 22
+                    }}
+                    autoCorrect={false}
+                    onChangeText={(text) => onChangeUserData('name', text)}
+                    selectionColor={Color.text}
+                    value={userData.name}
+                  />
+                  <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left', position: 'absolute', marginVertical: 13, marginHorizontal: 20}}>Nama Toko</Text>
+                  <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'right', marginHorizontal: 15, marginVertical: 2}}>0/200</Text>
+              </View>
+              <View>
+                  <TextInput 
+                    placeholder='813-1234-5678' 
+                    style={{
+                      marginVertical: 8,
+                      width: '95%', 
+                      borderWidth: 1, 
+                      borderColor: Color.border, 
+                      height: 45, 
+                      borderRadius: 5, 
+                      alignSelf: 'center', 
+                      fontSize: 12, 
+                      paddingHorizontal: 32,
+                      paddingTop: 22
+                    }}
+                    autoCorrect={false}
+                    onChangeText={(text) => onChangeUserData('noTelp', text)}
+                    selectionColor={Color.text}
+                    value={userData.noTelp}
+                    keyboardType='numeric'
+                  />
+                  <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left', position: 'absolute', marginVertical: 13, marginHorizontal: 20}}>No. Telpon Toko</Text>
+                  <Text style={{fontSize: 12, position: 'absolute', marginVertical: 25.8, marginHorizontal: 15}}>+62</Text>
+              </View>
+              <View>
+                  <TextInput 
+                    placeholder='Masukkan Alamat Toko' 
+                    style={{
+                      marginVertical: 8,
+                      width: '95%', 
+                      borderWidth: 1, 
+                      borderColor: Color.border, 
+                      height: 85, 
+                      borderRadius: 5, 
+                      alignSelf: 'center', 
+                      fontSize: 12, 
+                      paddingHorizontal: 10, 
+                      paddingTop: 22
+                    }}
+                    autoCorrect={false}
+                    onChangeText={(text) => onChangeUserData('alamat', text)}
+                    selectionColor={Color.text}
+                    value={userData.alamat}
+                  />
+                  <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left', position: 'absolute', marginVertical: 13, marginHorizontal: 20}}>Alamat Toko</Text>
+              </View>
+              <View>
+                  <TextInput 
+                    placeholder='tokojayaabadi' 
+                    style={{
+                      marginVertical: 8,
+                      width: '95%', 
+                      borderWidth: 1, 
+                      borderColor: Color.border, 
+                      height: 45, 
+                      borderRadius: 5, 
+                      alignSelf: 'center', 
+                      fontSize: 12, 
+                      paddingHorizontal: 25, 
+                      paddingTop: 22
+                    }}
+                    autoCorrect={false}
+                    onChangeText={(text) => onChangeUserData('instagram', text)}
+                    selectionColor={Color.text}
+                    value={userData.instagram}
+                  />
+                  <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left', position: 'absolute', marginVertical: 13, marginHorizontal: 20}}>Instagram Toko</Text>
+                  <Text style={{fontSize: 12, position: 'absolute', marginVertical: 25, marginHorizontal: 20}}>@</Text>
+              </View>
+              <Divider/>
+              <Text style={{fontSize: 10, fontWeight: 'bold', textAlign: 'left', marginHorizontal: 10}}>Titik Lokasi</Text>
+              <View style={{width: '100%', height: 200, marginVertical: 10, alignItems: 'center'}}>
+                <MapView style={{width: '95%', height: 200}} initialRegion={{
+                  latitude: -6.173696,
+                  longitude: 106.824707,
+                  latitudeDelta: 0.004,
+                  longitudeDelta: 0.004
+                }}>
+                  <Marker coordinate={{latitude: -6.175200397040409, longitude: 106.82714206826583}}/>
+                </MapView>
+              </View>
+
+        </ScrollView>
+        <Submit
+            buttonLabel='Lanjut'
+            buttonColor={Color.primary}
+            type='bottomSingleButton'
+            buttonBorderTopWidth={0}
+            style={{backgroundColor: Color.theme, paddingTop: 25, paddingBottom: 25}}
+            onPress={()=>{
+            onSubmit()
+          }}
+        />
+
+        <Loading {...loadingProps} />
+
             {/* Ini Modal */}
       <Modal isVisible={isModalVisible}>
         <View style={{width: '100%', height: 495, backgroundColor: Color.theme, borderRadius: 5}}>
@@ -145,10 +336,6 @@ const CreateShop = () => {
         </View>
       </Modal>
             {/* End Modal */}
-            <Divider height={70}/>
-            <TouchableOpacity onPress={toggleModal} style={{alignSelf: 'center',justifyContent: 'center',backgroundColor: Color.primary, width: '90%', height: 40, borderRadius: 20}}>
-                <Text style={{color: Color.textInput, fontSize: 12, fontWeight: 'bold'}}>Lanjut</Text>
-            </TouchableOpacity>
     </Scaffold>
   )
 }

@@ -41,6 +41,8 @@ const Content = Styled(View)`
 const ListShipping = ({ route, navigation  }) => {
   console.log(route)
   const [list, setList] = useState([]);
+  const [group, setGroup] = useState([]);
+  const [idx, setIndex] = useState(0);
   // selector
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
@@ -81,6 +83,15 @@ const ListShipping = ({ route, navigation  }) => {
     Client.mutate({mutation: queryGetShipper, variables})
       .then(res => {
           if(res.data.shipperGetPriceDomestic){
+            const sort = res.data.shipperGetPriceDomestic.pricings.sort((a,b) => (a.logistic.name > b.logistic.name) ? 1 : ((b.logistic.name > a.logistic.name) ? -1 : 0))
+             const groupByCategory = sort.reduce((group, product) => {
+                    const { name } = product.rate;
+                    group[name] = group[name] ?? [];
+                    group[name].push(product);
+                    return group;
+                  }, {});
+                  setGroup(groupByCategory)
+                  console.log(groupByCategory)
             setList(res.data.shipperGetPriceDomestic.pricings)
           }
         hideLoading()
@@ -107,7 +118,27 @@ const ListShipping = ({ route, navigation  }) => {
         >
         <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, }}>
           <View style={{ marginBottom: 40 }}>
-            {list.map((val, id) => (
+            {Object.keys(group).map(function(key, index) {
+               return(
+                <TouchableOpacity onPress={() => setIndex(index)} style={{ padding: 12, borderBottomWidth: 1, borderBottomColor: '#ddd' }}>
+                  <Text align='left' size={13}>{key}</Text>
+                  {idx == index && group[key].map((val, id) => (
+                    <TouchableOpacity onPress={() => submit(val)} style={{ paddingLeft: 15, paddingVertical: 8 }}>
+                      <Row>
+                        <Col>
+                          <Text align='left' size={13}>{val.logistic.name}</Text>
+                        </Col>
+                        <Col style={{ justifyContent: 'center' }}>
+                          <Text align='right' size={12}>{FormatMoney.getFormattedMoney(val.final_price)}</Text>
+                        </Col>
+                      </Row>
+                    </TouchableOpacity>
+                  ))}
+                </TouchableOpacity>
+               )
+                    // console.log(key,groupByCategory[key], index)
+            })}
+            {/* {list.map((val, id) => (
                 <TouchableOpacity onPress={() => submit(val)} style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ddd' }}>
                   <Row>
                     <Col>
@@ -119,7 +150,7 @@ const ListShipping = ({ route, navigation  }) => {
                     </Col>
                   </Row>
                 </TouchableOpacity>
-            ))}
+            ))} */}
           </View>
         </ScrollView>
       {/* <Loading {...loadingProps} /> */}

@@ -145,51 +145,6 @@ const Notification = () => {
         });
     };
     
-
-    const FirstRoute = () => (
-      <View>
-          <ScrollView>
-          
-          <FlatList
-                  data={listData}
-                  renderItem={renderItem}
-                  keyExtractor={item => item.id}
-                  showsVerticalScrollIndicator={false}
-                  showsHorizontalScrollIndicator={false}
-          />
-      </ScrollView>
-      <View style={{marginVertical: 130,flexDirection: 'row', width: '100%', height:80, backgroundColor: Color.textInput, elevation: 20,paddingVertical: 20}}>
-          <View style={{width: '45%', marginHorizontal: 20}}>
-              <Text style={{fontSize: 8, color: Color.secondary}}>Total Harga</Text>
-              <Text style={{fontWeight: 'bold', fontSize: 18}}>Rp. 0</Text>
-          </View>
-          <View style={{backgroundColor: Color.primary, width: 150, height: 35, borderRadius: 20}}>
-              <TouchableOpacity>
-                  <Text style={{textAlign: 'center', marginVertical: 5, color: Color.textInput, fontWeight: 'bold'}}>Checkout</Text>
-              </TouchableOpacity>
-          </View>
-    </View>
-      </View>
-    );
-    
-    const SecondRoute = () => (
-      
-      <View>
-        <TouchableOpacity style={{ marginVertical: 10, marginHorizontal: 10,flexDirection: 'row',backgroundColor: Color.textInput, width: '28%', height: 33, borderRadius: 20, justifyContent: 'center', alignItems: 'center',
-      }}>
-          <Text style={{fontSize:12}}>Terbaru</Text>
-          <MaterialIcons name={'keyboard-arrow-down'} size={20} style={{marginVertical: 6}}/>
-        </TouchableOpacity>
-        <FlatList
-                  data={listData}
-                  renderItem={render}
-                  keyExtractor={item => item.id}
-                  showsVerticalScrollIndicator={false}
-                  showsHorizontalScrollIndicator={false}
-      />
-      </View>
-    );
-    
     const initialLayout = { width: Dimensions.get('window').width };
 
     const totalBarang = (data) => {
@@ -202,10 +157,6 @@ const Notification = () => {
       }
     }
     
-    const renderScene = SceneMap({
-      sedangdibeli: FirstRoute,
-      semuariwayat: SecondRoute,
-    });
     
     const [index, setIndex] = React.useState(0);
           const [routes] = React.useState([
@@ -229,9 +180,9 @@ const Notification = () => {
                 </View>
                 <View style={{backgroundColor: Color.border, width: '95%', height: 1, alignSelf: 'center'}}></View>
                 <View style={{flexDirection: 'row',}}>
-                    <Image source={item.image} style={{resizeMode: 'contain', width: 70, height: 70, marginVertical: 8, marginHorizontal: 8, backgroundColor: 'yellow'}}/>
+                    <Image source={{ uri: item.products[0]['product']['imageUrl'] }} style={{resizeMode: 'contain', width: 70, height: 70, marginVertical: 8, marginHorizontal: 8}}/>
                     <View style={{marginVertical: 8}}>
-                        <Text style={{fontWeight: 'bold', marginHorizontal: 15}}>{item.products[0]['name']}</Text>
+                        <Text style={{fontWeight: 'bold', marginHorizontal: 15}}>{item.products[0]['product']['name']}</Text>
                         <View style={{flexDirection: 'row', marginHorizontal: 12, marginVertical: 5}}>
                         <Entypo name={'star'} style={{color: Color.yellow,}}/>
                         <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 3}}>{item.review}</Text>
@@ -257,76 +208,36 @@ const Notification = () => {
             </Pressable>
           );
 
-          const render = ({ item }) => (
-    
-            <View style={{marginHorizontal: 10, marginVertical: 5, backgroundColor: Color.textInput, width: '95%', height: 200, borderRadius: 10 }}>
-                <View style={{flexDirection: 'row'}}>
-                  <View style={{width: '65%', marginHorizontal: 10, marginVertical: 10}}>
-                    <Text style={{textAlign: 'left', color: Color.secondary, fontSize: 8}}>No Recipt</Text>
-                    <Text style={{textAlign: 'left', fontSize: 10, fontWeight: 'bold'}}>{item.Recipt}</Text>
-                  </View>
-                  <View>
-                    <View style={{backgroundColor: '#E3F7BC', borderRadius: 5, width: 90, marginVertical: 10, height: 20}}>
-                      <Text style={{color: '#76AE0B', fontSize: 10, paddingVertical: 3}}>Paket Diterima</Text>
-                    </View>
-                  </View>
-                </View>
-                <View style={{backgroundColor: Color.border, width: '95%', height: 1, alignSelf: 'center'}}></View>
-                <View style={{flexDirection: 'row',}}>
-                    <Image source={item.image} style={{resizeMode: 'contain', width: 70, height: 70, marginVertical: 8, marginHorizontal: 8, backgroundColor: 'yellow'}}/>
-                    <View style={{marginVertical: 8}}>
-                        <Text style={{fontWeight: 'bold', marginHorizontal: 15}}>{item.namaProduk}</Text>
-                        <View style={{flexDirection: 'row', marginHorizontal: 12, marginVertical: 5}}>
-                        <Entypo name={'star'} style={{color: Color.yellow,}}/>
-                        <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 3}}>{item.review}</Text>
-                        <View style={{backgroundColor: Color.secondary, height: 12, width: 1, marginHorizontal: 5}}></View>
-                        <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 3}}>{item.terjual}</Text>
-                        <Text style={{fontSize: 10, color: Color.secondary,}}>Terjual</Text>
-                    </View>
-                    <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left', marginHorizontal: 15}}>{item.total} Barang</Text>
-                    </View>
-                    
-                </View>
-                <View style={{marginVertical: 20, flexDirection: 'row'}}>
-                      <View style={{marginHorizontal: 10, width: '70%'}}>
-                        <Text style={{fontSize: 8, textAlign: 'left', color: Color.secondary}}>Harga Barang</Text>
-                        <Text style={{fontSize: 12, textAlign: 'left', fontWeight: 'bold'}}>{item.hargaAkhir}</Text>
-                      </View>
-                      <View style={{backgroundColor: Color.primary, width: 80, borderRadius: 20}}>
-                        <TouchableOpacity>
-                          <Text style={{fontSize: 10, paddingVertical: 6, color: Color.textInput, fontWeight: 'bold'}}>Ulasan</Text>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-            </View>
-          );
-
   return (
     <Scaffold
 		header={<Header customIcon title="Notifikasi" type="regular" centerTitle={false} />}
 		onPressLeftButton={() => navigation.pop()}
+    style={{backgroundColor: Color.semiwhite}}
 	>
-      <View style={{marginVertical: 10}}>
-        <View style={{flexDirection: 'row', marginHorizontal: 15}}>
-          <Image source={ImagesPath.clock} style={{marginHorizontal: 30}}/>
-          <Image source={ImagesPath.package} style={{marginHorizontal: 30}}/>
-          <Image source={ImagesPath.truck} style={{marginHorizontal: 30}}/>
-          <Image source={ImagesPath.mappinline} style={{marginHorizontal: 30}}/>
-        </View>
-        <View style={{flexDirection: 'row', marginHorizontal: 15, marginVertical: 5}}>
-          <Text style={{width: '25%', fontSize: 10, color: Color.secondary,}}>Menunggu Pembayaran</Text>
-          <Text style={{width: '20%',fontSize: 10, color: Color.secondary, marginHorizontal: 10}}>Sedang Diproses</Text>
-          <Text style={{width: '20%', fontSize: 10, color: Color.secondary, marginHorizontal: 10}}>Paket Dikirim</Text>
-          <Text style={{width: '15%', fontSize: 10, color: Color.secondary, marginHorizontal: 20}}>Paket Diterima</Text>
-        </View>
+      <View>
+          <ScrollView>
+          <View style={{flexDirection: 'row', marginVertical: 10}}>
+            <TouchableOpacity style={{marginHorizontal: 10, flexDirection: 'row', backgroundColor: Color.theme, width: '35%', height: 35, borderRadius: 20, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={{fontSize: 12, paddingHorizontal: 3, fontWeight: 'bold'}}>Semua Status</Text>
+              <MaterialIcons name={'keyboard-arrow-down'} size={18} style={{marginVertical: 9}}/>
+            </TouchableOpacity>
+            <View style={{width: 80}}></View>
+            <TouchableOpacity style={{flexDirection: 'row', backgroundColor: Color.theme, width: '35%', height: 35, borderRadius: 20, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={{fontSize: 12, paddingHorizontal: 3, fontWeight: 'bold'}}>Semua Tanggal</Text>
+              <MaterialIcons name={'keyboard-arrow-down'} size={18} style={{marginVertical: 9}}/>
+            </TouchableOpacity>
+          </View>
+
+          <FlatList
+                  data={listData}
+                  renderItem={renderItem}
+                  keyExtractor={item => item.id}
+                  showsVerticalScrollIndicator={false}
+                  showsHorizontalScrollIndicator={false}
+          />
+      </ScrollView>
+      
       </View>
-      <TabView
-                navigationState={{ index, routes }}
-                renderScene={renderScene}
-                onIndexChange={setIndex}
-                initialLayout={initialLayout}
-                style={{backgroundColor: Color.semiwhite}}
-      />
     </Scaffold>
 
   )

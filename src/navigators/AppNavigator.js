@@ -161,6 +161,7 @@ import CreateShop from 'src/screens/Ecommerce/CreateShop';
 // gallery
 import GalleryScreen from 'src/screens/Gallery/GalleryScreen';
 import GalleryDetailScreen from 'src/screens/Gallery/GalleryDetailScreen';
+import IncomingOrder from 'src/screens/Ecommerce/IncomingOrder';
 
 const {Navigator, Screen} = createStackNavigator();
 const MainPage =
@@ -227,6 +228,7 @@ function MainStackNavigator() {
       <Screen name='PaidPaymentStatus' component={PaidPaymentStatus} />
       <Screen name='SplashCreateShop' component={SplashCreateShop} />
       <Screen name='CreateShop' component={CreateShop} />
+      <Screen name='IncomingOrder' component={IncomingOrder} />
 
       {/* user */}
       <Screen name="LoginScreen" component={LoginScreen} />

@@ -62,7 +62,8 @@ const CheckoutScreen = ({ navigation }) => {
   useEffect(() => {
       const {saveAddress, saveShippment} = route.params
       if(saveAddress) {
-          setAddress(saveAddress)
+            getAddress()
+        //   setAddress(saveAddress)
         }else{
             getAddress()
         }
@@ -74,7 +75,7 @@ const CheckoutScreen = ({ navigation }) => {
     let variables = {
         userId: user.userId,
         page: 1,
-        itemPerPage: 10
+        itemPerPage: 1
     }
     console.log(variables)
     Client.query({query: queryGetAddress, variables})
@@ -133,7 +134,7 @@ const CheckoutScreen = ({ navigation }) => {
               });
             
             setTimeout(() => {
-                navigation.navigate('PaymentScreen')
+                navigation.navigate('PaymentScreen',{back: true})
                 // navigation.popToTop()
             }, 1000);
         }
@@ -187,7 +188,7 @@ const CheckoutScreen = ({ navigation }) => {
                         <Fontisto name='map-marker-alt' color={Color.error} size={13} style={{ marginRight: 6 }} />
                         <Text color={Color.text} type='bold'>Rumah</Text>
                     </Row>
-                    <Text color={Color.text} size={10} style={{ marginTop: 8 }} align='left'>{address.address ? address.address : 'Alamat belum tersedia'}</Text>
+                    <Text color={Color.text} size={10} style={{ marginTop: 8 }} align='left'>{address.address ? address.address+' '+address.postalCode+', kel. '+address.area.name+', kec. '+address.suburb.name+', '+address.city.name+', provinsi. '+address.province.name : 'Alamat belum tersedia'}</Text>
                 </View>
             </Content>
             <Content style={{ backgroundColor: Color.textInput }}>
@@ -207,7 +208,7 @@ const CheckoutScreen = ({ navigation }) => {
                 <TouchableOpacity onPress={() => {address.address ? navigation.navigate('ListShipping', {item: {...address, product: item.tempData }}) : alert('Isi alamat terlebih dahulu')}}>
                     <Row style={{ backgroundColor: Color.semiwhite, alignItems: 'center', padding: 12, marginTop: 20, borderRadius: 8 }}>
                         <MaterialCommunityIcons name='truck' color={Color.text} size={18}   />
-                        <Text color={Color.text} type='semiBold' style={{ marginHorizontal: 10 }}>{shippment.logistic ? shippment.logistic.name : 'Pilih Pengiriman'}</Text>
+                        <Text color={Color.text} type='semiBold' style={{ marginHorizontal: 10 }}>{shippment.logistic ? shippment.logistic.name+' '+shippment.rate.name : 'Pilih Pengiriman'}</Text>
                         <Col alignItems='flex-end'>
                             <AntDesign name='right' size={18} color={Color.text} />
                         </Col>

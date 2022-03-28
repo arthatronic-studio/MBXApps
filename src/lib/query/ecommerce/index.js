@@ -298,6 +298,7 @@ query (
         length
         width
         price
+        imageUrl
       }
     }
     address {
@@ -345,6 +346,52 @@ export const queryAddCart = gql`
     }
   }
   `;
+
+  export const queryCreateMerchant = gql `
+  mutation ecommerceCreateMerchant(
+    $body: ecommerceMerchantInput
+  ) {
+    ecommerceCreateMerchant(
+      body: $body
+    ) {
+      id
+      userId
+      name
+      noTelp
+      alamat
+      socialMedia {
+        instagram
+      }
+      profileImg
+      isVerified
+      isOfficial
+      createdAt
+      updatedAt
+      user {
+        userId
+        userName
+        firstName
+        lastName
+        email
+        phoneCountryCode
+        phoneNumber
+        address
+        city
+        postalCode
+        country
+        organizationId
+        organizationName
+        userCode
+        idCardNumber
+        isDirector
+        image
+        photoProfile
+        birthDate
+        blockedUsers
+      }
+    }
+  }
+`;
 
 export const queryCheckout = gql`
     mutation shipperCreateOrder(
@@ -466,6 +513,80 @@ export const queryGetCart = gql`
    }
   }
 `;
+export const queryCreateCart = gql`
+  mutation ecommerceCartCreate{
+    ecommerceCartCreate {
+      id user_id  productCartInfo { productId quantity } products { id name categoryId description price initialPrice imageUrl stock } totalProducts
+   }
+  }
+`;
+
+export const queryGetMyProduct = gql`
+query(
+  $merchantId: Int!
+){
+  ecommerceGetMerchant(
+    merchantId: $merchantId
+  )
+  {
+    id
+    userId
+    name
+    noTelp
+    alamat
+    profileImg
+    isVerified
+    isOfficial
+    createdAt
+    updatedAt
+    productList{
+    	id
+      name
+      categoryId
+      description
+      price
+      initialPrice
+      imageUrl
+      stock
+      height
+      width
+      length
+      weight
+      merchantId
+      productUnit
+      minimumBuy
+      productMassa
+      status
+  	}
+  }
+}
+
+`;
+export const mutationMerchant = gql`
+mutation(
+  $type: ecommerceMerchantTypeInput
+  $merchantId: Int!
+	$body: ecommerceMerchantManageInput
+) {
+  ecommerceMerchantManage(
+    type: $type
+    merchantId : $merchantId
+    body: $body
+  ) {
+    id
+    userId
+    name
+    noTelp
+    alamat
+    profileImg
+    isVerified
+    isOfficial
+    createdAt
+    updatedAt
+    user
+  }
+}
+`;
 
 export const queryGetCategory = gql`
   query(
@@ -533,7 +654,7 @@ export const queryGetAddress = gql`
       page: $page
       itemPerPage: $itemPerPage
    ) {
-    id userId address provinceId cityId suburbId postalCode penerimaName noTelp
+    id userId address provinceId cityId suburbId areaId postalCode penerimaName noTelp city { id name } province { id name } suburb { id name } area { id name }
    }
   }
 `;
@@ -546,7 +667,7 @@ export const queryEditAddress = gql`
       userAddressEdit(
       addresses: $addresses
     ) {
-      id userId address provinceId cityId suburbId postalCode penerimaName noTelp 
+      id userId address provinceId cityId suburbId areaId postalCode penerimaName noTelp 
     }
   }
 `;
@@ -558,7 +679,7 @@ export const queryAddAddress = gql`
       userAddressAdd(
       addresses: $addresses
     ) {
-      id userId address provinceId cityId suburbId postalCode penerimaName noTelp
+      id userId address provinceId cityId suburbId areaId postalCode penerimaName noTelp
     }
   }
 `;
@@ -597,5 +718,38 @@ export const queryGetSub = gql`
    ) {
       id name
    }
+  }
+`;
+
+export const queryGetArea = gql`
+  query(
+    $suburbId: Int!
+  ) {
+    shipperGetAreaList(
+     suburbId: $suburbId
+   ) {
+      id name
+   }
+  }
+`;
+export const queryAddProduct = gql`
+  mutation ecommerceProductAdd($products: [EcommerceProductInput]) {
+    ecommerceProductAdd(products: $products) {
+      name
+      categoryId
+      description
+      price
+      initialPrice
+      imageUrl
+      stock
+      weight
+      height
+      width
+      length
+      productUnit
+      minimumBuy
+      productMassa
+      status
+    }
   }
 `;

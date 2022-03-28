@@ -27,7 +27,7 @@ import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
 import { TextInput } from 'src/components/Form';
 import ModalProvince from 'src/components/Modal/ModalProvince';
-import { queryAddAddress, queryEditAddress, queryGetCity, queryGetProvince, queryGetSub } from 'src/lib/query/ecommerce';
+import { queryAddAddress, queryEditAddress, queryGetArea, queryGetCity, queryGetProvince, queryGetSub } from 'src/lib/query/ecommerce';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -48,8 +48,10 @@ const FormPayment = ({ route, navigation  }) => {
   const [prov, setProv] = useState(null);
   const [kota, setKota] = useState(null);
   const [kec, setKec] = useState(null);
+  const [area, setArea] = useState(null);
   const [dataProvince, setDataProvince] = useState([]);
   const [dataCity, setDataCity] = useState([]);
+  const [dataArea, setDataArea] = useState([]);
   const [dataSub, setDataSub] = useState([]);
   // selector
   const user = useSelector(state => state['user.auth'].login.user);
@@ -75,9 +77,10 @@ const FormPayment = ({ route, navigation  }) => {
       provinceId: value ? value.id : null,
       cityId:  value ? value.id : null,
       suburbId:  value ? value.id : null,
+      areaId:  value ? value.id : null,
     }
     console.log(variables)
-    const queryx = name == 'prov' ? queryGetCity : name == 'city' ? queryGetSub : queryGetProvince
+    const queryx = name == 'prov' ? queryGetCity : name == 'city' ? queryGetSub : name == 'sub' ? queryGetArea : queryGetProvince
     Client.query({query: queryx, variables})
       .then(res => {
         hideLoading()
@@ -92,6 +95,9 @@ const FormPayment = ({ route, navigation  }) => {
 
         if (res.data.shipperGetSuburbList) {
           setDataSub(res.data.shipperGetSuburbList)
+        }
+        if (res.data.shipperGetAreaList) {
+          setDataArea(res.data.shipperGetAreaList)
         }
       })
       .catch(reject => {
@@ -108,21 +114,29 @@ const FormPayment = ({ route, navigation  }) => {
       provinceId: value ? value.id : null,
       cityId:  value ? value.id : null,
       suburbId:  value ? value.id : null,
+      areaId:  value ? value.id : null,
     }
     console.log(variables)
-    const queryx = name == 'prov' ? queryGetCity : name == 'city' ? queryGetSub : queryGetProvince
+    const queryx = name == 'prov' ? queryGetCity : name == 'city' ? queryGetSub : name == 'sub' ? queryGetArea : queryGetProvince
     Client.query({query: queryx, variables})
       .then(res => {
         hideLoading()
-        console.log(res)
+        console.log(res, name)
         if(res.data.shipperGetProvinceList){
           if (res.data.shipperGetProvinceList.length > 0) {
             setDataProvince(res.data.shipperGetProvinceList)
             if(route.params.address.address){
-              firstGet('prov', {id: route.params.address.provinceId})
-              const idx = res.data.shipperGetProvinceList.findIndex(val => val.id == route.params.address.provinceId)
-              setProv(res.data.shipperGetProvinceList[idx])
-              firstGet('city', {id: route.params.address.cityId})
+              getData('prov', {id: route.params.address.provinceId})
+              // const idx = res.data.shipperGetProvinceList.findIndex(val => val.id == route.params.address.provinceId)
+              // setProv(res.data.shipperGetProvinceList[idx])
+
+              setProv({...route.params.address.province})
+              setKota({...route.params.address.city})
+              setKec({...route.params.address.suburb})
+              setArea({...route.params.address.area})
+              
+              getData('city', {id: route.params.address.cityId})
+              getData('sub', {id: route.params.address.suburb.id})
               setCode(route.params.address.postalCode)
               setAddress(route.params.address.address)
               setName(route.params.address.penerimaName)
@@ -131,26 +145,36 @@ const FormPayment = ({ route, navigation  }) => {
           }
         }
 
-        if(res.data.shipperGetCitiesList){
-          console.log('city')
-          if (res.data.shipperGetCitiesList.length > 0) {
-            setDataCity(res.data.shipperGetCitiesList)
-            if(route.params.address.address){
-              const idx = res.data.shipperGetCitiesList.findIndex(val => val.id == route.params.address.cityId)
-              setKota(res.data.shipperGetCitiesList[idx])
-            }
-          }
-        }
+        // if(res.data.shipperGetCitiesList){
+        //   console.log('city')
+        //   if (res.data.shipperGetCitiesList.length > 0) {
+        //     setDataCity(res.data.shipperGetCitiesList)
+        //     if(route.params.address.address){
+        //       const idx = res.data.shipperGetCitiesList.findIndex(val => val.id == route.params.address.cityId)
+        //       setKota(res.data.shipperGetCitiesList[idx])
+        //     }
+        //   }
+        // }
         
-        if (res.data.shipperGetSuburbList){
-          if (res.data.shipperGetSuburbList.length > 0) {
-            if(route.params.address.address){
-              const idx = res.data.shipperGetSuburbList.findIndex(val => val.id == route.params.address.suburbId)
-              setKec(res.data.shipperGetSuburbList[idx])
-            }
-            setDataSub(res.data.shipperGetSuburbList)
-          }
-        }
+        // if (res.data.shipperGetSuburbList){
+        //   if (res.data.shipperGetSuburbList.length > 0) {
+        //     if(route.params.address.address){
+        //       const idx = res.data.shipperGetSuburbList.findIndex(val => val.id == route.params.address.suburbId)
+        //       setKec(res.data.shipperGetSuburbList[idx])
+        //     }
+        //     setDataSub(res.data.shipperGetSuburbList)
+        //   }
+        // }
+
+        // if (res.data.shipperGetAreaList){
+        //   if (res.data.shipperGetAreaList.length > 0) {
+        //     if(route.params.address.address){
+        //       const idx = res.data.shipperGetAreaList.findIndex(val => val.id == route.params.address.areaId)
+        //       setArea(res.data.shipperGetAreaList[idx])
+        //     }
+        //     setDataArea(res.data.shipperGetAreaList)
+        //   }
+        // }
         
       })
       .catch(reject => {
@@ -173,10 +197,10 @@ const FormPayment = ({ route, navigation  }) => {
         provinceId: prov ? prov.id : prov,
         cityId: kota ? kota.id : kota,
         suburbId: kec ? kec.id : kec,
+        areaId: area ? area.id : area,
         // province: prov ? prov.name : prov,
         // city: kota ? kota.name : kota,
         // suburb: kec ? kec.name : kec,
-        areaId: 1,
         address: address,
         postalCode: postalCode,
         penerimaName: name,
@@ -188,10 +212,10 @@ const FormPayment = ({ route, navigation  }) => {
         provinceId: prov ? prov.id : prov,
         cityId: kota ? kota.id : kota,
         suburbId: kec ? kec.id : kec,
+        areaId: area ? area.id : area,
         // province: prov ? prov.name : prov,
         // city: kota ? kota.name : kota,
         // suburb: kec ? kec.name : kec,
-        areaId: 1,
         address: address,
         postalCode: postalCode,
         penerimaName: name,
@@ -205,7 +229,7 @@ const FormPayment = ({ route, navigation  }) => {
         console.log(res)
         if(res.data.userAddressAdd){
           if (res.data.userAddressAdd.length > 0) {
-            alert(route.params.address.address ? 'Success Edit Address' : 'Success Add Address')
+            alert('Success Add Address')
             const data = {
               name,
               phone,
@@ -214,13 +238,14 @@ const FormPayment = ({ route, navigation  }) => {
               prov,
               kota,
               kec,
+              area,
               userAddressIdDestination: res.data.userAddressAdd[0].id
             }
             navigation.navigate('CheckoutScreen',{saveAddress: { ...data, ...res.data.userAddressAdd[0] } })
           }
         }else{
           if (res.data.userAddressEdit.length > 0) {
-            alert(route.params.address.address ? 'Success Edit Address' : 'Success Add Address')
+            alert('Success Edit Address')
             const data = {
               name,
               phone,
@@ -229,7 +254,8 @@ const FormPayment = ({ route, navigation  }) => {
               prov,
               kota,
               kec,
-              userAddressIdDestination: res.data.userAddressEdit[0].userId
+              area,
+              userAddressIdDestination: res.data.userAddressEdit[0].id
             }
             navigation.navigate('CheckoutScreen',{saveAddress: { ...data, ...res.data.userAddressEdit[0] } })
           }
@@ -253,10 +279,15 @@ const FormPayment = ({ route, navigation  }) => {
     }else if(name == 'city'){
       setKota(item)
       setKec(null)
+      setArea(null)
       getData(name, item)
     }
-    else{
+    else if(name == 'sub'){
       setKec(item)
+      setArea(null)
+      getData(name, item)
+    }else{
+      setArea(item)
     }
     modalListActionRef.current.close();
   }
@@ -357,6 +388,19 @@ const FormPayment = ({ route, navigation  }) => {
                 </Row>
               </TouchableOpacity>
             </View>
+            <View>
+              <Text align='left' style={{ marginTop: 15, marginLeft: 16, color: Color.gray }} size={13}>Area</Text>
+              <TouchableOpacity  onPress={() => {setnameModal('area'); modalListActionRef.current.open()}} style={{ borderWidth: 2, borderColor: Color.border, marginHorizontal: 16, paddingVertical: 15, borderRadius: 5, paddingHorizontal: 10 }}>
+                <Row>
+                  <Col size={8}>
+                    <Text align='left'>{area ? area.name : '- PILIH Area -'}</Text>
+                  </Col>
+                  <Col alignItems='flex-end' justifyContent='center'>
+                    <AntDesign name='down' color={Color.text} size={15} />
+                  </Col>
+                </Row>
+              </TouchableOpacity>
+            </View>
             <TextInput
               placeholder='12345'
               title='Kode Pos'
@@ -379,7 +423,7 @@ const FormPayment = ({ route, navigation  }) => {
             ref={modalListActionRef}
             name={nameModal}
             onPress={(item, name) => {onSelected(item,name); }}
-            data={nameModal == 'prov' ? dataProvince : nameModal == 'city' ? dataCity : nameModal == 'sub' ? dataSub : []}
+            data={nameModal == 'prov' ? dataProvince : nameModal == 'city' ? dataCity : nameModal == 'sub' ? dataSub : nameModal == 'area' ? dataArea : []}
           />
       <Loading {...loadingProps} />
     </Scaffold>

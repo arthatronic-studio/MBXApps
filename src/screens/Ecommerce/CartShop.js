@@ -187,7 +187,7 @@ const CartShop = ({ navigation, route }) => {
                     {item.checked && <AntDesign name='check' />}
                 </TouchableOpacity>
             </View>
-            <View style={{ height: 56, width: 56, marginRight: 14 }}>
+            <TouchableOpacity onPress={() => navigation.navigate('DetailProduct',{item})} style={{ height: 56, width: 56, marginRight: 14 }}>
                 <Image
                 source={ImagesPath.productImage}
                 style={{
@@ -197,7 +197,7 @@ const CartShop = ({ navigation, route }) => {
                   alignSelf: 'center',
                 }}
               />
-            </View>
+            </TouchableOpacity>
             <Col>
                 <View style={{ alignItems: 'flex-start' }}>
                     <Text size={14} color={Color.text} style={{ textAlign: 'left', marginBottom: 10 }} type='bold'>{item.name}</Text>
@@ -280,18 +280,17 @@ const CartShop = ({ navigation, route }) => {
             </View>
             
         </ScrollView>
-        {list.length != 0 && <Row style={{padding: 16 }}>
+         <Row style={{padding: 16 }}>
             <Col align='flex-start' justify='center'>
                 <Text size={10} color={Color.text}>Total Harga</Text>
-                <Text type='bold' color={Color.text} >{list.length > 0 ? FormatMoney.getFormattedMoney(totalProduct(list)) : 0}</Text>
+                <Text type='bold' color={Color.text} >{list.length > 0 ? FormatMoney.getFormattedMoney(totalProduct(list)) : FormatMoney.getFormattedMoney(0)}</Text>
             </Col>
             <Col>
-            {console.log(checkButton(list), 'check')}
-                <TouchableOpacity disabled={checkButton(list)} onPress={() => submit()} style={{ backgroundColor: checkButton(list) ? '#bcbcbc' : Color.info, borderRadius: 20, paddingVertical: 10 }}>
-                    <Text type='semibold' color={Color.textInput}>Checkout</Text>
-                </TouchableOpacity>
+            <TouchableOpacity disabled={checkButton(list)} onPress={() => submit()} style={{ backgroundColor: checkButton(list) ? '#bcbcbc' : Color.info, borderRadius: 20, paddingVertical: 10 }}>
+                <Text type='semibold' color={Color.textInput}>Checkout</Text>
+            </TouchableOpacity>
             </Col>
-        </Row>}
+        </Row>
       <Loading {...loadingProps} />
     </View>
   );
