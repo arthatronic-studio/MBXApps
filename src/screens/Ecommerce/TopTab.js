@@ -20,6 +20,7 @@ function Description({props}) {
           paddingVertical: 20,
           paddingHorizontal: 20,
         }}>
+          {props.detail.description}
       </Text>
     </View>
   );

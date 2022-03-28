@@ -229,9 +229,9 @@ const Notification = () => {
                 </View>
                 <View style={{backgroundColor: Color.border, width: '95%', height: 1, alignSelf: 'center'}}></View>
                 <View style={{flexDirection: 'row',}}>
-                    <Image source={item.image} style={{resizeMode: 'contain', width: 70, height: 70, marginVertical: 8, marginHorizontal: 8, backgroundColor: 'yellow'}}/>
+                    <Image source={{ uri: item.products[0]['product']['imageUrl'] }} style={{resizeMode: 'contain', width: 70, height: 70, marginVertical: 8, marginHorizontal: 8}}/>
                     <View style={{marginVertical: 8}}>
-                        <Text style={{fontWeight: 'bold', marginHorizontal: 15}}>{item.products[0]['name']}</Text>
+                        <Text style={{fontWeight: 'bold', marginHorizontal: 15}}>{item.products[0]['product']['name']}</Text>
                         <View style={{flexDirection: 'row', marginHorizontal: 12, marginVertical: 5}}>
                         <Entypo name={'star'} style={{color: Color.yellow,}}/>
                         <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 3}}>{item.review}</Text>

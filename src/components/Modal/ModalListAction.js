@@ -1,5 +1,5 @@
 import React, { useRef, forwardRef } from 'react';
-import { View, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { View, TouchableOpacity, useWindowDimensions, ScrollView } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import {
   Text,
@@ -58,7 +58,7 @@ const ModalListAction = forwardRef((props, ref) => {
       ref={combinedRef}
       withHandle
       handlePosition="inside"
-      adjustToContentHeight
+      // adjustToContentHeight
       handleStyle={{
         width: width / 6,
         height: 4,
@@ -79,7 +79,12 @@ const ModalListAction = forwardRef((props, ref) => {
       }}
       onClose={() => onClose()}
     >
-      {data.length > 0 ? renderContent() : children}
+      <View style={{ flex: 1 }}>
+        <ScrollView>
+          {data.length > 0 ? renderContent() : children}
+        </ScrollView>
+
+      </View>
     </Modalize>
   );
 });

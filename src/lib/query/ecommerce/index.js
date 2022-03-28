@@ -298,6 +298,7 @@ query (
         length
         width
         price
+        imageUrl
       }
     }
     address {
@@ -533,7 +534,7 @@ export const queryGetAddress = gql`
       page: $page
       itemPerPage: $itemPerPage
    ) {
-    id userId address provinceId cityId suburbId postalCode penerimaName noTelp
+    id userId address provinceId cityId suburbId areaId postalCode penerimaName noTelp city { id name } province { id name } suburb { id name } area { id name }
    }
   }
 `;
@@ -546,7 +547,7 @@ export const queryEditAddress = gql`
       userAddressEdit(
       addresses: $addresses
     ) {
-      id userId address provinceId cityId suburbId postalCode penerimaName noTelp 
+      id userId address provinceId cityId suburbId areaId postalCode penerimaName noTelp 
     }
   }
 `;
@@ -558,7 +559,7 @@ export const queryAddAddress = gql`
       userAddressAdd(
       addresses: $addresses
     ) {
-      id userId address provinceId cityId suburbId postalCode penerimaName noTelp
+      id userId address provinceId cityId suburbId areaId postalCode penerimaName noTelp
     }
   }
 `;
@@ -594,6 +595,18 @@ export const queryGetSub = gql`
   ) {
     shipperGetSuburbList(
      cityId: $cityId
+   ) {
+      id name
+   }
+  }
+`;
+
+export const queryGetArea = gql`
+  query(
+    $suburbId: Int!
+  ) {
+    shipperGetAreaList(
+     suburbId: $suburbId
    ) {
       id name
    }
