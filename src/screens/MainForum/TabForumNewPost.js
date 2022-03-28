@@ -49,16 +49,18 @@ const TabForumNewPost = ({ navigation, route }) => {
       variables.productSubCategory = productSubCategory;
     }
 
-    const result = await Client.query({
-      query: queryContentUserProduct,
-      variables,
-    });
+    try {
+      const result = await Client.query({
+        query: queryContentUserProduct,
+        variables,
+      });
 
-    console.log("resultttt", result)
-
-    if (result && result.data && result.data.contentUserProduct && Array.isArray(result.data.contentUserProduct)) {
-      return result.data.contentUserProduct;
-    } else {
+      if (result && result.data && result.data.contentUserProduct && Array.isArray(result.data.contentUserProduct)) {
+        return result.data.contentUserProduct;
+      }
+      
+      return [];
+    } catch (error) {
       return [];
     }
   }
@@ -73,9 +75,12 @@ const TabForumNewPost = ({ navigation, route }) => {
     // }
   }
 
+  console.log(listNewPost.loading, 'listNewPost.loading');
+
   return (
     <ListForumVertical
       data={listNewPost.data}
+      loading={listNewPost.loading}
       showHeader={false}
       // onPressShowAll={() => {
       //   navigation.navigate('ShowAllFromForum', {

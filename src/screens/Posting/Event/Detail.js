@@ -74,7 +74,7 @@ const EventDetail = ({navigation, route}) => {
   };
 
   let eventDate = !isNaN(parseInt(item.eventDate)) ? parseInt(item.eventDate) : null;
-  if (!eventDate) !isNaN(parseInt(item.updated_date)) ? parseInt(item.updated_date) : null;
+  if (!eventDate) eventDate = !isNaN(parseInt(item.updated_date)) ? parseInt(item.updated_date) : null;
 
   return (
     <Scaffold
@@ -355,7 +355,7 @@ const EventDetail = ({navigation, route}) => {
             justifyContent: 'center',
             alignItems: 'center'
           }}>
-            <Ionicons name='chatbubble-ellipses-outline' color={Color.text} size={24} />
+            <Ionicons name='chatbubble-ellipses-outline' color={Color.textInput} size={24} />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {

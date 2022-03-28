@@ -850,7 +850,7 @@ const MainHome = ({navigation, route}) => {
             <MondayAccoustic />
           }
 
-          {accessClient.MainHome.showListYoutube &&
+          {accessClient.MainHome.showListVideo &&
             <VideoCardList
               onPress={() => navigation.navigate('VideoDetail')}
             />

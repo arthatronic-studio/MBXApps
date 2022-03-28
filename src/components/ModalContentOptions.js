@@ -17,8 +17,6 @@ const defaultProps = {
 const ModalContentOptions = forwardRef((props, ref) => {
   const {isOwner, item} = props;
 
-  console.log('Item kakaaa', item.id);
-
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
   const navigation = useNavigation();
