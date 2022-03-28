@@ -1,14 +1,17 @@
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import IonIcons from 'react-native-vector-icons/Ionicons'
+import { useNavigation } from '@react-navigation/native';
 
 const MyShopHeader = () => {
+
+  const navigation = useNavigation();
   return (
     <View style={{height: 50, flexDirection: 'row'}}>
-      <View style={{width: '10%', alignItems: 'center', justifyContent: 'center'}}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={{width: '10%', alignItems: 'center', justifyContent: 'center'}}>
         <AntDesign name={'arrowleft'} size={20}/>
-      </View>
+      </TouchableOpacity>
       <View style={{width: '72%',paddingHorizontal: 10, justifyContent: 'center'}}>
         <Text style={{fontSize: 18, fontWeight: 'bold', textAlign: 'left'}}>Toko Saya</Text>
       </View>

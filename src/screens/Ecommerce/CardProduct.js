@@ -79,7 +79,7 @@ const CardProduct = ({data}) => {
       }}>
       <View style={{flexDirection: 'row'}}>
         <Image
-        source={data.image}
+        source={data.imageUrl}
           style={{
             height: 48,
             width: 48,
@@ -89,7 +89,7 @@ const CardProduct = ({data}) => {
           }}
         />
         <View style={{alignItems: 'flex-start'}}>
-          <Text type="bold">{data.title}</Text>
+          <Text type="bold">{data.name}</Text>
           <View
             style={{
               flexDirection: 'row',
@@ -102,7 +102,7 @@ const CardProduct = ({data}) => {
               source={ImagesPath.starRate}
             />
             <Text size="10" style={{color: Color.gray}}>
-              {data.rating} | {data.sold}k terjual
+              {data.rating ? data.rating : 5} | {data.sold ? data.sold : 1000}k terjual
             </Text>
           </View>
           <View style={{flexDirection: 'row'}}>
@@ -122,7 +122,7 @@ const CardProduct = ({data}) => {
               <Text size="8" style={{color: Color.gray}}>
                 Etalase
               </Text>
-              <Text size="10">{data.category}</Text>
+              <Text size="10">{data.Category}</Text>
             </View>
           </View>
         </View>
