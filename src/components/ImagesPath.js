@@ -101,4 +101,13 @@ export default {
   mandiri: require('../components/Images/mandiri.png'),
   permata: require('../components/Images/permata.png'),
   createshop: require('../components/Images/createshop.png'),
+  shop: require('../components/Images/shop.png'),
+  chatframe: require('../components/Images/chatframe.png'),
+  wishlistframe: require('../components/Images/wishlistframe.png'),
+  scales: require('../components/Images/scales.png'),
+
+
+
+
+  
 };
