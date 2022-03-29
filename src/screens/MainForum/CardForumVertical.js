@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, ImageBackground, Dimensions, Image } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Moment from 'moment';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Share from 'react-native-share';
+import { useSelector } from 'react-redux';
 
 import ImagesPath from '../../components/ImagesPath';
 import {
-    Col,
     Text,
     TouchableOpacity,
     useColor
@@ -21,19 +19,20 @@ import client from 'src/lib/apollo';
 const { width } = Dimensions.get('window');
 
 const defaultProps = {
-    componentType: 'GENERAL',
     onPress: () => {},
     numColumns: 1,
     style: {},
+    onPressDot: () => {},
+    showDot: false,
 };
 
-const CardForumVertical = ({ componentType, item, numColumns, onPress, style }) => {
+const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showDot, style }) => {
     const [like, setLike] = useState(item.like);
     const [im_like, setImLike] = useState(item.im_like);
     const [trigger, setTrigger] = useState(false);
 
     const { Color } = useColor();
-    // const navigation = useNavigation();
+    const user = useSelector(state => state['user.auth'].login.user);
 
     useEffect(() => {
         setLike(item.like);
@@ -111,9 +110,12 @@ const CardForumVertical = ({ componentType, item, numColumns, onPress, style }) 
                         </View>
                     </View>
                 </View>
-                {/* <View style={{backgroundColor: Color.primary, paddingHorizontal: 16, paddingVertical: 6, marginTop: 8, borderRadius: 120, alignSelf: 'flex-start'}}>
-                    <Text size={8} align='left' color={'#ffffff'}>+ Gabung</Text>
-                </View> */}
+                {showDot && user && user.userId === item.ownerId && <TouchableOpacity
+                    onPress={() => onPressDot()}
+                    style={{ paddingLeft: 16 }}
+                >
+                    <Feather name='more-vertical' size={20} />
+                </TouchableOpacity>}
             </View>
 
             <View style={{ marginBottom: 16}}>

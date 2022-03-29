@@ -24,6 +24,7 @@ import {
 } from '@assets/images';
 import CardForumVertical from './CardForumVertical';
 import { Container, Divider } from 'src/styled';
+import ModalContentOptions from 'src/components/ModalContentOptions';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -48,6 +49,7 @@ const DetailForumScreen = ({ route, navigation }) => {
 
     // ref
     const modalListActionRef = useRef();
+    const modalOptionsRef = useRef();
 
     // hooks
     const [loadingProps, showLoading] = useLoading();
@@ -235,6 +237,8 @@ const DetailForumScreen = ({ route, navigation }) => {
             <View style={{ alignItems: 'center' }}>
                 <CardForumVertical
                     item={item}
+                    showDot
+                    onPressDot={() => modalOptionsRef.current.open()}
                 />
 
                 <View style={{ width: '100%', paddingHorizontal: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12, paddingTop: 16 }}>
@@ -335,6 +339,12 @@ const DetailForumScreen = ({ route, navigation }) => {
                         },
                     }
                 ]}
+            />
+
+            <ModalContentOptions
+                ref={modalOptionsRef}
+                isOwner={user && user.userId === item.ownerId}
+                item={item}
             />
         </Scaffold>
     )

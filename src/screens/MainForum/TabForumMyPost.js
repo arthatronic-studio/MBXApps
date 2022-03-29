@@ -49,16 +49,18 @@ const TabForumMyPost = ({ navigation, route }) => {
       variables.productSubCategory = productSubCategory;
     }
 
-    const result = await Client.query({
-      query: queryContentMyProduct,
-      variables,
-    });
-
-    console.log("resultttt", result)
-
-    if (result && result.data && result.data.contentMyProduct && Array.isArray(result.data.contentMyProduct)) {
-      return result.data.contentMyProduct;
-    } else {
+    try {
+      const result = await Client.query({
+        query: queryContentMyProduct,
+        variables,
+      });
+  
+      if (result && result.data && result.data.contentMyProduct && Array.isArray(result.data.contentMyProduct)) {
+        return result.data.contentMyProduct;
+      }
+      
+      return [];
+    } catch (error) {
       return [];
     }
   }
@@ -76,6 +78,7 @@ const TabForumMyPost = ({ navigation, route }) => {
   return (
     <ListForumVertical
         data={listMyPost.data}
+        loading={listMyPost.loading}
         showHeader={false}
         // onPressShowAll={() => {
         //   navigation.navigate('ShowAllFromForum', {

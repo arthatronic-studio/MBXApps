@@ -122,21 +122,21 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'history',
       title: 'Riwayat',
-      show: user && !user.guest,
+      show: accessClient.MainProfile.showMenuHistory && user && !user.guest,
       icon: <Ionicons name="receipt-outline" size={20} color={Color.text} style={{}} />,
       onPress: () => {},
     },
     {
       code: 'coupon',
       title: 'Kuponku',
-      show: user && !user.guest,
+      show: accessClient.MainProfile.showMenuJoinCommunity && user && !user.guest,
       icon: <MaterialCommunityIcons name="ticket-confirmation-outline" size={20} color={Color.text} style={{}} />,
       onPress: () => {},
     },
     {
       code: 'myshop',
       title: 'Toko Saya',
-      show: user && !user.guest,
+      show: accessClient.MainProfile.showMenuMyStore && user && !user.guest,
       icon: <MaterialCommunityIcons name="storefront-outline" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('MyShopHomepage'),
     },
@@ -157,7 +157,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'survey',
       title: 'Survei',
-      show: true,
+      show: accessClient.MainProfile.showMenuSurvey,
       icon: <Ionicons name={"ios-receipt" || "ios-reader"} size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('SurveyFirst'),
     },

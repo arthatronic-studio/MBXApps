@@ -58,7 +58,7 @@ const ModalListAction = forwardRef((props, ref) => {
       ref={combinedRef}
       withHandle
       handlePosition="inside"
-      // adjustToContentHeight
+      adjustToContentHeight
       handleStyle={{
         width: width / 6,
         height: 4,

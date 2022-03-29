@@ -1,16 +1,11 @@
 import React from 'react';
-import { View, FlatList } from 'react-native';
-import Styled from 'styled-components';
+import { View, FlatList, useWindowDimensions } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { useColor } from '@src/components';
+import { ScreenEmptyData, ScreenIndicator, useColor } from '@src/components';
 import Text from '@src/components/Text';
 import CardForumVertical from '@src/screens/MainForum/CardForumVertical';
-
-const MainView = Styled(View)`
-    width: 100%;
-    height: 100%;
-`;
+import { Container } from 'src/styled';
 
 const defaultProps = {
     componentType: 'GENERAL', // GENERAL | LIST | GRID
@@ -18,10 +13,13 @@ const defaultProps = {
     onPress: () => {},
     onPressShowAll: () => {},
     showHeader: true,
+    data: [],
+    loading: false,
 }
 
-const ListForumVertical = ({ componentType, data, title, showAll, onPressShowAll, onPress, showHeader }) => {
+const ListForumVertical = ({ componentType, data, loading, title, showAll, onPressShowAll, onPress, showHeader }) => {
     const { Color } = useColor();
+    const { height } = useWindowDimensions();
 
     return (
         <View style={{paddingBottom: 8, paddingTop: showHeader ? 0 : 8}}>
@@ -30,22 +28,31 @@ const ListForumVertical = ({ componentType, data, title, showAll, onPressShowAll
                 {showAll && <Text onPress={() => onPressShowAll()} size={12} color={Color.primary}>Lihat Semua <Ionicons name='arrow-forward' size={12} color={Color.primary} /></Text>}
             </View>}
             
-            <FlatList
-                key={componentType}
-                keyExtractor={(item, index) => item.toString() + index}
-                data={data}
-                contentContainerStyle={{paddingHorizontal: 16, paddingTop: 16}}
-                renderItem={({ item, index }) => {
-                    return (
-                        <CardForumVertical
-                            componentType={componentType}
-                            item={item}
-                            numColumns={2}
-                            onPress={() => onPress(item)}
-                        />
-                    )
-                }}
-            />
+            {loading ?
+                <Container paddingTop={height / 3}>
+                    <ScreenIndicator transparent />
+                </Container>
+            :
+                <FlatList
+                    key={componentType}
+                    keyExtractor={(item, index) => item.toString() + index}
+                    data={data}
+                    contentContainerStyle={{paddingHorizontal: 16, paddingTop: 16}}
+                    renderItem={({ item, index }) => {
+                        return (
+                            <CardForumVertical
+                                componentType={componentType}
+                                item={item}
+                                numColumns={2}
+                                onPress={() => onPress(item)}
+                            />
+                        )
+                    }}
+                    ListEmptyComponent={() => {
+                        return <ScreenEmptyData style={{marginTop: height / 6}} message='Belum ada postingan, Tekan tombol + untuk menambahkan' />
+                    }}
+                />
+            }
         </View>
     )
 }

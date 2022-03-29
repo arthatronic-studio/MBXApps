@@ -253,13 +253,13 @@ const Ecommerce = ({navigation}) => {
                 </View>
                 <Octicons name={'search'} size={14} style={{color: Color.placeholder,marginHorizontal: 240,
                     marginVertical: 22, position: 'absolute',}}/>
-                <View style={{flexDirection: 'row', marginVertical: 20}}> 
-                    <Pressable onPress={() => navigation.navigate('Wishlist')}>
+                <View style={{flexDirection: 'row', marginVertical: 20,marginLeft:35}}> 
+                    {/* <Pressable onPress={() => navigation.navigate('Wishlist')}>
                         <MaterialIcons name={'favorite-border'} size={26} style={{marginHorizontal: 3}}/>
                         <View style={{marginHorizontal: 18,marginVertical: 1, position: 'absolute', width: 18, height: 10, backgroundColor: Color.error, borderRadius: 5}}>
                             <Text style={{fontSize: 5, color: Color.textInput, alignSelf: 'center', paddingVertical: 1}}> +99</Text>
                         </View>
-                    </Pressable>
+                    </Pressable> */}
                     <Pressable onPress={() => navigation.navigate('CartScreen')}>
                         <MaterialCommunityIcons name={'shopping-outline'} size={26} style={{marginHorizontal: 3}}/>
                         <View style={{marginHorizontal: 18,marginVertical: 1, position: 'absolute', width: 18, height: 10, backgroundColor: Color.error, borderRadius: 5}}>
@@ -315,7 +315,37 @@ const Ecommerce = ({navigation}) => {
                         <Image source={ImagesPath.ebookbanner}/>
                     </View>
                 </Swiper>
-            </View>
+          </View>
+          <View style={{ backgroundColor:"#FFFFFE",alignSelf:"center",width:"95%",borderRadius:5}}>
+              <View style={{flexDirection:"row",alignSelf:"center"}} >
+                  <View style={{ marginTop:16 }}>
+                      <Image source={ImagesPath.shop}></Image>
+                  </View>
+                  <View style={{ marginLeft:46.33,marginTop:16, }}>
+                      <Image source={ImagesPath.chatframe}></Image>
+                  </View>
+                  <View style={{ marginLeft:46.33,marginTop:16, }}>
+                      <Image source={ImagesPath.wishlistframe}></Image>
+                  </View>
+                  <View style={{ marginLeft: 46.33, marginTop: 16, }}>
+                      <Image source={ImagesPath.scales}></Image>
+                  </View>
+              </View>
+              <View style={{ flexDirection:"row",marginBottom:16 }}>
+                  <View style={{marginLeft:20, marginTop:8 }}>
+                      <Text >Toko Saya</Text>
+                  </View>
+                  <View style={{ marginLeft:28.33,marginTop:8 }}>
+                      <Text>Chating</Text>
+                  </View>
+                  <View style={{ marginLeft:36.33,marginTop:8 }}>
+                      <Text>Wishlist</Text>
+                  </View>
+                  <View style={{ marginLeft:39.33,marginTop:8 }}>
+                      <Text>Lelang</Text>
+                  </View>
+              </View>
+          </View>
             <View style={{marginVertical: 15}}>
                 <View style={{flexDirection: 'row'}}>
                     <Text style={{width: '70%' ,fontWeight: 'bold', textAlign: 'left', paddingHorizontal: 20}}>Lelang Berlangsung</Text>

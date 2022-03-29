@@ -6,11 +6,11 @@ import {
     useLoading,
     usePopup,
     useColor,
-    Header
+    Header,
 } from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
-import { Divider } from 'src/styled';
+import { Divider, Row } from 'src/styled';
 import TabMusic from './TabMusic';
 import TabVideo from './TabVideo';
 import { useSelector } from 'react-redux';
@@ -47,12 +47,14 @@ const MediaPlayerScreen = ({ navigation, route }) => {
             popupProps={popupProps}
             loadingProps={loadingProps}
         >
-            {user && user.isDirector === 1 && <Text onPress={() => navigation.navigate('UploadMusicScreen')}>
-                Upload Music
-            </Text>}
-            {user && user.isDirector === 1 && <Text align='left' onPress={() => navigation.navigate('UploadVideoScreen')}>
-                Upload Video
-            </Text>}
+            {user && user.isDirector === 1 && <Row justify='space-around' style={{marginBottom: 16}}>
+                <Text onPress={() => navigation.navigate('UploadMusicScreen')}>
+                    Upload Music
+                </Text>
+                <Text onPress={() => navigation.navigate('UploadVideoScreen')}>
+                    Upload Video
+                </Text>
+            </Row>}
 
             <TabMusic />
 

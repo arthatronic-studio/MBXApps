@@ -54,7 +54,6 @@ import WidgetBalance from 'src/components/WidgetBalance';
 import WidgetMenuHome from './WidgetMenuHome';
 import PostingHeader from 'src/components/Posting/PostingHeader';
 import {shadowStyle} from 'src/styles';
-import {adsPopup} from 'assets/images/popup';
 import Geolocation from 'react-native-geolocation-service';
 import {accessClient} from 'src/utils/access_client';
 import VideoCardList from 'src/components/VideoCardList';
@@ -63,14 +62,6 @@ import FloatingMusicPlayer from 'src/components/FloatingMusicPlayer';
 import TrackPlayer, { Event, useTrackPlayerEvents } from 'react-native-track-player';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { getSizeByRatio } from 'src/utils/get_ratio';
-
-const dataPromoDummy = {
-  productName: 'Halo selamat datang!',
-  productCategory: 'Promo',
-  image: adsPopup,
-  productDescription:
-    'Cupcake ipsum dolor sit amet tart. Cookie carrot cake bear claw jujubes muffin. Cotton candy sweet candy chocolate muffin bonbon. Tart donut apple pie cupcake tart tart. Jelly-o chocolate cake ice cream shortbread biscuit chupa chups dessert. Macaroon cotton candy lollipop marshmallow dragée toffee shortbread macaroon dessert. Bear claw gummi bears pie apple pie tiramisu soufflé bonbon. Tiramisu tart candy croissant jujubes marshmallow lemon drops. Ice cream muffin pastry halvah chocolate bar bear claw. Tart icing pudding jelly-o fruitcake fruitcake. Tiramisu sweet pastry caramels sugar plum sweet gingerbread. Macaroon powder gummies tootsie roll muffin. Cookie danish candy jelly beans biscuit. Soufflé cake pudding fruitcake macaroon jelly beans.',
-};
 
 const dataDummyMusic = [
   {
@@ -173,7 +164,7 @@ const MainHome = ({navigation, route}) => {
   // end handle music analytics
 
   useEffect(() => {
-    fetchPromoBanners();
+    fetchPopup();
 
     currentSocket = io(Config.SOCKET_API_URL, {
       extraHeaders: {
@@ -264,8 +255,13 @@ const MainHome = ({navigation, route}) => {
   }, []);
 
   const fetchBannerList = () => {
+    const variables = {
+      categoryId: 1,
+    };
+
     Client.query({
       query: queryBannerList,
+      variables,
     })
       .then(res => {
         console.log('res banner list', res);
@@ -276,21 +272,25 @@ const MainHome = ({navigation, route}) => {
         console.log(err, 'err banner list');
       });
   };
-  
-  // Popup Banners
-  const fetchPromoBanners = () => {
+
+  const fetchPopup = () => {
+    const variables = {
+      categoryId: 2,
+    };
+
     Client.query({
-      query: queryPromoBanners,
+      query: queryBannerList,
+      variables,
     })
       .then(res => {
-        console.log('res Promo Banners', res);
-        setDataPopupAds(res.data.promoBanners);
+        console.log('res banner list', res);
+        if (Array.isArray(res.data.bannerList)) {
+          setDataPopupAds(res.data.bannerList[0]);
+        }
         setShowPopupAds(true);
       })
       .catch(err => {
-        console.log(err, 'err Promo Banners');
-        setDataPopupAds();
-        setShowPopupAds(true);
+        console.log(err, 'err banner list');
       });
   };
 
@@ -850,7 +850,7 @@ const MainHome = ({navigation, route}) => {
             <MondayAccoustic />
           }
 
-          {accessClient.MainHome.showListYoutube &&
+          {accessClient.MainHome.showListVideo &&
             <VideoCardList
               onPress={() => navigation.navigate('VideoDetail')}
             />
@@ -907,7 +907,7 @@ const MainHome = ({navigation, route}) => {
         }}
       />
 
-      <Modal
+      {dataPopupAds && <Modal
         isVisible={tempShowPopupAds && showPopupAds}
         onBackdropPress={() => {
           tempShowPopupAds = false;
@@ -921,14 +921,10 @@ const MainHome = ({navigation, route}) => {
             onPress={() => {
               tempShowPopupAds = false;
               setShowPopupAds(false);
-              // navigation.navigate('DetailPromo', {item: dataPromoDummy});
+              // navigation.navigate('DetailPromo', {item});
             }}>
             <ImageBackground
-              source={
-                dataPopupAds && dataPopupAds.picture && dataPopupAds.picture.url
-                  ? {uri: dataPopupAds.picture.url}
-                  : adsPopup
-              }
+              source={{ uri: dataPopupAds.image }}
               imageStyle={{borderRadius: 12}}
               style={{height: '100%', resizeMode: 'contain', width: '100%'}}>
               <TouchableOpacity
@@ -951,7 +947,7 @@ const MainHome = ({navigation, route}) => {
             </ImageBackground>
           </TouchableOpacity>
         </View>
-      </Modal>
+      </Modal>}
     </Scaffold>
   );
 };

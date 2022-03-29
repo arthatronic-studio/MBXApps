@@ -138,6 +138,7 @@ const ForumSearch = ({navigation, route}) => {
 
       {itemData.data.length > 0 ? <ListForumVertical
         data={itemData.data}
+        loading={itemData.loading}
         showHeader={false}
         onPress={(item) => {
           navigation.navigate('DetailForumScreen', { item });

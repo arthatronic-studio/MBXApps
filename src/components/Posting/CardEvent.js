@@ -75,7 +75,7 @@ const CardEvent = (props) => {
     }
 
     let eventDate = !isNaN(parseInt(item.eventDate)) ? parseInt(item.eventDate) : null;
-    if (!eventDate) !isNaN(parseInt(item.updated_date)) ? parseInt(item.updated_date) : null;
+    if (!eventDate) eventDate = !isNaN(parseInt(item.updated_date)) ? parseInt(item.updated_date) : null;
 
     return (
         <TouchableOpacity

@@ -53,6 +53,8 @@ const CircleSend = Styled(TouchableOpacity)`
   alignItems: center;
 `;
 
+const itemPerPage = 50;
+
 const ChatUserListScreen = ({navigation, route}) => {
   const { params } = route;
 
@@ -70,11 +72,11 @@ const ChatUserListScreen = ({navigation, route}) => {
   const { Color } = useColor();
 
   useEffect(() => {
-    
+    fetchGetUserOrganizationRef();
   }, []);
 
   useEffect(() => {
-    if (itemData.page !== -1) {
+    if (itemData.loadNext && itemData.page !== -1) {
       fetchGetUserOrganizationRef();
     }
   }, [itemData.loadNext]);
@@ -95,8 +97,14 @@ const ChatUserListScreen = ({navigation, route}) => {
   };
 
   const fetchGetUserOrganizationRef = () => {
+    const variables = {
+      page: itemData.page + 1,
+      limit: itemPerPage,
+    };
+
     Client.query({
       query: queryGetUserOrganizationRef,
+      variables,
     })
       .then(res => {
         console.log(res, 'ressss');
@@ -109,10 +117,12 @@ const ChatUserListScreen = ({navigation, route}) => {
           newArr = compareData(itemData.data.concat(data));
         }
 
+        console.log(data.length, itemPerPage);
+
         setStateItemData({
           data: newArr,
           loading: false,
-          page: data.length === 10 ? itemData.page + 1 : -1,
+          page: (data.length + 1) === itemPerPage ? itemData.page + 1 : -1,
           loadNext: false,
         });
 
@@ -205,6 +215,8 @@ const ChatUserListScreen = ({navigation, route}) => {
 
     setFilterData(newArr);
   }
+
+  console.log(itemData.loadNext, itemData.page);
 
   return (
     <Scaffold
@@ -353,9 +365,7 @@ const ChatUserListScreen = ({navigation, route}) => {
             </TouchableOpacity>
           );
         }}
-        onEndReached={() =>
-          itemData.page !== -1 && setStateItemData({loadNext: true})
-        }
+        onEndReached={() => setStateItemData({ loadNext: true })}
         onEndReachedThreshold={0.3}
       />
     </Scaffold>

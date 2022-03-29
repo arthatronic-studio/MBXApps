@@ -58,7 +58,12 @@ export const accessClient = {
         showListSoonAuction: isKomoto || isSabyan ? false : true,
         showListPromo: isKomoto || isSabyan ? false : true,
         showListMusicNewer: isKomoto ? false : true,
-        showListYoutube: isKomoto || isSabyan ? false : true,
+        showListYoutube:
+            isKomoto ? false :
+            isSabyan ? true : true,
+        showListVideo:
+            isKomoto ? false:
+            isSabyan ? false : true,
         showListEbookNewer: isKomoto || isSabyan ? false : true,
     },
     MenuHome: {
@@ -77,12 +82,30 @@ export const accessClient = {
             isSabyan ? false : true,
     },
     MainProfile: {
-        showButtonJoinCommunity: isKomoto ? false : true,
-        showMenuJoinCommunity: isKomoto ? true : false,
-        showMenuCommunityAdmin: isKomoto ? true : false,
-        showStatusMember: isSabyan ? false : true,
+        showButtonJoinCommunity:
+            isKomoto ? false :
+            isSabyan ? false : true,
+        showMenuHistory:
+            isKomoto ? false :
+            isSabyan ? false : true,
+        showMenuCoupon:
+            isKomoto ? false :
+            isSabyan ? false : true,
+        showMenuMyStore:
+            isKomoto ? false :
+            isSabyan ? false : true,
+        showMenuJoinCommunity:
+            isKomoto ? true : false,
+        showMenuCommunityAdmin:
+            isKomoto ? true : false,
+        showMenuSurvey:
+            isKomoto ? false :
+            isSabyan ? false : true,
+        showStatusMember:
+            isSabyan ? false : true,
     },
     ChangeProfile: {
-        showIdNumber: isKomoto ? true : false,
+        showIdNumber:
+            isKomoto ? true : false,
     },
 };
