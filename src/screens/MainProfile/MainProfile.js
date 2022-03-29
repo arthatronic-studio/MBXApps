@@ -519,7 +519,7 @@ const MainProfile = ({navigation, route}) => {
                       <Col justify="center" size={0.75}>
                         {item.icon}
                       </Col>
-                      <Col size={0.25} />
+                      <Col size={0.25}><View /></Col>
                       <Col align="flex-start" size={9} justify="center">
                         <Text
                           color={

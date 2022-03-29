@@ -67,9 +67,9 @@ const ChatUserListScreen = ({navigation, route}) => {
     loadNext: false,
   });
   const [selected, setSelected] = useState([]);
-
-  const [search, setSearch] = useState("")
-  const [filterData, setFilterData] = useState([])
+  const [search, setSearch] = useState("");
+  const [filterData, setFilterData] = useState([]);
+  const [filterLoading, setFilterLoading] = useState(false);
 
   const { Color } = useColor();
 
@@ -82,6 +82,16 @@ const ChatUserListScreen = ({navigation, route}) => {
       fetchGetUserOrganizationRef();
     }
   }, [itemData.loadNext]);
+
+  useEffect(() => {
+    const timeout = search !== '' ? setTimeout(() => {
+      fetchSearchNameMember();
+    }, 500) : null;
+
+    return () => {
+      clearTimeout(timeout);
+    }
+  }, [search]);
 
   const compareData = arr => {
     let obj = {};
@@ -97,6 +107,37 @@ const ChatUserListScreen = ({navigation, route}) => {
 
     return newData;
   };
+
+  const fetchSearchNameMember = () => {
+    setFilterLoading(true);
+
+    const variables = { name: search };
+
+    Client.query({
+      query: queryGetUserOrganizationRef,
+      variables,
+    })
+    .then((res) => {
+      console.log('res search', res);
+
+      const data = res.data.getUserOrganizationRef;
+
+      let newArr = [];
+
+      if (data) {
+        newArr = data;
+      }
+
+      setFilterData(newArr);
+      setFilterLoading(false);
+    })
+    .catch((err) => {
+      console.log('err search', err);
+
+      setFilterData([]);
+      setFilterLoading(false);
+    });
+  }
 
   const fetchGetUserOrganizationRef = () => {
     const variables = {
@@ -121,31 +162,24 @@ const ChatUserListScreen = ({navigation, route}) => {
 
         console.log(data.length, 'dapet length');
 
-        setStateItemData({
+        setItemData({
+          ...itemData,
           data: newArr,
           loading: false,
           page: data.length > 0 ? itemData.page + 1 : -1,
           loadNext: false,
         });
-
-        setFilterData(newArr);
       })
       .catch(err => {
         console.log(err, 'errrrr');
 
-        setStateItemData({
+        setItemData({
+          ...itemData,
           loading: false,
           page: -1,
           loadNext: false,
         });
       });
-  };
-
-  const setStateItemData = obj => {
-    setItemData({
-      ...itemData,
-      ...obj,
-    });
   };
 
   const onSelected = item => {
@@ -189,40 +223,12 @@ const ChatUserListScreen = ({navigation, route}) => {
     })
   };
 
-  const searchFilter = (v) => {
-    let val = v.replace(/\s/g, '');
-    let text = val.toLowerCase();
-    let newArr = [];
-
-    if (text !== '') {
-      let newData = [];
-      itemData.data.map((item) => {
-        let fullname = item.firstName.toLowerCase().replace(/\s/g, '') + item.lastName.toLowerCase().replace(/\s/g, '');
-        let arrOfName = [
-          item.firstName.toLowerCase().replace(/\s/g, ''),
-          item.lastName.toLowerCase().replace(/\s/g, ''),
-          fullname,
-          fullname.substr(0, text.length)
-        ];
-        
-        if (arrOfName.includes(text)) {
-          newData.push(item);
-        }
-      });
-
-      newArr = newData;
-    } else {
-      newArr = itemData.data;
-    }
-
-    setFilterData(newArr);
-  }
-
-  console.log(itemData.loadNext, itemData.page);
+  // console.log(itemData.loadNext, itemData.page);
 
   return (
     <Scaffold
       fallback={itemData.loading}
+      isLoading={filterLoading}
       header={
         <Header
           title="Buat Room Chat"
@@ -263,7 +269,6 @@ const ChatUserListScreen = ({navigation, route}) => {
             error={null}
             onChangeText={(text) => {
               setSearch(text);
-              searchFilter(text);
             }}
             style={{
               backgroundColor: Color.textInput,
@@ -278,7 +283,7 @@ const ChatUserListScreen = ({navigation, route}) => {
       
       <FlatList
         keyExtractor={(item, index) => item.toString() + index}
-        data={filterData}
+        data={search !== '' ? filterData : itemData.data}
         contentContainerStyle={{paddingHorizontal: 16, paddingTop: 8}}
         renderItem={({ item, index }) => {
           // const isSelected = selected.filter(
@@ -373,7 +378,7 @@ const ChatUserListScreen = ({navigation, route}) => {
             </TouchableOpacity>
           );
         }}
-        onEndReached={() => setStateItemData({ loadNext: true })}
+        onEndReached={() => itemData.page !== -1 ? setItemData({ ...itemData, loadNext: true }) : {}}
         onEndReachedThreshold={0.3}
       />
 

@@ -53,11 +53,11 @@
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) want to access your camera</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) need access the location for content you need</string>
+	<string>$(PRODUCT_NAME) need access the location, that will be use as analytic to get a number of usage in each set of area</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>$(PRODUCT_NAME) need access the location for content you need</string>
+	<string>$(PRODUCT_NAME) need access the location, that will be use as analytic to get a number of usage in each set of area</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) need access the location for content you need</string>
+	<string>$(PRODUCT_NAME) need access the location, that will be use as analytic to get a number of usage in each set of area</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>$(PRODUCT_NAME) want to add to your gallery</string>
 	<key>NSPhotoLibraryUsageDescription</key>
