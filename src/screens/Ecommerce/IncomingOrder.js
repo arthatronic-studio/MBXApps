@@ -7,7 +7,7 @@ import MapView, {Marker} from 'react-native-maps'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { useNavigation } from '@react-navigation/core';
 import Modal from "react-native-modal";
-
+import Client from '@src/lib/apollo';
 import {
   Text,
   // TouchableOpacity,
@@ -22,18 +22,17 @@ import ImagesPath from 'src/components/ImagesPath';
 import { Divider } from 'src/styled';
 import { ScrollView } from 'react-native-gesture-handler';
 import TopTabShop from './TopTabShop';
+import {queryListOrder} from 'src/lib/query/ecommerce';
+import CardOrder from './CardOrder';
 
 
-function BelumDibayar() {
+function BelumDibayar({data}) {
     const { Color } = useColor();
     const navigation = useNavigation();
+
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: Color.semiwhite,
-      }}>
-        <View style={{flexDirection: 'row', marginVertical: 15, marginHorizontal: 5,}}>
+      <View>
+          <View style={{flexDirection: 'row', marginVertical: 15, marginHorizontal: 5,}}>
             <TouchableOpacity style={{marginHorizontal: 5,backgroundColor: Color.theme,justifyContent: 'center', alignItems: 'center',flexDirection: 'row', borderWidth: 2, borderColor: Color.border, height: 34, width: '28%', borderRadius: 20}}>
                 <Text style={{fontSize: 12, paddingHorizontal: 5}}>Terbaru</Text>
                 <MaterialIcons style={{paddingVertical: 5}} name={'keyboard-arrow-down'} size={20}/>
@@ -44,56 +43,23 @@ function BelumDibayar() {
             <Pressable style={{marginHorizontal: 5,backgroundColor: Color.theme,justifyContent: 'center', alignItems: 'center',flexDirection: 'row', borderWidth: 2, borderColor: Color.border, height: 34, width: '32%', borderRadius: 20}}>
                 <Text style={{fontSize: 12,}}>Telah Diproses</Text>
             </Pressable>
-        </View>
-        <Pressable onPress={() => navigation.navigate('TransactionDetail')} style={{paddingHorizontal: 10,paddingVertical: 15,backgroundColor: Color.theme, width: '95%', height: '42%', alignSelf: 'center', borderRadius: 5}}>
-            <View style={{flexDirection: 'row'}}>
-                    <Image source={ImagesPath.avatar4}/>
-                <View style={{width: '70%', paddingHorizontal: 10, paddingVertical: 2}}>
-                    <Text style={{fontSize: 11, textAlign: 'left', fontWeight: 'bold'}}>Hendra Helinsky</Text>
-                    <Text style={{fontSize: 8,textAlign: 'left', color: Color.secondary}}>No. Pesanan : 100000012345678</Text>
-                </View>
-                <Text style={{fontSize: 10, marginVertical: 8, color: Color.primary}}>Belum Dibayar</Text>
             </View>
-            <Divider/>
-        <View style={{width: '99%', height: 1, backgroundColor: Color.border}}/>
-        <Divider/>
-        <View style={{flexDirection: 'row'}}>
-            <Image source={ImagesPath.productImage} style={{width: 50, height: 50, borderRadius: 5}}/>
-            <View style={{marginHorizontal: 10}}>
-                <Text style={{fontSize: 14, fontWeight: 'bold', textAlign: 'left',}}>Pashmina Pink Nissa Sabyan</Text>
-                <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left'}}>Stok Barang : 150 pcs</Text>
-                <Divider/>
-                <View>
-                    <View style={{flexDirection: 'row', marginVertical: 2}}>
-                        <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left', width: '89%'}}>Jumlah pembelian</Text>
-                        <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'right'}}> x1</Text>
-                    </View>
-                    <View style={{flexDirection: 'row',marginVertical: 2}}>
-                        <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left',width: '77%'}}>Harga Barang</Text>
-                        <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'right'}}> 150.000 Poin</Text>
-                    </View>
-                    <View style={{flexDirection: 'row',marginVertical: 2}}>
-                        <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left',width: '77%'}}>Total pembelian</Text>
-                        <Text style={{fontWeight: 'bold',fontSize: 8, color: Color.text, textAlign: 'right'}}> 150.000 Poin</Text>
-                    </View>
-                </View>
-            </View>
+
+            <FlatList
+            data={data}
+            keyExtractor={(item, index) => item.toString() + index}
+            renderItem={({item}) => {
+            return <CardOrder data={item} />;
+            }}
+        />
         </View>
-        <Divider height={10}/>
-        <View style={{paddingHorizontal: 10,justifyContent: 'center',borderRadius: 3,backgroundColor: Color.border, width: '99%', height: 46}}>
-            <Text style={{fontSize: 8, textAlign: 'left', paddingVertical: 2}}>Catatan Pembeli</Text>
-            <Text style={{fontSize: 10, fontWeight: 'bold', textAlign: 'left',paddingVertical: 2}}>Tolong anternya pake buroq ya biar cepet hehehe</Text>
-        </View>
-        <Divider/>
-        <Text style={{textAlign: 'left'}}>
-            <Text style={{fontSize: 8, color: Color.secondary,lineHeight: 12, textAlign:'left'}}>Pembeli sedang melakukan proses pembayaran. Pesanan akan dibatalkan otomatis pada tanggal</Text>
-            <Text style={{fontSize: 8, fontWeight: 'bold'}}> 25 Jan 2022</Text>
-        </Text>
-        </Pressable>
-        
-    </View>
+    
+
+
+    
   );
 }
+
 function Dikemas() {
     const { Color } = useColor();
     const navigation = useNavigation();
@@ -373,11 +339,42 @@ function Komplainan() {
 const Tab = createMaterialTopTabNavigator();
 
 const IncomingOrder = () => {
-    const { Color } = useColor();
 
+    const { Color } = useColor();
+    const user = useSelector(state => state['user.auth'].login.user);
+    const [data,setData]=useState()
+    
+    const getOrder =()=>{
+        console.log(user)
+        let variables = {
+          page: 1,
+          itemPerPage: 10,
+          status: 'BOOKING',
+          userId: 287 
+        //   dummy userId (temporary)
+        }
+        
+        console.log(variables)
+        Client.query({query: queryListOrder, variables})
+          .then(res => {
+            console.log("haiiiii",res.data.ecommerceOrderList)
+            if(res.data.ecommerceOrderList){
+                setData(res.data.ecommerceOrderList);
+            
+            }
+          })
+          .catch(reject => {
+            console.log(reject);
+          });
+          console.log("aku data",data)
+          
+    }
   
   useEffect(() => {
+      getOrder()
   }, []);
+
+
   return (
     <Scaffold
         style={{backgroundColor: Color.theme}}
@@ -411,7 +408,7 @@ const IncomingOrder = () => {
       >
       <Tab.Screen
         name="BelumDibayar"
-        component={BelumDibayar}
+        children={()=><BelumDibayar data={data}/>}
         options={{tabBarLabel: 'Belum Dibayar'}}
       />
       <Tab.Screen

@@ -175,6 +175,7 @@ query (
 	) {
     id
     userId
+    bookingId
     orderNumber
     expiredDate
     status
@@ -183,99 +184,6 @@ query (
     shippingRateId
     shippingUseInsurance
     shipperOrderNumber
-    shipperBody {
-      consignee {
-        name
-        phone_number
-      }
-      consigner {
-        name
-        phone_number
-      }
-      origin {
-        address
-        area_id
-        lat
-        lng
-      }
-      destination {
-        address
-        area_id
-        lat
-        lng
-      }
-      external_id
-      package {
-        weight
-        length
-        width
-        height
-        package_type
-        items {
-          name
-          qty
-          price
-        }
-      }
-      payment_type
-    }
-    shipperResponse {
-      consignee {
-        name
-        phone_number
-      }
-      consigner {
-        name
-        phone_number
-      }
-      origin {
-        address
-        postcode
-        area_id
-        area_name
-        suburb_id
-        city_id
-        city_name
-        province_id
-        province_name
-        country_id
-        country_name
-        lat
-        lng
-      }
-      destination {
-        address
-        postcode
-        area_id
-        area_name
-        suburb_id
-        city_id
-        city_name
-        province_id
-        province_name
-        country_id
-        country_name
-        lat
-        lng
-      }
-      external_id
-      order_id
-      package {
-        weight
-        length
-        width
-        height
-        volume_weight
-        package_type
-        items {
-          id
-          name
-          qty
-          price
-        }
-      }
-      payment_type
-    }
     paymentId
     shippingCost
     totalProductPrice
@@ -284,13 +192,19 @@ query (
     createdAt
     updatedAt
     deletedAt
-    products {
+    shipperBody{
+      consignee{
+        name
+      }
+    }
+     items {
       id
-      orderId
-      productId
-      quantity
-      price
-      product {
+      name
+      noTelp
+      socialMedia {
+        instagram
+      }
+      products {
         name
         description
         width
@@ -299,6 +213,8 @@ query (
         width
         price
         imageUrl
+        stock
+        quantity
       }
     }
     address {
