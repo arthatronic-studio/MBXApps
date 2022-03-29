@@ -509,10 +509,23 @@ export const queryGetCart = gql`
      page: $page
      limit: $limit
    ) {
-      id totalProducts productCartInfo { productId quantity } products { id name categoryId description price initialPrice imageUrl stock }
+      id totalProducts productCartInfo { productId quantity } products { id name categoryId description price initialPrice imageUrl stock merchantId }
    }
   }
 `;
+
+// export const queryGetMyShop = gql`
+//   query(
+//     $merchantId: Int
+//   ) {
+//     ecommerceGetMerchant(
+//      merchantId: $merchantId
+//    ) {
+//       id userId name noTelp alamat profileImg isVerified isOfficial createdAt user
+//    }
+//   }
+// `;
+
 export const queryCreateCart = gql`
   mutation ecommerceCartCreate{
     ecommerceCartCreate {

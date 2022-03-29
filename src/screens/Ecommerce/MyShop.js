@@ -28,6 +28,7 @@ import { TextInput } from 'src/components/Form';
 import CardListProduk from 'src/components/Card/CardListProduct';
 import TopTabShop from './TopTabShop';
 import ImagesPath from 'src/components/ImagesPath';
+import { queryGetMyProduct, queryGetMyShop } from 'src/lib/query/ecommerce';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -48,8 +49,6 @@ const MyShop = ({ navigation, route }) => {
   const { Color } = useColor();
 
   
-  useEffect(() => {
-  }, []);
 
   return (
     <Scaffold

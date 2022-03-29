@@ -38,6 +38,7 @@ import axios from 'axios';
 import moment from 'moment';
 import { queryGetAuction } from 'src/lib/query/auction';
 import { FormatMoney } from 'src/utils';
+import { queryGetProduct } from 'src/lib/query/ecommerce';
 
 
 const MainView = Styled(SafeAreaView)`
@@ -148,13 +149,35 @@ const Ecommerce = ({navigation}) => {
 	const loading = useSelector((state) => state['user.auth'].loading);
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
+    const [listProduct, setListProduct] = useState([]);
     const [liveAuction, setLiveAuction] = useState([]);
 	const { Color } = useColor();
 
     useEffect(() => {
         getAuction();
+        getProduct();
     // });
     }, []);
+
+    const getProduct = () => {
+        let variables = {
+          page: 1,
+          itemPerPage: 10
+        }
+        Client.query({query: queryGetProduct, variables})
+          .then(res => {
+            console.log(res)
+            if (res.data.ecommerceProductList) {
+              setListProduct(res.data.ecommerceProductList);
+            }
+    
+            // hideLoading();
+            // navigation.navigate('TopUpScreen');
+          })
+          .catch(reject => {
+            console.log(reject);
+          });
+      };
 
     const getAuction = () => {
         let variables = {
@@ -196,9 +219,9 @@ const Ecommerce = ({navigation}) => {
       );
 
       const render = ({ item }) => (
-        <Pressable style={{marginHorizontal: 10, marginVertical: 10, backgroundColor: Color.textInput, width: '45%', height: 300, borderRadius: 10 }}>
-            <Image source={item.image} style={{resizeMode: 'contain', width: 175, height: 160, marginVertical: 8}}/>
-            <Text style={{fontWeight: 'bold'}}>{item.namaProduk}</Text>
+        <Pressable  onPress={() => navigation.navigate('DetailProduct',{item})} style={{marginHorizontal: 10, marginVertical: 10, backgroundColor: Color.textInput, width: '45%', height: 300, borderRadius: 10 }}>
+            <Image source={{ uri: item.imageUrl }} style={{resizeMode: 'contain', width: 175, height: 160, marginVertical: 8}}/>
+            <Text style={{fontWeight: 'bold'}}>{item.name}</Text>
             <View style={{flexDirection: 'row', marginHorizontal: 12, marginVertical: 5}}>
                 <Entypo name={'star'} style={{color: Color.yellow,}}/>
                 <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 3}}>{item.review}</Text>
@@ -209,12 +232,12 @@ const Ecommerce = ({navigation}) => {
             <View style={{marginHorizontal: 15, marginVertical: 15}}>
                 <Text style={{marginVertical: 1, textAlign: 'left',color: Color.secondary, fontSize: 8}}>Harga</Text>
                 <Text style={{marginVertical: 1, textAlign: 'left',textDecorationLine: 'line-through', fontSize: 10, color: Color.secondary, fontWeight: 'bold'}}>{item.hargaCoret}</Text>
-                <Text style={{marginVertical: 1, textAlign: 'left',color: Color.error, fontWeight: 'bold'}}>{item.hargaAkhir}</Text>
+                <Text style={{marginVertical: 1, textAlign: 'left',color: Color.error, fontWeight: 'bold'}}>{item.price}</Text>
             </View>
-            <View style={{paddingVertical: 5, backgroundColor: Color.error, width: 60, height: 42, position: 'absolute', alignSelf: 'flex-end', borderTopRightRadius: 10, borderBottomLeftRadius: 20}}>
+            {/* <View style={{paddingVertical: 5, backgroundColor: Color.error, width: 60, height: 42, position: 'absolute', alignSelf: 'flex-end', borderTopRightRadius: 10, borderBottomLeftRadius: 20}}>
                 <Text style={{color: Color.textInput, fontSize: 10}}>Diskon</Text>
                 <Text style={{fontSize: 14, fontWeight: 'bold', color: Color.textInput}}>{item.diskon}</Text>
-            </View>
+            </View> */}
         </Pressable>
       );
 
@@ -315,7 +338,7 @@ const Ecommerce = ({navigation}) => {
                     <AntDesign name={'arrowright'} style={{marginVertical: 4, color: Color.info,}}/>
                 </View>
                 <FlatList
-                    data={Rekomendasi}
+                    data={listProduct}
                     renderItem={render}
                     keyExtractor={item => item.id}
                     numColumns={2}
@@ -331,7 +354,7 @@ const Ecommerce = ({navigation}) => {
                     <AntDesign name={'arrowright'} style={{marginVertical: 4, color: Color.info,}}/>
                 </View>
                 <FlatList
-                    data={Rekomendasi}
+                    data={listProduct}
                     renderItem={render}
                     keyExtractor={item => item.id}
                     numColumns={2}

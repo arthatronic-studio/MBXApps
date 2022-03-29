@@ -33,6 +33,7 @@ import Entypo from 'react-native-vector-icons/Entypo'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MyShopHeader from './MyShopHeader';
+import { queryGetMyProduct } from 'src/lib/query/ecommerce';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -48,10 +49,35 @@ const MyShopHomepage = ({ navigation }) => {
 	const user = useSelector((state) => state['user.auth'].login.user);
 	const loading = useSelector((state) => state['user.auth'].loading);
 
+    const [data, setData] = useState([]);
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
 	const { Color } = useColor();
 
-	useEffect(() => {}, []);
+	
+	useEffect(() => {
+		getMyShop();
+	// });
+	}, []);
+	
+	const getMyShop = () => {
+		let variables = {
+		  merchantId: 0,
+		}
+		Client.query({query: queryGetMyProduct, variables})
+		  .then(res => {
+			console.log(res)
+			if (res.data.ecommerceGetMerchant) {
+			  setData(res.data.ecommerceGetMerchant);
+			}
+	
+			// hideLoading();
+			// navigation.navigate('TopUpScreen');
+		  })
+		  .catch(reject => {
+			console.log(reject);
+		  });
+	  };
+
 	return (
 		<Scaffold
 		header={<MyShopHeader/>}
@@ -64,15 +90,15 @@ const MyShopHomepage = ({ navigation }) => {
 					<Image source={ImagesPath.shopbanner} style={{width: '100%', resizeMode: 'contain'}}/>
 					<Image source={ImagesPath.shopprofile} style={{alignSelf: 'center', position: 'absolute', marginVertical: 20}}/>
 					<View style={{width: '100%', height: 50}}></View>
-					<Text>Toko Sumber Makmur</Text>
+					<Text>{data.name}</Text>
 					<View style={{alignSelf: 'center', flexDirection: 'row', marginVertical: 6}}>
 						<View style={{flexDirection: 'row', marginHorizontal: 5}}>
 							<Entypo name={'location-pin'} size={12} style={{color:Color.secondary}}/>
-							<Text style={{fontSize: 10, paddingHorizontal: 3, color: Color.secondary}}>Tangerang, Banten</Text>
+							<Text style={{fontSize: 10, paddingHorizontal: 3, color: Color.secondary}}>{data.alamat}</Text>
 						</View>
 						<View style={{flexDirection: 'row', marginHorizontal: 5}}>
 							<FontAwesome name={'phone'} size={12} style={{color:Color.secondary,paddingVertical: 2}}/>
-							<Text style={{fontSize: 10, paddingHorizontal: 5, color: Color.secondary}}>0813-1234-5678</Text>
+							<Text style={{fontSize: 10, paddingHorizontal: 5, color: Color.secondary}}>{data.noTelp}</Text>
 						</View>
 					</View>
 					<View style={{alignItems: 'center', marginVertical: 20}}>
