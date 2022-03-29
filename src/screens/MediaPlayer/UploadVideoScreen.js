@@ -28,6 +28,7 @@ import { queryProductManage } from '@src/lib/query';
 import { outputVideoCache, outputImageCache, getRawCodec } from '@src/utils/rawFFMPEG';
 import { accessClient } from 'src/utils/access_client';
 import { Scaffold } from 'src/components';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 const MainView = Styled(View)`
     flex: 1;
@@ -420,7 +421,23 @@ const UploadVideoScreen = ({ navigation, route }) => {
 
                         <TouchableOpacity
                             onPress={() => {
-                                setModalImagePicker(true);
+                                // setModalImagePicker(true);
+
+                                // sementara
+                                const options = {
+                                    mediaType: 'photo',
+                                    maxWidth: 640,
+                                    maxHeight: 640,
+                                    quality: 1,
+                                    includeBase64: true,
+                                }
+    
+                                launchImageLibrary(options, (callback) => {
+                                    if (callback.base64) {
+                                        setThumbImage(callback.base64);
+                                        setMimeImage(callback.type);
+                                    }
+                                })
                             }}
                             style={{height: '100%', aspectRatio: 1, backgroundColor: '#4E4E4E', borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
                         >

@@ -23,6 +23,8 @@ import Config from 'react-native-config';
 import { useSelector } from 'react-redux';
 // import HtmlView from 'src/components/HtmlView';
 
+const itemPerPage = 50;
+
 const GalleryScreen = ({ navigation, route }) => {
     const { params } = route;
 
@@ -82,6 +84,8 @@ const GalleryScreen = ({ navigation, route }) => {
             productCategory: 'GALLERY',
             // productSubCategory: ,
             parentProductId: id,
+            page: 1,
+            itemPerPage,
         };
 
         Client.query({

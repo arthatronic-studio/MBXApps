@@ -191,7 +191,9 @@ const CreateThreadScreen = (props) => {
         .then((res) => {
             console.log(res, '=== Berhsail ===');
 
-            if (res.data.contentProductManage) {
+            const data = res.data.contentProductManage;
+
+            if (Array.isArray(data) && data.length > 0 && data[0]['id']) {
                 showLoading('success', 'Thread berhasil dibuat!');
 
                 setTimeout(() => {

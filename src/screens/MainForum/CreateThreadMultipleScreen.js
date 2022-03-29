@@ -135,8 +135,7 @@ const CreateThreadMultipleScreen = (props) => {
     }
 
     const backToSelectVideo = () => {
-        setThumbImage('');
-        setMimeImage('image/jpeg');
+
     }
 
     const isValueError = (name) => {
@@ -185,7 +184,9 @@ const CreateThreadMultipleScreen = (props) => {
         .then((res) => {
             console.log(res, '=== Berhsail ===');
 
-            if (res.data.contentProductManage) {
+            const data = res.data.contentProductManage;
+
+            if (Array.isArray(data) && data.length > 0 && data[0]['id']) {
                 showLoading('success', 'Thread berhasil dibuat!');
 
                 setTimeout(() => {
@@ -261,9 +262,6 @@ const CreateThreadMultipleScreen = (props) => {
 
                             launchImageLibrary(options, (callback) => {
                                 if (callback.base64) {
-                                    setThumbImage(callback.base64);
-                                    setMimeImage(callback.type);
-
                                     let newBodyImages = [...bodyImages];
                                     newBodyImages.push({
                                         base64: callback.base64,
@@ -276,7 +274,7 @@ const CreateThreadMultipleScreen = (props) => {
                         style={{width: '100%', height: 70, borderRadius: 4, marginTop: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
                     >
                         <Entypo name='folder-images' size={22} style={{marginBottom: 4}} />
-                        <Text size={10}>Pilih gambar</Text>
+                        <Text size={10}>{bodyImages.length > 0 ? 'Tambah Gambar' : 'Pilih Gambar'}</Text>
                     </TouchableOpacity>
                 </View>
 

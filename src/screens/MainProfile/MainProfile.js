@@ -141,6 +141,13 @@ const MainProfile = ({navigation, route}) => {
       onPress: () => navigation.navigate('MyShopHomepage'),
     },
     {
+      code: 'change_profile',
+      title: 'Ubah Profil',
+      show: user && !user.guest,
+      icon: <FontAwesome name="edit" size={20} color={Color.text} style={{}} />,
+      onPress: () => navigation.navigate('ChangeProfile'),
+    },
+    {
       code: 'setting',
       title: 'Pengaturan',
       show: user && !user.guest,

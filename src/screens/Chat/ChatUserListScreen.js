@@ -5,6 +5,7 @@ import {
   Image,
   ImageBackground,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -19,6 +20,7 @@ import Client from '@src/lib/apollo';
 import {queryGetUserOrganizationRef} from '@src/lib/query';
 import { Scaffold } from 'src/components';
 import { currentSocket } from '@src/screens/MainHome/MainHome';
+import { Container } from 'src/styled';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -53,7 +55,7 @@ const CircleSend = Styled(TouchableOpacity)`
   alignItems: center;
 `;
 
-const itemPerPage = 50;
+const itemPerPage = 100;
 
 const ChatUserListScreen = ({navigation, route}) => {
   const { params } = route;
@@ -114,15 +116,15 @@ const ChatUserListScreen = ({navigation, route}) => {
         let newArr = [];
 
         if (data) {
-          newArr = compareData(itemData.data.concat(data));
+          newArr = itemData.data.concat(data); // compareData(itemData.data.concat(data));
         }
 
-        console.log(data.length, itemPerPage);
+        console.log(data.length, 'dapet length');
 
         setStateItemData({
           data: newArr,
           loading: false,
-          page: (data.length + 1) === itemPerPage ? itemData.page + 1 : -1,
+          page: data.length > 0 ? itemData.page + 1 : -1,
           loadNext: false,
         });
 
@@ -278,55 +280,58 @@ const ChatUserListScreen = ({navigation, route}) => {
         keyExtractor={(item, index) => item.toString() + index}
         data={filterData}
         contentContainerStyle={{paddingHorizontal: 16, paddingTop: 8}}
-        renderItem={({item}) => {
-          const isSelected = selected.filter(
-            e => e.userId === item.userId,
-          )[0];
+        renderItem={({ item, index }) => {
+          // const isSelected = selected.filter(
+          //   e => e.userId === item.userId,
+          // )[0];
 
-          if (isSelected) {
-            return (
-              <TouchableOpacity
-                onPress={() => onPress(item)}
-                // onLongPress={() => onSelected(item)}
-                style={{
-                  width: '100%',
-                  borderRadius: 4,
-                  backgroundColor: Color.theme,
-                  marginBottom: 8,
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                }}>
-                <ImageBackground
-                  source={{uri: item.photoProfile}}
-                  style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 25,
-                    marginRight: 8,
-                    backgroundColor: Color.border,
-                  }}
-                  imageStyle={{borderRadius: 30}}>
-                  <MaterialIcons
-                    name="check-circle"
-                    color={Color.success}
-                    size={22}
-                  />
-                </ImageBackground>
-                <View
-                  style={{
-                    height: 60,
-                    alignItems: 'flex-start',
-                    justifyContent: 'space-around',
-                  }}>
-                  <Text size={12} type="semibold" numberOfLines={1}>
-                    {item.firstName} {item.lastName}
-                  </Text>
-                  {/* <Text size={10}>Available</Text> */}
-                </View>
-              </TouchableOpacity>
-            );
-          }
+          // if (isSelected) {
+          //   return (
+          //     <TouchableOpacity
+          //       onPress={() => onPress(item)}
+          //       // onLongPress={() => onSelected(item)}
+          //       style={{
+          //         width: '100%',
+          //         borderRadius: 4,
+          //         backgroundColor: Color.theme,
+          //         marginBottom: 8,
+          //         flexDirection: 'row',
+          //         justifyContent: 'flex-start',
+          //         alignItems: 'center',
+          //       }}>
+          //       <Container paddingRight={8}>
+          //         <Text>{index + 1}</Text>
+          //       </Container>
+          //       <ImageBackground
+          //         source={{uri: item.photoProfile}}
+          //         style={{
+          //           width: 50,
+          //           height: 50,
+          //           borderRadius: 25,
+          //           marginRight: 8,
+          //           backgroundColor: Color.border,
+          //         }}
+          //         imageStyle={{borderRadius: 30}}>
+          //         <MaterialIcons
+          //           name="check-circle"
+          //           color={Color.success}
+          //           size={22}
+          //         />
+          //       </ImageBackground>
+          //       <View
+          //         style={{
+          //           height: 60,
+          //           alignItems: 'flex-start',
+          //           justifyContent: 'space-around',
+          //         }}>
+          //         <Text size={12} type="semibold" numberOfLines={1}>
+          //           {item.firstName} {item.lastName}
+          //         </Text>
+          //         {/* <Text size={10}>Available</Text> */}
+          //       </View>
+          //     </TouchableOpacity>
+          //   );
+          // }
 
           return (
             <TouchableOpacity
@@ -340,6 +345,9 @@ const ChatUserListScreen = ({navigation, route}) => {
                 alignItems: 'center',
               }}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Container paddingRight={8}>
+                  <Text>{index + 1}</Text>
+                </Container>
                 <Image
                   source={{uri: item.photoProfile}}
                   style={{
@@ -368,6 +376,14 @@ const ChatUserListScreen = ({navigation, route}) => {
         onEndReached={() => setStateItemData({ loadNext: true })}
         onEndReachedThreshold={0.3}
       />
+
+      {itemData.loadNext ?
+      <ActivityIndicator
+        size='large'
+        color={Color.primary}
+        style={{paddingVertical: 4}}
+      />
+      : <View />}
     </Scaffold>
   );
 };

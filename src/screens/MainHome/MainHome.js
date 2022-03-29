@@ -270,6 +270,7 @@ const MainHome = ({navigation, route}) => {
       })
       .catch(err => {
         console.log(err, 'err banner list');
+        setLoadingBanner(false);
       });
   };
 
@@ -835,13 +836,7 @@ const MainHome = ({navigation, route}) => {
           )}
 
           {accessClient.MainHome.showListMusicNewer && (
-            <MusikTerbaru
-              data={dataDummyMusic}
-              onPress={(item, index) => {
-                trackPlayerPlay(dataDummyMusic, index);
-                navigation.navigate('MusicPlayerScreen');
-              }}
-            />
+            <MusikTerbaru />
           )}
 
           <Divider />

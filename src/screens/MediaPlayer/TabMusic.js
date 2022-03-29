@@ -17,23 +17,8 @@ import MusikTerbaru from 'src/components/MusikTerbaru';
 import { trackPlayerPlay } from 'src/utils/track-player-play';
 import CardListMusic from '@src/screens/MediaPlayer/CardListMusic';
 import TrackPlayer, { Event, useTrackPlayerEvents } from 'react-native-track-player';
-
-const dataDummyMusic = [
-    {
-        id: 'd',
-        productName: 'Deen Assalam',
-        productDescription: 'Bismillah',
-        image: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/nissa.png?alt=media&token=664063c5-fc42-458c-b02e-596cca8b18dc',
-        videoFilename: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/Sabyan%20Gambus%20-%20Deen%20Assalam.mp3?alt=media&token=ba7e5d58-4d81-4639-9758-cc7bf67aa43a'
-    },
-    {
-        id: 'y',
-        productName: 'Ya Habibal Qolbi',
-        productDescription: 'Bismillah',
-        image: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/nissa.png?alt=media&token=664063c5-fc42-458c-b02e-596cca8b18dc',
-        videoFilename: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/Sabyan%20Gambus%20-%20Ya%20Habibal%20Qolbi.mp3?alt=media&token=5d3154b8-9f01-4eee-8ebb-76d83ae31bf2'
-    },
-];
+import { queryBannerList } from 'src/lib/query/banner';
+import client from 'src/lib/apollo';
 
 const events = [
     Event.PlaybackTrackChanged,
@@ -46,6 +31,32 @@ const TabMusic = ({ }) => {
     const { Color } = useColor();
 
     const [thisTrack, setThisTrack] = useState();
+    const [loadingBanner, setLoadingBanner] = useState(true);
+    const [listBanner, setListBanner] = useState([]);
+
+    useEffect(() => {
+        fetchBannerList();
+    }, []);
+
+    const fetchBannerList = () => {
+        const variables = {
+          categoryId: 3,
+        };
+    
+        client.query({
+          query: queryBannerList,
+          variables,
+        })
+          .then(res => {
+            console.log('res banner list', res);
+            setListBanner(res.data.bannerList);
+            setLoadingBanner(false);
+          })
+          .catch(err => {
+            console.log(err, 'err banner list');
+            setLoadingBanner(false);
+          });
+    };
 
     // 
     useTrackPlayerEvents(events, (event) => {
@@ -63,9 +74,6 @@ const TabMusic = ({ }) => {
             setThisTrack();
         }
     }
-    //
-
-    console.log(thisTrack);
 
     return (
         <Scaffold
@@ -78,24 +86,17 @@ const TabMusic = ({ }) => {
             <ScrollView>
                 <Banner
                     showHeader={false}
-                    data={[{ imageAsset: ImagesPath.sabyanBannerMusic }]}
-                    loading={false}
+                    data={listBanner}
+                    loading={loadingBanner}
                 />
 
                 <Divider />
 
-                <MusikTerbaru
-                // data={dataDummyMusic}
-                // onPress={() => {
-                //     trackPlayerPlay();
-                //     navigation.navigate('MusicPlayerScreen');
-                // }}
-                />
+                <MusikTerbaru />
 
                 <CardListMusic
                     activePlayingTrack={thisTrack}
                     componentType='POPULAR'
-                    data={dataDummyMusic}
                     title='Lagu Populer'
                     decimalWidth={0.17}
                     decimalHeight={0.17}
