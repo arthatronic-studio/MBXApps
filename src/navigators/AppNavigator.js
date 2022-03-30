@@ -130,6 +130,11 @@ import StepTwo from 'src/screens/Ecommerce/StepTwo';
 import StepThree from 'src/screens/Ecommerce/StepThree';
 import MerchantSetting from 'src/screens/Ecommerce/MerchantSetting';
 import KuponKu from 'src/screens/Ecommerce/KuponKu';
+import ChatRoom from 'src/screens/Ecommerce/ChatRoom';
+import CardChat from 'src/screens/Ecommerce/CardChat';
+import CardChatExist from 'src/screens/Ecommerce/CardChatExist';
+
+
 // import PopUpCouponSucces from 'src/screens/Ecommerce/PopUpCouponSucces';
 
 // Media Player
@@ -219,6 +224,11 @@ function MainStackNavigator() {
       <Screen name="EditMerchantInfo" component={EditMerchantInfo} />
       <Screen name="Notification" component={Notification} />
       <Screen name="KuponKu" component={KuponKu} />
+      <Screen name="ChatRoom" component={ChatRoom} />
+      <Screen name="CardChat" component={CardChat} />
+      <Screen name="CardChatExist" component={CardChatExist} />
+
+
       {/* <Screen name="PopUpCouponSucces" component={PopUpCouponSucces}/> */}
       <Screen name="DetailCoupon" component={DetailCoupon} />
       <Screen name="SearchScreen" component={SearchScreen} />

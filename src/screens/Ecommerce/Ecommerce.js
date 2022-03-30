@@ -318,32 +318,32 @@ const Ecommerce = ({navigation}) => {
           </View>
           <View style={{ backgroundColor:"#FFFFFE",alignSelf:"center",width:"95%",borderRadius:5}}>
               <View style={{flexDirection:"row",alignSelf:"center"}} >
-                  <View style={{ marginTop:16 }}>
+                  <TouchableOpacity style={{ marginTop:16 }} onPress={() => navigation.navigate('MyShop')}>
                       <Image source={ImagesPath.shop}></Image>
-                  </View>
-                  <View style={{ marginLeft:46.33,marginTop:16, }}>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ marginLeft:46.33,marginTop:16, }}onPress={() => navigation.navigate('ChatRoom')}>
                       <Image source={ImagesPath.chatframe}></Image>
-                  </View>
-                  <View style={{ marginLeft:46.33,marginTop:16, }}>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ marginLeft:46.33,marginTop:16, }} onPress={() => navigation.navigate('Wishlist')}>
                       <Image source={ImagesPath.wishlistframe}></Image>
-                  </View>
-                  <View style={{ marginLeft: 46.33, marginTop: 16, }}>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ marginLeft: 46.33, marginTop: 16, }} onPress={() => navigation.navigate('LiveLelangScreen')}>
                       <Image source={ImagesPath.scales}></Image>
-                  </View>
+                  </TouchableOpacity>
               </View>
               <View style={{ flexDirection:"row",marginBottom:16 }}>
-                  <View style={{marginLeft:20, marginTop:8 }}>
+                  <TouchableOpacity style={{marginLeft:20, marginTop:8 }}  onPress={() => navigation.navigate('MyShop')}>
                       <Text >Toko Saya</Text>
-                  </View>
-                  <View style={{ marginLeft:28.33,marginTop:8 }}>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ marginLeft:28.33,marginTop:8 }} onPress={() => navigation.navigate('ChatRoom')}>
                       <Text>Chating</Text>
-                  </View>
-                  <View style={{ marginLeft:36.33,marginTop:8 }}>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ marginLeft:36.33,marginTop:8 }} onPress={() => navigation.navigate('Wishlist')}>
                       <Text>Wishlist</Text>
-                  </View>
-                  <View style={{ marginLeft:39.33,marginTop:8 }}>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ marginLeft:39.33,marginTop:8 }} onPress={() => navigation.navigate('LiveLelangScreen')}>
                       <Text>Lelang</Text>
-                  </View>
+                  </TouchableOpacity>
               </View>
           </View>
             <View style={{marginVertical: 15}}>
