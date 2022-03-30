@@ -80,7 +80,7 @@ const TabBarComponentSabyan = (props) => {
         <SafeAreaView
             style={{
                 width,
-                height: height * ((height/width) / 14), // 112 + (isIphoneNotch() ? 16 : 0),
+                height: isIphoneNotch() ? height * ((height/width) / 15) : 112,
                 backgroundColor: Color.theme,
                 paddingBottom: 16,
             }}

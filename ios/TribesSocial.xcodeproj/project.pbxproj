@@ -42,7 +42,6 @@
 		00E356EE1AD99517003FC87E /* TribesSocialTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TribesSocialTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* TribesSocialTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TribesSocialTests.m; sourceTree = "<group>"; };
-		0726A1A6B47B4D498247DB33 /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* TribesSocial.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TribesSocial.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = TribesSocial/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = TribesSocial/AppDelegate.m; sourceTree = "<group>"; };
@@ -50,41 +49,23 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = TribesSocial/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = TribesSocial/main.m; sourceTree = "<group>"; };
 		20E0CE272AD49DE26FC03234 /* libPods-TribesSocial-TribesSocialTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TribesSocial-TribesSocialTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2348EE6278BA4AD597A3CC90 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/native-base/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
 		2D5CCE5B27CD2BE900F986C6 /* TribesSocial.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = TribesSocial.entitlements; path = TribesSocial/TribesSocial.entitlements; sourceTree = "<group>"; };
 		2DB01DA9274BBEC800890BD8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2DF6D71027BB394C0029A539 /* TribesSocial-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TribesSocial-Bridging-Header.h"; sourceTree = "<group>"; };
 		2DF6D71127BB394C0029A539 /* dummy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dummy.swift; sourceTree = "<group>"; };
 		30CEF8FB6A3C407B9B15BA8A /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-SemiBold.ttf"; path = "../assets/fonts/Inter/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
-		3807C5FC86164864ADF811C3 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
-		40D8A2612FDC404581A7F87C /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/native-base/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		45A77801D85547988330594A /* Inter-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-ExtraLight.ttf"; path = "../assets/fonts/Inter/Inter-ExtraLight.ttf"; sourceTree = "<group>"; };
 		5B32806D66FA4E4AA85BD975 /* Inter-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Thin.ttf"; path = "../assets/fonts/Inter/Inter-Thin.ttf"; sourceTree = "<group>"; };
 		6175D5CDB5434D008E7E5ACB /* Inter-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Black.ttf"; path = "../assets/fonts/Inter/Inter-Black.ttf"; sourceTree = "<group>"; };
-		6249815FA7D34D1FA6ABFDEB /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/native-base/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
-		655C2AB7180C4219868EC293 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/native-base/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
-		67C856A9A0DD4887880710B7 /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = "../node_modules/native-base/Fonts/Roboto_medium.ttf"; sourceTree = "<group>"; };
-		6AC1815518944175801E82E1 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/native-base/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		6AF0F0EA6F069B8A318A85D2 /* Pods-TribesSocial.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TribesSocial.debug.xcconfig"; path = "Target Support Files/Pods-TribesSocial/Pods-TribesSocial.debug.xcconfig"; sourceTree = "<group>"; };
-		70661BF506DB4F6AAC63521A /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
-		74C545B0B90A4FC0BB050488 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/native-base/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = TribesSocial/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		9501AC687ECC4A0D8653C234 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/native-base/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
-		9E795D8E63D44D8D9A1E2B60 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
-		A2F30B6037344E549BFFDB3B /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = "../node_modules/native-base/Fonts/Roboto.ttf"; sourceTree = "<group>"; };
 		A5D7374F496349F99512AF35 /* Inter-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Medium.ttf"; path = "../assets/fonts/Inter/Inter-Medium.ttf"; sourceTree = "<group>"; };
 		AEB4FC05E7514D65A84EFC23 /* Inter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Regular.ttf"; path = "../assets/fonts/Inter/Inter-Regular.ttf"; sourceTree = "<group>"; };
-		B6BB87CB62514CE39CE5D572 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		BB9FC021A0351B8F61C598C0 /* libPods-TribesSocial.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TribesSocial.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		BCBE1EC785D84E84A8145C37 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		C28471C8DED54847F6D7D3F3 /* Pods-TribesSocial.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TribesSocial.release.xcconfig"; path = "Target Support Files/Pods-TribesSocial/Pods-TribesSocial.release.xcconfig"; sourceTree = "<group>"; };
 		C828D64C153D42F3ADA9898F /* Inter-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Bold.ttf"; path = "../assets/fonts/Inter/Inter-Bold.ttf"; sourceTree = "<group>"; };
-		D40914F868EB4FB18F3C765B /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; };
-		D5990E7A48E241AE8A3378B8 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
-		D77A7D8A22A94D31A1AD9808 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/native-base/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F1F24434BDAE4DBAB42D05A5 /* Inter-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Light.ttf"; path = "../assets/fonts/Inter/Inter-Light.ttf"; sourceTree = "<group>"; };
-		F4675FC677704B1B846D012F /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		F78B7A41B56AC6897FE3F1D6 /* Pods-TribesSocial-TribesSocialTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TribesSocial-TribesSocialTests.debug.xcconfig"; path = "Target Support Files/Pods-TribesSocial-TribesSocialTests/Pods-TribesSocial-TribesSocialTests.debug.xcconfig"; sourceTree = "<group>"; };
 		FBC4305C7845413D9906F5DE /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-ExtraBold.ttf"; path = "../assets/fonts/Inter/Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -175,25 +156,6 @@
 				AEB4FC05E7514D65A84EFC23 /* Inter-Regular.ttf */,
 				30CEF8FB6A3C407B9B15BA8A /* Inter-SemiBold.ttf */,
 				5B32806D66FA4E4AA85BD975 /* Inter-Thin.ttf */,
-				D77A7D8A22A94D31A1AD9808 /* AntDesign.ttf */,
-				655C2AB7180C4219868EC293 /* Entypo.ttf */,
-				9501AC687ECC4A0D8653C234 /* EvilIcons.ttf */,
-				D40914F868EB4FB18F3C765B /* Feather.ttf */,
-				40D8A2612FDC404581A7F87C /* FontAwesome.ttf */,
-				70661BF506DB4F6AAC63521A /* FontAwesome5_Brands.ttf */,
-				9E795D8E63D44D8D9A1E2B60 /* FontAwesome5_Regular.ttf */,
-				F4675FC677704B1B846D012F /* FontAwesome5_Solid.ttf */,
-				2348EE6278BA4AD597A3CC90 /* Fontisto.ttf */,
-				6249815FA7D34D1FA6ABFDEB /* Foundation.ttf */,
-				D5990E7A48E241AE8A3378B8 /* Ionicons.ttf */,
-				3807C5FC86164864ADF811C3 /* MaterialCommunityIcons.ttf */,
-				BCBE1EC785D84E84A8145C37 /* MaterialIcons.ttf */,
-				74C545B0B90A4FC0BB050488 /* Octicons.ttf */,
-				67C856A9A0DD4887880710B7 /* Roboto_medium.ttf */,
-				A2F30B6037344E549BFFDB3B /* Roboto.ttf */,
-				0726A1A6B47B4D498247DB33 /* rubicon-icon-font.ttf */,
-				6AC1815518944175801E82E1 /* SimpleLineIcons.ttf */,
-				B6BB87CB62514CE39CE5D572 /* Zocial.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";

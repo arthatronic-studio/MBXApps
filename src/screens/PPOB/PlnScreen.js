@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ScrollView, TouchableOpacity, View, Platform, FlatList } from 'react-native';
-import { Tab, Tabs, TabHeading } from 'native-base';
 import Styled from 'styled-components';
 import Moment from 'moment';
 import { TextInputMask } from 'react-native-masked-text';
@@ -17,14 +16,15 @@ import Loading, { useLoading } from '@src/components/Modal/Loading';
 import Popup, { usePopup } from '@src/components/Modal/Popup';
 import ScreenIndicator from '@src/components/Modal/ScreenIndicator';
 import ScreenEmptyData from '@src/components/Modal/ScreenEmptyData';
-
 import Client from '@src/lib/apollo';
 import { queryPlnPrepaidSubs, queryPlnPrepaidList, queryInquiryPascaBayarPLN } from '@src/lib/query/pln';
-
 import { plnPrepaid } from '@src/state/actions/Prepaid';
 import { plnPostpaid } from '@src/state/actions/Postpaid';
 import { shadowStyle } from '@src/styles';
-import { MainView } from '@src/styled';
+import { Scaffold } from 'src/components';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useIsFocused } from '@react-navigation/native';
+import { Divider } from 'src/styled';
 
 const TextInputSubsriber = Styled(TextInputMask)`
   width: 100%;
@@ -72,6 +72,8 @@ const ButtonPrepaidList = Styled(TouchableOpacity)`
   borderWidth: 0.5;
   borderRadius: 8px;
 `;
+
+const { Navigator, Screen } = createMaterialTopTabNavigator();
 
 export default ({ navigation, route }) => {
   // state
@@ -281,14 +283,6 @@ export default ({ navigation, route }) => {
     dispatch(plnPostpaid(variables));
   }
 
-  function renderTabHeading(label, index, activeTab) {
-    return (
-      <TabHeading style={{ backgroundColor: Color.theme }}>
-        <Text type={activeTab !== index ? 'semibold' : 'bold'} style={activeTab !== index ? {color: Color.text} : {color: Color.primary}}>{label}</Text>
-      </TabHeading>
-    );
-  }
-
   function renderPrabayar() {
     const { plnPriceList, selectedPlnPrepaid, plnPrepaidSubs, isEmptySubs, loadingPrepaid } = state;
 
@@ -493,34 +487,40 @@ export default ({ navigation, route }) => {
 
   const { activeTab, dataConfirm, selectedPlnPrepaid, inquiryPostpaid } = state;
 
-  const tabs = [
-    { label: 'Token Listrik', children: renderPrabayar() },
-    { label: 'PLN Pascabayar', children: renderPascaBayar() }
-  ];
-
   return (
-    <MainView style={{backgroundColor: Color.theme}}>
-      <Header
-        title= 'PLN'
-        onPressRightButton={() => onPressRightButton(activeTab === 0 ? 'PREPAID' : 'POSTPAID')}
-        iconRightButton={<MaterialIcons name='history' size={22} color={Color.gray} />}
-      />
+    <Scaffold
+      header={
+        <Header
+          title= 'PLN'
+          onPressRightButton={() => onPressRightButton(activeTab === 0 ? 'PREPAID' : 'POSTPAID')}
+          iconRightButton={<MaterialIcons name='history' size={22} color={Color.gray} />}
+        />
+      }
+    >
+      <Divider />
 
-      <Tabs
-        prerenderingSiblingsNumber={Infinity}
-        tabStyle={{backgroundColor: Color.theme}}
-        tabContainerStyle={{elevation: 0}}
-        tabBarUnderlineStyle={{backgroundColor: Color.primary, height: 2}}
-        onChangeTab={({ i }) => setState({ activeTab: i })}
-        locked={Platform.OS == 'android'}
-        initialPage={activeTab}
+      <Navigator
+        initialRouteName="Token"
+        tabBarOptions={{
+          indicatorStyle: {backgroundColor: Color.primary, height: '100%'},
+          activeTintColor: Color.textInput,
+          inactiveTintColor: Color.text,
+          labelStyle: {fontSize: 12, fontWeight: 'bold'},
+          style: {borderRadius: 30, marginVertical: 0, overflow: 'hidden', marginHorizontal: 16, backgroundColor: Color.semiwhite},
+          labelStyle: { textTransform: 'none' },
+        }}
       >
-        {tabs.map((item, index) =>
-          <Tab key={index} heading={renderTabHeading(item.label, index, activeTab)}>
-            {index === activeTab && item.children}
-          </Tab>
-        )}
-      </Tabs>
+        <Screen
+          name="Token"
+          component={(props) => renderPrabayar()}
+          options={{tabBarLabel: 'Token Listrik'}}
+        />
+        <Screen
+          name="Pascabayar"
+          component={(props) => renderPascaBayar()}
+          options={{tabBarLabel: 'PLN Pascabayar'}}
+        />
+      </Navigator>
 
       <Modalize
         ref={modalConfirmRef}
@@ -568,6 +568,6 @@ export default ({ navigation, route }) => {
       <Loading {...loadingProps} />
 
       <Popup {...popupProps} />
-    </MainView>
+    </Scaffold>
   );
 }

@@ -236,12 +236,15 @@ const ChatDetailScreen = ({ navigation, route }) => {
                     subTitleColor={userTyping && Color.success}
                     centerTitle
                     iconRightButton={
-                        <Ionicons
-                            name='information-circle-outline'
-                            size={22}
-                            color={Color.text}
-                            onPress={() => navigation.navigate('ChatInfoScreen', { member: params.selected })}
-                        />
+                        user && user.isDirector === 1 ?
+                            <Ionicons
+                                name='information-circle-outline'
+                                size={22}
+                                color={Color.text}
+                                onPress={() => navigation.navigate('ChatInfoScreen', { member: params.selected })}
+                            />
+                        :
+                            <View />
                     }
                 />
             }

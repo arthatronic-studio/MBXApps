@@ -8,7 +8,7 @@ import SplashScreen from 'src/screens/SplashScreen';
 import BottomTabsNavigator from '@src/navigators/BottomTabsNavigator';
 import BottomTabsNavigatorKomoto from '@src/navigators/BottomTabsNavigatorKomoto';
 import BottomTabsNavigatorsabyan from '@src/navigators/BottomTabsNavigatorSabyan';
-import KnowMeScreen from '@src/screens/KnowMeScreen';
+import OnBoardingScreen from '@src/screens/OnBoardingScreen';
 import CreateEmergencyScreen from '@src/screens/CreateEmergencyScreen';
 import PDFReaderScreen from 'src/screens/PDFReaderScreen';
 import MusicPlayerScreen from 'src/screens/MusicPlayerScreen';
@@ -182,7 +182,7 @@ function MainStackNavigator() {
       {/* uncanny */}
       <Screen name="SplashScreen" component={SplashScreen} />
       <Screen name="MainPage" component={MainPage} />
-      <Screen name="KnowMeScreen" component={KnowMeScreen} />
+      <Screen name="OnBoardingScreen" component={OnBoardingScreen} />
       <Screen name="CreateEmergencyScreen" component={CreateEmergencyScreen} />
       <Screen name="PDFReaderScreen" component={PDFReaderScreen} />
       <Screen name="MusicPlayerScreen" component={MusicPlayerScreen} />

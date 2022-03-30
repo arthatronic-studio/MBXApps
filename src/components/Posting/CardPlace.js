@@ -8,7 +8,6 @@ import {
 } from '@src/components';
 import { shadowStyle } from '@src/styles';
 import { Divider, Row } from '@src/styled';
-import { Container } from 'native-base';
 
 const { width } = Dimensions.get('window');
 

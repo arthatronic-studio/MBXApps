@@ -338,6 +338,8 @@ const ChatUserListScreen = ({navigation, route}) => {
           //   );
           // }
 
+          const isAdmin = item.isDirector === 1;
+
           return (
             <TouchableOpacity
               onPress={() => onPress(item)}
@@ -361,6 +363,8 @@ const ChatUserListScreen = ({navigation, route}) => {
                     borderRadius: 25,
                     marginRight: 8,
                     backgroundColor: Color.border,
+                    borderWidth: isAdmin ? 1 : 0,
+                    borderColor: Color.primary,
                   }}
                 />
                 <View
@@ -370,7 +374,7 @@ const ChatUserListScreen = ({navigation, route}) => {
                     justifyContent: 'space-around',
                   }}>
                   <Text size={12} type="semibold" numberOfLines={1}>
-                    {item.firstName} {item.lastName}
+                    {item.firstName} {item.lastName} {isAdmin && <MaterialIcons name='verified' color={Color.info} />}
                   </Text>
                   {/* <Text size={10}>Available</Text> */}
                 </View>
