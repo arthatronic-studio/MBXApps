@@ -493,6 +493,7 @@ export const queryGetCart = gql`
       id
       items{
         name
+        alamat
         products{
           id
           name

@@ -197,25 +197,29 @@ const CheckoutScreen = ({ navigation }) => {
                 </View>
             </Content>
             <Content style={{ backgroundColor: Color.theme }}>
-                <Row>
-                    <Image source={ImagesPath.shopprofile} style={{width: 50, height: 50, resizeMode: 'contain'}}/>
-                    <Col style={{justifyContent: 'center', paddingHorizontal: 10}}>
-                        <Text style={{textAlign: 'left', fontSize: 11, fontWeight: 'bold'}}>Toko Sumber Makmur</Text>
-                        <Text style={{textAlign: 'left', color: Color.secondary,fontSize: 8, fontWeight: 'normal'}}>Jakarta Barat</Text>
-                    </Col>
-                </Row>
-                {item.tempData.map((val, id) => (
-                    <Row style={{ marginBottom: 10}}>
-                        <Image source={{ uri: val.imageUrl }} style={{ height: 74, width: 74, marginRight: 14,  borderRadius: 8 }} />
-                        <Col alignItems='flex-start'>
-                            <Text color={Color.text} size={20}type='bold' textAlign='left'>{val.name}</Text>
-                            <Text style={{fontSize: 10, color: Color.secondary}}>Jumlah : {val.qty} Buah</Text>
-                            <View style={{flex: 1, paddingVertical: 5}}>
-                                {/* <Text size={10} color={Color.text} >Harga</Text> */}
-                                <Text type='bold' color={Color.text}>{FormatMoney.getFormattedMoney(val.price)}</Text>
-                            </View>
-                        </Col>
-                    </Row>
+                {route.params.list.map((item, id) => (
+                    <>
+                        <Row>
+                            <Image source={ImagesPath.shopprofile} style={{width: 50, height: 50, resizeMode: 'contain'}}/>
+                            <Col style={{justifyContent: 'center', paddingHorizontal: 10}}>
+                                <Text style={{textAlign: 'left', fontSize: 11, fontWeight: 'bold'}}>{item.name}</Text>
+                                <Text style={{textAlign: 'left', color: Color.secondary,fontSize: 8, fontWeight: 'normal'}}>{item.alamat}</Text>
+                            </Col>
+                        </Row>
+                        {item.products.map((val, id) => (
+                            <Row style={{ marginBottom: 10}}>
+                                <Image source={{ uri: val.imageUrl }} style={{ height: 74, width: 74, marginRight: 14,  borderRadius: 8 }} />
+                                <Col alignItems='flex-start'>
+                                    <Text color={Color.text} size={20}type='bold' textAlign='left'>{val.name}</Text>
+                                    <Text style={{fontSize: 10, color: Color.secondary}}>Jumlah : {val.qty} Buah</Text>
+                                    <View style={{flex: 1, paddingVertical: 5}}>
+                                        {/* <Text size={10} color={Color.text} >Harga</Text> */}
+                                        <Text type='bold' color={Color.text}>{FormatMoney.getFormattedMoney(val.price)}</Text>
+                                    </View>
+                                </Col>
+                            </Row>
+                        ))}
+                    </>
                 ))}
                     <Row>
                     <TextInput  placeholder='Tambahkan catatan untuk penjual' style={{width: '100%',backgroundColor: Color.border, borderRadius: 5, height: 35, fontSize: 10, paddingHorizontal:30}}></TextInput>
@@ -242,14 +246,14 @@ const CheckoutScreen = ({ navigation }) => {
                 </Row>
                 <View style={{ backgroundColor: 'rgba(18, 18, 18, 0.2)', height: 1, marginVertical: 12 }} />
 
-                <Row style={{ alignItems: 'center', marginBottom: 8 }}>
+                {/* <Row style={{ alignItems: 'center', marginBottom: 8 }}>
                     <Col alignItems='flex-start'>
                         <Text color={Color.secondary} size={10}>Harga (1 Barang)</Text>
                     </Col>
                     <Col alignItems='flex-end'>
                         <Text color={Color.secondary} size={10}>{FormatMoney.getFormattedMoney(item.price)}</Text>
                     </Col>
-                </Row>
+                </Row> */}
                 <Row style={{ alignItems: 'center', marginBottom: 8 }}>
                     <Col alignItems='flex-start'>
                         <Text color={Color.secondary} size={10}>Ongkos Kirim</Text>
@@ -258,14 +262,14 @@ const CheckoutScreen = ({ navigation }) => {
                         <Text color={Color.secondary} size={10}>{shippment.price ? FormatMoney.getFormattedMoney(shippment.price) : ''}</Text>
                     </Col>
                 </Row>
-                <Row style={{ alignItems: 'center', marginBottom: 8 }}>
+                {/* <Row style={{ alignItems: 'center', marginBottom: 8 }}>
                     <Col alignItems='flex-start'>
                         <Text color={Color.secondary} size={10}>Ppn 10%</Text>
                     </Col>
                     <Col alignItems='flex-end'>
                         <Text color={Color.secondary} size={10}>{FormatMoney.getFormattedMoney(totalProduct(item.tempData)*10/100)}</Text>
                     </Col>
-                </Row>
+                </Row> */}
             </Content>
             <Content style={{backgroundColor: Color.theme, borderRadius: 6, height: 65}}>
                 <TouchableOpacity style={{borderRadius: 5,flexDirection:'row',alignItems: 'center',backgroundColor: Color.border, height: '100%'}}>
@@ -290,7 +294,7 @@ const CheckoutScreen = ({ navigation }) => {
         <Row style={{ padding: 16, backgroundColor: Color.theme }}>
             <Col align='flex-start' justify='center'>
                 <Text size={10} color={Color.text}>Total Harga</Text>
-                <Text type='bold' color={Color.text} size={18} >{FormatMoney.getFormattedMoney(totalProduct(item.tempData)+(totalProduct(item.tempData)*10/100)+(shippment.price ? shippment.price : 0))}</Text>
+                <Text type='bold' color={Color.text} size={18} >{FormatMoney.getFormattedMoney(totalProduct(item.tempData)+(shippment.price ? shippment.price : 0))}</Text>
             </Col>
             <Col>
                 <TouchableOpacity onPress={() => {shippment.price ? submit() : alert('Pilih Pengiriman terlebih dahulu')}} style={{ backgroundColor: Color.primary, borderRadius: 30, paddingVertical: 10 }}>

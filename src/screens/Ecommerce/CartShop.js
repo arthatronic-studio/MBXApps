@@ -174,7 +174,7 @@ const CartShop = ({ navigation, route }) => {
         tempData
     }
     console.log(item)
-    navigation.navigate('CheckoutScreen',{item})
+    navigation.navigate('CheckoutScreen',{item, list})
     // // // showLoading();
     // let variables = {
     //     productId: list[0].id,
@@ -225,8 +225,8 @@ const CartShop = ({ navigation, route }) => {
                   </TouchableOpacity>
               </View>
               <TouchableOpacity onPress={() => navigation.navigate('DetailProduct',{val})} style={{marginRight: 14 }}>
-                  <Text align='left' size={12} type='bold'>T{item.name}</Text>
-                  <Text align='left' color='#606060' size={9}>Jakarta(Dummy)</Text>
+                  <Text align='left' size={12} type='bold'>{item.name}</Text>
+                  <Text align='left' color='#606060' size={9}>{item.alamat}</Text>
               </TouchableOpacity>
           </Row>
         </View>
