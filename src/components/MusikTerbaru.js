@@ -8,21 +8,19 @@ import {
   ImageBackground,
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
+import { useNavigation } from '@react-navigation/native';
 
-import ImagesPath from './ImagesPath';
 import {Text, useColor} from '@src/components';
 import client from 'src/lib/apollo';
 import { queryContentProduct } from 'src/lib/query';
 import { accessClient } from 'src/utils/access_client';
 import { trackPlayerPlay } from 'src/utils/track-player-play';
-import { useNavigation } from '@react-navigation/native';
 
 const defaultProps = {
-  data: [],
-  onPress: () => {}
+  
 }
 
-const MusikTerbaru = ({ data, onPress }) => {
+const MusikTerbaru = ({ }) => {
   const {Color} = useColor();
   const {width} = useWindowDimensions();
   const navigation = useNavigation();
@@ -84,7 +82,6 @@ const MusikTerbaru = ({ data, onPress }) => {
       }}>
       <TouchableOpacity
         onPress={() => {
-          // onPress(item, index);
           trackPlayerPlay(list.data, index);
           navigation.navigate('MusicPlayerScreen');
         }}

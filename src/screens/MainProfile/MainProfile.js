@@ -141,6 +141,13 @@ const MainProfile = ({navigation, route}) => {
       onPress: () => navigation.navigate('MyShopHomepage'),
     },
     {
+      code: 'change_profile',
+      title: 'Ubah Profil',
+      show: user && !user.guest,
+      icon: <FontAwesome name="edit" size={20} color={Color.text} style={{}} />,
+      onPress: () => navigation.navigate('ChangeProfile'),
+    },
+    {
       code: 'setting',
       title: 'Pengaturan',
       show: user && !user.guest,
@@ -512,7 +519,7 @@ const MainProfile = ({navigation, route}) => {
                       <Col justify="center" size={0.75}>
                         {item.icon}
                       </Col>
-                      <Col size={0.25} />
+                      <Col size={0.25}><View /></Col>
                       <Col align="flex-start" size={9} justify="center">
                         <Text
                           color={

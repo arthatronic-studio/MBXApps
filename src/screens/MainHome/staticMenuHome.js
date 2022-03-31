@@ -126,14 +126,16 @@ export const listMenuHome = [
     //     name: 'Pulsa',
     //     images: iconPulsa,
     //     nav: 'PulsaScreen',
-    //     params: {}
+    //     params: {},
+    //     show: true,
     // },
     // {
     //     code: '',
     //     name: 'Listrik',
     //     images: iconPLN,
     //     nav: 'PlnScreen',
-    //     params: {}
+    //     params: {},
+    //     show: true,
     // },
     // {
     //     code: '',

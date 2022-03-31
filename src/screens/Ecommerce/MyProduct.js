@@ -255,7 +255,6 @@ const MyProduct = ({navigation, route}) => {
               alignItems: 'center',
               justifyContent: 'center',
             }}
-            onPress={() => navigation.navigate('AddProduct')}
           >
             <Image source={ImagesPath.plusCircle} />
             <Text style={{ color: Color.textInput, marginLeft: 11 }}

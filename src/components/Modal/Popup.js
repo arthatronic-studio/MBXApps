@@ -135,7 +135,7 @@ const Popup = ({
             <MainView
                 style={{ transform: [{translateY: showPopup}] }}
                 fitHeight={fitHeight}
-                top={isTranslucent ? statusBarHeight : isIphoneNotch() ? statusBarHeight : 0}
+                top={isTranslucent || isIphoneNotch() ? statusBarHeight : 0}
             >
                 <TouchablePopup
                     onPress={() => closeModalPopup()}
@@ -160,5 +160,4 @@ const Popup = ({
 }
 
 Popup.defaultProps = defaultProps;
-
 export default Popup;

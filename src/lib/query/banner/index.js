@@ -14,6 +14,7 @@ export const queryBannerList = gql`
             id
             categoryId
             title
+            subTitle
             image
             link
         }

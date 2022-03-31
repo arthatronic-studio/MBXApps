@@ -5,6 +5,7 @@ import {
   Image,
   ImageBackground,
   TextInput,
+  ActivityIndicator,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -19,6 +20,7 @@ import Client from '@src/lib/apollo';
 import {queryGetUserOrganizationRef} from '@src/lib/query';
 import { Scaffold } from 'src/components';
 import { currentSocket } from '@src/screens/MainHome/MainHome';
+import { Container } from 'src/styled';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -53,7 +55,7 @@ const CircleSend = Styled(TouchableOpacity)`
   alignItems: center;
 `;
 
-const itemPerPage = 50;
+const itemPerPage = 100;
 
 const ChatUserListScreen = ({navigation, route}) => {
   const { params } = route;
@@ -65,9 +67,9 @@ const ChatUserListScreen = ({navigation, route}) => {
     loadNext: false,
   });
   const [selected, setSelected] = useState([]);
-
-  const [search, setSearch] = useState("")
-  const [filterData, setFilterData] = useState([])
+  const [search, setSearch] = useState("");
+  const [filterData, setFilterData] = useState([]);
+  const [filterLoading, setFilterLoading] = useState(false);
 
   const { Color } = useColor();
 
@@ -80,6 +82,16 @@ const ChatUserListScreen = ({navigation, route}) => {
       fetchGetUserOrganizationRef();
     }
   }, [itemData.loadNext]);
+
+  useEffect(() => {
+    const timeout = search !== '' ? setTimeout(() => {
+      fetchSearchNameMember();
+    }, 500) : null;
+
+    return () => {
+      clearTimeout(timeout);
+    }
+  }, [search]);
 
   const compareData = arr => {
     let obj = {};
@@ -95,6 +107,37 @@ const ChatUserListScreen = ({navigation, route}) => {
 
     return newData;
   };
+
+  const fetchSearchNameMember = () => {
+    setFilterLoading(true);
+
+    const variables = { name: search };
+
+    Client.query({
+      query: queryGetUserOrganizationRef,
+      variables,
+    })
+    .then((res) => {
+      console.log('res search', res);
+
+      const data = res.data.getUserOrganizationRef;
+
+      let newArr = [];
+
+      if (data) {
+        newArr = data;
+      }
+
+      setFilterData(newArr);
+      setFilterLoading(false);
+    })
+    .catch((err) => {
+      console.log('err search', err);
+
+      setFilterData([]);
+      setFilterLoading(false);
+    });
+  }
 
   const fetchGetUserOrganizationRef = () => {
     const variables = {
@@ -114,36 +157,29 @@ const ChatUserListScreen = ({navigation, route}) => {
         let newArr = [];
 
         if (data) {
-          newArr = compareData(itemData.data.concat(data));
+          newArr = itemData.data.concat(data); // compareData(itemData.data.concat(data));
         }
 
-        console.log(data.length, itemPerPage);
+        console.log(data.length, 'dapet length');
 
-        setStateItemData({
+        setItemData({
+          ...itemData,
           data: newArr,
           loading: false,
-          page: (data.length + 1) === itemPerPage ? itemData.page + 1 : -1,
+          page: data.length > 0 ? itemData.page + 1 : -1,
           loadNext: false,
         });
-
-        setFilterData(newArr);
       })
       .catch(err => {
         console.log(err, 'errrrr');
 
-        setStateItemData({
+        setItemData({
+          ...itemData,
           loading: false,
           page: -1,
           loadNext: false,
         });
       });
-  };
-
-  const setStateItemData = obj => {
-    setItemData({
-      ...itemData,
-      ...obj,
-    });
   };
 
   const onSelected = item => {
@@ -187,40 +223,12 @@ const ChatUserListScreen = ({navigation, route}) => {
     })
   };
 
-  const searchFilter = (v) => {
-    let val = v.replace(/\s/g, '');
-    let text = val.toLowerCase();
-    let newArr = [];
-
-    if (text !== '') {
-      let newData = [];
-      itemData.data.map((item) => {
-        let fullname = item.firstName.toLowerCase().replace(/\s/g, '') + item.lastName.toLowerCase().replace(/\s/g, '');
-        let arrOfName = [
-          item.firstName.toLowerCase().replace(/\s/g, ''),
-          item.lastName.toLowerCase().replace(/\s/g, ''),
-          fullname,
-          fullname.substr(0, text.length)
-        ];
-        
-        if (arrOfName.includes(text)) {
-          newData.push(item);
-        }
-      });
-
-      newArr = newData;
-    } else {
-      newArr = itemData.data;
-    }
-
-    setFilterData(newArr);
-  }
-
-  console.log(itemData.loadNext, itemData.page);
+  // console.log(itemData.loadNext, itemData.page);
 
   return (
     <Scaffold
       fallback={itemData.loading}
+      isLoading={filterLoading}
       header={
         <Header
           title="Buat Room Chat"
@@ -261,7 +269,6 @@ const ChatUserListScreen = ({navigation, route}) => {
             error={null}
             onChangeText={(text) => {
               setSearch(text);
-              searchFilter(text);
             }}
             style={{
               backgroundColor: Color.textInput,
@@ -276,57 +283,62 @@ const ChatUserListScreen = ({navigation, route}) => {
       
       <FlatList
         keyExtractor={(item, index) => item.toString() + index}
-        data={filterData}
+        data={search !== '' ? filterData : itemData.data}
         contentContainerStyle={{paddingHorizontal: 16, paddingTop: 8}}
-        renderItem={({item}) => {
-          const isSelected = selected.filter(
-            e => e.userId === item.userId,
-          )[0];
+        renderItem={({ item, index }) => {
+          // const isSelected = selected.filter(
+          //   e => e.userId === item.userId,
+          // )[0];
 
-          if (isSelected) {
-            return (
-              <TouchableOpacity
-                onPress={() => onPress(item)}
-                // onLongPress={() => onSelected(item)}
-                style={{
-                  width: '100%',
-                  borderRadius: 4,
-                  backgroundColor: Color.theme,
-                  marginBottom: 8,
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                }}>
-                <ImageBackground
-                  source={{uri: item.photoProfile}}
-                  style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 25,
-                    marginRight: 8,
-                    backgroundColor: Color.border,
-                  }}
-                  imageStyle={{borderRadius: 30}}>
-                  <MaterialIcons
-                    name="check-circle"
-                    color={Color.success}
-                    size={22}
-                  />
-                </ImageBackground>
-                <View
-                  style={{
-                    height: 60,
-                    alignItems: 'flex-start',
-                    justifyContent: 'space-around',
-                  }}>
-                  <Text size={12} type="semibold" numberOfLines={1}>
-                    {item.firstName} {item.lastName}
-                  </Text>
-                  {/* <Text size={10}>Available</Text> */}
-                </View>
-              </TouchableOpacity>
-            );
-          }
+          // if (isSelected) {
+          //   return (
+          //     <TouchableOpacity
+          //       onPress={() => onPress(item)}
+          //       // onLongPress={() => onSelected(item)}
+          //       style={{
+          //         width: '100%',
+          //         borderRadius: 4,
+          //         backgroundColor: Color.theme,
+          //         marginBottom: 8,
+          //         flexDirection: 'row',
+          //         justifyContent: 'flex-start',
+          //         alignItems: 'center',
+          //       }}>
+          //       <Container paddingRight={8}>
+          //         <Text>{index + 1}</Text>
+          //       </Container>
+          //       <ImageBackground
+          //         source={{uri: item.photoProfile}}
+          //         style={{
+          //           width: 50,
+          //           height: 50,
+          //           borderRadius: 25,
+          //           marginRight: 8,
+          //           backgroundColor: Color.border,
+          //         }}
+          //         imageStyle={{borderRadius: 30}}>
+          //         <MaterialIcons
+          //           name="check-circle"
+          //           color={Color.success}
+          //           size={22}
+          //         />
+          //       </ImageBackground>
+          //       <View
+          //         style={{
+          //           height: 60,
+          //           alignItems: 'flex-start',
+          //           justifyContent: 'space-around',
+          //         }}>
+          //         <Text size={12} type="semibold" numberOfLines={1}>
+          //           {item.firstName} {item.lastName}
+          //         </Text>
+          //         {/* <Text size={10}>Available</Text> */}
+          //       </View>
+          //     </TouchableOpacity>
+          //   );
+          // }
+
+          const isAdmin = item.isDirector === 1;
 
           return (
             <TouchableOpacity
@@ -340,6 +352,9 @@ const ChatUserListScreen = ({navigation, route}) => {
                 alignItems: 'center',
               }}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Container paddingRight={8}>
+                  <Text>{index + 1}</Text>
+                </Container>
                 <Image
                   source={{uri: item.photoProfile}}
                   style={{
@@ -348,6 +363,8 @@ const ChatUserListScreen = ({navigation, route}) => {
                     borderRadius: 25,
                     marginRight: 8,
                     backgroundColor: Color.border,
+                    borderWidth: isAdmin ? 1 : 0,
+                    borderColor: Color.primary,
                   }}
                 />
                 <View
@@ -357,7 +374,7 @@ const ChatUserListScreen = ({navigation, route}) => {
                     justifyContent: 'space-around',
                   }}>
                   <Text size={12} type="semibold" numberOfLines={1}>
-                    {item.firstName} {item.lastName}
+                    {item.firstName} {item.lastName} {isAdmin && <MaterialIcons name='verified' color={Color.info} />}
                   </Text>
                   {/* <Text size={10}>Available</Text> */}
                 </View>
@@ -365,9 +382,17 @@ const ChatUserListScreen = ({navigation, route}) => {
             </TouchableOpacity>
           );
         }}
-        onEndReached={() => setStateItemData({ loadNext: true })}
+        onEndReached={() => itemData.page !== -1 ? setItemData({ ...itemData, loadNext: true }) : {}}
         onEndReachedThreshold={0.3}
       />
+
+      {itemData.loadNext ?
+      <ActivityIndicator
+        size='large'
+        color={Color.primary}
+        style={{paddingVertical: 4}}
+      />
+      : <View />}
     </Scaffold>
   );
 };

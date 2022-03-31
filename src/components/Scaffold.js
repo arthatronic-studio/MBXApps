@@ -210,7 +210,7 @@ const Scaffold = ({
         </View>
       )}
 
-      <Popup {...popupProps} />
+      <Popup {...popupProps} isTranslucent={translucent} />
 
       <Loading {...loadingProps} />
     </MainView>

@@ -13,6 +13,8 @@ import { useSelector } from 'react-redux';
 
 const itemPerPage = 50;
 
+const avatarDefault = 'https://storage.googleapis.com/sabyan-prod-music-box/images/avatar/avatar-default.png';
+
 const WidgetUserLikes = ({ id, title }) => {
     const { Color } = useColor();
     const { width } = useWindowDimensions();
@@ -124,7 +126,7 @@ const WidgetUserLikes = ({ id, title }) => {
                                 //     idx === 4 ? ImagesPath.avatar5 :
                                 //     ImagesPath.avatar1
                                 // }
-                                source={{uri: item.image}}
+                                source={{uri: item.image ? item.image : avatarDefault}}
                                 style={{
                                     width: '100%',
                                     height: '100%',
@@ -184,7 +186,7 @@ const WidgetUserLikes = ({ id, title }) => {
                                     >
                                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                             <Image
-                                                source={{uri: item.image}}
+                                                source={{uri: item.image ? item.image : avatarDefault}}
                                                 style={{
                                                     width: 36,
                                                     height: 36,

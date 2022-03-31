@@ -4,7 +4,6 @@ import Styled from 'styled-components';
 import { TextInputMask } from 'react-native-masked-text';
 import { useDispatch, useSelector } from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { Tabs, Tab, TabHeading } from 'native-base';
 import Moment from 'moment';
 import { Modalize } from 'react-native-modalize';
 
@@ -35,6 +34,8 @@ import {
   iconXL,
 } from '@assets/images/operator';
 import { Scaffold } from 'src/components';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useIsFocused } from '@react-navigation/native';
 
 const MainView = Styled(View)`
   flex: 1;
@@ -153,6 +154,8 @@ const PulsaPostpaidProvider = [
 
 const errorInputPrepaid = ['prepaidNumber'];
 const errorInputPostpaid = ['selectedProvider', 'subscriberNumber'];
+
+const { Navigator, Screen } = createMaterialTopTabNavigator();
 
 export default ({ navigation, route }) => {
   const [state, changeState] = useState({
@@ -468,16 +471,20 @@ export default ({ navigation, route }) => {
     );
   }
 
-  function renderTabHeading(label, index, activeTab) {
-    return (
-      <TabHeading style={{backgroundColor: Color.textInput}}>
-        <Text type={activeTab !== index ? 'semibold' : 'bold'} style={activeTab !== index ? {color: Color.text} : {color: Color.secondary}}>{label}</Text>
-      </TabHeading>
-    );
-  }
+  console.log('prepaidActiveTab', prepaidActiveTab);
 
-  function renderPulsaPrepaidList(data, selected) {
+  function renderPulsaPrepaidList(data, selected, props) {
+    console.log(props);
     const selectedItem = state[selected];
+
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+      console.log(selected, isFocused);
+      if (isFocused) {
+        // setState({ prepaidActiveTab: selected === 'selectedPulsa' ? 0 : 1 });
+      }
+    }, [isFocused]);
 
     if (selected === 'selectedPulsa' && loadingPulsaList) return <ScreenIndicator visible />;
 
@@ -529,11 +536,6 @@ export default ({ navigation, route }) => {
   function renderPulsaPrepaid() {
     const { prepaidActiveTab, pulsaList, paketDataList, errorPrepaid } = state;
 
-    const tabs = [
-      { label: 'Pulsa', children: renderPulsaPrepaidList(pulsaList, 'selectedPulsa') },
-      { label: 'Paket Data', children: renderPulsaPrepaidList(paketDataList, 'selectedPaketData') }
-    ];
-
     return (
       <>
         <TopView style={{backgroundColor: Color.textInput}}>
@@ -567,27 +569,34 @@ export default ({ navigation, route }) => {
           {renderError(errorPrepaid.prepaidNumber)}
         </TopView>
 
-        <Tabs
-          prerenderingSiblingsNumber={Infinity}
-          tabContainerStyle={{elevation: 0}}
-          tabBarUnderlineStyle={{backgroundColor: Color.secondary, height: 2}}
+        <Navigator
+          initialRouteName="Pulsa"
+          tabBarOptions={{
+            indicatorStyle: {backgroundColor: Color.primary, height: '100%'},
+            activeTintColor: Color.textInput,
+            inactiveTintColor: Color.text,
+            labelStyle: {fontSize: 12, fontWeight: 'bold'},
+            style: {borderRadius: 30, marginVertical: 0, overflow: 'hidden', marginHorizontal: 16, backgroundColor: Color.semiwhite},
+            labelStyle: { textTransform: 'none' },
+          }}
+        >
+          <Screen
+            name="Pulsa"
+            component={(props) => renderPulsaPrepaidList(pulsaList, 'selectedPulsa', props)}
+            options={{tabBarLabel: 'Pulsa'}}
+          />
+          <Screen
+            name="Paket Data"
+            component={(props) => renderPulsaPrepaidList(paketDataList, 'selectedPaketData', props)}
+            options={{tabBarLabel: 'Paket Data'}}
+          />
+        </Navigator>
+
+        {/* <Tabs
           onChangeTab={({ i }) => setState({ prepaidActiveTab: i })}
-          locked={Platform.OS == 'android'}
           initialPage={prepaidActiveTab}
         >
-          {tabs.map((item, index) =>
-            <Tab
-              key={index}
-              style={{backgroundColor: Color.primary}}
-              heading={renderTabHeading(item.label, index, prepaidActiveTab)}
-            >
-              <View style={{paddingTop: 16, paddingBottom: 8}}>
-                <Text>{prepaidOperator === 'unkown prefix' ? 'Operator tidak dikenal' : prepaidOperator}</Text>
-              </View>
-              {index === prepaidActiveTab && item.children}
-            </Tab>
-          )}
-        </Tabs>
+        </Tabs> */}
       </>
     )
   }

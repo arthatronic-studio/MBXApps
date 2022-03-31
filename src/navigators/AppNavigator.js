@@ -8,7 +8,7 @@ import SplashScreen from 'src/screens/SplashScreen';
 import BottomTabsNavigator from '@src/navigators/BottomTabsNavigator';
 import BottomTabsNavigatorKomoto from '@src/navigators/BottomTabsNavigatorKomoto';
 import BottomTabsNavigatorsabyan from '@src/navigators/BottomTabsNavigatorSabyan';
-import KnowMeScreen from '@src/screens/KnowMeScreen';
+import OnBoardingScreen from '@src/screens/OnBoardingScreen';
 import CreateEmergencyScreen from '@src/screens/CreateEmergencyScreen';
 import PDFReaderScreen from 'src/screens/PDFReaderScreen';
 import MusicPlayerScreen from 'src/screens/MusicPlayerScreen';
@@ -130,6 +130,11 @@ import StepTwo from 'src/screens/Ecommerce/StepTwo';
 import StepThree from 'src/screens/Ecommerce/StepThree';
 import MerchantSetting from 'src/screens/Ecommerce/MerchantSetting';
 import KuponKu from 'src/screens/Ecommerce/KuponKu';
+import ChatRoom from 'src/screens/Ecommerce/ChatRoom';
+import CardChat from 'src/screens/Ecommerce/CardChat';
+import CardChatExist from 'src/screens/Ecommerce/CardChatExist';
+
+
 // import PopUpCouponSucces from 'src/screens/Ecommerce/PopUpCouponSucces';
 
 // Media Player
@@ -182,7 +187,7 @@ function MainStackNavigator() {
       {/* uncanny */}
       <Screen name="SplashScreen" component={SplashScreen} />
       <Screen name="MainPage" component={MainPage} />
-      <Screen name="KnowMeScreen" component={KnowMeScreen} />
+      <Screen name="OnBoardingScreen" component={OnBoardingScreen} />
       <Screen name="CreateEmergencyScreen" component={CreateEmergencyScreen} />
       <Screen name="PDFReaderScreen" component={PDFReaderScreen} />
       <Screen name="MusicPlayerScreen" component={MusicPlayerScreen} />
@@ -219,6 +224,11 @@ function MainStackNavigator() {
       <Screen name="EditMerchantInfo" component={EditMerchantInfo} />
       <Screen name="Notification" component={Notification} />
       <Screen name="KuponKu" component={KuponKu} />
+      <Screen name="ChatRoom" component={ChatRoom} />
+      <Screen name="CardChat" component={CardChat} />
+      <Screen name="CardChatExist" component={CardChatExist} />
+
+
       {/* <Screen name="PopUpCouponSucces" component={PopUpCouponSucces}/> */}
       <Screen name="DetailCoupon" component={DetailCoupon} />
       <Screen name="SearchScreen" component={SearchScreen} />

@@ -21,7 +21,7 @@ const SplashScreen = ({navigation, route}) => {
       if (user) {
         redirectTo('MainPage');
       } else {
-        redirectTo('KnowMeScreen');
+        redirectTo('OnBoardingScreen');
       }
     }, 3000);
   }, []);
