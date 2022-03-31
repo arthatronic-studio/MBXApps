@@ -69,6 +69,10 @@ const TransactionDetail = ({ route, navigation }) => {
         });
     };
 
+    const submit = () => {
+        console.log('submit')
+    }
+
     return (
         <Scaffold
         header={<Header customIcon title="Detail Pesanan" type="bold" style={{paddingTop: 16, marginBottom: 10}}   centerTitle={false}  />}
@@ -112,31 +116,31 @@ const TransactionDetail = ({ route, navigation }) => {
                     </View>
                         
                 </View>
-                {data.products && data.products.map((val, id) => (
+                {data.items && data.items.map((value, id) => (
                     <View>
-                    <View style={{ marginLeft:9 ,alignItems: 'baseline',marginTop:10,display: 'flex',flexDirection:'row',marginRight:10}}>
-                        <Image source={ImagesPath.sabyan} />
-                        <View style={{ marginLeft: 18, flexDirection: 'column-reverse' }}>
-                            <View style={{paddingRight:150 }}>
-                                {/* <Text style={{ color: 'gray', fontSize: 12 }}>Stok Barang : {val.quantity}pcs </Text> */}
-                            </View>
-                            <View>
-                                <Text style={{ color: 'black', fontSize: 21,fontWeight:'bold' }}>{val.product.name}</Text>
-                            </View>
-                        </View>
-                    </View>
-                    <View style={{ marginLeft:75 ,alignItems: 'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:10}}>
-                        <Text style={{color: 'gray',fontSize:12}}>Jumlah Pembelian</Text>
-                        <Text style={{color: 'gray',fontSize:12}}>x{val.quantity}</Text>
-                    </View>
-                    <View style={{ marginLeft:75 ,alignItems: 'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:10}}>
-                        <Text style={{color: 'gray',fontSize:12}}>Harga Barang</Text>
-                        <Text style={{color: 'gray',fontSize:12}}>{val.price} poin</Text>
-
-                        
-                        
-                    </View>
-                   
+                        {value.products.map((val, idx) => (
+                            <>
+                                <View style={{ marginLeft:9 ,alignItems: 'baseline',marginTop:10,display: 'flex',flexDirection:'row',marginRight:10}}>
+                                    <Image source={{uri: val.imageUrl}} />
+                                    <View style={{ marginLeft: 18, flexDirection: 'column-reverse' }}>
+                                        <View style={{paddingRight:150 }}>
+                                            {/* <Text style={{ color: 'gray', fontSize: 12 }}>Stok Barang : {val.quantity}pcs </Text> */}
+                                        </View>
+                                        <View>
+                                            <Text style={{ color: 'black', fontSize: 21,fontWeight:'bold' }}>{val.name}</Text>
+                                        </View>
+                                    </View>
+                                </View>
+                                <View style={{ marginLeft:75 ,alignItems: 'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:10}}>
+                                    <Text style={{color: 'gray',fontSize:12}}>Jumlah Pembelian</Text>
+                                    <Text style={{color: 'gray',fontSize:12}}>x{val.quantity}</Text>
+                                </View>
+                                <View style={{ marginLeft:75 ,alignItems: 'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:10}}>
+                                    <Text style={{color: 'gray',fontSize:12}}>Harga Barang</Text>
+                                    <Text style={{color: 'gray',fontSize:12}}>{val.price} poin</Text>
+                                </View>
+                        </>
+                        ))}
                 </View>
                 ))}
                  <View style={{ marginLeft:75 ,alignItems: 'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:10}}>
@@ -180,13 +184,13 @@ const TransactionDetail = ({ route, navigation }) => {
                 </View>
                 <View style={{ marginLeft:9 ,alignItems: 'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:10}}>
                     <Text style={{color: 'gray'}}>Metode Pembayaran</Text>
-                    <Text style={{color: '#F3771D'}}>Dompet Virtual</Text>
+                    <Text style={{color: '#F3771D'}}>{data.payment ? data.payment.name : ''}</Text>
 
                     
                     
                 </View>
                 <View style={{ marginLeft:9 ,alignItems: 'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:10}}>
-                    <Text style={{color: 'gray'}}>Total Harga (1 Barang)</Text>
+                    <Text style={{color: 'gray'}}>Total Harga Barang</Text>
                     <Text >{FormatMoney.getFormattedMoney(data.totalProductPrice)}</Text>
 
                     
@@ -201,7 +205,7 @@ const TransactionDetail = ({ route, navigation }) => {
                 </View>
                     <View style={{ marginLeft:9 ,alignItems: 'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:10}}>
                     <Text style={{color: 'gray'}}>Biaya Administrasi</Text>
-                    <Text >GRATIS</Text>
+                    <Text >{FormatMoney.getFormattedMoney(data.adminFee)}</Text>
 
                     
                     

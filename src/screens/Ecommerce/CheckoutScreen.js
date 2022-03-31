@@ -130,7 +130,7 @@ const CheckoutScreen = ({ navigation }) => {
             alert('Success order')
             dispatch({
                 type: 'BOOKING.ADD_BOOKING',
-                data: {...res.data.ecommerceOrderManage, id: res.data.ecommerceOrderManage.data.bookingId, vestaBiller: true, finalAmount: res.data.ecommerceOrderManage.data.totalPrice}
+                data: {...res.data.ecommerceOrderManage.data, id: res.data.ecommerceOrderManage.data.bookingId, vestaBiller: true, finalAmount: res.data.ecommerceOrderManage.data.totalPrice}
               });
             
             setTimeout(() => {

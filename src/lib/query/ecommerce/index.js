@@ -11,6 +11,10 @@ query(
   orderNumber
   expiredDate
   status
+  payment{
+    name
+  }
+  adminFee
   shippingAddressId
   shippingIsCod
   shippingRateId
@@ -117,16 +121,16 @@ query(
   createdAt
   updatedAt
   deletedAt
-  products {
-    id
-    product{
+  items{
+    products {
+      id
+      imageUrl
       name
+      quantity
+      price
     }
-    orderId
-    productId
-    quantity
-    price
   }
+  
   address {
     id
     penerimaName
@@ -361,6 +365,11 @@ mutation(
     success
     message
     data { 
+      vat
+      amount
+      discount
+      adminFee
+      invoiceNumber
       bookingId 
       orderNumber
       expiredDate
