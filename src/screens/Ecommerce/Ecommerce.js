@@ -246,7 +246,7 @@ const Ecommerce = ({navigation}) => {
             <View >
             <View style={{position: 'absolute', backgroundColor: Color.primary, width: '100%', height: 130, borderBottomLeftRadius: 40, borderBottomRightRadius: 40}}></View>
             <View style={{flexDirection: 'row'}}>
-                <View style={{width: '72%',}} onTouchStart={() => navigation.navigate('SearchScreen')}>
+                <View style={{width: '72%',}} onTouchStart={() => navigation.navigate('SearchResult')}>
                     <TextInput placeholder='Cari apa hari ini . . .' style={{backgroundColor: Color.textInput, width: '95%',
                     borderRadius: 7, height: 40, marginHorizontal: 10, marginVertical: 10, paddingHorizontal: 10}}></TextInput>
                     

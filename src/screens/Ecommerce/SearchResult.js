@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, ScrollView, Platform, Dimensions, FlatList, SafeAreaView, TextInput, Image, Pressable } from 'react-native';
+import { View, ScrollView, Platform, Dimensions, FlatList, SafeAreaView, TextInput, Image, Pressable, Keyboard } from 'react-native';
 import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -11,7 +11,10 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CardHistorySearch from './CardHistorySearch';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import Client from 'src/lib/apollo';
+import { queryGetProduct } from 'src/lib/query/ecommerce';
 import CardMerchant from './CardMerchant';
+import CardProductSearch from './CardProductSearch';
 
 import ImagesPath from '../../components/ImagesPath'
 
@@ -120,245 +123,218 @@ const CircleSend = Styled(TouchableOpacity)`
   
 `;
 
-const FilterProduk = [
-    {
-        id: 1,
-        name: 'Terlaris'
-    },
-    {
-        id: 2,
-        name: 'Gratis Ongkir'
-    },
-    {
-        id: 3,
-        name: 'Terpopuler'
-    }
-]
-
-const FilterToko = [
-    {
-        id: 1,
-        name: 'Nama Toko'
-    },
-    {
-        id: 2,
-        name: 'Popularitas'
-    },
-]
-
-const DataProduk = [
-    {
-      id: 1,
-      namaProduk: 'Tas Laptop Formal Pria',
-      review: '4.5',
-      terjual: 450,
-      hargaCoret: 'Rp. 300.000',
-      hargaAkhir: 'Rp. 278.100',
-      image: ImagesPath.lelangecommerce3,
-      diskon: '10%'
-    },
-    {
-        id: 1,
-        namaProduk: 'Tas Laptop Formal Pria',
-        review: '4.5',
-        terjual: 450,
-        hargaCoret: '300.000',
-        hargaAkhir: '278.100',
-        image: ImagesPath.lelangecommerce4,
-        diskon: '10%'
-      },
-      {
-        id: 1,
-        namaProduk: 'Tas Laptop Formal Pria',
-        review: '4.5',
-        terjual: 450,
-        hargaCoret: '300.000',
-        hargaAkhir: '278.100',
-        image: ImagesPath.lelangecommerce5,
-        diskon: '10%'
-      },
-      {
-        id: 1,
-        namaProduk: 'Tas Laptop Formal Pria',
-        review: '4.5',
-        terjual: 450,
-        hargaCoret: '300.000',
-        hargaAkhir: '278.100',
-        image: ImagesPath.lelangecommerce6,
-        diskon: '10%'
-      },
-    
-  ];
-
-const DataToko = [
-    {
-        id: 1,
-        name: 'Bytme Shop',
-        location: 'Jakarta Selatan',
-        image: ImagesPath.merchant1,
-    },
-    {
-        id: 2,
-        name: 'Observe Shop',
-        location: 'Jakarta Selatan',
-        image: ImagesPath.merchant2,
-    },
-    {
-        id: 3,
-        name: 'Hammerhead Shop',
-        location: 'Jakarta Selatan',
-        image: ImagesPath.merchant3,
-    },
-    {
-        id: 4,
-        name: 'Suslli Shop',
-        location: 'Jakarta Selatan',
-        image: ImagesPath.merchant4,
-    },
-    {
-        id: 5,
-        name: 'Hammerhead Shop',
-        location: 'Jakarta Selatan',
-        image: ImagesPath.merchant5,
-    },
-]
-
-  const render = ({ item }) => (
-    <Pressable style={{marginHorizontal: 10, marginVertical: 10, backgroundColor: '#FFFFFF', width: '45%', height: 300, borderRadius: 10 }}>
-        <Image source={item.image} style={{resizeMode: 'contain', width: 175, height: 160, marginVertical: 8}}/>
-        <Text style={{fontWeight: 'bold'}}>{item.namaProduk}</Text>
-        <View style={{flexDirection: 'row', marginHorizontal: 12, marginVertical: 5}}>
-            <Entypo name={'star'} style={{color: '#FFD35B',}}/>
-            <Text style={{fontSize: 10, color: '#6A7479', marginHorizontal: 3}}>{item.review}</Text>
-            <View style={{backgroundColor: '#6A7479', height: 12, width: 1, marginHorizontal: 5}}></View>
-            <Text style={{fontSize: 10, color: '#6A7479', marginHorizontal: 3}}>{item.terjual}</Text>
-            <Text style={{fontSize: 10, color: '#6A7479',}}>Terjual</Text>
-        </View>
-        <View style={{marginHorizontal: 15, marginVertical: 15}}>
-            <Text style={{marginVertical: 1, textAlign: 'left',color: '#6A7479', fontSize: 8}}>Harga</Text>
-            <Text style={{marginVertical: 1, textAlign: 'left',textDecorationLine: 'line-through', fontSize: 10, color: '#6A7479', fontWeight: 'bold'}}>{item.hargaCoret}</Text>
-            <Text style={{marginVertical: 1, textAlign: 'left',color: '#D83030', fontWeight: 'bold'}}>{item.hargaAkhir}</Text>
-        </View>
-        <View style={{paddingVertical: 5, backgroundColor: '#D83030', width: 60, height: 42, position: 'absolute', alignSelf: 'flex-end', borderTopRightRadius: 10, borderBottomLeftRadius: 20}}>
-            <Text style={{color: '#FFFFFF', fontSize: 10}}>Diskon</Text>
-            <Text style={{fontSize: 14, fontWeight: 'bold', color: '#FFFFFF'}}>{item.diskon}</Text>
-        </View>
-    </Pressable>
-  );
-
-  const renderFilter = ({item}) => (
-    <Pressable 
-        style={{
-            width: 100, 
-            paddingVertical: 8, 
-            paddingHorizontal: 12, 
-            marginRight: 10,
-            borderRadius: 120,
-            justifyContent: 'center', 
-            alignItems: 'center',
-            backgroundColor: '#A1A1A1'
-        }}
-    >
-        <Text align='left' size={10} color='#ffffff'>{item.name}</Text>
-    </Pressable>
-  )
-
-  const TabProduk = () => {
-    return (
-        <>  
-            <View style={{padding: 16, flexDirection: 'row', alignItems: 'center'}}>
-                <Pressable 
-                    style={{
-                        width: 80,
-                        borderWidth: 0.8,
-                        paddingVertical: 8, 
-                        paddingHorizontal: 12, 
-                        marginRight: 10,
-                        borderRadius: 120,
-                        flexDirection: 'row',
-                        justifyContent: 'center', 
-                        alignItems: 'center',
-                    }}
-                >
-                    <AntDesign
-                        name={'filter'}
-                        size={16}
-                    />
-                    <Text align='left' style={{marginLeft: 8}} size={10}>Filter</Text>
-                </Pressable>
-                <FlatList 
-                    data={FilterProduk}
-                    renderItem={renderFilter}
-                    keyExtractor={item => item.id}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                />
-            </View>
-            <FlatList
-                data={DataProduk}
-                renderItem={render}
-                keyExtractor={item => item.id}
-                numColumns={2}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-            />
-        </>
-    )
-  }
-
-  const TabToko = () => {
-      return (
-          <>
-            <View style={{padding: 16, flexDirection: 'row', alignItems: 'center'}}>
-                <Pressable 
-                    style={{
-                        width: 80,
-                        borderWidth: 0.8,
-                        paddingVertical: 8, 
-                        paddingHorizontal: 12, 
-                        marginRight: 10,
-                        borderRadius: 120,
-                        flexDirection: 'row',
-                        justifyContent: 'center', 
-                        alignItems: 'center',
-                    }}
-                >
-                    <AntDesign
-                        name={'filter'}
-                        size={16}
-                    />
-                    <Text align='left' style={{marginLeft: 8}} size={10}>Filter</Text>
-                </Pressable>
-                <FlatList 
-                    data={FilterToko}
-                    renderItem={renderFilter}
-                    keyExtractor={item => item.id}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                />
-            </View>
-            <FlatList
-              key={'GENERAL'}
-              keyExtractor={(item, index) => item.toString() + index}
-              data={DataToko}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{}}
-              renderItem={({ item, index }) => {
-                return (
-                  <CardMerchant
-                    componentType={'GENERAL'}
-                    item={item}
-                    onPress={() => onPress(item)}
-                  />
-                )
-              }}
-            />
-          </>
-      )
-  }
-
 const SearchResult = ({navigation, route}) => {
+
     const {Color} = useColor()
+    const [page, setPage] = useState(1);
+    const [search, setSearch] = useState("")
+    const [dataProduk, setDataProduk] = useState(null);
+
+    useEffect(() => {
+        getProduct();;
+    }, []);
+
+    const getProduct = () => {
+        let variables = {
+            page: page,
+            itemPerPage: 10,
+            name: search
+        }
+        Client.query({query: queryGetProduct, variables})
+            .then(res => {
+                if (res.data.ecommerceProductList) {
+                    setDataProduk(res.data.ecommerceProductList);
+                }
+                console.log(res);
+                // hideLoading();
+                // navigation.navigate('TopUpScreen');
+            })
+            .catch(reject => {
+                console.log(reject);
+            });
+    }
+
+    const FilterProduk = [
+        {
+            id: 1,
+            name: 'Terlaris'
+        },
+        {
+            id: 2,
+            name: 'Gratis Ongkir'
+        },
+        {
+            id: 3,
+            name: 'Terpopuler'
+        }
+    ]
+    
+    const FilterToko = [
+        {
+            id: 1,
+            name: 'Nama Toko'
+        },
+        {
+            id: 2,
+            name: 'Popularitas'
+        },
+    ]
+    
+    const DataToko = [
+        {
+            id: 1,
+            name: 'Bytme Shop',
+            location: 'Jakarta Selatan',
+            image: ImagesPath.merchant1,
+        },
+        {
+            id: 2,
+            name: 'Observe Shop',
+            location: 'Jakarta Selatan',
+            image: ImagesPath.merchant2,
+        },
+        {
+            id: 3,
+            name: 'Hammerhead Shop',
+            location: 'Jakarta Selatan',
+            image: ImagesPath.merchant3,
+        },
+        {
+            id: 4,
+            name: 'Suslli Shop',
+            location: 'Jakarta Selatan',
+            image: ImagesPath.merchant4,
+        },
+        {
+            id: 5,
+            name: 'Hammerhead Shop',
+            location: 'Jakarta Selatan',
+            image: ImagesPath.merchant5,
+        },
+    ]
+    
+      const renderFilter = ({item}) => (
+        <Pressable 
+            style={{
+                width: 100, 
+                paddingVertical: 8, 
+                paddingHorizontal: 12, 
+                marginRight: 10,
+                borderRadius: 120,
+                justifyContent: 'center', 
+                alignItems: 'center',
+                backgroundColor: '#A1A1A1'
+            }}
+        >
+            <Text align='left' size={10} color='#ffffff'>{item.name}</Text>
+        </Pressable>
+      )
+    
+    const handleLoadMore = ()  => {
+        setPage(page+1);
+        getProduct()
+    }
+
+      const TabProduk = () => {
+        return (
+            <>  
+                <View style={{padding: 16, flexDirection: 'row', alignItems: 'center'}}>
+                    <Pressable 
+                        style={{
+                            width: 80,
+                            borderWidth: 0.8,
+                            paddingVertical: 8, 
+                            paddingHorizontal: 12, 
+                            marginRight: 10,
+                            borderRadius: 120,
+                            flexDirection: 'row',
+                            justifyContent: 'center', 
+                            alignItems: 'center',
+                        }}
+                    >
+                        <AntDesign
+                            name={'filter'}
+                            size={16}
+                        />
+                        <Text align='left' style={{marginLeft: 8}} size={10}>Filter</Text>
+                    </Pressable>
+                    <FlatList 
+                        data={FilterProduk}
+                        renderItem={renderFilter}
+                        keyExtractor={item => item.id}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                    />
+                </View>
+                <FlatList
+                    data={dataProduk}
+                    keyExtractor={item => item.id}
+                    numColumns={2}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={({ item, index }) => {
+                        return (
+                          <CardProductSearch
+                            item={item}
+                          />
+                        )
+                      }}
+                    onEndReached={() => handleLoadMore()}
+                />
+            </>
+        )
+      }
+    
+      const TabToko = () => {
+          return (
+              <>
+                <View style={{padding: 16, flexDirection: 'row', alignItems: 'center'}}>
+                    <Pressable 
+                        style={{
+                            width: 80,
+                            borderWidth: 0.8,
+                            paddingVertical: 8, 
+                            paddingHorizontal: 12, 
+                            marginRight: 10,
+                            borderRadius: 120,
+                            flexDirection: 'row',
+                            justifyContent: 'center', 
+                            alignItems: 'center',
+                        }}
+                    >
+                        <AntDesign
+                            name={'filter'}
+                            size={16}
+                        />
+                        <Text align='left' style={{marginLeft: 8}} size={10}>Filter</Text>
+                    </Pressable>
+                    <FlatList 
+                        data={FilterToko}
+                        renderItem={renderFilter}
+                        keyExtractor={item => item.id}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                    />
+                </View>
+                <FlatList
+                  key={'GENERAL'}
+                  keyExtractor={(item, index) => item.toString() + index}
+                  data={DataToko}
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{}}
+                  renderItem={({ item, index }) => {
+                    return (
+                      <CardMerchant
+                        componentType={'GENERAL'}
+                        item={item}
+                        onPress={() => onPress(item)}
+                      />
+                    )
+                  }}
+                />
+              </>
+          )
+      }
 
     return (
         <Scaffold
@@ -381,19 +357,27 @@ const SearchResult = ({navigation, route}) => {
                         name="text"
                         placeholder="Cari Topik apa kali ini  . . ."
                         placeholderTextColor={Color.placeholder}
-                        returnKeyType="done"
-                        returnKeyLabel="Done"
                         blurOnSubmit={false}
                         onBlur={() => {}}
                         error={null}
-                        onChangeText={text => {}}
+                        onChangeText={text => {setSearch(text)}}
                         style={{
                             backgroundColor: '#FFFFFF',
                             color: Color.text,
                         }}
+                        onKeyPress={(e) => {
+                            if(e.key=="Enter") {
+                                getProduct()
+                                Keyboard.dismiss()
+                            }
+                        }}
                     />
                     <CircleSend
-                        onPress={() => {}}>
+                        onPress={() => {
+                            getProduct() 
+                            Keyboard.dismiss()
+                        }}
+                    >
                         <Ionicons name="search" size={20} color={Color.placeholder} />
                     </CircleSend>
                 </BoxInput>
@@ -417,7 +401,7 @@ const SearchResult = ({navigation, route}) => {
                 >
                     <Screen
                     name="TabProduk"
-                    component={TabProduk}
+                    component={() => TabProduk()}
                     options={{ tabBarLabel: 'Produk' }}
                     />
                     <Screen

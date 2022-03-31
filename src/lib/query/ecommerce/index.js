@@ -624,12 +624,16 @@ export const queryUpdateItemCart = gql`
 
 export const queryGetProduct = gql`
   query(
-    $page: Int!
-    $itemPerPage: Int!
+    $page: Int
+    $itemPerPage: Int
+    $name: String
+    $categoryId: Int
   ) {
     ecommerceProductList(
      page: $page
      itemPerPage: $itemPerPage
+     name: $name
+     categoryId: $categoryId
    ) {
     id name categoryId description price initialPrice imageUrl stock
    }
