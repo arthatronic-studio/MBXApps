@@ -29,7 +29,7 @@ const TransactionDetail = ({ route,navigation }) => {
         showLoading();
         let variables = {
             type: 'CANCEL',
-            orderId: route.params.data.id
+            orderId: route.params.item.id
         }
         client.mutate({mutation: mutationCancel, variables})
           .then(res => {
