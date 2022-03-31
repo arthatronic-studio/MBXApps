@@ -180,9 +180,9 @@ const Notification = () => {
                 </View>
                 <View style={{backgroundColor: Color.border, width: '95%', height: 1, alignSelf: 'center'}}></View>
                 <View style={{flexDirection: 'row',}}>
-                    <Image source={{ uri: item.products[0]['product']['imageUrl'] }} style={{resizeMode: 'contain', width: 70, height: 70, marginVertical: 8, marginHorizontal: 8}}/>
+                    <Image source={{ uri: item.items[0].products[0]['imageUrl'] }} style={{resizeMode: 'contain', width: 70, height: 70, marginVertical: 8, marginHorizontal: 8}}/>
                     <View style={{marginVertical: 8}}>
-                        <Text style={{fontWeight: 'bold', marginHorizontal: 15}}>{item.products[0]['product']['name']}</Text>
+                        <Text style={{fontWeight: 'bold', marginHorizontal: 15}}>{item.items[0].products[0]['name']}</Text>
                         <View style={{flexDirection: 'row', marginHorizontal: 12, marginVertical: 5}}>
                         <Entypo name={'star'} style={{color: Color.yellow,}}/>
                         <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 3}}>{item.review}</Text>
@@ -190,21 +190,21 @@ const Notification = () => {
                         <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 3}}>{item.terjual}</Text>
                         <Text style={{fontSize: 10, color: Color.secondary,}}>Terjual</Text>
                     </View>
-                    <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left', marginHorizontal: 15}}>{item.products[0]['quantity']} Barang</Text>
+                    <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left', marginHorizontal: 15}}>{item.items[0].products[0]['quantity']} Barang</Text>
                     </View>
                     
                 </View>
                 <View style={{marginVertical: 20, flexDirection: 'row'}}>
                       <View style={{marginHorizontal: 10, width: '65%'}}>
                         <Text style={{fontSize: 8, textAlign: 'left', color: Color.secondary}}>Harga Barang</Text>
-                        <Text style={{fontSize: 12, textAlign: 'left', fontWeight: 'bold'}}>{FormatMoney.getFormattedMoney(item.products[0]['price'])}</Text>
+                        <Text style={{fontSize: 12, textAlign: 'left', fontWeight: 'bold'}}>{FormatMoney.getFormattedMoney(item.items[0].products[0]['price'])}</Text>
                       </View>
                       <View style={{backgroundColor: Color.primary, width: 100, borderRadius: 20}}>
                         <TouchableOpacity>
                           <Text style={{fontSize: 10, paddingVertical: 6, color: Color.textInput, fontWeight: 'bold'}}>Lacak Paket</Text>
                         </TouchableOpacity>
                       </View>
-                    </View>
+                </View>
             </Pressable>
           );
 
