@@ -13,6 +13,7 @@ import CardHistorySearch from './CardHistorySearch';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Client from 'src/lib/apollo';
 import { queryGetProduct } from 'src/lib/query/ecommerce';
+import { queryGetListMerchant } from 'src/lib/query/ecommerce';
 import CardMerchant from './CardMerchant';
 import CardProductSearch from './CardProductSearch';
 
@@ -129,9 +130,11 @@ const SearchResult = ({navigation, route}) => {
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("")
     const [dataProduk, setDataProduk] = useState(null);
+    const [dataMerchant, setDataMerchant] = useState(null);
 
     useEffect(() => {
-        getProduct();;
+        getMerchant();
+        getProduct();
     }, []);
 
     const getProduct = () => {
@@ -145,9 +148,24 @@ const SearchResult = ({navigation, route}) => {
                 if (res.data.ecommerceProductList) {
                     setDataProduk(res.data.ecommerceProductList);
                 }
-                console.log(res);
-                // hideLoading();
-                // navigation.navigate('TopUpScreen');
+            })
+            .catch(reject => {
+                console.log(reject);
+            });
+    }
+
+    const getMerchant = () => {
+        let variables = {
+            page: page,
+            limit: 10,
+            merchantName: search
+        }
+        Client.query({query: queryGetListMerchant, variables})
+            .then(res => {
+                if (res.data.ecommerceGetListMerchant) {
+                    setDataMerchant(res.data.ecommerceGetListMerchant);
+                }
+                console.log(res)
             })
             .catch(reject => {
                 console.log(reject);
@@ -319,7 +337,7 @@ const SearchResult = ({navigation, route}) => {
                 <FlatList
                   key={'GENERAL'}
                   keyExtractor={(item, index) => item.toString() + index}
-                  data={DataToko}
+                  data={dataMerchant}
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{}}
                   renderItem={({ item, index }) => {
@@ -368,6 +386,7 @@ const SearchResult = ({navigation, route}) => {
                         onKeyPress={(e) => {
                             if(e.key=="Enter") {
                                 getProduct()
+                                getMerchant()
                                 Keyboard.dismiss()
                             }
                         }}
@@ -375,6 +394,7 @@ const SearchResult = ({navigation, route}) => {
                     <CircleSend
                         onPress={() => {
                             getProduct() 
+                            getMerchant()
                             Keyboard.dismiss()
                         }}
                     >
@@ -406,7 +426,7 @@ const SearchResult = ({navigation, route}) => {
                     />
                     <Screen
                     name="TabToko"
-                    component={TabToko}
+                    component={() => TabToko()}
                     options={{ tabBarLabel: 'Toko' }}
                     />
                 </Navigator>

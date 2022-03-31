@@ -515,6 +515,22 @@ export const queryGetMyShop = gql`
   }
 `;
 
+export const queryGetListMerchant = gql`
+  query(
+    $merchantName: String
+    $page: Int
+    $limit: Int
+  ) {
+    ecommerceProductList(
+     page: $page
+     limit: $limit
+     merchantName: $merchantName
+   ) {
+    id userId name noTelp alamat profileImg isVerified isOfficial createdAt
+   }
+  }
+`;
+
 export const queryCreateCart = gql`
   mutation ecommerceCartCreate{
     ecommerceCartCreate {
