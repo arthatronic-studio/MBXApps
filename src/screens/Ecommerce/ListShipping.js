@@ -83,16 +83,17 @@ const ListShipping = ({ route, navigation  }) => {
     Client.mutate({mutation: queryGetShipper, variables})
       .then(res => {
           if(res.data.shipperGetPriceDomestic){
-            const sort = res.data.shipperGetPriceDomestic.pricings.sort((a,b) => (a.logistic.name > b.logistic.name) ? 1 : ((b.logistic.name > a.logistic.name) ? -1 : 0))
-             const groupByCategory = sort.reduce((group, product) => {
-                    const { name } = product.rate;
-                    group[name] = group[name] ?? [];
-                    group[name].push(product);
-                    return group;
-                  }, {});
-                  setGroup(groupByCategory)
-                  console.log(groupByCategory)
-            setList(res.data.shipperGetPriceDomestic.pricings)
+            // const sort = res.data.shipperGetPriceDomestic.pricings.sort((a,b) => (a.logistic.name > b.logistic.name) ? 1 : ((b.logistic.name > a.logistic.name) ? -1 : 0))
+            //  const groupByCategory = sort.reduce((group, product) => {
+            //         const { name } = product.rate;
+            //         group[name] = group[name] ?? [];
+            //         group[name].push(product);
+            //         return group;
+            //       }, {});
+            //       setGroup(groupByCategory)
+            //       console.log(groupByCategory)
+           
+            setGroup(res.data.shipperGetPriceDomestic.groupListing)
           }
         hideLoading()
         console.log(res)
@@ -120,21 +121,29 @@ const ListShipping = ({ route, navigation  }) => {
           <View style={{ marginBottom: 40 }}>
             {Object.keys(group).map(function(key, index) {
                return(
-                <TouchableOpacity onPress={() => setIndex(index)} style={{ padding: 12, borderBottomWidth: 1, borderBottomColor: '#ddd' }}>
-                  <Text align='left' size={13}>{key}</Text>
-                  {idx == index && group[key].map((val, id) => (
-                    <TouchableOpacity onPress={() => submit(val)} style={{ paddingLeft: 15, paddingVertical: 8 }}>
-                      <Row>
-                        <Col>
-                          <Text align='left' size={13}>{val.logistic.name}</Text>
-                        </Col>
-                        <Col style={{ justifyContent: 'center' }}>
-                          <Text align='right' size={12}>{FormatMoney.getFormattedMoney(val.final_price)}</Text>
-                        </Col>
-                      </Row>
-                    </TouchableOpacity>
-                  ))}
-                </TouchableOpacity>
+                 <>
+                  {key != '__typename' && group[key].length != 0 && <TouchableOpacity onPress={() => setIndex(index == idx ? null : index)} style={{ padding: 12, borderBottomWidth: 1, borderBottomColor: '#ddd' }}>
+                    <Row>
+                      <Text align='left' size={13} type='bold'>{key}</Text>
+                      <Col style={{ justifyContent: 'center',alignItems: 'flex-end' }}>
+                        <AntDesign name={idx == index ? 'down' : 'right'} color='#07181F' />
+                      </Col>
+                    </Row>
+                    {idx == index && group[key].length != 0 &&  group[key].map((val, id) => (
+                      <TouchableOpacity onPress={() => submit(val)} style={{ paddingLeft: 15, paddingVertical: 12 }}>
+                        <Row>
+                          <Col>
+                            <Text align='left' type='semibold' size={13}>{val.logisticName}</Text>
+                            <Text align='left' size={9}>{val.estimation} hari</Text>
+                          </Col>
+                          <Col style={{ justifyContent: 'center' }}>
+                            <Text align='right' size={11} type='bold'>{FormatMoney.getFormattedMoney(val.price)}</Text>
+                          </Col>
+                        </Row>
+                      </TouchableOpacity>
+                    ))}
+                  </TouchableOpacity>}
+                </>
                )
                     // console.log(key,groupByCategory[key], index)
             })}

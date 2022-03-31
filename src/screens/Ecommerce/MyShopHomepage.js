@@ -33,7 +33,7 @@ import Entypo from 'react-native-vector-icons/Entypo'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MyShopHeader from './MyShopHeader';
-import { queryGetMyProduct } from 'src/lib/query/ecommerce';
+import { queryGetMyProduct, queryGetMyShop } from 'src/lib/query/ecommerce';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -61,11 +61,11 @@ const MyShopHomepage = ({ navigation }) => {
 	
 	const getMyShop = () => {
 		let variables = {
-		  merchantId: 0,
+		  merchantId: 2,
 		}
-		Client.query({query: queryGetMyProduct, variables})
+		Client.query({query: queryGetMyShop})
 		  .then(res => {
-			console.log(res)
+			console.log(res, 'ress')
 			if (res.data.ecommerceGetMerchant) {
 			  setData(res.data.ecommerceGetMerchant);
 			}

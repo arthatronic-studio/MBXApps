@@ -284,21 +284,24 @@ query (
     createdAt
     updatedAt
     deletedAt
-    products {
+    items {
       id
-      orderId
-      productId
-      quantity
+      name
+      noTelp
+      socialMedia {
+      instagram
+      }
+      products {
+      name
+      description
+      width
+      height
+      length
+      width
       price
-      product {
-        name
-        description
-        width
-        height
-        length
-        width
-        price
-        imageUrl
+      imageUrl
+      stock
+      quantity
       }
     }
     address {
@@ -495,7 +498,51 @@ export const queryGetShipper = gql`
       shipperGetPriceDomestic(
       input: $input
     ) {
-      pricings{ logistic { id name company_name code logo_url } final_price min_day max_day must_use_insurance discounted_price rate { id name type } }
+      origin{
+        area_id
+      }
+      groupListing{
+        Express{
+          logisticName
+          rateId
+          rateName
+          rateType
+          price
+          estimation
+        }
+        Regular{
+          logisticName
+          rateId
+          rateName
+          rateType
+          price
+          estimation
+        }
+        Trucking{
+          logisticName
+          rateId
+          rateName
+          rateType
+          price
+          estimation
+        }
+        SameDay{
+          logisticName
+          rateId
+          rateName
+          rateType
+          price
+          estimation
+        }
+        Instant{
+          logisticName
+          rateId
+          rateName
+          rateType
+          price
+          estimation
+        }
+      }
     }
   }
 `;
@@ -509,22 +556,30 @@ export const queryGetCart = gql`
      page: $page
      limit: $limit
    ) {
-      id totalProducts productCartInfo { productId quantity } products { id name categoryId description price initialPrice imageUrl stock merchantId }
-   }
+      id
+      items{
+        name
+        products{
+          id
+          name
+          price
+          quantity
+          description
+          imageUrl
+        }
+      }
+      totalProducts
+    }
   }
 `;
 
-// export const queryGetMyShop = gql`
-//   query(
-//     $merchantId: Int
-//   ) {
-//     ecommerceGetMerchant(
-//      merchantId: $merchantId
-//    ) {
-//       id userId name noTelp alamat profileImg isVerified isOfficial createdAt user
-//    }
-//   }
-// `;
+export const queryGetMyShop = gql`
+  query{
+    ecommerceGetMerchant {
+      id userId name noTelp alamat profileImg isVerified isOfficial createdAt
+   }
+  }
+`;
 
 export const queryCreateCart = gql`
   mutation ecommerceCartCreate{
@@ -571,6 +626,9 @@ query(
       productMassa
       status
   	}
+    socialMedia{
+      instagram
+    }
   }
 }
 

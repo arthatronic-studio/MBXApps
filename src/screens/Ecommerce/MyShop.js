@@ -46,9 +46,32 @@ const MyShop = ({ navigation, route }) => {
   const loading = useSelector(state => state['user.auth'].loading);
 
   const [loadingProps, showLoading, hideLoading] = useLoading();
+  const [data, setData] = useState({});
   const { Color } = useColor();
 
-  
+  useEffect(() => {
+		getMyShop();
+	// });
+	}, []);
+	
+	const getMyShop = () => {
+		let variables = {
+		  merchantId: 2,
+		}
+		Client.query({query: queryGetMyShop})
+		  .then(res => {
+			console.log(res, 'ress')
+			if (res.data.ecommerceGetMerchant) {
+			  setData(res.data.ecommerceGetMerchant);
+			}
+	
+			// hideLoading();
+			// navigation.navigate('TopUpScreen');
+		  })
+		  .catch(reject => {
+			console.log(reject);
+		  });
+	  };
 
   return (
     <Scaffold
@@ -77,19 +100,19 @@ const MyShop = ({ navigation, route }) => {
               </TouchableOpacity>
             </View>
                 <View style={{marginVertical: 12, backgroundColor: Color.theme, paddingBottom: 32, paddingLeft: 16, height: 60 }}>
-                    <Text align='left' type='bold' size={18}>Toko Sumber Makmur</Text>
+                    <Text align='left' type='bold' size={18}>{data.name}</Text>
                     <Row style={{marginVertical: 5}}>
                         <Col style={{flexDirection: 'row'}}>
                             <Entypo name={'location-pin'} size={12} style={{color: Color.secondary, paddingVertical: 1, paddingHorizontal: 2}}/>
-                            <Text size={10}>Tangerang, Banten</Text>
+                            <Text size={10}>{data.alamat}</Text>
                         </Col>
                         <Col style={{flexDirection: 'row'}}>
                             <FontAwesome name={'phone'} size={12} style={{color: Color.secondary, paddingVertical: 2, paddingHorizontal: 5}}/>
-                            <Text size={10}>0812-3456-7890</Text>
+                            <Text size={10}>{data.noTelp}</Text>
                         </Col>
                         <Col style={{flexDirection: 'row'}}>
                             <Entypo name={'instagram'} size={12} style={{color: Color.secondary, paddingVertical: 1, paddingHorizontal: 5}}/>
-                            <Text size={10}>@tokoku</Text>
+                            <Text size={10}>@{data.socialMedia ? data.socialMedia.instagram : ''}</Text>
                         </Col>
                         
                     </Row>

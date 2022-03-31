@@ -111,10 +111,10 @@ const CheckoutScreen = ({ navigation }) => {
         // courier: { rate_id: 268, use_insurance: false, cod: false, cost: 20000},
         // destinationAddressId: 2,
         courier: {
-            rate_id: shippment.rate.id,
+            rate_id: shippment.rateId,
             cod: false,
             use_insurance: false,
-            cost: shippment.final_price
+            cost: shippment.price
         },
         destinationAddressId: address.userAddressIdDestination,
         type: 'BOOKING',
@@ -208,7 +208,7 @@ const CheckoutScreen = ({ navigation }) => {
                 <TouchableOpacity onPress={() => {address.address ? navigation.navigate('ListShipping', {item: {...address, product: item.tempData }}) : alert('Isi alamat terlebih dahulu')}}>
                     <Row style={{ backgroundColor: Color.semiwhite, alignItems: 'center', padding: 12, marginTop: 20, borderRadius: 8 }}>
                         <MaterialCommunityIcons name='truck' color={Color.text} size={18}   />
-                        <Text color={Color.text} type='semiBold' style={{ marginHorizontal: 10 }}>{shippment.logistic ? shippment.logistic.name+' '+shippment.rate.name : 'Pilih Pengiriman'}</Text>
+                        <Text color={Color.text} type='semiBold' style={{ marginHorizontal: 10 }}>{shippment.logisticName ? shippment.logisticName+' '+shippment.rateName : 'Pilih Pengiriman'}</Text>
                         <Col alignItems='flex-end'>
                             <AntDesign name='right' size={18} color={Color.text} />
                         </Col>
@@ -239,7 +239,7 @@ const CheckoutScreen = ({ navigation }) => {
                         <Text color={Color.text} size={10}>Ongkos Kirim</Text>
                     </Col>
                     <Col alignItems='flex-end'>
-                        <Text color={Color.text} size={10}>{shippment.final_price ? FormatMoney.getFormattedMoney(shippment.final_price) : ''}</Text>
+                        <Text color={Color.text} size={10}>{shippment.price ? FormatMoney.getFormattedMoney(shippment.price) : ''}</Text>
                     </Col>
                 </Row>
                 <Row style={{ alignItems: 'center', marginBottom: 8 }}>
@@ -267,10 +267,10 @@ const CheckoutScreen = ({ navigation }) => {
         <Row style={{ padding: 16 }}>
             <Col align='flex-start' justify='center'>
                 <Text size={10} color={Color.text}>Total Harga</Text>
-                <Text type='bold' color={Color.text} size={18} >{FormatMoney.getFormattedMoney(totalProduct(item.tempData)+(totalProduct(item.tempData)*10/100)+(shippment.final_price ? shippment.final_price : 0))}</Text>
+                <Text type='bold' color={Color.text} size={18} >{FormatMoney.getFormattedMoney(totalProduct(item.tempData)+(totalProduct(item.tempData)*10/100)+(shippment.price ? shippment.price : 0))}</Text>
             </Col>
             <Col>
-                <TouchableOpacity onPress={() => {shippment.final_price ? submit() : alert('Pilih Pengiriman terlebih dahulu')}} style={{ backgroundColor: Color.info, borderRadius: 30, paddingVertical: 10 }}>
+                <TouchableOpacity onPress={() => {shippment.price ? submit() : alert('Pilih Pengiriman terlebih dahulu')}} style={{ backgroundColor: Color.info, borderRadius: 30, paddingVertical: 10 }}>
                     <Text type='semibold' color={Color.textInput}>Checkout</Text>
                 </TouchableOpacity>
             </Col>
