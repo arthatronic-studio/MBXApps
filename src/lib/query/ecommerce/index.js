@@ -515,6 +515,22 @@ export const queryGetMyShop = gql`
   }
 `;
 
+export const queryGetListMerchant = gql`
+  query(
+    $merchantName: String
+    $page: Int
+    $limit: Int
+  ) {
+    ecommerceProductList(
+     page: $page
+     limit: $limit
+     merchantName: $merchantName
+   ) {
+    id userId name noTelp alamat profileImg isVerified isOfficial createdAt
+   }
+  }
+`;
+
 export const queryCreateCart = gql`
   mutation ecommerceCartCreate{
     ecommerceCartCreate {
@@ -624,12 +640,16 @@ export const queryUpdateItemCart = gql`
 
 export const queryGetProduct = gql`
   query(
-    $page: Int!
-    $itemPerPage: Int!
+    $page: Int
+    $itemPerPage: Int
+    $name: String
+    $categoryId: Int
   ) {
     ecommerceProductList(
      page: $page
      itemPerPage: $itemPerPage
+     name: $name
+     categoryId: $categoryId
    ) {
     id name categoryId description price initialPrice imageUrl stock
    }

@@ -10,6 +10,8 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CardHistorySearch from './CardHistorySearch';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import CardMerchant from './CardMerchant';
 
 import ImagesPath from '../../components/ImagesPath'
 
@@ -26,6 +28,8 @@ import {
   useColor
 } from '@src/components';
 import { TouchableOpacity } from '@src/components/Button';
+
+const { Navigator, Screen } = createMaterialTopTabNavigator();
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -116,95 +120,22 @@ const CircleSend = Styled(TouchableOpacity)`
   
 `;
 
-const dataHistorySearch = [
-  {
-    id: 1,
-    name: 'Konektor RJ-45',
-  },
-  {
-    id: 2,
-    name: 'Hijab Pashmina',
-  },
-  {
-    id: 3,
-    name: 'HP Xiaomi',
-  },
-  {
-    id: 4,
-    name: 'CD-DVD',
-  }
-]
+const CardProductSearch = (props) => {
 
-const SearchScreen = ({navigation, route}) => {
+    const {item} = props
 
-    const {Color} = useColor()
-    const {search, setSearch} = useState(null)
+    return (
+        <Pressable style={{marginHorizontal: 10, marginVertical: 10, backgroundColor: '#FFFFFF', width: '45%', height: 270, borderRadius: 10 }}>
+            
+            <Image source={{uri: item.imageUrl}} style={{resizeMode: 'contain', width: 175, height: 160}}/>
+            
+            <Text align='left' style={{fontWeight: 'bold', marginHorizontal: 15}}>{item.name}</Text>
+            <View style={{marginHorizontal: 15, marginVertical: 15}}>
+                <Text style={{marginVertical: 1, textAlign: 'left',color: '#6A7479', fontSize: 10}}>Harga</Text>
+                <Text style={{marginVertical: 1, textAlign: 'left',textDecorationLine: 'line-through', fontSize: 12, color: '#6A7479', fontWeight: 'bold'}}>{item.initialPrice}</Text>
+            </View>
+        </Pressable>   
+    )
+}   
 
-  return (
-    <Scaffold
-        header={
-          <View style={{flexDirection: 'row', alignItems: 'center', marginHorizontal: 16, marginTop: 16}}>
-            <AntDesign
-              name={'arrowleft'}
-              color={Color.text}
-              size={24}
-              onPress={() => navigation.pop()}
-            />
-            <BottomSection style={{borderColor: Color.border}}>
-                <BoxInput
-                  style={{
-                  backgroundColor: Color.textInput,
-                  borderColor: Color.border,
-                  }}
-                >
-                  <TextInputNumber
-                    name="text"
-                    placeholder="Cari Topik apa kali ini  . . ."
-                    placeholderTextColor={Color.placeholder}
-                    returnKeyType="done"
-                    returnKeyLabel="Done"
-                    blurOnSubmit={false}
-                    onBlur={() => {}}
-                    error={null}
-                    onChangeText={text => {setSearch(text)}}
-                    style={{
-                        backgroundColor: Color.textInput,
-                        color: Color.text,
-                    }}
-                  />
-                  <CircleSend
-                    onPress={() => {}}>
-                    <Ionicons name="search" size={20} color={Color.placeholder} onPress={() => navigation.navigate('SearchResult')} />
-                  </CircleSend>
-              </BoxInput>
-            </BottomSection>
-          </View>  
-        }
-    >
-      <MainView>
-        <ScrollView>
-          <View style={{marginVertical: 24}}>
-            <FlatList
-              key={'GENERAL'}
-              keyExtractor={(item, index) => item.toString() + index}
-              data={dataHistorySearch}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{}}
-              renderItem={({ item, index }) => {
-                return (
-                  <CardHistorySearch 
-                    componentType={'GENERAL'}
-                    item={item}
-                    onPress={() => onPress(item)}
-                  />
-                )
-              }}
-            />
-          </View>
-        </ScrollView>
-      </MainView>
-    </Scaffold>
-  )
-}
-
-export default SearchScreen
+export default CardProductSearch
