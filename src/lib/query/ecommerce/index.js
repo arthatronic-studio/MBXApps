@@ -121,13 +121,25 @@ query(
   createdAt
   updatedAt
   deletedAt
-  items{
+  items {
+    id
+    name
+    noTelp
+    socialMedia {
+      instagram
+    }
     products {
       id
-      imageUrl
       name
-      quantity
+      description
+      width
+      height
+      length
+      width
       price
+      imageUrl
+      stock
+      quantity
     }
   }
   

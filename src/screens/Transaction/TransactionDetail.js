@@ -13,13 +13,13 @@ import { ScrollView } from 'react-native-gesture-handler';
 import ImagesPath from 'src/components/ImagesPath';
 import { mutationCancel, queryDetailOrder } from 'src/lib/query/ecommerce';
 import client from 'src/lib/apollo';
-import moment from 'moment';
+import Moment from 'moment';
 import { FormatMoney } from 'src/utils';
 
-const TransactionDetail = ({ route, navigation }) => {
+const TransactionDetail = ({ route,navigation }) => {
     const [data, setData] = useState({});
     const [loadingProps, showLoading, hideLoading] = useLoading();
-    console.log(route)
+    console.log("data",data)
     useEffect( () => {
         getProduct()
     }, []);
@@ -29,7 +29,7 @@ const TransactionDetail = ({ route, navigation }) => {
         showLoading();
         let variables = {
             type: 'CANCEL',
-            orderId: item.id
+            orderId: route.params.data.id
         }
         client.mutate({mutation: mutationCancel, variables})
           .then(res => {
@@ -51,9 +51,9 @@ const TransactionDetail = ({ route, navigation }) => {
 
     const getProduct = () => {
       let variables = {
-        orderId: route.params.item.id,
+        orderId: route.params.data.id
       }
-      console.log(variables)
+      console.log(route.params.data.id)
       client.query({query: queryDetailOrder, variables})
         .then(res => {
           console.log(res)
@@ -101,10 +101,7 @@ const TransactionDetail = ({ route, navigation }) => {
                 </View>
                 <View style={{ marginLeft:9 ,alignItems: 'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:10}}>
                     <Text style={{color: 'gray'}}>Tanggal Transaksi</Text>
-                    <Text size={12}>{moment(data.expiredDate).format('dddd, DD MMMM YYYY HH:mm')} WIB</Text>
-
-                    
-                    
+                    <Text size={12}>{Moment(parseInt(data.createdAt)).format('dddd, DD MMMM YYYY HH:mm')} WIB</Text>
                 </View>
             </View>
 

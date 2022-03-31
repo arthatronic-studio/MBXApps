@@ -821,7 +821,7 @@ const MainHome = ({navigation, route}) => {
             }}
             style={{paddingLeft: 8}}
           />
-
+    
           {accessClient.MainHome.showListJob && (
             <ListJob
               data={listJobs}

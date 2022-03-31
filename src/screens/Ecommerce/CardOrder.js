@@ -23,11 +23,12 @@ import {TouchableOpacity} from '@src/components/Button';
 import ImagesPath from 'src/components/ImagesPath';
 import {Divider} from 'src/styled';
 import {FormatMoney} from 'src/utils';
+import { navigationRef } from 'App';
 
 const CardOrder = ({data}) => {
- 
+  const navigation = useNavigation();
   const {Color} = useColor();
-  // console.log(data);
+  console.log(data);
   return (
     <View
       style={{
@@ -37,8 +38,8 @@ const CardOrder = ({data}) => {
       }}>
       {data.items.map(item => {
         return (
-          <Pressable
-            onPress={() => navigation.navigate('TransactionDetailSucces')}
+          <TouchableOpacity
+          onPress={() => navigation.navigate('TransactionDetail',{data})}
             style={{
               paddingHorizontal: 10,
               paddingVertical: 15,
@@ -66,7 +67,7 @@ const CardOrder = ({data}) => {
                           textAlign: 'left',
                           fontWeight: 'bold',
                         }}>
-                        Hendra Helinsky
+                        {data.address.penerimaName}
                       </Text>
                       <Text
                         style={{
@@ -231,7 +232,7 @@ const CardOrder = ({data}) => {
                 </View>
               );
             })}
-          </Pressable>
+          </TouchableOpacity>
         );
       })}
     </View>
