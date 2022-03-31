@@ -73,16 +73,29 @@ function MyTabs(props) {
   const {Color} = useColor();
   return (
     <Tab.Navigator
-      initialRouteName="Description"
-      tabBarOptions={{
-        activeTintColor: Color.info,
-        labelStyle: {fontSize: 12, fontWeight: 'bold'},
-        style: {backgroundColor: Color.theme},
-      }}>
+        initialRouteName="Description"
+        tabBarOptions={{
+          indicatorStyle: {backgroundColor: Color.theme, height: '100%'},
+          activeTintColor: Color.primary,
+          activeBackgroundColor: Color.primary,
+          inactiveTintColor: Color.secondary,
+          labelStyle: {
+            fontSize: 12,
+            fontWeight: 'bold',
+            color: Color.secondary,
+          },
+          indicatorStyle: {
+            borderBottomColor: Color.primary,
+            borderBottomWidth: 2,
+          },
+          labelStyle: {
+            fontSize: 12,
+          },
+        }}>
       <Tab.Screen
         name="Description"
         component={() => <Description props={props} />}
-        options={{tabBarLabel: 'Description'}}
+        options={{tabBarLabel: 'Deskripsi'}}
       />
       <Tab.Screen
         name="Review"

@@ -15,6 +15,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import ImageSlider from '../../components/ImageSlider';
+import IonIcons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {
@@ -33,6 +34,8 @@ import ImagesPath from 'src/components/ImagesPath';
 import { queryAddCart, queryDetailProduct } from 'src/lib/query/ecommerce';
 import Client from 'src/lib/apollo';
 import { FormatMoney } from 'src/utils';
+import DetailProductHeader from './DetailProductHeader';
+import { Divider } from 'src/styled';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -109,13 +112,7 @@ const DetailProduct = ({navigation}) => {
     <Scaffold
       loadingProps={loadingProps}
       header={
-        <Header
-          customIcon
-          type="regular"
-          centerTitle={false}
-          title='Detail Produk'
-          
-        />
+        <DetailProductHeader/>
       }
       onPressLeftButton={() => navigation.pop()}
     >
@@ -157,7 +154,7 @@ const DetailProduct = ({navigation}) => {
             </View>
             <View style={{flexDirection: 'row', paddingHorizontal: 16, justifyContent: 'space-between'}}>
               <View>
-                <Text type='bold' align='left'>
+                <Text type='regular' align='left'>
                   {detail.name}
                 </Text>
                 <Text align='left' size={11} color={Color.gray}>
@@ -167,7 +164,7 @@ const DetailProduct = ({navigation}) => {
                 <View
                   style={{
                     flexDirection: 'row',
-                    paddingVertical: 10,
+                    paddingVertical: 5,
                   }}>
                   <Entypo name={'star'} style={{color: Color.yellow}} />
                   <Entypo name={'star'} style={{color: Color.yellow}} />
@@ -177,25 +174,25 @@ const DetailProduct = ({navigation}) => {
                   <Text
                     style={{
                       fontSize: 12,
-                      color: Color.gray,
+                      color: Color.secondary,
                       paddingHorizontal: 5,
-                      fontWeight: 'bold',
                     }}>
                     4.0 
                   </Text>
+                  <Text style={{fontSize: 10, color: Color.secondary}}>|</Text>
                   <Text
                     style={{
                       fontSize: 12,
-                      color: Color.gray,
+                      color: Color.secondary,
                       paddingHorizontal: 5,
-                      fontWeight: 'bold',
+                      width: '50%'
                     }}>
-                    {/* 120 Terjual */}
+                    120 Terjual
                   </Text>
 
                 </View>
               </View>
-              <View style={{paddingVertical: 8}}>
+              <View>
                 <Text
                   style={{
                     color: Color.text,
@@ -204,22 +201,36 @@ const DetailProduct = ({navigation}) => {
                   }}>
                   {FormatMoney.getFormattedMoney(detail.price)}
                 </Text>
-
-                <TouchableOpacity onPress={() => setLike(!liked)} style={{  marginTop: 25, alignItems: 'flex-end' }}>
-                      <AntDesign name={liked ? 'heart' : 'hearto'} color={liked ? 'red' : '#111'} size={19} />
+                <View style={{flexDirection: 'row', marginVertical: 26, marginLeft: 35}}>
+                    <TouchableOpacity style={{marginHorizontal: 5}} onPress={() => setLike(!liked)}>
+                    <AntDesign name={liked ? 'heart' : 'hearto'} color={liked ? 'red' : '#111'} size={19} />
                   </TouchableOpacity>
+                  <TouchableOpacity style={{marginHorizontal: 5}}>
+                    <AntDesign name={'sharealt'} size={19}/>
+                  </TouchableOpacity>
+                </View>
               </View>
               
             </View>
+            <Row style={{backgroundColor: Color.border, width: '93%', height: 50, alignSelf: 'center', paddingVertical: 10, borderRadius: 5}}>
+                    <Image source={ImagesPath.avatar1} style={{width: 30, height: 30, resizeMode: 'cover', marginHorizontal: 10}}/>
+                    <Col>
+                      <Text style={{fontSize: 11, fontWeight: 'bold', textAlign: 'left'}}>Toko Sumber Makmur</Text>
+                      <Text style={{fontSize: 10, color: Color.primary, textAlign: 'left'}}>Lihat Detail Toko</Text>
+                    </Col>
+            </Row>
           </View>
-          {detail && <TopBar style={{borderRadius: 10}} detail={detail} />}
+          <Divider/>
+          {detail && <TopBar style={{borderRadius: 10,}} detail={detail} />}
         </View>
       </ScrollView>
       <View
         style={{
           width: '100%',
-          height: '10%',
-          backgroundColor: Color.theme,
+          height: '8%',
+          borderTopColor: Color.border,
+          borderTopWidth: 1,
+          justifyContent: 'center'
         }}>
         <View
           style={{
@@ -231,10 +242,25 @@ const DetailProduct = ({navigation}) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('CheckoutScreen', {item: {tempData:[{...detail, qty: 1}]}})}
             style={{
-              width: '40%',
+              width: '12%',
               height: 40,
               borderWidth: 1,
-              borderColor: Color.info,
+              borderColor: Color.primary,
+              borderRadius: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingHorizontal: 10,
+              marginHorizontal: 10,
+            }}>
+              <MaterialCommunityIcons size={25} name={'message-processing-outline'} style={{color: Color.primary}}/>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('CheckoutScreen', {item: {tempData:[{...detail, qty: 1}]}})}
+            style={{
+              width: '30%',
+              height: 40,
+              borderWidth: 1,
+              borderColor: Color.primary,
               borderRadius: 10,
               justifyContent: 'center',
               alignItems: 'center',
@@ -242,16 +268,10 @@ const DetailProduct = ({navigation}) => {
               marginHorizontal: 10,
             }}>
             <View style={{flexDirection: 'row'}}>
-              <MaterialCommunityIcons
-                name={'shopping-outline'}
-                size={17}
-                style={{paddingHorizontal: 5, color: Color.info}}
-              />
               <Text
                 style={{
-                  fontSize: 13,
-                  color: Color.info,
-                  fontWeight: 'bold',
+                  fontSize: 10,
+                  color: Color.primary,
                   paddingHorizontal: 5,
                 }}>
                 Beli Langsung
@@ -261,9 +281,9 @@ const DetailProduct = ({navigation}) => {
           <TouchableOpacity
             onPress={() => addToCart()}
             style={{
-              width: '50%',
+              width: '35%',
               height: 40,
-              backgroundColor: Color.info,
+              backgroundColor: Color.primary,
               borderRadius: 10,
               justifyContent: 'center',
               alignItems: 'center',
@@ -271,19 +291,18 @@ const DetailProduct = ({navigation}) => {
               marginHorizontal: 10,
               flexDirection: 'row',
             }}>
-            <FontAwesome5
-              name={'shopping-cart'}
+            <IonIcons
+              name={'add'}
               size={13}
-              style={{paddingHorizontal: 5, color: Color.theme}}
+              style={{color: Color.theme}}
             />
             <Text
               style={{
-                fontSize: 13,
+                fontSize: 12,
                 color: Color.textInput,
-                fontWeight: 'bold',
-                paddingHorizontal: 5,
+                paddingHorizontal: 3,
               }}>
-              Tambah Keranjang
+              Keranjang
             </Text>
           </TouchableOpacity>
         </View>
