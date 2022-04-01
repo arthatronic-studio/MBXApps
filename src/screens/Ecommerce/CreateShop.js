@@ -40,8 +40,8 @@ const CreateShop = () => {
     profileImg: '',
     isVerified: true,
     isOfficial: true,
-    latitude: -6.173696,
-    longitude: 106.824707
+    latitude: "-6.173696",
+    longitude: "106.824707"
   });
 
   const [thumbImage, setThumbImage] = useState('');
