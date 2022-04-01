@@ -1,5 +1,12 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Pressable, FlatList, Image, TextInput} from 'react-native';
+import {
+  View,
+  Pressable,
+  FlatList,
+  Image,
+  TextInput,
+  useWindowDimensions,
+} from 'react-native';
 import {useSelector} from 'react-redux';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
@@ -17,10 +24,11 @@ import {
   Col,
   useColor,
   Header,
+  ScreenIndicator,
 } from '@src/components';
 import {TouchableOpacity} from '@src/components/Button';
 import ImagesPath from 'src/components/ImagesPath';
-import {Divider} from 'src/styled';
+import {Container, Divider} from 'src/styled';
 import {ScrollView} from 'react-native-gesture-handler';
 import TopTabShop from './TopTabShop';
 import {queryListOrder} from 'src/lib/query/ecommerce';
@@ -29,12 +37,14 @@ import CardOrder from './CardOrder';
 function BelumDibayar({data}) {
   const {Color} = useColor();
   const navigation = useNavigation();
-  console.log('dataaaa', data);
-
   return (
-    <View style={{backgroundColor:Color.semiwhite}}>
-    
-        
+    <View style={{backgroundColor: Color.semiwhite}}>
+      {data.loadingIncoming ? (
+        <Container style={{height: '100%', marginTop: -10}}>
+          <ScreenIndicator transparent />
+        </Container>
+      ) : (
+        <View>
           <View
             style={{
               flexDirection: 'row',
@@ -92,16 +102,15 @@ function BelumDibayar({data}) {
               <Text style={{fontSize: 12}}>Telah Diproses</Text>
             </Pressable>
           </View>
-
           <FlatList
-            data={data}
+            data={data.data}
             keyExtractor={(item, index) => item.toString() + index}
             renderItem={({item}) => {
-              return <CardOrder data={item} />;
+              return <CardOrder data={item} loading={data.loadingIncoming} />;
             }}
           />
-        
-      
+        </View>
+      )}
     </View>
   );
 }
@@ -950,23 +959,25 @@ const IncomingOrder = () => {
   const {Color} = useColor();
   const user = useSelector(state => state['user.auth'].login.user);
   const [data, setData] = useState();
+  const [loadingIncoming, setLoadingIncoming] = useState(true);
+  const {height} = useWindowDimensions();
 
-  const getOrder = () => {
+  const getOrder = async () => {
     console.log(user);
     let variables = {
       page: 1,
       itemPerPage: 10,
       status: 'BOOKING',
-      userId: 287
+      userId: 287,
       //   dummy userId (temporary)
     };
 
     console.log(variables);
-    Client.query({query: queryListOrder, variables})
+    await Client.query({query: queryListOrder, variables})
       .then(res => {
-        console.log('haiiiii', res.data.ecommerceOrderList);
         if (res.data.ecommerceOrderList) {
           setData(res.data.ecommerceOrderList);
+          setLoadingIncoming(false);
         }
       })
       .catch(reject => {
@@ -1014,7 +1025,9 @@ const IncomingOrder = () => {
         }}>
         <Tab.Screen
           name="BelumDibayar"
-          children={() => <BelumDibayar data={data} />}
+          children={() => (
+            <BelumDibayar data={{data, loadingIncoming, height}} />
+          )}
           options={{tabBarLabel: 'Belum Dibayar'}}
         />
         <Tab.Screen
