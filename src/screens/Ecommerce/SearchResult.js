@@ -140,11 +140,13 @@ const SearchResult = ({navigation, route}) => {
     const getProduct = () => {
         let variables = {
             page: page,
-            itemPerPage: 10,
+            itemPerPage: 20,
             name: search
         }
+        console.log(variables)
         Client.query({query: queryGetProduct, variables})
             .then(res => {
+                console.log(res)
                 if (res.data.ecommerceProductList) {
                     setDataProduk(res.data.ecommerceProductList);
                 }
@@ -157,7 +159,7 @@ const SearchResult = ({navigation, route}) => {
     const getMerchant = () => {
         let variables = {
             page: page,
-            limit: 10,
+            limit: 20,
             merchantName: search
         }
         Client.query({query: queryGetListMerchant, variables})
@@ -297,7 +299,7 @@ const SearchResult = ({navigation, route}) => {
                           />
                         )
                       }}
-                    onEndReached={() => handleLoadMore()}
+                    // onEndReached={() => handleLoadMore()}
                 />
             </>
         )
@@ -376,23 +378,33 @@ const SearchResult = ({navigation, route}) => {
                         placeholder="Cari Topik apa kali ini  . . ."
                         placeholderTextColor={Color.placeholder}
                         blurOnSubmit={false}
-                        onBlur={() => {}}
+                        returnKeyType='search'
                         error={null}
+                        value={search}
                         onChangeText={text => {setSearch(text)}}
                         style={{
                             backgroundColor: '#FFFFFF',
                             color: Color.text,
                         }}
-                        onKeyPress={(e) => {
-                            if(e.key=="Enter") {
-                                getProduct()
-                                getMerchant()
-                                Keyboard.dismiss()
-                            }
+                        onSubmitEditing={() => {
+                            setPage(1)
+                            getProduct() 
+                            getMerchant()
+                            Keyboard.dismiss()
                         }}
+                        onBlur={() => { }}
+                        // onKeyPress={(e) => {
+                        //     if(e.key=="Enter") {
+                        //         setPage(1)
+                        //         getProduct()
+                        //         getMerchant()
+                        //         Keyboard.dismiss()
+                        //     }
+                        // }}
                     />
                     <CircleSend
                         onPress={() => {
+                            setPage(1)
                             getProduct() 
                             getMerchant()
                             Keyboard.dismiss()

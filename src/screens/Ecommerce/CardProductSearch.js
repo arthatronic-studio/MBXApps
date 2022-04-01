@@ -6,6 +6,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {useNavigation} from '@react-navigation/native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -121,18 +122,19 @@ const CircleSend = Styled(TouchableOpacity)`
 `;
 
 const CardProductSearch = (props) => {
+    const navigation = useNavigation();
 
     const {item} = props
 
     return (
-        <Pressable style={{marginHorizontal: 10, marginVertical: 10, backgroundColor: '#FFFFFF', width: '45%', height: 270, borderRadius: 10 }}>
+        <Pressable onPress={() => navigation.navigate('DetailProduct',{item})} style={{marginHorizontal: 10, marginVertical: 10, backgroundColor: '#FFFFFF', width: '45%', height: 270, borderRadius: 10 }}>
             
             <Image source={{uri: item.imageUrl}} style={{resizeMode: 'contain', width: 175, height: 160}}/>
             
             <Text align='left' style={{fontWeight: 'bold', marginHorizontal: 15}}>{item.name}</Text>
             <View style={{marginHorizontal: 15, marginVertical: 15}}>
                 <Text style={{marginVertical: 1, textAlign: 'left',color: '#6A7479', fontSize: 10}}>Harga</Text>
-                <Text style={{marginVertical: 1, textAlign: 'left',textDecorationLine: 'line-through', fontSize: 12, color: '#6A7479', fontWeight: 'bold'}}>{item.initialPrice}</Text>
+                <Text style={{marginVertical: 1, textAlign: 'left', fontSize: 12, color: '#6A7479', fontWeight: 'bold'}}>{item.price}</Text>
             </View>
         </Pressable>   
     )

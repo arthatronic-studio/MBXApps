@@ -522,7 +522,7 @@ export const queryGetListMerchant = gql`
     $page: Int
     $limit: Int
   ) {
-    ecommerceProductList(
+    ecommerceGetListMerchant(
      page: $page
      limit: $limit
      merchantName: $merchantName

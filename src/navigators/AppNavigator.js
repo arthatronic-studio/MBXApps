@@ -166,6 +166,7 @@ import CreateShop from 'src/screens/Ecommerce/CreateShop';
 import GalleryScreen from 'src/screens/Gallery/GalleryScreen';
 import GalleryDetailScreen from 'src/screens/Gallery/GalleryDetailScreen';
 import IncomingOrder from 'src/screens/Ecommerce/IncomingOrder';
+import SearchScreen from 'src/screens/Ecommerce/SearchScreen';
 
 const {Navigator, Screen} = createStackNavigator();
 const MainPage =
@@ -231,6 +232,7 @@ function MainStackNavigator() {
       {/* <Screen name="PopUpCouponSucces" component={PopUpCouponSucces}/> */}
       <Screen name="DetailCoupon" component={DetailCoupon} />
       <Screen name='SearchResult' component={SearchResult} />
+      <Screen name='SearchScreen' component={SearchScreen} />
       <Screen name='PaymentStatus' component={PaymentStatus} />
       <Screen name='PaymentMethod' component={PaymentMethod} />
       <Screen name='PaidPaymentStatus' component={PaidPaymentStatus} />

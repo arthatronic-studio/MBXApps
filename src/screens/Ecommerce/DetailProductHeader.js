@@ -1,5 +1,7 @@
 import { View, Text, TextInput, Pressable, 
-    SafeAreaView, } from 'react-native'
+    SafeAreaView,
+    TouchableOpacity,
+    Touchable, } from 'react-native'
 import React from 'react'
 import Styled from 'styled-components';
 import { useNavigation } from '@react-navigation/core';
@@ -25,13 +27,17 @@ const DetailProductHeader = () => {
         <Pressable onPress={() => navigation.goBack()} style={{ width: '8%'}}>
             <AntDesign name={'arrowleft'} size={20}/>
         </Pressable>
-        <View style={{width: '70%', justifyContent: 'center'}} onTouchStart={() => navigation.navigate('SearchScreen')}>
-            <TextInput placeholder='Cari apa hari ini . . .' style={{backgroundColor: Color.textInput, width: '95%',
-            borderRadius: 7, borderWidth: 1, borderColor: Color.border,height: 40, paddingHorizontal: 10}}></TextInput>
+        <View style={{width: '70%', justifyContent: 'center', }} onTouchStart={() => navigation.navigate('SearchResult')}>
+            <Text style={{backgroundColor: Color.textInput, width: '95%',
+            borderRadius: 7, borderWidth: 1, borderColor: Color.border, paddingVertical: 7, paddingHorizontal: 10}}>Cari apa hari ini . . .</Text>
             <AntDesign name={'search1'} size={15} style={{color: Color.secondary,position: 'absolute', alignSelf: 'flex-end', paddingHorizontal: 25}}/>
         </View>
-        <MaterialIcons name={'favorite-border'} size={22} style={{marginHorizontal: 5}}/>
-        <MaterialCommunityIcons name={'shopping-outline'} size={22} style={{marginHorizontal: 5}}/>
+        <TouchableOpacity onPress={() => navigation.navigate('Wishlist')}>
+            <MaterialIcons name={'favorite-border'} size={22} style={{marginHorizontal: 5}}/>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('CartScreen')}>
+            <MaterialCommunityIcons name={'shopping-outline'} size={22} style={{marginHorizontal: 5}}/>
+        </TouchableOpacity>
     </View>
   )
 }

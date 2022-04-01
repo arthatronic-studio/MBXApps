@@ -183,7 +183,7 @@ const CheckoutScreen = ({ navigation }) => {
                     </Col>
                     <Col alignItems='flex-end'>
                         <TouchableOpacity style={{ }} onPress={() => navigation.navigate('FormPayment',{address: address}) }>
-                            <Text color={Color.primary} size={10}>Tambahkan Alamat</Text>
+                            <Text color={Color.primary} size={10}>{address.address ? 'Ubah Alamat' : 'Tambahkan Alamat'}</Text>
                         </TouchableOpacity>
                     </Col>
                 </Row>
@@ -211,7 +211,7 @@ const CheckoutScreen = ({ navigation }) => {
                                 <Image source={{ uri: val.imageUrl }} style={{ height: 74, width: 74, marginRight: 14,  borderRadius: 8 }} />
                                 <Col alignItems='flex-start'>
                                     <Text color={Color.text} size={20}type='bold' textAlign='left'>{val.name}</Text>
-                                    <Text style={{fontSize: 10, color: Color.secondary}}>Jumlah : {val.qty} Buah</Text>
+                                    <Text style={{fontSize: 10, color: Color.secondary}}>Jumlah : {val.quantity} Buah</Text>
                                     <View style={{flex: 1, paddingVertical: 5}}>
                                         {/* <Text size={10} color={Color.text} >Harga</Text> */}
                                         <Text type='bold' color={Color.text}>{FormatMoney.getFormattedMoney(val.price)}</Text>

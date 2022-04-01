@@ -35,6 +35,7 @@ import { queryAddCart, queryDetailProduct } from 'src/lib/query/ecommerce';
 import Client from 'src/lib/apollo';
 import { FormatMoney } from 'src/utils';
 import DetailProductHeader from './DetailProductHeader';
+import Share from 'react-native-share';
 import { Divider } from 'src/styled';
 
 const MainView = Styled(SafeAreaView)`
@@ -89,7 +90,7 @@ const DetailProduct = ({navigation}) => {
       console.log(route, 'props')
       showLoading();
       let variables = {
-        productId: route.params.item.id,
+        productId: detail.id,
         quantity: 1
       }
       console.log(variables)
@@ -99,6 +100,7 @@ const DetailProduct = ({navigation}) => {
           console.log(res)
           if (res.data.ecommerceCartAdd) {
             alert('Success add to cart')
+            navigation.navigate('CartScreen')
           }
         })
         .catch(reject => {
@@ -112,7 +114,7 @@ const DetailProduct = ({navigation}) => {
     <Scaffold
       loadingProps={loadingProps}
       header={
-        <DetailProductHeader/>
+        <DetailProductHeader navigation />
       }
       onPressLeftButton={() => navigation.pop()}
     >
@@ -205,7 +207,11 @@ const DetailProduct = ({navigation}) => {
                     <TouchableOpacity style={{marginHorizontal: 5}} onPress={() => setLike(!liked)}>
                     <AntDesign name={liked ? 'heart' : 'hearto'} color={liked ? 'red' : '#111'} size={19} />
                   </TouchableOpacity>
-                  <TouchableOpacity style={{marginHorizontal: 5}}>
+                  <TouchableOpacity onPress={async() => {
+                        await Share.open({
+                            url: detail.share_link || 'Belum ada Linknya',
+                        });
+                    }} style={{marginHorizontal: 5}}>
                     <AntDesign name={'sharealt'} size={19}/>
                   </TouchableOpacity>
                 </View>
@@ -240,7 +246,7 @@ const DetailProduct = ({navigation}) => {
             paddingVertical: 10,
           }}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('CheckoutScreen', {item: {tempData:[{...detail, qty: 1}]}})}
+            onPress={() => navigation.navigate('ChatRoom', {item: detail } )}
             style={{
               width: '12%',
               height: 40,
@@ -255,7 +261,7 @@ const DetailProduct = ({navigation}) => {
               <MaterialCommunityIcons size={25} name={'message-processing-outline'} style={{color: Color.primary}}/>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.navigate('CheckoutScreen', {item: {tempData:[{...detail, qty: 1}]}})}
+            onPress={() => navigation.navigate('CheckoutScreen', {item: { tempData:[{...detail, qty: 1}] }, list: [{name: '', alamat: '', products: [{...detail, qty: 1}]}] })}
             style={{
               width: '30%',
               height: 40,

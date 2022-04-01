@@ -125,8 +125,8 @@ const Notification = () => {
       console.log(user)
       let variables = {
         page: 1,
-        itemPerPage: 10,
-        status: 'BOOKING',
+        itemPerPage: 20,
+        status: undefined,
         userId: user.userId
       }
       console.log(variables)
@@ -135,6 +135,31 @@ const Notification = () => {
           console.log(res)
           if (res.data.ecommerceOrderList) {
             setList(res.data.ecommerceOrderList);
+            // getCancelOrder()
+          }
+  
+          // hideLoading();
+          // navigation.navigate('TopUpScreen');
+        })
+        .catch(reject => {
+          console.log(reject);
+        });
+    };
+
+    const getCancelOrder = () => {
+      console.log(user)
+      let variables = {
+        page: 1,
+        itemPerPage: 20,
+        status: 'CANCEL',
+        userId: user.userId
+      }
+      console.log(variables)
+      Client.query({query: queryListOrder, variables})
+        .then(res => {
+          console.log(res)
+          if (res.data.ecommerceOrderList) {
+            setList(listData.concat(res.data.ecommerceOrderList));
           }
   
           // hideLoading();
@@ -174,7 +199,7 @@ const Notification = () => {
                   </View>
                   <View>
                     <View style={{backgroundColor: Color.warning, borderRadius: 5, width: 90, marginVertical: 10, height: 20}}>
-                      <Text style={{color: Color.textInput, fontSize: 10, paddingVertical: 3}}>Paket Dikirim</Text>
+                      <Text style={{color: Color.textInput, fontSize: 10, paddingVertical: 3}}>{item.status}</Text>
                     </View>
                   </View>
                 </View>

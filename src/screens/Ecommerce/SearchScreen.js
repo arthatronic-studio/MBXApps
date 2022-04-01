@@ -138,7 +138,7 @@ const dataHistorySearch = [
 const SearchScreen = ({navigation, route}) => {
 
     const {Color} = useColor()
-    const {search, setSearch} = useState(null)
+    const {search, setSearch} = useState('')
 
   return (
     <Scaffold
@@ -166,7 +166,7 @@ const SearchScreen = ({navigation, route}) => {
                     blurOnSubmit={false}
                     onBlur={() => {}}
                     error={null}
-                    onChangeText={text => {setSearch(text)}}
+                    onChangeText={(text) => {setSearch(text)}}
                     style={{
                         backgroundColor: Color.textInput,
                         color: Color.text,

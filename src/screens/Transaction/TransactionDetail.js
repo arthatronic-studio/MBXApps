@@ -51,9 +51,9 @@ const TransactionDetail = ({ route,navigation }) => {
 
     const getProduct = () => {
       let variables = {
-        orderId: route.params.data.id
+        orderId: route.params.item.id
       }
-      console.log(route.params.data.id)
+      console.log(route.params.item.id)
       client.query({query: queryDetailOrder, variables})
         .then(res => {
           console.log(res)

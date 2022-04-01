@@ -159,6 +159,27 @@ const Ecommerce = ({navigation}) => {
     // });
     }, []);
 
+    const getCart = () => {
+        // showLoading();
+        let variables = {
+          page: 1,
+          limit: 10
+        }
+        console.log(variables)
+        Client.query({query: queryGetCart, variables})
+          .then(res => {
+            console.log(res)
+            if (res.data.ecommerceCartList) {
+                setCart(res.data.ecommerceCartList)
+            }
+          })
+          .catch(reject => {
+            // hideLoading()
+            alert(reject.message)
+            console.log(reject.message, 'reject');
+          });
+      };
+
     const getProduct = () => {
         let variables = {
           page: 1,
