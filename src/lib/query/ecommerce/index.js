@@ -287,40 +287,9 @@ export const queryAddCart = gql`
       body: $body
     ) {
       id
-      userId
       name
       noTelp
       alamat
-      socialMedia {
-        instagram
-      }
-      profileImg
-      isVerified
-      isOfficial
-      createdAt
-      updatedAt
-      user {
-        userId
-        userName
-        firstName
-        lastName
-        email
-        phoneCountryCode
-        phoneNumber
-        address
-        city
-        postalCode
-        country
-        organizationId
-        organizationName
-        userCode
-        idCardNumber
-        isDirector
-        image
-        photoProfile
-        birthDate
-        blockedUsers
-      }
     }
   }
 `;

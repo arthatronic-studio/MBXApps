@@ -41,7 +41,7 @@ const SplashCreateShop = () => {
           onPressLeftButton={() => navigation.pop()}
     >
         <View style={{alignItems: 'center', justifyContent: 'center'}}>
-            <Divider height={160}/>
+            <Divider height={20}/>
             <Image source={ImagesPath.createshop}/>
             <Divider height={60}/>
             <Text style={{fontSize: 18, fontSize: 18, fontWeight: 'bold'}}>Buat Peluang Kamu Di Sini</Text>

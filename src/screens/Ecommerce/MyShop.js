@@ -56,13 +56,17 @@ const MyShop = ({ navigation, route }) => {
 	
 	const getMyShop = () => {
 		let variables = {
-		  merchantId: 2,
+		  merchantId: undefined,
 		}
 		Client.query({query: queryGetMyShop})
 		  .then(res => {
 			console.log(res, 'ress')
-			if (res.data.ecommerceGetMerchant) {
-			  setData(res.data.ecommerceGetMerchant);
+      if (res.data.ecommerceGetMerchant) {
+				if(res.data.ecommerceGetMerchant.id){
+					setData(res.data.ecommerceGetMerchant);
+				}else{
+					navigation.replace('SplashCreateShop')
+				}
 			}
 	
 			// hideLoading();
@@ -73,6 +77,7 @@ const MyShop = ({ navigation, route }) => {
 		  });
 	  };
 
+  if(data.length == 0) return <View />
   return (
     <Scaffold
           header={

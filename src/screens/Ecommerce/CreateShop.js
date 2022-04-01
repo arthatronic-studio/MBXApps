@@ -40,6 +40,8 @@ const CreateShop = () => {
     profileImg: '',
     isVerified: true,
     isOfficial: true,
+    latitude: -6.173696,
+    longitude: 106.824707
   });
 
   const [thumbImage, setThumbImage] = useState('');
@@ -54,6 +56,8 @@ const CreateShop = () => {
     profileImg: '',
     isVerified: null,
     isOfficial: null,
+    latitude: null,
+    longitude: null,
   });
 
   const isValueError = (name) => {
@@ -90,10 +94,12 @@ const CreateShop = () => {
         profileImg: 'data:image/png;base64,' + thumbImage,
         isVerified: userData.isVerified,
         isOfficial: userData.isOfficial,
+        lat: userData.latitude,
+        long: userData.longitude,
       }
     }
-
-    Client.query({query: queryCreateMerchant, variables})
+    console.log(variables)
+    Client.mutate({mutation: queryCreateMerchant, variables})
       .then((res) => {
         const data = res.data
 
