@@ -8,6 +8,7 @@ query(
    orderId: $orderId
  ) {
   userId
+  bookingId
   orderNumber
   expiredDate
   status

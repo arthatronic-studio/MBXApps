@@ -100,7 +100,7 @@ const DetailProduct = ({navigation}) => {
           console.log(res)
           if (res.data.ecommerceCartAdd) {
             alert('Success add to cart')
-            navigation.navigate('CartScreen')
+            // navigation.navigate('CartScreen')
           }
         })
         .catch(reject => {

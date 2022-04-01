@@ -4,6 +4,7 @@ import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RNSimpleCrypto from "react-native-simple-crypto";
@@ -38,7 +39,7 @@ import axios from 'axios';
 import moment from 'moment';
 import { queryGetAuction } from 'src/lib/query/auction';
 import { FormatMoney } from 'src/utils';
-import { queryGetProduct } from 'src/lib/query/ecommerce';
+import { queryGetCart, queryGetProduct } from 'src/lib/query/ecommerce';
 
 
 const MainView = Styled(SafeAreaView)`
@@ -145,19 +146,23 @@ const DATA = [
 
 
 const Ecommerce = ({navigation}) => {
+
+    const isFocused = useIsFocused();
     const user = useSelector((state) => state['user.auth'].login.user);
 	const loading = useSelector((state) => state['user.auth'].loading);
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
     const [listProduct, setListProduct] = useState([]);
     const [liveAuction, setLiveAuction] = useState([]);
+    const [cart, setCart] = useState(0);
 	const { Color } = useColor();
 
     useEffect(() => {
         getAuction();
         getProduct();
+        getCart()
     // });
-    }, []);
+    }, [isFocused]);
 
     const getCart = () => {
         // showLoading();
@@ -170,7 +175,7 @@ const Ecommerce = ({navigation}) => {
           .then(res => {
             console.log(res)
             if (res.data.ecommerceCartList) {
-                setCart(res.data.ecommerceCartList)
+                setCart(res.data.ecommerceCartList.totalProducts ? res.data.ecommerceCartList.totalProducts : 0)
             }
           })
           .catch(reject => {
@@ -283,9 +288,9 @@ const Ecommerce = ({navigation}) => {
                     </Pressable> */}
                     <Pressable onPress={() => navigation.navigate('CartScreen')}>
                         <MaterialCommunityIcons name={'shopping-outline'} size={26} style={{marginHorizontal: 3}}/>
-                        <View style={{marginHorizontal: 18,marginVertical: 1, position: 'absolute', width: 18, height: 10, backgroundColor: Color.error, borderRadius: 5}}>
-                            <Text style={{fontSize: 5, color: Color.textInput, alignSelf: 'center', paddingVertical: 1}}> +99</Text>
-                        </View>
+                        {cart > 0 && <View style={{marginHorizontal: 18,marginVertical: 1, position: 'absolute', width: 18, height: 10, backgroundColor: Color.error, borderRadius: 5}}>
+                            <Text style={{fontSize: 5, color: Color.textInput, alignSelf: 'center', paddingVertical: 1}}> {cart}</Text>
+                        </View>}
                     </Pressable>
                     <Pressable onPress={() => navigation.navigate('Notification')}>
                         <Ionicons name={'notifications-outline'} size={26} style={{marginHorizontal: 3}}/>

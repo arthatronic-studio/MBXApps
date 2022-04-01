@@ -65,7 +65,7 @@ const CartShop = ({ navigation, route }) => {
       .then(res => {
         // hideLoading()
         console.log(res)
-        if (res.data.ecommerceCartList) {
+        if (res.data.ecommerceCartList.id) {
             setCart(res.data.ecommerceCartList)
             const dataq = res.data.ecommerceCartList.items.map((val, id) => {
               const dateq = {
@@ -173,27 +173,18 @@ const CartShop = ({ navigation, route }) => {
         isFromCart: true,
         tempData
     }
-    console.log(item)
-    navigation.navigate('CheckoutScreen',{item, list})
-    // // // showLoading();
-    // let variables = {
-    //     productId: list[0].id,
-    // }
-    // console.log(variables)
-    // Client.mutate({mutation: queryCheckout, ...item})
-    //   .then(res => {
-    //     // getCart()
-    //     // hideLoading()
-    //     console.log(res)
-    //     // if (res.data.ecommerceCartList) {
-    //     //     setList(res.data.ecommerceCartList)
-    //     // }
-    //   })
-    //   .catch(reject => {
-    //     // hideLoading()
-    //     alert(reject.message)
-    //     console.log(reject.message, 'reject');
-    //   });
+    let dataq = []
+    list.forEach(val => {
+        let datTem = []
+        val.products.forEach(element => {
+          if(element.checked){
+            datTem.push(element)
+          }
+        });
+          dataq.push({...val, products: datTem})
+    });
+    console.log(dataq)
+    navigation.navigate('CheckoutScreen',{item, list: dataq})
   };
 
   function onChecked(index, id, value, name){

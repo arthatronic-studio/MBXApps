@@ -211,7 +211,7 @@ const CheckoutScreen = ({ navigation }) => {
                                 <Image source={{ uri: val.imageUrl }} style={{ height: 74, width: 74, marginRight: 14,  borderRadius: 8 }} />
                                 <Col alignItems='flex-start'>
                                     <Text color={Color.text} size={20}type='bold' textAlign='left'>{val.name}</Text>
-                                    <Text style={{fontSize: 10, color: Color.secondary}}>Jumlah : {val.quantity} Buah</Text>
+                                    <Text style={{fontSize: 10, color: Color.secondary}}>Jumlah : {val.quantity || val.qty} Buah</Text>
                                     <View style={{flex: 1, paddingVertical: 5}}>
                                         {/* <Text size={10} color={Color.text} >Harga</Text> */}
                                         <Text type='bold' color={Color.text}>{FormatMoney.getFormattedMoney(val.price)}</Text>
@@ -272,7 +272,7 @@ const CheckoutScreen = ({ navigation }) => {
                 </Row> */}
             </Content>
             <Content style={{backgroundColor: Color.theme, borderRadius: 6, height: 65}}>
-                <TouchableOpacity style={{borderRadius: 5,flexDirection:'row',alignItems: 'center',backgroundColor: Color.border, height: '100%'}}>
+                <TouchableOpacity onPress={() => navigation.navigate('KuponKu')} style={{borderRadius: 5,flexDirection:'row',alignItems: 'center',backgroundColor: Color.border, height: '100%'}}>
                     <FontAwesome name={'ticket'} size={15} style={{color: Color.info, paddingHorizontal: 10}}/>
                     <Text style={{color: Color.secondary, fontSize: 12, textAlign: 'left', width: '80%'}}>Masukkan Promo</Text>
                     <MaterialIcons name={'keyboard-arrow-right'} size={28} style={{color: Color.secondary}}/>

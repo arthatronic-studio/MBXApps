@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View,Image } from 'react-native';
 
+import { connect, useDispatch, useStore } from 'react-redux';
 
 import { TouchableOpacity } from '@src/components/Button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -17,6 +18,7 @@ import Moment from 'moment';
 import { FormatMoney } from 'src/utils';
 
 const TransactionDetail = ({ route,navigation }) => {
+    const dispatch = useDispatch();
     const [data, setData] = useState({});
     const [loadingProps, showLoading, hideLoading] = useLoading();
     console.log("data",data)
@@ -69,8 +71,12 @@ const TransactionDetail = ({ route,navigation }) => {
         });
     };
 
-    const submit = () => {
-        console.log('submit')
+    const onPayment = () => {
+        dispatch({
+            type: 'BOOKING.ADD_BOOKING',
+            data: {...data, vestaBiller: true, finalAmount: data.totalPrice}
+          });
+        navigation.navigate('PaymentScreen',{back: true})
     }
 
     return (
@@ -118,7 +124,7 @@ const TransactionDetail = ({ route,navigation }) => {
                         {value.products.map((val, idx) => (
                             <>
                                 <View style={{ marginLeft:9 ,alignItems: 'baseline',marginTop:10,display: 'flex',flexDirection:'row',marginRight:10}}>
-                                    <Image source={{uri: val.imageUrl}} />
+                                    <Image source={{uri: val.imageUrl}} style={{resizeMode: 'contain', width: 70, height: 70 }} />
                                     <View style={{ marginLeft: 18, flexDirection: 'column-reverse' }}>
                                         <View style={{paddingRight:150 }}>
                                             {/* <Text style={{ color: 'gray', fontSize: 12 }}>Stok Barang : {val.quantity}pcs </Text> */}
@@ -219,10 +225,10 @@ const TransactionDetail = ({ route,navigation }) => {
             </ScrollView>
 
             <View style={{width: '100%', height: 70, alignItems: 'center', borderRadius: 10,backgroundColor:'white',paddingTop:10 ,flexDirection:'row', justifyContent:"space-around"}}>
-            <TouchableOpacity onPress={() => cancelButton()} style={{borderWidth:1,borderColor:"#F3771D",backgroundColor: "white", width: '45%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
-                <Text style={{color: "#F3771D"}}>Batalkan Pesanan</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => submit()} style={{backgroundColor: "#F3771D", width: '45%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
+            {data.status != "CHECKOUT" && <TouchableOpacity onPress={() =>{data.status != "CHECKOUT" ? cancelButton() : onPayment() }}  style={{borderWidth:1,borderColor:"#F3771D",backgroundColor: "white", width: '45%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
+                <Text style={{color: "#F3771D"}}>{data.status != "CHECKOUT" ? 'Batalkan Pesanan' : 'Lanjut  Pembayaran'}</Text>
+            </TouchableOpacity>}
+            <TouchableOpacity onPress={() => submit()} style={{backgroundColor: "#F3771D", width: data.status == "CHECKOUT" ? '95%' : '45%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
                 <Text style={{color: "white"}}>Chat Pembeli</Text>
             </TouchableOpacity>
             </View>
