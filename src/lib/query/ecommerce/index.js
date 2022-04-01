@@ -512,7 +512,7 @@ export const queryCreateCart = gql`
 
 export const queryGetMyProduct = gql`
 query(
-  $merchantId: Int!
+  $merchantId: Int
 ){
   ecommerceGetMerchant(
     merchantId: $merchantId

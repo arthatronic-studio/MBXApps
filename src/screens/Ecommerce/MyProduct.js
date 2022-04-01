@@ -187,7 +187,7 @@ const MyProduct = ({navigation, route}) => {
       header={
         <Header
           customIcon
-          title="Produk Kamu"
+          title="Produk Saya"
           type="regular"
           centerTitle={false}
         />

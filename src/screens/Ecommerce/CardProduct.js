@@ -61,6 +61,10 @@ const CardProduct = ({data}) => {
     setSelectedItem(item);
   };
 
+  const onDeleteProduct = (id) => {
+    
+  }
+
   const [selectedItem, setSelectedItem] = useState(null);
   useEffect(() => {}, []);
 
@@ -135,7 +139,9 @@ const CardProduct = ({data}) => {
           marginTop: 16,
           marginBottom: 16,
         }}>
-        <Image source={ImagesPath.trash} />
+          <TouchableOpacity onPress={() => onDeleteProduct(data.id)}>
+            <Image source={ImagesPath.trash} />
+          </TouchableOpacity>
         <TouchableOpacity
           style={{
             borderRadius: 20,
