@@ -21,7 +21,7 @@ const TransactionDetail = ({ route,navigation }) => {
     const dispatch = useDispatch();
     const [data, setData] = useState({});
     const [loadingProps, showLoading, hideLoading] = useLoading();
-    console.log("data",data)
+ 
     useEffect( () => {
         getProduct()
     }, []);
@@ -31,7 +31,7 @@ const TransactionDetail = ({ route,navigation }) => {
         showLoading();
         let variables = {
             type: 'CANCEL',
-            orderId: route.params.item.id
+            orderId: route.params.data.id
         }
         client.mutate({mutation: mutationCancel, variables})
           .then(res => {
@@ -53,9 +53,9 @@ const TransactionDetail = ({ route,navigation }) => {
 
     const getProduct = () => {
       let variables = {
-        orderId: route.params.item.id
+        orderId: route.params.data.id
       }
-      console.log(route.params.item.id)
+    
       client.query({query: queryDetailOrder, variables})
         .then(res => {
           console.log(res)

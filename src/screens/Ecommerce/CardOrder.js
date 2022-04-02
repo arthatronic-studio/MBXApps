@@ -1,13 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Pressable, FlatList, Image, TextInput} from 'react-native';
-import {useSelector} from 'react-redux';
-import IonIcons from 'react-native-vector-icons/Ionicons';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import MapView, {Marker} from 'react-native-maps';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {View, Pressable, FlatList, Image, TextInput, useWindowDimensions} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
-import Modal from 'react-native-modal';
-import Client from '@src/lib/apollo';
 import moment from 'moment';
 import {
   Text,
@@ -18,17 +11,19 @@ import {
   Col,
   useColor,
   Header,
+  ScreenIndicator,
 } from '@src/components';
 import {TouchableOpacity} from '@src/components/Button';
 import ImagesPath from 'src/components/ImagesPath';
-import {Divider} from 'src/styled';
+import {Container, Divider} from 'src/styled';
 import {FormatMoney} from 'src/utils';
-import { navigationRef } from 'App';
+import {navigationRef} from 'App';
 
 const CardOrder = ({data}) => {
+
   const navigation = useNavigation();
   const {Color} = useColor();
-  console.log(data);
+  
   return (
     <View
       style={{
@@ -123,65 +118,131 @@ const CardOrder = ({data}) => {
                         <View style={{flexDirection: 'row', marginVertical: 2}}>
                           <Text
                             style={{
-                              fontSize: 8,
-                              color: Color.secondary,
+                              fontSize: 11,
                               textAlign: 'left',
-                              width: '89%',
+                              fontWeight: 'bold',
                             }}>
-                            Jumlah pembelian
+                            {data.address.penerimaName}
                           </Text>
                           <Text
                             style={{
                               fontSize: 8,
+                              textAlign: 'left',
                               color: Color.secondary,
-                              textAlign: 'right',
                             }}>
-                            {' '}
-                            x{product.quantity}
+                            No. Pesanan : {data.orderNumber}
                           </Text>
                         </View>
-                        <View style={{flexDirection: 'row', marginVertical: 2}}>
+                        <Text
+                          style={{
+                            fontSize: 10,
+                            marginVertical: 8,
+                            color: Color.primary,
+                          }}>
+                          Belum Dibayar
+                        </Text>
+                      </View>
+                      <Divider />
+                      <View
+                        style={{
+                          width: '99%',
+                          height: 1,
+                          backgroundColor: Color.border,
+                        }}
+                      />
+                      <Divider />
+                      <View style={{flexDirection: 'row'}}>
+                        <Image
+                          source={ImagesPath.produklelang}
+                          style={{width: 50, height: 50, borderRadius: 5}}
+                        />
+                        <View style={{marginHorizontal: 10}}>
                           <Text
                             style={{
-                              fontSize: 8,
-                              color: Color.secondary,
+                              fontSize: 14,
+                              fontWeight: 'bold',
                               textAlign: 'left',
-                              width: '77%',
-                            }}>
-                            Harga Barang
-                          </Text>
-                          <Text
-                            style={{
-                              fontSize: 8,
-                              color: Color.secondary,
-                              textAlign: 'right',
                             }}>
                             {FormatMoney.getFormattedMoney(product.price, '')} Poin
                           </Text>
-                        </View>
-                        <View style={{flexDirection: 'row', marginVertical: 2}}>
                           <Text
                             style={{
                               fontSize: 8,
                               color: Color.secondary,
                               textAlign: 'left',
-                              width: '77%',
                             }}>
-                            Total pembelian
+                            Stok Barang : {product.stock}
                           </Text>
-                          <Text
-                            style={{
-                              fontWeight: 'bold',
-                              fontSize: 8,
-                              color: Color.text,
-                              textAlign: 'right',
-                            }}>
-                            {' '}
-                            {FormatMoney.getFormattedMoney(
-                              data.totalPrice,
-                            )}{' '}
-                            Poin
-                          </Text>
+                          <Divider />
+                          <View>
+                            <View
+                              style={{flexDirection: 'row', marginVertical: 2}}>
+                              <Text
+                                style={{
+                                  fontSize: 8,
+                                  color: Color.secondary,
+                                  textAlign: 'left',
+                                  width: '89%',
+                                }}>
+                                Jumlah pembelian
+                              </Text>
+                              <Text
+                                style={{
+                                  fontSize: 8,
+                                  color: Color.secondary,
+                                  textAlign: 'right',
+                                }}>
+                                {' '}
+                                x{product.quantity}
+                              </Text>
+                            </View>
+                            <View
+                              style={{flexDirection: 'row', marginVertical: 2}}>
+                              <Text
+                                style={{
+                                  fontSize: 8,
+                                  color: Color.secondary,
+                                  textAlign: 'left',
+                                  width: '77%',
+                                }}>
+                                Harga Barang
+                              </Text>
+                              <Text
+                                style={{
+                                  fontSize: 8,
+                                  color: Color.secondary,
+                                  textAlign: 'right',
+                                }}>
+                                {FormatMoney.getFormattedMoney(product.price)}{' '}
+                                Poin
+                              </Text>
+                            </View>
+                            <View
+                              style={{flexDirection: 'row', marginVertical: 2}}>
+                              <Text
+                                style={{
+                                  fontSize: 8,
+                                  color: Color.secondary,
+                                  textAlign: 'left',
+                                  width: '77%',
+                                }}>
+                                Total pembelian
+                              </Text>
+                              <Text
+                                style={{
+                                  fontWeight: 'bold',
+                                  fontSize: 8,
+                                  color: Color.text,
+                                  textAlign: 'right',
+                                }}>
+                                {' '}
+                                {FormatMoney.getFormattedMoney(
+                                  data.totalPrice,
+                                )}{' '}
+                                Poin
+                              </Text>
+                            </View>
+                          </View>
                         </View>
                       </View>
                     </View>
