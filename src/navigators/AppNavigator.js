@@ -185,7 +185,7 @@ function MainStackNavigator() {
         headerShown: false,
       }}>
       {/* uncanny */}
-      <Screen name="SplashScreen" component={MyShopHomepage} />
+      <Screen name="SplashScreen" component={SplashScreen} />
       <Screen name="MainPage" component={MainPage} />
       <Screen name="OnBoardingScreen" component={OnBoardingScreen} />
       <Screen name="CreateEmergencyScreen" component={CreateEmergencyScreen} />

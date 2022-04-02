@@ -48,7 +48,7 @@ import CardListProduk from 'src/components/Card/CardListProduct';
 import TopTabShop from './TopTabShop';
 import ImagesPath from 'src/components/ImagesPath';
 import {updateCurrentUserProfile} from 'src/state/actions/user/auth';
-import {queryGetCategory} from 'src/lib/query/ecommerce';
+import {queryGetCategory, queryGetMyProduct} from 'src/lib/query/ecommerce';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -66,11 +66,7 @@ const AddProduct = ({navigation}) => {
   const [thumbImage, setThumbImage] = useState('');
   const [mimeImage, setMimeImage] = useState('image/jpeg');
 
-  const submit = () => {
-    const tempData = {imageUrl: 'data:image/png;base64,'+thumbImage, name, categoryId:value};
 
-    navigation.navigate('StepTwo', {tempData});
-  };
 
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
@@ -82,8 +78,10 @@ const AddProduct = ({navigation}) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([]);
+  const [dataToko, setDataToko] = useState([]);
 
   useEffect(() => {
+    getToko()
     Client.query({
       query: queryGetCategory,
       variables: {
@@ -95,6 +93,32 @@ const AddProduct = ({navigation}) => {
       setItems(res.data.ecommerceProductCategoryList);
     });
   }, []);
+
+  const submit = () => {
+    const tempData = {imageUrl: 'data:image/png;base64,'+thumbImage, name, categoryId:value, merchantId: dataToko.id};
+
+    navigation.navigate('StepTwo', {tempData});
+  };
+
+  const getToko = (id) => {
+    showLoading();
+    let variables = {
+      merchantId: undefined,
+    }
+    console.log(variables, 'toko')
+    Client.query({query: queryGetMyProduct, variables})
+      .then(res => {
+        // hideLoading()
+        console.log(res)
+        if (res.data.ecommerceGetMerchant) {
+          setDataToko(res.data.ecommerceGetMerchant);
+        }
+      })
+      .catch(reject => {
+        hideLoading()
+        console.log(reject.message, 'error');
+      });
+  }
 
   console.log('value', value);
 

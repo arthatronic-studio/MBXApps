@@ -39,7 +39,7 @@ const CardOrder = ({data}) => {
       {data.items.map(item => {
         return (
           <TouchableOpacity
-          onPress={() => navigation.navigate('TransactionDetail',{data})}
+          onPress={() => navigation.navigate('TransactionDetail',{item: data})}
             style={{
               paddingHorizontal: 10,
               paddingVertical: 15,
@@ -84,7 +84,7 @@ const CardOrder = ({data}) => {
                         marginVertical: 8,
                         color: Color.primary,
                       }}>
-                      Belum Dibayar
+                      {data.status}
                     </Text>
                   </View>
                   <Divider />
@@ -156,7 +156,7 @@ const CardOrder = ({data}) => {
                               color: Color.secondary,
                               textAlign: 'right',
                             }}>
-                            {FormatMoney.getFormattedMoney(product.price)} Poin
+                            {FormatMoney.getFormattedMoney(product.price, '')} Poin
                           </Text>
                         </View>
                         <View style={{flexDirection: 'row', marginVertical: 2}}>
@@ -211,12 +211,12 @@ const CardOrder = ({data}) => {
                         textAlign: 'left',
                         paddingVertical: 2,
                       }}>
-                      Tolong anternya pake buroq ya biar cepet hehehe
+                      {/* Tolong anternya pake buroq ya biar cepet hehehe */}
                     </Text>
                   </View>
                   <Divider />
 
-                  <Text style={{textAlign: 'left', marginHorizontal: 2}}>
+                  {data.status == 'OPEN' && <Text style={{textAlign: 'left', marginHorizontal: 2}}>
                     <Text
                       style={{
                         fontSize: 8,
@@ -228,7 +228,7 @@ const CardOrder = ({data}) => {
                       dibatalkan otomatis pada tanggal{' '}
                       {moment(data.expiredDate).format('DD MMM YYYY')}
                     </Text>
-                  </Text>
+                  </Text>}
                 </View>
               );
             })}

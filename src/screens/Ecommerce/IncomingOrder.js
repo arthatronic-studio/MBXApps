@@ -946,7 +946,7 @@ function Komplainan() {
 
 const Tab = createMaterialTopTabNavigator();
 
-const IncomingOrder = () => {
+const IncomingOrder = ({route, navigation}) => {
   const {Color} = useColor();
   const user = useSelector(state => state['user.auth'].login.user);
   const [data, setData] = useState();
@@ -956,8 +956,9 @@ const IncomingOrder = () => {
     let variables = {
       page: 1,
       itemPerPage: 10,
-      status: 'BOOKING',
-      userId: 287
+      status: undefined,
+      userId: 287,
+      merchantId: route.params.item.id
       //   dummy userId (temporary)
     };
 

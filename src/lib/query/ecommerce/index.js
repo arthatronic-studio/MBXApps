@@ -183,12 +183,14 @@ query (
 	$itemPerPage: Int
 	$status: EcommerceOrderManageType,
   $userId: Int
+  $merchantId: Int
 ){
   ecommerceOrderList(
     page: $page,
     itemPerPage: $itemPerPage,
     status: $status,
-    userId: $userId
+    userId: $userId,
+    merchantId: $merchantId
 	) {
     id
     userId

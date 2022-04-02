@@ -111,7 +111,7 @@ const StepThree = ({navigation, route}) => {
         },
       ],
     };
-
+    console.log(variables)
     Client.mutate({mutation: queryAddProduct, variables})
       .then(res => {
         console.log('BERHASIL KIRIM', res);

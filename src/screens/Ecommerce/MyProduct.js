@@ -121,34 +121,6 @@ const MyProduct = ({navigation, route}) => {
       });
   }
 
-  const getProduct = () => {
-    console.log(route, 'props')
-    // showLoading();
-    let variables = {
-      merchantId: 2
-    }
-    console.log(variables)
-    Client.query({query: queryGetMyProduct, variables})
-      .then(res => {
-        // hideLoading()
-        console.log(res)
-        if (res.data.ecommerceCartList) {
-            setCart(res.data.ecommerceCartList)
-            res.data.ecommerceCartList.products.forEach((items, index) => {
-                temp.push({...items, checked: false, ...res.data.ecommerceCartList.productCartInfo[index]})
-            });
-            setList(temp)
-            setChecked(temp)
-        }
-      })
-      .catch(reject => {
-        // hideLoading()
-        alert(reject.message)
-        console.log(reject.message, 'reject');
-      });
-  };
-
-
 
   const deleteProduct = (id, index) => {
     console.log(route, 'props')

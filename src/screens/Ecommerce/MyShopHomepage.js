@@ -130,14 +130,14 @@ const MyShopHomepage = ({ navigation }) => {
 					<View style={{flexDirection: 'row'}}>
 						<Text style={{fontSize: 10, fontWeight: 'bold', width: '70%', textAlign: 'left',
 							paddingHorizontal: 10, paddingVertical: 8}}>Penjualan</Text>
-						<Text onPress={()=> navigation.navigate('IncomingOrder')} style={{fontSize: 10, color: Color.primary, paddingVertical: 8, paddingHorizontal: 5, width: '30%'}}>Lihat Riwayat</Text>
+						<Text onPress={()=> navigation.navigate('IncomingOrder',{item: data})} style={{fontSize: 10, color: Color.primary, paddingVertical: 8, paddingHorizontal: 5, width: '30%'}}>Lihat Riwayat</Text>
 					</View>
 					<View style={{alignItems: 'center', justifyContent: 'center',flexDirection: 'row', borderWidth: 1, borderColor: Color.border, height: '60%', width: '95%',
 							alignSelf: 'center', borderRadius: 5}}>
 						<View style={{marginHorizontal: 5,flexDirection: 'row', borderRadius: 20, width: 30, height: 30, backgroundColor: '#761AAB', alignItems: 'center', justifyContent: 'center'}}>
 							<FontAwesome name={'inbox'} size={20} style={{color: Color.textInput}}/>
 						</View>
-						<Pressable onPress={()=> navigation.navigate('IncomingOrder')} style={{flexDirection: 'column', marginHorizontal: 5}}>
+						<Pressable onPress={()=> navigation.navigate('IncomingOrder',{item: data})} style={{flexDirection: 'column', marginHorizontal: 5}}>
 							<View style={{flexDirection: 'row'}}>
 								<Text style={{fontWeight: 'bold', fontSize: 11}}>Pesanan Masuk</Text>
 								<View style={{marginHorizontal: 5, marginVertical: 5, backgroundColor: Color.error, width: 5, height: 5, borderRadius: 20}}></View>
@@ -148,7 +148,7 @@ const MyShopHomepage = ({ navigation }) => {
 						<View style={{marginHorizontal: 5,flexDirection: 'row', borderRadius: 20, width: 30, height: 30, backgroundColor: Color.primary, alignItems: 'center', justifyContent: 'center'}}>
 							<FontAwesome5 name={'shopping-cart'} size={15} style={{color: Color.textInput}}/>
 						</View>
-						<Pressable onPress={()=> navigation.navigate('IncomingOrder')} style={{flexDirection: 'column', marginHorizontal: 5}}>
+						<Pressable onPress={()=> navigation.navigate('IncomingOrder',{item: data})} style={{flexDirection: 'column', marginHorizontal: 5}}>
 							<View style={{flexDirection: 'row',}}>
 								<Text style={{fontWeight: 'bold', fontSize: 11, textAlign: 'left'}}>Siap Dikirim</Text>
 								<View style={{marginHorizontal: 5, marginVertical: 5, backgroundColor: Color.error, width: 5, height: 5, borderRadius: 20}}></View>
