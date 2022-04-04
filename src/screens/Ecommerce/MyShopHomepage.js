@@ -142,7 +142,7 @@ const MyShopHomepage = ({ navigation }) => {
 								<Text style={{fontWeight: 'bold', fontSize: 11}}>Pesanan Masuk</Text>
 								<View style={{marginHorizontal: 5, marginVertical: 5, backgroundColor: Color.error, width: 5, height: 5, borderRadius: 20}}></View>
 							</View>
-							<Text style={{fontSize: 10, textAlign: 'left'}}>12 Pesanan Baru</Text>
+							<Text style={{fontSize: 10, textAlign: 'left'}}> Pesanan Baru</Text>
 						</Pressable>
 						<View style={{backgroundColor: Color.border, width: 2, height: 15, marginHorizontal: 25}}></View>
 						<View style={{marginHorizontal: 5,flexDirection: 'row', borderRadius: 20, width: 30, height: 30, backgroundColor: Color.primary, alignItems: 'center', justifyContent: 'center'}}>
@@ -166,7 +166,7 @@ const MyShopHomepage = ({ navigation }) => {
 						<FontAwesome5 name={'box'} size={20} style={{color: Color.text, paddingHorizontal: 20,}}/>
 						<TouchableOpacity style={{width: '70%'}} onPress={()=>{navigation.navigate('MyProduct')}}>
 							<Text style={{fontSize: 11, fontWeight: 'bold', textAlign: 'left'}}>Produk Kamu</Text>
-							<Text style={{fontSize: 10, fontWeighxt: 'normal', textAlign: 'left'}}>2 Produk Terdaftar</Text>
+							<Text style={{fontSize: 10, fontWeighxt: 'normal', textAlign: 'left'}}>Produk Terdaftar</Text>
 						</TouchableOpacity>
 						<MaterialIcons name={'keyboard-arrow-right'} size={30} style={{color: Color.text, width: '13%'}}/>
 					</Pressable>
