@@ -358,7 +358,7 @@ const Notification = () => {
           <View style={{flexDirection: 'row', marginVertical: 10}}>
             <TouchableOpacity
               style={{
-                marginHorizontal: 10,
+                marginHorizontal: 15,
                 flexDirection: 'row',
                 backgroundColor: Color.theme,
                 width: '35%',

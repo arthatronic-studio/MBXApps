@@ -27,7 +27,6 @@ import {TouchableOpacity} from '@src/components/Button';
 import ListForum from '@src/screens/MainForum/ListForum';
 
 import {shadowStyle} from '@src/styles';
-
 import Client from '@src/lib/apollo';
 import {queryContentProduct} from '@src/lib/query';
 import {FormatMoney} from 'src/utils';
@@ -40,6 +39,9 @@ import {
 } from 'src/lib/query/ecommerce';
 import {TextInput} from 'react-native-gesture-handler';
 
+var styled = function styled(tag) {
+  return constructWithOptions(createStyledComponent, tag);
+};
 const MainView = Styled(SafeAreaView)`
     flex: 1;
 `;

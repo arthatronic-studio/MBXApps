@@ -107,10 +107,23 @@ const CartAuction = ({navigation, route}) => {
                       <Text size={10} color={Color.gray}>
                         Harga
                       </Text>
-                      <Text size={14} color={Color.text} type="bold">
+                      <Text
+                        size={14}
+                        color={Color.text}
+                        type="bold"
+                        style={{marginRight: 5}}>
                         Rp. 100.000 Poin
                       </Text>
                     </View>
+                    <AntDesign
+                      name={'questioncircle'}
+                      size={10}
+                      style={{
+                        color: Color.secondary,
+                        alignSelf: 'flex-end',
+                        marginBottom: 3,
+                      }}
+                    />
                     <Col>
                       <TouchableOpacity
                         onPress={() => navigation.navigate('CheckoutScreen')}
