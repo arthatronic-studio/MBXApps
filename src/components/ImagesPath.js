@@ -108,5 +108,5 @@ export default {
   mail: require('../components/Images/mail.png'),
   chatimage: require('../components/Images/chatimage.png'),
   toko: require('../components/Images/Toko.png'),
-
+  BannerPink: require('../components/Images/BannerPink.png'),
 };

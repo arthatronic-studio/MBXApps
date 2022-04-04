@@ -18,7 +18,7 @@ import {useIsFocused} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import Modal from 'react-native-modal';
 import Config from 'react-native-config';
-import { io } from "socket.io-client";
+import {io} from 'socket.io-client';
 
 import ImagesPath from 'src/components/ImagesPath';
 import {
@@ -59,24 +59,31 @@ import {accessClient} from 'src/utils/access_client';
 import VideoCardList from 'src/components/VideoCardList';
 import {trackPlayerPlay} from 'src/utils/track-player-play';
 import FloatingMusicPlayer from 'src/components/FloatingMusicPlayer';
-import TrackPlayer, { Event, useTrackPlayerEvents } from 'react-native-track-player';
-import { analyticMethods, GALogEvent } from 'src/utils/analytics';
-import { getSizeByRatio } from 'src/utils/get_ratio';
+import TrackPlayer, {
+  Event,
+  useTrackPlayerEvents,
+} from 'react-native-track-player';
+import {analyticMethods, GALogEvent} from 'src/utils/analytics';
+import {getSizeByRatio} from 'src/utils/get_ratio';
 
 const dataDummyMusic = [
   {
     id: 'd',
     productName: 'Deen Assalam',
     productDescription: 'Bismillah',
-    image: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/nissa.png?alt=media&token=664063c5-fc42-458c-b02e-596cca8b18dc',
-    videoFilename: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/Sabyan%20Gambus%20-%20Deen%20Assalam.mp3?alt=media&token=ba7e5d58-4d81-4639-9758-cc7bf67aa43a'
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/nissa.png?alt=media&token=664063c5-fc42-458c-b02e-596cca8b18dc',
+    videoFilename:
+      'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/Sabyan%20Gambus%20-%20Deen%20Assalam.mp3?alt=media&token=ba7e5d58-4d81-4639-9758-cc7bf67aa43a',
   },
   {
     id: 'y',
     productName: 'Ya Habibal Qolbi',
     productDescription: 'Bismillah',
-    image: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/nissa.png?alt=media&token=664063c5-fc42-458c-b02e-596cca8b18dc',
-    videoFilename: 'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/Sabyan%20Gambus%20-%20Ya%20Habibal%20Qolbi.mp3?alt=media&token=5d3154b8-9f01-4eee-8ebb-76d83ae31bf2'
+    image:
+      'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/nissa.png?alt=media&token=664063c5-fc42-458c-b02e-596cca8b18dc',
+    videoFilename:
+      'https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/Sabyan%20Gambus%20-%20Ya%20Habibal%20Qolbi.mp3?alt=media&token=5d3154b8-9f01-4eee-8ebb-76d83ae31bf2',
   },
 ];
 
@@ -84,9 +91,7 @@ let tempShowPopupAds = true;
 
 export let currentSocket;
 
-const events = [
-  Event.PlaybackTrackChanged,
-];
+const events = [Event.PlaybackTrackChanged];
 
 const MainHome = ({navigation, route}) => {
   // state
@@ -129,38 +134,39 @@ const MainHome = ({navigation, route}) => {
   const {width} = useWindowDimensions();
 
   // handle music analytics
-  // 
-  useTrackPlayerEvents(events, (event) => {
+  //
+  useTrackPlayerEvents(events, event => {
     if (event.type === Event.PlaybackTrackChanged) {
       // console.log('home track changed', event);
       getCurrentPlaying();
     }
   });
 
-  const getCurrentPlaying = async() => {
+  const getCurrentPlaying = async () => {
     const newCurrent = await TrackPlayer.getCurrentTrack();
     if (newCurrent != null) {
       setThisTrack(await TrackPlayer.getTrack(newCurrent));
     } else {
       setThisTrack();
     }
-  }
+  };
 
   useEffect(() => {
-    const timeout = thisTrack ?
-      setTimeout(() => {
-        // console.log('thisTrack', thisTrack);
-        GALogEvent(thisTrack.artist, {
-          id: thisTrack.id,
-          product_name: thisTrack.title,
-          user_id: user.userId,
-          method: analyticMethods.view,
-        })
-      }, 1000) : null;
+    const timeout = thisTrack
+      ? setTimeout(() => {
+          // console.log('thisTrack', thisTrack);
+          GALogEvent(thisTrack.artist, {
+            id: thisTrack.id,
+            product_name: thisTrack.title,
+            user_id: user.userId,
+            method: analyticMethods.view,
+          });
+        }, 1000)
+      : null;
 
     return () => clearTimeout(timeout);
   }, [thisTrack]);
-  // 
+  //
   // end handle music analytics
 
   useEffect(() => {
@@ -170,16 +176,16 @@ const MainHome = ({navigation, route}) => {
       extraHeaders: {
         // Authorization: "Bearer authorization_token_here"
         // 'Control-Allow-Credentials': true
-      }
+      },
     });
 
-    currentSocket.emit('auth', { id: user ? user.userId : 0 });
-    currentSocket.on('auth', (res) => {
+    currentSocket.emit('auth', {id: user ? user.userId : 0});
+    currentSocket.on('auth', res => {
       console.log('res auth', res);
     });
 
     currentSocket.emit('chat_notification');
-    currentSocket.on('chat_notification', (res) => {
+    currentSocket.on('chat_notification', res => {
       console.log('res chat_notification', res);
       if (res && res.status) {
         if (chatNotifCount > 0) {
@@ -223,13 +229,7 @@ const MainHome = ({navigation, route}) => {
                   .collection('location-community')
                   .doc(docID)
                   .update(values)
-                  .then(
-                    console.log(
-                      'ini update',
-                      res.coords.latitude,
-                     
-                    ),
-                  )
+                  .then(console.log('ini update', res.coords.latitude))
                   .catch(err => console.log('error', err));
               } else {
                 firestore()
@@ -249,7 +249,7 @@ const MainHome = ({navigation, route}) => {
       const option = {
         enableHighAccuracy: true,
       };
-      
+
       Geolocation.watchPosition(successCallback, errorCallback, option);
     }, 5000);
   }, []);
@@ -296,23 +296,43 @@ const MainHome = ({navigation, route}) => {
   };
 
   const fetchData = async () => {
-    const resultEmergency = await fetchContentProduct(Config.PRODUCT_TYPE, 'EMERGENCY', '');
+    const resultEmergency = await fetchContentProduct(
+      Config.PRODUCT_TYPE,
+      'EMERGENCY',
+      '',
+    );
     setListEmergencyArea(resultEmergency);
     setLoadingEmergencyArea(false);
 
-    const resultPosting = await fetchContentProduct(Config.PRODUCT_TYPE, 'POSTING', '');
+    const resultPosting = await fetchContentProduct(
+      Config.PRODUCT_TYPE,
+      'POSTING',
+      '',
+    );
     setListPosting(resultPosting);
     setLoadingPosting(false);
 
-    const resultNearbyPlace = await fetchContentProduct(Config.PRODUCT_TYPE, 'NEARBY_PLACE', '');
+    const resultNearbyPlace = await fetchContentProduct(
+      Config.PRODUCT_TYPE,
+      'NEARBY_PLACE',
+      '',
+    );
     setListNearbyPlace(resultNearbyPlace);
     setLoadingNearbyPlace(false);
 
-    const resultEvent = await fetchContentProduct(Config.PRODUCT_TYPE, 'EVENT', '');
+    const resultEvent = await fetchContentProduct(
+      Config.PRODUCT_TYPE,
+      'EVENT',
+      '',
+    );
     setListEvent(resultEvent);
     setLoadingEvent(false);
 
-    const resultJobs = await fetchContentProduct(Config.PRODUCT_TYPE, 'JOBS', '');
+    const resultJobs = await fetchContentProduct(
+      Config.PRODUCT_TYPE,
+      'JOBS',
+      '',
+    );
     setListJobs(resultJobs);
     setLoadingJobs(false);
 
@@ -367,10 +387,7 @@ const MainHome = ({navigation, route}) => {
     }, 2000);
   };
 
-  const colorOutputRange = [
-    Color[accessClient.ColorBgParallax],
-    Color.theme,
-  ];
+  const colorOutputRange = [Color[accessClient.ColorBgParallax], Color.theme];
 
   const backgroundInterpolate = animationValue.interpolate({
     inputRange: [0, 100],
@@ -738,9 +755,9 @@ const MainHome = ({navigation, route}) => {
                 showIndicator
                 style={{
                   width,
-                  height: getSizeByRatio({ width: width - 32, ratio: 9/21 }).height,
-                }}
-              >
+                  height: getSizeByRatio({width: width - 32, ratio: 9 / 21})
+                    .height,
+                }}>
                 {[0].map((e, idx) => {
                   return (
                     <View
@@ -800,16 +817,18 @@ const MainHome = ({navigation, route}) => {
             </View>
           )}
 
-          {accessClient.MainHome.showListPlace && <ListPlace
-            data={listNearbyPlace}
-            loading={loadingNearbyPlace}
-            horizontal
-            showHeader
-            onPress={item => {
-              navigation.navigate('PlaceDetail', {item});
-            }}
-            style={{paddingLeft: 8}}
-          />}
+          {accessClient.MainHome.showListPlace && (
+            <ListPlace
+              data={listNearbyPlace}
+              loading={loadingNearbyPlace}
+              horizontal
+              showHeader
+              onPress={item => {
+                navigation.navigate('PlaceDetail', {item});
+              }}
+              style={{paddingLeft: 8}}
+            />
+          )}
 
           <ListEvent
             data={listEvent}
@@ -821,7 +840,7 @@ const MainHome = ({navigation, route}) => {
             }}
             style={{paddingLeft: 8}}
           />
-    
+
           {accessClient.MainHome.showListJob && (
             <ListJob
               data={listJobs}
@@ -835,21 +854,15 @@ const MainHome = ({navigation, route}) => {
             />
           )}
 
-          {accessClient.MainHome.showListMusicNewer && (
-            <MusikTerbaru />
-          )}
+          {accessClient.MainHome.showListMusicNewer && <MusikTerbaru />}
 
           <Divider />
 
-          {accessClient.MainHome.showListYoutube &&
-            <MondayAccoustic />
-          }
+          {accessClient.MainHome.showListYoutube && <MondayAccoustic />}
 
-          {accessClient.MainHome.showListVideo &&
-            <VideoCardList
-              onPress={() => navigation.navigate('VideoDetail')}
-            />
-          }
+          {accessClient.MainHome.showListVideo && (
+            <VideoCardList onPress={() => navigation.navigate('VideoDetail')} />
+          )}
 
           {accessClient.MainHome.showListEbookNewer && (
             <View style={{marginTop: 32}}>
@@ -889,9 +902,7 @@ const MainHome = ({navigation, route}) => {
       {/* <Box size={70} style={{position: 'absolute', bottom: -40}} /> */}
       {/*  */}
 
-      <FloatingMusicPlayer
-        ref={floatingMusicPlayerRef}
-      />
+      <FloatingMusicPlayer ref={floatingMusicPlayerRef} />
 
       <ModalPosting
         ref={modalPostingRef}
@@ -902,47 +913,50 @@ const MainHome = ({navigation, route}) => {
         }}
       />
 
-      {dataPopupAds && <Modal
-        isVisible={tempShowPopupAds && showPopupAds}
-        onBackdropPress={() => {
-          tempShowPopupAds = false;
-          setShowPopupAds(false);
-        }}
-        animationIn="slideInDown"
-        animationOut="slideOutDown"
-        backdropColor={Color.semiwhite}>
-        <View style={{width: '90%', aspectRatio: 9 / 16, alignSelf: 'center'}}>
-          <TouchableOpacity
-            onPress={() => {
-              tempShowPopupAds = false;
-              setShowPopupAds(false);
-              // navigation.navigate('DetailPromo', {item});
-            }}>
-            <ImageBackground
-              source={{ uri: dataPopupAds.image }}
-              imageStyle={{borderRadius: 12}}
-              style={{height: '100%', resizeMode: 'contain', width: '100%'}}>
-              <TouchableOpacity
-                onPress={() => {
-                  tempShowPopupAds = false;
-                  setShowPopupAds(false);
-                }}
-                style={{
-                  alignSelf: 'flex-end',
-                  padding: 4,
-                  margin: 8,
-                  backgroundColor: Color.error,
-                  borderRadius: 50,
-                }}>
-                <Image
-                  source={ImagesPath.icClose}
-                  style={{width: 20, height: 20}}
-                />
-              </TouchableOpacity>
-            </ImageBackground>
-          </TouchableOpacity>
-        </View>
-      </Modal>}
+      {dataPopupAds && (
+        <Modal
+          isVisible={tempShowPopupAds && showPopupAds}
+          onBackdropPress={() => {
+            tempShowPopupAds = false;
+            setShowPopupAds(false);
+          }}
+          animationIn="slideInDown"
+          animationOut="slideOutDown"
+          backdropColor={Color.semiwhite}>
+          <View
+            style={{width: '90%', aspectRatio: 9 / 16, alignSelf: 'center'}}>
+            <TouchableOpacity
+              onPress={() => {
+                tempShowPopupAds = false;
+                setShowPopupAds(false);
+                // navigation.navigate('DetailPromo', {item});
+              }}>
+              <ImageBackground
+                source={{uri: dataPopupAds.image}}
+                imageStyle={{borderRadius: 12}}
+                style={{height: '100%', resizeMode: 'contain', width: '100%'}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    tempShowPopupAds = false;
+                    setShowPopupAds(false);
+                  }}
+                  style={{
+                    alignSelf: 'flex-end',
+                    padding: 4,
+                    margin: 8,
+                    backgroundColor: Color.error,
+                    borderRadius: 50,
+                  }}>
+                  <Image
+                    source={ImagesPath.icClose}
+                    style={{width: 20, height: 20}}
+                  />
+                </TouchableOpacity>
+              </ImageBackground>
+            </TouchableOpacity>
+          </View>
+        </Modal>
+      )}
     </Scaffold>
   );
 };
