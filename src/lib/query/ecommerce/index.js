@@ -601,10 +601,12 @@ export const queryUpdateItemCart = gql`
   mutation ecommerceCartUpdate(
     $productId: Int!
     $quantity: Int!
+    $checked: Boolean!
   ) {
     ecommerceCartUpdate(
      productId: $productId
      quantity: $quantity
+     checked: $checked
    ) {
     id
    }

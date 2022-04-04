@@ -82,12 +82,12 @@ const CartShop = ({ navigation, route }) => {
                 }
               })
             })
-            console.log(dataq)
+            console.log(dataq[0])
             // res.data.ecommerceCartList.products.forEach((items, index) => {
             //     temp.push({...items, checked: false, ...res.data.ecommerceCartList.productCartInfo[index]})
             // });
             // setList(temp)
-            setList(res.data.ecommerceCartList.items)
+            setList(dataq[0])
             setChecked(temp)
         }
       })
@@ -126,6 +126,7 @@ const CartShop = ({ navigation, route }) => {
   };
 
   const updateQty = (item, qty, index, id) => {
+    console.log(item)
     const tempx = list
     console.log(tempx[index]['products'][id])
     // tempx[id][index]['quantity'] = item.quantity + qty
@@ -137,7 +138,8 @@ const CartShop = ({ navigation, route }) => {
     showLoading();
     let variables = {
         productId: item.id,
-        quantity: item.quantity + qty
+        quantity: item.quantity + qty,
+        checked: item.checked
     }
     console.log(variables)
     Client.mutate({mutation: queryUpdateItemCart, variables})
@@ -221,7 +223,7 @@ const CartShop = ({ navigation, route }) => {
               </TouchableOpacity>
           </Row>
         </View>
-        {item.products.map((val,id) => (
+        {item.products && item.products.map((val,id) => (
           <View key={id}>
             <Row style={{ paddingHorizontal: 10, paddingBottom: 20 }}>
                 <View style={{ justifyContent: 'center' }}>
