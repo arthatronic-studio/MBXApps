@@ -98,20 +98,23 @@ const TransactionDetail = ({route, navigation}) => {
           style={{
             backgroundColor: '#FFFFFF',
             borderRadius: 8,
-            marginTop: 25,
-            paddingBottom: 25,
+            marginTop: 10,
+            paddingBottom: 20,
             width: '95%',
             alignSelf: 'center',
           }}>
           <View
             style={{
               alignItems: 'baseline',
-              marginTop: 25,
               borderBottomWidth: 1,
               borderColor: '#E5E5E5',
+              paddingHorizontal: 10,
+              paddingVertical: 10,
             }}>
-            <View style={{marginLeft: 9, paddingBottom: 15}}>
-              <Text style={{fontWeight: 'bold'}}>Detail Transaksi</Text>
+            <View>
+              <Text style={{fontWeight: 'bold', fontSize: 11}}>
+                Detail Transaksi
+              </Text>
             </View>
           </View>
           <View
@@ -124,8 +127,8 @@ const TransactionDetail = ({route, navigation}) => {
               flexDirection: 'row',
               marginRight: 10,
             }}>
-            <Text style={{color: 'gray'}}>Status</Text>
-            <Text style={{color: '#F3771D'}}>{data.status}</Text>
+            <Text style={{color: 'gray', fontSize: 10}}>Status</Text>
+            <Text style={{color: '#F3771D', fontSize: 10}}>{data.status}</Text>
           </View>
           <View
             style={{
@@ -137,8 +140,8 @@ const TransactionDetail = ({route, navigation}) => {
               flexDirection: 'row',
               marginRight: 10,
             }}>
-            <Text style={{color: 'gray'}}>No Recipt</Text>
-            <Text>{data.orderNumber}</Text>
+            <Text style={{color: 'gray', fontSize: 10}}>No Recipt</Text>
+            <Text style={{fontSize: 10}}>{data.orderNumber}</Text>
           </View>
           <View
             style={{
@@ -150,8 +153,8 @@ const TransactionDetail = ({route, navigation}) => {
               flexDirection: 'row',
               marginRight: 10,
             }}>
-            <Text style={{color: 'gray'}}>Tanggal Transaksi</Text>
-            <Text size={12}>
+            <Text style={{color: 'gray', fontSize: 10}}>Tanggal Transaksi</Text>
+            <Text size={10}>
               {Moment(parseInt(data.createdAt)).format(
                 'dddd, DD MMMM YYYY HH:mm',
               )}{' '}
@@ -164,7 +167,7 @@ const TransactionDetail = ({route, navigation}) => {
           style={{
             backgroundColor: '#FFFFFF',
             borderRadius: 8,
-            marginTop: 25,
+            marginTop: 12,
             paddingBottom: 25,
             width: '95%',
             alignSelf: 'center',
@@ -172,12 +175,15 @@ const TransactionDetail = ({route, navigation}) => {
           <View
             style={{
               alignItems: 'baseline',
-              marginTop: 25,
               borderBottomWidth: 1,
               borderColor: '#E5E5E5',
+              paddingHorizontal: 10,
+              paddingVertical: 10,
             }}>
-            <View style={{marginLeft: 9, paddingBottom: 15}}>
-              <Text style={{fontWeight: 'bold'}}>Detail Produk</Text>
+            <View>
+              <Text style={{fontWeight: 'bold', fontSize: 11}}>
+                Detail Produk
+              </Text>
             </View>
           </View>
           {data.items &&
@@ -189,10 +195,8 @@ const TransactionDetail = ({route, navigation}) => {
                       style={{
                         marginLeft: 9,
                         alignItems: 'baseline',
-                        marginTop: 10,
                         display: 'flex',
                         flexDirection: 'row',
-                        marginRight: 10,
                       }}>
                       <Image
                         source={{uri: val.imageUrl}}
@@ -200,7 +204,6 @@ const TransactionDetail = ({route, navigation}) => {
                       />
                       <View
                         style={{
-                          marginLeft: 18,
                           flexDirection: 'column-reverse',
                         }}>
                         <View style={{paddingRight: 150}}>
@@ -210,7 +213,7 @@ const TransactionDetail = ({route, navigation}) => {
                           <Text
                             style={{
                               color: 'black',
-                              fontSize: 21,
+                              fontSize: 14,
                               fontWeight: 'bold',
                             }}>
                             {val.name}
@@ -220,7 +223,7 @@ const TransactionDetail = ({route, navigation}) => {
                     </View>
                     <View
                       style={{
-                        marginLeft: 75,
+                        marginLeft: 82,
                         alignItems: 'baseline',
                         marginTop: 10,
                         justifyContent: 'space-between',
@@ -228,16 +231,16 @@ const TransactionDetail = ({route, navigation}) => {
                         flexDirection: 'row',
                         marginRight: 10,
                       }}>
-                      <Text style={{color: 'gray', fontSize: 12}}>
+                      <Text style={{color: 'gray', fontSize: 8}}>
                         Jumlah Pembelian
                       </Text>
-                      <Text style={{color: 'gray', fontSize: 12}}>
+                      <Text style={{color: 'gray', fontSize: 8}}>
                         x{val.quantity}
                       </Text>
                     </View>
                     <View
                       style={{
-                        marginLeft: 75,
+                        marginLeft: 82,
                         alignItems: 'baseline',
                         marginTop: 10,
                         justifyContent: 'space-between',
@@ -245,10 +248,10 @@ const TransactionDetail = ({route, navigation}) => {
                         flexDirection: 'row',
                         marginRight: 10,
                       }}>
-                      <Text style={{color: 'gray', fontSize: 12}}>
+                      <Text style={{color: 'gray', fontSize: 8}}>
                         Harga Barang
                       </Text>
-                      <Text style={{color: 'gray', fontSize: 12}}>
+                      <Text style={{color: 'gray', fontSize: 8}}>
                         {val.price} poin
                       </Text>
                     </View>
@@ -258,7 +261,7 @@ const TransactionDetail = ({route, navigation}) => {
             ))}
           <View
             style={{
-              marginLeft: 75,
+              marginLeft: 82,
               alignItems: 'baseline',
               marginTop: 10,
               justifyContent: 'space-between',
@@ -266,8 +269,8 @@ const TransactionDetail = ({route, navigation}) => {
               flexDirection: 'row',
               marginRight: 10,
             }}>
-            <Text style={{color: 'gray', fontSize: 12}}>Total Pembelian</Text>
-            <Text style={{color: 'black', fontSize: 12, fontWeight: 'bold'}}>
+            <Text style={{color: 'gray', fontSize: 8}}>Total Pembelian</Text>
+            <Text style={{color: 'black', fontSize: 8, fontWeight: 'bold'}}>
               {data.totalProductPrice} poin
             </Text>
           </View>
@@ -277,7 +280,7 @@ const TransactionDetail = ({route, navigation}) => {
           style={{
             backgroundColor: '#FFFFFF',
             borderRadius: 8,
-            marginTop: 25,
+            marginTop: 15,
             paddingBottom: 25,
             width: '95%',
             alignSelf: 'center',
@@ -285,11 +288,12 @@ const TransactionDetail = ({route, navigation}) => {
           <View
             style={{
               alignItems: 'baseline',
-              marginTop: 25,
               borderBottomWidth: 1,
               borderColor: '#E5E5E5',
+              paddingHorizontal: 10,
+              paddingVertical: 10,
             }}>
-            <View style={{marginLeft: 9, paddingBottom: 15}}>
+            <View>
               <Text style={{fontWeight: 'bold'}}>Info Pengiriman</Text>
             </View>
           </View>
@@ -303,8 +307,8 @@ const TransactionDetail = ({route, navigation}) => {
               flexDirection: 'row',
               marginRight: 70,
             }}>
-            <Text style={{color: 'gray'}}>Nama Pembeli</Text>
-            <Text style={{color: '#F3771D'}}>
+            <Text style={{color: 'gray', fontSize: 10}}>Nama Pembeli</Text>
+            <Text style={{color: '#F3771D', fontSize: 10}}>
               {data.address && data.address.penerimaName}
             </Text>
           </View>
@@ -318,8 +322,13 @@ const TransactionDetail = ({route, navigation}) => {
               flexDirection: 'row',
               marginRight: 75,
             }}>
-            <Text style={{color: 'gray'}}>
-              No. Resi Pengiriman{' '}
+            <Text
+              style={{
+                color: 'gray',
+                fontSize: 10,
+                textAlign: 'left',
+              }}>
+              No. Resi Pengiriman
               <Ionicons name="copy-outline" size={16} color="orange" />
             </Text>
             <Text>{data.shipperOrderNumber}</Text>
@@ -335,7 +344,7 @@ const TransactionDetail = ({route, navigation}) => {
                 flexDirection: 'row',
                 marginRight: 117,
               }}>
-              <Text style={{color: 'gray'}}>
+              <Text style={{color: 'gray', fontSize: 10}}>
                 Alamat Pengiriman{' '}
                 <Ionicons
                   name="copy-outline"
@@ -344,7 +353,7 @@ const TransactionDetail = ({route, navigation}) => {
                   color="orange"
                 />
               </Text>
-              <Text>
+              <Text style={{fontSize: 10}}>
                 {data.address.address},{' '}
                 {data.address && data.address.suburb.name},{' '}
                 {data.address && data.address.city.name},{' '}
@@ -359,19 +368,20 @@ const TransactionDetail = ({route, navigation}) => {
             backgroundColor: '#FFFFFF',
             marginBottom: 10,
             borderRadius: 8,
-            marginTop: 25,
+            marginTop: 15,
             paddingBottom: 25,
             width: '95%',
             alignSelf: 'center',
+            paddingHorizontal: 10,
+            paddingVertical: 10,
           }}>
           <View
             style={{
               alignItems: 'baseline',
-              marginTop: 25,
               borderBottomWidth: 1,
               borderColor: '#E5E5E5',
             }}>
-            <View style={{marginLeft: 9, paddingBottom: 15}}>
+            <View>
               <Text style={{fontWeight: 'bold'}}>Rincian Pembayaran</Text>
             </View>
           </View>
