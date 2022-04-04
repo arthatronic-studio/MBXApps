@@ -111,6 +111,12 @@ const MyProduct = ({navigation, route}) => {
         // hideLoading()
         console.log(res)
         if (res.data.ecommerceGetMerchant) {
+          let temp = []
+          // if(res.data.ecommerceGetMerchant.productList.length > 0){
+          //   res.data.ecommerceGetMerchant.productList.forEach(element => {
+          //     if(element.status ==)
+          //   });
+          // }
           setData(res.data.ecommerceGetMerchant);
           console.log(res.data.ecommerceGetMerchant.productList);
         }
@@ -180,7 +186,7 @@ const MyProduct = ({navigation, route}) => {
             data={data.productList}
             keyExtractor={(item, index) => item.toString() + index}
             renderItem={({item}) => {
-              return <CardProduct  data={item} getProductList={() => getProductList()} />;
+              return <CardProduct  data={item} getProductList={getProductList} />;
             }}
           />
         </View>
@@ -210,7 +216,6 @@ const MyProduct = ({navigation, route}) => {
               paddingHorizontal: 16,
               borderRadius: 120,
             }}
-            onPress={() => deleteProduct()}
           >
             
             <Image source={ImagesPath.trash} />

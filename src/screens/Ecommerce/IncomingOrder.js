@@ -38,10 +38,11 @@ import CardOrder from './CardOrder';
 function BelumDibayar({data, getData}) {
   const {Color} = useColor();
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     data.getOrder('OPEN');
-  }, []);
+  }, [isFocused]);
   return (
     <View style={{backgroundColor: Color.semiwhite}}>
       {data.loadingIncoming ? (

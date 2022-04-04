@@ -161,9 +161,9 @@ const CardProduct = ({data, getProductList}) => {
           marginTop: 16,
           marginBottom: 16,
         }}>
-          <TouchableOpacity onPress={() => onDeleteProduct(data.id)}>
+          {data.status != 'DELETE' && <TouchableOpacity onPress={() => onDeleteProduct(data.id)}>
             <Image source={ImagesPath.trash} />
-          </TouchableOpacity>
+          </TouchableOpacity>}
         <TouchableOpacity
           style={{
             borderRadius: 20,
