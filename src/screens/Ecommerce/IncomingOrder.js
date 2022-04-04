@@ -37,6 +37,10 @@ import CardOrder from './CardOrder';
 function BelumDibayar({data}) {
   const {Color} = useColor();
   const navigation = useNavigation();
+
+  useEffect(() => {
+    data.getOrder('OPEN');
+  }, []);
   return (
     <View style={{backgroundColor: Color.semiwhite}}>
       {data.loadingIncoming ? (
@@ -962,18 +966,15 @@ const IncomingOrder = ({route, navigation}) => {
   const [loadingIncoming, setLoadingIncoming] = useState(true);
   const {height} = useWindowDimensions();
 
-  const getOrder = async () => {
-    console.log(user);
+  const getOrder = async type => {
     let variables = {
       page: 1,
       itemPerPage: 10,
-      status: undefined,
-      userId: 287,
-      merchantId: route.params.item.id
-      //   dummy userId (temporary)
+      status: type,
+      userId: user.userId,
+      merchantId: route.params.item.id,
     };
 
-    console.log(variables);
     await Client.query({query: queryListOrder, variables})
       .then(res => {
         if (res.data.ecommerceOrderList) {
@@ -984,12 +985,11 @@ const IncomingOrder = ({route, navigation}) => {
       .catch(reject => {
         console.log(reject);
       });
-    console.log('aku data', data);
   };
 
-  useEffect(() => {
-    getOrder();
-  }, []);
+  // useEffect(() => {
+  //   getOrder();
+  // }, []);
 
   return (
     <Scaffold
@@ -1027,7 +1027,7 @@ const IncomingOrder = ({route, navigation}) => {
         <Tab.Screen
           name="BelumDibayar"
           children={() => (
-            <BelumDibayar data={{data, loadingIncoming, height}} />
+            <BelumDibayar data={{data, loadingIncoming, height, getOrder}} />
           )}
           options={{tabBarLabel: 'Belum Dibayar'}}
         />
