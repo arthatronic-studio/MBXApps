@@ -34,6 +34,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MyShopHeader from './MyShopHeader';
 import { queryGetMyProduct, queryGetMyShop } from 'src/lib/query/ecommerce';
+import { useIsFocused } from '@react-navigation/native';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -52,12 +53,13 @@ const MyShopHomepage = ({ navigation }) => {
     const [data, setData] = useState([]);
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
 	const { Color } = useColor();
+	const isFocused = useIsFocused();
 
 	
 	useEffect(() => {
 		getMyShop();
 	// });
-	}, []);
+	}, [isFocused]);
 	
 	const getMyShop = () => {
 		let variables = {
@@ -93,7 +95,7 @@ const MyShopHomepage = ({ navigation }) => {
 						borderRadius: 8, elevation: 5, marginTop: 20, marginHorizontal: 16,
 						}}>
 					<Image source={ImagesPath.shopbanner} style={{width: '100%', resizeMode: 'contain'}}/>
-					<Image source={ImagesPath.shopprofile} style={{alignSelf: 'center', position: 'absolute', marginVertical: 20}}/>
+					<Image source={{ uri: data.profileImg }} resizeMode='contain' style={{alignSelf: 'center', height: 100, width: 60,  position: 'absolute', zIndex: 1, marginVertical: 20}}/>
 					<View style={{width: '100%', height: 50}}></View>
 					<Text>{data.name}</Text>
 					<View style={{alignSelf: 'center', flexDirection: 'row', marginVertical: 6}}>
@@ -107,7 +109,7 @@ const MyShopHomepage = ({ navigation }) => {
 						</View>
 					</View>
 					<View style={{alignItems: 'center', marginVertical: 20}}>
-						<Pressable onPress={() => navigation.navigate('EditMerchantInfo')} style={{borderWidth: 1, borderColor: Color.primary, height: 30, width: '30%', borderRadius: 3}}>
+						<Pressable onPress={() => navigation.navigate('EditMerchantInfo', {item: data})} style={{borderWidth: 1, borderColor: Color.primary, height: 30, width: '30%', borderRadius: 3}}>
 							<View style={{flexDirection: 'row', paddingVertical: 5, justifyContent: 'center', alignItems: 'center'}}>
 								<AntDesign name={'edit'} size={14} style={{color: Color.primary ,paddingHorizontal: 5}}/>
 								<Text style={{color: Color.primary ,fontSize: 10, paddingHorizontal: 5}}>Edit Toko</Text>

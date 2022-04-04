@@ -153,7 +153,7 @@ const CardOrder = ({data}) => {
                       <Divider />
                       <View style={{flexDirection: 'row'}}>
                         <Image
-                          source={ImagesPath.produklelang}
+                          source={{ uri: product.imageUrl }}
                           style={{width: 50, height: 50, borderRadius: 5}}
                         />
                         <View style={{marginHorizontal: 10}}>

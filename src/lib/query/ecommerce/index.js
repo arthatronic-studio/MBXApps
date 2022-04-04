@@ -181,7 +181,7 @@ export const queryListOrder = gql`
 query (
   $page: Int
 	$itemPerPage: Int
-	$status: EcommerceOrderManageType,
+	$status: EcommerceOrderStatusEnum,
   $userId: Int
   $merchantId: Int
 ){
@@ -483,7 +483,7 @@ export const queryGetCart = gql`
 export const queryGetMyShop = gql`
   query{
     ecommerceGetMerchant {
-      id userId name noTelp alamat profileImg isVerified isOfficial createdAt
+      id userId name noTelp alamat profileImg isVerified isOfficial createdAt lat long socialMedia { instagram }
    }
   }
 `;
@@ -568,16 +568,18 @@ mutation(
     body: $body
   ) {
     id
-    userId
-    name
-    noTelp
-    alamat
-    profileImg
-    isVerified
-    isOfficial
-    createdAt
-    updatedAt
-    user
+  }
+}
+`;
+
+export const mutationDeleteProduct = gql`
+mutation(
+  $id: Int
+) {
+  ecommerceProductDelete(
+    id: $id
+  ) {
+    success
   }
 }
 `;

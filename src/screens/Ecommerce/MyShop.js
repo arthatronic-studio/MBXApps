@@ -97,7 +97,7 @@ const MyShop = ({ navigation, route }) => {
               <Image source={ImagesPath.shopbanner} style={{width: '98%'}}/>
             </View>
             <View style={{ flexDirection: 'row', height: 72, backgroundColor: Color.textInput, position: 'absolute', elevation: 1, top: 36, zIndex: 1, left: 16, width: 72, borderRadius: 8 }}> 
-              <Image source={ImagesPath.shopprofile} style={{width: '100%', height: '100%'}}/>
+              <Image source={{ uri: data.profileImg }} style={{width: '100%', height: '100%'}}/>
             </View>
             <View style={{alignItems: 'flex-end', marginHorizontal: 20, marginVertical: 8}}>
               <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: Color.primary, height: 28, width: '24%', borderRadius: 8}}>

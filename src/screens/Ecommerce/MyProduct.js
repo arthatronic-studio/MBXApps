@@ -180,7 +180,7 @@ const MyProduct = ({navigation, route}) => {
             data={data.productList}
             keyExtractor={(item, index) => item.toString() + index}
             renderItem={({item}) => {
-              return <CardProduct data={item} />;
+              return <CardProduct  data={item} getProductList={() => getProductList()} />;
             }}
           />
         </View>
