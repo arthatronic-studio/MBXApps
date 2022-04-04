@@ -38,14 +38,10 @@ import CardOrder from './CardOrder';
 function BelumDibayar({data, getData}) {
   const {Color} = useColor();
   const navigation = useNavigation();
-  const isFocused = useIsFocused();
- 
 
   useEffect(() => {
-    console.log('Belum Bayar dong')
-    getData('OPEN')
-  }, [isFocused]);
-
+    data.getOrder('OPEN');
+  }, []);
   return (
     <View style={{backgroundColor: Color.semiwhite}}>
       {data.loadingIncoming ? (
@@ -492,22 +488,15 @@ const IncomingOrder = ({route, navigation}) => {
   const [loadingIncoming, setLoadingIncoming] = useState(true);
   const {height} = useWindowDimensions();
 
-  const setShowScreen = (index) => {
-    setScreen(index)
-  }
-
-  const getOrder = async (status) => {
-    console.log(user);
+  const getOrder = async type => {
     let variables = {
       page: 1,
       itemPerPage: 10,
-      status: status,
-      userId: 287,
-      merchantId: route.params.item.id
-      //   dummy userId (temporary)
+      status: type,
+      userId: user.userId,
+      merchantId: route.params.item.id,
     };
 
-    console.log(variables);
     await Client.query({query: queryListOrder, variables})
       .then(res => {
         console.log(res)
@@ -519,12 +508,11 @@ const IncomingOrder = ({route, navigation}) => {
       .catch(reject => {
         console.log(reject);
       });
-    console.log('aku data', data);
   };
 
-  useEffect(() => {
-    console.log('Induk')
-  }, []);
+  // useEffect(() => {
+  //   getOrder();
+  // }, []);
 
   return (
     <Scaffold
@@ -562,35 +550,35 @@ const IncomingOrder = ({route, navigation}) => {
         <Tab.Screen
           name="BelumDibayar"
           children={() => (
-            <BelumDibayar data={{data, loadingIncoming, height}} show={screenShow} getData={getOrder} setShowScreen={setShowScreen} setShowScreen={setShowScreen} />
+            <BelumDibayar data={{data, loadingIncoming, height, getOrder}} getData={getOrder} />
           )}
           options={{tabBarLabel: 'Belum Dibayar'}}
         />
         <Tab.Screen
           name="Dikemas"
           children={() => (
-            <Dikemas data={{data, loadingIncoming, height}} show={screenShow} getData={getOrder} setShowScreen={setShowScreen} />
+            <Dikemas data={{data, loadingIncoming, height}} show={screenShow} getData={getOrder} />
           )}
           options={{tabBarLabel: 'Dikemas'}}
         />
         <Tab.Screen
           name="Dikirim"
           children={() => (
-            <Dikirim data={{data, loadingIncoming, height}} show={screenShow} getData={getOrder} setShowScreen={setShowScreen} />
+            <Dikirim data={{data, loadingIncoming, height}} show={screenShow} getData={getOrder} />
           )}
           options={{tabBarLabel: 'Dikirim'}}
         />
         <Tab.Screen
           name="Selesai"
           children={() => (
-            <Selesai data={{data, loadingIncoming, height}} show={screenShow} getData={getOrder} setShowScreen={setShowScreen} />
+            <Selesai data={{data, loadingIncoming, height}} show={screenShow} getData={getOrder} />
           )}
           options={{tabBarLabel: 'Selesai'}}
         />
         <Tab.Screen
           name="Komplainan"
           children={() => (
-            <Komplainan data={{data, loadingIncoming, height}} show={screenShow} getData={getOrder} setShowScreen={setShowScreen} />
+            <Komplainan data={{data, loadingIncoming, height}} show={screenShow} getData={getOrder} />
           )}
           options={{tabBarLabel: 'Komplainan'}}
         />

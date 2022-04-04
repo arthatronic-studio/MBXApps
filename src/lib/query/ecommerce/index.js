@@ -181,7 +181,7 @@ export const queryListOrder = gql`
 query (
   $page: Int
 	$itemPerPage: Int
-	$status: EcommerceOrderStatusEnum,
+	$status: EcommerceOrderStatusEnum ,
   $userId: Int
   $merchantId: Int
 ){
@@ -237,6 +237,7 @@ query (
       }
     }
     address {
+      penerimaName
       id
       userId
       address
