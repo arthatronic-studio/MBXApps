@@ -326,12 +326,13 @@ const Ecommerce = ({navigation}) => {
     <Pressable
       onPress={() => navigation.navigate('DetailProduct', {item})}
       style={{
-        marginHorizontal: 10,
+        marginHorizontal: 15,
         marginVertical: 10,
-        backgroundColor: Color.textInput,
-        width: '45%',
-        height: 300,
+        backgroundColor: Color.theme,
+        width: '43%',
+        height: 320,
         borderRadius: 10,
+        elevation: 5,
       }}>
       <Image
         source={{uri: item.imageUrl}}
@@ -342,7 +343,32 @@ const Ecommerce = ({navigation}) => {
           marginVertical: 8,
         }}
       />
-      <Text style={{fontWeight: 'bold'}}>{item.name}</Text>
+      <View
+        style={{
+          backgroundColor: Color.error,
+          width: '40%',
+          height: 47,
+          position: 'absolute',
+          borderBottomLeftRadius: 15,
+          borderTopRightRadius: 15,
+          alignSelf: 'flex-end',
+          paddingVertical: 5,
+        }}>
+        <Text style={{fontSize: 10, color: Color.textInput}}>Diskon</Text>
+        <Text
+          style={{fontSize: 18, color: Color.textInput, fontWeight: 'bold'}}>
+          10%
+        </Text>
+      </View>
+      <Text
+        style={{
+          fontWeight: 'bold',
+          width: '95%',
+          height: 38,
+          paddingHorizontal: 2,
+        }}>
+        {item.name}
+      </Text>
       <View
         style={{flexDirection: 'row', marginHorizontal: 12, marginVertical: 5}}>
         <Entypo name={'star'} style={{color: Color.yellow}} />
@@ -402,7 +428,7 @@ const Ecommerce = ({navigation}) => {
   );
 
   return (
-    <ScrollView>
+    <ScrollView style={{backgroundColor: Color.theme}}>
       <View>
         <View
           style={{
@@ -689,7 +715,7 @@ const Ecommerce = ({navigation}) => {
                   backgroundColor: Color.error,
                   borderRadius: 20,
                   position: 'absolute',
-                  marginHorizontal: 42,
+                  marginHorizontal: 35,
                   marginVertical: 3,
                 }}
               />
@@ -713,14 +739,14 @@ const Ecommerce = ({navigation}) => {
               marginHorizontal: 5,
               marginVertical: 2,
               fontSize: 12,
-              color: Color.info,
+              color: Color.primary,
               fontWeight: 'bold',
             }}>
             Lihat Semua
           </Text>
           <AntDesign
             name={'arrowright'}
-            style={{marginVertical: 4, color: Color.info}}
+            style={{marginVertical: 4, color: Color.primary}}
           />
         </View>
         <FlatList
@@ -750,14 +776,14 @@ const Ecommerce = ({navigation}) => {
               marginHorizontal: 5,
               marginVertical: 2,
               fontSize: 12,
-              color: Color.info,
+              color: Color.primary,
               fontWeight: 'bold',
             }}>
             Lihat Semua
           </Text>
           <AntDesign
             name={'arrowright'}
-            style={{marginVertical: 4, color: Color.info}}
+            style={{marginVertical: 4, color: Color.primary}}
           />
         </View>
         <FlatList
@@ -789,14 +815,14 @@ const Ecommerce = ({navigation}) => {
               marginHorizontal: 5,
               marginVertical: 2,
               fontSize: 12,
-              color: Color.info,
+              color: Color.primary,
               fontWeight: 'bold',
             }}>
             Lihat Semua
           </Text>
           <AntDesign
             name={'arrowright'}
-            style={{marginVertical: 4, color: Color.info}}
+            style={{marginVertical: 4, color: Color.primary}}
           />
         </View>
         <FlatList

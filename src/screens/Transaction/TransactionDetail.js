@@ -1,14 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {View, Image} from 'react-native';
-
+import {Divider, Line} from 'src/styled';
 import {connect, useDispatch, useStore} from 'react-redux';
-
 import {TouchableOpacity} from '@src/components/Button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import Styled from 'styled-components';
 import Text from '@src/components/Text';
-
-import Scaffold from '@src/components/Scaffold';
 import {Header, Loading, useLoading} from 'src/components';
 import {ScrollView} from 'react-native-gesture-handler';
 import ImagesPath from 'src/components/ImagesPath';
@@ -16,6 +13,23 @@ import {mutationCancel, queryDetailOrder} from 'src/lib/query/ecommerce';
 import client from 'src/lib/apollo';
 import Moment from 'moment';
 import {FormatMoney} from 'src/utils';
+import {
+  HeaderBig,
+  useColor,
+  Scaffold,
+  Row,
+  Col,
+  Button,
+  Submit,
+} from '@src/components';
+import ColorPropType from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedColorPropType';
+
+const Content = Styled(View)`
+    margin: 16px
+    marginBottom: 0px
+    padding: 12px
+    borderRadius: 8px
+`;
 
 const TransactionDetail = ({route, navigation}) => {
   const dispatch = useDispatch();
@@ -80,7 +94,7 @@ const TransactionDetail = ({route, navigation}) => {
     });
     navigation.navigate('PaymentScreen', {back: true});
   };
-
+  const {Color} = useColor();
   return (
     <Scaffold
       header={
@@ -94,406 +108,449 @@ const TransactionDetail = ({route, navigation}) => {
       }
       style={{backgroundColor: '#E5E5E5'}}>
       <ScrollView>
+        {/* ======== Detail Transaksi ========== */}
         <View
           style={{
-            backgroundColor: '#FFFFFF',
-            borderRadius: 8,
-            marginTop: 25,
-            paddingBottom: 25,
-            width: '95%',
+            width: '93%',
             alignSelf: 'center',
+            height: 120,
+            backgroundColor: Color.theme,
+            borderRadius: 10,
+            marginTop: 5,
           }}>
+          <Row style={{paddingHorizontal: 10, paddingVertical: 10}}>
+            <Text style={{fontSize: 11, fontWeight: 'bold'}}>
+              Detail Transaksi
+            </Text>
+          </Row>
           <View
             style={{
-              alignItems: 'baseline',
-              marginTop: 25,
-              borderBottomWidth: 1,
-              borderColor: '#E5E5E5',
-            }}>
-            <View style={{marginLeft: 9, paddingBottom: 15}}>
-              <Text style={{fontWeight: 'bold'}}>Detail Transaksi</Text>
-            </View>
-          </View>
-          <View
-            style={{
-              marginLeft: 9,
-              alignItems: 'baseline',
-              marginTop: 10,
-              justifyContent: 'space-between',
-              display: 'flex',
-              flexDirection: 'row',
-              marginRight: 10,
-            }}>
-            <Text style={{color: 'gray'}}>Status</Text>
-            <Text style={{color: '#F3771D'}}>{data.status}</Text>
-          </View>
-          <View
-            style={{
-              marginLeft: 9,
-              alignItems: 'baseline',
-              marginTop: 10,
-              justifyContent: 'space-between',
-              display: 'flex',
-              flexDirection: 'row',
-              marginRight: 10,
-            }}>
-            <Text style={{color: 'gray'}}>No Recipt</Text>
-            <Text>{data.orderNumber}</Text>
-          </View>
-          <View
-            style={{
-              marginLeft: 9,
-              alignItems: 'baseline',
-              marginTop: 10,
-              justifyContent: 'space-between',
-              display: 'flex',
-              flexDirection: 'row',
-              marginRight: 10,
-            }}>
-            <Text style={{color: 'gray'}}>Tanggal Transaksi</Text>
-            <Text size={12}>
+              backgroundColor: Color.border,
+              height: 1,
+              width: '100%',
+            }}
+          />
+          <Row style={{paddingHorizontal: 10, paddingVertical: 5}}>
+            <Text
+              style={{
+                fontSize: 10,
+                width: '40%',
+                textAlign: 'left',
+                color: Color.secondary,
+              }}>
+              Status
+            </Text>
+            <Text
+              style={{
+                fontSize: 10,
+                width: '60%',
+                textAlign: 'right',
+                color: Color.primary,
+                fontWeight: 'bold',
+              }}>
+              {data.status}
+            </Text>
+          </Row>
+          <Row style={{paddingHorizontal: 10, paddingVertical: 5}}>
+            <Text
+              style={{
+                fontSize: 10,
+                width: '40%',
+                textAlign: 'left',
+                color: Color.secondary,
+              }}>
+              No Recipt
+            </Text>
+            <Text
+              style={{
+                fontSize: 10,
+                width: '60%',
+                textAlign: 'right',
+                fontWeight: 'bold',
+              }}>
+              {data.orderNumber}
+            </Text>
+          </Row>
+          <Row style={{paddingHorizontal: 10, paddingVertical: 5}}>
+            <Text
+              style={{
+                color: Color.secondary,
+                fontSize: 10,
+                width: '40%',
+                textAlign: 'left',
+              }}>
+              Tanggal Transaksi
+            </Text>
+            <Text
+              style={{
+                fontSize: 10,
+                width: '60%',
+                textAlign: 'right',
+                fontWeight: 'bold',
+              }}>
               {Moment(parseInt(data.createdAt)).format(
                 'dddd, DD MMMM YYYY HH:mm',
               )}{' '}
               WIB
             </Text>
-          </View>
+          </Row>
         </View>
 
-        <View
-          style={{
-            backgroundColor: '#FFFFFF',
-            borderRadius: 8,
-            marginTop: 25,
-            paddingBottom: 25,
-            width: '95%',
-            alignSelf: 'center',
-          }}>
-          <View
-            style={{
-              alignItems: 'baseline',
-              marginTop: 25,
-              borderBottomWidth: 1,
-              borderColor: '#E5E5E5',
-            }}>
-            <View style={{marginLeft: 9, paddingBottom: 15}}>
-              <Text style={{fontWeight: 'bold'}}>Detail Produk</Text>
-            </View>
-          </View>
-          {data.items &&
-            data.items.map((value, id) => (
-              <View>
-                {value.products.map((val, idx) => (
-                  <>
-                    <View
-                      style={{
-                        marginLeft: 9,
-                        alignItems: 'baseline',
-                        marginTop: 10,
-                        display: 'flex',
-                        flexDirection: 'row',
-                        marginRight: 10,
-                      }}>
-                      <Image
-                        source={{uri: val.imageUrl}}
-                        style={{resizeMode: 'contain', width: 70, height: 70}}
-                      />
-                      <View
-                        style={{
-                          marginLeft: 18,
-                          flexDirection: 'column-reverse',
-                        }}>
-                        <View style={{paddingRight: 150}}>
-                          {/* <Text style={{ color: 'gray', fontSize: 12 }}>Stok Barang : {val.quantity}pcs </Text> */}
-                        </View>
-                        <View>
-                          <Text
-                            style={{
-                              color: 'black',
-                              fontSize: 21,
-                              fontWeight: 'bold',
-                            }}>
-                            {val.name}
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                    <View
-                      style={{
-                        marginLeft: 75,
-                        alignItems: 'baseline',
-                        marginTop: 10,
-                        justifyContent: 'space-between',
-                        display: 'flex',
-                        flexDirection: 'row',
-                        marginRight: 10,
-                      }}>
-                      <Text style={{color: 'gray', fontSize: 12}}>
-                        Jumlah Pembelian
-                      </Text>
-                      <Text style={{color: 'gray', fontSize: 12}}>
-                        x{val.quantity}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        marginLeft: 75,
-                        alignItems: 'baseline',
-                        marginTop: 10,
-                        justifyContent: 'space-between',
-                        display: 'flex',
-                        flexDirection: 'row',
-                        marginRight: 10,
-                      }}>
-                      <Text style={{color: 'gray', fontSize: 12}}>
-                        Harga Barang
-                      </Text>
-                      <Text style={{color: 'gray', fontSize: 12}}>
-                        {val.price} poin
-                      </Text>
-                    </View>
-                  </>
-                ))}
-              </View>
-            ))}
-          <View
-            style={{
-              marginLeft: 75,
-              alignItems: 'baseline',
-              marginTop: 10,
-              justifyContent: 'space-between',
-              display: 'flex',
-              flexDirection: 'row',
-              marginRight: 10,
-            }}>
-            <Text style={{color: 'gray', fontSize: 12}}>Total Pembelian</Text>
-            <Text style={{color: 'black', fontSize: 12, fontWeight: 'bold'}}>
-              {data.totalProductPrice} poin
-            </Text>
-          </View>
-        </View>
+        {/* =========== Finish Detail Transaksi ============= */}
 
-        <View
-          style={{
-            backgroundColor: '#FFFFFF',
-            borderRadius: 8,
-            marginTop: 25,
-            paddingBottom: 25,
-            width: '95%',
-            alignSelf: 'center',
-          }}>
-          <View
-            style={{
-              alignItems: 'baseline',
-              marginTop: 25,
-              borderBottomWidth: 1,
-              borderColor: '#E5E5E5',
-            }}>
-            <View style={{marginLeft: 9, paddingBottom: 15}}>
-              <Text style={{fontWeight: 'bold'}}>Info Pengiriman</Text>
-            </View>
-          </View>
-          <View
-            style={{
-              marginLeft: 9,
-              alignItems: 'baseline',
-              marginTop: 10,
-              justifyContent: 'space-between',
-              display: 'flex',
-              flexDirection: 'row',
-              marginRight: 70,
-            }}>
-            <Text style={{color: 'gray'}}>Nama Pembeli</Text>
-            <Text style={{color: '#F3771D'}}>
-              {data.address && data.address.penerimaName}
-            </Text>
-          </View>
-          <View
-            style={{
-              marginLeft: 9,
-              alignItems: 'baseline',
-              marginTop: 10,
-              justifyContent: 'space-between',
-              display: 'flex',
-              flexDirection: 'row',
-              marginRight: 75,
-            }}>
-            <Text style={{color: 'gray'}}>
-              No. Resi Pengiriman{' '}
-              <Ionicons name="copy-outline" size={16} color="orange" />
-            </Text>
-            <Text>{data.shipperOrderNumber}</Text>
-          </View>
-          {data.address && (
+        {/* =========== Detail Produk ============= */}
+        {data.items &&
+          data.items.map((value, id) => (
             <View
               style={{
-                marginLeft: 9,
-                alignItems: 'baseline',
-                marginTop: 10,
-                justifyContent: 'space-between',
-                display: 'flex',
-                flexDirection: 'row',
-                marginRight: 117,
+                width: '93%',
+                alignSelf: 'center',
+                height: 130,
+                backgroundColor: Color.theme,
+                borderRadius: 10,
+                marginVertical: 15,
               }}>
-              <Text style={{color: 'gray'}}>
-                Alamat Pengiriman{' '}
-                <Ionicons
-                  name="copy-outline"
-                  size={16}
-                  type="entypo"
-                  color="orange"
-                />
+              {value.products.map((val, idx) => (
+                <>
+                  <Row style={{paddingHorizontal: 10, paddingVertical: 10}}>
+                    <Text style={{fontSize: 11, fontWeight: 'bold'}}>
+                      Detail Produk
+                    </Text>
+                  </Row>
+                  <View
+                    style={{
+                      backgroundColor: Color.border,
+                      height: 1,
+                      width: '100%',
+                    }}
+                  />
+                  <Row>
+                    <Image
+                      source={{uri: val.imageUrl}}
+                      style={{
+                        width: 50,
+                        height: 50,
+                        borderRadius: 5,
+                        marginHorizontal: 10,
+                        marginVertical: 10,
+                      }}
+                    />
+                    <Col>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 'bold',
+                          textAlign: 'left',
+                          marginHorizontal: 10,
+                          marginVertical: 5,
+                        }}>
+                        {val.name}
+                      </Text>
+                      <Row style={{paddingHorizontal: 10, paddingVertical: 2}}>
+                        <Text
+                          style={{
+                            fontSize: 8,
+                            width: '40%',
+                            textAlign: 'left',
+                            color: Color.secondary,
+                          }}>
+                          Jumlah Pembelian
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 8,
+                            width: '60%',
+                            textAlign: 'right',
+                            color: Color.secondary,
+                            fontWeight: 'bold',
+                          }}>
+                          x{val.quantity}
+                        </Text>
+                      </Row>
+                      <Row style={{paddingHorizontal: 10, paddingVertical: 2}}>
+                        <Text
+                          style={{
+                            fontSize: 8,
+                            width: '40%',
+                            textAlign: 'left',
+                            color: Color.secondary,
+                          }}>
+                          Harga Barang
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 8,
+                            width: '60%',
+                            textAlign: 'right',
+                            color: Color.secondary,
+                          }}>
+                          {val.price} poin
+                        </Text>
+                      </Row>
+                      <Row style={{paddingHorizontal: 10, paddingVertical: 2}}>
+                        <Text
+                          style={{
+                            fontSize: 8,
+                            width: '40%',
+                            textAlign: 'left',
+                            color: Color.secondary,
+                          }}>
+                          Total Pembelian
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 8,
+                            width: '60%',
+                            textAlign: 'right',
+                            color: Color.secondary,
+                            fontWeight: 'bold',
+                          }}>
+                          {data.totalProductPrice} poin
+                        </Text>
+                      </Row>
+                    </Col>
+                  </Row>
+                </>
+              ))}
+            </View>
+          ))}
+        {/* =========== Finish Detail Produk ============= */}
+
+        <View
+          style={{
+            width: '93%',
+            alignSelf: 'center',
+            height: 145,
+            backgroundColor: Color.theme,
+            borderRadius: 10,
+          }}>
+          <Row style={{paddingHorizontal: 10, paddingVertical: 10}}>
+            <Text style={{fontSize: 11, fontWeight: 'bold'}}>
+              Info Pengiriman
+            </Text>
+          </Row>
+          <View
+            style={{
+              backgroundColor: Color.border,
+              height: 1,
+              width: '100%',
+            }}
+          />
+          <Row style={{paddingHorizontal: 10, paddingVertical: 5}}>
+            <Text
+              style={{
+                fontSize: 10,
+                width: '37%',
+                textAlign: 'left',
+                color: Color.secondary,
+              }}>
+              Nama Pembeli
+            </Text>
+            <Text
+              style={{
+                fontSize: 10,
+                width: '60%',
+                textAlign: 'left',
+                color: Color.secondary,
+                fontWeight: 'bold',
+              }}>
+              {data.address && data.address.penerimaName}
+            </Text>
+          </Row>
+          <Row style={{paddingHorizontal: 10, paddingVertical: 5}}>
+            <Text
+              style={{
+                fontSize: 10,
+                width: '28%',
+                textAlign: 'left',
+                color: Color.secondary,
+              }}>
+              No Resi Pengiriman
+            </Text>
+            <Ionicons
+              name="copy-outline"
+              size={16}
+              type="entypo"
+              color="orange"
+              style={{marginRight: 15}}
+            />
+            <Text
+              style={{
+                fontSize: 10,
+                width: '60%',
+                textAlign: 'left',
+                color: Color.secondary,
+              }}>
+              {data.shipperOrderNumber}
+            </Text>
+          </Row>
+          {data.address && (
+            <Row style={{paddingHorizontal: 10, paddingVertical: 5}}>
+              <Text
+                style={{
+                  color: Color.secondary,
+                  fontSize: 10,
+                  width: '28%',
+                  textAlign: 'left',
+                }}>
+                Alamat Pengiriman
               </Text>
-              <Text>
+              <Ionicons
+                name="copy-outline"
+                size={16}
+                type="entypo"
+                color="orange"
+                style={{marginRight: 15}}
+              />
+              <Text
+                style={{
+                  fontSize: 10,
+                  width: '60%',
+                  textAlign: 'left',
+                  fontWeight: 'bold',
+                  lineHeight: 18,
+                }}>
                 {data.address.address},{' '}
                 {data.address && data.address.suburb.name},{' '}
                 {data.address && data.address.city.name},{' '}
                 {data.address && data.address.province.name}
               </Text>
-            </View>
+            </Row>
           )}
         </View>
 
+        {/* Rincian Pembayaran */}
         <View
           style={{
-            backgroundColor: '#FFFFFF',
-            marginBottom: 10,
-            borderRadius: 8,
-            marginTop: 25,
-            paddingBottom: 25,
-            width: '95%',
+            width: '93%',
             alignSelf: 'center',
+            height: 180,
+            backgroundColor: Color.theme,
+            borderRadius: 10,
+            marginTop: 15,
           }}>
+          <Row style={{paddingHorizontal: 10, paddingVertical: 10}}>
+            <Text style={{fontSize: 11, fontWeight: 'bold'}}>
+              Rincian Pembayaran
+            </Text>
+          </Row>
           <View
             style={{
-              alignItems: 'baseline',
-              marginTop: 25,
-              borderBottomWidth: 1,
-              borderColor: '#E5E5E5',
-            }}>
-            <View style={{marginLeft: 9, paddingBottom: 15}}>
-              <Text style={{fontWeight: 'bold'}}>Rincian Pembayaran</Text>
-            </View>
-          </View>
-          <View
-            style={{
-              marginLeft: 9,
-              alignItems: 'baseline',
-              marginTop: 10,
-              justifyContent: 'space-between',
-              display: 'flex',
-              flexDirection: 'row',
-              marginRight: 10,
-            }}>
-            <Text style={{color: 'gray'}}>Metode Pembayaran</Text>
-            <Text style={{color: '#F3771D'}}>
+              backgroundColor: Color.border,
+              height: 1,
+              width: '100%',
+            }}
+          />
+          <Row style={{paddingHorizontal: 10, paddingVertical: 5}}>
+            <Text
+              style={{
+                fontSize: 10,
+                width: '40%',
+                textAlign: 'left',
+                color: Color.secondary,
+              }}>
+              Metode Pembayaran
+            </Text>
+            <Text
+              style={{
+                fontSize: 10,
+                width: '60%',
+                textAlign: 'right',
+                color: Color.secondary,
+                fontWeight: 'bold',
+              }}>
               {data.payment ? data.payment.name : ''}
             </Text>
-          </View>
-          <View
-            style={{
-              marginLeft: 9,
-              alignItems: 'baseline',
-              marginTop: 10,
-              justifyContent: 'space-between',
-              display: 'flex',
-              flexDirection: 'row',
-              marginRight: 10,
-            }}>
-            <Text style={{color: 'gray'}}>Total Harga Barang</Text>
-            <Text>{FormatMoney.getFormattedMoney(data.totalProductPrice)}</Text>
-          </View>
-          <View
-            style={{
-              marginLeft: 9,
-              alignItems: 'baseline',
-              marginTop: 10,
-              justifyContent: 'space-between',
-              display: 'flex',
-              flexDirection: 'row',
-              marginRight: 10,
-            }}>
-            <Text style={{color: 'gray'}}>Total Ongkir</Text>
-            <Text>{FormatMoney.getFormattedMoney(data.shippingCost)}</Text>
-          </View>
-          <View
-            style={{
-              marginLeft: 9,
-              alignItems: 'baseline',
-              marginTop: 10,
-              justifyContent: 'space-between',
-              display: 'flex',
-              flexDirection: 'row',
-              marginRight: 10,
-            }}>
-            <Text style={{color: 'gray'}}>Biaya Administrasi</Text>
-            <Text>{FormatMoney.getFormattedMoney(data.adminFee)}</Text>
-          </View>
-          <View
-            style={{
-              marginLeft: 9,
-              alignItems: 'baseline',
-              marginTop: 10,
-              justifyContent: 'space-between',
-              display: 'flex',
-              flexDirection: 'row',
-              marginRight: 10,
-            }}>
-            <Text style={{color: 'black', fontWeight: 'bold'}}>
+          </Row>
+          <Row style={{paddingHorizontal: 10, paddingVertical: 5}}>
+            <Text
+              style={{
+                fontSize: 10,
+                width: '40%',
+                textAlign: 'left',
+                color: Color.secondary,
+              }}>
+              Total Harga (1 Barang)
+            </Text>
+            <Text
+              style={{
+                fontSize: 10,
+                width: '60%',
+                textAlign: 'right',
+                fontWeight: 'bold',
+                color: Color.secondary,
+              }}>
+              {FormatMoney.getFormattedMoney(data.totalProductPrice)}
+            </Text>
+          </Row>
+          <Row style={{paddingHorizontal: 10, paddingVertical: 5}}>
+            <Text
+              style={{
+                color: Color.secondary,
+                fontSize: 10,
+                width: '40%',
+                textAlign: 'left',
+              }}>
+              Total Ongkir
+            </Text>
+            <Text
+              style={{
+                fontSize: 10,
+                width: '60%',
+                textAlign: 'right',
+                fontWeight: 'bold',
+                color: Color.secondary,
+              }}>
+              {FormatMoney.getFormattedMoney(data.shippingCost)}
+            </Text>
+          </Row>
+          <Row style={{paddingHorizontal: 10, paddingVertical: 5}}>
+            <Text
+              style={{
+                color: Color.secondary,
+                fontSize: 10,
+                width: '40%',
+                textAlign: 'left',
+              }}>
+              Biaya Administrasi
+            </Text>
+            <Text
+              style={{
+                fontSize: 10,
+                width: '60%',
+                textAlign: 'right',
+                fontWeight: 'bold',
+                color: Color.secondary,
+              }}>
+              {FormatMoney.getFormattedMoney(data.adminFee)}
+            </Text>
+          </Row>
+          <Row style={{paddingHorizontal: 10, paddingVertical: 10}}>
+            <Text
+              style={{
+                color: Color.secondary,
+                fontSize: 11,
+                width: '40%',
+                textAlign: 'left',
+                fontWeight: 'bold',
+                color: Color.text,
+              }}>
               Total Bayar
             </Text>
-            <Text style={{color: 'black', fontWeight: 'bold'}}>
+            <Text
+              style={{
+                fontSize: 11,
+                width: '60%',
+                textAlign: 'right',
+                fontWeight: 'bold',
+                color: Color.text,
+              }}>
               {FormatMoney.getFormattedMoney(data.totalPrice)}
             </Text>
-          </View>
+          </Row>
         </View>
+        <Divider height={25} />
       </ScrollView>
-
-      <View
-        style={{
-          width: '100%',
-          height: 70,
-          alignItems: 'center',
-          borderRadius: 10,
-          backgroundColor: 'white',
-          paddingTop: 10,
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-        }}>
-        {data.status != 'CHECKOUT' && (
-          <TouchableOpacity
-            onPress={() => {
-              data.status != 'CHECKOUT' ? cancelButton() : onPayment();
-            }}
-            style={{
-              borderWidth: 1,
-              borderColor: '#F3771D',
-              backgroundColor: 'white',
-              width: '45%',
-              height: 45,
-              borderRadius: 50,
-              justifyContent: 'center',
-            }}>
-            <Text style={{color: '#F3771D'}}>
-              {data.status != 'CHECKOUT'
-                ? 'Batalkan Pesanan'
-                : 'Lanjut  Pembayaran'}
-            </Text>
-          </TouchableOpacity>
-        )}
-        <TouchableOpacity
-          onPress={() => submit()}
-          style={{
-            backgroundColor: '#F3771D',
-            width: data.status == 'CHECKOUT' ? '95%' : '45%',
-            height: 45,
-            borderRadius: 50,
-            justifyContent: 'center',
-          }}>
-          <Text style={{color: 'white'}}>Chat Pembeli</Text>
-        </TouchableOpacity>
-      </View>
-      <Loading {...loadingProps} />
     </Scaffold>
   );
 };
