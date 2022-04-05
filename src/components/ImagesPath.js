@@ -105,9 +105,8 @@ export default {
   chatframe: require('../components/Images/chatframe.png'),
   wishlistframe: require('../components/Images/wishlistframe.png'),
   scales: require('../components/Images/scales.png'),
-
-
-
-
-  
+  mail: require('../components/Images/mail.png'),
+  chatimage: require('../components/Images/chatimage.png'),
+  toko: require('../components/Images/Toko.png'),
+  BannerPink: require('../components/Images/BannerPink.png'),
 };

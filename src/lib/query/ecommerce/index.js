@@ -8,9 +8,14 @@ query(
    orderId: $orderId
  ) {
   userId
+  bookingId
   orderNumber
   expiredDate
   status
+  payment{
+    name
+  }
+  adminFee
   shippingAddressId
   shippingIsCod
   shippingRateId
@@ -117,16 +122,28 @@ query(
   createdAt
   updatedAt
   deletedAt
-  products {
+  items {
     id
-    product{
-      name
+    name
+    noTelp
+    socialMedia {
+      instagram
     }
-    orderId
-    productId
-    quantity
-    price
+    products {
+      id
+      name
+      description
+      width
+      height
+      length
+      width
+      price
+      imageUrl
+      stock
+      quantity
+    }
   }
+  
   address {
     id
     penerimaName
@@ -164,14 +181,16 @@ export const queryListOrder = gql`
 query (
   $page: Int
 	$itemPerPage: Int
-	$status: EcommerceOrderManageType,
+	$status: EcommerceOrderStatusEnum ,
   $userId: Int
+  $merchantId: Int
 ){
   ecommerceOrderList(
     page: $page,
     itemPerPage: $itemPerPage,
     status: $status,
-    userId: $userId
+    userId: $userId,
+    merchantId: $merchantId
 	) {
     id
     userId
@@ -218,6 +237,7 @@ query (
       }
     }
     address {
+      penerimaName
       id
       userId
       address
@@ -271,40 +291,9 @@ export const queryAddCart = gql`
       body: $body
     ) {
       id
-      userId
       name
       noTelp
       alamat
-      socialMedia {
-        instagram
-      }
-      profileImg
-      isVerified
-      isOfficial
-      createdAt
-      updatedAt
-      user {
-        userId
-        userName
-        firstName
-        lastName
-        email
-        phoneCountryCode
-        phoneNumber
-        address
-        city
-        postalCode
-        country
-        organizationId
-        organizationName
-        userCode
-        idCardNumber
-        isDirector
-        image
-        photoProfile
-        birthDate
-        blockedUsers
-      }
     }
   }
 `;
@@ -361,6 +350,11 @@ mutation(
     success
     message
     data { 
+      vat
+      amount
+      discount
+      adminFee
+      invoiceNumber
       bookingId 
       orderNumber
       expiredDate
@@ -411,7 +405,51 @@ export const queryGetShipper = gql`
       shipperGetPriceDomestic(
       input: $input
     ) {
-      pricings{ logistic { id name company_name code logo_url } final_price min_day max_day must_use_insurance discounted_price rate { id name type } }
+      origin{
+        area_id
+      }
+      groupListing{
+        Express{
+          logisticName
+          rateId
+          rateName
+          rateType
+          price
+          estimation
+        }
+        Regular{
+          logisticName
+          rateId
+          rateName
+          rateType
+          price
+          estimation
+        }
+        Trucking{
+          logisticName
+          rateId
+          rateName
+          rateType
+          price
+          estimation
+        }
+        SameDay{
+          logisticName
+          rateId
+          rateName
+          rateType
+          price
+          estimation
+        }
+        Instant{
+          logisticName
+          rateId
+          rateName
+          rateType
+          price
+          estimation
+        }
+      }
     }
   }
 `;
@@ -425,22 +463,47 @@ export const queryGetCart = gql`
      page: $page
      limit: $limit
    ) {
-      id totalProducts productCartInfo { productId quantity } products { id name categoryId description price initialPrice imageUrl stock merchantId }
+      id
+      items{
+        name
+        alamat
+        products{
+          id
+          name
+          price
+          quantity
+          description
+          imageUrl
+        }
+      }
+      totalProducts
+    }
+  }
+`;
+
+export const queryGetMyShop = gql`
+  query{
+    ecommerceGetMerchant {
+      id userId name noTelp alamat profileImg isVerified isOfficial createdAt lat long socialMedia { instagram }
    }
   }
 `;
 
-// export const queryGetMyShop = gql`
-//   query(
-//     $merchantId: Int
-//   ) {
-//     ecommerceGetMerchant(
-//      merchantId: $merchantId
-//    ) {
-//       id userId name noTelp alamat profileImg isVerified isOfficial createdAt user
-//    }
-//   }
-// `;
+export const queryGetListMerchant = gql`
+  query(
+    $merchantName: String
+    $page: Int
+    $limit: Int
+  ) {
+    ecommerceGetListMerchant(
+     page: $page
+     limit: $limit
+     merchantName: $merchantName
+   ) {
+    id userId name noTelp alamat profileImg isVerified isOfficial createdAt
+   }
+  }
+`;
 
 export const queryCreateCart = gql`
   mutation ecommerceCartCreate{
@@ -452,7 +515,7 @@ export const queryCreateCart = gql`
 
 export const queryGetMyProduct = gql`
 query(
-  $merchantId: Int!
+  $merchantId: Int
 ){
   ecommerceGetMerchant(
     merchantId: $merchantId
@@ -487,6 +550,9 @@ query(
       productMassa
       status
   	}
+    socialMedia{
+      instagram
+    }
   }
 }
 
@@ -503,16 +569,18 @@ mutation(
     body: $body
   ) {
     id
-    userId
-    name
-    noTelp
-    alamat
-    profileImg
-    isVerified
-    isOfficial
-    createdAt
-    updatedAt
-    user
+  }
+}
+`;
+
+export const mutationDeleteProduct = gql`
+mutation(
+  $id: Int
+) {
+  ecommerceProductDelete(
+    id: $id
+  ) {
+    success
   }
 }
 `;
@@ -536,10 +604,12 @@ export const queryUpdateItemCart = gql`
   mutation ecommerceCartUpdate(
     $productId: Int!
     $quantity: Int!
+    $checked: Boolean!
   ) {
     ecommerceCartUpdate(
      productId: $productId
      quantity: $quantity
+     checked: $checked
    ) {
     id
    }
@@ -548,12 +618,16 @@ export const queryUpdateItemCart = gql`
 
 export const queryGetProduct = gql`
   query(
-    $page: Int!
-    $itemPerPage: Int!
+    $page: Int
+    $itemPerPage: Int
+    $name: String
+    $categoryId: Int
   ) {
     ecommerceProductList(
      page: $page
      itemPerPage: $itemPerPage
+     name: $name
+     categoryId: $categoryId
    ) {
     id name categoryId description price initialPrice imageUrl stock
    }

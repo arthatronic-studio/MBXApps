@@ -10,6 +10,7 @@ import IonIcons from 'react-native-vector-icons/Ionicons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Entypo from 'react-native-vector-icons/Entypo'
 import { ScrollView } from 'react-native-gesture-handler';
+import CardMyProduct from 'src/components/Card/CardMyProduct';
 
 function Description() {
     const { Color } = useColor();
@@ -22,7 +23,7 @@ function Description() {
         
       
         <View style={{ paddingTop: 10 }}>
-            <CardListProduk />
+            <CardMyProduct />
         </View>
         
     </View>

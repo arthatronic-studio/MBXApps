@@ -111,6 +111,12 @@ const MyProduct = ({navigation, route}) => {
         // hideLoading()
         console.log(res)
         if (res.data.ecommerceGetMerchant) {
+          let temp = []
+          // if(res.data.ecommerceGetMerchant.productList.length > 0){
+          //   res.data.ecommerceGetMerchant.productList.forEach(element => {
+          //     if(element.status ==)
+          //   });
+          // }
           setData(res.data.ecommerceGetMerchant);
           console.log(res.data.ecommerceGetMerchant.productList);
         }
@@ -120,34 +126,6 @@ const MyProduct = ({navigation, route}) => {
         console.log(reject.message, 'error');
       });
   }
-
-  const getProduct = () => {
-    console.log(route, 'props')
-    // showLoading();
-    let variables = {
-      merchantId: 2
-    }
-    console.log(variables)
-    Client.query({query: queryGetMyProduct, variables})
-      .then(res => {
-        // hideLoading()
-        console.log(res)
-        if (res.data.ecommerceCartList) {
-            setCart(res.data.ecommerceCartList)
-            res.data.ecommerceCartList.products.forEach((items, index) => {
-                temp.push({...items, checked: false, ...res.data.ecommerceCartList.productCartInfo[index]})
-            });
-            setList(temp)
-            setChecked(temp)
-        }
-      })
-      .catch(reject => {
-        // hideLoading()
-        alert(reject.message)
-        console.log(reject.message, 'reject');
-      });
-  };
-
 
 
   const deleteProduct = (id, index) => {
@@ -187,7 +165,7 @@ const MyProduct = ({navigation, route}) => {
       header={
         <Header
           customIcon
-          title="Produk Kamu"
+          title="Produk Saya"
           type="regular"
           centerTitle={false}
         />
@@ -208,7 +186,7 @@ const MyProduct = ({navigation, route}) => {
             data={data.productList}
             keyExtractor={(item, index) => item.toString() + index}
             renderItem={({item}) => {
-              return <CardProduct data={item} />;
+              return <CardProduct  data={item} getProductList={getProductList} />;
             }}
           />
         </View>
@@ -238,7 +216,6 @@ const MyProduct = ({navigation, route}) => {
               paddingHorizontal: 16,
               borderRadius: 120,
             }}
-            onPress={() => deleteProduct()}
           >
             
             <Image source={ImagesPath.trash} />

@@ -42,10 +42,10 @@ const CardMerchant = (props) => {
             }}
         >
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Image source={item.image} style={{resizeMode: 'contain', width: 40, height: 40, marginVertical: 8}} />
+                <Image source={{uri: item.profileImg}} style={{resizeMode: 'contain', width: 40, height: 40, marginVertical: 8}} />
                 <View style={{marginLeft: 10}}>
                     <Text align='left' type='bold' style={{marginBottom: 6}}>{item.name}</Text>
-                    <Text align='left' size={10} color={Color.placeholder}>{item.location}</Text>
+                    <Text align='left' size={10} color={Color.placeholder}>{item.alamat}</Text>
                 </View>
             </View>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>

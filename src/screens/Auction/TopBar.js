@@ -8,15 +8,28 @@ import CartAuction from '@src/screens/Auction/CartAuction';
 const Tab = createMaterialTopTabNavigator();
 
 function MyTabs() {
-  const { Color } = useColor();
-  
+  const {Color} = useColor();
+
   return (
     <Tab.Navigator
       initialRouteName="Shop"
       tabBarOptions={{
+        indicatorStyle: {backgroundColor: Color.theme, height: '100%'},
         activeTintColor: Color.primary,
-        labelStyle: {fontSize: 12, },
-        style: {backgroundColor: Color.theme},
+        activeBackgroundColor: Color.primary,
+        inactiveTintColor: Color.secondary,
+        labelStyle: {
+          fontSize: 12,
+          fontWeight: 'bold',
+          color: Color.secondary,
+        },
+        indicatorStyle: {
+          borderBottomColor: Color.primary,
+          borderBottomWidth: 2,
+        },
+        labelStyle: {
+          fontSize: 12,
+        },
       }}>
       <Tab.Screen
         name="Shop"

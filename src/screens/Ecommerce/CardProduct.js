@@ -14,6 +14,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImagesPath from 'src/components/ImagesPath';
+import { navigationRef } from 'App';
 
 import {
   Text,
@@ -38,6 +39,8 @@ import {TextInput} from 'src/components/Form';
 import CardListProduk from 'src/components/Card/CardListProduct';
 import TopTabShop from './TopTabShop';
 import Filter from 'src/components/Filter';
+import client from '@src/lib/apollo';
+import { mutationDeleteProduct } from 'src/lib/query/ecommerce';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -52,13 +55,37 @@ let filter = [
   {id: 1, name: 'Category'},
   {id: 2, name: 'Rating'},
 ];
-const CardProduct = ({data}) => {
-
+const CardProduct = ({data, getProductList}) => {
 
   // selector
   const {Color} = useColor();
   const onSelect = item => {
     setSelectedItem(item);
+  };
+
+  const onDeleteProduct = (id, index) => {
+    // showLoading();
+    let variables = {
+      id
+    }
+    console.log(variables)
+    client.mutate({mutation: mutationDeleteProduct, variables})
+      .then(res => {
+       
+        console.log(res)
+        if (res.data.ecommerceProductDelete) {
+          alert('Success delete')
+          setTimeout(() => {
+          getProductList()
+            
+          }, 1000);
+        }
+      })
+      .catch(reject => {
+        // hideLoading()
+        alert(reject.message)
+        console.log(reject.message, 'reject');
+      });
   };
 
   const [selectedItem, setSelectedItem] = useState(null);
@@ -135,8 +162,11 @@ const CardProduct = ({data}) => {
           marginTop: 16,
           marginBottom: 16,
         }}>
-        <Image source={ImagesPath.trash} />
+          {data.status != 'DELETE' && <TouchableOpacity onPress={() => onDeleteProduct(data.id)}>
+            <Image source={ImagesPath.trash} />
+          </TouchableOpacity>}
         <TouchableOpacity
+        onPress={() => navigationRef.current.navigate('AddProduct', { item: data, type: 'edit'})}
           style={{
             borderRadius: 20,
             paddingVertical: 8,

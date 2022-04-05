@@ -46,10 +46,38 @@ const MyShop = ({ navigation, route }) => {
   const loading = useSelector(state => state['user.auth'].loading);
 
   const [loadingProps, showLoading, hideLoading] = useLoading();
+  const [data, setData] = useState({});
   const { Color } = useColor();
 
-  
+  useEffect(() => {
+		getMyShop();
+	// });
+	}, []);
+	
+	const getMyShop = () => {
+		let variables = {
+		  merchantId: undefined,
+		}
+		Client.query({query: queryGetMyShop})
+		  .then(res => {
+			console.log(res, 'ress')
+      if (res.data.ecommerceGetMerchant) {
+				if(res.data.ecommerceGetMerchant.id){
+					setData(res.data.ecommerceGetMerchant);
+				}else{
+					navigation.replace('SplashCreateShop')
+				}
+			}
+	
+			// hideLoading();
+			// navigation.navigate('TopUpScreen');
+		  })
+		  .catch(reject => {
+			console.log(reject);
+		  });
+	  };
 
+  if(data.length == 0) return <View />
   return (
     <Scaffold
           header={
@@ -69,7 +97,7 @@ const MyShop = ({ navigation, route }) => {
               <Image source={ImagesPath.shopbanner} style={{width: '98%'}}/>
             </View>
             <View style={{ flexDirection: 'row', height: 72, backgroundColor: Color.textInput, position: 'absolute', elevation: 1, top: 36, zIndex: 1, left: 16, width: 72, borderRadius: 8 }}> 
-              <Image source={ImagesPath.shopprofile} style={{width: '100%', height: '100%'}}/>
+              <Image source={{ uri: data.profileImg }} style={{width: '100%', height: '100%'}}/>
             </View>
             <View style={{alignItems: 'flex-end', marginHorizontal: 20, marginVertical: 8}}>
               <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: Color.primary, height: 28, width: '24%', borderRadius: 8}}>
@@ -77,19 +105,19 @@ const MyShop = ({ navigation, route }) => {
               </TouchableOpacity>
             </View>
                 <View style={{marginVertical: 12, backgroundColor: Color.theme, paddingBottom: 32, paddingLeft: 16, height: 60 }}>
-                    <Text align='left' type='bold' size={18}>Toko Sumber Makmur</Text>
+                    <Text align='left' type='bold' size={18}>{data.name}</Text>
                     <Row style={{marginVertical: 5}}>
                         <Col style={{flexDirection: 'row'}}>
                             <Entypo name={'location-pin'} size={12} style={{color: Color.secondary, paddingVertical: 1, paddingHorizontal: 2}}/>
-                            <Text size={10}>Tangerang, Banten</Text>
+                            <Text size={10}>{data.alamat}</Text>
                         </Col>
                         <Col style={{flexDirection: 'row'}}>
                             <FontAwesome name={'phone'} size={12} style={{color: Color.secondary, paddingVertical: 2, paddingHorizontal: 5}}/>
-                            <Text size={10}>0812-3456-7890</Text>
+                            <Text size={10}>{data.noTelp}</Text>
                         </Col>
                         <Col style={{flexDirection: 'row'}}>
                             <Entypo name={'instagram'} size={12} style={{color: Color.secondary, paddingVertical: 1, paddingHorizontal: 5}}/>
-                            <Text size={10}>@tokoku</Text>
+                            <Text size={10}>@{data.socialMedia ? data.socialMedia.instagram : ''}</Text>
                         </Col>
                         
                     </Row>

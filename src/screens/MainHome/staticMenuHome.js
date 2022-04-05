@@ -10,6 +10,7 @@ import {
     iconSemua,
     iconLelang,
     iconMediaPlayer,
+    iconSurvey,
     iconMenuArtikel,
     iconMenuEvent,
     iconMenuLoker,
@@ -100,6 +101,15 @@ export const listMenuHome = [
         params: { title: '' },
         badge: false,
         show: false,
+    },
+    {
+        code: 'SURVEY',
+        name: 'Survey',
+        images: iconSurvey,
+        nav: 'SurveyFirst',
+        params: { title: 'Survey' },
+        badge: false,
+        show: true,
     },
 
     // menu tribes

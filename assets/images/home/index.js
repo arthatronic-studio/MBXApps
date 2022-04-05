@@ -29,6 +29,7 @@ const iconMenuForum = require('./menu_forum.png');
 const iconWarning = require('./WarningCircle.png');
 const iconShare = require('./ShareNetwork.png');
 const iconHeart = require('./Heart.png');
+const iconSurvey = require('./iconSurvey.png');
 const iconBookmarks = require('./BookmarksSimple.png');
 
 export {
@@ -63,5 +64,6 @@ export {
   iconWarning,
   iconShare,
   iconHeart,
+  iconSurvey,
   iconBookmarks
 };

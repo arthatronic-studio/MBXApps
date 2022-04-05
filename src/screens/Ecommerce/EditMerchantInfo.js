@@ -6,6 +6,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
+import { launchImageLibrary } from 'react-native-image-picker';
+import {useIsFocused, useRoute} from '@react-navigation/native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Feather from 'react-native-vector-icons/Feather';
 
@@ -18,12 +20,13 @@ import {
   // TouchableOpacity,
   Loading, useLoading,
   HeaderBig,
-  Submit,
   Header,
   Scaffold,
   useColor
 } from '@src/components';
 import { TouchableOpacity } from '@src/components/Button';
+import client from 'src/lib/apollo';
+import { mutationMerchant } from 'src/lib/query/ecommerce';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -79,7 +82,61 @@ const CustomTextInput = Styled(TextInput)`
   fontSize: 14px;
 `;
 
-const EditMerchantInfo = () => {
+const EditMerchantInfo = ({navigation}) => {
+    const route = useRoute();
+    console.log(route)
+  const [loadingProps, showLoading, hideLoading] = useLoading();
+
+  const [thumbImage, setThumbImage] = useState('');
+  const [mimeImage, setMimeImage] = useState('image/jpeg');
+    const [userData, setUserData] = useState({
+        ...route.params.item,
+        instagram: route.params.item.socialMedia.instagram
+      });
+
+    const onChangeUserData = (key, val) => {
+        setUserData({ ...userData, [key]: val });
+      };
+
+      const submit = (id, index) => {
+        console.log(route, 'props')
+        showLoading();
+        let variables = {
+          body: {
+            userId: userData.userId,
+            name: userData.name,
+            noTelp: userData.noTelp,
+            alamat: userData.alamat,
+            socialMedia: {
+              instagram: userData.instagram,
+            },
+            profileImg: thumbImage ? 'data:image/png;base64,' + thumbImage : undefined,
+            // profileImg: 'data:image/png;base64,' + thumbImage,
+            isVerified: userData.isVerified,
+            isOfficial: userData.isOfficial,
+            lat: userData.lat,
+            long: userData.long,
+          },
+          merchantId:route.params.item.id,
+          type: 'UPDATED',
+      }
+        console.log(variables)
+        client.mutate({mutation: mutationMerchant, variables})
+          .then(res => {
+            hideLoading()
+            console.log(res)
+            if (res.data.ecommerceMerchantManage) {
+              alert('Success edit toko')
+              navigation.pop()
+            }
+          })
+          .catch(reject => {
+            hideLoading()
+            alert(reject.message)
+            console.log(reject.message, 'reject');
+          });
+      };
+
     const {Color} = useColor()
 
     return (
@@ -94,9 +151,23 @@ const EditMerchantInfo = () => {
 
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <TouchableOpacity
+                        onPress={() => {
+                            const options = {
+                                mediaType: 'photo',
+                                maxWidth: 640,
+                                maxHeight: 640,
+                                quality: 1,
+                                includeBase64: true,
+                            }
+        
+                            launchImageLibrary(options, (callback) => {
+                                setThumbImage(callback.base64);
+                                setMimeImage(callback.type);
+                            })
+                        }}
                             style={{width: 48, height: 48, borderRadius: 24, marginVertical: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: Color.grayLight, marginRight: 10}}
                         >
-                            <Feather name='camera' size={24} style={{marginBottom: 4}} color='#ffffff' />
+                            <Image source={{ uri: thumbImage ? `data:${mimeImage};base64,${thumbImage}` : userData.profileImg }} style={{ height: 48, width: 48, borderRadius: 24 }} />
                         </TouchableOpacity>
                         <View>
                             <Text align='left' type='bold' size={11}>Unggah Foto Profile Toko</Text>
@@ -121,6 +192,8 @@ const EditMerchantInfo = () => {
                                     autoCorrect={false}
                                     selectionColor={Color.text}
                                     style={{color: Color.text}}
+                                    value={userData.name}
+                                    onChangeText={(text) => onChangeUserData('name', text)}
                                 />
                             </EmailRoundedView>
                         </View>
@@ -140,6 +213,8 @@ const EditMerchantInfo = () => {
                                     autoCorrect={false}
                                     selectionColor={Color.text}
                                     style={{color: Color.text,}}
+                                    value={userData.noTelp}
+                                    onChangeText={(text) => onChangeUserData('noTelp', text)}
                                 />
                             </EmailRoundedView>
                         </View>
@@ -160,6 +235,8 @@ const EditMerchantInfo = () => {
                                     multiline={true}
                                     selectionColor={Color.text}
                                     style={{color: Color.text, height: 80}}
+                                    value={userData.alamat}
+                                    onChangeText={(text) => onChangeUserData('alamat', text)}
                                 />
                             </EmailRoundedView>
                         </View>
@@ -179,6 +256,8 @@ const EditMerchantInfo = () => {
                                     autoCorrect={false}
                                     selectionColor={Color.text}
                                     style={{color: Color.text}}
+                                    value={userData.instagram}
+                                    onChangeText={(text) => onChangeUserData('instagram', text)}
                                 />
                             </EmailRoundedView>
                         </View>
@@ -193,13 +272,14 @@ const EditMerchantInfo = () => {
                     </View>
 
                     <View style={{ backgroundColor: Color.theme, marginBottom: 16 }}>
-                        <TouchableOpacity style={{ backgroundColor: Color.primary, borderRadius: 30,  paddingVertical: 12 }}>
+                        <TouchableOpacity onPress={() => submit()} style={{ backgroundColor: Color.primary, borderRadius: 30,  paddingVertical: 12 }}>
                             <Text type='semibold' color={Color.textInput}>Lanjut</Text>
                         </TouchableOpacity>
                     </View>
 
                 </View>
             </ScrollView>
+      <Loading {...loadingProps} />
         </MainView>
     )
 }

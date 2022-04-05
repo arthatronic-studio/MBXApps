@@ -99,6 +99,7 @@ const StepTwo = ({navigation, route}) => {
       length,
       ...props.tempData,
     };
+    console.log(tempData)
     navigation.navigate('StepThree', {tempData});
   };
 
