@@ -6,7 +6,7 @@ import MapView, {Marker} from 'react-native-maps'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Modal from "react-native-modal";
 import { useNavigation } from '@react-navigation/native';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 
 import {
   Text,
@@ -20,7 +20,7 @@ import {
 } from '@src/components';
 import { TouchableOpacity } from '@src/components/Button';
 import ImagesPath from 'src/components/ImagesPath';
-import { Divider } from 'src/styled';
+import { Divider, Padding } from 'src/styled';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import Client from '@src/lib/apollo';
@@ -133,22 +133,114 @@ const CreateShop = () => {
           }
           onPressLeftButton={() => navigation.pop()}
     >
+
+        <Modal
+          isVisible={isModalVisible}
+          onBackdropPress={() => setModalVisible(false)}
+          animationIn="slideInDown"
+          animationOut="slideOutDown"
+          style={{borderRadius: 16}}
+        >
+          <View
+            style={{
+              backgroundColor: '#ffffff',
+              padding: 30,
+              borderRadius: 8
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                backgroundColor: Color.primary,
+                alignSelf: 'center',
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+                marginBottom: 16,
+                borderRadius: 6,
+              }}
+              onPress={() => {
+                const options = {
+                    mediaType: 'photo',
+                    maxWidth: 640,
+                    maxHeight: 640,
+                    quality: 1,
+                    includeBase64: true,
+                }
+
+                toggleModal()
+
+                launchCamera(options, (callback) => {
+                    setThumbImage(callback.base64);
+                    setMimeImage(callback.type);
+                  })
+                  
+
+              }}
+            >
+              <Text style={{color: Color.semiwhite}}>Take Photo</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                backgroundColor: Color.primary,
+                alignSelf: 'center',
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+                marginBottom: 16,
+                borderRadius: 6,
+              }}
+
+              onPress={() => {
+                const options = {
+                    mediaType: 'photo',
+                    maxWidth: 640,
+                    maxHeight: 640,
+                    quality: 1,
+                    includeBase64: true,
+                }
+
+                toggleModal()
+                
+                launchImageLibrary(options, (callback) => {
+                    setThumbImage(callback.base64);
+                    setMimeImage(callback.type);
+                })
+
+              }}
+            >
+              <Text style={{color: Color.semiwhite}}>Choose From Library</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                backgroundColor: Color.warning,
+                alignSelf: 'center',
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+                borderRadius: 6,
+              }}
+
+              onPress={() => toggleModal()}
+            >
+              <Text>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
         <ScrollView>
           <View style={{flexDirection: 'row', marginHorizontal: 10}}>
               <TouchableOpacity
                 onPress={() => {
-                    const options = {
-                        mediaType: 'photo',
-                        maxWidth: 640,
-                        maxHeight: 640,
-                        quality: 1,
-                        includeBase64: true,
-                    }
+                    // const options = {
+                    //     mediaType: 'photo',
+                    //     maxWidth: 640,
+                    //     maxHeight: 640,
+                    //     quality: 1,
+                    //     includeBase64: true,
+                    // }
+                    
+                    setModalVisible(true)
 
-                    launchImageLibrary(options, (callback) => {
-                        setThumbImage(callback.base64);
-                        setMimeImage(callback.type);
-                    })
+                    // launchImageLibrary(options, (callback) => {
+                    //     setThumbImage(callback.base64);
+                    //     setMimeImage(callback.type);
+                    // })
                 }}
               >
                 {thumbImage!=='' &&
@@ -163,7 +255,25 @@ const CreateShop = () => {
               <View style={{marginHorizontal: 10}}>
                   <Text style={{fontSize: 11, color: Color.text, fontWeight: 'bold', textAlign: 'left'}}>Unggah Foto Profile Toko</Text>
                   <Text style={{fontSize: 8, color: Color.secondary}}>Ukuran foto maks. 1MB dengan format JPEG, PNG, atau JPG</Text>
-                  <Text style={{fontSize: 8, color: Color.primary, textAlign: 'left'}}>Unggah Foto</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setModalVisible(true)
+                        // const options = {
+                        //     mediaType: 'photo',
+                        //     maxWidth: 640,
+                        //     maxHeight: 640,
+                        //     quality: 1,
+                        //     includeBase64: true,
+                        // }
+    
+                        // launchImageLibrary(options, (callback) => {
+                        //     setThumbImage(callback.base64);
+                        //     setMimeImage(callback.type);
+                        // })
+                    }}
+                  >
+                    <Text style={{fontSize: 8, color: Color.primary, textAlign: 'left'}}>Unggah Foto</Text>
+                  </TouchableOpacity>
               </View>
           </View>
           <Divider/>
@@ -288,7 +398,7 @@ const CreateShop = () => {
         <Loading {...loadingProps} />
 
             {/* Ini Modal */}
-      <Modal isVisible={isModalVisible}>
+      {/* <Modal isVisible={isModalVisible}>
         <View style={{width: '100%', height: 495, backgroundColor: Color.theme, borderRadius: 5}}>
           <Text style={{marginVertical: 15,fontSize: 24, fontWeight: 'bold'}}>Syarat & Ketentuan</Text>
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -340,7 +450,7 @@ const CreateShop = () => {
             </TouchableOpacity>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
             {/* End Modal */}
     </Scaffold>
   )
