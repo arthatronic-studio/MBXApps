@@ -41,7 +41,9 @@ function BelumDibayar({data, getData}) {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    data.getOrder('OPEN');
+    console.log("ISfoc open",isFocused)
+    {isFocused ? getData('OPEN') : null}
+    
   }, [isFocused]);
   return (
     <View style={{backgroundColor: Color.semiwhite}}>
@@ -128,8 +130,8 @@ function Dikemas({data, getData}) {
  
 
   useEffect(() => {
-    console.log('DIkemas dong')
-    getData('CHECKOUT')
+    console.log("dikemas dong")
+    {isFocused ? getData('CHECKOUT') : null}
   }, [isFocused]);
 
   return (
@@ -217,8 +219,10 @@ function Dikirim({data, getData}) {
  
 
   useEffect(() => {
+    
     console.log('Dikirim dong')
-    getData('SENT')
+
+    {isFocused ? getData('SENT') : null}
   }, [isFocused]);
 
   return (
@@ -307,8 +311,9 @@ function Selesai({data, getData}) {
  
 
   useEffect(() => {
+    console.log("ISfoc selesai",isFocused)
     console.log('Selesai dong')
-    getData('FINISHED')
+    {isFocused ? getData('FINISHED') : null}
   }, [isFocused]);
 
   return (
@@ -398,7 +403,7 @@ function Komplainan({data, getData}) {
 
   useEffect(() => {
     console.log('Complaint dong')
-    getData('COMPLAINED')
+    {isFocused ? getData('COMPLAINED') : null}
   }, [isFocused]);
 
   return (
@@ -494,8 +499,8 @@ const IncomingOrder = ({route, navigation}) => {
       page: 1,
       itemPerPage: 10,
       status: type,
-      userId: user.userId,
-      merchantId: route.params.item.id,
+      userId: 264,
+      merchantId: 5,
     };
 
     await Client.query({query: queryListOrder, variables})
@@ -551,7 +556,7 @@ const IncomingOrder = ({route, navigation}) => {
         <Tab.Screen
           name="BelumDibayar"
           children={() => (
-            <BelumDibayar data={{data, loadingIncoming, height, getOrder}} getData={getOrder} />
+            <BelumDibayar data={{data, loadingIncoming, height}} getData={getOrder} />
           )}
           options={{tabBarLabel: 'Belum Dibayar'}}
         />
