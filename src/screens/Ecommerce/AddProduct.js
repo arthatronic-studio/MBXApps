@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import Styled from 'styled-components';
 import {useSelector} from 'react-redux';
+import {useIsFocused, useRoute} from '@react-navigation/native';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -61,12 +62,11 @@ const Content = Styled(View)`
 `;
 
 const AddProduct = ({navigation}) => {
+  const route = useRoute();
   const {height} = useWindowDimensions();
-  const [name, setName] = useState('');
+  const [name, setName] = useState(route.params.item.name);
   const [thumbImage, setThumbImage] = useState('');
   const [mimeImage, setMimeImage] = useState('image/jpeg');
-
-
 
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
@@ -90,14 +90,19 @@ const AddProduct = ({navigation}) => {
       },
     }).then(res => {
       console.log('aku adalah', res.data.ecommerceProductCategoryList);
+      if(route.params.type == 'edit'){
+        const idx = res.data.ecommerceProductCategoryList.findIndex(val => val.id == route.params.item.categoryId)
+        setValue(res.data.ecommerceProductCategoryList[idx]);
+      }
       setItems(res.data.ecommerceProductCategoryList);
+      
     });
   }, []);
 
   const submit = () => {
-    const tempData = {imageUrl: 'data:image/png;base64,'+thumbImage, name, categoryId:value, merchantId: dataToko.id};
+    const tempData = {imageUrl: thumbImage ? 'data:image/png;base64,'+thumbImage : route.params.type == 'edit' ? route.params.item.imageUrl : undefined, name, categoryId:value, merchantId: dataToko.id};
 
-    navigation.navigate('StepTwo', {tempData});
+    navigation.navigate('StepTwo', {tempData, type: route.params.type});
   };
 
   const getToko = (id) => {
@@ -196,7 +201,7 @@ const AddProduct = ({navigation}) => {
               + Tambah Foto
             </Text>
           </View>
-          {thumbImage !== '' ? (
+          {thumbImage == '' && route.params.type == 'edit' ? (
             <TouchableOpacity
               onPress={() => {}}
               style={{
@@ -214,7 +219,29 @@ const AddProduct = ({navigation}) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
-                source={{uri: `data:${mimeImage};base64,${thumbImage}`}}
+                source={{uri:  route.params.item.imageUrl }}
+              />
+            </TouchableOpacity>
+          ) :
+          thumbImage !== '' ? (
+            <TouchableOpacity
+              onPress={() => {}}
+              style={{
+                marginVertical: 10,
+                width: '100%',
+                height: height / 3,
+                borderRadius: 4,
+                alignItems: 'center',
+              }}>
+              <Image
+                style={{
+                  height: '100%',
+                  aspectRatio: 1,
+                  borderRadius: 4,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                source={{uri:  `data:${mimeImage};base64,${thumbImage}`}}
               />
             </TouchableOpacity>
           ) : (

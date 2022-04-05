@@ -14,6 +14,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImagesPath from 'src/components/ImagesPath';
+import { navigationRef } from 'App';
 
 import {
   Text,
@@ -165,6 +166,7 @@ const CardProduct = ({data, getProductList}) => {
             <Image source={ImagesPath.trash} />
           </TouchableOpacity>}
         <TouchableOpacity
+        onPress={() => navigationRef.current.navigate('AddProduct', { item: data, type: 'edit'})}
           style={{
             borderRadius: 20,
             paddingVertical: 8,
