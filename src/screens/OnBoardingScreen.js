@@ -171,6 +171,10 @@ const OnBoardingScreen = ({ navigation }) => {
                 newData = data.reverse();
             }
 
+            if (newData.length === 0) {
+                redirectTo('LoginScreen');
+            }
+
             setListBoarding(newData);
             setLoadingBoarding(false);
         })
