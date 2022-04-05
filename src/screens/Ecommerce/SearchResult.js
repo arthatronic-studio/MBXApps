@@ -140,7 +140,7 @@ const SearchResult = ({navigation, route}) => {
     const getProduct = () => {
         let variables = {
             page: page,
-            itemPerPage: 20,
+            itemPerPage: 50,
             name: search
         }
         console.log(variables)
@@ -159,7 +159,7 @@ const SearchResult = ({navigation, route}) => {
     const getMerchant = () => {
         let variables = {
             page: page,
-            limit: 20,
+            limit: 50,
             merchantName: search
         }
         Client.query({query: queryGetListMerchant, variables})
@@ -200,38 +200,38 @@ const SearchResult = ({navigation, route}) => {
         },
     ]
     
-    const DataToko = [
-        {
-            id: 1,
-            name: 'Bytme Shop',
-            location: 'Jakarta Selatan',
-            image: ImagesPath.merchant1,
-        },
-        {
-            id: 2,
-            name: 'Observe Shop',
-            location: 'Jakarta Selatan',
-            image: ImagesPath.merchant2,
-        },
-        {
-            id: 3,
-            name: 'Hammerhead Shop',
-            location: 'Jakarta Selatan',
-            image: ImagesPath.merchant3,
-        },
-        {
-            id: 4,
-            name: 'Suslli Shop',
-            location: 'Jakarta Selatan',
-            image: ImagesPath.merchant4,
-        },
-        {
-            id: 5,
-            name: 'Hammerhead Shop',
-            location: 'Jakarta Selatan',
-            image: ImagesPath.merchant5,
-        },
-    ]
+    // const DataToko = [
+    //     {
+    //         id: 1,
+    //         name: 'Bytme Shop',
+    //         location: 'Jakarta Selatan',
+    //         image: ImagesPath.merchant1,
+    //     },
+    //     {
+    //         id: 2,
+    //         name: 'Observe Shop',
+    //         location: 'Jakarta Selatan',
+    //         image: ImagesPath.merchant2,
+    //     },
+    //     {
+    //         id: 3,
+    //         name: 'Hammerhead Shop',
+    //         location: 'Jakarta Selatan',
+    //         image: ImagesPath.merchant3,
+    //     },
+    //     {
+    //         id: 4,
+    //         name: 'Suslli Shop',
+    //         location: 'Jakarta Selatan',
+    //         image: ImagesPath.merchant4,
+    //     },
+    //     {
+    //         id: 5,
+    //         name: 'Hammerhead Shop',
+    //         location: 'Jakarta Selatan',
+    //         image: ImagesPath.merchant5,
+    //     },
+    // ]
     
       const renderFilter = ({item}) => (
         <Pressable 
