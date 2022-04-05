@@ -144,7 +144,7 @@ const MyShopHomepage = ({ navigation }) => {
 								<Text style={{fontWeight: 'bold', fontSize: 11}}>Pesanan Masuk</Text>
 								<View style={{marginHorizontal: 5, marginVertical: 5, backgroundColor: Color.error, width: 5, height: 5, borderRadius: 20}}></View>
 							</View>
-							<Text style={{fontSize: 10, textAlign: 'left'}}> Pesanan Baru</Text>
+							<Text style={{fontSize: 10, textAlign: 'left'}}>{data.incomingOrdersCount} Pesanan Baru</Text>
 						</Pressable>
 						<View style={{backgroundColor: Color.border, width: 2, height: 15, marginHorizontal: 25}}></View>
 						<View style={{marginHorizontal: 5,flexDirection: 'row', borderRadius: 20, width: 30, height: 30, backgroundColor: Color.primary, alignItems: 'center', justifyContent: 'center'}}>
@@ -155,7 +155,7 @@ const MyShopHomepage = ({ navigation }) => {
 								<Text style={{fontWeight: 'bold', fontSize: 11, textAlign: 'left'}}>Siap Dikirim</Text>
 								<View style={{marginHorizontal: 5, marginVertical: 5, backgroundColor: Color.error, width: 5, height: 5, borderRadius: 20}}></View>
 							</View>
-							<Text style={{fontSize: 10, textAlign: 'left', color: Color.secondary}}>8 Barang</Text>
+							<Text style={{fontSize: 10, textAlign: 'left', color: Color.secondary}}>{data.entriesproductsToBeSentCount} Barang</Text>
 						</Pressable>
 					</View>
 					

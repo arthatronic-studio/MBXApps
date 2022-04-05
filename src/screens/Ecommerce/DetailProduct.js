@@ -253,7 +253,7 @@ const DetailProduct = ({navigation}) => {
               <Col>
                 <Text
                   style={{fontSize: 11, fontWeight: 'bold', textAlign: 'left'}}>
-                  Toko Sumber Makmur
+                  {detail.merchant ? detail.merchant.name : ''}
                 </Text>
                 <Text
                   style={{

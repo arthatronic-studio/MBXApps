@@ -76,7 +76,7 @@ const AddProduct = ({navigation}) => {
   const modalListActionRef = useRef();
 
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState(route.params.item.categoryId);
   const [items, setItems] = useState([]);
   const [dataToko, setDataToko] = useState([]);
 
@@ -90,10 +90,10 @@ const AddProduct = ({navigation}) => {
       },
     }).then(res => {
       console.log('aku adalah', res.data.ecommerceProductCategoryList);
-      if(route.params.type == 'edit'){
-        const idx = res.data.ecommerceProductCategoryList.findIndex(val => val.id == route.params.item.categoryId)
-        setValue(res.data.ecommerceProductCategoryList[idx]);
-      }
+      // if(route.params.type == 'edit'){
+      //   const idx = res.data.ecommerceProductCategoryList.findIndex(val => val.id == route.params.item.categoryId)
+      //   setValue(res.data.ecommerceProductCategoryList[idx].id);
+      // }
       setItems(res.data.ecommerceProductCategoryList);
       
     });
@@ -102,7 +102,7 @@ const AddProduct = ({navigation}) => {
   const submit = () => {
     const tempData = {imageUrl: thumbImage ? 'data:image/png;base64,'+thumbImage : route.params.type == 'edit' ? route.params.item.imageUrl : undefined, name, categoryId:value, merchantId: dataToko.id};
 
-    navigation.navigate('StepTwo', {tempData, type: route.params.type});
+    navigation.navigate('StepTwo', {tempData, type: route.params.type, item: route.params.item});
   };
 
   const getToko = (id) => {

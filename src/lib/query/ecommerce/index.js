@@ -484,7 +484,7 @@ export const queryGetCart = gql`
 export const queryGetMyShop = gql`
   query{
     ecommerceGetMerchant {
-      id userId name noTelp alamat profileImg isVerified isOfficial createdAt lat long socialMedia { instagram }
+      id userId name noTelp alamat profileImg productsToBeSentCount incomingOrdersCount isVerified isOfficial createdAt lat long socialMedia { instagram }
    }
   }
 `;
@@ -641,7 +641,7 @@ export const queryDetailProduct = gql`
     ecommerceProductDetail(
      id: $id
    ) {
-    id name categoryId description price initialPrice imageUrl stock
+    id name categoryId description price initialPrice imageUrl stock merchant { name alamat isVerified }
    }
   }
 `;
@@ -753,6 +753,15 @@ export const queryAddProduct = gql`
       minimumBuy
       productMassa
       status
+    }
+  }
+`;
+
+export const queryEditProduct = gql`
+  mutation ecommerceProductEdit($products: [EcommerceProductInput]) {
+    ecommerceProductEdit(products: $products) {
+     id
+     name
     }
   }
 `;

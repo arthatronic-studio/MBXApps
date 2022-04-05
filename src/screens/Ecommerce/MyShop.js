@@ -127,7 +127,7 @@ const MyShop = ({ navigation, route }) => {
         </View>
         <Row style={{ backgroundColor: Color.theme, padding: 16 }}>
             <Col size={1.5}>
-                <TouchableOpacity onPress={() => navigation.navigate('CheckoutScreen')} style={{ width: 50,backgroundColor: Color.theme, borderWidth: 1, borderColor: Color.primary, borderRadius: 20, paddingVertical: 10 }}>
+                <TouchableOpacity onPress={() => navigation.navigate('MyProduct')} style={{ width: 50,backgroundColor: Color.theme, borderWidth: 1, borderColor: Color.primary, borderRadius: 20, paddingVertical: 10 }}>
                     <AntDesign name={'delete'} size={18} style={{textAlign: 'center', color: Color.primary}}/>
                 </TouchableOpacity>
             </Col>
