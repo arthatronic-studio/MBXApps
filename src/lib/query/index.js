@@ -1,4 +1,5 @@
 import { queryContentProduct } from './queryContentProduct';
+import { queryContentProductDetail } from './queryContentProductDetail';
 import { queryContentMyProduct } from './queryContentMyProduct';
 import { queryProductManage } from './queryContentProductManage';
 import { queryAddLike } from './queryContentAddLike';
@@ -22,6 +23,7 @@ import { queryProductReport } from './queryProductReport';
 
 export {
     queryContentProduct,
+    queryContentProductDetail,
     queryContentMyProduct,
     queryProductManage,
     queryAddLike,

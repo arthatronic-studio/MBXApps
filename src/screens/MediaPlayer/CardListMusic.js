@@ -4,6 +4,7 @@ import Styled from 'styled-components';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Text from '@src/components/Text';
 import { useColor } from '@src/components/Color';
@@ -30,12 +31,14 @@ const defaultProps = {
     onPressShowAll: () => { },
     stickyHeaderIndices: [],
     ListHeaderComponent: null,
+    topComponent: null,
 }
 
 const CardListMusic = ({
     activePlayingTrack,
     componentType, title, decimalWidth, decimalHeight, showAll, showHeader, withNumber,
     onPress, onLongPress, onPressShowAll, stickyHeaderIndices, ListHeaderComponent,
+    topComponent,
 }) => {
     const { Color } = useColor();
     const { width } = useWindowDimensions();
@@ -162,99 +165,157 @@ const CardListMusic = ({
             })
     }
 
-    if (list.data.length === 0) return <View />;
+    const renderItemPopular = (item, index) => {
+        if (item.header) {
+            return item.header;
+        }
+
+        const isActive = activePlayingTrack && activePlayingTrack.id === item.code;
+        const textType = isActive ? 'bold' : 'medium';
+
+        return (
+            <View style={{ flexDirection: 'row', paddingHorizontal: 16, alignItems: 'center', marginBottom: 6 }}>
+                {withNumber && <View style={{ flex: 1, alignItems: 'flex-start' }}>
+                    <Text size={18} type={textType}>{index + 1}</Text>
+                </View>}
+                <TouchableOpacity
+                    style={{ flex: 11 }}
+                    onPress={async() => {
+                        // const newData = [];
+                        // list.data.map((e) => {
+                        //     if (!e.header) {
+                        //         newData.push(e);
+                        //     }
+                        // });
+                        // console.log('here', list.data);
+                        await trackPlayerPlay(list.data, index);
+                        navigation.navigate('MusicPlayerScreen');
+                    }}
+                    onLongPress={() => onLongPress(item)}
+                >
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <View style={{ flex: 5, flexDirection: 'row', alignItems: 'center' }}>
+                            <Image
+                                source={{ uri: item.image }}
+                                style={{ height: width * (decimalHeight || 0.2), width: width * (decimalWidth || 0.2), borderRadius: 8, borderWidth: isActive ? 2 : 0, borderColor: Color.primary }}
+                            />
+                            
+                            <View style={{ paddingLeft: 16 }}>
+                                <Text type={textType} align='left' numberOfLines={2}>{item.productName}</Text>
+                                <Divider height={2} />
+                                <Text size={10} type={textType} align='left' numberOfLines={1} style={{ opacity: 0.6 }}>{item.productDescription}</Text>
+
+                                <View style={{ flexDirection: 'row' }}>
+                                    {/* <View style={{flexDirection: 'row', alignItems: 'center', marginRight: 12}}>
+                                        <SimpleLineIcons name='emotsmile' size={10} color={item && item.im_like ? Color.secondary : Color.text} />
+                                        <Text size={12} color={item && item.im_like ? Color.secondary : Color.text} style={{marginTop: 3}}> {item && item.like ? item.like : 0}</Text>
+                                    </View> */}
+
+                                    {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                        <MaterialIcons name='comment' size={10} color={Color.text} />
+                                        <Text size={12} style={{marginTop: 3}}> {item && item.comment ? item.comment : 0}</Text>
+                                    </View> */}
+                                </View>
+                            </View>
+                        </View>
+
+                        {/* <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
+                            <Text>{item.like}</Text>
+                            <Divider width={8} />
+                            <TouchableOpacity
+                                onPress={() => setSelected({
+                                    id: item.id,
+                                    idx: index,
+                                    name: item.productName,
+                                })}
+                            >
+                                <Container radius={50} padding={8} style={{ borderWidth: 1.5, borderColor: item.im_like ? Color.info : Color.text }}>
+                                    <FontAwesome
+                                        size={16}
+                                        name='thumbs-o-up'
+                                        color={item.im_like ? Color.info : Color.text}
+                                    />
+                                </Container>
+                            </TouchableOpacity>
+                        </View> */}
+
+                        <TouchableOpacity
+                            onPress={() => setSelected({
+                                id: item.id,
+                                idx: index,
+                                name: item.productName,
+                            })}
+                            style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}
+                        >
+                            <Text>{item.like}</Text>
+                            <Divider width={8} />
+                            <Container radius={50}>
+                                {item.im_like ?
+                                    <Ionicons name='heart' color={Color.error} size={20} />
+                                    :
+                                    <SimpleLineIcons name='heart' color={Color.text} size={16} />
+                                }
+                            </Container>
+                        </TouchableOpacity>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+    const renderItemDefault = (item, index) => {
+        return (
+            <TouchableOpacity
+                onPress={async() => {
+                    onPress(item);
+                    await trackPlayerPlay(list.data, index);
+                    navigation.navigate('MusicPlayerScreen');
+                }}
+                style={[{ marginRight: 10 }, index === 0 && { marginLeft: 16 }]}
+            >
+                <Image source={{ uri: item.image }} style={{ height: width * (decimalHeight || 0.3), width: width * (decimalWidth || 0.25), borderRadius: 4 }} />
+                <Text size={10} style={{ marginTop: 6 }} numberOfLines={2}>{item.productName}</Text>
+            </TouchableOpacity>
+        )
+    }
+
+    if (list.data.length === 0) {
+        if (topComponent) {
+            return (
+                <Container paddingTop={8}>
+                    {topComponent}
+                </Container>
+            );
+        }
+
+        return <View />
+    };
 
     if (componentType === 'POPULAR') {
         return (
             <MainView>
-                {showHeader && <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12, paddingTop: 24, paddingHorizontal: 16 }}>
-                    <Text type='bold'>{title}</Text>
-                    {showAll && <Text onPress={() => onPressShowAll()} color={Color.primary}>Lihat Semua</Text>}
-                </View>}
                 <FlatList
                     keyExtractor={(item, index) => item.toString() + index}
                     data={list.data}
                     showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8 }}
+                    contentContainerStyle={{ paddingTop: 8 }}
                     stickyHeaderIndices={stickyHeaderIndices}
                     ListHeaderComponent={ListHeaderComponent}
                     renderItem={({ item, index }) => {
-                        if (item.header) {
-                            return item.header;
+                        if (index === 0 && topComponent) {
+                            return (
+                                <>
+                                    {topComponent}
+                                    {showHeader && <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12, paddingTop: 24, paddingHorizontal: 16 }}>
+                                        <Text type='bold'>{title}</Text>
+                                        {showAll && <Text onPress={() => onPressShowAll()}>Lihat Semua</Text>}
+                                    </View>}
+                                    {renderItemPopular(item, index)}
+                                </>
+                            )
                         }
 
-                        const isActive = activePlayingTrack && activePlayingTrack.id === item.code;
-                        const textType = isActive ? 'bold' : 'medium';
-
-                        return (
-                            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
-                                {withNumber && <View style={{ flex: 1, alignItems: 'flex-start' }}>
-                                    <Text size={18} type={textType}>{index + 1}</Text>
-                                </View>}
-                                <TouchableOpacity
-                                    style={{ flex: 11 }}
-                                    onPress={async() => {
-                                        // const newData = [];
-                                        // list.data.map((e) => {
-                                        //     if (!e.header) {
-                                        //         newData.push(e);
-                                        //     }
-                                        // });
-                                        // console.log('here', list.data);
-                                        await trackPlayerPlay(list.data, index);
-                                        navigation.navigate('MusicPlayerScreen');
-                                    }}
-                                    onLongPress={() => onLongPress(item)}
-                                >
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                        <View style={{ flex: 5, flexDirection: 'row', alignItems: 'center' }}>
-                                            <Image
-                                                source={{ uri: item.image }}
-                                                style={{ height: width * (decimalHeight || 0.2), width: width * (decimalWidth || 0.2), borderRadius: 8, borderWidth: isActive ? 2 : 0, borderColor: Color.primary }}
-                                            />
-                                            
-                                            <View style={{ paddingLeft: 16 }}>
-                                                <Text type={textType} align='left' numberOfLines={2}>{item.productName}</Text>
-                                                <Divider height={2} />
-                                                <Text size={10} type={textType} align='left' numberOfLines={1} style={{ opacity: 0.6 }}>{item.productDescription}</Text>
-
-                                                <View style={{ flexDirection: 'row' }}>
-                                                    {/* <View style={{flexDirection: 'row', alignItems: 'center', marginRight: 12}}>
-                                                        <SimpleLineIcons name='emotsmile' size={10} color={item && item.im_like ? Color.secondary : Color.text} />
-                                                        <Text size={12} color={item && item.im_like ? Color.secondary : Color.text} style={{marginTop: 3}}> {item && item.like ? item.like : 0}</Text>
-                                                    </View> */}
-
-                                                    {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                                        <MaterialIcons name='comment' size={10} color={Color.text} />
-                                                        <Text size={12} style={{marginTop: 3}}> {item && item.comment ? item.comment : 0}</Text>
-                                                    </View> */}
-                                                </View>
-                                            </View>
-                                        </View>
-
-                                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end' }}>
-                                            <Text>{item.like}</Text>
-                                            <Divider width={8} />
-                                            <TouchableOpacity
-                                                onPress={() => setSelected({
-                                                    id: item.id,
-                                                    idx: index,
-                                                    name: item.productName,
-                                                })}
-                                            >
-                                                <Container radius={50} padding={8} style={{ borderWidth: 1.5, borderColor: item.im_like ? Color.primary : Color.text }}>
-                                                    <FontAwesome
-                                                        size={16}
-                                                        name='thumbs-o-up'
-                                                        color={item.im_like ? Color.primary : Color.text}
-                                                    />
-                                                </Container>
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-                        )
+                        return renderItemPopular(item, index);
                     }}
                 />
             </MainView>
@@ -263,29 +324,26 @@ const CardListMusic = ({
 
     return (
         <MainView>
-            <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12, paddingTop: 24, paddingHorizontal: 16 }}>
-                <Text size={12}>{title}</Text>
-                {showAll && <Text onPress={() => onPressShowAll()} size={12} color={Color.primary}>Lihat Semua</Text>}
-            </View>
             <FlatList
                 keyExtractor={(item, index) => item.toString() + index}
                 data={list.data}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item, index }) => {
-                    return (
-                        <TouchableOpacity
-                            onPress={async() => {
-                                onPress(item);
-                                await trackPlayerPlay(list.data, index);
-                                navigation.navigate('MusicPlayerScreen');
-                            }}
-                            style={[{ marginRight: 10 }, index === 0 && { marginLeft: 16 }]}
-                        >
-                            <Image source={{ uri: item.image }} style={{ height: width * (decimalHeight || 0.3), width: width * (decimalWidth || 0.25), borderRadius: 4 }} />
-                            <Text size={10} style={{ marginTop: 6 }} numberOfLines={2}>{item.productName}</Text>
-                        </TouchableOpacity>
-                    )
+                    if (index === 0 && topComponent) {
+                        return (
+                            <>
+                                {topComponent}
+                                <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12, paddingTop: 24, paddingHorizontal: 16 }}>
+                                    <Text size={12}>{title}</Text>
+                                    {showAll && <Text onPress={() => onPressShowAll()} size={12} color={Color.primary}>Lihat Semua</Text>}
+                                </View>
+                                {renderItemDefault(item, index)}
+                            </>
+                        )
+                    }
+
+                    return renderItemDefault(item, index);
                 }}
             />
         </MainView>

@@ -24,9 +24,10 @@ const defaultProps = {
     style: {},
     onPressDot: () => {},
     showDot: false,
+    showAllText: false,
 };
 
-const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showDot, style }) => {
+const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showDot, showAllText, style }) => {
     const [like, setLike] = useState(item.like);
     const [im_like, setImLike] = useState(item.im_like);
     const [trigger, setTrigger] = useState(false);
@@ -73,6 +74,8 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showDot, sty
         setImLike(!im_like);
         setTrigger(true);
     }
+
+    const extraPropsText = showAllText ? {} : { numberOfLines: 3 };
     
     return (
         <TouchableOpacity
@@ -119,7 +122,7 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showDot, sty
             </View>
 
             <View style={{ marginBottom: 16}}>
-                <Text size={14} align='left' numberOfLines={3}>{item.productDescription}...</Text>
+                <Text size={14} align='left' {...extraPropsText}>{item.productDescription}...</Text>
             </View>
 
             <ImageBackground

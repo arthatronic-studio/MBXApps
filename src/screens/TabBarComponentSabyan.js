@@ -26,7 +26,7 @@ const TabBarComponentSabyan = (props) => {
     const [menus] = useState([
         {id: 'ber', name: 'Beranda', iconName: 'home', iconType: 'Entypo', nav: 'MainHome', ref: useRef(new Animated.Value(1)).current, viewRef: useRef(new Animated.Value(0)).current },
         // {id: 'mer', name: 'Merch', iconName: 'store', iconType: 'MaterialIcons', nav: 'MyShopHomepage', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
-        {id: 'med', name: 'Album', iconName: 'play', iconType: 'EvilIcons', nav: 'MainMediaPlayer', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
+        {id: 'med', name: 'Media Player', iconName: 'play', iconType: 'EvilIcons', nav: 'MainMediaPlayer', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
         {id: 'pro', name: 'Profil', iconName: 'person', iconType: 'Ionicons', nav: 'MainProfile', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
     ]);
     
@@ -163,7 +163,7 @@ const TabBarComponentSabyan = (props) => {
                                 <Animated.Text
                                     style={{
                                         fontSize: 14,
-                                        fontWeight: '500',
+                                        fontFamily: `Inter-${isRouteActive ? 'Bold' : 'Regular'}`,
                                         color: isRouteActive ? Color.primary : Color.text,
                                         position: 'absolute',
                                         bottom: 12,

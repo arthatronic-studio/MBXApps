@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState} from 'react';
+import React, { useEffect, useCallback, useState, useRef} from 'react';
 import {
   View,
   Image,
@@ -6,6 +6,7 @@ import {
   useWindowDimensions,
   FlatList,
   ImageBackground,
+  Pressable,
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -18,13 +19,17 @@ import Client from '@src/lib/apollo';
 import {queryContentProduct} from '@src/lib/query';
 import Config from 'react-native-config';
 import { getSizeByRatio } from 'src/utils/get_ratio';
+import WebView from 'react-native-webview';
 
 const MondayAccoustic = ({  }) => {
   const {Color} = useColor();
   const {width} = useWindowDimensions();
 
   const [itemData, setItemData] = useState([]);
+  const [beforePlay, setBeforePlay] = useState(true);
   const [playing, setPlaying] = useState(false);
+
+  const youtubeRef = useRef();
 
   useEffect(() => {
     fetchContentProduct();
@@ -58,21 +63,53 @@ const MondayAccoustic = ({  }) => {
 
   const onStateChange = useCallback(state => {
     console.log('state', state);
-    if (state === 'ended' || state === 'paused') {
+    if (state === 'playing') {
+      setBeforePlay(false);
+      setPlaying(true);
+    }
+    else if (state === 'ended') {
+      setBeforePlay(true);
+      setPlaying(false);
+    }
+    else if (state === 'paused') {
       setPlaying(false);
     }
   }, []);
 
   const renderItem = ({ item }) => {
     return (
-      <View style={{paddingHorizontal: 6}}>
+      <View
+        style={{paddingHorizontal: 6}}
+      >        
         <YoutubePlayer
+          ref={youtubeRef}
           width={width - 32}
           height={getSizeByRatio({ width: width - 32, ratio: 9/16 }).height}
           play={playing}
           videoId={item.productName}
           onChangeState={onStateChange}
         />
+
+        <TouchableOpacity
+          onPress={() => {}}
+          style={{
+            width: width - 32,
+            height:
+              beforePlay ?
+                getSizeByRatio({ width: (width - 32) / 2.4, ratio: 9/16 }).height
+              :
+              playing ?
+                getSizeByRatio({ width: (width - 32) / 3, ratio: 9/16 }).height
+              :
+                getSizeByRatio({ width: (width - 32) / 1.4, ratio: 9/16 }).height,
+            position: 'absolute',
+            top: 0,
+            left: 6,
+            backgroundColor: 'transparent'
+          }}
+        >
+
+        </TouchableOpacity>
       </View>
 
       //     <View style={{paddingHorizontal: 8}}>
@@ -165,6 +202,8 @@ const MondayAccoustic = ({  }) => {
       //     </View>
     );
   };
+
+  if (itemData.length === 0) return <View />;
 
   return (
     <View style={{backgroundColor: Color.primary, paddingVertical: 12}}>

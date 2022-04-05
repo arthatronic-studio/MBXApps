@@ -6,52 +6,113 @@ import {
     usePopup,
     useLoading,
     useColor,
+    TouchableOpacity,
 } from '@src/components';
 import Client from '@src/lib/apollo';
 import Video from 'react-native-video';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import ImagesPath from 'src/components/ImagesPath';
 import { VideoPlayerAndroid } from 'src/components/VideoPlayerAndroid';
 import WebView from 'react-native-webview';
 import FormInput from 'src/components/FormInput';
 import { Divider } from 'src/styled';
+import VideoPlayerIos from 'src/components/VideoPlayerIos';
+import moment from 'moment';
+import { queryContentProductDetail, queryAddLike } from 'src/lib/query';
+import { getSizeByRatio } from 'src/utils/get_ratio';
 
-const Detail = () => {
+const Detail = ({ navigation, route }) => {
+    const { item } = route.params;
+
     const { height, width } = useWindowDimensions();
     const { Color } = useColor();
+
+    const [itemDetail, setItemDetail] = useState(item);
+
+    useEffect(() => {
+        fetchContentProductDetail();
+    }, []);
+
+    const fetchContentProductDetail = () => {
+        const variables = {
+            productCode: item.code,
+        }
+
+        console.log('variabels', variables);
+
+        Client.query({
+            query: queryContentProductDetail,
+            variables,
+        })
+        .then((res) => {
+            console.log('res content detail', res);
+
+            if (res.data.contentProductDetail) {
+                setItemDetail({ ...itemDetail, ...res.data.contentProductDetail });
+            }
+        })
+        .catch((err) => {
+            console.log('err content detail', err);
+        });
+    }
+
+    const fetchContentAddLike = () => {
+        Client.query({
+          query: queryAddLike,
+          variables: {
+            productId: item.id
+          }
+        })
+        .then((res) => {
+          // console.log(res, 'res add like');
+
+          if (res.data.contentAddLike) {
+            fetchContentProductDetail();
+
+            if (res.data.contentAddLike.status === 1) {
+                setItemDetail({ ...itemDetail, like: itemDetail.like += 1 });
+            } else {
+                setItemDetail({ ...itemDetail, like: itemDetail.like -= 1 });
+            }
+          }
+        })
+        .catch((err) => {
+            console.log(err, 'err add like');
+        })
+    }
 
     return (
         <Scaffold
 
         >
             {Platform.OS === 'ios' ?
-                <Video
-                    source={{ uri: "https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/videoplayback.mp4?alt=media&token=658dc8f3-d360-4fe1-9a89-8822f3c88035" }}
-                    style={{
-                        width: '100%',
-                        aspectRatio: 3 / 2
-                    }}
-                    controls
-                    fullscreen={false}
-                    paused={false}
-                    resizeMode='cover'
+                <VideoPlayerIos
+                    item={item}
                 />
                 :
                 // <VideoPlayerAndroid
                 //     item={{
-                //         videoFilename: "http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
+                //         videoFilename: 'https://storage.googleapis.com/sabyan-prod-music-box/videos/ipul_inul/001_low_sabar.mp4',
                 //     }}
                 //     autoplay={false}
                 // />
-                <WebView
-                    source={{ uri: "https://firebasestorage.googleapis.com/v0/b/tribes-social.appspot.com/o/videoplayback.mp4?alt=media&token=658dc8f3-d360-4fe1-9a89-8822f3c88035" }}
+                <View
                     style={{
                         width,
-                        aspectRatio: 3 / 2,
+                        aspectRatio: 16 / 9,
                     }}
-                    allowsFullscreenVideo
-                    injectedJavaScript={`document.getElementsByTagName("video")[0].controlsList="nodownload";`}
-                />
+                >
+                    <WebView
+                        source={{ uri: item.videoFilename }}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                        }}
+                        allowsFullscreenVideo
+                        injectedJavaScript={`document.getElementsByTagName("video")[0].controlsList="nodownload";`}
+                    />
+                </View>
             }
 
             <Divider height={8} />
@@ -59,20 +120,20 @@ const Detail = () => {
             <ScrollView>
                 <View style={{ marginHorizontal: 16, paddingTop: 8 }}>
                     <Text align='left' size={18}>
-                        Naskah sang kuasa
+                        {item.productName}
                     </Text>
                 </View>
 
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8, marginHorizontal: 16 }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 18 }}>
+                    {/* <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 18 }}>
                         <Image
                             source={ImagesPath.eye}
                             size={16}
                             color={Color.gray}
                             style={{ marginRight: 6 }}
                         />
-                        <Text align='left' size={12}>654K.5K</Text>
-                    </View>
+                        <Text align='left' size={12}>{item.view}</Text>
+                    </View> */}
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 18 }}>
                         <Image
                             source={ImagesPath.heart}
@@ -80,7 +141,16 @@ const Detail = () => {
                             color={Color.gray}
                             style={{ marginRight: 6 }}
                         />
-                        <Text align='left' size={12}>65.9K</Text>
+                        <Text align='left' size={12}>{itemDetail.like}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 18 }}>
+                        <MaterialIcons
+                            name='comment'
+                            size={16}
+                            color={Color.gray}
+                            style={{marginRight: 6}}
+                        />
+                        <Text align='left' size={12}>{item.comment}</Text>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 18 }}>
                         <Image
@@ -89,52 +159,69 @@ const Detail = () => {
                             color={Color.gray}
                             style={{ marginRight: 6 }}
                         />
-                        <Text align='left' size={12}>8 Bulan yang lalu</Text>
+                        <Text align='left' size={12}>{moment(parseInt(item.created_date)).fromNow()}</Text>
                     </View>
                 </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 30, marginHorizontal: 16 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 24, marginHorizontal: 16 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <View style={{ flexDirection: 'column', alignItems: 'center', marginRight: 16 }}>
+                        <TouchableOpacity
+                            onPress={() => fetchContentAddLike()}
+                            style={{ flexDirection: 'column', alignItems: 'center', marginRight: 16 }}
+                        >
                             <Image
                                 source={ImagesPath.fullHeart}
                                 size={24}
-                                color={Color.gray}
+                                style={{
+                                    tintColor: itemDetail.im_like ? Color.error : Color.gray,
+                                }}
                             />
                             <Text align='left' size={12}>Suka</Text>
-                        </View>
-                        <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('CommentListScreen', { item })}
+                            style={{ flexDirection: 'column', alignItems: 'center', marginRight: 16 }}
+                        >
+                            <MaterialIcons
+                                name='comment'
+                                size={24}
+                                color={Color.gray}
+                            />
+                            <Text align='left' size={12}>Komentar</Text>
+                        </TouchableOpacity>
+                        
+                        {/* <TouchableOpacity
+                            style={{ flexDirection: 'column', alignItems: 'center' }}
+                        >
                             <Image
                                 source={ImagesPath.share}
                                 size={24}
                                 color={Color.gray}
                             />
                             <Text align='left' size={12}>Bagikan</Text>
-                        </View>
+                        </TouchableOpacity> */}
                     </View>
-                    <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                    {/* <View style={{ flexDirection: 'column', alignItems: 'center' }}>
                         <Image
                             source={ImagesPath.bookmark}
                             size={24}
                             color={Color.gray}
                         />
                         <Text align='left' size={12}>Simpan</Text>
-                    </View>
+                    </View> */}
                 </View>
 
                 <View style={{ marginTop: 24, marginHorizontal: 16 }}>
-                    <Text align='left' size={14} color={Color.primary}>Deskripsi</Text>
-                    <View style={{ marginTop: 16 }}>
-                        <Text align='left' size={14}>
-                            Cupcake ipsum dolor sit amet tart. Cookie carrot cake bear claw jujubes muffin. Cotton candy sweet candy chocolate muffin bonbon. Tart donut apple pie cupcake tart tart. Jelly-o chocolate cake ice cream shortbread biscuit chupa chups dessert. Macaroon cotton candy lollipop marshmallow dragée toffee shortbread macaroon dessert.
-                        </Text>
-                        <Text align='left' size={14} style={{ marginTop: 6 }}>
-                            Bear claw gummi bears pie apple pie tiramisu soufflé bonbon. Tiramisu tart candy croissant jujubes marshmallow lemon drops. Ice cream muffin pastry halvah chocolate bar bear claw. Tart icing pudding jelly-o fruitcake fruitcake. Tiramisu sweet pastry caramels sugar plum sweet gingerbread. Macaroon powder gummies tootsie roll muffin. Cookie danish candy jelly beans biscuit. Soufflé cake pudding fruitcake macaroon jelly beans.
+                    <Text align='left' type='bold'>Deskripsi</Text>
+                    <View style={{ marginTop: 8 }}>
+                        <Text align='left'>
+                            {item.productDescription}
                         </Text>
                     </View>
                 </View>
 
-                <View style={{ marginTop: 32, marginHorizontal: 16 }}>
-                    <Text align='left' size={14} color={Color.primary}>Komentar</Text>
+                {/* <View style={{ marginTop: 24, marginHorizontal: 16 }}>
+                    <Text align='left' type='bold'>Komentar</Text>
                     <View style={{ marginTop: 16 }}>
                         <FormInput
                             label='Komentar'
@@ -183,7 +270,7 @@ const Detail = () => {
                             <Text align='left' size={12} color={Color.text} style={{ marginTop: 8 }}>Cupcake ipsum dolor sit amet donut. Toffee pie icing jelly beans biscuit bear claw. Icing jelly beans jelly-o ice cream topping marshmallow powder carrot cake.</Text>
                         </View>
                     </View>
-                </View>
+                </View> */}
             </ScrollView>
         </Scaffold>
     )

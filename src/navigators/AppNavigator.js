@@ -165,6 +165,7 @@ import CreateShop from 'src/screens/Ecommerce/CreateShop';
 // gallery
 import GalleryScreen from 'src/screens/Gallery/GalleryScreen';
 import GalleryDetailScreen from 'src/screens/Gallery/GalleryDetailScreen';
+import GalleryDetailSliderScreen from 'src/screens/Gallery/GalleryDetailSliderScreen';
 import IncomingOrder from 'src/screens/Ecommerce/IncomingOrder';
 import SearchScreen from 'src/screens/Ecommerce/SearchScreen';
 
@@ -336,6 +337,7 @@ function MainStackNavigator() {
       {/* gallery */}
       <Screen name='GalleryScreen' component={GalleryScreen} />
       <Screen name='GalleryDetailScreen' component={GalleryDetailScreen} />
+      <Screen name='GalleryDetailSliderScreen' component={GalleryDetailSliderScreen} />
     </Navigator>
   );
 }

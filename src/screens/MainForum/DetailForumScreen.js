@@ -239,6 +239,7 @@ const DetailForumScreen = ({ route, navigation }) => {
                     item={item}
                     showDot
                     onPressDot={() => modalOptionsRef.current.open()}
+                    showAllText
                 />
 
                 <View style={{ width: '100%', paddingHorizontal: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12, paddingTop: 16 }}>

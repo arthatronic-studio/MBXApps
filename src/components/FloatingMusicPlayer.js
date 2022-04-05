@@ -305,7 +305,7 @@ const FloatingMusicPlayer = forwardRef((props, ref) => {
           }}
         >
           <Text align='left' numberOfLines={2}>{currentPlaying ? currentPlaying.title : ''}</Text>
-          <Text size={12} color={Color.placeholder}>{currentPlaying ? currentPlaying.artist : ''}</Text>
+          <Text align='left' numberOfLines={1} size={12} color={Color.placeholder}>{currentPlaying ? currentPlaying.artist : ''}</Text>
         </TouchableOpacity>
 
         <View style={{flex: 4, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginRight: 12}}>

@@ -14,6 +14,8 @@ import { Divider } from 'src/styled';
 import Banner from 'src/components/Banner';
 import ImagesPath from 'src/components/ImagesPath';
 import VideoCardList from 'src/components/VideoCardList';
+import { queryBannerList } from 'src/lib/query/banner';
+import client from 'src/lib/apollo';
 
 const TabVideo = ({ }) => {
     const [state, setState] = useState();
@@ -25,9 +27,32 @@ const TabVideo = ({ }) => {
 
     const ref = useRef();
 
-    useEffect(() => {
+    const [loadingBanner, setLoadingBanner] = useState(true);
+    const [listBanner, setListBanner] = useState([]);
 
+    useEffect(() => {
+        fetchBannerList();
     }, []);
+
+    const fetchBannerList = () => {
+        const variables = {
+          categoryId: 4,
+        };
+    
+        client.query({
+          query: queryBannerList,
+          variables,
+        })
+          .then(res => {
+            console.log('res banner list', res);
+            setListBanner(res.data.bannerList);
+            setLoadingBanner(false);
+          })
+          .catch(err => {
+            console.log(err, 'err banner list');
+            setLoadingBanner(false);
+          });
+    };
 
     return (
         <Scaffold
@@ -38,16 +63,20 @@ const TabVideo = ({ }) => {
             loadingProps={loadingProps}
         >
             <ScrollView>
+                <Divider height={16} />
+
                 <Banner
                     showHeader={false}
-                    data={[{imageAsset: ImagesPath.sabyanBannerVideo}]}
-                    loading={false}
+                    data={listBanner}
+                    loading={loadingBanner}
                 />
 
                 <Divider />
 
                 <VideoCardList
-                onPress={() => navigation.navigate('VideoDetail')}
+                    title='INUL & IPUL'
+                    productCategory='NEWEST_VIDEO'
+                    onPress={(item) => navigation.navigate('VideoDetail', { item })}
                 />
             </ScrollView>
         </Scaffold>

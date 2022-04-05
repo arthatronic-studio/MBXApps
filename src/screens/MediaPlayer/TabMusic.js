@@ -83,35 +83,38 @@ const TabMusic = ({ }) => {
             popupProps={popupProps}
             loadingProps={loadingProps}
         >
-            <ScrollView>
-                <Banner
-                    showHeader={false}
-                    data={listBanner}
-                    loading={loadingBanner}
-                />
+            <CardListMusic
+                topComponent={
+                    <>
+                        <Divider height={8} />
+                    
+                        <Banner
+                            showHeader={false}
+                            data={listBanner}
+                            loading={loadingBanner}
+                        />
 
-                <Divider />
+                        <Divider />
 
-                <MusikTerbaru />
-
-                <CardListMusic
-                    activePlayingTrack={thisTrack}
-                    componentType='POPULAR'
-                    title='Lagu Populer'
-                    decimalWidth={0.17}
-                    decimalHeight={0.17}
-                    showAll={false}
-                    onPressShowAll={() => {
-                        // navigation.navigate('ShowAllScreen', {
-                        //     title: '',
-                        //     subTitle: 'Semua Musik',
-                        //     componentType: 'SHOW_ALL_MUSIC',
-                        //     productType: 'MUSIC',
-                        //     productCategory: 'POPULAR'
-                        // });
-                    }}
-                />
-            </ScrollView>
+                        <MusikTerbaru />
+                    </>
+                }
+                activePlayingTrack={thisTrack}
+                componentType='POPULAR'
+                title='Lagu Populer'
+                decimalWidth={0.17}
+                decimalHeight={0.17}
+                showAll={false}
+                onPressShowAll={() => {
+                    // navigation.navigate('ShowAllScreen', {
+                    //     title: '',
+                    //     subTitle: 'Semua Musik',
+                    //     componentType: 'SHOW_ALL_MUSIC',
+                    //     productType: 'MUSIC',
+                    //     productCategory: 'POPULAR'
+                    // });
+                }}
+            />
         </Scaffold>
     )
 }

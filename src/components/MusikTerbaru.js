@@ -154,6 +154,8 @@ const MusikTerbaru = ({ }) => {
     </View>
   );
 
+  if (list.data.length === 0) return <View />;
+
   return (
     <View>
       <View>

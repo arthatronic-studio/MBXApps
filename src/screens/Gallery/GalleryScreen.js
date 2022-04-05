@@ -21,7 +21,6 @@ import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
 import Config from 'react-native-config';
 import { useSelector } from 'react-redux';
-// import HtmlView from 'src/components/HtmlView';
 
 const itemPerPage = 50;
 
@@ -167,9 +166,9 @@ const GalleryScreen = ({ navigation, route }) => {
                             <Container key={idx} width='50%' padding={8}>
                                 <TouchableOpacity
                                     onPress={() => {
-                                        navigation.navigate('GalleryDetailScreen', {
-                                            id: e.id,
-                                            image: e.image,
+                                        navigation.navigate('GalleryDetailSliderScreen', {
+                                            data: listing,
+                                            selectedIndex: idx,
                                         });
                                     }}
                                 >

@@ -38,7 +38,7 @@ const MediaPlayerScreen = ({ navigation, route }) => {
         <Scaffold
             header={
                 <Header
-                    title='Album'
+                    title='Media Player'
                     showLeftButton={false}
                 />
             }
@@ -47,18 +47,16 @@ const MediaPlayerScreen = ({ navigation, route }) => {
             popupProps={popupProps}
             loadingProps={loadingProps}
         >
-            {user && user.isDirector === 1 && <Row justify='space-around' style={{marginBottom: 16}}>
+            {/* {user && user.isDirector === 1 && <Row justify='space-around' style={{marginBottom: 16}}>
                 <Text onPress={() => navigation.navigate('UploadMusicScreen')}>
                     Upload Music
                 </Text>
                 <Text onPress={() => navigation.navigate('UploadVideoScreen')}>
                     Upload Video
                 </Text>
-            </Row>}
+            </Row>} */}
 
-            <TabMusic />
-
-            {/* <Navigator
+            <Navigator
                 initialRouteName="TabMusic"
                 tabBarOptions={{
                     activeTintColor: Color.text,
@@ -81,7 +79,7 @@ const MediaPlayerScreen = ({ navigation, route }) => {
                     component={TabVideo}
                     options={{tabBarLabel: 'Video'}}
                 />
-            </Navigator> */}
+            </Navigator>
 
             <FloatingMusicPlayer
                 ref={floatingMusicPlayerRef}

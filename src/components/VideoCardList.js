@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import {
   View,
   Image,
@@ -13,23 +13,68 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Text, useColor} from '@src/components';
 import ImagesPath from 'src/components/ImagesPath';
 import {Divider} from 'src/styled';
-
-const DATA = [
-  {imageAsset: ImagesPath.bananaisart},
-  {imageAsset: ImagesPath.bananaisart},
-];
+import { initialItemState } from 'src/utils/constants';
+import client from 'src/lib/apollo';
+import { queryContentProduct } from 'src/lib/query';
+import Config from 'react-native-config';
 
 const defaultProps = {
+  title: '',
   onPress: () => {},
 }
 
-const VideoCardList = ({ onPress }) => {
+const VideoCardList = ({ title, onPress, productCategory, productSubCategory }) => {
   const {Color} = useColor();
   const {width} = useWindowDimensions();
 
   const [playing, setPlaying] = useState(false);
-
   const [paused, setPaused] = useState(true);
+  const [itemData, setItemData] = useState(initialItemState);
+
+  useEffect(() => {
+    const variables = {
+      productType: Config.PRODUCT_TYPE,
+    };
+
+    if (productCategory) {
+      variables['productCategory'] = productCategory;
+    }
+
+    if (productSubCategory) {
+      variables['productSubCategory'] = productSubCategory;
+    }
+
+    console.log('variables', variables);
+
+    client.query({
+      query: queryContentProduct,
+      variables,
+    })
+    .then((res) => {
+      console.log('res video', res);
+
+      const data = res.data.contentProduct;
+      let newData = [];
+
+      if (data) {
+        newData = data;
+      }
+
+      setItemData({
+        ...itemData,
+        data: newData,
+        loading: false,
+      });
+    })
+    .catch((err) => {
+      console.log('err video', err);
+
+      setItemData({
+        ...itemData,
+        loading: false,
+      });
+    });
+  }, []);
 
   const onStateChange = useCallback(state => {
     if (state === 'ended') {
@@ -44,24 +89,27 @@ const VideoCardList = ({ onPress }) => {
 
   const renderItem = ({ item, index }) => {
     return (
-      <View style={{width: width - 16, paddingHorizontal: 8, marginRight: 16}}>
-        <TouchableOpacity onPress={() => onPress()}>
+      <View style={{width: width - 32, paddingHorizontal: 8}}>
+        <TouchableOpacity
+          style={{ width: '100%' }}
+          onPress={() => onPress(item)}
+        >
           <ImageBackground
-            source={ImagesPath.sabyanLive}
-            style={{ width: '100%', aspectRatio: 3/2 }}
+            source={{ uri: item.image }}
+            style={{ width: '100%', aspectRatio: 16 / 9 }}
             imageStyle={{borderRadius: 8}}
           >
-            <View style={{position: 'absolute', bottom: 8, right: 8, paddingVertical: 4, paddingHorizontal: 16, borderRadius: 4, backgroundColor: Color.text}}>
+            {/* <View style={{position: 'absolute', bottom: 8, right: 8, paddingVertical: 4, paddingHorizontal: 16, borderRadius: 4, backgroundColor: Color.text}}>
               <Text color={Color.textInput}>
                 15:35
               </Text>
-            </View>
+            </View> */}
           </ImageBackground>
         </TouchableOpacity>
 
         <View style={{flexDirection:'row', paddingTop: 8}}>
           <Image
-            source={ImagesPath.sabyanLive}
+            source={{ uri: item.avatar }}
             style={{flex: 1, aspectRatio: 1, borderRadius: 50}}
           />
 
@@ -69,19 +117,20 @@ const VideoCardList = ({ onPress }) => {
             <Text
               align="left"
               type="bold"
-              numberOfLines={4}
+              numberOfLines={1}
               style={{
-                color: Color.textInput,
+                marginBottom: 4
               }}
             >
-                Sabyan New Album
+              {item.productName}
             </Text>
-            <Text align="left"
-              style={{
-                fontSize: 12,
-                color: Color.gray,
-                
-              }}>Sabyan Official
+            <Text
+              align="left"
+              size={12}
+              color={Color.gray}
+              numberOfLines={2}
+            >
+              {item.productDescription}
             </Text>
           </View>
           {/* <Entypo
@@ -96,26 +145,25 @@ const VideoCardList = ({ onPress }) => {
   }
 
   return (
-    <View style={{ backgroundColor:Color.disabled, paddingVertical: 16,}}>
+    <View style={{ backgroundColor: Color.primary, paddingVertical: 16 }}>
       <Text
         align="left"
         type="bold"
+        size={18}
         style={{
-          fontSize: 18,
           paddingLeft: 16,
-          color: Color.textInput,
         }}>
-        Video Terbaru
+        {title}
       </Text>
 
       <FlatList
         keyExtractor={(item, index) => item.id + index.toString()}
-        data={DATA}
+        data={itemData.data}
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={{
-          paddingHorizontal: 8,
+        contentContainerStyle={{
           paddingTop: 16,
+          paddingHorizontal: 8,
         }}
         renderItem={renderItem}
       />
