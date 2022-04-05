@@ -127,6 +127,7 @@ const SurveyFourth = ({route, navigation}) => {
               });
               hideLoading()
               alert('Success send survey')
+              navigation.popToTop()
               console.log(response, "respon apicall")
           } catch (error) {
             hideLoading()
