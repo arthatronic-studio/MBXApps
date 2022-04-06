@@ -738,6 +738,7 @@ export const queryGetArea = gql`
 export const queryAddProduct = gql`
   mutation ecommerceProductAdd($products: [EcommerceProductInput]) {
     ecommerceProductAdd(products: $products) {
+      imageProducts
       name
       categoryId
       description

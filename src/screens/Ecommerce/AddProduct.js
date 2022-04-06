@@ -15,6 +15,7 @@ import {
   TextInput as TextInputs,
   Pressable,
   useWindowDimensions,
+  FlatList
 } from 'react-native';
 import Styled from 'styled-components';
 import {useSelector} from 'react-redux';
@@ -67,6 +68,9 @@ const AddProduct = ({navigation}) => {
   const [name, setName] = useState(route.params.item.name);
   const [thumbImage, setThumbImage] = useState('');
   const [mimeImage, setMimeImage] = useState('image/jpeg');
+  const [listThumbImage, setListThumbImage] = useState([]);
+  const [image,setImage] = useState([]);
+  console.log('rrrrr', route.params);
 
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
@@ -81,7 +85,7 @@ const AddProduct = ({navigation}) => {
   const [dataToko, setDataToko] = useState([]);
 
   useEffect(() => {
-    getToko()
+    getToko();
     Client.query({
       query: queryGetCategory,
       variables: {
@@ -95,37 +99,73 @@ const AddProduct = ({navigation}) => {
       //   setValue(res.data.ecommerceProductCategoryList[idx].id);
       // }
       setItems(res.data.ecommerceProductCategoryList);
-      
     });
   }, []);
 
   const submit = () => {
-    const tempData = {imageUrl: thumbImage ? 'data:image/png;base64,'+thumbImage : route.params.type == 'edit' ? route.params.item.imageUrl : undefined, name, categoryId:value, merchantId: dataToko.id};
+    // const tempData = {imageUrl: thumbImage ? 'data:image/png;base64,'+thumbImage : route.params.type == 'edit' ? route.params.item.imageUrl : undefined, name, categoryId:value, merchantId: dataToko.id};
+    const tempData = {
+      imageProducts: listThumbImage,
+      name,
+      categoryId: value,
+      merchantId: dataToko.id,
+    };
 
     navigation.navigate('StepTwo', {tempData, type: route.params.type, item: route.params.item});
   };
 
-  const getToko = (id) => {
+  const getToko = id => {
     showLoading();
     let variables = {
       merchantId: undefined,
-    }
-    console.log(variables, 'toko')
+    };
+    console.log(variables, 'toko');
     Client.query({query: queryGetMyProduct, variables})
       .then(res => {
         // hideLoading()
-        console.log(res)
+        console.log(res);
         if (res.data.ecommerceGetMerchant) {
           setDataToko(res.data.ecommerceGetMerchant);
         }
       })
       .catch(reject => {
-        hideLoading()
+        hideLoading();
         console.log(reject.message, 'error');
       });
-  }
+  };
 
-  console.log('value', value);
+  const addImage = () => {
+    const options = {
+      mediaType: 'photo',
+      maxWidth: 640,
+      maxHeight: 640,
+      quality: 1,
+      includeBase64: true,
+    };
+
+    launchImageLibrary(options, callback => {
+      if (callback.base64) {
+        setThumbImage(callback.base64);
+        setMimeImage(callback.type);
+        // listThumbImage.push('data:image/png;base64,'+ callback.base64)
+        pushImage(callback.base64,callback.type);
+      }
+    });
+  };
+
+  const pushImage = (thumbImage,mimeImage) => {
+    const tempThumbImage = thumbImage
+      ? 'data:image/png;base64,' + thumbImage
+      : route.params.type == 'edit'
+      ? route.params.item.imageUrl
+      : undefined;
+
+    const tempImage = `data:${mimeImage};base64,${thumbImage}`
+    setImage([...image,tempImage])
+    setListThumbImage([...listThumbImage, tempThumbImage]);
+  };
+
+  console.log('mageee', image);
 
   return (
     <Scaffold
@@ -176,20 +216,7 @@ const AddProduct = ({navigation}) => {
             </Text>
             <Text
               onPress={() => {
-                const options = {
-                  mediaType: 'photo',
-                  maxWidth: 640,
-                  maxHeight: 640,
-                  quality: 1,
-                  includeBase64: true,
-                };
-
-                launchImageLibrary(options, callback => {
-                  if (callback.base64) {
-                    setThumbImage(callback.base64);
-                    setMimeImage(callback.type);
-                  }
-                });
+                addImage();
               }}
               style={{
                 width: '50%',
@@ -219,48 +246,62 @@ const AddProduct = ({navigation}) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
-                source={{uri:  route.params.item.imageUrl }}
+                source={{uri: route.params.item.imageUrl}}
               />
             </TouchableOpacity>
-          ) :
-          thumbImage !== '' ? (
-            <TouchableOpacity
-              onPress={() => {}}
+          ) : thumbImage !== '' ? (
+            <View
+              
               style={{
+                padding:16,
                 marginVertical: 10,
                 width: '100%',
                 height: height / 3,
                 borderRadius: 4,
                 alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'row',
               }}>
-              <Image
-                style={{
-                  height: '100%',
-                  aspectRatio: 1,
-                  borderRadius: 4,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                source={{uri:  `data:${mimeImage};base64,${thumbImage}`}}
-              />
-            </TouchableOpacity>
+              {console.log('listt', listThumbImage)}
+              {listThumbImage.length === 1 ? (
+                <Image
+                  style={{
+                    height: '100%',
+                    aspectRatio: 1,
+                    borderRadius: 4,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  source={{uri: `data:${mimeImage};base64,${thumbImage}`}}
+                />
+              ) : (
+                <FlatList
+                  data={image}
+                  horizontal={true}
+                  keyExtractor={(item, index) => item.toString() + index}
+                  renderItem={({item}) => {
+                    console.log("aaaaa",item)
+                    return (
+                      <Image
+                        style={{
+                          height: '100%',
+                          aspectRatio: 1,
+                          borderRadius: 4,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          marginRight:10
+                        }}
+                        source={{uri: item}}
+                      />
+                    );
+                  }}
+                />
+              )}
+            </View>
           ) : (
             <TouchableOpacity
               onPress={() => {
-                const options = {
-                  mediaType: 'photo',
-                  maxWidth: 640,
-                  maxHeight: 640,
-                  quality: 1,
-                  includeBase64: true,
-                };
-
-                launchImageLibrary(options, callback => {
-                  if (callback.base64) {
-                    setThumbImage(callback.base64);
-                    setMimeImage(callback.type);
-                  }
-                });
+                addImage();
               }}
               style={{
                 width: '30%',
