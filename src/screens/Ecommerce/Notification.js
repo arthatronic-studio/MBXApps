@@ -252,7 +252,7 @@ const Notification = () => {
           height: 1,
           alignSelf: 'center',
         }}></View>
-      <View style={{flexDirection: 'row'}}>
+      {item.items.length != 0 && <View style={{flexDirection: 'row'}}>
         <Image
           source={{uri: item.items[0].products[0]['imageUrl']}}
           style={{
@@ -309,8 +309,8 @@ const Notification = () => {
             {item.items[0].products[0]['quantity']} Barang
           </Text>
         </View>
-      </View>
-      <View style={{marginVertical: 20, flexDirection: 'row'}}>
+      </View>}
+      {item.items.length != 0 && <View style={{marginVertical: 20, flexDirection: 'row'}}>
         <View style={{marginHorizontal: 10, width: '65%'}}>
           <Text
             style={{fontSize: 8, textAlign: 'left', color: Color.secondary}}>
@@ -320,7 +320,7 @@ const Notification = () => {
             {FormatMoney.getFormattedMoney(item.items[0].products[0]['price'])}
           </Text>
         </View>
-        <View
+        {item.statusId == 3 && <View
           style={{
             backgroundColor: Color.primary,
             width: 100,
@@ -341,8 +341,31 @@ const Notification = () => {
               Lacak Paket
             </Text>
           </TouchableOpacity>
-        </View>
-      </View>
+        </View>}
+        {item.statusId == 0 && <View
+          style={{
+            backgroundColor: Color.primary,
+            width: 100,
+            borderRadius: 20,
+          }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('TransactionDetail', {item})}
+            style={{
+              height: 32,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text
+              style={{
+                fontSize: 10,
+                color: Color.textInput,
+                fontWeight: 'bold',
+              }}>
+              Detail Pemesanan
+            </Text>
+          </TouchableOpacity>
+        </View>}
+      </View>}
     </Pressable>
   );
 
@@ -353,7 +376,6 @@ const Notification = () => {
       }
       onPressLeftButton={() => navigation.pop()}
       style={{backgroundColor: Color.semiwhite}}>
-      <View>
         <ScrollView>
           <View style={{flexDirection: 'row', marginVertical: 10}}>
             <TouchableOpacity
@@ -416,7 +438,6 @@ const Notification = () => {
             showsHorizontalScrollIndicator={false}
           />
         </ScrollView>
-      </View>
     </Scaffold>
   );
 };

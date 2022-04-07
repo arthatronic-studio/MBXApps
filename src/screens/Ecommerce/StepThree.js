@@ -124,6 +124,10 @@ const StepThree = ({navigation, route}) => {
       .then(res => {
         console.log('BERHASIL KIRIM', res);
         setModalVisible(!isModalVisible);
+        setTimeout(() => {
+          navigation.popToTop()
+        }, 2000);
+        
       })
       .catch(err => {
         console.log('error', err);

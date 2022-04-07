@@ -112,7 +112,7 @@ const CartAuction = ({navigation, route}) => {
                         color={Color.text}
                         type="bold"
                         style={{marginRight: 5}}>
-                        Rp. 100.000 Poin
+                        Rp. 100.000
                       </Text>
                     </View>
                     <AntDesign

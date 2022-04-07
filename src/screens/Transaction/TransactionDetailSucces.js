@@ -77,16 +77,10 @@ const TransactionDetailSucces = ({ navigation }) => {
                 <View style={{ marginLeft:75 ,alignItems: 'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:10}}>
                     <Text style={{color: 'gray',fontSize:12}}>Jumlah Pembelian</Text>
                     <Text style={{color: 'gray',fontSize:12}}>x1</Text>
-
-                    
-                    
                 </View>
                 <View style={{ marginLeft:75 ,alignItems: 'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:10}}>
                     <Text style={{color: 'gray',fontSize:12}}>Harga Barang</Text>
                     <Text style={{color: 'gray',fontSize:12}}>10.000 poin</Text>
-
-                    
-                    
                 </View>
                 <View style={{ marginLeft:75 ,alignItems: 'baseline',marginTop:10,justifyContent:'space-between',display: 'flex',flexDirection:'row',marginRight:10}}>
                     <Text style={{color: 'gray',fontSize:12}}>Total Pembelian</Text>

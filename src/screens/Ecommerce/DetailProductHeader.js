@@ -20,7 +20,7 @@ const MainView = Styled(SafeAreaView)`
     flex: 1;
 `;
 
-const DetailProductHeader = () => {
+const DetailProductHeader = ({cart}) => {
   const {Color} = useColor();
 
   const navigation = useNavigation();
@@ -78,6 +78,31 @@ const DetailProductHeader = () => {
           size={22}
           style={{marginHorizontal: 5}}
         />
+        {cart > 0 && (
+								<View
+									style={{
+										marginHorizontal: 18,
+										marginVertical: 1,
+										position: 'absolute',
+										width: 18,
+										height: 10,
+										backgroundColor: Color.error,
+										borderRadius: 5
+									}}
+								>
+									<Text
+										style={{
+											fontSize: 5,
+											color: Color.textInput,
+											alignSelf: 'center',
+											paddingVertical: 1
+										}}
+									>
+										{' '}
+										{cart}
+									</Text>
+								</View>
+							)}
       </TouchableOpacity>
     </View>
   );

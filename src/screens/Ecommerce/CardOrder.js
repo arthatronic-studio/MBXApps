@@ -29,7 +29,7 @@ import {navigationRef} from 'App';
 const CardOrder = ({data}) => {
   const navigation = useNavigation();
   const {Color} = useColor();
-  const items = data.items[0].products;
+  const items = data.items.length > 0 ? data.items[0].products : [];
   return (
     <View
       style={{
@@ -92,7 +92,7 @@ const CardOrder = ({data}) => {
           }}
         />
         <Divider />
-        {items.map(product => {
+        {items.length != 0 && items.map(product => {
           return (
             <View>
             <View style={{flexDirection: 'row'}}>
@@ -155,7 +155,7 @@ const CardOrder = ({data}) => {
                               color: Color.secondary,
                               textAlign: 'right',
                             }}>
-                            {FormatMoney.getFormattedMoney(product.price)} Poin
+                            {FormatMoney.getFormattedMoney(product.price)} 
                           </Text>
                         </View>
                         <View style={{flexDirection: 'row', marginVertical: 2}}>
@@ -179,7 +179,6 @@ const CardOrder = ({data}) => {
                             {FormatMoney.getFormattedMoney(
                               data.totalPrice,
                             )}{' '}
-                            Poin
                           </Text>
                         </View>
                       </View>

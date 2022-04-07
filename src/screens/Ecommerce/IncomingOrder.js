@@ -677,7 +677,6 @@ const IncomingOrder = ({route, navigation}) => {
       page: 1,
       itemPerPage: 10,
       status: type,
-      userId: user.userId,
       merchantId: route.params.item.id,
     };
 

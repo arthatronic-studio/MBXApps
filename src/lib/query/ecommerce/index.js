@@ -10,8 +10,10 @@ query(
   userId
   bookingId
   orderNumber
+  invoiceNumber
   expiredDate
   status
+  statusId
   payment{
     name
   }
@@ -115,6 +117,10 @@ query(
     payment_type
   }
   paymentId
+  amount
+  vat
+  discount
+  adminFee
   shippingCost
   totalProductPrice
   totalPrice
@@ -204,6 +210,7 @@ query (
     shippingUseInsurance
     shipperOrderNumber
     paymentId
+    statusId
     shippingCost
     totalProductPrice
     totalPrice
@@ -605,11 +612,13 @@ export const queryUpdateItemCart = gql`
     $productId: Int!
     $quantity: Int!
     $checked: Boolean!
+    $updateType: EcommerceUpdateCartType
   ) {
     ecommerceCartUpdate(
      productId: $productId
      quantity: $quantity
      checked: $checked
+     updateType: $updateType
    ) {
     id
    }
@@ -641,7 +650,7 @@ export const queryDetailProduct = gql`
     ecommerceProductDetail(
      id: $id
    ) {
-    id name categoryId description price initialPrice imageUrl stock merchant { name alamat isVerified }
+    id name categoryId description price initialPrice imageUrl imageProducts stock merchant { name alamat isVerified }
    }
   }
 `;
