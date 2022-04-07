@@ -193,7 +193,7 @@ const Ecommerce = ({navigation}) => {
   useEffect(() => {
     getAuction();
     getProduct();
-    getCart();
+    // getCart();
     // });
   }, [isFocused]);
 

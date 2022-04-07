@@ -204,6 +204,7 @@ query (
     shippingUseInsurance
     shipperOrderNumber
     paymentId
+    statusId
     shippingCost
     totalProductPrice
     totalPrice
