@@ -188,7 +188,7 @@ const TransactionDetail = ({route, navigation}) => {
                 textAlign: 'right',
                 fontWeight: 'bold',
               }}>
-              {Moment(parseFloat(data.createdAt)).subtract(1, 'day').format(
+              {Moment(parseInt(data.createdAt)).format(
                 'dddd, DD MMMM YYYY HH:mm',
               )}{' '}
               WIB
@@ -551,6 +551,14 @@ const TransactionDetail = ({route, navigation}) => {
         </View>
         <Divider height={25} />
       </ScrollView>
+      <Row style={{height: 70, width: '100%', backgroundColor: Color.theme, justifyContent: 'center',paddingVertical: 15}}>
+          <TouchableOpacity style={{justifyContent: 'center',borderRadius: 20,marginHorizontal: 5,width: '44%', height: 40,borderWidth: 1, borderColor: Color.error,}}>
+            <Text style={{color: Color.error}}>Batalkan Pesanan</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{justifyContent: 'center',borderRadius: 20,marginHorizontal: 5,width: '44%', backgroundColor: Color.primary}}>
+            <Text style={{color: Color.textInput,}}>Chat Penjual</Text>
+          </TouchableOpacity>
+      </Row>
     </Scaffold>
   );
 };

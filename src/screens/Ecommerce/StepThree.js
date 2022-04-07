@@ -67,6 +67,7 @@ const StepThree = ({navigation, route}) => {
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
+    navigation.navigate('MyShop')
   };
 
   const [loadingProps, showLoading, hideLoading] = useLoading();

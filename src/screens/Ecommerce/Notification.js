@@ -353,7 +353,6 @@ const Notification = () => {
       }
       onPressLeftButton={() => navigation.pop()}
       style={{backgroundColor: Color.semiwhite}}>
-      <View>
         <ScrollView>
           <View style={{flexDirection: 'row', marginVertical: 10}}>
             <TouchableOpacity
@@ -416,7 +415,6 @@ const Notification = () => {
             showsHorizontalScrollIndicator={false}
           />
         </ScrollView>
-      </View>
     </Scaffold>
   );
 };
