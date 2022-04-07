@@ -646,8 +646,8 @@ const Ecommerce = ({navigation}) => {
         }}>
         <Row>
           <TouchableOpacity
-            onPress={() => navigation.navigate('MyShopHomepage')}
-            style={{marginRight: 27, alignItems: 'center'}}>
+            onPress={() => navigation.navigate('MyShop')}
+            style={{marginRight: 22, alignItems: 'center'}}>
             <Image source={ImagesPath.shop}></Image>
             <View style={{marginVertical: 5}}>
               <Text style={{fontSize: 10}}>Toko Saya</Text>
