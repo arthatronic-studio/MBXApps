@@ -677,8 +677,8 @@ const IncomingOrder = ({route, navigation}) => {
       page: 1,
       itemPerPage: 10,
       status: type,
-      userId: 264,
-      merchantId: 6,
+      userId: user.userId,
+      merchantId: route.params.item.id,
     };
 
     await Client.query({query: queryListOrder, variables})
