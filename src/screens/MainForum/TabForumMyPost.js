@@ -14,6 +14,8 @@ const initialListData = {
   refresh: false,
 };
 
+const itemPerPage = 10;
+
 const TabForumMyPost = ({ navigation, route }) => {
   // state
   const [listMyPost, setListMyPost] = useState(initialListData);
@@ -22,19 +24,30 @@ const TabForumMyPost = ({ navigation, route }) => {
     fecthData();
   }, []);
 
+  useEffect(() => {
+    if (listMyPost.loadNext) {
+      fecthData();
+    }
+  }, [listMyPost.loadNext]);
+
+
   const fecthData = async () => {
     const newListMyPost = await fetchContentMyProduct(Config.PRODUCT_TYPE, 'FORUM', 'ALL');
     setListMyPost({
       ...listMyPost,
       data: newListMyPost,
+      data: listMyPost.data.concat(newListMyPost),
       loading: false,
+      page: newListMyPost.length === itemPerPage ? listMyPost.page + 1 : -1,
+      loadNext: false,
+      refresh: false,
     });
   }
 
   const fetchContentMyProduct = async (productType, productCategory, productSubCategory) => {
     const variables = {
-      page: 0,
-      itemPerPage: 6,
+      page: listMyPost.page + 1,
+      itemPerPage,
     };
 
     if (productType !== '') {
@@ -54,6 +67,8 @@ const TabForumMyPost = ({ navigation, route }) => {
         query: queryContentMyProduct,
         variables,
       });
+
+      console.log('variables', variables);
   
       if (result && result.data && result.data.contentMyProduct && Array.isArray(result.data.contentMyProduct)) {
         return result.data.contentMyProduct;
@@ -79,6 +94,7 @@ const TabForumMyPost = ({ navigation, route }) => {
     <ListForumVertical
         data={listMyPost.data}
         loading={listMyPost.loading}
+        loadNext={listMyPost.loadNext}
         showHeader={false}
         // onPressShowAll={() => {
         //   navigation.navigate('ShowAllFromForum', {
@@ -94,6 +110,7 @@ const TabForumMyPost = ({ navigation, route }) => {
           onSelected(item);
           navigation.navigate('DetailForumScreen', { item });
         }}
+        onEndReached={() => listMyPost.page !== -1 && setListMyPost({ ...listMyPost, loadNext: true })}
       />
   );
 }

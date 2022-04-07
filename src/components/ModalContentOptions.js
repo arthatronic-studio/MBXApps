@@ -6,16 +6,18 @@ import ModalListAction from './Modal/ModalListAction';
 import {useNavigation} from '@react-navigation/native';
 import {Alert} from './Modal/Alert';
 import {accessClient} from 'src/utils/access_client';
-import {queryProductReport} from '@src/lib/query';
+import {queryProductReport, queryUserBlock} from '@src/lib/query';
 import Client from '@src/lib/apollo';
 
 const defaultProps = {
   isOwner: false,
   item: null,
+  useBlockUser: false,
+  onClose: () => {},
 };
 
 const ModalContentOptions = forwardRef((props, ref) => {
-  const {isOwner, item} = props;
+  const { isOwner, item, useBlockUser, onClose } = props;
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
@@ -24,11 +26,15 @@ const ModalContentOptions = forwardRef((props, ref) => {
   const {Color} = useColor();
 
   const fetchProductReportCheck = () => {
+    const variables = {
+      productId: item.id,
+    };
+
+    console.log('variables', variables);
+
     Client.mutate({
       mutation: queryProductReport,
-      variables: {
-        productId: item.id,
-      },
+      variables,
     })
       .then(res => {
         console.log("res report",res)
@@ -38,8 +44,30 @@ const ModalContentOptions = forwardRef((props, ref) => {
       })
       .catch(err => {
         console.log('error', err);
+        alert('terjadi kesalahan, silakan coba beberapa saat');
       });
   };
+
+  const fetchBlockUser = () => {
+    const variables = {
+      blockUserId: item.ownerId,
+    };
+
+    Client.mutate({
+      mutation: queryUserBlock,
+      variables,
+    })
+      .then(res => {
+        console.log("res block", res)
+        alert(
+          'User di blok',
+        );
+      })
+      .catch(err => {
+        console.log('error', err);
+        alert('terjadi kesalahan, silakan coba beberapa saat');
+      });
+  }
 
   const dataOptions = [
     {
@@ -68,7 +96,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
     },
   ];
 
-  if (accessClient.UserGeneratedContent) {
+  if (useBlockUser) {
     dataOptions.push({
       id: 2,
       name: 'Block User',
@@ -78,12 +106,13 @@ const ModalContentOptions = forwardRef((props, ref) => {
         Alert(
           'Block',
           'Apakah Anda yakin akan memblok semua postingan user ini?',
+          () => fetchBlockUser()
         );
       },
     });
   }
 
-  return <ModalListAction ref={combinedRef} data={dataOptions} />;
+  return <ModalListAction ref={combinedRef} data={dataOptions} onClose={() => onClose()} />;
 });
 
 ModalContentOptions.defaultProps = defaultProps;

@@ -19,7 +19,7 @@ import { queryGetUserOrganizationRef } from './queryGetUserOrganizationRef';
 import { queryContentUserProfile } from './queryContentUserProfile';
 import { queryContentUserProduct } from './queryContentUserProduct';
 import { queryProductReport } from './queryProductReport';
-
+import { queryUserBlock } from './queryUserBlock';
 
 export {
     queryContentProduct,
@@ -42,5 +42,6 @@ export {
     queryGetUserOrganizationRef,
     queryContentUserProfile,
     queryContentUserProduct,
-    queryProductReport
+    queryProductReport,
+    queryUserBlock,
 };
