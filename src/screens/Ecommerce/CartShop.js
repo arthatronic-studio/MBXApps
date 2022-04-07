@@ -193,7 +193,8 @@ const CartShop = ({navigation, route}) => {
           datTem.push(element);
         }
       });
-      dataq.push({...val, products: datTem});
+      if(val.checked) dataq.push({...val, products: datTem});
+      
     });
     console.log(dataq);
     navigation.navigate('CheckoutScreen', {item, list: dataq});
@@ -327,7 +328,7 @@ const CartShop = ({navigation, route}) => {
                     color={Color.text}
                     style={{textAlign: 'left'}}
                     type="bold">
-                    {val.price} Poin
+                    {FormatMoney.getFormattedMoney(val.price)}
                   </Text>
                 </Col>
                 <View style={{justifyContent: 'flex-end', flex: 1}}>

@@ -6,6 +6,7 @@ import {TouchableOpacity} from '@src/components/Button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Styled from 'styled-components';
 import Text from '@src/components/Text';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Header, Loading, useLoading} from 'src/components';
 import {ScrollView} from 'react-native-gesture-handler';
 import ImagesPath from 'src/components/ImagesPath';
@@ -96,7 +97,7 @@ const TransactionDetail = ({route, navigation}) => {
   const onPayment = () => {
     dispatch({
       type: 'BOOKING.ADD_BOOKING',
-      data: {...data, vestaBiller: true, finalAmount: data.totalPrice},
+      data: {...data, id: data.bookingId, vestaBiller: true, finalAmount: data.totalPrice},
     });
     navigation.navigate('PaymentScreen', {back: true});
   };
@@ -569,13 +570,34 @@ const TransactionDetail = ({route, navigation}) => {
           justifyContent: 'center',
           paddingVertical: 15,
         }}>
+          {data.statusId < 4 && (
+           <TouchableOpacity
+           onPress={() => navigation.navigate('ChatRoom', {item: detail})}
+           style={{
+             width: '12%',
+             height: 40,
+             borderWidth: 1,
+             borderColor: Color.primary,
+             borderRadius: 10,
+             justifyContent: 'center',
+             alignItems: 'center',
+             paddingHorizontal: 10,
+             marginHorizontal: 10,
+           }}>
+              <MaterialCommunityIcons
+                size={23}
+                name={'message-processing-outline'}
+                style={{color: Color.primary}}
+              />
+            </TouchableOpacity>
+        )}
         {data.statusId == 0 && (
           <TouchableOpacity
             style={{
               justifyContent: 'center',
               borderRadius: 20,
               marginHorizontal: 5,
-              width: '44%',
+              width: '40%',
               height: 40,
               borderWidth: 1,
               borderColor: Color.error,
@@ -583,18 +605,7 @@ const TransactionDetail = ({route, navigation}) => {
             <Text style={{color: Color.error}}>Batalkan Pesanan</Text>
           </TouchableOpacity>
         )}
-        {data.statusId < 4 && (
-          <TouchableOpacity
-            style={{
-              justifyContent: 'center',
-              borderRadius: 20,
-              marginHorizontal: 5,
-              width: '44%',
-              backgroundColor: Color.primary,
-            }}>
-            <Text style={{color: Color.textInput}}>Chat Penjual</Text>
-          </TouchableOpacity>
-        )}
+        
         {data.statusId == 3 && (
           <TouchableOpacity
             style={{
@@ -619,6 +630,19 @@ const TransactionDetail = ({route, navigation}) => {
               backgroundColor: Color.primary,
             }}>
             <Text style={{color: Color.textInput}}>Ulasan</Text>
+          </TouchableOpacity>
+        )}
+        {data.statusId == 0 && (
+          <TouchableOpacity
+            onPress={() => onPayment()}
+            style={{
+              justifyContent: 'center',
+              borderRadius: 20,
+              marginHorizontal: 5,
+              width: '30%',
+              backgroundColor: Color.primary,
+            }}>
+            <Text style={{color: Color.textInput}}>Lanjut Bayar</Text>
           </TouchableOpacity>
         )}
       </Row>

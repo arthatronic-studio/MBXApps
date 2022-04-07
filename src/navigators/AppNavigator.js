@@ -172,6 +172,7 @@ import GalleryDetailSliderScreen from 'src/screens/Gallery/GalleryDetailSliderSc
 import IncomingOrder from 'src/screens/Ecommerce/IncomingOrder';
 import SearchScreen from 'src/screens/Ecommerce/SearchScreen';
 import CurrentLocation from 'src/components/Maps/CurrentLocation';
+import TrackingOrder from 'src/screens/Transaction/TrackingOrder';
 
 const { Navigator, Screen } = createStackNavigator();
 const MainPage =
@@ -192,6 +193,7 @@ function MainStackNavigator() {
 			<Screen name="SplashScreen" component={SplashScreen} />
 			<Screen name="MainPage" component={MainPage} />
 			<Screen name="OnBoardingScreen" component={OnBoardingScreen} />
+			<Screen name="TrackingOrder" component={TrackingOrder} />
 			<Screen name="CreateEmergencyScreen" component={CreateEmergencyScreen} />
 			<Screen name="PDFReaderScreen" component={PDFReaderScreen} />
 			<Screen name="MusicPlayerScreen" component={MusicPlayerScreen} />

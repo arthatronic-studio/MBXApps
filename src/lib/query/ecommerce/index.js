@@ -10,6 +10,7 @@ query(
   userId
   bookingId
   orderNumber
+  invoiceNumber
   expiredDate
   status
   statusId
@@ -116,6 +117,10 @@ query(
     payment_type
   }
   paymentId
+  amount
+  vat
+  discount
+  adminFee
   shippingCost
   totalProductPrice
   totalPrice
@@ -607,11 +612,13 @@ export const queryUpdateItemCart = gql`
     $productId: Int!
     $quantity: Int!
     $checked: Boolean!
+    $updateType: EcommerceUpdateCartType
   ) {
     ecommerceCartUpdate(
      productId: $productId
      quantity: $quantity
      checked: $checked
+     updateType: $updateType
    ) {
     id
    }

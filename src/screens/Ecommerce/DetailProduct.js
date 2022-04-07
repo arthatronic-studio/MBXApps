@@ -31,7 +31,7 @@ import {
 } from '@src/components';
 import TopBar from './TopTab';
 import ImagesPath from 'src/components/ImagesPath';
-import {queryAddCart, queryDetailProduct} from 'src/lib/query/ecommerce';
+import {queryAddCart, queryDetailProduct, queryUpdateItemCart} from 'src/lib/query/ecommerce';
 import Client from 'src/lib/apollo';
 import {FormatMoney} from 'src/utils';
 import DetailProductHeader from './DetailProductHeader';
@@ -91,16 +91,18 @@ const DetailProduct = ({navigation}) => {
     let variables = {
       productId: detail.id,
       quantity: 1,
+      checked: false,
+      updateType: "ADD"
     };
     console.log(variables);
-    Client.mutate({mutation: queryAddCart, variables})
+    Client.mutate({mutation: queryUpdateItemCart, variables})
       .then(res => {
         hideLoading();
         console.log(res);
-        if (res.data.ecommerceCartAdd) {
-          alert('Success add to cart');
-          // navigation.navigate('CartScreen')
-        }
+        // if (res.data.ecommerceCartUpdate) {
+        //   alert('Success add to cart');
+        //   // navigation.navigate('CartScreen')
+        // }
       })
       .catch(reject => {
         hideLoading();
