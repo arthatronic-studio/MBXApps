@@ -320,7 +320,7 @@ const Notification = () => {
             {FormatMoney.getFormattedMoney(item.items[0].products[0]['price'])}
           </Text>
         </View>
-        {item.status_id == 3 && <View
+        {item.statusId == 3 && <View
           style={{
             backgroundColor: Color.primary,
             width: 100,
@@ -339,6 +339,29 @@ const Notification = () => {
                 fontWeight: 'bold',
               }}>
               Lacak Paket
+            </Text>
+          </TouchableOpacity>
+        </View>}
+        {item.statusId == 0 && <View
+          style={{
+            backgroundColor: Color.primary,
+            width: 100,
+            borderRadius: 20,
+          }}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('TransactionDetail', {item})}
+            style={{
+              height: 32,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text
+              style={{
+                fontSize: 10,
+                color: Color.textInput,
+                fontWeight: 'bold',
+              }}>
+              Detail Pemesanan
             </Text>
           </TouchableOpacity>
         </View>}

@@ -12,6 +12,7 @@ query(
   orderNumber
   expiredDate
   status
+  statusId
   payment{
     name
   }
@@ -642,7 +643,7 @@ export const queryDetailProduct = gql`
     ecommerceProductDetail(
      id: $id
    ) {
-    id name categoryId description price initialPrice imageUrl stock merchant { name alamat isVerified }
+    id name categoryId description price initialPrice imageUrl imageProducts stock merchant { name alamat isVerified }
    }
   }
 `;

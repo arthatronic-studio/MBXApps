@@ -216,7 +216,6 @@ const Ecommerce = ({ navigation }) => {
 			})
 			.catch((reject) => {
 				// hideLoading()
-				alert(reject.message);
 				console.log(reject.message, 'reject');
 			});
 	};
@@ -504,7 +503,7 @@ const Ecommerce = ({ navigation }) => {
 						</Pressable>
 						<Pressable onPress={() => navigation.navigate('Notification')}>
 							<Ionicons name={'notifications-outline'} size={24} style={{ marginHorizontal: 7 }} />
-							<View
+							{/* <View
 								style={{
 									marginHorizontal: 18,
 									marginVertical: 1,
@@ -526,7 +525,7 @@ const Ecommerce = ({ navigation }) => {
 									{' '}
 									+99
 								</Text>
-							</View>
+							</View> */}
 						</Pressable>
 					</View>
 				</View>

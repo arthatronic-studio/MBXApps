@@ -99,7 +99,6 @@ const CartShop = ({navigation, route}) => {
       })
       .catch(reject => {
         // hideLoading()
-        alert(reject.message);
         console.log(reject.message, 'reject');
       });
   };

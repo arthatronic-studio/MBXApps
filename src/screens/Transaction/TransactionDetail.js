@@ -552,12 +552,18 @@ const TransactionDetail = ({route, navigation}) => {
         <Divider height={25} />
       </ScrollView>
       <Row style={{height: 70, width: '100%', backgroundColor: Color.theme, justifyContent: 'center',paddingVertical: 15}}>
-          <TouchableOpacity style={{justifyContent: 'center',borderRadius: 20,marginHorizontal: 5,width: '44%', height: 40,borderWidth: 1, borderColor: Color.error,}}>
+          {data.statusId == 0 && <TouchableOpacity style={{justifyContent: 'center',borderRadius: 20,marginHorizontal: 5,width: '44%', height: 40,borderWidth: 1, borderColor: Color.error,}}>
             <Text style={{color: Color.error}}>Batalkan Pesanan</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={{justifyContent: 'center',borderRadius: 20,marginHorizontal: 5,width: '44%', backgroundColor: Color.primary}}>
+          </TouchableOpacity>}
+          {data.statusId < 4 && <TouchableOpacity style={{justifyContent: 'center',borderRadius: 20,marginHorizontal: 5,width: '44%', backgroundColor: Color.primary}}>
             <Text style={{color: Color.textInput,}}>Chat Penjual</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>}
+          {data.statusId == 3 && <TouchableOpacity style={{justifyContent: 'center',borderRadius: 20,marginHorizontal: 5,width: '44%', height: 40,borderWidth: 1, borderColor: Color.error,}}>
+            <Text style={{color: Color.error}}>Pesanan Diterima</Text>
+          </TouchableOpacity>}
+          {data.statusId == 4 && <TouchableOpacity style={{justifyContent: 'center',borderRadius: 20,marginHorizontal: 5,width: '44%', backgroundColor: Color.primary}}>
+            <Text style={{color: Color.textInput,}}>Ulasan</Text>
+          </TouchableOpacity>}
       </Row>
     </Scaffold>
   );

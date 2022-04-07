@@ -124,7 +124,7 @@ const DetailProduct = ({navigation}) => {
             backgroundColor: Color.theme,
           }}>
           <ImageSlider
-            data={[detail.imageUrl, detail.imageUrl, detail.imageUrl]}
+            data={detail.imageProducts ? detail.imageProducts : [detail.imageUrl, detail.imageUrl, detail.imageUrl]}
           />
         </View>
         <View
