@@ -75,7 +75,7 @@ const StepTwo = ({navigation, route}) => {
   const [openProductMassa, setOpenProductMassa] = useState(false);
   const [valueProductMassa, setValueProductMassa] = useState(null);
   const [itemsProductMassa, setItemsProductMassa] = useState([
-    {label: 'KG', value: 'KG'},
+    {label: 'gram', value: 'gram'},
   ]);
 
   const [stock, setStock] = useState(0);
