@@ -1,11 +1,13 @@
-import React from 'react';
-import { View, FlatList, useWindowDimensions } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, FlatList, useWindowDimensions, ActivityIndicator } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { ScreenEmptyData, ScreenIndicator, useColor } from '@src/components';
 import Text from '@src/components/Text';
 import CardForumVertical from '@src/screens/MainForum/CardForumVertical';
 import { Container } from 'src/styled';
+import ModalContentOptions from 'src/components/ModalContentOptions';
+import { useSelector } from 'react-redux';
 
 const defaultProps = {
     componentType: 'GENERAL', // GENERAL | LIST | GRID
@@ -15,11 +17,26 @@ const defaultProps = {
     showHeader: true,
     data: [],
     loading: false,
-}
+    onEndReached: () => {},
+    loadNext: false,
+};
 
-const ListForumVertical = ({ componentType, data, loading, title, showAll, onPressShowAll, onPress, showHeader }) => {
+const ListForumVertical = ({ componentType, data, loading, title, showAll, onPressShowAll, onPress, showHeader, loadNext, onEndReached }) => {
+    const [selectedItem, setSelectedItem] = useState();
+
     const { Color } = useColor();
     const { height } = useWindowDimensions();
+    const modalOptionsRef = useRef();
+
+    const user = useSelector(
+        state => state['user.auth'].login.user
+    );
+
+    useEffect(() => {
+        if (selectedItem) {
+            modalOptionsRef.current.open();
+        }
+    }, [selectedItem]);
 
     return (
         <View style={{paddingBottom: 8, paddingTop: showHeader ? 0 : 8}}>
@@ -30,7 +47,7 @@ const ListForumVertical = ({ componentType, data, loading, title, showAll, onPre
             
             {loading ?
                 <Container paddingTop={height / 3}>
-                    <ScreenIndicator transparent />
+                    <ScreenIndicator />
                 </Container>
             :
                 <FlatList
@@ -45,14 +62,34 @@ const ListForumVertical = ({ componentType, data, loading, title, showAll, onPre
                                 item={item}
                                 numColumns={2}
                                 onPress={() => onPress(item)}
+                                onPressDot={() => setSelectedItem(item)}
                             />
                         )
                     }}
                     ListEmptyComponent={() => {
                         return <ScreenEmptyData style={{marginTop: height / 6}} message='Belum ada postingan, Tekan tombol + untuk menambahkan' />
                     }}
+                    ListFooterComponent={() => {
+                        if (loadNext) {
+                            return (
+                                <ActivityIndicator color={Color.primary} size='large' />
+                            )
+                        }
+
+                        return <View />;
+                    }}
+                    onEndReachedThreshold={0.3}
+                    onEndReached={() => onEndReached()}
                 />
             }
+
+            <ModalContentOptions
+                ref={modalOptionsRef}
+                isOwner={user && selectedItem && user.userId === selectedItem.ownerId}
+                item={selectedItem}
+                onClose={() => setSelectedItem()}
+                useBlockUser
+            />
         </View>
     )
 }
