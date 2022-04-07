@@ -109,7 +109,7 @@ export const listMenuHome = [
         nav: 'SurveyFirst',
         params: { title: 'Survey' },
         badge: true,
-        show: true,
+        show: accessClient.MenuHome.showSurvey,
     },
 
     // menu tribes
