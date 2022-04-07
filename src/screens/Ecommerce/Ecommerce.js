@@ -749,6 +749,7 @@ const Ecommerce = ({navigation}) => {
             style={{marginVertical: 4, color: Color.primary}}
           />
         </View>
+        <Text onPress={() => navigation.navigate('Maps')}>Maps</Text>
         <FlatList
           data={liveAuction}
           renderItem={renderItem}

@@ -124,7 +124,7 @@ import Review from 'src/screens/Ecommerce/Review';
 import EditMerchantInfo from 'src/screens/Ecommerce/EditMerchantInfo';
 import DetailCoupon from 'src/screens/Ecommerce/DetailCoupon';
 import SearchResult from 'src/screens/Ecommerce/SearchResult';
-
+import Maps from 'src/components/Maps/Maps';
 import StepTwo from 'src/screens/Ecommerce/StepTwo';
 import StepThree from 'src/screens/Ecommerce/StepThree';
 import MerchantSetting from 'src/screens/Ecommerce/MerchantSetting';
@@ -168,6 +168,7 @@ import GalleryDetailScreen from 'src/screens/Gallery/GalleryDetailScreen';
 import GalleryDetailSliderScreen from 'src/screens/Gallery/GalleryDetailSliderScreen';
 import IncomingOrder from 'src/screens/Ecommerce/IncomingOrder';
 import SearchScreen from 'src/screens/Ecommerce/SearchScreen';
+import CurrentLocation from 'src/components/Maps/CurrentLocation';
 
 const {Navigator, Screen} = createStackNavigator();
 const MainPage =
@@ -228,7 +229,8 @@ function MainStackNavigator() {
       <Screen name="ChatRoom" component={ChatRoom} />
       <Screen name="CardChat" component={CardChat} />
       <Screen name="CardChatExist" component={CardChatExist} />
-
+      <Screen name="Maps" component={Maps} />
+      <Screen name="CurrentLocation" component={CurrentLocation} />
 
       {/* <Screen name="PopUpCouponSucces" component={PopUpCouponSucces}/> */}
       <Screen name="DetailCoupon" component={DetailCoupon} />

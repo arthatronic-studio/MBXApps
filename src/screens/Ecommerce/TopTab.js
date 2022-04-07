@@ -1,7 +1,12 @@
 import * as React from 'react';
-import {Text, View, Button} from 'react-native';
+import {Text, View, Button, FlatList, Image} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {useColor} from '@src/components';
+import {Row, useColor, Col} from '@src/components';
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import ImagesPath from 'src/components/ImagesPath';
+import { Divider } from 'src/styled';
 
 function Description({props}) {
   console.log(props)
@@ -28,41 +33,84 @@ function Description({props}) {
 
 function Review(props) {
   const {Color} = useColor();
+  const renderItem = ({item}) => (
+    <Row style={{marginBottom: 20}}>
+        <Image source={ImagesPath.avatar1}/>
+        <Col style={{marginHorizontal:10}}>
+          <Text style={{fontSize: 10, fontWeight: 'bold'}}>{item.personName}</Text>
+          <Text style={{fontSize: 8, color: Color.secondary, marginVertical: 3}}>{item.time}</Text>
+          <Row style={{marginVertical: 5}}>
+            <AntDesign name={'star'} style={{color: Color.warning, marginRight: 3}}/>
+            <AntDesign name={'star'} style={{color: Color.warning, marginRight: 3}}/>
+            <AntDesign name={'star'} style={{color: Color.warning, marginRight: 3}}/>
+            <AntDesign name={'star'} style={{color: Color.warning, marginRight: 3}}/>
+            <AntDesign name={'star'} style={{color: Color.warning, marginRight: 3}}/>
+          </Row>
+          <Text style={{width: '100%', textAlign: 'justify'}}>{item.comment}</Text>
+        </Col>
+      </Row>
+  )
   return (
     <View
       style={{
-        flex: 1,
         backgroundColor: Color.theme,
         paddingVertical: 14,
         paddingHorizontal: 20,
       }}>
-      <Text style={{fontSize: 14, color: Color.text, fontWeight: '400'}}>
-        Cupcake ipsum dolor sit amet jelly cookie. Chocolate cake gingerbread
-        gummi bears chocolate cake muffin toffee pastry. Sweet brownie bonbon
-        lollipop pie biscuit candy canes cake. Carrot cake sesame snaps
-        liquorice croissant fruitcake lollipop. Danish dessert gummi bears
-        dragée jelly-o. Halvah gummi bears powder wafer jelly beans tootsie roll
-        dessert. Toffee sweet roll donut tiramisu macaroon cake. Lemon drops
-        jelly cheesecake tiramisu icing ice cream chocolate marzipan.
-        Gingerbread marshmallow tiramisu macaroon jelly brownie caramels
-        liquorice halvah.{'\n'}
-        {'\n'}
-        Pudding sweet roll dessert jujubes halvah caramels. Jelly-o chocolate
-        bar chocolate bar cake tart jelly tiramisu cake shortbread. Pastry sweet
-        topping cheesecake chupa chups chocolate bar. Toffee muffin bonbon
-        pudding dragée. Croissant pie lollipop bonbon jelly tootsie roll jelly-o
-        croissant. Topping pudding dessert tootsie roll halvah gummi bears
-        sesame snaps. Cake jelly-o lemon drops fruitcake jujubes candy jelly.
-        Chocolate cake sesame snaps shortbread shortbread sesame snaps. {'\n'}
-        {'\n'}
-        Bear claw bear claw pastry lollipop gummi bears toffee gummi bears gummi
-        bears. Gummi bears croissant macaroon icing toffee. Tart cookie pudding
-        marzipan ice cream cheesecake jelly beans toffee. Jelly beans sweet
-        fruitcake sugar plum marzipan. Muffin candy wafer danish jelly-o powder
-        chocolate. Jelly-o wafer wafer croissant chocolate bar jelly beans
-        macaroon. Powder icing gummi bears danish bonbon. Sugar plum jelly icing
-        candy canes marzipan chupa chups pie fruitcake.
-      </Text>
+      <View style={{paddingVertical: 15,width: '100%', backgroundColor: Color.border, height: 90, borderRadius: 8}}>
+        <Text style={{fontSize: 12, color: Color.secondary, alignSelf: 'center'}}>Beri Nilai Produk</Text>
+        <Row style={{justifyContent: 'center', marginVertical: 15}}>
+          <AntDesign name={'star'} size={25} style={{marginHorizontal: 12,color: Color.secondary,}}/>
+          <AntDesign name={'star'} size={25} style={{marginHorizontal: 12,color: Color.secondary}}/>
+          <AntDesign name={'star'} size={25} style={{marginHorizontal: 12,color: Color.secondary}}/>
+          <AntDesign name={'star'} size={25} style={{marginHorizontal: 12,color: Color.secondary}}/>
+          <AntDesign name={'star'} size={25} style={{marginHorizontal: 12,color: Color.secondary}}/>
+        </Row>
+      </View>
+      <Text style={{fontWeight: 'bold', marginVertical: 15, fontSize: 12}}>Komentar orang lain</Text>
+      <View style={{flexDirection: 'row'}}>
+        <TouchableOpacity style={{flexDirection: 'row',alignItems: 'center', justifyContent: 'center',borderRadius: 20,borderWidth: 1, borderColor: Color.text, width: 67, height: 23}}>
+          <Text style={{fontSize: 10}}>Semua</Text>
+          <MaterialIcons name={'keyboard-arrow-down'} style={{marginVertical: 5, marginLeft: 4}}/>
+        </TouchableOpacity>
+        <FlatList
+          showsHorizontalScrollIndicator={false}
+          horizontal
+          data={[
+            {star: 5},{star: 4},{star: 3},{star: 2},{star: 1},
+          ]}
+          renderItem={({item}) => 
+          <View>
+            <TouchableOpacity style={{alignItems: 'center',justifyContent: 'center',borderWidth: 1, borderColor: Color.border, width: 40, height: 23,borderRadius: 20,flexDirection: 'row', marginHorizontal: 9}}>
+              <Text style={{fontSize: 10}}>{item.star}</Text>
+              <AntDesign name={'star'} size={8} style={{marginVertical: 3, marginLeft: 3,color: Color.warning}}/>
+            </TouchableOpacity>
+          </View>
+        }
+        />
+      </View>
+      <Divider/>
+      <ScrollView>
+      <FlatList
+      showsVerticalScrollIndicator={false}
+      style={{marginVertical: 5}}
+        data={[
+          {personName: 'Adang Susanyo',
+          time: '3 hari yang lalu',
+          comment: 'Muffin pastry candy canes sesame snaps lemon drops muffin cheesecake cupcake. Sesame snaps candy halvah tootsie roll dessert carrot cake chupa chups dragée. Cookie marshmallow candy canes chocolate cake brownie jelly beans tiramisu cake.Marshmallow gummi bears pie cake halvah candy canes powder tart. Sweet roll croissant jelly beans croissant croissant chocolate cake bonbon.'
+          },
+          {personName: 'Adang Susanyo',
+          time: '3 hari yang lalu',
+          comment: 'Muffin pastry candy canes sesame snaps lemon drops muffin cheesecake cupcake. Sesame snaps candy halvah tootsie roll dessert carrot cake chupa chups dragée. Cookie marshmallow candy canes chocolate cake brownie jelly beans tiramisu cake.Marshmallow gummi bears pie cake halvah candy canes powder tart. Sweet roll croissant jelly beans croissant croissant chocolate cake bonbon.'
+          },
+          {personName: 'Adang Susanyo',
+          time: '3 hari yang lalu',
+          comment: 'Muffin pastry candy canes sesame snaps lemon drops muffin cheesecake cupcake. Sesame snaps candy halvah tootsie roll dessert carrot cake chupa chups dragée. Cookie marshmallow candy canes chocolate cake brownie jelly beans tiramisu cake.Marshmallow gummi bears pie cake halvah candy canes powder tart. Sweet roll croissant jelly beans croissant croissant chocolate cake bonbon.'
+          },
+        ]}
+        renderItem={renderItem}
+      />
+      </ScrollView>
     </View>
   );
 }

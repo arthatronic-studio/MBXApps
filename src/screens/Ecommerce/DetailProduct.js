@@ -202,7 +202,7 @@ const DetailProduct = ({navigation}) => {
                   120 Terjual
                 </Text>
                 <TouchableOpacity
-                  style={{marginHorizontal: 5}}
+                  style={{marginHorizontal: 3}}
                   onPress={() => setLike(!liked)}>
                   <AntDesign
                     name={liked ? 'heart' : 'hearto'}
@@ -217,7 +217,7 @@ const DetailProduct = ({navigation}) => {
                       url: detail.share_link || 'Belum ada Linknya',
                     });
                   }}
-                  style={{marginHorizontal: 5}}>
+                  style={{marginHorizontal: 3}}>
                   <AntDesign
                     name={'sharealt'}
                     size={19}
@@ -307,7 +307,7 @@ const DetailProduct = ({navigation}) => {
             onPress={() =>
               navigation.navigate('CheckoutScreen', {
                 item: {tempData: [{...detail, qty: 1}]},
-                list: [{name: detail.merchant ? detail.merchant.name : '', alamat: detail.merchant ? detail.merchant.alamat : '', products: [{...detail, qty: 1}]}],
+                list: [{name: '', alamat: '', products: [{...detail, qty: 1}]}],
               })
             }
             style={{
