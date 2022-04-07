@@ -41,6 +41,7 @@ import TopTabShop from './TopTabShop';
 import Filter from 'src/components/Filter';
 import client from '@src/lib/apollo';
 import { mutationDeleteProduct } from 'src/lib/query/ecommerce';
+import { FormatMoney } from 'src/utils';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -137,7 +138,7 @@ const CardProduct = ({data, getProductList}) => {
               <Text size="8" style={{color: Color.gray}}>
                 Harga Barang
               </Text>
-              <Text size="10">{data.price} poin</Text>
+              <Text size="10">{FormatMoney.getFormattedMoney(data.price)}</Text>
             </View>
             <View style={{marginRight: 15}}>
               <Text size="8" style={{color: Color.gray}}>
