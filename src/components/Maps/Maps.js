@@ -2,7 +2,7 @@ import { Platform,Text, StyleSheet, View, TouchableOpacity, Dimensions, Image, T
 import React, { Component } from 'react'
 import MapView from 'react-native-maps'
 import Entypo from 'react-native-vector-icons/Entypo'
-import Geocoder from 'react-native-geocoder'
+// import Geocoder from 'react-native-geocoder'
 import Geolocation from '@react-native-community/geolocation';
 
 
@@ -54,18 +54,18 @@ export default class Maps extends Component {
     )
   }
 
-  getAddress = async(lat,lng)=>{ 
-    await Geocoder.fallbackToGoogle('https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY');
-    try {
-      let ret = await Geocoder.geocodePosition({lat, lng})
-      let addr = (results[0].formatted_address)
-      this.setState({
-        currentAddress: addr
-    })
-    } catch (error) {
-      alert(err)
-    }
-  }
+  // getAddress = async(lat,lng)=>{ 
+  //   await Geocoder.fallbackToGoogle('https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=YOUR_API_KEY');
+  //   try {
+  //     let ret = await Geocoder.geocodePosition({lat, lng})
+  //     let addr = (results[0].formatted_address)
+  //     this.setState({
+  //       currentAddress: addr
+  //   })
+  //   } catch (error) {
+  //     alert(err)
+  //   }
+  // }
 
   onChangeValue = initialRegion => {
     // ToastAndroid.show(JSON.stringify(this.state.currentAddress), ToastAndroid.SHORT)
