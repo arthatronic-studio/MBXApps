@@ -77,29 +77,28 @@ const CartShop = ({navigation, route}) => {
               ...val,
               checked: false,
             };
-            return val.products.map((value, idx) => {
+            const products = val.products.map((value, idx) => {
               return {
-                ...dateq,
-                products: [
-                  {
-                    ...value,
-                    checked: false
-                  }]
+                ...value,
+                checked: false
                 }
               })
+              return {
+                ...dateq,
+                products
+              }
             })
-            console.log(dataq[0])
+            console.log(dataq)
             // res.data.ecommerceCartList.products.forEach((items, index) => {
             //     temp.push({...items, checked: false, ...res.data.ecommerceCartList.productCartInfo[index]})
             // });
             // setList(temp)
-            setList(dataq[0])
+            setList(dataq)
             setChecked(temp)
         }
       })
       .catch(reject => {
         // hideLoading()
-        alert(reject.message);
         console.log(reject.message, 'reject');
       });
   };
@@ -145,7 +144,8 @@ const CartShop = ({navigation, route}) => {
     let variables = {
         productId: item.id,
         quantity: item.quantity + qty,
-        checked: item.checked
+        checked: item.checked,
+        updateType: "ADD"
     }
     console.log(variables)
     Client.mutate({mutation: queryUpdateItemCart, variables})
@@ -194,7 +194,10 @@ const CartShop = ({navigation, route}) => {
           datTem.push(element);
         }
       });
-      dataq.push({...val, products: datTem});
+      const valid = val.products.findIndex(vall => vall.checked == true)
+      if(valid > -1) dataq.push({...val, products: datTem});
+      
+      
     });
     console.log(dataq);
     navigation.navigate('CheckoutScreen', {item, list: dataq});
@@ -328,7 +331,7 @@ const CartShop = ({navigation, route}) => {
                     color={Color.text}
                     style={{textAlign: 'left'}}
                     type="bold">
-                    {val.price} Poin
+                    {FormatMoney.getFormattedMoney(val.price)}
                   </Text>
                 </Col>
                 <View style={{justifyContent: 'flex-end', flex: 1}}>
@@ -394,20 +397,31 @@ const CartShop = ({navigation, route}) => {
   const checkButton = data => {
     let valid = true;
     if (data) {
-      data.forEach((element, index) => {
-        element.products.forEach(element => {
-          if (element.checked) valid = false;
+      if(data.length > 0){
+        data.forEach((element, index) => {
+          element.products.forEach(element => {
+            if (element.checked) valid = false;
+          });
         });
-      });
+      }
       return valid;
     }
+    return valid
   };
 
   return (
     <View style={{flex: 1, backgroundColor: Color.theme}}>
       <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
         <View>
-          {list && (
+          {list && list.length == 0 && <View style={{ marginTop: '20%' }}>
+            <Image source={ImagesPath.ShoppingCartEmpty} style={{ alignSelf: 'center' }} />
+            <Text align='center' size={14} color='#9CA3A5'>Kamu belum memasukkan barang</Text>
+            <Text align='center' size={14} color='#9CA3A5'>apapun ke keranjang</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('MerchScreen')} color='#F3771D' style={{ backgroundColor: '#F3771D', paddingVertical: 10, width: '60%', alignSelf: 'center', marginTop: 30, borderRadius: 40 }}>
+              <Text color='#fff'>Belanja Sekarang</Text>
+            </TouchableOpacity>
+          </View>}
+          {list && list.length != 0 && (
             <FlatList
               numColumns={1}
               extraData={refresh}
@@ -437,7 +451,7 @@ const CartShop = ({navigation, route}) => {
             Total Harga
           </Text>
           <Text type="bold" color={Color.text}>
-            {list.length > 0
+            {list && list.length > 0
               ? FormatMoney.getFormattedMoney(totalProduct(list))
               : FormatMoney.getFormattedMoney(0)}
           </Text>

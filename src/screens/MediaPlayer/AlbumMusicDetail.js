@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, createRef } from 'react';
-import { FlatList, ScrollView, View } from 'react-native';
+import { FlatList, ScrollView, View, Image, useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import {
@@ -10,7 +10,7 @@ import {
 } from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
-import { Divider } from 'src/styled';
+import { Container, Divider } from 'src/styled';
 import Banner from 'src/components/Banner';
 import ImagesPath from 'src/components/ImagesPath';
 import MusikTerbaru from 'src/components/MusikTerbaru';
@@ -25,11 +25,13 @@ const events = [
     Event.PlaybackTrackChanged,
 ];
 
-const TabMusic = ({ }) => {
+const AlbumMusicDetail = ({ navigation, route }) => {
+    const { item } = route.params;
+
     const [popupProps, showPopup] = usePopup();
     const [loadingProps, showLoading] = useLoading();
-    const navigation = useNavigation();
     const { Color } = useColor();
+    const {height, width} = useWindowDimensions();
 
     const [thisTrack, setThisTrack] = useState();
     const [loadingBanner, setLoadingBanner] = useState(true);
@@ -78,27 +80,43 @@ const TabMusic = ({ }) => {
 
     return (
         <Scaffold
-            showHeader={false}
             fallback={false}
             empty={false}
             popupProps={popupProps}
             loadingProps={loadingProps}
         >
             <CardListMusic
+                parentProductId={item.id}
+                useCover={false}
                 topComponent={
-                    <>
-                        <Divider height={8} />
-                    
-                        <Banner
-                            showHeader={false}
-                            data={listBanner}
-                            loading={loadingBanner}
-                        />
+                    <Container paddingTop={8} paddingHorizontal={16} paddingBottom={32} width={width} style={{flexDirection: 'row'}}>
+                        <View
+                            style={{
+                                flex: 1,
+                                aspectRatio: 1,
+                            }}
+                        >
+                            <Image
+                                source={{ uri: item.image }}
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    borderRadius: 8,
+                                }}
+                            />
+                        </View>
 
-                        <Divider />
-
-                        <MusikAlbum />
-                    </>
+                        <View
+                            style={{
+                                flex: 2,
+                                alignItems: 'flex-start',
+                                padding: 16,
+                            }}
+                        >
+                            <Text type='bold' size={18}>{item.productName}</Text>
+                            <Text>{item.productDescription}</Text>
+                        </View>
+                    </Container>
                 }
                 activePlayingTrack={thisTrack}
                 componentType='POPULAR'
@@ -106,6 +124,7 @@ const TabMusic = ({ }) => {
                 decimalWidth={0.17}
                 decimalHeight={0.17}
                 showAll={false}
+                showHeader={false}
                 onPressShowAll={() => {
                     // navigation.navigate('ShowAllScreen', {
                     //     title: '',
@@ -120,4 +139,4 @@ const TabMusic = ({ }) => {
     )
 }
 
-export default TabMusic;
+export default AlbumMusicDetail;

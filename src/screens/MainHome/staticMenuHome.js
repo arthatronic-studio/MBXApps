@@ -108,7 +108,7 @@ export const listMenuHome = [
         images: iconSurvey,
         nav: 'SurveyFirst',
         params: { title: 'Survey' },
-        badge: false,
+        badge: true,
         show: true,
     },
 

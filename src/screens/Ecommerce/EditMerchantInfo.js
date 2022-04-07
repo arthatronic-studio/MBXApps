@@ -169,11 +169,24 @@ const EditMerchantInfo = ({navigation}) => {
                         >
                             <Image source={{ uri: thumbImage ? `data:${mimeImage};base64,${thumbImage}` : userData.profileImg }} style={{ height: 48, width: 48, borderRadius: 24 }} />
                         </TouchableOpacity>
-                        <View>
+                        <TouchableOpacity onPress={() => {
+                                const options = {
+                                    mediaType: 'photo',
+                                    maxWidth: 640,
+                                    maxHeight: 640,
+                                    quality: 1,
+                                    includeBase64: true,
+                                }
+            
+                                launchImageLibrary(options, (callback) => {
+                                    setThumbImage(callback.base64);
+                                    setMimeImage(callback.type);
+                                })
+                            }}>
                             <Text align='left' type='bold' size={11}>Unggah Foto Profile Toko</Text>
                             <Text align='left' type='bold' size={8} color={Color.gray} style={{marginVertical: 4}}>Ukuran foto maks. 1MB dengan format JPEG, PNG, atau JPG</Text>
-                            <Text align='left' type='bold' size={8} color={Color.primary}>Unggah Foto</Text>
-                        </View>
+                            <Text  align='left' type='bold' size={8} color={Color.primary}>Unggah Foto</Text>
+                        </TouchableOpacity>
                     </View>
 
                     <Text align='left' type='bold' size={11} style={{marginTop: 24, marginBottom: 16}}>Informasi Toko</Text>

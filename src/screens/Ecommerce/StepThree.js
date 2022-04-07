@@ -46,7 +46,7 @@ import {queryContentProduct} from '@src/lib/query';
 import CardListProduk from 'src/components/Card/CardListProduct';
 import TopTabShop from './TopTabShop';
 import ImagesPath from 'src/components/ImagesPath';
-import {queryAddProduct} from 'src/lib/query/ecommerce';
+import {queryAddProduct, queryEditProduct} from 'src/lib/query/ecommerce';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -67,6 +67,7 @@ const StepThree = ({navigation, route}) => {
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
+    navigation.navigate('MyShop')
   };
 
   const [loadingProps, showLoading, hideLoading] = useLoading();
@@ -98,24 +99,35 @@ const StepThree = ({navigation, route}) => {
 
   const [price, setPrice] = useState(0);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if(route.params.type == 'edit'){
+      console.log('edit boss')
+      setPrice(String(route.params.item.price))
+    }
+  }, []);
 
   const submit = () => {
     let variables = {
       products: [
         {
           ...props,
+          imageUrl: route.params.type == 'edit' && props.imageUrl == route.params.item.imageUrl ? undefined :  props.imageUrl,
           initialPrice: 0,
-          price,
+          id: route.params.type == 'edit' ? route.params.item.id : undefined,
+          price: parseInt(price),
           status: 'SHOW',
         },
       ],
     };
     console.log(variables)
-    Client.mutate({mutation: queryAddProduct, variables})
+    Client.mutate({mutation: route.params.type == 'edit' ? queryEditProduct : queryAddProduct, variables})
       .then(res => {
         console.log('BERHASIL KIRIM', res);
         setModalVisible(!isModalVisible);
+        setTimeout(() => {
+          navigation.popToTop()
+        }, 2000);
+        
       })
       .catch(err => {
         console.log('error', err);

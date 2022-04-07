@@ -6,6 +6,7 @@ import {TouchableOpacity} from '@src/components/Button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Styled from 'styled-components';
 import Text from '@src/components/Text';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Header, Loading, useLoading} from 'src/components';
 import {ScrollView} from 'react-native-gesture-handler';
 import ImagesPath from 'src/components/ImagesPath';
@@ -21,8 +22,10 @@ import {
   Col,
   Button,
   Submit,
+  ModalListAction,
 } from '@src/components';
 import ColorPropType from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedColorPropType';
+import {Modalize} from 'react-native-modalize';
 
 const Content = Styled(View)`
     margin: 16px
@@ -32,10 +35,14 @@ const Content = Styled(View)`
 `;
 
 const TransactionDetail = ({route, navigation}) => {
+  console.log('dataaa', data);
   const dispatch = useDispatch();
   const [data, setData] = useState({});
   const [loadingProps, showLoading, hideLoading] = useLoading();
 
+  const modalizeRef = useRef(null);
+
+  console.log('dataa', data);
   useEffect(() => {
     getProduct();
   }, []);
@@ -90,9 +97,13 @@ const TransactionDetail = ({route, navigation}) => {
   const onPayment = () => {
     dispatch({
       type: 'BOOKING.ADD_BOOKING',
-      data: {...data, vestaBiller: true, finalAmount: data.totalPrice},
+      data: {...data, id: data.bookingId, vestaBiller: true, finalAmount: data.totalPrice},
     });
     navigation.navigate('PaymentScreen', {back: true});
+  };
+
+  const pickupSchedule = () => {
+    modalizeRef.current.open();
   };
   const {Color} = useColor();
   return (
@@ -284,7 +295,7 @@ const TransactionDetail = ({route, navigation}) => {
                             textAlign: 'right',
                             color: Color.secondary,
                           }}>
-                          {val.price} poin
+                          {FormatMoney.getFormattedMoney(val.price)}
                         </Text>
                       </Row>
                       <Row style={{paddingHorizontal: 10, paddingVertical: 2}}>
@@ -305,7 +316,7 @@ const TransactionDetail = ({route, navigation}) => {
                             color: Color.secondary,
                             fontWeight: 'bold',
                           }}>
-                          {data.totalProductPrice} poin
+                          {FormatMoney.getFormattedMoney(data.totalProductPrice)}
                         </Text>
                       </Row>
                     </Col>
@@ -551,6 +562,241 @@ const TransactionDetail = ({route, navigation}) => {
         </View>
         <Divider height={25} />
       </ScrollView>
+      <Row
+        style={{
+          height: 70,
+          width: '100%',
+          backgroundColor: Color.theme,
+          justifyContent: 'center',
+          paddingVertical: 15,
+        }}>
+          {data.statusId < 4 && (
+           <TouchableOpacity
+           onPress={() => navigation.navigate('ChatRoom', {item: detail})}
+           style={{
+             width: '12%',
+             height: 40,
+             borderWidth: 1,
+             borderColor: Color.primary,
+             borderRadius: 10,
+             justifyContent: 'center',
+             alignItems: 'center',
+             paddingHorizontal: 10,
+             marginHorizontal: 10,
+           }}>
+              <MaterialCommunityIcons
+                size={23}
+                name={'message-processing-outline'}
+                style={{color: Color.primary}}
+              />
+            </TouchableOpacity>
+        )}
+        {data.statusId == 0 && (
+          <TouchableOpacity
+            style={{
+              justifyContent: 'center',
+              borderRadius: 20,
+              marginHorizontal: 5,
+              width: '40%',
+              height: 40,
+              borderWidth: 1,
+              borderColor: Color.error,
+            }}>
+            <Text style={{color: Color.error}}>Batalkan Pesanan</Text>
+          </TouchableOpacity>
+        )}
+        
+        {data.statusId == 3 && (
+          <TouchableOpacity
+            style={{
+              justifyContent: 'center',
+              borderRadius: 20,
+              marginHorizontal: 5,
+              width: '44%',
+              height: 40,
+              borderWidth: 1,
+              borderColor: Color.error,
+            }}>
+            <Text style={{color: Color.error}}>Pesanan Diterima</Text>
+          </TouchableOpacity>
+        )}
+        {data.statusId == 4 && (
+          <TouchableOpacity
+            style={{
+              justifyContent: 'center',
+              borderRadius: 20,
+              marginHorizontal: 5,
+              width: '44%',
+              backgroundColor: Color.primary,
+            }}>
+            <Text style={{color: Color.textInput}}>Ulasan</Text>
+          </TouchableOpacity>
+        )}
+        {data.statusId == 0 && (
+          <TouchableOpacity
+            onPress={() => onPayment()}
+            style={{
+              justifyContent: 'center',
+              borderRadius: 20,
+              marginHorizontal: 5,
+              width: '30%',
+              backgroundColor: Color.primary,
+            }}>
+            <Text style={{color: Color.textInput}}>Lanjut Bayar</Text>
+          </TouchableOpacity>
+        )}
+      </Row>
+
+      {/* {data.status === 'Menunggu Pembayaran' ? (
+        <Row
+          style={{
+            height: 70,
+            width: '100%',
+            backgroundColor: Color.theme,
+            justifyContent: 'center',
+            paddingVertical: 15,
+          }}>
+          <TouchableOpacity
+            onPress={() => cancelButton()}
+            style={{
+              justifyContent: 'center',
+              borderRadius: 20,
+              marginHorizontal: 5,
+              width: '44%',
+              height: 40,
+              borderWidth: 1,
+              borderColor: Color.error,
+            }}>
+            <Text style={{color: Color.error}}>Batalkan Pesanan</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ChatRoom')}
+            style={{
+              justifyContent: 'center',
+              borderRadius: 20,
+              marginHorizontal: 5,
+              width: '44%',
+              backgroundColor: Color.primary,
+            }}>
+            <Text style={{color: Color.textInput}}>Chat Pembeli</Text>
+          </TouchableOpacity>
+        </Row>
+      ) : (
+        <View />
+      )}
+
+      {data.status === 'Sudah Dibayar' && (
+        <View
+          style={{
+            backgroundColor: Color.theme,
+            flexDirection: 'column',
+            height: 190,
+            width: '100%',
+            justifyContent: 'center',
+            padding: 16,
+            justifyContent: 'space-between',
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              pickupSchedule();
+            }}
+            style={{
+              backgroundColor: Color.primary,
+              borderRadius: 120,
+              paddingVertical: 10,
+              paddingHorizontal: 107,
+            }}>
+            <Text style={{color: Color.theme}}>Atur Jadwal Pickup</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ChatRoom')}
+            style={{
+              backgroundColor: Color.theme,
+              borderRadius: 120,
+              paddingVertical: 10,
+              paddingHorizontal: 107,
+              borderColor: Color.primary,
+              borderWidth: 1,
+            }}>
+            <Text style={{color: Color.primary}}>Chat Pembeli</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => cancelButton()}
+            style={{
+              backgroundColor: Color.theme,
+              borderRadius: 120,
+              paddingVertical: 10,
+              paddingHorizontal: 107,
+              borderColor: Color.danger,
+              borderWidth: 1,
+            }}>
+            <Text style={{color: Color.danger}}>Batalkan Pesanan</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {data.status === 'Paket Dikemas' && (
+        <Row
+          style={{
+            height: 70,
+            width: '100%',
+            backgroundColor: Color.theme,
+            justifyContent: 'center',
+            paddingVertical: 15,
+          }}>
+          <TouchableOpacity
+            onPress={() => cancelButton()}
+            style={{
+              justifyContent: 'center',
+              borderRadius: 20,
+              marginHorizontal: 5,
+              width: '44%',
+              height: 40,
+              borderWidth: 1,
+              borderColor: Color.primary,
+            }}>
+            <Text style={{color: Color.primary}}>Kirim Barang</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ChatRoom')}
+            style={{
+              justifyContent: 'center',
+              borderRadius: 20,
+              marginHorizontal: 5,
+              width: '44%',
+              backgroundColor: Color.primary,
+            }}>
+            <Text style={{color: Color.textInput}}>Chat Pembeli</Text>
+          </TouchableOpacity>
+        </Row>
+      )}
+
+      {data.status === 'Paket Dikirim' && (
+        <View
+          style={{
+            width: '100%',
+            backgroundColor: Color.theme,
+            justifyContent: 'center',
+            padding: 16,
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ChatRoom');
+            }}
+            style={{
+              backgroundColor: Color.primary,
+              borderRadius: 120,
+              paddingVertical: 10,
+              paddingHorizontal: 107,
+            }}>
+            <Text style={{color: Color.theme}}>Chat Pembeli</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      <Modalize ref={modalizeRef} modalStyle={{}}>
+        <View></View>
+      </Modalize> */}
     </Scaffold>
   );
 };

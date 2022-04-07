@@ -290,9 +290,9 @@ const CheckoutScreen = ({navigation}) => {
                   <Col alignItems="flex-start">
                     <Text
                       color={Color.text}
-                      size={20}
+                      size={12}
                       type="bold"
-                      textAlign="left">
+                      align="left">
                       {val.name}
                     </Text>
                     <Text style={{fontSize: 10, color: Color.secondary}}>

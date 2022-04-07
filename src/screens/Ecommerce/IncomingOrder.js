@@ -41,7 +41,97 @@ function BelumDibayar({data, getData}) {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    data.getOrder('OPEN');
+    console.log("ISfoc open",isFocused)
+    {isFocused ? getData('OPEN') : null}
+    
+  }, [isFocused]);
+  return (
+    <View style={{backgroundColor: Color.semiwhite}}>
+      {data.loadingIncoming ? (
+        <Container style={{height: '100%', marginTop: -10}}>
+          <ScreenIndicator transparent />
+        </Container>
+      ) : (
+        <View>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginVertical: 15,
+              marginHorizontal: 5,
+            }}>
+            <TouchableOpacity
+              style={{
+                marginHorizontal: 5,
+                backgroundColor: Color.theme,
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
+                borderWidth: 2,
+                borderColor: Color.border,
+                height: 34,
+                width: '28%',
+                borderRadius: 20,
+              }}>
+              <Text style={{fontSize: 12, paddingHorizontal: 5}}>Terbaru</Text>
+              <MaterialIcons
+                style={{paddingVertical: 5}}
+                name={'keyboard-arrow-down'}
+                size={20}
+              />
+            </TouchableOpacity>
+            <Pressable
+              style={{
+                marginHorizontal: 5,
+                backgroundColor: Color.theme,
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
+                borderWidth: 2,
+                borderColor: Color.border,
+                height: 34,
+                width: '32%',
+                borderRadius: 20,
+              }}>
+              <Text style={{fontSize: 12}}>Perlu Diproses</Text>
+            </Pressable>
+            <Pressable
+              style={{
+                marginHorizontal: 5,
+                backgroundColor: Color.theme,
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
+                borderWidth: 2,
+                borderColor: Color.border,
+                height: 34,
+                width: '32%',
+                borderRadius: 20,
+              }}>
+              <Text style={{fontSize: 12}}>Telah Diproses</Text>
+            </Pressable>
+          </View>
+          <FlatList
+            data={data.data}
+            keyExtractor={(item, index) => item.toString() + index}
+            renderItem={({item}) => {
+              return <CardOrder data={item} loading={data.loadingIncoming} />;
+            }}
+          />
+        </View>
+      )}
+    </View>
+  );
+}
+
+function SudahDibayar({data, getData}) {
+  const {Color} = useColor();
+  const navigation = useNavigation();
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    console.log("ISfoc open",isFocused)
+    {isFocused ? getData('CHECKOUT') : null}
+    
   }, [isFocused]);
   return (
     <View style={{backgroundColor: Color.semiwhite}}>
@@ -128,8 +218,8 @@ function Dikemas({data, getData}) {
  
 
   useEffect(() => {
-    console.log('DIkemas dong')
-    getData('CHECKOUT')
+    console.log("dikemas dong")
+    {isFocused ? getData('PACKED') : null}
   }, [isFocused]);
 
   return (
@@ -217,8 +307,10 @@ function Dikirim({data, getData}) {
  
 
   useEffect(() => {
+    
     console.log('Dikirim dong')
-    getData('SENT')
+
+    {isFocused ? getData('SENT') : null}
   }, [isFocused]);
 
   return (
@@ -307,8 +399,9 @@ function Selesai({data, getData}) {
  
 
   useEffect(() => {
+    console.log("ISfoc selesai",isFocused)
     console.log('Selesai dong')
-    getData('FINISHED')
+    {isFocused ? getData('FINISHED') : null}
   }, [isFocused]);
 
   return (
@@ -398,7 +491,97 @@ function Komplainan({data, getData}) {
 
   useEffect(() => {
     console.log('Complaint dong')
-    getData('COMPLAINED')
+    {isFocused ? getData('COMPLAINED') : null}
+  }, [isFocused]);
+
+  return (
+    <View style={{backgroundColor: Color.semiwhite}}>
+      {data.loadingIncoming ? (
+        <Container style={{height: '100%', marginTop: -10}}>
+          <ScreenIndicator transparent />
+        </Container>
+      ) : (
+        <View>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginVertical: 15,
+              marginHorizontal: 5,
+            }}>
+            <TouchableOpacity
+              style={{
+                marginHorizontal: 5,
+                backgroundColor: Color.theme,
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
+                borderWidth: 2,
+                borderColor: Color.border,
+                height: 34,
+                width: '28%',
+                borderRadius: 20,
+              }}>
+              <Text style={{fontSize: 12, paddingHorizontal: 5}}>Terbaru</Text>
+              <MaterialIcons
+                style={{paddingVertical: 5}}
+                name={'keyboard-arrow-down'}
+                size={20}
+              />
+            </TouchableOpacity>
+            <Pressable
+              style={{
+                marginHorizontal: 5,
+                backgroundColor: Color.theme,
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
+                borderWidth: 2,
+                borderColor: Color.border,
+                height: 34,
+                width: '32%',
+                borderRadius: 20,
+              }}>
+              <Text style={{fontSize: 12}}>Perlu Diproses</Text>
+            </Pressable>
+            <Pressable
+              style={{
+                marginHorizontal: 5,
+                backgroundColor: Color.theme,
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
+                borderWidth: 2,
+                borderColor: Color.border,
+                height: 34,
+                width: '32%',
+                borderRadius: 20,
+              }}>
+              <Text style={{fontSize: 12}}>Telah Diproses</Text>
+            </Pressable>
+          </View>
+          <FlatList
+            data={data.data}
+            keyExtractor={(item, index) => item.toString() + index}
+            renderItem={({item}) => {
+              return <CardOrder data={item} loading={data.loadingIncoming} />;
+            }}
+          />
+        </View>
+      )}
+    </View>
+  );
+}
+
+function Dibatalkan({data, getData}) {
+  const {Color} = useColor();
+  const navigation = useNavigation();
+
+  const isFocused = useIsFocused();
+ 
+
+  useEffect(() => {
+    console.log('BATALKAN DONG')
+    {isFocused ? getData('CANCELED') : null}
   }, [isFocused]);
 
   return (
@@ -494,7 +677,6 @@ const IncomingOrder = ({route, navigation}) => {
       page: 1,
       itemPerPage: 10,
       status: type,
-      userId: user.userId,
       merchantId: route.params.item.id,
     };
 
@@ -551,9 +733,16 @@ const IncomingOrder = ({route, navigation}) => {
         <Tab.Screen
           name="BelumDibayar"
           children={() => (
-            <BelumDibayar data={{data, loadingIncoming, height, getOrder}} getData={getOrder} />
+            <BelumDibayar data={{data, loadingIncoming, height}} getData={getOrder} />
           )}
           options={{tabBarLabel: 'Belum Dibayar'}}
+        />
+        <Tab.Screen
+          name="SudahDibayar"
+          children={() => (
+            <SudahDibayar data={{data, loadingIncoming, height}} getData={getOrder} />
+          )}
+          options={{tabBarLabel: 'Sudah Dibayar'}}
         />
         <Tab.Screen
           name="Dikemas"
@@ -582,6 +771,13 @@ const IncomingOrder = ({route, navigation}) => {
             <Komplainan data={{data, loadingIncoming, height}} show={screenShow} getData={getOrder} />
           )}
           options={{tabBarLabel: 'Komplainan'}}
+        />
+        <Tab.Screen
+          name="Dibatalkan"
+          children={() => (
+            <Dibatalkan data={{data, loadingIncoming, height}} show={screenShow} getData={getOrder} />
+          )}
+          options={{tabBarLabel: 'Dibatalkan'}}
         />
       </Tab.Navigator>
     </Scaffold>

@@ -10,8 +10,10 @@ query(
   userId
   bookingId
   orderNumber
+  invoiceNumber
   expiredDate
   status
+  statusId
   payment{
     name
   }
@@ -115,6 +117,10 @@ query(
     payment_type
   }
   paymentId
+  amount
+  vat
+  discount
+  adminFee
   shippingCost
   totalProductPrice
   totalPrice
@@ -204,6 +210,7 @@ query (
     shippingUseInsurance
     shipperOrderNumber
     paymentId
+    statusId
     shippingCost
     totalProductPrice
     totalPrice
@@ -484,7 +491,7 @@ export const queryGetCart = gql`
 export const queryGetMyShop = gql`
   query{
     ecommerceGetMerchant {
-      id userId name noTelp alamat profileImg isVerified isOfficial createdAt lat long socialMedia { instagram }
+      id userId name noTelp alamat profileImg productsToBeSentCount incomingOrdersCount isVerified isOfficial createdAt lat long socialMedia { instagram }
    }
   }
 `;
@@ -605,11 +612,13 @@ export const queryUpdateItemCart = gql`
     $productId: Int!
     $quantity: Int!
     $checked: Boolean!
+    $updateType: EcommerceUpdateCartType
   ) {
     ecommerceCartUpdate(
      productId: $productId
      quantity: $quantity
      checked: $checked
+     updateType: $updateType
    ) {
     id
    }
@@ -641,7 +650,7 @@ export const queryDetailProduct = gql`
     ecommerceProductDetail(
      id: $id
    ) {
-    id name categoryId description price initialPrice imageUrl stock
+    id name categoryId description price initialPrice imageUrl imageProducts stock merchant { name alamat isVerified }
    }
   }
 `;
@@ -738,6 +747,7 @@ export const queryGetArea = gql`
 export const queryAddProduct = gql`
   mutation ecommerceProductAdd($products: [EcommerceProductInput]) {
     ecommerceProductAdd(products: $products) {
+      imageProducts
       name
       categoryId
       description
@@ -753,6 +763,15 @@ export const queryAddProduct = gql`
       minimumBuy
       productMassa
       status
+    }
+  }
+`;
+
+export const queryEditProduct = gql`
+  mutation ecommerceProductEdit($products: [EcommerceProductInput]) {
+    ecommerceProductEdit(products: $products) {
+     id
+     name
     }
   }
 `;

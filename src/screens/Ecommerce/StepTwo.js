@@ -57,6 +57,7 @@ const Content = Styled(View)`
 
 const StepTwo = ({navigation, route}) => {
   const props = route.params;
+  console.log(props)
 
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
@@ -74,14 +75,14 @@ const StepTwo = ({navigation, route}) => {
   const [openProductMassa, setOpenProductMassa] = useState(false);
   const [valueProductMassa, setValueProductMassa] = useState(null);
   const [itemsProductMassa, setItemsProductMassa] = useState([
-    {label: 'KG', value: 'KG'},
+    {label: 'gram', value: 'GRAM'},
   ]);
 
   const [stock, setStock] = useState(0);
   const [minimumBuy, setMinimumBuy] = useState(0);
   const [description, setDescription] = useState('');
 
-  const [weight, setWeight] = useState(0);
+  const [weight, setWeight] = useState(props.item.weight);
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
   const [length, setLength] = useState(0);
@@ -90,20 +91,33 @@ const StepTwo = ({navigation, route}) => {
     const tempData = {
       productUnit: valueProductUnit,
       productMassa: valueProductMassa,
-      stock,
-      minimumBuy,
-      description,
-      weight,
-      height,
-      width,
-      length,
+      stock: parseInt(stock),
+      minimumBuy: parseInt(minimumBuy),
+      description: description,
+      weight: parseInt(weight),
+      height: parseInt(height),
+      width: parseInt(width),
+      length: parseInt(length),
       ...props.tempData,
     };
     console.log(tempData)
-    navigation.navigate('StepThree', {tempData});
+    navigation.navigate('StepThree', {tempData, type: route.params.type, item: route.params.item});
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if(props.type == 'edit'){
+      console.log('edit boss')
+      setDescription(props.item.description)
+      setMinimumBuy(String(props.item.minimumBuy))
+      setStock(String(props.item.stock))
+      setHeight(String(props.item.height))
+      setWeight(String(props.item.weight))
+      setWidth(String(props.item.width))
+      setLength(String(props.item.length))
+      setValueProductUnit(String(props.item.productUnit))
+      setValueProductMassa(String(props.item.productMassa))
+    }
+  }, []);
 
   return (
     <Scaffold

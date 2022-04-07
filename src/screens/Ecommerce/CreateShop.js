@@ -5,8 +5,10 @@ import IonIcons from 'react-native-vector-icons/Ionicons'
 import MapView, {Marker} from 'react-native-maps'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Modal from "react-native-modal";
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import { queryAddAddress, queryEditAddress, queryGetArea, queryGetCity, queryGetProvince, queryGetSub } from 'src/lib/query/ecommerce';
 
 import {
   Text,
@@ -16,11 +18,12 @@ import {
   Row, Col,
   Submit,
   useColor,
-  Header
+  Header,
+  ModalListAction
 } from '@src/components';
 import { TouchableOpacity } from '@src/components/Button';
 import ImagesPath from 'src/components/ImagesPath';
-import { Divider } from 'src/styled';
+import { Divider, Padding } from 'src/styled';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import Client from '@src/lib/apollo';
@@ -29,7 +32,19 @@ import { queryCreateMerchant } from 'src/lib/query/ecommerce';
 
 const CreateShop = () => {
   const navigation = useNavigation();
+  const [nameModal, setnameModal] = useState(null);
+  const [postalCode, setCode] = useState('');
+  const [prov, setProv] = useState(null);
+  const [kota, setKota] = useState(null);
+  const [kec, setKec] = useState(null);
+  const [area, setArea] = useState(null);
+  const [dataProvince, setDataProvince] = useState([]);
+  const [dataCity, setDataCity] = useState([]);
+  const [dataArea, setDataArea] = useState([]);
+  const [dataSub, setDataSub] = useState([]);
   const user = useSelector(state => state['user.auth'].login.user);
+
+  const modalListActionRef = useRef();
 
   const [userData, setUserData] = useState({
     userId: user.userId,
@@ -118,7 +133,146 @@ const CreateShop = () => {
   }
   
   useEffect(() => {
+    firstGet()
   }, []);
+
+  const getData = (name, value) => {
+    showLoading();
+    let variables = {
+      countryCode: 228,
+      provinceId: value ? value.id : null,
+      cityId:  value ? value.id : null,
+      suburbId:  value ? value.id : null,
+      areaId:  value ? value.id : null,
+    }
+    console.log(variables)
+    const queryx = name == 'prov' ? queryGetCity : name == 'city' ? queryGetSub : name == 'sub' ? queryGetArea : queryGetProvince
+    Client.query({query: queryx, variables})
+      .then(res => {
+        hideLoading()
+        console.log(res)
+        if (res.data.shipperGetProvinceList) {
+          setDataProvince(res.data.shipperGetProvinceList)
+        }
+
+        if (res.data.shipperGetCitiesList) {
+          setDataCity(res.data.shipperGetCitiesList)
+        }
+
+        if (res.data.shipperGetSuburbList) {
+          setDataSub(res.data.shipperGetSuburbList)
+        }
+        if (res.data.shipperGetAreaList) {
+          setDataArea(res.data.shipperGetAreaList)
+        }
+      })
+      .catch(reject => {
+        hideLoading()
+        alert(reject.message)
+        console.log(reject.message, 'reject');
+      });
+  };
+
+  const firstGet = (name, value) => {
+    showLoading();
+    let variables = {
+      countryCode: 228,
+      provinceId: value ? value.id : null,
+      cityId:  value ? value.id : null,
+      suburbId:  value ? value.id : null,
+      areaId:  value ? value.id : null,
+    }
+    console.log(variables)
+    const queryx = name == 'prov' ? queryGetCity : name == 'city' ? queryGetSub : name == 'sub' ? queryGetArea : queryGetProvince
+    Client.query({query: queryx, variables})
+      .then(res => {
+        hideLoading()
+        console.log(res, name)
+        if(res.data.shipperGetProvinceList){
+          if (res.data.shipperGetProvinceList.length > 0) {
+            setDataProvince(res.data.shipperGetProvinceList)
+            if(route.params.address.address){
+              getData('prov', {id: route.params.address.provinceId})
+              // const idx = res.data.shipperGetProvinceList.findIndex(val => val.id == route.params.address.provinceId)
+              // setProv(res.data.shipperGetProvinceList[idx])
+
+              setProv({...route.params.address.province})
+              setKota({...route.params.address.city})
+              setKec({...route.params.address.suburb})
+              setArea({...route.params.address.area})
+              
+              getData('city', {id: route.params.address.cityId})
+              getData('sub', {id: route.params.address.suburb.id})
+              setCode(route.params.address.postalCode)
+              setAddress(route.params.address.address)
+              setName(route.params.address.penerimaName)
+              setPhone(route.params.address.noTelp)
+            }
+          }
+        }
+
+        // if(res.data.shipperGetCitiesList){
+        //   console.log('city')
+        //   if (res.data.shipperGetCitiesList.length > 0) {
+        //     setDataCity(res.data.shipperGetCitiesList)
+        //     if(route.params.address.address){
+        //       const idx = res.data.shipperGetCitiesList.findIndex(val => val.id == route.params.address.cityId)
+        //       setKota(res.data.shipperGetCitiesList[idx])
+        //     }
+        //   }
+        // }
+        
+        // if (res.data.shipperGetSuburbList){
+        //   if (res.data.shipperGetSuburbList.length > 0) {
+        //     if(route.params.address.address){
+        //       const idx = res.data.shipperGetSuburbList.findIndex(val => val.id == route.params.address.suburbId)
+        //       setKec(res.data.shipperGetSuburbList[idx])
+        //     }
+        //     setDataSub(res.data.shipperGetSuburbList)
+        //   }
+        // }
+
+        // if (res.data.shipperGetAreaList){
+        //   if (res.data.shipperGetAreaList.length > 0) {
+        //     if(route.params.address.address){
+        //       const idx = res.data.shipperGetAreaList.findIndex(val => val.id == route.params.address.areaId)
+        //       setArea(res.data.shipperGetAreaList[idx])
+        //     }
+        //     setDataArea(res.data.shipperGetAreaList)
+        //   }
+        // }
+        
+      })
+      .catch(reject => {
+        hideLoading()
+        // alert(reject.message)
+        console.log(reject.message, 'reject');
+      });
+  };
+
+  const onSelected = (item, name) => {
+    console.log(item, name)
+    if(name == 'prov'){
+      setProv(item)
+      setKota(null)
+      setKec(null)
+      getData(name, item)
+    }else if(name == 'city'){
+      setKota(item)
+      setKec(null)
+      setArea(null)
+      getData(name, item)
+    }
+    else if(name == 'sub'){
+      setKec(item)
+      setArea(null)
+      getData(name, item)
+    }else{
+      setArea(item)
+    }
+    modalListActionRef.current.close();
+  }
+
 
   return (
     <Scaffold
@@ -133,22 +287,114 @@ const CreateShop = () => {
           }
           onPressLeftButton={() => navigation.pop()}
     >
+
+        <Modal
+          isVisible={isModalVisible}
+          onBackdropPress={() => setModalVisible(false)}
+          animationIn="slideInDown"
+          animationOut="slideOutDown"
+          style={{borderRadius: 16}}
+        >
+          <View
+            style={{
+              backgroundColor: '#ffffff',
+              padding: 30,
+              borderRadius: 8
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                backgroundColor: Color.primary,
+                alignSelf: 'center',
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+                marginBottom: 16,
+                borderRadius: 6,
+              }}
+              onPress={() => {
+                const options = {
+                    mediaType: 'photo',
+                    maxWidth: 640,
+                    maxHeight: 640,
+                    quality: 1,
+                    includeBase64: true,
+                }
+
+                toggleModal()
+
+                launchCamera(options, (callback) => {
+                    setThumbImage(callback.base64);
+                    setMimeImage(callback.type);
+                  })
+                  
+
+              }}
+            >
+              <Text style={{color: Color.semiwhite}}>Take Photo</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                backgroundColor: Color.primary,
+                alignSelf: 'center',
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+                marginBottom: 16,
+                borderRadius: 6,
+              }}
+
+              onPress={() => {
+                const options = {
+                    mediaType: 'photo',
+                    maxWidth: 640,
+                    maxHeight: 640,
+                    quality: 1,
+                    includeBase64: true,
+                }
+
+                toggleModal()
+                
+                launchImageLibrary(options, (callback) => {
+                    setThumbImage(callback.base64);
+                    setMimeImage(callback.type);
+                })
+
+              }}
+            >
+              <Text style={{color: Color.semiwhite}}>Choose From Library</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                backgroundColor: Color.warning,
+                alignSelf: 'center',
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+                borderRadius: 6,
+              }}
+
+              onPress={() => toggleModal()}
+            >
+              <Text>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
         <ScrollView>
           <View style={{flexDirection: 'row', marginHorizontal: 10}}>
               <TouchableOpacity
                 onPress={() => {
-                    const options = {
-                        mediaType: 'photo',
-                        maxWidth: 640,
-                        maxHeight: 640,
-                        quality: 1,
-                        includeBase64: true,
-                    }
+                    // const options = {
+                    //     mediaType: 'photo',
+                    //     maxWidth: 640,
+                    //     maxHeight: 640,
+                    //     quality: 1,
+                    //     includeBase64: true,
+                    // }
+                    
+                    setModalVisible(true)
 
-                    launchImageLibrary(options, (callback) => {
-                        setThumbImage(callback.base64);
-                        setMimeImage(callback.type);
-                    })
+                    // launchImageLibrary(options, (callback) => {
+                    //     setThumbImage(callback.base64);
+                    //     setMimeImage(callback.type);
+                    // })
                 }}
               >
                 {thumbImage!=='' &&
@@ -163,7 +409,25 @@ const CreateShop = () => {
               <View style={{marginHorizontal: 10}}>
                   <Text style={{fontSize: 11, color: Color.text, fontWeight: 'bold', textAlign: 'left'}}>Unggah Foto Profile Toko</Text>
                   <Text style={{fontSize: 8, color: Color.secondary}}>Ukuran foto maks. 1MB dengan format JPEG, PNG, atau JPG</Text>
-                  <Text style={{fontSize: 8, color: Color.primary, textAlign: 'left'}}>Unggah Foto</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setModalVisible(true)
+                        // const options = {
+                        //     mediaType: 'photo',
+                        //     maxWidth: 640,
+                        //     maxHeight: 640,
+                        //     quality: 1,
+                        //     includeBase64: true,
+                        // }
+    
+                        // launchImageLibrary(options, (callback) => {
+                        //     setThumbImage(callback.base64);
+                        //     setMimeImage(callback.type);
+                        // })
+                    }}
+                  >
+                    <Text style={{fontSize: 8, color: Color.primary, textAlign: 'left'}}>Unggah Foto</Text>
+                  </TouchableOpacity>
               </View>
           </View>
           <Divider/>
@@ -260,6 +524,84 @@ const CreateShop = () => {
                   <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left', position: 'absolute', marginVertical: 13, marginHorizontal: 20}}>Instagram Toko</Text>
                   <Text style={{fontSize: 12, position: 'absolute', marginVertical: 25, marginHorizontal: 20}}>@</Text>
               </View>
+              
+              <View>
+                <TouchableOpacity onPress={() => {setnameModal('prov'); modalListActionRef.current.open()}} style={{marginTop: 6, borderWidth: 1, borderColor: Color.border, marginHorizontal: 10, paddingVertical: 8, borderRadius: 5, paddingHorizontal: 10 }}>
+                  <Text align='left' style={{fontSize: 8, color: Color.gray, marginBottom: 4 }}>Provinsi</Text>
+                  <Row>
+                    <Col size={8}>
+                      <Text align='left' style={{fontSize: 14}} >{prov ? prov.name : 'Pilih Provinsi'}</Text>
+                    </Col>
+                    <Col alignItems='flex-end' justifyContent='center'>
+                      <AntDesign name='down' color={Color.text} size={15} />
+                    </Col>
+                  </Row>
+                </TouchableOpacity>
+              </View>
+              <View>
+                <TouchableOpacity  onPress={() => {setnameModal('city'); modalListActionRef.current.open()}} style={{marginTop: 16, borderWidth: 1, borderColor: Color.border, marginHorizontal: 10, paddingVertical: 8, borderRadius: 5, paddingHorizontal: 10 }}>
+                  <Text align='left' style={{fontSize: 8, color: Color.gray, marginBottom: 4 }}>Kota / Kabupaten</Text>
+                  <Row>
+                    <Col size={8}>
+                      <Text align='left'>{kota ? kota.name : 'Pilih Kota/Kabupaten'}</Text>
+                    </Col>
+                    <Col alignItems='flex-end' justifyContent='center'>
+                      <AntDesign name='down' color={Color.text} size={15} />
+                    </Col>
+                  </Row>
+                </TouchableOpacity>
+              </View>
+              <View>
+                <TouchableOpacity  onPress={() => {setnameModal('sub'); modalListActionRef.current.open()}} style={{marginTop: 16, borderWidth: 1, borderColor: Color.border, marginHorizontal: 10, paddingVertical: 8, borderRadius: 5, paddingHorizontal: 10 }}>
+                  <Text align='left' style={{fontSize: 8, color: Color.gray, marginBottom: 4 }}>Kecamatan</Text>
+                  <Row>
+                    <Col size={8}>
+                      <Text align='left'>{kec ? kec.name : 'Pilih Kecamatan'}</Text>
+                    </Col>
+                    <Col alignItems='flex-end' justifyContent='center'>
+                      <AntDesign name='down' color={Color.text} size={15} />
+                    </Col>
+                  </Row>
+                </TouchableOpacity>
+              </View>
+              <View>
+                <TouchableOpacity  onPress={() => {setnameModal('area'); modalListActionRef.current.open()}} style={{marginTop: 16, marginBottom: 6, borderWidth: 1, borderColor: Color.border, marginHorizontal: 10, paddingVertical: 8, borderRadius: 5, paddingHorizontal: 10 }}>
+                  <Text align='left' style={{fontSize: 8, color: Color.gray, marginBottom: 4 }}>Area</Text>
+                  <Row>
+                    <Col size={8}>
+                      <Text align='left'>{area ? area.name : 'Pilih Area'}</Text>
+                    </Col>
+                    <Col alignItems='flex-end' justifyContent='center'>
+                      <AntDesign name='down' color={Color.text} size={15} />
+                    </Col>
+                  </Row>
+                </TouchableOpacity>
+              </View>
+              
+              <View>
+                  <TextInput 
+                    placeholder='Masukkan Kode Pos . . .' 
+                    style={{
+                      marginTop: 8,
+                      width: '95%', 
+                      borderWidth: 1, 
+                      borderColor: Color.border, 
+                      height: 45, 
+                      borderRadius: 5, 
+                      alignSelf: 'center', 
+                      fontSize: 12, 
+                      paddingHorizontal: 10, 
+                      paddingTop: 22
+                    }}
+                    autoCorrect={false}
+                    onChangeText={(text) => setCode(text)}
+                    selectionColor={Color.text}
+                    value={postalCode}
+                    keyboardType='numeric'
+                  />
+                  <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left', position: 'absolute', marginVertical: 13, marginHorizontal: 20}}>Kode Pos</Text>
+              </View>
+
               <Divider/>
               <Text style={{fontSize: 10, fontWeight: 'bold', textAlign: 'left', marginHorizontal: 10}}>Titik Lokasi</Text>
               <View style={{width: '100%', height: 200, marginVertical: 10, alignItems: 'center'}}>
@@ -285,10 +627,18 @@ const CreateShop = () => {
           }}
         />
 
+        
+        <ModalListAction
+          ref={modalListActionRef}
+          name={nameModal}
+          onPress={(item, name) => {onSelected(item,name); }}
+          data={nameModal == 'prov' ? dataProvince : nameModal == 'city' ? dataCity : nameModal == 'sub' ? dataSub : nameModal == 'area' ? dataArea : []}
+        />
+
         <Loading {...loadingProps} />
 
             {/* Ini Modal */}
-      <Modal isVisible={isModalVisible}>
+      {/* <Modal isVisible={isModalVisible}>
         <View style={{width: '100%', height: 495, backgroundColor: Color.theme, borderRadius: 5}}>
           <Text style={{marginVertical: 15,fontSize: 24, fontWeight: 'bold'}}>Syarat & Ketentuan</Text>
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -340,7 +690,7 @@ const CreateShop = () => {
             </TouchableOpacity>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
             {/* End Modal */}
     </Scaffold>
   )

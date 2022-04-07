@@ -1,7 +1,7 @@
 import React from 'react';
-import {Platform} from 'react-native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {accessClient} from 'src/utils/access_client';
+import { Platform } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { accessClient } from 'src/utils/access_client';
 
 // uncanny
 import SplashScreen from 'src/screens/SplashScreen';
@@ -43,6 +43,7 @@ import ChangeProfile from '@src/screens/MainProfile/ChangeProfile';
 import SettingScreen from '@src/screens/MainProfile/SettingScreen';
 import ShowAllFromProfile from '@src/screens/MainProfile/ShowAllFromProfile';
 import JoinCommunity from 'src/screens/MainProfile/JoinCommunity';
+import BlockUser from 'src/screens/MainProfile/BlockUser';
 import ReferralCodeScreen from '@src/screens/MainProfile/ReferralCodeScreen';
 import UserProfileScreen from '@src/screens/MainProfile/UserProfileScreen';
 import TermsCondition from 'src/screens/MainProfile/TermCondition';
@@ -124,7 +125,7 @@ import Review from 'src/screens/Ecommerce/Review';
 import EditMerchantInfo from 'src/screens/Ecommerce/EditMerchantInfo';
 import DetailCoupon from 'src/screens/Ecommerce/DetailCoupon';
 import SearchResult from 'src/screens/Ecommerce/SearchResult';
-
+import Maps from 'src/components/Maps/Maps';
 import StepTwo from 'src/screens/Ecommerce/StepTwo';
 import StepThree from 'src/screens/Ecommerce/StepThree';
 import MerchantSetting from 'src/screens/Ecommerce/MerchantSetting';
@@ -132,7 +133,9 @@ import KuponKu from 'src/screens/Ecommerce/KuponKu';
 import ChatRoom from 'src/screens/Ecommerce/ChatRoom';
 import CardChat from 'src/screens/Ecommerce/CardChat';
 import CardChatExist from 'src/screens/Ecommerce/CardChatExist';
-
+import ChatEcommerce from 'src/screens/Ecommerce/ChatEcommerce';
+import CardChatEcommerce from 'src/screens/Ecommerce/CardChatEcommerce';
+import ChatDetail from 'src/screens/Ecommerce/ChatDetail';
 
 // import PopUpCouponSucces from 'src/screens/Ecommerce/PopUpCouponSucces';
 
@@ -140,6 +143,7 @@ import CardChatExist from 'src/screens/Ecommerce/CardChatExist';
 import MediaPlayerScreen from 'src/screens/MediaPlayer/MediaPlayerScreen';
 import UploadMusicScreen from 'src/screens/MediaPlayer/UploadMusicScreen';
 import UploadVideoScreen from 'src/screens/MediaPlayer/UploadVideoScreen';
+import AlbumMusicDetail from 'src/screens/MediaPlayer/AlbumMusicDetail';
 
 // Survey
 import SurveyFirst from 'src/screens/Survey/SurveyFirst';
@@ -151,7 +155,7 @@ import Wishlist from 'src/screens/Ecommerce/Wishlist';
 import WishlistEmpty from 'src/screens/Ecommerce/WishlistEmpty';
 import Cart from 'src/screens/Ecommerce/Cart';
 import ListShipping from 'src/screens/Ecommerce/ListShipping';
- 
+
 // Transaction
 import TransactionDetail from 'src/screens/Transaction/TransactionDetail';
 import TransactionDetailSucces from 'src/screens/Transaction/TransactionDetailSucces';
@@ -168,14 +172,14 @@ import GalleryDetailScreen from 'src/screens/Gallery/GalleryDetailScreen';
 import GalleryDetailSliderScreen from 'src/screens/Gallery/GalleryDetailSliderScreen';
 import IncomingOrder from 'src/screens/Ecommerce/IncomingOrder';
 import SearchScreen from 'src/screens/Ecommerce/SearchScreen';
+import CurrentLocation from 'src/components/Maps/CurrentLocation';
+import TrackingOrder from 'src/screens/Transaction/TrackingOrder';
 
-const {Navigator, Screen} = createStackNavigator();
+const { Navigator, Screen } = createStackNavigator();
 const MainPage =
-  accessClient.BottomTabsNavigator.type === 'komoto'
-    ? BottomTabsNavigatorKomoto
-    : accessClient.BottomTabsNavigator.type === 'sabyan'
-    ? BottomTabsNavigatorsabyan
-    : BottomTabsNavigator;
+	accessClient.BottomTabsNavigator.type === 'komoto'
+		? BottomTabsNavigatorKomoto
+		: accessClient.BottomTabsNavigator.type === 'sabyan' ? BottomTabsNavigatorsabyan : BottomTabsNavigator;
 
 function MainStackNavigator() {
   return (
@@ -189,6 +193,7 @@ function MainStackNavigator() {
       <Screen name="SplashScreen" component={SplashScreen} />
       <Screen name="MainPage" component={MainPage} />
       <Screen name="OnBoardingScreen" component={OnBoardingScreen} />
+      <Screen name="TrackingOrder" component={TrackingOrder} />
       <Screen name="CreateEmergencyScreen" component={CreateEmergencyScreen} />
       <Screen name="PDFReaderScreen" component={PDFReaderScreen} />
       <Screen name="MusicPlayerScreen" component={MusicPlayerScreen} />
@@ -228,7 +233,11 @@ function MainStackNavigator() {
       <Screen name="ChatRoom" component={ChatRoom} />
       <Screen name="CardChat" component={CardChat} />
       <Screen name="CardChatExist" component={CardChatExist} />
-
+      <Screen name="Maps" component={Maps} />
+			<Screen name="CurrentLocation" component={CurrentLocation} />
+			<Screen name="ChatEcommerce" component={ChatEcommerce} />
+			<Screen name="CardChatEcommerce" component={CardChatEcommerce} />
+			<Screen name="ChatDetail" component={ChatDetail} />
 
       {/* <Screen name="PopUpCouponSucces" component={PopUpCouponSucces}/> */}
       <Screen name="DetailCoupon" component={DetailCoupon} />
@@ -287,6 +296,7 @@ function MainStackNavigator() {
       <Screen name="ShowAllFromProfile" component={ShowAllFromProfile} />
       <Screen name="SettingScreen" component={SettingScreen} />
       <Screen name="JoinCommunity" component={JoinCommunity} />
+      <Screen name='BlockUser' component={BlockUser} />
       <Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />
       <Screen name="TermsCondition" component={TermsCondition} />
       <Screen name="UserProfileScreen" component={UserProfileScreen} />
@@ -325,6 +335,7 @@ function MainStackNavigator() {
       <Screen name="MediaPlayerScreen" component={MediaPlayerScreen} />
       <Screen name="UploadMusicScreen" component={UploadMusicScreen} />
       <Screen name="UploadVideoScreen" component={UploadVideoScreen} />
+      <Screen name='AlbumMusicDetail' component={AlbumMusicDetail} />
 
       {/* Survey */}
       <Screen name='SurveyFirst' component={SurveyFirst} />
