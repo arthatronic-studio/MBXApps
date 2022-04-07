@@ -18,7 +18,7 @@ import WebView from 'react-native-webview';
 import FormInput from 'src/components/FormInput';
 import { Divider } from 'src/styled';
 
-const VideoPlayerIos = () => {
+const VideoPlayerIos = ({ item }) => {
     const { height, width } = useWindowDimensions();
     const { Color } = useColor();
 
@@ -46,7 +46,7 @@ const VideoPlayerIos = () => {
             }}
         >
             <Video
-                source={{ uri: 'https://storage.googleapis.com/sabyan-prod-music-box/videos/ipul_inul/001_low_sabar.mp4' }}
+                source={{ uri: item.videoFilename }}
                 style={{
                     width: '100%',
                     height: '100%',

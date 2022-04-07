@@ -140,6 +140,7 @@ import CardChatExist from 'src/screens/Ecommerce/CardChatExist';
 import MediaPlayerScreen from 'src/screens/MediaPlayer/MediaPlayerScreen';
 import UploadMusicScreen from 'src/screens/MediaPlayer/UploadMusicScreen';
 import UploadVideoScreen from 'src/screens/MediaPlayer/UploadVideoScreen';
+import AlbumMusicDetail from 'src/screens/MediaPlayer/AlbumMusicDetail';
 
 // Survey
 import SurveyFirst from 'src/screens/Survey/SurveyFirst';
@@ -325,6 +326,7 @@ function MainStackNavigator() {
       <Screen name="MediaPlayerScreen" component={MediaPlayerScreen} />
       <Screen name="UploadMusicScreen" component={UploadMusicScreen} />
       <Screen name="UploadVideoScreen" component={UploadVideoScreen} />
+      <Screen name='AlbumMusicDetail' component={AlbumMusicDetail} />
 
       {/* Survey */}
       <Screen name='SurveyFirst' component={SurveyFirst} />
