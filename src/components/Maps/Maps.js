@@ -93,7 +93,7 @@ export default class Maps extends Component {
           <Entypo name={'location-pin'} size={40} style={{color: 'red'}}/>
         </View>
         <View style={{top: '95%', left: '20%', marginLeft: -24, marginTop: -48, position: 'absolute'}}>
-          <TouchableOpacity style={{justifyContent: 'center', alignItems: 'center',width: 280, height: 60, backgroundColor: '#F3771D', borderRadius: 50}}>
+          <TouchableOpacity style={{justifyContent: 'center', alignItems: 'center',width: 280, height: 50, backgroundColor: '#F3771D', borderRadius: 50}}>
             <Text style={{color: 'white', fontSize: 14, fontWeight: 'bold'}}>Simpan</Text>
           </TouchableOpacity>
         </View>
