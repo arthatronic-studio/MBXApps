@@ -43,6 +43,7 @@ import ChangeProfile from '@src/screens/MainProfile/ChangeProfile';
 import SettingScreen from '@src/screens/MainProfile/SettingScreen';
 import ShowAllFromProfile from '@src/screens/MainProfile/ShowAllFromProfile';
 import JoinCommunity from 'src/screens/MainProfile/JoinCommunity';
+import BlockUser from 'src/screens/MainProfile/BlockUser';
 import ReferralCodeScreen from '@src/screens/MainProfile/ReferralCodeScreen';
 import UserProfileScreen from '@src/screens/MainProfile/UserProfileScreen';
 import TermsCondition from 'src/screens/MainProfile/TermCondition';
@@ -292,6 +293,7 @@ function MainStackNavigator() {
 			<Screen name="ChangeProfile" component={ChangeProfile} />
 			<Screen name="ShowAllFromProfile" component={ShowAllFromProfile} />
 			<Screen name="SettingScreen" component={SettingScreen} />
+      <Screen name="BlockUser" component={BlockUser} />
 			<Screen name="JoinCommunity" component={JoinCommunity} />
 			<Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />
 			<Screen name="TermsCondition" component={TermsCondition} />

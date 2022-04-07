@@ -80,6 +80,20 @@ const SettingScreen = ({ navigation, route }) => {
             <Grid style={{backgroundColor: Color.theme, borderColor: Color.border}}>
                 <TouchableOpacity
                     onPress={() => {
+                        navigation.navigate('BlockUser', { canGoBack: true });
+                    }}
+                >
+                    <Row>
+                        <Col align='flex-start' size={8} justify='center'>
+                            <Text size={12} type='medium' style={{marginBottom: 4}}>Daftar Blokir User</Text>
+                            <Text size={8} align='left'>Daftar user yang diblokir oleh anda</Text>
+                        </Col>
+                    </Row>
+                </TouchableOpacity>
+            </Grid>
+            <Grid style={{backgroundColor: Color.theme, borderColor: Color.border}}>
+                <TouchableOpacity
+                    onPress={() => {
                         navigation.navigate('UserChangePassword', { canGoBack: true });
                         dispatch({ type: 'USER.CHANGE_PASSWORD', status: false });
                     }}
