@@ -109,4 +109,5 @@ export default {
   chatimage: require('../components/Images/chatimage.png'),
   toko: require('../components/Images/Toko.png'),
   BannerPink: require('../components/Images/BannerPink.png'),
+  ShoppingCartEmpty: require('../components/Images/ShoppingCartEmpty.png'),
 };

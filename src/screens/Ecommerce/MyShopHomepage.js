@@ -155,7 +155,7 @@ const MyShopHomepage = ({ navigation }) => {
 								<Text style={{fontWeight: 'bold', fontSize: 11, textAlign: 'left'}}>Siap Dikirim</Text>
 								<View style={{marginHorizontal: 5, marginVertical: 5, backgroundColor: Color.error, width: 5, height: 5, borderRadius: 20}}></View>
 							</View>
-							<Text style={{fontSize: 10, textAlign: 'left', color: Color.secondary}}>{data.entriesproductsToBeSentCount} Barang</Text>
+							<Text style={{fontSize: 10, textAlign: 'left', color: Color.secondary}}>{data.productsToBeSentCount} Barang</Text>
 						</Pressable>
 					</View>
 					

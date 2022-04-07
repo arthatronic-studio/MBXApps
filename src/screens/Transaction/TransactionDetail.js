@@ -188,7 +188,7 @@ const TransactionDetail = ({route, navigation}) => {
                 textAlign: 'right',
                 fontWeight: 'bold',
               }}>
-              {Moment(parseInt(data.createdAt)).format(
+              {Moment(parseFloat(data.createdAt)).subtract(1, 'day').format(
                 'dddd, DD MMMM YYYY HH:mm',
               )}{' '}
               WIB

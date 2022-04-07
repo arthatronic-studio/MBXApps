@@ -307,7 +307,7 @@ const DetailProduct = ({navigation}) => {
             onPress={() =>
               navigation.navigate('CheckoutScreen', {
                 item: {tempData: [{...detail, qty: 1}]},
-                list: [{name: '', alamat: '', products: [{...detail, qty: 1}]}],
+                list: [{name: detail.merchant ? detail.merchant.name : '', alamat: detail.merchant ? detail.merchant.alamat : '', products: [{...detail, qty: 1}]}],
               })
             }
             style={{
