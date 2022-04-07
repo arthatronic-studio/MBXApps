@@ -144,7 +144,8 @@ const CartShop = ({navigation, route}) => {
     let variables = {
         productId: item.id,
         quantity: item.quantity + qty,
-        checked: item.checked
+        checked: item.checked,
+        updateType: "ADD"
     }
     console.log(variables)
     Client.mutate({mutation: queryUpdateItemCart, variables})
@@ -193,7 +194,9 @@ const CartShop = ({navigation, route}) => {
           datTem.push(element);
         }
       });
-      if(val.checked) dataq.push({...val, products: datTem});
+      const valid = val.products.findIndex(vall => vall.checked == true)
+      if(valid > -1) dataq.push({...val, products: datTem});
+      
       
     });
     console.log(dataq);

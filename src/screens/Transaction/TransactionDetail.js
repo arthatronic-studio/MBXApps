@@ -295,7 +295,7 @@ const TransactionDetail = ({route, navigation}) => {
                             textAlign: 'right',
                             color: Color.secondary,
                           }}>
-                          {val.price} poin
+                          {FormatMoney.getFormattedMoney(val.price)}
                         </Text>
                       </Row>
                       <Row style={{paddingHorizontal: 10, paddingVertical: 2}}>
@@ -316,7 +316,7 @@ const TransactionDetail = ({route, navigation}) => {
                             color: Color.secondary,
                             fontWeight: 'bold',
                           }}>
-                          {data.totalProductPrice} poin
+                          {FormatMoney.getFormattedMoney(data.totalProductPrice)}
                         </Text>
                       </Row>
                     </Col>

@@ -31,7 +31,7 @@ import {
 } from '@src/components';
 import TopBar from './TopTab';
 import ImagesPath from 'src/components/ImagesPath';
-import {queryAddCart, queryDetailProduct, queryUpdateItemCart} from 'src/lib/query/ecommerce';
+import {queryAddCart, queryDetailProduct, queryGetCart, queryUpdateItemCart} from 'src/lib/query/ecommerce';
 import Client from 'src/lib/apollo';
 import {FormatMoney} from 'src/utils';
 import DetailProductHeader from './DetailProductHeader';
@@ -57,6 +57,7 @@ const DetailProduct = ({navigation}) => {
   console.log(route, 'route');
   const [detail, setDetail] = useState([]);
   const [liked, setLike] = useState(false);
+  const [cart, setCart] = useState(0);
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
@@ -65,8 +66,29 @@ const DetailProduct = ({navigation}) => {
 
   useEffect(() => {
     getDetail();
+    getCart()
     // });
   }, [isFocused]);
+
+  const getCart = () => {
+		// showLoading();
+		let variables = {
+			page: 1,
+			limit: 10
+		};
+		console.log(variables);
+		Client.query({ query: queryGetCart, variables })
+			.then((res) => {
+				console.log(res);
+				if (res.data.ecommerceCartList) {
+					setCart(res.data.ecommerceCartList.totalProducts ? res.data.ecommerceCartList.totalProducts : 0);
+				}
+			})
+			.catch((reject) => {
+				// hideLoading()
+				console.log(reject.message, 'reject');
+			});
+	};
 
   const getDetail = () => {
     // showLoading();
@@ -99,10 +121,11 @@ const DetailProduct = ({navigation}) => {
       .then(res => {
         hideLoading();
         console.log(res);
-        // if (res.data.ecommerceCartUpdate) {
-        //   alert('Success add to cart');
-        //   // navigation.navigate('CartScreen')
-        // }
+        getCart()
+        if (res.data.ecommerceCartUpdate) {
+          alert('Success add to cart');
+          // navigation.navigate('CartScreen')
+        }
       })
       .catch(reject => {
         hideLoading();
@@ -114,7 +137,7 @@ const DetailProduct = ({navigation}) => {
   return (
     <Scaffold
       loadingProps={loadingProps}
-      header={<DetailProductHeader navigation />}
+      header={<DetailProductHeader navigation cart={cart} />}
       onPressLeftButton={() => navigation.pop()}>
       <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
         <View
