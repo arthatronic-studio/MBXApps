@@ -145,7 +145,7 @@ const CartShop = ({navigation, route}) => {
         productId: item.id,
         quantity: item.quantity + qty,
         checked: item.checked,
-        updateType: "ADD"
+        updateType: qty > 0 ? "ADD" : "DELETE"
     }
     console.log(variables)
     Client.mutate({mutation: queryUpdateItemCart, variables})
@@ -327,7 +327,7 @@ const CartShop = ({navigation, route}) => {
               <Row>
                 <Col style={{justifyContent: 'flex-end'}}>
                   <Text
-                    size={14}
+                    size={13}
                     color={Color.text}
                     style={{textAlign: 'left'}}
                     type="bold">
