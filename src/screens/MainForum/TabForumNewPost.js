@@ -14,6 +14,8 @@ const initialListData = {
   refresh: false,
 };
 
+const itemPerPage = 10;
+
 const TabForumNewPost = ({ navigation, route }) => {
   // state
   const [listNewPost, setListNewPost] = useState(initialListData);
@@ -22,19 +24,28 @@ const TabForumNewPost = ({ navigation, route }) => {
     fecthData();
   }, []);
 
+  useEffect(() => {
+    if (listNewPost.loadNext) {
+      fecthData();
+    }
+  }, [listNewPost.loadNext]);
+
   const fecthData = async () => {
     const newListNewPost = await fetchContentUserProduct(Config.PRODUCT_TYPE, "FORUM", "ALL");
     setListNewPost({
       ...listNewPost,
-      data: newListNewPost,
+      data: listNewPost.data.concat(newListNewPost),
       loading: false,
+      page: newListNewPost.length === itemPerPage ? listNewPost.page + 1 : -1,
+      loadNext: false,
+      refresh: false,
     });
   }
 
   const fetchContentUserProduct = async (productType, productCategory, productSubCategory) => {
     const variables = {
-      page: 0,
-      itemPerPage: 6,
+      page: listNewPost.page + 1,
+      itemPerPage,
     };
 
     if (productType !== '') {
@@ -75,12 +86,13 @@ const TabForumNewPost = ({ navigation, route }) => {
     // }
   }
 
-  console.log(listNewPost.loading, 'listNewPost.loading');
+  console.log(listNewPost, 'listNewPost');
 
   return (
     <ListForumVertical
       data={listNewPost.data}
       loading={listNewPost.loading}
+      loadNext={listNewPost.loadNext}
       showHeader={false}
       // onPressShowAll={() => {
       //   navigation.navigate('ShowAllFromForum', {
@@ -96,6 +108,7 @@ const TabForumNewPost = ({ navigation, route }) => {
         onSelected(item);
         navigation.navigate('DetailForumScreen', { item });
       }}
+      onEndReached={() => listNewPost.page !== -1 && setListNewPost({ ...listNewPost, loadNext: true })}
     />
   );
 }

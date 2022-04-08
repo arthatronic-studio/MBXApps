@@ -3,6 +3,7 @@ import { View, ImageBackground, Dimensions, Image } from 'react-native';
 import Moment from 'moment';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
 import Share from 'react-native-share';
 import { useSelector } from 'react-redux';
 
@@ -94,31 +95,39 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showDot, sho
         >
             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16}}>
                 <View
-                    style={{flexDirection: 'row', alignItems: 'center'}}
+                    style={{flexDirection: 'row', alignItems: 'center', width: '100%'}}
                 >
-                    <View style={{backgroundColor: Color.grayLight, width: 40, height: 40, borderRadius: 20, marginRight: 10}}>
+                    <View style={{ width: '10%', aspectRatio: 1, justifyContent: 'center' }}>
                         <Image 
                             source={{uri: item.avatar}}
                             style={{
+                                width: '100%',
                                 aspectRatio: 1,
                                 borderRadius: 50,
+                                backgroundColor: Color.primary,
                             }}
                         />
                     </View>
-                    <View>
-                        <Text size={14} type='bold' align='left'>{item.productName}</Text>
+
+                    <View style={{ width: '80%', paddingHorizontal: 8 }}>
+                        <Text type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
                         <View style={{flexDirection: 'row', marginTop: 4}}>
                             <Text size={8} align='left'>{item.fullname} - </Text>
                             <Text size={8} align='left'>{Moment(parseInt(item.created_date, 10)).fromNow()}</Text>
                         </View>
                     </View>
+
+                    <TouchableOpacity
+                        onPress={() => onPressDot()}
+                        style={{ width: '10%', aspectRatio: 1, alignItems: 'flex-end', justifyContent: 'center' }}
+                    >
+                        <Entypo
+                            name='dots-three-vertical'
+                            color={Color.text}
+                            size={16}
+                        />
+                    </TouchableOpacity>
                 </View>
-                {showDot && user && user.userId === item.ownerId && <TouchableOpacity
-                    onPress={() => onPressDot()}
-                    style={{ paddingLeft: 16 }}
-                >
-                    <Feather name='more-vertical' size={20} />
-                </TouchableOpacity>}
             </View>
 
             <View style={{ marginBottom: 16}}>

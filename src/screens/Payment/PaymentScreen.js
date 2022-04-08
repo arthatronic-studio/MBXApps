@@ -297,7 +297,7 @@ export default ({ navigation, route }) => {
                 <BackgroundView style={{backgroundColor: Color.theme}} />
             </AbsoluteView>
         </ImageBackground>
-{console.log(readyPayment, 'ready payment')}
+        
         {readyPayment && paymentData.map((item, idx) => 
           <Accordion
             key={idx}

@@ -237,7 +237,6 @@ const DetailForumScreen = ({ route, navigation }) => {
             <View style={{ alignItems: 'center' }}>
                 <CardForumVertical
                     item={item}
-                    showDot
                     onPressDot={() => modalOptionsRef.current.open()}
                     showAllText
                 />
@@ -346,6 +345,7 @@ const DetailForumScreen = ({ route, navigation }) => {
                 ref={modalOptionsRef}
                 isOwner={user && user.userId === item.ownerId}
                 item={item}
+                useBlockUser
             />
         </Scaffold>
     )

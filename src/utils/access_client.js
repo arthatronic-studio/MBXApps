@@ -75,6 +75,10 @@ export const accessClient = {
             isKomoto ? true :
             isSabyan ? false :
             true,
+        showSurvey:
+            isKomoto ? false :
+            isSabyan ? false :
+            true,
     },
     CreatePosting: {
         showPrivacy:

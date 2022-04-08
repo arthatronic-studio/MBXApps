@@ -17,6 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import { accessClient } from 'src/utils/access_client';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { useSelector } from 'react-redux';
+import { statusBarHeight } from 'src/utils/constants';
 
 const MainView = Styled(View)`
 `;
@@ -32,13 +33,15 @@ const defaultProps = {
     stickyHeaderIndices: [],
     ListHeaderComponent: null,
     topComponent: null,
+    parentProductId: null,
+    useCover: true,
 }
 
 const CardListMusic = ({
     activePlayingTrack,
     componentType, title, decimalWidth, decimalHeight, showAll, showHeader, withNumber,
     onPress, onLongPress, onPressShowAll, stickyHeaderIndices, ListHeaderComponent,
-    topComponent,
+    topComponent, parentProductId, useCover,
 }) => {
     const { Color } = useColor();
     const { width } = useWindowDimensions();
@@ -71,6 +74,10 @@ const CardListMusic = ({
             productCategory: "MUSIC",
             // productSubCategory: "POPULAR"
         };
+
+        if (parentProductId) {
+            variables.parentProductId = parentProductId;
+        }
 
         client.query({
             query: queryContentProduct,
@@ -195,10 +202,13 @@ const CardListMusic = ({
                 >
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                         <View style={{ flex: 5, flexDirection: 'row', alignItems: 'center' }}>
-                            <Image
+                            {useCover ? <Image
                                 source={{ uri: item.image }}
                                 style={{ height: width * (decimalHeight || 0.2), width: width * (decimalWidth || 0.2), borderRadius: 8, borderWidth: isActive ? 2 : 0, borderColor: Color.primary }}
                             />
+                            :
+                                <View style={{ height: 40 }} />
+                            }
                             
                             <View style={{ paddingLeft: 16 }}>
                                 <Text type={textType} align='left' numberOfLines={2}>{item.productName}</Text>
@@ -298,7 +308,7 @@ const CardListMusic = ({
                     keyExtractor={(item, index) => item.toString() + index}
                     data={list.data}
                     showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ paddingTop: 8 }}
+                    contentContainerStyle={{ paddingTop: 8, paddingBottom: statusBarHeight }}
                     stickyHeaderIndices={stickyHeaderIndices}
                     ListHeaderComponent={ListHeaderComponent}
                     renderItem={({ item, index }) => {
