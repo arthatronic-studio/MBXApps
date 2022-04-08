@@ -331,8 +331,8 @@ const DetailProduct = ({navigation}) => {
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('CheckoutScreen', {
-                item: {tempData: [{...detail, qty: 1}]},
-                list: [{name: '', alamat: '', products: [{...detail, qty: 1}]}],
+                item: {tempData: [{...detail, qty: 1, profileImg: detail.merchant ? detail.merchant.profileImg : '' }]},
+                list: [{name: detail.merchant ? detail.merchant.name : '', alamat: detail.merchant ? detail.merchant.alamat : '', products: [{...detail, qty: 1}]}],
               })
             }
             style={{

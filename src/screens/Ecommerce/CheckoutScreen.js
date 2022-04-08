@@ -253,8 +253,9 @@ const CheckoutScreen = ({navigation}) => {
             <>
               <Row>
                 <Image
-                  source={ImagesPath.shopprofile}
-                  style={{width: 50, height: 50, resizeMode: 'contain'}}
+                  source={{ uri: item.profileImg }}
+                  resizeMode='contain'
+                  style={{width: 40, height: 40, marginBottom: 5 }}
                 />
                 <Col style={{justifyContent: 'center', paddingHorizontal: 10}}>
                   <Text

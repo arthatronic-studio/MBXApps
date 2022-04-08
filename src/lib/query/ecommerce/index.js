@@ -474,6 +474,7 @@ export const queryGetCart = gql`
       items{
         name
         alamat
+        profileImg
         products{
           id
           name
@@ -650,7 +651,7 @@ export const queryDetailProduct = gql`
     ecommerceProductDetail(
      id: $id
    ) {
-    id name categoryId description price initialPrice imageUrl imageProducts stock merchant { name alamat isVerified }
+    id name categoryId description price initialPrice imageUrl imageProducts stock merchant { name alamat profileImg isVerified }
    }
   }
 `;

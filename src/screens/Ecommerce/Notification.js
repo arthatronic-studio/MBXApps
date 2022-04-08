@@ -46,7 +46,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
 import moment from 'moment';
 import Ecommerce from '../Ecommerce/Ecommerce';
-import {queryListOrder} from 'src/lib/query/ecommerce';
+import {mutationCancel, queryListOrder} from 'src/lib/query/ecommerce';
 import {FormatMoney} from 'src/utils';
 var crypto = require('crypto-js');
 
@@ -156,43 +156,30 @@ const Notification = () => {
       });
   };
 
-  const getCancelOrder = () => {
+  const updateStatus = (item) => {
     console.log(user);
+    showLoading()
     let variables = {
-      page: 1,
-      itemPerPage: 20,
-      status: 'CANCEL',
-      userId: user.userId,
+      type: 'FINISH',
+      orderId: item.id,
     };
     console.log(variables);
-    Client.query({query: queryListOrder, variables})
+    Client.query({query: mutationCancel, variables})
       .then(res => {
+        hideLoading()
         console.log(res);
-        if (res.data.ecommerceOrderList) {
-          setList(listData.concat(res.data.ecommerceOrderList));
-        }
-
+        getProduct()
         // hideLoading();
         // navigation.navigate('TopUpScreen');
       })
       .catch(reject => {
+        hideLoading()
         console.log(reject);
       });
   };
 
   const initialLayout = {width: Dimensions.get('window').width};
 
-  const totalBarang = data => {
-    let total = 0;
-    if (data) {
-      data.forEach(element => {
-        total = total + element.quantity;
-      });
-      return total;
-    }
-  };
-
-  const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     {key: 'sedangdibeli', title: 'Sedang Dibeli'},
     {key: 'semuariwayat', title: 'Semua Riwayat'},
@@ -320,7 +307,7 @@ const Notification = () => {
             {FormatMoney.getFormattedMoney(item.items[0].products[0]['price'])}
           </Text>
         </View>
-        {item.statusId == 3 && <View
+        {(item.shipperOrderNumber && item.statusId == 2) && <View
           style={{
             backgroundColor: Color.primary,
             width: 100,
@@ -339,6 +326,51 @@ const Notification = () => {
                 fontWeight: 'bold',
               }}>
               Lacak Paket
+            </Text>
+          </TouchableOpacity>
+        </View>}
+        {(item.statusId == 3) && <View
+          style={{
+            backgroundColor: Color.primary,
+            width: 100,
+            borderRadius: 20,
+          }}>
+          <TouchableOpacity
+            onPress={() => updateStatus()}
+            style={{
+              height: 32,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text
+              style={{
+                fontSize: 10,
+                color: Color.textInput,
+                fontWeight: 'bold',
+              }}>
+              Pesanan Diterima
+            </Text>
+          </TouchableOpacity>
+        </View>}
+        {(item.statusId == 4) && <View
+          style={{
+            backgroundColor: Color.primary,
+            width: 100,
+            borderRadius: 20,
+          }}>
+          <TouchableOpacity
+            style={{
+              height: 32,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text
+              style={{
+                fontSize: 10,
+                color: Color.textInput,
+                fontWeight: 'bold',
+              }}>
+              Ulasan
             </Text>
           </TouchableOpacity>
         </View>}
