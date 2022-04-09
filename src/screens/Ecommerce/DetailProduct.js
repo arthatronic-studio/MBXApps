@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
-  Dimensions,
+  useWindowDimensions,
 } from 'react-native';
 import Styled from 'styled-components';
 import {useSelector} from 'react-redux';
@@ -36,38 +36,23 @@ import Client from 'src/lib/apollo';
 import {FormatMoney} from 'src/utils';
 import DetailProductHeader from './DetailProductHeader';
 import Share from 'react-native-share';
-import {Divider} from 'src/styled';
+import {Container, Divider} from 'src/styled';
 
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
-
-const images = [
-  ImagesPath.productImage,
-  ImagesPath.productImage,
-  ImagesPath.productImage,
-  ImagesPath.productImage,
-  ImagesPath.productImage,
-];
-const WIDTH = Dimensions.get('window').width;
-const HEIGHT = Dimensions.get('window').height;
-
-const DetailProduct = ({navigation}) => {
-  const route = useRoute();
-  console.log(route, 'route');
+const DetailProduct = ({navigation, route}) => {
   const [detail, setDetail] = useState([]);
   const [liked, setLike] = useState(false);
   const [cart, setCart] = useState(0);
+
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
   const {Color} = useColor();
   const isFocused = useIsFocused();
+  const {width, height} = useWindowDimensions();
 
   useEffect(() => {
     getDetail();
     getCart()
-    // });
   }, [isFocused]);
 
   const getCart = () => {
@@ -138,45 +123,35 @@ const DetailProduct = ({navigation}) => {
     <Scaffold
       loadingProps={loadingProps}
       header={<DetailProductHeader navigation cart={cart} />}
-      onPressLeftButton={() => navigation.pop()}>
-      <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
+      onPressLeftButton={() => navigation.pop()}
+    >
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+      >
         <View
           style={{
-            flex: 1,
             width: '100%',
-            height: '50%',
-            position: 'absolute',
-            backgroundColor: Color.theme,
+            aspectRatio: 5/6,
           }}>
           <ImageSlider
             data={detail.imageProducts ? detail.imageProducts : [detail.imageUrl, detail.imageUrl, detail.imageUrl]}
           />
         </View>
+        
         <View
           style={{
-            backgroundColor: Color.theme,
             width: '100%',
-            height: 700,
-            marginTop: '95%',
-          }}>
-          <View style={{marginVertical: 15}}>
-            <View
-              style={{
-                width: '100%',
-                height: 5,
-                backgroundColor: Color.theme,
-              }}>
-              {/* Mulai */}
-            </View>
+            height: height / 1.5,
+          }}
+        >
+          <View style={{paddingTop: 16, paddingHorizontal: 16, paddingBottom: 8}}>
             <View>
               <Row>
-                <Col size={8.6} style={{paddingHorizontal: 15}}>
+                <Col size={6}>
                   <Text
                     style={{
                       textAlign: 'left',
-                      fontSize: 14,
                       lineHeight: 20,
-                      width: '70%',
                     }}>
                     {detail.name}
                   </Text>
@@ -186,9 +161,10 @@ const DetailProduct = ({navigation}) => {
                       color: Color.secondary,
                       marginVertical: 8,
                     }}>
-                    Fashion
+                    Fashion Harcode
                   </Text>
                 </Col>
+                <Col size={6}>
                 <Text
                   style={{
                     fontSize: 18,
@@ -197,103 +173,102 @@ const DetailProduct = ({navigation}) => {
                   }}>
                   {FormatMoney.getFormattedMoney(detail.price)}
                 </Text>
+                </Col>
               </Row>
-              <Divider />
-              <Row height={40} style={{paddingHorizontal: 15}}>
-                <Row style={{paddingVertical: 1}}>
+
+              <Row style={{justifyContent: 'space-between'}}>
+                <Row>
                   <Entypo name={'star'} style={{color: Color.yellow}} />
-                  <Entypo name={'star'} style={{color: Color.yellow}} />
-                  <Entypo name={'star'} style={{color: Color.yellow}} />
-                  <Entypo name={'star'} style={{color: Color.yellow}} />
-                  <Entypo name={'star'} style={{color: Color.gray}} />
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: Color.secondary,
+                      marginHorizontal: 5,
+                    }}>
+                    4 Harcode
+                  </Text>
+                  <Text style={{fontSize: 10, color: Color.secondary}}>|</Text>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      color: Color.secondary,
+                      textAlign: 'left',
+                      marginHorizontal: 5,
+                    }}>
+                    120 Terjual Harcode
+                  </Text>
                 </Row>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: Color.secondary,
-                    marginHorizontal: 5,
-                  }}>
-                  4.0
-                </Text>
-                <Text style={{fontSize: 10, color: Color.secondary}}>|</Text>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    color: Color.secondary,
-                    textAlign: 'left',
-                    marginHorizontal: 5,
-                    width: '57%',
-                  }}>
-                  120 Terjual
-                </Text>
-                <TouchableOpacity
-                  style={{marginHorizontal: 3}}
-                  onPress={() => setLike(!liked)}>
-                  <AntDesign
-                    name={liked ? 'heart' : 'hearto'}
-                    color={liked ? 'red' : '#111'}
-                    size={19}
-                    style={{color: Color.secondary}}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={async () => {
-                    await Share.open({
-                      url: detail.share_link || 'Belum ada Linknya',
-                    });
-                  }}
-                  style={{marginHorizontal: 3}}>
-                  <AntDesign
-                    name={'sharealt'}
-                    size={19}
-                    style={{color: Color.secondary}}
-                  />
-                </TouchableOpacity>
+
+                <Row>
+                  <TouchableOpacity
+                    style={{marginHorizontal: 3}}
+                    onPress={() => setLike(!liked)}>
+                    <AntDesign
+                      name={liked ? 'heart' : 'hearto'}
+                      color={liked ? 'red' : '#111'}
+                      size={19}
+                      style={{color: Color.secondary}}
+                    />
+                  </TouchableOpacity>
+                  {/* <TouchableOpacity
+                    onPress={async () => {
+                      await Share.open({
+                        url: detail.share_link || 'Belum ada Linknya',
+                      });
+                    }}
+                    style={{marginHorizontal: 3}}>
+                    <AntDesign
+                      name={'sharealt'}
+                      size={19}
+                      style={{color: Color.secondary}}
+                    />
+                  </TouchableOpacity> */}
+                </Row>
               </Row>
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                paddingHorizontal: 16,
-                justifyContent: 'space-between',
-              }}></View>
-            <Row
-              style={{
-                backgroundColor: Color.border,
-                width: '93%',
-                height: 50,
-                alignSelf: 'center',
-                paddingVertical: 10,
-                borderRadius: 5,
-              }}>
-              <Image
-                source={ImagesPath.avatar1}
+            
+            <Divider />
+
+            <Container>
+              <Row
                 style={{
-                  width: 30,
-                  height: 30,
-                  resizeMode: 'cover',
-                  marginHorizontal: 10,
-                }}
-              />
-              <Col>
-                <Text
-                  style={{fontSize: 11, fontWeight: 'bold', textAlign: 'left'}}>
-                  {detail.merchant ? detail.merchant.name : ''}
-                </Text>
-                <Text
+                  backgroundColor: Color.border,
+                  width: '100%',
+                  alignSelf: 'center',
+                  paddingVertical: 10,
+                  borderRadius: 5,
+                }}>
+                <Image
+                  source={ImagesPath.avatar1}
                   style={{
-                    fontSize: 10,
-                    color: Color.primary,
-                    textAlign: 'left',
-                  }}>
-                  Lihat Detail Toko
-                </Text>
-              </Col>
-            </Row>
+                    width: 30,
+                    height: 30,
+                    resizeMode: 'cover',
+                    marginHorizontal: 10,
+                  }}
+                />
+                <Col>
+                  <Text
+                    style={{fontSize: 11, fontWeight: 'bold', textAlign: 'left'}}>
+                    {detail.merchant ? detail.merchant.name : ''}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 10,
+                      color: Color.primary,
+                      textAlign: 'left',
+                    }}>
+                    Lihat Detail Toko
+                  </Text>
+                </Col>
+              </Row>
+            </Container>
           </View>
+
           {detail && <TopBar style={{borderRadius: 10}} detail={detail} />}
         </View>
       </ScrollView>
+      
       <View
         style={{
           width: '100%',

@@ -70,5 +70,3 @@ export default class SwiperComponent extends Component {
     );
   }
 }
-
-AppRegistry.registerComponent('myproject', () => SwiperComponent);

@@ -44,5 +44,3 @@ export default class BannerEbook extends Component {
     )
   }
 }
-
-AppRegistry.registerComponent('myproject', () => SwiperComponent)

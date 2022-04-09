@@ -2,7 +2,6 @@ import * as React from 'react';
 import { View, FlatList, Button} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Col, Row, TouchableOpacity, useColor, Text} from '@src/components';
-import CardListProduk from 'src/components/Card/CardListProduct';
 import ImagesPath from 'src/components/ImagesPath';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'

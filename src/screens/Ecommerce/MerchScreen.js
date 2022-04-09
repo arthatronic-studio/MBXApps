@@ -28,7 +28,7 @@ import { queryContentProduct } from '@src/lib/query';
 import Filter from 'src/components/Filter';
 import Category from 'src/components/Category';
 import ImagesPath from 'src/components/ImagesPath';
-import CardListProduk from 'src/components/Card/CardListProduct';
+import ListProduct from 'src/screens/Ecommerce/ListProduct';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -106,7 +106,7 @@ const MerchScreen = ({ navigation }) => {
       </View> */}
       
       <View>
-        <CardListProduk />
+        <ListProduct />
       </View>
     </Scaffold>
   );

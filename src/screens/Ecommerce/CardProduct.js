@@ -36,7 +36,6 @@ import {shadowStyle} from '@src/styles';
 import Client from '@src/lib/apollo';
 import {queryContentProduct} from '@src/lib/query';
 import {TextInput} from 'src/components/Form';
-import CardListProduk from 'src/components/Card/CardListProduct';
 import TopTabShop from './TopTabShop';
 import Filter from 'src/components/Filter';
 import client from '@src/lib/apollo';

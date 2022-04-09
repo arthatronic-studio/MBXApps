@@ -16,7 +16,6 @@ import { queryContentProduct } from '@src/lib/query';
 import { shadowStyle } from '@src/styles';
 import { Divider, Row } from 'src/styled';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import SwiperComponent from 'src/components/ImageSlider';
 import ImagesPath from 'src/components/ImagesPath';
 import BannerEbook from 'src/components/BannerEbook';
 

@@ -8,7 +8,7 @@ import {
   Image,
   useWindowDimensions,
 } from 'react-native';
-import ImagesPath from '../ImagesPath';
+import ImagesPath from '../../components/ImagesPath';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {
   Row,
@@ -25,7 +25,7 @@ import { FormatMoney } from 'src/utils';
 import CardEcomerceProduct from 'src/screens/Ecommerce/CardEcomerceProduct';
 import { statusBarHeight } from 'src/utils/constants';
 
-const CardListProduk = (props) => {
+const ListProduct = (props) => {
   const [listProduct, setListProduct] = useState([]);
   const { Color } = useColor();
   const navigation = useNavigation();
@@ -95,7 +95,7 @@ const CardListProduk = (props) => {
   );
 };
 
-export default CardListProduk;
+export default ListProduct;
 
 const styles = StyleSheet.create({
   txtTitle: {

@@ -67,5 +67,3 @@ export default class Promo extends Component {
     );
   }
 }
-
-AppRegistry.registerComponent('myproject', () => SwiperComponent);

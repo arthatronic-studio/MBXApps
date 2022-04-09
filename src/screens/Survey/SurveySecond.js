@@ -25,7 +25,6 @@ import { shadowStyle } from '@src/styles';
 
 import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
-import CardListProduk from 'src/components/Card/CardListProduct';
 import ImagesPath from 'src/components/ImagesPath';
 import Entypo from 'react-native-vector-icons/Entypo'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'

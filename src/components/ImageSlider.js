@@ -1,52 +1,20 @@
 import React, {Component} from 'react';
-import {AppRegistry, StyleSheet, Text, View, Image} from 'react-native';
-
+import {Image} from 'react-native';
 import Swiper from 'react-native-swiper';
-import ImagesPath from './ImagesPath';
 
-const styles = StyleSheet.create({
-  wrapper: {},
-  slide1: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#9DD6EB',
-  },
-  slide2: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#97CAE5',
-  },
-  slide3: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#92BBD9',
-  },
-  text: {
-    color: '#fff',
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-});
-
-export default class SwiperComponent extends Component {
+export default class ImageSlider extends Component {
   render() {
-    const {data} = this.props
+    const {data} = this.props;
     return (
-      <View style={{width: '100%', height: '100%'}}>
-        <Swiper style={styles.wrapper} showsButtons={false}>
-          {data.map((val, id) => (
-            <Image
-              source={{ uri: val }}
-              style={{width: '100%', height: '80%'}}
-            />
-          ))}
-        </Swiper>
-      </View>
+      <Swiper showsButtons={false}>
+        {data.map((val, idx) => (
+          <Image
+            key={idx}
+            source={{ uri: val }}
+            style={{width: '100%', height: '100%'}}
+          />
+        ))}
+      </Swiper>
     );
   }
 }
-
-AppRegistry.registerComponent('myproject', () => SwiperComponent);
