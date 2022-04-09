@@ -295,49 +295,49 @@ const Ecommerce = ({ navigation }) => {
 					}}
 				/>
 
-				<View style={{ flexDirection: 'row', marginTop: 15 }}>
-					<View style={{ width: '75%' }} onTouchStart={() => navigation.navigate('SearchResult')}>
+				<View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 8 }}>
+					<View style={{ width: '75%', alignItems: 'center', justifyContent: 'center' }} onTouchStart={() => navigation.navigate('SearchResult')}>
 						<TextInput
 							placeholder="Cari apa hari ini . . ."
+							editable={false}
 							style={{
 								backgroundColor: Color.textInput,
 								width: '100%',
-								borderRadius: 7,
+								borderRadius: 8,
 								height: 40,
-								marginHorizontal: 10,
-								marginVertical: 10,
-								paddingHorizontal: 10
+								paddingHorizontal: 8
+							}}
+						/>
+
+						<Octicons
+							name={'search'}
+							size={14}
+							style={{
+								color: Color.placeholder,
+								position: 'absolute',
+								right: 8,
 							}}
 						/>
 					</View>
-					<Octicons
-						name={'search'}
-						size={14}
-						style={{
-							color: Color.placeholder,
-							marginHorizontal: 290,
-							marginVertical: 22,
-							position: 'absolute'
-						}}
-					/>
-					<View style={{ flexDirection: 'row', marginVertical: 20, marginLeft: 15 }}>
+
+					<View style={{ width: '25%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', }}>
 						{/* <Pressable onPress={() => navigation.navigate('Wishlist')}>
 						<MaterialIcons name={'favorite-border'} size={26} style={{marginHorizontal: 3}}/>
 						<View style={{marginHorizontal: 18,marginVertical: 1, position: 'absolute', width: 18, height: 10, backgroundColor: Color.error, borderRadius: 5}}>
 							<Text style={{fontSize: 5, color: Color.textInput, alignSelf: 'center', paddingVertical: 1}}> +99</Text>
 						</View>
-					</Pressable> */}
+						</Pressable> */}
+						
 						<Pressable onPress={() => navigation.navigate('CartScreen')}>
 							<MaterialCommunityIcons
 								name={'shopping-outline'}
 								size={24}
-								style={{ marginLeft: 10, marginRight: 5 }}
+								style={{ }}
 							/>
 							{cart > 0 && (
 								<View
 									style={{
-										marginHorizontal: 18,
-										marginVertical: 1,
+										right: -4,
 										position: 'absolute',
 										width: 18,
 										height: 10,
@@ -353,14 +353,14 @@ const Ecommerce = ({ navigation }) => {
 											paddingVertical: 1
 										}}
 									>
-										{' '}
 										{cart}
 									</Text>
 								</View>
 							)}
 						</Pressable>
+
 						<Pressable onPress={() => navigation.navigate('Notification')}>
-							<Ionicons name={'notifications-outline'} size={24} style={{ marginHorizontal: 7 }} />
+							<Ionicons name={'notifications-outline'} size={24} style={{ marginLeft: 16 }} />
 							{/* <View
 								style={{
 									marginHorizontal: 18,

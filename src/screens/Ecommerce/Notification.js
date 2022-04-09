@@ -32,10 +32,7 @@ import {
   useColor,
   Header,
 } from '@src/components';
-import ListForum from '@src/screens/MainForum/ListForum';
-
 import {shadowStyle} from '@src/styles';
-
 import Client from '@src/lib/apollo';
 import {queryContentProduct} from '@src/lib/query';
 import ImagesPath from 'src/components/ImagesPath';
@@ -47,75 +44,8 @@ import moment from 'moment';
 import Ecommerce from '../Ecommerce/Ecommerce';
 import {mutationCancel, queryListOrder} from 'src/lib/query/ecommerce';
 import {FormatMoney} from 'src/utils';
-var crypto = require('crypto-js');
 
-function sha1(data) {}
-
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
-
-const Content = Styled(View)`
-    margin: 16px
-    padding: 12px
-    borderRadius: 8px
-    
-`;
-
-const DATA = [
-  {
-    id: 1,
-    namaProduk: 'Tas Laptop Formal Pria',
-    review: '4.5',
-    terjual: 450,
-    hargaCoret: 'Rp. 300.000',
-    hargaAkhir: 'Rp. 278.100',
-    image: ImagesPath.lelangecommerce3,
-    diskon: '10%',
-    status: 'Menang',
-    Recipt: '100003254876',
-    total: 1,
-  },
-  {
-    id: 1,
-    namaProduk: 'Tas Laptop Formal Pria',
-    review: '4.5',
-    terjual: 450,
-    hargaCoret: '300.000',
-    hargaAkhir: '278.100',
-    image: ImagesPath.lelangecommerce4,
-    diskon: '10%',
-    status: 'Paket Dikirim',
-    Recipt: '100003254876',
-    total: 1,
-  },
-  {
-    id: 1,
-    namaProduk: 'Tas Laptop Formal Pria',
-    review: '4.5',
-    terjual: 450,
-    hargaCoret: '300.000',
-    hargaAkhir: '278.100',
-    image: ImagesPath.lelangecommerce5,
-    diskon: '10%',
-    status: 'Menunggu Pembayaran',
-    Recipt: '100003254876',
-    total: 1,
-  },
-  {
-    id: 1,
-    namaProduk: 'Tas Laptop Formal Pria',
-    review: '4.5',
-    terjual: 450,
-    hargaCoret: '300.000',
-    hargaAkhir: '278.100',
-    image: ImagesPath.lelangecommerce6,
-    diskon: '10%',
-    status: 'Paket Dikirim',
-    Recipt: '100003254876',
-    total: 1,
-  },
-];
+const itemPerPage = 50;
 
 const Notification = () => {
   const user = useSelector(state => state['user.auth'].login.user);
@@ -134,7 +64,7 @@ const Notification = () => {
     console.log(user);
     let variables = {
       page: 1,
-      itemPerPage: 20,
+      itemPerPage,
       status: undefined,
       userId: user.userId,
     };
@@ -185,219 +115,218 @@ const Notification = () => {
   ]);
 
   const renderItem = ({item}) => (
-    <Pressable
-      onPress={() => navigation.navigate('TransactionDetail', {item})}
-      style={{
-        marginHorizontal: 10,
-        marginVertical: 5,
-        backgroundColor: Color.theme,
-        width: '95%',
-        height: 210,
-        borderRadius: 10,
-      }}>
-      <View
+    <View style={{width: '100%', paddingHorizontal: 8, marginBottom: 16}}>
+      <Pressable
+        onPress={() => navigation.navigate('TransactionDetail', {item})}
         style={{
-          flexDirection: 'row',
-          paddingVertical: 5,
-          paddingHorizontal: 5,
+          backgroundColor: Color.theme,
+          width: '100%',
+          borderRadius: 8,
+          ...shadowStyle,
         }}>
-        <View style={{width: '65%', marginHorizontal: 10, marginVertical: 10}}>
-          <Text
-            style={{textAlign: 'left', color: Color.secondary, fontSize: 8}}>
-            No Recipt
-          </Text>
-          <Text style={{textAlign: 'left', fontSize: 10, fontWeight: 'bold'}}>
-            {item.orderNumber}
-          </Text>
-        </View>
-        <View>
-          <View
-            style={{
-              backgroundColor: '#FEEFCC',
-              borderRadius: 5,
-              width: 90,
-              marginVertical: 10,
-              marginHorizontal: 12,
-              height: 20,
-            }}>
+        <View
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            padding: 8,
+          }}>
+          <View style={{width: '70%', justifyContent: 'center', paddingHorizontal: 8}}>
             <Text
-              style={{
-                color: '#F9AE00',
-                fontSize: 10,
-                paddingVertical: 3,
-              }}>
-              {item.status}
+              style={{textAlign: 'left', color: Color.secondary, fontSize: 8}}>
+              No. Recipt
+            </Text>
+            <Text style={{textAlign: 'left', fontSize: 10, fontWeight: 'bold'}}>
+              {item.orderNumber}
             </Text>
           </View>
+
+          <View style={{width: '30%', padding: 8}}>
+            <View
+              style={{
+                backgroundColor: Color.primarySoft,
+                borderRadius: 5,
+                width: '100%',
+                height: 20,
+              }}>
+              <Text
+                style={{
+                  fontSize: 10,
+                  paddingVertical: 3,
+                }}>
+                {item.status}
+              </Text>
+            </View>
+          </View>
         </View>
-      </View>
-      <View
-        style={{
-          backgroundColor: Color.border,
-          width: '95%',
-          height: 1,
-          alignSelf: 'center',
-        }}></View>
-      {item.items.length != 0 && <View style={{flexDirection: 'row'}}>
-        <Image
-          source={{uri: item.items[0].products[0]['imageUrl']}}
+
+        <View
           style={{
-            resizeMode: 'contain',
-            width: 70,
-            height: 70,
-            marginVertical: 8,
-            marginHorizontal: 8,
-          }}
-        />
-        <View style={{marginVertical: 8}}>
-          <Text style={{fontWeight: 'bold', marginHorizontal: 15}}>
-            {item.items[0].products[0]['name']}
-          </Text>
+            backgroundColor: Color.border,
+            width: '100%',
+            height: 1,
+            alignSelf: 'center',
+          }} />
+          
+        {item.items.length > 0 && item.items[0].products.length > 0 &&
+        <View style={{width: '100%', flexDirection: 'row', padding: 16}}>
           <View
             style={{
-              flexDirection: 'row',
-              marginHorizontal: 12,
-              marginVertical: 5,
-            }}>
-            <Entypo name={'star'} style={{color: Color.yellow}} />
-            <Text
+              width: '20%',
+              aspectRatio: 1,
+            }}
+          >
+            <Image
+              source={{uri: item.items[0].products[0]['imageUrl']}}
               style={{
-                fontSize: 10,
-                color: Color.secondary,
-                marginHorizontal: 3,
-              }}>
-              {item.review}
+                width: '100%',
+                height: '100%',
+              }}
+            />
+          </View>
+
+          <View style={{width: '80%', paddingLeft: 16, }}>
+            <Text align='left' type='bold'>
+              {item.items[0].products[0]['name']}
             </Text>
             <View
               style={{
-                backgroundColor: Color.secondary,
-                height: 12,
-                width: 1,
-                marginHorizontal: 5,
-              }}></View>
-            <Text
-              style={{
-                fontSize: 10,
-                color: Color.secondary,
-                marginHorizontal: 3,
+                flexDirection: 'row',
+                marginVertical: 5,
               }}>
-              {item.terjual}
-            </Text>
-            <Text style={{fontSize: 10, color: Color.secondary}}>Terjual</Text>
+              <Entypo name={'star'} style={{color: Color.yellow}} />
+              <Text
+                style={{
+                  fontSize: 10,
+                  color: Color.secondary,
+                  marginHorizontal: 3,
+                }}>
+                {item.review} 5 Harcode
+              </Text>
+              <View
+                style={{
+                  backgroundColor: Color.secondary,
+                  height: 12,
+                  width: 1,
+                  marginHorizontal: 5,
+                }}></View>
+              <Text
+                style={{
+                  fontSize: 10,
+                  color: Color.secondary,
+                  marginHorizontal: 3,
+                }}>
+                {item.terjual} 12 harcode
+              </Text>
+              <Text style={{fontSize: 10, color: Color.secondary}}>Terjual</Text>
+            </View>
           </View>
-          <Text
-            style={{
-              fontSize: 8,
-              color: Color.secondary,
-              textAlign: 'left',
-              marginHorizontal: 15,
-            }}>
-            {item.items[0].products[0]['quantity']} Barang
-          </Text>
-        </View>
-      </View>}
-      {item.items.length != 0 && <View style={{marginVertical: 20, flexDirection: 'row'}}>
-        <View style={{marginHorizontal: 10, width: '65%'}}>
-          <Text
-            style={{fontSize: 8, textAlign: 'left', color: Color.secondary}}>
-            Harga Barang
-          </Text>
-          <Text style={{fontSize: 12, textAlign: 'left', fontWeight: 'bold'}}>
-            {FormatMoney.getFormattedMoney(item.items[0].products[0]['price'])}
-          </Text>
-        </View>
-        {(item.shipperOrderNumber && item.statusId == 2) && <View
-          style={{
-            backgroundColor: Color.primary,
-            width: 100,
-            borderRadius: 20,
-          }}>
-          <TouchableOpacity
-            style={{
-              height: 32,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <Text
-              style={{
-                fontSize: 10,
-                color: Color.textInput,
-                fontWeight: 'bold',
-              }}>
-              Lacak Paket
-            </Text>
-          </TouchableOpacity>
         </View>}
-        {(item.statusId == 3) && <View
-          style={{
-            backgroundColor: Color.primary,
-            width: 100,
-            borderRadius: 20,
-          }}>
-          <TouchableOpacity
-            onPress={() => updateStatus()}
-            style={{
-              height: 32,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
+
+        {item.items.length != 0 && <View style={{flexDirection: 'row', paddingHorizontal: 16, paddingBottom: 16}}>
+          <View style={{}}>
             <Text
-              style={{
-                fontSize: 10,
-                color: Color.textInput,
-                fontWeight: 'bold',
-              }}>
-              Pesanan Diterima
+              style={{fontSize: 8, textAlign: 'left', color: Color.secondary}}>
+              Harga Barang
             </Text>
-          </TouchableOpacity>
-        </View>}
-        {(item.statusId == 4) && <View
-          style={{
-            backgroundColor: Color.primary,
-            width: 100,
-            borderRadius: 20,
-          }}>
-          <TouchableOpacity
+            <Text style={{fontSize: 12, textAlign: 'left', fontWeight: 'bold'}}>
+              {FormatMoney.getFormattedMoney(item.items[0].products[0]['price'])}
+            </Text>
+          </View>
+
+          {(item.shipperOrderNumber && item.statusId == 2) && <View
             style={{
-              height: 32,
-              alignItems: 'center',
-              justifyContent: 'center',
+              backgroundColor: Color.primary,
+              width: 100,
+              borderRadius: 20,
             }}>
-            <Text
+            <TouchableOpacity
               style={{
-                fontSize: 10,
-                color: Color.textInput,
-                fontWeight: 'bold',
+                height: 32,
+                alignItems: 'center',
+                justifyContent: 'center',
               }}>
-              Ulasan
-            </Text>
-          </TouchableOpacity>
-        </View>}
-        {item.statusId == 0 && <View
-          style={{
-            backgroundColor: Color.primary,
-            width: 100,
-            borderRadius: 20,
-          }}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('TransactionDetail', {item})}
+              <Text
+                style={{
+                  fontSize: 10,
+                  color: Color.textInput,
+                  fontWeight: 'bold',
+                }}>
+                Lacak Paket
+              </Text>
+            </TouchableOpacity>
+          </View>}
+          {(item.statusId == 3) && <View
             style={{
-              height: 32,
-              alignItems: 'center',
-              justifyContent: 'center',
+              backgroundColor: Color.primary,
+              width: 100,
+              borderRadius: 20,
             }}>
-            <Text
+            <TouchableOpacity
+              onPress={() => updateStatus()}
               style={{
-                fontSize: 10,
-                color: Color.textInput,
-                fontWeight: 'bold',
+                height: 32,
+                alignItems: 'center',
+                justifyContent: 'center',
               }}>
-              Detail Pemesanan
-            </Text>
-          </TouchableOpacity>
+              <Text
+                style={{
+                  fontSize: 10,
+                  color: Color.textInput,
+                  fontWeight: 'bold',
+                }}>
+                Pesanan Diterima
+              </Text>
+            </TouchableOpacity>
+          </View>}
+
+          {(item.statusId == 4) && <View
+            style={{
+              backgroundColor: Color.primary,
+              width: 100,
+              borderRadius: 20,
+            }}>
+            <TouchableOpacity
+              style={{
+                height: 32,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text
+                style={{
+                  fontSize: 10,
+                  color: Color.textInput,
+                  fontWeight: 'bold',
+                }}>
+                Ulasan
+              </Text>
+            </TouchableOpacity>
+          </View>}
+          {item.statusId == 0 && <View
+            style={{
+              backgroundColor: Color.primary,
+              width: 100,
+              borderRadius: 20,
+            }}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('TransactionDetail', {item})}
+              style={{
+                height: 32,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text
+                style={{
+                  fontSize: 10,
+                  color: Color.textInput,
+                  fontWeight: 'bold',
+                }}>
+                Detail Pemesanan
+              </Text>
+            </TouchableOpacity>
+          </View>}
         </View>}
-      </View>}
-    </Pressable>
+      </Pressable>
+    </View>
   );
 
   return (
@@ -406,69 +335,70 @@ const Notification = () => {
         <Header customIcon title="Notifikasi" type="bold" centerTitle={false} />
       }
       onPressLeftButton={() => navigation.pop()}
-      style={{backgroundColor: Color.semiwhite}}>
-        <ScrollView>
-          <View style={{flexDirection: 'row', marginVertical: 10}}>
-            <TouchableOpacity
-              style={{
-                marginHorizontal: 15,
-                flexDirection: 'row',
-                backgroundColor: Color.theme,
-                width: '35%',
-                height: 35,
-                borderRadius: 20,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text
-                style={{
-                  fontSize: 12,
-                  paddingHorizontal: 3,
-                  fontWeight: 'bold',
-                }}>
-                Semua Status
-              </Text>
-              <MaterialIcons
-                name={'keyboard-arrow-down'}
-                size={18}
-                style={{marginVertical: 9}}
-              />
-            </TouchableOpacity>
-            <View style={{width: 80}}></View>
-            <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                backgroundColor: Color.theme,
-                width: '35%',
-                height: 35,
-                borderRadius: 20,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text
-                style={{
-                  fontSize: 12,
-                  paddingHorizontal: 3,
-                  fontWeight: 'bold',
-                }}>
-                Semua Tanggal
-              </Text>
-              <MaterialIcons
-                name={'keyboard-arrow-down'}
-                size={18}
-                style={{marginVertical: 9}}
-              />
-            </TouchableOpacity>
-          </View>
-
-          <FlatList
-            data={listData}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
+    >
+      {/* hide filter */}
+      {/* <View style={{flexDirection: 'row', marginVertical: 10}}>
+        <TouchableOpacity
+          style={{
+            marginHorizontal: 15,
+            flexDirection: 'row',
+            backgroundColor: Color.theme,
+            width: '35%',
+            height: 35,
+            borderRadius: 20,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              fontSize: 12,
+              paddingHorizontal: 3,
+              fontWeight: 'bold',
+            }}>
+            Semua Status
+          </Text>
+          <MaterialIcons
+            name={'keyboard-arrow-down'}
+            size={18}
+            style={{marginVertical: 9}}
           />
-        </ScrollView>
+        </TouchableOpacity>
+        <View style={{width: 80}}></View>
+        <TouchableOpacity
+          style={{
+            flexDirection: 'row',
+            backgroundColor: Color.theme,
+            width: '35%',
+            height: 35,
+            borderRadius: 20,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              fontSize: 12,
+              paddingHorizontal: 3,
+              fontWeight: 'bold',
+            }}>
+            Semua Tanggal
+          </Text>
+          <MaterialIcons
+            name={'keyboard-arrow-down'}
+            size={18}
+            style={{marginVertical: 9}}
+          />
+        </TouchableOpacity>
+      </View> */}
+
+      <FlatList
+        data={listData}
+        renderItem={renderItem}
+        keyExtractor={item => item.id}
+        style={{ backgroundColor: Color.semiwhite }}
+        contentContainerStyle={{ paddingTop: 16, paddingHorizontal: 8 }}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      />
     </Scaffold>
   );
 };
