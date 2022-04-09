@@ -9,7 +9,8 @@ import {
 	SafeAreaView,
 	TextInput,
 	TouchableOpacity,
-	Pressable
+	Pressable,
+	useWindowDimensions,
 } from 'react-native';
 
 import { accessClient } from 'src/utils/access_client';
@@ -28,19 +29,16 @@ import ListNews from 'src/components/Posting/ListNews';
 import ListPlace from 'src/components/Posting/ListPlace';
 import ListEvent from 'src/components/Posting/ListEvent';
 import ListAuction from 'src/components/Posting/ListAuction';
-import { Divider, Circle, Container } from '@src/styled';
+import { Divider, Circle, Container, Row } from '@src/styled';
 import {
 	Text,
 	// TouchableOpacity,
 	Loading,
 	useLoading,
 	Scaffold,
-	Row,
-	Col,
 	HeaderBig,
 	useColor,
 	Header,
-	Banner
 } from '@src/components';
 import ListForum from '@src/screens/MainForum/ListForum';
 
@@ -59,104 +57,43 @@ import moment from 'moment';
 import { queryGetAuction } from 'src/lib/query/auction';
 import { FormatMoney } from 'src/utils';
 import { queryGetCart, queryGetProduct } from 'src/lib/query/ecommerce';
+import Banner from 'src/components/Banner';
+import { queryBannerList } from 'src/lib/query/banner';
 
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
-
-const Content = Styled(View)`
-    margin: 16px
-    padding: 12px
-    borderRadius: 8px
-`;
-
-const DATA = [
+const ecomMenu = [
 	{
-		id: 1,
-		namaProduk: 'Acer Aspire 3 A314',
-		hargaAwal: '3.000.000',
-		waktuSisa: '06:12',
-		image: ImagesPath.lelangecommerce1
+		code: 'mystore',
+		name: 'Toko Saya',
+		badge: true,
+		imageAsset: ImagesPath.shop,
+		navigate: 'MyShop',
+		show: true,
 	},
 	{
-		id: 2,
-		namaProduk: 'Acer Aspire 3 A314',
-		hargaAwal: '3.000.000',
-		waktuSisa: '06:12',
-		image: ImagesPath.lelangecommerce2
+		code: 'chat',
+		name: 'Chatting',
+		badge: true,
+		imageAsset: ImagesPath.chatframe,
+		navigate: 'ChatEcommerce',
+		show: true,
 	},
 	{
-		id: 3,
-		namaProduk: 'Acer Aspire 3 A314',
-		hargaAwal: '3.000.000',
-		waktuSisa: '06:12',
-		image: ImagesPath.lelangecommerce1
+		code: 'wishlist',
+		name: 'Whishlist',
+		badge: true,
+		imageAsset: ImagesPath.wishlistframe,
+		navigate: 'Wishlist',
+		show: true,
 	},
 	{
-		id: 4,
-		namaProduk: 'Acer Aspire 3 A314',
-		hargaAwal: '3.000.000',
-		waktuSisa: '06:12',
-		image: ImagesPath.lelangecommerce2
+		code: 'auction',
+		name: 'Lelang',
+		badge: true,
+		imageAsset: ImagesPath.scales,
+		navigate: 'LiveLelangScreen',
+		show: true,
 	},
-	{
-		id: 5,
-		namaProduk: 'Acer Aspire 3 A314',
-		hargaAwal: '3.000.000',
-		waktuSisa: '06:12',
-		image: ImagesPath.lelangecommerce1
-	},
-	{
-		id: 6,
-		namaProduk: 'Acer Aspire 3 A314',
-		hargaAwal: '3.000.000',
-		waktuSisa: '06:12',
-		image: ImagesPath.lelangecommerce2
-	}
-];
-
-const Rekomendasi = [
-	{
-		id: 1,
-		namaProduk: 'Tas Laptop Formal Pria',
-		review: '4.5',
-		terjual: 450,
-		hargaCoret: 'Rp. 300.000',
-		hargaAkhir: 'Rp. 278.100',
-		image: ImagesPath.lelangecommerce3,
-		diskon: '10%'
-	},
-	{
-		id: 1,
-		namaProduk: 'Tas Laptop Formal Pria',
-		review: '4.5',
-		terjual: 450,
-		hargaCoret: '300.000',
-		hargaAkhir: '278.100',
-		image: ImagesPath.lelangecommerce4,
-		diskon: '10%'
-	},
-	{
-		id: 1,
-		namaProduk: 'Tas Laptop Formal Pria',
-		review: '4.5',
-		terjual: 450,
-		hargaCoret: '300.000',
-		hargaAkhir: '278.100',
-		image: ImagesPath.lelangecommerce5,
-		diskon: '10%'
-	},
-	{
-		id: 1,
-		namaProduk: 'Tas Laptop Formal Pria',
-		review: '4.5',
-		terjual: 450,
-		hargaCoret: '300.000',
-		hargaAkhir: '278.100',
-		image: ImagesPath.lelangecommerce6,
-		diskon: '10%'
-	}
-];
+]
 
 const Ecommerce = ({ navigation }) => {
 	const isFocused = useIsFocused();
@@ -166,7 +103,9 @@ const Ecommerce = ({ navigation }) => {
 	const [ listProduct, setListProduct ] = useState([]);
 	const [ liveAuction, setLiveAuction ] = useState([]);
 	const [ cart, setCart ] = useState(0);
+
 	const { Color } = useColor();
+	const {width, height} = useWindowDimensions();
 
 	const [ loadingAuction, setLoadingAuction ] = useState(true);
 
@@ -192,13 +131,33 @@ const Ecommerce = ({ navigation }) => {
 
 	useEffect(
 		() => {
+			fetchBannerList();
 			getAuction();
 			getProduct();
 			getCart();
-			// });
 		},
 		[ isFocused ]
 	);
+
+	const fetchBannerList = () => {
+		const variables = {
+		  categoryId: 1,
+		};
+	
+		Client.query({
+		  query: queryBannerList,
+		  variables,
+		})
+		  .then(res => {
+			console.log('res banner list', res);
+			setListBanner(res.data.bannerList);
+			setLoadingBanner(false);
+		  })
+		  .catch(err => {
+			console.log(err, 'err banner list');
+			setLoadingBanner(false);
+		  });
+	};
 
 	const getCart = () => {
 		// showLoading();
@@ -261,7 +220,7 @@ const Ecommerce = ({ navigation }) => {
 			});
 	};
 
-	const renderItem = ({ item }) => (
+	const renderItemAuction = ({ item }) => (
 		<TouchableOpacity
 			onPress={() => navigation.navigate('DetailLelang', { item })}
 			style={{ marginHorizontal: 6, marginVertical: 10 }}
@@ -322,121 +281,127 @@ const Ecommerce = ({ navigation }) => {
 		</TouchableOpacity>
 	);
 
-	const render = ({ item }) => (
+	const renderItemProduct = ({ item, index }) => (
 		<Pressable
 			onPress={() => navigation.navigate('DetailProduct', { item })}
 			style={{
-				marginHorizontal: 15,
-				marginVertical: 10,
-				backgroundColor: Color.theme,
-				width: '43%',
-				height: 320,
-				borderRadius: 10,
-				elevation: 5
+				width: '50%',
+				paddingHorizontal: 8,
+				marginBottom: 16,
 			}}
 		>
-			<Image
-				source={{ uri: item.imageUrl }}
-				style={{
-					resizeMode: 'contain',
-					width: 175,
-					height: 160,
-					marginVertical: 8
-				}}
-			/>
 			<View
 				style={{
-					backgroundColor: Color.error,
-					width: '40%',
-					height: 47,
-					position: 'absolute',
-					borderBottomLeftRadius: 15,
-					borderTopRightRadius: 15,
-					alignSelf: 'flex-end',
-					paddingVertical: 5
+					backgroundColor: Color.theme,
+					borderRadius: 8,
+					padding: 8,
+					...shadowStyle,
 				}}
 			>
-				<Text style={{ fontSize: 10, color: Color.textInput }}>Diskon</Text>
-				<Text style={{ fontSize: 18, color: Color.textInput, fontWeight: 'bold' }}>10%</Text>
-			</View>
-			<Text
-				style={{
-					fontWeight: 'bold',
-					width: '95%',
-					height: 38,
-					paddingHorizontal: 2
-				}}
-			>
-				{item.name}
-			</Text>
-			<View style={{ flexDirection: 'row', marginHorizontal: 12, marginVertical: 5 }}>
-				<Entypo name={'star'} style={{ color: Color.yellow }} />
-				<Text style={{ fontSize: 10, color: Color.secondary, marginHorizontal: 3 }}>{item.review}</Text>
-				<View
+				<Image
+					source={{ uri: item.imageUrl }}
 					style={{
-						backgroundColor: Color.secondary,
-						height: 12,
-						width: 1,
-						marginHorizontal: 5
+						width: '100%',
+						aspectRatio: 1,
+						backgroundColor: Color.border,
 					}}
 				/>
-				<Text style={{ fontSize: 10, color: Color.secondary, marginHorizontal: 3 }}>{item.terjual}</Text>
-				<Text style={{ fontSize: 10, color: Color.secondary }}>Terjual</Text>
+
+				<View
+					style={{
+						backgroundColor: Color.error,
+						width: '40%',
+						position: 'absolute',
+						borderBottomLeftRadius: 15,
+						borderTopRightRadius: 15,
+						alignSelf: 'flex-end',
+						paddingVertical: 5
+					}}
+				>
+					<Text style={{ fontSize: 10, color: Color.textInput }}>Diskon Harcode</Text>
+					<Text style={{ fontSize: 18, color: Color.textInput, fontWeight: 'bold' }}>10%</Text>
+				</View>
+
+				<Divider height={8} />
+				
+				<Text
+					type='bold'
+					align='left'
+				>
+					{item.name}
+				</Text>
+
+				<View style={{ flexDirection: 'row' , marginTop: 8 }}>
+					<Entypo name={'star'} style={{ color: Color.yellow }} />
+					<Text style={{ fontSize: 10, color: Color.secondary, }}>5 harcode {item.review}</Text>
+					<View
+						style={{
+							backgroundColor: Color.secondary,
+							height: 12,
+							width: 1,
+							marginHorizontal: 5
+						}}
+					/>
+					<Text style={{ fontSize: 10, color: Color.secondary, marginHorizontal: 3 }}>{item.terjual || 0}</Text>
+					<Text style={{ fontSize: 10, color: Color.secondary }}>Terjual</Text>
+				</View>
+
+				<View style={{ marginTop: 8 }}>
+					<Text
+						style={{
+							marginVertical: 1,
+							textAlign: 'left',
+							color: Color.secondary,
+							fontSize: 8
+						}}
+					>
+						Harga
+					</Text>
+					{/* <Text
+						style={{
+							marginVertical: 1,
+							textAlign: 'left',
+							textDecorationLine: 'line-through',
+							fontSize: 10,
+							color: Color.secondary,
+							fontWeight: 'bold'
+						}}
+					>
+						{FormatMoney.getFormattedMoney(item.hargaCoret)}
+					</Text> */}
+					<Text
+						style={{
+							marginVertical: 1,
+							textAlign: 'left',
+							color: Color.error,
+							fontWeight: 'bold'
+						}}
+					>
+						{FormatMoney.getFormattedMoney(item.price)}
+					</Text>
+				</View>
+				{/* <View style={{paddingVertical: 5, backgroundColor: Color.error, width: 60, height: 42, position: 'absolute', alignSelf: 'flex-end', borderTopRightRadius: 10, borderBottomLeftRadius: 20}}>
+					<Text style={{color: Color.textInput, fontSize: 10}}>Diskon</Text>
+					<Text style={{fontSize: 14, fontWeight: 'bold', color: Color.textInput}}>{item.diskon}</Text>
+				</View> */}
 			</View>
-			<View style={{ marginHorizontal: 15, marginVertical: 15 }}>
-				<Text
-					style={{
-						marginVertical: 1,
-						textAlign: 'left',
-						color: Color.secondary,
-						fontSize: 8
-					}}
-				>
-					Harga
-				</Text>
-				<Text
-					style={{
-						marginVertical: 1,
-						textAlign: 'left',
-						textDecorationLine: 'line-through',
-						fontSize: 10,
-						color: Color.secondary,
-						fontWeight: 'bold'
-					}}
-				>
-					{item.hargaCoret}
-				</Text>
-				<Text
-					style={{
-						marginVertical: 1,
-						textAlign: 'left',
-						color: Color.error,
-						fontWeight: 'bold'
-					}}
-				>
-					{item.price}
-				</Text>
-			</View>
-			{/* <View style={{paddingVertical: 5, backgroundColor: Color.error, width: 60, height: 42, position: 'absolute', alignSelf: 'flex-end', borderTopRightRadius: 10, borderBottomLeftRadius: 20}}>
-                <Text style={{color: Color.textInput, fontSize: 10}}>Diskon</Text>
-                <Text style={{fontSize: 14, fontWeight: 'bold', color: Color.textInput}}>{item.diskon}</Text>
-            </View> */}
 		</Pressable>
 	);
 
-	return (
-		<ScrollView style={{ backgroundColor: Color.theme }}>
-			<View>
+	const renderHeader = () => {
+		return (
+			<>
 				<View
 					style={{
 						position: 'absolute',
-						backgroundColor: '#FDE4D2',
+						backgroundColor: Color.primarySoft,
 						width: '100%',
-						height: 250,
+						height: height * 0.3,
 						borderBottomLeftRadius: 40,
-						borderBottomRightRadius: 40
+						borderBottomRightRadius: 40,
 					}}
 				/>
+
 				<View style={{ flexDirection: 'row', marginTop: 15 }}>
 					<View style={{ width: '75%' }} onTouchStart={() => navigation.navigate('SearchResult')}>
 						<TextInput
@@ -464,11 +429,11 @@ const Ecommerce = ({ navigation }) => {
 					/>
 					<View style={{ flexDirection: 'row', marginVertical: 20, marginLeft: 15 }}>
 						{/* <Pressable onPress={() => navigation.navigate('Wishlist')}>
-                        <MaterialIcons name={'favorite-border'} size={26} style={{marginHorizontal: 3}}/>
-                        <View style={{marginHorizontal: 18,marginVertical: 1, position: 'absolute', width: 18, height: 10, backgroundColor: Color.error, borderRadius: 5}}>
-                            <Text style={{fontSize: 5, color: Color.textInput, alignSelf: 'center', paddingVertical: 1}}> +99</Text>
-                        </View>
-                    </Pressable> */}
+						<MaterialIcons name={'favorite-border'} size={26} style={{marginHorizontal: 3}}/>
+						<View style={{marginHorizontal: 18,marginVertical: 1, position: 'absolute', width: 18, height: 10, backgroundColor: Color.error, borderRadius: 5}}>
+							<Text style={{fontSize: 5, color: Color.textInput, alignSelf: 'center', paddingVertical: 1}}> +99</Text>
+						</View>
+					</Pressable> */}
 						<Pressable onPress={() => navigation.navigate('CartScreen')}>
 							<MaterialCommunityIcons
 								name={'shopping-outline'}
@@ -529,307 +494,254 @@ const Ecommerce = ({ navigation }) => {
 						</Pressable>
 					</View>
 				</View>
+			</>
+		)
+	}
 
+	return (
+		<Scaffold
+			header={renderHeader()}
+			useSafeArea={false}
+			translucent
+			statusBarColor={Color.primarySoft}
+		>
+			<ScrollView>
 				{/* Saldoku Di Hide Dulu */}
-
 				{/* <View
-          style={{
-            flexDirection: 'row',
-            backgroundColor: Color.textInput,
-            width: '95%',
-            height: 55,
-            borderRadius: 5,
-            alignSelf: 'center',
-            marginVertical: 15,
-            elevation: 3,
-          }}>
-          <View style={{marginHorizontal: 12, marginVertical: 8, width: '60%'}}>
-            <Text
-              style={{color: Color.secondary, fontSize: 8, textAlign: 'left'}}>
-              Saldoku
-            </Text>
-            <Text style={{fontSize: 18, fontWeight: 'bold', textAlign: 'left'}}>
-              Rp. 200.000
-            </Text>
-          </View>
-          <View style={{flexDirection: 'column', marginVertical: 10}}>
-            <View style={{flexDirection: 'row'}}>
-              <View
-                style={{
-                  marginHorizontal: 8,
-                  backgroundColor: Color.primary,
-                  width: 20,
-                  height: 20,
-                  borderRadius: 3,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <AntDesign name={'plus'} style={{color: Color.textInput}} />
-              </View>
-              <View
-                style={{
-                  marginHorizontal: 8,
-                  backgroundColor: Color.primary,
-                  width: 20,
-                  height: 20,
-                  borderRadius: 3,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <AntDesign name={'upload'} style={{color: Color.textInput}} />
-              </View>
-              <View
-                style={{
-                  marginHorizontal: 8,
-                  backgroundColor: Color.secondary,
-                  width: 20,
-                  height: 20,
-                  borderRadius: 3,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Entypo
-                  name={'dots-three-vertical'}
-                  style={{color: Color.textInput}}
-                />
-              </View>
-            </View>
-            <View style={{flexDirection: 'row', marginVertical: 2}}>
-              <Text style={{fontSize: 8, marginHorizontal: 6}}>Top Up</Text>
-              <Text style={{fontSize: 8, marginHorizontal: 6}}>Tarik</Text>
-              <Text style={{fontSize: 8, marginHorizontal: 6}}>Lainnya</Text>
-            </View>
-          </View>
-        </View> */}
-			</View>
-			<View style={{ marginTop: 5 }}>
-				<Text style={{ textAlign: 'left', marginHorizontal: 15, fontWeight: 'bold' }}>
-					Tribes Special Deals
-				</Text>
-				<Pressable
 					style={{
+						flexDirection: 'row',
+						backgroundColor: Color.textInput,
 						width: '95%',
-						height: 220,
+						height: 55,
+						borderRadius: 5,
 						alignSelf: 'center',
-						borderRadius: 10,
-						marginVertical: 10
-					}}
-				>
-					<FlatList
-						showsHorizontalScrollIndicator={false}
-						horizontal
-						data={[ { image: ImagesPath.BannerPink }, { image: ImagesPath.bannerlelang } ]}
-						renderItem={({ item }) => (
-							<Image
-								source={item.image}
-								style={{
-									resizeMode: 'cover',
-									width: 391,
-									height: '100%'
-								}}
+						marginVertical: 15,
+						elevation: 3,
+					}}>
+					<View style={{marginHorizontal: 12, marginVertical: 8, width: '60%'}}>
+						<Text
+						style={{color: Color.secondary, fontSize: 8, textAlign: 'left'}}>
+						Saldoku
+						</Text>
+						<Text style={{fontSize: 18, fontWeight: 'bold', textAlign: 'left'}}>
+						Rp. 200.000
+						</Text>
+					</View>
+					<View style={{flexDirection: 'column', marginVertical: 10}}>
+						<View style={{flexDirection: 'row'}}>
+						<View
+							style={{
+							marginHorizontal: 8,
+							backgroundColor: Color.primary,
+							width: 20,
+							height: 20,
+							borderRadius: 3,
+							justifyContent: 'center',
+							alignItems: 'center',
+							}}>
+							<AntDesign name={'plus'} style={{color: Color.textInput}} />
+						</View>
+						<View
+							style={{
+							marginHorizontal: 8,
+							backgroundColor: Color.primary,
+							width: 20,
+							height: 20,
+							borderRadius: 3,
+							justifyContent: 'center',
+							alignItems: 'center',
+							}}>
+							<AntDesign name={'upload'} style={{color: Color.textInput}} />
+						</View>
+						<View
+							style={{
+							marginHorizontal: 8,
+							backgroundColor: Color.secondary,
+							width: 20,
+							height: 20,
+							borderRadius: 3,
+							justifyContent: 'center',
+							alignItems: 'center',
+							}}>
+							<Entypo
+							name={'dots-three-vertical'}
+							style={{color: Color.textInput}}
 							/>
-						)}
+						</View>
+						</View>
+						<View style={{flexDirection: 'row', marginVertical: 2}}>
+						<Text style={{fontSize: 8, marginHorizontal: 6}}>Top Up</Text>
+						<Text style={{fontSize: 8, marginHorizontal: 6}}>Tarik</Text>
+						<Text style={{fontSize: 8, marginHorizontal: 6}}>Lainnya</Text>
+						</View>
+					</View>
+				</View> */}
+
+				<Container paddingVertical={16}>
+					<Banner
+						data={listBanner}
+						loading={loadingBanner}
 					/>
-				</Pressable>
-			</View>
-			<Content
-				style={{
-					alignItems: 'center',
-					borderRadius: 5
-				}}
-			>
-				<Row>
-					<TouchableOpacity
-						onPress={() => navigation.navigate('MyShop')}
-						style={{ marginRight: 27, alignItems: 'center' }}
-					>
-						<Image source={ImagesPath.shop} />
-						<View style={{ marginVertical: 5 }}>
-							<Text style={{ fontSize: 10 }}>Toko Saya</Text>
-							<View
-								style={{
-									width: 4,
-									height: 4,
-									backgroundColor: Color.error,
-									borderRadius: 20,
-									position: 'absolute',
-									marginHorizontal: 53,
-									marginVertical: 3
-								}}
-							/>
-						</View>
-					</TouchableOpacity>
-					<TouchableOpacity
-						onPress={() => navigation.navigate('ChatEcommerce')}
-						style={{ marginHorizontal: 27, alignItems: 'center' }}
-					>
-						<Image source={ImagesPath.chatframe} />
-						<View style={{ marginVertical: 5 }}>
-							<Text style={{ fontSize: 10 }}>Chatting</Text>
-							<View
-								style={{
-									width: 4,
-									height: 4,
-									backgroundColor: Color.error,
-									borderRadius: 20,
-									position: 'absolute',
-									marginHorizontal: 45,
-									marginVertical: 3
-								}}
-							/>
-						</View>
-					</TouchableOpacity>
-					<TouchableOpacity
-						onPress={() => navigation.navigate('Wishlist')}
-						style={{ marginHorizontal: 27, alignItems: 'center' }}
-					>
-						<Image source={ImagesPath.wishlistframe} />
-						<View style={{ marginVertical: 5 }}>
-							<Text style={{ fontSize: 10 }}>Wishlist</Text>
-							<View
-								style={{
-									width: 4,
-									height: 4,
-									backgroundColor: Color.error,
-									borderRadius: 20,
-									position: 'absolute',
-									marginHorizontal: 41,
-									marginVertical: 3
-								}}
-							/>
-						</View>
-					</TouchableOpacity>
-					<TouchableOpacity
-						onPress={() => navigation.navigate('LiveLelangScreen')}
-						style={{ marginLeft: 27, marginRight: 5, alignItems: 'center' }}
-					>
-						<Image source={ImagesPath.scales} />
-						<View style={{ marginVertical: 5 }}>
-							<Text style={{ fontSize: 10 }}>Lelang</Text>
-							<View
-								style={{
-									width: 4,
-									height: 4,
-									backgroundColor: Color.error,
-									borderRadius: 20,
-									position: 'absolute',
-									marginHorizontal: 35,
-									marginVertical: 3
-								}}
-							/>
-						</View>
-					</TouchableOpacity>
-				</Row>
-			</Content>
-			<View style={{ marginVertical: 5 }}>
-				<View style={{ flexDirection: 'row' }}>
-					<Text
-						style={{
-							width: '70%',
-							fontWeight: 'bold',
-							textAlign: 'left',
-							paddingHorizontal: 20
-						}}
-					>
-						Lelang Berlangsung
-					</Text>
-					<Text
-						style={{
-							marginHorizontal: 5,
-							marginVertical: 2,
-							fontSize: 12,
-							color: Color.primary,
-							fontWeight: 'bold'
-						}}
-					>
-						Lihat Semua
-					</Text>
-					<AntDesign name={'arrowright'} style={{ marginVertical: 4, color: Color.primary }} />
+				</Container>
+
+				<Container padding={16}>
+					<Row justify='space-between' style={{width: '100%'}}>
+						{ecomMenu.map((item, idx) => {
+							if (!item.show) return <View key={idx} />;
+
+							return (
+								<TouchableOpacity
+									key={idx}
+									onPress={() => navigation.navigate(item.navigate)}
+									style={{ width: '25%', alignItems: 'center', }}
+								>
+									<View
+										style={{
+											width: '50%',
+											aspectRatio: 1,
+										}}
+									>
+										<Image source={item.imageAsset} style={{width: '100%', height: '100%'}} resizeMode='contain' />
+									</View>
+
+									<View style={{ paddingVertical: 8 }}>
+										<Text style={{ fontSize: 10 }}>
+											{item.name}
+										</Text>
+										{item.badge && <View
+											style={{
+												width: 4,
+												height: 4,
+												backgroundColor: Color.error,
+												borderRadius: 2,
+												position: 'absolute',
+												right: -8,
+												top: 8
+											}}
+										/>}
+									</View>
+								</TouchableOpacity>
+							)
+						})}
+					</Row>
+				</Container>
+
+				{/* hide lelang */}
+				{/* <View style={{ marginVertical: 5 }}>
+					<View style={{ flexDirection: 'row' }}>
+						<Text
+							style={{
+								width: '70%',
+								fontWeight: 'bold',
+								textAlign: 'left',
+								paddingHorizontal: 20
+							}}
+						>
+							Lelang Berlangsung
+						</Text>
+						<Text
+							style={{
+								marginHorizontal: 5,
+								marginVertical: 2,
+								fontSize: 12,
+								color: Color.primary,
+								fontWeight: 'bold'
+							}}
+						>
+							Lihat Semua
+						</Text>
+						<AntDesign name={'arrowright'} style={{ marginVertical: 4, color: Color.primary }} />
+					</View>
+					<FlatList
+						data={liveAuction}
+						renderItem={renderItemAuction}
+						keyExtractor={(item) => item.id}
+						horizontal
+						showsVerticalScrollIndicator={false}
+						showsHorizontalScrollIndicator={false}
+						style={{ marginHorizontal: 15 }}
+					/>
+				</View> */}
+
+				<View>
+					<View style={{ flexDirection: 'row' }}>
+						<Text
+							style={{
+								width: '70%',
+								fontWeight: 'bold',
+								textAlign: 'left',
+								paddingHorizontal: 20
+							}}
+						>
+							Rekomendasi
+						</Text>
+						<Text
+							onPress={() => navigation.navigate('MerchScreen')}
+							style={{
+								marginHorizontal: 5,
+								marginVertical: 2,
+								fontSize: 12,
+								color: Color.primary,
+								fontWeight: 'bold'
+							}}
+						>
+							Lihat Semua
+						</Text>
+						<AntDesign name={'arrowright'} style={{ marginVertical: 4, color: Color.primary }} />
+					</View>
+					<FlatList
+						data={listProduct}
+						renderItem={renderItemProduct}
+						keyExtractor={(item) => item.id}
+						numColumns={2}
+						contentContainerStyle={{ paddingTop: 16, paddingHorizontal: 8 }}
+						showsVerticalScrollIndicator={false}
+						showsHorizontalScrollIndicator={false}
+					/>
 				</View>
-				<FlatList
-					data={liveAuction}
-					renderItem={renderItem}
-					keyExtractor={(item) => item.id}
-					horizontal
-					showsVerticalScrollIndicator={false}
-					showsHorizontalScrollIndicator={false}
-					style={{ marginHorizontal: 15 }}
+
+				<Image
+					source={ImagesPath.bannerLelangEcommerce}
+					style={{ width: '100%', resizeMode: 'contain', marginVertical: 15 }}
 				/>
-			</View>
-			<View>
-				<View style={{ flexDirection: 'row' }}>
-					<Text
-						style={{
-							width: '70%',
-							fontWeight: 'bold',
-							textAlign: 'left',
-							paddingHorizontal: 20
-						}}
-					>
-						Rekomendasi
-					</Text>
-					<Text
-						onPress={() => navigation.navigate('MerchScreen')}
-						style={{
-							marginHorizontal: 5,
-							marginVertical: 2,
-							fontSize: 12,
-							color: Color.primary,
-							fontWeight: 'bold'
-						}}
-					>
-						Lihat Semua
-					</Text>
-					<AntDesign name={'arrowright'} style={{ marginVertical: 4, color: Color.primary }} />
+				
+				<View style={{ marginVertical: 15 }}>
+					<View style={{ flexDirection: 'row' }}>
+						<Text
+							style={{
+								width: '70%',
+								fontWeight: 'bold',
+								textAlign: 'left',
+								paddingHorizontal: 20
+							}}
+						>
+							Paling Laku
+						</Text>
+						<Text
+							style={{
+								marginHorizontal: 5,
+								marginVertical: 2,
+								fontSize: 12,
+								color: Color.primary,
+								fontWeight: 'bold'
+							}}
+						>
+							Lihat Semua
+						</Text>
+						<AntDesign name={'arrowright'} style={{ marginVertical: 4, color: Color.primary }} />
+					</View>
+					<FlatList
+						data={listProduct}
+						renderItem={renderItemProduct}
+						keyExtractor={(item) => item.id}
+						numColumns={2}
+						contentContainerStyle={{ paddingTop: 16, paddingHorizontal: 8 }}
+						showsVerticalScrollIndicator={false}
+						showsHorizontalScrollIndicator={false}
+					/>
 				</View>
-				<FlatList
-					data={listProduct}
-					renderItem={render}
-					keyExtractor={(item) => item.id}
-					numColumns={2}
-					showsVerticalScrollIndicator={false}
-					showsHorizontalScrollIndicator={false}
-				/>
-			</View>
-			<Image
-				source={ImagesPath.bannerLelangEcommerce}
-				style={{ width: '100%', resizeMode: 'contain', marginVertical: 15 }}
-			/>
-			<View style={{ marginVertical: 15 }}>
-				<View style={{ flexDirection: 'row' }}>
-					<Text
-						style={{
-							width: '70%',
-							fontWeight: 'bold',
-							textAlign: 'left',
-							paddingHorizontal: 20
-						}}
-					>
-						Paling Laku
-					</Text>
-					<Text
-						style={{
-							marginHorizontal: 5,
-							marginVertical: 2,
-							fontSize: 12,
-							color: Color.primary,
-							fontWeight: 'bold'
-						}}
-					>
-						Lihat Semua
-					</Text>
-					<AntDesign name={'arrowright'} style={{ marginVertical: 4, color: Color.primary }} />
-				</View>
-				<FlatList
-					data={listProduct}
-					renderItem={render}
-					keyExtractor={(item) => item.id}
-					numColumns={2}
-					showsVerticalScrollIndicator={false}
-					showsHorizontalScrollIndicator={false}
-				/>
-			</View>
-		</ScrollView>
+			</ScrollView>
+		</Scaffold>
 	);
 };
 

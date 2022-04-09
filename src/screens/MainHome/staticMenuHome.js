@@ -111,17 +111,15 @@ export const listMenuHome = [
         badge: true,
         show: accessClient.MenuHome.showSurvey,
     },
-
-    // menu tribes
-    // {
-    //     code: '',
-    //     name: 'Media Player',
-    //     images: iconMediaPlayer,
-    //     nav: '',
-    //     params: {},
-    //     badge: true,
-    //     show: true,
-    // },
+    {
+        code: '',
+        name: 'Media Player',
+        images: iconMediaPlayer,
+        nav: 'MediaPlayerScreen',
+        params: {},
+        badge: true,
+        show: true,
+    },
     // {
     //     code: '',
     //     name: 'Lelang',
