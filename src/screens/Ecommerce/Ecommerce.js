@@ -59,6 +59,7 @@ import { FormatMoney } from 'src/utils';
 import { queryGetCart, queryGetProduct } from 'src/lib/query/ecommerce';
 import Banner from 'src/components/Banner';
 import { queryBannerList } from 'src/lib/query/banner';
+import CardEcomerceProduct from './CardEcomerceProduct';
 
 const ecomMenu = [
 	{
@@ -279,113 +280,6 @@ const Ecommerce = ({ navigation }) => {
 				</Text>
 			</View>
 		</TouchableOpacity>
-	);
-
-	const renderItemProduct = ({ item, index }) => (
-		<Pressable
-			onPress={() => navigation.navigate('DetailProduct', { item })}
-			style={{
-				width: '50%',
-				paddingHorizontal: 8,
-				marginBottom: 16,
-			}}
-		>
-			<View
-				style={{
-					backgroundColor: Color.theme,
-					borderRadius: 8,
-					padding: 8,
-					...shadowStyle,
-				}}
-			>
-				<Image
-					source={{ uri: item.imageUrl }}
-					style={{
-						width: '100%',
-						aspectRatio: 1,
-						backgroundColor: Color.border,
-					}}
-				/>
-
-				<View
-					style={{
-						backgroundColor: Color.error,
-						width: '40%',
-						position: 'absolute',
-						borderBottomLeftRadius: 15,
-						borderTopRightRadius: 15,
-						alignSelf: 'flex-end',
-						paddingVertical: 5
-					}}
-				>
-					<Text style={{ fontSize: 10, color: Color.textInput }}>Diskon Harcode</Text>
-					<Text style={{ fontSize: 18, color: Color.textInput, fontWeight: 'bold' }}>10%</Text>
-				</View>
-
-				<Divider height={8} />
-				
-				<Text
-					type='bold'
-					align='left'
-				>
-					{item.name}
-				</Text>
-
-				<View style={{ flexDirection: 'row' , marginTop: 8 }}>
-					<Entypo name={'star'} style={{ color: Color.yellow }} />
-					<Text style={{ fontSize: 10, color: Color.secondary, }}>5 harcode {item.review}</Text>
-					<View
-						style={{
-							backgroundColor: Color.secondary,
-							height: 12,
-							width: 1,
-							marginHorizontal: 5
-						}}
-					/>
-					<Text style={{ fontSize: 10, color: Color.secondary, marginHorizontal: 3 }}>{item.terjual || 0}</Text>
-					<Text style={{ fontSize: 10, color: Color.secondary }}>Terjual</Text>
-				</View>
-
-				<View style={{ marginTop: 8 }}>
-					<Text
-						style={{
-							marginVertical: 1,
-							textAlign: 'left',
-							color: Color.secondary,
-							fontSize: 8
-						}}
-					>
-						Harga
-					</Text>
-					{/* <Text
-						style={{
-							marginVertical: 1,
-							textAlign: 'left',
-							textDecorationLine: 'line-through',
-							fontSize: 10,
-							color: Color.secondary,
-							fontWeight: 'bold'
-						}}
-					>
-						{FormatMoney.getFormattedMoney(item.hargaCoret)}
-					</Text> */}
-					<Text
-						style={{
-							marginVertical: 1,
-							textAlign: 'left',
-							color: Color.error,
-							fontWeight: 'bold'
-						}}
-					>
-						{FormatMoney.getFormattedMoney(item.price)}
-					</Text>
-				</View>
-				{/* <View style={{paddingVertical: 5, backgroundColor: Color.error, width: 60, height: 42, position: 'absolute', alignSelf: 'flex-end', borderTopRightRadius: 10, borderBottomLeftRadius: 20}}>
-					<Text style={{color: Color.textInput, fontSize: 10}}>Diskon</Text>
-					<Text style={{fontSize: 14, fontWeight: 'bold', color: Color.textInput}}>{item.diskon}</Text>
-				</View> */}
-			</View>
-		</Pressable>
 	);
 
 	const renderHeader = () => {
@@ -691,7 +585,7 @@ const Ecommerce = ({ navigation }) => {
 					</View>
 					<FlatList
 						data={listProduct}
-						renderItem={renderItemProduct}
+						renderItem={({ item, index }) => <CardEcomerceProduct item={item} index={index} /> }
 						keyExtractor={(item) => item.id}
 						numColumns={2}
 						contentContainerStyle={{ paddingTop: 16, paddingHorizontal: 8 }}
@@ -700,14 +594,16 @@ const Ecommerce = ({ navigation }) => {
 					/>
 				</View>
 
-				<Image
+				{/* hide small banner */}
+				{/* <Image
 					source={ImagesPath.bannerLelangEcommerce}
 					style={{ width: '100%', resizeMode: 'contain', marginVertical: 15 }}
-				/>
+				/> */}
 				
 				<View style={{ marginVertical: 15 }}>
 					<View style={{ flexDirection: 'row' }}>
 						<Text
+							onPress={() => navigation.navigate('MerchScreen')}
 							style={{
 								width: '70%',
 								fontWeight: 'bold',
@@ -732,7 +628,7 @@ const Ecommerce = ({ navigation }) => {
 					</View>
 					<FlatList
 						data={listProduct}
-						renderItem={renderItemProduct}
+						renderItem={({ item, index }) => <CardEcomerceProduct item={item} index={index} /> }
 						keyExtractor={(item) => item.id}
 						numColumns={2}
 						contentContainerStyle={{ paddingTop: 16, paddingHorizontal: 8 }}
