@@ -158,6 +158,7 @@ import ListShipping from 'src/screens/Ecommerce/ListShipping';
 
 // Transaction
 import TransactionDetail from 'src/screens/Transaction/TransactionDetail';
+import TransactionDetailSeller from 'src/screens/Transaction/TransactionDetailSeller';
 import TransactionDetailSucces from 'src/screens/Transaction/TransactionDetailSucces';
 import Notification from 'src/screens/Ecommerce/Notification';
 import PaymentStatus from 'src/screens/Ecommerce/PaymentStatus';
@@ -344,7 +345,9 @@ function MainStackNavigator() {
       <Screen name='SurveyFourth' component={SurveyFourth} />
       {/* Transaction */}
       <Screen name='TransactionDetail' component={TransactionDetail} />
-      <Screen name='TransactionDetailSucces'component={TransactionDetailSucces}/>
+      <Screen name='TransactionDetailSucces' component={TransactionDetailSucces}/>
+      <Screen name='TransactionDetailSeller' component={TransactionDetailSeller}/>
+
       {/* gallery */}
       <Screen name='GalleryScreen' component={GalleryScreen} />
       <Screen name='GalleryDetailScreen' component={GalleryDetailScreen} />

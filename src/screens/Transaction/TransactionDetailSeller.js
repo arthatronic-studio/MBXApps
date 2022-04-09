@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Image} from 'react-native';
+import {View, Image, useWindowDimensions, TextInput} from 'react-native';
 import {Divider, Line} from 'src/styled';
 import {connect, useDispatch, useStore} from 'react-redux';
 import {TouchableOpacity} from '@src/components/Button';
@@ -10,8 +10,16 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {Header, Loading, useLoading} from 'src/components';
 import {ScrollView} from 'react-native-gesture-handler';
 import ImagesPath from 'src/components/ImagesPath';
-import {mutationCancel, queryDetailOrder} from 'src/lib/query/ecommerce';
-import client from 'src/lib/apollo';
+
+import {
+  mutationCancel,
+  mutationCheckout,
+  queryDetailOrder,
+  queryShipperPickupTimeSlot,
+  queryCheckout,
+  queryShipperCreatePickupOrderTimeSlot,
+} from 'src/lib/query/ecommerce';
+import Client from '@src/lib/apollo';
 import Moment from 'moment';
 import {FormatMoney} from 'src/utils';
 import {
@@ -26,6 +34,7 @@ import {
 } from '@src/components';
 import ColorPropType from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedColorPropType';
 import {Modalize} from 'react-native-modalize';
+import moment from 'moment';
 
 const Content = Styled(View)`
     margin: 16px
@@ -34,18 +43,25 @@ const Content = Styled(View)`
     borderRadius: 8px
 `;
 
-const TransactionDetail = ({route, navigation}) => {
-  
+const TransactionDetailSeller = ({route, navigation}) => {
   const dispatch = useDispatch();
   const [data, setData] = useState({});
   const [loadingProps, showLoading, hideLoading] = useLoading();
-  console.log('dataaa', data.userId);
+  console.log('routeee', route);
   const modalizeRef = useRef(null);
+  const {width, height} = useWindowDimensions();
 
+  const [pickUpTime, setPickUpTime] = useState([]);
+  const [pickUpOrderTimeSlot, setPickUpOrderTimeSlot] = useState();
+  const [open, setOpen] = useState(false);
+  const [date, setDate] = useState([]);
+  const [shipperOrder, setShipperOrder] = useState();
+  console.log('dataaa', data);
   useEffect(() => {
     getProduct();
+    getDate();
   }, []);
-
+  console.log('pickkuuu', pickUpTime);
   const cancelButton = () => {
     const {item} = route.params;
     showLoading();
@@ -53,8 +69,7 @@ const TransactionDetail = ({route, navigation}) => {
       type: 'CANCEL',
       orderId: route.params.item.id,
     };
-    client
-      .mutate({mutation: mutationCancel, variables})
+    Client.mutate({mutation: mutationCancel, variables})
       .then(res => {
         hideLoading();
         console.log(res);
@@ -71,16 +86,28 @@ const TransactionDetail = ({route, navigation}) => {
         console.log(reject, 'reject');
       });
   };
-  
+
+  const getDate = () => {
+    let variables = {
+      time_zone: 'Asia_Jakarta',
+    };
+    Client.query({query: queryShipperPickupTimeSlot, variables})
+      .then(res => {
+        setDate(res.data.shipperPickupTimeSlot.time_slots);
+      })
+      .catch(error => {
+        console.log('eeeeeee', error);
+      });
+  };
+
   const getProduct = () => {
     let variables = {
       orderId: route.params.item.id,
     };
 
-    client
-      .query({query: queryDetailOrder, variables})
+    Client.query({query: queryDetailOrder, variables})
       .then(res => {
-        console.log("reskak",res)
+        console.log('reskak', res);
         if (res.data.ecommerceOrderDetail) {
           setData(res.data.ecommerceOrderDetail);
         }
@@ -93,16 +120,128 @@ const TransactionDetail = ({route, navigation}) => {
       });
   };
 
+  console.log('userAddressIdDestination', data.shippingAddressId);
+  console.log('userPenerima', data.userId);
+  console.log('rate', data.shippingRateId);
+  console.log('insurance', data.shippingUseInsurance);
+
+  const updateStatusToPacking = () => {
+    let variablesPacking = {
+      type: 'PACKING',
+      orderId: route.params.item.id,
+    };
+
+    Client.mutate({mutation: mutationCheckout, variables: variablesPacking})
+      .then(res => {
+        console.log('BERHASIL', res);
+        getProduct();
+        // hideLoading();
+        // navigation.navigate('TopUpScreen');
+      })
+      .catch(reject => {
+        hideLoading();
+        console.log(reject);
+      });
+  };
+
+  const createShipperOrder = () => {
+    const prod = data.items[0].products.map(e => {
+      return {
+        id: e.id,
+        qty: e.quantity,
+      };
+    });
+    console.log('proddd', prod);
+    console.log('datalk', data);
+    let variablesCreateOrder = {
+      input: {
+        userAddressIdDestination: data.shippingAddressId,
+        userAddressIdOrigin: data.shippingAddressId,
+        products: prod,
+        payment_type: 'postpay',
+        package_type: 'SMALLPACKAGE',
+        userPenerima: data.userId,
+        courier: {
+          rate_id: data.shippingRateId,
+          use_insurance: data.shippingUseInsurance,
+        },
+      },
+    };
+    console.log('variablesCreateOrder', variablesCreateOrder);
+    Client.mutate({
+      mutation: queryCheckout,
+      variables: variablesCreateOrder,
+    }).then(res => {
+      console.log(res, 'createeeorder');
+      setShipperOrder(res.data.shipperCreateOrder);
+    });
+  };
+
+  console.log("shipperorder",shipperOrder)
+
+  const createPickupOrderTimeSlot = () => {
+    let variables = {
+      order_activation: {
+        order_id: [shipperOrder.order_id],
+        timezone: 'Asia_Jakarta',
+        start_time: pickUpTime.start_time,
+        end_time: pickUpTime.end_time,
+      },
+    };
+    console.log('variables queryShipperCreatePickupOrderTimeSlot', variables);
+    // Client.mutate({
+    //   mutation: queryShipperCreatePickupOrderTimeSlot,
+    //   variables,
+    // }).then(res => {
+    //   console.log('res queryShipperCreatePickupOrderTimeSlot', res);
+    //   setPickUpOrderTimeSlot(res.data.shipperCreatePickupOrderTimeSlot);
+    // });
+  };
+
+  const inputShippingNumber = () => {
+    let variables = {
+      type: 'INPUT_SHIPPING_NUMBER',
+      orderId: route.params.item.id,
+      shippingNumber: shipperOrder.order_id,
+    };
+    Client.mutate({
+      mutation: mutationCheckout,
+      variables,
+    }).then(res => {
+      console.log("berhasil input shipping number",res);
+    });
+  };
+
+  const updateStatusToSend = () => {
+    let variables = {
+      type: 'SEND',
+      orderId: route.params.item.id,
+    };
+    Client.mutate({
+      mutation: mutationCheckout,
+      variables,
+    }).then(res => {
+      console.log('res berhasil ubah ke semddddd', res);
+      getProduct();
+    });
+  };
+
   const onPayment = () => {
     dispatch({
       type: 'BOOKING.ADD_BOOKING',
-      data: {...data, id: data.bookingId, vestaBiller: true, finalAmount: data.totalPrice},
+      data: {
+        ...data,
+        id: data.bookingId,
+        vestaBiller: true,
+        finalAmount: data.totalPrice,
+      },
     });
     navigation.navigate('PaymentScreen', {back: true});
   };
 
   const pickupSchedule = () => {
     modalizeRef.current.open();
+    createShipperOrder()
   };
   const {Color} = useColor();
   return (
@@ -315,7 +454,9 @@ const TransactionDetail = ({route, navigation}) => {
                             color: Color.secondary,
                             fontWeight: 'bold',
                           }}>
-                          {FormatMoney.getFormattedMoney(data.totalProductPrice)}
+                          {FormatMoney.getFormattedMoney(
+                            data.totalProductPrice,
+                          )}
                         </Text>
                       </Row>
                     </Col>
@@ -561,102 +702,281 @@ const TransactionDetail = ({route, navigation}) => {
         </View>
         <Divider height={25} />
       </ScrollView>
-              
-      <Row
-        style={{
-          height: 70,
-          width: '100%',
-          backgroundColor: Color.theme,
-          justifyContent: 'center',
-          paddingVertical: 15,
-        }}>
-          {data.statusId < 4 && (
-           <TouchableOpacity
-           onPress={() => navigation.navigate('ChatRoom', {item: detail})}
-           style={{
-             width: '12%',
-             height: 40,
-             borderWidth: 1,
-             borderColor: Color.primary,
-             borderRadius: 10,
-             justifyContent: 'center',
-             alignItems: 'center',
-             paddingHorizontal: 10,
-             marginHorizontal: 10,
-           }}>
-              <MaterialCommunityIcons
-                size={23}
-                name={'message-processing-outline'}
-                style={{color: Color.primary}}
-              />
-            </TouchableOpacity>
-        )}
-        {data.statusId == 0 && (
+
+      {data.status === 'Menunggu Pembayaran' && (
+        <Row
+          style={{
+            height: 70,
+            width: '100%',
+            backgroundColor: Color.theme,
+            justifyContent: 'center',
+            paddingVertical: 15,
+          }}>
           <TouchableOpacity
+            onPress={() => cancelButton()}
             style={{
               justifyContent: 'center',
               borderRadius: 20,
               marginHorizontal: 5,
-              width: '40%',
+              width: '44%',
               height: 40,
-              borderWidth: 1,
+            borderWidth: 1,
               borderColor: Color.error,
             }}>
             <Text style={{color: Color.error}}>Batalkan Pesanan</Text>
           </TouchableOpacity>
-        )}
-        
-        {data.statusId == 3 && (
           <TouchableOpacity
+            onPress={() => navigation.navigate('ChatRoom')}
             style={{
               justifyContent: 'center',
               borderRadius: 20,
               marginHorizontal: 5,
               width: '44%',
-              height: 40,
+              backgroundColor: Color.primary,
+            }}>
+            <Text style={{color: Color.textInput}}>Chat Pembeli</Text>
+          </TouchableOpacity>
+        </Row>
+      )}
+
+      {data.statusId === 1 && (
+        <View
+          style={{
+            backgroundColor: Color.theme,
+            flexDirection: 'column',
+            height: 190,
+            width: '100%',
+            justifyContent: 'center',
+            padding: 16,
+            justifyContent: 'space-between',
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              updateStatusToPacking();
+              navigation.navigate('IncomingOrder');
+            }}
+            style={{
+              backgroundColor: Color.primary,
+              borderRadius: 120,
+              paddingVertical: 10,
+              paddingHorizontal: 107,
+            }}>
+            <Text style={{color: Color.theme}}>Proses Pesanan</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ChatRoom')}
+            style={{
+              backgroundColor: Color.theme,
+              borderRadius: 120,
+              paddingVertical: 10,
+              paddingHorizontal: 107,
+              borderColor: Color.primary,
               borderWidth: 1,
-              borderColor: Color.error,
             }}>
-            <Text style={{color: Color.error}}>Pesanan Diterima</Text>
+            <Text style={{color: Color.primary}}>Chat Pembeli</Text>
           </TouchableOpacity>
-        )}
-        {data.statusId == 4 && (
           <TouchableOpacity
+            onPress={() => cancelButton()}
             style={{
-              justifyContent: 'center',
-              borderRadius: 20,
-              marginHorizontal: 5,
-              width: '44%',
-              backgroundColor: Color.primary,
+              backgroundColor: Color.theme,
+              borderRadius: 120,
+              paddingVertical: 10,
+              paddingHorizontal: 107,
+              borderColor: Color.danger,
+              borderWidth: 1,
             }}>
-            <Text style={{color: Color.textInput}}>Ulasan</Text>
+            <Text style={{color: Color.danger}}>Batalkan Pesanan</Text>
           </TouchableOpacity>
-        )}
-        {data.statusId == 0 && (
+        </View>
+      )}
+
+      {data.statusId === 2 && (
+        <View
+          style={{
+            backgroundColor: Color.theme,
+            flexDirection: 'column',
+            width: '100%',
+            padding: 16,
+          }}>
           <TouchableOpacity
-            onPress={() => onPayment()}
+            onPress={() => {
+              pickupSchedule();
+            }}
             style={{
-              justifyContent: 'center',
-              borderRadius: 20,
-              marginHorizontal: 5,
-              width: '30%',
               backgroundColor: Color.primary,
+              borderRadius: 120,
+              paddingVertical: 10,
+              paddingHorizontal: 107,
+              marginBottom: 8,
             }}>
-            <Text style={{color: Color.textInput}}>Lanjut Bayar</Text>
+            <Text style={{color: Color.theme}}>Atur Jadwal Pickup</Text>
           </TouchableOpacity>
-        )}
-      </Row>
-      
-        
-      
+          {!data.invoiceNumber && (
+            <TouchableOpacity
+              onPress={() => {}}
+              style={{
+                backgroundColor: Color.theme,
+                borderRadius: 120,
+                paddingVertical: 10,
+                paddingHorizontal: 107,
+                borderColor: Color.primary,
+                borderWidth: 1,
+                marginBottom: 8,
+              }}>
+              <Text style={{color: Color.primary}}>Ubah Resi</Text>
+            </TouchableOpacity>
+          )}
 
-      
+          <TouchableOpacity
+            onPress={() => {
+              
+              createPickupOrderTimeSlot();
+              inputShippingNumber();
+                  updateStatusToSend();
+                  navigation.navigate('IncomingOrder');
+            }}
+            style={{
+              backgroundColor: Color.theme,
+              borderRadius: 120,
+              paddingVertical: 10,
+              paddingHorizontal: 107,
+              borderColor: Color.primary,
+              borderWidth: 1,
+            }}>
+            <Text style={{color: Color.primary}}>Kirim Barang</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
-      <Modalize ref={modalizeRef} modalStyle={{}}>
-        <View></View>
+      {data.statusId === 3 && (
+        <View
+          style={{
+            width: '100%',
+            backgroundColor: Color.theme,
+            justifyContent: 'center',
+            padding: 16,
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ChatRoom');
+            }}
+            style={{
+              backgroundColor: Color.primary,
+              borderRadius: 120,
+              paddingVertical: 10,
+              paddingHorizontal: 107,
+            }}>
+            <Text style={{color: Color.theme}}>Chat Pembeli</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      <Modalize
+        ref={modalizeRef}
+        modalHeight={height / 3}
+        modalStyle={{padding: 16}}>
+        <View style={{width: '100%', alignItems: 'flex-start'}}>
+          <Text type="bold" style={{marginBottom: 14}}>
+            Jadwal Pickup Kurir
+          </Text>
+          {/* <View style={{width: '100%'}}>
+            <View>
+              <TouchableOpacity
+                onPress={() => {
+                  setOpen(!open);
+                }}
+                placeholder={'dd/mm/yy'}
+                style={{
+                  borderWidth: 1,
+                  borderColor: Color.secondary,
+                  height: 45,
+                  paddingHorizontal: 12,
+                  paddingTop: 18,
+                  borderRadius: 5,
+                  fontSize: 12,
+                  position: 'relative',
+                }}>
+                <Text
+                  style={{
+                    paddingHorizontal: 12,
+                    paddingVertical: 5,
+                    color: Color.secondary,
+                    fontSize: 8,
+                    fontWeight: '400',
+                    position: 'absolute',
+                  }}>
+                  Pilih Tanggal Pickup
+                </Text>
+                <Text style={{position: 'absolute', left: 13, top: 15}}>
+                  dd/mm/yy
+                </Text>
+                <Image
+                  style={{position: 'absolute', top: 10, right: 10}}
+                  source={ImagesPath.calendarIcon}
+                />
+              </TouchableOpacity>
+            </View>
+            {open &&
+              date.map((e, idx) => {
+                return (
+                  <Text>
+                    {moment(new Date(e.start_time)).format('DD/MM/YYYY')} -{' '}
+                    {moment(new Date(e.end_time)).format('DD/MM/YYYY')}
+                  </Text>
+                );
+              })}
+          </View> */}
+          <View style={{alignItems: 'flex-start'}}>
+            <Text style={{color: Color.secondary, marginTop: 10}} size="10">
+              Jam Pick Up
+            </Text>
+
+            {date.map((e, idx) => {
+              return (
+                <TouchableOpacity
+                  onPress={() => {
+                    setPickUpTime({
+                      start_time: e.start_time,
+                      end_time: e.end_time,
+                    });
+                  }}>
+                  <Text style={{color: pickUpTime.length == 0 ? (Color.secondary) : (Color.text) }}>
+                    {String(new Date(e.start_time).getHours()).padStart(2, '0')}{' '}
+                    :{' '}
+                    {String(new Date(e.start_time).getMinutes()).padStart(
+                      2,
+                      '0',
+                    )}{' '}
+                    - {String(new Date(e.end_time).getHours()).padStart(2, '0')}{' '}
+                    :{' '}
+                    {String(new Date(e.end_time).getMinutes()).padStart(2, '0')}
+                    {/* {e.start_time}-{e.end_time} */}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+
+            <TouchableOpacity
+              onPress={() => {
+                pickUpTime && modalizeRef.current.close();
+              }}
+              style={{
+                backgroundColor: pickUpTime.length == 0 ? Color.secondary: Color.primary,
+                borderRadius: 120,
+                width: '100%',
+                paddingVertical: 10,
+                paddingHorizontal: 135,
+                marginVertical: 26,
+              }}>
+              <Text type="medium" style={{color: Color.theme}}>
+                Konfirmasi
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </Modalize>
     </Scaffold>
   );
 };
 
-export default TransactionDetail;
+export default TransactionDetailSeller;

@@ -221,5 +221,6 @@ export default {
 	toko: require('../components/Images/Toko.png'),
 	BannerPink: require('../components/Images/BannerPink.png'),
 	chat: require('../components/Images/tokomakmur.png'),
-	plusCircleGray: require('../components/Images/PlusCirclegray.png')
+	plusCircleGray: require('../components/Images/PlusCirclegray.png'),
+	calendarIcon :  require('../components/Images/CalendarBlank.png')
 };
