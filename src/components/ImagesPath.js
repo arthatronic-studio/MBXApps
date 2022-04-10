@@ -222,5 +222,6 @@ export default {
 	BannerPink: require('../components/Images/BannerPink.png'),
 	chat: require('../components/Images/tokomakmur.png'),
 	plusCircleGray: require('../components/Images/PlusCirclegray.png'),
-	calendarIcon :  require('../components/Images/CalendarBlank.png')
+	calendarIcon :  require('../components/Images/CalendarBlank.png'),
+	userCircle: require('../components/Images/UserCircle.png'),
 };
