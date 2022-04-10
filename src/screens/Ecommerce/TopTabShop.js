@@ -9,27 +9,25 @@ import IonIcons from 'react-native-vector-icons/Ionicons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Entypo from 'react-native-vector-icons/Entypo'
 import { ScrollView } from 'react-native-gesture-handler';
-import CardMyProduct from 'src/components/Card/CardMyProduct';
+import ListMyProduct from 'src/screens/Ecommerce/ListMyProduct';
 
-function Description() {
+function EcomerceBeranda() {
     const { Color } = useColor();
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: Color.semiwhite,
-      }}>
-        
-      
-        <View style={{ paddingTop: 10 }}>
-            <CardMyProduct />
-        </View>
-        
-    </View>
+    
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: Color.semiwhite,
+        }}>
+          <View style={{ paddingTop: 10 }}>
+            <ListMyProduct />
+          </View>
+      </View>
   );
 }
 
-function Review() {
+function EcomerceEtalase() {
   const { Color } = useColor();
 
   return (
@@ -85,7 +83,7 @@ function MyTabs() {
 
   return (
     <Tab.Navigator
-      initialRouteName="Description"
+      initialRouteName="EcomerceBeranda"
       tabBarOptions={{
         indicatorStyle: {backgroundColor: Color.primary, height: '100%'},
         activeTintColor: Color.textInput,
@@ -93,14 +91,14 @@ function MyTabs() {
         style: {backgroundColor: Color.secondary,borderRadius: 30, marginVertical: 0, overflow: 'hidden', marginHorizontal: 16},
       }}>
       <Tab.Screen
-        name="Description"
-        component={Description}
-        options={{tabBarLabel: 'Beranda'}}
+        name="EcomerceBeranda"
+        component={EcomerceBeranda}
+        options={{ tabBarLabel: 'Beranda' }}
       />
       <Tab.Screen
-        name="Review"
-        component={Review}
-        options={{tabBarLabel: 'Etalase'}}
+        name="EcomerceEtalase"
+        component={EcomerceEtalase}
+        options={{ tabBarLabel: 'Etalase' }}
       />
     </Tab.Navigator>
   );

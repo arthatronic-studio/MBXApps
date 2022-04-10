@@ -19,14 +19,18 @@ import {
 import { shadowStyle } from '@src/styles';
 import { FormatMoney } from 'src/utils';
 
-const CardEcomerceProduct = ({ item, index }) => {
+const defaultProps = {
+	isMyProduct: false,
+};
+
+const CardEcomerceProduct = ({ isMyProduct, item, index }) => {
 	const { Color } = useColor();
 	const {width, height} = useWindowDimensions();
     const navigation = useNavigation();
 
 	return (
 		<Pressable
-			onPress={() => navigation.navigate('DetailProduct', { item })}
+			onPress={() => !isMyProduct && navigation.navigate('DetailProduct', { item })}
 			style={{
 				width: '50%',
 				paddingHorizontal: 8,
@@ -140,4 +144,5 @@ const CardEcomerceProduct = ({ item, index }) => {
 	);
 };
 
+CardEcomerceProduct.defaultProps = defaultProps;
 export default CardEcomerceProduct;
