@@ -191,7 +191,7 @@ function MainStackNavigator() {
         headerShown: false,
       }}>
       {/* uncanny */}
-      <Screen name="SplashScreen" component={SplashScreen} />
+      <Screen name="SplashScreen" component={TrackingOrder} />
       <Screen name="MainPage" component={MainPage} />
       <Screen name="OnBoardingScreen" component={OnBoardingScreen} />
       <Screen name="TrackingOrder" component={TrackingOrder} />

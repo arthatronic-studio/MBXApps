@@ -780,6 +780,27 @@ export const queryGetSub = gql`
   }
 `;
 
+export const queryGetTracking = gql`
+  query ($orderId: Int!) {
+    shipperGetOrderDetails(orderId: $orderId) {
+      order_id
+    	trackings{
+        shipper_status{
+          name
+          code
+          description
+        }
+        logistic_status{
+          name
+          code
+          description
+        }
+        created_date
+      }
+    }
+  }
+`;
+
 export const queryGetArea = gql`
   query ($suburbId: Int!) {
     shipperGetAreaList(suburbId: $suburbId) {

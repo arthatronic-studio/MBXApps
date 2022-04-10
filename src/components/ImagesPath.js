@@ -224,4 +224,8 @@ export default {
 	plusCircleGray: require('../components/Images/PlusCirclegray.png'),
 	calendarIcon :  require('../components/Images/CalendarBlank.png'),
 	userCircle: require('../components/Images/UserCircle.png'),
+	trcOrder1: require('../components/Images/trcOrder1.png'),
+	trcOrder2: require('../components/Images/trcOrder2.png'),
+	trcOrder3: require('../components/Images/trcOrder3.png'),
+	trcOrder4: require('../components/Images/trcOrder4.png'),
 };
