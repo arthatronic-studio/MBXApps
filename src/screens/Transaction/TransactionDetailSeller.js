@@ -8,7 +8,7 @@ import Styled from 'styled-components';
 import Text from '@src/components/Text';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Header, Loading, useLoading} from 'src/components';
-import {ScrollView} from 'react-native-gesture-handler';
+import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import ImagesPath from 'src/components/ImagesPath';
 
 import {
@@ -52,16 +52,28 @@ const TransactionDetailSeller = ({route, navigation}) => {
   const {width, height} = useWindowDimensions();
 
   const [pickUpTime, setPickUpTime] = useState([]);
+  const [schedulePickUp,setSchedulePickUp] = useState([])
   const [pickUpOrderTimeSlot, setPickUpOrderTimeSlot] = useState();
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState([]);
   const [shipperOrder, setShipperOrder] = useState();
-  console.log('dataaa', data);
+  const [selectedOptionIndex,setSelectedOptionIndex] = useState()
+
+
+  // const [clickedId,setClickedId] = useState(0)
+  // const handleClick = (item) => {
+  //   console.log("ini itemku",item)
+  //   return()
+  //   setClick(item=!click)
+  // }
+
+  const [click,setClick] = useState(false)
+
   useEffect(() => {
     getProduct();
     getDate();
   }, []);
-  console.log('pickkuuu', pickUpTime);
+
   const cancelButton = () => {
     const {item} = route.params;
     showLoading();
@@ -72,7 +84,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
     Client.mutate({mutation: mutationCancel, variables})
       .then(res => {
         hideLoading();
-        console.log(res);
+        console.log(res,"res cancel");
         if (res.data.ecommerceOrderManage) {
           alert('Success cancel order');
           setTimeout(() => {
@@ -96,7 +108,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
         setDate(res.data.shipperPickupTimeSlot.time_slots);
       })
       .catch(error => {
-        console.log('eeeeeee', error);
+        console.log('error', error);
       });
   };
 
@@ -107,7 +119,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
 
     Client.query({query: queryDetailOrder, variables})
       .then(res => {
-        console.log('reskak', res);
+        console.log('res get detail order', res);
         if (res.data.ecommerceOrderDetail) {
           setData(res.data.ecommerceOrderDetail);
         }
@@ -120,12 +132,8 @@ const TransactionDetailSeller = ({route, navigation}) => {
       });
   };
 
-  console.log('userAddressIdDestination', data.shippingAddressId);
-  console.log('userPenerima', data.userId);
-  console.log('rate', data.shippingRateId);
-  console.log('insurance', data.shippingUseInsurance);
-
   const updateStatusToPacking = () => {
+    showLoading()
     let variablesPacking = {
       type: 'PACKING',
       orderId: route.params.item.id,
@@ -133,7 +141,12 @@ const TransactionDetailSeller = ({route, navigation}) => {
 
     Client.mutate({mutation: mutationCheckout, variables: variablesPacking})
       .then(res => {
-        console.log('BERHASIL', res);
+        hideLoading()
+        console.log('BERHASIL UPDATE TO PACKING', res);
+        alert('Success Sudah Dibayar');
+          setTimeout(() => {
+            navigation.pop();
+          }, 1000);
         getProduct();
         // hideLoading();
         // navigation.navigate('TopUpScreen');
@@ -151,8 +164,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
         qty: e.quantity,
       };
     });
-    console.log('proddd', prod);
-    console.log('datalk', data);
+
     let variablesCreateOrder = {
       input: {
         userAddressIdDestination: data.shippingAddressId,
@@ -162,22 +174,24 @@ const TransactionDetailSeller = ({route, navigation}) => {
         package_type: 'SMALLPACKAGE',
         userPenerima: data.userId,
         courier: {
+          cod:data.shippingIsCod,
           rate_id: data.shippingRateId,
           use_insurance: data.shippingUseInsurance,
+          cost: data.shippingCost
         },
       },
     };
-    console.log('variablesCreateOrder', variablesCreateOrder);
+
     Client.mutate({
       mutation: queryCheckout,
       variables: variablesCreateOrder,
     }).then(res => {
-      console.log(res, 'createeeorder');
+      console.log(res, 'res shipper create order');
       setShipperOrder(res.data.shipperCreateOrder);
     });
   };
 
-  console.log("shipperorder",shipperOrder)
+
 
   const createPickupOrderTimeSlot = () => {
     let variables = {
@@ -189,13 +203,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
       },
     };
     console.log('variables queryShipperCreatePickupOrderTimeSlot', variables);
-    // Client.mutate({
-    //   mutation: queryShipperCreatePickupOrderTimeSlot,
-    //   variables,
-    // }).then(res => {
-    //   console.log('res queryShipperCreatePickupOrderTimeSlot', res);
-    //   setPickUpOrderTimeSlot(res.data.shipperCreatePickupOrderTimeSlot);
-    // });
+
   };
 
   const inputShippingNumber = () => {
@@ -213,6 +221,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
   };
 
   const updateStatusToSend = () => {
+    showLoading();
     let variables = {
       type: 'SEND',
       orderId: route.params.item.id,
@@ -221,7 +230,12 @@ const TransactionDetailSeller = ({route, navigation}) => {
       mutation: mutationCheckout,
       variables,
     }).then(res => {
-      console.log('res berhasil ubah ke semddddd', res);
+      console.log('res berhasil ubah ke send', res);
+      hideLoading()
+      alert('Success Dikemas');
+          setTimeout(() => {
+            navigation.pop();
+          }, 1000);
       getProduct();
     });
   };
@@ -241,7 +255,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
 
   const pickupSchedule = () => {
     modalizeRef.current.open();
-    createShipperOrder()
+    
   };
   const {Color} = useColor();
   return (
@@ -471,7 +485,6 @@ const TransactionDetailSeller = ({route, navigation}) => {
           style={{
             width: '93%',
             alignSelf: 'center',
-            height: 145,
             backgroundColor: Color.theme,
             borderRadius: 10,
           }}>
@@ -508,7 +521,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
               {data.address && data.address.penerimaName}
             </Text>
           </Row>
-          <Row style={{paddingHorizontal: 10, paddingVertical: 5}}>
+          {shipperOrder ? <Row style={{paddingHorizontal: 10, paddingVertical: 5}}>
             <Text
               style={{
                 fontSize: 10,
@@ -532,9 +545,10 @@ const TransactionDetailSeller = ({route, navigation}) => {
                 textAlign: 'left',
                 color: Color.secondary,
               }}>
-              {data.shipperOrderNumber}
+              {shipperOrder.order_id}
             </Text>
-          </Row>
+          </Row> : <View/>} 
+          
           {data.address && (
             <Row style={{paddingHorizontal: 10, paddingVertical: 5}}>
               <Text
@@ -568,6 +582,38 @@ const TransactionDetailSeller = ({route, navigation}) => {
               </Text>
             </Row>
           )}
+          {schedulePickUp.length != 0 && <Row style={{paddingHorizontal: 10, paddingVertical: 5}}>
+              <Text
+                style={{
+                  color: Color.secondary,
+                  fontSize: 10,
+                  width: '28%',
+                  textAlign: 'left',
+                }}>
+                Jadwal Pickup
+              </Text>
+              <Ionicons
+                name="copy-outline"
+                size={16}
+                type="entypo"
+                color="orange"
+                style={{marginRight: 15}}
+              />
+              <Text
+                style={{
+                  fontSize: 10,
+                  width: '60%',
+                  textAlign: 'left',
+                  fontWeight: 'bold',
+                  lineHeight: 18,
+                }}>
+                
+                {moment(new Date(schedulePickUp.start_time)).format('LLL')} -{' '}
+                    {moment(new Date(schedulePickUp.end_time)).format('LLL')}
+               
+              </Text>
+            </Row>}
+          
         </View>
 
         {/* Rincian Pembayaran */}
@@ -753,7 +799,6 @@ const TransactionDetailSeller = ({route, navigation}) => {
           <TouchableOpacity
             onPress={() => {
               updateStatusToPacking();
-              navigation.navigate('IncomingOrder');
             }}
             style={{
               backgroundColor: Color.primary,
@@ -811,6 +856,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
             }}>
             <Text style={{color: Color.theme}}>Atur Jadwal Pickup</Text>
           </TouchableOpacity>
+
           {!data.invoiceNumber && (
             <TouchableOpacity
               onPress={() => {}}
@@ -826,14 +872,29 @@ const TransactionDetailSeller = ({route, navigation}) => {
               <Text style={{color: Color.primary}}>Ubah Resi</Text>
             </TouchableOpacity>
           )}
-
-          <TouchableOpacity
+          {shipperOrder && <TouchableOpacity
+            onPress={() => {navigation.navigate("TrackingOrder",{shipperOrder})
+            }}
+            style={{
+              backgroundColor: Color.theme,
+              borderRadius: 120,
+              paddingVertical: 10,
+              paddingHorizontal: 107,
+              borderColor: Color.primary,
+              borderWidth: 1,
+              marginBottom: 8,
+            }}>
+            <Text style={{color: Color.primary}}>Pickup Order</Text>
+          </TouchableOpacity>}
+          
+          
+          
+          {schedulePickUp.length !=0 && <TouchableOpacity
             onPress={() => {
-              
               createPickupOrderTimeSlot();
               inputShippingNumber();
-                  updateStatusToSend();
-                  navigation.navigate('IncomingOrder');
+              updateStatusToSend();
+              
             }}
             style={{
               backgroundColor: Color.theme,
@@ -844,7 +905,8 @@ const TransactionDetailSeller = ({route, navigation}) => {
               borderWidth: 1,
             }}>
             <Text style={{color: Color.primary}}>Kirim Barang</Text>
-          </TouchableOpacity>
+          </TouchableOpacity>}
+          
         </View>
       )}
 
@@ -926,39 +988,47 @@ const TransactionDetailSeller = ({route, navigation}) => {
                 );
               })}
           </View> */}
-          <View style={{alignItems: 'flex-start'}}>
+          <View style={{alignItems: 'flex-start',flex:1}}>
             <Text style={{color: Color.secondary, marginTop: 10}} size="10">
               Jam Pick Up
             </Text>
 
-            {date.map((e, idx) => {
-              return (
-                <TouchableOpacity
+            <FlatList
+            data={date}
+            keyExtractor={(item, index) => item.toString() + index}
+            renderItem={({item,index}) => {
+              const _isActive = item === selectedOptionIndex;
+              return(<TouchableOpacity
+                style={{flexDirection:'row',alignItems:'center'}}
                   onPress={() => {
+                    setSelectedOptionIndex(item)
                     setPickUpTime({
-                      start_time: e.start_time,
-                      end_time: e.end_time,
+                      start_time: item.start_time,
+                      end_time: item.end_time,
                     });
+                    
                   }}>
-                  <Text style={{color: pickUpTime.length == 0 ? (Color.secondary) : (Color.text) }}>
-                    {String(new Date(e.start_time).getHours()).padStart(2, '0')}{' '}
+                  <Ionicons color={_isActive ? Color.primary : Color.secondary} size={11} name={_isActive ? 'radio-button-on' : 'radio-button-off'} />
+                  <Text style={{color: _isActive ? (Color.text) : (Color.secondary),marginLeft:8 }}>
+                    {String(new Date(item.start_time).getHours()).padStart(2, '0')}{' '}
                     :{' '}
-                    {String(new Date(e.start_time).getMinutes()).padStart(
+                    {String(new Date(item.start_time).getMinutes()).padStart(
                       2,
                       '0',
                     )}{' '}
-                    - {String(new Date(e.end_time).getHours()).padStart(2, '0')}{' '}
+                    - {String(new Date(item.end_time).getHours()).padStart(2, '0')}{' '}
                     :{' '}
-                    {String(new Date(e.end_time).getMinutes()).padStart(2, '0')}
+                    {String(new Date(item.end_time).getMinutes()).padStart(2, '0')}
                     {/* {e.start_time}-{e.end_time} */}
                   </Text>
-                </TouchableOpacity>
-              );
-            })}
-
-            <TouchableOpacity
+                </TouchableOpacity>) 
+            }}
+          />
+               <TouchableOpacity
               onPress={() => {
-                pickUpTime && modalizeRef.current.close();
+                createShipperOrder();
+                pickUpTime && setSchedulePickUp(pickUpTime);
+                 modalizeRef.current.close();
               }}
               style={{
                 backgroundColor: pickUpTime.length == 0 ? Color.secondary: Color.primary,
