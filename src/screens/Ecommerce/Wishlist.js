@@ -9,6 +9,7 @@ import RNSimpleCrypto from "react-native-simple-crypto";
 import Octicons from 'react-native-vector-icons/Octicons'
 import Feather from 'react-native-vector-icons/Feather'
 import Swiper from 'react-native-swiper'
+import {useIsFocused, useRoute} from '@react-navigation/native';
 
 import {
 	Text,
@@ -26,8 +27,15 @@ import ListForum from '@src/screens/MainForum/ListForum';
 
 import { shadowStyle } from '@src/styles';
 
-import Client from '@src/lib/apollo';
-import { queryContentProduct } from '@src/lib/query';
+import {
+    queryAddCart, 
+    queryDetailProduct, 
+    queryGetCart, 
+    queryUpdateItemCart, 
+    queryWishlistManage, 
+    queryListWishlist
+} from 'src/lib/query/ecommerce';
+import Client from 'src/lib/apollo';
 import ImagesPath from 'src/components/ImagesPath';
 import Entypo from 'react-native-vector-icons/Entypo'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -78,44 +86,149 @@ const Wishlist = ({navigation}) => {
 	const loading = useSelector((state) => state['user.auth'].loading);
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
-    const [name, setName] = useState('');
-    const [phone, setPhone] = useState('');
-    const [email, setEmail] = useState('');
-    const [namePetugas, setNamePetugas] = useState('');
-    const [phonePetugas, setPhonePetugas] = useState('');
-    const [nameKoor, setNameKoor] = useState('');
-    const [phoneKoor, setPhoneKoor] = useState('');
+    const [dataWishlist, setDataWishlist] = useState(null)
+    const [cart, setCart] = useState(0);
+    const isFocused = useIsFocused();
 	const { Color } = useColor();
 
+    useEffect(() => {
+        getWishlist()
+    }, [isFocused])
+    
+    const getWishlist = () => {
+        showLoading()
+
+        let variables = {
+            page: 0,
+            itemPerPage: 25,
+            name: ""
+        }
+
+        Client.query({query: queryListWishlist, variables})
+            .then(res => {
+                console.log("masuuuuk")
+                console.log(res.data.ecommerceProductWishlist)
+                setDataWishlist(res.data.ecommerceProductWishlist)
+                hideLoading()
+            }).catch(reject => {
+                hideLoading()
+                console.log("error")
+                console.log(reject)
+            })
+    }
+
+    const removeFromWishList = (item) => {
+        // showLoading()
+    
+        let variables = {
+          productId: item.id
+        };
+
+        console.log(`data variables ${variables}`)
+    
+        Client.mutate({mutation: queryWishlistManage, variables})
+          .then(res => {
+            showLoading('success', 'Success remove item from wishlist')        
+            console.log(`data wishlisttt ${res}`)
+            getWishlist()
+          }).catch(reject => {
+            // showLoading('error', 'Failed remove item from wishlist')
+            console.log(reject)
+          })
+    }
+
+    const getCart = () => {
+		// showLoading();
+		let variables = {
+			page: 1,
+			limit: 10
+		};
+		console.log(variables);
+		Client.query({ query: queryGetCart, variables })
+			.then((res) => {
+				console.log(res);
+				if (res.data.ecommerceCartList) {
+					setCart(res.data.ecommerceCartList.totalProducts ? res.data.ecommerceCartList.totalProducts : 0);
+				}
+			})
+			.catch((reject) => {
+				// hideLoading()
+				console.log(reject.message, 'reject');
+			});
+	};
+
+    const addToCart = (item) => {
+        showLoading();
+        let variables = {
+          productId: item.id,
+          quantity: 1,
+          checked: false,
+          updateType: "ADD"
+        };
+        console.log(variables);
+        Client.mutate({mutation: queryUpdateItemCart, variables})
+          .then(res => {
+            hideLoading();
+            console.log(res);
+            getCart()
+            if (res.data.ecommerceCartUpdate) {
+                showLoading('success', 'Success add item to cart')        
+            //   alert('Success add to cart');
+              // navigation.navigate('CartScreen')
+            }
+          })
+          .catch(reject => {
+            hideLoading();
+            alert(reject.message);
+            console.log(reject.message, 'reject');
+          });
+      };
 
     const renderItem = ({ item }) => (
         <View style={{borderRadius: 5, width: '95%', marginHorizontal: 8, marginVertical: 5, paddingVertical: 10, backgroundColor: Color.textInput }}>
             <View style={{ flexDirection: 'row',}}>
-                <Image source={item.image} style={{width: 50, height: 50, marginHorizontal: 10}}/>
+                <Image source={{uri: item.imageUrl}} style={{width: 50, height: 50, marginHorizontal: 10}}/>
                 <View style={{marginHorizontal: 10}}>
-                    <Text style={{fontWeight: 'bold'}}>{item.namaProduk}</Text>
+                    <Text style={{fontWeight: 'bold'}}>{item.name}</Text>
                     <View style={{flexDirection: 'row', marginVertical: 3}}>
                         <Entypo name={'star'} style={{color: Color.yellow,}}/>
-                        <Text style={{fontSize: 10, marginHorizontal: 5}}>{item.review}</Text>
+                        {/* hardcode */}
+                        <Text style={{fontSize: 10, marginHorizontal: 5}}>4.5</Text> 
                         <View style={{marginHorizontal: 5, marginVertical: 2,backgroundColor: Color.secondary, height: 10, width: 1}}></View>
-                        <Text style={{marginHorizontal: 5, fontSize: 10}}>{item.terjual}</Text>
+                        {/* hardcode */}
+                        <Text style={{marginHorizontal: 5, fontSize: 10}}>0</Text>
                         <Text style={{ fontSize: 10}}>Terjual</Text>
                     </View>
-                    <Text style={{textAlign: 'left', fontWeight: 'bold'}}>{item.harga}</Text>
+                    <Text style={{textAlign: 'left', fontWeight: 'bold'}}>Rp. {item.price}</Text>
                 </View>
             </View>
             <View style={{flexDirection: 'row', marginTop: 25, alignSelf: 'flex-end', marginHorizontal: 10}}>
                 <View style={{ borderRadius: 10, width: '30%', alignSelf: 'flex-end'}}>
-                    <TouchableOpacity style={{backgroundColor: Color.textInput, height: 27, borderRadius: 20}}>
+                    <TouchableOpacity 
+                        style={{
+                            backgroundColor: Color.textInput, 
+                            height: 27, 
+                            borderRadius: 20
+                        }}
+                        onPress={() => removeFromWishList(item)}
+                    >
                         <Text style={{color: Color.error, fontWeight: 'bold', fontSize: 10, marginVertical: 5}}>Hapus</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{ borderRadius: 10, width: '30%'}}>
-                    <TouchableOpacity style={{backgroundColor: Color.primary, borderRadius: 20, height: 27}}>
+                    <TouchableOpacity 
+                        style={{
+                            backgroundColor: Color.primary, 
+                            borderRadius: 20, 
+                            height: 27
+                        }}
+                        onPress={() => addToCart(item)}
+                    >
                         <Text style={{color: Color.textInput, fontWeight: 'bold', fontSize: 10, marginVertical: 5}}>+ Ke keranjang</Text>
                     </TouchableOpacity>
                 </View>
             </View>
+            <Loading {...loadingProps} />
         </View>
       );
   return (
@@ -123,14 +236,34 @@ const Wishlist = ({navigation}) => {
     onPressLeftButton={() => navigation.pop()}>
         <ScrollView style={{backgroundColor: Color.semiwhite}}>
             <View>
-            <FlatList
-                    data={WishlistData}
+                <FlatList
+                    data={dataWishlist}
                     renderItem={renderItem}
                     keyExtractor={item => item.id}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                 />
             </View>
+            {dataWishlist==false && (
+                <View style={{alignItems: 'center', justifyContent: 'center', marginVertical: 100}}>
+                    <Image source={ImagesPath.wishlist}/>
+                    <Text style={{fontSize: 12, color: Color.secondary, width: '60%', paddingVertical: 15, lineHeight: 20}}>Kamu belum memiliki daftar wishlist apapun</Text>
+                    <View>
+                    <TouchableOpacity 
+                        style={{
+                            backgroundColor: Color.primary, 
+                            width: 160, 
+                            height: 35, 
+                            borderRadius: 20,
+                            justifyContent: 'center'
+                        }}
+                        onPress={() => navigation.navigate('MerchScreen')}
+                    >
+                        <Text style={{fontSize: 12, fontWeight: 'bold', color: Color.textInput}}>Belanja Sekarang</Text>
+                    </TouchableOpacity>
+                    </View>
+                </View>
+            )}
         </ScrollView>
     </Scaffold>
   )

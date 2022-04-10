@@ -495,6 +495,46 @@ export const queryGetListMerchant = gql`
   }
 `;
 
+export const queryListWishlist = gql`
+  query (
+    $page: Int
+    $itemPerPage: Int
+    $name: String
+    $categoryId: Int
+  ) {
+    ecommerceProductWishlist (
+      page: $page
+      itemPerPage: $itemPerPage
+      name: $name
+      categoryId: $categoryId
+    ) {
+      id
+      name
+      categoryId
+      description
+      price
+      initialPrice
+      imageUrl
+      imageProducts
+      stock
+      merchantId
+    }
+  }
+`
+
+export const queryWishlistManage = gql`
+  mutation (
+    $productId: Int!
+  ) {
+    ecommerceWishlistManage (
+      productId: $productId
+    ) {
+      success
+      message
+    }
+  }
+`
+
 export const queryCreateCart = gql`
   mutation ecommerceCartCreate {
     ecommerceCartCreate {
