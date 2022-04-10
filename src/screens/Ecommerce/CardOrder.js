@@ -38,7 +38,7 @@ const CardOrder = ({data}) => {
         alignItems: 'center',
       }}>
       <TouchableOpacity
-        onPress={() => navigation.navigate('TransactionDetail', {item: data})}
+        onPress={() => navigation.navigate('TransactionDetailSeller', {item: data})}
         style={{
           paddingHorizontal: 10,
           paddingVertical: 15,
@@ -79,7 +79,8 @@ const CardOrder = ({data}) => {
               marginVertical: 8,
               color: Color.primary,
             }}>
-            {data.status}
+            {console.log("datakuu",data)}
+            {data.statusId == 1 ? ("Sudah Dibayar"):(data.status)}
           </Text>
         </View>
         <Divider />
