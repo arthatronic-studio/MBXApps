@@ -140,6 +140,7 @@ import CardChatExist from 'src/screens/Ecommerce/CardChatExist';
 import ChatEcommerce from 'src/screens/Ecommerce/ChatEcommerce';
 import CardChatEcommerce from 'src/screens/Ecommerce/CardChatEcommerce';
 import ChatDetail from 'src/screens/Ecommerce/ChatDetail';
+import EditProduct from 'src/screens/Ecommerce/EditProduct';
 
 // import PopUpCouponSucces from 'src/screens/Ecommerce/PopUpCouponSucces';
 
@@ -243,6 +244,7 @@ function MainStackNavigator() {
 			<Screen name="ChatEcommerce" component={ChatEcommerce} />
 			<Screen name="CardChatEcommerce" component={CardChatEcommerce} />
 			<Screen name="ChatDetail" component={ChatDetail} />
+			<Screen name="EditProduct" component={EditProduct} />
 
       {/* <Screen name="PopUpCouponSucces" component={PopUpCouponSucces}/> */}
       <Screen name="DetailCoupon" component={DetailCoupon} />

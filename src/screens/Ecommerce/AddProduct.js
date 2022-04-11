@@ -49,7 +49,7 @@ import {queryContentProduct} from '@src/lib/query';
 import TopTabShop from './TopTabShop';
 import ImagesPath from 'src/components/ImagesPath';
 import {updateCurrentUserProfile} from 'src/state/actions/user/auth';
-import {queryGetCategory, queryGetMyProduct} from 'src/lib/query/ecommerce';
+import {queryEditProduct, queryGetCategory, queryGetMyProduct} from 'src/lib/query/ecommerce';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -61,15 +61,14 @@ const Content = Styled(View)`
     borderRadius: 8px
 `;
 
-const AddProduct = ({navigation}) => {
-  const route = useRoute();
+const AddProduct = ({navigation,route}) => {
+
   const {height} = useWindowDimensions();
   const [name, setName] = useState(route.params.item.name);
   const [thumbImage, setThumbImage] = useState('');
   const [mimeImage, setMimeImage] = useState('image/jpeg');
   const [listThumbImage, setListThumbImage] = useState([]);
   const [image,setImage] = useState([]);
-  console.log('rrrrr', route.params);
 
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
@@ -82,6 +81,7 @@ const AddProduct = ({navigation}) => {
   const [value, setValue] = useState(route.params.item.categoryId);
   const [items, setItems] = useState([]);
   const [dataToko, setDataToko] = useState([]);
+  
 
   useEffect(() => {
     getToko();
@@ -100,6 +100,29 @@ const AddProduct = ({navigation}) => {
       setItems(res.data.ecommerceProductCategoryList);
     });
   }, []);
+
+
+  const save = () => {
+    showLoading()
+    const variables = {
+      imageProducts: listThumbImage,
+      name,
+      categoryId: value,
+      merchantId: dataToko.id,
+    }
+    Client.mutate({mutation: queryEditProduct, variables})
+      .then(res => {
+        console.log('BERHASIL EDIT', res);
+        hideLoading();
+        setTimeout(() => {
+          navigation.popToTop()
+        }, 2000);
+        
+      })
+      .catch(err => {
+        console.log('error', err);
+      });
+  }
 
   const submit = () => {
     // const tempData = {imageUrl: thumbImage ? 'data:image/png;base64,'+thumbImage : route.params.type == 'edit' ? route.params.item.imageUrl : undefined, name, categoryId:value, merchantId: dataToko.id};
@@ -172,7 +195,7 @@ const AddProduct = ({navigation}) => {
       header={
         <Header
           customIcon
-          title="Tambah Produk"
+          title= {route.params.type =="edit" ?"Edit Produk" : "Tambah Produk"}
           type="regular"
           centerTitle={false}
         />
@@ -193,7 +216,7 @@ const AddProduct = ({navigation}) => {
               paddingHorizontal: 20,
             }}>
             <Text style={{fontWeight: 'bold', fontSize: 14}}>
-              Tambah Produk
+              {route.params.type =="edit" ? "Edit Produk" : "Tambah Produk"}
             </Text>
             <Text style={{color: Color.secondary, fontSize: 10}}>
               Masukkan Produk baru untuk dijual
@@ -445,7 +468,21 @@ const AddProduct = ({navigation}) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <TouchableOpacity
+        {route.params.type =="edit" ? <TouchableOpacity
+          style={{
+            backgroundColor: Color.primary,
+            width: '80%',
+            height: 45,
+            borderRadius: 30,
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+          //   onPress={() => navigation.navigate('StepTwo')}
+          onPress={() => save()}>
+          <Text style={{color: Color.textInput, fontWeight: 'bold'}}>
+            Simpan
+          </Text>
+        </TouchableOpacity> : <TouchableOpacity
           style={{
             backgroundColor: Color.primary,
             width: '80%',
@@ -459,7 +496,8 @@ const AddProduct = ({navigation}) => {
           <Text style={{color: Color.textInput, fontWeight: 'bold'}}>
             Lanjut
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity>}
+        
       </View>
     </Scaffold>
   );

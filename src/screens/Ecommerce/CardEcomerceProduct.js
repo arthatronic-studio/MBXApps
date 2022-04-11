@@ -194,7 +194,7 @@ const CardEcomerceProduct = ({ isMyProduct, item, index, onRefresh }) => {
 					</TouchableOpacity>
 					<Divider width={8} />
 					<TouchableOpacity
-						onPress={() => navigation.navigate('AddProduct', { item, type: 'edit'})}
+						onPress={() => navigation.navigate('EditProduct', { item, type: 'edit'})}
 						style={{
 							flex: 1,
 							marginTop: 8,
