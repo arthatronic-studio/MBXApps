@@ -844,7 +844,10 @@ const MainHome = ({navigation, route}) => {
           {accessClient.MainHome.showListYoutube && <MondayAccoustic />}
 
           {accessClient.MainHome.showListVideo && (
-            <VideoCardList onPress={() => navigation.navigate('VideoDetail')} />
+            <VideoCardList
+              productCategory='NEWEST_VIDEO'
+              onPress={(item) => navigation.navigate('VideoDetail', { item })}
+            />
           )}
 
           {accessClient.MainHome.showListEbookNewer && (

@@ -66,7 +66,7 @@ const ecomMenu = [
 		name: 'Toko Saya',
 		badge: true,
 		imageAsset: ImagesPath.shop,
-		navigate: 'MyShop',
+		navigate: 'MyShopHomepage',
 		show: true,
 	},
 	{

@@ -72,9 +72,12 @@ const MyShop = ({ navigation, route }) => {
         <View style={{ width: '100%', aspectRatio: 4/1, paddingHorizontal: 16 }}>
           <Image source={ImagesPath.shopbanner} style={{width: '100%', height: '100%'}}/>
 
-          <View style={{ height: imageStoreSize, aspectRatio: 1, position: 'absolute', bottom: -(imageStoreSize / 2), left: 16}}> 
-            <Image source={{ uri: data.profileImg }} style={{width: '100%', height: '100%'}}/>
-          </View>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('MyShop')}
+            style={{ height: imageStoreSize, aspectRatio: 1, position: 'absolute', bottom: -(imageStoreSize / 2), left: 32}}
+          > 
+            <Image source={{ uri: data.profileImg }} style={{width: '100%', height: '100%', borderRadius: 4}} />
+          </TouchableOpacity>
 
           <View style={{width: '100%', position: 'absolute', bottom: -(imageStoreSize / 2), right: 16, alignItems: 'flex-end'}}>
             <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: Color.primary, height: 28, width: '24%', borderRadius: 8}}>
@@ -107,13 +110,14 @@ const MyShop = ({ navigation, route }) => {
   const renderFooterMyStore = () => {
     return (
       <Row style={{ backgroundColor: Color.theme, padding: 16 }}>
-        <Col size={1.5}>
+        {/* hide batch delete */}
+        {/* <Col size={1.5}>
           <TouchableOpacity onPress={() => navigation.navigate('MyProduct')} style={{ width: 50,backgroundColor: Color.theme, borderWidth: 1, borderColor: Color.primary, borderRadius: 20, paddingVertical: 10 }}>
             <AntDesign name={'delete'} size={18} style={{textAlign: 'center', color: Color.primary}}/>
           </TouchableOpacity>
-        </Col>
-        <Col size={0.5} />
-        <TouchableOpacity onPress={()=> navigation.navigate('AddProduct',{type: 'add', item: {}})} style={{justifyContent: 'center',flexDirection: 'row',backgroundColor: Color.primary, borderRadius: 20, paddingVertical: 10, width: '83%'}}>
+        </Col> */}
+        {/* <Col size={0.5} /> */}
+        <TouchableOpacity onPress={()=> navigation.navigate('AddProduct',{type: 'add', item: {}})} style={{justifyContent: 'center',flexDirection: 'row',backgroundColor: Color.primary, borderRadius: 20, paddingVertical: 10, width: '100%'}}>
           <AntDesign name={'pluscircleo'} size={18} style={{color: Color.textInput, paddingVertical: 2, marginHorizontal: 10}}/>
           <Text type='semibold' color={Color.textInput} style={{selfAlign: 'center'}}>Tambah Produk</Text>
         </TouchableOpacity>
@@ -128,7 +132,7 @@ const MyShop = ({ navigation, route }) => {
       header={
         <Header 
           customIcon 
-          title='Toko Saya' 
+          title='Toko Saya'
           type='regular'
           centerTitle={false}
         />
