@@ -158,7 +158,7 @@ const CardProduct = ({data, getProductList}) => {
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          alignSelf: 'flex-end',
+          alignSelf: 'flex-end', 
           marginTop: 16,
           marginBottom: 16,
         }}>
@@ -166,7 +166,7 @@ const CardProduct = ({data, getProductList}) => {
             <Image source={ImagesPath.trash} />
           </TouchableOpacity>} */}
         <TouchableOpacity
-        onPress={() => navigationRef.current.navigate('AddProduct', { item: data, type: 'edit'})}
+        onPress={() => navigationRef.current.navigate('EditProduct', { item: data, type: 'edit'})}
           style={{
             borderRadius: 20,
             paddingVertical: 8,

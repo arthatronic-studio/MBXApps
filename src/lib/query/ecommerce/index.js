@@ -825,8 +825,22 @@ export const queryAddProduct = gql`
 export const queryEditProduct = gql`
   mutation ecommerceProductEdit($products: [EcommerceProductInput]) {
     ecommerceProductEdit(products: $products) {
-      id
+      imageProducts
       name
+      categoryId
+      description
+      price
+      initialPrice
+      imageUrl
+      stock
+      weight
+      height
+      width
+      length
+      productUnit
+      minimumBuy
+      productMassa
+      status
     }
   }
 `;

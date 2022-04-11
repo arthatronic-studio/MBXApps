@@ -139,7 +139,7 @@ const StepThree = ({navigation, route}) => {
       header={
         <Header
           customIcon
-          title="Tambah Produk"
+          title={route.params.type =="edit" ?"Edit Produk" : "Tambah Produk"}
           type="regular"
           centerTitle={false}
         />
