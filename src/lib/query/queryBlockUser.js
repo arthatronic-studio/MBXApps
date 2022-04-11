@@ -3,9 +3,11 @@ import gql from 'graphql-tag';
 export const queryGetUserBlock = gql`
     query(
         $userId: Int
+        $name: String
     ) {
         userBlockList (
             userId: $userId
+            name: $name
         ) {
             userId
             userName

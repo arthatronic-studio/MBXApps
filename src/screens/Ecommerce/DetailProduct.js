@@ -31,7 +31,7 @@ import {
 } from '@src/components';
 import TopBar from './TopTab';
 import ImagesPath from 'src/components/ImagesPath';
-import {queryAddCart, queryDetailProduct, queryGetCart, queryUpdateItemCart} from 'src/lib/query/ecommerce';
+import {queryAddCart, queryDetailProduct, queryGetCart, queryUpdateItemCart, queryWishlistManage} from 'src/lib/query/ecommerce';
 import Client from 'src/lib/apollo';
 import {FormatMoney} from 'src/utils';
 import DetailProductHeader from './DetailProductHeader';
@@ -85,12 +85,35 @@ const DetailProduct = ({navigation, route}) => {
         console.log(res);
         if (res.data.ecommerceProductDetail) {
           setDetail(res.data.ecommerceProductDetail[0]);
+          console.log("data detailllll")
+          console.log(res.data.ecommerceProductDetail[0]);
         }
       })
       .catch(reject => {
         console.log(reject);
       });
   };
+
+  const addToWishList = () => {
+    showLoading()
+
+    let variables = {
+      productId: detail.id
+    };
+
+    Client.mutate({mutation: queryWishlistManage, variables})
+      .then(res => {
+        if(liked==false){
+          showLoading('success', 'Success add to wishlist')
+        } else {
+          showLoading('success', 'Success remove from wishlist')
+        }
+        console.log(`data wishlisttt ${res}`)
+      }).catch(reject => {
+        showLoading('error', 'Failed add to wishlist')
+        console.log(reject)
+      })
+  }
 
   const addToCart = () => {
     console.log(route, 'props');
@@ -202,7 +225,11 @@ const DetailProduct = ({navigation, route}) => {
                 <Row>
                   <TouchableOpacity
                     style={{marginHorizontal: 3}}
-                    onPress={() => setLike(!liked)}>
+                    onPress={() => {
+                      setLike(!liked)
+                      addToWishList()
+                    }}
+                  >
                     <AntDesign
                       name={liked ? 'heart' : 'hearto'}
                       color={liked ? 'red' : '#111'}

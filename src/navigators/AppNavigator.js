@@ -104,6 +104,13 @@ import ChatInfoScreen from '@src/screens/Chat/ChatInfoScreen';
 import AuctionDetail from '@src/screens/Posting/Auction/Detail';
 import Bid from '@src/screens/Posting/Auction/Bid';
 
+// Lelang 
+import Lelang from 'src/screens/Lelang/Lelang';
+import DetailLelang from 'src/screens/Lelang/DetailLelang';
+import JoinLelang from 'src/screens/Lelang/JoinLelang';
+import LiveLelangScreen from 'src/screens/Lelang/LiveLelangScreen';
+
+
 //Ecommerce & Tokoku
 import CartScreen from '@src/screens/Ecommerce/CartScreen';
 import CartShop from '@src/screens/Ecommerce/CartShop';
@@ -113,9 +120,6 @@ import MyShop from '@src/screens/Ecommerce/MyShop';
 import MerchScreen from 'src/screens/Ecommerce/MerchScreen';
 import DetailProduct from 'src/screens/Ecommerce/DetailProduct';
 import CartAuction from 'src/screens/Auction/CartAuction';
-import Lelang from 'src/screens/Lelang';
-import LiveLelangScreen from 'src/screens/LiveLelangScreen';
-import DetailLelang from 'src/screens/DetailLelang';
 import DetailPromo from 'src/screens/Promo/DetailPromo';
 import Ebook from 'src/screens/Posting/Ebook/Ebook';
 import MyShopHomepage from 'src/screens/Ecommerce/MyShopHomepage';
@@ -201,6 +205,8 @@ function MainStackNavigator() {
 
       {/* Auction */}
       <Screen name="CartAuction" component={CartAuction} />
+
+      {/* Lelang */}
       <Screen name="Lelang" component={Lelang} />
       <Screen name="DetailLelang" component={DetailLelang} />
       <Screen name="LiveLelangScreen" component={LiveLelangScreen} />
@@ -234,8 +240,6 @@ function MainStackNavigator() {
       <Screen name="ChatRoom" component={ChatRoom} />
       <Screen name="CardChat" component={CardChat} />
       <Screen name="CardChatExist" component={CardChatExist} />
-      <Screen name="Maps" component={Maps} />
-			<Screen name="CurrentLocation" component={CurrentLocation} />
 			<Screen name="ChatEcommerce" component={ChatEcommerce} />
 			<Screen name="CardChatEcommerce" component={CardChatEcommerce} />
 			<Screen name="ChatDetail" component={ChatDetail} />

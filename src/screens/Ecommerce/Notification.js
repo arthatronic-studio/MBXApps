@@ -61,6 +61,7 @@ const Notification = () => {
   }, []);
 
   const getProduct = () => {
+    showLoading()
     console.log(user);
     let variables = {
       page: 1,
@@ -71,6 +72,7 @@ const Notification = () => {
     console.log(variables);
     Client.query({query: queryListOrder, variables})
       .then(res => {
+        hideLoading()
         console.log(res);
         if (res.data.ecommerceOrderList) {
           setList(res.data.ecommerceOrderList);
@@ -81,6 +83,7 @@ const Notification = () => {
         // navigation.navigate('TopUpScreen');
       })
       .catch(reject => {
+        hideLoading()
         console.log(reject);
       });
   };
@@ -95,7 +98,6 @@ const Notification = () => {
     console.log(variables);
     Client.query({query: mutationCancel, variables})
       .then(res => {
-        hideLoading()
         console.log(res);
         getProduct()
         // hideLoading();
@@ -232,7 +234,8 @@ const Notification = () => {
               {FormatMoney.getFormattedMoney(item.items[0].products[0]['price'])}
             </Text>
           </View>
-
+            
+          <Col style={{ alignItems: 'flex-end' }}>
           {(item.shipperOrderNumber && item.statusId == 2) && <View
             style={{
               backgroundColor: Color.primary,
@@ -259,10 +262,11 @@ const Notification = () => {
             style={{
               backgroundColor: Color.primary,
               width: 100,
+              
               borderRadius: 20,
             }}>
             <TouchableOpacity
-              onPress={() => updateStatus()}
+              onPress={() => updateStatus(item)}
               style={{
                 height: 32,
                 alignItems: 'center',
@@ -324,6 +328,7 @@ const Notification = () => {
               </Text>
             </TouchableOpacity>
           </View>}
+          </Col>
         </View>}
       </Pressable>
     </View>
@@ -331,6 +336,7 @@ const Notification = () => {
 
   return (
     <Scaffold
+      loadingProps={loadingProps}
       header={
         <Header customIcon title="Notifikasi" type="bold" centerTitle={false} />
       }
