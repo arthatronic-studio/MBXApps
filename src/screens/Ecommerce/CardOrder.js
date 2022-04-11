@@ -79,7 +79,6 @@ const CardOrder = ({data}) => {
               marginVertical: 8,
               color: Color.primary,
             }}>
-            {console.log("datakuu",data)}
             {data.statusId == 1 ? ("Sudah Dibayar"):(data.status)}
           </Text>
         </View>

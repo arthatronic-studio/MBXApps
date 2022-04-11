@@ -296,26 +296,24 @@ export const queryCreateMerchant = gql`
 export const queryCheckout = gql`
   mutation shipperCreateOrder($input: ShipperCreateOrderInputType) {
     shipperCreateOrder(input: $input) {
-     order_id
-    awb_number
-    consignee {
-      name
-      phone_number
-    }
-    consigner {
-      name
-      phone_number
-    }
-    destination {
-      area_name
-      address
-    }
-    origin {
-      area_name
-      address
-    }
-    pickup_code
-    pickup_time
+      order_id
+      awb_number
+      consignee {
+        name
+        phone_number
+      }
+      consigner {
+        name
+        phone_number
+      }
+      destination {
+        area_name
+        address
+      }
+      origin {
+        area_name
+        address
+      }
     }
   }
 `;
@@ -326,16 +324,16 @@ export const mutationCheckout = gql`
     $products: [EcommerceOrderProductInput]
     $courier: ShipperCreateOrderCourierInputType
     $destinationAddressId: Int
-    $orderId:Int
-    $shippingNumber:String
+    $orderId: Int
+    $shippingNumber: String
   ) {
     ecommerceOrderManage(
       type: $type
       products: $products
       destinationAddressId: $destinationAddressId
       courier: $courier
-      orderId:$orderId
-      shippingNumber:$shippingNumber
+      orderId: $orderId
+      shippingNumber: $shippingNumber
     ) {
       success
       message
@@ -496,13 +494,8 @@ export const queryGetListMerchant = gql`
 `;
 
 export const queryListWishlist = gql`
-  query (
-    $page: Int
-    $itemPerPage: Int
-    $name: String
-    $categoryId: Int
-  ) {
-    ecommerceProductWishlist (
+  query ($page: Int, $itemPerPage: Int, $name: String, $categoryId: Int) {
+    ecommerceProductWishlist(
       page: $page
       itemPerPage: $itemPerPage
       name: $name
@@ -520,20 +513,16 @@ export const queryListWishlist = gql`
       merchantId
     }
   }
-`
+`;
 
 export const queryWishlistManage = gql`
-  mutation (
-    $productId: Int!
-  ) {
-    ecommerceWishlistManage (
-      productId: $productId
-    ) {
+  mutation ($productId: Int!) {
+    ecommerceWishlistManage(productId: $productId) {
       success
       message
     }
   }
-`
+`;
 
 export const queryCreateCart = gql`
   mutation ecommerceCartCreate {
@@ -784,13 +773,13 @@ export const queryGetTracking = gql`
   query ($orderId: Int!) {
     shipperGetOrderDetails(orderId: $orderId) {
       order_id
-    	trackings{
-        shipper_status{
+      trackings {
+        shipper_status {
           name
           code
           description
         }
-        logistic_status{
+        logistic_status {
           name
           code
           description

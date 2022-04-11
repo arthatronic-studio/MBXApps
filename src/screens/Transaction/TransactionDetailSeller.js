@@ -99,11 +99,11 @@ const TransactionDetailSeller = ({route, navigation}) => {
       });
   };
 
-  const getDate = () => {
+  const getDate = async() => {
     let variables = {
       time_zone: 'Asia_Jakarta',
     };
-    Client.query({query: queryShipperPickupTimeSlot, variables})
+    await Client.query({query: queryShipperPickupTimeSlot, variables})
       .then(res => {
         setDate(res.data.shipperPickupTimeSlot.time_slots);
       })
@@ -112,12 +112,12 @@ const TransactionDetailSeller = ({route, navigation}) => {
       });
   };
 
-  const getProduct = () => {
+  const getProduct = async() => {
     let variables = {
       orderId: route.params.item.id,
     };
 
-    Client.query({query: queryDetailOrder, variables})
+   await Client.query({query: queryDetailOrder, variables})
       .then(res => {
         console.log('res get detail order', res);
         if (res.data.ecommerceOrderDetail) {
@@ -165,6 +165,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
       };
     });
 
+    console.log(prod,"prod")
     let variablesCreateOrder = {
       input: {
         userAddressIdDestination: data.shippingAddressId,
@@ -202,8 +203,11 @@ const TransactionDetailSeller = ({route, navigation}) => {
         end_time: pickUpTime.end_time,
       },
     };
-    console.log('variables queryShipperCreatePickupOrderTimeSlot', variables);
-
+    Client.mutate({
+      mutation:queryShipperCreatePickupOrderTimeSlot,variables
+    }).then(res=>{
+      console.log('variables queryShipperCreatePickupOrderTimeSlot', res);
+    })
   };
 
   const inputShippingNumber = () => {
@@ -255,7 +259,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
 
   const pickupSchedule = () => {
     modalizeRef.current.open();
-    
+    // createShipperOrder()
   };
   const {Color} = useColor();
   return (
@@ -521,6 +525,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
               {data.address && data.address.penerimaName}
             </Text>
           </Row>
+          {console.log("ada gakk", shipperOrder)}
           {shipperOrder ? <Row style={{paddingHorizontal: 10, paddingVertical: 5}}>
             <Text
               style={{
@@ -799,6 +804,8 @@ const TransactionDetailSeller = ({route, navigation}) => {
           <TouchableOpacity
             onPress={() => {
               updateStatusToPacking();
+              
+              
             }}
             style={{
               backgroundColor: Color.primary,
