@@ -696,6 +696,7 @@ const IncomingOrder = ({route, navigation}) => {
   // useEffect(() => {
   //   getOrder();
   // }, []);
+  const {routeName} = route.params
 
   return (
     <Scaffold
@@ -710,7 +711,7 @@ const IncomingOrder = ({route, navigation}) => {
       }
       onPressLeftButton={() => navigation.pop()}>
       <Tab.Navigator
-        initialRouteName="Description"
+        initialRouteName={routeName}
         tabBarOptions={{
           scrollEnabled: true,
           indicatorStyle: {backgroundColor: Color.theme, height: '100%'},
