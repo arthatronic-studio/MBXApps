@@ -338,6 +338,11 @@ const TransactionDetail = ({route, navigation}) => {
             <Text style={{fontSize: 11, fontWeight: 'bold'}}>
               Info Pengiriman
             </Text>
+            <View style={{ flex: 1, alignItems: 'flex-end' }}>
+              {data.shipperOrderNumber && <Text onPress={() => navigation.navigate('TrackingOrder',{item: data})} style={{fontSize: 11, fontWeight: 'bold'}}>
+                Lacak Paket {'>>'}
+              </Text>}
+            </View>
           </Row>
           <View
             style={{
