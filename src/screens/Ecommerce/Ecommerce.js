@@ -79,7 +79,7 @@ const ecomMenu = [
 	},
 	{
 		code: 'wishlist',
-		name: 'Whishlist',
+		name: 'Wishlist',
 		badge: true,
 		imageAsset: ImagesPath.wishlistframe,
 		navigate: 'Wishlist',

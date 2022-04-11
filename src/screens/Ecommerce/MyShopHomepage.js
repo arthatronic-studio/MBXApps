@@ -138,7 +138,7 @@ const MyShopHomepage = ({ navigation }) => {
 						<View style={{marginHorizontal: 5,flexDirection: 'row', borderRadius: 20, width: 30, height: 30, backgroundColor: '#761AAB', alignItems: 'center', justifyContent: 'center'}}>
 							<FontAwesome name={'inbox'} size={20} style={{color: Color.textInput}}/>
 						</View>
-						<Pressable onPress={()=> navigation.navigate('IncomingOrder',{item: data})} style={{flexDirection: 'column', marginHorizontal: 5}}>
+						<Pressable onPress={()=> navigation.navigate('IncomingOrder',{item: data, routeName: "Dikemas"})} style={{flexDirection: 'column', marginHorizontal: 5}}>
 							<View style={{flexDirection: 'row'}}>
 								<Text style={{fontWeight: 'bold', fontSize: 11}}>Pesanan Masuk</Text>
 								<View style={{marginHorizontal: 5, marginVertical: 5, backgroundColor: Color.error, width: 5, height: 5, borderRadius: 20}}></View>
@@ -149,7 +149,7 @@ const MyShopHomepage = ({ navigation }) => {
 						<View style={{marginHorizontal: 5,flexDirection: 'row', borderRadius: 20, width: 30, height: 30, backgroundColor: Color.primary, alignItems: 'center', justifyContent: 'center'}}>
 							<FontAwesome5 name={'shopping-cart'} size={15} style={{color: Color.textInput}}/>
 						</View>
-						<Pressable onPress={()=> navigation.navigate('IncomingOrder',{item: data})} style={{flexDirection: 'column', marginHorizontal: 5}}>
+						<Pressable onPress={()=> navigation.navigate('IncomingOrder',{item: data, routeName: "Dikirim"})} style={{flexDirection: 'column', marginHorizontal: 5}}>
 							<View style={{flexDirection: 'row',}}>
 								<Text style={{fontWeight: 'bold', fontSize: 11, textAlign: 'left'}}>Siap Dikirim</Text>
 								<View style={{marginHorizontal: 5, marginVertical: 5, backgroundColor: Color.error, width: 5, height: 5, borderRadius: 20}}></View>
@@ -186,7 +186,7 @@ const MyShopHomepage = ({ navigation }) => {
 						</View>
 						<MaterialIcons name={'keyboard-arrow-right'} size={20} style={{color: Color.text, width: '74%', textAlign: 'right'}}/>
 					</Pressable>
-					<Pressable onPress={()=> navigation.navigate('IncomingOrder')} style={{flexDirection: 'row', marginVertical: 10, alignItems: 'center'}}>
+					<Pressable onPress={()=> navigation.navigate('IncomingOrder', {routeName: "Komplainan"})} style={{flexDirection: 'row', marginVertical: 10, alignItems: 'center'}}>
 						<Text style={{textAlign: 'left', width: '45%', fontSize: 14, paddingHorizontal: 10}}>Pesanan dikomplain</Text>
 						<View style={{backgroundColor: Color.error,width: 13, height: 13, alignItems: 'center', justifyContent: 'center', borderRadius: 20}}>
 							<Text style={{color: Color.textInput, fontSize: 8}}>9</Text>
