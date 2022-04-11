@@ -62,7 +62,8 @@ const CardEcomerceProduct = ({ isMyProduct, item, index }) => {
 					/>
 				</View>
 
-				<View
+				{/* hide diiskon */}
+				{/* <View
 					style={{
 						backgroundColor: Color.error,
 						width: '40%',
@@ -75,7 +76,7 @@ const CardEcomerceProduct = ({ isMyProduct, item, index }) => {
 				>
 					<Text style={{ fontSize: 10, color: Color.textInput }}>Diskon Harcode</Text>
 					<Text style={{ fontSize: 18, color: Color.textInput, fontWeight: 'bold' }}>10%</Text>
-				</View>
+				</View> */}
 
 				<Divider height={8} />
 				

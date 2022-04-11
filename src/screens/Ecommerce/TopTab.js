@@ -19,7 +19,7 @@ function Description({props}) {
         padding: 16,
         alignItems: 'flex-start',
       }}>
-        <Text>
+        <Text align='left'>
           {props.detail.description}
         </Text>
     </View>
