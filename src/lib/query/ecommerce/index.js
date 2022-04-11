@@ -4,6 +4,7 @@ export const queryDetailOrder = gql`
   query ($orderId: Int!) {
     ecommerceOrderDetail(orderId: $orderId) {
       userId
+      id
       bookingId
       orderNumber
       invoiceNumber
@@ -785,6 +786,7 @@ export const queryGetTracking = gql`
     shipperGetOrderDetails(orderId: $orderId) {
       order_id
     	trackings{
+        created_date
         shipper_status{
           name
           code

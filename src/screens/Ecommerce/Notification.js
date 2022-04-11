@@ -243,6 +243,7 @@ const Notification = () => {
               borderRadius: 20,
             }}>
             <TouchableOpacity
+             onPress={() => navigation.navigate('TrackingOrder',{item})}
               style={{
                 height: 32,
                 alignItems: 'center',

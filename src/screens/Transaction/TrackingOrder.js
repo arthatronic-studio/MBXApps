@@ -25,6 +25,7 @@ import {
 } from '@src/components';
 import ColorPropType from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedColorPropType';
 import {Modalize} from 'react-native-modalize';
+import moment from 'moment';
 
 const Content = Styled(View)`
     margin: 16px
@@ -37,24 +38,25 @@ const TrackingOrder = ({route, navigation}) => {
   console.log('dataaa', data);
   const dispatch = useDispatch();
   const [data, setData] = useState({});
+  const [list, setList] = useState([]);
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const dataTr = [{CreatedAt: '20-20-2020',PaketStatus: 'System Tracker - Sabtu, 04 April 2022', Desc: 'Pesanan telah dikirim', Desc2: 'Pesanan Anda dalam proses pengiriman oleh kurir.' },{CreatedAt: '20-20-2020',PaketStatus: 'System Tracker - Sabtu, 04 April 2022', Desc: 'Pesanan telah dikirim', Desc2: 'Pesanan Anda dalam proses pengiriman oleh kurir.' },{CreatedAt: '20-20-2020',PaketStatus: 'System Tracker - Sabtu, 04 April 2022', Desc: 'Pesanan telah dikirim', Desc2: 'Pesanan Anda dalam proses pengiriman oleh kurir.' },{CreatedAt: '20-20-2020',PaketStatus: 'System Tracker - Sabtu, 04 April 2022', Desc: 'Pesanan telah dikirim', Desc2: 'Pesanan Anda dalam proses pengiriman oleh kurir.' }]
 
-  console.log('dataa', data);
+  console.log('dataa', route);
   useEffect(() => {
     getTrack();
   }, []);
 
   const getTrack = () => {
     let variables = {
-      orderId: 183,
+      orderId: route.params.item.id,
     };
     console.log(variables);
     client.query({query: queryGetTracking, variables})
       .then(res => {
         console.log(res);
         if (res.data.shipperGetOrderDetails) {
-          // setList(res.data.ecommerceOrderList);
+          setList(res.data.shipperGetOrderDetails.trackings);
           // getCancelOrder()
         }
 
@@ -99,7 +101,7 @@ const TrackingOrder = ({route, navigation}) => {
               ))}
             </Row>
             <Text type='bold' size={11} align='left' style={{ paddingLeft: 16, marginBottom: 16 }}>Status Pemesanan</Text>
-            { dataTr.map((keys, i) => (
+            {list.length != 0 && list.map((keys, i) => (
                 <View key={i} >
                       <View style={styles.listRoad}>
                           <View style={{width:'10%'}}>
@@ -108,8 +110,8 @@ const TrackingOrder = ({route, navigation}) => {
                               </View>
                           </View>
                           <View style={{width:'90%',paddingBottom:20}}>
-                              <Text align='left' style={{color: i == 0 ? '#3C58C1' : '#6A7479',fontSize:14,paddingBottom:5}} type={i == 0 ? 'bold' : 'regular'}>{keys.PaketStatus}</Text>
-                              <Text align='left' style={{color:'#6A7479',fontSize:10}} type='medium'>{keys.Desc}</Text>
+                              <Text align='left' style={{color: i == 0 ? '#3C58C1' : '#6A7479',fontSize:14,paddingBottom:5}} type={i == 0 ? 'bold' : 'regular'}>System Tracker - {moment(keys.created_date).format('dddd, DD MMMM YYYY')}</Text>
+                              <Text align='left' style={{color:'#6A7479',fontSize:10}} type='medium'>{keys.shipper_status.name}</Text>
                           </View>
                     </View>
                 </View>
