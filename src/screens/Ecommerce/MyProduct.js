@@ -208,7 +208,7 @@ const MyProduct = ({navigation, route}) => {
             alignItems: 'center',
             flexDirection: 'row',
           }}>
-          {/* <TouchableOpacity
+          <TouchableOpacity
             style={{
               borderWidth: 1.5,
               borderColor: Color.danger,
@@ -219,7 +219,7 @@ const MyProduct = ({navigation, route}) => {
           >
             
             <Image source={ImagesPath.trash} />
-          </TouchableOpacity> */}
+          </TouchableOpacity>
           <TouchableOpacity
           onPress={() => navigation.navigate('AddProduct', {type: 'add', item: {}})}
             style={{

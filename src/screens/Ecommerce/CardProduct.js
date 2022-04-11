@@ -162,9 +162,9 @@ const CardProduct = ({data, getProductList}) => {
           marginTop: 16,
           marginBottom: 16,
         }}>
-          {data.status != 'DELETE' && <TouchableOpacity onPress={() => onDeleteProduct(data.id)}>
+          {/* {data.status != 'DELETE' && <TouchableOpacity onPress={() => onDeleteProduct(data.id)}>
             <Image source={ImagesPath.trash} />
-          </TouchableOpacity>}
+          </TouchableOpacity>} */}
         <TouchableOpacity
         onPress={() => navigationRef.current.navigate('AddProduct', { item: data, type: 'edit'})}
           style={{
