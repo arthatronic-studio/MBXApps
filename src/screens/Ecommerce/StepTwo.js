@@ -85,6 +85,7 @@ const StepTwo = ({navigation, route}) => {
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
   const [length, setLength] = useState(0);
+  console.log("route2",route)
 
   const submit = () => {
     const tempData = {
@@ -124,7 +125,7 @@ const StepTwo = ({navigation, route}) => {
       header={
         <Header
           customIcon
-          title="Tambah Produk"
+          title={route.params.type =="edit" ?"Edit Produk" : "Tambah Produk"}
           type="regular"
           centerTitle={false}
         />

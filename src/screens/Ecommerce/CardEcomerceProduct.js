@@ -13,20 +13,53 @@ import { useNavigation } from '@react-navigation/native';
 
 import { Divider } from '@src/styled';
 import {
+	Alert,
 	Text,
+	TouchableOpacity,
 	useColor,
 } from '@src/components';
 import { shadowStyle } from '@src/styles';
 import { FormatMoney } from 'src/utils';
+import { mutationDeleteProduct } from 'src/lib/query/ecommerce';
+import client from 'src/lib/apollo';
 
 const defaultProps = {
 	isMyProduct: false,
+	onRefresh: () => {},
 };
 
-const CardEcomerceProduct = ({ isMyProduct, item, index }) => {
+const CardEcomerceProduct = ({ isMyProduct, item, index, onRefresh }) => {
 	const { Color } = useColor();
 	const {width, height} = useWindowDimensions();
     const navigation = useNavigation();
+
+	const onDeleteProduct = () => {
+		// showLoading();
+		let variables = {
+		  id: item.id,
+		};
+
+		console.log(variables);
+
+		client.mutate({mutation: mutationDeleteProduct, variables})
+		  .then(res => {
+			console.log(res)
+
+			if (res.data.ecommerceProductDelete) {
+				if (res.data.ecommerceProductDelete.success == 'Sukses') {
+					onRefresh();
+					alert('Success delete');
+				} else {
+					alert('Error delete');
+				}
+			}
+		  })
+		  .catch(reject => {
+			// hideLoading()
+			alert(reject.message)
+			console.log(reject.message, 'reject');
+		  });
+	};
 
 	return (
 		<Pressable
@@ -62,7 +95,8 @@ const CardEcomerceProduct = ({ isMyProduct, item, index }) => {
 					/>
 				</View>
 
-				<View
+				{/* hide diiskon */}
+				{/* <View
 					style={{
 						backgroundColor: Color.error,
 						width: '40%',
@@ -75,7 +109,7 @@ const CardEcomerceProduct = ({ isMyProduct, item, index }) => {
 				>
 					<Text style={{ fontSize: 10, color: Color.textInput }}>Diskon Harcode</Text>
 					<Text style={{ fontSize: 18, color: Color.textInput, fontWeight: 'bold' }}>10%</Text>
-				</View>
+				</View> */}
 
 				<Divider height={8} />
 				
@@ -139,6 +173,42 @@ const CardEcomerceProduct = ({ isMyProduct, item, index }) => {
 					<Text style={{color: Color.textInput, fontSize: 10}}>Diskon</Text>
 					<Text style={{fontSize: 14, fontWeight: 'bold', color: Color.textInput}}>{item.diskon}</Text>
 				</View> */}
+
+				{isMyProduct && <View style={{flexDirection: 'row'}}>
+					<TouchableOpacity
+						onPress={() => Alert(
+							'Hapus',
+							'Hapus Produk?',
+							() => onDeleteProduct(),
+						)}
+						style={{
+							marginTop: 8,
+							padding: 8,
+							borderRadius: 8,
+							borderWidth: 2,
+							borderColor: Color.error,
+							backgroundColor: Color.error,
+						}}
+					>
+						<Ionicons name='trash' color={Color.textInput} size={16} />
+					</TouchableOpacity>
+					<Divider width={8} />
+					<TouchableOpacity
+						onPress={() => navigation.navigate('EditProduct', { item, type: 'edit'})}
+						style={{
+							flex: 1,
+							marginTop: 8,
+							padding: 8,
+							borderRadius: 20,
+							borderWidth: 2,
+							borderColor: Color.primary,
+						}}
+					>
+						<Text size="12" type="bold" style={{color: Color.primary}}>
+							Edit Produk
+						</Text>
+					</TouchableOpacity>
+				</View>}
 			</View>
 		</Pressable>
 	);

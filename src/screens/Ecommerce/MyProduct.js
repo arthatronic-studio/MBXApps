@@ -24,7 +24,6 @@ import {
 import {TouchableOpacity} from '@src/components/Button';
 
 import Filter from 'src/components/Filter';
-import CardProduct from './CardProduct';
 import ImagesPath from 'src/components/ImagesPath';
 import Client from '@src/lib/apollo';
 
@@ -33,73 +32,23 @@ import {MainView} from 'src/styled';
 import { shadowStyle } from '@src/styles';
 
 import { mutationMerchant, queryGetCart, queryGetMyProduct } from 'src/lib/query/ecommerce';
+import CardEcomerceProduct from './CardEcomerceProduct';
 
 let filter = [
   {id: 1, name: 'Category'},
   {id: 2, name: 'Rating'},
 ];
 
-
-
-
 const MyProduct = ({navigation, route}) => {
   // selector
   const {Color} = useColor();
   const [loadingProps, showLoading, hideLoading] = useLoading();
-  const [data, setData] = useState({
-    "id": 1,
-    "userId": 1,
-    "name": "Preach",
-    "noTelp": "082213231071",
-    "alamat": "bakti murni",
-    "profileImg": ImagesPath.productImage,
-    "isVeriffied": true,
-    "isOfficial": true,
-    "productList": [{
-      "id": 1,
-      "name": "Preach",
-      "catgoryID": 1,
-      "description": "Preach",
-      "price": 10000,
-      "initialPrice": 1000000.0,
-      "imageUrl": ImagesPath.productImage,
-      "stock": 10,
-      "height": 1.5,
-      "width": 1.5,
-      "length": 1.5,
-      "weight": 1.5,
-      "merchantId": 1,
-      "productUnit": "res productUnit",
-      "minimumBuy": 1,
-      "productMassa": "100",
-      "status": "statusss",
-      "Category": "Pakaian",
-    },
-    {
-      "id": 2,
-      "name": "bro",
-      "catgoryID": 2,
-      "description": "bro",
-      "price": 10000,
-      "initialPrice": 1000000.0,
-      "imageUrl": ImagesPath.productImage,
-      "stock": 10,
-      "height": 1.5,
-      "width": 1.5,
-      "length": 1.5,
-      "weight": 1.5,
-      "merchantId": 1,
-      "productUnit": "res productUnit",
-      "minimumBuy": 1,
-      "productMassa": "100",
-      "status": "statusss",
-      "Category": "Pakaian",
-    }],
-  });
+  const [data, setData] = useState([]);
 
   const onSelect = item => {
     setSelectedItem(item);
   };
+
   const getProductList = (id) => {
     showLoading();
     let variables = {
@@ -117,8 +66,7 @@ const MyProduct = ({navigation, route}) => {
           //     if(element.status ==)
           //   });
           // }
-          setData(res.data.ecommerceGetMerchant);
-          console.log(res.data.ecommerceGetMerchant.productList);
+          setData(res.data.ecommerceGetMerchant.productList);
         }
       })
       .catch(reject => {
@@ -156,6 +104,7 @@ const MyProduct = ({navigation, route}) => {
 
   
   const [selectedItem, setSelectedItem] = useState(null);
+
   useEffect(() => {
     getProductList();
   }, []);
@@ -172,21 +121,27 @@ const MyProduct = ({navigation, route}) => {
       }
       onPressLeftButton={() => navigation.pop()}>
       <MainView style={{backgroundColor: Color.semiwhite}}>
-        <View style={{marginTop: 12, marginBottom: 10}}>
+        {/* hide filter */}
+        {/* <View style={{marginTop: 12, marginBottom: 10}}>
           <Filter
             title={'semua'}
             value={selectedItem}
             data={filter}
             onSelect={onSelect}
           />
-        </View>
+        </View> */}
         
         <View style={{flex: 1}}>
           <FlatList
-            data={data.productList}
+            data={data}
             keyExtractor={(item, index) => item.toString() + index}
-            renderItem={({item}) => {
-              return <CardProduct  data={item} getProductList={getProductList} />;
+            contentContainerStyle={{
+              marginTop: 16,
+              paddingHorizontal: 8,
+            }}
+            numColumns={2}
+            renderItem={({item, index}) => {
+              return <CardEcomerceProduct item={item} index={index} isMyProduct onRefresh={() => getProductList()} />;
             }}
           />
         </View>
@@ -208,7 +163,8 @@ const MyProduct = ({navigation, route}) => {
             alignItems: 'center',
             flexDirection: 'row',
           }}>
-          <TouchableOpacity
+          {/* hide batch delete */}
+          {/* <TouchableOpacity
             style={{
               borderWidth: 1.5,
               borderColor: Color.danger,
@@ -219,7 +175,7 @@ const MyProduct = ({navigation, route}) => {
           >
             
             <Image source={ImagesPath.trash} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
           onPress={() => navigation.navigate('AddProduct', {type: 'add', item: {}})}
             style={{
