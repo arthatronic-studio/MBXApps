@@ -88,7 +88,7 @@ const CardEcomerceProduct = ({ isMyProduct, item, index }) => {
 
 				<View style={{ flexDirection: 'row' , marginTop: 8 }}>
 					<Entypo name={'star'} style={{ color: Color.yellow }} />
-					<Text style={{ fontSize: 10, color: Color.secondary, }}>5 harcode {item.review}</Text>
+					<Text style={{ fontSize: 10, color: Color.secondary, }}>{item.review} </Text>
 					<View
 						style={{
 							backgroundColor: Color.secondary,
@@ -97,7 +97,7 @@ const CardEcomerceProduct = ({ isMyProduct, item, index }) => {
 							marginHorizontal: 5
 						}}
 					/>
-					<Text style={{ fontSize: 10, color: Color.secondary, marginHorizontal: 3 }}>{item.terjual || 0}</Text>
+					<Text style={{ fontSize: 10, color: Color.secondary, marginHorizontal: 3 }}>{item.sold || 0}</Text>
 					<Text style={{ fontSize: 10, color: Color.secondary }}>Terjual</Text>
 				</View>
 
