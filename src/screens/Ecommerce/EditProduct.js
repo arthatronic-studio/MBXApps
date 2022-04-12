@@ -21,8 +21,36 @@ import {
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import ImagesPath from 'src/components/ImagesPath';
+import { FormatMoney } from 'src/utils';
+import { queryDetailProduct } from 'src/lib/query/ecommerce';
+import client from 'src/lib/apollo';
 
 const EditProduct = ({navigation,route}) => {
+  const [data,setData] = useState([]);
+  useEffect(()=>{
+   
+    getDetail()
+   
+  },[data])
+
+  const getDetail = () => {
+    let variables = {
+      id: route.params.item.id,
+    };
+    client.query({query: queryDetailProduct, variables})
+      .then(res => {
+        console.log(res);
+          setData(res.data.ecommerceProductDetail[0]);
+          console.log("data detailllll")
+          console.log(res.data.ecommerceProductDetail[0]);
+         
+      })
+      .catch(reject => {
+        console.log(reject);
+      });
+  }
+
+  console.log(data,"dataaa")
   const {Color} = useColor();
   return (
     <Scaffold
@@ -46,7 +74,7 @@ const EditProduct = ({navigation,route}) => {
             borderRadius: 8,
           }}>
           <Image
-          source={{uri:route.params.item.imageUrl}}
+          source={{uri:data.imageUrl}}
             style={{
               borderRadius: 4,
               backgroundColor: Color.secondary,
@@ -55,7 +83,7 @@ const EditProduct = ({navigation,route}) => {
             }}
           />
           <View style={{marginLeft: 8, alignItems: 'flex-start'}}>
-            <Text type="bold">Pashmina Pink Nissa Sabyan</Text>
+            <Text type="bold">{data.name}</Text>
             <View
               style={{
                 flexDirection: 'row',
@@ -69,26 +97,27 @@ const EditProduct = ({navigation,route}) => {
               <Text style={{color: Color.secondary}} size="10">
                 •
               </Text>
+              
               <Text style={{color: Color.secondary}} size="10">
-                250gr
+                {data.weight}gr
               </Text>
               <Text style={{color: Color.secondary}} size="10">
                 •
               </Text>
               <Text style={{color: Color.secondary}} size="10">
-                120 Stok
+                {data.stock} Stok
               </Text>
             </View>
-            <Text type="bold">Rp15.000</Text>
+            <Text type="bold">{FormatMoney.getFormattedMoney(data.price)}</Text>
           </View>
         </View>
         <View style={{marginTop: 24, alignItems: 'flex-start'}}>
           <Text size="11" type="semibold">
             Detail
           </Text>
-          {console.log(route,"route edit")}
+
           <TouchableOpacity
-          onPress={()=>{navigation.navigate('AddProduct',route.params)}}
+          onPress={()=>{navigation.navigate('AddProduct',{item:data,type:"edit"})}}
             style={{
               paddingVertical: 16,
               flexDirection: 'row',
@@ -99,7 +128,10 @@ const EditProduct = ({navigation,route}) => {
             <Text>Informasi Produk</Text>
             <Image source={ImagesPath.arrowRight} />
           </TouchableOpacity>
-          <View
+          <TouchableOpacity
+          onPress={()=>{
+            navigation.navigate("StepTwo",{item:data,type:"edit"})
+          }}
             style={{
               paddingVertical: 16,
               flexDirection: 'row',
@@ -109,8 +141,11 @@ const EditProduct = ({navigation,route}) => {
             }}>
             <Text>Detail Produk</Text>
             <Image source={ImagesPath.arrowRight} />
-          </View>
-          <View
+          </TouchableOpacity>
+          <TouchableOpacity
+          onPress={()=>{
+            navigation.navigate("StepThree",{item:data,type:"edit"})
+          }}
             style={{
               paddingVertical: 16,
               flexDirection: 'row',
@@ -120,7 +155,7 @@ const EditProduct = ({navigation,route}) => {
             }}>
             <Text>Harga Produk</Text>
             <Image source={ImagesPath.arrowRight} />
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     </Scaffold>

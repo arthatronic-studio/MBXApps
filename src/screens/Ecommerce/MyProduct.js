@@ -107,7 +107,7 @@ const MyProduct = ({navigation, route}) => {
 
   useEffect(() => {
     getProductList();
-  }, []);
+  }, [data]);
 
   return (
     <Scaffold
