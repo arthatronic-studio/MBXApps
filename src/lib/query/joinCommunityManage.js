@@ -15,8 +15,6 @@ query(
     ) {
       id
       status
-      customIdNumber
-      organizationInitionalCode
     }
   }
 `;

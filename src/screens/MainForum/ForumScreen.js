@@ -42,6 +42,7 @@ const ForumScreen = ({ navigation, route }) => {
               <AntDesign
                 name='plus'
                 size={24}
+                color={Color.text}
                 // onPress={() => navigation.navigate('CardDetailForum')}
               />
             </TouchableOpacity>

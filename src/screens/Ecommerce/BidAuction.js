@@ -68,7 +68,6 @@ const BidAuction = ({ navigation }) => {
 						<View
 							style={{
 								flexDirection: 'column',
-								alignSelf: 'baseline',
 								marginLeft: 16
 							}}
 						>
@@ -77,14 +76,13 @@ const BidAuction = ({ navigation }) => {
 									fontWeight: 'bold',
 									fontSize: 14,
 									width: '75%',
-									alignSelf: 'baseline',
 									textAlign: 'left',
 									marginBottom: 4
 								}}
 							>
 								Pashmina Pink Nissa Sabyan
 							</Text>
-							<Text style={{ alignSelf: 'baseline', fontSize: 10 }}>Hijab</Text>
+							<Text style={{ fontSize: 10 }}>Hijab</Text>
 						</View>
 						<View
 							style={{
@@ -119,26 +117,24 @@ const BidAuction = ({ navigation }) => {
 						>
 							<View
 								style={{
-									alignSelf: 'baseline',
 									marginHorizontal: 10,
 									marginVertical: 15
 								}}
 							>
 								<Text style={{ fontSize: 8 }}>Penawaranmu</Text>
 								<View style={{ flexDirection: 'row' }}>
-									<Text style={{ fontSize: 18, alignSelf: 'baseline', fontWeight: 'bold' }}>0 </Text>
+									<Text style={{ fontSize: 18, fontWeight: 'bold' }}>0 </Text>
 									<Text style={{ fontSize: 11, marginTop: 6, fontWeight: 'bold' }}>Poin</Text>
 								</View>
 							</View>
 							<View
 								style={{
-									alignSelf: 'baseline',
 									marginHorizontal: 10
 								}}
 							>
-								<Text style={{ fontSize: 8, alignSelf: 'baseline' }}>Penawaranmu</Text>
+								<Text style={{ fontSize: 8 }}>Penawaranmu</Text>
 								<View style={{ flexDirection: 'row' }}>
-									<Text style={{ fontSize: 18, alignSelf: 'baseline', fontWeight: 'regular' }}>
+									<Text style={{ fontSize: 18 }}>
 										50.000{' '}
 									</Text>
 									<Text style={{ fontSize: 11, marginTop: 6, fontWeight: 'bold' }}>Poin</Text>
@@ -147,7 +143,7 @@ const BidAuction = ({ navigation }) => {
 						</View>
 					</View>
 					<View style={{ backgroundColor: '#F3771D', marginTop: 16 }}>
-						<View style={{ alignSelf: 'baseline', marginHorizontal: 16, marginVertical: 16 }}>
+						<View style={{ marginHorizontal: 16, marginVertical: 16 }}>
 							<Text style={{ fontSize: 14, color: Color.textInput }}>Penawar</Text>
 						</View>
 					</View>

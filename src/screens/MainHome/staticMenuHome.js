@@ -118,7 +118,7 @@ export const listMenuHome = [
         nav: 'MediaPlayerScreen',
         params: {},
         badge: true,
-        show: true,
+        show: accessClient.MenuHome.showAlbum,
     },
     {
         code: 'E_COMMERCE',
@@ -127,7 +127,7 @@ export const listMenuHome = [
         nav: 'Ecommerce',
         params: {},
         badge: true,
-        show: true,
+        show: accessClient.MenuHome.showEcommerce,
     },
     // {
     //     code: '',

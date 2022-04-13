@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, FlatList, useWindowDimensions, ActivityIndicator } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import { ScreenEmptyData, ScreenIndicator, useColor } from '@src/components';
+import { Scaffold, ScreenEmptyData, ScreenIndicator, useColor } from '@src/components';
 import Text from '@src/components/Text';
 import CardForumVertical from '@src/screens/MainForum/CardForumVertical';
 import { Container } from 'src/styled';
@@ -39,7 +39,10 @@ const ListForumVertical = ({ componentType, data, loading, title, showAll, onPre
     }, [selectedItem]);
 
     return (
-        <View style={{paddingBottom: 8, paddingTop: showHeader ? 0 : 8}}>
+        <Scaffold
+            showHeader={false}
+            style={{paddingBottom: 8, paddingTop: showHeader ? 0 : 8}}
+        >
             {showHeader && <View style={{width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12, paddingTop: 24, paddingHorizontal: 16}}>
                 <Text type='semibold' size={12}>{title}</Text>
                 {showAll && <Text onPress={() => onPressShowAll()} size={12} color={Color.primary}>Lihat Semua <Ionicons name='arrow-forward' size={12} color={Color.primary} /></Text>}
@@ -90,7 +93,7 @@ const ListForumVertical = ({ componentType, data, loading, title, showAll, onPre
                 onClose={() => setSelectedItem()}
                 useBlockUser
             />
-        </View>
+        </Scaffold>
     )
 }
 
