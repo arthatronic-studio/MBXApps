@@ -141,6 +141,13 @@ const MainProfile = ({navigation, route}) => {
       onPress: () => navigation.navigate('MyShopHomepage'),
     },
     {
+      code: 'auction',
+      title: 'Bid Auction',
+      show: user && !user.guest,
+      icon: <MaterialCommunityIcons name="ticket-confirmation-outline" size={20} color={Color.text} style={{}} />,
+      onPress: () => navigation.navigate('BidAuction'),
+    },
+    {
       code: 'change_profile',
       title: 'Ubah Profil',
       show: user && !user.guest,
