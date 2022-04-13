@@ -80,7 +80,7 @@ const MyShop = ({ navigation, route }) => {
           </TouchableOpacity>
 
           <View style={{width: '100%', position: 'absolute', bottom: -(imageStoreSize / 2), right: 16, alignItems: 'flex-end'}}>
-            <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: Color.primary, height: 28, width: '24%', borderRadius: 8}}>
+            <TouchableOpacity onPress={() => navigation.navigate('EditMerchantInfo', { item: data })} style={{ justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: Color.primary, height: 28, width: '24%', borderRadius: 8}}>
               <Text style={{fontSize: 9, color: Color.primary}}>Edit Toko</Text>
             </TouchableOpacity>
           </View>
