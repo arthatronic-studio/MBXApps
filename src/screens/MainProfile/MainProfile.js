@@ -129,7 +129,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'coupon',
       title: 'Kuponku',
-      show: accessClient.MainProfile.showMenuJoinCommunity && user && !user.guest,
+      show: accessClient.MainProfile.showMenuCoupon && user && !user.guest,
       icon: <MaterialCommunityIcons name="ticket-confirmation-outline" size={20} color={Color.text} style={{}} />,
       onPress: () => {},
     },
@@ -143,7 +143,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'auction',
       title: 'Bid Auction',
-      show: user && !user.guest,
+      show: accessClient.MainProfile.showMenuBidAuction && user && !user.guest,
       icon: <MaterialCommunityIcons name="ticket-confirmation-outline" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('BidAuction'),
     },
@@ -206,7 +206,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'community_admin',
       title: 'Community Admin',
-      show: accessClient.MainProfile.showMenuJoinCommunity && user && !user.organizationId,
+      show: accessClient.MainProfile.showMenuCommunityAdmin && user && user.isDirector === 1,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('CommunityAdminPage'),
     },

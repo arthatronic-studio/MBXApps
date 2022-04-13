@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, ScrollView, TextInput, SafeAreaView, Image, Keyboard, BackHandler, useWindowDimensions } from 'react-native';
 import Styled from 'styled-components';
 import Entypo from 'react-native-vector-icons/Entypo';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { launchImageLibrary } from 'react-native-image-picker';
 import {
     Header,
@@ -23,6 +24,9 @@ import { queryProductManage } from '@src/lib/query';
 import { Divider } from 'src/styled';
 import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
 import { accessClient } from 'src/utils/access_client';
+import FormSelect from 'src/components/FormSelect';
+import DatePicker from 'react-native-date-picker';
+import Moment from 'moment';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -60,8 +64,7 @@ const ErrorView = Styled(View)`
 const EditThreadScreen = (props) => {
     const { navigation, route } = props;
     const { params } = route;
-
-    console.log(params);
+    const eventDate = parseInt(params.eventDate);
 
     const { height } = useWindowDimensions();
     const { Color } = useColor();
@@ -73,10 +76,11 @@ const EditThreadScreen = (props) => {
         status: params.status,
         method: 'UPDATE',
         type: params.productType,
-        category: params.productSubCategory,
+        category: params.productCategory,
         description: params.productDescription,
         latitude: '',
         longitude: '',
+        eventDate: Moment(eventDate).isValid() ? new Date(eventDate) : new Date(),
     });
     const [error, setError] = useState({
         name: null,
@@ -90,6 +94,7 @@ const EditThreadScreen = (props) => {
         value: params.status,
         iconName: params.status === 'PRIVATE' ? 'lock-closed' : 'globe',
     });
+    const [showDatePicker, setShowDatePicker] = useState(false);
 
     // ref
     const modalSelectStatusRef = useRef();
@@ -170,6 +175,7 @@ const EditThreadScreen = (props) => {
         showLoading();
 
         let objProduct = userData;
+        objProduct.eventDate = Moment(userData.eventDate).format('YYYY-MM-DD HH:mm:ss');
         if (status) objProduct.status = status;
         if (thumbImage !== '') objProduct.image = thumbImage;
 
@@ -197,6 +203,9 @@ const EditThreadScreen = (props) => {
             showLoading('error', 'Gagal, Harap ulangi kembali');
         });
     }
+
+    const showEvent = userData.category === 'EVENT';
+    console.log('showEvent', userData);
     
     return (
         <MainView style={{backgroundColor: Color.theme}}>
@@ -309,6 +318,19 @@ const EditThreadScreen = (props) => {
                     </ErrorView>
                 </View>
 
+                {showEvent && <FormSelect
+                    label='Tanggal Event'
+                    placeholder='Pilih Tanggal'
+                    value={Moment(userData.eventDate).format('DD MMM YYYY')}
+                    onPress={() => setShowDatePicker(true)}
+                    // error={errorUserData.usageType}
+                    suffixIcon={
+                        <View style={{height: '100%', width: '10%', paddingRight: 16, justifyContent: 'center', alignItems: 'flex-end'}}>
+                            <Ionicons name='calendar' />
+                        </View>
+                    }
+                />}
+
                 {accessClient.CreatePosting.showPrivacy && <TouchSelect
                     title='Siapa yang dapat melihat ini?'
                     value={selectedStatus.label}
@@ -354,6 +376,20 @@ const EditThreadScreen = (props) => {
                     modalSelectStatusRef.current.close();
                 }}
             />
+
+            {showDatePicker && <DatePicker
+                modal
+                open={showDatePicker}   
+                date={userData.eventDate}
+                mode="date"
+                onConfirm={(date) => {
+                    setShowDatePicker(false);
+                    onChangeUserData('eventDate', date);
+                }}
+                onCancel={() => {
+                    setShowDatePicker(false)
+                }}
+            />}
         </MainView>
     )
 }
