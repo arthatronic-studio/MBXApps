@@ -10,7 +10,7 @@ const LiveLelangScreen = () => {
     <Scaffold
       header={
         <Header
-          type="regular"
+          type="bold"
           centerTitle={false}
           customIcon
           title="Sedang Berlangsung"

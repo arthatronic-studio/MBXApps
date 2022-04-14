@@ -563,6 +563,7 @@ export const queryGetMyProduct = gql`
       createdAt
       updatedAt
       productList {
+        imageProducts
         id
         name
         categoryId
@@ -659,15 +660,23 @@ export const queryGetProduct = gql`
 export const queryDetailProduct = gql`
   query ($id: Int!) {
     ecommerceProductDetail(id: $id) {
-      id
+      imageProducts
       name
       categoryId
       description
       price
       initialPrice
       imageUrl
-      imageProducts
       stock
+      weight
+      height
+      width
+      length
+      productUnit
+      minimumBuy
+      productMassa
+      status
+      id
       merchant {
         name
         alamat

@@ -79,6 +79,14 @@ export const accessClient = {
             isKomoto ? false :
             isSabyan ? false :
             true,
+        showEcommerce:
+            isKomoto ? false :
+            isSabyan ? false :
+            true,
+        showAlbum:
+            isKomoto ? false :
+            isSabyan ? true :
+            true,
     },
     CreatePosting: {
         showPrivacy:
@@ -98,18 +106,25 @@ export const accessClient = {
         showMenuMyStore:
             isKomoto ? false :
             isSabyan ? false : true,
+        showMenuBidAuction:
+            isKomoto ? false :
+            isSabyan ? false : true,
         showMenuJoinCommunity:
-            isKomoto ? true : false,
+            isKomoto ? true :
+            isSabyan ? false : false,
         showMenuCommunityAdmin:
-            isKomoto ? true : false,
+            isKomoto ? true :
+            isSabyan ? false : false,
         showMenuSurvey:
             isKomoto ? false :
             isSabyan ? false : true,
         showStatusMember:
+            isKomoto ? true :
             isSabyan ? false : true,
     },
     ChangeProfile: {
         showIdNumber:
-            isKomoto ? true : false,
+            isKomoto ? true :
+            isSabyan ? false : false,
     },
 };

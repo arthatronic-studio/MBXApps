@@ -222,7 +222,7 @@ export default {
 	BannerPink: require('../components/Images/BannerPink.png'),
 	chat: require('../components/Images/tokomakmur.png'),
 	plusCircleGray: require('../components/Images/PlusCirclegray.png'),
-	calendarIcon :  require('../components/Images/CalendarBlank.png'),
+	calendarIcon: require('../components/Images/CalendarBlank.png'),
 	userCircle: require('../components/Images/UserCircle.png'),
 	trcOrder1: require('../components/Images/trcOrder1.png'),
 	trcOrder2: require('../components/Images/trcOrder2.png'),
@@ -230,4 +230,6 @@ export default {
 	trcOrder4: require('../components/Images/trcOrder4.png'),
 	arrowRight: require('../components/Images/arrowRight.png'),
 
+	nisa: require('../components/Images/nisa.png'),
+	profile: require('../components/Images/profile.png')
 };

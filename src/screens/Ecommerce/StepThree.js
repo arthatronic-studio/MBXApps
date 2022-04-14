@@ -133,6 +133,51 @@ const StepThree = ({navigation, route}) => {
       });
   };
 
+  const save = () => {
+
+    let variables = {
+      products: [
+        {
+          imageProducts: route.params.item.imageProducts,
+          name:route.params.item.name,
+          categoryId: route.params.item.categoryId,
+          merchantId: route.params.item.merchantId,
+
+          productUnit: route.params.item.productUnit,
+          productMassa: route.params.item.productMassa,
+          stock:  route.params.item.stock,
+          minimumBuy:  route.params.item.minimumBuy,
+          description: route.params.item.description,
+          weight: route.params.item.weight,
+          height: route.params.item.height,
+          width: route.params.item.width,
+          length:route.params.item.length,
+
+      // imageUrl: route.params.type == 'edit' && listThumbImage[0] == route.params.item.imageUrl ? undefined :  listThumbImage[0],
+      // imageUrl: listThumbImage[0] == undefined ? route.params.item.imageProducts[0] : listThumbImage[0],
+      initialPrice: 0,
+      id: route.params.type == 'edit' ? route.params.item.id : undefined,
+      price: parseInt(price),
+      status: 'SHOW'
+        },
+      ],
+    };
+
+    console.log("variablesss",variables)
+    Client.mutate({mutation: queryEditProduct, variables})
+    .then(res => {
+      console.log('BERHASIL EDIT', res);
+      alert('Berhasi Menyimpan');
+          setTimeout(() => {
+            navigation.pop();
+          }, 1000);
+      
+    })
+    .catch(err => {
+      console.log('error', err);
+    });
+  }
+
   return (
     <Scaffold
       style
@@ -336,7 +381,20 @@ const StepThree = ({navigation, route}) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <TouchableOpacity
+        {route.params.type === "edit" ?<TouchableOpacity
+          style={{
+            backgroundColor: Color.primary,
+            width: '80%',
+            height: 45,
+            borderRadius: 30,
+            justifyContent: 'center',
+            textAlign: 'center',
+          }}
+          onPress={() => save()}>
+          <Text style={{color: Color.textInput, fontWeight: 'bold'}}>
+            Simpan
+          </Text>
+        </TouchableOpacity> : <TouchableOpacity
           style={{
             backgroundColor: Color.primary,
             width: '80%',
@@ -349,7 +407,8 @@ const StepThree = ({navigation, route}) => {
           <Text style={{color: Color.textInput, fontWeight: 'bold'}}>
             Selesai
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity>}
+        
       </View>
       <View style={{height: 100, backgroundColor: Color.textInput}}>
         <Modal isVisible={isModalVisible}>

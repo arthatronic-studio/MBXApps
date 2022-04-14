@@ -79,7 +79,7 @@ const JobDetail = ({ navigation, route }) => {
     return (
         <Scaffold
             headerTitle='Detail'
-            iconRightButton={<Feather name='more-vertical' size={20} />}
+            iconRightButton={<Feather name='more-vertical' size={20} color={Color.text} />}
             onPressRightButton={() => {
                 modalOptionsRef.current.open();
             }}

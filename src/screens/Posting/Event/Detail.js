@@ -79,7 +79,7 @@ const EventDetail = ({navigation, route}) => {
   return (
     <Scaffold
       headerTitle="Detail"
-      iconRightButton={<MaterialIcons name='more-vert' size={22} />}
+      iconRightButton={<MaterialIcons name='more-vert' size={22} color={Color.text} />}
       onPressRightButton={() => {
           modalOptionsRef.current.open();
       }}

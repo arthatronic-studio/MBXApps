@@ -33,7 +33,7 @@ const App = () => {
     const unsubscribe = NetInfo.addEventListener((state) => {
       console.log("Connection Info", state);
 
-      if (!state.isConnected) {
+      if (!state.isConnected && state.type !== 'none') {
         setModalNetInfo(true);
       } else {
         setModalNetInfo(false);

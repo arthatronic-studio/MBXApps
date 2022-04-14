@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, ImageBackground, Dimensions, Image } from 'react-native';
 import Moment from 'moment';
-import Feather from 'react-native-vector-icons/Feather';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Entypo from 'react-native-vector-icons/Entypo';
 import Share from 'react-native-share';
 import { useSelector } from 'react-redux';
 
@@ -121,10 +120,10 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showDot, sho
                         onPress={() => onPressDot()}
                         style={{ width: '10%', aspectRatio: 1, alignItems: 'flex-end', justifyContent: 'center' }}
                     >
-                        <Entypo
-                            name='dots-three-vertical'
+                        <MaterialCommunityIcons
+                            name='dots-vertical'
                             color={Color.text}
-                            size={16}
+                            size={18}
                         />
                     </TouchableOpacity>
                 </View>
@@ -164,8 +163,10 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showDot, sho
                     <Text align='left' size={16} color={Color.gray}>|</Text>
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                    <Image 
-                        source={ImagesPath.chat}
+                    <MaterialCommunityIcons
+                        name='comment-outline'
+                        size={24}
+                        color={Color.gray}
                     />
                     <Text size={14} align='left' color={Color.gray} style={{marginLeft: 10}}>{item.comment}</Text>
                 </View>

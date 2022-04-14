@@ -43,6 +43,7 @@ import Client from '@src/lib/apollo';
 import {queryContentProduct} from '@src/lib/query';
 import TopTabShop from './TopTabShop';
 import ImagesPath from 'src/components/ImagesPath';
+import { queryEditProduct } from 'src/lib/query/ecommerce';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -56,7 +57,7 @@ const Content = Styled(View)`
 
 const StepTwo = ({navigation, route}) => {
   const props = route.params;
-  console.log(props)
+  console.log("props",props);
 
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
@@ -85,7 +86,53 @@ const StepTwo = ({navigation, route}) => {
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
   const [length, setLength] = useState(0);
-  console.log("route2",route)
+
+  const save = () => {
+    // console.log("?????",route.params.item.imageProducts[0])
+    // showLoading()
+   
+    let variables = {
+      products: [
+        {
+          imageProducts: route.params.item.name.imageProducts,
+          name:route.params.item.name,
+          categoryId: route.params.item.categoryId,
+          merchantId: route.params.item.merchantId,
+
+          productUnit: valueProductUnit,
+      productMassa: valueProductMassa,
+      stock: parseInt(stock),
+      minimumBuy: parseInt(minimumBuy),
+      description: description,
+      weight: parseInt(weight),
+      height: parseInt(height),
+      width: parseInt(width),
+      length: parseInt(length),
+
+      // imageUrl: route.params.type == 'edit' && listThumbImage[0] == route.params.item.imageUrl ? undefined :  listThumbImage[0],
+      // imageUrl: listThumbImage[0] == undefined ? route.params.item.imageProducts[0] : listThumbImage[0],
+      initialPrice: 0,
+      id: route.params.type == 'edit' ? route.params.item.id : undefined,
+      price: route.params.item.price,
+      status: 'SHOW',
+        },
+      ],
+    };
+
+    console.log("variablesss",variables)
+    Client.mutate({mutation: queryEditProduct, variables})
+    .then(res => {
+      console.log('BERHASIL EDIT', res);
+      alert('Berhasi Menyimpan');
+          setTimeout(() => {
+            navigation.pop();
+          }, 1000);
+      
+    })
+    .catch(err => {
+      console.log('error', err);
+    });
+  }
 
   const submit = () => {
     const tempData = {
@@ -100,22 +147,26 @@ const StepTwo = ({navigation, route}) => {
       length: parseInt(length),
       ...props.tempData,
     };
-    console.log(tempData)
-    navigation.navigate('StepThree', {tempData, type: route.params.type, item: route.params.item});
+    console.log(tempData);
+    navigation.navigate('StepThree', {
+      tempData,
+      type: route.params.type,
+      item: route.params.item,
+    });
   };
 
   useEffect(() => {
-    if(props.type == 'edit'){
-      console.log('edit boss')
-      setDescription(props.item.description)
-      setMinimumBuy(String(props.item.minimumBuy))
-      setStock(String(props.item.stock))
-      setHeight(String(props.item.height))
-      setWeight(String(props.item.weight))
-      setWidth(String(props.item.width))
-      setLength(String(props.item.length))
-      setValueProductUnit(String(props.item.productUnit))
-      setValueProductMassa(String(props.item.productMassa))
+    if (props.type == 'edit') {
+      console.log('edit boss');
+      setDescription(props.item.description);
+      setMinimumBuy(String(props.item.minimumBuy));
+      setStock(String(props.item.stock));
+      setHeight(String(props.item.height));
+      setWeight(String(props.item.weight));
+      setWidth(String(props.item.width));
+      setLength(String(props.item.length));
+      setValueProductUnit(String(props.item.productUnit));
+      setValueProductMassa(String(props.item.productMassa));
     }
   }, []);
 
@@ -125,7 +176,7 @@ const StepTwo = ({navigation, route}) => {
       header={
         <Header
           customIcon
-          title={route.params.type =="edit" ?"Edit Produk" : "Tambah Produk"}
+          title={route.params.type == 'edit' ? 'Edit Produk' : 'Tambah Produk'}
           type="regular"
           centerTitle={false}
         />
@@ -475,21 +526,39 @@ const StepTwo = ({navigation, route}) => {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <TouchableOpacity
-          style={{
-            backgroundColor: Color.primary,
-            width: '80%',
-            height: 45,
-            borderRadius: 30,
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-          // onPress={() => navigation.navigate('StepThree')}
-          onPress={() => submit()}>
-          <Text style={{color: Color.textInput, fontWeight: 'bold'}}>
-            Lanjut
-          </Text>
-        </TouchableOpacity>
+        {route.params.type === 'edit' ? (
+          <TouchableOpacity
+            style={{
+              backgroundColor: Color.primary,
+              width: '80%',
+              height: 45,
+              borderRadius: 30,
+              justifyContent: 'center',
+              textAlign: 'center',
+            }}
+            // onPress={() => navigation.navigate('StepThree')}
+            onPress={() => save()}>
+            <Text style={{color: Color.textInput, fontWeight: 'bold'}}>
+              Simpan
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={{
+              backgroundColor: Color.primary,
+              width: '80%',
+              height: 45,
+              borderRadius: 30,
+              justifyContent: 'center',
+              textAlign: 'center',
+            }}
+            // onPress={() => navigation.navigate('StepThree')}
+            onPress={() => submit()}>
+            <Text style={{color: Color.textInput, fontWeight: 'bold'}}>
+              Lanjut
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
     </Scaffold>
   );

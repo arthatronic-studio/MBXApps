@@ -25,7 +25,6 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {launchImageLibrary} from 'react-native-image-picker';
-
 import {
   Text,
   // TouchableOpacity,
@@ -49,7 +48,7 @@ import {queryContentProduct} from '@src/lib/query';
 import TopTabShop from './TopTabShop';
 import ImagesPath from 'src/components/ImagesPath';
 import {updateCurrentUserProfile} from 'src/state/actions/user/auth';
-import {queryEditProduct, queryGetCategory, queryGetMyProduct} from 'src/lib/query/ecommerce';
+import {queryGetCategory, queryGetMyProduct,queryEditProduct} from 'src/lib/query/ecommerce';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -62,7 +61,7 @@ const Content = Styled(View)`
 `;
 
 const AddProduct = ({navigation,route}) => {
-
+console.log("rrrrrrrrr",route)
   const {height} = useWindowDimensions();
   const [name, setName] = useState(route.params.item.name);
   const [thumbImage, setThumbImage] = useState('');
@@ -81,7 +80,6 @@ const AddProduct = ({navigation,route}) => {
   const [value, setValue] = useState(route.params.item.categoryId);
   const [items, setItems] = useState([]);
   const [dataToko, setDataToko] = useState([]);
-  
 
   useEffect(() => {
     getToko();
@@ -103,25 +101,49 @@ const AddProduct = ({navigation,route}) => {
 
 
   const save = () => {
-    showLoading()
-    const variables = {
-      imageProducts: listThumbImage,
-      name,
-      categoryId: value,
-      merchantId: dataToko.id,
-    }
+
+    let variables = {
+      products: [
+        {
+          imageProducts: listThumbImage.length>0 ? listThumbImage : route.params.item.imageProducts,
+          name,
+          categoryId: value,
+          merchantId: dataToko.id,
+
+          productUnit: route.params.item.productUnit,
+      productMassa: route.params.item.productMassa,
+      stock:  route.params.item.stock,
+      minimumBuy:  route.params.item.minimumBuy,
+      description: route.params.item.description,
+      weight: route.params.item.weight,
+      height: route.params.item.height,
+      width: route.params.item.width,
+      length:route.params.item.length,
+
+      // imageUrl: route.params.type == 'edit' && listThumbImage[0] == route.params.item.imageUrl ? undefined :  listThumbImage[0],
+      // imageUrl: listThumbImage[0] == undefined ? route.params.item.imageProducts[0] : listThumbImage[0],
+      initialPrice: 0,
+      id: route.params.type == 'edit' ? route.params.item.id : undefined,
+      price: route.params.item.price,
+      status: 'SHOW',
+
+        },
+      ],
+    };
+
+    console.log("variablesss",variables)
     Client.mutate({mutation: queryEditProduct, variables})
-      .then(res => {
-        console.log('BERHASIL EDIT', res);
-        hideLoading();
-        setTimeout(() => {
-          navigation.popToTop()
-        }, 2000);
-        
-      })
-      .catch(err => {
-        console.log('error', err);
-      });
+    .then(res => {
+      console.log('BERHASIL EDIT', res);
+      alert('Berhasi Menyimpan');
+          setTimeout(() => {
+            navigation.navigate("EditProduct");
+          }, 1000);
+      
+    })
+    .catch(err => {
+      console.log('error', err);
+    });
   }
 
   const submit = () => {
@@ -201,7 +223,7 @@ const AddProduct = ({navigation,route}) => {
         />
       }
       onPressLeftButton={() => navigation.pop()}>
-      <ScrollView>
+      <ScrollView style={{backgroundColor:Color}}>
         <View
           style={{
             flexDirection: 'row',
@@ -260,7 +282,27 @@ const AddProduct = ({navigation,route}) => {
                 borderRadius: 4,
                 alignItems: 'center',
               }}>
-              <Image
+              <FlatList
+                  data={route.params.item.imageProducts}
+                  horizontal={true}
+                  keyExtractor={(item, index) => item.toString() + index}
+                  renderItem={({item}) => {
+                    return (
+                      <Image
+                        style={{
+                          height: '100%',
+                          aspectRatio: 1,
+                          borderRadius: 4,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          marginRight:10
+                        }}
+                        source={{uri: item}}
+                      />
+                    );
+                  }}
+                />
+              {/* <Image
                 style={{
                   height: '100%',
                   aspectRatio: 1,
@@ -269,7 +311,7 @@ const AddProduct = ({navigation,route}) => {
                   justifyContent: 'center',
                 }}
                 source={{uri: route.params.item.imageUrl}}
-              />
+              /> */}
             </TouchableOpacity>
           ) : thumbImage !== '' ? (
             <View

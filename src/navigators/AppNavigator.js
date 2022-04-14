@@ -141,6 +141,8 @@ import ChatEcommerce from 'src/screens/Ecommerce/ChatEcommerce';
 import CardChatEcommerce from 'src/screens/Ecommerce/CardChatEcommerce';
 import ChatDetail from 'src/screens/Ecommerce/ChatDetail';
 import EditProduct from 'src/screens/Ecommerce/EditProduct';
+import BidAuction from 'src/screens/Ecommerce/BidAuction';
+import CardBid from 'src/screens/Ecommerce/CardBid';
 
 // import PopUpCouponSucces from 'src/screens/Ecommerce/PopUpCouponSucces';
 
@@ -193,8 +195,9 @@ function MainStackNavigator() {
       initialRouteName="SplashScreen"
       screenOptions={{
         gestureEnabled: Platform.OS === 'ios',
-        headerShown: false,
-      }}>
+        headerShown: false
+      }}
+	>
       {/* uncanny */}
       <Screen name="SplashScreen" component={SplashScreen} />
       <Screen name="MainPage" component={MainPage} />
@@ -241,10 +244,14 @@ function MainStackNavigator() {
       <Screen name="ChatRoom" component={ChatRoom} />
       <Screen name="CardChat" component={CardChat} />
       <Screen name="CardChatExist" component={CardChatExist} />
-			<Screen name="ChatEcommerce" component={ChatEcommerce} />
-			<Screen name="CardChatEcommerce" component={CardChatEcommerce} />
-			<Screen name="ChatDetail" component={ChatDetail} />
-			<Screen name="EditProduct" component={EditProduct} />
+	  <Screen name="Maps" component={Maps} />
+		<Screen name="CurrentLocation" component={CurrentLocation} />
+		<Screen name="ChatEcommerce" component={ChatEcommerce} />
+		<Screen name="CardChatEcommerce" component={CardChatEcommerce} />
+		<Screen name="ChatDetail" component={ChatDetail} />
+		<Screen name="EditProduct" component={EditProduct} />
+		<Screen name="BidAuction" component={BidAuction} />
+		<Screen name="CardBid" component={CardBid} />
 
       {/* <Screen name="PopUpCouponSucces" component={PopUpCouponSucces}/> */}
       <Screen name="DetailCoupon" component={DetailCoupon} />
