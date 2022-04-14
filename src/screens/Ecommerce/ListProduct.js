@@ -42,12 +42,13 @@ const ListProduct = (props) => {
       page: page,
       itemPerPage: 10
     }
-
+    console.log(variables)
     Client.query({ query: queryGetProduct, variables })
       .then(res => {
         console.log(res)
         if (res.data.ecommerceProductList.length != 0) {
           setListProduct(listProduct.concat(res.data.ecommerceProductList));
+          setPage(page+1)
         }
 
         // hideLoading();
@@ -58,9 +59,10 @@ const ListProduct = (props) => {
       });
   };
 
-  const onEndReached = () => {
-    setPage(page+1);
-    getProduct()
+  const onEndReached = async () => {
+    // setPage(page+1);
+      getProduct()
+    
   }
 
   return (

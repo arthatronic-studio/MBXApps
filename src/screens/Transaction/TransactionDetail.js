@@ -212,6 +212,7 @@ const TransactionDetail = ({route, navigation}) => {
         {data.items &&
           data.items.map((value, id) => (
             <View
+            key={id}
               style={{
                 width: '93%',
                 alignSelf: 'center',
