@@ -18,6 +18,7 @@ import {
   queryShipperPickupTimeSlot,
   queryCheckout,
   queryShipperCreatePickupOrderTimeSlot,
+  queryGetTracking,
 } from 'src/lib/query/ecommerce';
 import Client from '@src/lib/apollo';
 import Moment from 'moment';
@@ -47,7 +48,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
   const dispatch = useDispatch();
   const [data, setData] = useState({});
   const [loadingProps, showLoading, hideLoading] = useLoading();
-  console.log('routeee', route);
+
   const modalizeRef = useRef(null);
   const {width, height} = useWindowDimensions();
 
@@ -72,7 +73,9 @@ const TransactionDetailSeller = ({route, navigation}) => {
   useEffect(() => {
     getProduct();
     getDate();
-  }, []);
+    getOrderList();
+    
+  },[]);
 
   const cancelButton = () => {
     const {item} = route.params;
@@ -99,11 +102,11 @@ const TransactionDetailSeller = ({route, navigation}) => {
       });
   };
 
-  const getDate = async() => {
+  const getDate = () => {
     let variables = {
       time_zone: 'Asia_Jakarta',
     };
-    await Client.query({query: queryShipperPickupTimeSlot, variables})
+     Client.query({query: queryShipperPickupTimeSlot, variables})
       .then(res => {
         setDate(res.data.shipperPickupTimeSlot.time_slots);
       })
@@ -112,17 +115,19 @@ const TransactionDetailSeller = ({route, navigation}) => {
       });
   };
 
-  const getProduct = async() => {
+  const getProduct = () => {
     let variables = {
       orderId: route.params.item.id,
     };
 
-   await Client.query({query: queryDetailOrder, variables})
+    Client.query({query: queryDetailOrder, variables})
       .then(res => {
         console.log('res get detail order', res);
         if (res.data.ecommerceOrderDetail) {
           setData(res.data.ecommerceOrderDetail);
+     
         }
+       
 
         // hideLoading();
         // navigation.navigate('TopUpScreen');
@@ -157,6 +162,8 @@ const TransactionDetailSeller = ({route, navigation}) => {
       });
   };
 
+  console.log("dataaa",data)
+
   const createShipperOrder = () => {
     const prod = data.items[0].products.map(e => {
       return {
@@ -177,11 +184,13 @@ const TransactionDetailSeller = ({route, navigation}) => {
         courier: {
           cod:data.shippingIsCod,
           rate_id: data.shippingRateId,
-          use_insurance: data.shippingUseInsurance,
+          use_insurance: true,
           cost: data.shippingCost
         },
       },
     };
+
+    console.log("variirrrrr",variablesCreateOrder)
 
     Client.mutate({
       mutation: queryCheckout,
@@ -211,6 +220,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
   };
 
   const inputShippingNumber = () => {
+    showLoading();
     let variables = {
       type: 'INPUT_SHIPPING_NUMBER',
       orderId: route.params.item.id,
@@ -220,7 +230,12 @@ const TransactionDetailSeller = ({route, navigation}) => {
       mutation: mutationCheckout,
       variables,
     }).then(res => {
+      hideLoading()
+      alert('Success');
       console.log("berhasil input shipping number",res);
+      setTimeout(() => {
+        navigation.pop();
+      }, 1000);
     });
   };
 
@@ -236,7 +251,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
     }).then(res => {
       console.log('res berhasil ubah ke send', res);
       hideLoading()
-      alert('Success Dikemas');
+      alert('Success Dikirim');
           setTimeout(() => {
             navigation.pop();
           }, 1000);
@@ -261,6 +276,17 @@ const TransactionDetailSeller = ({route, navigation}) => {
     modalizeRef.current.open();
     // createShipperOrder()
   };
+{console.log("resss",route.params.item.shipperOrderNumber)}
+
+  const getOrderList = () => {
+    const variables = {
+      orderId:route.params.item.id,
+    }
+
+    Client.query({query:queryGetTracking,variables}).then((res)=>{
+      console.log("res order listtttttttt",res)
+    })
+  }
   const {Color} = useColor();
   return (
     <Scaffold
@@ -526,7 +552,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
             </Text>
           </Row>
           {console.log("ada gakk", shipperOrder)}
-          {shipperOrder ? <Row style={{paddingHorizontal: 10, paddingVertical: 5}}>
+          {route.params.item.shipperOrderNumber ? <Row style={{paddingHorizontal: 10, paddingVertical: 5}}>
             <Text
               style={{
                 fontSize: 10,
@@ -550,7 +576,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
                 textAlign: 'left',
                 color: Color.secondary,
               }}>
-              {shipperOrder.order_id}
+              {route.params.item.shipperOrderNumber}
             </Text>
           </Row> : <View/>} 
           
@@ -842,7 +868,8 @@ const TransactionDetailSeller = ({route, navigation}) => {
         </View>
       )}
 
-      {data.statusId === 2 && (
+      {data.statusId === 2 && !route.params.item.shipperOrderNumber &&(
+        
         <View
           style={{
             backgroundColor: Color.theme,
@@ -850,6 +877,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
             width: '100%',
             padding: 16,
           }}>
+          
           <TouchableOpacity
             onPress={() => {
               pickupSchedule();
@@ -880,8 +908,8 @@ const TransactionDetailSeller = ({route, navigation}) => {
             </TouchableOpacity>
           )}
           {shipperOrder && <TouchableOpacity
-            onPress={() => {navigation.navigate("TrackingOrder",{shipperOrder})
-            }}
+            onPress={() => {createPickupOrderTimeSlot();
+              inputShippingNumber();}}
             style={{
               backgroundColor: Color.theme,
               borderRadius: 120,
@@ -894,28 +922,36 @@ const TransactionDetailSeller = ({route, navigation}) => {
             <Text style={{color: Color.primary}}>Pickup Order</Text>
           </TouchableOpacity>}
           
-          
-          
-          {schedulePickUp.length !=0 && <TouchableOpacity
+          </View>
+      )} 
+          {console.log(schedulePickUp,"aaaaaaaaaaa")}
+          { route.params.item.shipperOrderNumber && data.statusId == 2 &&
+            <View
+          style={{
+            backgroundColor: Color.theme,
+            flexDirection: 'column',
+            width: '100%',
+            padding: 16,
+          }}>
+          <TouchableOpacity
             onPress={() => {
-              createPickupOrderTimeSlot();
-              inputShippingNumber();
+              
               updateStatusToSend();
               
             }}
             style={{
-              backgroundColor: Color.theme,
+              backgroundColor: Color.primary,
               borderRadius: 120,
               paddingVertical: 10,
               paddingHorizontal: 107,
               borderColor: Color.primary,
               borderWidth: 1,
             }}>
-            <Text style={{color: Color.primary}}>Kirim Barang</Text>
-          </TouchableOpacity>}
+            <Text style={{color: Color.textInput}}>Kirim Barang</Text>
+          </TouchableOpacity>
+          </View>}
           
-        </View>
-      )}
+        
 
       {data.statusId === 3 && (
         <View
