@@ -62,7 +62,6 @@ const ListProduct = (props) => {
   const onEndReached = async () => {
     // setPage(page+1);
       getProduct()
-    
   }
 
   return (

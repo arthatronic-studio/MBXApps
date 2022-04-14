@@ -45,14 +45,15 @@ import Ecommerce from '../Ecommerce/Ecommerce';
 import {mutationCancel, queryListOrder} from 'src/lib/query/ecommerce';
 import {FormatMoney} from 'src/utils';
 
-const itemPerPage = 50;
+const itemPerPage = 20;
 
 const Notification = () => {
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
 
+  const [page, setPage] = useState(1);
   const [loadingProps, showLoading, hideLoading] = useLoading();
-  const [listData, setList] = useState('');
+  const [listData, setList] = useState([]);
   const {Color} = useColor();
   const navigation = useNavigation();
 
@@ -64,7 +65,7 @@ const Notification = () => {
     showLoading()
     console.log(user);
     let variables = {
-      page: 1,
+      page: page,
       itemPerPage,
       status: undefined,
       userId: user.userId,
@@ -74,8 +75,9 @@ const Notification = () => {
       .then(res => {
         hideLoading()
         console.log(res);
-        if (res.data.ecommerceOrderList) {
-          setList(res.data.ecommerceOrderList);
+        if (res.data.ecommerceOrderList.length > 0) {
+          setList(listData.concat(res.data.ecommerceOrderList));
+          setPage(page+1)
           // getCancelOrder()
         }
 
@@ -89,6 +91,7 @@ const Notification = () => {
   };
 
   const updateStatus = (item) => {
+    setPage(1)
     console.log(user);
     showLoading()
     let variables = {
@@ -115,6 +118,11 @@ const Notification = () => {
     {key: 'sedangdibeli', title: 'Sedang Dibeli'},
     {key: 'semuariwayat', title: 'Semua Riwayat'},
   ]);
+
+  const onEndReached = async () => {
+    // setPage(page+1);
+      getProduct()
+  }
 
   const renderItem = ({item}) => (
     <View style={{width: '100%', paddingHorizontal: 8, marginBottom: 16}}>
@@ -401,6 +409,8 @@ const Notification = () => {
       <FlatList
         data={listData}
         renderItem={renderItem}
+        onEndReachedThreshold={0.3}
+        onEndReached={() => onEndReached()}
         keyExtractor={item => item.id}
         style={{ backgroundColor: Color.semiwhite }}
         contentContainerStyle={{ paddingTop: 16, paddingHorizontal: 8 }}
