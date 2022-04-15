@@ -54,7 +54,9 @@ const MyProduct = ({navigation, route}) => {
     let variables = {
       merchantId: id,
     }
-    console.log(variables)
+
+    console.log(variables);
+
     Client.query({query: queryGetMyProduct, variables})
       .then(res => {
         // hideLoading()
@@ -85,8 +87,10 @@ const MyProduct = ({navigation, route}) => {
       },
       merchantId:id,
       type: 'DELETED',
-  }
-    console.log(variables)
+    }
+    
+    console.log(variables);
+
     Client.mutate({mutation: mutationMerchant, variables})
       .then(res => {
        
@@ -107,7 +111,7 @@ const MyProduct = ({navigation, route}) => {
 
   useEffect(() => {
     getProductList();
-  }, [data]);
+  }, []);
 
   return (
     <Scaffold

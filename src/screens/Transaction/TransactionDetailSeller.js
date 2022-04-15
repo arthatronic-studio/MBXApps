@@ -880,7 +880,8 @@ const TransactionDetailSeller = ({route, navigation}) => {
             </TouchableOpacity>
           )}
           {shipperOrder && <TouchableOpacity
-            onPress={() => {navigation.navigate("TrackingOrder",{shipperOrder})
+            onPress={() => {
+              // navigation.navigate("TrackingOrder", {shipperOrder});
             }}
             style={{
               backgroundColor: Color.theme,
@@ -893,8 +894,6 @@ const TransactionDetailSeller = ({route, navigation}) => {
             }}>
             <Text style={{color: Color.primary}}>Pickup Order</Text>
           </TouchableOpacity>}
-          
-          
           
           {schedulePickUp.length !=0 && <TouchableOpacity
             onPress={() => {
@@ -1013,7 +1012,6 @@ const TransactionDetailSeller = ({route, navigation}) => {
                       start_time: item.start_time,
                       end_time: item.end_time,
                     });
-                    
                   }}>
                   <Ionicons color={_isActive ? Color.primary : Color.secondary} size={11} name={_isActive ? 'radio-button-on' : 'radio-button-off'} />
                   <Text style={{color: _isActive ? (Color.text) : (Color.secondary),marginLeft:8 }}>
