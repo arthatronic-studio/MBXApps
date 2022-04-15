@@ -61,7 +61,8 @@ const BidAuction = ({ navigation }) => {
 						style={{
 							flexDirection: 'row',
 							marginHorizontal: 16,
-							marginTop: 33
+							marginTop: 33,
+							marginBottom:16
 						}}
 					>
 						<Image source={ImagesPath.nisa} style={{}} />
@@ -129,7 +130,9 @@ const BidAuction = ({ navigation }) => {
 							</View>
 							<View
 								style={{
-									marginHorizontal: 10
+									marginHorizontal: 10,
+									marginVertical: 15
+
 								}}
 							>
 								<Text style={{ fontSize: 8 }}>Penawaranmu</Text>

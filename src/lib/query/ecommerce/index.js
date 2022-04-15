@@ -645,6 +645,8 @@ export const queryGetProduct = gql`
     ) {
       id
       name
+      rating
+      sold
       categoryId
       description
       price

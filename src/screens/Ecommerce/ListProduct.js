@@ -27,6 +27,7 @@ import { statusBarHeight } from 'src/utils/constants';
 
 const ListProduct = (props) => {
   const [listProduct, setListProduct] = useState([]);
+  const [page, setPage] = useState(1);
   const { Color } = useColor();
   const navigation = useNavigation();
   const { height, width } = useWindowDimensions();
@@ -38,15 +39,16 @@ const ListProduct = (props) => {
 
   const getProduct = () => {
     let variables = {
-      page: 1,
+      page: page,
       itemPerPage: 10
     }
-
+    console.log(variables)
     Client.query({ query: queryGetProduct, variables })
       .then(res => {
         console.log(res)
-        if (res.data.ecommerceProductList) {
-          setListProduct(res.data.ecommerceProductList);
+        if (res.data.ecommerceProductList.length != 0) {
+          setListProduct(listProduct.concat(res.data.ecommerceProductList));
+          setPage(page+1)
         }
 
         // hideLoading();
@@ -56,6 +58,11 @@ const ListProduct = (props) => {
         console.log(reject);
       });
   };
+
+  const onEndReached = async () => {
+    // setPage(page+1);
+      getProduct()
+  }
 
   return (
     <>
@@ -85,6 +92,8 @@ const ListProduct = (props) => {
         keyExtractor={(item, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
         data={listProduct}
+        onEndReachedThreshold={0.3}
+        onEndReached={() => onEndReached()}
         renderItem={({ item, index }) => <CardEcomerceProduct item={item} index={index} />}
         contentContainerStyle={{
           paddingHorizontal: 8,
