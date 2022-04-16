@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Image,
@@ -15,13 +15,54 @@ import {
 import {shadowStyle} from '@src/styles';
 import {Container} from '@src/styled';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
-import { listMenuHome } from 'src/screens/MainHome/staticMenuHome';
+import client from 'src/lib/apollo';
+import { queryMenuList } from 'src/lib/query';
+import { accessClient } from 'src/utils/access_client';
 
-const WidgetMenuHome = (props) => {
+const defaultProps = {
+  itemPerPage: 8,
+  onPress: () => {},
+};
+
+const WidgetMenuHome = ({ itemPerPage, onPress }) => {
   const {Color} = useColor();
   const navigation = useNavigation();
   const user = useSelector(state => state['user.auth'].login.user);
   const {width} = useWindowDimensions();
+
+  const [listMenuHome, setListMenuHome] = useState([]);
+
+  useEffect(() => {
+    fetchMenuList();
+  }, []);
+
+  const fetchMenuList = () => {
+    const variables = {
+      page: 1,
+      itemPerPage,
+      orderDir: 'ASC',
+      type: accessClient.InitialCode,
+      category: 'HOME',
+    };
+
+    client.query({
+      query: queryMenuList,
+      variables,
+    })
+    .then((res) => {
+      console.log('res menu list', res);
+
+      const data = res.data.menuList;
+      if (Array.isArray(data)) {
+        setListMenuHome(data);
+      }
+    })
+    .catch((err) => {
+      console.log('err menu list', err);
+    });
+  }
+
+  console.log('listMeny', listMenuHome);
 
   const renderMenuBadge = () => {
     return (
@@ -79,7 +120,7 @@ const WidgetMenuHome = (props) => {
               activeOpacity={0.75}
               disabled={menu.comingsoon}
               onPress={() => {
-                props.onPress(menu);
+                onPress(menu);
 
                 if (menu.nav === '') return;
                 navigation.navigate(menu.nav, menu.params);
@@ -109,7 +150,7 @@ const WidgetMenuHome = (props) => {
                     menu.comingsoon ? {opacity: 0.3} : {}
                   ]}
                   resizeMode="contain"
-                  source={menu.images}
+                  source={{ uri: menu.image }}
                 />
               </View>
               
@@ -126,4 +167,5 @@ const WidgetMenuHome = (props) => {
   );
 };
 
+WidgetMenuHome.defaultProps = defaultProps;
 export default WidgetMenuHome;

@@ -141,7 +141,7 @@ const Ecommerce = ({ navigation }) => {
 
 	const fetchBannerList = () => {
 		const variables = {
-		  categoryId: 1,
+		  categoryId: 6,
 		};
 	
 		Client.query({

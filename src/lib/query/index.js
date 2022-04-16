@@ -21,7 +21,7 @@ import { queryContentUserProduct } from './queryContentUserProduct';
 import { queryProductReport } from './queryProductReport';
 import { queryUserBlock } from './queryUserBlock';
 import { queryGetUserBlock, queryUnblockUser } from './queryBlockUser';
-
+import { queryMenuList } from './queryMenuList';
 
 export {
     queryContentProduct,
@@ -47,5 +47,6 @@ export {
     queryProductReport,
     queryUserBlock,
     queryGetUserBlock,
-    queryUnblockUser
+    queryUnblockUser,
+    queryMenuList,
 };

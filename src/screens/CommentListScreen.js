@@ -17,10 +17,9 @@ import {queryComment, queryDelComment} from '@src/lib/query';
 import { Alert } from '@src/components';
 import {analyticMethods, GALogEvent} from 'src/utils/analytics';
 import { useSelector } from 'react-redux';
-import { listMenuHome } from '@src/screens/MainHome/staticMenuHome';
 import { Container, Divider } from 'src/styled';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { isIphoneNotch } from 'src/utils/constants';
+import { isIphoneNotch, listContentCategory } from 'src/utils/constants';
 
 const itemPerPage = 10;
 const initSelectedComment = {
@@ -215,7 +214,7 @@ const CommentListScreen = ({navigation, route}) => {
         showAll={item.comment > 3 ? true : false}
         onSuccessComment={id => {
           setRefreshComment(true);
-          const getObj = listMenuHome.filter((e => e.code === item.productCategory))[0];
+          const getObj = listContentCategory.filter((e => e.code === item.productCategory))[0];
 
           GALogEvent(getObj ? getObj.name : 'Uncategorized', {
             id: item.id,

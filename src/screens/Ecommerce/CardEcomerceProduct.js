@@ -46,7 +46,7 @@ const CardEcomerceProduct = ({ isMyProduct, item, index, onRefresh }) => {
 			console.log(res)
 
 			if (res.data.ecommerceProductDelete) {
-				if (res.data.ecommerceProductDelete.success == 'Sukses') {
+				if (res.data.ecommerceProductDelete.success === 'OK') {
 					onRefresh();
 					alert('Success delete');
 				} else {
