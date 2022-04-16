@@ -163,6 +163,17 @@ import WishlistEmpty from 'src/screens/Ecommerce/WishlistEmpty';
 import Cart from 'src/screens/Ecommerce/Cart';
 import ListShipping from 'src/screens/Ecommerce/ListShipping';
 
+// Survey Pasar
+import SurveyPasarFirst from 'src/screens/SurveyPasar/SurveyFirst';
+import SurveyPasarSecond from 'src/screens/SurveyPasar/SurveySecond';
+import SurveyPasarThird from 'src/screens/SurveyPasar/SurveyThird';
+
+// Survey Tahu Tempe
+import SurveyTahuTempeFirst from 'src/screens/SurveyTahuTempe/SurveyFirst';
+import SurveyTahuTempeSecond from 'src/screens/SurveyTahuTempe/SurveySecond';
+import SurveyTahuTempeThird from 'src/screens/SurveyTahuTempe/SurveyThird';
+import SurveyTahuTempeFourth from 'src/screens/SurveyTahuTempe/SurveyFourth';
+
 // Transaction
 import TransactionDetail from 'src/screens/Transaction/TransactionDetail';
 import TransactionDetailSeller from 'src/screens/Transaction/TransactionDetailSeller';
@@ -206,6 +217,17 @@ function MainStackNavigator() {
       <Screen name="CreateEmergencyScreen" component={CreateEmergencyScreen} />
       <Screen name="PDFReaderScreen" component={PDFReaderScreen} />
       <Screen name="MusicPlayerScreen" component={MusicPlayerScreen} />
+
+       {/* Survey Pasar */}
+      <Screen name="SurveyPasarFirst" component={SurveyPasarFirst} />
+      <Screen name="SurveyPasarSecond" component={SurveyPasarSecond} />
+      <Screen name="SurveyPasarThird" component={SurveyPasarThird} />
+
+       {/* Survey Pasar */}
+       <Screen name="SurveyTahuTempeFirst" component={SurveyTahuTempeFirst} />
+      <Screen name="SurveyTahuTempeSecond" component={SurveyTahuTempeSecond} />
+      <Screen name="SurveyTahuTempeThird" component={SurveyTahuTempeThird} />
+      <Screen name="SurveyTahuTempeFourth" component={SurveyTahuTempeFourth} />
 
       {/* Auction */}
       <Screen name="CartAuction" component={CartAuction} />
