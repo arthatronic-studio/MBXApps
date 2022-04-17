@@ -63,16 +63,15 @@ const SurveySecond = ({ route, navigation}) => {
 
 
   const [coords, setCoords] = useState({
-    latitude: !isNaN(parseFloat(route.params.address)) ? parseFloat(route.params.address) : initialLatitude,
-    longitude: !isNaN(parseFloat(route.params.address)) ? parseFloat(route.params.address) : initialLongitude,
+    latitude: initialLatitude,
+    longitude: initialLongitude,
   });
 
   console.log('coords', coords);
 
   const [modalSelectMap, setModalSelectMap] = useState(false);
-  const [isPinnedMap, setIsPinnedMap] = useState(
-    route.params.address ? true : false
-  );
+  const [isPinnedMap, setIsPinnedMap] = useState(false
+);
   const [locationPinnedMap, setLocationPinnedMap] = useState('');
 
 	
@@ -83,8 +82,9 @@ const SurveySecond = ({ route, navigation}) => {
     }, []);
 
 	const submit = async () => {
-        const label = ['address','province','city','kecamatan','kelurahan']
-        const dataState = [address, province, city, kecamatan, kelurahan]
+        console.log(coords)
+        const label = ['address','province','city','kecamatan','kelurahan', 'coords']
+        const dataState = [address, province, city, kecamatan, kelurahan, coords]
         let tempData = []
         label.forEach((element, index) => {
             tempData.push({

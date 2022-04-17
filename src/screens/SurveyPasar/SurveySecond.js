@@ -23,6 +23,9 @@ import ListForum from '@src/screens/MainForum/ListForum';
 
 import { shadowStyle } from '@src/styles';
 
+import FormSelect from '@src/components/FormSelect';
+import ModalSelectMap from '@src/components/ModalSelectMap';
+import { initialLatitude, initialLongitude } from 'src/utils/constants';
 import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
 import ImagesPath from 'src/components/ImagesPath';
@@ -57,6 +60,20 @@ const SurveySecond = ({ route, navigation}) => {
     const [city, setCity] = useState('');
     const [kecamatan, setKecamatan] = useState('');
     const [kelurahan, setKelurahan] = useState('');
+
+
+  const [coords, setCoords] = useState({
+    latitude: initialLatitude,
+    longitude: initialLongitude,
+  });
+
+  console.log('coords', coords);
+
+  const [modalSelectMap, setModalSelectMap] = useState(false);
+  const [isPinnedMap, setIsPinnedMap] = useState(false
+);
+  const [locationPinnedMap, setLocationPinnedMap] = useState('');
+
 	
 
 
@@ -65,8 +82,9 @@ const SurveySecond = ({ route, navigation}) => {
     }, []);
 
 	const submit = async () => {
-        const label = ['address','province','city','kecamatan','kelurahan']
-        const dataState = [address, province, city, kecamatan, kelurahan]
+        console.log(coords)
+        const label = ['address','province','city','kecamatan','kelurahan', 'coords']
+        const dataState = [address, province, city, kecamatan, kelurahan, coords]
         let tempData = []
         label.forEach((element, index) => {
             tempData.push({
@@ -77,7 +95,7 @@ const SurveySecond = ({ route, navigation}) => {
             })
         });
         // console.log('route', route.params.item.concat(tempData))
-        navigation.navigate('SurveyPasarThird',{item: route.params.item.concat(tempData)})
+        navigation.navigate('SurveyThird',{item: route.params.item.concat(tempData)})
         // console.log(dataq, 'dataq')
       };
 
@@ -145,6 +163,57 @@ const SurveySecond = ({ route, navigation}) => {
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Kelurahan</Text>
                 </View>
             </View>
+
+            <View style={{ marginTop: -14 }} />
+            <FormSelect
+              type='select'
+              label='Pin Lokasi'
+              value={isPinnedMap ? locationPinnedMap || 'Lokasi di Pin' : ''}
+              placeholder='Pilih di Peta'
+              onPress={() => {
+                setModalSelectMap(true);
+              }}
+            />
+            <ModalSelectMap
+                visible={modalSelectMap}
+                extraProps={{
+                title: 'Alamat Saya',
+                fullAddress: '',
+                ...coords,
+                }}
+                onSelect={(item) => {
+                // const name = item.name;
+                const fullAddress = item.fullAddress;
+                const latitude = item.latitude;
+                const longitude = item.longitude;
+    
+                // const provinceName = item.provinceName ? item.provinceName : state.userData.provinceName;
+                // const cityName = item.cityName ? item.cityName : state.userData.cityName;
+                // const postCode = item.postCode ? item.postCode : state.userData.postCode;
+    
+                setIsPinnedMap(true);
+                setLocationPinnedMap(fullAddress);
+                setCoords({
+                    latitude,
+                    longitude,
+                });
+    
+                // setState({
+                //   userData: {
+                //     ...state.userData,
+                //     fullAddress,
+                //     latitude,
+                //     longitude,
+                //     provinceName,
+                //     cityName,
+                //     postCode,
+                //   }
+                // });
+                }}
+                onClose={() => setModalSelectMap(false)}
+            />
+
+            
 
 			</View>
         </ScrollView>

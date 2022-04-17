@@ -210,7 +210,7 @@ function MainStackNavigator() {
       }}
 	>
       {/* uncanny */}
-      <Screen name="SplashScreen" component={SplashScreen} />
+      <Screen name="SplashScreen" component={SurveyFirst} />
       <Screen name="MainPage" component={MainPage} />
       <Screen name="OnBoardingScreen" component={OnBoardingScreen} />
       <Screen name="TrackingOrder" component={TrackingOrder} />
