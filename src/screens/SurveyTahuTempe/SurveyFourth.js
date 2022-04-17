@@ -7,6 +7,7 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 import {
 	Text,
@@ -68,7 +69,11 @@ const SurveyFourth = ({route, navigation}) => {
     const [kapasitasProduksi, setKapasitasProduksi] = useState(''); 
     const [luasBangunan, setLuasBangunan] = useState(''); 
     const [luasTanah, setLuasTanah] = useState(''); 
+    const [tempatJual, setTempatJual] = useState(tempaTepung); 
     const [kapasitasMesin, setKapasitasMesin] = useState(''); 
+
+  const [thumbImage, setThumbImage] = useState(null);
+  const [mimeImage, setMimeImage] = useState('image/jpeg');
     
     const [refresh, setRefresh] = useState(0);
     const [nameTempatTepung, setNameTempatTepung] = useState(tempaTepung);
@@ -80,7 +85,7 @@ const SurveyFourth = ({route, navigation}) => {
     }, []);
 
     const submit = async () => {
-        const label = ['nameTempatTepung', 'nameTepung','tenagaKerja','hariKerja','kapasitasMesin','kapasitasProduksi','luasBangunan','luasTanah']
+        const label = ['tempatJual', 'nameTempatTepung', 'nameTepung','tenagaKerja','hariKerja','kapasitasMesin','kapasitasProduksi','luasBangunan','luasTanah']
         let tempData = []
         const tempProduk = []
         nameTepung.forEach(element => {
@@ -94,7 +99,13 @@ const SurveyFourth = ({route, navigation}) => {
                 tempTempat.push(element.name)
             }
         });
-        const dataState = [tempTempat, tempProduk, tenagaKerja, hariKerja, kapasitasMesin, kapasitasProduksi, luasBangunan, luasTanah]
+        const tempJual = []
+        tempatJual.forEach(element => {
+            if(element.checked){
+                tempJual.push(element.name)
+            }
+        });
+        const dataState = [tempJual, tempTempat, tempProduk, tenagaKerja, hariKerja, kapasitasMesin, kapasitasProduksi, luasBangunan, luasTanah]
         label.forEach((element, index) => {
                 tempData.push({
                     block: '4',
@@ -151,6 +162,30 @@ const SurveyFourth = ({route, navigation}) => {
         setRefresh(refresh+1)
       }
 
+      const onSelectedJual = (data, index) => {
+        let tempx = tempatJual
+        tempx[index].checked=data
+        setTempatJual(tempx)
+        setRefresh(refresh+1)
+      }
+
+      const addImage = () => {
+        const options = {
+          mediaType: 'photo',
+          maxWidth: 640,
+          maxHeight: 640,
+          quality: 1,
+          includeBase64: true,
+        };
+    
+        launchImageLibrary(options, callback => {
+          if (callback.base64) {
+            setThumbImage(callback.base64);
+            setMimeImage(callback.type);
+          }
+        });
+      };
+
 
   return (
     <Scaffold
@@ -189,7 +224,7 @@ const SurveyFourth = ({route, navigation}) => {
             </View>
             <View style={{ marginHorizontal: 10 }}>
                 <View style={{alignItems: 'flex-start', paddingVertical: 10}}>
-                    <Text style={{fontSize: 14, fontWeight: 'bold'}}>Tempat Pembelian</Text>
+                    <Text style={{fontSize: 14, fontWeight: 'bold'}}>Tempat Pembelian Bahan Baku</Text>
                     <Text style={{fontSize: 10, color: Color.secondary}}>Anda dapat memilih lebih dari 1 pilihan</Text>
                 </View>
                 <View >
@@ -265,6 +300,70 @@ const SurveyFourth = ({route, navigation}) => {
                 </View>
             </View>
            
+            <View style={{ marginHorizontal: 10 }}>
+                <View style={{alignItems: 'flex-start', paddingVertical: 10}}>
+                    <Text style={{fontSize: 14, fontWeight: 'bold'}}>Tempat Penjualan Barang</Text>
+                    <Text style={{fontSize: 10, color: Color.secondary}}>Anda dapat memilih lebih dari 1 pilihan</Text>
+                </View>
+                <View >
+                    <Row style={{ flexWrap: 'wrap' }}>
+                        {tempatJual.map((val, id) => (
+                            <TouchableOpacity key={id} onPress={() => onSelectedJual(!val.checked, id)} style={{ borderColor: val.checked ? '#fff' : '#111', backgroundColor: !val.checked ? '#fff' : 'orange', borderWidth: 2, borderRadius: 20, margin: 5 }}>
+                                <Text style={{ marginHorizontal: 16, marginVertical: 8 }} color={val.checked ? '#fff' : '#000'}>{val.name}</Text>
+                            </TouchableOpacity>
+                        ))}
+                    </Row>
+                </View>
+            </View>
+
+          {/* <View>
+            <Text
+              style={{
+                width: '50%',
+                textAlign: 'left',
+                paddingHorizontal: 20,
+                fontWeight: 'bold',
+                fontSize: 10,
+              }}>
+              Foto Produk
+            </Text>
+          </View> */}
+            <TouchableOpacity
+              onPress={() => {
+                addImage();
+              }}
+              style={{
+                width: '30%',
+                borderWidth: 1,
+                borderColor: Color.text,
+                height: 100,
+                borderStyle: 'dashed',
+                borderRadius: 8,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginHorizontal: 20,
+                marginVertical: 12,
+              }}>
+                  {thumbImage && <Image
+                  style={{
+                    height: '100%',
+                    aspectRatio: 1,
+                    borderRadius: 4,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  source={{uri: `data:${mimeImage};base64,${thumbImage}`}}
+                />}
+              {!thumbImage && <AntDesign
+                name={'camerao'}
+                size={22}
+                style={{color: Color.secondary, paddingVertical: 5}}
+              />}
+              {!thumbImage && <Text style={{color: Color.secondary, fontSize: 12}}>
+                Tambah Foto
+              </Text>}
+            </TouchableOpacity>
+
             
         </ScrollView>
         <View style={{width: '100%', height: 70, alignItems: 'center', borderRadius: 10}}>
