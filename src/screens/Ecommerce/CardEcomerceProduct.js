@@ -122,7 +122,7 @@ const CardEcomerceProduct = ({ isMyProduct, item, index, onRefresh }) => {
 
 				<View style={{ flexDirection: 'row' , marginTop: 8 }}>
 					<Entypo name={'star'} style={{ color: Color.yellow }} />
-					<Text style={{ fontSize: 10, color: Color.secondary, }}>{item.review} </Text>
+					<Text style={{ fontSize: 10, color: Color.secondary, }}>{item.rating || 0} </Text>
 					<View
 						style={{
 							backgroundColor: Color.secondary,

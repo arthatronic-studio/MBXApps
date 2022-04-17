@@ -95,6 +95,8 @@ const WidgetMenuHome = ({ itemPerPage, onPress }) => {
   const widthPerMenu = menuRealLength < 4 ? 100 / menuRealLength : 25;
   const widthIconMenu = (width / (menuRealLength < 4 ? menuRealLength : 4) - 16) / 2.5;
 
+  if (listMenuHome.length === 0) return <View />;
+
   return (
     <Container padding={16}>
       <Container

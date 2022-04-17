@@ -63,52 +63,63 @@ const FormSelect = forwardRef(({ label, placeholder, onPress, onChangeText, valu
             }}>
                 <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>{label}</Text>
             </View>
-            <TouchableOpacity
-                onPress={() => onPress()}
+            <View
                 style={{
                     width: '100%',
-                    flexDirection: 'row',
                     height: 50,
-                    borderRadius: 10,
-                    backgroundColor: Color.textInput,
+                    paddingHorizontal: 16,
                 }}
             >
-                {prefixIcon}
-
-                <Container flex={1} align='flex-start' justify='center' paddingHorizontal={16}>
-                    <Text color={Color.gray}>
-                        {value || placeholder}
-                    </Text>
-                </Container>
-
-                {/* <TextInput
-                    ref={ref}
-                    placeholder={placeholder}
-                    placeholderTextColor={Color.gray}
-                    underlineColorAndroid='transparent'
-                    autoCorrect={false}
-                    onChangeText={(val) => onChangeText(val)}
-                    selectionColor={Color.text}
-                    value={value}
-                    onBlur={() => onBlur()}
-                    returnKeyType={returnKeyType}
-                    onSubmitEditing={() => onSubmitEditing()}
-                    blurOnSubmit={false}
-                    keyboardType={keyboardType}
+                <TouchableOpacity
+                    onPress={() => onPress()}
                     style={{
-                        // width: '100%',
-                        flex: 1,
-                        // height: '100%',
-                        paddingHorizontal: 16,
-                        color: Color.gray,
+                        width: '100%',
+                        height: '100%',
+                        flexDirection: 'row',
+                        borderRadius: 4,
+                        backgroundColor: Color.textInput,
+                        borderWidth: 2,
+                        borderColor: Color.border,
                     }}
-                    secureTextEntry={secureTextEntry}
-                /> */}
+                >
+                    {prefixIcon}
 
-                {suffixIcon || <View style={{height: '100%', width: '10%', paddingRight: 16, justifyContent: 'center', alignItems: 'flex-end'}}>
-                    <Fontisto size={14} name='angle-down' color={Color.gray} />
-                </View>}
-            </TouchableOpacity>
+                    <Container flex={1} align='flex-start' justify='center' paddingHorizontal={8}>
+                        <Text color={Color.gray} numberOfLines={1} align='left'>
+                            {value || placeholder}
+                        </Text>
+                    </Container>
+
+                    {/* <TextInput
+                        ref={ref}
+                        placeholder={placeholder}
+                        placeholderTextColor={Color.gray}
+                        underlineColorAndroid='transparent'
+                        autoCorrect={false}
+                        onChangeText={(val) => onChangeText(val)}
+                        selectionColor={Color.text}
+                        value={value}
+                        onBlur={() => onBlur()}
+                        returnKeyType={returnKeyType}
+                        onSubmitEditing={() => onSubmitEditing()}
+                        blurOnSubmit={false}
+                        keyboardType={keyboardType}
+                        style={{
+                            // width: '100%',
+                            flex: 1,
+                            // height: '100%',
+                            paddingHorizontal: 16,
+                            color: Color.gray,
+                        }}
+                        secureTextEntry={secureTextEntry}
+                    /> */}
+
+                    {suffixIcon || <View style={{height: '100%', width: '10%', paddingRight: 16, justifyContent: 'center', alignItems: 'flex-end'}}>
+                        <Fontisto size={14} name='angle-down' color={Color.gray} />
+                    </View>}
+                </TouchableOpacity>
+            </View>
+
             <View style={{
                 width: '100%',
                 paddingTop: 2,

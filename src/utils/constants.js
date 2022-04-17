@@ -3,6 +3,10 @@ const { StatusBarManager } = NativeModules;
 
 export const statusBarHeight = isIphoneNotch() ? 44 : StatusBarManager['HEIGHT'];
 
+export const googleApiKey = 'AIzaSyAjI_NfMmz2vSZmtvV2c3HY0ziL2WJP-Rw';
+export const initialLatitude = -6.225588;
+export const initialLongitude = 106.798553;
+
 export function isIphoneNotch() {
     const dimen = Dimensions.get('window');
     return (

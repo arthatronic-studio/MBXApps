@@ -14,7 +14,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {
   Text,
   // TouchableOpacity,
-  Loading,
   useLoading,
   Scaffold,
   Row,
@@ -53,18 +52,18 @@ const Content = Styled(View)`
     borderRadius: 8px
 `;
 
-const CheckoutScreen = ({navigation}) => {
-  const dispatch = useDispatch();
-  const route = useRoute();
-  console.log(route);
+const CheckoutScreen = ({ navigation, route }) => {
   const {item} = route.params;
+
+  const dispatch = useDispatch();
   const [address, setAddress] = useState({});
   const [shippment, setShipping] = useState({});
   const isFocused = useIsFocused();
+
   // selector
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
-  console.log(user, 'user');
+  
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const {Color} = useColor();
 
@@ -76,17 +75,21 @@ const CheckoutScreen = ({navigation}) => {
     } else {
       getAddress();
     }
+
     if (saveShippment) setShipping(saveShippment);
   }, [isFocused]);
 
   const getAddress = () => {
     showLoading();
+
     let variables = {
       userId: user.userId,
       page: 1,
       itemPerPage: 1,
     };
+
     console.log(variables);
+
     Client.query({query: queryGetAddress, variables})
       .then(res => {
         hideLoading();
@@ -178,12 +181,16 @@ const CheckoutScreen = ({navigation}) => {
 
   return (
     <Scaffold
-      style={{backgroundColor: Color.semiwhite}}
       header={
         <Header customIcon title="Checkout" type="bold" centerTitle={false} />
       }
-      onPressLeftButton={() => navigation.pop()}>
-      <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
+      onPressLeftButton={() => navigation.pop()}
+      loadingProps={loadingProps}
+    >
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{backgroundColor: Color.semiwhite}}
+      >
         <Content
           style={{
             backgroundColor: Color.theme,
@@ -224,7 +231,7 @@ const CheckoutScreen = ({navigation}) => {
                 style={{marginRight: 6}}
               />
               <Text color={Color.text} type="bold">
-                Rumah
+                Alamat Saya
               </Text>
             </Row>
             <Text
@@ -419,7 +426,9 @@ const CheckoutScreen = ({navigation}) => {
                     </Col>
                 </Row> */}
         </Content>
-        <Content
+
+        {/* hide promo/voucher */}
+        {/* <Content
           style={{backgroundColor: Color.theme, borderRadius: 6, height: 65}}>
           <TouchableOpacity
             onPress={() => navigation.navigate('KuponKu')}
@@ -450,7 +459,7 @@ const CheckoutScreen = ({navigation}) => {
               style={{color: Color.secondary}}
             />
           </TouchableOpacity>
-        </Content>
+        </Content> */}
 
         {/* <Content>
                 <View style={{ backgroundColor: Color.semiwhite, borderRadius: 8, padding: 10}}>
@@ -494,7 +503,6 @@ const CheckoutScreen = ({navigation}) => {
           </TouchableOpacity>
         </Col>
       </Row>
-      <Loading {...loadingProps} />
     </Scaffold>
   );
 };

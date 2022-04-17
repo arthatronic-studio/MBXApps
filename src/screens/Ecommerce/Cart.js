@@ -85,7 +85,7 @@ const Cart = () => {
                     <Text style={{fontWeight: 'bold', marginHorizontal: 15}}>{item.namaProduk}</Text>
                     <View style={{flexDirection: 'row', marginHorizontal: 12, marginVertical: 5}}>
                     <Entypo name={'star'} style={{color: Color.yellow,}}/>
-                    <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 3}}>{item.review}</Text>
+                    <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 3}}>{item.rating || 0}</Text>
                     <View style={{backgroundColor: Color.secondary, height: 12, width: 1, marginHorizontal: 5}}></View>
                     <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 3}}>{item.terjual}</Text>
                     <Text style={{fontSize: 10, color: Color.secondary,}}>Terjual</Text>
@@ -117,7 +117,7 @@ const Cart = () => {
                     </View>
                     <View style={{flexDirection: 'row', marginHorizontal: 12, marginVertical: 5}}>
                     <Entypo name={'star'} style={{color: Color.yellow,}}/>
-                    <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 3}}>{item.review}</Text>
+                    <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 3}}>{item.rating || 0}</Text>
                     <View style={{backgroundColor: Color.secondary, height: 12, width: 1, marginHorizontal: 5}}></View>
                     <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 3}}>{item.terjual}</Text>
                     <Text style={{fontSize: 10, color: Color.secondary,}}>Terjual</Text>

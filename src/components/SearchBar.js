@@ -37,7 +37,6 @@ const SearchBar = ({ type, label, style, onPress, value, onChangeText }) => {
 
     const { Color } = useColor();
 
-
     useEffect(() => {
 
     }, []);

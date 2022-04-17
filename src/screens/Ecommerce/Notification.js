@@ -210,7 +210,7 @@ const Notification = () => {
                   color: Color.secondary,
                   marginHorizontal: 3,
                 }}>
-                {item.review} 5 Harcode
+                {item.rating || 0}
               </Text>
               <View
                 style={{
@@ -225,7 +225,7 @@ const Notification = () => {
                   color: Color.secondary,
                   marginHorizontal: 3,
                 }}>
-                {item.terjual} 12 harcode
+                {item.sold || 0}
               </Text>
               <Text style={{fontSize: 10, color: Color.secondary}}>Terjual</Text>
             </View>

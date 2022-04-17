@@ -512,6 +512,8 @@ export const queryListWishlist = gql`
       imageProducts
       stock
       merchantId
+      sold
+      rating
     }
   }
 `;
@@ -716,6 +718,8 @@ export const queryGetAddress = gql`
         id
         name
       }
+      latitude
+    	longitude
     }
   }
 `;

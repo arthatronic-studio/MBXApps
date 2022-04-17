@@ -599,7 +599,8 @@ const Ecommerce = ({ navigation }) => {
 					style={{ width: '100%', resizeMode: 'contain', marginVertical: 15 }}
 				/> */}
 				
-				<View style={{ marginVertical: 15 }}>
+				{/* hide paling laku */}
+				{/* <View style={{ marginVertical: 15 }}>
 					<View style={{ flexDirection: 'row' }}>
 						<Text
 							onPress={() => navigation.navigate('MerchScreen')}
@@ -634,7 +635,7 @@ const Ecommerce = ({ navigation }) => {
 						showsVerticalScrollIndicator={false}
 						showsHorizontalScrollIndicator={false}
 					/>
-				</View>
+				</View> */}
 			</ScrollView>
 		</Scaffold>
 	);

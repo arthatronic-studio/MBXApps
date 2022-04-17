@@ -15,11 +15,6 @@ import Client from 'src/lib/apollo';
 import { queryGetProduct } from 'src/lib/query/ecommerce';
 import { queryGetListMerchant } from 'src/lib/query/ecommerce';
 import CardMerchant from './CardMerchant';
-import CardProductSearch from './CardProductSearch';
-
-import ImagesPath from '../../components/ImagesPath'
-
-const { width } = Dimensions.get('window');
 
 import {
   Text,
@@ -32,6 +27,8 @@ import {
   useColor
 } from '@src/components';
 import { TouchableOpacity } from '@src/components/Button';
+import CardEcomerceProduct from './CardEcomerceProduct';
+import { initialItemState } from 'src/utils/constants';
 
 const { Navigator, Screen } = createMaterialTopTabNavigator();
 
@@ -121,47 +118,248 @@ const CircleSend = Styled(TouchableOpacity)`
   borderRadius: 20px;
   justifyContent: center;
   alignItems: center;
-  
 `;
 
-const SearchResult = ({navigation, route}) => {
+const FilterProduk = [
+    {
+        id: 1,
+        name: 'Terlaris'
+    },
+    {
+        id: 2,
+        name: 'Gratis Ongkir'
+    },
+    {
+        id: 3,
+        name: 'Terpopuler'
+    }
+];
 
-    const {Color} = useColor()
-    const [page, setPage] = useState(1);
-    const [search, setSearch] = useState("")
-    const [dataProduk, setDataProduk] = useState(null);
+const FilterToko = [
+    {
+        id: 1,
+        name: 'Nama Toko'
+    },
+    {
+        id: 2,
+        name: 'Popularitas'
+    },
+];
+
+const itemPerPage = 6;
+
+const renderFilter = ({item}) => (
+    <Pressable 
+        style={{
+            width: 100, 
+            paddingVertical: 8, 
+            paddingHorizontal: 12, 
+            marginRight: 10,
+            borderRadius: 120,
+            justifyContent: 'center', 
+            alignItems: 'center',
+            backgroundColor: '#A1A1A1'
+        }}
+    >
+        <Text align='left' size={10} color='#ffffff'>{item.name}</Text>
+    </Pressable>
+)
+
+const TabProduk = ({ search }) => {
+    const {Color} = useColor();
+
+    const [dataProduk, setDataProduk] = useState(initialItemState);
+    const [searchProduk, setSearchProduk] = useState(initialItemState);
+
+    useEffect(() => {
+        fetchProduct();
+    }, []);
+
+    useEffect(() => {
+        if (dataProduk.loadNext && dataProduk.page !== -1) {
+            fetchProduct();
+        }
+    }, [dataProduk.loadNext]);
+
+    useEffect(() => {
+        if (searchProduk.loadNext && searchProduk.page !== -1) {
+            fetchSearchProduct();
+        }
+    }, [searchProduk.loadNext]);
+
+    useEffect(() => {
+        const timeout = search !== '' ?
+            setTimeout(() => {
+                setSearchProduk({ ...searchProduk, refresh: true });
+            }, 1000) : null;
+
+        return () => {
+            clearTimeout(timeout);
+        }
+    }, [search]);
+
+    useEffect(() => {
+        if (searchProduk.refresh) {
+            fetchSearchProduct();
+        }
+    }, [searchProduk.refresh]);
+
+    const fetchProduct = () => {
+        let variables = {
+            page: dataProduk.page + 1,
+            itemPerPage,
+            name: search
+        }
+
+        console.log(variables);
+
+        Client.query({query: queryGetProduct, variables})
+        .then(res => {
+            console.log(res);
+
+            const data = res.data.ecommerceProductList;
+            let newData = [];
+            if (Array.isArray(data)) {
+                newData = data;
+            }
+
+            setDataProduk({
+                ...dataProduk,
+                data: dataProduk.data.concat(newData),
+                page: newData.length === itemPerPage ? dataProduk.page + 1 : -1,
+                loading: false,
+                loadNext: false,
+                refresh: false,
+            });
+        })
+        .catch(reject => {
+            console.log(reject);
+
+            setDataProduk({
+                ...dataProduk,
+                loading: false,
+                loadNext: false,
+                refresh: false,
+            });
+        });
+    }
+
+    const fetchSearchProduct = () => {
+        let variables = {
+            page: searchProduk.page + 1,
+            itemPerPage,
+            name: search
+        }
+
+        console.log(variables);
+
+        Client.query({query: queryGetProduct, variables})
+        .then(res => {
+            console.log(res);
+
+            const data = res.data.ecommerceProductList;
+            let newData = [];
+            if (Array.isArray(data)) {
+                newData = data;
+            }
+
+            setSearchProduk({
+                ...searchProduk,
+                data: searchProduk.refresh ? newData : searchProduk.data.concat(newData),
+                page: newData.length === itemPerPage ? searchProduk.page + 1 : -1,
+                loading: false,
+                loadNext: false,
+                refresh: false,
+            });
+        })
+        .catch(reject => {
+            console.log(reject);
+
+            setSearchProduk({
+                ...searchProduk,
+                loading: false,
+                loadNext: false,
+                refresh: false,
+            });
+        });
+    }
+
+    return (
+        <>
+            {/* hide filter product */}
+            {/* <View style={{padding: 16, flexDirection: 'row', alignItems: 'center'}}>
+                <Pressable 
+                    style={{
+                        width: 80,
+                        borderWidth: 0.8,
+                        paddingVertical: 8, 
+                        paddingHorizontal: 12, 
+                        marginRight: 10,
+                        borderRadius: 120,
+                        flexDirection: 'row',
+                        justifyContent: 'center', 
+                        alignItems: 'center',
+                    }}
+                >
+                    <AntDesign
+                        name={'filter'}
+                        size={16}
+                    />
+                    <Text align='left' style={{marginLeft: 8}} size={10}>Filter</Text>
+                </Pressable>
+                <FlatList 
+                    data={FilterProduk}
+                    renderItem={renderFilter}
+                    keyExtractor={item => item.id}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                />
+            </View> */}
+            <FlatList
+                data={search !== '' ? searchProduk.data : dataProduk.data}
+                keyExtractor={(item, index) => item.id + index.toString()}
+                numColumns={2}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{
+                    paddingTop: 16,
+                    paddingHorizontal: 8,
+                }}
+                renderItem={({ item, index }) => {
+                    return (
+                        <CardEcomerceProduct
+                            item={item}
+                            index={index}
+                        />
+                    )
+                }}
+                onEndReachedThreshold={0.3}
+                onEndReached={() =>
+                    search !== '' ?
+                    setSearchProduk({ ...searchProduk, loadNext: true }) :
+                    setDataProduk({ ...dataProduk, loadNext: true })
+                }
+            />
+        </>
+    )
+}
+
+const TabToko = ({ search }) => {
+    const {Color} = useColor();
+
     const [dataMerchant, setDataMerchant] = useState(null);
 
     useEffect(() => {
         getMerchant();
-        getProduct();
     }, []);
-
-    const getProduct = () => {
-        let variables = {
-            page: page,
-            itemPerPage: 50,
-            name: search
-        }
-        console.log(variables)
-        Client.query({query: queryGetProduct, variables})
-            .then(res => {
-                console.log(res)
-                if (res.data.ecommerceProductList) {
-                    setDataProduk(res.data.ecommerceProductList);
-                }
-            })
-            .catch(reject => {
-                console.log(reject);
-            });
-    }
 
     const getMerchant = () => {
         let variables = {
-            page: page,
+            page: 1,
             limit: 50,
             merchantName: search
         }
+
         Client.query({query: queryGetListMerchant, variables})
             .then(res => {
                 if (res.data.ecommerceGetListMerchant) {
@@ -174,188 +372,64 @@ const SearchResult = ({navigation, route}) => {
             });
     }
 
-    const FilterProduk = [
-        {
-            id: 1,
-            name: 'Terlaris'
-        },
-        {
-            id: 2,
-            name: 'Gratis Ongkir'
-        },
-        {
-            id: 3,
-            name: 'Terpopuler'
-        }
-    ]
-    
-    const FilterToko = [
-        {
-            id: 1,
-            name: 'Nama Toko'
-        },
-        {
-            id: 2,
-            name: 'Popularitas'
-        },
-    ]
-    
-    // const DataToko = [
-    //     {
-    //         id: 1,
-    //         name: 'Bytme Shop',
-    //         location: 'Jakarta Selatan',
-    //         image: ImagesPath.merchant1,
-    //     },
-    //     {
-    //         id: 2,
-    //         name: 'Observe Shop',
-    //         location: 'Jakarta Selatan',
-    //         image: ImagesPath.merchant2,
-    //     },
-    //     {
-    //         id: 3,
-    //         name: 'Hammerhead Shop',
-    //         location: 'Jakarta Selatan',
-    //         image: ImagesPath.merchant3,
-    //     },
-    //     {
-    //         id: 4,
-    //         name: 'Suslli Shop',
-    //         location: 'Jakarta Selatan',
-    //         image: ImagesPath.merchant4,
-    //     },
-    //     {
-    //         id: 5,
-    //         name: 'Hammerhead Shop',
-    //         location: 'Jakarta Selatan',
-    //         image: ImagesPath.merchant5,
-    //     },
-    // ]
-    
-      const renderFilter = ({item}) => (
-        <Pressable 
-            style={{
-                width: 100, 
-                paddingVertical: 8, 
-                paddingHorizontal: 12, 
-                marginRight: 10,
-                borderRadius: 120,
-                justifyContent: 'center', 
-                alignItems: 'center',
-                backgroundColor: '#A1A1A1'
-            }}
-        >
-            <Text align='left' size={10} color='#ffffff'>{item.name}</Text>
-        </Pressable>
-      )
-    
-    const handleLoadMore = ()  => {
-        setPage(page+1);
-        getProduct()
-    }
-
-      const TabProduk = () => {
-        return (
-            <>  
-                <View style={{padding: 16, flexDirection: 'row', alignItems: 'center'}}>
-                    <Pressable 
-                        style={{
-                            width: 80,
-                            borderWidth: 0.8,
-                            paddingVertical: 8, 
-                            paddingHorizontal: 12, 
-                            marginRight: 10,
-                            borderRadius: 120,
-                            flexDirection: 'row',
-                            justifyContent: 'center', 
-                            alignItems: 'center',
-                        }}
-                    >
-                        <AntDesign
-                            name={'filter'}
-                            size={16}
-                        />
-                        <Text align='left' style={{marginLeft: 8}} size={10}>Filter</Text>
-                    </Pressable>
-                    <FlatList 
-                        data={FilterProduk}
-                        renderItem={renderFilter}
-                        keyExtractor={item => item.id}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
+    return (
+          <>
+            {/* hide filter merchant */}
+            {/* <View style={{padding: 16, flexDirection: 'row', alignItems: 'center'}}>
+                <Pressable 
+                    style={{
+                        width: 80,
+                        borderWidth: 0.8,
+                        paddingVertical: 8, 
+                        paddingHorizontal: 12, 
+                        marginRight: 10,
+                        borderRadius: 120,
+                        flexDirection: 'row',
+                        justifyContent: 'center', 
+                        alignItems: 'center',
+                    }}
+                >
+                    <AntDesign
+                        name={'filter'}
+                        size={16}
                     />
-                </View>
-                <FlatList
-                    data={dataProduk}
+                    <Text align='left' style={{marginLeft: 8}} size={10}>Filter</Text>
+                </Pressable>
+
+                <FlatList 
+                    data={FilterToko}
+                    renderItem={renderFilter}
                     keyExtractor={item => item.id}
-                    numColumns={2}
-                    showsVerticalScrollIndicator={false}
+                    horizontal
                     showsHorizontalScrollIndicator={false}
-                    renderItem={({ item, index }) => {
-                        return (
-                          <CardProductSearch
-                            item={item}
-                          />
-                        )
-                      }}
-                    // onEndReached={() => handleLoadMore()}
                 />
-            </>
-        )
-      }
-    
-      const TabToko = () => {
-          return (
-              <>
-                <View style={{padding: 16, flexDirection: 'row', alignItems: 'center'}}>
-                    <Pressable 
-                        style={{
-                            width: 80,
-                            borderWidth: 0.8,
-                            paddingVertical: 8, 
-                            paddingHorizontal: 12, 
-                            marginRight: 10,
-                            borderRadius: 120,
-                            flexDirection: 'row',
-                            justifyContent: 'center', 
-                            alignItems: 'center',
-                        }}
-                    >
-                        <AntDesign
-                            name={'filter'}
-                            size={16}
-                        />
-                        <Text align='left' style={{marginLeft: 8}} size={10}>Filter</Text>
-                    </Pressable>
-                    <FlatList 
-                        data={FilterToko}
-                        renderItem={renderFilter}
-                        keyExtractor={item => item.id}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                    />
-                </View>
-                <FlatList
-                  key={'GENERAL'}
-                  keyExtractor={(item, index) => item.toString() + index}
-                  data={dataMerchant}
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={{}}
-                  renderItem={({ item, index }) => {
-                    return (
-                      <CardMerchant
-                        componentType={'GENERAL'}
-                        item={item}
-                        onPress={() => onPress(item)}
-                      />
-                    )
-                  }}
-                />
-              </>
-          )
-      }
+            </View> */}
+            <FlatList
+              key={'GENERAL'}
+              keyExtractor={(item, index) => item.toString() + index}
+              data={dataMerchant}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                  paddingTop: 16,
+              }}
+              renderItem={({ item, index }) => {
+                return (
+                  <CardMerchant
+                    componentType={'GENERAL'}
+                    item={item}
+                    onPress={() => onPress(item)}
+                  />
+                )
+              }}
+            />
+          </>
+      )
+}
 
+const SearchResult = ({navigation, route}) => {
+    const {Color} = useColor();
+    const [search, setSearch] = useState("");
+    
     return (
         <Scaffold
             header={
@@ -375,7 +449,7 @@ const SearchResult = ({navigation, route}) => {
                     >
                     <TextInputNumber
                         name="text"
-                        placeholder="Cari Topik apa kali ini  . . ."
+                        placeholder="Cari Topik apa kali ini..."
                         placeholderTextColor={Color.placeholder}
                         blurOnSubmit={false}
                         returnKeyType='search'
@@ -387,27 +461,13 @@ const SearchResult = ({navigation, route}) => {
                             color: Color.text,
                         }}
                         onSubmitEditing={() => {
-                            setPage(1)
-                            getProduct() 
-                            getMerchant()
-                            Keyboard.dismiss()
+                            // Keyboard.dismiss();
                         }}
                         onBlur={() => { }}
-                        // onKeyPress={(e) => {
-                        //     if(e.key=="Enter") {
-                        //         setPage(1)
-                        //         getProduct()
-                        //         getMerchant()
-                        //         Keyboard.dismiss()
-                        //     }
-                        // }}
                     />
                     <CircleSend
                         onPress={() => {
-                            setPage(1)
-                            getProduct() 
-                            getMerchant()
-                            Keyboard.dismiss()
+                            // Keyboard.dismiss();
                         }}
                     >
                         <Ionicons name="search" size={20} color={Color.placeholder} />
@@ -432,14 +492,14 @@ const SearchResult = ({navigation, route}) => {
                     }}
                 >
                     <Screen
-                    name="TabProduk"
-                    component={() => TabProduk()}
-                    options={{ tabBarLabel: 'Produk' }}
+                        name="TabProduk"
+                        children={() => <TabProduk search={search} />}
+                        options={{ tabBarLabel: 'Produk' }}
                     />
                     <Screen
-                    name="TabToko"
-                    component={() => TabToko()}
-                    options={{ tabBarLabel: 'Toko' }}
+                        name="TabToko"
+                        children={() => <TabToko search={search} />}
+                        options={{ tabBarLabel: 'Toko' }}
                     />
                 </Navigator>
             </MainView>    

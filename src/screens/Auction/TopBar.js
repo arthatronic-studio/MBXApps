@@ -10,6 +10,10 @@ const Tab = createMaterialTopTabNavigator();
 function MyTabs() {
   const {Color} = useColor();
 
+  return <CartShop />
+
+  // hide tab
+
   return (
     <Tab.Navigator
       initialRouteName="Shop"

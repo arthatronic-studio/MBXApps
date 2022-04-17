@@ -10,17 +10,17 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {
   Text,
   // TouchableOpacity,
-  Loading, useLoading,
+  useLoading,
   Scaffold,
   Row, Col,
-  HeaderBig,
   useColor,
   Header,
-  ModalListAction
+  ModalListAction,
 } from '@src/components';
 import { TouchableOpacity } from '@src/components/Button';
 import ListForum from '@src/screens/MainForum/ListForum';
-
+import FormSelect from '@src/components/FormSelect';
+import ModalSelectMap from '@src/components/ModalSelectMap';
 import { shadowStyle } from '@src/styles';
 
 import Client from '@src/lib/apollo';
@@ -28,18 +28,11 @@ import { queryContentProduct } from '@src/lib/query';
 import { TextInput } from 'src/components/Form';
 import ModalProvince from 'src/components/Modal/ModalProvince';
 import { queryAddAddress, queryEditAddress, queryGetArea, queryGetCity, queryGetProvince, queryGetSub } from 'src/lib/query/ecommerce';
+import { initialLatitude, initialLongitude } from 'src/utils/constants';
 
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
+const FormPayment = ({ route, navigation }) => {
+  const routeAddress = route.params.address.address;
 
-const Content = Styled(View)`
-    margin: 16px
-    padding: 12px
-    borderRadius: 8px
-`;
-
-const FormPayment = ({ route, navigation  }) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
@@ -53,6 +46,21 @@ const FormPayment = ({ route, navigation  }) => {
   const [dataCity, setDataCity] = useState([]);
   const [dataArea, setDataArea] = useState([]);
   const [dataSub, setDataSub] = useState([]);
+  const [coords, setCoords] = useState({
+    latitude: !isNaN(parseFloat(route.params.address.latitude)) ? parseFloat(route.params.address.latitude) : initialLatitude,
+    longitude: !isNaN(parseFloat(route.params.address.longitude)) ? parseFloat(route.params.address.longitude) : initialLongitude,
+  });
+
+  console.log('coords', coords);
+
+  const [modalSelectMap, setModalSelectMap] = useState(false);
+  const [isPinnedMap, setIsPinnedMap] = useState(
+    route.params.address.latitude && route.params.address.longitude ? true : false
+  );
+  const [locationPinnedMap, setLocationPinnedMap] = useState('');
+
+  console.log(isPinnedMap, 'routeng', route);
+
   // selector
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
@@ -60,14 +68,9 @@ const FormPayment = ({ route, navigation  }) => {
   const modalListActionRef = useRef();
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const { Color } = useColor();
-
   
   useEffect(() => {
-   
-    console.log(route.params)
-    firstGet()
-    return () => {
-    }
+    firstGet();
   }, [])
 
   const getData = (name, value) => {
@@ -124,8 +127,9 @@ const FormPayment = ({ route, navigation  }) => {
         console.log(res, name)
         if(res.data.shipperGetProvinceList){
           if (res.data.shipperGetProvinceList.length > 0) {
-            setDataProvince(res.data.shipperGetProvinceList)
-            if(route.params.address.address){
+            setDataProvince(res.data.shipperGetProvinceList);
+
+            if (routeAddress) {
               getData('prov', {id: route.params.address.provinceId})
               // const idx = res.data.shipperGetProvinceList.findIndex(val => val.id == route.params.address.provinceId)
               // setProv(res.data.shipperGetProvinceList[idx])
@@ -138,7 +142,7 @@ const FormPayment = ({ route, navigation  }) => {
               getData('city', {id: route.params.address.cityId})
               getData('sub', {id: route.params.address.suburb.id})
               setCode(route.params.address.postalCode)
-              setAddress(route.params.address.address)
+              setAddress(routeAddress);
               setName(route.params.address.penerimaName)
               setPhone(route.params.address.noTelp)
             }
@@ -149,7 +153,7 @@ const FormPayment = ({ route, navigation  }) => {
         //   console.log('city')
         //   if (res.data.shipperGetCitiesList.length > 0) {
         //     setDataCity(res.data.shipperGetCitiesList)
-        //     if(route.params.address.address){
+        //     if (routeAddress) {
         //       const idx = res.data.shipperGetCitiesList.findIndex(val => val.id == route.params.address.cityId)
         //       setKota(res.data.shipperGetCitiesList[idx])
         //     }
@@ -158,7 +162,7 @@ const FormPayment = ({ route, navigation  }) => {
         
         // if (res.data.shipperGetSuburbList){
         //   if (res.data.shipperGetSuburbList.length > 0) {
-        //     if(route.params.address.address){
+        //     if (routeAddress) {
         //       const idx = res.data.shipperGetSuburbList.findIndex(val => val.id == route.params.address.suburbId)
         //       setKec(res.data.shipperGetSuburbList[idx])
         //     }
@@ -168,7 +172,7 @@ const FormPayment = ({ route, navigation  }) => {
 
         // if (res.data.shipperGetAreaList){
         //   if (res.data.shipperGetAreaList.length > 0) {
-        //     if(route.params.address.address){
+        //     if (routeAddress) {
         //       const idx = res.data.shipperGetAreaList.findIndex(val => val.id == route.params.address.areaId)
         //       setArea(res.data.shipperGetAreaList[idx])
         //     }
@@ -186,12 +190,12 @@ const FormPayment = ({ route, navigation  }) => {
 
 
   const submit = () => {
-    console.log(user)
-    const quer = route.params.address.address ? queryEditAddress : queryAddAddress
+    const quer = routeAddress ? queryEditAddress : queryAddAddress
+    
     showLoading();
+
     let variables = {
-      addresses:route.params.address.address ? {
-        id: route.params.address.id,
+      addresses: {
         userId: user.userId,
         countryId: 228,
         provinceId: prov ? prov.id : prov,
@@ -204,25 +208,18 @@ const FormPayment = ({ route, navigation  }) => {
         address: address,
         postalCode: postalCode,
         penerimaName: name,
-        noTelp: phone
-      } :
-      {
-        userId: user.userId,
-        countryId: 228,
-        provinceId: prov ? prov.id : prov,
-        cityId: kota ? kota.id : kota,
-        suburbId: kec ? kec.id : kec,
-        areaId: area ? area.id : area,
-        // province: prov ? prov.name : prov,
-        // city: kota ? kota.name : kota,
-        // suburb: kec ? kec.name : kec,
-        address: address,
-        postalCode: postalCode,
-        penerimaName: name,
-        noTelp: phone
+        noTelp: phone,
+        latitude: isPinnedMap ? coords.latitude.toString() : null,
+        longitude: isPinnedMap ? coords.longitude.toString() : null,
       }
+    };
+
+    if (routeAddress) {
+      variables.addresses.id = route.params.address.id;
     }
-    console.log(variables)
+
+    console.log(variables);
+
     Client.mutate({mutation: quer, variables})
       .then(res => {
         hideLoading()
@@ -294,28 +291,18 @@ const FormPayment = ({ route, navigation  }) => {
 
   return (
     <Scaffold
-          header={
-            <Header 
-              customIcon 
-              title='Ubah Alamat' 
-              type='regular' 
-              centerTitle={false}
-            />
-          }
-        >
-        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, }}>
+      loadingProps={loadingProps}
+      header={
+        <Header 
+          customIcon 
+          title='Ubah Alamat' 
+          type='regular' 
+          centerTitle={false}
+        />
+      }
+    >
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{ marginBottom: 40 }}>
-            <Text align='left' style={{ paddingLeft: 16, marginTop: 15 }} type='bold'>Detail Alamat</Text>
-            <View style={{width: '100%', height: 200, marginVertical: 10}}>
-              <MapView style={{width: '100%', height: 200}} initialRegion={{
-                latitude: -6.173696,
-                longitude: 106.824707,
-                latitudeDelta: 0.009,
-                longitudeDelta: 0.009
-              }}>
-                <Marker coordinate={{latitude: -6.175200397040409, longitude: 106.82714206826583}}/>
-              </MapView>
-            </View>
             <TextInput
               placeholder='Adang Susanyo'
               title='Nama Penerima'
@@ -326,6 +313,7 @@ const FormPayment = ({ route, navigation  }) => {
               textInputStyle={{ borderWidth: 2, borderColor: Color.border, borderRadius: 5, paddingLeft: 10 }}
               style={{height: 50, color: Color.gray, fontSize: 14, borderWidth: 1, fontFamily: 'Inter-Regular', marginLeft: 8}}
             />
+
             <TextInput
               placeholder='813-1234-5678'
               title='No Telpon'
@@ -337,7 +325,18 @@ const FormPayment = ({ route, navigation  }) => {
               textInputStyle={{ borderWidth: 2, borderColor: Color.border, borderRadius: 5, paddingLeft: 10 }}
               style={{height: 50, color: Color.gray, fontSize: 14, borderWidth: 1, fontFamily: 'Inter-Regular', marginLeft: 8}}
             />
-            <Text align='left' style={{ marginTop: 15,  marginLeft: 16, color: Color.gray }} size={13}>Alamat Lengkap</Text>
+
+            <FormSelect
+              type='select'
+              label='Pin Lokasi'
+              value={isPinnedMap ? locationPinnedMap || 'Lokasi di Pin' : ''}
+              placeholder='Pilih di Peta'
+              onPress={() => {
+                setModalSelectMap(true);
+              }}
+            />
+
+            <Text align='left' style={{ marginLeft: 16, color: Color.gray }} size={13}>Alamat Lengkap</Text>
             <TextInputs
               placeholder='Tuliskan Alamat . . . '
               numberOfLines={3}
@@ -347,8 +346,9 @@ const FormPayment = ({ route, navigation  }) => {
               value={address}
               multiline
               placeholderTextColor={Color.gray}
-              style={{ borderWidth: 2, borderColor: Color.border, marginHorizontal: 16, borderRadius: 5, paddingLeft: 10 }}
+              style={{ borderWidth: 2, borderColor: Color.border, marginHorizontal: 16, borderRadius: 5, paddingLeft: 10, minHeight: 100 }}
             />
+
             <View>
               <Text align='left' style={{ marginTop: 15, marginLeft: 16, color: Color.gray }} size={13}>Provinsi</Text>
               <TouchableOpacity onPress={() => {setnameModal('prov'); modalListActionRef.current.open()}} style={{ borderWidth: 2, borderColor: Color.border, marginHorizontal: 16, paddingVertical: 15, borderRadius: 5, paddingHorizontal: 10 }}>
@@ -362,6 +362,7 @@ const FormPayment = ({ route, navigation  }) => {
                 </Row>
               </TouchableOpacity>
             </View>
+
             <View>
               <Text align='left' style={{ marginTop: 15, marginLeft: 16, color: Color.gray }} size={13}>Kota / Kabupaten</Text>
               <TouchableOpacity  onPress={() => {setnameModal('city'); modalListActionRef.current.open()}} style={{ borderWidth: 2, borderColor: Color.border, marginHorizontal: 16, paddingVertical: 15, borderRadius: 5, paddingHorizontal: 10 }}>
@@ -375,6 +376,7 @@ const FormPayment = ({ route, navigation  }) => {
                 </Row>
               </TouchableOpacity>
             </View>
+
             <View>
               <Text align='left' style={{ marginTop: 15, marginLeft: 16, color: Color.gray }} size={13}>Kecamatan</Text>
               <TouchableOpacity  onPress={() => {setnameModal('sub'); modalListActionRef.current.open()}} style={{ borderWidth: 2, borderColor: Color.border, marginHorizontal: 16, paddingVertical: 15, borderRadius: 5, paddingHorizontal: 10 }}>
@@ -388,6 +390,7 @@ const FormPayment = ({ route, navigation  }) => {
                 </Row>
               </TouchableOpacity>
             </View>
+
             <View>
               <Text align='left' style={{ marginTop: 15, marginLeft: 16, color: Color.gray }} size={13}>Area</Text>
               <TouchableOpacity  onPress={() => {setnameModal('area'); modalListActionRef.current.open()}} style={{ borderWidth: 2, borderColor: Color.border, marginHorizontal: 16, paddingVertical: 15, borderRadius: 5, paddingHorizontal: 10 }}>
@@ -401,6 +404,7 @@ const FormPayment = ({ route, navigation  }) => {
                 </Row>
               </TouchableOpacity>
             </View>
+
             <TextInput
               placeholder='12345'
               title='Kode Pos'
@@ -414,18 +418,58 @@ const FormPayment = ({ route, navigation  }) => {
             />
           </View>
         </ScrollView>
+
         <View style={{ backgroundColor: Color.theme }}>
           <TouchableOpacity onPress={() => submit()} style={{ backgroundColor: Color.info, borderRadius: 30, margin: 15, paddingVertical: 10 }}>
               <Text type='semibold' color={Color.textInput}>Lanjutkan</Text>
           </TouchableOpacity>
         </View>
+
         <ModalListAction
-            ref={modalListActionRef}
-            name={nameModal}
-            onPress={(item, name) => {onSelected(item,name); }}
-            data={nameModal == 'prov' ? dataProvince : nameModal == 'city' ? dataCity : nameModal == 'sub' ? dataSub : nameModal == 'area' ? dataArea : []}
-          />
-      <Loading {...loadingProps} />
+          ref={modalListActionRef}
+          name={nameModal}
+          onPress={(item, name) => {onSelected(item,name); }}
+          data={nameModal == 'prov' ? dataProvince : nameModal == 'city' ? dataCity : nameModal == 'sub' ? dataSub : nameModal == 'area' ? dataArea : []}
+        />
+
+        <ModalSelectMap
+          visible={modalSelectMap}
+          extraProps={{
+            title: 'Alamat Saya',
+            fullAddress: '',
+            ...coords,
+          }}
+          onSelect={(item) => {
+            // const name = item.name;
+            const fullAddress = item.fullAddress;
+            const latitude = item.latitude;
+            const longitude = item.longitude;
+
+            // const provinceName = item.provinceName ? item.provinceName : state.userData.provinceName;
+            // const cityName = item.cityName ? item.cityName : state.userData.cityName;
+            // const postCode = item.postCode ? item.postCode : state.userData.postCode;
+
+            setIsPinnedMap(true);
+            setLocationPinnedMap(fullAddress);
+            setCoords({
+              latitude,
+              longitude,
+            });
+
+            // setState({
+            //   userData: {
+            //     ...state.userData,
+            //     fullAddress,
+            //     latitude,
+            //     longitude,
+            //     provinceName,
+            //     cityName,
+            //     postCode,
+            //   }
+            // });
+          }}
+          onClose={() => setModalSelectMap(false)}
+        />
     </Scaffold>
   );
 }

@@ -48,14 +48,15 @@ const CardMerchant = (props) => {
                     <Text align='left' size={10} color={Color.placeholder}>{item.alamat}</Text>
                 </View>
             </View>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            {/* hide lihat toko */}
+            {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Text align='left' type='bold' color={Color.primary} size={12} style={{marginRight: 4}}>Lihat Toko</Text>
                 <MaterialIcons 
                     name={'keyboard-arrow-right'}
                     size={16}
                     color={Color.primary}
                 />
-            </View>
+            </View> */}
         </Pressable>
     )
 }

@@ -37,14 +37,11 @@ import {
 import {FormatMoney} from 'src/utils';
 import ImagesPath from 'src/components/ImagesPath';
 
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
-
 const CartShop = ({navigation, route}) => {
   const {Color} = useColor();
 
   const [list, setList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState([]);
   const [cart, setCart] = useState(0);
   const [refresh, setRefresh] = useState(0);
@@ -96,10 +93,13 @@ const CartShop = ({navigation, route}) => {
             setList(dataq)
             setChecked(temp)
         }
+
+        setLoading(false);
       })
       .catch(reject => {
         // hideLoading()
-        console.log(reject.message, 'reject');
+        console.log(reject, 'reject');
+        setLoading(false);
       });
   };
 
@@ -410,41 +410,40 @@ const CartShop = ({navigation, route}) => {
   };
 
   return (
-    <View style={{flex: 1, backgroundColor: Color.theme}}>
-      <ScrollView showsVerticalScrollIndicator={false} style={{flex: 1}}>
-        <View>
-          {list && list.length == 0 && <View style={{ marginTop: '20%' }}>
-            <Image source={ImagesPath.ShoppingCartEmpty} style={{ alignSelf: 'center' }} />
-            <Text align='center' size={14} color='#9CA3A5'>Kamu belum memasukkan barang</Text>
-            <Text align='center' size={14} color='#9CA3A5'>apapun ke keranjang</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('MerchScreen')} color='#F3771D' style={{ backgroundColor: '#F3771D', paddingVertical: 10, width: '60%', alignSelf: 'center', marginTop: 30, borderRadius: 40 }}>
-              <Text color='#fff'>Belanja Sekarang</Text>
-            </TouchableOpacity>
-          </View>}
-          {list && list.length != 0 && (
-            <FlatList
-              numColumns={1}
-              extraData={refresh}
-              keyExtractor={(item, index) => index.toString()}
-              showsHorizontalScrollIndicator={false}
-              data={list}
-              renderItem={renderItem}
-              contentContainerStyle={{
-                paddingHorizontal: 8,
-                paddingBottom: 20,
-              }}
-            />
-          )}
+    <Scaffold
+      showHeader={false}
+      fallback={loading}
+    >
+      {!loading && list.length === 0 && <View style={{ marginTop: '20%' }}>
+        <Image source={ImagesPath.ShoppingCartEmpty} style={{ alignSelf: 'center' }} />
+        <Text align='center' size={14} color='#9CA3A5'>Kamu belum memasukkan barang</Text>
+        <Text align='center' size={14} color='#9CA3A5'>apapun ke keranjang</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('MerchScreen')} color='#F3771D' style={{ backgroundColor: '#F3771D', paddingVertical: 10, width: '60%', alignSelf: 'center', marginTop: 30, borderRadius: 40 }}>
+          <Text color='#fff'>Belanja Sekarang</Text>
+        </TouchableOpacity>
+      </View>}
 
-          <View
-            style={{
-              backgroundColor: '#rgba(255, 255, 254, 0.2)',
-              height: 2,
-              marginTop: 24,
-            }}
-          />
-        </View>
-      </ScrollView>
+      <FlatList
+        numColumns={1}
+        extraData={refresh}
+        keyExtractor={(item, index) => index.toString()}
+        showsHorizontalScrollIndicator={false}
+        data={list}
+        renderItem={renderItem}
+        contentContainerStyle={{
+          paddingHorizontal: 8,
+          paddingBottom: 20,
+        }}
+      />
+
+      <View
+        style={{
+          backgroundColor: '#rgba(255, 255, 254, 0.2)',
+          height: 2,
+          marginTop: 24,
+        }}
+      />
+        
       <Row style={{padding: 16}}>
         <Col align="flex-start" justify="center">
           <Text size={10} color={Color.text}>
@@ -472,7 +471,7 @@ const CartShop = ({navigation, route}) => {
         </Col>
       </Row>
       <Loading {...loadingProps} />
-    </View>
+    </Scaffold>
   );
 };
 
