@@ -4,13 +4,16 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import {useColor} from '@src/components';
 import CartShop from '@src/screens/Ecommerce/CartShop';
 import CartAuction from '@src/screens/Auction/CartAuction';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const Tab = createMaterialTopTabNavigator();
 
 function MyTabs() {
   const {Color} = useColor();
+  const navigation = useNavigation();
+  const route = useRoute();
 
-  return <CartShop />
+  return <CartShop navigation={navigation} route={route} />
 
   // hide tab
 

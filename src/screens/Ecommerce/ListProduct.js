@@ -11,9 +11,6 @@ import {
 import ImagesPath from '../../components/ImagesPath';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {
-  Row,
-  Col,
-  // TouchableOpacity,
   useColor,
 } from '@src/components';
 import { useNavigation } from '@react-navigation/native';
@@ -23,45 +20,139 @@ import { queryGetProduct } from 'src/lib/query/ecommerce';
 import Client from 'src/lib/apollo';
 import { FormatMoney } from 'src/utils';
 import CardEcomerceProduct from 'src/screens/Ecommerce/CardEcomerceProduct';
-import { statusBarHeight } from 'src/utils/constants';
+import { initialItemState, statusBarHeight } from 'src/utils/constants';
+import SearchBar from 'src/components/SearchBar';
+
+const itemPerPage = 6;
 
 const ListProduct = (props) => {
-  const [listProduct, setListProduct] = useState([]);
-  const [page, setPage] = useState(1);
+  const [dataProduk, setDataProduk] = useState(initialItemState);
+  const [searchProduk, setSearchProduk] = useState(initialItemState);
+  const [searchText, setSearchText] = useState('');
+
   const { Color } = useColor();
-  const navigation = useNavigation();
   const { height, width } = useWindowDimensions();
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    getProduct();
-  }, [isFocused]);
+    fetchProduct();
+  }, []);
 
-  const getProduct = () => {
-    let variables = {
-      page: page,
-      itemPerPage: 10
+  useEffect(() => {
+    if (dataProduk.loadNext && dataProduk.page !== -1) {
+        fetchProduct();
     }
-    console.log(variables)
-    Client.query({ query: queryGetProduct, variables })
-      .then(res => {
-        console.log(res)
-        if (res.data.ecommerceProductList.length != 0) {
-          setListProduct(listProduct.concat(res.data.ecommerceProductList));
-          setPage(page+1)
+  }, [dataProduk.loadNext]);
+
+  useEffect(() => {
+    if (searchProduk.loadNext && searchProduk.page !== -1) {
+        fetchSearchProduct();
+    }
+  }, [searchProduk.loadNext]);
+
+  useEffect(() => {
+    const timeout = searchText !== '' ?
+        setTimeout(() => {
+            setSearchProduk({ ...searchProduk, refresh: true });
+        }, 1000) : null;
+
+    return () => {
+        clearTimeout(timeout);
+    }
+  }, [searchText]);
+
+  useEffect(() => {
+    if (searchProduk.refresh) {
+        fetchSearchProduct();
+    }
+  }, [searchProduk.refresh]);
+
+  const fetchProduct = () => {
+    let variables = {
+        page: dataProduk.page + 1,
+        itemPerPage,
+        name: searchText
+    }
+
+    console.log(variables);
+
+    Client.query({query: queryGetProduct, variables})
+    .then(res => {
+        console.log(res);
+
+        const data = res.data.ecommerceProductList;
+        let newData = [];
+        if (Array.isArray(data)) {
+            newData = data;
         }
 
-        // hideLoading();
-        // navigation.navigate('TopUpScreen');
-      })
-      .catch(reject => {
+        setDataProduk({
+            ...dataProduk,
+            data: dataProduk.data.concat(newData),
+            page: newData.length === itemPerPage ? dataProduk.page + 1 : -1,
+            loading: false,
+            loadNext: false,
+            refresh: false,
+        });
+    })
+    .catch(reject => {
         console.log(reject);
-      });
-  };
 
-  const onEndReached = async () => {
-    // setPage(page+1);
-      getProduct()
+        setDataProduk({
+            ...dataProduk,
+            loading: false,
+            loadNext: false,
+            refresh: false,
+        });
+    });
+  }
+
+  const fetchSearchProduct = () => {
+    let variables = {
+        page: searchProduk.page + 1,
+        itemPerPage,
+        name: searchText
+    }
+
+    console.log(variables);
+
+    Client.query({query: queryGetProduct, variables})
+    .then(res => {
+        console.log(res);
+
+        const data = res.data.ecommerceProductList;
+        let newData = [];
+        if (Array.isArray(data)) {
+            newData = data;
+        }
+
+        setSearchProduk({
+            ...searchProduk,
+            data: searchProduk.refresh ? newData : searchProduk.data.concat(newData),
+            page: newData.length === itemPerPage ? searchProduk.page + 1 : -1,
+            loading: false,
+            loadNext: false,
+            refresh: false,
+        });
+    })
+    .catch(reject => {
+        console.log(reject);
+
+        setSearchProduk({
+            ...searchProduk,
+            loading: false,
+            loadNext: false,
+            refresh: false,
+        });
+    });
+  }
+
+  const onEndReached = () => {
+    if (searchText !== '') {
+      setSearchProduk({ ...searchProduk, loadNext: true });
+    } else {
+      setDataProduk({ ...dataProduk, loadNext: true });
+    }
   }
 
   return (
@@ -86,12 +177,18 @@ const ListProduct = (props) => {
         }
       /> */}
 
+      <SearchBar
+        type='input'
+        value={searchText}
+        onChangeText={(val) => setSearchText(val)}
+      />
+
       <FlatList
         style={{ marginVertical: 10, }}
         numColumns={2}
         keyExtractor={(item, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
-        data={listProduct}
+        data={searchText !== '' ? searchProduk.data : dataProduk.data}
         onEndReachedThreshold={0.3}
         onEndReached={() => onEndReached()}
         renderItem={({ item, index }) => <CardEcomerceProduct item={item} index={index} />}
@@ -105,28 +202,3 @@ const ListProduct = (props) => {
 };
 
 export default ListProduct;
-
-const styles = StyleSheet.create({
-  txtTitle: {
-    fontWeight: '700',
-    fontSize: 14,
-  },
-  txtCategory: {
-    fontWeight: '400',
-    fontSize: 11,
-  },
-  txtRating: {
-    fontWeight: '400',
-    fontSize: 11,
-    paddingRight: 5,
-  },
-  txtSold: {
-    fontWeight: '400',
-    fontSize: 11,
-    paddingLeft: 5,
-  },
-  txtPrice: {
-    fontWeight: '700',
-    fontSize: 14,
-  },
-});

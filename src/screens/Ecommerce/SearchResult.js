@@ -9,20 +9,14 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import CardHistorySearch from './CardHistorySearch';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
 import Client from 'src/lib/apollo';
 import { queryGetProduct } from 'src/lib/query/ecommerce';
 import { queryGetListMerchant } from 'src/lib/query/ecommerce';
 import CardMerchant from './CardMerchant';
-
 import {
   Text,
-  // TouchableOpacity,
-  Loading, useLoading,
-  HeaderBig,
-  Submit,
-  Header,
   Scaffold,
   useColor
 } from '@src/components';
@@ -32,30 +26,11 @@ import { initialItemState } from 'src/utils/constants';
 
 const { Navigator, Screen } = createMaterialTopTabNavigator();
 
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
-
-const ContentView = Styled(View)`
-    width: 100%;
-    marginTop: 16px;
-    paddingHorizontal: 16px;
-`;
-
-const MainMenuView = Styled(View)`
-    width: 100%;
-    borderRadius: 8px;
-    marginTop: 12px;
-    padding: 20px 0px;
-    flexDirection: row;
-    flexWrap: wrap;
-`;
-
 const BottomSection = Styled(View)`
-flexDirection: row;
-paddingRight: 34;
-alignItems: center;
-borderTopWidth: 0.5px;
+    flexDirection: row;
+    paddingRight: 34;
+    alignItems: center;
+    borderTopWidth: 0.5px;
 `;
 
 const BoxInput = Styled(View)`
@@ -66,42 +41,6 @@ const BoxInput = Styled(View)`
   borderRadius: 8px;
   borderWidth: 0.5px;
   flexDirection: row;
-`;
-
-
-const PerUserIcons = Styled(TouchableOpacity)`
-    width: 33.33%;
-    aspectRatio: 1.3;
-    flexDirection: column;
-    paddingHorizontal: 8px;
-`;
-
-const UserIcon = Styled(View)`
-    height: 100%;
-    justifyContent: center;
-    alignItems: center;
-`;
-
-const LabelInput = Styled(View)`
-  width: 100%;
-  justifyContent: flex-start;
-  alignItems: flex-start;
-`;
-
-const EmailRoundedView = Styled(View)`
-  width: 100%;
-  height: 40px;
-  alignItems: flex-start;
-  justifyContent: center;
-  flexDirection: column;
-`;
-
-const CustomTextInput = Styled(TextInput)`
-  width: 100%;
-  height: 100%;
-  fontFamily: Inter-Regular;
-  backgroundColor: transparent;
-  fontSize: 14px;
 `;
 
 const TextInputNumber = Styled(TextInput)`
@@ -477,32 +416,30 @@ const SearchResult = ({navigation, route}) => {
             </View>  
             }
         >
-            <MainView style={{marginTop: 16}}>
-                <Navigator
-                    initialRouteName="TabProduk"
-                    tabBarOptions={{
-                        activeTintColor: Color.text,
-                        inactiveColor: Color.border,
-                        labelStyle: { fontSize: 14, fontWeight: 'bold' },
-                        style: {
-                            backgroundColor: '#FFFFFF',
-                        },
-                        labelStyle: { textTransform: 'none' },
-                        indicatorStyle: { backgroundColor: Color.primary,}
-                    }}
-                >
-                    <Screen
-                        name="TabProduk"
-                        children={() => <TabProduk search={search} />}
-                        options={{ tabBarLabel: 'Produk' }}
-                    />
-                    <Screen
-                        name="TabToko"
-                        children={() => <TabToko search={search} />}
-                        options={{ tabBarLabel: 'Toko' }}
-                    />
-                </Navigator>
-            </MainView>    
+            <Navigator
+                initialRouteName="TabProduk"
+                tabBarOptions={{
+                    activeTintColor: Color.text,
+                    inactiveColor: Color.border,
+                    labelStyle: { fontSize: 14, fontWeight: 'bold' },
+                    style: {
+                        backgroundColor: '#FFFFFF',
+                    },
+                    labelStyle: { textTransform: 'none' },
+                    indicatorStyle: { backgroundColor: Color.primary,}
+                }}
+            >
+                <Screen
+                    name="TabProduk"
+                    children={() => <TabProduk search={search} />}
+                    options={{ tabBarLabel: 'Produk' }}
+                />
+                <Screen
+                    name="TabToko"
+                    children={() => <TabToko search={search} />}
+                    options={{ tabBarLabel: 'Toko' }}
+                />
+            </Navigator>
         </Scaffold>
     )
 }

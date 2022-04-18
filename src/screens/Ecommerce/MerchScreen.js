@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, ScrollView, Platform, SafeAreaView, Image } from 'react-native';
-import Styled from 'styled-components';
+import { View } from 'react-native';
 import { useSelector } from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -8,31 +7,12 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {
-  Text,
-  // TouchableOpacity,
   useLoading,
   Scaffold,
-  Row,
-  Col,
-  HeaderBig,
   useColor,
   Header,
 } from '@src/components';
-import { TouchableOpacity } from '@src/components/Button';
-import ListForum from '@src/screens/MainForum/ListForum';
-
-import { shadowStyle } from '@src/styles';
-
-import Client from '@src/lib/apollo';
-import { queryContentProduct } from '@src/lib/query';
-import Filter from 'src/components/Filter';
-import Category from 'src/components/Category';
-import ImagesPath from 'src/components/ImagesPath';
 import ListProduct from 'src/screens/Ecommerce/ListProduct';
-
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
 
 let filter = [
   { id: 1, name: 'Category' },

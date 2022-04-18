@@ -50,8 +50,8 @@ const EditProduct = ({navigation,route}) => {
       });
   }
 
-  console.log(data,"dataaa")
   const {Color} = useColor();
+
   return (
     <Scaffold
       style
@@ -63,46 +63,51 @@ const EditProduct = ({navigation,route}) => {
           centerTitle={false}
         />
       }
-      onPressLeftButton={() => navigation.pop()}>
-      <View style={{paddingHorizontal: 14, paddingVertical: 16}}>
+      onPressLeftButton={() => navigation.pop()}
+    >
+      <View style={{width: '100%', padding: 16}}>
         <View
           style={{
-            padding: 16,
+            padding: 8,
             flexDirection: 'row',
             borderWidth: 1,
             borderColor: Color.border,
             borderRadius: 8,
-          }}>
-          <Image
-          source={{uri:data.imageUrl}}
-            style={{
-              borderRadius: 4,
-              backgroundColor: Color.secondary,
-              width: 48,
-              height: 48,
-            }}
-          />
-          <View style={{marginLeft: 8, alignItems: 'flex-start'}}>
-            <Text type="bold">{data.name}</Text>
+          }}
+        >
+          <View style={{ width: '20%', aspectRatio: 1 }}>
+            <Image
+              source={{uri: data.imageUrl}}
+              style={{
+                borderRadius: 4,
+                backgroundColor: Color.secondary,
+                width: '100%',
+                height: '100%',
+              }}
+            />
+          </View>
+
+          <View style={{ width: '80%', paddingLeft: 8, alignItems: 'flex-start'}}>
+            <Text type="bold" align='left' numberOfLines={2}>{data.name}</Text>
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-around',
-                width: 120,
                 marginVertical: 4,
               }}>
-              <Text style={{color: Color.secondary}} size="10">
+              {/* hide category */}
+              {/* <Text style={{color: Color.secondary}} size="10">
                 Hijab
-              </Text>
-              <Text style={{color: Color.secondary}} size="10">
+              </Text> */}
+              {/* <Text style={{color: Color.secondary}} size="10">
                 •
-              </Text>
+              </Text> */}
               
               <Text style={{color: Color.secondary}} size="10">
-                {data.weight}gr
+                {data.weight} gr
               </Text>
               <Text style={{color: Color.secondary}} size="10">
-                •
+                &nbsp;&nbsp;•&nbsp;&nbsp;
               </Text>
               <Text style={{color: Color.secondary}} size="10">
                 {data.stock} Stok
@@ -130,7 +135,7 @@ const EditProduct = ({navigation,route}) => {
           </TouchableOpacity>
           <TouchableOpacity
           onPress={()=>{
-            navigation.navigate("StepTwo",{item:data,type:"edit"})
+            navigation.navigate("StepTwo",{item:data, type:"edit"})
           }}
             style={{
               paddingVertical: 16,

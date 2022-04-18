@@ -39,7 +39,8 @@ import Share from 'react-native-share';
 import {Container, Divider} from 'src/styled';
 
 const DetailProduct = ({navigation, route}) => {
-  const [detail, setDetail] = useState([]);
+  const [detail, setDetail] = useState();
+  const [isLoading, setIsLoading] = useState(true);
   const [liked, setLike] = useState(false);
   const [cart, setCart] = useState(0);
 
@@ -85,12 +86,13 @@ const DetailProduct = ({navigation, route}) => {
         console.log(res);
         if (res.data.ecommerceProductDetail) {
           setDetail(res.data.ecommerceProductDetail[0]);
-          console.log("data detailllll")
-          console.log(res.data.ecommerceProductDetail[0]);
         }
+
+        setIsLoading(false);
       })
       .catch(reject => {
         console.log(reject);
+        setIsLoading(false);
       });
   };
 
@@ -142,158 +144,167 @@ const DetailProduct = ({navigation, route}) => {
       });
   };
 
+  console.log('detail', detail);
+
   return (
     <Scaffold
       loadingProps={loadingProps}
       header={<DetailProductHeader navigation cart={cart} />}
       onPressLeftButton={() => navigation.pop()}
+      isLoading={isLoading}
+      empty={!detail}
     >
       <ScrollView
         showsVerticalScrollIndicator={false}
       >
-        <View
-          style={{
-            width: '100%',
-            aspectRatio: 5/6,
-          }}>
-          <ImageSlider
-            data={detail.imageProducts ? detail.imageProducts : [detail.imageUrl, detail.imageUrl, detail.imageUrl]}
-          />
-        </View>
-        
-        <View
-          style={{
-            width: '100%',
-            height: height / 1.5,
-          }}
-        >
-          <View style={{paddingTop: 16, paddingHorizontal: 16, paddingBottom: 8}}>
-            <View>
-              <Row>
-                <Col size={6}>
-                  <Text
-                    style={{
-                      textAlign: 'left',
-                      lineHeight: 20,
-                    }}>
-                    {detail.name}
-                  </Text>
-                  <Text
-                    style={{
-                      textAlign: 'left',
-                      color: Color.secondary,
-                      marginVertical: 8,
-                    }}>
-                    Fashion Harcode
-                  </Text>
-                </Col>
-                <Col size={6}>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    fontWeight: 'bold',
-                    textAlign: 'right',
-                  }}>
-                  {FormatMoney.getFormattedMoney(detail.price)}
-                </Text>
-                </Col>
-              </Row>
-
-              <Row style={{justifyContent: 'space-between'}}>
-                <Row>
-                  <Entypo name={'star'} style={{color: Color.yellow}} />
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: Color.secondary,
-                      marginHorizontal: 5,
-                    }}>
-                    4 Harcode
-                  </Text>
-                  <Text style={{fontSize: 10, color: Color.secondary}}>|</Text>
-                  <Text
-                    style={{
-                      fontSize: 12,
-                      color: Color.secondary,
-                      textAlign: 'left',
-                      marginHorizontal: 5,
-                    }}>
-                    120 Terjual Harcode
-                  </Text>
-                </Row>
-
-                <Row>
-                  <TouchableOpacity
-                    style={{marginHorizontal: 3}}
-                    onPress={() => {
-                      setLike(!liked)
-                      addToWishList()
-                    }}
-                  >
-                    <AntDesign
-                      name={liked ? 'heart' : 'hearto'}
-                      color={liked ? 'red' : '#111'}
-                      size={19}
-                      style={{color: Color.secondary}}
-                    />
-                  </TouchableOpacity>
-                  {/* <TouchableOpacity
-                    onPress={async () => {
-                      await Share.open({
-                        url: detail.share_link || 'Belum ada Linknya',
-                      });
-                    }}
-                    style={{marginHorizontal: 3}}>
-                    <AntDesign
-                      name={'sharealt'}
-                      size={19}
-                      style={{color: Color.secondary}}
-                    />
-                  </TouchableOpacity> */}
-                </Row>
-              </Row>
-            </View>
-            
-            <Divider />
-
-            <Container>
-              <Row
-                style={{
-                  backgroundColor: Color.border,
-                  width: '100%',
-                  alignSelf: 'center',
-                  paddingVertical: 10,
-                  borderRadius: 5,
-                }}>
-                <Image
-                  source={ImagesPath.avatar1}
-                  style={{
-                    width: 30,
-                    height: 30,
-                    resizeMode: 'cover',
-                    marginHorizontal: 10,
-                  }}
-                />
-                <Col>
-                  <Text
-                    style={{fontSize: 11, fontWeight: 'bold', textAlign: 'left'}}>
-                    {detail.merchant ? detail.merchant.name : ''}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 10,
-                      color: Color.primary,
-                      textAlign: 'left',
-                    }}>
-                    Lihat Detail Toko
-                  </Text>
-                </Col>
-              </Row>
-            </Container>
+        {detail && <>
+          <View
+            style={{
+              width: '100%',
+              aspectRatio: 5/6,
+            }}>
+            <ImageSlider
+              data={detail.imageProducts ? detail.imageProducts : [detail.imageUrl, detail.imageUrl, detail.imageUrl]}
+            />
           </View>
+          
+          <View
+            style={{
+              width: '100%',
+              height: height / 1.5,
+            }}
+          >
+            <View style={{paddingTop: 16, paddingHorizontal: 16, paddingBottom: 8}}>
+              <View>
+                <Row>
+                  <Col size={12}>
+                    <Text
+                      style={{
+                        textAlign: 'left',
+                        lineHeight: 20,
+                      }}>
+                      {detail.name}
+                    </Text>
+                    {/* hide category */}
+                    {/* <Text
+                      style={{
+                        textAlign: 'left',
+                        color: Color.secondary,
+                        marginVertical: 8,
+                      }}>
+                      Fashion
+                    </Text> */}
+                  </Col>
 
-          {detail && <TopBar style={{borderRadius: 10}} detail={detail} />}
-        </View>
+                  <Container paddingVertical={8}>
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: 'bold',
+                        textAlign: 'right',
+                      }}>
+                      {FormatMoney.getFormattedMoney(detail.price)}
+                    </Text>
+                  </Container>
+                </Row>
+
+                <Row style={{justifyContent: 'space-between', marginTop: 8}}>
+                  <Row>
+                    <Entypo name={'star'} style={{color: Color.yellow}} />
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: Color.secondary,
+                        marginHorizontal: 5,
+                      }}>
+                      {detail.rating || 0}
+                    </Text>
+                    <Text style={{fontSize: 10, color: Color.secondary}}>|</Text>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        color: Color.secondary,
+                        textAlign: 'left',
+                        marginHorizontal: 5,
+                      }}>
+                      {detail.sold || 0} Terjual
+                    </Text>
+                  </Row>
+
+                  <Row>
+                    <TouchableOpacity
+                      style={{marginHorizontal: 3}}
+                      onPress={() => {
+                        setLike(!liked)
+                        addToWishList()
+                      }}
+                    >
+                      <AntDesign
+                        name={liked ? 'heart' : 'hearto'}
+                        size={19}
+                        color={liked ? Color.error : Color.secondary}
+                      />
+                    </TouchableOpacity>
+                    {/* <TouchableOpacity
+                      onPress={async () => {
+                        await Share.open({
+                          url: detail.share_link || 'Belum ada Linknya',
+                        });
+                      }}
+                      style={{marginHorizontal: 3}}>
+                      <AntDesign
+                        name={'sharealt'}
+                        size={19}
+                        style={{color: Color.secondary}}
+                      />
+                    </TouchableOpacity> */}
+                  </Row>
+                </Row>
+              </View>
+              
+              <Divider />
+
+              <Container>
+                <Row
+                  style={{
+                    backgroundColor: '#f2f2f2', // Color.semiwhite,
+                    width: '100%',
+                    alignSelf: 'center',
+                    paddingVertical: 10,
+                    borderRadius: 5,
+                  }}>
+                  <Image
+                    source={{ uri: detail.merchant ? detail.merchant.profileImg : '' }}
+                    style={{
+                      width: 30,
+                      height: 30,
+                      borderRadius: 15,
+                      resizeMode: 'cover',
+                      marginHorizontal: 10,
+                    }}
+                  />
+                  <Col>
+                    <Text
+                      style={{fontSize: 11, fontWeight: 'bold', textAlign: 'left'}}>
+                      {detail.merchant ? detail.merchant.name : ''}
+                    </Text>
+                    {/* hide lihat detail toko */}
+                    {/* <Text
+                      style={{
+                        fontSize: 10,
+                        color: Color.primary,
+                        textAlign: 'left',
+                      }}>
+                      Lihat Detail Toko
+                    </Text> */}
+                  </Col>
+                </Row>
+              </Container>
+            </View>
+
+            {detail && <TopBar style={{borderRadius: 10}} detail={detail} />}
+          </View>
+        </>}
       </ScrollView>
       
       <View
@@ -311,8 +322,9 @@ const DetailProduct = ({navigation, route}) => {
             alignItems: 'center',
             paddingVertical: 10,
           }}>
+          {/* refactor ChatRoomsScreen */}
           <TouchableOpacity
-            onPress={() => navigation.navigate('ChatRoom', {item: detail})}
+            onPress={() => navigation.navigate('ChatRoomsScreen' || 'ChatRoom', {item: detail})}
             style={{
               width: '12%',
               height: 40,

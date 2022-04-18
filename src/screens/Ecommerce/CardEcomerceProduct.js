@@ -107,7 +107,7 @@ const CardEcomerceProduct = ({ isMyProduct, item, index, onRefresh }) => {
 						paddingVertical: 5
 					}}
 				>
-					<Text style={{ fontSize: 10, color: Color.textInput }}>Diskon Harcode</Text>
+					<Text style={{ fontSize: 10, color: Color.textInput }}>Diskon</Text>
 					<Text style={{ fontSize: 18, color: Color.textInput, fontWeight: 'bold' }}>10%</Text>
 				</View> */}
 
@@ -116,6 +116,7 @@ const CardEcomerceProduct = ({ isMyProduct, item, index, onRefresh }) => {
 				<Text
 					type='bold'
 					align='left'
+					numberOfLines={2}
 				>
 					{item.name}
 				</Text>

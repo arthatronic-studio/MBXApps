@@ -101,14 +101,14 @@ const MyShopHomepage = ({ navigation }) => {
 								<Text>{data.name}</Text>
 							</View>
 
-							<View style={{ alignSelf: 'center', flexDirection: 'row', marginTop: 6 }}>
-								<View style={{ flexDirection: 'row', marginHorizontal: 5 }}>
+							<View style={{ width: '100%', alignSelf: 'center', flexDirection: 'row', marginTop: 6, paddingHorizontal: 8 }}>
+								<View style={{ flex: 1, flexDirection: 'row', marginHorizontal: 5 }}>
 									<Entypo name={'location-pin'} size={12} style={{ color: Color.secondary }} />
-									<Text style={{ fontSize: 10, paddingHorizontal: 3, color: Color.secondary }}>{data.alamat}</Text>
+									<Text align='left' style={{ fontSize: 10, paddingHorizontal: 3, color: Color.secondary }}>{data.alamat}</Text>
 								</View>
-								<View style={{ flexDirection: 'row', marginHorizontal: 5 }}>
+								<View style={{ flex: 1, flexDirection: 'row', marginHorizontal: 5 }}>
 									<FontAwesome name={'phone'} size={12} style={{ color: Color.secondary, paddingVertical: 2 }} />
-									<Text style={{ fontSize: 10, paddingHorizontal: 5, color: Color.secondary }}>{data.noTelp}</Text>
+									<Text align='left' style={{ fontSize: 10, paddingHorizontal: 5, color: Color.secondary }}>{data.noTelp}</Text>
 								</View>
 							</View>
 

@@ -44,6 +44,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import axios from 'axios';
 import moment from 'moment';
 import { FormatMoney } from 'src/utils';
+import { Container, Divider } from 'src/styled';
 
 
 const Wishlist = ({navigation}) => {
@@ -154,51 +155,60 @@ const Wishlist = ({navigation}) => {
     };
 
     const renderItem = ({ item }) => (
-        <View style={{borderRadius: 5, width: '95%', marginHorizontal: 8, marginVertical: 5, paddingVertical: 10, backgroundColor: Color.textInput }}>
-            <View style={{ flexDirection: 'row',}}>
-                <Image source={{uri: item.imageUrl}} style={{width: 50, height: 50, marginHorizontal: 10}}/>
-                <View style={{marginHorizontal: 10}}>
-                    <Text align='left' type='bold'>{item.name}</Text>
-                    <View style={{flexDirection: 'row', marginVertical: 3}}>
-                        <Entypo name={'star'} style={{color: Color.yellow,}}/>
-                        <Text style={{fontSize: 10, marginHorizontal: 5}}>{item.rating || 0}</Text> 
-                        <View style={{marginHorizontal: 5, marginVertical: 2,backgroundColor: Color.secondary, height: 10, width: 1}}></View>
-                        
-                        <Text style={{marginHorizontal: 5, fontSize: 10}}>{item.sold || 0}</Text>
-                        <Text style={{ fontSize: 10}}>Terjual</Text>
+        <View style={{ width: '100%', paddingHorizontal: 16, marginBottom: 16 }}>
+            <View style={{borderRadius: 5, width: '100%', padding: 8, backgroundColor: Color.textInput, ...shadowStyle }}>
+                <View style={{ flexDirection: 'row',}}>
+                    <View style={{ width: '20%', aspectRatio: 1 }}>
+                        <Image source={{uri: item.imageUrl}} style={{width: '100%', height: '100%', borderRadius: 4}} />
                     </View>
-                    <Text style={{textAlign: 'left', fontWeight: 'bold'}}>{FormatMoney.getFormattedMoney(item.price)}</Text>
+                    <View style={{ width: '80%', paddingHorizontal: 8 }}>
+                        <Text align='left' type='bold' numberOfLines={2}>{item.name}</Text>
+                        <Container paddingVertical={8}>
+                            <Text style={{textAlign: 'left', fontWeight: 'bold'}}>{FormatMoney.getFormattedMoney(item.price)}</Text>
+                        </Container>
+                        <View style={{flexDirection: 'row', marginVertical: 3}}>
+                            <Entypo name={'star'} style={{color: Color.yellow,}}/>
+                            <Text style={{fontSize: 10, marginHorizontal: 5}}>{item.rating || 0}</Text> 
+                            <View style={{marginHorizontal: 5, marginVertical: 2,backgroundColor: Color.secondary, height: 10, width: 1}}></View>
+                            <Text style={{marginHorizontal: 5, fontSize: 10}}>{item.sold || 0}</Text>
+                            <Text style={{ fontSize: 10}}>Terjual</Text>
+                        </View>
+                    </View>
                 </View>
+
+                <View style={{flexDirection: 'row', marginTop: 8, alignSelf: 'flex-end'}}>
+                    <View style={{ borderRadius: 10, width: '30%', paddingVertical: 8, alignSelf: 'flex-end'}}>
+                        <TouchableOpacity 
+                            style={{
+                                backgroundColor: Color.textInput,
+                                borderRadius: 20,
+                                borderColor: Color.red,
+                                borderWidth: 0.5,
+                            }}
+                            onPress={() => removeFromWishList(item)}
+                        >
+                            <Text style={{color: Color.error, fontWeight: 'bold', fontSize: 10, marginVertical: 5}}>Hapus</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <Divider />
+                    <View style={{ borderRadius: 10, width: '30%', paddingVertical: 8,}}>
+                        <TouchableOpacity 
+                            style={{
+                                backgroundColor: Color.primary, 
+                                borderRadius: 20,
+                            }}
+                            onPress={() => addToCart(item)}
+                        >
+                            <Text style={{color: Color.textInput, fontWeight: 'bold', fontSize: 10, marginVertical: 5}}>+ Ke keranjang</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <Loading {...loadingProps} />
             </View>
-            <View style={{flexDirection: 'row', marginTop: 25, alignSelf: 'flex-end', marginHorizontal: 10}}>
-                <View style={{ borderRadius: 10, width: '30%', alignSelf: 'flex-end'}}>
-                    <TouchableOpacity 
-                        style={{
-                            backgroundColor: Color.textInput, 
-                            height: 27, 
-                            borderRadius: 20
-                        }}
-                        onPress={() => removeFromWishList(item)}
-                    >
-                        <Text style={{color: Color.error, fontWeight: 'bold', fontSize: 10, marginVertical: 5}}>Hapus</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={{ borderRadius: 10, width: '30%'}}>
-                    <TouchableOpacity 
-                        style={{
-                            backgroundColor: Color.primary, 
-                            borderRadius: 20, 
-                            height: 27
-                        }}
-                        onPress={() => addToCart(item)}
-                    >
-                        <Text style={{color: Color.textInput, fontWeight: 'bold', fontSize: 10, marginVertical: 5}}>+ Ke keranjang</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-            <Loading {...loadingProps} />
         </View>
     );
+
+    // console.log('dataWishlist', dataWishlist);
 
   return (
     <Scaffold

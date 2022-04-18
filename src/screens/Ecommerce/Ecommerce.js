@@ -296,9 +296,12 @@ const Ecommerce = ({ navigation }) => {
 				/>
 
 				<View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 8 }}>
-					<View style={{ width: '75%', alignItems: 'center', justifyContent: 'center' }} onTouchStart={() => navigation.navigate('SearchResult')}>
+					<View
+						style={{ width: '75%', alignItems: 'center', justifyContent: 'center' }}
+						onTouchStart={() => navigation.navigate('SearchResult')}
+					>
 						<TextInput
-							placeholder="Cari apa hari ini . . ."
+							placeholder="Cari apa hari ini..."
 							editable={false}
 							style={{
 								backgroundColor: Color.textInput,
@@ -582,15 +585,11 @@ const Ecommerce = ({ navigation }) => {
 						</Text>
 						<AntDesign name={'arrowright'} style={{ marginVertical: 4, color: Color.primary }} />
 					</View>
-					<FlatList
-						data={listProduct}
-						renderItem={({ item, index }) => <CardEcomerceProduct item={item} index={index} /> }
-						keyExtractor={(item) => item.id}
-						numColumns={2}
-						contentContainerStyle={{ paddingTop: 16, paddingHorizontal: 8 }}
-						showsVerticalScrollIndicator={false}
-						showsHorizontalScrollIndicator={false}
-					/>
+					<View style={{ paddingTop: 16, paddingHorizontal: 8, width: '100%', flexDirection: 'row', flexWrap: 'wrap' }}>
+						{listProduct.map((item, index) => {
+							return <CardEcomerceProduct key={index} item={item} index={index} />
+						})}
+					</View>
 				</View>
 
 				{/* hide small banner */}

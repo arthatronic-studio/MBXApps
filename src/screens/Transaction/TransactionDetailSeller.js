@@ -802,8 +802,9 @@ const TransactionDetailSeller = ({route, navigation}) => {
             }}>
             <Text style={{color: Color.error}}>Batalkan Pesanan</Text>
           </TouchableOpacity>
+          {/* refactor ChatRoomsScreen */}
           <TouchableOpacity
-            onPress={() => navigation.navigate('ChatRoom')}
+            onPress={() => navigation.navigate('ChatRoomsScreen' || 'ChatRoom')}
             style={{
               justifyContent: 'center',
               borderRadius: 20,
@@ -841,8 +842,9 @@ const TransactionDetailSeller = ({route, navigation}) => {
             }}>
             <Text style={{color: Color.theme}}>Proses Pesanan</Text>
           </TouchableOpacity>
+          {/* refactor ChatRoomsScreen */}
           <TouchableOpacity
-            onPress={() => navigation.navigate('ChatRoom')}
+            onPress={() => navigation.navigate('ChatRoomsScreen' || 'ChatRoom')}
             style={{
               backgroundColor: Color.theme,
               borderRadius: 120,
@@ -961,9 +963,10 @@ const TransactionDetailSeller = ({route, navigation}) => {
             justifyContent: 'center',
             padding: 16,
           }}>
+            {/* refactor ChatRoomsScreen */}
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('ChatRoom');
+              navigation.navigate('ChatRoomsScreen' || 'ChatRoom');
             }}
             style={{
               backgroundColor: Color.primary,

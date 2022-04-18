@@ -31,6 +31,7 @@ import {
   HeaderBig,
   useColor,
   Header,
+  Alert,
 } from '@src/components';
 import {shadowStyle} from '@src/styles';
 import Client from '@src/lib/apollo';
@@ -270,12 +271,15 @@ const Notification = () => {
           {(item.statusId == 3) && <View
             style={{
               backgroundColor: Color.primary,
-              width: 100,
-              
+              paddingHorizontal: 16,
               borderRadius: 20,
             }}>
             <TouchableOpacity
-              onPress={() => updateStatus(item)}
+              onPress={() => Alert(
+                'Konfirmasi',
+                'Apakah Anda yakin akan menerima pesanan?',
+                () => updateStatus(item)
+              )}
               style={{
                 height: 32,
                 alignItems: 'center',
@@ -292,7 +296,8 @@ const Notification = () => {
             </TouchableOpacity>
           </View>}
 
-          {(item.statusId == 4) && <View
+          {/* hide ulasan */}
+          {/* {(item.statusId == 4) && <View
             style={{
               backgroundColor: Color.primary,
               width: 100,
@@ -314,7 +319,7 @@ const Notification = () => {
                 Ulasan
               </Text>
             </TouchableOpacity>
-          </View>}
+          </View>} */}
           {item.statusId == 0 && <View
             style={{
               backgroundColor: Color.primary,

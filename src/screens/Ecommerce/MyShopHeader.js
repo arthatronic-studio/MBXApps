@@ -17,9 +17,10 @@ const MyShopHeader = () => {
 			<View style={{ width: '72%', paddingHorizontal: 10, justifyContent: 'center' }}>
 				<Text style={{ fontSize: 18, fontWeight: 'bold', textAlign: 'left' }}>Toko Saya</Text>
 			</View>
+			{/* refactor ChatRoomsScreen */}
 			<TouchableOpacity
 				style={{ width: '8%', alignItems: 'center', justifyContent: 'center' }}
-				onPress={() => navigation.navigate('ChatRoom')}
+				onPress={() => navigation.navigate('ChatRoomsScreen' || 'ChatRoom')}
 			>
 				<IonIcons name={'chatbubbles-outline'} size={20} />
 			</TouchableOpacity>

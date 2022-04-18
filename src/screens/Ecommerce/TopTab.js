@@ -1,20 +1,25 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import {View, Button, FlatList, Image} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {Row, useColor, Col, Text} from '@src/components';
+import {Row, useColor, Col, Text, ScreenEmptyData} from '@src/components';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import ImagesPath from 'src/components/ImagesPath';
 import { Divider } from 'src/styled';
 import { ScrollView } from 'react-native-gesture-handler';
+import client from 'src/lib/apollo';
+import { queryEcommerceProductUlasan } from 'src/lib/query/ecommerce/queryEcommerceProductUlasan';
+import moment from 'moment';
 
-function Description({props}) {
+function Description(props) {
   const {Color} = useColor();
 
+  console.log(props);
+
   return (
+    <ScrollView>
     <View
       style={{
-        flex: 1,
         backgroundColor: Color.theme,
         padding: 16,
         alignItems: 'flex-start',
@@ -23,28 +28,70 @@ function Description({props}) {
           {props.detail.description}
         </Text>
     </View>
+    </ScrollView>
   );
 }
 
 function Review(props) {
   const {Color} = useColor();
 
+  console.log('props', props);
+
+  const [listReview, setListReview] = useState([]);
+
+  useEffect(() => {
+    fetchEcommerceProductUlasan();
+  }, []);
+
+  const fetchEcommerceProductUlasan = () => {
+    const variables = {
+      page: 1,
+      itemPerPage: 3,
+      productId: props.detail.id
+    };
+
+    console.log('variables', variables);
+
+    client.query({
+      query: queryEcommerceProductUlasan,
+      variables
+    })
+    .then((res) => {
+      console.log('res ecom prd ulasan', res);
+
+      const data = res.data.ecommerceProductUlasan;
+      if (Array.isArray(data)) {
+        setListReview(data);
+      }
+    })
+    .catch((err) => {
+      console.log('err ecom prd ulasan', err);
+    });
+  }
+
   const renderItem = ({ item, index }) => (
-    <Row style={{marginBottom: 20}}>
-        <Image source={ImagesPath.avatar1}/>
-        <Col style={{marginHorizontal:10}}>
-          <Text style={{fontSize: 10, fontWeight: 'bold'}}>{item.personName}</Text>
-          <Text style={{fontSize: 8, color: Color.secondary, marginVertical: 3}}>{item.time}</Text>
-          <Row style={{marginVertical: 5}}>
-            <AntDesign name={'star'} style={{color: Color.warning, marginRight: 3}}/>
-            <AntDesign name={'star'} style={{color: Color.warning, marginRight: 3}}/>
-            <AntDesign name={'star'} style={{color: Color.warning, marginRight: 3}}/>
-            <AntDesign name={'star'} style={{color: Color.warning, marginRight: 3}}/>
-            <AntDesign name={'star'} style={{color: Color.warning, marginRight: 3}}/>
-          </Row>
-          <Text style={{width: '100%', textAlign: 'justify'}}>{item.comment}</Text>
-        </Col>
-      </Row>
+    <Row key={index} style={{marginBottom: 20}}>
+      <Image source={{ uri: item.image }} />
+      <Col style={{marginHorizontal:10}}>
+        <Text align='left' style={{fontSize: 10, fontWeight: 'bold'}}>{item.firstName} {item.lastName}</Text>
+        <Text align='left' style={{fontSize: 8, color: Color.secondary, marginVertical: 3}}>{moment(item.createdAt).fromNow()}</Text>
+        <Row style={{marginVertical: 5}}>
+          {[1,2,3,4,5].map((e, idx) => {
+            const isActive = e <= item.rating;
+            return (
+              <AntDesign
+                key={idx}
+                name={'star'}
+                size={25}
+                color={isActive ? Color.primary : Color.secondary}
+                style={{marginHorizontal: 8}}
+              />
+            )
+          })}
+        </Row>
+        <Text style={{width: '100%', textAlign: 'justify'}}>{item.ulasan}</Text>
+      </Col>
+    </Row>
   )
 
   return (
@@ -55,16 +102,6 @@ function Review(props) {
           paddingVertical: 14,
           paddingHorizontal: 20,
         }}>
-        <View style={{paddingVertical: 15,width: '100%', backgroundColor: Color.border, height: 90, borderRadius: 8}}>
-          <Text style={{fontSize: 12, color: Color.secondary, alignSelf: 'center'}}>Beri Nilai Produk</Text>
-          <Row style={{justifyContent: 'center', marginVertical: 15}}>
-            <AntDesign name={'star'} size={25} style={{marginHorizontal: 12,color: Color.secondary,}}/>
-            <AntDesign name={'star'} size={25} style={{marginHorizontal: 12,color: Color.secondary}}/>
-            <AntDesign name={'star'} size={25} style={{marginHorizontal: 12,color: Color.secondary}}/>
-            <AntDesign name={'star'} size={25} style={{marginHorizontal: 12,color: Color.secondary}}/>
-            <AntDesign name={'star'} size={25} style={{marginHorizontal: 12,color: Color.secondary}}/>
-          </Row>
-        </View>
         {/* <Text style={{fontWeight: 'bold', marginVertical: 15, fontSize: 12}}>Komentar orang lain</Text> */}
         {/* hide filter */}
         {/* <View style={{flexDirection: 'row'}}>
@@ -88,24 +125,17 @@ function Review(props) {
           }
           />
         </View> */}
-        <Divider/>
+
+        <Divider />
+
         <View
           style={{marginVertical: 5}}
         >
-          {[
-            {personName: 'Adang Susanyo',
-            time: '3 hari yang lalu',
-            comment: 'Muffin pastry candy canes sesame snaps lemon drops muffin cheesecake cupcake. Sesame snaps candy halvah tootsie roll dessert carrot cake chupa chups dragée. Cookie marshmallow candy canes chocolate cake brownie jelly beans tiramisu cake.Marshmallow gummi bears pie cake halvah candy canes powder tart. Sweet roll croissant jelly beans croissant croissant chocolate cake bonbon.'
-            },
-            {personName: 'Adang Susanyo',
-            time: '3 hari yang lalu',
-            comment: 'Muffin pastry candy canes sesame snaps lemon drops muffin cheesecake cupcake. Sesame snaps candy halvah tootsie roll dessert carrot cake chupa chups dragée. Cookie marshmallow candy canes chocolate cake brownie jelly beans tiramisu cake.Marshmallow gummi bears pie cake halvah candy canes powder tart. Sweet roll croissant jelly beans croissant croissant chocolate cake bonbon.'
-            },
-            {personName: 'Adang Susanyo',
-            time: '3 hari yang lalu',
-            comment: 'Muffin pastry candy canes sesame snaps lemon drops muffin cheesecake cupcake. Sesame snaps candy halvah tootsie roll dessert carrot cake chupa chups dragée. Cookie marshmallow candy canes chocolate cake brownie jelly beans tiramisu cake.Marshmallow gummi bears pie cake halvah candy canes powder tart. Sweet roll croissant jelly beans croissant croissant chocolate cake bonbon.'
-            },
-          ].map((item, index) => renderItem({ item, index }))}
+          {listReview.length > 0 ?
+            listReview.map((item, index) => renderItem({ item, index }))
+          :
+            <ScreenEmptyData message='Ulasan belum tersedia' />
+          }
         </View>
       </View>
     </ScrollView>
@@ -116,6 +146,7 @@ const Tab = createMaterialTopTabNavigator();
 
 function MyTabs(props) {
   const {Color} = useColor();
+
   return (
     <Tab.Navigator
       initialRouteName="Description"
@@ -140,12 +171,12 @@ function MyTabs(props) {
     >
       <Tab.Screen
         name="Description"
-        component={() => <Description props={props} />}
+        children={() => <Description {...props} />}
         options={{tabBarLabel: 'Deskripsi'}}
       />
       <Tab.Screen
         name="Review"
-        component={() => <Review props={props} />}
+        children={() => <Review {...props} />}
         options={{tabBarLabel: 'Review'}}
       />
     </Tab.Navigator>

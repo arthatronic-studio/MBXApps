@@ -220,45 +220,43 @@ const CartShop = ({navigation, route}) => {
     }
   }
 
+  console.log('list', list);
+
   const renderItem = ({item, index}) => (
-    <View style={{borderBottomColor: '#00000020', borderBottomWidth: 1}}>
-      <View
-        style={{
-          marginBottom: 24,
-          marginTop: 14,
-        }}>
-        <Row style={{marginHorizontal: 10}}>
-          <View style={{justifyContent: 'center'}}>
-            <TouchableOpacity
-              onPress={() => onChecked(index, null, item.checked, 'shop')}
-              style={{
-                height: 16,
-                width: 16,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginRight: 16,
-                borderColor: Color.text,
-                borderWidth: 1,
-                borderRadius: 4,
-              }}>
+    <View style={{borderBottomColor: '#00000020', borderBottomWidth: 1, marginBottom: 16}}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <TouchableOpacity
+          onPress={() => onChecked(index, null, item.checked, 'shop')}
+          style={{paddingLeft: 16, paddingVertical: 8}}
+        >
+            <View style={{
+              height: 18,
+              width: 18,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginRight: 16,
+              borderColor: Color.text,
+              borderWidth: 1,
+              borderRadius: 4,
+            }}>
               {item.checked && <AntDesign name="check" />}
-            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('DetailProduct', {val})}
-            style={{marginRight: 14}}>
-            <Text align="left" size={12} type="bold">
-              {item.name}
-            </Text>
-            <Text align="left" color="#606060" size={9}>
-              {item.alamat}
-            </Text>
-          </TouchableOpacity>
-        </Row>
+        </TouchableOpacity>
+          
+        <TouchableOpacity
+          style={{marginRight: 14}}>
+          <Text align="left" size={12} type="bold">
+            {item.name}
+          </Text>
+          <Text align="left" color="#606060" size={9}>
+            {item.alamat}
+          </Text>
+        </TouchableOpacity>
       </View>
+
       {item.products.map((val, id) => (
-        <View key={id}>
-          <Row style={{paddingHorizontal: 10, paddingBottom: 20}}>
+        <View key={id} style={{marginTop: 8}}>
+          <Row style={{paddingHorizontal: 16, paddingBottom: 20}}>
             <View
               style={{
                 paddingVertical: 20,
@@ -266,23 +264,30 @@ const CartShop = ({navigation, route}) => {
               <TouchableOpacity
                 onPress={() => onChecked(index, id, val.checked, 'product')}
                 style={{
-                  height: 16,
-                  width: 16,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginRight: 16,
-                  borderColor: Color.text,
-                  borderWidth: 1,
-                  borderRadius: 4,
-                }}>
-                {val.checked && <AntDesign name="check" />}
+                  paddingRight: 8
+                }}
+              >
+                  <View
+                    style={{
+                      height: 18,
+                      width: 18,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginRight: 8,
+                      borderColor: Color.text,
+                      borderWidth: 1,
+                      borderRadius: 4,
+                    }}
+                  >
+                    {val.checked && <AntDesign name="check" />}
+                 </View>
               </TouchableOpacity>
             </View>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('DetailProduct', {item: {...val}})
               }
-              style={{height: 56, width: 56, marginRight: 14}}>
+              style={{height: 56, width: 56, marginRight: 8}}>
               <Image
                 source={{uri: val.imageUrl}}
                 resizeMode="cover"
@@ -299,12 +304,15 @@ const CartShop = ({navigation, route}) => {
                 <Text
                   size={14}
                   color={Color.text}
-                  style={{textAlign: 'left', marginBottom: 10}}
-                  type="medium">
+                  type="medium"
+                  numberOfLines={2}
+                  align='left'
+                >
                   {val.name}
                 </Text>
               </View>
-              <Row>
+              {/* hide rating & terjual */}
+              {/* <Row>
                 <Entypo name={'star'} style={{color: Color.warning}} />
                 <Text
                   style={{
@@ -323,7 +331,7 @@ const CartShop = ({navigation, route}) => {
                   }}>
                   2,5rb Terjual
                 </Text>
-              </Row>
+              </Row> */}
               <Row>
                 <Col style={{justifyContent: 'flex-end'}}>
                   <Text
@@ -431,8 +439,7 @@ const CartShop = ({navigation, route}) => {
         data={list}
         renderItem={renderItem}
         contentContainerStyle={{
-          paddingHorizontal: 8,
-          paddingBottom: 20,
+          paddingBottom: 16,
         }}
       />
 

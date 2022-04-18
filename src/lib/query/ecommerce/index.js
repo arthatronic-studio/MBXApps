@@ -679,11 +679,24 @@ export const queryDetailProduct = gql`
       productMassa
       status
       id
+      rating
+      sold
       merchant {
+        id
+        userId
         name
+        noTelp
         alamat
+        socialMedia{
+          instagram
+        }
         profileImg
+        lat
+        long
         isVerified
+        isOfficial
+        createdAt
+        updatedAt
       }
     }
   }

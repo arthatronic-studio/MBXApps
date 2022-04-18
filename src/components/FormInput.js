@@ -73,7 +73,7 @@ const FormInput = forwardRef((props, ref) => {
                         marginBottom: Platform.OS === 'ios' ? 4 : 2,
                     }}
                 >
-                    <Text size={8} color={Color.placeholder}>{label}</Text>
+                    <Text size={12} color={Color.placeholder}>{label}</Text>
                 </View>}
 
                 <Row>
