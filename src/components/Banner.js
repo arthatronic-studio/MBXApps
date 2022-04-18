@@ -28,6 +28,12 @@ const Banner = ({ data, loading, showHeader }) => {
   const {Color} = useColor();
   const navigation = useNavigation();
 
+  const onPress = (e) => {
+    if (e.link) {
+      navigation.navigate(e.link);
+    }
+  }
+
   const renderskeleton = () => {
     return (
       <View
@@ -93,16 +99,20 @@ const Banner = ({ data, loading, showHeader }) => {
                   height='100%'
                   paddingHorizontal={16}
                 >
-                  <Image
-                    source={{uri: e.image}}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      borderRadius: 8,
-                      backgroundColor: Color.border,
-                    }}
-                    resizeMode='cover'
-                  />
+                  <TouchableOpacity
+                    onPress={() => onPress(e)}
+                  >
+                    <Image
+                      source={{uri: e.image}}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: 8,
+                        backgroundColor: Color.border,
+                      }}
+                      resizeMode='cover'
+                    />
+                  </TouchableOpacity>
                 </Container>
               )
             })}
