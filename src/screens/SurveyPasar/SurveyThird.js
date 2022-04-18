@@ -6,6 +6,7 @@ import RNSimpleCrypto from "react-native-simple-crypto";
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {launchImageLibrary} from 'react-native-image-picker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {
@@ -73,6 +74,10 @@ const SurveyThird = ({route, navigation}) => {
     const [pedagangSayurBuah, setPedagangSayurBuah] = useState(''); 
     const [pengunjungPerHari, setPengunjungPerhari] = useState(''); 
     const [penjualanFMCG, setPenjualanFMCG] = useState(''); 
+
+
+  const [thumbImage, setThumbImage] = useState(null);
+  const [mimeImage, setMimeImage] = useState('image/jpeg');
     
     const [refresh, setRefresh] = useState(0);
     const [nameTempatTepung, setNameTempatTepung] = useState(tempaTepung);
@@ -148,6 +153,23 @@ const SurveyThird = ({route, navigation}) => {
         setNameTempatTepung(tempx)
         setRefresh(refresh+1)
       }
+
+      const addImage = () => {
+        const options = {
+          mediaType: 'photo',
+          maxWidth: 640,
+          maxHeight: 640,
+          quality: 1,
+          includeBase64: true,
+        };
+    
+        launchImageLibrary(options, callback => {
+          if (callback.base64) {
+            setThumbImage(callback.base64);
+            setMimeImage(callback.type);
+          }
+        });
+      };
 
 
   return (
@@ -250,9 +272,41 @@ const SurveyThird = ({route, navigation}) => {
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jumlah Pedagang Daging</Text>
                 </View>
             </View>
-            <View>
-                
-            </View>
+            <TouchableOpacity
+              onPress={() => {
+                addImage();
+              }}
+              style={{
+                width: '30%',
+                borderWidth: 1,
+                borderColor: Color.text,
+                height: 100,
+                borderStyle: 'dashed',
+                borderRadius: 8,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginHorizontal: 20,
+                marginVertical: 12,
+              }}>
+                  {thumbImage && <Image
+                  style={{
+                    height: '100%',
+                    aspectRatio: 1,
+                    borderRadius: 4,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  source={{uri: `data:${mimeImage};base64,${thumbImage}`}}
+                />}
+              {!thumbImage && <AntDesign
+                name={'camerao'}
+                size={22}
+                style={{color: Color.secondary, paddingVertical: 5}}
+              />}
+              {!thumbImage && <Text style={{color: Color.secondary, fontSize: 12}}>
+                Tambah Foto
+              </Text>}
+            </TouchableOpacity>
             
             
             

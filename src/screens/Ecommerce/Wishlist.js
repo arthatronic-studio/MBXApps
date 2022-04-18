@@ -157,7 +157,10 @@ const Wishlist = ({navigation}) => {
     const renderItem = ({ item }) => (
         <View style={{ width: '100%', paddingHorizontal: 16, marginBottom: 16 }}>
             <View style={{borderRadius: 5, width: '100%', padding: 8, backgroundColor: Color.textInput, ...shadowStyle }}>
-                <View style={{ flexDirection: 'row',}}>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('DetailProduct', { item } )}
+                    style={{ flexDirection: 'row' }}
+                >
                     <View style={{ width: '20%', aspectRatio: 1 }}>
                         <Image source={{uri: item.imageUrl}} style={{width: '100%', height: '100%', borderRadius: 4}} />
                     </View>
@@ -174,7 +177,7 @@ const Wishlist = ({navigation}) => {
                             <Text style={{ fontSize: 10}}>Terjual</Text>
                         </View>
                     </View>
-                </View>
+                </TouchableOpacity>
 
                 <View style={{flexDirection: 'row', marginTop: 8, alignSelf: 'flex-end'}}>
                     <View style={{ borderRadius: 10, width: '30%', paddingVertical: 8, alignSelf: 'flex-end'}}>
