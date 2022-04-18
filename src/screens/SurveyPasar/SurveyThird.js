@@ -90,7 +90,7 @@ const SurveyThird = ({route, navigation}) => {
     }, []);
 
     const submit = async () => {
-        const label = [ 'jamBukaOperasional', 'jamTutupOperasional', 'namaPasar','pedagangDaging','pedagangFMCG','pedagangIkan','pedagangMakanan','pedagangSayurBuah','pengunjungPerHari','penjualanFMCG' ]
+        const label = [ 'photo', 'jamBukaOperasional', 'jamTutupOperasional', 'namaPasar','pedagangDaging','pedagangFMCG','pedagangIkan','pedagangMakanan','pedagangSayurBuah','pengunjungPerHari','penjualanFMCG' ]
         let tempData = []
         const tempPasar = []
         nameTepung.forEach(element => {
@@ -98,7 +98,7 @@ const SurveyThird = ({route, navigation}) => {
                 tempPasar.push(element.name)
             }
         });
-        const dataState = [ jamBukaOperasional, jamTutupOperasional, tempPasar,pedagangDaging,pedagangFMCG,pedagangIkan,pedagangMakanan,pedagangSayurBuah,pengunjungPerHari,penjualanFMCG ]
+        const dataState = [ thumbImage, jamBukaOperasional, jamTutupOperasional, tempPasar,pedagangDaging,pedagangFMCG,pedagangIkan,pedagangMakanan,pedagangSayurBuah,pengunjungPerHari,penjualanFMCG ]
         label.forEach((element, index) => {
                 tempData.push({
                     block: '4',
