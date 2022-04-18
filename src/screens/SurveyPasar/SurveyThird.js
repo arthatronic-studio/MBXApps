@@ -45,7 +45,6 @@ const Content = Styled(View)`
 `;
 
 let tepung = [{name: 'Pasar Basah Modern', checked: false},
-{name: 'Cakra Kembar', checked: false},
 {name: 'Pasar Basah Tradisional', checked: false},
 {name: 'Pasar Hewan', checked: false},
 {name: 'Pasar Pakaian', checked: false},
@@ -74,6 +73,8 @@ const SurveyThird = ({route, navigation}) => {
     const [pedagangSayurBuah, setPedagangSayurBuah] = useState(''); 
     const [pengunjungPerHari, setPengunjungPerhari] = useState(''); 
     const [penjualanFMCG, setPenjualanFMCG] = useState(''); 
+    const [jamBukaOperasional, setjamBukaOperasional] = useState(''); 
+    const [jamTutupOperasional, setjamTutupOperasional] = useState(''); 
 
 
   const [thumbImage, setThumbImage] = useState(null);
@@ -89,7 +90,7 @@ const SurveyThird = ({route, navigation}) => {
     }, []);
 
     const submit = async () => {
-        const label = ['nameTepung','pedagangDaging','pedagangFMCG','pedagangIkan','pedagangMakanan','pedagangSayurBuah','pengunjungPerHari','penjualanFMCG' ]
+        const label = ['jamBukaOperasional', 'jamTutupOperasional', 'namaPasar','pedagangDaging','pedagangFMCG','pedagangIkan','pedagangMakanan','pedagangSayurBuah','pengunjungPerHari','penjualanFMCG' ]
         let tempData = []
         const tempPasar = []
         nameTepung.forEach(element => {
@@ -97,7 +98,7 @@ const SurveyThird = ({route, navigation}) => {
                 tempPasar.push(element.name)
             }
         });
-        const dataState = [tempPasar,pedagangDaging,pedagangFMCG,pedagangIkan,pedagangMakanan,pedagangSayurBuah,pengunjungPerHari,penjualanFMCG ]
+        const dataState = [jamBukaOperasional, jamTutupOperasional, tempPasar,pedagangDaging,pedagangFMCG,pedagangIkan,pedagangMakanan,pedagangSayurBuah,pengunjungPerHari,penjualanFMCG ]
         label.forEach((element, index) => {
                 tempData.push({
                     block: '4',
@@ -111,7 +112,7 @@ const SurveyThird = ({route, navigation}) => {
             "auth": sha1Hash, 
             "survey_code": "SURVEY-20220229", 
             "timestamps": moment().format('YYYY-MM-DD HH:mm:ss'),
-            "caption_code": pasar,
+            "caption_code": "pasar",
             "data": route.params.item.concat(tempData)
         }
         console.log(dataq, 'dataq')
@@ -165,7 +166,8 @@ const SurveyThird = ({route, navigation}) => {
     
         launchImageLibrary(options, callback => {
           if (callback.base64) {
-            setThumbImage(callback.base64);
+            // data:${callback.type};base64,${callback.base64}
+            setThumbImage(`data:${callback.type};base64,${callback.base64}`);
             setMimeImage(callback.type);
           }
         });
@@ -174,12 +176,12 @@ const SurveyThird = ({route, navigation}) => {
 
   return (
     <Scaffold
-		header={<Header customIcon title="Survey" type="regular" centerTitle={false} />}
+		header={<Header customIcon title="Survey Pasar" type="regular" centerTitle={false} />}
 		onPressLeftButton={() => navigation.pop()}
 	>
         <ScrollView>
             <View style={{flexDirection: 'row',}}>
-                <Image source={ImagesPath.survey4} style={{marginHorizontal: 10, height: 40, width: 40 }} resizeMode='contain' />
+                <Image source={ImagesPath.survey3} style={{marginHorizontal: 10, height: 40, width: 40 }} resizeMode='contain' />
                 <View style={{alignItems: 'flex-start', paddingVertical: 5}}>
                     <Text style={{fontSize: 14, fontWeight: 'bold'}}>Seputar Produk</Text>
                     <Text style={{fontSize: 10, color: Color.secondary}}>Survey seputar pasar yang kamu kunjungi</Text>
@@ -209,11 +211,29 @@ const SurveyThird = ({route, navigation}) => {
             </View>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
-                    <TextInput placeholder='100' style={{borderWidth: 1, borderColor: Color.border,
+                    <TextInput placeholder='20' style={{borderWidth: 1, borderColor: Color.border,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setPengunjungPerhari(value)}
                         value={pengunjungPerHari}></TextInput>
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jumlah Pengunjung per Hari</Text>
+                </View>
+            </View>
+            <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
+                <View style={{width: '100%'}}>
+                    <TextInput placeholder='06:00' style={{borderWidth: 1, borderColor: Color.border,
+                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
+                        onChangeText={(value) => setjamBukaOperasional(value)}
+                        value={jamBukaOperasional}></TextInput>
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jam Buka Operasional</Text>
+                </View>
+            </View>
+            <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
+                <View style={{width: '100%'}}>
+                    <TextInput placeholder='17:00' style={{borderWidth: 1, borderColor: Color.border,
+                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
+                        onChangeText={(value) => setjamTutupOperasional(value)}
+                        value={jamTutupOperasional}></TextInput>
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jam Tutup Operasional</Text>
                 </View>
             </View>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
@@ -227,9 +247,11 @@ const SurveyThird = ({route, navigation}) => {
             </View>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
-                    <TextInput placeholder='Pasar' style={{borderWidth: 1, borderColor: Color.border,
-                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
+                    <TextInput placeholder={"1.Pasar Pakaian "+'\n'+" 2.Pasar Grosiran"+'\n'+" 3.Pasar Modern"} style={{borderWidth: 1, borderColor: Color.border,
+                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, minHeight: 90}}
                         onChangeText={(value) => setPenjualanFMCG(value)}
+                        multiline={true}
+                        numberOfLines={3}
                         value={penjualanFMCG}></TextInput>
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Produk FMCG Penjualan Tertinggi di</Text>
                 </View>
@@ -296,7 +318,7 @@ const SurveyThird = ({route, navigation}) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}
-                  source={{uri: `data:${mimeImage};base64,${thumbImage}`}}
+                  source={{uri: thumbImage}}
                 />}
               {!thumbImage && <AntDesign
                 name={'camerao'}

@@ -107,7 +107,7 @@ const SurveyFirst = ({navigation}) => {
 
   return (
     <Scaffold
-		header={<Header customIcon title="Survey" type="regular" centerTitle={false} />}
+		header={<Header customIcon title="Survey Pasar" type="regular" centerTitle={false} />}
 		onPressLeftButton={() => navigation.pop()}
 	>
         <ScrollView>
