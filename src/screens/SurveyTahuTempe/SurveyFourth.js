@@ -85,7 +85,7 @@ const SurveyFourth = ({route, navigation}) => {
     }, []);
 
     const submit = async () => {
-        const label = ['tempatJual', 'nameTempatTepung', 'nameTepung','tenagaKerja','hariKerja','kapasitasMesin','kapasitasProduksi','luasBangunan','luasTanah']
+        const label = ['tempatJual', 'tempatBeli', 'jenisProduk','tenagaKerja','hariKerja','kapasitasMesin','kapasitasProduksi','luasBangunan','luasTanah']
         let tempData = []
         const tempProduk = []
         nameTepung.forEach(element => {
@@ -256,47 +256,47 @@ const SurveyFourth = ({route, navigation}) => {
             </View>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
-                    <TextInput placeholder='2' style={{borderWidth: 1, borderColor: Color.border,
+                    <TextInput placeholder='5' style={{borderWidth: 1, borderColor: Color.border,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setHariKerja(value)}
                         value={hariKerja}></TextInput>
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jumlah Tenaga Kerja</Text>
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jumlah Hari Kerja</Text>
                 </View>
             </View>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
-                    <TextInput placeholder='2' style={{borderWidth: 1, borderColor: Color.border,
+                    <TextInput placeholder='22' style={{borderWidth: 1, borderColor: Color.border,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setKapasitasProduksi(value)}
                         value={kapasitasProduksi}></TextInput>
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jumlah Tenaga Kerja</Text>
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Kapasitas Produksi</Text>
                 </View>
             </View>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
-                    <TextInput placeholder='2' style={{borderWidth: 1, borderColor: Color.border,
+                    <TextInput placeholder='Luas Bangunan' style={{borderWidth: 1, borderColor: Color.border,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setLuasBangunan(value)}
                         value={luasBangunan}></TextInput>
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jumlah Tenaga Kerja</Text>
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Luas Bangunan</Text>
                 </View>
             </View>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
-                    <TextInput placeholder='2' style={{borderWidth: 1, borderColor: Color.border,
+                    <TextInput placeholder='20m' style={{borderWidth: 1, borderColor: Color.border,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setLuasTanah(value)}
                         value={luasTanah}></TextInput>
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jumlah Tenaga Kerja</Text>
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Luas Tanah</Text>
                 </View>
             </View>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
-                    <TextInput placeholder='2' style={{borderWidth: 1, borderColor: Color.border,
+                    <TextInput placeholder='200' style={{borderWidth: 1, borderColor: Color.border,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setKapasitasMesin(value)}
                         value={kapasitasMesin}></TextInput>
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jumlah Tenaga Kerja</Text>
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Kapasitas Mesin</Text>
                 </View>
             </View>
            

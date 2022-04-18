@@ -75,9 +75,9 @@ const SurveyThird = ({route, navigation}) => {
     const [penjualanFMCG, setPenjualanFMCG] = useState(''); 
     const [jamBukaOperasional, setjamBukaOperasional] = useState(''); 
     const [jamTutupOperasional, setjamTutupOperasional] = useState(''); 
+    const [tempImage, setImage] = useState([]); 
 
-
-  const [thumbImage, setThumbImage] = useState(null);
+  const [thumbImage, setThumbImage] = useState([]);
   const [mimeImage, setMimeImage] = useState('image/jpeg');
     
     const [refresh, setRefresh] = useState(0);
@@ -160,15 +160,19 @@ const SurveyThird = ({route, navigation}) => {
           mediaType: 'photo',
           maxWidth: 640,
           maxHeight: 640,
+          multiple: true,
           quality: 1,
           includeBase64: true,
         };
     
         launchImageLibrary(options, callback => {
           if (callback.base64) {
+              console.log(callback)
+              if(thumbImage.length == 0) setThumbImage([{data: `data:${callback.type};base64,${callback.base64}`, type: callback.type}])
+              else setThumbImage(thumbImage.concat({data: `data:${callback.type};base64,${callback.base64}`, type: callback.type }) )
             // data:${callback.type};base64,${callback.base64}
-            setThumbImage(`data:${callback.type};base64,${callback.base64}`);
-            setMimeImage(callback.type);
+            // setThumbImage(`data:${callback.type};base64,${callback.base64}`);
+            // setMimeImage(callback.type);
           }
         });
       };
@@ -183,7 +187,7 @@ const SurveyThird = ({route, navigation}) => {
             <View style={{flexDirection: 'row',}}>
                 <Image source={ImagesPath.survey3} style={{marginHorizontal: 10, height: 40, width: 40 }} resizeMode='contain' />
                 <View style={{alignItems: 'flex-start', paddingVertical: 5}}>
-                    <Text style={{fontSize: 14, fontWeight: 'bold'}}>Seputar Produk</Text>
+                    <Text style={{fontSize: 14, fontWeight: 'bold'}}>Seputar Pasar</Text>
                     <Text style={{fontSize: 10, color: Color.secondary}}>Survey seputar pasar yang kamu kunjungi</Text>
                 </View>
             </View>
@@ -294,7 +298,39 @@ const SurveyThird = ({route, navigation}) => {
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jumlah Pedagang Daging</Text>
                 </View>
             </View>
-            <TouchableOpacity
+            {thumbImage.length != 0 && <Row style={{ flexWrap: 'wrap', flex: 1 }}>
+                {console.log(thumbImage)}
+                {thumbImage.map((val, id) => (
+                    <TouchableOpacity
+                        onPress={() => {
+                            addImage();
+                        }}
+                        style={{
+                            width: '30%',
+                            borderWidth: 1,
+                            borderColor: Color.text,
+                            height: 100,
+                            borderStyle: 'dashed',
+                            borderRadius: 8,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginHorizontal: 20,
+                            marginVertical: 12,
+                        }}>
+                            <Image
+                            style={{
+                                height: '100%',
+                                aspectRatio: 1,
+                                borderRadius: 4,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                            source={{uri: val.data}}
+                            />
+                        </TouchableOpacity>
+                ))}
+            </Row>}
+            {thumbImage.length == 0 && <TouchableOpacity
               onPress={() => {
                 addImage();
               }}
@@ -310,25 +346,15 @@ const SurveyThird = ({route, navigation}) => {
                 marginHorizontal: 20,
                 marginVertical: 12,
               }}>
-                  {thumbImage && <Image
-                  style={{
-                    height: '100%',
-                    aspectRatio: 1,
-                    borderRadius: 4,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  source={{uri: thumbImage}}
-                />}
-              {!thumbImage && <AntDesign
+              <AntDesign
                 name={'camerao'}
                 size={22}
                 style={{color: Color.secondary, paddingVertical: 5}}
-              />}
-              {!thumbImage && <Text style={{color: Color.secondary, fontSize: 12}}>
+              />
+            <Text style={{color: Color.secondary, fontSize: 12}}>
                 Tambah Foto
-              </Text>}
-            </TouchableOpacity>
+              </Text>
+            </TouchableOpacity>}
             
             
             
