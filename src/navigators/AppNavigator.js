@@ -109,7 +109,7 @@ import Lelang from 'src/screens/Lelang/Lelang';
 import DetailLelang from 'src/screens/Lelang/DetailLelang';
 import JoinLelang from 'src/screens/Lelang/JoinLelang';
 import LiveLelangScreen from 'src/screens/Lelang/LiveLelangScreen';
-
+import DirectOrder from 'src/screens/Lelang/DirectOrder';
 
 //Ecommerce & Tokoku
 import CartScreen from '@src/screens/Ecommerce/CartScreen';
@@ -236,6 +236,7 @@ function MainStackNavigator() {
       <Screen name="Lelang" component={Lelang} />
       <Screen name="DetailLelang" component={DetailLelang} />
       <Screen name="LiveLelangScreen" component={LiveLelangScreen} />
+      <Screen name="DirectOrder" component={DirectOrder} />
 
       {/* Promo Popup */}
       <Screen name="DetailPromo" component={DetailPromo} />
