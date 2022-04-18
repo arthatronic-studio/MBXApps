@@ -44,6 +44,13 @@ const Content = Styled(View)`
     borderRadius: 8px
 `;
 
+let tempaTepungx = [{name: 'Warung', checked: false},
+{name: 'Minimarket', checked: false},
+{name: 'Supermarket/Mall', checked: false},
+{name: 'Pasar', checked: false},
+{name: 'Online/E-Commerce', checked: false},
+{name: 'Lainnya', checked: false}]
+
 let tepung = [{name: 'Tahu', checked: false},
 {name: 'Tempe', checked: false},
 {name: 'Kerupuk', checked: false},
@@ -55,6 +62,17 @@ let tempaTepung = [{name: 'Warung', checked: false},
 {name: 'Pasar', checked: false},
 {name: 'Online/E-Commerce', checked: false},
 {name: 'Lainnya', checked: false}]
+
+const nil = {
+    namaProduct: '',
+    masaProduct: '',
+    hargaProduct: ''
+}
+const baku = {
+    namaProduct: '',
+    masaProduct: '',
+    hargaProduct: ''
+}
 
 let temp = []
 let tempTempat = []
@@ -68,11 +86,13 @@ const SurveyFourth = ({route, navigation}) => {
     const [hariKerja, setHariKerja] = useState(''); 
     const [kapasitasProduksi, setKapasitasProduksi] = useState(''); 
     const [luasBangunan, setLuasBangunan] = useState(''); 
+    const [bahanBaku, setBahanBaku] = useState([baku]); 
+    const [nilaiProduct, setNilaiProduct] = useState([nil]); 
     const [luasTanah, setLuasTanah] = useState(''); 
-    const [tempatJual, setTempatJual] = useState(tempaTepung); 
+    const [tempatJual, setTempatJual] = useState(tempaTepungx); 
     const [kapasitasMesin, setKapasitasMesin] = useState(''); 
 
-  const [thumbImage, setThumbImage] = useState(null);
+  const [thumbImage, setThumbImage] = useState([]);
   const [mimeImage, setMimeImage] = useState('image/jpeg');
     
     const [refresh, setRefresh] = useState(0);
@@ -85,7 +105,7 @@ const SurveyFourth = ({route, navigation}) => {
     }, []);
 
     const submit = async () => {
-        const label = ['tempatJual', 'nameTempatTepung', 'nameTepung','tenagaKerja','hariKerja','kapasitasMesin','kapasitasProduksi','luasBangunan','luasTanah']
+        const label = ['bahanBaku', 'nilaiProduct', 'tempatJual', 'tempatBeli', 'jenisProduk','tenagaKerja','hariKerja','kapasitasMesin','kapasitasProduksi','luasBangunan','luasTanah']
         let tempData = []
         const tempProduk = []
         nameTepung.forEach(element => {
@@ -105,7 +125,7 @@ const SurveyFourth = ({route, navigation}) => {
                 tempJual.push(element.name)
             }
         });
-        const dataState = [tempJual, tempTempat, tempProduk, tenagaKerja, hariKerja, kapasitasMesin, kapasitasProduksi, luasBangunan, luasTanah]
+        const dataState = [bahanBaku, nilaiProduct, tempJual, tempTempat, tempProduk, tenagaKerja, hariKerja, kapasitasMesin, kapasitasProduksi, luasBangunan, luasTanah]
         label.forEach((element, index) => {
                 tempData.push({
                     block: '4',
@@ -174,22 +194,43 @@ const SurveyFourth = ({route, navigation}) => {
           mediaType: 'photo',
           maxWidth: 640,
           maxHeight: 640,
+          multiple: true,
           quality: 1,
           includeBase64: true,
         };
     
         launchImageLibrary(options, callback => {
           if (callback.base64) {
-            setThumbImage(callback.base64);
-            setMimeImage(callback.type);
+              console.log(callback)
+              if(thumbImage.length == 0) setThumbImage([{data: `data:${callback.type};base64,${callback.base64}`, type: callback.type}])
+              else setThumbImage(thumbImage.concat({data: `data:${callback.type};base64,${callback.base64}`, type: callback.type }) )
+            // data:${callback.type};base64,${callback.base64}
+            // setThumbImage(`data:${callback.type};base64,${callback.base64}`);
+            // setMimeImage(callback.type);
           }
         });
       };
 
+      const changeValue = (value, name, id) => {
+        const dataq = bahanBaku
+        dataq[id][name] = value
+        setBahanBaku(dataq)
+        setRefresh(refresh+1)
+      }
+
+      const changeValueProduksi = (value, name, id) => {
+        const dataqs = nilaiProduct
+        dataqs[id][name] = value
+        setNilaiProduct(dataqs)
+        setRefresh(refresh+1)
+      }
+
+      
+
 
   return (
     <Scaffold
-		header={<Header customIcon title="Survey" type="regular" centerTitle={false} />}
+		header={<Header customIcon title="Survey Tahu Tempe" type="regular" centerTitle={false} />}
 		onPressLeftButton={() => navigation.pop()}
 	>
         <ScrollView>
@@ -256,47 +297,47 @@ const SurveyFourth = ({route, navigation}) => {
             </View>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
-                    <TextInput placeholder='2' style={{borderWidth: 1, borderColor: Color.border,
+                    <TextInput placeholder='5' style={{borderWidth: 1, borderColor: Color.border,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setHariKerja(value)}
                         value={hariKerja}></TextInput>
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jumlah Tenaga Kerja</Text>
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jumlah Hari Kerja</Text>
                 </View>
             </View>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
-                    <TextInput placeholder='2' style={{borderWidth: 1, borderColor: Color.border,
+                    <TextInput placeholder='22' style={{borderWidth: 1, borderColor: Color.border,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setKapasitasProduksi(value)}
                         value={kapasitasProduksi}></TextInput>
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jumlah Tenaga Kerja</Text>
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Kapasitas Produksi</Text>
                 </View>
             </View>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
-                    <TextInput placeholder='2' style={{borderWidth: 1, borderColor: Color.border,
+                    <TextInput placeholder='Luas Bangunan' style={{borderWidth: 1, borderColor: Color.border,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setLuasBangunan(value)}
                         value={luasBangunan}></TextInput>
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jumlah Tenaga Kerja</Text>
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Luas Bangunan</Text>
                 </View>
             </View>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
-                    <TextInput placeholder='2' style={{borderWidth: 1, borderColor: Color.border,
+                    <TextInput placeholder='20m' style={{borderWidth: 1, borderColor: Color.border,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setLuasTanah(value)}
                         value={luasTanah}></TextInput>
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jumlah Tenaga Kerja</Text>
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Luas Tanah</Text>
                 </View>
             </View>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
-                    <TextInput placeholder='2' style={{borderWidth: 1, borderColor: Color.border,
+                    <TextInput placeholder='200' style={{borderWidth: 1, borderColor: Color.border,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setKapasitasMesin(value)}
                         value={kapasitasMesin}></TextInput>
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jumlah Tenaga Kerja</Text>
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Kapasitas Mesin</Text>
                 </View>
             </View>
            
@@ -316,6 +357,98 @@ const SurveyFourth = ({route, navigation}) => {
                 </View>
             </View>
 
+            <View style={{ marginHorizontal: 10 }}>
+                <View style={{alignItems: 'flex-start', paddingVertical: 10}}>
+                    <Text style={{fontSize: 14, fontWeight: 'bold'}}>Bahan Baku dalam satu bulan</Text>
+                </View>
+                {bahanBaku.map((val ,id) => (
+                    <View key={id} >
+                        <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
+                            <View style={{width: '100%'}}>
+                                <TextInput placeholder='Segitiga Biru' style={{borderWidth: 1, borderColor: Color.border,
+                                    width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
+                                    onChangeText={(value) => changeValue(value, 'namaProduct', id)}
+                                    value={val.namaProduct}></TextInput>
+                                <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Nama Produk</Text>
+                            </View>
+                        </View>
+                        <Row>
+                            <Col size={5.8}>
+                                <View style={{ marginHorizontal: 10, marginVertical: 5}}>
+                                    <View style={{width: '100%'}}>
+                                        <TextInput placeholder='200' style={{borderWidth: 1, borderColor: Color.border,
+                                            width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
+                                            onChangeText={(value) => changeValue(value, 'masaProduct', id)}
+                                            value={val.masaProduct}></TextInput>
+                                        <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Masa Produk</Text>
+                                    </View>
+                                </View>
+                            </Col>
+                            <Col size={5.8}>
+                                <View style={{ marginHorizontal: 10, marginVertical: 5}}>
+                                    <View style={{width: '100%'}}>
+                                        <TextInput placeholder='200' style={{borderWidth: 1, borderColor: Color.border,
+                                            width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
+                                            onChangeText={(value) => changeValue(value, 'hargaProduct', id)}
+                                            value={val.hargaProduct}></TextInput>
+                                        <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Harga Produk</Text>
+                                    </View>
+                                </View>
+                            </Col>
+                        </Row>
+                    </View>
+                ))}
+                <TouchableOpacity onPress={() => { setBahanBaku(bahanBaku.concat([baku])) }} style={{borderColor: Color.primary,marginVertical: 12, borderWidth: 1, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
+                    <Text style={{color: Color.primary}}>Tambah Product Lainnya</Text>
+                </TouchableOpacity>
+            </View>
+
+            <View style={{ marginHorizontal: 10 }}>
+                <View style={{alignItems: 'flex-start', paddingVertical: 10}}>
+                    <Text style={{fontSize: 14, fontWeight: 'bold'}}>Nilai Produksi dalam satu bulan</Text>
+                </View>
+                {nilaiProduct.map((val ,idx) => (
+                    <View key={id} >
+                        <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
+                            <View style={{width: '100%'}}>
+                                <TextInput placeholder='Segitiga Biru' style={{borderWidth: 1, borderColor: Color.border,
+                                    width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
+                                    onChangeText={(value) => changeValueProduksi(value, 'nameProduct', idx)}
+                                    value={val.namaProduct}></TextInput>
+                                <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Nama Produk</Text>
+                            </View>
+                        </View>
+                        <Row>
+                            <Col size={5.8}>
+                                <View style={{ marginHorizontal: 10, marginVertical: 5}}>
+                                    <View style={{width: '100%'}}>
+                                        <TextInput placeholder='200' style={{borderWidth: 1, borderColor: Color.border,
+                                            width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
+                                            onChangeText={(value) => changeValueProduksi(value, 'masaProduct', idx)}
+                                            value={val.masaProduct}></TextInput>
+                                        <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Masa Produk</Text>
+                                    </View>
+                                </View>
+                            </Col>
+                            <Col size={5.8}>
+                                <View style={{ marginHorizontal: 10, marginVertical: 5}}>
+                                    <View style={{width: '100%'}}>
+                                        <TextInput placeholder='200' style={{borderWidth: 1, borderColor: Color.border,
+                                            width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
+                                            onChangeText={(value) => changeValueProduksi(value, 'hargaProduct', idx)}
+                                            value={val.hargaProduct}></TextInput>
+                                        <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Harga Produk</Text>
+                                    </View>
+                                </View>
+                            </Col>
+                        </Row>
+                    </View>
+                ))}
+                <TouchableOpacity onPress={() => { setNilaiProduct(nilaiProduct.concat([nil])) }} style={{borderColor: Color.primary,marginVertical: 12, borderWidth: 1, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
+                    <Text style={{color: Color.primary}}>Tambah Product Lainnya</Text>
+                </TouchableOpacity>
+            </View>
+
           {/* <View>
             <Text
               style={{
@@ -328,7 +461,39 @@ const SurveyFourth = ({route, navigation}) => {
               Foto Produk
             </Text>
           </View> */}
-            <TouchableOpacity
+            {thumbImage.length != 0 && <Row style={{ flexWrap: 'wrap', flex: 1 }}>
+                {console.log(thumbImage)}
+                {thumbImage.map((val, id) => (
+                    <TouchableOpacity
+                        onPress={() => {
+                            addImage();
+                        }}
+                        style={{
+                            width: '30%',
+                            borderWidth: 1,
+                            borderColor: Color.text,
+                            height: 100,
+                            borderStyle: 'dashed',
+                            borderRadius: 8,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginHorizontal: 20,
+                            marginVertical: 12,
+                        }}>
+                            <Image
+                            style={{
+                                height: '100%',
+                                aspectRatio: 1,
+                                borderRadius: 4,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                            source={{uri: val.data}}
+                            />
+                        </TouchableOpacity>
+                ))}
+            </Row>}
+            {thumbImage.length == 0 && <TouchableOpacity
               onPress={() => {
                 addImage();
               }}
@@ -344,25 +509,15 @@ const SurveyFourth = ({route, navigation}) => {
                 marginHorizontal: 20,
                 marginVertical: 12,
               }}>
-                  {thumbImage && <Image
-                  style={{
-                    height: '100%',
-                    aspectRatio: 1,
-                    borderRadius: 4,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  source={{uri: `data:${mimeImage};base64,${thumbImage}`}}
-                />}
-              {!thumbImage && <AntDesign
+              <AntDesign
                 name={'camerao'}
                 size={22}
                 style={{color: Color.secondary, paddingVertical: 5}}
-              />}
-              {!thumbImage && <Text style={{color: Color.secondary, fontSize: 12}}>
+              />
+            <Text style={{color: Color.secondary, fontSize: 12}}>
                 Tambah Foto
-              </Text>}
-            </TouchableOpacity>
+              </Text>
+            </TouchableOpacity>}
 
             
         </ScrollView>

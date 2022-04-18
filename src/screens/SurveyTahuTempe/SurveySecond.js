@@ -95,13 +95,13 @@ const SurveySecond = ({ route, navigation}) => {
             })
         });
         // console.log('route', route.params.item.concat(tempData))
-        navigation.navigate('SurveyThird',{item: route.params.item.concat(tempData)})
+        navigation.navigate('SurveyTahuTempeThird',{item: route.params.item.concat(tempData)})
         // console.log(dataq, 'dataq')
       };
 
   return (
     <Scaffold
-		header={<Header customIcon title="Survey" type="regular" centerTitle={false} />}
+		header={<Header customIcon title="Survey Tahu Tempe" type="regular" centerTitle={false} />}
 		onPressLeftButton={() => navigation.pop()}
 	>
         <ScrollView>
