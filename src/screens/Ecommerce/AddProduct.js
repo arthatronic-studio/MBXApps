@@ -9,18 +9,20 @@ import {
   TextInput,
   View,
   Image,
+  ImageBackground,
   ScrollView,
   Platform,
   SafeAreaView,
   TextInput as TextInputs,
   Pressable,
   useWindowDimensions,
-  FlatList
+  FlatList,
 } from 'react-native';
 import Styled from 'styled-components';
 import {useSelector} from 'react-redux';
 import {useIsFocused, useRoute} from '@react-navigation/native';
 import Fontisto from 'react-native-vector-icons/Fontisto';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -48,7 +50,11 @@ import {queryContentProduct} from '@src/lib/query';
 import TopTabShop from './TopTabShop';
 import ImagesPath from 'src/components/ImagesPath';
 import {updateCurrentUserProfile} from 'src/state/actions/user/auth';
-import {queryGetCategory, queryGetMyProduct,queryEditProduct} from 'src/lib/query/ecommerce';
+import {
+  queryGetCategory,
+  queryGetMyProduct,
+  queryEditProduct,
+} from 'src/lib/query/ecommerce';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -60,14 +66,14 @@ const Content = Styled(View)`
     borderRadius: 8px
 `;
 
-const AddProduct = ({navigation,route}) => {
-console.log("rrrrrrrrr",route)
+const AddProduct = ({navigation, route}) => {
+  console.log('rrrrrrrrr', route);
   const {height} = useWindowDimensions();
   const [name, setName] = useState(route.params.item.name);
   const [thumbImage, setThumbImage] = useState('');
   const [mimeImage, setMimeImage] = useState('image/jpeg');
   const [listThumbImage, setListThumbImage] = useState([]);
-  const [image,setImage] = useState([]);
+  const [image, setImage] = useState([]);
 
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
@@ -99,52 +105,51 @@ console.log("rrrrrrrrr",route)
     });
   }, []);
 
-
   const save = () => {
-
     let variables = {
       products: [
         {
-          imageProducts: listThumbImage.length>0 ? listThumbImage : route.params.item.imageProducts,
+          imageProducts:
+            listThumbImage.length > 0
+              ? listThumbImage
+              : route.params.item.imageProducts,
           name,
           categoryId: value,
           merchantId: dataToko.id,
 
           productUnit: route.params.item.productUnit,
-      productMassa: route.params.item.productMassa,
-      stock:  route.params.item.stock,
-      minimumBuy:  route.params.item.minimumBuy,
-      description: route.params.item.description,
-      weight: route.params.item.weight,
-      height: route.params.item.height,
-      width: route.params.item.width,
-      length:route.params.item.length,
+          productMassa: route.params.item.productMassa,
+          stock: route.params.item.stock,
+          minimumBuy: route.params.item.minimumBuy,
+          description: route.params.item.description,
+          weight: route.params.item.weight,
+          height: route.params.item.height,
+          width: route.params.item.width,
+          length: route.params.item.length,
 
-      // imageUrl: route.params.type == 'edit' && listThumbImage[0] == route.params.item.imageUrl ? undefined :  listThumbImage[0],
-      // imageUrl: listThumbImage[0] == undefined ? route.params.item.imageProducts[0] : listThumbImage[0],
-      initialPrice: 0,
-      id: route.params.type == 'edit' ? route.params.item.id : undefined,
-      price: route.params.item.price,
-      status: 'SHOW',
-
+          // imageUrl: route.params.type == 'edit' && listThumbImage[0] == route.params.item.imageUrl ? undefined :  listThumbImage[0],
+          // imageUrl: listThumbImage[0] == undefined ? route.params.item.imageProducts[0] : listThumbImage[0],
+          initialPrice: 0,
+          id: route.params.type == 'edit' ? route.params.item.id : undefined,
+          price: route.params.item.price,
+          status: 'SHOW',
         },
       ],
     };
 
-    console.log("variablesss",variables)
+    console.log('variablesss', variables);
     Client.mutate({mutation: queryEditProduct, variables})
-    .then(res => {
-      console.log('BERHASIL EDIT', res);
-      alert('Berhasi Menyimpan');
-          setTimeout(() => {
-            navigation.navigate("EditProduct");
-          }, 1000);
-      
-    })
-    .catch(err => {
-      console.log('error', err);
-    });
-  }
+      .then(res => {
+        console.log('BERHASIL EDIT', res);
+        alert('Berhasi Menyimpan');
+        setTimeout(() => {
+          navigation.navigate('EditProduct');
+        }, 1000);
+      })
+      .catch(err => {
+        console.log('error', err);
+      });
+  };
 
   const submit = () => {
     // const tempData = {imageUrl: thumbImage ? 'data:image/png;base64,'+thumbImage : route.params.type == 'edit' ? route.params.item.imageUrl : undefined, name, categoryId:value, merchantId: dataToko.id};
@@ -155,19 +160,19 @@ console.log("rrrrrrrrr",route)
       merchantId: dataToko.id,
     };
 
-    navigation.navigate('StepTwo', {tempData, type: route.params.type, item: route.params.item});
+    navigation.navigate('StepTwo', {
+      tempData,
+      type: route.params.type,
+      item: route.params.item,
+    });
   };
 
   const getToko = id => {
     showLoading();
-    let variables = {
-      merchantId: undefined,
-    };
-    console.log(variables, 'toko');
-    Client.query({query: queryGetMyProduct, variables})
+    Client.query({query: queryGetMyProduct})
       .then(res => {
         // hideLoading()
-        console.log(res);
+        console.log(res, "hasil get toko");
         if (res.data.ecommerceGetMerchant) {
           setDataToko(res.data.ecommerceGetMerchant);
         }
@@ -192,24 +197,36 @@ console.log("rrrrrrrrr",route)
         setThumbImage(callback.base64);
         setMimeImage(callback.type);
         // listThumbImage.push('data:image/png;base64,'+ callback.base64)
-        pushImage(callback.base64,callback.type);
+        pushImage(callback.base64, callback.type);
       }
     });
   };
 
-  const pushImage = (thumbImage,mimeImage) => {
+  const delImage = (item) => {
+    if(item === 0){
+      setImage([]);
+      setListThumbImage([]);
+      setThumbImage('');
+    }else{
+      const temp = listThumbImage.filter(data => data !== item);
+      setImage(temp);
+      setListThumbImage(temp);
+    }
+  }
+
+  const pushImage = (thumbImage, mimeImage) => {
     const tempThumbImage = thumbImage
       ? 'data:image/png;base64,' + thumbImage
       : route.params.type == 'edit'
       ? route.params.item.imageUrl
       : undefined;
 
-    const tempImage = `data:${mimeImage};base64,${thumbImage}`
-    setImage([...image,tempImage])
+    const tempImage = `data:${mimeImage};base64,${thumbImage}`;
+    setImage([...image, tempImage]);
     setListThumbImage([...listThumbImage, tempThumbImage]);
   };
 
-  console.log('mageee', image);
+  console.log('mageee', listThumbImage);
 
   return (
     <Scaffold
@@ -217,13 +234,13 @@ console.log("rrrrrrrrr",route)
       header={
         <Header
           customIcon
-          title= {route.params.type =="edit" ?"Edit Produk" : "Tambah Produk"}
+          title={route.params.type == 'edit' ? 'Edit Produk' : 'Tambah Produk'}
           type="regular"
           centerTitle={false}
         />
       }
       onPressLeftButton={() => navigation.pop()}>
-      <ScrollView style={{backgroundColor:Color}}>
+      <ScrollView style={{backgroundColor: Color}}>
         <View
           style={{
             flexDirection: 'row',
@@ -238,7 +255,7 @@ console.log("rrrrrrrrr",route)
               paddingHorizontal: 20,
             }}>
             <Text style={{fontWeight: 'bold', fontSize: 14}}>
-              {route.params.type =="edit" ? "Edit Produk" : "Tambah Produk"}
+              {route.params.type == 'edit' ? 'Edit Produk' : 'Tambah Produk'}
             </Text>
             <Text style={{color: Color.secondary, fontSize: 10}}>
               Masukkan Produk baru untuk dijual
@@ -283,41 +300,45 @@ console.log("rrrrrrrrr",route)
                 alignItems: 'center',
               }}>
               <FlatList
-                  data={route.params.item.imageProducts}
-                  horizontal={true}
-                  keyExtractor={(item, index) => item.toString() + index}
-                  renderItem={({item}) => {
-                    return (
-                      <Image
+                data={route.params.item.imageProducts}
+                horizontal={true}
+                keyExtractor={(item, index) => item.toString() + index}
+                renderItem={({item}) => {
+                  return (
+                    <ImageBackground
                         style={{
                           height: '100%',
                           aspectRatio: 1,
-                          borderRadius: 4,
                           alignItems: 'center',
                           justifyContent: 'center',
-                          marginRight:10
+                          marginRight: 10,
                         }}
+                        imageStyle={{ borderRadius: 4, }}
                         source={{uri: item}}
-                      />
-                    );
-                  }}
-                />
-              {/* <Image
-                style={{
-                  height: '100%',
-                  aspectRatio: 1,
-                  borderRadius: 4,
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                      >
+                        <Text
+                          onPress={(item) => {
+                            delImage(item);
+                          }}
+                          style={{
+                            width: '50%',
+                            textAlign: 'right',
+                            paddingHorizontal: 20,
+                            color: Color.primary,
+                            fontSize: 10,
+                          }}>
+                          - Hapus Foto
+                        </Text>
+                      </ImageBackground>
+                  );
                 }}
-                source={{uri: route.params.item.imageUrl}}
-              /> */}
+              />
+
             </TouchableOpacity>
           ) : thumbImage !== '' ? (
             <View
-              
               style={{
-                padding:16,
+                padding: 16,
                 marginVertical: 10,
                 width: '100%',
                 height: height / 3,
@@ -326,37 +347,64 @@ console.log("rrrrrrrrr",route)
                 justifyContent: 'center',
                 flexDirection: 'row',
               }}>
-              {console.log('listt', listThumbImage)}
+              {console.log('listt thumb', listThumbImage)}
               {listThumbImage.length === 1 ? (
-                <Image
-                  style={{
-                    height: '100%',
-                    aspectRatio: 1,
-                    borderRadius: 4,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  source={{uri: `data:${mimeImage};base64,${thumbImage}`}}
-                />
-              ) : (
-                <FlatList
-                  data={image}
-                  horizontal={true}
-                  keyExtractor={(item, index) => item.toString() + index}
-                  renderItem={({item}) => {
-                    console.log("aaaaa",item)
-                    return (
-                      <Image
+                <ImageBackground
                         style={{
                           height: '100%',
                           aspectRatio: 1,
-                          borderRadius: 4,
+                          alignItems: 'flex-end',
+                          justifyContent: 'flex-start',
+                          marginRight: 10,
+                        }}
+                        imageStyle={{ borderRadius: 4, }}
+                        source={{uri: listThumbImage[0]}}
+                      >
+                        <TouchableOpacity
+                          onPress={() => {
+                            delImage(0);
+                          }}
+                          style={{ 
+                            marginTop: 10,
+                            marginEnd: 10,
+                           }}>
+                            <Ionicons name='trash' color={Color.textInput} size={16} />
+                        </TouchableOpacity>
+                      </ImageBackground>
+              ) : ( 
+                <FlatList
+                  data={listThumbImage}
+                  horizontal={true}
+                  keyExtractor={(item, index) => item.toString() + index}
+                  renderItem={({item}) => {
+                    console.log('aaaaa', item);
+                    return (
+                      <ImageBackground
+                        style={{
+                          height: '100%',
+                          aspectRatio: 1,
                           alignItems: 'center',
                           justifyContent: 'center',
-                          marginRight:10
+                          marginRight: 10,
                         }}
+                        imageStyle={{ borderRadius: 4, }}
                         source={{uri: item}}
-                      />
+                      >
+                        <Text
+                          onPress={() => {
+                            console.log(item, "iteeeeeeeeeeeeeeeeeeeeem");
+                            delImage(item);
+                          }}
+                          style={{
+                            width: '50%',
+                            textAlign: 'right',
+                            paddingHorizontal: 20,
+                            color: Color.primary,
+                            fontSize: 10,
+                          }}>
+                          - Hapus Foto
+                        </Text>
+                      </ImageBackground>
                     );
                   }}
                 />
@@ -510,36 +558,39 @@ console.log("rrrrrrrrr",route)
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        {route.params.type =="edit" ? <TouchableOpacity
-          style={{
-            backgroundColor: Color.primary,
-            width: '80%',
-            height: 45,
-            borderRadius: 30,
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-          //   onPress={() => navigation.navigate('StepTwo')}
-          onPress={() => save()}>
-          <Text style={{color: Color.textInput, fontWeight: 'bold'}}>
-            Simpan
-          </Text>
-        </TouchableOpacity> : <TouchableOpacity
-          style={{
-            backgroundColor: Color.primary,
-            width: '80%',
-            height: 45,
-            borderRadius: 30,
-            justifyContent: 'center',
-            textAlign: 'center',
-          }}
-          //   onPress={() => navigation.navigate('StepTwo')}
-          onPress={() => submit()}>
-          <Text style={{color: Color.textInput, fontWeight: 'bold'}}>
-            Lanjut
-          </Text>
-        </TouchableOpacity>}
-        
+        {route.params.type == 'edit' ? (
+          <TouchableOpacity
+            style={{
+              backgroundColor: Color.primary,
+              width: '80%',
+              height: 45,
+              borderRadius: 30,
+              justifyContent: 'center',
+              textAlign: 'center',
+            }}
+            //   onPress={() => navigation.navigate('StepTwo')}
+            onPress={() => save()}>
+            <Text style={{color: Color.textInput, fontWeight: 'bold'}}>
+              Simpan
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={{
+              backgroundColor: Color.primary,
+              width: '80%',
+              height: 45,
+              borderRadius: 30,
+              justifyContent: 'center',
+              textAlign: 'center',
+            }}
+            //   onPress={() => navigation.navigate('StepTwo')}
+            onPress={() => submit()}>
+            <Text style={{color: Color.textInput, fontWeight: 'bold'}}>
+              Lanjut
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
     </Scaffold>
   );
