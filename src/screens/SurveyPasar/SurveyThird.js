@@ -90,7 +90,7 @@ const SurveyThird = ({route, navigation}) => {
     }, []);
 
     const submit = async () => {
-        const label = [ 'photo', 'jamBukaOperasional', 'jamTutupOperasional', 'namaPasar','pedagangDaging','pedagangFMCG','pedagangIkan','pedagangMakanan','pedagangSayurBuah','pengunjungPerHari','penjualanFMCG' ]
+        const label = [  'jamBukaOperasional', 'jamTutupOperasional', 'namaPasar','pedagangDaging','pedagangFMCG','pedagangIkan','pedagangMakanan','pedagangSayurBuah','pengunjungPerHari','penjualanFMCG' ]
         let tempData = []
         const tempPasar = []
         nameTepung.forEach(element => {
@@ -98,7 +98,7 @@ const SurveyThird = ({route, navigation}) => {
                 tempPasar.push(element.name)
             }
         });
-        const dataState = [ thumbImage, jamBukaOperasional, jamTutupOperasional, tempPasar,pedagangDaging,pedagangFMCG,pedagangIkan,pedagangMakanan,pedagangSayurBuah,pengunjungPerHari,penjualanFMCG ]
+        const dataState = [ jamBukaOperasional, jamTutupOperasional, tempPasar,pedagangDaging,pedagangFMCG,pedagangIkan,pedagangMakanan,pedagangSayurBuah,pengunjungPerHari,penjualanFMCG ]
         label.forEach((element, index) => {
                 tempData.push({
                     block: '4',
@@ -168,14 +168,22 @@ const SurveyThird = ({route, navigation}) => {
         launchImageLibrary(options, callback => {
           if (callback.base64) {
               console.log(callback)
-              if(thumbImage.length == 0) setThumbImage([{data: `data:${callback.type};base64,${callback.base64}`, type: callback.type}])
-              else setThumbImage(thumbImage.concat({data: `data:${callback.type};base64,${callback.base64}`, type: callback.type }) )
+              if(thumbImage.length == 0) setThumbImage([`data:${callback.type};base64,${callback.base64}`])
+            //   if(thumbImage.length == 0) setThumbImage([{data: `data:${callback.type};base64,${callback.base64}`, type: callback.type}])
+              else setThumbImage(thumbImage.concat(`data:${callback.type};base64,${callback.base64}`))
             // data:${callback.type};base64,${callback.base64}
             // setThumbImage(`data:${callback.type};base64,${callback.base64}`);
             // setMimeImage(callback.type);
           }
         });
       };
+
+      const onDeleteImagee = (id) => {
+        const dataIma = thumbImage
+        dataIma.splice(id, 1)
+        setThumbImage(dataIma)
+        setRefresh(refresh+1)
+    }
 
 
   return (
@@ -251,7 +259,7 @@ const SurveyThird = ({route, navigation}) => {
             </View>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
-                    <TextInput placeholder={"1.Pasar Pakaian "+'\n'+" 2.Pasar Grosiran"+'\n'+" 3.Pasar Modern"} style={{borderWidth: 1, borderColor: Color.border,
+                    <TextInput placeholder={" 1. Pasar Pakaian "+'\n'+" 2. Pasar Grosiran"+'\n'+" 3. Pasar Modern"} style={{borderWidth: 1, borderColor: Color.border,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, minHeight: 90}}
                         onChangeText={(value) => setPenjualanFMCG(value)}
                         multiline={true}
@@ -325,12 +333,19 @@ const SurveyThird = ({route, navigation}) => {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                             }}
-                            source={{uri: val.data}}
+                            source={{uri: val}}
                             />
+                            <TouchableOpacity onPress={() => onDeleteImagee(id)} style={{ position: 'absolute', zIndex: 1, top: 8, right: 10 }}>
+                                <AntDesign
+                                    name={'close'}
+                                    size={22}
+                                    style={{color: 'red', paddingVertical: 5}}
+                                />
+                            </TouchableOpacity>
                         </TouchableOpacity>
                 ))}
             </Row>}
-            {thumbImage.length == 0 && <TouchableOpacity
+             <TouchableOpacity
               onPress={() => {
                 addImage();
               }}
@@ -354,7 +369,9 @@ const SurveyThird = ({route, navigation}) => {
             <Text style={{color: Color.secondary, fontSize: 12}}>
                 Tambah Foto
               </Text>
-            </TouchableOpacity>}
+            </TouchableOpacity>
+            <Text size={10} style={{ marginBottom: 20 }}>*)Setelah melakukan geotagging infrastruktur lengkapi foto infrastruktur pintu masuk, tampak luar, tampak dalam, tampak samping kanan kiri dan tengah pasar</Text>
+
             
             
             
