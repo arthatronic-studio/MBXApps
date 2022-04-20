@@ -78,6 +78,7 @@ const CardOrder = ({data}) => {
               fontSize: 10,
               marginVertical: 8,
               color: Color.primary,
+              width: '20%'
             }}>
             {data.statusId == 1 ? ("Sudah Dibayar"):(data.status)}
           </Text>

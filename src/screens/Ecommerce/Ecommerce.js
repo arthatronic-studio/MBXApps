@@ -331,7 +331,7 @@ const Ecommerce = ({ navigation }) => {
 						</View>
 						</Pressable> */}
 						
-						<Pressable onPress={() => navigation.navigate('CartScreen')}>
+						<Pressable onPress={() => navigation.navigate('CartScreen', {routeName: "Shop"})}>
 							<MaterialCommunityIcons
 								name={'shopping-outline'}
 								size={24}

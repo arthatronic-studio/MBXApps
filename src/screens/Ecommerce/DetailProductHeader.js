@@ -65,14 +65,14 @@ const DetailProductHeader = ({cart}) => {
           }}
         />
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate('Wishlist')}>
+      <TouchableOpacity onPress={()=> navigation.navigate('Wishlist')}>
         <MaterialIcons
           name={'favorite-border'}
           size={22}
           style={{marginHorizontal: 5}}
         />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('CartScreen')}>
+      <TouchableOpacity onPress={() => navigation.navigate('CartScreen', {routeName: "Shop"})}>
         <MaterialCommunityIcons
           name={'shopping-outline'}
           size={22}
