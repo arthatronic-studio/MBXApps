@@ -27,6 +27,8 @@ import {
 import { TouchableOpacity } from '@src/components/Button';
 import client from 'src/lib/apollo';
 import { mutationMerchant } from 'src/lib/query/ecommerce';
+import FormSelect from 'src/components/FormSelect';
+import ModalSelectMap from 'src/components/ModalSelectMap';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -93,9 +95,22 @@ const EditMerchantInfo = ({navigation}) => {
         ...route.params.item,
         instagram: route.params.item.socialMedia.instagram
       });
+    
+  const [coords, setCoords] = useState({
+    latitude: !isNaN(parseFloat(route.params.item.lat)) ? parseFloat(route.params.item.lat) : initialLatitude,
+    longitude: !isNaN(parseFloat(route.params.item.long)) ? parseFloat(route.params.item.long) : initialLongitude,
+  });
+
+  const [modalSelectMap, setModalSelectMap] = useState(false);
+  const [isPinnedMap, setIsPinnedMap] = useState(
+    route.params.item.lat && route.params.item.long ? true : false
+  );
+  const [locationPinnedMap, setLocationPinnedMap] = useState('');
 
     const onChangeUserData = (key, val) => {
+        console.log(key, val)
         setUserData({ ...userData, [key]: val });
+        console.log(userData)
       };
 
       const submit = (id, index) => {
@@ -114,8 +129,8 @@ const EditMerchantInfo = ({navigation}) => {
             // profileImg: 'data:image/png;base64,' + thumbImage,
             isVerified: userData.isVerified,
             isOfficial: userData.isOfficial,
-            lat: userData.lat,
-            long: userData.long,
+            lat: String(userData.lat),
+            long: String(userData.long),
           },
           merchantId:route.params.item.id,
           type: 'UPDATED',
@@ -254,6 +269,7 @@ const EditMerchantInfo = ({navigation}) => {
                             </EmailRoundedView>
                         </View>
                     </View>
+                    
 
                     <View style={{marginBottom: 16}}>
                         <View style={{borderWidth: 1, borderRadius: 4, borderColor: Color.border, paddingVertical: 8, paddingHorizontal: 12}}>
@@ -275,13 +291,56 @@ const EditMerchantInfo = ({navigation}) => {
                             </EmailRoundedView>
                         </View>
                     </View>
+                    <View style={{ marginHorizontal: -16, marginTop: -20 }}>
+                        <FormSelect
+                            type='select'
+                            label='Pin Lokasi'
+                            value={isPinnedMap ? locationPinnedMap || 'Lokasi di Pin' : ''}
+                            placeholder='Pilih di Peta'
+                            onPress={() => {
+                                setModalSelectMap(true);
+                            }}
+                        />
+                        <ModalSelectMap
+                            visible={modalSelectMap}
+                            extraProps={{
+                                title: 'Alamat Saya',
+                                fullAddress: '',
+                                ...coords,
+                            }}
+                            onSelect={(item) => {
+                                // const name = item.name;
+                                const address = item.fullAddress;
+                                const latitude = item.latitude;
+                                const longitude = item.longitude;
 
-                    <View style={{marginTop: 8, marginBottom: 10}}>
-                        <Text type='bold' size={11} align='left'>Titik Lokasi</Text>
-                    </View>
+                                // const provinceName = item.provinceName ? item.provinceName : state.userData.provinceName;
+                                // const cityName = item.cityName ? item.cityName : state.userData.cityName;
+                                // const postCode = item.postCode ? item.postCode : state.userData.postCode;
 
-                    <View style={{marginBottom: 30}}>
-                        <Image source={ImagesPath.wholeMap} style={{width: '100%'}} />
+                                setIsPinnedMap(true);
+                                setLocationPinnedMap(address);
+                                onChangeUserData('lat', item.latitude);
+                                onChangeUserData('long', item.longitude);
+                                setCoords({
+                                    latitude,
+                                    longitude,
+                                });
+
+                                // setState({
+                                //   userData: {
+                                //     ...state.userData,
+                                //     fullAddress,
+                                //     latitude,
+                                //     longitude,
+                                //     provinceName,
+                                //     cityName,
+                                //     postCode,
+                                //   }
+                                // });
+                            }}
+                            onClose={() => setModalSelectMap(false)}
+                            />
                     </View>
 
                     <View style={{ backgroundColor: Color.theme, marginBottom: 16 }}>
