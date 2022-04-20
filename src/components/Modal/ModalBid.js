@@ -198,13 +198,13 @@ const ModalBid = forwardRef((props, ref) => {
 				<Text style={{ color: Color.grayLight }}>Poinku</Text>
 				<Text style={{ fontWeight: 'bold' }}>250.000 Poin</Text>
 			</View>
-			<SubmitButton onPress={() => submit()} style={{ backgroundColor: Color.grayLight }}>
+			<SubmitButton style={{ backgroundColor: Color.grayLight }}>
 				<Text color={Color.textInput} size={16}>
 					Pasang Tawaran
 				</Text>
 			</SubmitButton>
 
-			<Loading {...loadingProps} />
+			<Loading {...loadingProps} /> 
 
 			<Popup {...popupProps} />
 		</Modalize>

@@ -115,14 +115,43 @@ const getAuction = () => {
         height: 260,
         marginHorizontal: 5,
         marginVertical: 5,
+        borderRadius: 5,
       }}
     >
       <TouchableOpacity
-        style={[styles.btnCategory, {backgroundColor: Color.textInput}]}
+        style={[styles.btnCategory, {backgroundColor: Color.textInput, elevation: 5}]}
         onPress={() => {
           navigation.navigate('DetailLelang', {item});
         }}
       >
+        <View
+        style={{
+          width: '17%',
+          position: 'absolute',
+          marginVertical: 14,
+          marginHorizontal: 20,
+        }}>
+        <TouchableOpacity
+          style={{
+            width: 53,
+            height: 23,
+          }}>
+          <View>
+            <View
+              style={{
+                backgroundColor: Color.error,
+                width: 60,
+                height: 23,
+                borderRadius: 50,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Text color={Color.textInput} size={10}>{item.time}</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      </View>
         <Image
           source={{ uri: item.image_url }}
           style={{
@@ -144,38 +173,11 @@ const getAuction = () => {
           <View style={{marginVertical: 5}}>
             <Text align='left' size={12} color={Color.disabled}>Harga Awal</Text>
             <Divider height={4} />
-            <Text align='left' type='bold'>{FormatMoney.getFormattedMoney(item.start_price)}</Text>
+            <Text align='left' type='bold'>{FormatMoney.getFormattedMoney(item.start_price)} <Text size={8}>Poin</Text></Text>
           </View>
         </View>
       </TouchableOpacity>
-      <View
-        style={{
-          width: '17%',
-          position: 'absolute',
-          marginVertical: 14,
-          marginHorizontal: 20,
-        }}>
-        <TouchableOpacity
-          style={{
-            width: 53,
-            height: 23,
-          }}>
-          <View>
-            <View
-              style={{
-                backgroundColor: Color.error,
-                width: 53,
-                height: 23,
-                borderRadius: 50,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Text color={Color.textInput} size={10}>{item.time}</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </View>
+      
     </View>
   );
 

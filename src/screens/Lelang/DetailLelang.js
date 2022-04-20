@@ -1,12 +1,12 @@
 import React,{useState} from 'react';
 import {View, Image, FlatList, StatusBar} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-
 import ImagesPath from 'src/components/ImagesPath';
 import {Scaffold, useColor, Header, Text} from '@src/components';
 import { Divider } from 'src/styled';
 import { FormatMoney } from 'src/utils';
 import moment from 'moment';
+import Entypo from 'react-native-vector-icons/Entypo'
 
 const DetailLelang = ({route, navigation}) => {
   const [product, setProduct] = useState(route.params.item);
@@ -20,6 +20,11 @@ const DetailLelang = ({route, navigation}) => {
           color={Color.text}
           centerTitle={false}
           customIcon
+          actions={
+            <>
+              <Entypo name={'dots-three-vertical'} size={20}/>
+            </>
+          }
         />
       }>
       <ScrollView>
@@ -31,7 +36,7 @@ const DetailLelang = ({route, navigation}) => {
           }}>
           <View
             style={{
-              width: '50%',
+              width: '60%',
               justifyContent: 'center',
               paddingHorizontal: 15,
             }}>
@@ -41,14 +46,14 @@ const DetailLelang = ({route, navigation}) => {
           </View>
           <View
             style={{
-              width: '50%',
+              width: '40%',
               alignItems: 'flex-end',
               justifyContent: 'center',
               paddingHorizontal: 15,
             }}>
             <View
               style={{
-                backgroundColor: Color.text,
+                backgroundColor: '#3C58C1',
                 width: 90,
                 height: 40,
                 borderRadius: 25,
@@ -56,8 +61,8 @@ const DetailLelang = ({route, navigation}) => {
                 justifyContent: 'center',
               }}>
               <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                <Text size={8} color={Color.textInput}>Sisa Waktu</Text>
-                <Text color={Color.textInput} size={12}>{moment.unix((product.time_end/1000) - moment().unix()).format("DD") > 0 ? moment.unix((product.time_end/1000) - moment().unix()).format("DD")+'Hari ' : ''}{moment.unix((product.time_end/1000) - moment().unix()).format("HH:mm")}</Text>
+                <Text size={5} color={Color.textInput}>Sisa Waktu</Text>
+                <Text style={{fontWeight: 'bold'}} color={Color.textInput} size={11}>{moment.unix((product.time_end/1000) - moment().unix()).format("DD") > 0 ? moment.unix((product.time_end/1000) - moment().unix()).format("DD")+'Hari ' : ''}{moment.unix((product.time_end/1000) - moment().unix()).format("HH:mm")}</Text>
               </View>
             </View>
           </View>
@@ -73,23 +78,23 @@ const DetailLelang = ({route, navigation}) => {
         >
           <View
             style={{
-              width: '50%',
+              width: '40%',
               justifyContent: 'center',
             }}>
-            <Text align='left'>
-              Harga saat ini
+            <Text align='left' style={{fontSize: 10, color: Color.secondary}}>
+              Harga tertinggi
             </Text>
-            <Divider height={4} />
-            <Text size={16} type='bold' align='left'>
+            <Divider height={1} />
+            <Text size={18} type='bold' align='left'>
               {FormatMoney.getFormattedMoney(product.buy_now_price)}
             </Text>
           </View>
-          <View style={{width: '50%', justifyContent: 'center'}}>
-            <Text align='right'>
-              Harga permulaan
+          <View style={{width: '60%', justifyContent: 'center'}}>
+            <Text align='left' style={{fontSize: 10, color: Color.secondary}}>
+              Harga Buka
             </Text>
-            <Divider height={4} />
-            <Text size={16} type='bold' align='right'>
+            <Divider height={1} />
+            <Text size={14} align='left'>
               {FormatMoney.getFormattedMoney(product.start_price)}
             </Text>
           </View>
@@ -108,6 +113,7 @@ const DetailLelang = ({route, navigation}) => {
               height: 60,
               backgroundColor: Color.semiwhite,
               flexDirection: 'row',
+              borderRadius: 5
             }}>
             <View
               style={{
@@ -115,8 +121,9 @@ const DetailLelang = ({route, navigation}) => {
                 justifyContent: 'center',
                 paddingHorizontal: 10,
               }}>
-              <Text size={10} color={Color.gray}>Jenis Barang</Text>
-              <Text size={10} type='medium'>Hijab</Text>
+              <Text size={10} color={Color.gray} align='left'>Jenis Barang</Text>
+              <Divider height={1}/>
+              <Text size={11} type='bold' align='left'>Hijab</Text>
             </View>
             <View
               style={{
@@ -125,7 +132,8 @@ const DetailLelang = ({route, navigation}) => {
                 paddingHorizontal: 10,
               }}>
               <Text size={10} color={Color.gray}>Jumlah</Text>
-              <Text size={10} type='medium'>{product.quantity} Unit</Text>
+              <Divider height={1}/>
+              <Text size={11} type='bold'>{product.quantity} Unit</Text>
             </View>
             <View
               style={{
@@ -134,7 +142,8 @@ const DetailLelang = ({route, navigation}) => {
                 paddingHorizontal: 10,
               }}>
               <Text size={10} color={Color.gray}>Jam Mulai</Text>
-              <Text size={10} type='medium'>{moment.unix(product.time_start/1000).format("HH:mm")} WIB</Text>
+              <Divider height={1}/>
+              <Text size={11} type='bold'>{moment.unix(product.time_start/1000).format("HH:mm")} WIB</Text>
             </View>
             <View
               style={{
@@ -144,13 +153,15 @@ const DetailLelang = ({route, navigation}) => {
               }}>
               <Text size={10} color={Color.gray}>Durasi</Text>
               {console.log( (product.time_end / 1000) - moment().unix()  )}
-              <Text size={10} type='medium'>{moment.unix((product.time_start/1000) + moment().unix()).format("HH:mm")}</Text>
+              <Divider height={1}/>
+              <Text size={11} type='bold'>{moment.unix((product.time_start/1000) + moment().unix()).format("HH:mm")}</Text>
             </View>
           </View>
         </View>
         {/* Foto Produk */}
         <FlatList
           horizontal
+          showsHorizontalScrollIndicator={false}
           data={[
             {image: ImagesPath.produklelang},
             {image: ImagesPath.produklelang},
@@ -174,11 +185,12 @@ const DetailLelang = ({route, navigation}) => {
           <Text
             color={Color.gray}
             align='left'
+            size={10}
           >
             Deskripsi
           </Text>
         </View>
-        <View style={{width: '100%', marginTop: 8, paddingHorizontal: 16}}>
+        <View style={{width: '100%', marginTop: 3, paddingHorizontal: 16}}>
           <Text
             align='left'
             lineHeight={20}
@@ -188,16 +200,35 @@ const DetailLelang = ({route, navigation}) => {
         </View>
       </ScrollView>
       <View>
+        <Text style={{fontSize: 10, fontWeight: 'bold', marginVertical: 5}}>Males Ikutan Lelang?</Text>
+        <TouchableOpacity
+          onPress={()=> navigation.navigate('DirectOrder')}
+          style={{
+            width: '92%',
+            height: 45,
+            backgroundColor: Color.theme,
+            borderWidth: 1,
+            borderColor: Color.primary,
+            borderRadius: 30,
+            marginHorizontal: 15,
+            paddingVertical: 10,
+            marginVertical: 5
+          }}>
+          <Text color={Color.primary} style={{fontSize: 14}}>
+            Beli Langsung Aja
+          </Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={{
             width: '92%',
             height: 45,
-            backgroundColor: Color.info,
+            backgroundColor: Color.primary,
             borderRadius: 30,
             marginHorizontal: 15,
             paddingVertical: 10,
+            marginVertical: 10
           }}>
-          <Text color={Color.textInput}>
+          <Text color={Color.textInput} onPress={()=> navigation.navigate('JoinLelang')}>
             Ikuti Lelang
           </Text>
         </TouchableOpacity>

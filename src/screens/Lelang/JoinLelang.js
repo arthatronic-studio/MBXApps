@@ -1,35 +1,119 @@
-import React from 'react';
-import {View, Text, Image, FlatList, StatusBar} from 'react-native';
-import Banner from 'src/components/Banner';
+import React, { useRef, useState } from 'react';
+import {View, Text,useWindowDimensions, Image, FlatList,Pressable,} from 'react-native';
 import ImagesPath from 'src/components/ImagesPath';
-import {Scaffold, useColor, Header} from '@src/components';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import CardListLelang from 'src/components/Card/CardListLelang';
-import LiveProductList from 'src/components/LiveProductList';
+import { Divider } from 'src/styled';
+import { shadowStyle } from '@src/styles';
+import {Scaffold, useColor, Header, Row, Col, TouchableOpacity} from '@src/components';
+import ModalBid from 'src/components/Modal/ModalBid';
+import Styled from 'styled-components';
+import { FormatMoney } from 'src/utils';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Bid from '../Posting/Auction/Bid';
 
 const DATA = [
   {
     id: 1,
-    no: 1,
+    avatar: ImagesPath.avatar1,
+    namaPenawar: 'Tantri N.',
+    jumlahPenawaran: '150.000'
   },
   {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
+    id: 2,
+    avatar: ImagesPath.avatar2,
+    namaPenawar: 'Mina M.',
+    jumlahPenawaran: '150.000'
   },
   {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
+    id: 3,
+    avatar: ImagesPath.avatar3,
+    namaPenawar: 'Galih F.',
+    jumlahPenawaran: '150.000'
+  },
+  {
+    id: 4,
+    avatar: ImagesPath.avatar1,
+    namaPenawar: 'Tantri N.',
+    jumlahPenawaran: '150.000'
+  },
+  {
+    id: 5,
+    avatar: ImagesPath.avatar2,
+    namaPenawar: 'Mina M.',
+    jumlahPenawaran: '150.000'
+  },
+  {
+    id: 6,
+    avatar: ImagesPath.avatar3,
+    namaPenawar: 'Galih F.',
+    jumlahPenawaran: '150.000'
+  },
+  {
+    id: 7,
+    avatar: ImagesPath.avatar1,
+    namaPenawar: 'Tantri N.',
+    jumlahPenawaran: '150.000'
+  },
+  {
+    id: 8,
+    avatar: ImagesPath.avatar2,
+    namaPenawar: 'Mina M.',
+    jumlahPenawaran: '150.000'
+  },
+  {
+    id: 9,
+    avatar: ImagesPath.avatar3,
+    namaPenawar: 'Galih F.',
+    jumlahPenawaran: '150.000'
   },
 ];
 
+const ButtonView = Styled(View)`
+    width: 100%;
+    marginHorizontal: 16;
+    paddingVertical: 16;
+    flexDirection: column;
+    justifyContent: flex-start;
+    alignItems: flex-start;
+    borderTopLeftRadius: 16;
+    borderTopRightRadius: 16;
+`;
+
+const EnterButton = Styled(TouchableOpacity)`
+    width: 140;
+    paddingVertical: 13;
+    borderRadius: 120px;
+    justifyContent: center;
+    alignItems: center;
+	height:48;
+`;
+
+
+
 const JoinLelang = () => {
+	const modalBidRef = useRef();
+  const { width, height } = useWindowDimensions();
+	const [ selectedAmount, setSelectedAmount ] = useState();
   const {Color} = useColor();
-  const renderItem = ({item}) => <Text>{item.title}</Text>;
+
+
+  const renderItem = ({item}) => 
+  <Row style={{justifyContent: 'center', alignItems: 'center',paddingVertical: 15, paddingHorizontal: 20,backgroundColor: Color.theme,width: '100%', height: 70,borderBottomWidth: 1, borderBottomColor: Color.border}}>
+    <Text style={{fontSize: 14,width: '10%'}}>{item.id}</Text>
+    <Image source={item.avatar} style={{backgroundColor: Color.secondary, width: '10%', height: 35}}/>
+    <Col style={{paddingHorizontal: 10,}}>
+      <Text style={{fontSize: 8}}>Nama Penawar</Text>
+      <Text style={{fontSize: 14}}>{item.namaPenawar}</Text>
+    </Col>
+    <Col>
+      <Text style={{fontSize: 8, textAlign: 'right'}}>Jumlah Penawaran</Text>
+      <Text style={{fontSize: 14, fontWeight: 'bold', textAlign: 'right'}}>{item.jumlahPenawaran} Poin</Text>
+    </Col>
+  </Row>
   return (
     <Scaffold
       header={
         <Header
-          type="regular"
+          type="bold"
           centerTitle={false}
           customIcon
           title="Lelang"
@@ -72,15 +156,15 @@ const JoinLelang = () => {
             }}>
             <View
               style={{
-                backgroundColor: Color.text,
+                backgroundColor: '#3C58C1',
                 width: 75,
                 height: 35,
                 borderRadius: 20,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Text color={Color.textInput} size={8}>Sisa waktu</Text>
-              <Text color={Color.textInput} size={12}>12:05</Text>
+              <Text style={{fontSize: 5, color: Color.textInput}}>Sisa waktu</Text>
+              <Text style={{fontSize: 11, color: Color.textInput}}>12:05</Text>
             </View>
           </View>
         </View>
@@ -102,23 +186,16 @@ const JoinLelang = () => {
               alignItems: 'center',
               paddingHorizontal: 20,
             }}>
-            <View style={{width: '35%'}}>
-              <Text style={{color: Color.gray, fontSize: 9}}>
-                Penawaran saat ini
-              </Text>
-              <Text
-                style={{color: Color.text, fontSize: 18, fontWeight: 'bold'}}>
-                Rp. 150.000
-              </Text>
-            </View>
             <View style={{width: '30%'}}>
-              <Text style={{color: Color.gray, fontSize: 9}}>Penawaranmu</Text>
-              <Text style={{color: Color.gray, fontSize: 14}}>Rp.0</Text>
+              <Text style={{color: Color.gray, fontSize: 8}}>Penawaranmu</Text>
+              <Divider height={2}/>
+              <Text style={{color: Color.text, fontWeight: 'bold', fontSize: 11}}>0 Poin</Text>
             </View>
             <View style={{width: '35%'}}>
-              <Text style={{color: Color.gray, fontSize: 9}}>Penawaran Awal</Text>
-              <Text style={{color: Color.gray, fontSize: 14, fontWeight: 'bold'}}>
-                Rp. 50.000
+              <Text style={{color: Color.gray, fontSize: 8}}>Penawaran Awal</Text>
+              <Divider height={2}/>
+              <Text style={{color: Color.text, fontSize: 10, fontWeight: 'normal'}}>
+                50.000 Poin
               </Text>
             </View>
           </View>
@@ -148,6 +225,54 @@ const JoinLelang = () => {
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
+      <View style={{ backgroundColor: Color.theme }}>
+					<ButtonView style={{backgroundColor: Color.theme }}>
+						<Text size={11} style={{ color: Color.text }}>
+							Pasang Tawaran
+						</Text>
+						<Divider height={10} />
+						<View
+							style={{
+								flexDirection: 'row',
+								justifyContent: 'flex-start',
+								alignItems: 'center'
+							}}
+						>
+							<EnterButton
+								style={{
+									backgroundColor: Color.grayLight
+								}}
+							>
+								<Text size={14}>
+								{FormatMoney.getFormattedMoney(5000)}
+							</Text>
+							</EnterButton>
+							<EnterButton style={{ backgroundColor: Color.grayLight, marginLeft: 10 }}>
+								<Text size={14} letterSpacing={0.02} color={Color.textInput}>
+									+{FormatMoney.getFormattedMoney(10000)}
+								</Text>
+							</EnterButton>
+							<TouchableOpacity
+								style={{
+									width: 43,
+									height: 43,
+									backgroundColor: Color.primary,
+									aspectRatio: 1,
+									marginLeft: 20,
+									borderRadius: 120,
+									alignItems: 'center',
+									justifyContent: 'center'
+								}}
+								onPress={() => {
+									modalBidRef.current.open();
+								}}
+							>
+								<Ionicons name="chevron-up-outline" color={Color.textInput} size={20} />
+							</TouchableOpacity>
+						</View>
+					</ButtonView>
+				</View>
+      <ModalBid ref={modalBidRef} />
     </Scaffold>
   );
 };

@@ -13,13 +13,13 @@ function MyTabs() {
   const navigation = useNavigation();
   const route = useRoute();
 
-  return <CartShop navigation={navigation} route={route} />
+  // return <CartShop navigation={navigation} route={route} />
 
   // hide tab
-
+  const {routeName} = route.params
   return (
     <Tab.Navigator
-      initialRouteName="Shop"
+      initialRouteName={routeName}
       tabBarOptions={{
         indicatorStyle: {backgroundColor: Color.theme, height: '100%'},
         activeTintColor: Color.primary,

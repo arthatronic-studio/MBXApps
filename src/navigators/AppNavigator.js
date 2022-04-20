@@ -107,9 +107,12 @@ import Bid from '@src/screens/Posting/Auction/Bid';
 // Lelang 
 import Lelang from 'src/screens/Lelang/Lelang';
 import DetailLelang from 'src/screens/Lelang/DetailLelang';
-import JoinLelang from 'src/screens/Lelang/JoinLelang';
+import CardBid from 'src/screens/Lelang/CardBid';
 import LiveLelangScreen from 'src/screens/Lelang/LiveLelangScreen';
 import DirectOrder from 'src/screens/Lelang/DirectOrder';
+import JoinLelang from 'src/screens/Lelang/JoinLelang';
+import AuctionHistory from 'src/screens/Lelang/AuctionHistory';
+import BidAuction from 'src/screens/Lelang/BidAuction';
 
 //Ecommerce & Tokoku
 import CartScreen from '@src/screens/Ecommerce/CartScreen';
@@ -141,8 +144,6 @@ import ChatEcommerce from 'src/screens/Ecommerce/ChatEcommerce';
 import CardChatEcommerce from 'src/screens/Ecommerce/CardChatEcommerce';
 import ChatDetail from 'src/screens/Ecommerce/ChatDetail';
 import EditProduct from 'src/screens/Ecommerce/EditProduct';
-import BidAuction from 'src/screens/Ecommerce/BidAuction';
-import CardBid from 'src/screens/Ecommerce/CardBid';
 import MyAuction from 'src/screens/Ecommerce/MyAuction';
 
 // import PopUpCouponSucces from 'src/screens/Ecommerce/PopUpCouponSucces';
@@ -237,7 +238,10 @@ function MainStackNavigator() {
       <Screen name="Lelang" component={Lelang} />
       <Screen name="DetailLelang" component={DetailLelang} />
       <Screen name="LiveLelangScreen" component={LiveLelangScreen} />
-      <Screen name="DirectOrder" component={DirectOrder} />
+      <Screen name="DirectOrder" component={DirectOrder}/>
+      <Screen name="JoinLelang" component={JoinLelang}/>
+      <Screen name="AuctionHistory" component={AuctionHistory}/>
+      <Screen name="BidAuction" component={BidAuction}/>
 
       {/* Promo Popup */}
       <Screen name="DetailPromo" component={DetailPromo} />
@@ -274,7 +278,6 @@ function MainStackNavigator() {
 		<Screen name="CardChatEcommerce" component={CardChatEcommerce} />
 		<Screen name="ChatDetail" component={ChatDetail} />
 		<Screen name="EditProduct" component={EditProduct} />
-		<Screen name="BidAuction" component={BidAuction} />
 		<Screen name="CardBid" component={CardBid} />
     <Screen name="MyAuction" component={MyAuction} />
 

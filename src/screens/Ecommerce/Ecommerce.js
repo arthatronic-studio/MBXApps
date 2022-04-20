@@ -90,7 +90,7 @@ const ecomMenu = [
 		name: 'Lelang',
 		badge: true,
 		imageAsset: ImagesPath.scales,
-		navigate: 'LiveLelangScreen',
+		navigate: 'Lelang',
 		show: true,
 	},
 ]

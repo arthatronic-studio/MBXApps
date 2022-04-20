@@ -73,9 +73,23 @@ function MyTabs() {
     <Tab.Navigator
       initialRouteName="Description"
       tabBarOptions={{
-        activeTintColor: Color.text,
-        labelStyle: {fontSize: 11, fontWeight: 'bold'},
-        style: {backgroundColor: Color.textInput},
+        scrollEnabled: true,
+        indicatorStyle: {backgroundColor: Color.theme, height: '100%'},
+        activeTintColor: Color.primary,
+        activeBackgroundColor: Color.primary,
+        inactiveTintColor: Color.secondary,
+        labelStyle: {
+          fontSize: 12,
+          fontWeight: 'bold',
+          color: Color.secondary,
+        },
+        indicatorStyle: {
+          borderBottomColor: Color.theme,
+          borderBottomWidth: 2,
+        },
+        labelStyle: {
+          fontSize: 12,
+        },
       }}>
       <Tab.Screen
         name="Semua"
