@@ -207,6 +207,20 @@ const MyShopHomepage = ({ navigation }) => {
 								</TouchableOpacity>
 								<MaterialIcons name={'keyboard-arrow-right'} size={30} style={{ color: Color.text, width: '13%' }} />
 							</Pressable>
+							<Pressable onPress={() => navigation.navigate('MyAuction')}>
+								<View 
+									style={{
+										flexDirection: 'row', 
+										alignItems: 'center', 
+										justifyContent: 'space-between', 
+										paddingHorizontal: 16, 
+										marginTop: 14
+									}}
+								>
+									<Text align='left'>Lelang Produk</Text>
+									<MaterialIcons name={'keyboard-arrow-right'} size={20} style={{ color: Color.text}} />
+								</View>
+							</Pressable>
 							{/* hide lelang produk */}
 							{/* <View style={{ borderRadius: 5, flexDirection: 'row', marginHorizontal: 10, width: '95%', alignItems: 'center' }}>
 								<Text style={{ width: '92%', textAlign: 'left' }}>Lelang Produk</Text>

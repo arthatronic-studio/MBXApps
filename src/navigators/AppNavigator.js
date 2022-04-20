@@ -143,6 +143,7 @@ import ChatDetail from 'src/screens/Ecommerce/ChatDetail';
 import EditProduct from 'src/screens/Ecommerce/EditProduct';
 import BidAuction from 'src/screens/Ecommerce/BidAuction';
 import CardBid from 'src/screens/Ecommerce/CardBid';
+import MyAuction from 'src/screens/Ecommerce/MyAuction';
 
 // import PopUpCouponSucces from 'src/screens/Ecommerce/PopUpCouponSucces';
 
@@ -275,6 +276,7 @@ function MainStackNavigator() {
 		<Screen name="EditProduct" component={EditProduct} />
 		<Screen name="BidAuction" component={BidAuction} />
 		<Screen name="CardBid" component={CardBid} />
+    <Screen name="MyAuction" component={MyAuction} />
 
       {/* <Screen name="PopUpCouponSucces" component={PopUpCouponSucces}/> */}
       <Screen name="DetailCoupon" component={DetailCoupon} />
