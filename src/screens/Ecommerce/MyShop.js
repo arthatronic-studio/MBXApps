@@ -91,7 +91,7 @@ const MyShop = ({ navigation, route }) => {
           <Row style={{marginVertical: 5}}>
               <Col style={{flexDirection: 'row'}}>
                   <Entypo name={'location-pin'} size={12} style={{color: Color.secondary, paddingVertical: 1, paddingHorizontal: 2}}/>
-                  <Text size={10}>{data.alamat}</Text>
+                  <Text size={10}>{data.cityName}</Text>
               </Col>
               <Col style={{flexDirection: 'row'}}>
                   <FontAwesome name={'phone'} size={12} style={{color: Color.secondary, paddingVertical: 2, paddingHorizontal: 5}}/>

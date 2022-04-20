@@ -137,28 +137,9 @@ const StepThree = ({navigation, route}) => {
 
     let variables = {
       products: [
-        {
-          imageProducts: route.params.item.imageProducts,
-          name:route.params.item.name,
-          categoryId: route.params.item.categoryId,
-          merchantId: route.params.item.merchantId,
-
-          productUnit: route.params.item.productUnit,
-          productMassa: route.params.item.productMassa,
-          stock:  route.params.item.stock,
-          minimumBuy:  route.params.item.minimumBuy,
-          description: route.params.item.description,
-          weight: route.params.item.weight,
-          height: route.params.item.height,
-          width: route.params.item.width,
-          length:route.params.item.length,
-
-      // imageUrl: route.params.type == 'edit' && listThumbImage[0] == route.params.item.imageUrl ? undefined :  listThumbImage[0],
-      // imageUrl: listThumbImage[0] == undefined ? route.params.item.imageProducts[0] : listThumbImage[0],
-      initialPrice: 0,
-      id: route.params.type == 'edit' ? route.params.item.id : undefined,
-      price: parseInt(price),
-      status: 'SHOW'
+        {         
+          id: route.params.type == 'edit' ? route.params.item.id : undefined,
+          price: parseInt(price),
         },
       ],
     };
@@ -257,7 +238,7 @@ const StepThree = ({navigation, route}) => {
           </Text>
         </View>
 
-        <View
+        {/* <View
           style={{
             height: 300,
             width: '90%',
@@ -371,7 +352,7 @@ const StepThree = ({navigation, route}) => {
               }}
             />
           </View>
-        </View>
+        </View> */}
       </ScrollView>
       <View
         style={{

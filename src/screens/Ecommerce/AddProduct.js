@@ -72,7 +72,9 @@ const AddProduct = ({navigation, route}) => {
   const [name, setName] = useState(route.params.item.name);
   const [thumbImage, setThumbImage] = useState('');
   const [mimeImage, setMimeImage] = useState('image/jpeg');
-  const [listThumbImage, setListThumbImage] = useState([]);
+  const [listThumbImage, setListThumbImage] = useState(route.params.item.imageProducts ? route.params.item.imageProducts : []);
+  const [listEditThumbImage, setListEditThumbImage] = useState(route.params.item.imageProducts ? route.params.item.imageProducts : []);
+  const [listIndexDelete, setListIndexDelete] = useState([]);
   const [image, setImage] = useState([]);
 
   const user = useSelector(state => state['user.auth'].login.user);
@@ -106,33 +108,16 @@ const AddProduct = ({navigation, route}) => {
   }, []);
 
   const save = () => {
+    const resImage = listThumbImage.filter(data => !data.startsWith("http://"));
     let variables = {
       products: [
         {
-          imageProducts:
-            listThumbImage.length > 0
-              ? listThumbImage
-              : route.params.item.imageProducts,
+          id: route.params.item.id,
+          imageProducts: resImage,
           name,
           categoryId: value,
-          merchantId: dataToko.id,
-
-          productUnit: route.params.item.productUnit,
-          productMassa: route.params.item.productMassa,
-          stock: route.params.item.stock,
-          minimumBuy: route.params.item.minimumBuy,
-          description: route.params.item.description,
-          weight: route.params.item.weight,
-          height: route.params.item.height,
-          width: route.params.item.width,
-          length: route.params.item.length,
-
-          // imageUrl: route.params.type == 'edit' && listThumbImage[0] == route.params.item.imageUrl ? undefined :  listThumbImage[0],
-          // imageUrl: listThumbImage[0] == undefined ? route.params.item.imageProducts[0] : listThumbImage[0],
-          initialPrice: 0,
-          id: route.params.type == 'edit' ? route.params.item.id : undefined,
-          price: route.params.item.price,
-          status: 'SHOW',
+          status: 'DELETE',
+          indexImageDeleted: listIndexDelete 
         },
       ],
     };
@@ -203,6 +188,15 @@ const AddProduct = ({navigation, route}) => {
   };
 
   const delImage = (item) => {
+    console.log(listIndexDelete.length, "length delete");
+    console.log(listEditThumbImage.length, "length edit");
+    console.log(item, "iteeeem");
+    if(route.params.type == 'edit' && listIndexDelete.length < listEditThumbImage.length){
+      const index = listEditThumbImage.indexOf(item);
+      console.log(index, "indeeex delete");
+      setListIndexDelete([...listIndexDelete, index]);
+    }
+
     if(item === 0){
       setImage([]);
       setListThumbImage([]);
@@ -227,6 +221,8 @@ const AddProduct = ({navigation, route}) => {
   };
 
   console.log('mageee', listThumbImage);
+  console.log('deleteindex', listIndexDelete);
+  console.log('mageeeee edit', listEditThumbImage);
 
   return (
     <Scaffold
@@ -289,53 +285,33 @@ const AddProduct = ({navigation, route}) => {
               + Tambah Foto
             </Text>
           </View>
-          {thumbImage == '' && route.params.type == 'edit' ? (
+          {listThumbImage.length === 0 ? (
             <TouchableOpacity
-              onPress={() => {}}
-              style={{
-                marginVertical: 10,
-                width: '100%',
-                height: height / 3,
-                borderRadius: 4,
-                alignItems: 'center',
-              }}>
-              <FlatList
-                data={route.params.item.imageProducts}
-                horizontal={true}
-                keyExtractor={(item, index) => item.toString() + index}
-                renderItem={({item}) => {
-                  return (
-                    <ImageBackground
-                        style={{
-                          height: '100%',
-                          aspectRatio: 1,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          marginRight: 10,
-                        }}
-                        imageStyle={{ borderRadius: 4, }}
-                        source={{uri: item}}
-                      >
-                        <Text
-                          onPress={(item) => {
-                            delImage(item);
-                          }}
-                          style={{
-                            width: '50%',
-                            textAlign: 'right',
-                            paddingHorizontal: 20,
-                            color: Color.primary,
-                            fontSize: 10,
-                          }}>
-                          - Hapus Foto
-                        </Text>
-                      </ImageBackground>
-                  );
-                }}
-              />
-
-            </TouchableOpacity>
-          ) : thumbImage !== '' ? (
+            onPress={() => {
+              addImage();
+            }}
+            style={{
+              width: '30%',
+              borderWidth: 1,
+              borderColor: Color.text,
+              height: 100,
+              borderStyle: 'dashed',
+              borderRadius: 8,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginHorizontal: 20,
+              marginVertical: 12,
+            }}>
+            <AntDesign
+              name={'camerao'}
+              size={22}
+              style={{color: Color.secondary, paddingVertical: 5}}
+            />
+            <Text style={{color: Color.secondary, fontSize: 12}}>
+              Tambah Foto
+            </Text>
+          </TouchableOpacity>
+          ) : (
             <View
               style={{
                 padding: 16,
@@ -362,12 +338,13 @@ const AddProduct = ({navigation, route}) => {
                       >
                         <TouchableOpacity
                           onPress={() => {
-                            delImage(0);
+                            delImage(route.params.type == 'edit'? listThumbImage[0] : 0);
                           }}
-                          style={{ 
-                            marginTop: 10,
-                            marginEnd: 10,
-                           }}>
+                          style={{
+                            position: 'absolute',
+                            top: 5,
+                            right: 5,
+                          }}>
                             <Ionicons name='trash' color={Color.textInput} size={16} />
                         </TouchableOpacity>
                       </ImageBackground>
@@ -390,52 +367,23 @@ const AddProduct = ({navigation, route}) => {
                         imageStyle={{ borderRadius: 4, }}
                         source={{uri: item}}
                       >
-                        <Text
+                        <TouchableOpacity
                           onPress={() => {
-                            console.log(item, "iteeeeeeeeeeeeeeeeeeeeem");
                             delImage(item);
                           }}
                           style={{
-                            width: '50%',
-                            textAlign: 'right',
-                            paddingHorizontal: 20,
-                            color: Color.primary,
-                            fontSize: 10,
+                            position: 'absolute',
+                            top: 5,
+                            right: 5,
                           }}>
-                          - Hapus Foto
-                        </Text>
+                            <Ionicons name='trash' color={Color.textInput} size={16} />
+                        </TouchableOpacity>
                       </ImageBackground>
                     );
                   }}
                 />
               )}
             </View>
-          ) : (
-            <TouchableOpacity
-              onPress={() => {
-                addImage();
-              }}
-              style={{
-                width: '30%',
-                borderWidth: 1,
-                borderColor: Color.text,
-                height: 100,
-                borderStyle: 'dashed',
-                borderRadius: 8,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginHorizontal: 20,
-                marginVertical: 12,
-              }}>
-              <AntDesign
-                name={'camerao'}
-                size={22}
-                style={{color: Color.secondary, paddingVertical: 5}}
-              />
-              <Text style={{color: Color.secondary, fontSize: 12}}>
-                Tambah Foto
-              </Text>
-            </TouchableOpacity>
           )}
 
           <Text

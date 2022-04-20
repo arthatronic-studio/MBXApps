@@ -30,6 +30,7 @@ import Client from '@src/lib/apollo';
 
 import {MainView} from 'src/styled';
 import { shadowStyle } from '@src/styles';
+import { useIsFocused } from '@react-navigation/native';
 
 import { mutationMerchant, queryGetCart, queryGetMyProduct } from 'src/lib/query/ecommerce';
 import CardEcomerceProduct from './CardEcomerceProduct';
@@ -44,6 +45,7 @@ const MyProduct = ({navigation, route}) => {
   const {Color} = useColor();
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const [data, setData] = useState([]);
+  const isFocused = useIsFocused();
 
   const onSelect = item => {
     setSelectedItem(item);
@@ -111,7 +113,7 @@ const MyProduct = ({navigation, route}) => {
 
   useEffect(() => {
     getProductList();
-  }, []);
+  }, [isFocused]);
 
   return (
     <Scaffold

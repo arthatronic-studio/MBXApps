@@ -102,9 +102,9 @@ const MyShopHomepage = ({ navigation }) => {
 							</View>
 
 							<View style={{ width: '100%', alignSelf: 'center', flexDirection: 'row', marginTop: 6, paddingHorizontal: 8 }}>
-								<View style={{ flex: 1, flexDirection: 'row', marginHorizontal: 5 }}>
+								<View style={{ flex: 1, flexDirection: 'row', marginHorizontal: 5, justifyContent: 'flex-end'}}>
 									<Entypo name={'location-pin'} size={12} style={{ color: Color.secondary }} />
-									<Text align='left' style={{ fontSize: 10, paddingHorizontal: 3, color: Color.secondary }}>{data.alamat}</Text>
+									<Text align='left' style={{ fontSize: 10, paddingHorizontal: 3, color: Color.secondary }}>{data.cityName}, {data.provinceName}</Text>
 								</View>
 								<View style={{ flex: 1, flexDirection: 'row', marginHorizontal: 5 }}>
 									<FontAwesome name={'phone'} size={12} style={{ color: Color.secondary, paddingVertical: 2 }} />

@@ -24,14 +24,17 @@ import ImagesPath from 'src/components/ImagesPath';
 import { FormatMoney } from 'src/utils';
 import { queryDetailProduct } from 'src/lib/query/ecommerce';
 import client from 'src/lib/apollo';
+import { useIsFocused } from '@react-navigation/native';
+
 
 const EditProduct = ({navigation,route}) => {
   const [data,setData] = useState([]);
+	const isFocused = useIsFocused();
   useEffect(()=>{
    
     getDetail()
    
-  },[data])
+  },[isFocused])
 
   const getDetail = () => {
     let variables = {

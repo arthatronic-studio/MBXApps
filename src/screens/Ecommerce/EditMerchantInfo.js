@@ -115,22 +115,21 @@ const EditMerchantInfo = ({navigation}) => {
   const [nameModal, setnameModal] = useState(null);
   const [thumbImage, setThumbImage] = useState('');
   const [mimeImage, setMimeImage] = useState('image/jpeg');
-  const [postalCode, setCode] = useState('');
   const [dataProvince, setDataProvince] = useState([]);
   const [dataCity, setDataCity] = useState([]);
   const [dataArea, setDataArea] = useState([]);
   const [dataSub, setDataSub] = useState([]);
-  const [prov, setProv] = useState(() => {});
-  const [kota, setKota] = useState(null);
-  const [kec, setKec] = useState(null);
-  const [area, setArea] = useState(null);
-  const [isFirstGet, setIsFirstGet] = useState(false);
 
   const modalListActionRef = useRef();
 
   const onChangeUserData = (key, val) => {
     setUserData({...userData, [key]: val});
   };
+
+  const onListChangeUserData = (keys, values) => {
+    const temp = Object.fromEntries(keys.map((_, i) => [keys[i], values[i]]))  
+    setUserData({...userData, ...temp})
+  }
 
   const getData = (name, value) => {
     showLoading();
@@ -211,11 +210,14 @@ const EditMerchantInfo = ({navigation}) => {
         if (res.data.shipperGetProvinceList) {
           if (res.data.shipperGetProvinceList.length > 0) {
             setDataProvince(res.data.shipperGetProvinceList);
-            console.log(route.params.item.provinceId, 'kondisi');
-            if (route.params.item.provinceId) {
-              getData('prov', {id: route.params.item.provinceId});
-              getData('city', {id: route.params.item.cityId});
-              getData('sub', {id: route.params.item.suburbId});
+            if (userData.provinceId) {
+              getData('prov', {id: userData.provinceId});
+              if(userData.cityId){
+                getData('city', {id: userData.cityId});
+              }
+              if(userData.suburbId){
+                getData('sub', {id: userData.suburbId});
+              }
             }
           }
         }
@@ -245,10 +247,15 @@ const EditMerchantInfo = ({navigation}) => {
         isVerified: userData.isVerified,
         isOfficial: userData.isOfficial,
         countryId: 228,
+        countryName: 'Indonesia',
         provinceId: userData.provinceId,
+        provinceName: userData.provinceName,
         cityId: userData.cityId,
+        cityName: userData.cityName,
         suburbId: userData.suburbId,
+        suburbName: userData.suburbName,
         areaId: userData.areaId,
+        areaName: userData.areaName,
         postalCode: userData.postalCode,
         lat: String(userData.lat),
         long: String(userData.long),
@@ -260,7 +267,7 @@ const EditMerchantInfo = ({navigation}) => {
     Client.mutate({mutation: mutationMerchant, variables})
       .then(res => {
         hideLoading();
-        console.log(res);
+        console.log(res, "res edit toko");
         if (res.data.ecommerceMerchantManage) {
           alert('Success edit toko');
           navigation.pop();
@@ -274,42 +281,41 @@ const EditMerchantInfo = ({navigation}) => {
   };
 
   const onSelected = (item, name) => {
-    console.log(item, name);
-    if (name == 'prov') {
-      setProv(item);
-      onChangeUserData('provinceId', item.id);
-      setKota(null);
-      setKec(null);
+    console.log(item, name, "onselecetd");
+    if(name === 'prov'){
+      console.log("masuk prov");
+      onListChangeUserData(
+        ['provinceId', 'provinceName', 'cityId', 'cityName', 'suburbId', 'suburbName', 'areaId', 'areaName'],
+        [item.id, item.name, null, null, null, null, null, null]
+      );
       getData(name, item);
-    } else if (name == 'city') {
-      setKota(item);
-      onChangeUserData('cityId', item.id);
-      setKec(null);
-      setArea(null);
+    } else if (name === 'city') {
+      console.log("masuk city");
+      onListChangeUserData(
+        ['cityId', 'cityName', 'suburbId', 'suburbName', 'areaId', 'areaName'],
+        [item.id, item.name, null, null, null, null]
+      );
       getData(name, item);
-    } else if (name == 'sub') {
-      setKec(item);
-      onChangeUserData('suburbId', item.id);
-      setArea(null);
+    } else if (name === 'sub'){
+      console.log("masuk sub");
+      onListChangeUserData(
+        ['suburbId', 'suburbName', 'areaId', 'areaName'],
+        [item.id, item.name, null, null]
+      );
       getData(name, item);
-    } else {
-      setArea(item);
-      onChangeUserData('areaId', item.id);
+    }else {
+      console.log("masuk area");
+      onListChangeUserData(
+        ['areaId', 'areaName'],
+        [item.id, item.name]
+      );
     }
     modalListActionRef.current.close();
   };
 
   useEffect(() => {
     firstGet();
-    setIsFirstGet(true);
   }, []);
-
-  useEffect(() => {
-    setProv(dataProvince.find(item => item.id === userData.provinceId));
-    setKota(dataCity.find(item => item.id === userData.cityId));
-    setKec(dataSub.find(item => item.id === userData.suburbId));
-    setArea(dataArea.find(item => item.id === userData.areaId));
-  }, [dataArea, isFirstGet]);
 
   const {Color} = useColor();
 
@@ -549,7 +555,7 @@ const EditMerchantInfo = ({navigation}) => {
               <Row>
                 <Col size={8}>
                   <Text align="left" style={{fontSize: 14}}>
-                    {prov ? prov.name : 'Pilih Provinsi'}
+                    {userData.provinceName ? userData.provinceName : 'Pilih Provinsi'}
                   </Text>
                 </Col>
                 <Col alignItems="flex-end" justifyContent="center">
@@ -581,7 +587,7 @@ const EditMerchantInfo = ({navigation}) => {
               <Row>
                 <Col size={8}>
                   <Text align="left">
-                    {kota ? kota.name : 'Pilih Kota/Kabupaten'}
+                    {userData.cityName ? userData.cityName : 'Pilih Kota/Kabupaten'}
                   </Text>
                 </Col>
                 <Col alignItems="flex-end" justifyContent="center">
@@ -612,7 +618,7 @@ const EditMerchantInfo = ({navigation}) => {
               </Text>
               <Row>
                 <Col size={8}>
-                  <Text align="left">{kec ? kec.name : 'Pilih Kecamatan'}</Text>
+                  <Text align="left">{userData.suburbName ? userData.suburbName : 'Pilih Kecamatan'}</Text>
                 </Col>
                 <Col alignItems="flex-end" justifyContent="center">
                   <AntDesign name="down" color={Color.text} size={15} />
@@ -643,7 +649,7 @@ const EditMerchantInfo = ({navigation}) => {
               </Text>
               <Row>
                 <Col size={8}>
-                  <Text align="left">{area ? area.name : 'Pilih Area'}</Text>
+                  <Text align="left">{userData.areaName ? userData.areaName : 'Pilih Area'}</Text>
                 </Col>
                 <Col alignItems="flex-end" justifyContent="center">
                   <AntDesign name="down" color={Color.text} size={15} />
