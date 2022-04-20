@@ -465,6 +465,17 @@ export const queryGetMyShop = gql`
       isVerified
       isOfficial
       createdAt
+      countryId
+      countryName
+      provinceId
+      provinceName
+      cityId
+      cityName
+      suburbId
+      suburbName
+      areaId
+      areaName
+      postalCode
       lat
       long
       socialMedia {
@@ -687,7 +698,7 @@ export const queryDetailProduct = gql`
         name
         noTelp
         alamat
-        socialMedia{
+        socialMedia {
           instagram
         }
         profileImg
@@ -732,7 +743,7 @@ export const queryGetAddress = gql`
         name
       }
       latitude
-    	longitude
+      longitude
     }
   }
 `;
