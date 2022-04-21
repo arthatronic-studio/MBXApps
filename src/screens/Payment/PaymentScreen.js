@@ -130,10 +130,12 @@ export default ({ navigation, route }) => {
     const variables = {
       bookingId: booking.id //16
     };
-    console.log(booking, 'booking')
+    
     if (batchPayment) {
       variables.batchBookingId = batchPayment.batchId;
     }
+
+    console.log(variables, 'variables');
 
     Client.query({
       query: queryPaymentMethods,
@@ -234,8 +236,8 @@ export default ({ navigation, route }) => {
             activeOpacity={0.7}
             onPress={() => setSelectedPayment(pay)}
           >
-            {pay.class === 'vestaPoint' && amountTotal > vestaAmount && <View style={{paddingHorizontal: 16}}>
-              <Text color={Color.error}>Saldo Anda tidak mencukupi untuk membayar transaksi ini.</Text>
+            {pay.class === 'vestaPoint' && amountTotal > vestaAmount && <View style={{paddingHorizontal: 16, paddingBottom: 8}}>
+              <Text align='left' color={Color.error}>Saldo Anda tidak mencukupi untuk membayar transaksi ini.</Text>
             </View>}
   
             <View style={{paddingHorizontal: 16, flexDirection: 'row', width: '100%'}}>

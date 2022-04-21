@@ -37,6 +37,7 @@ import {
   queryGetShipper,
 } from 'src/lib/query/ecommerce';
 import {TextInput} from 'react-native-gesture-handler';
+import { Divider } from 'src/styled';
 
 var styled = function styled(tag) {
   return constructWithOptions(createStyledComponent, tag);
@@ -60,6 +61,7 @@ const CheckoutScreen = ({ navigation, route }) => {
   const [shippment, setShipping] = useState({});
   const isFocused = useIsFocused();
   const [note, setNote] = useState();
+  const [productList, setProductList] = useState([]);
 
   // selector
   const user = useSelector(state => state['user.auth'].login.user);
@@ -78,6 +80,12 @@ const CheckoutScreen = ({ navigation, route }) => {
     }
 
     if (saveShippment) setShipping(saveShippment);
+
+    // let newArr = [];
+    // route.params.list.map((item) => {
+    //   newArr.push({ ...item, note: '' });
+    // });
+    setProductList(route.params.list);
   }, [isFocused]);
 
   const getAddress = () => {
@@ -112,18 +120,22 @@ const CheckoutScreen = ({ navigation, route }) => {
 
   const submit = () => {
     const {saveAddress, saveShippment, item} = route.params;
-    console.log(route, 'props');
+    
     showLoading();
-    const prod = item.tempData.map((val, id) => {
-      return {
-        id: val.id,
-        qty: val.qty,
-        note: val.note
-      };
+
+    let prod = [];
+    productList.map((i) => {
+      i.products.map((e) => {
+        prod.push({
+          id: e.id,
+          qty: e.quantity,
+          note: e.note,
+        });
+      })
     });
+
     let variables = {
       // type: "BOOKING",
-      products: [{ id: prod.id, qty: prod.qty, note: note }],
       // courier: { rate_id: 268, use_insurance: false, cod: false, cost: 20000},
       // destinationAddressId: 2,
       courier: {
@@ -136,18 +148,22 @@ const CheckoutScreen = ({ navigation, route }) => {
       type: 'BOOKING',
       products: prod,
     };
+
     console.log(variables, 'variables');
+
     Client.mutate({mutation: mutationCheckout, variables})
       .then(res => {
         hideLoading();
         console.log(res);
-        if (res.data.ecommerceOrderManage) {
+        if (res.data.ecommerceOrderManage && res.data.ecommerceOrderManage.success) {
           console.log('datanya nih', {
             ...res.data.ecommerceOrderManage,
             id: res.data.ecommerceOrderManage.data.bookingId,
             vestaBiller: true,
           });
-          alert('Success order');
+
+          alert(res.data.ecommerceOrderManage.message);
+
           dispatch({
             type: 'BOOKING.ADD_BOOKING',
             data: {
@@ -162,11 +178,15 @@ const CheckoutScreen = ({ navigation, route }) => {
             navigation.navigate('PaymentScreen', {back: true});
             // navigation.popToTop()
           }, 1000);
+        } else if (res.data.ecommerceOrderManage) {
+          alert(res.data.ecommerceOrderManage.message);
+        } else {
+          alert('Gagal Order');
         }
       })
       .catch(reject => {
         hideLoading();
-        alert(reject);
+        alert('Gagal Order');
         console.log(reject, 'reject');
       });
   };
@@ -258,7 +278,7 @@ const CheckoutScreen = ({ navigation, route }) => {
           </View>
         </Content>
         <Content style={{backgroundColor: Color.theme}}>
-          {route.params.list.map((item, id) => (
+          {productList.map((item, index) => (
             <>
               <Row>
                 <Image
@@ -286,61 +306,75 @@ const CheckoutScreen = ({ navigation, route }) => {
                   </Text>
                 </Col>
               </Row>
-              {item.products.map((val, id) => (
-                <Row style={{marginBottom: 10}}>
-                  <Image
-                    source={{uri: val.imageUrl}}
-                    style={{
-                      height: 74,
-                      width: 74,
-                      marginRight: 14,
-                      borderRadius: 8,
-                    }}
-                  />
-                  <Col alignItems="flex-start">
-                    <Text
-                      color={Color.text}
-                      size={12}
-                      type="bold"
-                      align="left">
-                      {val.name}
-                    </Text>
-                    <Text style={{fontSize: 10, color: Color.secondary}}>
-                      Jumlah : {val.quantity || val.qty} Buah
-                    </Text>
-                    <View style={{flex: 1, paddingVertical: 5}}>
-                      {/* <Text size={10} color={Color.text} >Harga</Text> */}
-                      <Text type="bold" color={Color.text}>
-                        {FormatMoney.getFormattedMoney(val.price)}
+              {item.products.map((val, idx) => (
+                <>
+                  <Row style={{marginBottom: 10}}>
+                    <Image
+                      source={{uri: val.imageUrl}}
+                      style={{
+                        height: 74,
+                        width: 74,
+                        marginRight: 14,
+                        borderRadius: 8,
+                      }}
+                    />
+                    <Col alignItems="flex-start">
+                      <Text
+                        color={Color.text}
+                        size={12}
+                        type="bold"
+                        align="left">
+                        {val.name}
                       </Text>
-                    </View>
-                  </Col>
-                </Row>
+                      <Text style={{fontSize: 10, color: Color.secondary}}>
+                        Jumlah : {val.quantity || val.qty} Buah
+                      </Text>
+                      <View style={{flex: 1, paddingVertical: 5}}>
+                        {/* <Text size={10} color={Color.text} >Harga</Text> */}
+                        <Text type="bold" color={Color.text}>
+                          {FormatMoney.getFormattedMoney(val.price)}
+                        </Text>
+                      </View>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <TextInput
+                      onChangeText={(e) => {
+                        let newPrd = [...item.products];
+                        newPrd[idx].note = e;
+
+                        let newList = [...productList];
+                        newList[index].products = newPrd;
+
+                        setProductList(newList);
+                      }}
+                      value={val.note}
+                      placeholder="Tambahkan catatan untuk penjual"
+                      style={{
+                        width: '100%',
+                        backgroundColor: Color.border,
+                        borderRadius: 5,
+                        height: 35,
+                        fontSize: 10,
+                        paddingHorizontal: 30,
+                      }}></TextInput>
+                    <FontAwesome
+                      name={'sticky-note-o'}
+                      style={{
+                        position: 'absolute',
+                        paddingVertical: 11,
+                        paddingHorizontal: 10,
+                      }}
+                    />
+                  </Row>
+
+                  <Divider />
+                </>
               ))}
             </>
           ))}
-          <Row>
-            <TextInput
-              onChangeText={(e) => setNote(e)}
-              value={note}
-              placeholder="Tambahkan catatan untuk penjual"
-              style={{
-                width: '100%',
-                backgroundColor: Color.border,
-                borderRadius: 5,
-                height: 35,
-                fontSize: 10,
-                paddingHorizontal: 30,
-              }}></TextInput>
-            <FontAwesome
-              name={'sticky-note-o'}
-              style={{
-                position: 'absolute',
-                paddingVertical: 11,
-                paddingHorizontal: 10,
-              }}
-            />
-          </Row>
+          
           <TouchableOpacity
             onPress={() => {
               address.address
