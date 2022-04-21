@@ -12,6 +12,7 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import MapView, {Marker} from 'react-native-maps';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Modal from 'react-native-modal';
+import { initialLatitude, initialLongitude } from 'src/utils/constants';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
@@ -45,6 +46,8 @@ import {ScrollView} from 'react-native-gesture-handler';
 import Client from '@src/lib/apollo';
 
 import {queryCreateMerchant} from 'src/lib/query/ecommerce';
+import ModalSelectMap from 'src/components/ModalSelectMap';
+import FormSelect from 'src/components/FormSelect';
 
 const CreateShop = () => {
   const navigation = useNavigation();
@@ -114,6 +117,21 @@ const CreateShop = () => {
     setModalVisible(!isModalVisible);
   };
 
+
+  const [coords, setCoords] = useState({
+    latitude:  initialLatitude,
+    longitude: initialLongitude,
+  });
+
+  console.log('coords', coords);
+
+  const [modalSelectMap, setModalSelectMap] = useState(false);
+  const [isPinnedMap, setIsPinnedMap] = useState(
+     false
+  );
+  const [locationPinnedMap, setLocationPinnedMap] = useState('');
+
+
   const onSubmit = () => {
     Keyboard.dismiss();
 
@@ -142,8 +160,8 @@ const CreateShop = () => {
         areaId: userData.areaId,
         areaName: area.name,
         postalCode: userData.postalCode,
-        lat: userData.latitude,
-        long: userData.longitude,
+        lat: String(userData.latitude),
+        long: String(userData.longitude),
       },
     };
 
@@ -823,37 +841,16 @@ const CreateShop = () => {
         </View>
 
         <Divider />
-        <Text
-          style={{
-            fontSize: 10,
-            fontWeight: 'bold',
-            textAlign: 'left',
-            marginHorizontal: 10,
-          }}>
-          Titik Lokasi
-        </Text>
-        <View
-          style={{
-            width: '100%',
-            height: 200,
-            marginVertical: 10,
-            alignItems: 'center',
-          }}>
-          <MapView
-            style={{width: '95%', height: 200}}
-            initialRegion={{
-              latitude: -6.173696,
-              longitude: 106.824707,
-              latitudeDelta: 0.004,
-              longitudeDelta: 0.004,
-            }}>
-            <Marker
-              coordinate={{
-                latitude: -6.175200397040409,
-                longitude: 106.82714206826583,
+        <View style={{ marginHorizontal: -8, marginTop: -25 }}>
+            <FormSelect
+              type='select'
+              label='Pin Lokasi'
+              value={isPinnedMap ? locationPinnedMap || 'Lokasi di Pin' : ''}
+              placeholder='Pilih di Peta'
+              onPress={() => {
+                setModalSelectMap(true);
               }}
             />
-          </MapView>
         </View>
       </ScrollView>
       <Submit
@@ -870,6 +867,47 @@ const CreateShop = () => {
           onSubmit();
         }}
       />
+      <ModalSelectMap
+      visible={modalSelectMap}
+      extraProps={{
+        title: 'Alamat Saya',
+        fullAddress: '',
+        ...coords,
+      }}
+      onSelect={(item) => {
+        // const name = item.name;
+        const fullAddress = item.fullAddress;
+        const latitude = item.latitude;
+        const longitude = item.longitude;
+
+        // const provinceName = item.provinceName ? item.provinceName : state.userData.provinceName;
+        // const cityName = item.cityName ? item.cityName : state.userData.cityName;
+        // const postCode = item.postCode ? item.postCode : state.userData.postCode;
+        onChangeUserData('longitude', longitude)
+        onChangeUserData('latitude', latitude)
+        setIsPinnedMap(true);
+        setLocationPinnedMap(fullAddress);
+        setCoords({
+          latitude,
+          longitude,
+        });
+
+        // setState({
+        //   userData: {
+        //     ...state.userData,
+        //     fullAddress,
+        //     latitude,
+        //     longitude,
+        //     provinceName,
+        //     cityName,
+        //     postCode,
+        //   }
+        // });
+      }}
+      onClose={() => setModalSelectMap(false)}
+    />
+
+      
 
       <ModalListAction
         ref={modalListActionRef}
