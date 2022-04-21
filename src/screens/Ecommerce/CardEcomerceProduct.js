@@ -25,10 +25,9 @@ import client from 'src/lib/apollo';
 
 const defaultProps = {
 	isMyProduct: false,
-	onRefresh: () => {},
 };
 
-const CardEcomerceProduct = ({ isMyProduct, item, index, onRefresh }) => {
+const CardEcomerceProduct = ({ isMyProduct, item, onRefresh, index  }) => {
 	const { Color } = useColor();
 	const {width, height} = useWindowDimensions();
     const navigation = useNavigation();
