@@ -145,6 +145,7 @@ export const queryDetailOrder = gql`
           imageUrl
           stock
           quantity
+          note
         }
       }
 

@@ -42,11 +42,13 @@ const ListMyProduct = ({ topComponent, bottomComponent }) => {
 
     Client.query({query: queryGetMyProduct, variables})
       .then(res => {
-        console.log(res);
+        console.log(res, 'myproduct');
 
         if (res.data.ecommerceGetMerchant.productList) {
           let newData = res.data.ecommerceGetMerchant.productList;
           setListProduct(newData);
+        }else{
+          setListProduct([]);
         }
 
         // hideLoading();
@@ -88,7 +90,7 @@ const ListMyProduct = ({ topComponent, bottomComponent }) => {
         showsHorizontalScrollIndicator={false}
         data={listProduct}
         ListHeaderComponent={topComponent}
-        renderItem={({ item, index }) => <CardEcomerceProduct isMyProduct item={item} index={index} />}
+        renderItem={({ item, index }) => <CardEcomerceProduct isMyProduct item={item} onRefresh={() => getProduct()} index={index} />}
         contentContainerStyle={{
           paddingHorizontal: 8,
           paddingBottom: statusBarHeight,

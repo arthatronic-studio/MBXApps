@@ -358,7 +358,7 @@ const TransactionDetail = ({route, navigation}) => {
                           {FormatMoney.getFormattedMoney(val.price)}
                         </Text>
                       </Row>
-                      <Row style={{paddingHorizontal: 10, paddingVertical: 2}}>
+                      {/* <Row style={{paddingHorizontal: 10, paddingVertical: 2}}>
                         <Text
                           style={{
                             fontSize: 8,
@@ -378,9 +378,35 @@ const TransactionDetail = ({route, navigation}) => {
                           }}>
                           {FormatMoney.getFormattedMoney(data.totalProductPrice)}
                         </Text>
-                      </Row>
+                      </Row> */}
+                      
                     </Col>
+                    
                   </Row>
+                  
+                    <View style={{paddingHorizontal: 10, marginTop: -5}}>
+                        <Text
+                          style={{
+                            fontSize: 8,
+                            width: '40%',
+                            textAlign: 'left',
+                            color: Color.secondary,
+                          }} type='semiBold'>
+                          Catatan
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 8,
+                            textAlign: 'left',
+                            borderRadius: 4,
+                            padding: 6,
+                            backgroundColor: '#bcbcbc50',
+                            color: Color.text,
+                            fontWeight: 'semiBold',
+                          }}>
+                          {val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}
+                        </Text>
+                    </View>
 
                   {data.statusId == 4 && (
                     <Container paddingHorizontal={8} paddingTop={16}>
