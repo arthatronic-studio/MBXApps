@@ -378,55 +378,63 @@ export const queryDeleteItemCart = gql`
 `;
 
 export const queryGetShipper = gql`
-  mutation shipperGetPriceDomestic($input: ShipperGetDomesticInput) {
-    shipperGetPriceDomestic(input: $input) {
-      origin {
-        area_id
+mutation shipperGetPriceDomestic($input: ShipperGetDomesticInput) {
+  shipperGetPriceDomestic(input: $input) {
+    origin {
+      area_id
+    }
+    groupListing {
+      Express {
+        logisticName
+        rateId
+        rateName
+        rateType
+        price
+        estimation
       }
-      groupListing {
-        Express {
-          logisticName
-          rateId
-          rateName
-          rateType
-          price
-          estimation
-        }
-        Regular {
-          logisticName
-          rateId
-          rateName
-          rateType
-          price
-          estimation
-        }
-        Trucking {
-          logisticName
-          rateId
-          rateName
-          rateType
-          price
-          estimation
-        }
-        SameDay {
-          logisticName
-          rateId
-          rateName
-          rateType
-          price
-          estimation
-        }
-        Instant {
-          logisticName
-          rateId
-          rateName
-          rateType
-          price
-          estimation
-        }
+      Regular {
+        logisticName
+        rateId
+        rateName
+        rateType
+        price
+        estimation
+      }
+      Trucking {
+        logisticName
+        rateId
+        rateName
+        rateType
+        price
+        estimation
+      }
+      SameDay {
+        logisticName
+        rateId
+        rateName
+        rateType
+        price
+        estimation
+      }
+      Instant {
+        logisticName
+        rateId
+        rateName
+        rateType
+        price
+        estimation
+      }
+      PickupBySeller{
+        logisticName
+        rateId
+        rateName
+        rateType
+        price
+        estimation
       }
     }
   }
+}
 `;
 
 export const queryGetCart = gql`
