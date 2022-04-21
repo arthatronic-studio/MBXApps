@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, ScrollView, Platform, SafeAreaView, TextInput as TextInputs } from 'react-native';
-import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import MapView, {Marker} from 'react-native-maps'
-import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 

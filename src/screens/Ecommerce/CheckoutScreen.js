@@ -59,6 +59,7 @@ const CheckoutScreen = ({ navigation, route }) => {
   const [address, setAddress] = useState({});
   const [shippment, setShipping] = useState({});
   const isFocused = useIsFocused();
+  const [note, setNote] = useState();
 
   // selector
   const user = useSelector(state => state['user.auth'].login.user);
@@ -117,11 +118,12 @@ const CheckoutScreen = ({ navigation, route }) => {
       return {
         id: val.id,
         qty: val.qty,
+        note: val.note
       };
     });
     let variables = {
       // type: "BOOKING",
-      // products: [{ id: 17, qty: 1 }],
+      products: [{ id: prod.id, qty: prod.qty, note: note }],
       // courier: { rate_id: 268, use_insurance: false, cod: false, cost: 20000},
       // destinationAddressId: 2,
       courier: {
@@ -319,6 +321,8 @@ const CheckoutScreen = ({ navigation, route }) => {
           ))}
           <Row>
             <TextInput
+              onChangeText={(e) => setNote(e)}
+              value={note}
               placeholder="Tambahkan catatan untuk penjual"
               style={{
                 width: '100%',
