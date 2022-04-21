@@ -48,7 +48,7 @@ const MyShopHomepage = ({ navigation }) => {
 
 	useEffect(() => {
 		getMyShop();
-	}, [isFocused]);
+	}, []);
 
 	const getMyShop = () => {
 		let variables = {
@@ -74,12 +74,11 @@ const MyShopHomepage = ({ navigation }) => {
 			});
 	};
 
-	if (data.length === 0) return <View />
-
 	return (
 		<Scaffold
 			header={<MyShopHeader />}
 			onPressLeftButton={() => navigation.pop()}
+			fallback={data.length === 0}
 		>
 			<ScrollView style={{ backgroundColor: Color.semiwhite }}>
 				<Container padding={16}>
