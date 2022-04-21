@@ -318,7 +318,7 @@ const EditMerchantInfo = ({navigation}) => {
   }, []);
 
   const {Color} = useColor();
-
+  console.log(coords)
   return (
     <MainView style={{backgroundColor: Color.theme}}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -693,16 +693,17 @@ const EditMerchantInfo = ({navigation}) => {
             </Text>
           </View>
 
-          <View style={{marginTop: 8, marginBottom: 10}}>
-            <Text type="bold" size={11} align="left">
-              Titik Lokasi
-            </Text>
+          <View style={{ marginHorizontal: -16, marginTop: -10 }}>
+            <FormSelect
+                type='select'
+                label='Pin Lokasi'
+                value={isPinnedMap ? locationPinnedMap || 'Lokasi di Pin' : ''}
+                placeholder='Pilih di Peta'
+                onPress={() => {
+                  setModalSelectMap(true);
+                }}
+              />
           </View>
-
-          <View style={{marginBottom: 30}}>
-            <Image source={ImagesPath.wholeMap} style={{width: '100%'}} />
-          </View>
-
           <View style={{backgroundColor: Color.theme, marginBottom: 16}}>
             <TouchableOpacity
               onPress={() => submit()}
@@ -716,8 +717,49 @@ const EditMerchantInfo = ({navigation}) => {
               </Text>
             </TouchableOpacity>
           </View>
+          
         </View>
       </ScrollView>
+      <ModalSelectMap
+          visible={modalSelectMap}
+          extraProps={{
+            title: 'Alamat Saya',
+            fullAddress: '',
+            ...coords,
+          }}
+          onSelect={(item) => {
+            // const name = item.name;
+            const fullAddress = item.fullAddress;
+            const latitude = item.latitude;
+            const longitude = item.longitude;
+            onChangeUserData('lat', latitude)
+            onChangeUserData('long', longitude)
+
+            // const provinceName = item.provinceName ? item.provinceName : state.userData.provinceName;
+            // const cityName = item.cityName ? item.cityName : state.userData.cityName;
+            // const postCode = item.postCode ? item.postCode : state.userData.postCode;
+
+            setIsPinnedMap(true);
+            setLocationPinnedMap(fullAddress);
+            setCoords({
+              latitude,
+              longitude,
+            });
+
+            // setState({
+            //   userData: {
+            //     ...state.userData,
+            //     fullAddress,
+            //     latitude,
+            //     longitude,
+            //     provinceName,
+            //     cityName,
+            //     postCode,
+            //   }
+            // });
+          }}
+          onClose={() => setModalSelectMap(false)}
+        />
 
        
       <ModalListAction

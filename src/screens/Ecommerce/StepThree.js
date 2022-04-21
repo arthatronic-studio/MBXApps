@@ -66,6 +66,7 @@ const StepThree = ({navigation, route}) => {
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
+    navigation.popToTop()
     navigation.navigate('MyShop')
   };
 
@@ -123,9 +124,9 @@ const StepThree = ({navigation, route}) => {
       .then(res => {
         console.log('BERHASIL KIRIM', res);
         setModalVisible(!isModalVisible);
-        setTimeout(() => {
-          navigation.popToTop()
-        }, 2000);
+        // setTimeout(() => {
+        //   navigation.popToTop()
+        // }, 2000);
         
       })
       .catch(err => {
