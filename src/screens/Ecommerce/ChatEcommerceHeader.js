@@ -15,7 +15,11 @@ const MainView = Styled(SafeAreaView)`
       flex: 1;
   `;
 
-const ChatEcommerceHeader = () => {
+const ChatEcommerceHeader = (props) => {
+	const {
+    name,
+		merchant
+  } = props;
 	const { Color } = useColor();
 
 	const navigation = useNavigation();
@@ -43,18 +47,20 @@ const ChatEcommerceHeader = () => {
 							fontWeight: 'bold'
 						}}
 					>
-						Toko Sumber Makmur
+						{name}
 					</Text>
 					<Image source={ImagesPath.toko} style={{}} />
 				</View>
-				<Text
-					style={{
-						paddingHorizontal: 10,
-						fontSize: 10
-					}}
-				>
-					Akun Merchant
-				</Text>
+				{merchant &&
+					<Text
+						style={{
+							paddingHorizontal: 10,
+							fontSize: 10
+						}}
+					>	
+						Akun Merchant
+					</Text>
+				}
 			</View>
 
 			<TouchableOpacity>

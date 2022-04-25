@@ -2,16 +2,55 @@ import gql from 'graphql-tag';
 
 export const queryGetAuction = gql`
 query(
-  $page: Int!
-  $limit: Int!
-) {
-   auctionProduct(
-    page: $page
-    limit: $limit
+   $page: Int
+    $limit: Int
+    $auctionId: Int
+    $productName: String
+    $type: AuctionTypeScreen!
+    $status: AuctionSearchStatus
  ) {
-    data { id product_id date_start time_start time_end description start_price buy_now_price quantity image_url is_open is_winner_check } total
+    auctionProduct(
+     page: $page
+     limit: $limit
+     type: $type
+     auctionId: $auctionId
+     productName: $productName
+     status: $status
+  ) {
+   id
+   productId
+   dateStart
+   dateEnd
+   quantity
+   description
+   startPrice
+   buyNowPrice
+   isOpen
+   status
+   product {
+     id
+     name
+     categoryId
+     description
+     price
+     initialPrice
+     imageUrl
+     imageProducts
+     stock
+     height
+     width
+     length
+     weight
+     merchantId
+     productUnit
+     minimumBuy
+     productMassa
+     status
+     rating
+     sold
+   }
+  }
  }
-}
 `;
 
 export const mutationCrateAuction = gql`

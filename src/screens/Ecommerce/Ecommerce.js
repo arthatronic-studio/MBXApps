@@ -202,7 +202,8 @@ const Ecommerce = ({ navigation }) => {
 	const getAuction = () => {
 		let variables = {
 			page: 1,
-			limit: 5
+			limit: 5,
+			type: 'HOMEPAGE'
 		};
 
 		Client.query({ query: queryGetAuction, variables })

@@ -20,7 +20,7 @@ const MyShopHeader = () => {
 			{/* refactor ChatRoomsScreen */}
 			<TouchableOpacity
 				style={{ width: '8%', alignItems: 'center', justifyContent: 'center' }}
-				onPress={() => navigation.navigate('ChatRoomsScreen' || 'ChatRoom')}
+				onPress={() => navigation.navigate('ChatEcommerce', {type: "seller"})}
 			>
 				<IonIcons name={'chatbubbles-outline'} size={20} />
 			</TouchableOpacity>

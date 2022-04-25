@@ -17,6 +17,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import ImageSlider from '../../components/ImageSlider';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { currentSocket } from '@src/screens/MainHome/MainHome';
+import TouchableDebounce from 'src/components/Button/TouchableDebounce';
 
 import {
   Text,
@@ -46,6 +48,7 @@ const DetailProduct = ({navigation, route}) => {
 
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const user = useSelector(state => state['user.auth'].login.user);
+  console.log(user, "useeer");
   const loading = useSelector(state => state['user.auth'].loading);
   const {Color} = useColor();
   const isFocused = useIsFocused();
@@ -144,7 +147,65 @@ const DetailProduct = ({navigation, route}) => {
       });
   };
 
+  const get_room = () => {
+    currentSocket.emit('get_community_chat_room_id', { room_type: 'ECOMMERCE', user_id: user.userId, user_id_target: detail.merchant.userId});
+    currentSocket.on('get_community_chat_room_id', (res) => {
+      console.log('get_community_chat_room_id', res);
+      if(res.data === null){
+        create_room();
+      }else{
+        navigation.navigate('ChatDetail', {id: res.data.chat_room_id, merchant: detail.merchant});
+      }
+    });
+  }
+
+  const create_room = () => {
+    console.log("masukk");
+    const body = {room_type: 'ECOMMERCE', room_user_type: 'USER', user_ids: JSON.stringify([user.userId.toString(), detail.merchant.userId.toString()]), admin_ids: JSON.stringify([detail.merchant.userId.toString()])}
+    currentSocket.emit('create_community_chat_room', body);
+    currentSocket.on('community_chat_room', (res) => {
+      console.log('create_community_chat_room', res);
+      const id = res.data.slice(-1)[0].id;
+      navigation.navigate('ChatDetail', {id: id, merchant: detail.merchant});
+    });
+  }
+
+  const create_message = () => {
+    console.log("masukk");
+    const body = {chat_room_id: 6, chat_message: 'testttt', user_id:  user.userId, chat_type: 'TEXT'};
+    currentSocket.emit('create_community_chat_message', body);
+    // currentSocket.on('community_chat_message', (res) => {
+    //   console.log('community_chat_message', res);
+    // });
+  }
+
+  const [temp, setTemp] = useState(null);
+
+  const get_message = () => {
+    console.log("masukk");
+    const body = {chat_room_id: 6};
+    currentSocket.emit('community_chat_message', body);
+    currentSocket.on('community_chat_message', (res) => {
+      console.log('community_chat_message', res);
+      setTemp(res);
+    });
+  }
+
+  const get_list_room = () => {
+    console.log("masukk");
+    const body = {room_type: 'ECOMMERCE'};
+    currentSocket.emit('community_chat_room', body);
+    currentSocket.on('community_chat_room', (res) => {
+      console.log('community_chat_room', res);
+    });
+  }
+
   console.log('detail', detail);
+  // console.log(temp, "pesan");
+
+  // get list room
+  // endpoint: community_chat_room
+  // body: room_type
 
   return (
     <Scaffold
@@ -323,8 +384,9 @@ const DetailProduct = ({navigation, route}) => {
             paddingVertical: 10,
           }}>
           {/* refactor ChatRoomsScreen */}
-          <TouchableOpacity
-            onPress={() => navigation.navigate('ChatRoomsScreen' || 'ChatRoom', {item: detail})}
+          <TouchableDebounce
+            // onPress={() => navigation.navigate('ChatRoomsScreen' || 'ChatRoom', {item: detail})}
+            onPress={() => get_room()}
             style={{
               width: '12%',
               height: 40,
@@ -341,7 +403,7 @@ const DetailProduct = ({navigation, route}) => {
               name={'message-processing-outline'}
               style={{color: Color.primary}}
             />
-          </TouchableOpacity>
+          </TouchableDebounce>
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('CheckoutScreen', {
