@@ -27,7 +27,7 @@ const Lelang = ({ navigation, route }) => {
         actions={
           <View style={{flexDirection: 'row'}}>
             <MaterialIcons onPress={()=> navigation.navigate('Wishlist')} name={'favorite-outline'} size={20} style={{marginHorizontal: 5, color: Color.secondary}}/>
-            <MaterialCommunityIcons onPress={()=> navigation.navigate('CartScreen')} name={'shopping-outline'} size={20} style={{marginHorizontal: 5, color: Color.secondary}}/>
+            <MaterialCommunityIcons onPress={()=> navigation.navigate('CartScreen', { routeName: "Auction" })} name={'shopping-outline'} size={20} style={{marginHorizontal: 5, color: Color.secondary}}/>
             <MaterialCommunityIcons onPress={()=> navigation.navigate('AuctionHistory')} name={'history'} size={20} style={{marginHorizontal: 5, color: Color.secondary}}/>
           </View>
         }
