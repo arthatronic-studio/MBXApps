@@ -143,6 +143,8 @@ const SurveyFourth = ({route, navigation}) => {
                     value: dataState[index]
                 })
         });
+        const valid = tempData.every(val => val.value)
+        if(!valid) return alert('Data harus diisi semua')
         const sha1Hash = await RNSimpleCrypto.SHA.sha1("SURVEY-20220229" + moment().format('YYYY-MM-DD HH:mm:ss') + '123!!qweQWE');
         const dataq = {
             "auth": sha1Hash, 
