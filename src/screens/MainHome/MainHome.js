@@ -14,6 +14,7 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useIsFocused} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import Modal from 'react-native-modal';
@@ -459,10 +460,67 @@ const MainHome = ({navigation, route}) => {
                   </Circle>
                 )}
               </TouchableOpacity>
+
+              {accessClient.isKomoto && <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('MainProfile');
+                }}
+                style={{
+                  width: '20%',
+                  justifyContent: 'flex-start',
+                  alignItems: 'flex-end',
+                }}>
+                <Ionicons
+                  name="person"
+                  size={22}
+                  color={Color.text}
+                />
+              </TouchableOpacity>}
             </View>
           }
         />
-      }>
+      }
+      floatingActionButton={
+        accessClient.isKomoto ?
+          <View
+              style={{
+                  bottom: -16,
+                  height: width / 5 - 8,
+                  width: width / 5 - 8,
+                  borderRadius: width / 5 - 8,
+                  backgroundColor: Color.primary,
+                  alignSelf: 'center',
+                  ...shadowStyle,
+              }}
+          >
+              <TouchableOpacity
+                  onPress={() => {
+                      const isJoinMember = user && user.organizationId;
+
+                      if (!isJoinMember) {
+                          showLoading('error', 'Fitur ini hanya untuk anggota komunitas');
+                          return;
+                      }
+
+                      navigation.navigate('CreateEmergencyScreen', { 
+                          routeIndex: 1, 
+                          title: 'Emergency Area',
+                          productType: Config.PRODUCT_TYPE,
+                          productCategory: '',
+                          productSubCategory: 'EMERGENCY', 
+                      });
+                  }}
+                  style={{width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center'}}
+              >
+                  <MaterialIcons
+                    name='vibration'
+                    color={Color.textInput}
+                    size={32}
+                  />
+              </TouchableOpacity>
+          </View> : <View />
+      }
+    >
       <ScrollView
         scrollEventThrottle={16}
         onScroll={Animated.event(
@@ -532,7 +590,7 @@ const MainHome = ({navigation, route}) => {
             </>
           )}
 
-          <WidgetMenuHome
+          {accessClient.MainHome.showMenuHome && <WidgetMenuHome
             onPress={item => {
               console.log(item, 'item');
 
@@ -540,7 +598,7 @@ const MainHome = ({navigation, route}) => {
                 modalPostingRef.current.open();
               }
             }}
-          />
+          />}
 
           <View style={{flex: 1}}>
             <Modal

@@ -44,9 +44,9 @@ const ListEmergency = (props) => {
     const renderHeader = () => {
         return (
             <PostingHeader
-                title='Emergency Area'
+                title='Help Me'
                 onSeeAllPress={() => {
-                    navigation.navigate('EmergencyScreen', {title: 'Emergency Area'})
+                    navigation.navigate('EmergencyScreen', {title: 'Help Me'})
                 }}
             />
         )
