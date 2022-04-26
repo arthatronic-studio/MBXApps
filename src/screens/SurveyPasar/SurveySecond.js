@@ -95,7 +95,9 @@ const SurveySecond = ({ route, navigation}) => {
             })
         });
         // console.log('route', route.params.item.concat(tempData))
-        navigation.navigate('SurveyPasarThird',{item: route.params.item.concat(tempData)})
+        const valid = tempData.every(val => val.value)
+        if(valid) navigation.navigate('SurveyPasarThird',{item: route.params.item.concat(tempData)})
+        else alert('Data harus diisi semua')
         // console.log(dataq, 'dataq')
       };
 

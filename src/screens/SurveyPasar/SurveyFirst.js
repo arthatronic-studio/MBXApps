@@ -78,31 +78,11 @@ const SurveyFirst = ({navigation}) => {
                 value: dataState[index]
             })
         });
+        const valid = tempData.every(val => val.value)
+        if(valid) navigation.navigate('SurveyPasarSecond',{item: tempData})
+        else alert('Data harus diisi semua')
         console.log(tempData)
-        // const sha1Hash = await RNSimpleCrypto.SHA.sha1("SURVEY-20220229" + moment().format('YYYY-MM-DD HH:mm:ss') + '123!!qweQWE');
-        // const dataq = {
-        //     "auth": sha1Hash, 
-        //     "survey_code": "SURVEY-20220229", 
-        //     "timestamps": moment().format('YYYY-MM-DD HH:mm:ss'),
-        //     "data": tempData
-        // }
-        navigation.navigate('SurveyPasarSecond',{item: tempData})
-        // try {
-        //     const response = await axios({
-        //         baseURL: 'http://panel.sw.tribesocial.id',
-        //         method: 'post',
-        //         url: '/submit-survey',
-        //         data: dataq,
-        //         headers: {
-        //             Accept: 'application/json'
-        //         },
-        //         timeout: 5000,
-                
-        //       });
-        //       console.log(response, "respon apicall")
-        //   } catch (error) {
-        //     console.log(error.response, 'error apicall')
-        //   }
+        
       };
 
   return (

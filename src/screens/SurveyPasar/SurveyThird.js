@@ -97,7 +97,7 @@ const SurveyThird = ({route, navigation}) => {
 
     const submit = async () => {
         // return console.log(thumbImage)
-        const label = [ 'photo', 'jamBukaOperasional', 'jamTutupOperasional', 'namaPasar','pedagangDaging','pedagangFMCG','pedagangIkan','pedagangMakanan','pedagangSayurBuah','pengunjungPerHari','penjualanFMCG','penjualanFMCG2','penjualanFMCG3' ]
+        const label = [ 'jamBukaOperasional', 'jamTutupOperasional', 'namaPasar','pedagangDaging','pedagangFMCG','pedagangIkan','pedagangMakanan','pedagangSayurBuah','pengunjungPerHari','penjualanFMCG','penjualanFMCG2','penjualanFMCG3' ]
         let tempData = []
         const tempPasar = []
         nameTepung.forEach(element => {
@@ -106,7 +106,7 @@ const SurveyThird = ({route, navigation}) => {
             }
         });
 
-        const dataState = [ 'belum ada', moment(jamBukaOperasional).format('HH:mm'), moment(jamTutupOperasional).format('HH:mm'), tempPasar,pedagangDaging,pedagangFMCG,pedagangIkan,pedagangMakanan,pedagangSayurBuah,pengunjungPerHari,penjualanFMCG,penjualanFMCG2,penjualanFMCG3 ]
+        const dataState = [moment(jamBukaOperasional).format('HH:mm'), moment(jamTutupOperasional).format('HH:mm'), tempPasar,pedagangDaging,pedagangFMCG,pedagangIkan,pedagangMakanan,pedagangSayurBuah,pengunjungPerHari,penjualanFMCG,penjualanFMCG2,penjualanFMCG3 ]
         label.forEach((element, index) => {
                 tempData.push({
                     block: '4',
@@ -115,6 +115,8 @@ const SurveyThird = ({route, navigation}) => {
                     value: dataState[index]
                 })
         });
+        const valid = tempData.every(val => val.value)
+        if(!valid) return alert('Semua data harus diisi')
         const sha1Hash = await RNSimpleCrypto.SHA.sha1("SURVEY-20220229" + moment().format('YYYY-MM-DD HH:mm:ss') + '123!!qweQWE');
         const dataq = {
             "auth": sha1Hash, 
