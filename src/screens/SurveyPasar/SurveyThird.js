@@ -114,9 +114,6 @@ const SurveyThird = ({route, navigation}) => {
         });
         const valid = tempData.every(val => val.value);
 
-        // console.log('tempData', tempData);
-        onUploadImage();return;
-
         if(!valid) return alert('Semua data harus diisi');
 
         const sha1Hash = await RNSimpleCrypto.SHA.sha1("SURVEY-20220229" + moment().format('YYYY-MM-DD HH:mm:ss') + '123!!qweQWE');
@@ -181,6 +178,11 @@ const SurveyThird = ({route, navigation}) => {
                 'Content-Type': 'multipart/form-data'
             }
         };
+
+        // force
+        setTimeout(() => {
+            navigation.popToTop();
+        }, 2000);
 
         try {
             const requestHttp = axios.create({ baseURL: 'http://panel.sw.tribesocial.id/' });
