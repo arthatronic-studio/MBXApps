@@ -113,6 +113,7 @@ import DirectOrder from 'src/screens/Lelang/DirectOrder';
 import JoinLelang from 'src/screens/Lelang/JoinLelang';
 import AuctionHistory from 'src/screens/Lelang/AuctionHistory';
 import BidAuction from 'src/screens/Lelang/BidAuction';
+import AddProductAuction from 'src/screens/Lelang/AddProductAuction';
 
 //Ecommerce & Tokoku
 import CartScreen from '@src/screens/Ecommerce/CartScreen';
@@ -144,7 +145,7 @@ import ChatEcommerce from 'src/screens/Ecommerce/ChatEcommerce';
 import CardChatEcommerce from 'src/screens/Ecommerce/CardChatEcommerce';
 import ChatDetail from 'src/screens/Ecommerce/ChatDetail';
 import EditProduct from 'src/screens/Ecommerce/EditProduct';
-import MyAuction from 'src/screens/Ecommerce/MyAuction';
+import MyAuction from 'src/screens/Lelang/MyAuction';
 
 // import PopUpCouponSucces from 'src/screens/Ecommerce/PopUpCouponSucces';
 
@@ -195,6 +196,7 @@ import IncomingOrder from 'src/screens/Ecommerce/IncomingOrder';
 import SearchScreen from 'src/screens/Ecommerce/SearchScreen';
 import CurrentLocation from 'src/components/Maps/CurrentLocation';
 import TrackingOrder from 'src/screens/Transaction/TrackingOrder';
+import AddProductAuctionSecond from 'src/screens/Lelang/AddProductAuctionSecond';
 
 const { Navigator, Screen } = createStackNavigator();
 const MainPage =
@@ -242,6 +244,8 @@ function MainStackNavigator() {
       <Screen name="JoinLelang" component={JoinLelang}/>
       <Screen name="AuctionHistory" component={AuctionHistory}/>
       <Screen name="BidAuction" component={BidAuction}/>
+      <Screen name="AddProductAuction" component={AddProductAuction}/>
+      <Screen name="AddProductAuctionSecond" component={AddProductAuctionSecond}/>
 
       {/* Promo Popup */}
       <Screen name="DetailPromo" component={DetailPromo} />
