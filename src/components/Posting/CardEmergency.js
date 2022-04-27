@@ -129,7 +129,8 @@ const CardEmergency = (props) => {
                                     source={iconCategory}
                                 />
                             </Container>
-                            <Text size={12}>{item.productCategory}</Text>
+                            {/* <Text size={12}>{item.productCategory}</Text> */}
+                            <Text size={12}>HELP ME</Text>
                         </Row>
                         {/* <Row>
                             <Image

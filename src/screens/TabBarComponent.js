@@ -103,7 +103,7 @@ const TabBarComponent = (props) => {
                             key={routeIndex}
                             activeOpacity={1}
                             style={{
-                                width: isRouteActive ? `${100 - ((menus.length - 1) * sizePerMenu)}%` : `${sizePerMenu}%`,
+                                flex: isRouteActive ? 3 : 1,
                                 alignItems: 'center',
                                 flexDirection: 'row',
                                 justifyContent: 'center',

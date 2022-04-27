@@ -79,7 +79,7 @@ const ModalListAction = forwardRef((props, ref) => {
         backgroundColor: Color.theme,
         alignItems: 'flex-start',
         padding: 16,
-        paddingBottom: statusBarHeight + 16,
+        paddingBottom: statusBarHeight,
         borderTopLeftRadius: 12,
         borderTopRightRadius: 12,
         ...style,

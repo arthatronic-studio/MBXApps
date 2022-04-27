@@ -95,7 +95,9 @@ const SurveySecond = ({ route, navigation}) => {
             })
         });
         // console.log('route', route.params.item.concat(tempData))
-        navigation.navigate('SurveyPasarThird',{item: route.params.item.concat(tempData)})
+        const valid = tempData.every(val => val.value)
+        if(valid) navigation.navigate('SurveyPasarThird',{item: route.params.item.concat(tempData)})
+        else alert('Data harus diisi semua')
         // console.log(dataq, 'dataq')
       };
 
@@ -112,16 +114,28 @@ const SurveySecond = ({ route, navigation}) => {
                     <Text style={{fontSize: 10, color: Color.secondary}}>Masukkan alamat lengkap</Text>
                 </View>
             </View>
-            <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginTop: 20, marginBottom: 5}}>
+            <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
-                    <TextInput placeholder='Masukkan alamat lengkap . . .' style={{borderWidth: 1, borderColor: Color.secondary,
-                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 90}}
+                    <TextInput placeholder='Masukkan alamat lengkap . . .' style={{borderWidth: 1, borderColor: Color.border,
+                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, minHeight: 40}}
 						onChangeText={(value) => setAddress(value)}
+                        multiline
                         value={address}
                     />
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Alamat lengkap</Text>
                 </View>
             </View>
+            {/* <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginTop: 20, marginBottom: 5}}>
+                <View style={{width: '100%'}}>
+                    <TextInput placeholder='Masukkan alamat lengkap . . .' style={{borderWidth: 1, borderColor: Color.secondary,
+                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 90}}
+                        multiline={true}
+						onChangeText={(value) => setAddress(value)}
+                        value={address}
+                    />
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Alamat lengkap</Text>
+                </View>
+            </View> */}
             <View style={{height: 500}}>
 			<View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>

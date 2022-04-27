@@ -229,7 +229,8 @@ export default {
 	trcOrder3: require('../components/Images/trcOrder3.png'),
 	trcOrder4: require('../components/Images/trcOrder4.png'),
 	arrowRight: require('../components/Images/arrowRight.png'),
-
+	one: require('../components/Images/one.png'),
+	two: require('../components/Images/two.png'),
 	nisa: require('../components/Images/nisa.png'),
 	profile: require('../components/Images/profile.png')
 };

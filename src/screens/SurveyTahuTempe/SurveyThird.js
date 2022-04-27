@@ -68,7 +68,10 @@ const SurveyThird = ({route, navigation}) => {
                 value: dataState[index]
             })
         });
-        navigation.navigate('SurveyTahuTempeFourth',{item: route.params.item.concat(tempData)})
+        const valid = tempData.every(val => val.value)
+        if(valid) navigation.navigate('SurveyTahuTempeFourth',{item: route.params.item.concat(tempData)})
+        else alert('Data harus diisi semua')
+        
     //    navigation.navigate('SurveyFourth')
       };
 

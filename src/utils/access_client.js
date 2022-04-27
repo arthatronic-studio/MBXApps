@@ -3,31 +3,48 @@ import Config from 'react-native-config';
 const listKomotoFamily = [
     'TRIBESXKOMOTO',
     'TRIBESXRRID',
+    'TRIBESXTRCI',
+    'TRIBESXMOBILITY',
+    'TRIBESXTIOCI',
+    'TRIBESXSIRIONITY',
+    'TRIBESXAFI',
+    'TRIBESXKTCI',
+    'TRIBESXDAI',
+    'TRIBESXHBC',
+    'TRIBESXXMAN',
+    'TRIBESXBRIONESIA',
 ];
 
 const listInitialCode = [
     ...listKomotoFamily,
     'TRIBESASIA',
+    'TRIBESXSURVEY',
     'TRIBESXSABYAN',
     'TRIBESXGOFISH',
+    'TRIBESXTEUKUZACKY',
+];
+
+const useDefaultDarkThemeCode = [
+    'TRIBESXMOBILITY',
 ];
 
 const isKomoto = listKomotoFamily.includes(Config.INITIAL_CODE);
 const isSabyan = Config.INITIAL_CODE === 'TRIBESXSABYAN';
+const isGofish = Config.INITIAL_CODE === 'TRIBESXGOFISH';
+const isTeukuZacky = Config.INITIAL_CODE === 'TRIBESXTEUKUZACKY';
 
 export const accessClient = {
-    // legacy
+    // state
     InitialCode: Config.INITIAL_CODE,
+    isKomoto,
     IsAutoJoinMember:
         isKomoto ? false :
         isSabyan ? true :
         false,
     Theme:
-        isKomoto ? "dark" :
-        isSabyan ? 'light' :
-        'light',
+        useDefaultDarkThemeCode.includes(Config.INITIAL_CODE) ? 'dark' : 'light',
     ColorBgParallax:
-        isKomoto ? 'theme' :
+        useDefaultDarkThemeCode.includes(Config.INITIAL_CODE) ? 'theme' :
         isSabyan ? 'primary' :
         'primarySoft',
     UserGeneratedContent:
@@ -46,6 +63,7 @@ export const accessClient = {
             isSabyan ? 'sabyan' : 'default',
     },
     MainHome: {
+        showMenuHome: isKomoto ? false : true,
         showWidgetBalance: isKomoto || isSabyan ? false : true,
         showBannerHeader: isKomoto || isSabyan ? false : true,
         showListEmergency: isKomoto,
@@ -63,30 +81,8 @@ export const accessClient = {
             isSabyan ? true : true,
         showListVideo:
             isKomoto ? false:
-            isSabyan ? false : true,
+            isSabyan ? true : true,
         showListEbookNewer: isKomoto || isSabyan ? false : true,
-    },
-    MenuHome: {
-        showJob:
-            isKomoto ? false :
-            isSabyan ? false :
-            true,
-        showPlace:
-            isKomoto ? true :
-            isSabyan ? false :
-            true,
-        showSurvey:
-            isKomoto ? false :
-            isSabyan ? false :
-            true,
-        showEcommerce:
-            isKomoto ? false :
-            isSabyan ? false :
-            true,
-        showAlbum:
-            isKomoto ? false :
-            isSabyan ? true :
-            true,
     },
     CreatePosting: {
         showPrivacy:

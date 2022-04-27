@@ -86,7 +86,9 @@ const SurveyFirst = ({navigation}) => {
         //     "timestamps": moment().format('YYYY-MM-DD HH:mm:ss'),
         //     "data": tempData
         // }
-        navigation.navigate('SurveyTahuTempeSecond',{item: tempData})
+        const valid = tempData.every(val => val.value)
+        if(valid) navigation.navigate('SurveyTahuTempeSecond',{item: tempData})
+        else alert('Data harus diisi semua')
         // try {
         //     const response = await axios({
         //         baseURL: 'http://panel.sw.tribesocial.id',
