@@ -81,7 +81,7 @@ export const accessClient = {
             isSabyan ? true : true,
         showListVideo:
             isKomoto ? false:
-            isSabyan ? false : true,
+            isSabyan ? true : true,
         showListEbookNewer: isKomoto || isSabyan ? false : true,
     },
     CreatePosting: {

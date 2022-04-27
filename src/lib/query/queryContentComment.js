@@ -14,13 +14,30 @@ export const queryComment = gql`
             id
             userId
             fullname
+            current
             image
             comment
+            isDirector
             commentDate
             productId
             parentCommentId
             imageVideo
+            isPinned
             videoFilename
+            replies{
+                id
+                userId
+                fullname
+                commentDate
+                comment
+                isDirector
+                isPinned
+                status
+                image
+                parentCommentId
+                imageVideo
+                videoFilename
+            }
         }
     }
 `;

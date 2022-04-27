@@ -7,6 +7,7 @@ import { queryAddComment } from './queryContentAddComment';
 import { queryDelComment } from './queryContentDelComment';
 import { queryLike } from './queryContentLike';
 import { queryComment } from './queryContentComment';
+import { queryContentCommentPinManage } from './queryContentCommentPinManage';
 import { queryJoinCommunity } from './queryJoinCommunity';
 import { queryGetChapterList } from './queyGetChapterList'
 import { queryCheckVersion } from './queryCheckVersion';
@@ -33,6 +34,7 @@ export {
     queryDelComment,
     queryLike,
     queryComment,
+    queryContentCommentPinManage,
     queryJoinCommunity,
     queryGetChapterList,
     queryCheckVersion,
