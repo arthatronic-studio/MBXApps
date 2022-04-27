@@ -167,7 +167,7 @@ const DetailProduct = ({navigation, route}) => {
     currentSocket.on('community_chat_room', (res) => {
       console.log('create_community_chat_room', res);
       const id = res.data.slice(-1)[0].id;
-      navigation.navigate('ChatDetail', {id: id, merchant: detail.merchant, type: 'buyer', users: res.data.us});
+      navigation.navigate('ChatDetail', {id: id, merchant: detail.merchant, type: 'buyer', users: res.data.users});
     });
   }
 
