@@ -141,9 +141,11 @@ import KuponKu from 'src/screens/Ecommerce/KuponKu';
 import ChatRoom from 'src/screens/Ecommerce/ChatRoom';
 import CardChat from 'src/screens/Ecommerce/CardChat';
 import CardChatExist from 'src/screens/Ecommerce/CardChatExist';
-import ChatEcommerce from 'src/screens/Ecommerce/ChatEcommerce';
+import ChatEcommerceBuyer from 'src/screens/Ecommerce/ChatEcommerceBuyer';
+import ChatEcommerceSeller from 'src/screens/Ecommerce/ChatEcommerceSeller';
 import CardChatEcommerce from 'src/screens/Ecommerce/CardChatEcommerce';
-import ChatDetail from 'src/screens/Ecommerce/ChatDetail';
+import ChatDetailBuyer from 'src/screens/Ecommerce/ChatDetailBuyer';
+import ChatDetailSeller from 'src/screens/Ecommerce/ChatDetailSeller';
 import EditProduct from 'src/screens/Ecommerce/EditProduct';
 import MyAuction from 'src/screens/Lelang/MyAuction';
 
@@ -278,9 +280,11 @@ function MainStackNavigator() {
       <Screen name="CardChatExist" component={CardChatExist} />
 	  <Screen name="Maps" component={Maps} />
 		<Screen name="CurrentLocation" component={CurrentLocation} />
-		<Screen name="ChatEcommerce" component={ChatEcommerce} />
+		<Screen name="ChatEcommerceBuyer" component={ChatEcommerceBuyer} />
+		<Screen name="ChatEcommerceSeller" component={ChatEcommerceSeller} />
 		<Screen name="CardChatEcommerce" component={CardChatEcommerce} />
-		<Screen name="ChatDetail" component={ChatDetail} />
+		<Screen name="ChatDetailBuyer" component={ChatDetailBuyer} />
+		<Screen name="ChatDetailSeller" component={ChatDetailSeller} />
 		<Screen name="EditProduct" component={EditProduct} />
 		<Screen name="CardBid" component={CardBid} />
     <Screen name="MyAuction" component={MyAuction} />

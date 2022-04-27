@@ -148,12 +148,11 @@ const DetailProduct = ({navigation, route}) => {
   };
 
   const get_room = () => {
-    console.log({ room_type: 'ECOMMERCE', user_id: user.userId, user_id_target: detail.merchant.userId}, "tesss")
     currentSocket.emit('get_community_chat_room_id', { room_type: 'ECOMMERCE', user_id: user.userId, user_id_target: detail.merchant.userId});
     currentSocket.on('get_community_chat_room_id', (res) => {
       console.log('get_community_chat_room_id', res);
       if(res.data.chat_room_id){
-        navigation.navigate('ChatDetail', {id: res.data.chat_room_id, merchant: detail.merchant, type: 'buyer', users: res.data.users});
+        navigation.navigate('ChatDetailBuyer', {id: res.data.chat_room_id, merchant: detail.merchant, users: res.data.users});
       }else{
         create_room();
       }
@@ -167,7 +166,7 @@ const DetailProduct = ({navigation, route}) => {
     currentSocket.on('community_chat_room', (res) => {
       console.log('create_community_chat_room', res);
       const id = res.data.slice(-1)[0].id;
-      navigation.navigate('ChatDetail', {id: id, merchant: detail.merchant, type: 'buyer', users: res.data.users});
+      navigation.navigate('ChatDetailBuyer', {id: id, merchant: detail.merchant, users: res.data.users});
     });
   }
 

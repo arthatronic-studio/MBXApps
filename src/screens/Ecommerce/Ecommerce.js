@@ -74,8 +74,7 @@ const ecomMenu = [
 		name: 'Chatting',
 		badge: true,
 		imageAsset: ImagesPath.chatframe,
-		navigate: 'ChatEcommerce',
-		params: {type: 'buyer'},
+		navigate: 'ChatEcommerceBuyer',
 		show: true,
 	},
 	{
@@ -496,7 +495,7 @@ const Ecommerce = ({ navigation }) => {
 							return (
 								<TouchableOpacity
 									key={idx}
-									onPress={() => item.params ? navigation.navigate(item.navigate, {...item.params}) : navigation.navigate(item.navigate)}
+									onPress={() => navigation.navigate(item.navigate)}
 									style={{ width: '25%', alignItems: 'center', }}
 								>
 									<View

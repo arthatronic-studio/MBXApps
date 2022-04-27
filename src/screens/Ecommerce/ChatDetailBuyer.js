@@ -51,8 +51,8 @@ const CircleSend = Styled(TouchableOpacity)`
   justifyContent: center;
   alignItems: center;
 `;
-const ChatDetail = ({ navigation, route }) => {
-	const { id, merchant, type, users } = route.params;
+const ChatDetailBuyer = ({ navigation, route }) => {
+	const { id, merchant, users } = route.params;
 	const { Color } = useColor();
 	const [roomId, setRoomId] = useState(id);
   const user = useSelector(state => state['user.auth'].login.user);
@@ -60,17 +60,13 @@ const ChatDetail = ({ navigation, route }) => {
 	const { width, height } = useWindowDimensions();
 	const [message, setMessage] = useState('');
 	const [dataChat, setDataChat] = useState([]);
-	const [userImage, setUserImage] = useState(type === 'buyer' ? user.photoProfile : merchant.profile_img);
-	const [targetImage, setTargetImage] = useState(type === 'buyer' ?merchant.profile_img : userTarget.photoProfile);
+	const [userImage, setUserImage] = useState(user.photoProfile);
+	const [targetImage, setTargetImage] = useState(merchant.profile_img);
+	console.log("targetImage", targetImage);
 
 
 	const create_message = () => {
-    var body = {};
-		if(type === 'buyer'){
-			body = {room_type: 'ECOMMERCE', room_user_type: 'USER', chat_room_id: roomId, chat_message: message, user_id:  user.userId, chat_type: 'TEXT'};
-		}else{
-			body = {room_type: 'ECOMMERCE', room_user_type: 'MERCHANT', chat_room_id: roomId, chat_message: message, user_id:  user.userId, chat_type: 'TEXT'};
-		}
+		const	body = {room_type: 'ECOMMERCE', room_user_type: 'USER', chat_room_id: roomId, chat_message: message, user_id:  user.userId, chat_type: 'TEXT'};
     currentSocket.emit('create_community_chat_message', body);
 		setMessage('');
   }
@@ -90,8 +86,8 @@ const ChatDetail = ({ navigation, route }) => {
 	return (
 		<Scaffold header={
 			<ChatEcommerceHeader 
-				name={type === 'buyer' ? merchant.name : 'user'}
-				merchant={type === 'buyer' ? true : false}
+				name={merchant.name}
+				merchant={true}
 				isOnline={userTarget.is_online}
 			/>
 		}>
@@ -111,7 +107,7 @@ const ChatDetail = ({ navigation, route }) => {
 							{item.user_id == userTarget.user_id ?
 								(
 									<View style={{ marginHorizontal: 8, marginVertical: 8, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'flex-start' }}>
-										<Image source={{ uri: targetImage }} style={{ marginRight: 8}} />
+										<Image source={{ uri: targetImage }} style={{ width: 36, aspectRatio: 1, borderRadius: 18, marginRight: 8 }} />
 										<View style={{ backgroundColor: '#FDE4D2', borderRadius: 8, paddingHorizontal: 12, paddingVertical: 12, maxWidth: width-(52) }}>
 											<Text size={14} align='left'>
 												{item.chat_message}
@@ -173,4 +169,4 @@ const ChatDetail = ({ navigation, route }) => {
 	);
 };
 
-export default ChatDetail;
+export default ChatDetailBuyer;

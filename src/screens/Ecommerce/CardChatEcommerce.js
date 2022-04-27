@@ -23,9 +23,6 @@ const CardChatEcommerce = ({item, type}) => {
     const user = useSelector(state => state['user.auth'].login.user);
 	const [userTarget, setUserTarget] = useState(item.users.find(item => item.user_id != user.userId));
 
-    const onClick = () => {
-        navigation.navigate('ChatDetail', {id: res.data.chat_room_id, merchant: detail.merchant});
-    }
 
     var time = moment(item.created_unix_date).fromNow()
     if(item.last_chat){

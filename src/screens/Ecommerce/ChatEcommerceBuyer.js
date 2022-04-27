@@ -8,16 +8,12 @@ import { useIsFocused } from '@react-navigation/native';
 import { currentSocket } from '@src/screens/MainHome/MainHome';
 
 
-const ChatEcommerce = ({ navigation, route }) => {
+const ChatEcommerceBuyer = ({ navigation, route }) => {
 	const { Color } = useColor();
 	const [rooms, setRooms] = useState([]);
-	const {type} = route.params;
 
 	const get_list_room = () => {
-		var body = {room_type: 'ECOMMERCE', room_user_type: 'USER'};
-		if(type === 'seller'){
-			body = {room_type: 'ECOMMERCE', room_user_type: 'MERCHANT'};
-		}
+		const body = {room_type: 'ECOMMERCE', room_user_type: 'USER'};
     currentSocket.emit('community_chat_room', body);
     currentSocket.on('community_chat_room', (res) => {
       console.log('community_chat_room', res);
@@ -67,8 +63,8 @@ const ChatEcommerce = ({ navigation, route }) => {
 						keyExtractor={(item, index) => item.toString() + index}
 						renderItem={({ item }) => {
 							return (
-								<TouchableOpacity onPress={() => navigation.navigate('ChatDetail', {id: item.id, merchant: item.merchant, type: type, users: item.users})}>
-									<CardChatEcommerce item={item} type={type}/>
+								<TouchableOpacity onPress={() => navigation.navigate('ChatDetailBuyer', {id: item.id, merchant: item.merchant, users: item.users})}>
+									<CardChatEcommerce item={item} type={'buyer'}/>
 								</TouchableOpacity>
 							);
 						}}
@@ -79,4 +75,4 @@ const ChatEcommerce = ({ navigation, route }) => {
 	);
 };
 
-export default ChatEcommerce;
+export default ChatEcommerceBuyer;
