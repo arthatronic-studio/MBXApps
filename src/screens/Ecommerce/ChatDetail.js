@@ -52,19 +52,27 @@ const CircleSend = Styled(TouchableOpacity)`
   alignItems: center;
 `;
 const ChatDetail = ({ navigation, route }) => {
-	const { params } = route;
+	const { id, merchant, type, users } = route.params;
 	const { Color } = useColor();
-	const [roomId, setRoomId] = useState(params.id);
+	const [roomId, setRoomId] = useState(id);
   const user = useSelector(state => state['user.auth'].login.user);
+	const [userTarget, setUserTarget] = useState(users.find(item => item.user_id != user.userId));
 	const { width, height } = useWindowDimensions();
 	const [message, setMessage] = useState('');
 	const [dataChat, setDataChat] = useState([]);
+	const [userImage, setUserImage] = useState(type === 'buyer' ? user.photoProfile : merchant.profile_img);
+	const [targetImage, setTargetImage] = useState(type === 'buyer' ?merchant.profile_img : userTarget.photoProfile);
+
 
 	const create_message = () => {
-    console.log("masukk", message);
-    const body = {chat_room_id: 6, chat_message: message, user_id:  user.userId, chat_type: 'TEXT'};
+    var body = {};
+		if(type === 'buyer'){
+			body = {room_type: 'ECOMMERCE', room_user_type: 'USER', chat_room_id: roomId, chat_message: message, user_id:  user.userId, chat_type: 'TEXT'};
+		}else{
+			body = {room_type: 'ECOMMERCE', room_user_type: 'MERCHANT', chat_room_id: roomId, chat_message: message, user_id:  user.userId, chat_type: 'TEXT'};
+		}
     currentSocket.emit('create_community_chat_message', body);
-		console.log(dataChat, "pesan create message");
+		setMessage('');
   }
 	
 	useEffect(() => {
@@ -79,13 +87,12 @@ const ChatDetail = ({ navigation, route }) => {
 		}
 	}, [roomId]);
 
-	console.log(dataChat, "pesan");
-
 	return (
 		<Scaffold header={
 			<ChatEcommerceHeader 
-				name={user.userId !== params.merchant.userId ? params.merchant.name : 'user'}
-				merchant={user.userId !== params.merchant.userId ? true : false}
+				name={type === 'buyer' ? merchant.name : 'user'}
+				merchant={type === 'buyer' ? true : false}
+				isOnline={userTarget.is_online}
 			/>
 		}>
 			<View style={{ backgroundColor: Color.grayLight, height: height-146 }}>
@@ -101,10 +108,10 @@ const ChatDetail = ({ navigation, route }) => {
 					renderItem={({ item, index }) => {
 						return (
 							<>
-							{item.user_id == params.merchant.userId ?
+							{item.user_id == userTarget.user_id ?
 								(
 									<View style={{ marginHorizontal: 8, marginVertical: 8, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'flex-start' }}>
-										<Image source={ImagesPath.chat} style={{ marginRight: 8}} />
+										<Image source={{ uri: targetImage }} style={{ marginRight: 8}} />
 										<View style={{ backgroundColor: '#FDE4D2', borderRadius: 8, paddingHorizontal: 12, paddingVertical: 12, maxWidth: width-(52) }}>
 											<Text size={14} align='left'>
 												{item.chat_message}
@@ -121,7 +128,7 @@ const ChatDetail = ({ navigation, route }) => {
 											</Text>
 											<Text size={10} type="medium" color={Color.gray} style={{ marginTop: 3 }} align='left'>{new Date(item.created_date).getHours()}:{new Date(item.created_date).getMinutes()}</Text>
 										</View>
-										<Image source={ImagesPath.chat} style={{ marginLeft: 8}} />
+										<Image source={{ uri: userImage }} style={{ width: 36, aspectRatio: 1, borderRadius: 18, marginLeft: 8 }}/>
 									</View>
 								)
 								}
@@ -131,7 +138,7 @@ const ChatDetail = ({ navigation, route }) => {
 				/>
 
 			</View>
-			<View style={{}}>
+			<View>
 				<BottomSection style={{ borderColor: Color.theme }}>
 					<BoxInput style={{ borderColor: Color.text, flexDirection: 'row' }}>
 						<CustomTextInput

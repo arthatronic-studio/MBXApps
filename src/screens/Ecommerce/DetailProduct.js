@@ -148,13 +148,14 @@ const DetailProduct = ({navigation, route}) => {
   };
 
   const get_room = () => {
+    console.log({ room_type: 'ECOMMERCE', user_id: user.userId, user_id_target: detail.merchant.userId}, "tesss")
     currentSocket.emit('get_community_chat_room_id', { room_type: 'ECOMMERCE', user_id: user.userId, user_id_target: detail.merchant.userId});
     currentSocket.on('get_community_chat_room_id', (res) => {
       console.log('get_community_chat_room_id', res);
-      if(res.data === null){
-        create_room();
+      if(res.data.chat_room_id){
+        navigation.navigate('ChatDetail', {id: res.data.chat_room_id, merchant: detail.merchant, type: 'buyer', users: res.data.users});
       }else{
-        navigation.navigate('ChatDetail', {id: res.data.chat_room_id, merchant: detail.merchant});
+        create_room();
       }
     });
   }
@@ -166,46 +167,9 @@ const DetailProduct = ({navigation, route}) => {
     currentSocket.on('community_chat_room', (res) => {
       console.log('create_community_chat_room', res);
       const id = res.data.slice(-1)[0].id;
-      navigation.navigate('ChatDetail', {id: id, merchant: detail.merchant});
+      navigation.navigate('ChatDetail', {id: id, merchant: detail.merchant, type: 'buyer', users: res.data.us});
     });
   }
-
-  const create_message = () => {
-    console.log("masukk");
-    const body = {chat_room_id: 6, chat_message: 'testttt', user_id:  user.userId, chat_type: 'TEXT'};
-    currentSocket.emit('create_community_chat_message', body);
-    // currentSocket.on('community_chat_message', (res) => {
-    //   console.log('community_chat_message', res);
-    // });
-  }
-
-  const [temp, setTemp] = useState(null);
-
-  const get_message = () => {
-    console.log("masukk");
-    const body = {chat_room_id: 6};
-    currentSocket.emit('community_chat_message', body);
-    currentSocket.on('community_chat_message', (res) => {
-      console.log('community_chat_message', res);
-      setTemp(res);
-    });
-  }
-
-  const get_list_room = () => {
-    console.log("masukk");
-    const body = {room_type: 'ECOMMERCE'};
-    currentSocket.emit('community_chat_room', body);
-    currentSocket.on('community_chat_room', (res) => {
-      console.log('community_chat_room', res);
-    });
-  }
-
-  console.log('detail', detail);
-  // console.log(temp, "pesan");
-
-  // get list room
-  // endpoint: community_chat_room
-  // body: room_type
 
   return (
     <Scaffold
