@@ -12,6 +12,7 @@ const listKomotoFamily = [
     'TRIBESXDAI',
     'TRIBESXHBC',
     'TRIBESXXMAN',
+    'TRIBESXBRIONESIA',
 ];
 
 const listInitialCode = [
