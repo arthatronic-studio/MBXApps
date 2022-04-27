@@ -10,55 +10,75 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useColor, Header, Row } from '@src/components';
 import ImagesPath from 'src/components/ImagesPath';
 import Entypo from 'react-native-vector-icons/Entypo';
+import { Divider } from '@src/styled';
 
 const MainView = Styled(SafeAreaView)`
       flex: 1;
   `;
 
-const ChatEcommerceHeader = () => {
+const ChatEcommerceHeader = (props) => {
+	const {
+    name,
+		merchant,
+		isOnline
+  } = props;
 	const { Color } = useColor();
 
 	const navigation = useNavigation();
 	return (
 		<View
 			style={{
-				marginTop: 5,
-				marginBottom: 5,
+				paddingVertical: 5,
+				paddingHorizontal: 20,
 				width: '100%',
-				justifyContent: 'center',
+				justifyContent: 'space-between',
 				alignItems: 'center',
-				height: '7%',
 				flexDirection: 'row'
 			}}
 		>
-			<Pressable onPress={() => navigation.goBack()} style={{ width: '8%' }}>
-				<AntDesign name={'arrowleft'} size={20} />
-			</Pressable>
-			<View style={{ width: '80%' }}>
-				<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-					<Text
-						style={{
-							paddingVertical: 7,
-							paddingHorizontal: 10,
-							fontWeight: 'bold'
-						}}
-					>
-						Toko Sumber Makmur
-					</Text>
-					<Image source={ImagesPath.toko} style={{}} />
+			<View flexDirection='row' alignItems="center">
+				<Pressable onPress={() => navigation.goBack()} style={{ marginRight: 20 }}>
+					<AntDesign name={'arrowleft'} size={20} />
+				</Pressable>
+				<View>
+					<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+						<Text
+							style={{
+								fontWeight: 'bold'
+							}}
+						>
+							{name}
+						</Text>
+						{merchant &&
+							<Image source={ImagesPath.toko} style={{marginLeft: 5}} />
+						}
+					</View>
+					<Divider height={2} />
+					{merchant ?
+						<Text
+							style={{
+								fontSize: 10
+							}}
+						>	
+							Akun Merchant
+						</Text> 
+					:
+						<View flexDirection="row">
+							<Entypo name={'controller-record'} color={isOnline ? '#B8E271' : '#9CA3A5'} style={{marginRight: 4}}/>
+							<Text
+								style={{
+									fontSize: 10
+								}}
+							>	
+								{isOnline ? 'Online' : 'Offline'}
+							</Text>
+						</View>
+					}
 				</View>
-				<Text
-					style={{
-						paddingHorizontal: 10,
-						fontSize: 10
-					}}
-				>
-					Akun Merchant
-				</Text>
 			</View>
 
 			<TouchableOpacity>
-				<Entypo name={'dots-three-vertical'} size={22} style={{ marginHorizontal: 5 }} />
+				<Entypo name={'dots-three-vertical'} size={22} />
 			</TouchableOpacity>
 		</View>
 	);

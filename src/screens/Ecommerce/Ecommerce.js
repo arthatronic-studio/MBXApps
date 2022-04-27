@@ -75,6 +75,7 @@ const ecomMenu = [
 		badge: true,
 		imageAsset: ImagesPath.chatframe,
 		navigate: 'ChatEcommerce',
+		params: {type: 'buyer'},
 		show: true,
 	},
 	{
@@ -202,7 +203,8 @@ const Ecommerce = ({ navigation }) => {
 	const getAuction = () => {
 		let variables = {
 			page: 1,
-			limit: 5
+			limit: 5,
+			type: 'HOMEPAGE'
 		};
 
 		Client.query({ query: queryGetAuction, variables })
@@ -494,7 +496,7 @@ const Ecommerce = ({ navigation }) => {
 							return (
 								<TouchableOpacity
 									key={idx}
-									onPress={() => navigation.navigate(item.navigate)}
+									onPress={() => item.params ? navigation.navigate(item.navigate, {...item.params}) : navigation.navigate(item.navigate)}
 									style={{ width: '25%', alignItems: 'center', }}
 								>
 									<View
