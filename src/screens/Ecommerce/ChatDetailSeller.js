@@ -63,31 +63,28 @@ const ChatDetailSeller = ({ navigation, route }) => {
 	const [userImage, setUserImage] = useState(merchant.profile_img);
 	const [targetImage, setTargetImage] = useState(userTarget.photoProfile);
 
-
 	const create_message = () => {
 		const community_chat_user_params = [
 			{ user_id: userTarget.user_id, room_type: 'ECOMMERCE', room_user_type: 'USER' },
 			{ user_id: user.userId, room_type: 'ECOMMERCE', room_user_type: 'MERCHANT' },
 		];
-		const	body = {community_chat_user_params: community_chat_user_params, chat_room_id: roomId, chat_message: message, user_id:  user.userId, chat_type: 'TEXT'};
-    currentSocket.emit('create_community_chat_message', body);
+		const body = {community_chat_user_params: community_chat_user_params, chat_room_id: roomId, chat_message: message, user_id:  user.userId, chat_type: 'TEXT'};
+    	currentSocket.emit('create_community_chat_message', body);
 		currentSocket.on('create_community_chat_room', (res) => {
 			console.log('res create_community_chat_room', res);
 		});
 		setMessage('');
-  }
+  	}
 	
 	useEffect(() => {
-		if (roomId) {
-			currentSocket.emit('community_chat_message', {chat_room_id: roomId});
-			currentSocket.on('community_chat_message', (res) => {
-				console.log('community_chat_message', res.data);
-				if(Array.isArray(res.data)) {
-					setDataChat(res.data);
-				}
-			});
-		}
-	}, [roomId]);
+		currentSocket.emit('community_chat_message', {chat_room_id: roomId});
+		currentSocket.on('community_chat_message', (res) => {
+			console.log('community_chat_message', res.data);
+			if(Array.isArray(res.data)) {
+				setDataChat(res.data);
+			}
+		});
+	}, []);
 
 	return (
 		<Scaffold header={
@@ -97,49 +94,47 @@ const ChatDetailSeller = ({ navigation, route }) => {
 				isOnline={userTarget.is_online}
 			/>
 		}>
-			<View style={{ backgroundColor: Color.grayLight, height: height-146 }}>
-
-				<FlatList
-					key='Chat'
-					keyExtractor={(item, index) => item.toString() + index}
-					data={dataChat}
-					numColumns={1}
-					showsHorizontalScrollIndicator={false}
-					contentContainerStyle={{marginHorizontal: 8, marginVertical: 8, paddingBottom: 8}}
-					inverted
-					renderItem={({ item, index }) => {
-						return (
-							<>
-							{item.user_id == userTarget.user_id ?
-								(
-									<View style={{ marginHorizontal: 8, marginVertical: 8, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'flex-start' }}>
-										<Image source={{ uri: targetImage }} style={{ width: 36, aspectRatio: 1, borderRadius: 18, marginRight: 8 }} />
-										<View style={{ backgroundColor: '#FDE4D2', borderRadius: 8, paddingHorizontal: 12, paddingVertical: 12, maxWidth: width-(52) }}>
-											<Text size={14} align='left'>
-												{item.chat_message}
-											</Text>
-											<Text size={10} type="medium" color={Color.gray} style={{ marginTop: 3 }} align='left'>{new Date(item.created_date).getHours()}:{new Date(item.created_date).getMinutes()}</Text>
-										</View>
+			<FlatList
+				key='Chat'
+				keyExtractor={(item, index) => item.toString() + index}
+				data={dataChat}
+				numColumns={1}
+				showsHorizontalScrollIndicator={false}
+				style={{backgroundColor: Color.border}}
+				contentContainerStyle={{marginHorizontal: 8, marginVertical: 8, paddingBottom: 8}}
+				inverted
+				renderItem={({ item, index }) => {
+					return (
+						<>
+						{item.user_id == userTarget.user_id ?
+							(
+								<View style={{ marginHorizontal: 8, marginVertical: 8, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'flex-start' }}>
+									<Image source={{ uri: targetImage }} style={{ width: 36, aspectRatio: 1, borderRadius: 18, marginRight: 8 }} />
+									<View style={{ backgroundColor: '#FDE4D2', borderRadius: 8, paddingHorizontal: 12, paddingVertical: 12, maxWidth: width-(52) }}>
+										<Text size={14} align='left'>
+											{item.chat_message}
+										</Text>
+										<Text size={10} type="medium" color={Color.gray} style={{ marginTop: 3 }} align='left'>{new Date(item.created_date).getHours()}:{new Date(item.created_date).getMinutes()}</Text>
 									</View>
-								) :
-								(
-									<View style={{ marginHorizontal: 8, marginVertical: 8, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
-										<View style={{ backgroundColor: '#FDE4D2', borderRadius: 8, paddingHorizontal: 12, paddingVertical: 12, maxWidth: width-(52) }}>
-											<Text size={14} align='left'>
-												{item.chat_message}
-											</Text>
-											<Text size={10} type="medium" color={Color.gray} style={{ marginTop: 3 }} align='left'>{new Date(item.created_date).getHours()}:{new Date(item.created_date).getMinutes()}</Text>
-										</View>
-										<Image source={{ uri: userImage }} style={{ width: 36, aspectRatio: 1, borderRadius: 18, marginLeft: 8 }}/>
+								</View>
+							) :
+							(
+								<View style={{ marginHorizontal: 8, marginVertical: 8, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
+									<View style={{ backgroundColor: '#FDE4D2', borderRadius: 8, paddingHorizontal: 12, paddingVertical: 12, maxWidth: width-(52) }}>
+										<Text size={14} align='left'>
+											{item.chat_message}
+										</Text>
+										<Text size={10} type="medium" color={Color.gray} style={{ marginTop: 3 }} align='left'>{new Date(item.created_date).getHours()}:{new Date(item.created_date).getMinutes()}</Text>
 									</View>
-								)
-								}
-							</>
-						)
-					}}
-				/>
+									<Image source={{ uri: userImage }} style={{ width: 36, aspectRatio: 1, borderRadius: 18, marginLeft: 8 }}/>
+								</View>
+							)
+							}
+						</>
+					)
+				}}
+			/>
 
-			</View>
 			<View>
 				<BottomSection style={{ borderColor: Color.theme }}>
 					<BoxInput style={{ borderColor: Color.text, flexDirection: 'row' }}>

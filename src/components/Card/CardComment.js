@@ -28,6 +28,7 @@ const defaultProps = {
 const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots, onPressReply, }) => {
   const {Color} = useColor();
   const user = useSelector(state => state['user.auth'].login.user);
+  const {width} = useWindowDimensions();
 
   // const canManagementProduct = user && !user.guest && user.userId === productOwnerId;
   const isCommentFromOwnerProduct = item.userId === productOwnerId;
@@ -86,6 +87,12 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
             {` • `}{Moment(parseInt(item.commentDate)).fromNow()}
           </Text>
         </View>
+
+        {item.imageVideo &&
+          <View style={{ width: width / 3, aspectRatio: 1, paddingVertical: 4 }}>
+            <Image source={{ uri: item.imageVideo }} style={{width: '100%', height: '100%', backgroundColor: Color.border }} />
+          </View>
+        }
         
         <Text size={12} align='left'>{item.comment}</Text>
 

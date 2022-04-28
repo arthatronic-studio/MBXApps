@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, ImageBackground, Dimensions, Image,TextInput } from 'react-native';
+import { View, Dimensions, Image,TextInput } from 'react-native';
 import { Header } from '@src/components';
 import {Divider} from 'src/styled';
 import {useWindowDimensions} from 'react-native';
@@ -46,7 +46,10 @@ const CardChatEcommerce = ({item, type}) => {
     return(    
         <View style={{ flexDirection: 'row', marginVertical: 8, marginHorizontal: 16, justifyContent: 'space-between', }}>
             <View style={{ flexDirection: 'row'}}>
-                <Image source={{uri: item.merchant.profile_img}} style={{ width: 48, aspectRatio: 1, borderRadius: 24 }}/>
+                <Image
+                    source={{uri: type === 'buyer' ? item.merchant.profile_img : userTarget ? userTarget.photo_profile : ''}}
+                    style={{ width: 48, aspectRatio: 1, borderRadius: 24 }}
+                />
                 <View style={{ flexDirection: 'column', marginLeft: 8, width: '73%' }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Entypo name={'controller-record'} style={{ marginRight: 5 }} color={userTarget.is_online ? '#B8E271' : '#9CA3A5'}/>
