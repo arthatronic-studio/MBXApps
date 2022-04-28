@@ -37,7 +37,7 @@ const ChatEcommerceHeader = (props) => {
 			}}
 		>
 			<View flexDirection='row' alignItems="center">
-				<Pressable onPress={() => navigation.goBack()} style={{ marginRight: 20 }}>
+				<Pressable onPress={() => navigation.pop()} style={{ marginRight: 20 }}>
 					<AntDesign name={'arrowleft'} size={20} />
 				</Pressable>
 				<View>

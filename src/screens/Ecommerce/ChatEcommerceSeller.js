@@ -10,14 +10,14 @@ import { currentSocket } from '@src/screens/MainHome/MainHome';
 
 const ChatEcommerceSeller = ({ navigation, route }) => {
 	const { Color } = useColor();
-	const [rooms, setRooms] = useState([]);
+	const [roomSellers, setRoomSellers] = useState([]);
 
 	const get_list_room = () => {
 		const body = {room_type: 'ECOMMERCE', room_user_type: 'MERCHANT'};
     currentSocket.emit('community_chat_room', body);
     currentSocket.on('community_chat_room', (res) => {
       console.log('community_chat_room', res);
-			setRooms(res.data);
+			setRoomSellers(res.data);
     });
   }
 
@@ -28,7 +28,7 @@ const ChatEcommerceSeller = ({ navigation, route }) => {
 
 	return (
 		<Scaffold
-			header={<Header customIcon title="Chat Ecommerce" type="bold" centerTitle={false} />}
+			header={<Header customIcon title="Chat Ecommerce seller" type="bold" centerTitle={false} />}
 			onPressLeftButton={() => navigation.pop()}
 		>
 			<ScrollView>
@@ -59,7 +59,7 @@ const ChatEcommerceSeller = ({ navigation, route }) => {
 						}}
 					/> */}
 					<FlatList
-						data={rooms}
+						data={roomSellers}
 						keyExtractor={(item, index) => item.toString() + index}
 						renderItem={({ item }) => {
 							return (

@@ -154,19 +154,30 @@ const DetailProduct = ({navigation, route}) => {
       if(res.data.chat_room_id){
         navigation.navigate('ChatDetailBuyer', {id: res.data.chat_room_id, merchant: detail.merchant, users: res.data.users});
       }else{
+        console.log("sinii")
         create_room();
       }
     });
   }
 
   const create_room = () => {
-    console.log("masukk");
-    const body = {room_type: 'ECOMMERCE', room_user_type: 'USER', user_ids: JSON.stringify([user.userId.toString(), detail.merchant.userId.toString()]), admin_ids: JSON.stringify([detail.merchant.userId.toString()])}
+    const community_chat_user_params = [
+			{ user_id: user.userId, room_type: 'ECOMMERCE', room_user_type: 'USER' },
+			{ user_id: detail.merchant.userId, room_type: 'ECOMMERCE', room_user_type: 'MERCHANT' },
+		];
+    const body = {community_chat_user_params: community_chat_user_params, room_name: 'Chat_ECOMMERCE', room_type: 'ECOMMERCE', user_ids: [user.userId.toString(), detail.merchant.userId.toString()], admin_ids: [detail.merchant.userId.toString()]}
+    console.log(body, "boddy")
     currentSocket.emit('create_community_chat_room', body);
     currentSocket.on('community_chat_room', (res) => {
-      console.log('create_community_chat_room', res);
-      const id = res.data.slice(-1)[0].id;
-      navigation.navigate('ChatDetailBuyer', {id: id, merchant: detail.merchant, users: res.data.users});
+      console.log('community_chat_room', res);
+      if(res.data.length > 0){
+        const id = res.data.slice(-1)[0].id;
+        const users = res.data.slice(-1)[0].users;
+        console.log("test", {id: id, merchant: detail.merchant, users: users});
+        navigation.navigate('ChatDetailBuyer', {id: id, merchant: detail.merchant, users: users});
+      }else{
+        console.log("Create room chat error");
+      }
     });
   }
 

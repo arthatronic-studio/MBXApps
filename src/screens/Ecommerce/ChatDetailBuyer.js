@@ -66,8 +66,15 @@ const ChatDetailBuyer = ({ navigation, route }) => {
 
 
 	const create_message = () => {
-		const	body = {room_type: 'ECOMMERCE', room_user_type: 'USER', chat_room_id: roomId, chat_message: message, user_id:  user.userId, chat_type: 'TEXT'};
+		const community_chat_user_params = [
+			{ user_id: user.userId, room_type: 'ECOMMERCE', room_user_type: 'USER' },
+			{ user_id: userTarget.user_id, room_type: 'ECOMMERCE', room_user_type: 'MERCHANT' },
+		];
+		const	body = {community_chat_user_params: community_chat_user_params, chat_room_id: roomId, chat_message: message, user_id:  user.userId, chat_type: 'TEXT'};
     currentSocket.emit('create_community_chat_message', body);
+		currentSocket.on('create_community_chat_room', (res) => {
+			console.log('res create_community_chat_room', res);
+		});
 		setMessage('');
   }
 	

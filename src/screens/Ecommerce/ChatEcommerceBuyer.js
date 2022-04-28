@@ -28,7 +28,7 @@ const ChatEcommerceBuyer = ({ navigation, route }) => {
 
 	return (
 		<Scaffold
-			header={<Header customIcon title="Chat Ecommerce" type="bold" centerTitle={false} />}
+			header={<Header customIcon title="Chat Ecommerce buyer" type="bold" centerTitle={false} />}
 			onPressLeftButton={() => navigation.pop()}
 		>
 			<ScrollView>
