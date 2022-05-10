@@ -67,10 +67,23 @@ const SurveyFourth = ({route, navigation}) => {
 	const loading = useSelector((state) => state['user.auth'].loading);
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
-    const [nameTepung, setNameTepung] = useState(tepung); 
+    const [nameTepung, setNameTepung] = useState([{name: 'Segitiga Biru', checked: false},
+    {name: 'Cakra Kembar', checked: false},
+    {name: 'Kunci Biru', checked: false},
+    {name: 'Mila', checked: false},
+    {name: 'Bola Salju', checked: false},
+    {name: 'Gatotkaca', checked: false},
+    {name: 'Kompas', checked: false},
+    {name: 'Kompas', checked: false},
+    {name: 'Lainnya', checked: false, label: ''}]); 
     
     const [refresh, setRefresh] = useState(0);
-    const [nameTempatTepung, setNameTempatTepung] = useState(tempaTepung);
+    const [nameTempatTepung, setNameTempatTepung] = useState([{name: 'Warung', checked: false},
+    {name: 'Minimarket', checked: false},
+    {name: 'Supermarket/Mall', checked: false},
+    {name: 'Pasar', checked: false},
+    {name: 'Online/E-Commerce', checked: false},
+    {name: 'Lainnya', checked: false}]);
 	const { Color } = useColor();
 
 	useEffect(() => {

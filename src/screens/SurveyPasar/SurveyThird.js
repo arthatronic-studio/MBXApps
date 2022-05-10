@@ -46,14 +46,14 @@ const Content = Styled(View)`
     borderRadius: 8px
 `;
 
-let tepung = [{name: 'Pasar Basah Modern', checked: false},
+const tepung = [{name: 'Pasar Basah Modern', checked: false},
 {name: 'Pasar Basah Tradisional', checked: false},
 {name: 'Pasar Hewan', checked: false},
 {name: 'Pasar Pakaian', checked: false},
 {name: 'Pasar Grosiran', checked: false},
 {name: 'Lainnya', checked: false, label: ''}]
 
-let tempaTepung = [{name: 'Warung', checked: false},
+const tempaTepung = [{name: 'Warung', checked: false},
 {name: 'Minimarket', checked: false},
 {name: 'Supermarket/Mall', checked: false},
 {name: 'Pasar', checked: false},
@@ -69,7 +69,12 @@ const SurveyThird = ({route, navigation}) => {
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
     const [showDatePicker, setShowDatePicker] = useState(false); 
     const [showDatePicker2, setShowDatePicker2] = useState(false); 
-    const [nameTepung, setNameTepung] = useState(tepung); 
+    const [nameTepung, setNameTepung] = useState([{name: 'Pasar Basah Modern', checked: false},
+    {name: 'Pasar Basah Tradisional', checked: false},
+    {name: 'Pasar Hewan', checked: false},
+    {name: 'Pasar Pakaian', checked: false},
+    {name: 'Pasar Grosiran', checked: false},
+    {name: 'Lainnya', checked: false, label: ''}]); 
     const [pedagangDaging, setPedagangDaging] = useState(''); 
     const [pedagangFMCG, setPedagangFMCG] = useState(''); 
     const [pedagangIkan, setPedagangIkan] = useState(''); 
@@ -87,12 +92,15 @@ const SurveyThird = ({route, navigation}) => {
 
     
     const [refresh, setRefresh] = useState(0);
-    const [nameTempatTepung, setNameTempatTepung] = useState(tempaTepung);
+    const [nameTempatTepung, setNameTempatTepung] = useState([{name: 'Warung', checked: false},
+    {name: 'Minimarket', checked: false},
+    {name: 'Supermarket/Mall', checked: false},
+    {name: 'Pasar', checked: false},
+    {name: 'Online/E-Commerce', checked: false},
+    {name: 'Lainnya', checked: false}]);
 	const { Color } = useColor();
 
 	useEffect(() => {
-        temp = []
-        tempTempat = []
     }, []);
 
     const submit = async () => {

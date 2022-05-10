@@ -44,19 +44,19 @@ const Content = Styled(View)`
     borderRadius: 8px
 `;
 
-let tempaTepungx = [{name: 'Warung', checked: false},
+const tempaTepungx = [{name: 'Warung', checked: false},
 {name: 'Minimarket', checked: false},
 {name: 'Supermarket/Mall', checked: false},
 {name: 'Pasar', checked: false},
 {name: 'Online/E-Commerce', checked: false},
 {name: 'Lainnya', checked: false, label: ''}]
 
-let tepung = [{name: 'Tahu', checked: false},
+const tepung = [{name: 'Tahu', checked: false},
 {name: 'Tempe', checked: false},
 {name: 'Kerupuk', checked: false},
 {name: 'Lainnya', checked: false, label: ''}]
 
-let tempaTepung = [{name: 'Warung', checked: false},
+const tempaTepung = [{name: 'Warung', checked: false},
 {name: 'Minimarket', checked: false},
 {name: 'Supermarket/Mall', checked: false},
 {name: 'Pasar', checked: false},
@@ -81,7 +81,10 @@ const SurveyFourth = ({route, navigation}) => {
 	const loading = useSelector((state) => state['user.auth'].loading);
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
-    const [nameTepung, setNameTepung] = useState(tepung); 
+    const [nameTepung, setNameTepung] = useState([{name: 'Tahu', checked: false},
+    {name: 'Tempe', checked: false},
+    {name: 'Kerupuk', checked: false},
+    {name: 'Lainnya', checked: false, label: ''}]); 
     const [tenagaKerja, setTenagaKerja] = useState(''); 
     const [hariKerja, setHariKerja] = useState(''); 
     const [kapasitasProduksi, setKapasitasProduksi] = useState(''); 
@@ -99,19 +102,27 @@ const SurveyFourth = ({route, navigation}) => {
         hargaProduct: ''
     }]); 
     const [luasTanah, setLuasTanah] = useState(''); 
-    const [tempatJual, setTempatJual] = useState(tempaTepungx); 
+    const [tempatJual, setTempatJual] = useState([{name: 'Warung', checked: false},
+    {name: 'Minimarket', checked: false},
+    {name: 'Supermarket/Mall', checked: false},
+    {name: 'Pasar', checked: false},
+    {name: 'Online/E-Commerce', checked: false},
+    {name: 'Lainnya', checked: false, label: ''}]); 
     const [kapasitasMesin, setKapasitasMesin] = useState(''); 
 
   const [thumbImage, setThumbImage] = useState([]);
   const [mimeImage, setMimeImage] = useState('image/jpeg');
     
     const [refresh, setRefresh] = useState(0);
-    const [nameTempatTepung, setNameTempatTepung] = useState(tempaTepung);
+    const [nameTempatTepung, setNameTempatTepung] = useState([{name: 'Warung', checked: false},
+    {name: 'Minimarket', checked: false},
+    {name: 'Supermarket/Mall', checked: false},
+    {name: 'Pasar', checked: false},
+    {name: 'Online/E-Commerce', checked: false},
+    {name: 'Lainnya', checked: false, label: ''}]);
 	const { Color } = useColor();
 
 	useEffect(() => {
-        temp = []
-        tempTempat = []
     }, []);
 
     const submit = async () => {
