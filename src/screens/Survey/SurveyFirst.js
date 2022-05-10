@@ -53,9 +53,9 @@ const SurveyFirst = ({navigation}) => {
 	const loading = useSelector((state) => state['user.auth'].loading);
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
-    const [name, setName] = useState('');
-    const [phone, setPhone] = useState('');
-    const [email, setEmail] = useState('');
+    const [name, setName] = useState(user.firstName+' '+user.lastName);
+    const [phone, setPhone] = useState(user.phoneNumber);
+    const [email, setEmail] = useState(user.email);
     const [namePetugas, setNamePetugas] = useState('');
     const [phonePetugas, setPhonePetugas] = useState('');
     const [nameKoor, setNameKoor] = useState('');

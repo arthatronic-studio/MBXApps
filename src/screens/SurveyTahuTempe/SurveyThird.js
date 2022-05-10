@@ -112,6 +112,7 @@ const SurveyThird = ({route, navigation}) => {
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='813-1234-5678' style={{borderWidth: 1, borderColor: Color.border,
                         width: '100%', borderRadius: 5, paddingHorizontal: 40, paddingTop: 20, height: 47}}
+                        keyboardType='numeric'
                         onChangeText={(value) => setPhoneUsaha(value)}
                         value={phoneUsaha}
                     />

@@ -183,13 +183,22 @@ const SurveySecond = ({ route, navigation}) => {
                 }}
                 onSelect={(item) => {
                 // const name = item.name;
+                const spl = item.fullAddress.split(",");
                 const fullAddress = item.fullAddress;
                 const latitude = item.latitude;
                 const longitude = item.longitude;
     
-                // const provinceName = item.provinceName ? item.provinceName : state.userData.provinceName;
-                // const cityName = item.cityName ? item.cityName : state.userData.cityName;
-                // const postCode = item.postCode ? item.postCode : state.userData.postCode;
+                const provinceName = item.provinceName
+                const cityName = item.cityName
+                const postCode = item.postCode
+                const kecName = spl[3]
+                const kelName = spl[2]
+
+                setProvince(provinceName)
+                setCity(cityName)
+                setKecamatan(kecName)
+                setKelurahan(kelName)
+                setAddress(fullAddress)
     
                 setIsPinnedMap(true);
                 setLocationPinnedMap(fullAddress);
@@ -197,18 +206,6 @@ const SurveySecond = ({ route, navigation}) => {
                     latitude,
                     longitude,
                 });
-    
-                // setState({
-                //   userData: {
-                //     ...state.userData,
-                //     fullAddress,
-                //     latitude,
-                //     longitude,
-                //     provinceName,
-                //     cityName,
-                //     postCode,
-                //   }
-                // });
                 }}
                 onClose={() => setModalSelectMap(false)}
             />

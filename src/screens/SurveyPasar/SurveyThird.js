@@ -81,7 +81,7 @@ const SurveyThird = ({route, navigation}) => {
     const [penjualanFMCG3, setPenjualanFMCG3] = useState(''); 
     const [jamBukaOperasional, setjamBukaOperasional] = useState(new Date()); 
     const [jamTutupOperasional, setjamTutupOperasional] = useState(new Date()); 
-    const [tempImage, setImage] = useState([]); 
+    const [logistik, setLogistik] = useState('Pribadi'); 
 
   const [thumbImage, setThumbImage] = useState([]);
   const [mimeImage, setMimeImage] = useState('image/jpeg');
@@ -97,7 +97,7 @@ const SurveyThird = ({route, navigation}) => {
 
     const submit = async () => {
         // return console.log(thumbImage)
-        const label = [ 'jamBukaOperasional', 'jamTutupOperasional', 'namaPasar','pedagangDaging','pedagangFMCG','pedagangIkan','pedagangMakanan','pedagangSayurBuah','pengunjungPerHari','penjualanFMCG','penjualanFMCG2','penjualanFMCG3' ]
+        const label = [ 'logistik', 'jamBukaOperasional', 'jamTutupOperasional', 'namaPasar','pedagangDaging','pedagangFMCG','pedagangIkan','pedagangMakanan','pedagangSayurBuah','pengunjungPerHari','penjualanFMCG','penjualanFMCG2','penjualanFMCG3' ]
         let tempData = []
         const tempPasar = []
         nameTepung.forEach(element => {
@@ -106,7 +106,7 @@ const SurveyThird = ({route, navigation}) => {
             }
         });
 
-        const dataState = [moment(jamBukaOperasional).format('HH:mm'), moment(jamTutupOperasional).format('HH:mm'), tempPasar,pedagangDaging,pedagangFMCG,pedagangIkan,pedagangMakanan,pedagangSayurBuah,pengunjungPerHari,penjualanFMCG,penjualanFMCG2,penjualanFMCG3 ]
+        const dataState = [logistik, moment(jamBukaOperasional).format('HH:mm'), moment(jamTutupOperasional).format('HH:mm'), tempPasar,pedagangDaging,pedagangFMCG,pedagangIkan,pedagangMakanan,pedagangSayurBuah,pengunjungPerHari,penjualanFMCG,penjualanFMCG2,penjualanFMCG3 ]
         label.forEach((element, index) => {
                 tempData.push({
                     block: '4',
@@ -209,6 +209,71 @@ const SurveyThird = ({route, navigation}) => {
                     <Text style={{fontSize: 10, color: Color.secondary}}>Survey seputar pasar yang kamu kunjungi</Text>
                 </View>
             </View>
+            {thumbImage.length != 0 && <Row style={{ flexWrap: 'wrap', flex: 1 }}>
+                {thumbImage.map((val, id) => (
+                    <TouchableOpacity
+                        onPress={() => {
+                            addImage();
+                        }}
+                        style={{
+                            width: '30%',
+                            borderWidth: 1,
+                            borderColor: Color.text,
+                            height: 100,
+                            borderStyle: 'dashed',
+                            borderRadius: 8,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginHorizontal: 20,
+                            marginVertical: 12,
+                        }}>
+                            <Image
+                            style={{
+                                height: '100%',
+                                aspectRatio: 1,
+                                borderRadius: 4,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                            source={{uri: val}}
+                            />
+                            <TouchableOpacity onPress={() => onDeleteImagee(id)} style={{ position: 'absolute', zIndex: 1, top: 8, right: 10 }}>
+                                <AntDesign
+                                    name={'close'}
+                                    size={22}
+                                    style={{color: 'red', paddingVertical: 5}}
+                                />
+                            </TouchableOpacity>
+                        </TouchableOpacity>
+                ))}
+            </Row>}
+             <TouchableOpacity
+              onPress={() => {
+                addImage();
+              }}
+              style={{
+                width: '30%',
+                borderWidth: 1,
+                borderColor: Color.text,
+                height: 100,
+                borderStyle: 'dashed',
+                borderRadius: 8,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginHorizontal: 20,
+                marginVertical: 12,
+              }}>
+              <AntDesign
+                name={'camerao'}
+                size={22}
+                style={{color: Color.secondary, paddingVertical: 5}}
+              />
+            <Text style={{color: Color.secondary, fontSize: 12}}>
+                Tambah Foto
+              </Text>
+            </TouchableOpacity>
+            <Text size={10} style={{ marginBottom: 20 }}>*)Setelah melakukan geotagging infrastruktur lengkapi foto infrastruktur pintu masuk, tampak luar, tampak dalam, tampak samping kanan kiri dan tengah pasar</Text>
+
             <View style={{ marginHorizontal: 10 }}>
                 <View style={{alignItems: 'flex-start', paddingVertical: 10}}>
                     <Text style={{fontSize: 14, fontWeight: 'bold'}}>Klasifikasi Pasar</Text>
@@ -299,24 +364,19 @@ const SurveyThird = ({route, navigation}) => {
                     setShowDatePicker2(false)
                 }}
             />}
-            {/* <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
-                <View style={{width: '100%'}}>
-                    <TextInput placeholder='06:00' style={{borderWidth: 1, borderColor: Color.border,
-                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
-                        onChangeText={(value) => setjamBukaOperasional(value)}
-                        value={jamBukaOperasional}></TextInput>
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jam Buka Operasional</Text>
-                </View>
-            </View> */}
-            {/* <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
-                <View style={{width: '100%'}}>
-                    <TextInput placeholder='17:00' style={{borderWidth: 1, borderColor: Color.border,
-                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
-                        onChangeText={(value) => setjamTutupOperasional(value)}
-                        value={jamTutupOperasional}></TextInput>
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jam Tutup Operasional</Text>
-                </View>
-            </View> */}
+            <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
+                <Text align='left' size={12} color={Color.secondary} style={{ marginBottom: 4 }}>Pilih sumber logistik</Text>
+                <Row>
+                    <TouchableOpacity onPress={() => setLogistik('Pribadi')} style={{ height: 20, width: 20, borderRadius: 15, backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center' }}>
+                        {logistik == 'Pribadi' && <View style={{ height: 14, width: 14, borderRadius: 7, backgroundColor: '#fff' }} />}
+                    </TouchableOpacity>
+                    <Text size={12}>  Pribadi     </Text>
+                    <TouchableOpacity onPress={() => setLogistik('Sewa')} style={{ height: 20, width: 20, borderRadius: 15, backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center' }}>
+                        {logistik == 'Sewa' && <View style={{ height: 14, width: 14, borderRadius: 7, backgroundColor: '#fff' }} />}
+                    </TouchableOpacity>
+                    <Text size={12}>  Sewa</Text>
+                </Row>
+            </View>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='100' style={{borderWidth: 1, borderColor: Color.border,
@@ -387,72 +447,7 @@ const SurveyThird = ({route, navigation}) => {
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Jumlah Pedagang Daging</Text>
                 </View>
             </View>
-            {thumbImage.length != 0 && <Row style={{ flexWrap: 'wrap', flex: 1 }}>
-                {console.log(thumbImage)}
-                {thumbImage.map((val, id) => (
-                    <TouchableOpacity
-                        onPress={() => {
-                            addImage();
-                        }}
-                        style={{
-                            width: '30%',
-                            borderWidth: 1,
-                            borderColor: Color.text,
-                            height: 100,
-                            borderStyle: 'dashed',
-                            borderRadius: 8,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            marginHorizontal: 20,
-                            marginVertical: 12,
-                        }}>
-                            <Image
-                            style={{
-                                height: '100%',
-                                aspectRatio: 1,
-                                borderRadius: 4,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}
-                            source={{uri: val}}
-                            />
-                            <TouchableOpacity onPress={() => onDeleteImagee(id)} style={{ position: 'absolute', zIndex: 1, top: 8, right: 10 }}>
-                                <AntDesign
-                                    name={'close'}
-                                    size={22}
-                                    style={{color: 'red', paddingVertical: 5}}
-                                />
-                            </TouchableOpacity>
-                        </TouchableOpacity>
-                ))}
-            </Row>}
-             <TouchableOpacity
-              onPress={() => {
-                addImage();
-              }}
-              style={{
-                width: '30%',
-                borderWidth: 1,
-                borderColor: Color.text,
-                height: 100,
-                borderStyle: 'dashed',
-                borderRadius: 8,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginHorizontal: 20,
-                marginVertical: 12,
-              }}>
-              <AntDesign
-                name={'camerao'}
-                size={22}
-                style={{color: Color.secondary, paddingVertical: 5}}
-              />
-            <Text style={{color: Color.secondary, fontSize: 12}}>
-                Tambah Foto
-              </Text>
-            </TouchableOpacity>
-            <Text size={10} style={{ marginBottom: 20 }}>*)Setelah melakukan geotagging infrastruktur lengkapi foto infrastruktur pintu masuk, tampak luar, tampak dalam, tampak samping kanan kiri dan tengah pasar</Text>
-
+            
             
             
             

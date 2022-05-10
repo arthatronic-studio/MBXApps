@@ -108,6 +108,7 @@ const SurveySecond = ({ route, navigation}) => {
 		onPressLeftButton={() => navigation.pop()}
 	>
         <ScrollView>
+        
             <View style={{flexDirection: 'row',}}>
                 <Image source={ImagesPath.survey2} style={{marginHorizontal: 10}}/>
                 <View style={{alignItems: 'flex-start', paddingVertical: 5}}>
@@ -115,11 +116,57 @@ const SurveySecond = ({ route, navigation}) => {
                     <Text style={{fontSize: 10, color: Color.secondary}}>Masukkan alamat lengkap</Text>
                 </View>
             </View>
-            <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginTop: 20, marginBottom: 5}}>
+            <View style={{  }} />
+            <FormSelect
+              type='select'
+              label='Pin Lokasi'
+              value={isPinnedMap ? locationPinnedMap || 'Lokasi di Pin' : ''}
+              placeholder='Pilih di Peta'
+              onPress={() => {
+                setModalSelectMap(true);
+              }}
+            />
+            <ModalSelectMap
+                visible={modalSelectMap}
+                extraProps={{
+                title: 'Alamat Saya',
+                fullAddress: '',
+                ...coords,
+                }}
+                onSelect={(item) => {
+                // const name = item.name;
+                const spl = item.fullAddress.split(",");
+                const fullAddress = item.fullAddress;
+                const latitude = item.latitude;
+                const longitude = item.longitude;
+    
+                const provinceName = item.provinceName
+                const cityName = item.cityName
+                const postCode = item.postCode
+                const kecName = spl[3]
+                const kelName = spl[2]
+
+                setProvince(provinceName)
+                setCity(cityName)
+                setKecamatan(kecName)
+                setKelurahan(kelName)
+                setAddress(fullAddress)
+    
+                setIsPinnedMap(true);
+                setLocationPinnedMap(fullAddress);
+                setCoords({
+                    latitude,
+                    longitude,
+                });
+                }}
+                onClose={() => setModalSelectMap(false)}
+            />
+            <View style={{alignItems: 'flex-start', marginHorizontal: 10,  marginBottom: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Masukkan alamat lengkap . . .' style={{borderWidth: 1, borderColor: Color.secondary,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 90}}
 						onChangeText={(value) => setAddress(value)}
+                        multiline
                         value={address}
                     />
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Alamat lengkap</Text>
@@ -167,54 +214,7 @@ const SurveySecond = ({ route, navigation}) => {
                 </View>
             </View>
 
-            <View style={{ marginTop: -14 }} />
-            <FormSelect
-              type='select'
-              label='Pin Lokasi'
-              value={isPinnedMap ? locationPinnedMap || 'Lokasi di Pin' : ''}
-              placeholder='Pilih di Peta'
-              onPress={() => {
-                setModalSelectMap(true);
-              }}
-            />
-            <ModalSelectMap
-                visible={modalSelectMap}
-                extraProps={{
-                title: 'Alamat Saya',
-                fullAddress: '',
-                ...coords,
-                }}
-                onSelect={(item) => {
-                // const name = item.name;
-                const fullAddress = item.fullAddress;
-                const latitude = item.latitude;
-                const longitude = item.longitude;
-    
-                // const provinceName = item.provinceName ? item.provinceName : state.userData.provinceName;
-                // const cityName = item.cityName ? item.cityName : state.userData.cityName;
-                // const postCode = item.postCode ? item.postCode : state.userData.postCode;
-    
-                setIsPinnedMap(true);
-                setLocationPinnedMap(fullAddress);
-                setCoords({
-                    latitude,
-                    longitude,
-                });
-    
-                // setState({
-                //   userData: {
-                //     ...state.userData,
-                //     fullAddress,
-                //     latitude,
-                //     longitude,
-                //     provinceName,
-                //     cityName,
-                //     postCode,
-                //   }
-                // });
-                }}
-                onClose={() => setModalSelectMap(false)}
-            />
+            
 
             
 

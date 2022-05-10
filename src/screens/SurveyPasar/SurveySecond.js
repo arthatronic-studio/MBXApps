@@ -107,6 +107,8 @@ const SurveySecond = ({ route, navigation}) => {
 		onPressLeftButton={() => navigation.pop()}
 	>
         <ScrollView>
+            
+        
             <View style={{flexDirection: 'row',}}>
                 <Image source={ImagesPath.survey2} style={{marginHorizontal: 10}}/>
                 <View style={{alignItems: 'flex-start', paddingVertical: 5}}>
@@ -114,6 +116,15 @@ const SurveySecond = ({ route, navigation}) => {
                     <Text style={{fontSize: 10, color: Color.secondary}}>Masukkan alamat lengkap</Text>
                 </View>
             </View>
+            <FormSelect
+              type='select'
+              label='Pin Lokasi'
+              value={isPinnedMap ? locationPinnedMap || 'Lokasi di Pin' : ''}
+              placeholder='Pilih di Peta'
+              onPress={() => {
+                setModalSelectMap(true);
+              }}
+            />
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Masukkan alamat lengkap . . .' style={{borderWidth: 1, borderColor: Color.border,
@@ -179,15 +190,6 @@ const SurveySecond = ({ route, navigation}) => {
             </View>
 
             <View style={{ marginTop: -14 }} />
-            <FormSelect
-              type='select'
-              label='Pin Lokasi'
-              value={isPinnedMap ? locationPinnedMap || 'Lokasi di Pin' : ''}
-              placeholder='Pilih di Peta'
-              onPress={() => {
-                setModalSelectMap(true);
-              }}
-            />
             <ModalSelectMap
                 visible={modalSelectMap}
                 extraProps={{
@@ -197,13 +199,22 @@ const SurveySecond = ({ route, navigation}) => {
                 }}
                 onSelect={(item) => {
                 // const name = item.name;
+                const spl = item.fullAddress.split(",");
                 const fullAddress = item.fullAddress;
                 const latitude = item.latitude;
                 const longitude = item.longitude;
     
-                // const provinceName = item.provinceName ? item.provinceName : state.userData.provinceName;
-                // const cityName = item.cityName ? item.cityName : state.userData.cityName;
-                // const postCode = item.postCode ? item.postCode : state.userData.postCode;
+                const provinceName = item.provinceName
+                const cityName = item.cityName
+                const postCode = item.postCode
+                const kecName = spl[3]
+                const kelName = spl[2]
+
+                setProvince(provinceName)
+                setCity(cityName)
+                setKecamatan(kecName)
+                setKelurahan(kelName)
+                setAddress(fullAddress)
     
                 setIsPinnedMap(true);
                 setLocationPinnedMap(fullAddress);
@@ -211,18 +222,6 @@ const SurveySecond = ({ route, navigation}) => {
                     latitude,
                     longitude,
                 });
-    
-                // setState({
-                //   userData: {
-                //     ...state.userData,
-                //     fullAddress,
-                //     latitude,
-                //     longitude,
-                //     provinceName,
-                //     cityName,
-                //     postCode,
-                //   }
-                // });
                 }}
                 onClose={() => setModalSelectMap(false)}
             />

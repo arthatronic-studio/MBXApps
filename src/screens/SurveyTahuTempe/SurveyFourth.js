@@ -86,6 +86,7 @@ const SurveyFourth = ({route, navigation}) => {
     const [hariKerja, setHariKerja] = useState(''); 
     const [kapasitasProduksi, setKapasitasProduksi] = useState(''); 
     const [luasBangunan, setLuasBangunan] = useState(''); 
+    const [logistik, setLogistik] = useState('Pribadi'); 
     const [isMesin, setIsMesin] = useState(true); 
     const [bahanBaku, setBahanBaku] = useState([{
         namaProduct: '',
@@ -114,7 +115,7 @@ const SurveyFourth = ({route, navigation}) => {
     }, []);
 
     const submit = async () => {
-        const label = ['bahanBaku', 'nilaiProduct', 'tempatJual', 'tempatBeli', 'jenisProduk','tenagaKerja','hariKerja','kapasitasMesin','kapasitasProduksi','luasBangunan','luasTanah']
+        const label = ['logistik', 'bahanBaku', 'nilaiProduct', 'tempatJual', 'tempatBeli', 'jenisProduk','tenagaKerja','hariKerja','kapasitasMesin','kapasitasProduksi','luasBangunan','luasTanah']
         let tempData = []
         const tempProduk = []
         nameTepung.forEach(element => {
@@ -134,7 +135,7 @@ const SurveyFourth = ({route, navigation}) => {
                 tempJual.push(element.name)
             }
         });
-        const dataState = [bahanBaku, nilaiProduct, tempJual, tempTempat, tempProduk, tenagaKerja, hariKerja, kapasitasMesin, kapasitasProduksi, luasBangunan, luasTanah]
+        const dataState = [logistik, bahanBaku, nilaiProduct, tempJual, tempTempat, tempProduk, tenagaKerja, hariKerja, kapasitasMesin, kapasitasProduksi, luasBangunan, luasTanah]
         label.forEach((element, index) => {
                 tempData.push({
                     block: '4',
@@ -267,6 +268,71 @@ const SurveyFourth = ({route, navigation}) => {
                     <Text style={{fontSize: 10, color: Color.secondary}}>Survey seputar produk yang kamu gunakan</Text>
                 </View>
             </View>
+            {thumbImage.length != 0 && <Row style={{ flexWrap: 'wrap', flex: 1 }}>
+                {thumbImage.map((val, id) => (
+                    <TouchableOpacity
+                        onPress={() => {
+                            addImage();
+                        }}
+                        style={{
+                            width: '30%',
+                            borderWidth: 1,
+                            borderColor: Color.text,
+                            height: 100,
+                            borderStyle: 'dashed',
+                            borderRadius: 8,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginHorizontal: 20,
+                            marginVertical: 12,
+                        }}>
+                            <Image
+                            style={{
+                                height: '100%',
+                                aspectRatio: 1,
+                                borderRadius: 4,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                            source={{uri: val.data}}
+                            />
+                            <TouchableOpacity onPress={() => onDeleteImagee(id)} style={{ position: 'absolute', zIndex: 1, top: 8, right: 10 }}>
+                                <AntDesign
+                                    name={'close'}
+                                    size={22}
+                                    style={{color: 'red', paddingVertical: 5}}
+                                />
+                            </TouchableOpacity>
+                        </TouchableOpacity>
+                ))}
+            </Row>}
+             <TouchableOpacity
+              onPress={() => {
+                addImage();
+              }}
+              style={{
+                width: '30%',
+                borderWidth: 1,
+                borderColor: Color.text,
+                height: 100,
+                borderStyle: 'dashed',
+                borderRadius: 8,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginHorizontal: 20,
+                marginVertical: 12,
+              }}>
+              <AntDesign
+                name={'camerao'}
+                size={22}
+                style={{color: Color.secondary, paddingVertical: 5}}
+              />
+            <Text style={{color: Color.secondary, fontSize: 12}}>
+                Tambah Foto
+              </Text>
+            </TouchableOpacity>
+            <Text size={10} style={{ marginBottom: 20 }}>*)Setelah melakukan geotagging infrastruktur lengkapi foto infrastruktur tampak luar dan tampak dalam pabrik</Text>
+
             <View style={{ marginHorizontal: 10 }}>
                 <View style={{alignItems: 'flex-start', paddingVertical: 10}}>
                     <Text style={{fontSize: 14, fontWeight: 'bold'}}>Jenis Produk yang sering digunakan</Text>
@@ -311,12 +377,19 @@ const SurveyFourth = ({route, navigation}) => {
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Lainnya</Text>
                 </View>
             </View>
+
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
-                <View style={{width: '100%'}}>
-                    <TextInput placeholder='Masukkan pilihan lainnya' style={{borderWidth: 1, borderColor: Color.border,
-                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}></TextInput>
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Lainnya</Text>
-                </View>
+                <Text align='left' size={12} color={Color.secondary} style={{ marginBottom: 4 }}>Pilih sumber logistik</Text>
+                <Row>
+                    <TouchableOpacity onPress={() => setLogistik('Pribadi')} style={{ height: 20, width: 20, borderRadius: 15, backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center' }}>
+                        {logistik == 'Pribadi' && <View style={{ height: 14, width: 14, borderRadius: 7, backgroundColor: '#fff' }} />}
+                    </TouchableOpacity>
+                    <Text size={12}>  Pribadi     </Text>
+                    <TouchableOpacity onPress={() => setLogistik('Sewa')} style={{ height: 20, width: 20, borderRadius: 15, backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center' }}>
+                        {logistik == 'Sewa' && <View style={{ height: 14, width: 14, borderRadius: 7, backgroundColor: '#fff' }} />}
+                    </TouchableOpacity>
+                    <Text size={12}>  Sewa</Text>
+                </Row>
             </View>
 
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
@@ -499,19 +572,7 @@ const SurveyFourth = ({route, navigation}) => {
                 </TouchableOpacity>
             </View>
 
-          {/* <View>
-            <Text
-              style={{
-                width: '50%',
-                textAlign: 'left',
-                paddingHorizontal: 20,
-                fontWeight: 'bold',
-                fontSize: 10,
-              }}>
-              Foto Produk
-            </Text>
-          </View> */}
-            {thumbImage.length != 0 && <Row style={{ flexWrap: 'wrap', flex: 1 }}>
+            {/* {thumbImage.length != 0 && <Row style={{ flexWrap: 'wrap', flex: 1 }}>
                 {thumbImage.map((val, id) => (
                     <TouchableOpacity
                         onPress={() => {
@@ -574,9 +635,8 @@ const SurveyFourth = ({route, navigation}) => {
                 Tambah Foto
               </Text>
             </TouchableOpacity>
-            <Text size={10} style={{ marginBottom: 20 }}>*)Setelah melakukan geotagging infrastruktur lengkapi foto infrastruktur tampak luar dan tampak dalam pabrik</Text>
+            <Text size={10} style={{ marginBottom: 20 }}>*)Setelah melakukan geotagging infrastruktur lengkapi foto infrastruktur tampak luar dan tampak dalam pabrik</Text> */}
 
-            
         </ScrollView>
         <View style={{width: '100%', height: 70, alignItems: 'center', borderRadius: 10}}>
             <TouchableOpacity onPress={() => {submit()}} style={{backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
