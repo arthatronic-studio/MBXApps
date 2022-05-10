@@ -107,12 +107,20 @@ const EmergencyScreen = ({ navigation, route }) => {
                       name='add'
                       color={Color.primary}
                       size={26}
-                      onPress={() => navigation.navigate('CreateThreadScreen', {
-                        title: route.params && route.params.title ? route.params.title : '',
-                        productType: Config.PRODUCT_TYPE,
-                        productCategory: '',
-                        productSubCategory: 'EMERGENCY',
-                      })}
+                      onPress={() => {
+                        const isJoinMember = user && user.organizationId;;
+                        if (!isJoinMember) {
+                          showLoading('error', 'Fitur ini hanya untuk anggota komunitas');
+                          return;
+                        }
+
+                        navigation.navigate('CreateThreadScreen', {
+                          title: route.params && route.params.title ? route.params.title : '',
+                          productType: Config.PRODUCT_TYPE,
+                          productCategory: '',
+                          productSubCategory: 'EMERGENCY',
+                        });
+                      }}
                     />
                   </Row>
                 }

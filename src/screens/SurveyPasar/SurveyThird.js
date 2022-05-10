@@ -81,10 +81,10 @@ const SurveyThird = ({route, navigation}) => {
     const [penjualanFMCG3, setPenjualanFMCG3] = useState(''); 
     const [jamBukaOperasional, setjamBukaOperasional] = useState(new Date()); 
     const [jamTutupOperasional, setjamTutupOperasional] = useState(new Date()); 
+    const [thumbImage, setThumbImage] = useState([]);
+    const [photos, setPhotos] = useState([]);
     const [logistik, setLogistik] = useState('Pribadi'); 
 
-  const [thumbImage, setThumbImage] = useState([]);
-  const [mimeImage, setMimeImage] = useState('image/jpeg');
     
     const [refresh, setRefresh] = useState(0);
     const [nameTempatTepung, setNameTempatTepung] = useState(tempaTepung);
@@ -96,7 +96,6 @@ const SurveyThird = ({route, navigation}) => {
     }, []);
 
     const submit = async () => {
-        // return console.log(thumbImage)
         const label = [ 'logistik', 'jamBukaOperasional', 'jamTutupOperasional', 'namaPasar','pedagangDaging','pedagangFMCG','pedagangIkan','pedagangMakanan','pedagangSayurBuah','pengunjungPerHari','penjualanFMCG','penjualanFMCG2','penjualanFMCG3' ]
         let tempData = []
         const tempPasar = []
@@ -115,8 +114,10 @@ const SurveyThird = ({route, navigation}) => {
                     value: dataState[index]
                 })
         });
-        const valid = tempData.every(val => val.value)
-        if(!valid) return alert('Semua data harus diisi')
+        const valid = tempData.every(val => val.value);
+
+        if(!valid) return alert('Semua data harus diisi');
+
         const sha1Hash = await RNSimpleCrypto.SHA.sha1("SURVEY-20220229" + moment().format('YYYY-MM-DD HH:mm:ss') + '123!!qweQWE');
         const dataq = {
             "auth": sha1Hash, 
@@ -126,7 +127,7 @@ const SurveyThird = ({route, navigation}) => {
             "data": route.params.item.concat(tempData)
         }
         console.log(dataq, 'dataq')
-        axios
+
         try {
             showLoading()
             const response = await axios({
@@ -138,18 +139,66 @@ const SurveyThird = ({route, navigation}) => {
                     Accept: 'application/json'
                 },
                 timeout: 5000,
-                
               });
-              hideLoading()
-              alert('Success send survey')
-              navigation.popToTop()
+
+              hideLoading();
+              
+              onUploadImage();
               console.log(response, "respon apicall")
           } catch (error) {
             hideLoading()
-            alert(error.response.data.message)
+            alert(error.response.data.message);
             console.log(error.response, 'error apicall')
           }
-      };
+    };
+
+    const onUploadImage = async() => {
+        const sha1Hash = await RNSimpleCrypto.SHA.sha1("SURVEY-20220229" + moment().format('YYYY-MM-DD HH:mm:ss') + '123!!qweQWE');
+        
+        const data = new FormData();
+
+        const images = {
+            'block': 4,
+            'index': 11,
+            'name': 'photo',
+            'value': photos[0]
+        };
+
+        data.append('auth', sha1Hash);
+        data.append('survey_code', 'SURVEY-20220229');
+        data.append('timestamps', moment().format('YYYY-MM-DD HH:mm:ss'));
+        data.append('caption_code', 'pasar');
+        // data.append('data[][photo]', images);
+        data.append('data[][photo]', images);
+
+        console.log(data);
+
+        // route.params.item.concat(tempData)
+
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        };
+
+        // force
+        setTimeout(() => {
+            navigation.popToTop();
+        }, 2000);
+
+        try {
+            const requestHttp = axios.create({ baseURL: 'http://panel.sw.tribesocial.id/' });
+
+            const response = await requestHttp.post('survey-form-file', data, config);
+
+            console.log('response uploading', response);
+            alert('Success send survey');
+            // navigation.popToTop();
+        } catch (error) {
+            console.log('error uploading', error.response);
+            alert(error.response.data.message);
+        }
+    }
 
       const onSelected = (data, index) => {
         let tempx = nameTepung
@@ -177,24 +226,38 @@ const SurveyThird = ({route, navigation}) => {
     
         launchImageLibrary(options, callback => {
           if (callback.base64) {
-              console.log(callback)
-              if(thumbImage.length == 0) setThumbImage([`data:${callback.type};base64,${callback.base64}`])
-            //   if(thumbImage.length == 0) setThumbImage([{data: `data:${callback.type};base64,${callback.base64}`, type: callback.type}])
-              else setThumbImage(thumbImage.concat(`data:${callback.type};base64,${callback.base64}`))
-            // data:${callback.type};base64,${callback.base64}
-            // setThumbImage(`data:${callback.type};base64,${callback.base64}`);
-            // setMimeImage(callback.type);
+              console.log(callback);
+
+              const newPhotos = [...photos];
+              newPhotos.push({
+                uri: callback.uri,
+                type: callback.type,
+                name: callback.fileName
+              });
+
+              if (thumbImage.length == 0) {
+                setThumbImage([`data:${callback.type};base64,${callback.base64}`]);
+                setPhotos(newPhotos);
+              }
+              else {
+                setThumbImage(thumbImage.concat(`data:${callback.type};base64,${callback.base64}`));
+                setPhotos(newPhotos);
+              }
           }
         });
-      };
+    };
 
-      const onDeleteImagee = (id) => {
+    const onDeleteImagee = (id) => {
         const dataIma = thumbImage
-        dataIma.splice(id, 1)
-        setThumbImage(dataIma)
-        setRefresh(refresh+1)
-    }
+        dataIma.splice(id, 1);
 
+        const newPhotos = [...photos];
+        newPhotos.splice(id, 1);
+
+        setThumbImage(dataIma);
+        setRefresh(refresh+1);
+        setPhotos(newPhotos);
+    }
 
   return (
     <Scaffold

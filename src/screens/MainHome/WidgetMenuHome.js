@@ -62,8 +62,6 @@ const WidgetMenuHome = ({ itemPerPage, onPress }) => {
     });
   }
 
-  console.log('listMeny', listMenuHome);
-
   const renderMenuBadge = () => {
     return (
       <View

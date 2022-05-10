@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, ImageBackground, Dimensions, Image,TextInput } from 'react-native';
+import React, {useState} from 'react';
+import { View, Dimensions, Image,TextInput } from 'react-native';
 import { Header } from '@src/components';
 import {Divider} from 'src/styled';
 import {useWindowDimensions} from 'react-native';
@@ -14,40 +14,84 @@ import {
     TouchableOpacity,
     useColor
 } from '@src/components';
-import { shadowStyle } from '@src/styles';
-import { TabBar, TabView, SceneMap } from 'react-native-tab-view';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
-import CardChat from './CardChat';
-import CardChatExist from './CardChatExist';
 import ImagesPath from 'src/components/ImagesPath';
+import moment from 'moment';
+import { useSelector } from 'react-redux';
 
-const CardChatEcommerce = ({ navigation, route }) => { 
+const CardChatEcommerce = ({item, type}) => { 
     const{Color} = useColor();
+    const user = useSelector(state => state['user.auth'].login.user);
+	const [userTarget, setUserTarget] = useState(item.users.find(item => item.user_id != user.userId));
+
+
+    var time = moment(item.created_unix_date).fromNow()
+    if(item.last_chat){
+        time = moment(item.last_chat.created_unix_date).fromNow();
+    }
+
+    if(time.includes("hari")){
+        if(item.last_chat){
+            time = moment(item.last_chat.created_unix_date).format("DD/MM HH:mm");
+        }else{
+            time = moment(item.created_unix_date).format("DD/MM HH:mm");
+        }
+    }else{
+        if(item.last_chat){
+            time = moment(item.last_chat.created_unix_date).format("HH:mm");
+        }else{
+            time = moment(item.created_unix_date).format("HH:mm");
+        }
+    }
 
     return(    
-        <View>
-            <View style={{ flexDirection: 'row', marginVertical: 16.5, marginHorizontal: 32.5 }}
-             
-            >
-                    <Image source={ImagesPath.chatimage} />
-                    <View style={{marginLeft:8,marginTop:4}}>
-                        <Entypo name={'controller-record'} />
-                        <Ionicons name={'checkmark-done'} style={{marginTop:10}}/>
+        <View style={{ flexDirection: 'row', marginVertical: 8, marginHorizontal: 16, justifyContent: 'space-between', }}>
+            <View style={{ flexDirection: 'row'}}>
+                <Image
+                    source={{uri: type === 'buyer' ? item.merchant.profile_img : userTarget ? userTarget.photo_profile : ''}}
+                    style={{ width: 48, aspectRatio: 1, borderRadius: 24 }}
+                />
+                <View style={{ flexDirection: 'column', marginLeft: 8, width: '73%' }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Entypo name={'controller-record'} style={{ marginRight: 5 }} color={userTarget.is_online ? '#B8E271' : '#9CA3A5'}/>
+                        <Text numberOfLines={1} style={{ fontSize: 14, fontWeight: "bold" }}>{type === 'buyer' ? item.merchant.name : userTarget.first_name}</Text>
+                        {type === 'buyer' &&
+                            <Image source={ImagesPath.toko} style={{marginLeft: 8}}/>       
+                        }
                     </View>
-                    <View style={{ flexDirection: 'column' }}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ fontSize: 14, fontWeight: "bold" }}>Sumber Makmur  </Text>
-                            <Image source={ImagesPath.toko}/>
-                            
+                    <Divider height={3}/>
+                    {item.last_chat && 
+                        <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+                            <Ionicons name={'checkmark-done'} style={{ marginRight: 5 }} size={16} color={item.last_chat.is_readed ? '#80A9FA' : Color.placeholder}/>
+                            <Text numberOfLines={1} align="left">{item.last_chat.chat_message}</Text>
                         </View>
-                        <View style={{ alignItems:'flex-start' }}>
-                            <Text>Sip sip</Text>
-                        </View>
-                    </View>
-                    <View style={{ marginLeft:80}}>
-                        <Text>10 jam</Text>
-                    </View>
+                    }
                 </View>
+            </View>
+            <View style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
+                <Text size={10}>{time}</Text>
+                <Divider height={3}/>
+                {item.unread_count > 0 && 
+                    <View
+                        style={{
+                            width: 18,
+                            height: 18,
+                            backgroundColor: Color.error,
+                            borderRadius: 9
+                        }}
+                    >
+                        <Text
+                            style={{
+                                fontSize: 10,
+                                color: Color.textInput,
+                                alignSelf: 'center',
+                                paddingVertical: 1
+                            }}
+                        >
+                            {item.unread_count}
+                        </Text>
+                    </View>
+                }
+            </View>
         </View>
     )
 }

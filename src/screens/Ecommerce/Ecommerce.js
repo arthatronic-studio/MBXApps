@@ -74,7 +74,7 @@ const ecomMenu = [
 		name: 'Chatting',
 		badge: true,
 		imageAsset: ImagesPath.chatframe,
-		navigate: 'ChatEcommerce',
+		navigate: 'ChatEcommerceBuyer',
 		show: true,
 	},
 	{
@@ -202,7 +202,8 @@ const Ecommerce = ({ navigation }) => {
 	const getAuction = () => {
 		let variables = {
 			page: 1,
-			limit: 5
+			limit: 5,
+			type: 'HOMEPAGE'
 		};
 
 		Client.query({ query: queryGetAuction, variables })
@@ -300,27 +301,33 @@ const Ecommerce = ({ navigation }) => {
 						style={{ width: '75%', alignItems: 'center', justifyContent: 'center' }}
 						onTouchStart={() => navigation.navigate('SearchResult')}
 					>
-						<TextInput
-							placeholder="Cari apa hari ini..."
-							editable={false}
-							style={{
-								backgroundColor: Color.textInput,
-								width: '100%',
-								borderRadius: 8,
-								height: 40,
-								paddingHorizontal: 8
-							}}
-						/>
+						<TouchableOpacity
+							activeOpacity={1}
+							onPress={() => navigation.navigate('SearchResult')}
+							style={{width: '100%', alignItems: 'center', justifyContent: 'center'}}
+						>
+							<TextInput
+								placeholder="Cari apa hari ini..."
+								editable={false}
+								style={{
+									backgroundColor: Color.textInput,
+									width: '100%',
+									borderRadius: 8,
+									height: 40,
+									paddingHorizontal: 8
+								}}
+							/>
 
-						<Octicons
-							name={'search'}
-							size={14}
-							style={{
-								color: Color.placeholder,
-								position: 'absolute',
-								right: 8,
-							}}
-						/>
+							<Octicons
+								name={'search'}
+								size={14}
+								style={{
+									color: Color.placeholder,
+									position: 'absolute',
+									right: 8,
+								}}
+							/>
+						</TouchableOpacity>
 					</View>
 
 					<View style={{ width: '25%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', }}>
