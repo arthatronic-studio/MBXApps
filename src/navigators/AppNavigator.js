@@ -133,7 +133,6 @@ import Review from 'src/screens/Ecommerce/Review';
 import EditMerchantInfo from 'src/screens/Ecommerce/EditMerchantInfo';
 import DetailCoupon from 'src/screens/Ecommerce/DetailCoupon';
 import SearchResult from 'src/screens/Ecommerce/SearchResult';
-import Maps from 'src/components/Maps/Maps';
 import StepTwo from 'src/screens/Ecommerce/StepTwo';
 import StepThree from 'src/screens/Ecommerce/StepThree';
 import MerchantSetting from 'src/screens/Ecommerce/MerchantSetting';
@@ -196,7 +195,6 @@ import GalleryDetailScreen from 'src/screens/Gallery/GalleryDetailScreen';
 import GalleryDetailSliderScreen from 'src/screens/Gallery/GalleryDetailSliderScreen';
 import IncomingOrder from 'src/screens/Ecommerce/IncomingOrder';
 import SearchScreen from 'src/screens/Ecommerce/SearchScreen';
-import CurrentLocation from 'src/components/Maps/CurrentLocation';
 import TrackingOrder from 'src/screens/Transaction/TrackingOrder';
 import AddProductAuctionSecond from 'src/screens/Lelang/AddProductAuctionSecond';
 
@@ -216,7 +214,7 @@ function MainStackNavigator() {
       }}
 	>
       {/* uncanny */}
-      <Screen name="SplashScreen" component={SurveyPasarFirst} />
+      <Screen name="SplashScreen" component={SplashScreen} />
       <Screen name="MainPage" component={MainPage} />
       <Screen name="OnBoardingScreen" component={OnBoardingScreen} />
       <Screen name="TrackingOrder" component={TrackingOrder} />
@@ -278,16 +276,14 @@ function MainStackNavigator() {
       <Screen name="ChatRoom" component={ChatRoom} />
       <Screen name="CardChat" component={CardChat} />
       <Screen name="CardChatExist" component={CardChatExist} />
-	  <Screen name="Maps" component={Maps} />
-		<Screen name="CurrentLocation" component={CurrentLocation} />
-		<Screen name="ChatEcommerceBuyer" component={ChatEcommerceBuyer} />
-		<Screen name="ChatEcommerceSeller" component={ChatEcommerceSeller} />
-		<Screen name="CardChatEcommerce" component={CardChatEcommerce} />
-		<Screen name="ChatDetailBuyer" component={ChatDetailBuyer} />
-		<Screen name="ChatDetailSeller" component={ChatDetailSeller} />
-		<Screen name="EditProduct" component={EditProduct} />
-		<Screen name="CardBid" component={CardBid} />
-    <Screen name="MyAuction" component={MyAuction} />
+      <Screen name="ChatEcommerceBuyer" component={ChatEcommerceBuyer} />
+      <Screen name="ChatEcommerceSeller" component={ChatEcommerceSeller} />
+      <Screen name="CardChatEcommerce" component={CardChatEcommerce} />
+      <Screen name="ChatDetailBuyer" component={ChatDetailBuyer} />
+      <Screen name="ChatDetailSeller" component={ChatDetailSeller} />
+      <Screen name="EditProduct" component={EditProduct} />
+      <Screen name="CardBid" component={CardBid} />
+      <Screen name="MyAuction" component={MyAuction} />
 
       {/* <Screen name="PopUpCouponSucces" component={PopUpCouponSucces}/> */}
       <Screen name="DetailCoupon" component={DetailCoupon} />

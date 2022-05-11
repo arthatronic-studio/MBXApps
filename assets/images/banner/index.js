@@ -20,6 +20,7 @@ const bannerType = {
         {imageAsset: require('./rrid/banner-lokasi.png')},
         {imageAsset: require('./rrid/banner-shop.png')},
     ],
+    'TRIBESXSURVEY': [],
 }
 
 const listDummyBanner = bannerType[accessClient.InitialCode] ?
