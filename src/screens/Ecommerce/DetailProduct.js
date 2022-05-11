@@ -181,6 +181,8 @@ const DetailProduct = ({navigation, route}) => {
     });
   }
 
+  console.log(detail, "detail");
+
   return (
     <Scaffold
       loadingProps={loadingProps}

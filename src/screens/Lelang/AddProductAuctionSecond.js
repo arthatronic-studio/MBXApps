@@ -1,117 +1,503 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, ScrollView, Platform, Image, FlatList,SafeAreaView, TextInput, Pressable, useWindowDimensions } from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {
+  View,
+  ScrollView,
+  Platform,
+  Image,
+  FlatList,
+  SafeAreaView,
+  TextInput,
+  Pressable,
+  useWindowDimensions,
+} from 'react-native';
 import Styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import {TextInputMask} from 'react-native-masked-text';
+import {useSelector} from 'react-redux';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {
-	Text,
-	// TouchableOpacity,
-	useLoading,
-	Scaffold,
-	Col,
-	HeaderBig,
-	useColor,
-	Header
+  Text,
+  // TouchableOpacity,
+  useLoading,
+  Scaffold,
+  Col,
+  HeaderBig,
+  useColor,
+  Header,
 } from '@src/components';
-import { TouchableOpacity } from '@src/components/Button';
-import ListForum from '@src/screens/MainForum/ListForum';
-
-import { Divider, Circle, Container, Row } from '@src/styled';
-import { shadowStyle } from '@src/styles';
+import {TouchableOpacity} from '@src/components/Button';
+import {FormatMoney} from '@src/utils';
+import {Divider, Circle, Container, Row} from '@src/styled';
 import Client from '@src/lib/apollo';
-import { queryContentProduct } from '@src/lib/query';
-import TopTabShop from '../Ecommerce/TopTabShop';
 import ImagesPath from 'src/components/ImagesPath';
-import Entypo from 'react-native-vector-icons/Entypo'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import MyShopHeader from '../Ecommerce/MyShopHeader';
-import { queryGetMyProduct, queryGetMyShop } from 'src/lib/query/ecommerce';
-import { useIsFocused } from '@react-navigation/native';
+import ModalDropDown from 'src/components/Modal/ModalDropDown';
+import ModalNominalPicker from 'src/components/Modal/ModalNominalPicker';
+import Modal from 'react-native-modal';
+import {mutationCrateAuction} from 'src/lib/query/auction';
+import Moment from 'moment';
 
-const AddProductAuctionSecond = ({navigation}) => {
-    const { Color } = useColor();
+const AddProductAuctionSecond = ({navigation, route}) => {
+  const {Color} = useColor();
+  const {width, height} = useWindowDimensions();
+  const {item} = route.params;
+  console.log(item);
+  const modalDropDownRef = useRef();
+  const modalNominalPickerRef = useRef();
+  const amountPrice = useRef();
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
+  const [duration, setDuration] = useState(0);
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState(0);
+  const [quickAccess, setQuickAccess] = useState([50, 100, 250]);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+    setTimeout(() => {
+      setModalVisible(!isModalVisible);
+      navigation.popToTop();
+      navigation.navigate('MyAuction');
+    }, 100);
+  };
+
+  const onDurationChange = value => {
+    setDuration(value);
+    modalDropDownRef.current.close();
+  };
+
+  const onSubmitQuickAccess = value => {
+    setQuickAccess(
+      value.sort(function (a, b) {
+        return a - b;
+      }),
+    );
+    modalNominalPickerRef.current.close();
+  };
+
+  const onSubmit = () => {
+    if (
+      date.length != 0 &&
+      time.length != 0 &&
+      duration != 0 &&
+      description.length != 0 &&
+      price != 0 &&
+      quickAccess.length != 0
+    ) {
+      const variables = {
+        productId: item.id,
+        dateStart: Moment(date).format('YYYY-MM-DD'),
+        timeStart: time,
+        timeDuration: duration,
+        description: description,
+        startPrice: amountPrice.current.getRawValue(),
+        buyNowPrice: amountPrice.current.getRawValue(),
+        quantity: 1,
+        bidNominal: quickAccess,
+        status: 'OPENFORBID',
+      };
+
+      console.log(variables, 'variable');
+
+      Client.mutate({
+        mutation: mutationCrateAuction,
+        variables,
+      })
+        .then(res => {
+          console.log('res', res);
+          toggleModal();
+        })
+        .catch(err => {
+          console.log('error', err);
+        });
+    } else {
+      alert('Semua field harus diisi');
+    }
+  };
+
   return (
     <Scaffold
-      header={<Header title={'Tambah Barang Lelang'} customIcon type="bold" centerTitle={false} />}
+      header={
+        <Header
+          title={'Tambah Barang Lelang'}
+          customIcon
+          type="bold"
+          centerTitle={false}
+        />
+      }
       onPressLeftButton={() => navigation.pop()}>
-    <ScrollView>
-    <Row style={{backgroundColor: Color.theme, paddingHorizontal: 15, paddingVertical: 15}}>
-        <Image source={ImagesPath.two} style={{width: 40, height: 40}}/>
-        <Col style={{paddingHorizontal: 10}}>
-            <Text style={{fontWeight: 'bold', fontSize: 14, textAlign: 'left'}}>Hampir Selesai</Text>
-            <Text style={{lineHeight: 15,fontSize: 8, color: Color.secondary, textAlign: 'left'}}>Masukkan jadwal lelang, harga, dan informasi lainnya tentang lelang ini.</Text>
-        </Col>
-        <View style={{width: '22%'}}/>    
-    </Row>
-    <Row style={{borderWidth: 1, borderColor: Color.border, width: '95%', alignSelf: 'center',paddingHorizontal: 10,borderRadius: 10}}>
-        <Image source={ImagesPath.produklelang} style={{width: 60, height: 60, borderRadius: 10}}/>
-        <Col style={{paddingHorizontal: 10, paddingVertical: 10}}>
-            <Text style={{fontSize: 12, fontWeight: 'bold', textAlign: 'left'}}>Xiaomi 11T 128GB</Text>
-            <Divider/>
-            <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left'}}>Harga saat ini</Text>
-            <Text style={{fontSize: 12, fontWeight: 'bold', textAlign: 'left'}}>Rp. 5.999.000</Text>
-        </Col>
-    </Row>
-    
-    <View style={{alignSelf: 'center', width:'95%'}}>
-        <Text style={{marginVertical: 14,position: 'absolute', fontSize: 6, marginHorizontal: 10, color: Color.secondary}}>Tanggal Mulai Lelang</Text>
-        <TextInput placeholder={'dd/mm/yyyy'} style={{ontSize: 12, paddingHorizontal: 10, paddingTop: 16,borderWidth: 1, borderColor: Color.border, width: '100%', alignSelf: 'center', height: 45, borderRadius: 5, marginVertical: 10}}>
-
-        </TextInput>
-        <Fontisto name={'date'} style={{position: 'absolute', marginVertical: 30, right: 10, marginHorizontal: 10}} color={Color.secondary}/>
-    </View>
-    <View style={{alignSelf: 'center', width:'95%', flexDirection: 'row'}}>
-        <View style={{width: '49%'}}>
-            <Text style={{marginVertical: 5,position: 'absolute', fontSize: 6, marginHorizontal: 10, color: Color.secondary}}>Jam Mulai</Text>
-            <TextInput placeholder={'00:00'} style={{fontSize: 12, paddingHorizontal: 10, paddingTop: 16,borderWidth: 1, borderColor: Color.border, width: '100%', alignSelf: 'center', height: 45, borderRadius: 5,}}>
-
-            </TextInput>
+      <ScrollView style={{paddingHorizontal: 16}}>
+        <View
+          style={{
+            backgroundColor: Color.theme,
+            paddingVertical: 16,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            width: '100%',
+          }}>
+          <Image source={ImagesPath.two} style={{width: 40, height: 40}} />
+          <View
+            style={{flexDirection: 'column', marginLeft: 8, width: width - 80}}>
+            <Text style={{fontWeight: 'bold', fontSize: 14, textAlign: 'left'}}>
+              Hampir Selesai
+            </Text>
+            <Divider height={2} />
+            <Text
+              style={{
+                lineHeight: 15,
+                fontSize: 10,
+                color: Color.secondary,
+                textAlign: 'left',
+              }}>
+              Masukkan jadwal lelang, harga, dan informasi lainnya tentang
+              lelang ini.
+            </Text>
+          </View>
         </View>
-        <View style={{width: '48%', marginHorizontal: 10}}>
-            <TouchableOpacity style={{borderWidth: 1, borderColor: Color.border, width: '100%', height: 45, borderRadius: 5,}}>
-                <Text style={{marginVertical: 5,fontSize: 6, marginHorizontal: 10, color: Color.secondary, textAlign: 'left'}}>Durasi</Text>
-                <Row>
-                    <Text style={{fontSize: 12, color: Color.text, marginHorizontal: 10, width: '75%', textAlign: 'left'}}>Pilih Durasi</Text>
-                    <MaterialIcons name={'keyboard-arrow-down'} size={16} style={{width: '25%'}}/>
-                </Row>
+
+        <View
+          style={{
+            borderWidth: 1,
+            borderColor: Color.border,
+            width: '100%',
+            borderRadius: 10,
+            flexDirection: 'row',
+            paddingVertical: 10,
+            paddingHorizontal: 10,
+          }}>
+          <Image
+            source={{uri: item.imageUrl}}
+            style={{height: 60, aspectRatio: 1, borderRadius: 10}}
+          />
+          <Divider width={16} />
+          <View style={{flexDirection: 'column', width: width - 128}}>
+            <Text style={{fontSize: 12, fontWeight: 'bold', textAlign: 'left'}}>
+              {item.name}
+            </Text>
+            <Divider height={16} />
+            <Text
+              style={{fontSize: 8, color: Color.secondary, textAlign: 'left'}}>
+              Harga saat ini
+            </Text>
+            <Text style={{fontSize: 12, fontWeight: 'bold', textAlign: 'left'}}>
+              {FormatMoney.getFormattedMoney(item.price)}
+            </Text>
+          </View>
+        </View>
+
+        <View style={{width: '100%'}}>
+          <Text
+            style={{
+              marginVertical: 14,
+              position: 'absolute',
+              fontSize: 6,
+              marginHorizontal: 10,
+              color: Color.secondary,
+            }}>
+            Tanggal Mulai Lelang
+          </Text>
+          <TextInputMask
+            type={'datetime'}
+            options={{
+              format: 'DD/MM/YYYY',
+            }}
+            value={date}
+            onChangeText={text => setDate(text)}
+            placeholder={'dd/mm/yyyy'}
+            style={{
+              ontSize: 12,
+              paddingHorizontal: 10,
+              paddingTop: 16,
+              borderWidth: 1,
+              borderColor: Color.border,
+              width: '100%',
+              alignSelf: 'center',
+              height: 45,
+              borderRadius: 5,
+              marginVertical: 10,
+            }}
+          />
+          <Fontisto
+            name={'date'}
+            style={{
+              position: 'absolute',
+              marginVertical: 30,
+              right: 10,
+              marginHorizontal: 10,
+            }}
+            color={Color.secondary}
+          />
+        </View>
+
+        <View
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <View
+            style={{
+              paddingHorizontal: 10,
+              paddingVertical: 8,
+              borderWidth: 1,
+              borderColor: Color.border,
+              borderRadius: 5,
+              flexDirection: 'column',
+              width: '48%',
+            }}>
+            <Text align="left" size={8} color={Color.secondary}>
+              Jam Mulai
+            </Text>
+            <TextInputMask
+              type={'datetime'}
+              options={{
+                format: 'HH:mm',
+              }}
+              value={time}
+              onChangeText={text => setTime(text)}
+              placeholder={'00:00'}
+              style={{
+                paddingHorizontal: 0,
+                paddingVertical: 0,
+                fontSize: 14,
+              }}
+            />
+          </View>
+
+          <View
+            style={{
+              paddingHorizontal: 10,
+              paddingVertical: 8,
+              borderWidth: 1,
+              borderColor: Color.border,
+              borderRadius: 5,
+              flexDirection: 'column',
+              width: '48%',
+            }}>
+            <Text align="left" size={8} color={Color.secondary}>
+              Durasi
+            </Text>
+            <Divider height={4} />
+            <TouchableOpacity
+              onPress={() => modalDropDownRef.current.open()}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Text size={14}>
+                {duration ? duration + ' Menit' : 'Pilih Durasi'}
+              </Text>
+              <IonIcons
+                name="chevron-down-outline"
+                color={Color.text}
+                size={18}
+              />
             </TouchableOpacity>
+          </View>
         </View>
-    </View>
-        <View style={{width: '95%', alignSelf: 'center', marginVertical: 10}}>
-            <Text style={{marginVertical: 5,position: 'absolute', fontSize: 6, marginHorizontal: 10, color: Color.secondary}}>Deskripsi</Text>
-            <TextInput placeholder={'Tuliskan sesuatu tentang ini . . .'} style={{fontSize: 12, paddingHorizontal: 10, paddingTop: 16,borderWidth: 1, borderColor: Color.border, width: '100%', alignSelf: 'center', height: 95, borderRadius: 5,}}>
 
-            </TextInput>
+        <View style={{width: '100%', marginVertical: 10}}>
+          <Text
+            style={{
+              marginVertical: 5,
+              position: 'absolute',
+              fontSize: 6,
+              marginHorizontal: 10,
+              color: Color.secondary,
+            }}>
+            Deskripsi
+          </Text>
+          <TextInput
+            placeholder={'Tuliskan sesuatu tentang ini . . .'}
+            style={{
+              fontSize: 12,
+              paddingHorizontal: 10,
+              paddingTop: 16,
+              borderWidth: 1,
+              borderColor: Color.border,
+              width: '100%',
+              alignSelf: 'center',
+              minHeight: 95,
+            }}
+            multiline
+            value={description}
+            onChangeText={text => setDescription(text)}
+          />
         </View>
-    <View style={{alignSelf: 'center', width:'95%'}}>
-        <Text style={{marginVertical: 7,position: 'absolute', fontSize: 6, marginHorizontal: 10, color: Color.secondary}}>Harga awal</Text>
-        <TextInput placeholder={'0'} style={{ontSize: 12, paddingHorizontal: 10, paddingTop: 16,borderWidth: 1, borderColor: Color.border, width: '100%', alignSelf: 'center', height: 45, borderRadius: 5, marginBottom: 10}}>
 
-        </TextInput>
-        <Text style={{position: 'absolute', marginVertical: 16, right: 10, marginHorizontal: 10, fontSize: 12}} color={Color.text}>Poin</Text>
-        <Row>
-            <IonIcons name={'information-circle-outline'} color={'#2C70F7'}/>
-            <Text style={{fontSize: 8, marginHorizontal: 5, color: Color.secondary}}>Harga akhir lelang nantinya akan dikonversikan kedalam rupiah</Text>
-        </Row>
-    </View>
-    <Divider/>
-    <Row style={{paddingHorizontal: 10}}>
-        <Text style={{fontSize: 8, marginHorizontal: 5, color: Color.secondary, width: '47%', textAlign: 'left'}}>Nominal Kelipatan Biding</Text>
-        <Text style={{fontSize: 8, marginHorizontal: 5, color: Color.primary, width: '47%', textAlign: 'right'}}>Tambah Nominal Kelipatan</Text>
-    </Row>
-    <View style={{alignItems: 'center', justifyContent: 'center',marginVertical: 10, borderRadius: 5,width: '95%', backgroundColor: Color.border, height: 60, alignSelf: 'center'}}>
-        <Text style={{fontSize: 10, color: Color.secondary}}>Nominal bidding belum diatur</Text>
-    </View>
-    </ScrollView>
-    <Row style={{backgroundColor: Color.theme, height: 60, justifyContent: 'center', alignItems: 'center'}}>
-        <TouchableOpacity onPress={()=> navigation.navigate('AddProductAuctionSecond')} style={{backgroundColor: Color.primary, width: '95%',height: '65%', justifyContent: 'center', alignItems: 'center',borderRadius: 20}}>
-            <Text style={{marginHorizontal: 5,fontSize: 12, color: Color.textInput}}>Lanjutkan</Text>
+        <View
+          style={{
+            width: '100%',
+            paddingVertical: 8,
+            paddingHorizontal: 10,
+            borderWidth: 1,
+            borderColor: Color.border,
+            borderRadius: 5,
+            flexDirection: 'column',
+          }}>
+          <Text size={8} align="left">
+            Harga awal
+          </Text>
+          <Divider height={4} />
+
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <TextInputMask
+              ref={amountPrice}
+              type={'money'}
+              options={{
+                precision: 0,
+                separator: ',',
+                delimiter: '.',
+                unit: '',
+                suffixUnit: '',
+              }}
+              value={price}
+              onChangeText={value => setPrice(value)}
+              placeholder={'0'}
+              style={{
+                paddingHorizontal: 0,
+                paddingVertical: 0,
+                fontSize: 14,
+                maxWidth: '90%',
+              }}
+            />
+            <Text size={14} color={Color.text}>
+              Poin
+            </Text>
+          </View>
+        </View>
+
+        <Divider height={5} />
+
+        <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+          <IonIcons name={'information-circle-outline'} color={'#2C70F7'} />
+          <Divider width={5} />
+          <Text size={8} color={Color.secondary}>
+            Harga akhir lelang nantinya akan dikonversikan kedalam rupiah
+          </Text>
+        </View>
+
+        <Divider height={17} />
+
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text align="left" size={10} color={Color.secondary}>
+            Nominal Kelipatan Biding
+          </Text>
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => modalNominalPickerRef.current.open()}>
+            <Text size={10} color={Color.primary}>
+              Tambah Nominal Kelipatan
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <Divider height={6} />
+
+        {quickAccess ? (
+          <View
+            style={{
+              alignItems: 'center',
+              flexDirection: 'row',
+              width: '100%',
+              flexWrap: 'wrap',
+            }}>
+            {quickAccess.map((item, idx) => (
+              <View
+                style={{
+                  paddingHorizontal: 16,
+                  paddingVertical: 8,
+                  borderRadius: 120,
+                  backgroundColor: Color.grayLight,
+                  marginBottom: 10,
+                  marginRight: 10,
+                }}>
+                <Text size={14} color={Color.text}>
+                  {item.toLocaleString().replace(/,/g, '.')} Poin
+                </Text>
+              </View>
+            ))}
+          </View>
+        ) : (
+          <View
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 5,
+              width: '100%',
+              backgroundColor: Color.border,
+              height: 60,
+            }}>
+            <Text size={10} color={Color.secondary}>
+              Nominal bidding belum diatur bro
+            </Text>
+          </View>
+        )}
+      </ScrollView>
+
+      <Row
+        style={{
+          backgroundColor: Color.theme,
+          height: 60,
+          paddingHorizontal: 16,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <TouchableOpacity
+          onPress={() => onSubmit()}
+          style={{
+            backgroundColor: Color.primary,
+            width: '100%',
+            height: '65%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 20,
+          }}>
+          <Text
+            style={{marginHorizontal: 5, fontSize: 12, color: Color.textInput}}>
+            Lanjutkan
+          </Text>
         </TouchableOpacity>
-   </Row>
-    </Scaffold>
-  )
-}
+      </Row>
 
-export default AddProductAuctionSecond
+      {/* Modal */}
+      <ModalDropDown
+        ref={modalDropDownRef}
+        selectedValue={duration}
+        onPress={value => onDurationChange(value)}
+      />
+      <ModalNominalPicker
+        ref={modalNominalPickerRef}
+        data={quickAccess}
+        onSubmit={value => onSubmitQuickAccess(value)}
+      />
+      <Modal isVisible={isModalVisible}>
+        <View
+          style={{
+            backgroundColor: Color.textInput,
+            borderRadius: 20,
+            paddingTop: 33,
+            paddingHorizontal: 24,
+            paddingBottom: 24,
+            alignItems: 'center',
+          }}>
+          <Image source={ImagesPath.checkCircle} size={54} />
+          <Divider height={25} />
+          <Text style={{fontWeight: 'bold', fontSize: 14}}>
+            Barang Berhasil Ditambahkan
+          </Text>
+        </View>
+      </Modal>
+    </Scaffold>
+  );
+};
+
+export default AddProductAuctionSecond;
