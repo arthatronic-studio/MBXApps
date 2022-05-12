@@ -93,12 +93,11 @@ const CardOrder = ({data}) => {
           }}
         />
         <Divider />
-        {items.length != 0 && items.map(product => {
-          return (
+        {items.length != 0 && 
             <View>
             <View style={{flexDirection: 'row'}}>
                     <Image
-                      source={{uri:product.imageUrl}}
+                      source={{uri:items[0].imageUrl}}
                       style={{width: 50, height: 50, borderRadius: 5}}
                     />
                     <View style={{marginHorizontal: 10}}>
@@ -108,7 +107,7 @@ const CardOrder = ({data}) => {
                           fontWeight: 'bold',
                           textAlign: 'left',
                         }}>
-                        {product.name}
+                        {items[0].name}
                       </Text>
                       <Text
                         style={{
@@ -116,7 +115,7 @@ const CardOrder = ({data}) => {
                           color: Color.secondary,
                           textAlign: 'left',
                         }}>
-                        Stok Barang : {product.stock}
+                        Stok Barang : {items[0].stock}
                       </Text>
                       <Divider />
                       <View>
@@ -137,7 +136,7 @@ const CardOrder = ({data}) => {
                               textAlign: 'right',
                             }}>
                             {' '}
-                            x{product.quantity}
+                            x{items[0].quantity}
                           </Text>
                         </View>
                         <View style={{flexDirection: 'row', marginVertical: 2}}>
@@ -156,7 +155,7 @@ const CardOrder = ({data}) => {
                               color: Color.secondary,
                               textAlign: 'right',
                             }}>
-                            {FormatMoney.getFormattedMoney(product.price)} 
+                            {FormatMoney.getFormattedMoney(items[0].price)} 
                           </Text>
                         </View>
                         <View style={{flexDirection: 'row', marginVertical: 2}}>
@@ -197,7 +196,7 @@ const CardOrder = ({data}) => {
                       fontWeight: 'bold',
                       textAlign: 'left',
                     }}>
-                    {product.name}
+                    {items[0].name}
                   </Text>
                   <Text
                     style={{
@@ -205,7 +204,7 @@ const CardOrder = ({data}) => {
                       color: Color.secondary,
                       textAlign: 'left',
                     }}>
-                    Stok Barang : {product.stock} pcs
+                    Stok Barang : {items[0].stock} pcs
                   </Text>
                   <Divider />
                   <View>
@@ -248,9 +247,7 @@ const CardOrder = ({data}) => {
                   
                 </View>
               </View> */}
-            </View>
-          );
-        })}
+            </View>}
 
         <Divider height={10} />
         <View
@@ -260,7 +257,7 @@ const CardOrder = ({data}) => {
             borderRadius: 3,
             backgroundColor: Color.border,
             width: '99%',
-            height: 46,
+            minHeight: 46,
           }}>
           <Text
             style={{
@@ -277,6 +274,7 @@ const CardOrder = ({data}) => {
               textAlign: 'left',
               paddingVertical: 2,
             }}>
+              {items.length > 0 && items[0].note}
             {/* Tolong anternya pake buroq ya biar cepet hehehe */}
           </Text>
         </View>

@@ -48,7 +48,7 @@ const MyShopHomepage = ({ navigation }) => {
 
 	useEffect(() => {
 		getMyShop();
-	}, []);
+	}, [isFocused]);
 
 	const getMyShop = () => {
 		let variables = {

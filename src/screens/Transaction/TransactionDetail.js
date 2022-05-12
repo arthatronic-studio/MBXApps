@@ -404,7 +404,7 @@ const TransactionDetail = ({route, navigation}) => {
                             color: Color.text,
                             fontWeight: 'semiBold',
                           }}>
-                          {val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}
+                          {val.note}
                         </Text>
                     </View>
 

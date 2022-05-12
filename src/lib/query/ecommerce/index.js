@@ -233,6 +233,7 @@ export const queryListOrder = gql`
           name
           description
           width
+          note
           height
           length
           width

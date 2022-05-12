@@ -520,7 +520,6 @@ const EditMerchantInfo = ({navigation}) => {
               <EmailRoundedView>
                 <CustomTextInput
                   placeholder="@ tokojayaabadi"
-                  keyboardType="numeric"
                   placeholderTextColor={Color.gray}
                   underlineColorAndroid="transparent"
                   autoCorrect={false}
