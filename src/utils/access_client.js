@@ -32,11 +32,16 @@ const isKomoto = listKomotoFamily.includes(Config.INITIAL_CODE);
 const isSabyan = Config.INITIAL_CODE === 'TRIBESXSABYAN';
 const isGofish = Config.INITIAL_CODE === 'TRIBESXGOFISH';
 const isTeukuZacky = Config.INITIAL_CODE === 'TRIBESXTEUKUZACKY';
+const isSurvey = Config.INITIAL_CODE === 'TRIBESXSURVEY';
 
 export const accessClient = {
     // state
     InitialCode: Config.INITIAL_CODE,
     isKomoto,
+    isSabyan,
+    isGofish,
+    isTeukuZacky,
+    isSurvey,
     IsAutoJoinMember:
         isKomoto ? false :
         isSabyan ? true :

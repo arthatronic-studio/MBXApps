@@ -24,7 +24,6 @@ import { Alert } from '@src/components';
 import {analyticMethods, GALogEvent} from 'src/utils/analytics';
 import { Container, Divider, Row } from 'src/styled';
 import { isIphoneNotch, listContentCategory } from 'src/utils/constants';
-import ModalCommentReply from '@src/components/Modal/ModalCommentReply';
 import CardComment from 'src/components/Card/CardComment';
 
 const itemPerPage = 10;
@@ -33,7 +32,7 @@ const initSelectedComment = {
   index: -1,
 }
 
-const CommentListScreen = ({navigation, route}) => {
+const CommentListScreen = ({ navigation, route }) => {
   const {item} = route.params;
 
   const [dataComment, setDataComment] = useState({
@@ -51,13 +50,13 @@ const CommentListScreen = ({navigation, route}) => {
   const [textComment, setTextComment] = useState('');
 
   const modalListActionRef = useRef();
-  const modalCommentReplyRef = useRef();
 
   const {Color} = useColor();
   const [loadingProps, showLoading] = useLoading();
   const [popupProps, showPopup] = usePopup();
   const user = useSelector(state => state['user.auth'].login.user);
   const {height} = useWindowDimensions();
+  
   const isOwnerProduct = user && !user.guest && user.userId === item.ownerId;
 
   useEffect(() => {
@@ -209,8 +208,9 @@ const CommentListScreen = ({navigation, route}) => {
     }
 
     const variables = {
-        productId: item.id,
-        comment: textComment,
+      productId: item.id,
+      comment: textComment,
+      image: thumbImage,
     };
 
     console.log(variables, 'variables');
@@ -227,6 +227,7 @@ const CommentListScreen = ({navigation, route}) => {
         
           setTextComment('');
           setDataComment({ ...dataComment, data: arrNew });
+          setThumbImage('');
           onSuccessComment(res.data.contentAddComment.productId);
         } else {
           showLoading('error', 'Gagal mengirimkan komentar');
@@ -344,7 +345,7 @@ const CommentListScreen = ({navigation, route}) => {
                   }}
                 />
 
-                {/* <TouchableOpacity
+                <TouchableOpacity
                   onPress={() => {
                     const options = {
                       mediaType: 'photo',
@@ -360,10 +361,10 @@ const CommentListScreen = ({navigation, route}) => {
                     })
                   }}
                 >
-                  <View style={{width: 40, height: 40, position:'absolute',right: 50, bottom: 2, alignItems:'center', justifyContent:'center'}}>
+                  <View style={{width: 40, height: 40, alignItems:'center', justifyContent:'center'}}>
                     <Entypo name="camera" size={20} />
                   </View>
-                </TouchableOpacity>  */}
+                </TouchableOpacity> 
                    
                 <TouchableOpacity
                   onPress={() => {
@@ -379,21 +380,25 @@ const CommentListScreen = ({navigation, route}) => {
             
             {thumbImage !== '' && 
               <View style={{width: '100%', borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle, justifyContent: 'center', alignItems: 'center', paddingVertical: 16}}>
-                <TouchableOpacity 
-                  onPress={()=> {setThumbImage('')}}
-                  style={{position:'absolute', right: 90, top: -1}}
-                >
-                  <Entypo name='circle-with-cross' size={24} color={Color.primary} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {}}
-                  style={{width: '100%', height: height / 4, borderRadius: 4, alignItems: 'center'}}
+                <View
+                  style={{width: '100%', aspectRatio: 16/9}}
                 >
                   <Image
-                    style={{height: '100%', aspectRatio: 1, borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
+                    style={{height: '100%', width: '100%', borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
                     source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
+                    resizeMode='contain'
                   />
-                </TouchableOpacity>
+
+                  <View style={{position: 'absolute', right: 16, top: -16}}>
+                    <TouchableOpacity
+                      onPress={()=> {
+                        setThumbImage('');
+                      }}
+                    >
+                      <Entypo name='circle-with-cross' size={30} color={Color.error} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
               </View>
             }
             
@@ -428,8 +433,14 @@ const CommentListScreen = ({navigation, route}) => {
                       setIsPinnedComment(itemComment.isPinned);
                     }}
                     onPressReply={() => {
-                      modalCommentReplyRef.current.open();
                       setSelectedComment({ ...itemComment, index });
+                      navigation.navigate('CommentReplyScreen', {
+                        ...route.params,
+                        parentComment: { ...itemComment, index },
+                        onRefresh: () => {
+                          setRefreshComment(true);
+                        }
+                      });
                     }}
                   />
                 );
@@ -528,19 +539,6 @@ const CommentListScreen = ({navigation, route}) => {
         data={dataListAction}
         onClose={() => {
           resetTempState()
-        }}
-      />
-
-      <ModalCommentReply
-        ref={modalCommentReplyRef}
-        productOwnerId={item.ownerId}
-        selectedComment={selectedComment}
-        onSubmit={(text) => {
-          onSubmitReply(text);
-          modalCommentReplyRef.current.close();
-        }}
-        onClose={() => {
-          setSelectedComment(initSelectedComment);
         }}
       />
     </Scaffold>

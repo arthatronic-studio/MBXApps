@@ -24,6 +24,7 @@ import TopUpScreen from '@src/screens/Topup/TopUpScreen';
 
 // screen
 import CommentListScreen from '@src/screens/CommentListScreen';
+import CommentReplyScreen from 'src/screens/CommentReplyScreen';
 import DetailEbookScreen from '@src/screens/DetailEbookScreen';
 import MainSearch from '@src/screens/MainHome/MainSearch';
 
@@ -324,6 +325,7 @@ function MainStackNavigator() {
       {/* screen */}
       <Screen name="Ebook" component={Ebook} />
       <Screen name="CommentListScreen" component={CommentListScreen} />
+      <Screen name="CommentReplyScreen" component={CommentReplyScreen} />
       <Screen name="DetailEbookScreen" component={DetailEbookScreen} />
       <Screen name="MainSearch" component={MainSearch} />
       {/* forum */}
