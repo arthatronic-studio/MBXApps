@@ -12,9 +12,11 @@ import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Loading, { useLoading } from  '@src/components/Modal/Loading';
 
 import Client from '@src/lib/apollo';
-import { queryAddComment } from '@src/lib/query';
+import { queryAddComment, queryReportComment } from '@src/lib/query';
 import { shadowStyle } from '@src/styles';
 import { isIphoneNotch } from 'src/utils/constants';
+import ImagesPath from 'src/components/ImagesPath';
+import Modal from 'react-native-modal';
 import { Container, Divider, Row } from 'src/styled';
 import { useSelector } from 'react-redux';
 
@@ -29,13 +31,36 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
   const {Color} = useColor();
   const user = useSelector(state => state['user.auth'].login.user);
   const {width} = useWindowDimensions();
-
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalSuccess, setModalSuccess] = useState(false);
   // const canManagementProduct = user && !user.guest && user.userId === productOwnerId;
   const isCommentFromOwnerProduct = item.userId === productOwnerId;
   const isAdmin = item.isDirector;
   const isPinned = item.isPinned;
 
   const [itemOwnerReply, setItemOwnerReply] = useState();
+
+  const onPressReport = () => {
+    const variables = {
+      commentId: item.id,
+    };
+    Client.mutate({
+      mutation: queryReportComment,
+      variables,
+    })
+      .then(res => {
+        console.log('res', res);
+        if(res.data.commentReport.status){
+          setModalSuccess(true);
+          setTimeout(() => {
+            setModalSuccess(false);
+          }, 3000);
+        }
+      })
+      .catch(err => {
+        console.log('error', err);
+      });
+  };
 
   useEffect(() => {
     if (Array.isArray(item.replies) && item.replies.length > 0) {
@@ -96,7 +121,7 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
         
         <Text size={12} align='left'>{item.comment}</Text>
 
-        {canReply && <Container paddingTop={8}>
+        {canReply ? <Container paddingTop={8}>
           <Row>
             <TouchableOpacity
               onPress={() => {
@@ -107,12 +132,25 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
             </TouchableOpacity>
 
             <Divider />
+            { item.userId !== user.userId &&
+              <>
+                <TouchableOpacity
+                  onPress={() => {
+                    setModalVisible(!isModalVisible);
+                  }}
+                >
+                  <Text size={12} align='left'>Laporkan</Text>
+                </TouchableOpacity>
+
+                <Divider />
+              </>
+            }
 
             {Array.isArray(item.replies) && item.replies.length > 0 && <TouchableOpacity
               onPress={() => {
                 onPressReply();
               }}
-            >
+              >
               <Text size={12} align='left' color={Color.info} type='medium'>{item.replies.length} Balasan</Text>
             </TouchableOpacity>}
 
@@ -120,17 +158,87 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
 
             {itemOwnerReply && <Image source={{ uri: itemOwnerReply.image }} style={{ height: 20, width: 20, borderRadius: 10, borderWidth: 1, borderColor: Color.primary }} />}
           </Row>
-        </Container>}
+        </Container> 
+        :
+        item.userId !== user.userId &&
+          <Container paddingTop={8}>
+            <Row>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalVisible(!isModalVisible);
+                }}
+              >
+                <Text size={12} align='left'>Laporkan</Text>
+              </TouchableOpacity>
+            </Row>
+          </Container> 
+        }
       </View>
       
       <View style={{width: '5%', aspectRatio: 1}}>
         {showOptions && <TouchableOpacity
           onPress={() => onPressDots()}
           style={{width: '100%', height: '100%', alignItems: 'flex-end'}}
-        >
+          >
             <Entypo name='dots-three-vertical' color={Color.text} size={16} />
         </TouchableOpacity>}
       </View>
+
+      <Modal isVisible={isModalVisible}>
+        <View
+          style={{
+            backgroundColor: Color.textInput,
+            borderRadius: 20,
+            padding: 24,
+            alignItems: 'center',
+          }}>
+          <MaterialCommunityIcons name='alert-circle-outline' color={Color.danger} size={54} />
+          <Divider height={12} />
+          <Text style={{fontWeight: 'bold', fontSize: 14}}>
+            Laporkan comment?
+          </Text>
+          <Divider height={8}/>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width: '80%'}}>
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisible(!isModalVisible);
+              }}
+              style={{paddingVertical: 8, paddingHorizontal: 16, backgroundColor: Color.disabled, borderRadius: 120}}>
+              <Text>
+                Batal
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisible(!isModalVisible);
+                onPressReport();
+              }}
+              style={{paddingVertical: 8, paddingHorizontal: 16, backgroundColor: Color.primary, borderRadius: 120}}>
+              <Text>
+                Laporkan
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal isVisible={isModalSuccess}>
+        <View
+          style={{
+            backgroundColor: Color.textInput,
+            borderRadius: 20,
+            paddingTop: 33,
+            paddingHorizontal: 24,
+            paddingBottom: 24,
+            alignItems: 'center',
+          }}>
+          <Image source={ImagesPath.checkCircle} size={54} />
+          <Divider height={25} />
+          <Text style={{fontWeight: 'bold', fontSize: 14}}>
+            Comment berhasil dilaporkan
+          </Text>
+        </View>
+      </Modal>
     </View>
   )
 }

@@ -66,6 +66,7 @@ import TrackPlayer, {
 } from 'react-native-track-player';
 import {analyticMethods, GALogEvent} from 'src/utils/analytics';
 import {getSizeByRatio} from 'src/utils/get_ratio';
+import MusikAlbum from 'src/components/MusikAlbum';
 
 let tempShowPopupAds = true;
 
@@ -175,6 +176,59 @@ const MainHome = ({navigation, route}) => {
         setChatNotifCount(res.data.count);
       }
     });
+
+    const successCallback = (res) => {
+      console.log('ini response geo');
+      const ltu = { userId: user.userId, lat: res.coords.latitude, long: res.coords.longitude };
+      currentSocket.emit('location-tracker-user', ltu );
+      currentSocket.on('location-tracker-user', res => {
+        console.log('res location-tracker-user', res);
+      });
+      
+      // firestore()
+      //   .collection('location-community')
+      //   .where('userId', '==', user.userId)
+      //   .limit(1)
+      //   .get()
+      //   .then(snap => {
+      //     if (snap) {
+      //       const values = {
+      //         position: [res.coords.latitude, res.coords.longitude],
+      //         userId: user.userId,
+      //       };
+      //       console.log('res gettttt', snap);
+
+      //       if (snap.docs.length > 0) {
+      //         docID = snap._docs[0]._ref._documentPath._parts[1];
+
+      //         console.log('doc', docID);
+      //         firestore()
+      //           .collection('location-community')
+      //           .doc(docID)
+      //           .update(values)
+      //           .then(console.log('ini update', res.coords.latitude))
+      //           .catch(err => console.log('error', err));
+      //       } else {
+      //         firestore()
+      //           .collection('location-community')
+      //           .add(values)
+      //           .then(console.log('ini add'))
+      //           .catch(err => console.log('error', err));
+      //       }
+      //     }
+      //   });
+    };
+
+    const errorCallback = err => {
+      console.log('ini err', err);
+    };
+
+    const option = {
+      enableHighAccuracy: true,
+      timeout: 5000
+    };
+
+    Geolocation.watchPosition(successCallback, errorCallback, option);
   }, []);
 
   useEffect(() => {
@@ -184,55 +238,6 @@ const MainHome = ({navigation, route}) => {
       fetchData();
     }
   }, [isFocused]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      const successCallback = res => {
-        firestore()
-          .collection('location-community')
-          .where('userId', '==', user.userId)
-          .limit(1)
-          .get()
-          .then(snap => {
-            if (snap) {
-              const values = {
-                position: [res.coords.latitude, res.coords.longitude],
-                userId: user.userId,
-              };
-              console.log('res gettttt', snap);
-
-              if (snap.docs.length > 0) {
-                docID = snap._docs[0]._ref._documentPath._parts[1];
-
-                console.log('doc', docID);
-                firestore()
-                  .collection('location-community')
-                  .doc(docID)
-                  .update(values)
-                  .then(console.log('ini update', res.coords.latitude))
-                  .catch(err => console.log('error', err));
-              } else {
-                firestore()
-                  .collection('location-community')
-                  .add(values)
-                  .then(console.log('ini add'))
-                  .catch(err => console.log('error', err));
-              }
-            }
-          });
-      };
-
-      const errorCallback = err => {
-        console.log('ini err', err);
-      };
-
-      const option = {
-        enableHighAccuracy: true,
-      };
-
-      Geolocation.watchPosition(successCallback, errorCallback, option);
-    }, 5000);
-  }, []);
 
   const fetchBannerList = () => {
     const variables = {
@@ -899,10 +904,15 @@ const MainHome = ({navigation, route}) => {
 
           <Divider />
 
+          <MusikAlbum />
+
+          <Divider />
+
           {accessClient.MainHome.showListYoutube && <MondayAccoustic />}
 
           {accessClient.MainHome.showListVideo && (
             <VideoCardList
+              title='INUL & IPUL'            
               productCategory='NEWEST_VIDEO'
               onPress={(item) => navigation.navigate('VideoDetail', { item })}
             />

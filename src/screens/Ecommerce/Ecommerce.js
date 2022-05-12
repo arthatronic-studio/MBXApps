@@ -28,7 +28,6 @@ import ListSoonAuction from 'src/components/Posting/ListSoonAuction';
 import ListNews from 'src/components/Posting/ListNews';
 import ListPlace from 'src/components/Posting/ListPlace';
 import ListEvent from 'src/components/Posting/ListEvent';
-import ListAuction from 'src/components/Posting/ListAuction';
 import { Divider, Circle, Container, Row } from '@src/styled';
 import {
 	Text,

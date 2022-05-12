@@ -118,7 +118,7 @@ const LoginScreen = ({navigation, route}) => {
             navigation.navigate('UserChangePassword', {
               password: state.password,
             });
-            dispatch({ action: 'USER.CHANGE_PASSWORD', status: false });
+            dispatch({ type: 'USER.CHANGE_PASSWORD', status: false });
           } else {
             // redirectTo('MainPage');
             showPopup(

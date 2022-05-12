@@ -59,7 +59,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
       setModalVisible(!isModalVisible);
       navigation.popToTop();
       navigation.navigate('MyAuction');
-    }, 100);
+    }, 3000);
   };
 
   const onDurationChange = value => {
