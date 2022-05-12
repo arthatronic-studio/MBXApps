@@ -1,7 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, ScrollView, Platform, SafeAreaView} from 'react-native';
+import {View, ScrollView, Image, SafeAreaView} from 'react-native';
 import Styled from 'styled-components';
 import {useSelector} from 'react-redux';
+import {useIsFocused, useRoute} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -26,6 +27,8 @@ import {shadowStyle} from '@src/styles';
 
 import Client from '@src/lib/apollo';
 import {queryContentProduct} from '@src/lib/query';
+import { queryGetCartAuction } from 'src/lib/query/auction';
+import { FormatMoney } from 'src/utils';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -34,16 +37,62 @@ const MainView = Styled(SafeAreaView)`
 const CartAuction = ({navigation, route}) => {
   // selector
   const user = useSelector(state => state['user.auth'].login.user);
-  const loading = useSelector(state => state['user.auth'].loading);
 
+  const [list, setList] = useState([]);
   const [loadingProps, showLoading, hideLoading] = useLoading();
+  const [loading, setLoading] = useState(true);
   const {Color} = useColor();
 
-  useEffect(() => {}, []);
+  const isFocused = useIsFocused();
+  let temp = [];
+
+  useEffect(() => {
+    temp = [];
+    getCart();
+  }, [isFocused]);
+
+  const getCart = () => {
+    console.log(route, 'props');
+    // showLoading();
+    let variables = {
+      page: 1, 
+      limit:20,
+      cartType: 'CART',
+      orderDirection: 'DESC',
+      orderBy: 'CREATEDATE'
+    };
+    console.log(variables);
+    Client.query({query: queryGetCartAuction, variables})
+      .then(res => {
+        // hideLoading()
+        console.log(res, 'auction');
+        if (res.data.auctionCartList.id) {
+            setList(res.data.auctionCartList.items)
+        }
+        setLoading(false);
+      })
+      .catch(reject => {
+        console.log(reject, 'reject auction');
+        setLoading(false);
+      });
+  };
+
+  const submit = (val) => {
+    const dataq = [{
+      type: 'auction',
+      products: [{...val,id: val.productId, imageUrl: val.image.length > 0 ? val.image[0] : '',
+        qty: val.quantity,
+        price: val.total}],
+      
+    }]
+    navigation.navigate('CheckoutScreen',{item: {tempData: [{...val,id: val.productId, imageUrl: val.image.length > 0 ? val.image[0] : '',
+    qty: val.quantity,
+    price: val.total}]}, list: dataq})
+  }
 
   return (
     <Scaffold header={<View />} style={{backgroundColor: Color.semiwhite}}>
-        {[1, 2, 3, 4].map((val, id) => (
+        {list.map((val, id) => (
           <View
             style={{
               marginHorizontal: 15,
@@ -53,7 +102,8 @@ const CartAuction = ({navigation, route}) => {
               backgroundColor: Color.theme,
             }}>
             <Row style={{}}>
-              <View
+              <Image
+                source={{ uri: Image.length > 0 ? image[0] : '' }}
                 style={{
                   height: 74,
                   width: 74,
@@ -73,7 +123,7 @@ const CartAuction = ({navigation, route}) => {
                         width: '80%',
                       }}
                       type="bold">
-                      ZIPPO Pemantik Armor 5 Sisi . . .
+                      {val.name}
                     </Text>
                   </Col>
                   <Col>
@@ -90,7 +140,7 @@ const CartAuction = ({navigation, route}) => {
                         borderWidth: 1,
                       }}>
                       <Text size={10} color="#76AE0B">
-                        Menang
+                        {val.status}
                       </Text>
                     </View>
                   </Col>
@@ -111,7 +161,7 @@ const CartAuction = ({navigation, route}) => {
                         color={Color.text}
                         type="bold"
                         style={{marginRight: 5}}>
-                        Rp. 100.000
+                        {FormatMoney.getFormattedMoney(val.total)}
                       </Text>
                     </View>
                     <AntDesign
@@ -125,7 +175,7 @@ const CartAuction = ({navigation, route}) => {
                     />
                     <Col>
                       <TouchableOpacity
-                        onPress={() => navigation.navigate('CheckoutScreen')}
+                        onPress={() => submit(val)}
                         style={{
                           flex: 1,
                           justifyContent: 'flex-end',

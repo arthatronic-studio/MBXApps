@@ -38,6 +38,7 @@ import {
 } from 'src/lib/query/ecommerce';
 import {TextInput} from 'react-native-gesture-handler';
 import { Divider } from 'src/styled';
+import { mutationCheckoutAuction } from 'src/lib/query/auction';
 
 var styled = function styled(tag) {
   return constructWithOptions(createStyledComponent, tag);
@@ -118,11 +119,68 @@ const CheckoutScreen = ({ navigation, route }) => {
       });
   };
 
+  const submitAuction = () => {
+      const {saveAddress, saveShippment, item} = route.params;
+      showLoading();
+  
+      let variables = {
+        courier: {
+          rate_id: shippment.rateId,
+          cod: false,
+          use_insurance: false,
+          cost: shippment.price,
+        },
+        destinationAddressId: address.userAddressIdDestination,
+        type: 'BOOKING',
+        auctionProductId: item.tempData[0]['auctionId'],
+        winningPrice: item.tempData[0]['total']
+      };
+  
+      console.log(variables, 'variables');
+  
+      Client.mutate({mutation: mutationCheckoutAuction, variables})
+        .then(res => {
+          hideLoading();
+          console.log(res);
+          if (res.data.auctionOrderManage && res.data.auctionOrderManage.success) {
+            console.log('datanya nih', {
+              ...res.data.auctionOrderManage,
+              id: res.data.auctionOrderManage.data.bookingId,
+              vestaBiller: true,
+            });
+  
+            alert(res.data.auctionOrderManage.message);
+  
+            dispatch({
+              type: 'BOOKING.ADD_BOOKING',
+              data: {
+                ...res.data.auctionOrderManage.data,
+                id: res.data.auctionOrderManage.data.bookingId,
+                vestaBiller: true,
+                finalAmount: res.data.auctionOrderManage.data.totalPrice,
+              },
+            });
+  
+            setTimeout(() => {
+              navigation.navigate('PaymentScreen', {back: true});
+              // navigation.popToTop()
+            }, 1000);
+          } else if (res.data.auctionOrderManage) {
+            alert(res.data.auctionOrderManage.message);
+          } else {
+            alert('Gagal Order');
+          }
+        })
+        .catch(reject => {
+          hideLoading();
+          alert('Gagal Order');
+          console.log(reject, 'reject');
+        });
+  }
+
   const submit = () => {
     const {saveAddress, saveShippment, item} = route.params;
-    
     showLoading();
-
     let prod = [];
     productList.map((i) => {
       i.products.map((e) => {
@@ -280,7 +338,7 @@ const CheckoutScreen = ({ navigation, route }) => {
         <Content style={{backgroundColor: Color.theme}}>
           {productList.map((item, index) => (
             <>
-              <Row>
+              {item.name && <Row>
                 <Image
                   source={{ uri: item.profileImg }}
                   resizeMode='contain'
@@ -305,7 +363,7 @@ const CheckoutScreen = ({ navigation, route }) => {
                     {item.alamat}
                   </Text>
                 </Col>
-              </Row>
+              </Row>}
               {item.products.map((val, idx) => (
                 <>
                   <Row style={{marginBottom: 10}}>
@@ -527,7 +585,7 @@ const CheckoutScreen = ({ navigation, route }) => {
           <TouchableOpacity
             onPress={() => {
               shippment.price
-                ? submit()
+                ? item['tempData'][0]['auctionId'] ? submitAuction() : submit()
                 : alert('Pilih Pengiriman terlebih dahulu');
             }}
             style={{
