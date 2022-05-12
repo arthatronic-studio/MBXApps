@@ -4,6 +4,7 @@ import { queryContentMyProduct } from './queryContentMyProduct';
 import { queryProductManage } from './queryContentProductManage';
 import { queryAddLike } from './queryContentAddLike';
 import { queryAddComment } from './queryContentAddComment';
+import { queryReportComment } from './queryContentReportComment';
 import { queryDelComment } from './queryContentDelComment';
 import { queryLike } from './queryContentLike';
 import { queryComment } from './queryContentComment';
@@ -31,6 +32,7 @@ export {
     queryProductManage,
     queryAddLike,
     queryAddComment,
+    queryReportComment,
     queryDelComment,
     queryLike,
     queryComment,
