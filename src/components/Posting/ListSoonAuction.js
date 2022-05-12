@@ -59,7 +59,6 @@ const ListSoonAuction = (props) => {
                 renderSkeleton()
             :
                 <FlatList
-                    key='ListAuction'
                     keyExtractor={(item, index) => item.toString() + index}
                     data={data}
                     {...extraProps}
