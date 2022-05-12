@@ -220,10 +220,6 @@ const AddProduct = ({navigation, route}) => {
     setListThumbImage([...listThumbImage, tempThumbImage]);
   };
 
-  console.log('mageee', listThumbImage);
-  console.log('deleteindex', listIndexDelete);
-  console.log('mageeeee edit', listEditThumbImage);
-
   return (
     <Scaffold
       style

@@ -18,12 +18,15 @@ export const queryAddComment = gql`
             id
             userId
             fullname
+            current
             image
             comment
+            isDirector
             commentDate
             productId
             parentCommentId
             imageVideo
+            isPinned
             videoFilename
         }
     }

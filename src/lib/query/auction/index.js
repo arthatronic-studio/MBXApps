@@ -97,6 +97,8 @@ query(
    buyNowPrice
    isOpen
    status
+   duration
+   auctionStatus
    product {
      id
      name
@@ -124,28 +126,62 @@ query(
 `;
 
 export const mutationCrateAuction = gql`
-  mutation auctionCreateProduct(
-      $productId: Int
-      $date_start: String
-      $time_start: String
-      $time_end: String
-      $description: String
-      $start_price: Float
-      $buy_now_price: Float
-      $quantity: Int
-  ) {
+mutation(
+   $productId: Int!
+   $dateStart: String!
+   $timeStart: String!
+   $timeDuration: Int!
+   $description: String!
+   $startPrice: Float!
+   $buyNowPrice: Float!
+   $quantity: Int!
+   $bidNominal: [Int!]!
+   $status: AuctionStatus!
+ ) {
    auctionCreateProduct(
-      productId: $productId
-      date_start: $date_start
-      time_start: $time_start
-      time_end: $time_end
-      description: $description
-      start_price: $start_price
-      buy_now_price: $buy_now_price
-      quantity: $quantity
-   ) {
-    id
+   productId: $productId
+   dateStart: $dateStart
+   timeStart: $timeStart
+   timeDuration: $timeDuration
+   description: $description
+   startPrice: $startPrice
+   buyNowPrice: $buyNowPrice
+   quantity: $quantity
+   bidNominal: $bidNominal
+   status: $status
+  ) {
+   id
+   productId
+   dateStart
+   dateEnd
+   quantity
+   description
+   startPrice
+   buyNowPrice
+   isOpen
+   status
+   product{
+     id
+     name
+     categoryId
+     description
+     price
+     initialPrice
+     imageUrl
+     imageProducts
+     stock
+     height
+     width
+     length
+     weight
+     merchantId
+     productUnit
+     minimumBuy
+     productMassa
+     status
+     rating
+     sold
    }
   }
+ }
 `;
-

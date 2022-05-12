@@ -18,6 +18,7 @@ const indexing = {
         {imageAsset: require('./rrid/icon-3.png'), title: 'SALING TERKONEKSI', subTitle: 'Makin mudah menjalin relasi dan berkomunikasi dengan sesama member/anggota bahkan yang jauh sekalipun.'},
         {imageAsset: require('./rrid/icon-4.png'), title: 'LOGIN SEKARANG', subTitle: ''},
     ],
+    'TRIBESXSURVEY': [],
 }
 
 const listBoarding = indexing[accessClient.InitialCode] ?

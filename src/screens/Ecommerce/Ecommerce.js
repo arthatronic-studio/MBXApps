@@ -220,7 +220,7 @@ const Ecommerce = ({ navigation }) => {
 				console.log(reject);
 			});
 	};
-
+	console.log(listProduct, "list product");
 	const renderItemAuction = ({ item }) => (
 		<TouchableOpacity
 			onPress={() => navigation.navigate('DetailLelang', { item })}
