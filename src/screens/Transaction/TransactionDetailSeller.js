@@ -398,7 +398,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
               style={{
                 width: '93%',
                 alignSelf: 'center',
-                height: 130,
+                minHeight: 130,
                 backgroundColor: Color.theme,
                 borderRadius: 10,
                 marginVertical: 15,
@@ -525,7 +525,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
                         color: Color.text,
                         fontWeight: 'semiBold',
                       }}>
-                      {val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}{val.note}
+                      {val.note}
                     </Text>
                   </View>
                 </>

@@ -682,7 +682,7 @@ const IncomingOrder = ({route, navigation}) => {
 
     await Client.query({query: queryListOrder, variables})
       .then(res => {
-        console.log(res)
+        console.log(res, 'incoming order')
         if (res.data.ecommerceOrderList) {
           setData(res.data.ecommerceOrderList);
           setLoadingIncoming(false);
