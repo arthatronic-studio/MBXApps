@@ -128,6 +128,7 @@ const FormInput = forwardRef((props, ref) => {
                             onSubmitEditing={() => onSubmitEditing()}
                             blurOnSubmit={false}
                             keyboardType={keyboardType}
+                            autoCapitalize={secureTextEntry ? 'none' : undefined}
                             style={{
                                 // width: '100%',
                                 // height: '100%',
