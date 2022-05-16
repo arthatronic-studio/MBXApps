@@ -3,7 +3,7 @@
 buildscript {
     ext {
         buildToolsVersion = "30.0.2"
-        minSdkVersion = 24 // <- 24 for rn-ffmpeg, AndroidX splashscreen has basic support for 21 (only the background color), so 23 is best
+        minSdkVersion = 21
         compileSdkVersion = 30
         targetSdkVersion = 30
         ndkVersion = "21.4.7075529"
@@ -11,7 +11,7 @@ buildscript {
         googlePlayServicesVersion = "17.0.0"
         firebaseMessagingVersion = "22.0.0"
         supportLibVersion = "28.0.0"
-        reactNativeFFmpegPackage = "full-gpl"
+        reactNativeFFmpegPackage = "full-gpl-lts"
     }
     repositories {
         google()

@@ -25,6 +25,7 @@ import { queryProductManage } from '@src/lib/query';
 import { Box, Divider } from 'src/styled';
 import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
 import { accessClient } from 'src/utils/access_client';
+import { currentSocket } from '@src/screens/MainHome/MainHome';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -193,20 +194,28 @@ const CreateEmergencyScreen = (props) => {
         };
 
         console.log(variables, 'variables');
-        
 
         Client.query({
             query: queryProductManage,
             variables,
         })
         .then((res) => {
-            console.log(res, '=== Berhsail ===');
-            showLoading('success', 'Emergency berhasil dibuat!');
+            console.log(res, '=== res create emergency ===');
 
-            setTimeout(() => {
-                // navigation.navigate('ForumSegmentScreen', { ...params, componentType: 'LIST', refresh: true });
-                navigation.navigate('MainHome');
-            }, 2500);
+            const data = res.data.contentProductManage;
+
+            if (data && data.id) {
+                showLoading('success', 'Emergency berhasil dibuat!');
+
+                currentSocket.emit('helpme', { productId: data.id });
+
+                setTimeout(() => {
+                    // navigation.navigate('ForumSegmentScreen', { ...params, componentType: 'LIST', refresh: true });
+                    navigation.navigate('MainHome');
+                }, 2500);
+            } else {
+                showLoading('error', 'Emergency berhasil dibuat!');
+            }
         })
         .catch((err) => {
             console.log(err, 'errrrr');
