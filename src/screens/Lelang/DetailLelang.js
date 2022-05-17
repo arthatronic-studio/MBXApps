@@ -112,7 +112,9 @@ const DetailLelang = ({ navigation, route}) => {
               }}>
               <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 <Text size={5} color={Color.textInput}>Sisa Waktu</Text>
-                {/* <Text style={{fontWeight: 'bold'}} color={Color.textInput} size={11}>{product ? moment.unix((product.dateEnd/1000) - moment().unix()).format("DD") > 0 ? moment.unix((product.dateEnd/1000) - moment().unix()).format("DD")+'Hari ' : ''}{moment.unix((product.dateEnd/1000) - moment().unix()).format("HH:mm")}</Text> */}
+                <Text style={{fontWeight: 'bold'}} color={Color.textInput} size={11}>
+                {product ? moment(product.dateEnd).format("HH:mm:ss")- moment(product.dateEnd).format("HH:mm:ss") : ""}
+                </Text>
               </View>
             </View>
           </View>
@@ -193,7 +195,7 @@ const DetailLelang = ({ navigation, route}) => {
               }}>
               <Text size={10} color={Color.gray}>Jam Mulai</Text>
               <Divider height={1}/>
-              <Text size={11} type='bold'>{product ? moment.unix(product.dateStart/1000).format("HH:mm") : ""} WIB</Text>
+              <Text size={11} type='bold'>{product ? moment(product.dateStart).format("HH:mm") : ""} WIB</Text>
             </View>
             <View
               style={{
