@@ -26,6 +26,7 @@ const listInitialCode = [
 
 const useDefaultDarkThemeCode = [
     'TRIBESXMOBILITY',
+    'TRIBESXRRID',
 ];
 
 const isKomoto = listKomotoFamily.includes(Config.INITIAL_CODE);

@@ -42,7 +42,8 @@ const ListAuction = (props) => {
         let variables = {
           page: 1,
           limit: 10,
-          type: "HOMEPAGE"
+          type: "HOMEPAGE",
+          status: "ONGOING",
         }
         
         Client.query({query: queryGetAuction, variables})

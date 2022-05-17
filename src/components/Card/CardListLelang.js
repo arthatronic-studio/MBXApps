@@ -48,14 +48,13 @@ const CardListLelang = (props) => {
 
   const fetchListProduct = () => {
     const variables = {
-      type: "HOMEPAGE"
+      type: "HOMEPAGE",
+      status: "ONGOING",
     };
 
     Client.query({
       query: queryGetAuction,
-      variables: {
-        type: "HOMEPAGE"
-      },
+      variables,
     }).then(res => {
       console.log('aku adalah', res.data.auctionProduct);
 
