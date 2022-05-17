@@ -178,45 +178,12 @@ const MainHome = ({navigation, route}) => {
     });
 
     const successCallback = (res) => {
-      console.log('ini response geo');
       const ltu = { userId: user.userId, lat: res.coords.latitude, long: res.coords.longitude };
       currentSocket.emit('location-tracker-user', ltu );
+      
       currentSocket.on('location-tracker-user', res => {
         console.log('res location-tracker-user', res);
       });
-      
-      // firestore()
-      //   .collection('location-community')
-      //   .where('userId', '==', user.userId)
-      //   .limit(1)
-      //   .get()
-      //   .then(snap => {
-      //     if (snap) {
-      //       const values = {
-      //         position: [res.coords.latitude, res.coords.longitude],
-      //         userId: user.userId,
-      //       };
-      //       console.log('res gettttt', snap);
-
-      //       if (snap.docs.length > 0) {
-      //         docID = snap._docs[0]._ref._documentPath._parts[1];
-
-      //         console.log('doc', docID);
-      //         firestore()
-      //           .collection('location-community')
-      //           .doc(docID)
-      //           .update(values)
-      //           .then(console.log('ini update', res.coords.latitude))
-      //           .catch(err => console.log('error', err));
-      //       } else {
-      //         firestore()
-      //           .collection('location-community')
-      //           .add(values)
-      //           .then(console.log('ini add'))
-      //           .catch(err => console.log('error', err));
-      //       }
-      //     }
-      //   });
     };
 
     const errorCallback = err => {
