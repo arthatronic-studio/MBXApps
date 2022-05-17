@@ -81,10 +81,8 @@ const CardListLelang = (props) => {
       });
     })
   }
-  
 
   const renderItem = ({item}) => (
-    
     <View
       style={{
         width: '46%',
@@ -175,7 +173,7 @@ const CardListLelang = (props) => {
         keyExtractor={(item, index) => item.id + index.toString()}
         ListHeaderComponent={() => renderHeader()}
         contentContainerStyle={{
-          paddingBottom: statusBarHeight
+          paddingBottom: statusBarHeight + 60
         }}
       />
     </View>
