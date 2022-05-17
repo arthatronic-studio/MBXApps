@@ -62,6 +62,13 @@ const DetailLelang = ({ navigation, route}) => {
       <Image source={item.imageProducts}/>
     </View>
   );
+
+  const endDate = moment(product ? product.endDate : null)
+  const startDate = moment(product ? product.startDate : null)
+  let duration = moment.duration(endDate.diff(startDate));
+  let hours = duration.asHours();
+  let minutes = duration.asMinutes();
+  let seconds = duration.asSeconds();
   return (
     <Scaffold
       header={
@@ -112,8 +119,8 @@ const DetailLelang = ({ navigation, route}) => {
               }}>
               <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 <Text size={5} color={Color.textInput}>Sisa Waktu</Text>
-                <Text style={{fontWeight: 'bold'}} color={Color.textInput} size={11}>
-                {product ? moment(product.dateEnd).format("HH:mm:ss")- moment(product.dateEnd).format("HH:mm:ss") : ""}
+                <Text color={Color.textInput} size={12}>
+                  {hours}{minutes}{seconds}
                 </Text>
               </View>
             </View>
@@ -245,7 +252,7 @@ const DetailLelang = ({ navigation, route}) => {
             align='left'
             lineHeight={20}
           >
-           {product ? product.description : ""}
+           {detail ? detail.description : ""}
           </Text>
         </View>
       </ScrollView>
