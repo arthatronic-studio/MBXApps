@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import {View, Image, FlatList, StatusBar} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import ImagesPath from 'src/components/ImagesPath';
@@ -7,11 +7,45 @@ import { Divider } from 'src/styled';
 import { FormatMoney } from 'src/utils';
 import moment from 'moment';
 import Entypo from 'react-native-vector-icons/Entypo'
+import { queryGetDetailAuction } from 'src/lib/query/auction';
+import Client from 'src/lib/apollo';
+import {useIsFocused, useRoute} from '@react-navigation/native';
 
-const DetailLelang = ({route, navigation}) => {
-  const [product, setProduct] = useState(route.params.item);
-  console.log(product)
+const DetailLelang = ({ navigation, route}) => {
+  const [product, setProduct] = useState();
+  const [detail, setDetail] = useState();
+  const isFocused = useIsFocused();
+  const id = route.params.iniId
+  useEffect(() => {
+    getDetailLelang();
+  }, [isFocused]);
+  
   const {Color} = useColor();
+  
+
+  const getDetailLelang = () => {
+    const variables = {
+      auctionProductId: id
+    };
+
+    Client.query({
+      query: queryGetDetailAuction,
+      variables: {
+        auctionProductId: id
+      },
+    }).then(res => {
+      console.log('Eka Data', res.data.auctionProductDetail);
+
+      if (res.data.auctionProductDetail){
+        setProduct(res.data.auctionProductDetail)
+        setDetail(res.data.auctionProductDetail.product)
+      }
+      
+    }).catch((err) => {
+      console.log('err', err);
+    })
+  }
+  
   return (
     <Scaffold
       header={
@@ -41,7 +75,7 @@ const DetailLelang = ({route, navigation}) => {
               paddingHorizontal: 15,
             }}>
             <Text size={18} type='bold' align='left'>
-              Pashmina Pink Nissa Sabyan
+              
             </Text>
           </View>
           <View
@@ -62,7 +96,7 @@ const DetailLelang = ({route, navigation}) => {
               }}>
               <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 <Text size={5} color={Color.textInput}>Sisa Waktu</Text>
-                <Text style={{fontWeight: 'bold'}} color={Color.textInput} size={11}>{moment.unix((product.time_end/1000) - moment().unix()).format("DD") > 0 ? moment.unix((product.time_end/1000) - moment().unix()).format("DD")+'Hari ' : ''}{moment.unix((product.time_end/1000) - moment().unix()).format("HH:mm")}</Text>
+                {/* <Text style={{fontWeight: 'bold'}} color={Color.textInput} size={11}>{moment.unix((product.dateEnd/1000) - moment().unix()).format("DD") > 0 ? moment.unix((product.dateEnd/1000) - moment().unix()).format("DD")+'Hari ' : ''}{moment.unix((product.dateEnd/1000) - moment().unix()).format("HH:mm")}</Text> */}
               </View>
             </View>
           </View>
@@ -82,11 +116,11 @@ const DetailLelang = ({route, navigation}) => {
               justifyContent: 'center',
             }}>
             <Text align='left' style={{fontSize: 10, color: Color.secondary}}>
-              Harga tertinggi
+            Harga Tertinggi
             </Text>
             <Divider height={1} />
             <Text size={18} type='bold' align='left'>
-              {FormatMoney.getFormattedMoney(product.buy_now_price)}
+              {/* {FormatMoney.getFormattedMoney(product.buyNowPrice)} */}
             </Text>
           </View>
           <View style={{width: '60%', justifyContent: 'center'}}>
@@ -95,7 +129,7 @@ const DetailLelang = ({route, navigation}) => {
             </Text>
             <Divider height={1} />
             <Text size={14} align='left'>
-              {FormatMoney.getFormattedMoney(product.start_price)}
+              {/* {FormatMoney.getFormattedMoney(product.startPrice)} */}
             </Text>
           </View>
         </View>
@@ -133,7 +167,7 @@ const DetailLelang = ({route, navigation}) => {
               }}>
               <Text size={10} color={Color.gray}>Jumlah</Text>
               <Divider height={1}/>
-              <Text size={11} type='bold'>{product.quantity} Unit</Text>
+              {/* <Text size={11} type='bold'>{detail.stock} Unit</Text> */}
             </View>
             <View
               style={{
@@ -143,7 +177,7 @@ const DetailLelang = ({route, navigation}) => {
               }}>
               <Text size={10} color={Color.gray}>Jam Mulai</Text>
               <Divider height={1}/>
-              <Text size={11} type='bold'>{moment.unix(product.time_start/1000).format("HH:mm")} WIB</Text>
+              {/* <Text size={11} type='bold'>{moment.unix(product.dateStart/1000).format("HH:mm")} WIB</Text> */}
             </View>
             <View
               style={{
@@ -151,10 +185,10 @@ const DetailLelang = ({route, navigation}) => {
                 justifyContent: 'center',
                 paddingHorizontal: 10,
               }}>
-              <Text size={10} color={Color.gray}>Durasi</Text>
-              {console.log( (product.time_end / 1000) - moment().unix()  )}
+              {/* <Text size={10} color={Color.gray}>Durasi</Text>
+              {console.log( (product.time_end / 1000) - moment().unix()  )} */}
               <Divider height={1}/>
-              <Text size={11} type='bold'>{moment.unix((product.time_start/1000) + moment().unix()).format("HH:mm")}</Text>
+              {/* <Text size={11} type='bold'>{moment.unix((product.time_start/1000) + moment().unix()).format("HH:mm")}</Text> */}
             </View>
           </View>
         </View>
@@ -195,14 +229,14 @@ const DetailLelang = ({route, navigation}) => {
             align='left'
             lineHeight={20}
           >
-           {product.description}
+           {/* {product.description} */}
           </Text>
         </View>
       </ScrollView>
       <View>
         <Text style={{fontSize: 10, fontWeight: 'bold', marginVertical: 5}}>Males Ikutan Lelang?</Text>
         <TouchableOpacity
-          onPress={()=> navigation.navigate('DirectOrder')}
+          // onPress={alert("id : "+ item.product.id)}
           style={{
             width: '92%',
             height: 45,
