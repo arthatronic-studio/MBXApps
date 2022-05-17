@@ -2,18 +2,25 @@ import React,{useState, useEffect} from 'react';
 import {View, Image, FlatList, StatusBar} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import ImagesPath from 'src/components/ImagesPath';
-import {Scaffold, useColor, Header, Text} from '@src/components';
+import {Scaffold, useColor, Header, Text, useLoading} from '@src/components';
 import { Divider } from 'src/styled';
-import { FormatMoney } from 'src/utils';
-import moment from 'moment';
+import {useSelector} from 'react-redux';
 import Entypo from 'react-native-vector-icons/Entypo'
 import { queryGetDetailAuction } from 'src/lib/query/auction';
 import Client from 'src/lib/apollo';
 import {useIsFocused, useRoute} from '@react-navigation/native';
+import moment from 'moment';
+import {FormatMoney} from 'src/utils';
+import ImageSlider from '../../components/ImageSlider';
 
 const DetailLelang = ({ navigation, route}) => {
   const [product, setProduct] = useState();
   const [detail, setDetail] = useState();
+  const [image, setImage] = useState([]);
+  const [loadingProps, showLoading, hideLoading] = useLoading();
+  const [isLoading, setIsLoading] = useState(true);
+  const loading = useSelector(state => state['user.auth'].loading);
+
   const isFocused = useIsFocused();
   const id = route.params.iniId
   useEffect(() => {
@@ -34,18 +41,27 @@ const DetailLelang = ({ navigation, route}) => {
         auctionProductId: id
       },
     }).then(res => {
-      console.log('Eka Data', res.data.auctionProductDetail);
+      console.log('Try Data', res.data.auctionProductDetail);
 
+      let listImage = [];
       if (res.data.auctionProductDetail){
-        setProduct(res.data.auctionProductDetail)
         setDetail(res.data.auctionProductDetail.product)
+        setProduct(res.data.auctionProductDetail)
+        setImage(res.data.auctionProductDetail.product.imageProducts)
       }
-      
+
+      console.log("Ini Image", listImage)
     }).catch((err) => {
       console.log('err', err);
+      setIsLoading(false);
     })
   }
-  
+  const renderItem = ({item}) => (
+    
+    <View>
+      <Image source={item.imageProducts}/>
+    </View>
+  );
   return (
     <Scaffold
       header={
@@ -75,7 +91,7 @@ const DetailLelang = ({ navigation, route}) => {
               paddingHorizontal: 15,
             }}>
             <Text size={18} type='bold' align='left'>
-              
+              {detail ? detail.name : "Loading"}
             </Text>
           </View>
           <View
@@ -96,7 +112,7 @@ const DetailLelang = ({ navigation, route}) => {
               }}>
               <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 <Text size={5} color={Color.textInput}>Sisa Waktu</Text>
-                {/* <Text style={{fontWeight: 'bold'}} color={Color.textInput} size={11}>{moment.unix((product.dateEnd/1000) - moment().unix()).format("DD") > 0 ? moment.unix((product.dateEnd/1000) - moment().unix()).format("DD")+'Hari ' : ''}{moment.unix((product.dateEnd/1000) - moment().unix()).format("HH:mm")}</Text> */}
+                {/* <Text style={{fontWeight: 'bold'}} color={Color.textInput} size={11}>{product ? moment.unix((product.dateEnd/1000) - moment().unix()).format("DD") > 0 ? moment.unix((product.dateEnd/1000) - moment().unix()).format("DD")+'Hari ' : ''}{moment.unix((product.dateEnd/1000) - moment().unix()).format("HH:mm")}</Text> */}
               </View>
             </View>
           </View>
@@ -120,7 +136,7 @@ const DetailLelang = ({ navigation, route}) => {
             </Text>
             <Divider height={1} />
             <Text size={18} type='bold' align='left'>
-              {/* {FormatMoney.getFormattedMoney(product.buyNowPrice)} */}
+              {product ? FormatMoney.getFormattedMoney(product.buyNowPrice) : "Loading"}
             </Text>
           </View>
           <View style={{width: '60%', justifyContent: 'center'}}>
@@ -129,7 +145,7 @@ const DetailLelang = ({ navigation, route}) => {
             </Text>
             <Divider height={1} />
             <Text size={14} align='left'>
-              {/* {FormatMoney.getFormattedMoney(product.startPrice)} */}
+              {product ? FormatMoney.getFormattedMoney(product.startPrice) : "Loading"}
             </Text>
           </View>
         </View>
@@ -167,7 +183,7 @@ const DetailLelang = ({ navigation, route}) => {
               }}>
               <Text size={10} color={Color.gray}>Jumlah</Text>
               <Divider height={1}/>
-              {/* <Text size={11} type='bold'>{detail.stock} Unit</Text> */}
+              <Text size={11} type='bold'>{detail ? detail.stock : "Loading"} Unit</Text>
             </View>
             <View
               style={{
@@ -177,7 +193,7 @@ const DetailLelang = ({ navigation, route}) => {
               }}>
               <Text size={10} color={Color.gray}>Jam Mulai</Text>
               <Divider height={1}/>
-              {/* <Text size={11} type='bold'>{moment.unix(product.dateStart/1000).format("HH:mm")} WIB</Text> */}
+              <Text size={11} type='bold'>{product ? moment.unix(product.dateStart/1000).format("HH:mm") : ""} WIB</Text>
             </View>
             <View
               style={{
@@ -185,29 +201,27 @@ const DetailLelang = ({ navigation, route}) => {
                 justifyContent: 'center',
                 paddingHorizontal: 10,
               }}>
-              {/* <Text size={10} color={Color.gray}>Durasi</Text>
-              {console.log( (product.time_end / 1000) - moment().unix()  )} */}
+               <Text size={10} color={Color.gray}>Durasi</Text>
+              
               <Divider height={1}/>
-              {/* <Text size={11} type='bold'>{moment.unix((product.time_start/1000) + moment().unix()).format("HH:mm")}</Text> */}
+              <Text>{product ? product.duration : ""}
+              </Text>
             </View>
           </View>
         </View>
         {/* Foto Produk */}
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          data={[
-            {image: ImagesPath.produklelang},
-            {image: ImagesPath.produklelang},
-            {image: ImagesPath.produklelang},
-          ]}
-          renderItem={({item}) => (
-            <Image
-              source={item.image}
-              style={{marginHorizontal: 15, marginVertical: 15}}
+        
+        <View
+            style={{
+              marginVertical: 10,
+              width: '95%',
+              alignSelf: 'center',
+              aspectRatio: 6/6,
+            }}>
+            <ImageSlider
+              data={image ? image: [detail.imageUrl, detail.imageUrl, detail.imageUrl]}
             />
-          )}
-        />
+          </View>
         {/* Deskripsi */}
         <View
           style={{
@@ -229,7 +243,7 @@ const DetailLelang = ({ navigation, route}) => {
             align='left'
             lineHeight={20}
           >
-           {/* {product.description} */}
+           {product ? product.description : ""}
           </Text>
         </View>
       </ScrollView>

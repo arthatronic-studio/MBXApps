@@ -149,7 +149,7 @@ const CardListLelang = (props) => {
           <View style={{marginVertical: 5}}>
             <Text align='left' size={8} color={Color.disabled}>Harga Awal</Text>
             <Divider height={4} />
-            <Text align='left' type='bold'>{FormatMoney.getFormattedMoney(item.product.price)} <Text size={8}>Poin</Text></Text>
+            <Text align='left' type='bold'>{FormatMoney.getFormattedMoney(item.startPrice)} <Text size={8}>Poin</Text></Text>
           </View>
         </View>
       </TouchableOpacity>

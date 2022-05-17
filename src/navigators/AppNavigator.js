@@ -114,6 +114,7 @@ import DirectOrder from 'src/screens/Lelang/DirectOrder';
 import JoinLelang from 'src/screens/Lelang/JoinLelang';
 import AuctionHistory from 'src/screens/Lelang/AuctionHistory';
 import BidAuction from 'src/screens/Lelang/BidAuction';
+import TestLelang from 'src/screens/Lelang/TestLelang';
 import AddProductAuction from 'src/screens/Lelang/AddProductAuction';
 
 //Ecommerce & Tokoku
@@ -245,6 +246,7 @@ function MainStackNavigator() {
       <Screen name="JoinLelang" component={JoinLelang}/>
       <Screen name="AuctionHistory" component={AuctionHistory}/>
       <Screen name="BidAuction" component={BidAuction}/>
+      <Screen name="TestLelang" component={TestLelang}/>
       <Screen name="AddProductAuction" component={AddProductAuction}/>
       <Screen name="AddProductAuctionSecond" component={AddProductAuctionSecond}/>
 
