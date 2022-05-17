@@ -564,7 +564,6 @@ const Ecommerce = ({ navigation }) => {
 						style={{ marginHorizontal: 15 }}
 					/>
 				</View> */}
-
 				<View>
 					<View style={{ flexDirection: 'row' }}>
 						<Text

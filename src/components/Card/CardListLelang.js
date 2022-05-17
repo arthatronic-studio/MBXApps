@@ -16,99 +16,75 @@ import {
 } from '@src/components';
 import { statusBarHeight } from 'src/utils/constants';
 import { Divider } from 'src/styled';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { queryGetAuction } from 'src/lib/query/auction';
 import client from 'src/lib/apollo';
 import { FormatMoney } from 'src/utils';
+import Client from '@src/lib/apollo';
 
 const propTypes = {
   ListHeaderComponent: PropTypes.func,
 }
 
 const defaultProps = {
-  ListHeaderComponent: () => <View />,
+  ListHeaderComponent: () => <View />
 }
-
-const DATA = [
-  {
-    id: 1,
-    image: ImagesPath.produklelang,
-    title: 'Pashmina Pink Nissa Sabyan',
-    firstPrice: '50.000',
-    time: '02:25',
-  },
-  {
-    id: 2,
-    image: ImagesPath.produklelang2,
-    title: 'Gazelle Hi Vintage - Green',
-    firstPrice: '20.000',
-    time: '02:25',
-  },
-  {
-    id: 3,
-    image: ImagesPath.produklelang3,
-    title: 'ZIPPO Pemantik Armor 5 Sisi ...',
-    firstPrice: '20.000',
-    time: '02:25',
-  },
-  {
-    id: 4,
-    image: ImagesPath.produklelang2,
-    title: 'Gazelle Hi Vintage - Green',
-    firstPrice: '20.000',
-    time: '02:25',
-  },
-  {
-    id: 4,
-    image: ImagesPath.produklelang5,
-    title: 'Limited Edition Figure - Monkey ...',
-    firstPrice: '60.000',
-    time: '02:25',
-  },
-  {
-    id: 4,
-    image: ImagesPath.produklelang6,
-    title: 'PlayStation 4 Pro 500 Million ...',
-    firstPrice: '50.000',
-    time: '02:25',
-  },
-];
 
 const CardListLelang = (props) => {
   const { ListHeaderComponent } = props;
-
   const navigation = useNavigation();
   const {Color} = useColor();
-
-  const [listProduct, setListProduct] = useState([]);
   const isFocused = useIsFocused();
 
+  const [list, setList] = useState({
+    data: [],
+    loading: false,
+    message: 'error',
+  });
+
   useEffect(() => {
-    getAuction();
-// });
-}, [isFocused]);
+    fetchListProduct();
+  }, []);
 
-const getAuction = () => {
-    let variables = {
-      page: 1,
-      limit: 10
-    }
-    client.query({query: queryGetAuction, variables})
-      .then(res => {
-        console.log(res)
-        if (res.data.auctionProduct) {
-          setListProduct(res.data.auctionProduct.data);
-        }
+  const fetchListProduct = () => {
+    const variables = {
+      type: "HOMEPAGE"
+    };
 
-        // hideLoading();
-        // navigation.navigate('TopUpScreen');
-      })
-      .catch(reject => {
-        console.log(reject);
+    Client.query({
+      query: queryGetAuction,
+      variables: {
+        type: "HOMEPAGE"
+      },
+    }).then(res => {
+      console.log('aku adalah', res.data.auctionProduct);
+
+      let newData = [];
+      if (res.data.auctionProduct) {
+        newData = res.data.auctionProduct;
+      }
+
+      setList({
+        ...list,
+        data: newData,
+        loading: false,
+        message: ''
       });
-  };
+    })
+    .catch((err) => {
+      console.log('err', err);
+
+      setList({
+        ...list,
+        loading: false,
+        message: ''
+      });
+    })
+  }
+  
 
   const renderItem = ({item}) => (
+    
     <View
       style={{
         width: '46%',
@@ -121,7 +97,7 @@ const getAuction = () => {
       <TouchableOpacity
         style={[styles.btnCategory, {backgroundColor: Color.textInput, elevation: 5}]}
         onPress={() => {
-          navigation.navigate('DetailLelang', {item});
+          navigation.navigate('DetailLelang', {iniId: item.id})
         }}
       >
         <View
@@ -153,7 +129,7 @@ const getAuction = () => {
         </TouchableOpacity>
       </View>
         <Image
-          source={{ uri: item.image_url }}
+          source={{ uri: item.product.imageUrl }}
           style={{
             width: 160,
             height: 150,
@@ -168,12 +144,12 @@ const getAuction = () => {
             height: '45%',
           }}>
           <View style={{paddingVertical: 8}}>
-            <Text align='left' type='bold'>{item.title}</Text>
+            <Text align='left' type='bold'>{item.product.name}</Text>
           </View>
           <View style={{marginVertical: 5}}>
-            <Text align='left' size={12} color={Color.disabled}>Harga Awal</Text>
+            <Text align='left' size={8} color={Color.disabled}>Harga Awal</Text>
             <Divider height={4} />
-            <Text align='left' type='bold'>{FormatMoney.getFormattedMoney(item.start_price)} <Text size={8}>Poin</Text></Text>
+            <Text align='left' type='bold'>{FormatMoney.getFormattedMoney(item.startPrice)} <Text size={8}>Poin</Text></Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -194,9 +170,10 @@ const getAuction = () => {
       <FlatList
         numColumns={2}
         showsHorizontalScrollIndicator={false}
-        data={listProduct}
-        ListHeaderComponent={() => renderHeader()}
+        data={list.data}
         renderItem={renderItem}
+        keyExtractor={(item, index) => item.id + index.toString()}
+        ListHeaderComponent={() => renderHeader()}
         contentContainerStyle={{
           paddingBottom: statusBarHeight
         }}

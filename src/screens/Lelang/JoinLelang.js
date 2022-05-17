@@ -9,6 +9,8 @@ import Styled from 'styled-components';
 import { FormatMoney } from 'src/utils';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Bid from '../Posting/Auction/Bid';
+import {io} from 'socket.io-client';
+import {useSelector, useDispatch} from 'react-redux';
 
 const DATA = [
   {
@@ -94,8 +96,57 @@ const JoinLelang = () => {
   const { width, height } = useWindowDimensions();
 	const [ selectedAmount, setSelectedAmount ] = useState();
   const {Color} = useColor();
+  const user = useSelector(state => state['user.auth'].login.user);
 
+  // useEffect(() => {
+  //   fetchPopup();
 
+  //   currentSocket = io(Config.SOCKET_API_URL, {
+  //     extraHeaders: {
+  //       // Authorization: "Bearer authorization_token_here"
+  //       // 'Control-Allow-Credentials': true
+  //     },
+  //   });
+
+  //   let auctionParam = {userId, auctionId, bidValue}
+
+  //   currentSocket.emit('auth', {id: user ? user.userId : 0});
+  //   currentSocket.on('auth', res => {
+  //     console.log('res auth', res);
+  //   });
+
+  //   currentSocket.emit('chat_notification');
+  //   currentSocket.on('chat_notification', res => {
+  //     console.log('res chat_notification', res);
+  //     if (res && res.status) {
+  //       if (chatNotifCount > 0) {
+  //         playNotificationSounds();
+  //       }
+
+  //       setChatNotifCount(res.data.count);
+  //     }
+  //   });
+
+  //   const successCallback = (res) => {
+  //     console.log('ini response geo');
+  //     const ltu = { userId: user.userId, lat: res.coords.latitude, long: res.coords.longitude };
+  //     currentSocket.emit('location-tracker-user', ltu );
+  //     currentSocket.on('location-tracker-user', res => {
+  //       console.log('res location-tracker-user', res);
+  //     });
+  //   };
+
+  //   const errorCallback = err => {
+  //     console.log('ini err', err);
+  //   };
+
+  //   const option = {
+  //     enableHighAccuracy: true,
+  //     timeout: 5000
+  //   };
+
+  //   Geolocation.watchPosition(successCallback, errorCallback, option);
+  // }, []);
   const renderItem = ({item}) => 
   <Row style={{justifyContent: 'center', alignItems: 'center',paddingVertical: 15, paddingHorizontal: 20,backgroundColor: Color.theme,width: '100%', height: 70,borderBottomWidth: 1, borderBottomColor: Color.border}}>
     <Text style={{fontSize: 14,width: '10%'}}>{item.id}</Text>
