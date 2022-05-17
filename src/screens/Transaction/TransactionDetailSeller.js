@@ -87,12 +87,18 @@ const TransactionDetailSeller = ({route, navigation}) => {
     Client.mutate({mutation: mutationCancel, variables})
       .then(res => {
         hideLoading();
+        
         console.log(res,"res cancel");
-        if (res.data.ecommerceOrderManage) {
-          alert('Success cancel order');
-          setTimeout(() => {
-            navigation.popToTop();
-          }, 1000);
+        if(res.data.ecommerceOrderManage) {
+          if(res.data.ecommerceOrderManage.success){
+            getProduct()
+            alert('Success cancel order');
+          }else{
+            alert(res.data.ecommerceOrderManage.message)
+          }
+          // setTimeout(() => {
+          //   navigation.popToTop();
+          // }, 1000);
         }
       })
       .catch(reject => {
@@ -399,6 +405,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
                 width: '93%',
                 alignSelf: 'center',
                 minHeight: 130,
+                paddingBottom: 12,
                 backgroundColor: Color.theme,
                 borderRadius: 10,
                 marginVertical: 15,

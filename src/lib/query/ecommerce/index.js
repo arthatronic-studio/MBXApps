@@ -300,7 +300,6 @@ export const queryCheckout = gql`
   mutation shipperCreateOrder($input: ShipperCreateOrderInputType) {
     shipperCreateOrder(input: $input) {
       order_id
-      awb_number
       consignee {
         name
         phone_number
