@@ -17,18 +17,35 @@ const DetailLelang = ({ navigation, route}) => {
   const [product, setProduct] = useState();
   const [detail, setDetail] = useState();
   const [image, setImage] = useState([]);
+  const [timeLeft, setTimeLeft] = useState(0);
+
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const [isLoading, setIsLoading] = useState(true);
   const loading = useSelector(state => state['user.auth'].loading);
 
   const isFocused = useIsFocused();
-  const id = route.params.iniId
+  const id = route.params.iniId;
+  
+  useEffect(() => {
+    const interval = product ?
+      setInterval(() => {
+        const endDate = moment(product.dateEnd);
+        const tl = moment(endDate).diff(moment(), 'seconds');
+        // TODO: bukain buat semua status
+        // if (tl > 0 && product.auctionStatus == 'BELUM SELESAI') {
+        if (tl > 0) {
+          setTimeLeft(tl);
+        }
+      }, 1000) : null;
+
+    return () => clearInterval(interval);
+  }, [product]);
+
   useEffect(() => {
     getDetailLelang();
   }, [isFocused]);
   
   const {Color} = useColor();
-  
 
   const getDetailLelang = () => {
     const variables = {
@@ -63,12 +80,6 @@ const DetailLelang = ({ navigation, route}) => {
     </View>
   );
 
-  const endDate = moment(product ? product.endDate : null)
-  const startDate = moment(product ? product.startDate : null)
-  let duration = moment.duration(endDate.diff(startDate));
-  let hours = duration.asHours();
-  let minutes = duration.asMinutes();
-  let seconds = duration.asSeconds();
   return (
     <Scaffold
       header={
@@ -120,7 +131,7 @@ const DetailLelang = ({ navigation, route}) => {
               <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 <Text size={5} color={Color.textInput}>Sisa Waktu</Text>
                 <Text color={Color.textInput} size={12}>
-                  {hours}{minutes}{seconds}
+                  {moment.duration(timeLeft, 'seconds').format('HH:mm:ss', { trim: false })}
                 </Text>
               </View>
             </View>
