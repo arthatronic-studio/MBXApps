@@ -29,10 +29,6 @@ import {
   queryGetSub,
 } from 'src/lib/query/ecommerce';
 
-import ImagesPath from '../../components/ImagesPath';
-
-const {width} = Dimensions.get('window');
-
 import {
   Text,
   Loading,
@@ -50,38 +46,7 @@ import Client from 'src/lib/apollo';
 import { mutationMerchant } from 'src/lib/query/ecommerce';
 import FormSelect from 'src/components/FormSelect';
 import ModalSelectMap from 'src/components/ModalSelectMap';
-
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
-
-const ContentView = Styled(View)`
-    width: 100%;
-    marginTop: 16px;
-    paddingHorizontal: 16px;
-`;
-
-const MainMenuView = Styled(View)`
-    width: 100%;
-    borderRadius: 8px;
-    marginTop: 12px;
-    padding: 20px 0px;
-    flexDirection: row;
-    flexWrap: wrap;
-`;
-
-const PerUserIcons = Styled(TouchableOpacity)`
-    width: 33.33%;
-    aspectRatio: 1.3;
-    flexDirection: column;
-    paddingHorizontal: 8px;
-`;
-
-const UserIcon = Styled(View)`
-    height: 100%;
-    justifyContent: center;
-    alignItems: center;
-`;
+import { googleApiKey } from 'src/utils/constants';
 
 const LabelInput = Styled(View)`
   width: 100%;
@@ -105,13 +70,14 @@ const CustomTextInput = Styled(TextInput)`
   fontSize: 14px;
 `;
 
-const EditMerchantInfo = ({navigation}) => {
-  const route = useRoute();
+const EditMerchantInfo = ({ navigation, route }) => {
+  const [loadingProps, showLoading, hideLoading] = useLoading();
+  const {Color} = useColor();
+
   const [userData, setUserData] = useState({
     ...route.params.item,
     instagram: route.params.item.socialMedia.instagram,
   });
-  const [loadingProps, showLoading, hideLoading] = useLoading();
   const [nameModal, setnameModal] = useState(null);
   const [thumbImage, setThumbImage] = useState('');
   const [mimeImage, setMimeImage] = useState('image/jpeg');
@@ -317,25 +283,47 @@ const EditMerchantInfo = ({navigation}) => {
     firstGet();
   }, []);
 
-  const {Color} = useColor();
-  console.log(coords)
-  return (
-    <MainView style={{backgroundColor: Color.theme}}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Scaffold
-          header={
-            <Header
-              customIcon
-              title="Edit Profil Toko"
-              type="bold"
-              style={{paddingTop: 17, marginBottom: 10}}
-              centerTitle={false}
-            />
-          }
-          onPressLeftButton={() => navigation.pop()}
-        />
+  useEffect(() => {
+    if (userData.lat && userData.long) {
+      fetchGoogleSearch();
+    }
+  }, [userData]);
 
-        <View style={{padding: 16}}>
+  const fetchGoogleSearch = () => {
+    const paramLocation = `latlng=${userData.lat},${userData.long}`;
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?${paramLocation}&result_type=street_address&key=${googleApiKey}`;
+
+    fetch(url)
+    .then((result) => result.json())
+    .then((res) => {
+        console.log('res place search', res);
+
+        if (res.status.toLowerCase() === 'ok' && res.results.length > 0) {
+          setLocationPinnedMap(res.results[0].formatted_address);
+        } else {
+          setLocationPinnedMap('');
+        }
+    })
+    .catch((err) => {
+        console.log('err place search', err);
+        setLocationPinnedMap('');
+    });
+  }
+  
+  return (
+    <Scaffold
+      header={
+        <Header
+          customIcon
+          title="Edit Profil Toko"
+          type="bold"
+          centerTitle={false}
+        />
+      }
+      onPressLeftButton={() => navigation.pop()}
+    >
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={{paddingHorizontal: 16}}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <TouchableOpacity
               onPress={() => {
@@ -702,65 +690,65 @@ const EditMerchantInfo = ({navigation}) => {
                   setModalSelectMap(true);
                 }}
               />
-          </View>
-          <View style={{backgroundColor: Color.theme, marginBottom: 16}}>
-            <TouchableOpacity
-              onPress={() => submit()}
-              style={{
-                backgroundColor: Color.primary,
-                borderRadius: 30,
-                paddingVertical: 12,
-              }}>
-              <Text type="semibold" color={Color.textInput}>
-                Lanjut
-              </Text>
-            </TouchableOpacity>
-          </View>
-          
+          </View>          
         </View>
       </ScrollView>
+
+      <View style={{backgroundColor: Color.theme, padding: 16}}>
+        <TouchableOpacity
+          onPress={() => submit()}
+          style={{
+            backgroundColor: Color.primary,
+            borderRadius: 30,
+            paddingVertical: 12,
+          }}>
+          <Text type="semibold" color={Color.textInput}>
+            Lanjut
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       <ModalSelectMap
-          visible={modalSelectMap}
-          extraProps={{
-            title: 'Alamat Saya',
-            fullAddress: '',
-            ...coords,
-          }}
-          onSelect={(item) => {
-            // const name = item.name;
-            const fullAddress = item.fullAddress;
-            const latitude = item.latitude;
-            const longitude = item.longitude;
-            onChangeUserData('lat', latitude)
-            onChangeUserData('long', longitude)
+        visible={modalSelectMap}
+        extraProps={{
+          title: 'Alamat Saya',
+          fullAddress: '',
+          ...coords,
+        }}
+        onSelect={(item) => {
+          // const name = item.name;
+          const fullAddress = item.fullAddress;
+          const latitude = item.latitude;
+          const longitude = item.longitude;
+          onChangeUserData('lat', latitude)
+          onChangeUserData('long', longitude)
 
-            // const provinceName = item.provinceName ? item.provinceName : state.userData.provinceName;
-            // const cityName = item.cityName ? item.cityName : state.userData.cityName;
-            // const postCode = item.postCode ? item.postCode : state.userData.postCode;
+          // const provinceName = item.provinceName ? item.provinceName : state.userData.provinceName;
+          // const cityName = item.cityName ? item.cityName : state.userData.cityName;
+          // const postCode = item.postCode ? item.postCode : state.userData.postCode;
 
-            setIsPinnedMap(true);
-            setLocationPinnedMap(fullAddress);
-            setCoords({
-              latitude,
-              longitude,
-            });
+          setIsPinnedMap(true);
+          setLocationPinnedMap(fullAddress);
+          setCoords({
+            latitude,
+            longitude,
+          });
 
-            // setState({
-            //   userData: {
-            //     ...state.userData,
-            //     fullAddress,
-            //     latitude,
-            //     longitude,
-            //     provinceName,
-            //     cityName,
-            //     postCode,
-            //   }
-            // });
-          }}
-          onClose={() => setModalSelectMap(false)}
-        />
-
-       
+          // setState({
+          //   userData: {
+          //     ...state.userData,
+          //     fullAddress,
+          //     latitude,
+          //     longitude,
+          //     provinceName,
+          //     cityName,
+          //     postCode,
+          //   }
+          // });
+        }}
+        onClose={() => setModalSelectMap(false)}
+      />
+    
       <ModalListAction
         ref={modalListActionRef}
         name={nameModal}
@@ -779,8 +767,9 @@ const EditMerchantInfo = ({navigation}) => {
             : []
         }
       />
+
       <Loading {...loadingProps} />
-    </MainView>
+    </Scaffold>
   );
 };
 
