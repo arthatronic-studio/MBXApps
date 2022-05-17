@@ -107,7 +107,7 @@ const CardOrder = ({data}) => {
                           fontWeight: 'bold',
                           textAlign: 'left',
                         }}>
-                        {items[0].name}
+                        {items[0].name.length > 64 ? items[0].name.substring(0,64)+' ...' : items[0].name}
                       </Text>
                       <Text
                         style={{

@@ -197,7 +197,7 @@ const Notification = () => {
 
           <View style={{width: '80%', paddingLeft: 16, }}>
             <Text align='left' type='bold'>
-              {item.items[0].products[0]['name']}
+              {item.items[0].products[0]['name'].length > 58 ? item.items[0].products[0]['name'].substring(0,55)+' ...' : item.items[0].products[0]['name']}
             </Text>
             <View
               style={{

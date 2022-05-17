@@ -729,6 +729,7 @@ const TransactionDetail = ({route, navigation}) => {
 
           {data.statusId == 0 && (
             <TouchableOpacity
+              onPress={() => cancelButton()}
               style={{
                 justifyContent: 'center',
                 borderRadius: 20,
