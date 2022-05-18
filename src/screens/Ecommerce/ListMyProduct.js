@@ -42,7 +42,7 @@ const ListMyProduct = ({ topComponent, bottomComponent }) => {
 
     Client.query({query: queryGetMyProduct, variables})
       .then(res => {
-        console.log(res, 'myproduct');
+        console.log(res, 'product seller');
 
         if (res.data.ecommerceGetMerchant.productList) {
           let newData = res.data.ecommerceGetMerchant.productList;
@@ -84,12 +84,13 @@ const ListMyProduct = ({ topComponent, bottomComponent }) => {
         }
       /> */}
 
+
+      {topComponent}
       <FlatList
         numColumns={2}
         keyExtractor={(item, index) => index.toString()}
         showsHorizontalScrollIndicator={false}
         data={listProduct}
-        ListHeaderComponent={topComponent}
         renderItem={({ item, index }) => <CardEcomerceProduct isMyProduct item={item} onRefresh={() => getProduct()} index={index} />}
         contentContainerStyle={{
           paddingHorizontal: 8,
@@ -97,7 +98,6 @@ const ListMyProduct = ({ topComponent, bottomComponent }) => {
         }}
         style={{backgroundColor: Color.semiwhite}}
       />
-
       {bottomComponent}
     </>
   );

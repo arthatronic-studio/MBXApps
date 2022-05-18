@@ -79,28 +79,18 @@ const MyShop = ({ navigation, route }) => {
             <Image source={{ uri: data.profileImg }} style={{width: '100%', height: '100%', borderRadius: 4}} />
           </TouchableOpacity>
 
-          <View style={{width: '100%', position: 'absolute', bottom: -(imageStoreSize / 2), right: 16, alignItems: 'flex-end'}}>
-            <TouchableOpacity onPress={() => navigation.navigate('EditMerchantInfo', { item: data })} style={{ justifyContent: 'center', alignItems: 'center',borderWidth: 1, borderColor: Color.primary, height: 28, width: '24%', borderRadius: 8}}>
-              <Text style={{fontSize: 9, color: Color.primary}}>Edit Toko</Text>
-            </TouchableOpacity>
-          </View>
+          
         </View>
 
         <View style={{marginTop: imageStoreSize / 1.4, backgroundColor: Color.theme, paddingBottom: 32, paddingLeft: 16, height: 60 }}>
           <Text align='left' type='bold' size={18}>{data.name}</Text>
-          <Row style={{marginVertical: 5}}>
-              <Col style={{flexDirection: 'row'}}>
-                  <Entypo name={'location-pin'} size={12} style={{color: Color.secondary, paddingVertical: 1, paddingHorizontal: 2}}/>
-                  <Text size={10}>{data.cityName}</Text>
-              </Col>
-              <Col style={{flexDirection: 'row'}}>
-                  <FontAwesome name={'phone'} size={12} style={{color: Color.secondary, paddingVertical: 2, paddingHorizontal: 5}}/>
-                  <Text size={10}>{data.noTelp}</Text>
-              </Col>
-              <Col style={{flexDirection: 'row'}}>
-                  <Entypo name={'instagram'} size={12} style={{color: Color.secondary, paddingVertical: 1, paddingHorizontal: 5}}/>
-                  <Text size={10}>@{data.socialMedia ? data.socialMedia.instagram : ''}</Text>
-              </Col>
+          <Row style={{marginVertical: 8}}>
+              <Entypo name={'location-pin'} size={12} style={{color: Color.secondary, paddingVertical: 1, paddingHorizontal: 2}}/>
+              <Text size={10} numberOfLines={1} style={{color: Color.secondary, width: '30%', marginRight: 10}}>{data.cityName? data.cityName : 'Belum Ada Lokasi yang jelas gimana'}</Text>
+              <FontAwesome name={'phone'} size={12} style={{color: Color.secondary, paddingVertical: 1, marginHorizontal: 8}}/>
+              <Text style={{fontSize: 10, textAlign: 'left', width: '25%'}}>{data.noTelp}</Text>
+              <Entypo name={'instagram'} size={12} style={{color: Color.secondary, paddingVertical: 1, paddingHorizontal: 5}}/>
+              <Text numberOfLines={1} style={{fontSize: 10, textAlign: 'left', width: '20%'}}>@{data.socialMedia ? data.socialMedia.instagram : ''}</Text>
           </Row>
         </View>
       </View>

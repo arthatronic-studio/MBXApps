@@ -341,6 +341,7 @@ const CreateShop = () => {
     modalListActionRef.current.close();
   };
 
+  const shop = 0
   return (
     <Scaffold
       style={{backgroundColor: Color.theme}}
