@@ -1,5 +1,38 @@
 import gql from 'graphql-tag';
 
+export const queryGetCartAuction = gql`
+query(
+  $page: Int
+   $limit: Int
+   $cartType: AuctionCartTypeEnum
+   $orderDirection: AuctionOrderDirection
+   $orderBy: AuctionOrderBy
+) {
+   auctionProduct(
+    page: $page
+    limit: $limit
+    cartType: $cartType
+    orderDirection: $orderDirection
+    orderBy: $orderBy
+ ) {
+  id
+  userId
+  items{
+    auctionId
+    productId
+    image
+    name
+    total
+    quantity
+    checked
+    status
+  }
+  
+  
+ }
+}
+`;
+
 export const queryGetAuction = gql`
 query(
    $page: Int

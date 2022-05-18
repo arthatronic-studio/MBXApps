@@ -62,7 +62,7 @@ const CartAuction = ({navigation, route}) => {
       orderBy: 'CREATEDATE'
     };
     console.log(variables);
-    Client.query({query: queryGetCartAuction, variables})
+  Client.query({query: queryGetCartAuction, variables})
       .then(res => {
         // hideLoading()
         console.log(res, 'auction');
