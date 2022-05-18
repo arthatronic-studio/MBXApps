@@ -69,10 +69,10 @@ const ChatDetailBuyer = ({ navigation, route }) => {
 			{ user_id: userTarget.user_id, room_type: 'ECOMMERCE', room_user_type: 'MERCHANT' },
 		];
 		const body = {community_chat_user_params: community_chat_user_params, chat_room_id: roomId, chat_message: message, user_id:  user.userId, chat_type: 'TEXT'};
-    	currentSocket.emit('create_community_chat_message', body);
-		currentSocket.on('create_community_chat_room', (res) => {
-			console.log('res create_community_chat_room', res);
-		});
+		currentSocket.emit('create_community_chat_message', body);
+		// currentSocket.on('create_community_chat_room', (res) => {
+		// 	console.log('res create_community_chat_room', res);
+		// });
 		setMessage('');
   	}
 	
@@ -130,6 +130,18 @@ const ChatDetailBuyer = ({ navigation, route }) => {
 								</View>
 							)
 							}
+							{/* <TouchableOpacity style={{ paddingHorizontal: 16, paddingVertical: 8, backgroundColor: Color.theme, marginVertical: 8, flexDirection: 'row', borderRadius: 8 }}>
+								<Image source={{ uri: targetImage }} style={{ width: 48, aspectRatio: 1, borderRadius: 5, marginRight: 16 }} />
+								<View style={{ flexDirection: 'column', maxWidth: width-16-32-48-16, justifyContent: 'space-between' }}>
+									<Text size={12} align='left' numberOfLines={2}>
+										Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci exercitationem corporis odit aut animi? Incidunt facere recusandae praesentium doloremque ad?
+									</Text>
+									<Divider height={3}/>
+									<Text size={12} align='left' type='bold'>
+										Rp 12.000
+									</Text>
+								</View>
+							</TouchableOpacity> */}
 						</>
 					)
 				}}

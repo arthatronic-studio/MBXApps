@@ -44,6 +44,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
   const modalDropDownRef = useRef();
   const modalNominalPickerRef = useRef();
   const amountPrice = useRef();
+  const dateRef = useRef();
   const [isModalVisible, setModalVisible] = useState(false);
 
   const [date, setDate] = useState('');
@@ -87,7 +88,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
     ) {
       const variables = {
         productId: item.id,
-        dateStart: Moment(date).format('YYYY-MM-DD'),
+        dateStart: Moment(dateRef.current.getRawValue()).format('YYYY-MM-DD'),
         timeStart: time,
         timeDuration: duration,
         description: description,
@@ -97,7 +98,6 @@ const AddProductAuctionSecond = ({navigation, route}) => {
         bidNominal: quickAccess,
         status: 'OPENFORBID',
       };
-
       console.log(variables, 'variable');
 
       Client.mutate({
@@ -173,7 +173,9 @@ const AddProductAuctionSecond = ({navigation, route}) => {
           />
           <Divider width={16} />
           <View style={{flexDirection: 'column', width: width - 128}}>
-            <Text style={{fontSize: 12, fontWeight: 'bold', textAlign: 'left'}}>
+            <Text
+              style={{fontSize: 12, fontWeight: 'bold', textAlign: 'left'}}
+              numberOfLines={2}>
               {item.name}
             </Text>
             <Divider height={16} />
@@ -199,6 +201,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
             Tanggal Mulai Lelang
           </Text>
           <TextInputMask
+            ref={dateRef}
             type={'datetime'}
             options={{
               format: 'DD/MM/YYYY',

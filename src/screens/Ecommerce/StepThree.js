@@ -46,6 +46,7 @@ import {queryContentProduct} from '@src/lib/query';
 import TopTabShop from './TopTabShop';
 import ImagesPath from 'src/components/ImagesPath';
 import {queryAddProduct, queryEditProduct} from 'src/lib/query/ecommerce';
+import { AlertModal } from '@src/components';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -63,6 +64,7 @@ const StepThree = ({navigation, route}) => {
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisibleError, setIsModalVisibleError] = useState(false);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -102,62 +104,69 @@ const StepThree = ({navigation, route}) => {
   useEffect(() => {
     if(route.params.type == 'edit'){
       console.log('edit boss')
-      setPrice(String(route.params.item.price))
+      setPrice(parseFloat(route.params.item.price))
     }
   }, []);
 
   const submit = () => {
-    let variables = {
-      products: [
-        {
-          ...props,
-          imageUrl: route.params.type == 'edit' && props.imageUrl == route.params.item.imageUrl ? undefined :  props.imageUrl,
-          initialPrice: 0,
-          id: route.params.type == 'edit' ? route.params.item.id : undefined,
-          price: parseInt(price),
-          status: 'SHOW',
-        },
-      ],
-    };
-    console.log(variables)
-    Client.mutate({mutation: route.params.type == 'edit' ? queryEditProduct : queryAddProduct, variables})
+    if(price != 0){
+      let variables = {
+        products: [
+          {
+            ...props,
+            imageUrl: route.params.type == 'edit' && props.imageUrl == route.params.item.imageUrl ? undefined :  props.imageUrl,
+            initialPrice: 0,
+            id: route.params.type == 'edit' ? route.params.item.id : undefined,
+            price: price,
+            status: 'SHOW',
+          },
+        ],
+      };
+      console.log(variables)
+      Client.mutate({mutation: route.params.type == 'edit' ? queryEditProduct : queryAddProduct, variables})
+        .then(res => {
+          console.log('BERHASIL KIRIM', res);
+          setModalVisible(!isModalVisible);
+          // setTimeout(() => {
+          //   navigation.popToTop()
+          // }, 2000);
+          
+        })
+        .catch(err => {
+          console.log('error', err);
+        });
+    }else{
+      setIsModalVisibleError(true);
+    }
+  };
+
+  const save = () => {
+    if(price != 0){
+      let variables = {
+        products: [
+          {         
+            id: route.params.type == 'edit' ? route.params.item.id : undefined,
+            price: price,
+          },
+        ],
+      };
+
+      console.log("variablesss",variables)
+      Client.mutate({mutation: queryEditProduct, variables})
       .then(res => {
-        console.log('BERHASIL KIRIM', res);
-        setModalVisible(!isModalVisible);
-        // setTimeout(() => {
-        //   navigation.popToTop()
-        // }, 2000);
+        console.log('BERHASIL EDIT', res);
+        alert('Berhasi Menyimpan');
+            setTimeout(() => {
+              navigation.pop();
+            }, 1000);
         
       })
       .catch(err => {
         console.log('error', err);
       });
-  };
-
-  const save = () => {
-
-    let variables = {
-      products: [
-        {         
-          id: route.params.type == 'edit' ? route.params.item.id : undefined,
-          price: parseInt(price),
-        },
-      ],
-    };
-
-    console.log("variablesss",variables)
-    Client.mutate({mutation: queryEditProduct, variables})
-    .then(res => {
-      console.log('BERHASIL EDIT', res);
-      alert('Berhasi Menyimpan');
-          setTimeout(() => {
-            navigation.pop();
-          }, 1000);
-      
-    })
-    .catch(err => {
-      console.log('error', err);
-    });
+    }else{
+      setIsModalVisibleError(true);
+    }
   }
 
   return (
@@ -210,8 +219,8 @@ const StepThree = ({navigation, route}) => {
         <View>
           <TextInput
             keyboardType="numeric"
-            onChangeText={value => setPrice(parseFloat(value))}
-            value={price}
+            onChangeText={value => {value.length == 0 ? setPrice(parseFloat(0)) : setPrice(parseFloat(value))}}
+            value={String(price)}
             placeholder={'0'}
             style={{
               borderWidth: 1,
@@ -444,6 +453,7 @@ const StepThree = ({navigation, route}) => {
           </View>
         </Modal>
       </View>
+      <AlertModal visible={isModalVisibleError} message="Data belum lengkap" type="error" onClose={() => setIsModalVisibleError(false)} onSubmit={() => setIsModalVisibleError(false)}/>
     </Scaffold>
   );
 };

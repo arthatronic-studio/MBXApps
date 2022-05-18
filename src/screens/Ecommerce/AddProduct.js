@@ -27,6 +27,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {launchImageLibrary} from 'react-native-image-picker';
+import { Divider } from 'src/styled';
 import {
   Text,
   // TouchableOpacity,
@@ -55,6 +56,7 @@ import {
   queryGetMyProduct,
   queryEditProduct,
 } from 'src/lib/query/ecommerce';
+import { AlertModal } from '@src/components';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -67,10 +69,11 @@ const Content = Styled(View)`
 `;
 
 const AddProduct = ({navigation, route}) => {
-  console.log('rrrrrrrrr', route);
   const {height} = useWindowDimensions();
   const [name, setName] = useState(route.params.item.name);
+  const [categoryFreeText, setCategoryFreeText] = useState(route.params.item.categoryFreeText);
   const [thumbImage, setThumbImage] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [mimeImage, setMimeImage] = useState('image/jpeg');
   const [listThumbImage, setListThumbImage] = useState(route.params.item.imageProducts ? route.params.item.imageProducts : []);
   const [listEditThumbImage, setListEditThumbImage] = useState(route.params.item.imageProducts ? route.params.item.imageProducts : []);
@@ -109,47 +112,57 @@ const AddProduct = ({navigation, route}) => {
 
   const save = () => {
     const resImage = listThumbImage.filter(data => !data.startsWith("http://"));
-    let variables = {
-      products: [
-        {
-          id: route.params.item.id,
-          imageProducts: resImage,
-          name,
-          categoryId: value,
-          status: 'DELETE',
-          indexImageDeleted: listIndexDelete 
-        },
-      ],
-    };
+    if(resImage.length != 0 && name != undefined && name.length != 0 && categoryFreeText != undefined && categoryFreeText.length != 0 ){
+      let variables = {
+        products: [
+          {
+            id: route.params.item.id,
+            imageProducts: resImage,
+            name,
+            // categoryId: value,
+            status: 'DELETE',
+            indexImageDeleted: listIndexDelete,
+            categoryFreeText, 
+          },
+        ],
+      };
 
-    console.log('variablesss', variables);
-    Client.mutate({mutation: queryEditProduct, variables})
-      .then(res => {
-        console.log('BERHASIL EDIT', res);
-        alert('Berhasi Menyimpan');
-        setTimeout(() => {
-          navigation.navigate('EditProduct');
-        }, 1000);
-      })
-      .catch(err => {
-        console.log('error', err);
-      });
+      console.log('variablesss', variables);
+      Client.mutate({mutation: queryEditProduct, variables})
+        .then(res => {
+          console.log('BERHASIL EDIT', res);
+          alert('Berhasi Menyimpan');
+          setTimeout(() => {
+            navigation.navigate('EditProduct');
+          }, 1000);
+        })
+        .catch(err => {
+          console.log('error', err);
+        });
+    }else{
+      setIsModalVisible(true);
+    }
   };
 
   const submit = () => {
-    // const tempData = {imageUrl: thumbImage ? 'data:image/png;base64,'+thumbImage : route.params.type == 'edit' ? route.params.item.imageUrl : undefined, name, categoryId:value, merchantId: dataToko.id};
-    const tempData = {
-      imageProducts: listThumbImage,
-      name,
-      categoryId: value,
-      merchantId: dataToko.id,
-    };
+    if(listThumbImage.length != 0 && name != undefined && name.length != 0 && categoryFreeText != undefined && categoryFreeText.length != 0 ){
+      // const tempData = {imageUrl: thumbImage ? 'data:image/png;base64,'+thumbImage : route.params.type == 'edit' ? route.params.item.imageUrl : undefined, name, categoryId:value, merchantId: dataToko.id};
+      const tempData = {
+        imageProducts: listThumbImage,
+        name,
+        // categoryId: value,
+        merchantId: dataToko.id,
+        categoryFreeText,
+      };
 
-    navigation.navigate('StepTwo', {
-      tempData,
-      type: route.params.type,
-      item: route.params.item,
-    });
+      navigation.navigate('StepTwo', {
+        tempData,
+        type: route.params.type,
+        item: route.params.item,
+      });
+    }else{
+      setIsModalVisible(true);
+    }
   };
 
   const getToko = id => {
@@ -445,54 +458,37 @@ const AddProduct = ({navigation, route}) => {
             </View>
           </View>
         </View>
-
-        <View
-          style={{
-            height: 250,
-            width: '90%',
-            marginHorizontal: 20,
-            marginVertical: 20,
-          }}>
+        <Divider height={16}/>
+        <View>
+          <TextInput
+            onChangeText={value => setCategoryFreeText(value)}
+            value={categoryFreeText}
+            placeholder={'Masukkan Kategori'}
+            style={{
+              borderWidth: 1,
+              borderColor: Color.secondary,
+              height: 45,
+              width: '90%',
+              paddingHorizontal: 12,
+              paddingTop: 18,
+              marginHorizontal: 20,
+              borderRadius: 5,
+              fontSize: 12,
+            }}
+          />
           <Text
             style={{
-              paddingHorizontal: 15,
-              paddingTop: 5,
+              paddingHorizontal: 32,
+              paddingVertical: 5,
               color: Color.secondary,
               fontSize: 8,
               fontWeight: '400',
-              textAlign: 'left',
-            }}>
-            Kategori Barang
-          </Text>
-          <DropDownPicker
-            schema={{label: 'name', value: 'id'}}
-            placeholder="- Pilih Kategori -"
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
-            style={{
-              paddingHorizontal: 12,
-              paddingBottom: 5,
-              marginHorizontal: 1,
-              borderWidth: 0,
-              width: '99%',
-              height: 28,
-            }}
-          />
-          <View
-            style={{
               position: 'absolute',
-              width: '100%',
-              height: 47,
-              borderWidth: 1,
-              borderColor: Color.secondary,
-              borderRadius: 5,
-            }}
-          />
+            }}>
+            Nama Produk
+          </Text>
         </View>
+        
       </ScrollView>
       <View
         style={{
@@ -536,6 +532,7 @@ const AddProduct = ({navigation, route}) => {
           </TouchableOpacity>
         )}
       </View>
+      <AlertModal visible={isModalVisible} message="Data belum lengkap" type="error" onClose={() => setIsModalVisible(false)} onSubmit={() => setIsModalVisible(false)}/>
     </Scaffold>
   );
 };

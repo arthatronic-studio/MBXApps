@@ -99,7 +99,9 @@ export default function AddProductAuction({navigation}) {
             borderRadius: 10,
           }}
         />
-        <Text style={{fontWeight: 'bold', textAlign: 'left', lineHeight: 20}}>
+        <Text
+          style={{fontWeight: 'bold', textAlign: 'left', lineHeight: 20}}
+          numberOfLines={2}>
           {item.name}
         </Text>
         <Text
