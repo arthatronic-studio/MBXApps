@@ -39,6 +39,7 @@ import {FormatMoney} from 'src/utils';
 import DetailProductHeader from './DetailProductHeader';
 import Share from 'react-native-share';
 import {Container, Divider} from 'src/styled';
+import { async } from 'validate.js';
 
 const DetailProduct = ({navigation, route}) => {
   const [detail, setDetail] = useState();
@@ -56,8 +57,30 @@ const DetailProduct = ({navigation, route}) => {
 
   useEffect(() => {
     getDetail();
-    getCart()
+    getCart();
   }, [isFocused]);
+
+  useEffect(() => {
+    if(detail){
+      currentSocket.on('get_community_chat_room_id', (res) => {
+        console.log('get_community_chat_room_id', res);
+        console.log("merchant", detail);
+        if(res.data.chat_room_id){
+          const community_chat_user_params = [
+            { user_id: user.userId, room_type: 'ECOMMERCE', room_user_type: 'USER' },
+            { user_id: detail.merchant.userId, room_type: 'ECOMMERCE', room_user_type: 'MERCHANT' },
+          ];
+          const bodyMessage = {community_chat_user_params: community_chat_user_params, chat_room_id: res.data.chat_room_id, user_id:  user.userId, chat_type: 'TAGGED_ECOMMERCE_PRODUCT', tagged_id: detail.id, tagged_name: detail.name, tagged_price: detail.price, tagged_image: detail.imageUrl, chat_message: 'tagged product'};
+          currentSocket.emit('create_community_chat_message', bodyMessage);
+          console.log(bodyMessage, "body tagged");
+          navigation.navigate('ChatDetailBuyer', {id: res.data.chat_room_id, merchant: detail.merchant, users: res.data.users});
+        }else{
+          console.log("sinii")
+          create_room();
+        }
+      });
+    }
+  }, [detail]);
 
   const getCart = () => {
 		// showLoading();
@@ -147,17 +170,9 @@ const DetailProduct = ({navigation, route}) => {
       });
   };
 
+
   const get_room = () => {
     currentSocket.emit('get_community_chat_room_id', { room_type: 'ECOMMERCE', user_id: user.userId, user_id_target: detail.merchant.userId});
-    currentSocket.on('get_community_chat_room_id', (res) => {
-      console.log('get_community_chat_room_id', res);
-      if(res.data.chat_room_id){
-        navigation.navigate('ChatDetailBuyer', {id: res.data.chat_room_id, merchant: detail.merchant, users: res.data.users});
-      }else{
-        console.log("sinii")
-        create_room();
-      }
-    });
   }
 
   const create_room = () => {
@@ -168,19 +183,7 @@ const DetailProduct = ({navigation, route}) => {
     const body = {community_chat_user_params: community_chat_user_params, room_name: 'Chat_ECOMMERCE', room_type: 'ECOMMERCE', user_ids: [user.userId.toString(), detail.merchant.userId.toString()], admin_ids: [detail.merchant.userId.toString()]}
     console.log(body, "boddy")
     currentSocket.emit('create_community_chat_room', body);
-    currentSocket.on('community_chat_room', (res) => {
-      console.log('community_chat_room', res);
-      if(res.data.length > 0){
-        const id = res.data.slice(-1)[0].id;
-        const users = res.data.slice(-1)[0].users;
-        console.log("test", {id: id, merchant: detail.merchant, users: users});
-        // const bodyMessage = {community_chat_user_params: community_chat_user_params, chat_room_id: id, user_id:  user.userId, chat_type: 'TAGGED_ECOMMERCE_PRODUCT', tagged_id: detail.id, tagged_name: detail.name, tagged_price: detail.price, tagged_image: detail.imageUrl};
-        // currentSocket.emit('create_community_chat_message', bodyMessage);
-        navigation.navigate('ChatDetailBuyer', {id: id, merchant: detail.merchant, users: users});
-      }else{
-        console.log("Create room chat error");
-      }
-    });
+    currentSocket.emit('get_community_chat_room_id', { room_type: 'ECOMMERCE', user_id: user.userId, user_id_target: detail.merchant.userId});
   }
 
   console.log(detail, "detail");

@@ -25,10 +25,9 @@ import client from 'src/lib/apollo';
 
 const defaultProps = {
 	isMyProduct: false,
-	type: '',
 };
 
-const CardEcomerceProduct = ({ isMyProduct, item, onRefresh, index, type }) => {
+const CardEcomerceProduct = ({ isMyProduct, item, onRefresh, index }) => {
 	const { Color } = useColor();
 	const {width, height} = useWindowDimensions();
     const navigation = useNavigation();
@@ -64,7 +63,7 @@ const CardEcomerceProduct = ({ isMyProduct, item, onRefresh, index, type }) => {
 		<Pressable
 			onPress={() => !isMyProduct && navigation.navigate('DetailProduct', { item })}
 			style={{
-				width: type === 'not-simetris' ? '100%' : '50%',
+				width: '50%',
 				paddingHorizontal: 8,
 				marginBottom: 16,
 			}}
@@ -116,6 +115,7 @@ const CardEcomerceProduct = ({ isMyProduct, item, onRefresh, index, type }) => {
 					type='bold'
 					align='left'
 					numberOfLines={2}
+					style={{ minHeight: 36}}
 				>
 					{item.name}
 				</Text>

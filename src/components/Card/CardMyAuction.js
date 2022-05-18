@@ -18,7 +18,7 @@ import {ExternalStorageDirectoryPath} from 'react-native-fs';
 const CardMyAuction = ({item}) => {
   const {Color} = useColor();
   const [timeLeft, setTimeLeft] = useState(0);
-  console.log(item, 'item');
+  const navigation = useNavigation();
   let remainingTime = 0;
   if (item.auctionStatus === 'BELUM SELESAI') {
     // remainingTime = moment(new Date("2022-05-04 02:00:00") - new Date()).format("hh:mm");
@@ -175,6 +175,9 @@ const CardMyAuction = ({item}) => {
           </View>
         ) : (
           <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('DetailLelang', {iniId: item.id})
+            }}
             style={{
               paddingVertical: 8,
               paddingHorizontal: 24,

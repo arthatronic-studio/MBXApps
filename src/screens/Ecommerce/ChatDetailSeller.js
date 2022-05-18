@@ -18,6 +18,7 @@ import ChatEcommerceHeader from './ChatEcommerceHeader';
 import {useSelector} from 'react-redux';
 import Footer from 'src/components/Footer';
 import { currentSocket } from '@src/screens/MainHome/MainHome';
+import { FormatMoney } from '@src/utils';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -105,6 +106,46 @@ const ChatDetailSeller = ({ navigation, route }) => {
 				contentContainerStyle={{marginHorizontal: 8, marginVertical: 8, paddingBottom: 8}}
 				inverted
 				renderItem={({ item, index }) => {
+					if (item.tagged_id) {
+            return (
+              <>
+                <TouchableOpacity
+                  style={{
+                    paddingHorizontal: 16,
+                    paddingVertical: 8,
+                    backgroundColor: Color.theme,
+                    marginVertical: 8,
+                    flexDirection: 'row',
+                    borderRadius: 8,
+                  }}>
+                  <Image
+                    source={{uri: item.tagged_image}}
+                    style={{
+                      width: 48,
+                      aspectRatio: 1,
+                      borderRadius: 5,
+                      marginRight: 16,
+                    }}
+                  />
+                  <View
+                    style={{
+                      flexDirection: 'column',
+                      maxWidth: width - 16 - 32 - 48 - 16,
+                      justifyContent: 'space-between',
+                    }}>
+                    <Text size={12} align="left" numberOfLines={2}>
+                      {item.tagged_name}
+                    </Text>
+                    <Divider height={3} />
+                    <Text size={12} align="left" type="bold">
+											{FormatMoney.getFormattedMoney(item.price)}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </>
+            );
+          }
+
 					return (
 						<>
 						{item.user_id == userTarget.user_id ?

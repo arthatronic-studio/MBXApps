@@ -45,8 +45,6 @@ const MyProduct = ({navigation, route}) => {
   const {Color} = useColor();
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const [data, setData] = useState([]);
-  const [data1, setData1] = useState([]);
-  const [data2, setData2] = useState([]);
   const isFocused = useIsFocused();
 
   const onSelect = item => {
@@ -72,8 +70,7 @@ const MyProduct = ({navigation, route}) => {
           //     if(element.status ==)
           //   });
           // }
-          setData1(res.data.ecommerceGetMerchant.productList.filter((v, i) => !(i % 2)));
-          setData2(res.data.ecommerceGetMerchant.productList.filter((v, i) => (i % 2)));
+          setData(res.data.ecommerceGetMerchant.productList);
         }
       })
       .catch(reject => {
@@ -128,7 +125,7 @@ const MyProduct = ({navigation, route}) => {
         />
       }
       onPressLeftButton={() => navigation.pop()}>
-      <ScrollView style={{backgroundColor: Color.semiwhite}}>
+      <MainView style={{backgroundColor: Color.semiwhite}}>
         {/* hide filter */}
         {/* <View style={{marginTop: 12, marginBottom: 10}}>
           <Filter
@@ -138,33 +135,23 @@ const MyProduct = ({navigation, route}) => {
             onSelect={onSelect}
           />
         </View> */}
-        <View style={{flex: 1, flexDirection: 'row'}}>
+        <View style={{flex: 1}}>
           <FlatList
-            data={data1}
+            data={data}
             keyExtractor={(item, index) => item.toString() + index}
             contentContainerStyle={{
               marginTop: 16,
               paddingHorizontal: 8,
             }}
+            numColumns={2}
             renderItem={({item, index}) => {
-              return <CardEcomerceProduct item={item} index={index} isMyProduct onRefresh={() => getProductList()} type={"not-simetris"}/>;
-            }}
-          />
-          <FlatList
-            data={data2}
-            keyExtractor={(item, index) => item.toString() + index}
-            contentContainerStyle={{
-              marginTop: 16,
-              paddingHorizontal: 8,
-            }}
-            renderItem={({item, index}) => {
-              return <CardEcomerceProduct item={item} index={index} isMyProduct onRefresh={() => getProductList()} type={"not-simetris"}/>;
+              return <CardEcomerceProduct item={item} index={index} isMyProduct onRefresh={() => getProductList()}/>;
             }}
           />
         </View>
 
         {/* <Loading {...loadingProps} /> */}
-      </ScrollView>
+      </MainView>
       <View
         style={{
           ...shadowStyle,

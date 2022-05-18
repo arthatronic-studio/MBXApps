@@ -16,7 +16,7 @@ function MyTabs() {
   // return <CartShop navigation={navigation} route={route} />
 
   // hide tab
-  const {routeName} = route.params
+  const {routeName} = route.params;
   return (
     <Tab.Navigator
       initialRouteName={routeName}
