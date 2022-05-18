@@ -15,13 +15,13 @@ const ChatEcommerceBuyer = ({ navigation, route }) => {
 	const get_list_room = () => {
 		const body = {room_type: 'ECOMMERCE', room_user_type: 'USER'};
 		currentSocket.emit('community_chat_room', body);
+	}
+
+	useEffect(() => {
 		currentSocket.on('community_chat_room', (res) => {
 			console.log('community_chat_room', res);
 			setRooms(res.data);
-    	});
-  	}
-
-	useEffect(() => {
+		});
 		get_list_room();
 	}, []);
 
