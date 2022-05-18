@@ -49,7 +49,7 @@ const CardListLelang = (props) => {
   const fetchListProduct = () => {
     const variables = {
       type: "HOMEPAGE",
-      status: "ONGOING",
+      // status: "ONGOING",
     };
 
     Client.query({
