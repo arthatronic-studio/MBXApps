@@ -287,6 +287,7 @@ const DetailLelang = ({ navigation, route}) => {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
+        onPress={()=> navigation.navigate('JoinLelang', {prodName: detail.name, prodImage: detail.imageProducts})}
           style={{
             width: '92%',
             height: 45,
@@ -296,7 +297,7 @@ const DetailLelang = ({ navigation, route}) => {
             paddingVertical: 10,
             marginVertical: 10
           }}>
-          <Text color={Color.textInput} onPress={()=> navigation.navigate('JoinLelang')}>
+          <Text color={Color.textInput} >
             Ikuti Lelang
           </Text>
         </TouchableOpacity>

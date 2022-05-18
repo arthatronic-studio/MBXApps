@@ -44,6 +44,7 @@ import {queryContentProduct} from '@src/lib/query';
 import TopTabShop from './TopTabShop';
 import ImagesPath from 'src/components/ImagesPath';
 import { queryEditProduct } from 'src/lib/query/ecommerce';
+import { AlertModal } from '@src/components';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -61,6 +62,8 @@ const StepTwo = ({navigation, route}) => {
 
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
 
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const {Color} = useColor();
@@ -82,7 +85,7 @@ const StepTwo = ({navigation, route}) => {
   const [minimumBuy, setMinimumBuy] = useState(0);
   const [description, setDescription] = useState('');
 
-  const [weight, setWeight] = useState(props.item.weight);
+  const [weight, setWeight] = useState(0);
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
   const [length, setLength] = useState(0);
@@ -90,69 +93,75 @@ const StepTwo = ({navigation, route}) => {
   const save = () => {
     // console.log("?????",route.params.item.imageProducts[0])
     // showLoading()
-   
-    let variables = {
-      products: [
-        {
-          imageProducts: route.params.item.name.imageProducts,
-          name:route.params.item.name,
-          categoryId: route.params.item.categoryId,
-          merchantId: route.params.item.merchantId,
+    if(valueProductUnit != null && valueProductMassa != null && minimumBuy != 0 && description.length != 0 && weight != 0 && height != 0 && length != 0 && width !=0){
+      let variables = {
+        products: [
+          {
+            imageProducts: route.params.item.name.imageProducts,
+            name:route.params.item.name,
+            categoryId: route.params.item.categoryId,
+            merchantId: route.params.item.merchantId,
 
-          productUnit: valueProductUnit,
-      productMassa: valueProductMassa,
-      stock: parseInt(stock),
-      minimumBuy: parseInt(minimumBuy),
-      description: description,
-      weight: parseInt(weight),
-      height: parseInt(height),
-      width: parseInt(width),
-      length: parseInt(length),
+            productUnit: valueProductUnit,
+            productMassa: valueProductMassa,
+            stock: parseInt(stock),
+            minimumBuy: parseInt(minimumBuy),
+            description: description,
+            weight: parseFloat(weight),
+            height: parseFloat(height),
+            width: parseFloat(width),
+            length: parseFloat(length),
 
-      // imageUrl: route.params.type == 'edit' && listThumbImage[0] == route.params.item.imageUrl ? undefined :  listThumbImage[0],
-      // imageUrl: listThumbImage[0] == undefined ? route.params.item.imageProducts[0] : listThumbImage[0],
-      initialPrice: 0,
-      id: route.params.type == 'edit' ? route.params.item.id : undefined,
-      price: route.params.item.price,
-      status: 'SHOW',
-        },
-      ],
-    };
+            // imageUrl: route.params.type == 'edit' && listThumbImage[0] == route.params.item.imageUrl ? undefined :  listThumbImage[0],
+            // imageUrl: listThumbImage[0] == undefined ? route.params.item.imageProducts[0] : listThumbImage[0],
+            initialPrice: 0,
+            id: route.params.type == 'edit' ? route.params.item.id : undefined,
+            price: route.params.item.price,
+            status: 'SHOW',
+          },
+        ],
+      };
 
-    console.log("variablesss",variables)
-    Client.mutate({mutation: queryEditProduct, variables})
-    .then(res => {
-      console.log('BERHASIL EDIT', res);
-      alert('Berhasi Menyimpan');
-          setTimeout(() => {
-            navigation.pop();
-          }, 1000);
-      
-    })
-    .catch(err => {
-      console.log('error', err);
-    });
+      console.log("variablesss",variables)
+      Client.mutate({mutation: queryEditProduct, variables})
+      .then(res => {
+        console.log('BERHASIL EDIT', res);
+        alert('Berhasi Menyimpan');
+            setTimeout(() => {
+              navigation.pop();
+            }, 1000);
+        
+      })
+      .catch(err => {
+        console.log('error', err);
+      });
+    }else{
+      setIsModalVisible(true);
+    }
   }
 
   const submit = () => {
-    const tempData = {
-      productUnit: valueProductUnit,
-      productMassa: valueProductMassa,
-      stock: parseInt(stock),
-      minimumBuy: parseInt(minimumBuy),
-      description: description,
-      weight: parseInt(weight),
-      height: parseInt(height),
-      width: parseInt(width),
-      length: parseInt(length),
-      ...props.tempData,
-    };
-    console.log(tempData);
-    navigation.navigate('StepThree', {
-      tempData,
-      type: route.params.type,
-      item: route.params.item,
-    });
+    if(valueProductUnit != null && valueProductMassa != null && minimumBuy != 0 && description.length != 0 && weight != 0 && height != 0 && length != 0 && width !=0){
+      const tempData = {
+        productUnit: valueProductUnit,
+        productMassa: valueProductMassa,
+        stock: parseInt(stock),
+        minimumBuy: parseInt(minimumBuy),
+        description: description,
+        weight: weight,
+        height: height,
+        width: width,
+        length: length,
+        ...props.tempData,
+      };
+      navigation.navigate('StepThree', {
+        tempData,
+        type: route.params.type,
+        item: route.params.item,
+      });
+    }else{
+      setIsModalVisible(true);
+    }
   };
 
   useEffect(() => {
@@ -261,8 +270,8 @@ const StepTwo = ({navigation, route}) => {
           <View>
             <TextInput
               placeholder={'Stok Barang'}
-              onChangeText={value => setStock(parseInt(value))}
-              value={stock}
+              onChangeText={value => value.length == 0 ? setStock(parseInt(0)) : setStock(parseInt(value))}
+              value={String(stock)}
               style={{
                 borderWidth: 1,
                 borderColor: Color.secondary,
@@ -289,8 +298,8 @@ const StepTwo = ({navigation, route}) => {
           </View>
           <View style={{marginVertical: 10}}>
             <TextInput
-              onChangeText={value => setMinimumBuy(parseInt(value))}
-              value={minimumBuy}
+              onChangeText={value => value.length == 0 ? setMinimumBuy(parseInt(0)) : setMinimumBuy(parseInt(value))}
+              value={String(minimumBuy)}
               placeholder={'Minimum Pembelian'}
               style={{
                 borderWidth: 1,
@@ -399,8 +408,8 @@ const StepTwo = ({navigation, route}) => {
           </View>
           <View style={{marginVertical: 5}}>
             <TextInput
-              onChangeText={value => setWeight(parseFloat(value))}
-              value={weight}
+              onChangeText={value => value.length == 0 ? setWeight(parseFloat(0)) : setWeight(parseFloat(value))}
+              value={String(weight)}
               placeholder={'Berat Barang'}
               style={{
                 borderWidth: 1,
@@ -429,8 +438,8 @@ const StepTwo = ({navigation, route}) => {
 
           <View style={{marginVertical: 5}}>
             <TextInput
-              onChangeText={value => setHeight(parseFloat(value))}
-              value={height}
+              onChangeText={value => value.length == 0 ? setHeight(parseFloat(0)) : setHeight(parseFloat(value))}
+              value={String(height)}
               placeholder={'Tinggi Barang'}
               style={{
                 borderWidth: 1,
@@ -459,8 +468,8 @@ const StepTwo = ({navigation, route}) => {
 
           <View style={{marginVertical: 5}}>
             <TextInput
-              onChangeText={value => setWidth(parseFloat(value))}
-              value={width}
+              onChangeText={value => value.length == 0 ? setWidth(parseFloat(0)) : setWidth(parseFloat(value))}
+              value={String(width)}
               placeholder={'Lebar Barang'}
               style={{
                 borderWidth: 1,
@@ -489,8 +498,8 @@ const StepTwo = ({navigation, route}) => {
 
           <View style={{marginVertical: 5}}>
             <TextInput
-              onChangeText={value => setLength(parseFloat(value))}
-              value={length}
+              onChangeText={value => value.length == 0 ? setLength(parseFloat(0)) : setLength(parseFloat(value))}
+              value={String(length)}
               placeholder={'Panjang Barang'}
               style={{
                 borderWidth: 1,
@@ -560,6 +569,7 @@ const StepTwo = ({navigation, route}) => {
           </TouchableOpacity>
         )}
       </View>
+      <AlertModal visible={isModalVisible} message="Data belum lengkap" type="error" onClose={() => setIsModalVisible(false)} onSubmit={() => setIsModalVisible(false)}/>
     </Scaffold>
   );
 };

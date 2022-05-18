@@ -145,7 +145,7 @@ const MainProfile = ({navigation, route}) => {
       title: 'Bid Auction',
       show: accessClient.MainProfile.showMenuBidAuction && user && !user.guest,
       icon: <MaterialCommunityIcons name="ticket-confirmation-outline" size={20} color={Color.text} style={{}} />,
-      onPress: () => navigation.navigate('JoinLelang'),
+      onPress: () => navigation.navigate('Lelang'),
     },
     {
       code: 'change_profile',

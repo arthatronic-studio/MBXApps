@@ -44,13 +44,13 @@ const CardChatEcommerce = ({item, type}) => {
     }
 
     return(    
-        <View style={{ flexDirection: 'row', marginVertical: 8, marginHorizontal: 16, justifyContent: 'space-between', }}>
+        <View style={{ flexDirection: 'row', marginVertical: 8, marginHorizontal: 16, justifyContent: 'space-between' }}>
             <View style={{ flexDirection: 'row'}}>
                 <Image
                     source={{uri: type === 'buyer' ? item.merchant.profile_img : userTarget ? userTarget.photo_profile : ''}}
                     style={{ width: 48, aspectRatio: 1, borderRadius: 24 }}
                 />
-                <View style={{ flexDirection: 'column', marginLeft: 8, width: '73%' }}>
+                <View style={{ flexDirection: 'column', marginLeft: 8, width: '68%' }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Entypo name={'controller-record'} style={{ marginRight: 5 }} color={userTarget.is_online ? '#B8E271' : '#9CA3A5'}/>
                         <Text numberOfLines={1} style={{ fontSize: 14, fontWeight: "bold" }}>{type === 'buyer' ? item.merchant.name : userTarget.first_name}</Text>
@@ -61,7 +61,9 @@ const CardChatEcommerce = ({item, type}) => {
                     <Divider height={3}/>
                     {item.last_chat && 
                         <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                            <Ionicons name={'checkmark-done'} style={{ marginRight: 5 }} size={16} color={item.last_chat.is_readed ? '#80A9FA' : Color.placeholder}/>
+                            {item.last_chat.user_id == user.userId &&
+                                <Ionicons name={'checkmark-done'} style={{ marginRight: 5 }} size={16} color={item.last_chat.is_readed ? '#80A9FA' : Color.placeholder}/>
+                            }
                             <Text numberOfLines={1} align="left">{item.last_chat.chat_message}</Text>
                         </View>
                     }

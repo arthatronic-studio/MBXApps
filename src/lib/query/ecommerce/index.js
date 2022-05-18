@@ -603,6 +603,7 @@ export const queryGetMyProduct = gql`
         minimumBuy
         productMassa
         status
+        categoryFreeText
       }
       socialMedia {
         instagram
@@ -701,6 +702,7 @@ export const queryDetailProduct = gql`
       id
       rating
       sold
+      categoryFreeText
       merchant {
         id
         userId

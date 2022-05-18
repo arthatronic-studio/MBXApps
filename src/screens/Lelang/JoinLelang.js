@@ -91,7 +91,7 @@ const EnterButton = Styled(TouchableOpacity)`
 
 
 
-const JoinLelang = () => {
+const JoinLelang = ({navigation, route}) => {
 	const modalBidRef = useRef();
   const { width, height } = useWindowDimensions();
 	const [ selectedAmount, setSelectedAmount ] = useState();
@@ -160,6 +160,9 @@ const JoinLelang = () => {
       <Text style={{fontSize: 14, fontWeight: 'bold', textAlign: 'right'}}>{item.jumlahPenawaran} Poin</Text>
     </Col>
   </Row>
+
+  const image = route.params.prodImage[1]
+  const name = route.params.prodName
   return (
     <Scaffold
       header={
@@ -180,13 +183,13 @@ const JoinLelang = () => {
               justifyContent: 'center',
             }}>
             <Image
-              source={ImagesPath.produklelang}
+              source={{uri: route.params.prodImage[0]}}
               style={{width: 80, height: 80, borderRadius: 10}}
             />
           </View>
           <View style={{width: '40%', height: 100, paddingVertical: 10}}>
             <Text style={{fontSize: 14, fontWeight: 'bold', color: Color.text}}>
-              Pashmina Pink Nissa Sabyan
+              {name? name : ""}
             </Text>
             <Text
               style={{

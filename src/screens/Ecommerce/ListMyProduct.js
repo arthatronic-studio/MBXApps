@@ -42,7 +42,7 @@ const ListMyProduct = ({ topComponent, bottomComponent }) => {
 
     Client.query({query: queryGetMyProduct, variables})
       .then(res => {
-        console.log(res, 'myproduct');
+        console.log(res, 'product seller');
 
         if (res.data.ecommerceGetMerchant.productList) {
           let newData = res.data.ecommerceGetMerchant.productList;
@@ -97,7 +97,7 @@ const ListMyProduct = ({ topComponent, bottomComponent }) => {
         }}
         style={{backgroundColor: Color.semiwhite}}
       />
-
+      
       {bottomComponent}
     </>
   );

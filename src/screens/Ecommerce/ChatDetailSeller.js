@@ -61,7 +61,7 @@ const ChatDetailSeller = ({ navigation, route }) => {
 	const [message, setMessage] = useState('');
 	const [dataChat, setDataChat] = useState([]);
 	const [userImage, setUserImage] = useState(merchant.profile_img);
-	const [targetImage, setTargetImage] = useState(userTarget.photoProfile);
+	const [targetImage, setTargetImage] = useState(userTarget.photo_profile);
 
 	const create_message = () => {
 		const community_chat_user_params = [
@@ -69,15 +69,16 @@ const ChatDetailSeller = ({ navigation, route }) => {
 			{ user_id: user.userId, room_type: 'ECOMMERCE', room_user_type: 'MERCHANT' },
 		];
 		const body = {community_chat_user_params: community_chat_user_params, chat_room_id: roomId, chat_message: message, user_id:  user.userId, chat_type: 'TEXT'};
-    	currentSocket.emit('create_community_chat_message', body);
-		currentSocket.on('create_community_chat_room', (res) => {
-			console.log('res create_community_chat_room', res);
-		});
+		currentSocket.emit('create_community_chat_message', body);
+		// currentSocket.on('create_community_chat_room', (res) => {
+		// 	console.log('res create_community_chat_room', res);
+		// });
 		setMessage('');
   	}
 	
 	useEffect(() => {
 		currentSocket.emit('community_chat_message', {chat_room_id: roomId});
+		console.log("test");
 		currentSocket.on('community_chat_message', (res) => {
 			console.log('community_chat_message', res.data);
 			if(Array.isArray(res.data)) {
@@ -89,7 +90,7 @@ const ChatDetailSeller = ({ navigation, route }) => {
 	return (
 		<Scaffold header={
 			<ChatEcommerceHeader 
-				name={'user'}
+				name={userTarget.first_name}
 				merchant={false}
 				isOnline={userTarget.is_online}
 			/>

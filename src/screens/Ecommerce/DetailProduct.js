@@ -174,6 +174,8 @@ const DetailProduct = ({navigation, route}) => {
         const id = res.data.slice(-1)[0].id;
         const users = res.data.slice(-1)[0].users;
         console.log("test", {id: id, merchant: detail.merchant, users: users});
+        // const bodyMessage = {community_chat_user_params: community_chat_user_params, chat_room_id: id, user_id:  user.userId, chat_type: 'TAGGED_ECOMMERCE_PRODUCT', tagged_id: detail.id, tagged_name: detail.name, tagged_price: detail.price, tagged_image: detail.imageUrl};
+        // currentSocket.emit('create_community_chat_message', bodyMessage);
         navigation.navigate('ChatDetailBuyer', {id: id, merchant: detail.merchant, users: users});
       }else{
         console.log("Create room chat error");
