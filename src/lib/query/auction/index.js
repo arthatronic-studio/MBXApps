@@ -8,27 +8,25 @@ query(
    $orderDirection: AuctionOrderDirection
    $orderBy: AuctionOrderBy
 ) {
-   auctionProduct(
+  auctionCartList(
     page: $page
     limit: $limit
     cartType: $cartType
     orderDirection: $orderDirection
     orderBy: $orderBy
  ) {
-  id
-  userId
-  items{
-    auctionId
-    productId
-    image
-    name
-    total
-    quantity
-    checked
-    status
-  }
-  
-  
+    id
+    userId
+    items{
+      auctionId
+      productId
+      image
+      name
+      total
+      quantity
+      checked
+      status
+    }
  }
 }
 `;
