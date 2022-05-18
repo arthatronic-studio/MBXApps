@@ -16,7 +16,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useIsFocused} from '@react-navigation/native';
-import firestore from '@react-native-firebase/firestore';
 import Modal from 'react-native-modal';
 import Config from 'react-native-config';
 import {io} from 'socket.io-client';
@@ -32,6 +31,7 @@ import {
   Col,
   Button,
   Submit,
+  useLoading,
 } from '@src/components';
 import ListAuction from 'src/components/Posting/ListAuction';
 import ListSoonAuction from 'src/components/Posting/ListSoonAuction';
@@ -113,6 +113,7 @@ const MainHome = ({navigation, route}) => {
   const modalPostingRef = useRef();
   const floatingMusicPlayerRef = useRef();
   const {width} = useWindowDimensions();
+  const [loadingProps, showLoading] = useLoading();
 
   // handle music analytics
   //
@@ -180,7 +181,7 @@ const MainHome = ({navigation, route}) => {
     const successCallback = (res) => {
       const ltu = { userId: user.userId, lat: res.coords.latitude, long: res.coords.longitude };
       currentSocket.emit('location-tracker-user', ltu );
-      
+
       currentSocket.on('location-tracker-user', res => {
         console.log('res location-tracker-user', res);
       });
@@ -386,6 +387,7 @@ const MainHome = ({navigation, route}) => {
           ? {backgroundColor: backgroundInterpolate}
           : {}
       }
+      loadingProps={loadingProps}
       header={
         <HeaderBig
           useAnimated
@@ -470,8 +472,8 @@ const MainHome = ({navigation, route}) => {
                       const isJoinMember = user && user.organizationId;
 
                       if (!isJoinMember) {
-                          showLoading('error', 'Fitur ini hanya untuk anggota komunitas');
-                          return;
+                        showLoading('error', 'Fitur ini hanya untuk anggota komunitas');
+                        return;
                       }
 
                       navigation.navigate('CreateEmergencyScreen', { 

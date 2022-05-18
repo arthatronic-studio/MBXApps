@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {View, Image, ScrollView, Platform, Linking} from 'react-native';
-import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
@@ -22,29 +21,22 @@ const EventDetail = ({navigation, route}) => {
   const {Color} = useColor();
   const {item} = route.params;
   const modalOptionsRef = useRef();
-
   const user = useSelector(state => state['user.auth'].login.user);
 
-  const [state, changeState] = useState({
-    im_like: item.im_like,
-  });
-
-  const setState = obj => changeState({...state, ...obj});
+  const [im_like, set_im_like] = useState(item.im_like);
 
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
 
-  console.log(item);
+  // useEffect(() => {
+  //     const timeout = trigger ? setTimeout(() => {
+  //         fetchAddLike();
+  //     }, 500) : null;
 
-  //   // useEffect(() => {
-  //   //     const timeout = trigger ? setTimeout(() => {
-  //   //         fetchAddLike();
-  //   //     }, 500) : null;
-
-  //   //     return () => {
-  //   //         clearTimeout(timeout);
-  //   //     }
-  //   // }, [trigger]);
+  //     return () => {
+  //         clearTimeout(timeout);
+  //     }
+  // }, [trigger]);
 
   const fetchAddLike = () => {
     showLoading();
@@ -59,11 +51,11 @@ const EventDetail = ({navigation, route}) => {
         console.log(res, 'res add like');
         if (res.data.contentAddLike.id) {
           if (res.data.contentAddLike.status === 1) {
-            showLoading('success', 'Berhasil dipesan');
-            setState({im_like: true});
+            showLoading('success', 'Akan datang');
+            set_im_like(true);
           } else {
             showLoading('info', 'Berhasil membatalkan');
-            setState({im_like: false});
+            set_im_like(false);
           }
         }
       })
@@ -76,12 +68,17 @@ const EventDetail = ({navigation, route}) => {
   let eventDate = !isNaN(parseInt(item.eventDate)) ? parseInt(item.eventDate) : null;
   if (!eventDate) eventDate = !isNaN(parseInt(item.updated_date)) ? parseInt(item.updated_date) : null;
 
+  let isPassedEventDate = true;
+  if (moment(eventDate).isValid() && moment(eventDate).isAfter(moment())) {
+    isPassedEventDate = false;
+  }
+
   return (
     <Scaffold
       headerTitle="Detail"
       iconRightButton={<MaterialIcons name='more-vert' size={22} color={Color.text} />}
       onPressRightButton={() => {
-          modalOptionsRef.current.open();
+        modalOptionsRef.current.open();
       }}
       fallback={false}
       empty={false}
@@ -358,6 +355,7 @@ const EventDetail = ({navigation, route}) => {
             <Ionicons name='chatbubble-ellipses-outline' color={Color.textInput} size={24} />
         </TouchableOpacity>
         <TouchableOpacity
+          disabled={isPassedEventDate}
           onPress={() => {
             GALogEvent('Event', {
               id: item.id,
@@ -366,7 +364,7 @@ const EventDetail = ({navigation, route}) => {
               method: analyticMethods.like,
             });
 
-            if (state.im_like) {
+            if (im_like) {
               Alert(
                 'Konfirmasi',
                 'Apakah Anda yakin akan membatalkan?',
@@ -378,7 +376,7 @@ const EventDetail = ({navigation, route}) => {
             fetchAddLike();
           }}
           style={{
-            backgroundColor: state.im_like ? Color.error : Color.primary,
+            backgroundColor: isPassedEventDate ? Color.disabled : im_like ? Color.error : Color.primary,
             width: '40%',
             height: 45,
             borderRadius: 25,
@@ -387,7 +385,7 @@ const EventDetail = ({navigation, route}) => {
           <Text
             style={{color: Color.textInput, fontSize: 16, fontWeight: 'bold'}}
           >
-            {state.im_like ? 'Batalkan' : 'Akan Datang'}
+            {im_like ? 'Batalkan' : 'Akan Datang'}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity

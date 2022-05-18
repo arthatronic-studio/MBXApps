@@ -1,13 +1,13 @@
 import React from 'react';
 import {View, TouchableOpacity, TextInput, Image} from 'react-native';
 import Styled from 'styled-components';
-import {withNavigation} from '@react-navigation/compat';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCOmmunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import PropTypes from 'prop-types';
+import { useNavigation } from '@react-navigation/native';
 
 import {
   Row,
@@ -87,16 +87,26 @@ const defaultProps = {
   actions: null,
 };
 
-const Header = props => {
+const Header = (props) => {
   const {Color} = useColor();
+  const navigation = useNavigation();
 
   const onPressRightButton = () => {
     if (props.onPressRightButton) props.onPressRightButton();
   };
 
   const onPressLeftButton = () => {
-    if (props.onPressLeftButton) props.onPressLeftButton();
-    else props.navigation.pop();
+    if (props.onPressLeftButton) {
+      props.onPressLeftButton();
+      return;
+    }
+
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+      return;
+    }
+
+    navigation.popToTop();
   };
 
   const renderTransparentMode = () => {
@@ -307,7 +317,7 @@ const Header = props => {
 
           <ColumnView>
             {cartIcon ? (
-              <TouchableOpacity onPress={() => props.navigation.navigate('CartScreen')}>
+              <TouchableOpacity onPress={() => navigation.navigate('CartScreen')}>
                 <MaterialCOmmunityIcons
                   name={'shopping-outline'}
                   color={Color.gray}
@@ -390,4 +400,4 @@ const Header = props => {
 
 Header.propTypes = propTypes;
 Header.defaultProps = defaultProps;
-export default withNavigation(Header);
+export default Header;

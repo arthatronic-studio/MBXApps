@@ -301,26 +301,17 @@ const UserProfileScreen = ({ navigation, route }) => {
                         </Text>
                     </View>
                 </View>
-                <View style={{flex: 1.5, paddingLeft: 8}}>
+                {/* hide chat */}
+                {/* <View style={{flex: 1.5, paddingLeft: 8}}>
                     <TouchableOpacity
                         onPress={() => {
-                            // navigation.navigate('ChatDetailScreen', {
-                            //     roomId: null,
-                            //     roomName: "",
-                            //     selected: [{
-                            //         ...userContent,
-                            //         firstName: userContent.firstName,
-                            //         lastName: userContent.lastName,
-                            //         fullname: userContent.firstName + ' ' + userContent.lastName,
-                            //     }],
-                            //     targetIds: [userContent.userId]
-                            // });
+
                         }}
                         style={{width: '100%', height: 35, borderWidth: 1, borderColor: Color.secondary, borderRadius: 4, justifyContent: 'center'}}
                     >
                         <Text size={10} color={Color.secondary}>Chat</Text>
                     </TouchableOpacity>
-                </View>
+                </View> */}
             </View>
         )
     }
@@ -596,7 +587,8 @@ const UserProfileScreen = ({ navigation, route }) => {
 
             <Loading { ...loadingProps } />
 
-            <ModalListAction
+            {/* hide options */}
+            {/* <ModalListAction
                 ref={modalListActionRef}
                 data={[
                     {
@@ -633,7 +625,7 @@ const UserProfileScreen = ({ navigation, route }) => {
                         },
                     }
                 ]}
-            />
+            /> */}
         </Scaffold>
     )
 }

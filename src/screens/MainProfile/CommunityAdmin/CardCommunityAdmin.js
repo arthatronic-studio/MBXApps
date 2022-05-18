@@ -29,7 +29,6 @@ const CardCommunityAdmin = (props) => {
   useEffect(() => {
     if (isFocused) {
       fetchData();
-      console.log('here');
     }
   }, [isFocused]);
 
@@ -281,8 +280,6 @@ const CardCommunityAdmin = (props) => {
       </TouchableOpacity>
     );
   };
-
-  console.log(props);
 
   return (
     <Scaffold

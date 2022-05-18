@@ -24,6 +24,7 @@ import {queryJoinCommunityManage} from '@src/lib/query/joinCommunityManage';
 import {Container, Divider} from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
 import { getSizeByRatio } from 'src/utils/get_ratio';
+import { joinCommunityMember } from 'src/lib/query/joinCommunityMember';
 
 const EmailRoundedView = Styled(View)`
   width: 100%;
@@ -59,29 +60,6 @@ const CardDetail = ({ navigation, route }) => {
     setIdNumber(userDetail.idNumber);
   }, []);
   
-  const fetchData = () => {
-    let status = 2;
-    if (props.type === 'newAnggota') {
-      status = 0;
-    } else if (props.type === 'Anggota') {
-      status = 1;
-    }
-
-    Client.query({
-      query: joinCommunityMember,
-      variables: {
-        status: status,
-      },
-    })
-      .then((res) => {
-        setData(res.data.joinCommunityMember);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log('err', err);
-        setLoading(false);
-      });
-  };
   const fetchUpdateMember = item => {
     setLoading(true);
 
@@ -96,7 +74,7 @@ const CardDetail = ({ navigation, route }) => {
     })
       .then((res) => {
         showPopup('Akun berhasil diubah', 'success');
-        fetchData();
+        // fetchData();
         setLoading(false);
       })
       .catch((err) => {
@@ -112,13 +90,17 @@ const CardDetail = ({ navigation, route }) => {
       status === 1 ? 'Diterima' :
       status === 2 ? 'Ditolak' : 'Dihapus';
 
+    const variables = {
+      status,
+      id,
+      organizationInitialCode: accessClient.InitialCode,
+    };
+
+    console.log('variables', variables);
+
     Client.query({
       query: queryJoinCommunityManage,
-      variables: {
-        status,
-        id,
-        organizationInitialCode: accessClient.InitialCode,
-      },
+      variables,
     })
       .then((res) => {
         console.log('res join', res);
@@ -127,21 +109,20 @@ const CardDetail = ({ navigation, route }) => {
         const success = data && data.id;
 
         if (success) {
-          fetchData();
+          // fetchData();
           showPopup(`Akun berhasil ${resMessage}`, 'success');
-          setLoading(false);
         } else {
           showPopup(`Akun gagal ${resMessage}`, 'error');
-          setLoading(false);
         }
+
+        setLoading(false);
       })
       .catch((err) => {
+        console.log('err', err);
         showPopup(err.message, 'error');
         setLoading(false);
       });
   };
-
-  console.log(item);
 
   const renderFotoInfo = (label, image) => {
     return (

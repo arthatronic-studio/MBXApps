@@ -115,7 +115,11 @@ const EmergencyDetail = ({ navigation, route }) => {
                     <Divider height={8} />
 
                     <Row justify='space-between' align='center'>
-                        <Text type='semibold'>{item.fullname}</Text>
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('UserProfileScreen', { userId: item.ownerId })}
+                        >
+                            <Text type='semibold'>{item.fullname}</Text>
+                        </TouchableOpacity>
 
                         {Moment(parseInt(item.created_date)).isValid() && <View>
                             <Text size={12} align='left' style={{opacity: 0.6}}>

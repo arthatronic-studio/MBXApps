@@ -110,6 +110,14 @@ const Scaffold = ({
     : View;
   const AndroidStatusBarAnimated = Animated.createAnimatedComponent(StatusBar);
 
+  let headerProps = {};
+  if (typeof onPressLeftButton === 'function') {
+    headerProps = { ...headerProps, onPressLeftButton: () => onPressLeftButton() };
+  }
+  if (typeof onPressRightButton === 'function') {
+    headerProps = { ...headerProps, onPressRightButton: () => onPressRightButton() };
+  }
+
   return (
     <MainView style={{flex: 1, backgroundColor: Color.theme, ...style}}>
       {Platform.OS === 'android' && statusBarAnimatedStyle ? (
@@ -144,14 +152,9 @@ const Scaffold = ({
         header
       ) : showHeader ? (
         <Header
+            { ...headerProps }
             title={headerTitle}
-            onPressLeftButton={() =>
-              onPressLeftButton ? onPressLeftButton() : navigation.pop()
-            }
             iconRightButton={iconRightButton}
-            onPressRightButton={() =>
-              onPressRightButton ? onPressRightButton() : {}
-            }
             iconlike={iconLike}
         />
       ) : null}
