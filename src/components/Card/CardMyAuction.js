@@ -1,24 +1,22 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
-
-import PropTypes from 'prop-types';
+import {View, TouchableOpacity, Image} from 'react-native';
 
 import {Text, useColor} from '@src/components';
 import {Divider} from 'src/styled';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import moment from 'moment';
-import {ExternalStorageDirectoryPath} from 'react-native-fs';
+import Modal from 'react-native-modal';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import ImagesPath from 'src/components/ImagesPath';
+import {mutationDeleteAuction} from 'src/lib/query/auction';
+import Client from '@src/lib/apollo';
 
-const CardMyAuction = ({item}) => {
+const CardMyAuction = ({item, onDelete}) => {
   const {Color} = useColor();
   const [timeLeft, setTimeLeft] = useState(0);
   const navigation = useNavigation();
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalSuccess, setModalSuccess] = useState(false);
   let remainingTime = 0;
   if (item.auctionStatus === 'BELUM SELESAI') {
     // remainingTime = moment(new Date("2022-05-04 02:00:00") - new Date()).format("hh:mm");
@@ -38,6 +36,29 @@ const CardMyAuction = ({item}) => {
     }
     return () => {};
   }, []);
+
+  const onPressDelete = () => {
+    const variables = {
+      auctionId: item.id,
+    };
+    Client.mutate({
+      mutation: mutationDeleteAuction,
+      variables,
+    })
+      .then(res => {
+        console.log('res', res);
+        if (res.data.auctionDeleteProduct.success) {
+          setModalSuccess(true);
+          setTimeout(() => {
+            setModalSuccess(false);
+            onDelete(item.id);
+          }, 3000);
+        }
+      })
+      .catch(err => {
+        console.log('error', err);
+      });
+  };
 
   return (
     <View
@@ -147,6 +168,7 @@ const CardMyAuction = ({item}) => {
         {item.auctionStatus === 'BELUM MULAI' ? (
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
+              onPress={() => setModalVisible(!isModalVisible)}
               style={{
                 paddingHorizontal: 16,
                 alignItems: 'center',
@@ -158,6 +180,12 @@ const CardMyAuction = ({item}) => {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('AddProductAuctionSecond', {
+                  item: item.product,
+                  edit: item,
+                })
+              }
               style={{
                 paddingVertical: 8,
                 paddingHorizontal: 24,
@@ -176,7 +204,7 @@ const CardMyAuction = ({item}) => {
         ) : (
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('DetailLelang', {iniId: item.id})
+              navigation.navigate('DetailLelang', {iniId: item.id});
             }}
             style={{
               paddingVertical: 8,
@@ -194,6 +222,77 @@ const CardMyAuction = ({item}) => {
           </TouchableOpacity>
         )}
       </View>
+
+      <Modal isVisible={isModalVisible}>
+        <View
+          style={{
+            backgroundColor: Color.textInput,
+            borderRadius: 20,
+            padding: 24,
+            alignItems: 'center',
+          }}>
+          <MaterialCommunityIcons
+            name="alert-circle-outline"
+            color={Color.danger}
+            size={54}
+          />
+          <Divider height={12} />
+          <Text style={{fontWeight: 'bold', fontSize: 14}}>
+            Yakin ingin menghapus lelang?
+          </Text>
+          <Divider height={8} />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              width: '80%',
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisible(!isModalVisible);
+              }}
+              style={{
+                paddingVertical: 8,
+                paddingHorizontal: 16,
+                backgroundColor: Color.disabled,
+                borderRadius: 120,
+              }}>
+              <Text>Batal</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisible(!isModalVisible);
+                onPressDelete();
+              }}
+              style={{
+                paddingVertical: 8,
+                paddingHorizontal: 16,
+                backgroundColor: Color.primary,
+                borderRadius: 120,
+              }}>
+              <Text>Hapus</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal isVisible={isModalSuccess}>
+        <View
+          style={{
+            backgroundColor: Color.textInput,
+            borderRadius: 20,
+            paddingTop: 33,
+            paddingHorizontal: 24,
+            paddingBottom: 24,
+            alignItems: 'center',
+          }}>
+          <Image source={ImagesPath.checkCircle} size={54} />
+          <Divider height={25} />
+          <Text style={{fontWeight: 'bold', fontSize: 14}}>
+            Lelang berhasil dihapus
+          </Text>
+        </View>
+      </Modal>
     </View>
   );
 };

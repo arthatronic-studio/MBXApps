@@ -66,6 +66,7 @@ const MyAuction = () => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [data, setData] = useState([]);
+  const [render, setRender] = useState();
 
   const getAuction = () => {
     let variables = {
@@ -85,10 +86,10 @@ const MyAuction = () => {
 
   useEffect(() => {
     getAuction();
-  }, [isFocused]);
+  }, [isFocused, render]);
 
   const renderItem = ({item}) => {
-    return <CardMyAuction item={item} />;
+    return <CardMyAuction item={item} onDelete={(value) => setRender(value)}/>;
   };
 
   return (

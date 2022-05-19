@@ -105,6 +105,7 @@ query(
      id
      name
      categoryId
+     categoryFreeText
      description
      price
      initialPrice
@@ -231,4 +232,80 @@ query(
    }
   }
  }
+`;
+
+export const mutationDeleteAuction = gql`
+mutation(
+  $auctionId: Int!
+){
+  auctionDeleteProduct(
+    auctionId: $auctionId
+  ){
+    message
+    success
+  }
+}
+`;
+
+export const mutationEditAuction = gql`
+mutation(
+  $auctionId: Int!
+  $productId: Int!
+  $dateStart: String!
+  $timeStart: String!
+  $timeDuration: Int!
+  $description: String!
+  $startPrice: Float!
+  $buyNowPrice: Float!
+  $quantity: Int!
+  $bidNominal: [Int!]!
+  $status: AuctionStatus!
+){
+  auctionEditProduct(
+    auctionId: $auctionId
+    productId: $productId
+    dateStart: $dateStart
+    timeStart: $timeStart
+    timeDuration: $timeDuration
+    description: $description
+    startPrice: $startPrice
+    buyNowPrice: $buyNowPrice
+    quantity: $quantity
+    bidNominal: $bidNominal
+    status: $status
+  ){
+    id
+    productId
+    dateStart
+    dateEnd
+    quantity
+    description
+    startPrice
+    buyNowPrice
+    isOpen
+    status
+    product{
+      id
+      name
+      categoryId
+      description
+      price
+      initialPrice
+      imageUrl
+      imageProducts
+      stock
+      height
+      width
+      length
+      weight
+      merchantId
+      productUnit
+      minimumBuy
+      productMassa
+      status
+      rating
+      sold
+    }
+  }
+}
 `;

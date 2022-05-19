@@ -33,14 +33,13 @@ import ImagesPath from 'src/components/ImagesPath';
 import ModalDropDown from 'src/components/Modal/ModalDropDown';
 import ModalNominalPicker from 'src/components/Modal/ModalNominalPicker';
 import Modal from 'react-native-modal';
-import {mutationCrateAuction} from 'src/lib/query/auction';
+import {mutationCrateAuction, mutationEditAuction} from 'src/lib/query/auction';
 import Moment from 'moment';
 
 const AddProductAuctionSecond = ({navigation, route}) => {
   const {Color} = useColor();
   const {width, height} = useWindowDimensions();
-  const {item} = route.params;
-  console.log(item);
+  const {item, edit} = route.params;
   const modalDropDownRef = useRef();
   const modalNominalPickerRef = useRef();
   const amountPrice = useRef();
@@ -116,11 +115,61 @@ const AddProductAuctionSecond = ({navigation, route}) => {
     }
   };
 
+  const onEdit = () => {
+    if (
+      date.length != 0 &&
+      time.length != 0 &&
+      duration != 0 &&
+      description.length != 0 &&
+      price != 0 &&
+      quickAccess.length != 0
+    ) {
+      const variables = {
+        auctionId: edit.id,
+        productId: item.id,
+        dateStart: Moment(dateRef.current.getRawValue()).format('YYYY-MM-DD'),
+        timeStart: time,
+        timeDuration: duration,
+        description: description,
+        startPrice: typeof amountPrice.current.props.value === 'number' ? amountPrice.current.props.value : amountPrice.current.getRawValue(),
+        buyNowPrice: typeof amountPrice.current.props.value === 'number' ? amountPrice.current.props.value : amountPrice.current.getRawValue(),
+        quantity: 1,
+        bidNominal: quickAccess,
+        status: 'OPENFORBID',
+      };
+      console.log(variables, 'variable');
+
+      Client.mutate({
+        mutation: mutationEditAuction,
+        variables,
+      })
+        .then(res => {
+          console.log('res edit', res);
+          toggleModal();
+        })
+        .catch(err => {
+          console.log('error', err);
+        });
+    } else {
+      alert('Semua field harus diisi');
+    }
+  }
+
+  useEffect(() => {
+    if(edit){
+      setDuration(edit.duration);
+      setDescription(edit.description);
+      setPrice(edit.startPrice);
+      setTime(Moment(edit.dateStart).format('HH:mm'));
+      setDate(Moment(edit.dateStart).format('DD/MM/YYYY'));
+    }
+  }, [edit])
+
   return (
     <Scaffold
       header={
         <Header
-          title={'Tambah Barang Lelang'}
+          title={edit? 'Edit Barang Lelang': 'Tambah Barang Lelang'}
           customIcon
           type="bold"
           centerTitle={false}
@@ -415,6 +464,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
             }}>
             {quickAccess.map((item, idx) => (
               <View
+                key={idx}
                 style={{
                   paddingHorizontal: 16,
                   paddingVertical: 8,
@@ -455,7 +505,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
           alignItems: 'center',
         }}>
         <TouchableOpacity
-          onPress={() => onSubmit()}
+          onPress={() => {edit ? onEdit() : onSubmit()}}
           style={{
             backgroundColor: Color.primary,
             width: '100%',
@@ -495,7 +545,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
           <Image source={ImagesPath.checkCircle} size={54} />
           <Divider height={25} />
           <Text style={{fontWeight: 'bold', fontSize: 14}}>
-            Barang Berhasil Ditambahkan
+            {edit ? 'Barang Berhasil Diedit' : 'Barang Berhasil Ditambahkan'}
           </Text>
         </View>
       </Modal>

@@ -143,6 +143,7 @@ const ModalNominalPicker = forwardRef((props, ref) => {
               }}>
               {listPrice.map((item, idx) => (
                 <View
+                  key={idx}
                   style={{
                     paddingHorizontal: 16,
                     paddingVertical: 8,
