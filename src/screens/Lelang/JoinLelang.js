@@ -108,7 +108,9 @@ const JoinLelang = ({navigation, route}) => {
   //     },
   //   });
 
-  //   let auctionParam = {userId, auctionId, bidValue}
+  //  let userId
+  //  let bidValue
+  //  let auctionId
 
   //   currentSocket.emit('auth', {id: user ? user.userId : 0});
   //   currentSocket.on('auth', res => {

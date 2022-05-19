@@ -26,7 +26,7 @@ import ImagesPath from 'src/components/ImagesPath';
 import { queryGetMyProduct, queryGetMyShop } from 'src/lib/query/ecommerce';
 import ListMyProduct from 'src/screens/Ecommerce/ListMyProduct';
 
-const MyShop = ({ navigation, route }) => {
+const MyShop = ({ navigation,}) => {
   // selector
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
@@ -109,7 +109,7 @@ const MyShop = ({ navigation, route }) => {
         {/* <Col size={0.5} /> */}
         <TouchableOpacity onPress={()=> navigation.navigate('AddProduct',{type: 'add', item: {}})} style={{justifyContent: 'center',flexDirection: 'row',backgroundColor: Color.primary, borderRadius: 20, paddingVertical: 10, width: '100%'}}>
           <AntDesign name={'pluscircleo'} size={18} style={{color: Color.textInput, paddingVertical: 2, marginHorizontal: 10}}/>
-          <Text type='semibold' color={Color.textInput}>Tambah Produk</Text>
+          <Text type='semibold' color={Color.textInput} style={{selfAlign: 'center'}}>Tambah Produk</Text>
         </TouchableOpacity>
       </Row>
     )

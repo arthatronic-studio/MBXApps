@@ -109,6 +109,10 @@ const CreateShop = () => {
     setUserData({...userData, [key]: val});
   };
 
+  const onChangeValue = () => {
+    setShopName(1)
+  }
+
   const loading = useSelector(state => state['user.auth'].loading);
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const {Color} = useColor();
@@ -561,8 +565,9 @@ const CreateShop = () => {
               textAlign: 'right',
               marginHorizontal: 15,
               marginVertical: 2,
+              maxLength: 200
             }}>
-            0/200
+            {userData.name.length}/200
           </Text>
         </View>
         <View>

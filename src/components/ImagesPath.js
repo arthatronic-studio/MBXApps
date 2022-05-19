@@ -232,5 +232,6 @@ export default {
 	one: require('../components/Images/one.png'),
 	two: require('../components/Images/two.png'),
 	nisa: require('../components/Images/nisa.png'),
-	profile: require('../components/Images/profile.png')
+	profile: require('../components/Images/profile.png'),
+	productempty: require('../components/Images/productempty.png')
 };
