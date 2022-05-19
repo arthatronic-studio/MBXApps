@@ -47,8 +47,8 @@ const Ebook = () => {
 						size={16}
 						style={{
 							color: Color.gray,
-							paddingVertical: 17,
-							selfAlign: 'right'
+							paddingVertical: 16,
+							alignSelf: 'flex-end'
 						}}
 					/>
 				</View>
