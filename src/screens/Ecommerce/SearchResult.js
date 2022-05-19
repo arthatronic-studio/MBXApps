@@ -149,9 +149,7 @@ const TabProduk = ({ search }) => {
             itemPerPage,
             name: search
         }
-
         console.log(variables);
-
         Client.query({query: queryGetProduct, variables})
         .then(res => {
             console.log(res);
@@ -161,7 +159,6 @@ const TabProduk = ({ search }) => {
             if (Array.isArray(data)) {
                 newData = data;
             }
-
             setDataProduk({
                 ...dataProduk,
                 data: dataProduk.data.concat(newData),
@@ -291,6 +288,17 @@ const TabToko = ({ search }) => {
     useEffect(() => {
         getMerchant();
     }, []);
+
+    useEffect(() => {
+        const timeout = search !== '' ?
+            setTimeout(() => {
+                getMerchant()
+            }, 1000) : null;
+
+        return () => {
+            clearTimeout(timeout);
+        }
+    }, [search]);
 
     const getMerchant = () => {
         let variables = {

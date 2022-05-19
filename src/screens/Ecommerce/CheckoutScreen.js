@@ -499,6 +499,14 @@ const CheckoutScreen = ({ navigation, route }) => {
                         <Text color={Color.secondary} size={10}>{FormatMoney.getFormattedMoney(item.price)}</Text>
                     </Col>
                 </Row> */}
+          <Row style={{ alignItems: 'center', marginBottom: 8 }}>
+              <Col alignItems='flex-start'>
+                  <Text color={Color.secondary} size={10}>Biaya Admin</Text>
+              </Col>
+              <Col alignItems='flex-end'>
+                  <Text color={Color.secondary} size={10}>{FormatMoney.getFormattedMoney(0)}</Text>
+              </Col>
+          </Row>
           <Row style={{alignItems: 'center', marginBottom: 8}}>
             <Col alignItems="flex-start">
               <Text color={Color.secondary} size={10}>
