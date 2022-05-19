@@ -8,6 +8,7 @@ import {
   Image,
   useWindowDimensions,
 } from 'react-native';
+import ImagesPath from 'src/components/ImagesPath';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {
   Row,
@@ -84,20 +85,29 @@ const ListMyProduct = ({ topComponent, bottomComponent }) => {
         }
       /> */}
 
-      <FlatList
-        numColumns={2}
-        keyExtractor={(item, index) => index.toString()}
-        showsHorizontalScrollIndicator={false}
-        data={listProduct}
-        ListHeaderComponent={topComponent}
-        renderItem={({ item, index }) => <CardEcomerceProduct isMyProduct item={item} onRefresh={() => getProduct()} index={index} />}
-        contentContainerStyle={{
-          paddingHorizontal: 8,
-          paddingBottom: statusBarHeight,
-        }}
-        style={{backgroundColor: Color.semiwhite}}
-      />
+
+      {topComponent}
       
+      {listProduct.length === 0 ?
+      <View style={{justifyContent: 'center', alignItems: 'center', height: '55%', backgroundColor: Color.semiwhite}}>
+        <Image source={ImagesPath.productempty}/>
+        <Text style={{marginVertical: 15, lineHeight: 20,fontSize: 14, color: Color.secondary, width: '60%', textAlign: 'center' }}>Kamu belum memasukkan barang apapun ke Toko</Text>
+      </View>
+      :
+      <FlatList
+      numColumns={2}
+      keyExtractor={(item, index) => index.toString()}
+      showsHorizontalScrollIndicator={false}
+      data={listProduct}
+      renderItem={({ item, index }) => <CardEcomerceProduct isMyProduct item={item} onRefresh={() => getProduct()} index={index} />}
+      contentContainerStyle={{
+        paddingHorizontal: 8,
+        paddingBottom: statusBarHeight,
+      }}
+      style={{backgroundColor: Color.semiwhite}}
+    />
+      }
+
       {bottomComponent}
     </>
   );

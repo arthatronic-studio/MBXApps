@@ -326,7 +326,7 @@ const FormPayment = ({ route, navigation }) => {
             <FormSelect
               type='select'
               label='Pin Lokasi'
-              value={isPinnedMap ? locationPinnedMap || 'Lokasi di Pin' : ''}
+              value={isPinnedMap ? 'Lokasi berhasil disimpan' || 'Lokasi di Pin' : ''}
               placeholder='Pilih di Peta'
               onPress={() => {
                 setModalSelectMap(true);

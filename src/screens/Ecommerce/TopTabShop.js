@@ -68,7 +68,7 @@ function EcomerceEtalase() {
       />
             <TouchableOpacity style={{marginVertical: 15,marginHorizontal: 30,borderWidth: 1, borderColor: Color.error, borderStyle: 'dashed',justifyContent: 'center',flexDirection: 'row',backgroundColor: Color.theme, borderRadius: 20, paddingVertical: 10, width: '83%'}}>
                     <AntDesign name={'pluscircleo'} size={16} style={{color: Color.error, marginHorizontal: 10}}/>
-                    <Text type='semibold' color={Color.error} style={{selfAlign: 'center', fontSize: 12}}>Tambah Kategori</Text>
+                    <Text type='semibold' color={Color.error} size={12}>Tambah Kategori</Text>
             </TouchableOpacity>
         </View>
     </View>

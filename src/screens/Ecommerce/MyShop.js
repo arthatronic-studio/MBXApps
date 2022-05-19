@@ -26,7 +26,7 @@ import ImagesPath from 'src/components/ImagesPath';
 import { queryGetMyProduct, queryGetMyShop } from 'src/lib/query/ecommerce';
 import ListMyProduct from 'src/screens/Ecommerce/ListMyProduct';
 
-const MyShop = ({ navigation, route }) => {
+const MyShop = ({ navigation,}) => {
   // selector
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
