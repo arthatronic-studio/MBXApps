@@ -112,7 +112,7 @@ const AddProduct = ({navigation, route}) => {
 
   const save = () => {
     const resImage = listThumbImage.filter(data => !data.startsWith("http://"));
-    if(resImage.length != 0 && name != undefined && name.length != 0 && categoryFreeText != undefined && categoryFreeText.length != 0 ){
+    if((resImage.length != 0 || listIndexDelete.length == 0) && name != undefined && name.length != 0 && categoryFreeText != undefined && categoryFreeText.length != 0 ){
       let variables = {
         products: [
           {
@@ -201,12 +201,8 @@ const AddProduct = ({navigation, route}) => {
   };
 
   const delImage = (item) => {
-    console.log(listIndexDelete.length, "length delete");
-    console.log(listEditThumbImage.length, "length edit");
-    console.log(item, "iteeeem");
     if(route.params.type == 'edit' && listIndexDelete.length < listEditThumbImage.length){
       const index = listEditThumbImage.indexOf(item);
-      console.log(index, "indeeex delete");
       setListIndexDelete([...listIndexDelete, index]);
     }
 
@@ -332,7 +328,6 @@ const AddProduct = ({navigation, route}) => {
                 justifyContent: 'center',
                 flexDirection: 'row',
               }}>
-              {console.log('listt thumb', listThumbImage)}
               {listThumbImage.length === 1 ? (
                 <ImageBackground
                         style={{
@@ -363,7 +358,6 @@ const AddProduct = ({navigation, route}) => {
                   horizontal={true}
                   keyExtractor={(item, index) => item.toString() + index}
                   renderItem={({item}) => {
-                    console.log('aaaaa', item);
                     return (
                       <ImageBackground
                         style={{

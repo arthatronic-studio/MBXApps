@@ -67,8 +67,8 @@ const CardEcomerceProduct = ({ isMyProduct, item, onRefresh, index, type }) => {
 			style={{
 				width: type === 'not-simetris' ? '100%' : '50%',
 				paddingHorizontal: 8,
-				marginBottom: 16,
-				marginTop: 15
+				marginBottom: 8,
+				marginTop: 8
 			}}
 		>
 			<View
@@ -114,13 +114,15 @@ const CardEcomerceProduct = ({ isMyProduct, item, onRefresh, index, type }) => {
 
 				<Divider height={8} />
 				
-				<Text
-					type='bold'
-					align='left'
-					numberOfLines={2}
-				>
-					{item.name}
-				</Text>
+				<View style={{ minHeight: 36 }}>
+					<Text
+						type='bold'
+						align='left'
+						numberOfLines={2}
+					>
+						{item.name}
+					</Text>
+				</View>
 
 				<View style={{ flexDirection: 'row' , marginTop: 8 }}>
 					<Entypo name={'star'} style={{ color: Color.yellow }} />

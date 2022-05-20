@@ -24,7 +24,7 @@ const DetailLelang = ({ navigation, route}) => {
   const loading = useSelector(state => state['user.auth'].loading);
 
   const isFocused = useIsFocused();
-  const id = route.params.iniId;
+  const { iniId:id, showButton} = route.params;
   
   useEffect(() => {
     const interval = product ?
@@ -73,12 +73,6 @@ const DetailLelang = ({ navigation, route}) => {
       setIsLoading(false);
     })
   }
-  const renderItem = ({item}) => (
-    
-    <View>
-      <Image source={item.imageProducts}/>
-    </View>
-  );
 
   return (
     <Scaffold
@@ -239,7 +233,7 @@ const DetailLelang = ({ navigation, route}) => {
               aspectRatio: 6/6,
             }}>
             <ImageSlider
-              data={image ? image: [detail.imageUrl, detail.imageUrl, detail.imageUrl]}
+              data={detail ? detail.imageProducts.length != 0 ? detail.imageProducts: [detail.imageUrl, detail.imageUrl, detail.imageUrl] : []}
             />
           </View>
         {/* Deskripsi */}
@@ -267,41 +261,44 @@ const DetailLelang = ({ navigation, route}) => {
           </Text>
         </View>
       </ScrollView>
-      <View>
-        <Text style={{fontSize: 10, fontWeight: 'bold', marginVertical: 5}}>Males Ikutan Lelang?</Text>
-        <TouchableOpacity
-          // onPress={alert("id : "+ item.product.id)}
-          style={{
-            width: '92%',
-            height: 45,
-            backgroundColor: Color.theme,
-            borderWidth: 1,
-            borderColor: Color.primary,
-            borderRadius: 30,
-            marginHorizontal: 15,
-            paddingVertical: 10,
-            marginVertical: 5
-          }}>
-          <Text color={Color.primary} style={{fontSize: 14}}>
-            Beli Langsung Aja
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-        onPress={()=> navigation.navigate('JoinLelang', {prodName: detail.name, prodImage: detail.imageProducts})}
-          style={{
-            width: '92%',
-            height: 45,
-            backgroundColor: Color.primary,
-            borderRadius: 30,
-            marginHorizontal: 15,
-            paddingVertical: 10,
-            marginVertical: 10
-          }}>
-          <Text color={Color.textInput} >
-            Ikuti Lelang
-          </Text>
-        </TouchableOpacity>
-      </View>
+
+      {showButton &&
+        <View>
+          <Text style={{fontSize: 10, fontWeight: 'bold', marginVertical: 5}}>Males Ikutan Lelang?</Text>
+          <TouchableOpacity
+            // onPress={alert("id : "+ item.product.id)}
+            style={{
+              width: '92%',
+              height: 45,
+              backgroundColor: Color.theme,
+              borderWidth: 1,
+              borderColor: Color.primary,
+              borderRadius: 30,
+              marginHorizontal: 15,
+              paddingVertical: 10,
+              marginVertical: 5
+            }}>
+            <Text color={Color.primary} style={{fontSize: 14}}>
+              Beli Langsung Aja
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+          onPress={()=> navigation.navigate('JoinLelang', {prodName: detail.name, prodImage: detail.imageProducts})}
+            style={{
+              width: '92%',
+              height: 45,
+              backgroundColor: Color.primary,
+              borderRadius: 30,
+              marginHorizontal: 15,
+              paddingVertical: 10,
+              marginVertical: 10
+            }}>
+            <Text color={Color.textInput} >
+              Ikuti Lelang
+            </Text>
+          </TouchableOpacity>
+        </View>
+      }
     </Scaffold>
   );
 };

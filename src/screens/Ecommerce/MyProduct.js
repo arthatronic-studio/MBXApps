@@ -24,6 +24,7 @@ import {
 import {TouchableOpacity} from '@src/components/Button';
 
 import Filter from 'src/components/Filter';
+import { statusBarHeight } from 'src/utils/constants';
 import ImagesPath from 'src/components/ImagesPath';
 import Client from '@src/lib/apollo';
 
@@ -140,7 +141,8 @@ const MyProduct = ({navigation, route}) => {
             data={data}
             keyExtractor={(item, index) => item.toString() + index}
             contentContainerStyle={{
-              marginTop: 16,
+              marginTop: 8,
+              paddingBottom: statusBarHeight,
               paddingHorizontal: 8,
             }}
             numColumns={2}

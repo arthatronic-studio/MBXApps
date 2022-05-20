@@ -102,6 +102,7 @@ const ListMyProduct = ({ topComponent, bottomComponent }) => {
       renderItem={({ item, index }) => <CardEcomerceProduct isMyProduct item={item} onRefresh={() => getProduct()} index={index} />}
       contentContainerStyle={{
         paddingHorizontal: 8,
+        paddingTop: 8,
         paddingBottom: statusBarHeight,
       }}
       style={{backgroundColor: Color.semiwhite}}
