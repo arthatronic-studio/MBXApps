@@ -156,7 +156,7 @@ const TransactionDetail = ({route, navigation}) => {
     .then((res) => {
       console.log('res ecomm ulasan', res);
       alert('Ulasan berhasil terkirim');
-      fetchCheckIsUlasan(id);
+      // fetchCheckIsUlasan(id);
     })
     .catch((err) => {
       console.log('err ecomm ulasan', err);
