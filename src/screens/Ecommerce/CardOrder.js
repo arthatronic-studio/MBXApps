@@ -100,7 +100,7 @@ const CardOrder = ({data}) => {
                       source={{uri:items[0].imageUrl}}
                       style={{width: 50, height: 50, borderRadius: 5}}
                     />
-                    <View style={{marginHorizontal: 10}}>
+                    <View style={{marginHorizontal: 10,  flex: 1}}>
                       <Text
                         style={{
                           fontSize: 14,
