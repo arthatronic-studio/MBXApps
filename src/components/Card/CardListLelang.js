@@ -141,7 +141,7 @@ const CardListLelang = (props) => {
             height: '45%',
           }}>
           <View style={{paddingVertical: 8}}>
-            <Text align='left' type='bold'>{item.product.name}</Text>
+            <Text numberOfLines={1}  align='left' type='bold'>{item.product.name}</Text>
           </View>
           <View style={{marginVertical: 5}}>
             <Text align='left' size={8} color={Color.disabled}>Harga Awal</Text>
@@ -165,15 +165,16 @@ const CardListLelang = (props) => {
   return (
     <View style={{alignItems: 'center'}}>
       <FlatList
+        maxToRenderPerBatch={2}
         numColumns={2}
         showsHorizontalScrollIndicator={false}
-        data={list.data}
+        data={list.data.slice(0,6)}
         renderItem={renderItem}
         keyExtractor={(item, index) => item.id + index.toString()}
         ListHeaderComponent={() => renderHeader()}
-        contentContainerStyle={{
-          paddingBottom: statusBarHeight + 60
-        }}
+        // contentContainerStyle={{
+        //   paddingBottom: statusBarHeight + 10
+        // }}
       />
     </View>
   );

@@ -66,7 +66,8 @@ const CardReview = ({data}) => {
             justifyContent: 'space-between',
           }}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <View
+            <Image
+              source={{ uri: data.image }}
               style={{
                 borderRadius: 20,
                 marginRight: 8,
@@ -76,7 +77,7 @@ const CardReview = ({data}) => {
               }}
             />
             <Text size="11" type="bold">
-              {data.buyer}
+              {data.firstName  + ' ' + data.lastName}
             </Text>
           </View>
           <Image source={ImagesPath.DotsThree} />
@@ -91,7 +92,7 @@ const CardReview = ({data}) => {
           }}></View>
         <View style={{flexDirection: 'row'}}>
           <Image
-            source={data.image}
+            source={{uri: data.imageProduct}}
             style={{
               marginRight: 16,
               height: 48,
@@ -101,16 +102,20 @@ const CardReview = ({data}) => {
             }}
           />
           <View>
-            <Text type="bold">{data.title}</Text>
+            <Text type="bold">{data.nameProduct}</Text>
             <View
               style={{flexDirection: 'row', marginTop: 4, marginBottom: 10}}>
-              <Image source={ImagesPath.starRate} />
-              <Image source={ImagesPath.starRate} />
-              <Image source={ImagesPath.starRate} />
-              <Image source={ImagesPath.starRate} />
-              <Image source={ImagesPath.starUnrate} />
+              {data.rating > 4 && <Image source={ImagesPath.starRate} />}
+              {data.rating > 3 && <Image source={ImagesPath.starRate} />}
+              {data.rating > 2 && <Image source={ImagesPath.starRate} />}
+              {data.rating > 1 && <Image source={ImagesPath.starRate} />}
+              {data.rating > 0 && <Image source={ImagesPath.starRate} />}
+              {/* {data.rating < 5 &&<Image source={ImagesPath.starUnrate} />}
+              {data.rating < 4 &&<Image source={ImagesPath.starUnrate} />}
+              {data.rating < 5 &&<Image source={ImagesPath.starUnrate} />}
+              {data.rating < 5 &&<Image source={ImagesPath.starUnrate} />} */}
             </View>
-            <Text align="left">Barangnya bagus bangettt</Text>
+            <Text align="left">{data.ulasan}</Text>
           </View>
         </View>
         <View

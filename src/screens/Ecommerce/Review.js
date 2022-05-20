@@ -33,6 +33,8 @@ import Filter from 'src/components/Filter';
 import ImagesPath from 'src/components/ImagesPath';
 import Category from 'src/components/Category';
 import CardReview from './CardReview';
+import { queryEcommerceProductUlasan } from 'src/lib/query/ecommerce/queryEcommerceProductUlasan';
+import client from 'src/lib/apollo';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -87,6 +89,7 @@ const Review = ({navigation, route}) => {
   // selector
   const user = useSelector(state => state['user.auth'].login.user);
   const loading = useSelector(state => state['user.auth'].loading);
+  const [listReview, setListReview] = useState([]);
 
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const {Color} = useColor();
@@ -95,7 +98,34 @@ const Review = ({navigation, route}) => {
   };
 
   const [selectedItem, setSelectedItem] = useState(null);
-  useEffect(() => {}, []);
+  useEffect(() => {
+    fetchEcommerceProductUlasan()
+  }, []);
+
+  const fetchEcommerceProductUlasan = () => {
+    const variables = {
+      page: 1,
+      itemPerPage: 20,
+      type: "USER"
+    };
+
+    console.log('variables', variables);
+    client.query({
+      query: queryEcommerceProductUlasan,
+      variables
+    })
+    .then((res) => {
+      console.log('res ecom prd ulasan', res);
+
+      const data = res.data.ecommerceProductUlasan;
+      if (Array.isArray(data)) {
+        setListReview(data);
+      }
+    })
+    .catch((err) => {
+      console.log('err ecom prd ulasan', err);
+    });
+  }
 
   return (
     <Scaffold
@@ -118,7 +148,7 @@ const Review = ({navigation, route}) => {
         </View>
         <View style={{ paddingVertical: 10,flex:1}}>
           <FlatList
-            data={DATA}
+            data={listReview}
             keyExtractor={(item, index) => item.toString() + index}
             renderItem={({item}) => {
               return <CardReview data={item} />;

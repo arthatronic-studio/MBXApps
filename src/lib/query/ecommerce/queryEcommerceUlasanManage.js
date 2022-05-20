@@ -7,6 +7,7 @@ export const queryEcommerceUlasanManage = gql`
     $rating: Int!
     $manageType: EcommerceUlasanTypeInput
     $ulasanId: Int
+    $orderId: Int
   ){
     ecommerceUlasanManage(
       productId: $productId
@@ -14,6 +15,7 @@ export const queryEcommerceUlasanManage = gql`
       rating: $rating
       manageType: $manageType
       ulasanId: $ulasanId
+      orderId: $orderId
     ) {
       id
       firstName

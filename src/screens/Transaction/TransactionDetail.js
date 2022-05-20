@@ -145,6 +145,7 @@ const TransactionDetail = ({route, navigation}) => {
       ulasan: review.ulasan,
       rating: review.rating,
       manageType: 'ADD',
+      orderId: route.params.item.id,
       // $ulasanId: Int for type delete
     };
 
@@ -155,7 +156,7 @@ const TransactionDetail = ({route, navigation}) => {
     .then((res) => {
       console.log('res ecomm ulasan', res);
       alert('Ulasan berhasil terkirim');
-      fetchCheckIsUlasan(id);
+      // fetchCheckIsUlasan(id);
     })
     .catch((err) => {
       console.log('err ecomm ulasan', err);

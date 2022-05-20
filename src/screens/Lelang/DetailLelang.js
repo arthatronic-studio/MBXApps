@@ -102,7 +102,7 @@ const DetailLelang = ({ navigation, route}) => {
               justifyContent: 'center',
               paddingHorizontal: 15,
             }}>
-            <Text size={18} type='bold' align='left'>
+            <Text numberOfLines={3} size={18} type='bold' align='left'>
               {detail ? detail.name : "Loading"}
             </Text>
           </View>
@@ -187,7 +187,7 @@ const DetailLelang = ({ navigation, route}) => {
               }}>
               <Text size={10} color={Color.gray} align='left'>Jenis Barang</Text>
               <Divider height={1}/>
-              <Text size={11} type='bold' align='left'>Hijab</Text>
+              <Text size={11} type='bold' align='left'>{detail ? detail.categoryFreeText : "Kateg"}</Text>
             </View>
             <View
               style={{

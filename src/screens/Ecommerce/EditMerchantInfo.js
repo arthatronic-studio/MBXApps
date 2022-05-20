@@ -47,6 +47,7 @@ import { mutationMerchant } from 'src/lib/query/ecommerce';
 import FormSelect from 'src/components/FormSelect';
 import ModalSelectMap from 'src/components/ModalSelectMap';
 import { googleApiKey } from 'src/utils/constants';
+import { iconMenuTempat } from 'assets/images/home';
 
 const LabelInput = Styled(View)`
   width: 100%;
@@ -684,7 +685,7 @@ const EditMerchantInfo = ({ navigation, route }) => {
             <FormSelect
                 type='select'
                 label='Pin Lokasi'
-                value={isPinnedMap ? locationPinnedMap || 'Lokasi di Pin' : ''}
+                value={isPinnedMap ? 'Lokasi berhasil disimpan' || 'Lokasi di Pin' : ''}
                 placeholder='Pilih di Peta'
                 onPress={() => {
                   setModalSelectMap(true);
@@ -720,9 +721,12 @@ const EditMerchantInfo = ({ navigation, route }) => {
           const fullAddress = item.fullAddress;
           const latitude = item.latitude;
           const longitude = item.longitude;
+          console.log(iconMenuTempat)
           onChangeUserData('lat', latitude)
-          onChangeUserData('long', longitude)
-
+          
+          setTimeout(() => {
+            onChangeUserData('long', longitude)
+          }, 1000);
           // const provinceName = item.provinceName ? item.provinceName : state.userData.provinceName;
           // const cityName = item.cityName ? item.cityName : state.userData.cityName;
           // const postCode = item.postCode ? item.postCode : state.userData.postCode;
