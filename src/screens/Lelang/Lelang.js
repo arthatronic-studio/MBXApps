@@ -10,7 +10,9 @@ import Banner from 'src/components/Banner';
 import { queryGetAuction } from 'src/lib/query/auction';
 import client from 'src/lib/apollo';
 import { Divider } from 'src/styled';
+import { statusBarHeight } from 'src/utils/constants';
 import { queryBannerList } from 'src/lib/query/banner';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const Lelang = ({ navigation, route }) => {
   const {Color} = useColor();
@@ -83,9 +85,21 @@ const Lelang = ({ navigation, route }) => {
       }
       onPressLeftButton={() => navigation.pop()}
     >
-      <CardListLelang
-        ListHeaderComponent={renderHeader}
-      />
+
+      <ScrollView>
+        <CardListLelang
+          ListHeaderComponent={renderHeader}
+        />
+        <Row style={{width: '100%', paddingHorizontal: 15, marginVertical: 15}}>
+          <Col style={{width: '50%',}}>
+            <Text align='left' type='bold'>Pelelangan</Text>
+            <Text align='left' type='bold'>Yang akan datang</Text>
+          </Col>
+          <Text onPress={()=> navigation.navigate('LiveLelangScreen')} style={{width: '50%',marginVertical: 10, textAlign: 'right', color: Color.primary}}>Lihat Semua</Text>
+        </Row>
+        <CardListLelang/>
+        <View style={{paddingBottom: statusBarHeight + 60}}/>
+      </ScrollView>
     </Scaffold>
   );
 };

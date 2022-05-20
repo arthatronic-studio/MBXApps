@@ -190,7 +190,7 @@ const JoinLelang = ({navigation, route}) => {
             />
           </View>
           <View style={{width: '40%', height: 100, paddingVertical: 10}}>
-            <Text style={{fontSize: 14, fontWeight: 'bold', color: Color.text}}>
+            <Text numberOfLines={3} style={{fontSize: 14, fontWeight: 'bold', color: Color.text}}>
               {name? name : ""}
             </Text>
             <Text
