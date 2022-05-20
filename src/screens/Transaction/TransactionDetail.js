@@ -145,6 +145,7 @@ const TransactionDetail = ({route, navigation}) => {
       ulasan: review.ulasan,
       rating: review.rating,
       manageType: 'ADD',
+      orderId: route.params.item.id,
       // $ulasanId: Int for type delete
     };
 
