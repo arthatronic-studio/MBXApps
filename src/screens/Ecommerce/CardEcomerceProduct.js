@@ -67,8 +67,8 @@ const CardEcomerceProduct = ({ isMyProduct, item, onRefresh, index, type }) => {
 			style={{
 				width: type === 'not-simetris' ? '100%' : '50%',
 				paddingHorizontal: 8,
-				marginBottom: 16,
-				marginTop: 15
+				marginBottom: 8,
+				marginTop: 8
 			}}
 		>
 			<View

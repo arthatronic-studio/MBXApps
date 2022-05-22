@@ -29,6 +29,7 @@ import Client from '@src/lib/apollo';
 import {queryContentProduct} from '@src/lib/query';
 import { queryGetCartAuction } from 'src/lib/query/auction';
 import { FormatMoney } from 'src/utils';
+import ModalFilter from 'src/components/Modal/ModalFilter';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -103,7 +104,7 @@ const CartAuction = ({navigation, route}) => {
             }}>
             <Row style={{}}>
               <Image
-                source={{ uri: Image.length > 0 ? image[0] : '' }}
+                source={{ uri: val.imageUrl }}
                 style={{
                   height: 74,
                   width: 74,

@@ -43,6 +43,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
   const modalDropDownRef = useRef();
   const modalNominalPickerRef = useRef();
   const amountPrice = useRef();
+  const amountPriceBuyNow = useRef();
   const dateRef = useRef();
   const [isModalVisible, setModalVisible] = useState(false);
 
@@ -51,6 +52,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
   const [duration, setDuration] = useState(0);
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(0);
+  const [priceBuyNow, setPriceBuyNow] = useState(0);
   const [quickAccess, setQuickAccess] = useState([50, 100, 250]);
 
   const toggleModal = () => {
@@ -92,7 +94,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
         timeDuration: duration,
         description: description,
         startPrice: amountPrice.current.getRawValue(),
-        buyNowPrice: amountPrice.current.getRawValue(),
+        buyNowPrice: amountPriceBuyNow.current.getRawValue(),
         quantity: 1,
         bidNominal: quickAccess,
         status: 'OPENFORBID',
@@ -132,7 +134,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
         timeDuration: duration,
         description: description,
         startPrice: typeof amountPrice.current.props.value === 'number' ? amountPrice.current.props.value : amountPrice.current.getRawValue(),
-        buyNowPrice: typeof amountPrice.current.props.value === 'number' ? amountPrice.current.props.value : amountPrice.current.getRawValue(),
+        buyNowPrice: typeof amountPriceBuyNow.current.props.value === 'number' ? amountPriceBuyNow.current.props.value : amountPriceBuyNow.current.getRawValue(),
         quantity: 1,
         bidNominal: quickAccess,
         status: 'OPENFORBID',
@@ -160,8 +162,10 @@ const AddProductAuctionSecond = ({navigation, route}) => {
       setDuration(edit.duration);
       setDescription(edit.description);
       setPrice(edit.startPrice);
+      setPriceBuyNow(edit.buyNowPrice);
       setTime(Moment(edit.dateStart).format('HH:mm'));
       setDate(Moment(edit.dateStart).format('DD/MM/YYYY'));
+      setQuickAccess(edit.bidNominal);
     }
   }, [edit])
 
@@ -259,7 +263,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
             onChangeText={text => setDate(text)}
             placeholder={'dd/mm/yyyy'}
             style={{
-              ontSize: 12,
+              fontSize: 12,
               paddingHorizontal: 10,
               paddingTop: 16,
               borderWidth: 1,
@@ -413,6 +417,55 @@ const AddProductAuctionSecond = ({navigation, route}) => {
               }}
               value={price}
               onChangeText={value => setPrice(value)}
+              placeholder={'0'}
+              style={{
+                paddingHorizontal: 0,
+                paddingVertical: 0,
+                fontSize: 14,
+                maxWidth: '90%',
+              }}
+            />
+            <Text size={14} color={Color.text}>
+              Poin
+            </Text>
+          </View>
+        </View>
+
+        <Divider height={10} />
+
+        <View
+          style={{
+            width: '100%',
+            paddingVertical: 8,
+            paddingHorizontal: 10,
+            borderWidth: 1,
+            borderColor: Color.border,
+            borderRadius: 5,
+            flexDirection: 'column',
+          }}>
+          <Text size={8} align="left">
+            Harga beli langsung
+          </Text>
+          <Divider height={4} />
+
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <TextInputMask
+              ref={amountPriceBuyNow}
+              type={'money'}
+              options={{
+                precision: 0,
+                separator: ',',
+                delimiter: '.',
+                unit: '',
+                suffixUnit: '',
+              }}
+              value={priceBuyNow}
+              onChangeText={value => setPriceBuyNow(value)}
               placeholder={'0'}
               style={{
                 paddingHorizontal: 0,

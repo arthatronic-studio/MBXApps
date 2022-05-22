@@ -26,6 +26,9 @@ query(
       quantity
       checked
       status
+      dateStart
+      latestBidPrice
+      userBidLatest
     }
  }
 }
@@ -101,6 +104,7 @@ query(
    status
    duration
    auctionStatus
+   bidNominal
    product {
      id
      name
