@@ -118,8 +118,9 @@ const CardEcomerceProduct = ({ isMyProduct, item, onRefresh, index, type }) => {
 					type='bold'
 					align='left'
 					numberOfLines={2}
+					style={{ height: 50  }}
 				>
-					{item.name}
+					{item.name.length > 29 ? item.name.substring(0,28) : item.name}
 				</Text>
 
 				<View style={{ flexDirection: 'row' , marginTop: 8 }}>

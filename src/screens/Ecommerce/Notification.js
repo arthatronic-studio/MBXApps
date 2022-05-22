@@ -199,7 +199,7 @@ const Notification = () => {
             <Text align='left' type='bold'>
               {item.items[0].products[0]['name'].length > 58 ? item.items[0].products[0]['name'].substring(0,55)+' ...' : item.items[0].products[0]['name']}
             </Text>
-            <View
+            {/* <View
               style={{
                 flexDirection: 'row',
                 marginVertical: 5,
@@ -229,7 +229,7 @@ const Notification = () => {
                 {item.sold || 0}
               </Text>
               <Text style={{fontSize: 10, color: Color.secondary}}>Terjual</Text>
-            </View>
+            </View> */}
           </View>
         </View>}
 

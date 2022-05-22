@@ -129,15 +129,17 @@ const CardOrder = ({data}) => {
                             }}>
                             Jumlah pembelian
                           </Text>
-                          <Text
-                            style={{
-                              fontSize: 8,
-                              color: Color.secondary,
-                              textAlign: 'right',
-                            }}>
-                            {' '}
-                            x{items[0].quantity}
-                          </Text>
+                          <View style={{ alignItems:  'flex-end', flex: 1 }}>
+                            <Text
+                              style={{
+                                fontSize: 8,
+                                color: Color.secondary,
+                                textAlign: 'right',
+                              }}>
+                              {' '}
+                              x{items[0].quantity}
+                            </Text>
+                          </View>
                         </View>
                         <View style={{flexDirection: 'row', marginVertical: 2}}>
                           <Text
@@ -149,14 +151,16 @@ const CardOrder = ({data}) => {
                             }}>
                             Harga Barang
                           </Text>
-                          <Text
-                            style={{
-                              fontSize: 8,
-                              color: Color.secondary,
-                              textAlign: 'right',
-                            }}>
-                            {FormatMoney.getFormattedMoney(items[0].price)} 
-                          </Text>
+                          <View style={{ alignItems:  'flex-end', flex: 1 }}>
+                            <Text
+                              style={{
+                                fontSize: 8,
+                                color: Color.secondary,
+                                textAlign: 'right',
+                              }}>
+                              {FormatMoney.getFormattedMoney(items[0].price)} 
+                            </Text>
+                          </View>
                         </View>
                         <View style={{flexDirection: 'row', marginVertical: 2}}>
                           <Text
@@ -168,6 +172,7 @@ const CardOrder = ({data}) => {
                             }}>
                             Total pembelian
                           </Text>
+                          <View style={{ alignItems:  'flex-end', flex: 1 }}>
                           <Text
                             style={{
                               fontWeight: 'bold',
@@ -180,6 +185,7 @@ const CardOrder = ({data}) => {
                               data.totalPrice,
                             )}{' '}
                           </Text>
+                          </View>
                         </View>
                       </View>
                     </View>

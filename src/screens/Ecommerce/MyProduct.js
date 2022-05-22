@@ -139,10 +139,10 @@ const MyProduct = ({navigation, route}) => {
           <FlatList
             data={data}
             keyExtractor={(item, index) => item.toString() + index}
-            contentContainerStyle={{
-              marginTop: 16,
-              paddingHorizontal: 8,
-            }}
+            // contentContainerStyle={{
+            //   marginTop: 16,
+            //   paddingHorizontal: 8,
+            // }}
             numColumns={2}
             renderItem={({item, index}) => {
               return <CardEcomerceProduct item={item} index={index} isMyProduct onRefresh={() => getProductList()}/>;

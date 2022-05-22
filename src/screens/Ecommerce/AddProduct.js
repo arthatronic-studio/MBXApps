@@ -485,7 +485,7 @@ const AddProduct = ({navigation, route}) => {
               fontWeight: '400',
               position: 'absolute',
             }}>
-            Nama Produk
+            Nama Kategori
           </Text>
         </View>
         

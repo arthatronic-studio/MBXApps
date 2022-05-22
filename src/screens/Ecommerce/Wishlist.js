@@ -169,13 +169,13 @@ const Wishlist = ({navigation}) => {
                         <Container paddingVertical={8}>
                             <Text style={{textAlign: 'left', fontWeight: 'bold'}}>{FormatMoney.getFormattedMoney(item.price)}</Text>
                         </Container>
-                        <View style={{flexDirection: 'row', marginVertical: 3}}>
+                        {/* <View style={{flexDirection: 'row', marginVertical: 3}}>
                             <Entypo name={'star'} style={{color: Color.yellow,}}/>
                             <Text style={{fontSize: 10, marginHorizontal: 5}}>{item.rating || 0}</Text> 
                             <View style={{marginHorizontal: 5, marginVertical: 2,backgroundColor: Color.secondary, height: 10, width: 1}}></View>
                             <Text style={{marginHorizontal: 5, fontSize: 10}}>{item.sold || 0}</Text>
                             <Text style={{ fontSize: 10}}>Terjual</Text>
-                        </View>
+                        </View> */}
                     </View>
                 </TouchableOpacity>
 
