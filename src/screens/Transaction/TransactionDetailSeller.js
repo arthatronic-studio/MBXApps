@@ -238,8 +238,8 @@ const TransactionDetailSeller = ({route, navigation}) => {
       type: 'INPUT_SHIPPING_NUMBER',
       orderId: route.params.item.id,
       shippingNumber: shipperOrder.order_id,
-      start_time: pickUpTime.start_time,
-      end_time: pickUpTime.end_time,
+      pickupStartTime: pickUpTime.start_time,
+      pickupEndTime: pickUpTime.end_time,
     };
     Client.mutate({
       mutation: mutationCheckout,

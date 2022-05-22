@@ -337,6 +337,8 @@ export const mutationCheckout = gql`
     $destinationAddressId: Int
     $orderId: Int
     $shippingNumber: String
+    $pickupStartTime: String
+    $pickupEndTime: String
   ) {
     ecommerceOrderManage(
       type: $type
@@ -345,6 +347,8 @@ export const mutationCheckout = gql`
       courier: $courier
       orderId: $orderId
       shippingNumber: $shippingNumber
+      pickupStartTime: $pickupStartTime
+      pickupEndTime: $pickupEndTime
     ) {
       success
       message
