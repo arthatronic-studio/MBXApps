@@ -114,15 +114,14 @@ const CardEcomerceProduct = ({ isMyProduct, item, onRefresh, index, type }) => {
 
 				<Divider height={8} />
 				
-				<View style={{ minHeight: 36 }}>
-					<Text
-						type='bold'
-						align='left'
-						numberOfLines={2}
-					>
-						{item.name}
-					</Text>
-				</View>
+				<Text
+					type='bold'
+					align='left'
+					numberOfLines={2}
+					style={{ height: 50  }}
+				>
+					{item.name.length > 29 ? item.name.substring(0,28) : item.name}
+				</Text>
 
 				<View style={{ flexDirection: 'row' , marginTop: 8 }}>
 					<Entypo name={'star'} style={{ color: Color.yellow }} />

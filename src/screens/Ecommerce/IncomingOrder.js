@@ -53,7 +53,7 @@ function BelumDibayar({data, getData}) {
         </Container>
       ) : (
         <View>
-          <View
+          {/* <View
             style={{
               flexDirection: 'row',
               marginVertical: 15,
@@ -109,7 +109,7 @@ function BelumDibayar({data, getData}) {
               }}>
               <Text style={{fontSize: 12}}>Telah Diproses</Text>
             </Pressable>
-          </View>
+          </View> */}
           <FlatList
             data={data.data}
             keyExtractor={(item, index) => item.toString() + index}
@@ -141,7 +141,7 @@ function SudahDibayar({data, getData}) {
         </Container>
       ) : (
         <View>
-          <View
+          {/* <View
             style={{
               flexDirection: 'row',
               marginVertical: 15,
@@ -197,7 +197,7 @@ function SudahDibayar({data, getData}) {
               }}>
               <Text style={{fontSize: 12}}>Telah Diproses</Text>
             </Pressable>
-          </View>
+          </View> */}
           <FlatList
             data={data.data}
             keyExtractor={(item, index) => item.toString() + index}
@@ -230,7 +230,7 @@ function Dikemas({data, getData}) {
         </Container>
       ) : (
         <View>
-          <View
+          {/* <View
             style={{
               flexDirection: 'row',
               marginVertical: 15,
@@ -286,7 +286,7 @@ function Dikemas({data, getData}) {
               }}>
               <Text style={{fontSize: 12}}>Telah Diproses</Text>
             </Pressable>
-          </View>
+          </View> */}
           <FlatList
             data={data.data}
             keyExtractor={(item, index) => item.toString() + index}
@@ -321,7 +321,7 @@ function Dikirim({data, getData}) {
         </Container>
       ) : (
         <View>
-          <View
+          {/* <View
             style={{
               flexDirection: 'row',
               marginVertical: 15,
@@ -377,7 +377,7 @@ function Dikirim({data, getData}) {
               }}>
               <Text style={{fontSize: 12}}>Telah Diproses</Text>
             </Pressable>
-          </View>
+          </View> */}
           <FlatList
             data={data.data}
             keyExtractor={(item, index) => item.toString() + index}
@@ -412,7 +412,7 @@ function Selesai({data, getData}) {
         </Container>
       ) : (
         <View>
-          <View
+          {/* <View
             style={{
               flexDirection: 'row',
               marginVertical: 15,
@@ -468,7 +468,7 @@ function Selesai({data, getData}) {
               }}>
               <Text style={{fontSize: 12}}>Telah Diproses</Text>
             </Pressable>
-          </View>
+          </View> */}
           <FlatList
             data={data.data}
             keyExtractor={(item, index) => item.toString() + index}
@@ -502,7 +502,7 @@ function Komplainan({data, getData}) {
         </Container>
       ) : (
         <View>
-          <View
+          {/* <View
             style={{
               flexDirection: 'row',
               marginVertical: 15,
@@ -558,7 +558,7 @@ function Komplainan({data, getData}) {
               }}>
               <Text style={{fontSize: 12}}>Telah Diproses</Text>
             </Pressable>
-          </View>
+          </View> */}
           <FlatList
             data={data.data}
             keyExtractor={(item, index) => item.toString() + index}
@@ -592,7 +592,7 @@ function Dibatalkan({data, getData}) {
         </Container>
       ) : (
         <View>
-          <View
+          {/* <View
             style={{
               flexDirection: 'row',
               marginVertical: 15,
@@ -648,7 +648,7 @@ function Dibatalkan({data, getData}) {
               }}>
               <Text style={{fontSize: 12}}>Telah Diproses</Text>
             </Pressable>
-          </View>
+          </View> */}
           <FlatList
             data={data.data}
             keyExtractor={(item, index) => item.toString() + index}

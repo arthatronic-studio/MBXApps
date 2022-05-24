@@ -24,7 +24,7 @@ const DetailLelang = ({ navigation, route}) => {
   const loading = useSelector(state => state['user.auth'].loading);
 
   const isFocused = useIsFocused();
-  const { iniId:id, showButton} = route.params;
+  const id = route.params.iniId;
   
   useEffect(() => {
     const interval = product ?
@@ -73,6 +73,12 @@ const DetailLelang = ({ navigation, route}) => {
       setIsLoading(false);
     })
   }
+  const renderItem = ({item}) => (
+    
+    <View>
+      <Image source={item.imageProducts}/>
+    </View>
+  );
 
   return (
     <Scaffold
@@ -187,7 +193,7 @@ const DetailLelang = ({ navigation, route}) => {
               }}>
               <Text size={10} color={Color.gray} align='left'>Jenis Barang</Text>
               <Divider height={1}/>
-              <Text size={11} type='bold' align='left'>{detail ? detail.categoryFreeText : "Kateg"}</Text>
+              <Text size={11} type='bold' align='left'>{detail ? detail.categoryFreeText : null}</Text>
             </View>
             <View
               style={{
@@ -233,7 +239,7 @@ const DetailLelang = ({ navigation, route}) => {
               aspectRatio: 6/6,
             }}>
             <ImageSlider
-              data={detail ? detail.imageProducts.length != 0 ? detail.imageProducts: [detail.imageUrl, detail.imageUrl, detail.imageUrl] : []}
+              data={image ? image: [detail.imageUrl, detail.imageUrl, detail.imageUrl]}
             />
           </View>
         {/* Deskripsi */}
@@ -261,44 +267,41 @@ const DetailLelang = ({ navigation, route}) => {
           </Text>
         </View>
       </ScrollView>
-
-      {showButton &&
-        <View>
-          <Text style={{fontSize: 10, fontWeight: 'bold', marginVertical: 5}}>Males Ikutan Lelang?</Text>
-          <TouchableOpacity
-            // onPress={alert("id : "+ item.product.id)}
-            style={{
-              width: '92%',
-              height: 45,
-              backgroundColor: Color.theme,
-              borderWidth: 1,
-              borderColor: Color.primary,
-              borderRadius: 30,
-              marginHorizontal: 15,
-              paddingVertical: 10,
-              marginVertical: 5
-            }}>
-            <Text color={Color.primary} style={{fontSize: 14}}>
-              Beli Langsung Aja
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-          onPress={()=> navigation.navigate('JoinLelang', {prodName: detail.name, prodImage: detail.imageProducts})}
-            style={{
-              width: '92%',
-              height: 45,
-              backgroundColor: Color.primary,
-              borderRadius: 30,
-              marginHorizontal: 15,
-              paddingVertical: 10,
-              marginVertical: 10
-            }}>
-            <Text color={Color.textInput} >
-              Ikuti Lelang
-            </Text>
-          </TouchableOpacity>
-        </View>
-      }
+      <View>
+        <Text style={{fontSize: 10, fontWeight: 'bold', marginVertical: 5}}>Males Ikutan Lelang?</Text>
+        <TouchableOpacity
+          // onPress={alert("id : "+ item.product.id)}
+          style={{
+            width: '92%',
+            height: 45,
+            backgroundColor: Color.theme,
+            borderWidth: 1,
+            borderColor: Color.primary,
+            borderRadius: 30,
+            marginHorizontal: 15,
+            paddingVertical: 10,
+            marginVertical: 5
+          }}>
+          <Text color={Color.primary} style={{fontSize: 14}}>
+            Beli Langsung Aja
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+        onPress={()=> navigation.navigate('JoinLelang', {prodName: detail.name, prodImage: detail.imageProducts, })}
+          style={{
+            width: '92%',
+            height: 45,
+            backgroundColor: Color.primary,
+            borderRadius: 30,
+            marginHorizontal: 15,
+            paddingVertical: 10,
+            marginVertical: 10
+          }}>
+          <Text color={Color.textInput} >
+            Ikuti Lelang
+          </Text>
+        </TouchableOpacity>
+      </View>
     </Scaffold>
   );
 };

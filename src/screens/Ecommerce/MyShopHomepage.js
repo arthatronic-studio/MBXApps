@@ -235,12 +235,12 @@ const MyShopHomepage = ({ navigation }) => {
 							<View style={{width: '85%'}}>
 								<Text align='left'>Ulasan</Text>
 							</View>
-							<View style={{ backgroundColor: Color.error, width: 13, height: 13, alignItems: 'center', justifyContent: 'center', borderRadius: 20 }}>
-								<Text style={{ color: Color.textInput, fontSize: 8 }}>9</Text>
-							</View>
+							{data.reviewsCount > 0 && <View style={{ backgroundColor: Color.error, width: 13, height: 13, alignItems: 'center', justifyContent: 'center', borderRadius: 20 }}>
+								<Text style={{ color: Color.textInput, fontSize: 8 }}>{data.reviewsCount}</Text>
+							</View>}
 							<MaterialIcons name={'keyboard-arrow-right'} size={20} style={{ color: Color.text }} />
 						</Pressable>
-						<Pressable onPress={() => navigation.navigate('IncomingOrder', { routeName: "Komplainan" })} style={{ flexDirection: 'row', marginVertical: 10, alignItems: 'center', justifyContent: 'space-between' }}>
+						{/* <Pressable onPress={() => navigation.navigate('IncomingOrder', { routeName: "Komplainan" })} style={{ flexDirection: 'row', marginVertical: 10, alignItems: 'center', justifyContent: 'space-between' }}>
 							<View style={{width: '85%'}}>
 								<Text align='left'>Pesanan</Text>
 							</View>
@@ -248,7 +248,7 @@ const MyShopHomepage = ({ navigation }) => {
 								<Text style={{ color: Color.textInput, fontSize: 8 }}>9</Text>
 							</View>
 							<MaterialIcons name={'keyboard-arrow-right'} size={20} style={{ color: Color.text }} />
-						</Pressable>
+						</Pressable> */}
 					</View>
 
 					<View style={{ marginTop: 16, backgroundColor: Color.textInput, width: '100%', alignSelf: 'center', borderRadius: 5, paddingHorizontal: 16 }}>

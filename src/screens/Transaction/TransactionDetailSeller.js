@@ -124,6 +124,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
   const getProduct = () => {
     let variables = {
       orderId: route.params.item.id,
+      isMerchant: true
     };
 
     Client.query({query: queryDetailOrder, variables})
@@ -131,7 +132,13 @@ const TransactionDetailSeller = ({route, navigation}) => {
         console.log('res get detail order', res);
         if (res.data.ecommerceOrderDetail) {
           setData(res.data.ecommerceOrderDetail);
-     
+          if(res.data.ecommerceOrderDetail.start_time){
+            setSchedulePickUp({
+              start_time: res.data.ecommerceOrderDetail.start_time,
+              end_time: res.data.ecommerceOrderDetail.end_time,
+            })
+          }
+          
         }
        
 
@@ -231,6 +238,8 @@ const TransactionDetailSeller = ({route, navigation}) => {
       type: 'INPUT_SHIPPING_NUMBER',
       orderId: route.params.item.id,
       shippingNumber: shipperOrder.order_id,
+      pickupStartTime: pickUpTime.start_time,
+      pickupEndTime: pickUpTime.end_time,
     };
     Client.mutate({
       mutation: mutationCheckout,

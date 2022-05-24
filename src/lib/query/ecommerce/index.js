@@ -1,8 +1,14 @@
 import gql from 'graphql-tag';
 
 export const queryDetailOrder = gql`
-  query ($orderId: Int!) {
-    ecommerceOrderDetail(orderId: $orderId) {
+  query (
+    $orderId: Int!
+    $isMerchant: Boolean
+  ) {
+    ecommerceOrderDetail(
+      orderId: $orderId
+      isMerchant: $isMerchant
+    ) {
       userId
       id
       bookingId
@@ -11,6 +17,8 @@ export const queryDetailOrder = gql`
       expiredDate
       status
       statusId
+      start_time
+      end_time
       payment {
         name
       }
@@ -146,6 +154,7 @@ export const queryDetailOrder = gql`
           stock
           quantity
           note
+          isReviewed
         }
       }
 
@@ -328,6 +337,8 @@ export const mutationCheckout = gql`
     $destinationAddressId: Int
     $orderId: Int
     $shippingNumber: String
+    $pickupStartTime: String
+    $pickupEndTime: String
   ) {
     ecommerceOrderManage(
       type: $type
@@ -336,6 +347,8 @@ export const mutationCheckout = gql`
       courier: $courier
       orderId: $orderId
       shippingNumber: $shippingNumber
+      pickupStartTime: $pickupStartTime
+      pickupEndTime: $pickupEndTime
     ) {
       success
       message
@@ -471,6 +484,7 @@ export const queryGetMyShop = gql`
       profileImg
       productsToBeSentCount
       incomingOrdersCount
+      reviewsCount
       isVerified
       isOfficial
       createdAt
@@ -601,6 +615,8 @@ export const queryGetMyProduct = gql`
         merchantId
         productUnit
         minimumBuy
+        sold
+        rating
         productMassa
         status
         categoryFreeText

@@ -96,6 +96,7 @@ const TransactionDetail = ({route, navigation}) => {
   const getProduct = () => {
     let variables = {
       orderId: route.params.item.id,
+      isMerchant: false
     };
 
     client
@@ -156,6 +157,7 @@ const TransactionDetail = ({route, navigation}) => {
     .then((res) => {
       console.log('res ecomm ulasan', res);
       alert('Ulasan berhasil terkirim');
+      getProduct()
       // fetchCheckIsUlasan(id);
     })
     .catch((err) => {
@@ -409,7 +411,7 @@ const TransactionDetail = ({route, navigation}) => {
                         </Text>
                     </View>
 
-                  {data.statusId == 4 && (
+                  {data.statusId == 4 && !val.isReviewed && (
                     <Container paddingHorizontal={8} paddingTop={16}>
                       <View style={{paddingVertical: 15,width: '100%', backgroundColor: Color.border, height: 90, borderRadius: 8}}>
                         <Text style={{fontSize: 12, color: Color.secondary, alignSelf: 'center'}}>Beri Nilai Produk</Text>
