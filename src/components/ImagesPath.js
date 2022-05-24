@@ -233,5 +233,9 @@ export default {
 	two: require('../components/Images/two.png'),
 	nisa: require('../components/Images/nisa.png'),
 	profile: require('../components/Images/profile.png'),
-	productempty: require('../components/Images/productempty.png')
+	productempty: require('../components/Images/productempty.png'),
+	firstChat: require('../components/Images/First.png'),
+	secondChat: require('../components/Images/second.png'),
+	userChat: require('../components/Images/User.png'),
+	filedoc: require('../components/Images/FileDoc.png')
 };
