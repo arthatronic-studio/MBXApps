@@ -32,6 +32,7 @@ const defaultProps = {
 
 const CardListLelang = (props) => {
   const { ListHeaderComponent } = props;
+
   const navigation = useNavigation();
   const {Color} = useColor();
   const isFocused = useIsFocused();
@@ -94,7 +95,7 @@ const CardListLelang = (props) => {
       <TouchableOpacity
         style={[styles.btnCategory, {backgroundColor: Color.textInput, elevation: 5}]}
         onPress={() => {
-          navigation.navigate('DetailLelang', {iniId: item.id})
+          navigation.navigate('DetailLelang', { item })
         }}
       >
         <View
@@ -163,20 +164,18 @@ const CardListLelang = (props) => {
   }
 
   return (
-    <View style={{alignItems: 'center'}}>
-      <FlatList
-        maxToRenderPerBatch={2}
-        numColumns={2}
-        showsHorizontalScrollIndicator={false}
-        data={list.data.slice(0,6)}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => item.id + index.toString()}
-        ListHeaderComponent={() => renderHeader()}
-        // contentContainerStyle={{
-        //   paddingBottom: statusBarHeight + 10
-        // }}
-      />
-    </View>
+    <FlatList
+      maxToRenderPerBatch={2}
+      numColumns={2}
+      showsHorizontalScrollIndicator={false}
+      data={list.data.slice(0,6)}
+      renderItem={renderItem}
+      keyExtractor={(item, index) => item.id + index.toString()}
+      ListHeaderComponent={() => renderHeader()}
+      contentContainerStyle={{
+        paddingBottom: 16
+      }}
+    />
   );
 };
 

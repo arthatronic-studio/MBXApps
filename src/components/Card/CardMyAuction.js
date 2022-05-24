@@ -204,7 +204,7 @@ const CardMyAuction = ({item, onDelete}) => {
         ) : (
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('DetailLelang', {iniId: item.id});
+              navigation.navigate('DetailLelang', { item });
             }}
             style={{
               paddingVertical: 8,

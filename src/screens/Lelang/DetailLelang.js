@@ -13,7 +13,7 @@ import moment from 'moment';
 import {FormatMoney} from 'src/utils';
 import ImageSlider from '../../components/ImageSlider';
 
-const DetailLelang = ({ navigation, route}) => {
+const DetailLelang = ({ navigation, route }) => {
   const [product, setProduct] = useState();
   const [detail, setDetail] = useState();
   const [image, setImage] = useState([]);
@@ -22,9 +22,11 @@ const DetailLelang = ({ navigation, route}) => {
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const [isLoading, setIsLoading] = useState(true);
   const loading = useSelector(state => state['user.auth'].loading);
-
   const isFocused = useIsFocused();
-  const { iniId:id, showButton} = route.params;
+
+  const { item } = route.params;
+  const { id } = item;
+  const showButton = item.status == 'ONGOING';
   
   useEffect(() => {
     const interval = product ?
@@ -123,7 +125,7 @@ const DetailLelang = ({ navigation, route}) => {
                 justifyContent: 'center',
               }}>
               <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                <Text size={5} color={Color.textInput}>Sisa Waktu</Text>
+                <Text size={8} color={Color.textInput}>Sisa Waktu</Text>
                 <Text color={Color.textInput} size={12}>
                   {moment.duration(timeLeft, 'seconds').format('HH:mm:ss', { trim: false })}
                 </Text>
@@ -282,8 +284,11 @@ const DetailLelang = ({ navigation, route}) => {
               Beli Langsung Aja
             </Text>
           </TouchableOpacity>
+        </View>}
+
+        <View>
           <TouchableOpacity
-          onPress={()=> navigation.navigate('JoinLelang', {prodName: detail.name, prodImage: detail.imageProducts})}
+            onPress={() => navigation.navigate('JoinLelang', {prodName: detail.name, prodImage: detail.imageProducts})}
             style={{
               width: '92%',
               height: 45,
@@ -298,7 +303,6 @@ const DetailLelang = ({ navigation, route}) => {
             </Text>
           </TouchableOpacity>
         </View>
-      }
     </Scaffold>
   );
 };

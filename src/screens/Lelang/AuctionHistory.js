@@ -122,7 +122,7 @@ const AuctionHistory = () => {
                     <Text style={{fontSize: 10, color: Color.secondary, textAlign: 'left'}}>Harga Akhir</Text>
                     <Text style={{fontSize: 12, fontWeight: 'bold', textAlign: 'left'}}>{item.latestBidPrice.toLocaleString().replace(/,/g, '.')} <Text style={{fontSize: 8, fontWeight: 'bold'}}>Poin</Text></Text>
                 </Col>
-                <TouchableOpacity onPress={() => navigation.navigate('DetailLelang', {iniId: item.auctionId, showButton: item.status == 'ONGOING' ? true : false})}>
+                <TouchableOpacity onPress={() => navigation.navigate('DetailLelang', { item })}>
                   <Text style={{fontSize: 10, marginHorizontal: 5, marginVertical: 8, color: Color.primary}}>Lihat Detail</Text>
                 </TouchableOpacity>
                 <AntDesign name={'arrowright'} size={11} style={{marginVertical: 9, marginRight: 15, color: Color.primary}}/>

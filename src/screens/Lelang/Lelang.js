@@ -90,15 +90,16 @@ const Lelang = ({ navigation, route }) => {
         <CardListLelang
           ListHeaderComponent={renderHeader}
         />
-        <Row style={{width: '100%', paddingHorizontal: 15, marginVertical: 15}}>
+
+        <Row style={{width: '100%', paddingHorizontal: 16, paddingBottom: 16}}>
           <Col style={{width: '50%',}}>
             <Text align='left' type='bold'>Pelelangan</Text>
             <Text align='left' type='bold'>Yang akan datang</Text>
           </Col>
           <Text onPress={()=> navigation.navigate('LiveLelangScreen')} style={{width: '50%',marginVertical: 10, textAlign: 'right', color: Color.primary}}>Lihat Semua</Text>
         </Row>
+        
         <CardListLelang/>
-        <View style={{paddingBottom: statusBarHeight + 60}}/>
       </ScrollView>
     </Scaffold>
   );
