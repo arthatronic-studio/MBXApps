@@ -24,7 +24,8 @@ import ChatEcommerceHeader from './ChatEcommerceHeader';
 import {useSelector} from 'react-redux';
 import Footer from 'src/components/Footer';
 import {currentSocket} from '@src/screens/MainHome/MainHome';
-import { FormatMoney } from '@src/utils';
+import {FormatMoney} from '@src/utils';
+import moment from 'moment';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -133,36 +134,63 @@ const ChatDetailBuyer = ({navigation, route}) => {
             return (
               <>
                 <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('DetailProduct', {
+                      item: {id: +item.tagged_id},
+                    })
+                  }
                   style={{
-                    paddingHorizontal: 16,
-                    paddingVertical: 8,
+                    paddingHorizontal: 32,
+                    paddingVertical: 16,
                     backgroundColor: Color.theme,
                     marginVertical: 8,
                     flexDirection: 'row',
                     borderRadius: 8,
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-end',
                   }}>
-                  <Image
-                    source={{uri: item.tagged_image}}
-                    style={{
-                      width: 48,
-                      aspectRatio: 1,
-                      borderRadius: 5,
-                      marginRight: 16,
-                    }}
-                  />
-                  <View
-                    style={{
-                      flexDirection: 'column',
-                      maxWidth: width - 16 - 32 - 48 - 16,
-                      justifyContent: 'space-between',
-                    }}>
-                    <Text size={12} align="left" numberOfLines={2}>
-                      {item.tagged_name}
-                    </Text>
-                    <Divider height={3} />
-                    <Text size={12} align="left" type="bold">
-											{FormatMoney.getFormattedMoney(item.price)}
-                    </Text>
+                  <View style={{flexDirection: 'row'}}>
+                    <Image
+                      source={{uri: item.tagged_image}}
+                      style={{
+                        width: 54,
+                        aspectRatio: 1,
+                        borderRadius: 5,
+                        marginRight: 16,
+                      }}
+                    />
+                    <View
+                      style={{
+                        flexDirection: 'column',
+                        maxWidth: width - 16 - 32 - 48 - 16,
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text size={14} align="left" numberOfLines={2}>
+                        {item.tagged_name}
+                      </Text>
+                      <Divider height={5} />
+                      <Text size={14} align="left" type="bold">
+                        {FormatMoney.getFormattedMoney(item.price)}
+                      </Text>
+                    </View>
+                  </View>
+                  <View>
+                    <View
+                      style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                      <Ionicons
+                        name={'checkmark-done'}
+                        size={14}
+                        color={Color.placeholder}
+                      />
+                      <Divider width={2} />
+                      <Text
+                        size={10}
+                        type="medium"
+                        color={Color.gray}
+                        align="left">
+                        {moment(item.created_date).format('HH:mm')}
+                      </Text>
+                    </View>
                   </View>
                 </TouchableOpacity>
               </>
@@ -206,8 +234,7 @@ const ChatDetailBuyer = ({navigation, route}) => {
                       color={Color.gray}
                       style={{marginTop: 3}}
                       align="left">
-                      {new Date(item.created_date).getHours()}:
-                      {new Date(item.created_date).getMinutes()}
+                      {moment(item.created_date).format('HH:mm')}
                     </Text>
                   </View>
                 </View>
@@ -231,15 +258,26 @@ const ChatDetailBuyer = ({navigation, route}) => {
                     <Text size={14} align="left">
                       {item.chat_message}
                     </Text>
-                    <Text
-                      size={10}
-                      type="medium"
-                      color={Color.gray}
-                      style={{marginTop: 3}}
-                      align="left">
-                      {new Date(item.created_date).getHours()}:
-                      {new Date(item.created_date).getMinutes()}
-                    </Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'flex-end',
+                        marginTop: 3,
+                      }}>
+                      <Ionicons
+                        name={'checkmark-done'}
+                        size={14}
+                        color={Color.placeholder}
+                      />
+                      <Divider width={2} />
+                      <Text
+                        size={10}
+                        type="medium"
+                        color={Color.gray}
+                        align="left">
+                        {moment(item.created_date).format('HH:mm')}
+                      </Text>
+                    </View>
                   </View>
                   <Image
                     source={{uri: userImage}}
