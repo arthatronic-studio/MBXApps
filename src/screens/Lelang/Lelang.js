@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Image, FlatList, useWindowDimensions} from 'react-native';
+import {View, Image, FlatList, ScrollView,useWindowDimensions} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import {Scaffold, useColor, Header, Text,  Row,
@@ -12,7 +12,6 @@ import client from 'src/lib/apollo';
 import { Divider } from 'src/styled';
 import { statusBarHeight } from 'src/utils/constants';
 import { queryBannerList } from 'src/lib/query/banner';
-import { ScrollView } from 'react-native-gesture-handler';
 
 const Lelang = ({ navigation, route }) => {
   const {Color} = useColor();
@@ -59,7 +58,7 @@ const Lelang = ({ navigation, route }) => {
             <Text align='left' type='bold'>Pelelangan</Text>
             <Text align='left' type='bold'>Sedang Berlangsung</Text>
           </Col>
-          <Text onPress={()=> navigation.navigate('LiveLelangScreen')} style={{width: '50%',marginVertical: 10, textAlign: 'right', color: Color.primary}}>Lihat Semua</Text>
+          <Text onPress={()=> navigation.navigate('LiveLelangScreen', {title: 'Sedang Berlangsung', cardStatus: 'ONGOING'})} style={{width: '50%',marginVertical: 10, textAlign: 'right', color: Color.primary}}>Lihat Semua</Text>
         </Row>
         <Divider height={10}/>
       </>
@@ -87,7 +86,7 @@ const Lelang = ({ navigation, route }) => {
     >
 
       <ScrollView>
-        <CardListLelang
+        <CardListLelang prodStatus={'ONGOING'}
           ListHeaderComponent={renderHeader}
         />
 
@@ -96,7 +95,7 @@ const Lelang = ({ navigation, route }) => {
             <Text align='left' type='bold'>Pelelangan</Text>
             <Text align='left' type='bold'>Yang akan datang</Text>
           </Col>
-          <Text onPress={()=> navigation.navigate('LiveLelangScreen')} style={{width: '50%',marginVertical: 10, textAlign: 'right', color: Color.primary}}>Lihat Semua</Text>
+          <Text onPress={()=> navigation.navigate('LiveLelangScreen', {title: 'Yang Akan Datang', cardStatus: 'WILLCOME'})} style={{width: '50%',marginVertical: 10, textAlign: 'right', color: Color.primary}}>Lihat Semua</Text>
         </Row>
         
         <CardListLelang/>

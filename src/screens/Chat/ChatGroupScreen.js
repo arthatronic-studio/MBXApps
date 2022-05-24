@@ -58,7 +58,7 @@ const initialDataRooms = {
     refresh: false,
 }
 
-const ChatRoomsScreen = ({ navigation, route }) => {
+const ChatGroupScreen = ({ navigation, route }) => {
     // state
     const [dataRooms, setDataRooms] = useState(initialDataRooms);
     const [myRoomIds, setMyRoomIds] = useState([]);
@@ -211,7 +211,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                                     if (e['user_id'] != user.userId) targetIds.push(e['user_id']);
                                 });
 
-                                navigation.navigate('ChatDetailScreen', {
+                                navigation.navigate('GroupDetailScreen', {
                                     roomId: item.room_id,
                                     roomName: getTitle(item.member),
                                     selected: item.member,
@@ -242,7 +242,8 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                                     type='semibold'
                                     numberOfLines={1}
                                 >
-                                    {item.name || getTitle(item.member)}
+                                    Belajar Ngoding
+                                    {/* {item.name || getTitle(item.member)} */}
                                 </Text>
                                 <Text
                                     type={isUserTyping(item.typing) ? 'italic' : notifBadge ? 'bold' : 'regular'}
@@ -296,4 +297,4 @@ const ChatRoomsScreen = ({ navigation, route }) => {
     )
 }
 
-export default ChatRoomsScreen;
+export default ChatGroupScreen;

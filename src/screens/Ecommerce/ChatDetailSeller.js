@@ -1,15 +1,21 @@
 import React, {useState, useEffect} from 'react';
-import { View, ImageBackground, useWindowDimensions, Image, TextInput } from 'react-native';
-import { Header } from '@src/components';
-import { Divider } from 'src/styled';
-import { MainView } from '@src/styled';
+import {
+  View,
+  ImageBackground,
+  useWindowDimensions,
+  Image,
+  TextInput,
+} from 'react-native';
+import {Header} from '@src/components';
+import {Divider} from 'src/styled';
+import {MainView} from '@src/styled';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Col, Scaffold, Text, TouchableOpacity, useColor } from '@src/components';
-import { shadowStyle } from '@src/styles';
-import { TabBar, TabView, SceneMap } from 'react-native-tab-view';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import {Col, Scaffold, Text, TouchableOpacity, useColor} from '@src/components';
+import {shadowStyle} from '@src/styles';
+import {TabBar, TabView, SceneMap} from 'react-native-tab-view';
+import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import CardChat from './CardChat';
 import CardChatExist from './CardChatExist';
 import ImagesPath from 'src/components/ImagesPath';
@@ -17,8 +23,9 @@ import Styled from 'styled-components';
 import ChatEcommerceHeader from './ChatEcommerceHeader';
 import {useSelector} from 'react-redux';
 import Footer from 'src/components/Footer';
-import { currentSocket } from '@src/screens/MainHome/MainHome';
-import { FormatMoney } from '@src/utils';
+import {currentSocket} from '@src/screens/MainHome/MainHome';
+import {FormatMoney} from '@src/utils';
+import moment from 'moment';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -52,164 +59,273 @@ const CircleSend = Styled(TouchableOpacity)`
   justifyContent: center;
   alignItems: center;
 `;
-const ChatDetailSeller = ({ navigation, route }) => {
-	const { id, merchant, users } = route.params;
-	const { Color } = useColor();
-	const [roomId, setRoomId] = useState(id);
+const ChatDetailSeller = ({navigation, route}) => {
+  const {id, merchant, users} = route.params;
+  const {Color} = useColor();
+  const [roomId, setRoomId] = useState(id);
   const user = useSelector(state => state['user.auth'].login.user);
-	const [userTarget, setUserTarget] = useState(users.find(item => item.user_id != user.userId));
-	const { width, height } = useWindowDimensions();
-	const [message, setMessage] = useState('');
-	const [dataChat, setDataChat] = useState([]);
-	const [userImage, setUserImage] = useState(merchant.profile_img);
-	const [targetImage, setTargetImage] = useState(userTarget.photo_profile);
+  const [userTarget, setUserTarget] = useState(
+    users.find(item => item.user_id != user.userId),
+  );
+  const {width, height} = useWindowDimensions();
+  const [message, setMessage] = useState('');
+  const [dataChat, setDataChat] = useState([]);
+  const [userImage, setUserImage] = useState(merchant.profile_img);
+  const [targetImage, setTargetImage] = useState(userTarget.photo_profile);
 
-	const create_message = () => {
-		const community_chat_user_params = [
-			{ user_id: userTarget.user_id, room_type: 'ECOMMERCE', room_user_type: 'USER' },
-			{ user_id: user.userId, room_type: 'ECOMMERCE', room_user_type: 'MERCHANT' },
-		];
-		const body = {community_chat_user_params: community_chat_user_params, chat_room_id: roomId, chat_message: message, user_id:  user.userId, chat_type: 'TEXT'};
-		currentSocket.emit('create_community_chat_message', body);
-		// currentSocket.on('create_community_chat_room', (res) => {
-		// 	console.log('res create_community_chat_room', res);
-		// });
-		setMessage('');
-  	}
-	
-	useEffect(() => {
-		currentSocket.emit('community_chat_message', {chat_room_id: roomId});
-		console.log("test");
-		currentSocket.on('community_chat_message', (res) => {
-			console.log('community_chat_message', res.data);
-			if(Array.isArray(res.data)) {
-				setDataChat(res.data);
-			}
-		});
-	}, []);
+  const create_message = () => {
+    const community_chat_user_params = [
+      {
+        user_id: userTarget.user_id,
+        room_type: 'ECOMMERCE',
+        room_user_type: 'USER',
+      },
+      {
+        user_id: user.userId,
+        room_type: 'ECOMMERCE',
+        room_user_type: 'MERCHANT',
+      },
+    ];
+    const body = {
+      community_chat_user_params: community_chat_user_params,
+      chat_room_id: roomId,
+      chat_message: message,
+      user_id: user.userId,
+      chat_type: 'TEXT',
+    };
+    currentSocket.emit('create_community_chat_message', body);
+    // currentSocket.on('create_community_chat_room', (res) => {
+    // 	console.log('res create_community_chat_room', res);
+    // });
+    setMessage('');
+  };
 
-	return (
-		<Scaffold header={
-			<ChatEcommerceHeader 
-				name={userTarget.first_name}
-				merchant={false}
-				isOnline={userTarget.is_online}
-			/>
-		}>
-			<FlatList
-				key='Chat'
-				keyExtractor={(item, index) => item.toString() + index}
-				data={dataChat}
-				numColumns={1}
-				showsHorizontalScrollIndicator={false}
-				style={{backgroundColor: Color.border}}
-				contentContainerStyle={{marginHorizontal: 8, marginVertical: 8, paddingBottom: 8}}
-				inverted
-				renderItem={({ item, index }) => {
-					if (item.tagged_id) {
+  useEffect(() => {
+    currentSocket.emit('community_chat_message', {chat_room_id: roomId});
+    console.log('test');
+    currentSocket.on('community_chat_message', res => {
+      console.log('community_chat_message', res.data);
+      if (Array.isArray(res.data)) {
+        setDataChat(res.data);
+      }
+    });
+  }, []);
+
+  return (
+    <Scaffold
+      header={
+        <ChatEcommerceHeader
+          name={userTarget.first_name}
+          merchant={false}
+          isOnline={userTarget.is_online}
+        />
+      }>
+      <FlatList
+        key="Chat"
+        keyExtractor={(item, index) => item.toString() + index}
+        data={dataChat}
+        numColumns={1}
+        showsHorizontalScrollIndicator={false}
+        style={{backgroundColor: Color.border}}
+        contentContainerStyle={{
+          marginHorizontal: 8,
+          marginVertical: 8,
+          paddingBottom: 8,
+        }}
+        inverted
+        renderItem={({item, index}) => {
+          if (item.tagged_id) {
             return (
               <>
                 <TouchableOpacity
                   style={{
-                    paddingHorizontal: 16,
-                    paddingVertical: 8,
+                    paddingHorizontal: 32,
+                    paddingVertical: 16,
                     backgroundColor: Color.theme,
                     marginVertical: 8,
                     flexDirection: 'row',
                     borderRadius: 8,
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-end',
                   }}>
-                  <Image
-                    source={{uri: item.tagged_image}}
-                    style={{
-                      width: 48,
-                      aspectRatio: 1,
-                      borderRadius: 5,
-                      marginRight: 16,
-                    }}
-                  />
-                  <View
-                    style={{
-                      flexDirection: 'column',
-                      maxWidth: width - 16 - 32 - 48 - 16,
-                      justifyContent: 'space-between',
-                    }}>
-                    <Text size={12} align="left" numberOfLines={2}>
-                      {item.tagged_name}
-                    </Text>
-                    <Divider height={3} />
-                    <Text size={12} align="left" type="bold">
-											{FormatMoney.getFormattedMoney(item.price)}
-                    </Text>
+                  <View style={{flexDirection: 'row'}}>
+                    <Image
+                      source={{uri: item.tagged_image}}
+                      style={{
+                        width: 54,
+                        aspectRatio: 1,
+                        borderRadius: 5,
+                        marginRight: 16,
+                      }}
+                    />
+                    <View
+                      style={{
+                        flexDirection: 'column',
+                        maxWidth: width - 16 - 32 - 48 - 16,
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text size={14} align="left" numberOfLines={2}>
+                        {item.tagged_name}
+                      </Text>
+                      <Divider height={5} />
+                      <Text size={14} align="left" type="bold">
+                        {FormatMoney.getFormattedMoney(item.price)}
+                      </Text>
+                    </View>
+                  </View>
+                  <View>
+                    <View
+                      style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+                      <Ionicons
+                        name={'checkmark-done'}
+                        size={14}
+                        color={Color.placeholder}
+                      />
+                      <Divider width={2} />
+                      <Text
+                        size={10}
+                        type="medium"
+                        color={Color.gray}
+                        align="left">
+                        {moment(item.created_date).format('HH:mm')}
+                      </Text>
+                    </View>
                   </View>
                 </TouchableOpacity>
               </>
             );
           }
 
-					return (
-						<>
-						{item.user_id == userTarget.user_id ?
-							(
-								<View style={{ marginHorizontal: 8, marginVertical: 8, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'flex-start' }}>
-									<Image source={{ uri: targetImage }} style={{ width: 36, aspectRatio: 1, borderRadius: 18, marginRight: 8 }} />
-									<View style={{ backgroundColor: '#FDE4D2', borderRadius: 8, paddingHorizontal: 12, paddingVertical: 12, maxWidth: width-(52) }}>
-										<Text size={14} align='left'>
-											{item.chat_message}
-										</Text>
-										<Text size={10} type="medium" color={Color.gray} style={{ marginTop: 3 }} align='left'>{new Date(item.created_date).getHours()}:{new Date(item.created_date).getMinutes()}</Text>
-									</View>
-								</View>
-							) :
-							(
-								<View style={{ marginHorizontal: 8, marginVertical: 8, flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'flex-end' }}>
-									<View style={{ backgroundColor: '#FDE4D2', borderRadius: 8, paddingHorizontal: 12, paddingVertical: 12, maxWidth: width-(52) }}>
-										<Text size={14} align='left'>
-											{item.chat_message}
-										</Text>
-										<Text size={10} type="medium" color={Color.gray} style={{ marginTop: 3 }} align='left'>{new Date(item.created_date).getHours()}:{new Date(item.created_date).getMinutes()}</Text>
-									</View>
-									<Image source={{ uri: userImage }} style={{ width: 36, aspectRatio: 1, borderRadius: 18, marginLeft: 8 }}/>
-								</View>
-							)
-							}
-						</>
-					)
-				}}
-			/>
+          return (
+            <>
+              {item.user_id == userTarget.user_id ? (
+                <View
+                  style={{
+                    marginHorizontal: 8,
+                    marginVertical: 8,
+                    flexDirection: 'row',
+                    alignItems: 'flex-end',
+                    justifyContent: 'flex-start',
+                  }}>
+                  <Image
+                    source={{uri: targetImage}}
+                    style={{
+                      width: 36,
+                      aspectRatio: 1,
+                      borderRadius: 18,
+                      marginRight: 8,
+                    }}
+                  />
+                  <View
+                    style={{
+                      backgroundColor: '#FDE4D2',
+                      borderRadius: 8,
+                      paddingHorizontal: 12,
+                      paddingVertical: 12,
+                      maxWidth: width - 52,
+                    }}>
+                    <Text size={14} align="left">
+                      {item.chat_message}
+                    </Text>
+                    <Text
+                      size={10}
+                      type="medium"
+                      color={Color.gray}
+                      style={{marginTop: 3}}
+                      align="left">
+                      {moment(item.created_date).format('HH:mm')}
+                    </Text>
+                  </View>
+                </View>
+              ) : (
+                <View
+                  style={{
+                    marginHorizontal: 8,
+                    marginVertical: 8,
+                    flexDirection: 'row',
+                    alignItems: 'flex-end',
+                    justifyContent: 'flex-end',
+                  }}>
+                  <View
+                    style={{
+                      backgroundColor: '#FDE4D2',
+                      borderRadius: 8,
+                      paddingHorizontal: 12,
+                      paddingVertical: 12,
+                      maxWidth: width - 52,
+                    }}>
+                    <Text size={14} align="left">
+                      {item.chat_message}
+                    </Text>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'flex-end',
+                        marginTop: 3,
+                      }}>
+                      <Ionicons
+                        name={'checkmark-done'}
+                        size={14}
+                        color={Color.placeholder}
+                      />
+                      <Divider width={2} />
+                      <Text
+                        size={10}
+                        type="medium"
+                        color={Color.gray}
+                        align="left">
+                        {moment(item.created_date).format('HH:mm')}
+                      </Text>
+                    </View>
+                  </View>
+                  <Image
+                    source={{uri: userImage}}
+                    style={{
+                      width: 36,
+                      aspectRatio: 1,
+                      borderRadius: 18,
+                      marginLeft: 8,
+                    }}
+                  />
+                </View>
+              )}
+            </>
+          );
+        }}
+      />
 
-			<View>
-				<BottomSection style={{ borderColor: Color.theme }}>
-					<BoxInput style={{ borderColor: Color.text, flexDirection: 'row' }}>
-						<CustomTextInput
-							name="text"
-							placeholder="Kirim Pesan.."
-							placeholderTextColor={Color.text}
-							selectionColor={Color.primary}
-							returnKeyType="done"
-							returnKeyLabel="Done"
-							blurOnSubmit={false}
-							error={null}
-							multiline
-							value={message}
-							onChangeText={(text) => setMessage(text)}
-							style={{ color: Color.text, marginHorizontal: 20 }}
-						/>
-						{/* <Image source={ImagesPath.plusCircleGray} style={{ marginVertical: 12 }} /> */}
-					</BoxInput>
-					<CircleSend
-						onPress={() => create_message()}
-						style={{
-							backgroundColor: Color.primary,
-							marginRight: 5,
-							marginBottom: 10
-						}}
-					>
-						<Ionicons name="send" color={Color.textInput} size={15} />
-					</CircleSend>
-				</BottomSection>
-			</View>
-		</Scaffold>
-	);
+      <View>
+        <BottomSection style={{borderColor: Color.theme}}>
+          <BoxInput style={{borderColor: Color.text, flexDirection: 'row'}}>
+            <CustomTextInput
+              name="text"
+              placeholder="Kirim Pesan.."
+              placeholderTextColor={Color.text}
+              selectionColor={Color.primary}
+              returnKeyType="done"
+              returnKeyLabel="Done"
+              blurOnSubmit={false}
+              error={null}
+              multiline
+              value={message}
+              onChangeText={text => setMessage(text)}
+              style={{color: Color.text, marginHorizontal: 20}}
+            />
+            {/* <Image source={ImagesPath.plusCircleGray} style={{ marginVertical: 12 }} /> */}
+          </BoxInput>
+          <CircleSend
+            onPress={() => create_message()}
+            style={{
+              backgroundColor: Color.primary,
+              marginRight: 5,
+              marginBottom: 10,
+            }}>
+            <Ionicons name="send" color={Color.textInput} size={15} />
+          </CircleSend>
+        </BottomSection>
+      </View>
+    </Scaffold>
+  );
 };
 
 export default ChatDetailSeller;

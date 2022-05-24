@@ -4,7 +4,7 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  Image,
+  Image, Dimensions, Pressable
 } from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -30,7 +30,7 @@ const defaultProps = {
   ListHeaderComponent: () => <View />
 }
 
-const CardListLelang = (props) => {
+const CardListLelang = (props, route) => {
   const { ListHeaderComponent } = props;
 
   const navigation = useNavigation();
@@ -50,7 +50,7 @@ const CardListLelang = (props) => {
   const fetchListProduct = () => {
     const variables = {
       type: "HOMEPAGE",
-      status: "ONGOING",
+      status: props.prodStatus,
     };
 
     Client.query({
@@ -83,9 +83,10 @@ const CardListLelang = (props) => {
   }
 
   const renderItem = ({item}) => (
+
     <View
       style={{
-        width: '46%',
+        width: '45%',
         height: 260,
         marginHorizontal: 5,
         marginVertical: 5,
@@ -153,6 +154,7 @@ const CardListLelang = (props) => {
       </TouchableOpacity>
       
     </View>
+
   );
 
   const renderHeader = () => {
@@ -163,11 +165,12 @@ const CardListLelang = (props) => {
     return <View />;
   }
 
+  const windowWidth = Dimensions.get('window').width;
+
   return (
     <FlatList
-      maxToRenderPerBatch={2}
-      numColumns={2}
       showsHorizontalScrollIndicator={false}
+      numColumns={2}
       data={list.data.slice(0,6)}
       renderItem={renderItem}
       keyExtractor={(item, index) => item.id + index.toString()}

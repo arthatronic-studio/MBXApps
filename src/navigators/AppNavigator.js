@@ -199,6 +199,13 @@ import IncomingOrder from 'src/screens/Ecommerce/IncomingOrder';
 import SearchScreen from 'src/screens/Ecommerce/SearchScreen';
 import TrackingOrder from 'src/screens/Transaction/TrackingOrder';
 import AddProductAuctionSecond from 'src/screens/Lelang/AddProductAuctionSecond';
+import Chat from 'src/screens/Chat/Chat';
+import ChatGroupScreen from 'src/screens/Chat/ChatGroupScreen';
+import CreateGroup from 'src/screens/Chat/CreateGroup';
+import AddInformationGroup from 'src/screens/Chat/AddInformationGroup';
+import GroupDetailScreen from 'src/screens/Chat/GroupDetailScreen';
+import UserGroupDetail from 'src/screens/Chat/UserGroupDetail';
+import AddMember from 'src/screens/Chat/AddMember';
 
 const { Navigator, Screen } = createStackNavigator();
 const MainPage =
@@ -376,6 +383,14 @@ function MainStackNavigator() {
       <Screen name="ChatDetailScreen" component={ChatDetailScreen} />
       <Screen name="ChatUserListScreen" component={ChatUserListScreen} />
       <Screen name="ChatInfoScreen" component={ChatInfoScreen} />
+      <Screen name="Chat" component={Chat} />
+      <Screen name="AddMember" component={AddMember} />
+      <Screen name="UserGroupDetail" component={UserGroupDetail} />
+      <Screen name="AddInformationGroup" component={AddInformationGroup} />
+      <Screen name="CreateGroup" component={CreateGroup} />
+      <Screen name="GroupDetailScreen" component={GroupDetailScreen} />
+      <Screen name="ChatGroupScreen" component={ChatGroupScreen} />
+
 
       {/* auction */}
       <Screen name="AuctionDetail" component={AuctionDetail} />

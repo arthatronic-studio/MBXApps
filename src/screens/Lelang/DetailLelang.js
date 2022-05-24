@@ -75,6 +75,12 @@ const DetailLelang = ({ navigation, route }) => {
       setIsLoading(false);
     })
   }
+  const renderItem = ({item}) => (
+    
+    <View>
+      <Image source={item.imageProducts}/>
+    </View>
+  );
 
   return (
     <Scaffold
@@ -189,7 +195,7 @@ const DetailLelang = ({ navigation, route }) => {
               }}>
               <Text size={10} color={Color.gray} align='left'>Jenis Barang</Text>
               <Divider height={1}/>
-              <Text size={11} type='bold' align='left'>{detail ? detail.categoryFreeText : "Kateg"}</Text>
+              <Text size={11} type='bold' align='left'>{detail ? detail.categoryFreeText : null}</Text>
             </View>
             <View
               style={{
@@ -235,7 +241,7 @@ const DetailLelang = ({ navigation, route }) => {
               aspectRatio: 6/6,
             }}>
             <ImageSlider
-              data={detail ? detail.imageProducts.length != 0 ? detail.imageProducts: [detail.imageUrl, detail.imageUrl, detail.imageUrl] : []}
+              data={image ? image: [detail.imageUrl, detail.imageUrl, detail.imageUrl]}
             />
           </View>
         {/* Deskripsi */}
