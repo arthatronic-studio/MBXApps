@@ -10,37 +10,14 @@ import { TextInputMask } from 'react-native-masked-text';
 import { useSelector } from 'react-redux';
 import { navigationRef } from 'App';
 import { Col } from '../Grid';
+import FormInput from '../FormInput';
 
 const { width } = Dimensions.get('window');
 
 const defaultProps = {
-	onPress: () => {}
+	startPrice: 0,
+	onPress: () => {},
 };
-
-const CustomTextInput = Styled(TextInput)`
-  width: 95%;
-  height: 100%;
-  fontFamily: OpenSans-Regular;
-  backgroundColor: transparent;
-  fontSize: 18px;
-`;
-
-const InputNumberView = Styled(TextInputMask)`
-  width: 100%;
-  fontFamily: OpenSans-Regular;
-  alignContent: flex-start;
-  fontSize: 14px;
-`;
-
-const EmailRoundedView = Styled(View)`
-  width: ${width - 32};
-  paddingHorizontal: 10;
-  alignItems: center;
-  justifyContent: center;
-  flexDirection: column;
-  borderRadius: 4px;
-  marginBottom: 10;
-`;
 
 const SubmitButton = Styled(TouchableOpacity)`
   width: 100%;
@@ -60,7 +37,7 @@ const amountData = [
 ];
 
 const ModalBid = forwardRef((props, ref) => {
-	const { onPress, data } = props;
+	const { onPress, startPrice } = props;
 	const modalizeRef = useRef(null);
 	const combinedRef = useCombinedRefs(ref, modalizeRef);
 	const [ handle, setHandle ] = useState(false);
@@ -68,32 +45,28 @@ const ModalBid = forwardRef((props, ref) => {
 	const [ popupProps, showPopup ] = usePopup();
 	const { Color } = useColor();
 	const { width } = useWindowDimensions();
+
 	const handlePosition = (position) => {
 		setHandle(position === 'top');
 	};
-	const amountBid = useRef();
-
-	// selector
-	const user = useSelector((state) => state['user.auth'].login.user);
 
 	// state
 	const [ text, setText ] = useState('');
 	const [ selectedAmount, setSelectedAmount ] = useState();
 
-	const submit = () => {
-		if (text !== '') {
-			if (amountBid.current.getRawValue() < 5000) {
+	const onSubmit = () => {
+		if (text) {
+			if (parseInt(text) < startPrice) {
 				showPopup('Minimal bid adalah Rp 5.000', 'warning');
 			} else {
-				data.push({ name: user.firstName, bid: amountBid.current.getRawValue() });
+				onPress(text);
 				combinedRef.current.close();
-				navigationRef.current.navigate('CartScreen');
+				setText('');
+				setSelectedAmount();
 			}
 		} else {
 			showPopup('Silakan masukan nominal bid terlebih dulu', 'warning');
 		}
-		setText('');
-		setSelectedAmount();
 	};
 
 	const renderContent = () => {
@@ -182,6 +155,7 @@ const ModalBid = forwardRef((props, ref) => {
 					<Ionicons name="chevron-down-outline" color={Color.text} size={18} />
 				</TouchableOpacity>
 			</View>
+
 			<View style={{ flexDirection: 'row', marginBottom: 16 }}>
 				<View style={{ flexDirection: 'column', marginRight: 24, alignItems: 'baseline' }}>
 					<Text style={{ color: Color.grayLight }}>Harga saat ini</Text>
@@ -189,16 +163,28 @@ const ModalBid = forwardRef((props, ref) => {
 				</View>
 				<View style={{ flexDirection: 'column', alignItems: 'baseline' }}>
 					<Text style={{ color: Color.grayLight }}>Penawaranmu</Text>
-					<Text style={{ fontWeight: 'bold' }}>-</Text>
+					<FormInput
+						placeholder='-'
+						value={text}
+						onChangeText={(val) => {
+							setText(val);
+						}}
+						keyboardType='numeric'
+					/>
 				</View>
 			</View>
 
 			{renderContent()}
+
 			<View style={{ flexDirection: 'column', marginRight: 24, alignItems: 'baseline', marginTop: 16 }}>
 				<Text style={{ color: Color.grayLight }}>Poinku</Text>
 				<Text style={{ fontWeight: 'bold' }}>250.000 Poin</Text>
 			</View>
-			<SubmitButton style={{ backgroundColor: Color.grayLight }}>
+
+			<SubmitButton
+				onPress={() => onSubmit()}
+				style={{ backgroundColor: Color.grayLight }}
+			>
 				<Text color={Color.textInput} size={16}>
 					Pasang Tawaran
 				</Text>
@@ -212,5 +198,4 @@ const ModalBid = forwardRef((props, ref) => {
 });
 
 ModalBid.defaultProps = defaultProps;
-
 export default ModalBid;

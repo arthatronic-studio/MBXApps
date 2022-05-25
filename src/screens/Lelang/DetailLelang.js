@@ -294,7 +294,7 @@ const DetailLelang = ({ navigation, route }) => {
 
         <View>
           <TouchableOpacity
-            onPress={() => navigation.navigate('JoinLelang', {prodName: detail.name, prodImage: detail.imageProducts})}
+            onPress={() => navigation.navigate('JoinLelang', { item: product })}
             style={{
               width: '92%',
               height: 45,

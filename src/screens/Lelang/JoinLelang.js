@@ -1,172 +1,115 @@
-import React, { useRef, useState } from 'react';
-import {View, Text,useWindowDimensions, Image, FlatList,Pressable,} from 'react-native';
-import ImagesPath from 'src/components/ImagesPath';
-import { Divider } from 'src/styled';
-import { shadowStyle } from '@src/styles';
-import {Scaffold, useColor, Header, Row, Col, TouchableOpacity} from '@src/components';
-import ModalBid from 'src/components/Modal/ModalBid';
+import React, { useRef, useState, useEffect } from 'react';
+import {View, Text,useWindowDimensions, Image, FlatList } from 'react-native';
 import Styled from 'styled-components';
-import { FormatMoney } from 'src/utils';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Bid from '../Posting/Auction/Bid';
-import {io} from 'socket.io-client';
 import {useSelector, useDispatch} from 'react-redux';
 
-const DATA = [
-  {
-    id: 1,
-    avatar: ImagesPath.avatar1,
-    namaPenawar: 'Tantri N.',
-    jumlahPenawaran: '150.000'
-  },
-  {
-    id: 2,
-    avatar: ImagesPath.avatar2,
-    namaPenawar: 'Mina M.',
-    jumlahPenawaran: '150.000'
-  },
-  {
-    id: 3,
-    avatar: ImagesPath.avatar3,
-    namaPenawar: 'Galih F.',
-    jumlahPenawaran: '150.000'
-  },
-  {
-    id: 4,
-    avatar: ImagesPath.avatar1,
-    namaPenawar: 'Tantri N.',
-    jumlahPenawaran: '150.000'
-  },
-  {
-    id: 5,
-    avatar: ImagesPath.avatar2,
-    namaPenawar: 'Mina M.',
-    jumlahPenawaran: '150.000'
-  },
-  {
-    id: 6,
-    avatar: ImagesPath.avatar3,
-    namaPenawar: 'Galih F.',
-    jumlahPenawaran: '150.000'
-  },
-  {
-    id: 7,
-    avatar: ImagesPath.avatar1,
-    namaPenawar: 'Tantri N.',
-    jumlahPenawaran: '150.000'
-  },
-  {
-    id: 8,
-    avatar: ImagesPath.avatar2,
-    namaPenawar: 'Mina M.',
-    jumlahPenawaran: '150.000'
-  },
-  {
-    id: 9,
-    avatar: ImagesPath.avatar3,
-    namaPenawar: 'Galih F.',
-    jumlahPenawaran: '150.000'
-  },
-];
+import ImagesPath from 'src/components/ImagesPath';
+import { Divider } from 'src/styled';
+import {Scaffold, useColor, Header, Row, Col, TouchableOpacity, usePopup} from '@src/components';
+import ModalBid from 'src/components/Modal/ModalBid';
+import { FormatMoney } from 'src/utils';
+import Bid from '../Posting/Auction/Bid';
+import {currentSocket} from '@src/screens/MainHome/MainHome';
 
 const ButtonView = Styled(View)`
-    width: 100%;
-    marginHorizontal: 16;
-    paddingVertical: 16;
-    flexDirection: column;
-    justifyContent: flex-start;
-    alignItems: flex-start;
-    borderTopLeftRadius: 16;
-    borderTopRightRadius: 16;
+  width: 100%;
+  marginHorizontal: 16;
+  paddingVertical: 16;
+  flexDirection: column;
+  justifyContent: flex-start;
+  alignItems: flex-start;
+  borderTopLeftRadius: 16;
+  borderTopRightRadius: 16;
 `;
 
 const EnterButton = Styled(TouchableOpacity)`
-    width: 140;
-    paddingVertical: 13;
-    borderRadius: 120px;
-    justifyContent: center;
-    alignItems: center;
-	height:48;
+  width: 140;
+  paddingVertical: 13;
+  borderRadius: 120px;
+  justifyContent: center;
+  alignItems: center;
+  height:48;
 `;
-
-
 
 const JoinLelang = ({navigation, route}) => {
 	const modalBidRef = useRef();
   const { width, height } = useWindowDimensions();
-	const [ selectedAmount, setSelectedAmount ] = useState();
+	const [ listBidding, setListBidding ] = useState([]);
   const {Color} = useColor();
   const user = useSelector(state => state['user.auth'].login.user);
+  const [popupProps, showPopup] = usePopup();
 
-  // useEffect(() => {
-  //   fetchPopup();
+  useEffect(() => {
+    // auction join
+    currentSocket.on('auction-join-success', (res) => {
+      console.log('res success', res);
+      if (res && Array.isArray(res.list)) {
+        setListBidding(res.list);
+      }
+    });
 
-  //   currentSocket = io(Config.SOCKET_API_URL, {
-  //     extraHeaders: {
-  //       // Authorization: "Bearer authorization_token_here"
-  //       // 'Control-Allow-Credentials': true
-  //     },
-  //   });
+    currentSocket.on('auction-join-failed', (res) => {
+      console.log('res failed', res);
+      setListBidding([]);
+    });
 
-  //  let userId
-  //  let bidValue
-  //  let auctionId
+    const args = {
+      userId: user.userId,
+      auctionId: route.params.item.id
+    };
+    console.log('args', args);
+    currentSocket.emit('auction-join', args);
+  }, []);
 
-  //   currentSocket.emit('auth', {id: user ? user.userId : 0});
-  //   currentSocket.on('auth', res => {
-  //     console.log('res auth', res);
-  //   });
+  useEffect(() => {
+    // auction bid
+    currentSocket.on('auction-bid-success', (res) => {
+      console.log('res bid success', res);
+      let newArr = [...listBidding];
+      newArr.push(res.bid);
+      setListBidding(newArr);
+      // showPopup('Berhasil', 'success');
+    });
 
-  //   currentSocket.emit('chat_notification');
-  //   currentSocket.on('chat_notification', res => {
-  //     console.log('res chat_notification', res);
-  //     if (res && res.status) {
-  //       if (chatNotifCount > 0) {
-  //         playNotificationSounds();
-  //       }
+    currentSocket.on('auction-bid-failed', (res) => {
+      console.log('res bid failed', res);
+      showPopup(res, 'error');
+    });
+  }, [listBidding]);
 
-  //       setChatNotifCount(res.data.count);
-  //     }
-  //   });
+  const onSubmitAuctionBid = (val) => {
+    const bidValue = parseInt(val);
 
-  //   const successCallback = (res) => {
-  //     console.log('ini response geo');
-  //     const ltu = { userId: user.userId, lat: res.coords.latitude, long: res.coords.longitude };
-  //     currentSocket.emit('location-tracker-user', ltu );
-  //     currentSocket.on('location-tracker-user', res => {
-  //       console.log('res location-tracker-user', res);
-  //     });
-  //   };
+    const args = {
+      userId: user.userId,
+      auctionId: route.params.item.id,
+      bidValue,
+    };
 
-  //   const errorCallback = err => {
-  //     console.log('ini err', err);
-  //   };
+    console.log('args', args);
+    currentSocket.emit('auction-bid', args);
+  }
 
-  //   const option = {
-  //     enableHighAccuracy: true,
-  //     timeout: 5000
-  //   };
+  console.log(route);
 
-  //   Geolocation.watchPosition(successCallback, errorCallback, option);
-  // }, []);
-  const renderItem = ({item}) => 
+  const renderItem = ({item, index}) => 
   <Row style={{justifyContent: 'center', alignItems: 'center',paddingVertical: 15, paddingHorizontal: 20,backgroundColor: Color.theme,width: '100%', height: 70,borderBottomWidth: 1, borderBottomColor: Color.border}}>
-    <Text style={{fontSize: 14,width: '10%'}}>{item.id}</Text>
-    <Image source={item.avatar} style={{backgroundColor: Color.secondary, width: '10%', height: 35}}/>
+    <Text style={{fontSize: 14,width: '10%'}}>{index + 1}</Text>
+    <Image source={item.photoFilename ? { uri: item.photoFilename } : ImagesPath.avatar1} style={{backgroundColor: Color.secondary, width: '10%', height: 35}}/>
     <Col style={{paddingHorizontal: 10,}}>
       <Text style={{fontSize: 8}}>Nama Penawar</Text>
-      <Text style={{fontSize: 14}}>{item.namaPenawar}</Text>
+      <Text style={{fontSize: 14}}>{item.user.firstName + ' ' + item.user.lastName}</Text>
     </Col>
     <Col>
       <Text style={{fontSize: 8, textAlign: 'right'}}>Jumlah Penawaran</Text>
-      <Text style={{fontSize: 14, fontWeight: 'bold', textAlign: 'right'}}>{item.jumlahPenawaran} Poin</Text>
+      <Text style={{fontSize: 14, fontWeight: 'bold', textAlign: 'right'}}>{item.bid} Poin</Text>
     </Col>
   </Row>
 
-  const image = route.params.prodImage[1]
-  const name = route.params.prodName
   return (
     <Scaffold
+      popupProps={popupProps}
       header={
         <Header
           type="bold"
@@ -185,13 +128,13 @@ const JoinLelang = ({navigation, route}) => {
               justifyContent: 'center',
             }}>
             <Image
-              source={{uri: route.params.prodImage[0]}}
+              source={{uri: route.params && Array.isArray(route.params.item.product.imageProducts) ? route.params.item.product.imageProducts[0] : ''}}
               style={{width: 80, height: 80, borderRadius: 10}}
             />
           </View>
           <View style={{width: '40%', height: 100, paddingVertical: 10}}>
             <Text numberOfLines={3} style={{fontSize: 14, fontWeight: 'bold', color: Color.text}}>
-              {name? name : ""}
+              {route.params ? route.params.item.product.name : ""}
             </Text>
             <Text
               style={{
@@ -277,7 +220,7 @@ const JoinLelang = ({navigation, route}) => {
         <View style={{width: '70%'}}></View>
       </View>
       <FlatList
-        data={DATA}
+        data={listBidding.reverse()}
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
@@ -327,8 +270,15 @@ const JoinLelang = ({navigation, route}) => {
 							</TouchableOpacity>
 						</View>
 					</ButtonView>
-				</View>
-      <ModalBid ref={modalBidRef} />
+      </View>
+
+      <ModalBid
+        ref={modalBidRef}
+        startPrice={route.params.item.startPrice}
+        onPress={(text) => {
+          onSubmitAuctionBid(text);
+        }}
+      />
     </Scaffold>
   );
 };
