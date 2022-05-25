@@ -12,12 +12,14 @@ import Client from '@src/lib/apollo';
 const defaultProps = {
   isOwner: false,
   item: null,
+  nameType: 'PRODUCT',
+  moduleType: 'CREATE',
   useBlockUser: false,
   onClose: () => {},
 };
 
 const ModalContentOptions = forwardRef((props, ref) => {
-  const { isOwner, item, useBlockUser, onClose } = props;
+  const { isOwner, item, useBlockUser, moduleType, nameType, onClose } = props;
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
@@ -27,7 +29,9 @@ const ModalContentOptions = forwardRef((props, ref) => {
 
   const fetchProductReportCheck = () => {
     const variables = {
-      productId: item.id,
+      referenceId: item.id,
+      referenceType: nameType,
+      manageType: moduleType
     };
 
     console.log('variables', variables);

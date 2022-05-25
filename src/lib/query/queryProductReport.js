@@ -2,12 +2,20 @@ import gql from 'graphql-tag';
 
 export const queryProductReport = gql`
 mutation (
-  $productId: Int
+  $referenceId: Int!
+  $referenceType: ReportAbuseType!
+  $manageType: ReportAbuseManageType!
+  $message: String
+  $status: ReportAbuseStatus
 ) {
-  productReport(
-    productId: $productId
+  reportAbuseManage(
+    referenceId: $referenceId
+    referenceType: $referenceType
+    manageType: $manageType
+    message: $message
+    status: $status
   ) {
-    	productId
+      id
 	    status
     }
   }
