@@ -97,7 +97,6 @@ const TrackingOrder = ({route, navigation}) => {
                     </View>
                     <Text size={10} color='#666666' align='center'>{val.label}</Text>
                 </View>
-                
               ))}
             </Row>
             <Text type='bold' size={11} align='left' style={{ paddingLeft: 16, marginBottom: 16 }}>Status Pemesanan</Text>
@@ -105,7 +104,7 @@ const TrackingOrder = ({route, navigation}) => {
                 <View key={i} >
                       <View style={styles.listRoad}>
                           <View style={{width:'10%'}}>
-                              <View style={[styles.timeline,{  backgroundColor: dataTr.length == (i+1) ? '#fff' : '#CCCCCC'}]}>
+                              <View style={[styles.timeline,{  backgroundColor: list.length == (i+1) ? '#fff' : '#CCCCCC'}]}>
                                   <View style={[styles.rounded,{backgroundColor: i == 0 ? '#3C58C1' : '#CCCCCC'}]}></View>
                               </View>
                           </View>

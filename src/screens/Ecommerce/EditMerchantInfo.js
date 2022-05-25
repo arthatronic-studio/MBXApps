@@ -754,6 +754,7 @@ const EditMerchantInfo = ({ navigation, route }) => {
       />
     
       <ModalListAction
+        adjust={false}
         ref={modalListActionRef}
         name={nameModal}
         onPress={(item, name) => {

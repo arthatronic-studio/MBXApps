@@ -917,6 +917,7 @@ const CreateShop = () => {
 
       <ModalListAction
         ref={modalListActionRef}
+        adjust={false}
         name={nameModal}
         onPress={(item, name) => {
           onSelected(item, name);

@@ -13,6 +13,7 @@ import {statusBarHeight} from 'src/utils/constants';
 
 const defaultProps = {
   data: [],
+  adjust: true,
   selected: null,
   name: '',
   onPress: () => {},
@@ -21,7 +22,7 @@ const defaultProps = {
 };
 
 const ModalListAction = forwardRef((props, ref) => {
-  const {data, selected, onPress, onClose, children, style, name} = props;
+  const {data, selected, adjust, onPress, onClose, children, style, name} = props;
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
@@ -67,6 +68,7 @@ const ModalListAction = forwardRef((props, ref) => {
     <Modalize
       ref={combinedRef}
       withHandle
+      adjustToContentHeight={adjust}
       handlePosition="inside"
       handleStyle={{
         width: width / 6,
