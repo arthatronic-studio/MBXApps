@@ -194,6 +194,7 @@ const SurveyFourth = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Masukkan pilihan lainnya' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}></TextInput>
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Lainnya</Text>
                 </View>
@@ -216,6 +217,7 @@ const SurveyFourth = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Masukkan pilihan lainnya' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}></TextInput>
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Lainnya</Text>
                 </View>
@@ -223,6 +225,7 @@ const SurveyFourth = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 10}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='0' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 40, paddingTop: 20, height: 47}}></TextInput>
                     <Text style={{position: 'absolute', marginVertical: 17,marginHorizontal: 10, fontSize: 13}}>Rp</Text>
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Harga Tepung Perkilogram</Text>
