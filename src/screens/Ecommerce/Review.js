@@ -133,7 +133,7 @@ const Review = ({navigation, route}) => {
       }
       onPressLeftButton={() => navigation.pop()}>
       <MainView style={{backgroundColor: Color.semiwhite}}>
-        <View style={{marginTop: 12, flexDirection: 'row'}}>
+        {/* <View style={{marginTop: 12, flexDirection: 'row'}}>
           <Filter
             title={'Terbaru'}
             value={selectedItem}
@@ -144,7 +144,7 @@ const Review = ({navigation, route}) => {
           <View style={{flex: 1}}>
             <Category type={'review'} />
           </View>
-        </View>
+        </View> */}
         <View style={{ paddingVertical: 10,flex:1}}>
           <FlatList
             data={listReview}

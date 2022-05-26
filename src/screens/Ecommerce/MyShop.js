@@ -84,9 +84,11 @@ const MyShop = ({ navigation,}) => {
 
         <View style={{marginTop: imageStoreSize / 1.4, backgroundColor: Color.theme, paddingBottom: 32, paddingLeft: 16, height: 60 }}>
           <Text align='left' type='bold' size={18}>{data.name}</Text>
-          <Row style={{marginVertical: 8}}>
-              <Entypo name={'location-pin'} size={12} style={{color: Color.secondary, paddingVertical: 1, paddingHorizontal: 2}}/>
-              <Text size={10} numberOfLines={1} style={{color: Color.secondary, width: '30%', marginRight: 10}}>{data.cityName? data.cityName : 'Belum Ada Lokasi yang jelas gimana'}</Text>
+          <Row style={{marginVertical: 8,}}>
+              <Row>
+                <Entypo name={'location-pin'} size={12} style={{color: Color.secondary, paddingVertical: 1, paddingHorizontal: 2}}/>
+                <Text size={10} numberOfLines={1} style={{color: Color.secondary, width: '30%', marginRight: 10}}>{data.cityName? data.cityName : 'Belum Ada Lokasi yang jelas gimana'}</Text>
+              </Row>
               <FontAwesome name={'phone'} size={12} style={{color: Color.secondary, paddingVertical: 1, marginHorizontal: 8}}/>
               <Text style={{fontSize: 10, textAlign: 'left', width: '25%'}}>{data.noTelp}</Text>
               <Entypo name={'instagram'} size={12} style={{color: Color.secondary, paddingVertical: 1, paddingHorizontal: 5}}/>

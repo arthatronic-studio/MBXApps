@@ -424,6 +424,7 @@ const FormPayment = ({ route, navigation }) => {
 
         <ModalListAction
           ref={modalListActionRef}
+          adjust={false}
           name={nameModal}
           onPress={(item, name) => {onSelected(item,name); }}
           data={nameModal == 'prov' ? dataProvince : nameModal == 'city' ? dataCity : nameModal == 'sub' ? dataSub : nameModal == 'area' ? dataArea : []}

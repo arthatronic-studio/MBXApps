@@ -930,7 +930,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
               paddingHorizontal: 107,
               marginBottom: 8,
             }}>
-            <Text style={{color: Color.theme}}>Atur Jadwal Pickup</Text>
+            <Text style={{color: Color.theme}}>Atur Jadwal Pengiriman</Text>
           </TouchableOpacity>
 
           {!data.invoiceNumber && (
@@ -960,7 +960,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
               borderWidth: 1,
               marginBottom: 8,
             }}>
-            <Text style={{color: Color.primary}}>Pickup Order</Text>
+            <Text style={{color: Color.primary}}>Kirim Jadwal Pengiriman</Text>
           </TouchableOpacity>}
           
           </View>

@@ -52,7 +52,7 @@ const CardReview = ({data}) => {
     <View style={{alignItems: 'center'}}>
       <TouchableOpacity
         style={{
-          width: '92%',
+          marginHorizontal: 16,
           padding: 10,
           borderRadius: 8,
           backgroundColor: Color.textInput,
@@ -76,15 +76,16 @@ const CardReview = ({data}) => {
                 backgroundColor: Color.grayLight,
               }}
             />
-            <Text size="11" type="bold">
-              {data.firstName  + ' ' + data.lastName}
-            </Text>
+            <View style={{ flex: 1, alignItems: 'flex-start' }}>
+              <Text size="11" type="bold">
+                {data.firstName  + ' ' + data.lastName}
+              </Text>
+            </View>
           </View>
-          <Image source={ImagesPath.DotsThree} />
+          {/* <Image source={ImagesPath.DotsThree} /> */}
         </View>
         <View
           style={{
-            width: '100%',
             height: 1,
             backgroundColor: Color.border,
             alignSelf: 'center',
@@ -101,8 +102,10 @@ const CardReview = ({data}) => {
               backgroundColor: Color.grayLight,
             }}
           />
-          <View>
-            <Text type="bold">{data.nameProduct}</Text>
+          <View style={{ flex: 1 }}>
+            <View style={{  alignItems: 'flex-start' }}>
+              <Text type="bold" textAlign='left'>{data.nameProduct}</Text>
+            </View>
             <View
               style={{flexDirection: 'row', marginTop: 4, marginBottom: 10}}>
               {data.rating > 4 && <Image source={ImagesPath.starRate} />}
@@ -115,7 +118,9 @@ const CardReview = ({data}) => {
               {data.rating < 5 &&<Image source={ImagesPath.starUnrate} />}
               {data.rating < 5 &&<Image source={ImagesPath.starUnrate} />} */}
             </View>
-            <Text align="left">{data.ulasan}</Text>
+            <View style={{ flex: 1 }}>
+              <Text align="left">{data.ulasan}</Text>
+            </View>
           </View>
         </View>
         <View
@@ -123,7 +128,7 @@ const CardReview = ({data}) => {
             alignSelf: 'flex-end',
             marginTop: 16,
           }}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{
               borderRadius: 20,
               paddingVertical: 8,
@@ -137,7 +142,7 @@ const CardReview = ({data}) => {
                 Balas Ulasan
               </Text>
             </TouchableOpacity>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </TouchableOpacity>
     </View>

@@ -12,7 +12,7 @@ import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Loading, { useLoading } from  '@src/components/Modal/Loading';
 
 import Client from '@src/lib/apollo';
-import { queryAddComment, queryReportComment } from '@src/lib/query';
+import { queryAddComment, queryProductReport, queryReportComment } from '@src/lib/query';
 import { shadowStyle } from '@src/styles';
 import { isIphoneNotch } from 'src/utils/constants';
 import ImagesPath from 'src/components/ImagesPath';
@@ -42,15 +42,17 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
 
   const onPressReport = () => {
     const variables = {
-      commentId: item.id,
+      referenceId: item.id,
+      referenceType: 'PRODUCT_COMMENT',
+      manageType: 'CREATE'
     };
     Client.mutate({
-      mutation: queryReportComment,
+      mutation: queryProductReport, 
       variables,
     })
       .then(res => {
         console.log('res', res);
-        if(res.data.commentReport.status){
+        if(res.data.reportAbuseManage.status){
           setModalSuccess(true);
           setTimeout(() => {
             setModalSuccess(false);
