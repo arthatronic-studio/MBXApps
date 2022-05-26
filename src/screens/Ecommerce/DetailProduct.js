@@ -182,6 +182,7 @@ const DetailProduct = ({navigation, route}) => {
 
 
   const get_room = () => {
+    console.log('get_community_chat_room_id');
     currentSocket.emit('get_community_chat_room_id', { user_id: user.userId, user_id_target: detail.merchant.userId, admin_ids: [detail.merchant.userId]});
   }
 

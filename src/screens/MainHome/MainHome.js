@@ -718,7 +718,7 @@ const MainHome = ({navigation, route}) => {
               horizontal
               showHeader
               onPress={item => {
-                navigation.navigate('AuctionDetail', {item});
+                navigation.navigate('DetailLelang', {item});
               }}
               style={{paddingLeft: 8}}
             />
@@ -731,7 +731,7 @@ const MainHome = ({navigation, route}) => {
               horizontal
               showHeader
               onPress={item => {
-                navigation.navigate('AuctionDetail', {item});
+                navigation.navigate('DetailLelang', {item});
               }}
               style={{paddingLeft: 8}}
             />

@@ -1,31 +1,23 @@
-import React, { useRef, forwardRef, useState } from 'react';
-import { Dimensions, TouchableOpacity, useWindowDimensions, View, TextInput, FlatList } from 'react-native';
+import React, { useRef, forwardRef, useState, useEffect } from 'react';
+import { TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import { Popup, usePopup, Loading, useLoading, Text, useColor } from '@src/components';
 import { useCombinedRefs } from 'src/hooks';
 import { FormatMoney } from 'src/utils';
-import { TextInputMask } from 'react-native-masked-text';
-import { useSelector } from 'react-redux';
-import { navigationRef } from 'App';
-import { Col } from '../Grid';
 import FormInput from '../FormInput';
-
-const { width } = Dimensions.get('window');
+import { getVestaBalance } from 'src/api/vestaBalance';
+import { statusBarHeight } from 'src/utils/constants';
+import { Divider } from 'src/styled';
+import { Button } from '../Button';
 
 const defaultProps = {
 	startPrice: 0,
+	userLastBid: 0,
+	highestBid: 0,
 	onPress: () => {},
 };
-
-const SubmitButton = Styled(TouchableOpacity)`
-  width: 100%;
-  height: 45px;
-  marginTop: 16px;
-  borderRadius: 120px;
-  justifyContent: center;
-`;
 
 const amountData = [
 	{ id: 1, bid: 5000 },
@@ -37,10 +29,10 @@ const amountData = [
 ];
 
 const ModalBid = forwardRef((props, ref) => {
-	const { onPress, startPrice } = props;
+	const { onPress, startPrice, userLastBid, highestBid } = props;
+
 	const modalizeRef = useRef(null);
 	const combinedRef = useCombinedRefs(ref, modalizeRef);
-	const [ handle, setHandle ] = useState(false);
 	const [ loadingProps, showLoading ] = useLoading();
 	const [ popupProps, showPopup ] = usePopup();
 	const { Color } = useColor();
@@ -51,8 +43,25 @@ const ModalBid = forwardRef((props, ref) => {
 	};
 
 	// state
-	const [ text, setText ] = useState('');
-	const [ selectedAmount, setSelectedAmount ] = useState();
+	const [handle, setHandle] = useState(false);
+	const [text, setText] = useState(userLastBid.toString());
+	const [selectedAmount, setSelectedAmount] = useState();
+	const [vestaAmount, setVestaAmount] = useState(0);
+
+	useEffect(() => {
+		setText(userLastBid.toString());
+	}, [userLastBid]);
+
+	useEffect(() => {
+		fetchData();
+	}, []);
+
+	const fetchData = async() => {
+		const result = await getVestaBalance();
+		if (result.status) {
+			setVestaAmount(result.data.amount);
+		}
+	}
 
 	const onSubmit = () => {
 		if (text) {
@@ -61,8 +70,6 @@ const ModalBid = forwardRef((props, ref) => {
 			} else {
 				onPress(text);
 				combinedRef.current.close();
-				setText('');
-				setSelectedAmount();
 			}
 		} else {
 			showPopup('Silakan masukan nominal bid terlebih dulu', 'warning');
@@ -71,46 +78,49 @@ const ModalBid = forwardRef((props, ref) => {
 
 	const renderContent = () => {
 		return (
-			<FlatList
-				key="listBidValue"
-				keyExtractor={(item, index) => item.toString() + index}
-				data={amountData}
-				numColumns={3}
-				keyboardShouldPersistTaps="handled"
-				columnWrapperStyle={{ justifyContent: 'space-between' }}
-				ItemSeparatorComponent={() => <View style={{ height: 10, backgroundColor: Color.theme }} />}
-				showsHorizontalScrollIndicator={false}
-				// contentContainerStyle={{justifyContent: 'space-between', borderWidth: 1}}
-				renderItem={({ item, index }) => {
+			<View
+				style={{
+					flex: 1,
+					flexDirection: 'row',
+					flexWrap: 'wrap',
+				}}
+			>
+				{amountData.map((item, index) => {
 					const isSelected = selectedAmount && selectedAmount.id === item.id;
+					
 					return (
-						<TouchableOpacity
-							activeOpacity={1}
-							onPress={() => {
-								setText(item.bid.toString());
-								setSelectedAmount(item);
+						<View
+							key={index}
+							style={{
+								width: `${100/3}%`,
+								padding: 4,
 							}}
-							style={[
-								{
-									borderRadius: 120,
+						>
+							<TouchableOpacity
+								activeOpacity={1}
+								onPress={() => {
+									const calculate = highestBid + item.bid;
+									setText(calculate.toString());
+									setSelectedAmount(item);
+								}}
+								style={{
+									flex: 1,
+									borderRadius: 12,
 									paddingVertical: 12,
 									flexDirection: 'row',
 									justifyContent: 'center',
-									width: '32%',
-									height: 46,
-									backgroundColor: Color.grayLight
-								},
-								isSelected && { borderWidth: 2 }
-							]}
-						>
-							<Text size={14} color={isSelected ? Color.primary : Color.textInput}>
-								{FormatMoney.getFormattedMoney(item.bid)}
-							</Text>
-						</TouchableOpacity>
+									backgroundColor: isSelected ? Color.text : Color.grayLight,
+								}}
+							>
+								<Text size={14} color={isSelected ? Color.textInput : Color.text}>
+									+ {FormatMoney.getFormattedMoney(item.bid)}
+								</Text>
+							</TouchableOpacity>
+						</View>
 					);
-				}}
-			/>
-		);
+				})}
+			</View>
+		)
 	};
 
 	return (
@@ -122,73 +132,82 @@ const ModalBid = forwardRef((props, ref) => {
 			handleStyle={{ width: width / 4, height: handle ? 4 : 4, backgroundColor: Color.primary, marginTop: 8 }}
 			onPositionChange={handlePosition}
 			childrenStyle={{
-				width: width,
-				alignItems: 'center',
-				marginTop: 10,
-				padding: 8,
-				paddingBottom: 16,
-				borderTopLeftRadius: 12,
-				borderTopRightRadius: 12
+				marginTop: 8,
+				paddingBottom: statusBarHeight,
+				borderTopLeftRadius: 16,
+				borderTopRightRadius: 16,
 			}}
 			modalStyle={{
 				backgroundColor: Color.theme,
-				width: width
+				width: width,
+			}}
+			onClose={() => {
+				setText(userLastBid.toString());
+				setSelectedAmount();
 			}}
 		>
-			<View
-				style={{
-					flexDirection: 'row',
-					justifyContent: 'space-between',
-					marginBottom: 10,
-					alignItems: 'center'
-				}}
-			>
-				<Text size={11} color={Color.text} style={{ fontWeight: 'bold' }}>
-					Pasang Tawaran
-				</Text>
-				<TouchableOpacity
-					style={{ marginRight: 7 }}
-					onPress={() => {
-						combinedRef.current.close();
+			<View style={{width, padding: 16}}>
+				<View
+					style={{
+						flex: 1,
+						flexDirection: 'row',
+						justifyContent: 'space-between',
+						marginBottom: 16,
+						alignItems: 'center',
 					}}
 				>
-					<Ionicons name="chevron-down-outline" color={Color.text} size={18} />
-				</TouchableOpacity>
-			</View>
-
-			<View style={{ flexDirection: 'row', marginBottom: 16 }}>
-				<View style={{ flexDirection: 'column', marginRight: 24, alignItems: 'baseline' }}>
-					<Text style={{ color: Color.grayLight }}>Harga saat ini</Text>
-					<Text style={{ fontWeight: 'bold' }}>150.000 Poin</Text>
-				</View>
-				<View style={{ flexDirection: 'column', alignItems: 'baseline' }}>
-					<Text style={{ color: Color.grayLight }}>Penawaranmu</Text>
-					<FormInput
-						placeholder='-'
-						value={text}
-						onChangeText={(val) => {
-							setText(val);
+					<Text color={Color.text} type='bold'>
+						Pasang Tawaran
+					</Text>
+					<TouchableOpacity
+						onPress={() => {
+							combinedRef.current.close();
 						}}
-						keyboardType='numeric'
-					/>
+					>
+						<Ionicons name="chevron-down-outline" color={Color.text} size={18} />
+					</TouchableOpacity>
+				</View>
+
+				<View style={{ flex: 1, flexDirection: 'row' }}>
+					<View style={{ flex: 1, alignItems: 'flex-start' }}>
+						<Text style={{ color: Color.grayLight }}>Harga saat ini</Text>
+						<Divider height={8} />
+						<Text style={{ fontWeight: 'bold' }}>{FormatMoney.getFormattedMoney(highestBid, '')} Poin</Text>
+					</View>
+					<View style={{ flex: 1, alignItems: 'flex-start' }}>
+						<Text style={{ color: Color.grayLight }}>Penawaranmu</Text>
+						<Divider height={8} />
+						<FormInput
+							placeholder='-'
+							value={text}
+							onChangeText={(val) => {
+								setText(val);
+								setSelectedAmount();
+							}}
+							keyboardType='numeric'
+						/>
+					</View>
 				</View>
 			</View>
 
-			{renderContent()}
-
-			<View style={{ flexDirection: 'column', marginRight: 24, alignItems: 'baseline', marginTop: 16 }}>
-				<Text style={{ color: Color.grayLight }}>Poinku</Text>
-				<Text style={{ fontWeight: 'bold' }}>250.000 Poin</Text>
+			<View style={{width, paddingHorizontal: 12}}>
+				{renderContent()}
 			</View>
+			
+			<View style={{width, padding: 16}}>
+				<View style={{ flexDirection: 'column', alignItems: 'baseline' }}>
+					<Text style={{ color: Color.grayLight }}>Poinku</Text>
+					<Text style={{ fontWeight: 'bold' }}>{FormatMoney.getFormattedMoney(vestaAmount, '')} Poin</Text>
+				</View>
 
-			<SubmitButton
-				onPress={() => onSubmit()}
-				style={{ backgroundColor: Color.grayLight }}
-			>
-				<Text color={Color.textInput} size={16}>
+				<Divider />
+
+				<Button
+					onPress={() => onSubmit()}
+				>
 					Pasang Tawaran
-				</Text>
-			</SubmitButton>
+				</Button>
+			</View>
 
 			<Loading {...loadingProps} /> 
 

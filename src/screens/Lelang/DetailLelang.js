@@ -18,26 +18,46 @@ const DetailLelang = ({ navigation, route }) => {
   const [detail, setDetail] = useState();
   const [image, setImage] = useState([]);
   const [timeLeft, setTimeLeft] = useState(0);
+  const [minutesLeft, setMinutesLeft] = useState(0);
+  const [hoursLeft, setHourssLeft] = useState(0);
+  const [daysLeft, setDaysLeft] = useState(0);
+  const [weeksLeft, setWeeksLeft] = useState(0);
+  const [monthsLeft, setMonthsLeft] = useState(0);
+  const [yearsLeft, setYearsLeft] = useState(0);
 
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const [isLoading, setIsLoading] = useState(true);
   const loading = useSelector(state => state['user.auth'].loading);
   const isFocused = useIsFocused();
+  const {Color} = useColor();
 
   const { item } = route.params;
   const { id } = item;
   const showButton = item.status == 'ONGOING';
+
+  console.log(daysLeft);
   
   useEffect(() => {
     const interval = product ?
       setInterval(() => {
+        const now = moment();
         const endDate = moment(product.dateEnd);
-        const tl = moment(endDate).diff(moment(), 'seconds');
+        const tl = endDate.diff(now, 'seconds');
+        const minl = endDate.diff(now, 'minutes');
+        const hl = endDate.diff(now, 'hours');
+        const dl = endDate.diff(now, 'days');
+        const wl = endDate.diff(now, 'weeks');
+        const ml = endDate.diff(now, 'months');
+        const yl = endDate.diff(now, 'years');
         // TODO: bukain buat semua status
         // if (tl > 0 && product.auctionStatus == 'BELUM SELESAI') {
-        if (tl > 0) {
-          setTimeLeft(tl);
-        }
+        setTimeLeft(tl > 0 ? tl : 0);
+        setMinutesLeft(minl > 0 ? minl : 0);
+        setHourssLeft(hl > 0 ? hl : 0);
+        setDaysLeft(dl > 0 ? dl : 0);
+        setWeeksLeft(wl > 0 ? wl : 0);
+        setMonthsLeft(ml > 0 ? ml : 0);
+        setYearsLeft(yl > 0 ? yl : 0);
       }, 1000) : null;
 
     return () => clearInterval(interval);
@@ -46,8 +66,6 @@ const DetailLelang = ({ navigation, route }) => {
   useEffect(() => {
     getDetailLelang();
   }, [isFocused]);
-  
-  const {Color} = useColor();
 
   const getDetailLelang = () => {
     const variables = {
@@ -133,7 +151,16 @@ const DetailLelang = ({ navigation, route }) => {
               <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 <Text size={8} color={Color.textInput}>Sisa Waktu</Text>
                 <Text color={Color.textInput} size={12}>
-                  {moment.duration(timeLeft, 'seconds').format('HH:mm:ss', { trim: false })}
+                  {
+                    yearsLeft > 0 ? `${yearsLeft} Tahun lagi` :
+                    monthsLeft > 0 ? monthsLeft + ' Bulan lagi' :
+                    weeksLeft > 0 ? weeksLeft + ' Minggu lagi' :
+                    daysLeft > 0 ? daysLeft + ' Hari lagi' :
+                    hoursLeft > 0 ? moment.duration(timeLeft, 'seconds').format('HH:mm:ss', { trim: false }) :
+                    minutesLeft > 0 ? moment.duration(timeLeft, 'seconds').format('mm:ss', { trim: false }) :
+                    timeLeft > 0 ? moment.duration(timeLeft, 'seconds').format('ss', { trim: false }) :
+                    product ? '-' : 'Waktu habis'
+                  }
                 </Text>
               </View>
             </View>
@@ -226,7 +253,8 @@ const DetailLelang = ({ navigation, route }) => {
                <Text size={10} color={Color.gray}>Durasi</Text>
               
               <Divider height={1}/>
-              <Text>{product ? product.duration : ""}
+              <Text>
+                {product ? moment.duration(product.duration, 'seconds').humanize() : '-'}
               </Text>
             </View>
           </View>
@@ -294,11 +322,12 @@ const DetailLelang = ({ navigation, route }) => {
 
         <View>
           <TouchableOpacity
+            disabled={!product || timeLeft === 0}
             onPress={() => navigation.navigate('JoinLelang', { item: product })}
             style={{
               width: '92%',
               height: 45,
-              backgroundColor: Color.primary,
+              backgroundColor: product ? Color.primary : Color.disabled,
               borderRadius: 30,
               marginHorizontal: 15,
               paddingVertical: 10,

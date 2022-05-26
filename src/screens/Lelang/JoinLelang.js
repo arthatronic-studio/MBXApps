@@ -1,21 +1,21 @@
 import React, { useRef, useState, useEffect } from 'react';
-import {View, Text,useWindowDimensions, Image, FlatList } from 'react-native';
+import {View, useWindowDimensions, Image, FlatList } from 'react-native';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector, useDispatch} from 'react-redux';
 
 import ImagesPath from 'src/components/ImagesPath';
 import { Divider } from 'src/styled';
-import {Scaffold, useColor, Header, Row, Col, TouchableOpacity, usePopup} from '@src/components';
+import {Scaffold, Text, useColor, Header, Row, Col, TouchableOpacity, usePopup, Alert} from '@src/components';
 import ModalBid from 'src/components/Modal/ModalBid';
 import { FormatMoney } from 'src/utils';
 import Bid from '../Posting/Auction/Bid';
 import {currentSocket} from '@src/screens/MainHome/MainHome';
+import moment from 'moment';
 
 const ButtonView = Styled(View)`
   width: 100%;
-  marginHorizontal: 16;
-  paddingVertical: 16;
+  padding: 16px;
   flexDirection: column;
   justifyContent: flex-start;
   alignItems: flex-start;
@@ -24,21 +24,59 @@ const ButtonView = Styled(View)`
 `;
 
 const EnterButton = Styled(TouchableOpacity)`
-  width: 140;
-  paddingVertical: 13;
+  paddingVertical: 16px;
   borderRadius: 120px;
   justifyContent: center;
   alignItems: center;
-  height:48;
 `;
 
 const JoinLelang = ({navigation, route}) => {
+  const { item } = route.params;
+
+  const [listBidding, setListBidding] = useState([]);
+  const [userLastBid, setUserLastBid] = useState(0);
+  const [highestBid, setHighestBid] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [minutesLeft, setMinutesLeft] = useState(0);
+  const [hoursLeft, setHourssLeft] = useState(0);
+  const [daysLeft, setDaysLeft] = useState(0);
+  const [weeksLeft, setWeeksLeft] = useState(0);
+  const [monthsLeft, setMonthsLeft] = useState(0);
+  const [yearsLeft, setYearsLeft] = useState(0);
+  
 	const modalBidRef = useRef();
   const { width, height } = useWindowDimensions();
-	const [ listBidding, setListBidding ] = useState([]);
   const {Color} = useColor();
   const user = useSelector(state => state['user.auth'].login.user);
   const [popupProps, showPopup] = usePopup();
+  
+  console.log(route);
+
+  useEffect(() => {
+    const interval = item ?
+      setInterval(() => {
+        const now = moment();
+        const endDate = moment(item.dateEnd);
+        const tl = endDate.diff(now, 'seconds');
+        const minl = endDate.diff(now, 'minutes');
+        const hl = endDate.diff(now, 'hours');
+        const dl = endDate.diff(now, 'days');
+        const wl = endDate.diff(now, 'weeks');
+        const ml = endDate.diff(now, 'months');
+        const yl = endDate.diff(now, 'years');
+        // TODO: bukain buat semua status
+        // if (tl > 0 && product.auctionStatus == 'BELUM SELESAI') {
+        setTimeLeft(tl > 0 ? tl : 0);
+        setMinutesLeft(minl > 0 ? minl : 0);
+        setHourssLeft(hl > 0 ? hl : 0);
+        setDaysLeft(dl > 0 ? dl : 0);
+        setWeeksLeft(wl > 0 ? wl : 0);
+        setMonthsLeft(ml > 0 ? ml : 0);
+        setYearsLeft(yl > 0 ? yl : 0);
+      }, 1000) : null;
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     // auction join
@@ -46,6 +84,8 @@ const JoinLelang = ({navigation, route}) => {
       console.log('res success', res);
       if (res && Array.isArray(res.list)) {
         setListBidding(res.list);
+        setUserLastBid(res.userLastBid);
+        setHighestBid(res.highestBid);
       }
     });
 
@@ -56,7 +96,7 @@ const JoinLelang = ({navigation, route}) => {
 
     const args = {
       userId: user.userId,
-      auctionId: route.params.item.id
+      auctionId: item.id,
     };
     console.log('args', args);
     currentSocket.emit('auction-join', args);
@@ -66,8 +106,7 @@ const JoinLelang = ({navigation, route}) => {
     // auction bid
     currentSocket.on('auction-bid-success', (res) => {
       console.log('res bid success', res);
-      let newArr = [...listBidding];
-      newArr.push(res.bid);
+      let newArr = [res.bid].concat([listBidding]);
       setListBidding(newArr);
       // showPopup('Berhasil', 'success');
     });
@@ -83,7 +122,7 @@ const JoinLelang = ({navigation, route}) => {
 
     const args = {
       userId: user.userId,
-      auctionId: route.params.item.id,
+      auctionId: item.id,
       bidValue,
     };
 
@@ -91,19 +130,28 @@ const JoinLelang = ({navigation, route}) => {
     currentSocket.emit('auction-bid', args);
   }
 
-  console.log(route);
-
   const renderItem = ({item, index}) => 
-  <Row style={{justifyContent: 'center', alignItems: 'center',paddingVertical: 15, paddingHorizontal: 20,backgroundColor: Color.theme,width: '100%', height: 70,borderBottomWidth: 1, borderBottomColor: Color.border}}>
-    <Text style={{fontSize: 14,width: '10%'}}>{index + 1}</Text>
-    <Image source={item.photoFilename ? { uri: item.photoFilename } : ImagesPath.avatar1} style={{backgroundColor: Color.secondary, width: '10%', height: 35}}/>
+  <Row style={{justifyContent: 'center', alignItems: 'center',paddingVertical: 15, paddingHorizontal: 16, backgroundColor: Color.theme,width: '100%', height: 70,borderBottomWidth: 1, borderBottomColor: Color.border}}>
+    <View
+      style={{width: '5%', aspectRatio: 1, alignItems: 'flex-start', justifyContent: 'center'}}
+    >
+      <Text>{index + 1}</Text>
+    </View>
+
+    <View
+      style={{width: '10%', aspectRatio: 1}}
+    >
+      <Image source={item.photoFilename ? { uri: item.photoFilename } : ImagesPath.avatar1} style={{backgroundColor: Color.secondary, width: '100%', height: '100%'}}/>
+    </View>
+
     <Col style={{paddingHorizontal: 10,}}>
-      <Text style={{fontSize: 8}}>Nama Penawar</Text>
-      <Text style={{fontSize: 14}}>{item.user.firstName + ' ' + item.user.lastName}</Text>
+      <Text align='left' style={{fontSize: 8}}>Nama Penawar</Text>
+      <Text align='left' style={{fontSize: 14}}>{item.user.firstName + ' ' + item.user.lastName}</Text>
     </Col>
+
     <Col>
       <Text style={{fontSize: 8, textAlign: 'right'}}>Jumlah Penawaran</Text>
-      <Text style={{fontSize: 14, fontWeight: 'bold', textAlign: 'right'}}>{item.bid} Poin</Text>
+      <Text style={{fontSize: 14, fontWeight: 'bold', textAlign: 'right'}}>{FormatMoney.getFormattedMoney(item.bid, '')} Poin</Text>
     </Col>
   </Row>
 
@@ -128,22 +176,23 @@ const JoinLelang = ({navigation, route}) => {
               justifyContent: 'center',
             }}>
             <Image
-              source={{uri: route.params && Array.isArray(route.params.item.product.imageProducts) ? route.params.item.product.imageProducts[0] : ''}}
+              source={{uri: Array.isArray(item.product.imageProducts) ? item.product.imageProducts[0] : ''}}
               style={{width: 80, height: 80, borderRadius: 10}}
             />
           </View>
           <View style={{width: '40%', height: 100, paddingVertical: 10}}>
-            <Text numberOfLines={3} style={{fontSize: 14, fontWeight: 'bold', color: Color.text}}>
-              {route.params ? route.params.item.product.name : ""}
+            <Text align='left' numberOfLines={3} style={{fontSize: 14, fontWeight: 'bold'}}>
+              {item.product.name}
             </Text>
             <Text
+              align='left'
               style={{
                 fontSize: 10,
                 fontWeight: 'bold',
                 color: Color.gray,
                 paddingVertical: 5,
               }}>
-              Hijab
+              Hijab Hardcode
             </Text>
           </View>
           <View
@@ -162,8 +211,19 @@ const JoinLelang = ({navigation, route}) => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Text style={{fontSize: 5, color: Color.textInput}}>Sisa waktu</Text>
-              <Text style={{fontSize: 11, color: Color.textInput}}>12:05</Text>
+              <Text size={8} style={{color: Color.textInput}}>Sisa waktu</Text>
+              <Text size={12} style={{color: Color.textInput}}>
+                {
+                  yearsLeft > 0 ? `${yearsLeft} Tahun lagi` :
+                  monthsLeft > 0 ? monthsLeft + ' Bulan lagi' :
+                  weeksLeft > 0 ? weeksLeft + ' Minggu lagi' :
+                  daysLeft > 0 ? daysLeft + ' Hari lagi' :
+                  hoursLeft > 0 ? moment.duration(timeLeft, 'seconds').format('HH:mm:ss', { trim: false }) :
+                  minutesLeft > 0 ? moment.duration(timeLeft, 'seconds').format('mm:ss', { trim: false }) :
+                  timeLeft > 0 ? moment.duration(timeLeft, 'seconds').format('ss', { trim: false }) :
+                  item ? '-' : 'Waktu habis'
+                }
+              </Text>
             </View>
           </View>
         </View>
@@ -186,15 +246,15 @@ const JoinLelang = ({navigation, route}) => {
               paddingHorizontal: 20,
             }}>
             <View style={{width: '30%'}}>
-              <Text style={{color: Color.gray, fontSize: 8}}>Penawaranmu</Text>
+              <Text align='left' style={{color: Color.gray, fontSize: 8}}>Penawaranmu</Text>
               <Divider height={2}/>
-              <Text style={{color: Color.text, fontWeight: 'bold', fontSize: 11}}>0 Poin</Text>
+              <Text align='left' style={{fontWeight: 'bold', fontSize: 11}}>{FormatMoney.getFormattedMoney(userLastBid, '')} Poin</Text>
             </View>
             <View style={{width: '35%'}}>
-              <Text style={{color: Color.gray, fontSize: 8}}>Penawaran Awal</Text>
+              <Text align='left' style={{color: Color.gray, fontSize: 8}}>Penawaran Awal</Text>
               <Divider height={2}/>
-              <Text style={{color: Color.text, fontSize: 10, fontWeight: 'normal'}}>
-                50.000 Poin
+              <Text align='left' style={{fontSize: 10}}>
+                {FormatMoney.getFormattedMoney(item.startPrice, '')} Poin
               </Text>
             </View>
           </View>
@@ -219,62 +279,89 @@ const JoinLelang = ({navigation, route}) => {
         </Text>
         <View style={{width: '70%'}}></View>
       </View>
+
       <FlatList
-        data={listBidding.reverse()}
+        data={listBidding}
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
-      <View style={{ backgroundColor: Color.theme }}>
-					<ButtonView style={{backgroundColor: Color.theme }}>
-						<Text size={11} style={{ color: Color.text }}>
-							Pasang Tawaran
-						</Text>
-						<Divider height={10} />
-						<View
-							style={{
-								flexDirection: 'row',
-								justifyContent: 'flex-start',
-								alignItems: 'center'
-							}}
-						>
-							<EnterButton
-								style={{
-									backgroundColor: Color.grayLight
-								}}
-							>
-								<Text size={14}>
-								{FormatMoney.getFormattedMoney(5000)}
-							</Text>
-							</EnterButton>
-							<EnterButton style={{ backgroundColor: Color.grayLight, marginLeft: 10 }}>
-								<Text size={14} letterSpacing={0.02} color={Color.textInput}>
-									+{FormatMoney.getFormattedMoney(10000)}
-								</Text>
-							</EnterButton>
-							<TouchableOpacity
-								style={{
-									width: 43,
-									height: 43,
-									backgroundColor: Color.primary,
-									aspectRatio: 1,
-									marginLeft: 20,
-									borderRadius: 120,
-									alignItems: 'center',
-									justifyContent: 'center'
-								}}
-								onPress={() => {
-									modalBidRef.current.open();
-								}}
-							>
-								<Ionicons name="chevron-up-outline" color={Color.textInput} size={20} />
-							</TouchableOpacity>
-						</View>
-					</ButtonView>
-      </View>
+
+      <ButtonView>
+        <Text size={12}>
+          Pasang Tawaran
+        </Text>
+
+        <Divider height={10} />
+
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center'
+          }}
+        >
+          <EnterButton
+            onPress={() => {
+              Alert(
+                'Tawar',
+                `Pasang penawaran untuk harga ${FormatMoney.getFormattedMoney(highestBid + 5000)} ?`,
+                () => onSubmitAuctionBid(highestBid + 5000)
+              );
+            }}
+            style={{
+              flex: 3,
+              backgroundColor: Color.grayLight,
+            }}
+          >
+            <Text>
+              + {FormatMoney.getFormattedMoney(5000)}
+            </Text>
+          </EnterButton>
+
+          <Divider width={8} />
+
+          <EnterButton
+            onPress={() => {
+              Alert(
+                'Tawar',
+                `Pasang penawaran untuk harga ${FormatMoney.getFormattedMoney(highestBid + 10000)} ?`,
+                () => onSubmitAuctionBid(highestBid + 10000)
+              );
+            }}
+            style={{
+              flex: 3,
+              backgroundColor: Color.grayLight,
+            }}
+          >
+            <Text>
+              + {FormatMoney.getFormattedMoney(10000)}
+            </Text>
+          </EnterButton>
+
+          <Divider width={8} />
+
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              backgroundColor: Color.primary,
+              aspectRatio: 1,
+              borderRadius: 120,
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+            onPress={() => {
+              modalBidRef.current.open();
+            }}
+          >
+            <Ionicons name="chevron-up-outline" color={Color.textInput} size={20} />
+          </TouchableOpacity>
+        </View>
+      </ButtonView>
 
       <ModalBid
         ref={modalBidRef}
-        startPrice={route.params.item.startPrice}
+        startPrice={item.startPrice}
+        userLastBid={userLastBid}
+        highestBid={highestBid}
         onPress={(text) => {
           onSubmitAuctionBid(text);
         }}
