@@ -9,7 +9,6 @@ import { Divider } from 'src/styled';
 import {Scaffold, Text, useColor, Header, Row, Col, TouchableOpacity, usePopup, Alert} from '@src/components';
 import ModalBid from 'src/components/Modal/ModalBid';
 import { FormatMoney } from 'src/utils';
-import Bid from '../Posting/Auction/Bid';
 import {currentSocket} from '@src/screens/MainHome/MainHome';
 import moment from 'moment';
 
