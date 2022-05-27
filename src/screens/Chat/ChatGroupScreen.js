@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, FlatList, TextInput, Image } from 'react-native';
+import { View, FlatList, TextInput, Image, ScrollView } from 'react-native';
 import Styled from 'styled-components';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import Moment from 'moment';
 import { useSelector } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
-
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import Text from '@src/components/Text';
 import { useColor } from '@src/components/Color';
 import { usePopup } from '@src/components';
@@ -168,7 +168,8 @@ const ChatGroupScreen = ({ navigation, route }) => {
     }
 
     return (
-        <View style={{backgroundColor: Color.theme}}>
+        <ScrollView style={{backgroundColor: Color.theme}}>
+            <View style={{backgroundColor: Color.theme}}>
             {/* <BottomSection style={{borderColor: Color.border}}>
                 <BoxInput style={true ? {borderColor: Color.border} : {borderColor: Color.error}}>
                     <TextInputNumber
@@ -189,7 +190,10 @@ const ChatGroupScreen = ({ navigation, route }) => {
                     </CircleSend>
                 </BoxInput>
             </BottomSection> */}
-
+            <View style={{backgroundColor: Color.theme, width: '100%', height: 70, justifyContent: 'center', alignItems: 'center'}}>
+                <TextInput placeholder='Cari . . .' style={{backgroundColor: Color.border, width: '95%', height: 35, borderRadius: 5, fontSize: 10, paddingHorizontal: 10}}></TextInput>
+                <AntDesign name={'search1'} size={12} style={{alignSelf: 'flex-end', right: 20,color: Color.secondary,position: 'absolute'}}/>
+            </View>
             <FlatList
                 keyExtractor={(item, index) => item.id.toString() + index.toString()}
                 data={dataRooms.data}
@@ -251,7 +255,7 @@ const ChatGroupScreen = ({ navigation, route }) => {
                                     color={isUserTyping(item.typing) ? Color.success : Color.text}
                                     style={{opacity: 0.6}}
                                 >
-                                    {item.last_chat && item.last_chat.user_id == user.userId ? 'Terkirim: ' : 'Diterima: '}
+                                    {item.last_chat && item.last_chat.user_id == user.userId ? "User's Name :   " : <Ionicons name={"md-checkmark-done-sharp"} size={12}/>}
                                     {isUserTyping(item.typing) ? 'Sedang mengetik...' : item.last_chat ? item.last_chat.message : ''}
                                 </Text>
                             </View>
@@ -294,6 +298,7 @@ const ChatGroupScreen = ({ navigation, route }) => {
                 ]}
             />
         </View>
+        </ScrollView>
     )
 }
 
