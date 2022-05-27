@@ -4,18 +4,20 @@ import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Moment from 'moment';
 import { useSelector } from 'react-redux';
-
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import Text from '@src/components/Text';
 import { useColor } from '@src/components/Color';
 import Header from '@src/components/Header';
+import {ModalListAction } from 'src/components';
 import { usePopup } from '@src/components/Modal/Popup';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Scaffold from '@src/components/Scaffold';
-
+import Entypo from 'react-native-vector-icons/Entypo'
 import Client from '@src/lib/apollo';
 import { queryContentChatRoomManage, queryContentChatMessage } from '@src/lib/query';
 import { Divider } from 'src/styled';
 import { currentSocket } from '@src/screens/MainHome/MainHome';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -24,7 +26,7 @@ const BottomSection = Styled(View)`
 `;
 
 const BoxInput = Styled(View)`
-  width: 100%;
+  width: 88%;
   minHeight: 48px;
   padding: 0px 42px 0px 16px;
   borderRadius: 8px;
@@ -40,12 +42,9 @@ const CustomTextInput = Styled(TextInput)`
 `;
 
 const CircleSend = Styled(TouchableOpacity)`
-  position: absolute;
-  right: 8px;
-  bottom: 8px;
-  width: 30px;
-  height: 30px;
-  borderRadius: 15px;
+  width: 40px;
+  height: 40px;
+  borderRadius: 25px;
   justifyContent: center;
   alignItems: center;
 `;
@@ -63,6 +62,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
     const [textComment, setTextComment] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const [roomId, setRoomId] = useState(params.roomId);
+    const [showSection, setShowSection] = useState(true);
     const [dataChat, setDataChat] = useState({
         data: [],
         loading: false,
@@ -70,6 +70,8 @@ const ChatDetailScreen = ({ navigation, route }) => {
         loadNext: false,
     });
     const [userTyping, setUserTyping] = useState(false);
+    const modalListActionRef = useRef();
+
 
     let isInitial = useRef(true);
     let newDataIn = useRef([]);
@@ -172,6 +174,25 @@ const ChatDetailScreen = ({ navigation, route }) => {
         }
     }
     
+    const DetailHeader = () => {
+        return (
+          <View style={{backgroundColor: Color.theme, alignItems: 'center',width: '100%', height: 60, flexDirection: 'row'}}>
+              <AntDesign onPress={() => navigation.goBack()} name={"arrowleft"} size={20} style={{marginHorizontal: 15}}/>
+              <View style={{width: '78%'}}>
+                <Text style={{fontWeight: 'bold', fontSize: 16, textAlign: 'left', marginVertical: 1}}>{params.roomName}</Text>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={{marginHorizontal: 3,backgroundColor: Color.green, width: 6, borderRadius: 20, height: 6}}/>
+                    {userTyping ? userTyping && 'sedang mengetik . . .' : <Text style={{fontSize: 8, color: Color.secondary}}>Online</Text>}
+                </View>
+              </View>
+              <Entypo onPress={() => {
+                                setShowSection(!showSection)
+                                modalListActionRef.current.open();
+                            }} name={"dots-three-vertical"} size={18}/>
+          </View>
+        )
+      }
+
     const onSendChat = (room_id) => {
         const variables = {
             method: 'INSERT',
@@ -223,32 +244,23 @@ const ChatDetailScreen = ({ navigation, route }) => {
         
         return title;
     }
+
+    
     
     return (
         <Scaffold
+            style={{backgroundColor: Color.semiwhite}}
             fallback={dataChat.loading}
             popupProps={popupProps}
             color={Color.semiwhite}
             header={
-                <Header
-                    title={params.roomName}
-                    subTitle={userTyping && 'sedang mengetik...'}
-                    subTitleColor={userTyping && Color.success}
-                    centerTitle
-                    iconRightButton={
-                        user && user.isDirector === 1 ?
-                            <Ionicons
-                                name='information-circle-outline'
-                                size={22}
-                                color={Color.text}
-                                onPress={() => navigation.navigate('ChatInfoScreen', { member: params.selected })}
-                            />
-                        :
-                            <View />
-                    }
-                />
+                <DetailHeader/>
             }
         >
+            <ScrollView>
+            <View style={{backgroundColor: Color.border, width: '35%', height: 25, borderRadius: 20, alignItems: 'center', justifyContent: 'center', marginVertical: 15, alignSelf: 'center'}}>
+                <Text style={{fontSize: 10, color: Color.secondary, fontWeight: 'bold'}}>Senin, 03 Januari 2022</Text>
+            </View>
             <FlatList
                 keyExtractor={(item, index) => item.id + index.toString()}
                 data={dataChat.data}
@@ -261,15 +273,21 @@ const ChatDetailScreen = ({ navigation, route }) => {
                     // const isAdmin = user && user.userId === item.userId;
                     const isMe = user.userId == item.user_id;
 
+
+                    //Sender Chat
                     if (isMe) {
                         return (
-                            <View style={{width, marginTop: 16, paddingHorizontal: 16, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
+                            <View style={{width, marginTop: 16 ,paddingHorizontal: 16, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
                                 <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.textInput, borderRadius: 8, borderBottomRightRadius: 0, alignItems: 'flex-end'}}>
-                                    <Text size={10} type='semibold' align='right' color={Color.secondary}>{item.name}</Text>
+                                    {/* <Text size={10} type='semibold' align='right' color={Color.secondary}>{item.name}</Text> */}
                                     <Divider height={4} />
                                     <Text align='right'>{item.message}</Text>
                                     <Divider height={4} />
-                                    <Text size={8} align='right' style={{opacity: 0.6}}>{managedDateUTC(item.created_unix_date)}</Text>
+                                    <View style={{flexDirection: 'row'}}>
+                                        <Ionicons name={"md-checkmark-done-sharp"} size={12}/>
+                                        <Text size={8} align='right' style={{opacity: 0.6}}>  {managedDateUTC(item.created_unix_date)}</Text>
+                                    </View>
+                                    
                                 </View>
                                 <View style={{width: 30, height: 30, marginLeft: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.disabled}}>
                                     <Image
@@ -281,6 +299,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
                         )
                     }
 
+                    // Receiver Chat
                     return (
                         <View style={{width, marginTop: 16, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'flex-end'}}>
                             <View style={{width: 30, height: 30, marginRight: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.primary}}>
@@ -289,8 +308,8 @@ const ChatDetailScreen = ({ navigation, route }) => {
                                 style={{width: '100%', aspectRatio: 1, borderRadius: 15, backgroundColor: Color.primary}}
                             />
                             </View>
-                            <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.primarySoft, borderRadius: 8, borderBottomLeftRadius: 0, alignItems: 'flex-start'}}>
-                                <Text size={10} type='semibold' align='left' color={Color.primary}>{item.name}</Text>
+                            <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: '#E8F3FD', borderRadius: 8, borderBottomLeftRadius: 0, alignItems: 'flex-start'}}>
+                                {/* <Text size={10} type='semibold' align='left' color={Color.primary}>{item.name}</Text> */}
                                 <Divider height={4} />
                                 <Text align='left' color={Color.text}>{item.message}</Text>
                                 <Divider height={4} />
@@ -300,13 +319,15 @@ const ChatDetailScreen = ({ navigation, route }) => {
                     )
                 }}
             />
+            </ScrollView>
 
-            <BottomSection style={{borderColor: Color.theme}}>
-                <BoxInput style={{borderColor: Color.text}}>
+            {showSection == true ? 
+            <BottomSection style={{flexDirection: 'row', alignItems: 'center',backgroundColor: Color.theme, borderColor: Color.theme, elevation: 5}}>
+                <BoxInput style={{alignItems: 'center',borderColor: Color.secondary, borderRadius: 30, flexDirection: 'row'}}>
                     <CustomTextInput
                         name="text"
-                        placeholder='Masukan teks...'
-                        placeholderTextColor={Color.text}
+                        placeholder='Kirim Pesan ...'
+                        placeholderTextColor={Color.secondary}
                         selectionColor={Color.primary}
                         returnKeyType="done"
                         returnKeyLabel="Done"
@@ -325,15 +346,58 @@ const ChatDetailScreen = ({ navigation, route }) => {
                         }}
                         style={{color: Color.text}}
                     />
-
-                    <CircleSend
-                        onPress={() => onSubmit()}
-                        style={{backgroundColor: Color.primary}}
-                    >
-                        <Ionicons name='send' color={Color.textInput} />
-                    </CircleSend>
+                    <AntDesign name={"pluscircleo"} size={18} color={Color.secondary} style={{right: -10}}/>
                 </BoxInput>
+                <CircleSend
+                        onPress={() => onSubmit()}
+                        style={{backgroundColor: Color.primary, marginHorizontal: 8}}
+                    >
+                        <Ionicons name='send' color={Color.textInput} size={16}/>
+                </CircleSend>
             </BottomSection>
+            : null}
+            <ModalListAction
+                onClose={() => setShowSection(!showSection)}
+                ref={modalListActionRef}
+                data={[
+                    {
+                        id: 0,
+                        name: 'Cari',
+                        color: Color.text,
+                        onPress: () => {
+                            setShowSection(!showSection)
+                            modalListActionRef.current.close();
+                        },
+                    },
+                    {
+                        id: 1,
+                        name: 'Matikan pemberitahuan',
+                        color: Color.text,
+                        onPress: () => {
+                            setShowSection(!showSection)
+                            modalListActionRef.current.close();
+                        },
+                    },
+                    {
+                        id: 2,
+                        name: 'Bersihkan obrolan',
+                        color: Color.text,
+                        onPress: () => {
+                            setShowSection(!showSection)
+                            modalListActionRef.current.close();
+                        },
+                    },
+                    {
+                        id: 3,
+                        name: 'Report',
+                        color: Color.red,
+                        onPress: () => {
+                            setShowSection(!showSection)
+                            modalListActionRef.current.close();
+                        },
+                    },
+                ]}
+            />
         </Scaffold>
     )
 }

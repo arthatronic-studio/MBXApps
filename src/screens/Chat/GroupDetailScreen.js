@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, FlatList, TextInput, Image, Pressable,useWindowDimensions, AppState } from 'react-native';
+import { View, FlatList, ScrollView,TextInput, Image, Pressable,useWindowDimensions, AppState } from 'react-native';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Moment from 'moment';
+import {ModalListAction } from 'src/components';
 import { useSelector } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Text from '@src/components/Text';
@@ -21,6 +22,7 @@ import { queryContentChatRoomManage, queryContentChatMessage } from '@src/lib/qu
 import { Divider } from 'src/styled';
 import { currentSocket } from '@src/screens/MainHome/MainHome';
 
+
 const BottomSection = Styled(View)`
   width: 100%;
   padding: 16px;
@@ -28,7 +30,7 @@ const BottomSection = Styled(View)`
 `;
 
 const BoxInput = Styled(View)`
-  width: 100%;
+  width: 88%;
   minHeight: 48px;
   padding: 0px 42px 0px 16px;
   borderRadius: 8px;
@@ -44,17 +46,17 @@ const CustomTextInput = Styled(TextInput)`
 `;
 
 const CircleSend = Styled(TouchableOpacity)`
-  position: absolute;
-  right: 8px;
-  bottom: 8px;
-  width: 30px;
-  height: 30px;
-  borderRadius: 15px;
+  width: 40px;
+  height: 40px;
+  borderRadius: 25px;
   justifyContent: center;
   alignItems: center;
 `;
 
 const GroupDetailScreen = ({ navigation, route }) => {
+
+    const modalListActionRef = useRef();
+    const [showSection, setShowSection] = useState(true)
     // params
     const { params } = route;
 
@@ -94,7 +96,11 @@ const GroupDetailScreen = ({ navigation, route }) => {
               <Text style={{fontSize: 8, color: Color.secondary, fontWeight: 'bold', textAlign: 'left'}}>Zahra Anindita, John Doe ...</Text>
             </Col>
             <View style={{width: '10%'}}>
-              <Entypo name={'dots-three-vertical'} size={20}/>
+              <Entypo onPress={() => {
+                                setShowSection(!showSection)
+                                modalListActionRef.current.open();
+                            }} 
+                    name={'dots-three-vertical'} size={20}/>
             </View>
           </Row>
         </Pressable>
@@ -276,6 +282,11 @@ const GroupDetailScreen = ({ navigation, route }) => {
               <GroupHeader />
             }
         >
+
+         <ScrollView>
+            <View style={{backgroundColor: Color.border, width: '35%', height: 25, borderRadius: 20, alignItems: 'center', justifyContent: 'center', marginVertical: 15, alignSelf: 'center'}}>
+                <Text style={{fontSize: 10, color: Color.secondary, fontWeight: 'bold'}}>Senin, 03 Januari 2022</Text>
+            </View>
             <FlatList
                 keyExtractor={(item, index) => item.id + index.toString()}
                 data={dataChat.data}
@@ -292,11 +303,14 @@ const GroupDetailScreen = ({ navigation, route }) => {
                         return (
                             <View style={{width, marginTop: 16, paddingHorizontal: 16, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
                                 <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.textInput, borderRadius: 8, borderBottomRightRadius: 0, alignItems: 'flex-end'}}>
-                                    <Text size={10} type='semibold' align='right' color={Color.secondary}>{item.name}</Text>
+                                    {/* <Text size={10} type='semibold' align='right' color={Color.secondary}>{item.name}</Text> */}
                                     <Divider height={4} />
                                     <Text align='right'>{item.message}</Text>
                                     <Divider height={4} />
-                                    <Text size={8} align='right' style={{opacity: 0.6}}>{managedDateUTC(item.created_unix_date)}</Text>
+                                   <View style={{flexDirection: 'row'}}>
+                                        <Ionicons name={"md-checkmark-done-sharp"} size={12}/>
+                                        <Text size={8} align='right' style={{opacity: 0.6}}>  {managedDateUTC(item.created_unix_date)}</Text>
+                                   </View>
                                 </View>
                                 <View style={{width: 30, height: 30, marginLeft: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.disabled}}>
                                     <Image
@@ -316,7 +330,7 @@ const GroupDetailScreen = ({ navigation, route }) => {
                                 style={{width: '100%', aspectRatio: 1, borderRadius: 15, backgroundColor: Color.primary}}
                             />
                             </View>
-                            <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.primarySoft, borderRadius: 8, borderBottomLeftRadius: 0, alignItems: 'flex-start'}}>
+                            <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: '#E8F3FD', borderRadius: 8, borderBottomLeftRadius: 0, alignItems: 'flex-start'}}>
                                 <Text size={10} type='semibold' align='left' color={Color.primary}>{item.name}</Text>
                                 <Divider height={4} />
                                 <Text align='left' color={Color.text}>{item.message}</Text>
@@ -327,40 +341,105 @@ const GroupDetailScreen = ({ navigation, route }) => {
                     )
                 }}
             />
+            </ScrollView>
 
-            <BottomSection style={{borderColor: Color.theme}}>
-                <BoxInput style={{borderColor: Color.secondary, borderRadius: 30}}>
-                    <CustomTextInput
-                        name="text"
-                        placeholder='Kirim Pesan . . .'
-                        placeholderTextColor={Color.secondary}
-                        selectionColor={Color.primary}
-                        returnKeyType="done"
-                        returnKeyLabel="Done"
-                        blurOnSubmit={false}
-                        onBlur={() => {}}
-                        error={null}
-                        multiline
-                        value={textComment}
-                        onChangeText={(text) => {
-                            if (isTyping === false && text.length > textComment.length) {
-                                setIsTyping(true);
-                                // UpdateTyping to true
-                            }
+            
+            {showSection == true ?
+            <BottomSection style={{flexDirection: 'row', alignItems: 'center',backgroundColor: Color.theme, borderColor: Color.theme, elevation: 5}}>
+            <BoxInput style={{alignItems: 'center',borderColor: Color.secondary, borderRadius: 30, flexDirection: 'row'}}>
+                <CustomTextInput
+                    name="text"
+                    placeholder='Kirim Pesan ...'
+                    placeholderTextColor={Color.secondary}
+                    selectionColor={Color.primary}
+                    returnKeyType="done"
+                    returnKeyLabel="Done"
+                    blurOnSubmit={false}
+                    onBlur={() => {}}
+                    error={null}
+                    multiline
+                    value={textComment}
+                    onChangeText={(text) => {
+                        if (isTyping === false && text.length > textComment.length) {
+                            setIsTyping(true);
+                            // UpdateTyping to true
+                        }
 
-                            setTextComment(text);
-                        }}
-                        style={{color: Color.text}}
-                    />
+                        setTextComment(text);
+                    }}
+                    style={{color: Color.text}}
+                />
+                <AntDesign name={"pluscircleo"} size={18} color={Color.secondary} style={{right: -10}}/>
+            </BoxInput>
+            <CircleSend
+                    onPress={() => onSubmit()}
+                    style={{backgroundColor: Color.primary, marginHorizontal: 8}}
+                >
+                    <Ionicons name='send' color={Color.textInput} size={16}/>
+            </CircleSend>
+        </BottomSection>
+        : null }
 
-                    <CircleSend
-                        onPress={() => onSubmit()}
-                        style={{backgroundColor: Color.primary}}
-                    >
-                        <Ionicons name='send' color={Color.textInput} />
-                    </CircleSend>
-                </BoxInput>
-            </BottomSection>
+            <ModalListAction
+                onClose={() => setShowSection(!showSection)}
+                ref={modalListActionRef}
+                data={[
+                    {
+                        id: 0,
+                        name: 'Cari',
+                        color: Color.text,
+                        onPress: () => {
+                            setShowSection(!showSection)
+                            modalListActionRef.current.close();
+                        },
+                    },
+                    {
+                        id: 1,
+                        name: 'Tambahkan Anggota',
+                        color: Color.text,
+                        onPress: () => {
+                            setShowSection(!showSection)
+                            modalListActionRef.current.close();
+                        },
+                    },
+                    {
+                        id: 2,
+                        name: 'Matikan pemberitahuan',
+                        color: Color.text,
+                        onPress: () => {
+                            setShowSection(!showSection)
+                            modalListActionRef.current.close();
+                        },
+                    },
+                    {
+                        id: 3,
+                        name: 'Bersihkan obrolan',
+                        color: Color.text,
+                        onPress: () => {
+                            setShowSection(!showSection)
+                            modalListActionRef.current.close();
+                        },
+                    },
+                    {
+                        id: 4,
+                        name: 'Report',
+                        color: Color.red,
+                        onPress: () => {
+                            setShowSection(!showSection)
+                            modalListActionRef.current.close();
+                        },
+                    },
+                    {
+                        id: 5,
+                        name: 'Keluar dari grup',
+                        color: Color.red,
+                        onPress: () => {
+                            setShowSection(!showSection)
+                            modalListActionRef.current.close();
+                        },
+                    },
+                ]}
+            />
         </Scaffold>
     )
 }
