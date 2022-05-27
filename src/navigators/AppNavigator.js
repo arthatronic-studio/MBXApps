@@ -101,10 +101,6 @@ import ChatDetailScreen from '@src/screens/Chat/ChatDetailScreen';
 import ChatUserListScreen from '@src/screens/Chat/ChatUserListScreen';
 import ChatInfoScreen from '@src/screens/Chat/ChatInfoScreen';
 
-// auction
-import AuctionDetail from '@src/screens/Posting/Auction/Detail';
-import Bid from '@src/screens/Posting/Auction/Bid';
-
 // Lelang 
 import Lelang from 'src/screens/Lelang/Lelang';
 import DetailLelang from 'src/screens/Lelang/DetailLelang';
@@ -113,7 +109,6 @@ import LiveLelangScreen from 'src/screens/Lelang/LiveLelangScreen';
 import DirectOrder from 'src/screens/Lelang/DirectOrder';
 import JoinLelang from 'src/screens/Lelang/JoinLelang';
 import AuctionHistory from 'src/screens/Lelang/AuctionHistory';
-import BidAuction from 'src/screens/Lelang/BidAuction';
 import TestLelang from 'src/screens/Lelang/TestLelang';
 import AddProductAuction from 'src/screens/Lelang/AddProductAuction';
 
@@ -252,7 +247,6 @@ function MainStackNavigator() {
       <Screen name="DirectOrder" component={DirectOrder}/>
       <Screen name="JoinLelang" component={JoinLelang}/>
       <Screen name="AuctionHistory" component={AuctionHistory}/>
-      <Screen name="BidAuction" component={BidAuction}/>
       <Screen name="TestLelang" component={TestLelang}/>
       <Screen name="AddProductAuction" component={AddProductAuction}/>
       <Screen name="AddProductAuctionSecond" component={AddProductAuctionSecond}/>
@@ -390,11 +384,6 @@ function MainStackNavigator() {
       <Screen name="CreateGroup" component={CreateGroup} />
       <Screen name="GroupDetailScreen" component={GroupDetailScreen} />
       <Screen name="ChatGroupScreen" component={ChatGroupScreen} />
-
-
-      {/* auction */}
-      <Screen name="AuctionDetail" component={AuctionDetail} />
-      <Screen name="Bid" component={Bid} />
 
       {/* media player */}
       <Screen name="MediaPlayerScreen" component={MediaPlayerScreen} />

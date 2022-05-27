@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, FlatList, TextInput, Image } from 'react-native';
+import { View, FlatList, TextInput, Image, ScrollView } from 'react-native';
 import Styled from 'styled-components';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Moment from 'moment';
 import { useSelector } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
-
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import Text from '@src/components/Text';
 import { useColor } from '@src/components/Color';
 import { usePopup } from '@src/components';
@@ -99,6 +99,8 @@ const ChatRoomsScreen = ({ navigation, route }) => {
             });
           }
         });
+
+
     }, []);
 
     useEffect(() => {
@@ -168,7 +170,8 @@ const ChatRoomsScreen = ({ navigation, route }) => {
     }
 
     return (
-        <View style={{backgroundColor: Color.theme}}>
+        <ScrollView style={{backgroundColor: Color.theme}}>
+            <View style={{backgroundColor: Color.theme}}>
             {/* <BottomSection style={{borderColor: Color.border}}>
                 <BoxInput style={true ? {borderColor: Color.border} : {borderColor: Color.error}}>
                     <TextInputNumber
@@ -189,7 +192,10 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                     </CircleSend>
                 </BoxInput>
             </BottomSection> */}
-
+            <View style={{backgroundColor: Color.theme, width: '100%', height: 70, justifyContent: 'center', alignItems: 'center'}}>
+                <TextInput placeholder='Cari . . .' style={{backgroundColor: Color.border, width: '95%', height: 35, borderRadius: 5, fontSize: 10, paddingHorizontal: 10}}></TextInput>
+                <AntDesign name={'search1'} size={12} style={{alignSelf: 'flex-end', right: 20,color: Color.secondary,position: 'absolute'}}/>
+            </View>
             <FlatList
                 keyExtractor={(item, index) => item.id.toString() + index.toString()}
                 data={dataRooms.data}
@@ -201,9 +207,9 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                     const isSelected = selectedRoom && selectedRoom.id === item.id;
                     const notifBadge = item.unread_count > 0;
 
-                    // console.log('item', item);
 
                     return (
+                        
                         <TouchableOpacity
                             onPress={() => {
                                 let targetIds = [];
@@ -231,29 +237,40 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                                 backgroundColor: isSelected ? Color.primarySoft : Color.textInput,
                             }}
                         >
+                            
+                            
                             <View style={{width: '12%', height: '100%', alignItems: 'center', justifyContent: 'center'}}>
                                 <Image
                                     source={{uri: item.image}}
                                     style={{width: '100%', aspectRatio: 1, borderRadius: 30, backgroundColor: Color.border}}
                                 />
                             </View>
-                            <View style={{width: '70%', height: '100%', alignItems: 'flex-start', justifyContent: 'space-around', paddingLeft: 8, paddingRight: 16, paddingVertical: 4}}>
-                                <Text
-                                    type='semibold'
-                                    numberOfLines={1}
-                                >
-                                    {item.name || getTitle(item.member)}
-                                </Text>
-                                <Text
-                                    type={isUserTyping(item.typing) ? 'italic' : notifBadge ? 'bold' : 'regular'}
-                                    numberOfLines={1}
-                                    color={isUserTyping(item.typing) ? Color.success : Color.text}
-                                    style={{opacity: 0.6}}
-                                >
-                                    {item.last_chat && item.last_chat.user_id == user.userId ? 'Terkirim: ' : 'Diterima: '}
-                                    {isUserTyping(item.typing) ? 'Sedang mengetik...' : item.last_chat ? item.last_chat.message : ''}
-                                </Text>
-                            </View>
+
+                                
+                            
+                                <View style={{width: '70%', height: '100%', alignItems: 'flex-start', justifyContent: 'space-around', paddingLeft: 8, paddingRight: 16, paddingVertical: 4}}>
+                                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                        <View style={{marginRight: 5,borderRadius: 20,width: 8, height: 8, backgroundColor: Color.green}}/>
+                                        <Text
+                                        type='semibold'
+                                        numberOfLines={1}
+                                    >
+                                        {item.name || getTitle(item.member)}
+
+                                    </Text>
+                                    </View>
+                                    <Text
+                                        type={isUserTyping(item.typing) ? 'italic' : notifBadge ? 'bold' : 'regular'}
+                                        numberOfLines={1}
+                                        color={isUserTyping(item.typing) ? Color.success : Color.text}
+                                        style={{opacity: 0.6}}
+                                    >
+                                        {item.last_chat && item.last_chat.user_id == user.userId ? <Ionicons name={"md-checkmark-done-sharp"} size={12}/> : ''}
+                                        {isUserTyping(item.typing) ? 'Sedang mengetik...' : item.last_chat ? item.last_chat.message : ''}
+                                    </Text>
+                                </View>
+                                
+
                             <View style={{width: '18%', height: '100%', alignItems: 'flex-end', justifyContent: 'space-around', paddingVertical: 4}}>
                                 <Text
                                     size={8}
@@ -293,6 +310,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                 ]}
             />
         </View>
+        </ScrollView>
     )
 }
 

@@ -51,10 +51,6 @@ const MyShopHomepage = ({ navigation }) => {
 	}, [isFocused]);
 
 	const getMyShop = () => {
-		let variables = {
-			merchantId: undefined,
-		};
-
 		Client.query({ query: queryGetMyShop })
 			.then(res => {
 				console.log(res, 'ress')
@@ -74,6 +70,8 @@ const MyShopHomepage = ({ navigation }) => {
 				console.log(reject);
 			});
 	};
+
+	console.log('res', data);
 
 	return (
 		<Scaffold

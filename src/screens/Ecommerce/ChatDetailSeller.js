@@ -169,7 +169,7 @@ const ChatDetailSeller = ({navigation, route}) => {
                       </Text>
                       <Divider height={5} />
                       <Text size={14} align="left" type="bold">
-                        {FormatMoney.getFormattedMoney(item.price)}
+                        {FormatMoney.getFormattedMoney(item.tagged_price)}
                       </Text>
                     </View>
                   </View>
@@ -208,7 +208,7 @@ const ChatDetailSeller = ({navigation, route}) => {
                     justifyContent: 'flex-start',
                   }}>
                   <Image
-                    source={{uri: targetImage}}
+                    source={targetImage ? {uri: targetImage} : ImagesPath.userChat}
                     style={{
                       width: 36,
                       aspectRatio: 1,
@@ -279,7 +279,7 @@ const ChatDetailSeller = ({navigation, route}) => {
                     </View>
                   </View>
                   <Image
-                    source={{uri: userImage}}
+                    source={ userImage ? {uri: userImage} : ImagesPath.userChat}
                     style={{
                       width: 36,
                       aspectRatio: 1,

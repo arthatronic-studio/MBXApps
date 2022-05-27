@@ -128,6 +128,7 @@ const SurveySecond = ({ route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Masukkan alamat lengkap . . .' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, minHeight: 40}}
 						onChangeText={(value) => setAddress(value)}
                         multiline
@@ -139,6 +140,7 @@ const SurveySecond = ({ route, navigation}) => {
             {/* <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginTop: 20, marginBottom: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Masukkan alamat lengkap . . .' style={{borderWidth: 1, borderColor: Color.secondary,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 90}}
                         multiline={true}
 						onChangeText={(value) => setAddress(value)}
@@ -151,6 +153,7 @@ const SurveySecond = ({ route, navigation}) => {
 			<View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Banten' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setProvince(value)}
                         value={province}
@@ -161,6 +164,7 @@ const SurveySecond = ({ route, navigation}) => {
 			<View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Tangerang' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setCity(value)}
                         value={city}
@@ -171,6 +175,7 @@ const SurveySecond = ({ route, navigation}) => {
 			<View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Jatiuwung' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setKecamatan(value)}
                         value={kecamatan}
@@ -181,6 +186,7 @@ const SurveySecond = ({ route, navigation}) => {
 			<View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Keroncong' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setKelurahan(value)}
                         value={kelurahan}

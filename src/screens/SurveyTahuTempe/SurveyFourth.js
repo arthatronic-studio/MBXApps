@@ -362,6 +362,7 @@ const SurveyFourth = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Masukkan pilihan lainnya' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}></TextInput>
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Lainnya</Text>
                 </View>
@@ -384,6 +385,7 @@ const SurveyFourth = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Masukkan pilihan lainnya' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}></TextInput>
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Lainnya</Text>
                 </View>
@@ -406,6 +408,7 @@ const SurveyFourth = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='2' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setTenagaKerja(value)}
                         value={tenagaKerja}></TextInput>
@@ -415,6 +418,7 @@ const SurveyFourth = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='5' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setHariKerja(value)}
                         value={hariKerja}></TextInput>
@@ -424,6 +428,7 @@ const SurveyFourth = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='22' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setKapasitasProduksi(value)}
                         value={kapasitasProduksi}></TextInput>
@@ -433,6 +438,7 @@ const SurveyFourth = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Luas Bangunan' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setLuasBangunan(value)}
                         value={luasBangunan}></TextInput>
@@ -442,6 +448,7 @@ const SurveyFourth = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='20m' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setLuasTanah(value)}
                         value={luasTanah}></TextInput>
@@ -464,6 +471,7 @@ const SurveyFourth = ({route, navigation}) => {
            {isMesin && <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='200' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setKapasitasMesin(value)}
                         value={kapasitasMesin}></TextInput>
@@ -496,6 +504,7 @@ const SurveyFourth = ({route, navigation}) => {
                         <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                             <View style={{width: '100%'}}>
                                 <TextInput placeholder='Segitiga Biru' style={{borderWidth: 1, borderColor: Color.border,
+                                    color: Color.text,
                                     width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                                     onChangeText={(value) => changeValue(value, 'namaProduct', id)}
                                     value={val.namaProduct}></TextInput>
@@ -507,6 +516,7 @@ const SurveyFourth = ({route, navigation}) => {
                                 <View style={{ marginHorizontal: 10, marginVertical: 5}}>
                                     <View style={{width: '100%'}}>
                                         <TextInput placeholder='200' style={{borderWidth: 1, borderColor: Color.border,
+                                            color: Color.text,
                                             width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                                             onChangeText={(value) => changeValue(value, 'masaProduct', id)}
                                             value={val.masaProduct}></TextInput>
@@ -518,6 +528,7 @@ const SurveyFourth = ({route, navigation}) => {
                                 <View style={{ marginHorizontal: 10, marginVertical: 5}}>
                                     <View style={{width: '100%'}}>
                                         <TextInput placeholder='200' style={{borderWidth: 1, borderColor: Color.border,
+                                            color: Color.text,
                                             width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                                             onChangeText={(value) => changeValue(value, 'hargaProduct', id)}
                                             value={val.hargaProduct}></TextInput>
@@ -542,6 +553,7 @@ const SurveyFourth = ({route, navigation}) => {
                         <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                             <View style={{width: '100%'}}>
                                 <TextInput placeholder='Segitiga Biru' style={{borderWidth: 1, borderColor: Color.border,
+                                    color: Color.text,
                                     width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                                     onChangeText={(value) => changeValueProduksi(value, 'namaProduct', idx)}
                                     value={val.namaProduct}></TextInput>
@@ -553,6 +565,7 @@ const SurveyFourth = ({route, navigation}) => {
                                 <View style={{ marginHorizontal: 10, marginVertical: 5}}>
                                     <View style={{width: '100%'}}>
                                         <TextInput placeholder='200' style={{borderWidth: 1, borderColor: Color.border,
+                                            color: Color.text,
                                             width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                                             onChangeText={(value) => changeValueProduksi(value, 'masaProduct', idx)}
                                             value={val.masaProduct}></TextInput>
@@ -564,6 +577,7 @@ const SurveyFourth = ({route, navigation}) => {
                                 <View style={{ marginHorizontal: 10, marginVertical: 5}}>
                                     <View style={{width: '100%'}}>
                                         <TextInput placeholder='200' style={{borderWidth: 1, borderColor: Color.border,
+                                            color: Color.text,
                                             width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                                             onChangeText={(value) => changeValueProduksi(value, 'hargaProduct', idx)}
                                             value={val.hargaProduct}></TextInput>

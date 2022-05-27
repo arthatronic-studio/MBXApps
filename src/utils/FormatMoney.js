@@ -9,7 +9,7 @@ const FormatMoney = {
       }
       return str.join('.');
   },
-  getFormattedMoney: (value, currency) => `${currency || 'Rp'} ${value ? FormatMoney.commafy(value) : ' 0'}`,
+  getFormattedMoney: (value, currency) => `${typeof currency === 'string' ? currency : 'Rp'}${value ? FormatMoney.commafy(value) : '0'}`,
 };
 
 export default FormatMoney;

@@ -60,7 +60,7 @@ const CircleSend = Styled(TouchableOpacity)`
   alignItems: center;
 `;
 const ChatDetailBuyer = ({navigation, route}) => {
-  const {id, merchant, users} = route.params;
+  const {id, merchant, users, bodyTagged} = route.params;
   const {Color} = useColor();
   const [roomId, setRoomId] = useState(id);
   const user = useSelector(state => state['user.auth'].login.user);
@@ -72,8 +72,10 @@ const ChatDetailBuyer = ({navigation, route}) => {
   const [dataChat, setDataChat] = useState([]);
   const [userImage, setUserImage] = useState(user.photoProfile);
   const [targetImage, setTargetImage] = useState(merchant.profile_img);
+  const [tagged, setTagged] = useState(bodyTagged);
 
   const create_message = () => {
+    if (tagged) create_flag_item();
     const community_chat_user_params = [
       {user_id: user.userId, room_type: 'ECOMMERCE', room_user_type: 'USER'},
       {
@@ -91,10 +93,12 @@ const ChatDetailBuyer = ({navigation, route}) => {
     };
     currentSocket.emit('create_community_chat_message', body);
     console.log(body, 'body');
-    // currentSocket.on('create_community_chat_room', (res) => {
-    // 	console.log('res create_community_chat_room', res);
-    // });
     setMessage('');
+  };
+
+  const create_flag_item = () => {
+    currentSocket.emit('create_community_chat_message', tagged);
+    setTagged(null);
   };
 
   useEffect(() => {
@@ -170,7 +174,7 @@ const ChatDetailBuyer = ({navigation, route}) => {
                       </Text>
                       <Divider height={5} />
                       <Text size={14} align="left" type="bold">
-                        {FormatMoney.getFormattedMoney(item.price)}
+                        {FormatMoney.getFormattedMoney(item.tagged_price)}
                       </Text>
                     </View>
                   </View>
@@ -209,7 +213,9 @@ const ChatDetailBuyer = ({navigation, route}) => {
                     justifyContent: 'flex-start',
                   }}>
                   <Image
-                    source={{uri: targetImage}}
+                    source={
+                      targetImage ? {uri: targetImage} : ImagesPath.userChat
+                    }
                     style={{
                       width: 36,
                       aspectRatio: 1,
@@ -280,7 +286,7 @@ const ChatDetailBuyer = ({navigation, route}) => {
                     </View>
                   </View>
                   <Image
-                    source={{uri: userImage}}
+                    source={userImage ? {uri: userImage} : ImagesPath.userChat}
                     style={{
                       width: 36,
                       aspectRatio: 1,
@@ -294,6 +300,49 @@ const ChatDetailBuyer = ({navigation, route}) => {
           );
         }}
       />
+
+      {tagged &&
+        <View style={{ backgroundColor: Color.border}}>
+          <View
+            style={{
+              paddingHorizontal: 32,
+              paddingVertical: 16,
+              backgroundColor: Color.theme,
+              marginVertical: 8,
+              marginHorizontal: 8,
+              flexDirection: 'row',
+              borderRadius: 8,
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+            }}>
+            <View style={{flexDirection: 'row'}}>
+              <Image
+                source={{uri: tagged.tagged_image}}
+                style={{
+                  width: 54,
+                  aspectRatio: 1,
+                  borderRadius: 5,
+                  marginRight: 16,
+                }}
+              />
+              <View
+                style={{
+                  flexDirection: 'column',
+                  maxWidth: width - 16 - 32 - 48 - 16,
+                  justifyContent: 'space-between',
+                }}>
+                <Text size={14} align="left" numberOfLines={2}>
+                  {tagged.tagged_name}
+                </Text>
+                <Divider height={5} />
+                <Text size={14} align="left" type="bold">
+                  {FormatMoney.getFormattedMoney(tagged.tagged_price)}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      }
 
       <View>
         <BottomSection style={{borderColor: Color.theme}}>

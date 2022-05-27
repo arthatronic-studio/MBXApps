@@ -103,6 +103,7 @@ const SurveyFirst = ({navigation}) => {
                 <Text style={{fontSize: 10, fontWeight: 'bold', marginVertical: 10}}>Informasi Pribadi</Text>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Adang Susanyo' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setName(value)}
                         value={name}
@@ -113,6 +114,7 @@ const SurveyFirst = ({navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='813-1234-5678' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 40, paddingTop: 20, height: 47}}
                         keyboardType='number-pad'
                         onChangeText={(value) => setPhone(value)}
@@ -125,6 +127,7 @@ const SurveyFirst = ({navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='contoh@gmail.com' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setEmail(value)}
                         value={email}
@@ -137,6 +140,7 @@ const SurveyFirst = ({navigation}) => {
                 <Text style={{fontSize: 10, fontWeight: 'bold', marginVertical: 10}}>Informasi Petugas</Text>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Adang Susanyo' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setNamePetugas(value)}
                         value={namePetugas}
@@ -147,6 +151,7 @@ const SurveyFirst = ({navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='813-1234-5678' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 40, paddingTop: 20, height: 47}}    
                         keyboardType='number-pad'
                         onChangeText={(value) => setPhonePetugas(value)}
@@ -159,6 +164,7 @@ const SurveyFirst = ({navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Adang Susanyo' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setNameKoor(value)}
                         value={nameKoor}
@@ -169,6 +175,7 @@ const SurveyFirst = ({navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='812-1234-5678' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 40, paddingTop: 20, height: 47}}
                         keyboardType='number-pad'
                         onChangeText={(value) => setPhoneKoor(value)}

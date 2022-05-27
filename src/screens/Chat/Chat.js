@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, FlatList, TextInput, Image } from 'react-native';
+import { View, FlatList, TextInput, Image, Pressable } from 'react-native';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Moment from 'moment';
 import { useSelector } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import Text from '@src/components/Text';
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import { useColor } from '@src/components/Color';
 import { usePopup } from '@src/components';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
@@ -73,6 +73,8 @@ const Chat = ({navigation}) => {
     const user = useSelector(
         state => state['user.auth'].login.user
     )
+
+
 
     // hooks
     const isFocused = useIsFocused();
@@ -179,7 +181,8 @@ const Chat = ({navigation}) => {
                     iconRightButton={
                         <TouchableOpacity
                             onPress={() => {
-                                navigation.navigate('CreateGroup', { myRoomIds });
+                                modalListActionRef.current.open();
+                                
                             }}
                             style={{justifyContent: 'center', alignItems: 'center'}}
                         >
@@ -192,7 +195,7 @@ const Chat = ({navigation}) => {
     >
         <Tab.Navigator
                 
-                initialRouteName={'Belanjaan'}
+                initialRouteName={'Chat'}
                 tabBarOptions={{
                     indicatorStyle: {backgroundColor: Color.theme, height: '100%'},
                     activeTintColor: Color.primary,
@@ -225,6 +228,34 @@ const Chat = ({navigation}) => {
                     options={{tabBarLabel: 'Grup'}}
                 />
                 </Tab.Navigator>
+
+                <Pressable style={{alignItems: 'center', justifyContent: 'center',backgroundColor: Color.primary, width: 60, height: 60, position: 'absolute', alignSelf: 'flex-end', bottom: 90, right: 30, borderRadius: 30,}}>
+                    <AntDesign name={'message1'} size={27} style={{color: Color.textInput}}/>
+                </Pressable>
+                <ModalListAction
+                ref={modalListActionRef}
+                data={[
+                    {
+                        id: 0,
+                        name: 'Buat Grup Baru',
+                        color: Color.text,
+                        onPress: () => {
+                            navigation.navigate('CreateGroup')
+                            modalListActionRef.current.close();
+                            setSelectedRoom();
+                        },
+                    },
+                    {
+                        id: 1,
+                        name: 'Pengaturan',
+                        color: Color.text,
+                        onPress: () => {
+                            modalListActionRef.current.close();
+                            setSelectedRoom();
+                        },
+                    },
+                ]}
+            />
     </Scaffold>
   )
 }

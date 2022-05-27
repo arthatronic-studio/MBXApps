@@ -270,7 +270,7 @@ const StepTwo = ({navigation, route}) => {
           <View>
             <TextInput
               placeholder={'Stok Barang'}
-              onChangeText={value => value.length == 0 ? setStock(parseInt(0)) : setStock(parseInt(value))}
+              onChangeText={value => setStock(value)}
               value={String(stock)}
               style={{
                 borderWidth: 1,

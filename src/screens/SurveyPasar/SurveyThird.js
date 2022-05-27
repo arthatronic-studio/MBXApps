@@ -363,6 +363,7 @@ const SurveyThird = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Masukkan pilihan lainnya' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}></TextInput>
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Lainnya</Text>
                 </View>
@@ -370,6 +371,7 @@ const SurveyThird = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='20' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setPengunjungPerhari(value)}
                         keyboardType='numeric'
@@ -451,6 +453,7 @@ const SurveyThird = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='100' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setPedagangFMCG(value)}
                         keyboardType='numeric'
@@ -462,14 +465,17 @@ const SurveyThird = ({route, navigation}) => {
                 <Text style={{fontSize: 8, color: Color.secondary, paddingVertical: 5}}>Produk FMCG Penjualan Tertinggi di</Text>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder={"1. Pasar Pakaian "} style={{borderWidth: 1, marginBottom: 10, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingVertical: 0, minHeight: 30}}
                         onChangeText={(value) => setPenjualanFMCG(value)}
                         value={penjualanFMCG}></TextInput>
                     <TextInput placeholder={"2. Pasar Grosiran"} style={{borderWidth: 1, marginBottom: 10, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingVertical: 0, minHeight: 30}}
                         onChangeText={(value) => setPenjualanFMCG2(value)}
                         value={penjualanFMCG2}></TextInput>
                     <TextInput placeholder={"3. Pasar Modern"} style={{borderWidth: 1, marginBottom: 10, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingVertical: 0, minHeight: 30}}
                         onChangeText={(value) => setPenjualanFMCG3(value)}
                         value={penjualanFMCG3}>
@@ -481,6 +487,7 @@ const SurveyThird = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='14' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setPedagangMakanan(value)}
                         keyboardType='numeric'
@@ -491,6 +498,7 @@ const SurveyThird = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='10' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setPedagangSayurBuah(value)}
                         keyboardType='numeric'
@@ -501,6 +509,7 @@ const SurveyThird = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='20' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setPedagangIkan(value)}
                         keyboardType='numeric'
@@ -511,6 +520,7 @@ const SurveyThird = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='20' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setPedagangDaging(value)}
                         keyboardType='numeric'

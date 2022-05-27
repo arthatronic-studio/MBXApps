@@ -61,31 +61,22 @@ const DetailProduct = ({navigation, route}) => {
     getCart();
   }, [isFocused]);
 
-  useEffect(() => {
-    if(detail){
-      currentSocket.on('get_community_chat_room_id', (res) => {
-        console.log('get_community_chat_room_id', res);
-        console.log("merchant", detail);
-        if(res.data.chat_room_id){
-          setTargetRoomId(res);
-        }else{
-          console.log("sinii")
-          create_room();
-        }
-      });
-    }
-  }, [detail]);
+  // useEffect(() => {
+  //   if(detail){
+      
+  //   }
+  // }, [detail]);
 
   useEffect(() => {
     const ChatRoom = () => {
+      console.log("siniii");
       const community_chat_user_params = [
         { user_id: user.userId, room_type: 'ECOMMERCE', room_user_type: 'USER' },
         { user_id: detail.merchant.userId, room_type: 'ECOMMERCE', room_user_type: 'MERCHANT' },
       ];
       const bodyMessage = {community_chat_user_params: community_chat_user_params, chat_room_id: targetRoomId.data.chat_room_id, user_id:  user.userId, chat_type: 'TAGGED_ECOMMERCE_PRODUCT', tagged_id: detail.id, tagged_name: detail.name, tagged_price: detail.price, tagged_image: detail.imageUrl, chat_message: detail.name};
-      currentSocket.emit('create_community_chat_message', bodyMessage);
-      console.log(bodyMessage, "body tagged");
-      navigation.navigate('ChatDetailBuyer', {id: targetRoomId.data.chat_room_id, merchant: detail.merchant, users: targetRoomId.data.users});
+      // currentSocket.emit('create_community_chat_message', bodyMessage);
+      navigation.navigate('ChatDetailBuyer', {id: targetRoomId.data.chat_room_id, merchant: detail.merchant, users: targetRoomId.data.users, bodyTagged: bodyMessage});
     }
 
     if(targetRoomId) ChatRoom();
@@ -182,7 +173,18 @@ const DetailProduct = ({navigation, route}) => {
 
 
   const get_room = () => {
+    console.log('get_community_chat_room_id');
     currentSocket.emit('get_community_chat_room_id', { user_id: user.userId, user_id_target: detail.merchant.userId, admin_ids: [detail.merchant.userId]});
+    currentSocket.on('get_community_chat_room_id', (res) => {
+      console.log('get_community_chat_room_id', res);
+      console.log("merchant", detail);
+      if(res.data.chat_room_id){
+        setTargetRoomId(res);
+      }else{
+        console.log("sinii")
+        create_room();
+      }
+    });
   }
 
   const create_room = () => {

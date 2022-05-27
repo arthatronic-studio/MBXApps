@@ -15,6 +15,7 @@ import Scaffold from '@src/components/Scaffold';
 import { Header } from 'src/components';
 import Entypo from 'react-native-vector-icons/Entypo'
 import Feather from 'react-native-vector-icons/Feather'
+import {ModalListAction } from 'src/components';
 import {
 	Row,
 	Col,
@@ -59,24 +60,35 @@ const DATA = [
 
 
 function Anggota(props) {
-    
+ 
+  const modalListActionRef = useRef();
+
     const {Color} = useColor();
     const renderItem = ({ item }) => (
-        <Row style={{marginHorizontal: 0, marginVertical: 12, alignItems: 'center'}}>
+      <View style={{backgroundColor: Color.theme,}}>
+       <Row style={{marginHorizontal: 0, marginVertical: 12, alignItems: 'center'}}>
             <Image source={item.image} style={{borderRadius: 20}}/>
             <View style={{width: '85%'}}>
                 <Text style={{textAlign: 'left',fontSize: 14,fontWeight: 'bold', marginHorizontal: 8}}>{item.name}</Text>
                 <Text style={{fontSize: 8, color: Color.error, textAlign: 'left', marginHorizontal: 10}}>{item.status}</Text>
             </View>
-            <Entypo name={'dots-three-horizontal'} size={15}/>
+            <TouchableOpacity onPress={() => {
+                            modalListActionRef.current.open();
+                        }}>
+             <Entypo name={'dots-three-horizontal'} size={15}/>
+            </TouchableOpacity>
+            
         </Row>
+
+        
+      </View>
+       
         
        );
   
-    console.log(props);
   
     return (
-      <ScrollView>
+      <ScrollView style={{backgroundColor: Color.theme}}>
       <View
         style={{
           backgroundColor: Color.theme,
@@ -89,6 +101,38 @@ function Anggota(props) {
             keyExtractor={item => item.id}
             />
       </View>
+      <ModalListAction
+                ref={modalListActionRef}
+                data={[
+                    {
+                        id: 0,
+                        name: 'Keluarkan dari grup',
+                        color: Color.text,
+                        onPress: () => {
+                            setShowSection(!showSection)
+                            modalListActionRef.current.close();
+                        },
+                    },
+                    {
+                        id: 1,
+                        name: 'Jadikan Admin',
+                        color: Color.red,
+                        onPress: () => {
+                            setShowSection(!showSection)
+                            modalListActionRef.current.close();
+                        },
+                    },
+                    {
+                        id: 2,
+                        name: 'Report',
+                        color: Color.red,
+                        onPress: () => {
+                            setShowSection(!showSection)
+                            modalListActionRef.current.close();
+                        },
+                    },
+                ]}
+            />
       </ScrollView>
     );
   }
@@ -186,9 +230,33 @@ function Anggota(props) {
 
 const UserGroupDetail = ({navigation}) => {
 
+    const modalListActionRef = useRef();
     const [isLoading, setIsLoading] = useState(false);
     const { Color } = useColor();
     const Tab = createMaterialTopTabNavigator();
+    const [backCover, setBackCover] = useState(true)
+
+
+    const GroupDetailHeader = () => {
+      return (
+        <>
+          <Row>
+            <Image source={ImagesPath.avatar1} style={{marginHorizontal: 15}}/>
+          <Col>
+              <Text style={{fontSize: 14, fontWeight: 'bold', textAlign: 'left'}}>Ngoding Bareng</Text>
+              <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left', marginVertical: 1}}>28 Anggota</Text>
+          </Col>
+          <View style={{width: '8%', marginVertical: 5}}>
+              <Feather name={'edit-2'}/>
+          </View>
+          </Row>
+        <Pressable onPress={()=>{navigation.navigate('AddMember')}} style={{flexDirection: 'row',marginHorizontal: 15, marginVertical: 15}}>
+            <Ionicons name={'person-add-outline'} size={16} style={{color: Color.primary}}/>
+            <Text style={{color: Color.primary, fontSize: 12, marginHorizontal: 10}}>Tambahkan anggota grup</Text>
+        </Pressable>
+        </>
+      )
+    }
 
   return (
     <Scaffold
@@ -198,6 +266,9 @@ const UserGroupDetail = ({navigation}) => {
                     title='Detail Grup'
                     iconRightButton={
                         <TouchableOpacity
+                          onPress={() => {
+                            modalListActionRef.current.open();
+                        }} 
                             style={{justifyContent: 'center', alignItems: 'center'}}
                         >
                             <Entypo name='dots-three-vertical' color={Color.text} size={20} />
@@ -206,20 +277,7 @@ const UserGroupDetail = ({navigation}) => {
                 />
             }
     >
-        <Row>
-            <Image source={ImagesPath.avatar1} style={{marginHorizontal: 15}}/>
-            <Col>
-                <Text style={{fontSize: 14, fontWeight: 'bold', textAlign: 'left'}}>Ngoding Bareng</Text>
-                <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left', marginVertical: 1}}>28 Anggota</Text>
-            </Col>
-            <View style={{width: '8%', marginVertical: 5}}>
-                <Feather name={'edit-2'}/>
-            </View>
-        </Row>
-        <Pressable onPress={()=>{navigation.navigate('AddMember')}} style={{flexDirection: 'row',marginHorizontal: 15, marginVertical: 15}}>
-            <Ionicons name={'person-add-outline'} size={16} style={{color: Color.primary}}/>
-            <Text style={{color: Color.primary, fontSize: 12, marginHorizontal: 10}}>Tambahkan anggota grup</Text>
-        </Pressable>
+        <GroupDetailHeader/>
         <Tab.Navigator
                 
                 initialRouteName={'Belanjaan'}
@@ -260,6 +318,41 @@ const UserGroupDetail = ({navigation}) => {
                     options={{tabBarLabel: 'Dokumen'}}
                 />
                 </Tab.Navigator>
+
+                <ModalListAction
+                ref={modalListActionRef}
+                data={[
+                    {
+                        id: 0,
+                        name: 'Matikan pemberitahuan',
+                        color: Color.text,
+                        onPress: () => {
+                            setShowSection(!showSection)
+                            modalListActionRef.current.close();
+                        },
+                    },
+                    {
+                        id: 1,
+                        name: 'Keluar dari grup',
+                        color: Color.red,
+                        onPress: () => {
+                            setShowSection(!showSection)
+                            modalListActionRef.current.close();
+                        },
+                    },
+                    {
+                        id: 2,
+                        name: 'Report',
+                        color: Color.red,
+                        onPress: () => {
+                            setShowSection(!showSection)
+                            modalListActionRef.current.close();
+                        },
+                    },
+                ]}
+            />
+
+            
     </Scaffold>
   )
 }
