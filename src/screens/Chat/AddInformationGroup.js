@@ -57,13 +57,13 @@ const AddInformationGroup = () => {
             </View>
             <View style={{marginVertical: 15}}>
                 <Text style={{marginTop: 5,left: 25,fontSize: 6, color: Color.secondary, position: 'absolute'}}>Nama Forum</Text>
-                <TextInput placeholder='Masukkan Nama Grup' style={{borderWidth: 1, borderColor: Color.border, width: '95%', alignSelf: 'center', borderRadius: 5, height: 80, fontSize: 12, paddingHorizontal: 15, paddingTop: 17}}>
+                <TextInput placeholder='Tuliskan sesuatu tentang forum' style={{borderWidth: 1, borderColor: Color.border, width: '95%', alignSelf: 'center', borderRadius: 5, height: 80, fontSize: 12, paddingHorizontal: 15, paddingTop: 17}}>
 
                 </TextInput>
             </View>
         </ScrollView>
 
-        <TouchableOpacity onPress={() => {navigation.navigate('AddInformationGroup')}} style={{marginVertical: 10,backgroundColor: Color.secondary, height: 40, width: '92%', alignSelf: 'center', borderRadius: 20, alignItems: 'center', justifyContent: 'center'}}>
+        <TouchableOpacity style={{marginVertical: 10,backgroundColor: Color.secondary, height: 40, width: '92%', alignSelf: 'center', borderRadius: 20, alignItems: 'center', justifyContent: 'center'}}>
             <Text style={{fontSize: 12, color: Color.textInput}}>Buat Grup</Text>
         </TouchableOpacity>
 

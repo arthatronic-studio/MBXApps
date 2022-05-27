@@ -88,6 +88,7 @@ const SurveyThird = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Adang Susanyo' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setNamePengusaha(value)}
                         value={namePengusaha}
@@ -98,6 +99,7 @@ const SurveyThird = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Adang Susanyo' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setNameUsaha(value)}
                         value={nameUsaha}
@@ -108,6 +110,7 @@ const SurveyThird = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='813-1234-5678' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 40, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setPhoneUsaha(value)}
                         value={phoneUsaha}
@@ -119,6 +122,7 @@ const SurveyThird = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Adang Susanyo' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setProductUtama(value)}
                         value={productUtama}
@@ -129,6 +133,7 @@ const SurveyThird = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginTop: 20, marginBottom: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Masukkan deskripsi usaha . . . . . .' style={{borderWidth: 1, borderColor: Color.secondary,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 90}}
                         onChangeText={(value) => setKegiatanUtama(value)}
                         value={kegiatanUtama}
@@ -140,6 +145,7 @@ const SurveyThird = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Adang Susanyo' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
                         onChangeText={(value) => setTepungTambahan(value)}
                         value={tepungTambahan}
@@ -151,6 +157,7 @@ const SurveyThird = ({route, navigation}) => {
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginTop: 20, marginBottom: 5}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Masukkan deskripsi usaha . . . . . .' style={{borderWidth: 1, borderColor: Color.secondary,
+                        color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 90}}
                         onChangeText={(value) => setKegiatanTambahan(value)}
                         value={kegiatanTambahan}
