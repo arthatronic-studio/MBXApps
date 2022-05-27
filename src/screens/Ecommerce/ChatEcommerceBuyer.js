@@ -28,7 +28,11 @@ const ChatEcommerceBuyer = ({ navigation, route }) => {
 	return (
 		<Scaffold
 			header={<Header customIcon title="Chat Ecommerce buyer" type="bold" centerTitle={false} />}
-			onPressLeftButton={() => navigation.pop()}
+			onPressLeftButton={() => {
+				console.log("siniii");
+				currentSocket.off('community_chat_room');
+				navigation.pop();
+			}}
 		>
 			<View>
 				{/* <View style={{ width: '90%', alignSelf: 'center' }}>
@@ -61,7 +65,10 @@ const ChatEcommerceBuyer = ({ navigation, route }) => {
 					keyExtractor={(item, index) => item.toString() + index}
 					renderItem={({ item }) => {
 						return (
-							<TouchableOpacity onPress={() => navigation.navigate('ChatDetailBuyer', {id: item.id, merchant: item.merchant, users: item.users})}>
+							<TouchableOpacity onPress={() => {
+								navigation.navigate('ChatDetailBuyer', {id: item.id, merchant: item.merchant, users: item.users});
+								}
+							}>
 								<CardChatEcommerce item={item} type={'buyer'}/>
 							</TouchableOpacity>
 						);

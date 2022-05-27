@@ -12,10 +12,11 @@ import {TouchableOpacity, Button} from '@src/components/Button';
 import {Container, Divider} from 'src/styled';
 import Text from '@src/components/Text';
 import {Alert, Header, useLoading} from 'src/components';
-import {mutationCancel, queryDetailOrder} from 'src/lib/query/ecommerce';
+import {mutationCancel, queryDetailOrder, queryGetMerchant} from 'src/lib/query/ecommerce';
 import {queryEcommerceUlasanManage} from '@src/lib/query/ecommerce/queryEcommerceUlasanManage';
 import client from 'src/lib/apollo';
 import {FormatMoney} from 'src/utils';
+import {useSelector} from 'react-redux';
 import {
   useColor,
   Scaffold,
@@ -25,19 +26,23 @@ import {
 import {Modalize} from 'react-native-modalize';
 import FormInput from 'src/components/FormInput';
 import { queryCheckIsUlasan } from 'src/lib/query/ecommerce/queryCheckIsUlasan';
+import { currentSocket } from '../MainHome/MainHome';
 
 const TransactionDetail = ({route, navigation}) => {
   const [data, setData] = useState({});
+  const [merchant, setMerchant] = useState({});
   const [review, setReview] = useState({
     rating: 5,
     ulasan: '',
   });
 
   const [loadingProps, showLoading, hideLoading] = useLoading();
+  const user = useSelector(state => state['user.auth'].login.user);
   
   const dispatch = useDispatch();
   const modalizeRef = useRef(null);
   const {Color} = useColor();
+
 
   useEffect(() => {
     getProduct();
@@ -105,12 +110,25 @@ const TransactionDetail = ({route, navigation}) => {
         console.log("reskak",res)
         if (res.data.ecommerceOrderDetail) {
           setData(res.data.ecommerceOrderDetail);
+          getMerchant(res.data.ecommerceOrderDetail.merchantId);
         }
-
         // hideLoading();
         // navigation.navigate('TopUpScreen');
       })
       .catch(reject => {
+        console.log(reject);
+      });
+  };
+
+  const getMerchant = (id) => {
+    const variables = {
+      merchantId: id
+    };
+
+    client.query({query: queryGetMerchant, variables})
+      .then(res => {
+        setMerchant(res.data.ecommerceGetMerchant);
+      }).catch(reject => {
         console.log(reject);
       });
   };
@@ -165,6 +183,31 @@ const TransactionDetail = ({route, navigation}) => {
       alert('Ulasan gagal dikirim');
     });
   };
+  
+  const get_room = () => {
+    const body = { user_id: user.userId.toString(), user_id_target: data.items[0].userId.toString(), admin_ids: [data.items[0].userId.toString()]};
+    currentSocket.emit('get_community_chat_room_id', body);
+    currentSocket.on('get_community_chat_room_id', (res) => {
+      console.log('get_community_chat_room_id', res);
+      if(res.data.chat_room_id){
+        currentSocket.off('get_community_chat_room_id');
+        navigation.navigate('ChatDetailBuyer', {id: res.data.chat_room_id, merchant: merchant, users: res.data.users});
+      }else{
+        console.log("gaada room");
+        create_room();
+      }
+    });
+  }
+
+  const create_room = () => {
+    const community_chat_user_params = [
+			{ user_id: user.userId, room_type: 'ECOMMERCE', room_user_type: 'USER' },
+			{ user_id: data.items[0].userId, room_type: 'ECOMMERCE', room_user_type: 'MERCHANT' },
+		];
+    const body = {community_chat_user_params: community_chat_user_params, room_name: 'Chat_ECOMMERCE', room_type: 'ECOMMERCE', user_ids: [user.userId.toString(), data.items[0].userId.toString()], admin_ids: [data.items[0].userId.toString()]}
+    currentSocket.emit('create_community_chat_room', body);
+    currentSocket.emit('get_community_chat_room_id', { user_id: user.userId.toString(), user_id_target: data.items[0].userId.toString(), admin_ids: [data.items[0].userId.toString()]});
+  }
 
   return (
     <Scaffold
@@ -710,7 +753,8 @@ const TransactionDetail = ({route, navigation}) => {
             {/* refactor ChatRoomsScreen */}
             {data.statusId < 4 && (
             <TouchableOpacity
-            onPress={() => navigation.navigate('ChatRoomsScreen' || 'ChatRoom', {item: detail})}
+            // onPress={() => navigation.navigate('ChatRoomsScreen' || 'ChatRoom', {item: detail})}
+            onPress={() => get_room()}
             style={{
               width: '12%',
               height: 40,

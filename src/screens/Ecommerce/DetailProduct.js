@@ -61,12 +61,6 @@ const DetailProduct = ({navigation, route}) => {
     getCart();
   }, [isFocused]);
 
-  // useEffect(() => {
-  //   if(detail){
-      
-  //   }
-  // }, [detail]);
-
   useEffect(() => {
     const ChatRoom = () => {
       console.log("siniii");
@@ -76,6 +70,7 @@ const DetailProduct = ({navigation, route}) => {
       ];
       const bodyMessage = {community_chat_user_params: community_chat_user_params, chat_room_id: targetRoomId.data.chat_room_id, user_id:  user.userId, chat_type: 'TAGGED_ECOMMERCE_PRODUCT', tagged_id: detail.id, tagged_name: detail.name, tagged_price: detail.price, tagged_image: detail.imageUrl, chat_message: detail.name};
       // currentSocket.emit('create_community_chat_message', bodyMessage);
+      currentSocket.off('get_community_chat_room_id');
       navigation.navigate('ChatDetailBuyer', {id: targetRoomId.data.chat_room_id, merchant: detail.merchant, users: targetRoomId.data.users, bodyTagged: bodyMessage});
     }
 
@@ -98,7 +93,7 @@ const DetailProduct = ({navigation, route}) => {
 			})
 			.catch((reject) => {
 				// hideLoading()
-				console.log(reject.message, 'reject');
+				console.log(reject.message, 'reject get cart');
 			});
 	};
 
@@ -167,20 +162,19 @@ const DetailProduct = ({navigation, route}) => {
       .catch(reject => {
         hideLoading();
         alert(reject.message);
-        console.log(reject.message, 'reject');
+        console.log(reject.message, 'reject detail product');
       });
   };
 
 
   const get_room = () => {
-    currentSocket.emit('get_community_chat_room_id', { user_id: user.userId, user_id_target: detail.merchant.userId, admin_ids: [detail.merchant.userId]});
+    currentSocket.emit('get_community_chat_room_id', { user_id: user.userId.toString(), user_id_target: detail.merchant.userId.toString(), admin_ids: [detail.merchant.userId.toString()]});
     currentSocket.on('get_community_chat_room_id', (res) => {
       console.log('get_community_chat_room_id', res);
-      console.log("merchant", detail);
       if(res.data.chat_room_id){
         setTargetRoomId(res);
       }else{
-        console.log("sinii")
+        console.log("gaada room", detail.name);
         create_room();
       }
     });
@@ -194,7 +188,7 @@ const DetailProduct = ({navigation, route}) => {
     const body = {community_chat_user_params: community_chat_user_params, room_name: 'Chat_ECOMMERCE', room_type: 'ECOMMERCE', user_ids: [user.userId.toString(), detail.merchant.userId.toString()], admin_ids: [detail.merchant.userId.toString()]}
     console.log(body, "boddy")
     currentSocket.emit('create_community_chat_room', body);
-    currentSocket.emit('get_community_chat_room_id', { room_type: 'ECOMMERCE', user_id: user.userId, user_id_target: detail.merchant.userId});
+    currentSocket.emit('get_community_chat_room_id', { user_id: user.userId.toString(), user_id_target: detail.merchant.userId.toString(), admin_ids: [detail.merchant.userId.toString()]});
   }
 
   console.log(detail, "detail");

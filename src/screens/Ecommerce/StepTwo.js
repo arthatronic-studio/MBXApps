@@ -81,7 +81,7 @@ const StepTwo = ({navigation, route}) => {
     {label: 'gram', value: 'GRAM'},
   ]);
 
-  const [stock, setStock] = useState(0);
+  const [stock, setStock] = useState('');
   const [minimumBuy, setMinimumBuy] = useState(0);
   const [description, setDescription] = useState('');
 
@@ -93,7 +93,7 @@ const StepTwo = ({navigation, route}) => {
   const save = () => {
     // console.log("?????",route.params.item.imageProducts[0])
     // showLoading()
-    if(valueProductUnit != null && valueProductMassa != null && minimumBuy != 0 && description.length != 0 && weight != 0 && height != 0 && length != 0 && width !=0){
+    if(valueProductUnit != null && valueProductMassa != null && minimumBuy != 0 && description.length != 0 && weight != 0 && height != 0 && length != 0 && width !=0 && stock != ''){
       let variables = {
         products: [
           {
@@ -141,7 +141,7 @@ const StepTwo = ({navigation, route}) => {
   }
 
   const submit = () => {
-    if(valueProductUnit != null && valueProductMassa != null && minimumBuy != 0 && description.length != 0 && weight != 0 && height != 0 && length != 0 && width !=0){
+    if(valueProductUnit != null && valueProductMassa != null && minimumBuy != 0 && description.length != 0 && weight != 0 && height != 0 && length != 0 && width !=0 && stock != ''){
       const tempData = {
         productUnit: valueProductUnit,
         productMassa: valueProductMassa,

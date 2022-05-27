@@ -10,6 +10,7 @@ export const queryDetailOrder = gql`
       isMerchant: $isMerchant
     ) {
       userId
+      merchantId
       id
       bookingId
       orderNumber
@@ -208,6 +209,7 @@ export const queryListOrder = gql`
     ) {
       id
       userId
+      merchantId
       bookingId
       orderNumber
       expiredDate
@@ -937,3 +939,43 @@ export const queryShipperCreatePickupOrderTimeSlot = gql`
     }
   }
 `;
+
+export const queryGetMerchant = gql`
+query(
+  $merchantId: Int
+){
+  ecommerceGetMerchant
+  (
+    merchantId: $merchantId
+  ){
+    id
+    userId
+    name
+    noTelp
+    alamat
+    profileImg
+    productsToBeSentCount
+    incomingOrdersCount
+    reviewsCount
+    isVerified
+    isOfficial
+    createdAt
+    countryId
+    countryName
+    provinceId
+    provinceName
+    cityId
+    cityName
+    suburbId
+    suburbName
+    areaId
+    areaName
+    postalCode
+    lat
+    long
+    socialMedia {
+      instagram
+    }
+  }
+}
+`

@@ -19,6 +19,7 @@ import {
   queryCheckout,
   queryShipperCreatePickupOrderTimeSlot,
   queryGetTracking,
+  queryGetMerchant,
 } from 'src/lib/query/ecommerce';
 import Client from '@src/lib/apollo';
 import Moment from 'moment';
@@ -36,6 +37,8 @@ import {
 import ColorPropType from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedColorPropType';
 import {Modalize} from 'react-native-modalize';
 import moment from 'moment';
+import { currentSocket } from '../MainHome/MainHome';
+import {useSelector} from 'react-redux';
 
 const Content = Styled(View)`
     margin: 16px
@@ -47,7 +50,10 @@ const Content = Styled(View)`
 const TransactionDetailSeller = ({route, navigation}) => {
   const dispatch = useDispatch();
   const [data, setData] = useState({});
+  const [merchant, setMerchant] = useState();
   const [loadingProps, showLoading, hideLoading] = useLoading();
+  const {item} = route.params;
+  console.log(item, "item cok");
 
   const modalizeRef = useRef(null);
   const {width, height} = useWindowDimensions();
@@ -59,6 +65,8 @@ const TransactionDetailSeller = ({route, navigation}) => {
   const [date, setDate] = useState([]);
   const [shipperOrder, setShipperOrder] = useState();
   const [selectedOptionIndex,setSelectedOptionIndex] = useState()
+  const user = useSelector(state => state['user.auth'].login.user);
+  console.log(user, "useerrr");
 
 
   // const [clickedId,setClickedId] = useState(0)
@@ -74,7 +82,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
     getProduct();
     getDate();
     getOrderList();
-    
+    getMerchant();
   },[]);
 
   const cancelButton = () => {
@@ -146,6 +154,19 @@ const TransactionDetailSeller = ({route, navigation}) => {
         // navigation.navigate('TopUpScreen');
       })
       .catch(reject => {
+        console.log(reject);
+      });
+  };
+
+  const getMerchant = (id) => {
+    const variables = {
+      merchantId: item.merchantId
+    };
+
+    Client.query({query: queryGetMerchant, variables})
+      .then(res => {
+        setMerchant(res.data.ecommerceGetMerchant);
+      }).catch(reject => {
         console.log(reject);
       });
   };
@@ -291,7 +312,6 @@ const TransactionDetailSeller = ({route, navigation}) => {
     modalizeRef.current.open();
     // createShipperOrder()
   };
-{console.log("resss",route.params.item.shipperOrderNumber)}
 
   const getOrderList = () => {
     const variables = {
@@ -303,12 +323,39 @@ const TransactionDetailSeller = ({route, navigation}) => {
     })
   }
   const {Color} = useColor();
+
+  const get_room = () => {
+    const body = { user_id: user.userId.toString(), user_id_target: item.userId.toString(), admin_ids: []};
+    currentSocket.emit('get_community_chat_room_id', body);
+    currentSocket.on('get_community_chat_room_id', (res) => {
+      console.log('get_community_chat_room_id', res);
+      if(res.data.chat_room_id){
+        currentSocket.off('get_community_chat_room_id');
+        navigation.navigate('ChatDetailSeller', {id: res.data.chat_room_id, merchant: merchant, users: res.data.users});
+      }else{
+        console.log("gaada room");
+        create_room();
+      }
+    });
+  }
+
+  const create_room = () => {
+    const community_chat_user_params = [
+			{ user_id: user.userId, room_type: 'ECOMMERCE', room_user_type: 'MERCHANT' },
+			{ user_id: item.userId, room_type: 'ECOMMERCE', room_user_type: 'USER' },
+		];
+    const body = {community_chat_user_params: community_chat_user_params, room_name: 'Chat_ECOMMERCE', room_type: 'ECOMMERCE', user_ids: [user.userId.toString(), item.userId.toString()], admin_ids: [user.userId.toString()]}
+    currentSocket.emit('create_community_chat_room', body);
+    currentSocket.emit('get_community_chat_room_id', { user_id: user.userId.toString(), user_id_target: item.userId.toString(), admin_ids: []});
+  }
+
+
   return (
     <Scaffold
       header={
         <Header
           customIcon
-          title="Detail Pesanan"
+          title="Detail Pesananan"
           type="bold"
           style={{paddingTop: 16, marginBottom: 10}}
           centerTitle={false}
@@ -843,7 +890,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
           </TouchableOpacity>
           {/* refactor ChatRoomsScreen */}
           <TouchableOpacity
-            onPress={() => navigation.navigate('ChatRoomsScreen' || 'ChatRoom')}
+            onPress={() => get_room()}
             style={{
               justifyContent: 'center',
               borderRadius: 20,
@@ -883,7 +930,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
           </TouchableOpacity>
           {/* refactor ChatRoomsScreen */}
           <TouchableOpacity
-            onPress={() => navigation.navigate('ChatRoomsScreen' || 'ChatRoom')}
+            onPress={() => get_room()}
             style={{
               backgroundColor: Color.theme,
               borderRadius: 120,
@@ -1005,7 +1052,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
             {/* refactor ChatRoomsScreen */}
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('ChatRoomsScreen' || 'ChatRoom');
+              get_room();
             }}
             style={{
               backgroundColor: Color.primary,

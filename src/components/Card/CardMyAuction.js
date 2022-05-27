@@ -71,7 +71,7 @@ const CardMyAuction = ({item, onDelete}) => {
         marginHorizontal: 16,
       }}>
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', maxWidth: '60%',}}>
           <Image
             source={{uri: item.product.imageUrl}}
             style={{height: 48, aspectRatio: 1, borderRadius: 5}}
@@ -80,7 +80,6 @@ const CardMyAuction = ({item, onDelete}) => {
             style={{
               marginLeft: 16,
               flexDirection: 'column',
-              maxWidth: '70%',
             }}>
             <Text
               style={{fontWeight: 'bold', textAlign: 'left'}}
@@ -204,7 +203,7 @@ const CardMyAuction = ({item, onDelete}) => {
         ) : (
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('DetailLelang', { item });
+              navigation.navigate('DetailLelang', { item, myAuction: true });
             }}
             style={{
               paddingVertical: 8,

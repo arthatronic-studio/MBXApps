@@ -24,7 +24,7 @@ const DetailLelang = ({ navigation, route }) => {
   const loading = useSelector(state => state['user.auth'].loading);
   const isFocused = useIsFocused();
 
-  const { item } = route.params;
+  const { item, myAuction } = route.params;
   const { id } = item;
   const showButton = item.status == 'ONGOING';
   
@@ -291,24 +291,26 @@ const DetailLelang = ({ navigation, route }) => {
             </Text>
           </TouchableOpacity>
         </View>}
-
-        <View>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('JoinLelang', { item: product })}
-            style={{
-              width: '92%',
-              height: 45,
-              backgroundColor: Color.primary,
-              borderRadius: 30,
-              marginHorizontal: 15,
-              paddingVertical: 10,
-              marginVertical: 10
-            }}>
-            <Text color={Color.textInput} >
-              Ikuti Lelang
-            </Text>
-          </TouchableOpacity>
-        </View>
+        
+        {myAuction === false &&
+          <View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('JoinLelang', { item: product })}
+              style={{
+                width: '92%',
+                height: 45,
+                backgroundColor: Color.primary,
+                borderRadius: 30,
+                marginHorizontal: 15,
+                paddingVertical: 10,
+                marginVertical: 10
+              }}>
+              <Text color={Color.textInput} >
+                Ikuti Lelang
+              </Text>
+            </TouchableOpacity>
+          </View>
+        }
     </Scaffold>
   );
 };

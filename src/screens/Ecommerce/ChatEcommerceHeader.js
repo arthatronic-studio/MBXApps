@@ -11,6 +11,7 @@ import { useColor, Header, Row } from '@src/components';
 import ImagesPath from 'src/components/ImagesPath';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { Divider } from '@src/styled';
+import {currentSocket} from '@src/screens/MainHome/MainHome';
 
 const MainView = Styled(SafeAreaView)`
       flex: 1;
@@ -37,7 +38,10 @@ const ChatEcommerceHeader = (props) => {
 			}}
 		>
 			<View flexDirection='row' alignItems="center">
-				<Pressable onPress={() => navigation.pop()} style={{ marginRight: 20 }}>
+				<Pressable onPress={() => {
+					currentSocket.off('community_chat_message'); 
+					navigation.pop();}} 
+					style={{ marginRight: 20 }}>
 					<AntDesign name={'arrowleft'} size={20} />
 				</Pressable>
 				<View>

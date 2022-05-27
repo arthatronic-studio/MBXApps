@@ -138,10 +138,13 @@ const ChatDetailBuyer = ({navigation, route}) => {
             return (
               <>
                 <TouchableOpacity
-                  onPress={() =>
+                  onPress={() =>{
+                    currentSocket.off('community_chat_message');
+                    currentSocket.off('community_chat_room detail buyer');
                     navigation.navigate('DetailProduct', {
                       item: {id: +item.tagged_id},
-                    })
+                    });
+                    }
                   }
                   style={{
                     paddingHorizontal: 32,

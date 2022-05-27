@@ -43,7 +43,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
   const modalDropDownRef = useRef();
   const modalNominalPickerRef = useRef();
   const amountPrice = useRef();
-  const amountPriceBuyNow = useRef();
+  // const amountPriceBuyNow = useRef();
   const dateRef = useRef();
   const [isModalVisible, setModalVisible] = useState(false);
 
@@ -52,7 +52,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
   const [duration, setDuration] = useState(0);
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(0);
-  const [priceBuyNow, setPriceBuyNow] = useState(0);
+  // const [priceBuyNow, setPriceBuyNow] = useState(0);
   const [quickAccess, setQuickAccess] = useState([50, 100, 250]);
 
   const toggleModal = () => {
@@ -79,6 +79,8 @@ const AddProductAuctionSecond = ({navigation, route}) => {
   };
 
   const onSubmit = () => {
+    console.log(date);
+    console.log(Moment(dateRef.current.getRawValue()).format('YYYY-MM-DD'));
     if (
       date.length != 0 &&
       time.length != 0 &&
@@ -94,7 +96,8 @@ const AddProductAuctionSecond = ({navigation, route}) => {
         timeDuration: duration,
         description: description,
         startPrice: amountPrice.current.getRawValue(),
-        buyNowPrice: amountPriceBuyNow.current.getRawValue(),
+        buyNowPrice: amountPrice.current.getRawValue(),
+        // buyNowPrice: amountPriceBuyNow.current.getRawValue(),
         quantity: 1,
         bidNominal: quickAccess,
         status: 'OPENFORBID',
@@ -134,7 +137,8 @@ const AddProductAuctionSecond = ({navigation, route}) => {
         timeDuration: duration,
         description: description,
         startPrice: typeof amountPrice.current.props.value === 'number' ? amountPrice.current.props.value : amountPrice.current.getRawValue(),
-        buyNowPrice: typeof amountPriceBuyNow.current.props.value === 'number' ? amountPriceBuyNow.current.props.value : amountPriceBuyNow.current.getRawValue(),
+        buyNowPrice: typeof amountPrice.current.props.value === 'number' ? amountPrice.current.props.value : amountPrice.current.getRawValue(),
+        // buyNowPrice: typeof amountPriceBuyNow.current.props.value === 'number' ? amountPriceBuyNow.current.props.value : amountPriceBuyNow.current.getRawValue(),
         quantity: 1,
         bidNominal: quickAccess,
         status: 'OPENFORBID',
@@ -162,7 +166,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
       setDuration(edit.duration);
       setDescription(edit.description);
       setPrice(edit.startPrice);
-      setPriceBuyNow(edit.buyNowPrice);
+      // setPriceBuyNow(edit.buyNowPrice);
       setTime(Moment(edit.dateStart).format('HH:mm'));
       setDate(Moment(edit.dateStart).format('DD/MM/YYYY'));
       setQuickAccess(edit.bidNominal);
@@ -433,7 +437,8 @@ const AddProductAuctionSecond = ({navigation, route}) => {
 
         <Divider height={10} />
 
-        <View
+        {/* hide beli langsung */}
+        {/* <View
           style={{
             width: '100%',
             paddingVertical: 8,
@@ -480,7 +485,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
           </View>
         </View>
 
-        <Divider height={5} />
+        <Divider height={5} /> */}
 
         <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
           <IonIcons name={'information-circle-outline'} color={'#2C70F7'} />
