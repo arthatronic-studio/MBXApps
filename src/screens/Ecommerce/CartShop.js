@@ -195,7 +195,7 @@ const CartShop = ({navigation, route}) => {
         }
       });
       const valid = val.products.findIndex(vall => vall.checked == true)
-      if(valid > -1) dataq.push({...val, products: datTem});
+      if(valid > -1) dataq.push({...val, products: datTem, shipping: null});
       
       
     });

@@ -70,6 +70,7 @@ const MyShopHomepage = ({ navigation }) => {
 				// navigation.navigate('TopUpScreen');
 			})
 			.catch(reject => {
+				navigation.replace('SplashCreateShop')
 				console.log(reject);
 			});
 	};
