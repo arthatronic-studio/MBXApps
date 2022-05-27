@@ -109,7 +109,6 @@ function Anggota(props) {
                         name: 'Keluarkan dari grup',
                         color: Color.text,
                         onPress: () => {
-                            setShowSection(!showSection)
                             modalListActionRef.current.close();
                         },
                     },
@@ -118,7 +117,6 @@ function Anggota(props) {
                         name: 'Jadikan Admin',
                         color: Color.red,
                         onPress: () => {
-                            setShowSection(!showSection)
                             modalListActionRef.current.close();
                         },
                     },
@@ -127,7 +125,6 @@ function Anggota(props) {
                         name: 'Report',
                         color: Color.red,
                         onPress: () => {
-                            setShowSection(!showSection)
                             modalListActionRef.current.close();
                         },
                     },
@@ -327,7 +324,6 @@ const UserGroupDetail = ({navigation}) => {
                         name: 'Matikan pemberitahuan',
                         color: Color.text,
                         onPress: () => {
-                            setShowSection(!showSection)
                             modalListActionRef.current.close();
                         },
                     },
@@ -336,7 +332,6 @@ const UserGroupDetail = ({navigation}) => {
                         name: 'Keluar dari grup',
                         color: Color.red,
                         onPress: () => {
-                            setShowSection(!showSection)
                             modalListActionRef.current.close();
                         },
                     },
@@ -345,7 +340,6 @@ const UserGroupDetail = ({navigation}) => {
                         name: 'Report',
                         color: Color.red,
                         onPress: () => {
-                            setShowSection(!showSection)
                             modalListActionRef.current.close();
                         },
                     },
