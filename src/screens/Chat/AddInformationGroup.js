@@ -19,7 +19,6 @@ import {
     Row,
     Col,
   } from '@src/components';
-import ChatUserListScreen from './ChatUserListScreen';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const AddInformationGroup = () => {

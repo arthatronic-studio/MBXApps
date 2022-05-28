@@ -17,7 +17,6 @@ import Client from '@src/lib/apollo';
 import { queryContentChatRoomManage, queryContentChatMessage } from '@src/lib/query';
 import { Divider } from 'src/styled';
 import { currentSocket } from '@src/screens/MainHome/MainHome';
-import { ScrollView } from 'react-native-gesture-handler';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -249,7 +248,6 @@ const ChatDetailScreen = ({ navigation, route }) => {
     
     return (
         <Scaffold
-            style={{backgroundColor: Color.semiwhite}}
             fallback={dataChat.loading}
             popupProps={popupProps}
             color={Color.semiwhite}
@@ -257,10 +255,10 @@ const ChatDetailScreen = ({ navigation, route }) => {
                 <DetailHeader/>
             }
         >
-            <ScrollView>
-            <View style={{backgroundColor: Color.border, width: '35%', height: 25, borderRadius: 20, alignItems: 'center', justifyContent: 'center', marginVertical: 15, alignSelf: 'center'}}>
+            {/* hide tgl */}
+            {/* <View style={{backgroundColor: Color.border, width: '35%', height: 25, borderRadius: 20, alignItems: 'center', justifyContent: 'center', marginVertical: 15, alignSelf: 'center'}}>
                 <Text style={{fontSize: 10, color: Color.secondary, fontWeight: 'bold'}}>Senin, 03 Januari 2022</Text>
-            </View>
+            </View> */}
             <FlatList
                 keyExtractor={(item, index) => item.id + index.toString()}
                 data={dataChat.data}
@@ -272,7 +270,6 @@ const ChatDetailScreen = ({ navigation, route }) => {
                 renderItem={({ item }) => {
                     // const isAdmin = user && user.userId === item.userId;
                     const isMe = user.userId == item.user_id;
-
 
                     //Sender Chat
                     if (isMe) {
@@ -319,7 +316,6 @@ const ChatDetailScreen = ({ navigation, route }) => {
                     )
                 }}
             />
-            </ScrollView>
 
             {showSection == true ? 
             <BottomSection style={{flexDirection: 'row', alignItems: 'center',backgroundColor: Color.theme, borderColor: Color.theme, elevation: 5}}>

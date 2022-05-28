@@ -14,6 +14,7 @@ import { Circle } from '@src/styled';
 
 import { Header, ModalListAction, Scaffold, Alert } from 'src/components';
 import {currentSocket} from '@src/screens/MainHome/MainHome';
+import { statusBarHeight } from 'src/utils/constants';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -170,147 +171,149 @@ const ChatRoomsScreen = ({ navigation, route }) => {
     }
 
     return (
-        <ScrollView style={{backgroundColor: Color.theme}}>
+        <Scaffold
+            showHeader={false}
+        >
             <View style={{backgroundColor: Color.theme}}>
-            {/* <BottomSection style={{borderColor: Color.border}}>
-                <BoxInput style={true ? {borderColor: Color.border} : {borderColor: Color.error}}>
-                    <TextInputNumber
-                        name="text"
-                        placeholder='Masukan teks..'
-                        returnKeyType="done"
-                        returnKeyLabel="Done"
-                        blurOnSubmit={false}
-                        onBlur={() => {}}
-                        error={null}
-                        onChangeText={(text) => {
-                            // this.setState({ prepaidNumber }, () => this.validateTypingNumber(prepaidNumber, 'prepaid') );
-                            // this.isValueErrorPrepaid('prepaidNumber')
-                        }}
-                    />
-                    <CircleSend style={{backgroundColor: Color.primary}}>
-                        <Ionicons name='search' size={16} color={Color.text} />
-                    </CircleSend>
-                </BoxInput>
-            </BottomSection> */}
-            <View style={{backgroundColor: Color.theme, width: '100%', height: 70, justifyContent: 'center', alignItems: 'center'}}>
-                <TextInput placeholder='Cari . . .' style={{backgroundColor: Color.border, width: '95%', height: 35, borderRadius: 5, fontSize: 10, paddingHorizontal: 10}}></TextInput>
-                <AntDesign name={'search1'} size={12} style={{alignSelf: 'flex-end', right: 20,color: Color.secondary,position: 'absolute'}}/>
-            </View>
-            <FlatList
-                keyExtractor={(item, index) => item.id.toString() + index.toString()}
-                data={dataRooms.data}
-                keyboardShouldPersistTaps='handled'
-                contentContainerStyle={{paddingTop: 8}}
-                onEndReachedThreshold={0.3}
-                onEndReached={() => {}}
-                renderItem={({ item }) => {
-                    const isSelected = selectedRoom && selectedRoom.id === item.id;
-                    const notifBadge = item.unread_count > 0;
+                {/* <BottomSection style={{borderColor: Color.border}}>
+                    <BoxInput style={true ? {borderColor: Color.border} : {borderColor: Color.error}}>
+                        <TextInputNumber
+                            name="text"
+                            placeholder='Masukan teks..'
+                            returnKeyType="done"
+                            returnKeyLabel="Done"
+                            blurOnSubmit={false}
+                            onBlur={() => {}}
+                            error={null}
+                            onChangeText={(text) => {
+                                // this.setState({ prepaidNumber }, () => this.validateTypingNumber(prepaidNumber, 'prepaid') );
+                                // this.isValueErrorPrepaid('prepaidNumber')
+                            }}
+                        />
+                        <CircleSend style={{backgroundColor: Color.primary}}>
+                            <Ionicons name='search' size={16} color={Color.text} />
+                        </CircleSend>
+                    </BoxInput>
+                </BottomSection> */}
+                <View style={{backgroundColor: Color.theme, width: '100%', height: 70, justifyContent: 'center', alignItems: 'center'}}>
+                    <TextInput placeholder='Cari . . .' style={{backgroundColor: Color.border, width: '95%', height: 35, borderRadius: 5, fontSize: 10, paddingHorizontal: 10}}></TextInput>
+                    <AntDesign name={'search1'} size={12} style={{alignSelf: 'flex-end', right: 20,color: Color.secondary,position: 'absolute'}}/>
+                </View>
+                <FlatList
+                    keyExtractor={(item, index) => item.id.toString() + index.toString()}
+                    data={dataRooms.data}
+                    keyboardShouldPersistTaps='handled'
+                    contentContainerStyle={{paddingTop: 8, paddingBottom: statusBarHeight}}
+                    onEndReachedThreshold={0.3}
+                    onEndReached={() => {}}
+                    renderItem={({ item }) => {
+                        const isSelected = selectedRoom && selectedRoom.id === item.id;
+                        const notifBadge = item.unread_count > 0;
 
 
-                    return (
-                        
-                        <TouchableOpacity
-                            onPress={() => {
-                                let targetIds = [];
-                                item.member.map((e) => {
-                                    if (e['user_id'] != user.userId) targetIds.push(e['user_id']);
-                                });
-
-                                navigation.navigate('ChatDetailScreen', {
-                                    roomId: item.room_id,
-                                    roomName: getTitle(item.member),
-                                    selected: item.member,
-                                    targetIds,
-                                });
-                            }}
-                            onLongPress={() => {
-                                modalListActionRef.current.open();
-                                setSelectedRoom(item);
-                            }}
-                            style={{
-                                height: 60,
-                                paddingHorizontal: 16,
-                                marginBottom: 16,
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                backgroundColor: isSelected ? Color.primarySoft : Color.textInput,
-                            }}
-                        >
+                        return (
                             
-                            
-                            <View style={{width: '12%', height: '100%', alignItems: 'center', justifyContent: 'center'}}>
-                                <Image
-                                    source={{uri: item.image}}
-                                    style={{width: '100%', aspectRatio: 1, borderRadius: 30, backgroundColor: Color.border}}
-                                />
-                            </View>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    let targetIds = [];
+                                    item.member.map((e) => {
+                                        if (e['user_id'] != user.userId) targetIds.push(e['user_id']);
+                                    });
 
+                                    navigation.navigate('ChatDetailScreen', {
+                                        roomId: item.room_id,
+                                        roomName: getTitle(item.member),
+                                        selected: item.member,
+                                        targetIds,
+                                    });
+                                }}
+                                onLongPress={() => {
+                                    modalListActionRef.current.open();
+                                    setSelectedRoom(item);
+                                }}
+                                style={{
+                                    height: 60,
+                                    paddingHorizontal: 16,
+                                    marginBottom: 16,
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    backgroundColor: isSelected ? Color.primarySoft : Color.textInput,
+                                }}
+                            >
                                 
-                            
-                                <View style={{width: '70%', height: '100%', alignItems: 'flex-start', justifyContent: 'space-around', paddingLeft: 8, paddingRight: 16, paddingVertical: 4}}>
-                                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                        <View style={{marginRight: 5,borderRadius: 20,width: 8, height: 8, backgroundColor: Color.green}}/>
-                                        <Text
-                                        type='semibold'
-                                        numberOfLines={1}
-                                    >
-                                        {item.name || getTitle(item.member)}
-
-                                    </Text>
-                                    </View>
-                                    <Text
-                                        type={isUserTyping(item.typing) ? 'italic' : notifBadge ? 'bold' : 'regular'}
-                                        numberOfLines={1}
-                                        color={isUserTyping(item.typing) ? Color.success : Color.text}
-                                        style={{opacity: 0.6}}
-                                    >
-                                        {item.last_chat && item.last_chat.user_id == user.userId ? <Ionicons name={"md-checkmark-done-sharp"} size={12}/> : ''}
-                                        {isUserTyping(item.typing) ? 'Sedang mengetik...' : item.last_chat ? item.last_chat.message : ''}
-                                    </Text>
+                                
+                                <View style={{width: '12%', height: '100%', alignItems: 'center', justifyContent: 'center'}}>
+                                    <Image
+                                        source={{uri: item.image}}
+                                        style={{width: '100%', aspectRatio: 1, borderRadius: 30, backgroundColor: Color.border}}
+                                    />
                                 </View>
+
+                                    
                                 
+                                    <View style={{width: '70%', height: '100%', alignItems: 'flex-start', justifyContent: 'space-around', paddingLeft: 8, paddingRight: 16, paddingVertical: 4}}>
+                                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                            <View style={{marginRight: 5,borderRadius: 20,width: 8, height: 8, backgroundColor: Color.green}}/>
+                                            <Text
+                                            type='semibold'
+                                            numberOfLines={1}
+                                        >
+                                            {item.name || getTitle(item.member)}
 
-                            <View style={{width: '18%', height: '100%', alignItems: 'flex-end', justifyContent: 'space-around', paddingVertical: 4}}>
-                                <Text
-                                    size={8}
-                                >
-                                    {item.last_chat ? managedDateUTC(item.last_chat.created_unix_date) : ''}
-                                </Text>
-                                <Circle
-                                    size={20}
-                                    color={notifBadge ? Color.primary : 'transparent'}
-                                >
-                                    {notifBadge && <Text color={Color.textInput} size={10}>{item.unread_count}</Text>}
-                                </Circle>
-                            </View>
-                        </TouchableOpacity>
-                    )
-                }}
-            />
+                                        </Text>
+                                        </View>
+                                        <Text
+                                            type={isUserTyping(item.typing) ? 'italic' : notifBadge ? 'bold' : 'regular'}
+                                            numberOfLines={1}
+                                            color={isUserTyping(item.typing) ? Color.success : Color.text}
+                                            style={{opacity: 0.6}}
+                                        >
+                                            {item.last_chat && item.last_chat.user_id == user.userId ? <Ionicons name={"md-checkmark-done-sharp"} size={12}/> : ''}
+                                            {isUserTyping(item.typing) ? 'Sedang mengetik...' : item.last_chat ? item.last_chat.message : ''}
+                                        </Text>
+                                    </View>
+                                    
 
-            <ModalListAction
-                ref={modalListActionRef}
-                onClose={() => {
-                    setSelectedRoom();
-                }}
-                data={[
-                    {
-                        id: 0,
-                        name: 'Hapus',
-                        color: Color.red,
-                        onPress: () => {
-                            Alert('Hapus', 'Apakah Anda yakin menghapus konten?', () => {
-                                fetchRoomsDelete();
-                            });
-                            modalListActionRef.current.close();
-                            setSelectedRoom();
-                        },
-                    }
-                ]}
-            />
-        </View>
-        </ScrollView>
+                                <View style={{width: '18%', height: '100%', alignItems: 'flex-end', justifyContent: 'space-around', paddingVertical: 4}}>
+                                    <Text
+                                        size={8}
+                                    >
+                                        {item.last_chat ? managedDateUTC(item.last_chat.created_unix_date) : ''}
+                                    </Text>
+                                    <Circle
+                                        size={20}
+                                        color={notifBadge ? Color.primary : 'transparent'}
+                                    >
+                                        {notifBadge && <Text color={Color.textInput} size={10}>{item.unread_count}</Text>}
+                                    </Circle>
+                                </View>
+                            </TouchableOpacity>
+                        )
+                    }}
+                />
+
+                <ModalListAction
+                    ref={modalListActionRef}
+                    onClose={() => {
+                        setSelectedRoom();
+                    }}
+                    data={[
+                        {
+                            id: 0,
+                            name: 'Hapus',
+                            color: Color.red,
+                            onPress: () => {
+                                Alert('Hapus', 'Apakah Anda yakin menghapus konten?', () => {
+                                    fetchRoomsDelete();
+                                });
+                                modalListActionRef.current.close();
+                                setSelectedRoom();
+                            },
+                        }
+                    ]}
+                />
+            </View>
+        </Scaffold>
     )
 }
 

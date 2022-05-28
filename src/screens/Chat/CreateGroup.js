@@ -17,9 +17,7 @@ import {currentSocket} from '@src/screens/MainHome/MainHome';
 import {
     Row,
     Col,
-  } from '@src/components';
-import ChatUserListScreen from './ChatUserListScreen';
-
+} from '@src/components';
 
 const DATA = [
     {

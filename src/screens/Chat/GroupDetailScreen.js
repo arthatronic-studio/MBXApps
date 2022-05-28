@@ -254,7 +254,6 @@ const GroupDetailScreen = ({ navigation, route }) => {
     
     return (
         <Scaffold
-            style={{backgroundColor: Color.semiwhite}}
             fallback={dataChat.loading}
             popupProps={popupProps}
             color={Color.semiwhite}
@@ -282,103 +281,101 @@ const GroupDetailScreen = ({ navigation, route }) => {
               <GroupHeader />
             }
         >
+            <View style={{flex: 1, backgroundColor: Color.semiwhite}}>
+                {/* <View style={{backgroundColor: Color.border, width: '35%', height: 25, borderRadius: 20, alignItems: 'center', justifyContent: 'center', marginVertical: 15, alignSelf: 'center'}}>
+                    <Text style={{fontSize: 10, color: Color.secondary, fontWeight: 'bold'}}>Senin, 03 Januari 2022</Text>
+                </View> */}
+                <FlatList
+                    keyExtractor={(item, index) => item.id + index.toString()}
+                    data={dataChat.data}
+                    inverted
+                    keyboardShouldPersistTaps='handled'
+                    contentContainerStyle={{paddingTop: 16}}
+                    onEndReachedThreshold={0.3}
+                    onEndReached={() => dataChat.page !== -1 && setDataChat({ ...dataChat, loadNext: true })}
+                    renderItem={({ item }) => {
+                        // const isAdmin = user && user.userId === item.userId;
+                        const isMe = user.userId == item.user_id;
 
-         <ScrollView>
-            <View style={{backgroundColor: Color.border, width: '35%', height: 25, borderRadius: 20, alignItems: 'center', justifyContent: 'center', marginVertical: 15, alignSelf: 'center'}}>
-                <Text style={{fontSize: 10, color: Color.secondary, fontWeight: 'bold'}}>Senin, 03 Januari 2022</Text>
-            </View>
-            <FlatList
-                keyExtractor={(item, index) => item.id + index.toString()}
-                data={dataChat.data}
-                inverted
-                keyboardShouldPersistTaps='handled'
-                contentContainerStyle={{paddingTop: 16}}
-                onEndReachedThreshold={0.3}
-                onEndReached={() => dataChat.page !== -1 && setDataChat({ ...dataChat, loadNext: true })}
-                renderItem={({ item }) => {
-                    // const isAdmin = user && user.userId === item.userId;
-                    const isMe = user.userId == item.user_id;
-
-                    if (isMe) {
-                        return (
-                            <View style={{width, marginTop: 16, paddingHorizontal: 16, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
-                                <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.textInput, borderRadius: 8, borderBottomRightRadius: 0, alignItems: 'flex-end'}}>
-                                    {/* <Text size={10} type='semibold' align='right' color={Color.secondary}>{item.name}</Text> */}
-                                    <Divider height={4} />
-                                    <Text align='right'>{item.message}</Text>
-                                    <Divider height={4} />
-                                   <View style={{flexDirection: 'row'}}>
-                                        <Ionicons name={"md-checkmark-done-sharp"} size={12}/>
-                                        <Text size={8} align='right' style={{opacity: 0.6}}>  {managedDateUTC(item.created_unix_date)}</Text>
-                                   </View>
+                        if (isMe) {
+                            return (
+                                <View style={{width, marginTop: 16, paddingHorizontal: 16, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
+                                    <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.textInput, borderRadius: 8, borderBottomRightRadius: 0, alignItems: 'flex-end'}}>
+                                        {/* <Text size={10} type='semibold' align='right' color={Color.secondary}>{item.name}</Text> */}
+                                        <Divider height={4} />
+                                        <Text align='right'>{item.message}</Text>
+                                        <Divider height={4} />
+                                    <View style={{flexDirection: 'row'}}>
+                                            <Ionicons name={"md-checkmark-done-sharp"} size={12}/>
+                                            <Text size={8} align='right' style={{opacity: 0.6}}>  {managedDateUTC(item.created_unix_date)}</Text>
+                                    </View>
+                                    </View>
+                                    <View style={{width: 30, height: 30, marginLeft: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.disabled}}>
+                                        <Image
+                                            source={{uri: item.image}}
+                                            style={{width: '100%', aspectRatio: 1, borderRadius: 30, backgroundColor: Color.disabled}}
+                                        />
+                                    </View>
                                 </View>
-                                <View style={{width: 30, height: 30, marginLeft: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.disabled}}>
-                                    <Image
-                                        source={{uri: item.image}}
-                                        style={{width: '100%', aspectRatio: 1, borderRadius: 30, backgroundColor: Color.disabled}}
-                                    />
+                            )
+                        }
+
+                        return (
+                            <View style={{width, marginTop: 16, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'flex-end'}}>
+                                <View style={{width: 30, height: 30, marginRight: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.primary}}>
+                                <Image
+                                    source={{uri: item.image}}
+                                    style={{width: '100%', aspectRatio: 1, borderRadius: 15, backgroundColor: Color.primary}}
+                                />
+                                </View>
+                                <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: '#E8F3FD', borderRadius: 8, borderBottomLeftRadius: 0, alignItems: 'flex-start'}}>
+                                    <Text size={10} type='semibold' align='left' color={Color.primary}>{item.name}</Text>
+                                    <Divider height={4} />
+                                    <Text align='left' color={Color.text}>{item.message}</Text>
+                                    <Divider height={4} />
+                                    <Text size={8} align='left' color={Color.text} style={{opacity: 0.6}}>{managedDateUTC(item.created_unix_date)}</Text>
                                 </View>
                             </View>
                         )
-                    }
-
-                    return (
-                        <View style={{width, marginTop: 16, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'flex-end'}}>
-                            <View style={{width: 30, height: 30, marginRight: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.primary}}>
-                            <Image
-                                source={{uri: item.image}}
-                                style={{width: '100%', aspectRatio: 1, borderRadius: 15, backgroundColor: Color.primary}}
-                            />
-                            </View>
-                            <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: '#E8F3FD', borderRadius: 8, borderBottomLeftRadius: 0, alignItems: 'flex-start'}}>
-                                <Text size={10} type='semibold' align='left' color={Color.primary}>{item.name}</Text>
-                                <Divider height={4} />
-                                <Text align='left' color={Color.text}>{item.message}</Text>
-                                <Divider height={4} />
-                                <Text size={8} align='left' color={Color.text} style={{opacity: 0.6}}>{managedDateUTC(item.created_unix_date)}</Text>
-                            </View>
-                        </View>
-                    )
-                }}
-            />
-            </ScrollView>
-
-            
-            {showSection == true ?
-            <BottomSection style={{flexDirection: 'row', alignItems: 'center',backgroundColor: Color.theme, borderColor: Color.theme, elevation: 5}}>
-            <BoxInput style={{alignItems: 'center',borderColor: Color.secondary, borderRadius: 30, flexDirection: 'row'}}>
-                <CustomTextInput
-                    name="text"
-                    placeholder='Kirim Pesan ...'
-                    placeholderTextColor={Color.secondary}
-                    selectionColor={Color.primary}
-                    returnKeyType="done"
-                    returnKeyLabel="Done"
-                    blurOnSubmit={false}
-                    onBlur={() => {}}
-                    error={null}
-                    multiline
-                    value={textComment}
-                    onChangeText={(text) => {
-                        if (isTyping === false && text.length > textComment.length) {
-                            setIsTyping(true);
-                            // UpdateTyping to true
-                        }
-
-                        setTextComment(text);
                     }}
-                    style={{color: Color.text}}
                 />
-                <AntDesign name={"pluscircleo"} size={18} color={Color.secondary} style={{right: -10}}/>
-            </BoxInput>
-            <CircleSend
-                    onPress={() => onSubmit()}
-                    style={{backgroundColor: Color.primary, marginHorizontal: 8}}
-                >
-                    <Ionicons name='send' color={Color.textInput} size={16}/>
-            </CircleSend>
-        </BottomSection>
-        : null }
+            
+                    {showSection == true ?
+                    <BottomSection style={{flexDirection: 'row', alignItems: 'center',backgroundColor: Color.theme, borderColor: Color.theme, elevation: 5}}>
+                    <BoxInput style={{alignItems: 'center',borderColor: Color.secondary, borderRadius: 30, flexDirection: 'row'}}>
+                        <CustomTextInput
+                            name="text"
+                            placeholder='Kirim Pesan ...'
+                            placeholderTextColor={Color.secondary}
+                            selectionColor={Color.primary}
+                            returnKeyType="done"
+                            returnKeyLabel="Done"
+                            blurOnSubmit={false}
+                            onBlur={() => {}}
+                            error={null}
+                            multiline
+                            value={textComment}
+                            onChangeText={(text) => {
+                                if (isTyping === false && text.length > textComment.length) {
+                                    setIsTyping(true);
+                                    // UpdateTyping to true
+                                }
+
+                                setTextComment(text);
+                            }}
+                            style={{color: Color.text}}
+                        />
+                        <AntDesign name={"pluscircleo"} size={18} color={Color.secondary} style={{right: -10}}/>
+                    </BoxInput>
+                    <CircleSend
+                            onPress={() => onSubmit()}
+                            style={{backgroundColor: Color.primary, marginHorizontal: 8}}
+                        >
+                            <Ionicons name='send' color={Color.textInput} size={16}/>
+                    </CircleSend>
+                </BottomSection>
+                : null }
+            </View>
 
             <ModalListAction
                 onClose={() => setShowSection(!showSection)}

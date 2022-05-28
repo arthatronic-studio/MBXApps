@@ -6,75 +6,23 @@ import Moment from 'moment';
 import { useSelector } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import AntDesign from 'react-native-vector-icons/AntDesign'
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo'
+
 import { useColor } from '@src/components/Color';
 import { usePopup } from '@src/components';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
-import Entypo from 'react-native-vector-icons/Entypo'
+import { Header, ModalListAction, Scaffold } from 'src/components';
+import ChatRoomsScreen from 'src/screens/Chat/ChatRoomsScreen';
+import ChatGroupScreen from 'src/screens/Chat/ChatGroupScreen';
+import { currentSocket } from '@src/screens/MainHome/MainHome';
 
-import { Header, ModalListAction, Scaffold, Alert } from 'src/components';
-import {currentSocket} from '@src/screens/MainHome/MainHome';
-
-import ChatRoomsScreen from './ChatRoomsScreen';
-import ChatGroupScreen from './ChatGroupScreen';
-
-const BottomSection = Styled(View)`
-  width: 100%;
-  paddingHorizontal: 16px;
-  paddingTop: 8px;
-  paddingBottom: 4px;
-  flexDirection: row;
-  alignItems: center;
-  borderTopWidth: 0.5px;
-`;
-
-const BoxInput = Styled(View)`
-  width: 100%;
-  backgroundColor: #FFFFFF;
-  padding: 8px 16px 8px 16px;
-  borderRadius: 32px;
-  borderWidth: 0.5px;
-  flexDirection: row;
-`;
-
-const TextInputNumber = Styled(TextInput)`
-  width: 90%;
-  alignContent: flex-start;
-  fontFamily: Inter-Regular;
-  letterSpacing: 0.23;
-  height: 40px;
-`;
-
-const CircleSend = Styled(TouchableOpacity)`
-  width: 40px;
-  height: 40px;
-  borderRadius: 20px;
-  justifyContent: center;
-  alignItems: center;
-`;
-
-const initialDataRooms = {
-    data: [],
-    loading: true,
-    page: 0,
-    loadNext: false,
-    refresh: false,
-}
 const Chat = ({navigation}) => {
     // state
-    const [dataRooms, setDataRooms] = useState(initialDataRooms);
     const [myRoomIds, setMyRoomIds] = useState([]);
-    const [selectedRoom, setSelectedRoom] = useState();
-    const [isLoading, setIsLoading] = useState(false);
+
     const Tab = createMaterialTopTabNavigator();
     const modalListActionRef = useRef();
-
-    // selector
-    const user = useSelector(
-        state => state['user.auth'].login.user
-    )
-
-
 
     // hooks
     const isFocused = useIsFocused();
@@ -82,119 +30,39 @@ const Chat = ({navigation}) => {
     const [popupProps, showPopup] = usePopup();
 
     useEffect(() => {
-        currentSocket.on('chat_rooms', (res) => {
-          console.log('chat_rooms', res);
-          if (Array.isArray(res)) {
-            setDataRooms({
-                ...dataRooms,
-                data: res,
-                loading: false,
-            });
-
-            let ids = [];
-            res.forEach((e) => {
-                ids.push(parseInt(e['room_id']));
-            })
-            setMyRoomIds(ids);
-          } else {
-            setDataRooms({
-                ...dataRooms,
-                loading: false,
-            });
-          }
+        currentSocket.emit('list_my_room_ids');
+        currentSocket.on('list_my_room_ids', (res) => {
+            console.log('list_my_room_ids', res);
+            setMyRoomIds(res);
         });
     }, []);
 
-    useEffect(() => {
-        if (isFocused) {
-            currentSocket.emit('chat_rooms');
-        }
-    }, [isFocused]);
-
-    const fetchRoomsDelete = async() => {
-        // setIsLoading(true);
-
-        console.log(selectedRoom);
-
-        currentSocket.emit('chat_rooms_delete', { room_id: selectedRoom.room_id });
-        currentSocket.on('chat_rooms_delete', (res) => {
-            console.log('res rooms delete', res);
-
-            // setIsLoading(false);
-            setSelectedRoom();
-
-            showPopup('Berhasil menghapus obrolan', 'success');
-            // showPopup('Gagal menghapus obrolan', 'error');
-        });
-    }
-
-    const getTitle = (member) => {
-        let title = '';
-        
-        if (member.length === 2) {
-            member.map((i) => {
-                if (i.user_id != user.userId) title = i.first_name;
-            });
-        } else if (member.length > 2) {
-            member.map((i) => {
-                if (i.user_id != user.userId) title = '[Grup] ' + i.first_name + ' & ' + member.length + ' lainnya';
-            });
-        }
-
-        return title;
-    }
-
-    const managedDateUTC = (origin) => {
-        const date = Moment(origin).utc();
-        const now = new Moment();
-        const diff = now.diff(Moment(date), 'days');
-        
-        let title = '';
-
-        if (diff === 0) {
-            title = date.format('HH:mm');
-        } else if (diff === 1) {
-            title = 'Kemarin';
-        } else {
-            title = date.format('DD/MM/YYYY');
-        }
-        
-        return title;
-    }
-
-    const isUserTyping = (typing) => {
-        let result = false;
-        if (Array.isArray(typing) && typing.length > 0) {
-            const idxOf = typing.indexOf(user.userId.toString());
-            if (idxOf === -1) result = true;
-        }
-        return result;
-    }
-  return (
-    <Scaffold
-            fallback={dataRooms.loading}
-            isLoading={isLoading}
+    return (
+        <Scaffold
             popupProps={popupProps}
             header={
                 <Header
                     title='Obrolan'
-                    iconRightButton={
-                        <TouchableOpacity
-                            onPress={() => {
-                                modalListActionRef.current.open();
-                                
-                            }}
-                            style={{justifyContent: 'center', alignItems: 'center'}}
-                        >
-                            <Entypo name='dots-three-vertical' color={Color.text} size={20} />
-                        </TouchableOpacity>
-                    }
+                    // iconRightButton={
+                    //     <TouchableOpacity
+                    //         onPress={() => {}}
+                    //         style={{justifyContent: 'center', alignItems: 'center'}}
+                    //     >
+                    //         <Entypo name='dots-three-vertical' color={Color.text} size={20} />
+                    //     </TouchableOpacity>
+                    // }
                 />
             }
-            empty={!dataRooms.loading && dataRooms.data.length === 0}
-    >
-        <Tab.Navigator
-                
+            floatingActionButton={
+                <Pressable
+                    onPress={() => modalListActionRef.current.open()}
+                    style={{alignItems: 'center', justifyContent: 'center', backgroundColor: Color.primary, width: 60, height: 60, borderRadius: 30}}
+                >
+                    <AntDesign name={'message1'} size={27} style={{color: Color.textInput}} />
+                </Pressable>
+            }
+        >
+            <Tab.Navigator
                 initialRouteName={'Chat'}
                 tabBarOptions={{
                     indicatorStyle: {backgroundColor: Color.theme, height: '100%'},
@@ -227,37 +95,33 @@ const Chat = ({navigation}) => {
                     component={ChatGroupScreen}
                     options={{tabBarLabel: 'Grup'}}
                 />
-                </Tab.Navigator>
+            </Tab.Navigator>
 
-                <Pressable style={{alignItems: 'center', justifyContent: 'center',backgroundColor: Color.primary, width: 60, height: 60, position: 'absolute', alignSelf: 'flex-end', bottom: 90, right: 30, borderRadius: 30,}}>
-                    <AntDesign name={'message1'} size={27} style={{color: Color.textInput}}/>
-                </Pressable>
-                <ModalListAction
+            <ModalListAction
                 ref={modalListActionRef}
                 data={[
                     {
-                        id: 0,
-                        name: 'Buat Grup Baru',
+                        id: 1,
+                        name: 'Buat Chat Baru',
                         color: Color.text,
                         onPress: () => {
-                            navigation.navigate('CreateGroup')
+                            navigation.navigate('ChatUserListScreen', { myRoomIds });
                             modalListActionRef.current.close();
-                            setSelectedRoom();
                         },
                     },
                     {
-                        id: 1,
-                        name: 'Pengaturan',
+                        id: 2,
+                        name: 'Buat Grup Baru',
                         color: Color.text,
                         onPress: () => {
+                            navigation.navigate('CreateGroup');
                             modalListActionRef.current.close();
-                            setSelectedRoom();
                         },
                     },
                 ]}
             />
-    </Scaffold>
-  )
+        </Scaffold>
+    )
 }
 
-export default Chat
+export default Chat;
