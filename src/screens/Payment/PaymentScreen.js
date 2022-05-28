@@ -16,12 +16,13 @@ import Footer from '@src/components/Footer';
 
 import { getOptionsProduct } from '@src/utils/getOptionsProduct';
 import Client from '@src/lib/apollo';
-import { queryVestaBalance, queryPaymentMethods } from '@src/lib/query/payment';
+import { queryPaymentMethods } from '@src/lib/query/payment';
 import { MainView } from '@src/styled';
 
 import {
   imagePaymentBanner,
 } from '@assets/images';
+import { fetchVestaBalance } from 'src/api/vestaBalance';
 
 const Container = Styled(View)`
   padding: 16px;
@@ -115,15 +116,11 @@ export default ({ navigation, route }) => {
     return true;
   }
 
-  function getVesta() {
-    Client.query({query: queryVestaBalance})
-    .then(res => {
-      // console.log(res, 'res vesta balance');
-      setVestaAmount(res.data.vestaBalance.amount);
-    }).catch(reject => {
-      // console.log(reject, 'err vesta balance');
-      setVestaAmount(0);
-    })
+  const getVesta = async() => {
+    const result = await fetchVestaBalance();
+    if (result.status) {
+        setVestaAmount(result.data.amount);
+    }
   }
 
   function getPaymentMethods() {

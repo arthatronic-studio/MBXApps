@@ -7,7 +7,7 @@ import { Popup, usePopup, Loading, useLoading, Text, useColor } from '@src/compo
 import { useCombinedRefs } from 'src/hooks';
 import { FormatMoney } from 'src/utils';
 import FormInput from '../FormInput';
-import { getVestaBalance } from 'src/api/vestaBalance';
+import { fetchVestaBalance } from 'src/api/vestaBalance';
 import { statusBarHeight } from 'src/utils/constants';
 import { Divider } from 'src/styled';
 import { Button } from '../Button';
@@ -57,7 +57,7 @@ const ModalBid = forwardRef((props, ref) => {
 	}, []);
 
 	const fetchData = async() => {
-		const result = await getVestaBalance();
+		const result = await fetchVestaBalance();
 		if (result.status) {
 			setVestaAmount(result.data.amount);
 		}

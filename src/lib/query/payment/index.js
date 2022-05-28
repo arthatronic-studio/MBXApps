@@ -16,7 +16,7 @@ export const queryPaymentMethods = gql`
 
 export const queryVestaBalance = gql`
   query{
-    vestaBalance { amount }
+    vestaBalance { amount wallet }
   }
 `;
 

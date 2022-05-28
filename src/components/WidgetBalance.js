@@ -12,8 +12,9 @@ import {
 import { FormatMoney } from '@src/utils';
 import { shadowStyle } from '@src/styles';
 import Client from '@src/lib/apollo';
-import { queryVestaBalance, queryVestaOpenBalance } from '@src/lib/query/payment';
+import { queryVestaOpenBalance } from '@src/lib/query/payment';
 import { Container, Row } from 'src/styled';
+import { fetchVestaBalance } from 'src/api/vestaBalance';
 
 const WidgetBalance = (props) => {
     // state
@@ -32,21 +33,14 @@ const WidgetBalance = (props) => {
         }
     }, [isFocused]);
 
-    const componentWillFocus = () => {
+    const componentWillFocus = async() => {
         if (user && !user.guest) {
-            getVestaBalance();
+            const result = await fetchVestaBalance();
+            if (result.status) {
+                setVestaAmount(result.data.amount);
+                setWallet(result.data.wallet);
+            }
         }
-    };
-
-    const getVestaBalance = () => {
-        Client.query({ query: queryVestaBalance })
-            .then((res) => {
-                setVestaAmount(res.data.vestaBalance.amount || 0);
-                setWallet(res.data.vestaBalance.wallet);
-            })
-            .catch((err) => {
-                console.log(err, 'err get vesta balance');
-            });
     };
 
     const openVesta = () => {

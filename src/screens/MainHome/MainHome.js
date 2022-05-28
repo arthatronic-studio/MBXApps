@@ -67,6 +67,7 @@ import TrackPlayer, {
 import {analyticMethods, GALogEvent} from 'src/utils/analytics';
 import {getSizeByRatio} from 'src/utils/get_ratio';
 import MusikAlbum from 'src/components/MusikAlbum';
+import { fetchContentProduct } from 'src/api/content';
 
 let tempShowPopupAds = true;
 
@@ -249,92 +250,29 @@ const MainHome = ({navigation, route}) => {
   };
 
   const fetchData = async () => {
-    const resultEmergency = await fetchContentProduct(
-      Config.PRODUCT_TYPE,
-      'EMERGENCY',
-      '',
-    );
-    setListEmergencyArea(resultEmergency);
+    const resultEmergency = await fetchContentProduct({ productCategory: 'EMERGENCY' });
+    setListEmergencyArea(resultEmergency.data);
     setLoadingEmergencyArea(false);
 
-    const resultPosting = await fetchContentProduct(
-      Config.PRODUCT_TYPE,
-      'POSTING',
-      '',
-    );
-    setListPosting(resultPosting);
+    const resultPosting = await fetchContentProduct({ productCategory: 'POSTING' });
+    setListPosting(resultPosting.data);
     setLoadingPosting(false);
 
-    const resultNearbyPlace = await fetchContentProduct(
-      Config.PRODUCT_TYPE,
-      'NEARBY_PLACE',
-      '',
-    );
-    setListNearbyPlace(resultNearbyPlace);
+    const resultNearbyPlace = await fetchContentProduct({ productCategory: 'NEARBY_PLACE' });
+    setListNearbyPlace(resultNearbyPlace.data);
     setLoadingNearbyPlace(false);
 
-    const resultEvent = await fetchContentProduct(
-      Config.PRODUCT_TYPE,
-      'EVENT',
-      '',
-    );
-    setListEvent(resultEvent);
+    const resultEvent = await fetchContentProduct({ productCategory: 'EVENT' });
+    setListEvent(resultEvent.data);
     setLoadingEvent(false);
 
-    const resultJobs = await fetchContentProduct(
-      Config.PRODUCT_TYPE,
-      'JOBS',
-      '',
-    );
-    setListJobs(resultJobs);
+    const resultJobs = await fetchContentProduct({ productCategory: 'JOBS' });
+    setListJobs(resultJobs.data);
     setLoadingJobs(false);
 
     // not yet
     setLoadingAuction(false);
     setLoadingSoonAuction(false);
-  };
-
-  const fetchContentProduct = async (
-    productType,
-    productCategory,
-    productSubCategory,
-  ) => {
-    const variables = {
-      page: 0,
-      itemPerPage: 6,
-    };
-
-    if (productType) {
-      variables.productType = productType;
-    }
-
-    if (productCategory) {
-      variables.productCategory = productCategory;
-    }
-
-    if (productSubCategory) {
-      variables.productSubCategory = productSubCategory;
-    }
-
-    try {
-      const result = await Client.query({
-        query: queryContentProduct,
-        variables,
-      });
-  
-      if (
-        result &&
-        result.data &&
-        result.data.contentProduct &&
-        Array.isArray(result.data.contentProduct)
-      ) {
-        return result.data.contentProduct;
-      }
-
-      return [];
-    } catch (error) {
-      return [];
-    }
   };
 
   const onRefresh = () => {
