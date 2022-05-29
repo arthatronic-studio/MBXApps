@@ -1,20 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, FlatList, TextInput, Image, ScrollView } from 'react-native';
+import { View, FlatList, TextInput, Image, ScrollView, useWindowDimensions } from 'react-native';
 import Styled from 'styled-components';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Moment from 'moment';
 import { useSelector } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Modal from 'react-native-modal';
+
 import Text from '@src/components/Text';
 import { useColor } from '@src/components/Color';
 import { usePopup } from '@src/components';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import { Circle } from '@src/styled';
 
-import { Header, ModalListAction, Scaffold, Alert } from 'src/components';
+import { Header, Scaffold, Alert } from 'src/components';
 import {currentSocket} from '@src/screens/MainHome/MainHome';
 import { statusBarHeight } from 'src/utils/constants';
+import ModalActions from 'src/components/Modal/ModalActions';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -57,7 +60,7 @@ const initialDataRooms = {
     page: 0,
     loadNext: false,
     refresh: false,
-}
+};
 
 const ChatRoomsScreen = ({ navigation, route }) => {
     // state
@@ -65,17 +68,17 @@ const ChatRoomsScreen = ({ navigation, route }) => {
     const [myRoomIds, setMyRoomIds] = useState([]);
     const [selectedRoom, setSelectedRoom] = useState();
     const [isLoading, setIsLoading] = useState(false);
-
-    const modalListActionRef = useRef();
+    const [modalActions, setModalActions] = useState(false);
 
     // selector
     const user = useSelector(
         state => state['user.auth'].login.user
     )
-
+        
     // hooks
     const isFocused = useIsFocused();
     const { Color } = useColor();
+    const { width } = useWindowDimensions();
     const [popupProps, showPopup] = usePopup();
 
     useEffect(() => {
@@ -228,7 +231,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                                     });
                                 }}
                                 onLongPress={() => {
-                                    modalListActionRef.current.open();
+                                    setModalActions(true);
                                     setSelectedRoom(item);
                                 }}
                                 style={{
@@ -292,22 +295,19 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                     }}
                 />
 
-                <ModalListAction
-                    ref={modalListActionRef}
-                    onClose={() => {
-                        setSelectedRoom();
-                    }}
+                <ModalActions
+                    visible={modalActions}
+                    onClose={() => setModalActions(false)}
                     data={[
                         {
                             id: 0,
                             name: 'Hapus',
                             color: Color.red,
                             onPress: () => {
-                                Alert('Hapus', 'Apakah Anda yakin menghapus konten?', () => {
+                                Alert('Hapus', 'Apakah Anda yakin menghapus obrolan?', () => {
                                     fetchRoomsDelete();
                                 });
-                                modalListActionRef.current.close();
-                                setSelectedRoom();
+                                setModalActions(false);
                             },
                         }
                     ]}

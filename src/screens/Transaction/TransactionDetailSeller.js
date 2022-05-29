@@ -32,7 +32,6 @@ import {
   Col,
   Button,
   Submit,
-  ModalListAction,
 } from '@src/components';
 import ColorPropType from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedColorPropType';
 import {Modalize} from 'react-native-modalize';

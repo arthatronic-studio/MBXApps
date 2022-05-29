@@ -13,7 +13,7 @@ import { usePopup } from '@src/components';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Entypo from 'react-native-vector-icons/Entypo'
 import ImagesPath from 'src/components/ImagesPath';
-import { Header, ModalListAction, Scaffold, Alert } from 'src/components';
+import { Header, Scaffold, Alert } from 'src/components';
 import {currentSocket} from '@src/screens/MainHome/MainHome';
 import {
     Row,

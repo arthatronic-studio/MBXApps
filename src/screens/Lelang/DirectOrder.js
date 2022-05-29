@@ -18,7 +18,6 @@ import {
   HeaderBig,
   useColor,
   Header,
-  ModalListAction,
 } from '@src/components';
 import {FlatList, ScrollView} from 'react-native-gesture-handler';
 import ImagesPath from 'src/components/ImagesPath';

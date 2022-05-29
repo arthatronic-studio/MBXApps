@@ -39,7 +39,6 @@ import {
   HeaderBig,
   useColor,
   Header,
-  ModalListAction,
 } from '@src/components';
 import {TouchableOpacity} from '@src/components/Button';
 import ListForum from '@src/screens/MainForum/ListForum';
@@ -85,7 +84,6 @@ const AddProduct = ({navigation, route}) => {
 
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const {Color} = useColor();
-  const modalListActionRef = useRef();
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(route.params.item.categoryId);
