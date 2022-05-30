@@ -24,6 +24,10 @@ const DetailLelang = ({ navigation, route }) => {
   const [weeksLeft, setWeeksLeft] = useState(0);
   const [monthsLeft, setMonthsLeft] = useState(0);
   const [yearsLeft, setYearsLeft] = useState(0);
+  // 
+  const [isWillCome, setIsWillCome] = useState(false);
+  const [isOnGoing, setIsOnGoing] = useState(false);
+  const [isPassed, setIsPassed] = useState(false);
 
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const [isLoading, setIsLoading] = useState(true);
@@ -33,22 +37,30 @@ const DetailLelang = ({ navigation, route }) => {
 
   const { item, myAuction } = route.params;
   const { id } = item;
-  const showButton = item.status == 'ONGOING';
-
-  console.log(daysLeft);
   
   useEffect(() => {
     const interval = product ?
       setInterval(() => {
         const now = moment();
-        const endDate = moment(product.dateEnd);
-        const tl = endDate.diff(now, 'seconds');
-        const minl = endDate.diff(now, 'minutes');
-        const hl = endDate.diff(now, 'hours');
-        const dl = endDate.diff(now, 'days');
-        const wl = endDate.diff(now, 'weeks');
-        const ml = endDate.diff(now, 'months');
-        const yl = endDate.diff(now, 'years');
+        const _isWillCome = moment(product.dateStart).isAfter(now);
+        const _isOnGoing = moment(product.dateEnd).isAfter(now);
+        const _isPassed = moment(product.dateEnd).isBefore(now);
+        console.log('////////////////////////');
+        console.log('akan datang', _isWillCome);
+        console.log('sedang berlangsung', _isOnGoing);
+        console.log('telah lewat', _isPassed);
+        console.log('////////////////////////');
+        setIsWillCome(_isWillCome);
+        setIsOnGoing(!_isWillCome && _isOnGoing);
+        setIsPassed(_isPassed);
+        const issueDate = _isWillCome ? moment(product.dateStart) : moment(product.dateEnd);
+        const tl = issueDate.diff(now, 'seconds');
+        const minl = issueDate.diff(now, 'minutes');
+        const hl = issueDate.diff(now, 'hours');
+        const dl = issueDate.diff(now, 'days');
+        const wl = issueDate.diff(now, 'weeks');
+        const ml = issueDate.diff(now, 'months');
+        const yl = issueDate.diff(now, 'years');
         // TODO: bukain buat semua status
         // if (tl > 0 && product.auctionStatus == 'BELUM SELESAI') {
         setTimeLeft(tl > 0 ? tl : 0);
@@ -108,11 +120,11 @@ const DetailLelang = ({ navigation, route }) => {
           color={Color.text}
           centerTitle={false}
           customIcon
-          actions={
-            <>
-              <Entypo name={'dots-three-vertical'} size={20}/>
-            </>
-          }
+          // actions={
+          //   <>
+          //     <Entypo name={'dots-three-vertical'} size={20}/>
+          //   </>
+          // }
         />
       }>
       <ScrollView>
@@ -149,7 +161,7 @@ const DetailLelang = ({ navigation, route }) => {
                 justifyContent: 'center',
               }}>
               <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                <Text size={8} color={Color.textInput}>Sisa Waktu</Text>
+                <Text size={8} color={Color.textInput}>{isWillCome ? 'Dimulai Dalam' : 'Sisa Waktu'}</Text>
                 <Text color={Color.textInput} size={12}>
                   {
                     yearsLeft > 0 ? `${yearsLeft} Tahun lagi` :
@@ -159,7 +171,7 @@ const DetailLelang = ({ navigation, route }) => {
                     hoursLeft > 0 ? moment.duration(timeLeft, 'seconds').format('HH:mm:ss', { trim: false }) :
                     minutesLeft > 0 ? moment.duration(timeLeft, 'seconds').format('mm:ss', { trim: false }) :
                     timeLeft > 0 ? moment.duration(timeLeft, 'seconds').format('ss', { trim: false }) :
-                    product ? '-' : 'Waktu habis'
+                    isPassed ? 'Waktu habis' : '-'
                   }
                 </Text>
               </View>
@@ -298,7 +310,8 @@ const DetailLelang = ({ navigation, route }) => {
         </View>
       </ScrollView>
 
-      {showButton &&
+      {/* hide beli langsung */}
+      {/* { &&
         <View>
           <Text style={{fontSize: 10, fontWeight: 'bold', marginVertical: 5}}>Males Ikutan Lelang?</Text>
           <TouchableOpacity
@@ -318,9 +331,9 @@ const DetailLelang = ({ navigation, route }) => {
               Beli Langsung Aja
             </Text>
           </TouchableOpacity>
-        </View>}
+        </View>} */}
         
-        {myAuction === false &&
+        {!myAuction && isOnGoing &&
           <View>
             <TouchableOpacity
               disabled={!product || timeLeft === 0}

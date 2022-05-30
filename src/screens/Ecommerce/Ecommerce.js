@@ -24,7 +24,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import RNSimpleCrypto from 'react-native-simple-crypto';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Swiper from 'react-native-swiper';
-import ListSoonAuction from 'src/components/Posting/ListSoonAuction';
 import ListNews from 'src/components/Posting/ListNews';
 import ListPlace from 'src/components/Posting/ListPlace';
 import ListEvent from 'src/components/Posting/ListEvent';

@@ -33,8 +33,6 @@ import {
   Submit,
   useLoading,
 } from '@src/components';
-import ListAuction from 'src/components/Posting/ListAuction';
-import ListSoonAuction from 'src/components/Posting/ListSoonAuction';
 import ListNews from 'src/components/Posting/ListNews';
 import ListPlace from 'src/components/Posting/ListPlace';
 import ListEvent from 'src/components/Posting/ListEvent';
@@ -68,6 +66,7 @@ import {analyticMethods, GALogEvent} from 'src/utils/analytics';
 import {getSizeByRatio} from 'src/utils/get_ratio';
 import MusikAlbum from 'src/components/MusikAlbum';
 import { fetchContentProduct } from 'src/api/content';
+import HighlightLelang from 'src/components/Card/HighlightLelang';
 
 let tempShowPopupAds = true;
 
@@ -650,30 +649,22 @@ const MainHome = ({navigation, route}) => {
           <Divider height={24} />
 
           {accessClient.MainHome.showListAuction && (
-            <ListAuction
-              data={listEvent}
-              loading={loadingAuction}
-              horizontal
-              showHeader
-              onPress={item => {
-                navigation.navigate('DetailLelang', {item});
-              }}
-              style={{paddingLeft: 8}}
+            <HighlightLelang
+              title={`Pelelangan\nSedang Berlangsung`}
+              nav='LiveLelangScreen'
+              prodStatus='ONGOING'
             />
           )}
 
           {accessClient.MainHome.showListSoonAuction && (
-            <ListSoonAuction
-              data={listEvent}
-              loading={loadingSoonAuction}
-              horizontal
-              showHeader
-              onPress={item => {
-                navigation.navigate('DetailLelang', {item});
-              }}
-              style={{paddingLeft: 8}}
+            <HighlightLelang
+              title={`Pelelangan\nYang Akan Datang`}
+              nav='LiveLelangScreen'
+              prodStatus='WILLCOME'
             />
           )}
+
+          <Divider />
 
           {accessClient.MainHome.showListEmergency && (
             <ListEmergency
