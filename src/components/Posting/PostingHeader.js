@@ -3,7 +3,6 @@ import { View, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import CardPlace from 'src/components/Posting/CardPlace';
 import {
     Text,
     TouchableOpacity,
@@ -20,14 +19,14 @@ const propTypes = {
     onSeeAllPress: PropTypes.func,
     showSeeAllText: PropTypes.bool,
     style: PropTypes.object,
-}
+};
 
 const defaultProps = {
     title: '',
     onSeeAllPress: () => {},
     showSeeAllText: true,
     style: {},
-}
+};
 
 const PostingHeader = (props) => {
     const {
@@ -47,6 +46,7 @@ const PostingHeader = (props) => {
             style={{
                 flexDirection: 'row',
                 paddingHorizontal: 16,
+                paddingBottom: 16,
                 ...style,
             }}
         >

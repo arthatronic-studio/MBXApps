@@ -12,21 +12,13 @@ import {
 	Pressable,
 	useWindowDimensions,
 } from 'react-native';
-
-import { accessClient } from 'src/utils/access_client';
-import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import RNSimpleCrypto from 'react-native-simple-crypto';
 import Octicons from 'react-native-vector-icons/Octicons';
-import Swiper from 'react-native-swiper';
-import ListNews from 'src/components/Posting/ListNews';
-import ListPlace from 'src/components/Posting/ListPlace';
-import ListEvent from 'src/components/Posting/ListEvent';
 import { Divider, Circle, Container, Row } from '@src/styled';
 import {
 	Text,
@@ -38,10 +30,6 @@ import {
 	useColor,
 	Header,
 } from '@src/components';
-import ListForum from '@src/screens/MainForum/ListForum';
-
-import { shadowStyle } from '@src/styles';
-
 import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
 import ImagesPath from 'src/components/ImagesPath';
@@ -49,7 +37,6 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import axios from 'axios';
 import moment from 'moment';
 import { queryGetAuction } from 'src/lib/query/auction';
 import { FormatMoney } from 'src/utils';
@@ -109,20 +96,8 @@ const Ecommerce = ({ navigation }) => {
 
 	const [ loadingSoonAuction, setLoadingSoonAuction ] = useState(true);
 
-	const [ loadingEmergency, setLoadingEmergencyArea ] = useState(true);
-	const [ listEmergencyArea, setListEmergencyArea ] = useState([]);
-
-	const [ loadingPosting, setLoadingPosting ] = useState(true);
-	const [ listPosting, setListPosting ] = useState([]);
-
 	const [ loadingNearbyPlace, setLoadingNearbyPlace ] = useState(true);
 	const [ listNearbyPlace, setListNearbyPlace ] = useState([]);
-
-	const [ loadingEvent, setLoadingEvent ] = useState(true);
-	const [ listEvent, setListEvent ] = useState([]);
-
-	const [ loadingJobs, setLoadingJobs ] = useState(true);
-	const [ listJobs, setListJobs ] = useState([]);
 
 	const [ loadingBanner, setLoadingBanner ] = useState(true);
 	const [ listBanner, setListBanner ] = useState([]);

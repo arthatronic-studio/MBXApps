@@ -11,10 +11,10 @@ import {
 import Text from '@src/components/Text';
 import HeaderBig from '@src/components/HeaderBig';
 import Scaffold from '@src/components/Scaffold';
-import ListNews from 'src/components/Posting/ListNews';
 
 import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
+import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
 
 export default ({ navigation, route }) => {
   // state
@@ -101,14 +101,12 @@ export default ({ navigation, route }) => {
         Buat
       </Text>}
 
-      <ListNews
-        data={listProduct}
-        onPress={(item) => {
-          navigation.navigate('NewsDetail', { item });
-        }}
-        style={{
-          paddingBottom: 80
-        }}
+      <HighlightContentProduct
+        productCategory='POSTING'
+        name='Artikel'
+        title='Postingan Artikel'
+        nav='NewsScreen'
+        refresh={false}
       />
     </Scaffold>
   )

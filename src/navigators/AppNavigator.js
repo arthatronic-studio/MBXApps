@@ -53,6 +53,10 @@ import TermsCondition from 'src/screens/MainProfile/TermCondition';
 import CommunityAdminPage from '@src/screens/MainProfile/CommunityAdmin/CommunityAdminPage';
 import CardDetail from 'src/screens/MainProfile/CommunityAdmin/CardDetail';
 
+// Content
+import VideoScreen from 'src/screens/Content/VideoScreen';
+import YoutubeScreen from 'src/screens/Content/YoutubeScreen';
+
 // Emergency
 import EmergencyScreen from 'src/screens/Posting/Emergency/Index';
 import EmergencyDetail from 'src/screens/Posting/Emergency/Detail';
@@ -307,6 +311,9 @@ function MainStackNavigator() {
       <Screen name="UserChangePassword" component={UserChangePassword} />
       {/* topup */}
       <Screen name="TopUpScreen" component={TopUpScreen} />
+      {/* content */}
+      <Screen name='VideoScreen' component={VideoScreen} />
+      <Screen name='YoutubeScreen' component={YoutubeScreen} />
       {/* Emergency */}
       <Screen name="EmergencyScreen" component={EmergencyScreen} />
       <Screen name="EmergencyDetail" component={EmergencyDetail} />

@@ -19,7 +19,7 @@ const ChatEcommerceBuyer = ({ navigation, route }) => {
 
 	useEffect(() => {
 		currentSocket.on('community_chat_room', (res) => {
-			console.log('community_chat_room', res);
+			console.log('community_chat_room siniiii', res);
 			setRooms(res.data);
 		});
 		get_list_room();
@@ -27,12 +27,13 @@ const ChatEcommerceBuyer = ({ navigation, route }) => {
 
 	return (
 		<Scaffold
-			header={<Header customIcon title="Chat Ecommerce buyer" type="bold" centerTitle={false} />}
-			onPressLeftButton={() => {
-				console.log("siniii");
-				currentSocket.off('community_chat_room');
-				navigation.pop();
-			}}
+			header={<Header customIcon title="Chat Ecommerce buyer" type="bold" centerTitle={false} 
+				onPressLeftButton={() => {
+					currentSocket.off('community_chat_room');
+					navigation.pop();
+				}}
+			/>}
+			
 		>
 			<View>
 				{/* <View style={{ width: '90%', alignSelf: 'center' }}>

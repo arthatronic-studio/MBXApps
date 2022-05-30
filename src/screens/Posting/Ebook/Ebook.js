@@ -9,7 +9,6 @@ import { useLoading, usePopup, useColor, Alert } from '@src/components';
 import Text from '@src/components/Text';
 import { TouchableOpacity } from '@src/components/Button';
 import Scaffold from '@src/components/Scaffold';
-import ListEvent from 'src/components/Posting/ListEvent';
 
 import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';

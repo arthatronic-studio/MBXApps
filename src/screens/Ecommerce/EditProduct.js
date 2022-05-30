@@ -16,7 +16,6 @@ import {
   HeaderBig,
   useColor,
   Header,
-  ModalListAction,
 } from '@src/components';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {FlatList, ScrollView} from 'react-native-gesture-handler';
