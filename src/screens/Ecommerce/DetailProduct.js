@@ -54,28 +54,27 @@ const DetailProduct = ({navigation, route}) => {
   const {Color} = useColor();
   const isFocused = useIsFocused();
   const {width, height} = useWindowDimensions();
-  const [targetRoomId, setTargetRoomId] = useState(null);
 
   useEffect(() => {
     getDetail();
     getCart();
   }, [isFocused]);
 
-  useEffect(() => {
-    const ChatRoom = () => {
-      console.log("siniii");
-      const community_chat_user_params = [
-        { user_id: user.userId, room_type: 'ECOMMERCE', room_user_type: 'USER' },
-        { user_id: detail.merchant.userId, room_type: 'ECOMMERCE', room_user_type: 'MERCHANT' },
-      ];
-      const bodyMessage = {community_chat_user_params: community_chat_user_params, chat_room_id: targetRoomId.data.chat_room_id, user_id:  user.userId, chat_type: 'TAGGED_ECOMMERCE_PRODUCT', tagged_id: detail.id, tagged_name: detail.name, tagged_price: detail.price, tagged_image: detail.imageUrl, chat_message: detail.name};
-      // currentSocket.emit('create_community_chat_message', bodyMessage);
-      currentSocket.off('get_community_chat_room_id');
-      navigation.navigate('ChatDetailBuyer', {id: targetRoomId.data.chat_room_id, merchant: detail.merchant, users: targetRoomId.data.users, bodyTagged: bodyMessage});
+  const directChatRoom = (dataRoom, bodyCreateRoom, bodyGetRoom) => {
+    console.log("siniii", dataRoom);
+    const community_chat_user_params = [
+      { user_id: user.userId, room_type: 'ECOMMERCE', room_user_type: 'USER' },
+      { user_id: detail.merchant.userId, room_type: 'ECOMMERCE', room_user_type: 'MERCHANT' },
+    ];
+    currentSocket.off('get_community_chat_room_id');
+    if(dataRoom){
+      const bodyMessage = {community_chat_user_params: community_chat_user_params, chat_room_id: dataRoom.data.chat_room_id, user_id:  user.userId, chat_type: 'TAGGED_ECOMMERCE_PRODUCT', tagged_id: detail.id, tagged_name: detail.name, tagged_price: detail.price, tagged_image: detail.imageUrl, chat_message: detail.name};
+      navigation.navigate('ChatDetailBuyer', {id: dataRoom.data.chat_room_id, merchant: detail.merchant, users: dataRoom.data.users, bodyTagged: bodyMessage, bodyCreateRoom: bodyCreateRoom, bodyGetRoom});
+    }else{
+      const bodyMessage = {community_chat_user_params: community_chat_user_params, user_id: user.userId, chat_type: 'TAGGED_ECOMMERCE_PRODUCT', tagged_id: detail.id, tagged_name: detail.name, tagged_price: detail.price, tagged_image: detail.imageUrl, chat_message: detail.name};
+      navigation.navigate('ChatDetailBuyer', {merchant: detail.merchant, bodyTagged: bodyMessage, bodyCreateRoom: bodyCreateRoom, bodyGetRoom});
     }
-
-    if(targetRoomId) ChatRoom();
-  }, [targetRoomId]);
+  }
 
   const getCart = () => {
 		// showLoading();
@@ -172,7 +171,7 @@ const DetailProduct = ({navigation, route}) => {
     currentSocket.on('get_community_chat_room_id', (res) => {
       console.log('get_community_chat_room_id', res);
       if(res.data.chat_room_id){
-        setTargetRoomId(res);
+        directChatRoom(res, undefined, undefined);
       }else{
         console.log("gaada room", detail.name);
         create_room();
@@ -185,10 +184,11 @@ const DetailProduct = ({navigation, route}) => {
 			{ user_id: user.userId, room_type: 'ECOMMERCE', room_user_type: 'USER' },
 			{ user_id: detail.merchant.userId, room_type: 'ECOMMERCE', room_user_type: 'MERCHANT' },
 		];
-    const body = {community_chat_user_params: community_chat_user_params, room_name: 'Chat_ECOMMERCE', room_type: 'ECOMMERCE', user_ids: [user.userId.toString(), detail.merchant.userId.toString()], admin_ids: [detail.merchant.userId.toString()]}
-    console.log(body, "boddy")
-    currentSocket.emit('create_community_chat_room', body);
-    currentSocket.emit('get_community_chat_room_id', { user_id: user.userId.toString(), user_id_target: detail.merchant.userId.toString(), admin_ids: [detail.merchant.userId.toString()]});
+    const bodyCreateRoom = {community_chat_user_params: community_chat_user_params, room_name: 'Chat_ECOMMERCE', room_type: 'ECOMMERCE', user_ids: [user.userId.toString(), detail.merchant.userId.toString()], admin_ids: [detail.merchant.userId.toString()]}
+    const bodyGetRoom = { user_id: user.userId.toString(), user_id_target: detail.merchant.userId.toString(), admin_ids: [detail.merchant.userId.toString()]}
+    // currentSocket.emit('create_community_chat_room', bodyCreateRoom);
+    // currentSocket.emit('get_community_chat_room_id', { user_id: user.userId.toString(), user_id_target: detail.merchant.userId.toString(), admin_ids: [detail.merchant.userId.toString()]});
+    directChatRoom(undefined, bodyCreateRoom, bodyGetRoom)
   }
 
   console.log(detail, "detail");
