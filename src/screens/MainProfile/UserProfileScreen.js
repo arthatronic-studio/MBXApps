@@ -25,6 +25,9 @@ import Loading, { useLoading } from '@src/components/Modal/Loading';
 import Client from '@src/lib/apollo';
 import { queryProductManage, queryContentUserProfile, queryContentUserProduct } from '@src/lib/query';
 import { Scaffold } from 'src/components';
+import { ScrollView } from 'react-native-gesture-handler';
+import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
+import { Container } from 'src/styled';
 
 const UserProfileScreen = ({ navigation, route }) => {
     // params
@@ -335,253 +338,137 @@ const UserProfileScreen = ({ navigation, route }) => {
         )
     }
 
-    const header = <View />;
-
-    // let dataVideo = [{header: header1()}, {header}, {header: header2()}, {header}];
-    // let dataMusic = [{header: header1()}, {header}, {header: header2()}, {header}];
-    // let dataBook = [{header: header1()}, {header}, {header: header2()}, {header}];
-
-    let dataVideo = [{header: header1()}, {header}, {header}, {header}];
-    let dataMusic = [{header: header1()}, {header}, {header}, {header}];
-    let dataBook = [{header: header1()}, {header}, {header}, {header}];
-
     if (itemCasting.data.length > 0) {
-        itemCasting.data.forEach((e) => {
-            if (e.videoFilename.includes('.mp4')) {
-                dataVideo.push(e);
-            } else if (e.videoFilename.includes('.mp3')) {
-                dataMusic.push(e);
-            } else {
-                dataBook.push(e);
-            }
-        })
+        // itemCasting.data.forEach((e) => {
+        //     if (e.videoFilename.includes('.mp4')) {
+        //         dataVideo.push(e);
+        //     } else if (e.videoFilename.includes('.mp3')) {
+        //         dataMusic.push(e);
+        //     } else {
+        //         dataBook.push(e);
+        //     }
+        // })
     }
 
-    console.log(user, 'userrrr');
+    console.log(userContent, 'userContent');
     
     return (
         <Scaffold
-            headerTitle='Profile'
             fallback={!userContent}
-        >
-            {/* <Header
-                title='Profile'
-                style={{backgroundColor: 'transparent', paddingTop: 16}}
-            /> */}
-
-            {activeTab === 0 ?
-                <>
-                    {itemCasting.loading ?
-                        <View style={{marginTop: 32}}>
-                            <ActivityIndicator color={Color.primary} size='large' />
-                        </View>
-                    :
-                        <FlatList
-                            keyExtractor={(item, index) => item.toString() + index}
-                            data={dataVideo}
-                            numColumns={2}
-                            key={2}
-                            showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={{paddingHorizontal: 16, paddingTop: 8}}
-                            stickyHeaderIndices={[0, 1]}
-                            ListEmptyComponent={
-                                <View style={{marginTop: 32}}>
-                                    <Text>Data tidak tersedia</Text>
-                                </View>
-                            }
-                            ListFooterComponent={
-                                itemCasting.loadNext &&
-                                    <View style={{flex: 1, alignItems: 'center'}}>
-                                        <View style={{width: 30, height: 30, borderRadius: 15, marginBottom: 15, backgroundColor: Color.border, justifyContent: 'center', alignItems: 'center'}}>
-                                            <ActivityIndicator color={Color.primary} />
-                                        </View>
-                                    </View>
-                            }
-                            renderItem={({ item, index }) => {
-                                if (item.header) {
-                                    return item.header;
-                                }
-                                
-                                return renderImageView(item, index);
-                            }}
-                            onEndReached={() => itemCasting.page !== -1 && setStateItemCasting({ loadNext: true })}
-                            onEndReachedThreshold={0.3}
-                        />
-                    }
-                </>
-            : activeTab === 1 ?
-                <>
-                    {itemCasting.loading ?
-                        <View style={{marginTop: 32}}>
-                            <ActivityIndicator color={Color.primary} size='large' />
-                        </View>
-                    :
-                        <FlatList
-                            keyExtractor={(item, index) => item.toString() + index}
-                            data={dataMusic}
-                            key={0}
-                            showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={{paddingHorizontal: 16, paddingTop: 8}}
-                            stickyHeaderIndices={[0, 1]}
-                            ListEmptyComponent={
-                                <View style={{marginTop: 32}}>
-                                    <Text>Data tidak tersedia</Text>
-                                </View>
-                            }
-                            ListFooterComponent={
-                                itemCasting.loadNext &&
-                                    <View style={{flex: 1, alignItems: 'center'}}>
-                                        <View style={{width: 30, height: 30, borderRadius: 15, marginBottom: 15, backgroundColor: Color.border, justifyContent: 'center', alignItems: 'center'}}>
-                                            <ActivityIndicator color={Color.primary} />
-                                        </View>
-                                    </View>
-                            }
-                            onEndReached={() => itemCasting.page !== -1 && setStateItemCasting({ loadNext: true })}
-                            onEndReachedThreshold={0.3}
-                            renderItem={({ item, index }) => {
-                                if (item.header) {
-                                    return item.header;
-                                }
-                                
-                                return (
-                                    <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 6}}>
-                                        <View style={{flex: 1, alignItems: 'flex-start'}}>
-                                            <Text type='semibold'>{index - 3}</Text>
-                                        </View>
-                                        <TouchableOpacity
-                                            style={{flex: 11}}
-                                            onPress={() => {
-                                                // const newData = [];
-                                                // dataMusic.map((e) => {
-                                                //     if (!e.header) {
-                                                //         newData.push(e);
-                                                //     }
-                                                // });
-                                                // trackPlayerPlugAndPlay(newData, item);
-                                            }}
-                                        >
-                                            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                                    <Image source={{uri: item.image}} style={{height: 70, width: 70, borderRadius: 4}} />
-                                                    <View style={{paddingLeft: 16}}>
-                                                        <Text size={12} type='semibold' align='left'>{item.productName}</Text>
-                                                        <Text size={10} align='left' style={{opacity: 0.6}}>{item.productDescription}</Text>
-
-                                                        <View style={{flexDirection: 'row'}}>
-                                                            <View style={{flexDirection: 'row', alignItems: 'center', marginRight: 12}}>
-                                                                <SimpleLineIcons name='emotsmile' size={10} color={item && item.im_like ? Color.secondary : Color.text} />
-                                                                <Text size={12} color={item && item.im_like ? Color.secondary : Color.text} style={{marginTop: 3}}> {item && item.like ? item.like : 0}</Text>
-                                                            </View>
-
-                                                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                                                <MaterialIcons name='comment' size={10} color={Color.text} />
-                                                                <Text size={12} color={Color.text} style={{marginTop: 3}}> {item && item.comment ? item.comment : 0}</Text>
-                                                            </View>
-                                                        </View>
-                                                    </View>
-                                                </View>
-                                            </View>
-                                        </TouchableOpacity>
-                                        {item.status === 'PRIVATE' && <View style={{position: 'absolute', top: 4, left: 16, backgroundColor: Color.theme, height: 20, width: 20, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
-                                            <SimpleLineIcons size={12} name='lock' color={Color.text} />
-                                        </View>}
-
-                                        {/* {isDirector && <View style={{position: 'absolute', right: 0}}>
-                                            <MaterialCommunityIcons
-                                                size={16}
-                                                name='dots-vertical'
-                                                color={Color.text}
-                                                onPress={() => {
-                                                    setSelectedCasting(item);
-                                                    modalListActionRef.current.open();
-                                                }}
-                                            />
-                                        </View>} */}
-                                    </View>
-                                )
-                            }}
-                        />
-                    }
-                </>
-            :
-                <>
-                    {itemCasting.loading ?
-                        <View style={{marginTop: 32}}>
-                            <ActivityIndicator color={Color.primary} size='large' />
-                        </View>
-                    :
-                        <FlatList
-                            keyExtractor={(item, index) => item.toString() + index}
-                            data={dataBook}
-                            numColumns={2}
-                            key={2}
-                            showsHorizontalScrollIndicator={false}
-                            contentContainerStyle={{paddingHorizontal: 16, paddingTop: 8}}
-                            stickyHeaderIndices={[0, 1]}
-                            ListEmptyComponent={
-                                <View style={{marginTop: 32}}>
-                                    <Text>Data tidak tersedia</Text>
-                                </View>
-                            }
-                            ListFooterComponent={
-                                itemCasting.loadNext &&
-                                    <View style={{flex: 1, alignItems: 'center'}}>
-                                        <View style={{width: 30, height: 30, borderRadius: 15, marginBottom: 15, backgroundColor: Color.border, justifyContent: 'center', alignItems: 'center'}}>
-                                            <ActivityIndicator color={Color.primary} />
-                                        </View>
-                                    </View>
-                            }
-                            renderItem={({ item, index }) => {
-                                if (item.header) {
-                                    return item.header;
-                                }
-                                
-                                return (
-                                    <View style={{width: `${100 / 2}%`, marginBottom: 10, paddingHorizontal: 4}}>
-                                        {/* <CardEbook
-                                            item={item}
-                                            onPress={() => navigation.navigate('PDFReaderScreen', { item })}
-                                        /> */}
-
-                                        {item.status === 'PRIVATE' && <View style={{position: 'absolute', top: 4, left: 8, backgroundColor: Color.theme, height: 20, width: 20, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
-                                            <SimpleLineIcons size={12} name='lock' color={Color.text} />
-                                        </View>}
-
-                                        {/* {isDirector && <View style={{position: 'absolute', right: 0}}>
-                                            <MaterialCommunityIcons
-                                                size={16}
-                                                name='dots-vertical'
-                                                color={Color.text}
-                                                onPress={() => {
-                                                    setSelectedCasting(item);
-                                                    modalListActionRef.current.open();
-                                                }}
-                                            />
-                                        </View>} */}
-                                    </View>
-                                )
-                            }}
-                            onEndReached={() => itemCasting.page !== -1 && setStateItemCasting({ loadNext: true })}
-                            onEndReachedThreshold={0.3}
-                        />
-                    }
-                </>
+            header={
+                <Header
+                    title='Profile'
+                    centerTitle={false}
+                />
             }
+        >
+            <ScrollView>
+                {userContent &&
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
+                        <View style={{flex: 4, flexDirection: 'row', alignItems: 'center'}}>
+                            <View>
+                                <Ionicons name='person-circle' color={Color.primary} size={56} />
+                            </View>
+                            <View style={{marginLeft: 8}}>
+                                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                    <Text size={12} align='left' letterSpacing={0.18}>
+                                        {userContent.firstName} {userContent.lastName}
+                                    </Text>
+                                    {userContent.isDirector === 1 &&
+                                        <Octicons
+                                            name='verified'
+                                            color={Color.info}
+                                            size={14}
+                                            style={{transform: [{ rotateY: '0deg' }]}}
+                                        />
+                                    }
+                                </View>
+                                <Text size={10} align='left' letterSpacing={0.18} style={{marginTop: 2, opacity: 0.6}}>
+                                    {userContent.organizationId ? 'Anggota ' + userContent.organizationName : 'Belum Terdaftar'}
+                                </Text>
+                            </View>
+                        </View>
+                        {/* hide chat */}
+                        {/* <View style={{flex: 1.5, paddingLeft: 8}}>
+                            <TouchableOpacity
+                                onPress={() => {
 
-            {/* {playNow.data.length > 0 && <MusicPlayer
-                ref={musicPlayerRef}
-            />} */}
+                                }}
+                                style={{width: '100%', height: 35, borderWidth: 1, borderColor: Color.secondary, borderRadius: 4, justifyContent: 'center'}}
+                            >
+                                <Text size={10} color={Color.secondary}>Chat</Text>
+                            </TouchableOpacity>
+                        </View> */}
+                    </View>
+                }
 
-            {/* <YoutubeVideoPlayer
-                visible={modalYoutubeVideoPlayer}
-                item={selectedCasting}
-                onPressLeftButton={() => {
-                    setSelectedCasting();
-                    setModalYoutubeVideoPlayer(false);
-                }}
-                onSuccessLike={(id) => onChangeRootData(id, 'like')}
-                onSuccessComment={(id) => onChangeRootData(id, 'comment')}
-            /> */}
+                <Container paddingHorizontal={16} marginBottom={16}>
+                    <Text align='left' size={18} type='semibold'>Konten</Text>
+                </Container>
+
+                <HighlightContentProduct
+                    userProfileId={params.userId}
+                    productCategory='EMERGENCY'
+                    name='Help Me'
+                    title='Help Me'
+                    nav='EmergencyScreen'
+                    refresh={false}
+                />
+
+                <HighlightContentProduct
+                    userProfileId={params.userId}
+                    productCategory='POSTING'
+                    name='Artikel'
+                    title='Postingan Artikel'
+                    nav='NewsScreen'
+                    refresh={false}
+                />
+
+                <HighlightContentProduct
+                    userProfileId={params.userId}
+                    productCategory='NEARBY_PLACE'
+                    name='Tempat'
+                    title='Tempat Favorit'
+                    nav='PlaceScreen'
+                    refresh={false}
+                />
+
+                <HighlightContentProduct
+                    userProfileId={params.userId}
+                    productCategory='EVENT'
+                    name='Event'
+                    title='Event Terbaru'
+                    nav='EventScreen'
+                    refresh={false}
+                />
+                
+                <HighlightContentProduct
+                    userProfileId={params.userId}
+                    productCategory='JOBS'
+                    name='Loker'
+                    title='Lowongan Pekerjaan'
+                    nav='JobScreen'
+                    refresh={false}
+                />
+
+                <HighlightContentProduct
+                    userProfileId={params.userId}
+                    productCategory='YOUTUBE_VIDEO'
+                    name='Live'
+                    title='Sedang Berlangsung'
+                    nav='YoutubeScreen'
+                    refresh={false}
+                />
+
+                <HighlightContentProduct
+                    userProfileId={params.userId}
+                    productCategory='NEWEST_VIDEO'
+                    name='Video'
+                    title='Video Terbaru'
+                    nav='VideoScreen'
+                    refresh={false}
+                />
+            </ScrollView>
 
             <Popup {...popupProps} />
 

@@ -123,13 +123,21 @@ const WidgetMenuHome = ({ itemPerPage, onPress }) => {
                 onPress(menu);
 
                 if (menu.nav === '') return;
-                navigation.navigate(menu.nav, menu.params);
+
                 GALogEvent(menu.name, {
                   id: menu.code,
                   product_name: menu.name,
                   user_id: user.userId,
                   method: analyticMethods.viewAll,
                 });
+
+                if (menu.nav === 'modal') {
+                  // ganti ke modal show menu all
+                  navigation.navigate('MediaPlayerScreen', menu.params);
+                  return;
+                }
+
+                navigation.navigate(menu.nav, menu.params);
               }}
               style={{
                 width: `${widthPerMenu}%`,

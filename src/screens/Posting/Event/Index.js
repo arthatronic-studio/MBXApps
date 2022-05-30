@@ -1,107 +1,25 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {View} from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import React from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
 import Config from 'react-native-config';
 
-import {useLoading, usePopup, useColor, Header} from '@src/components';
-import Text from '@src/components/Text';
-import {TouchableOpacity} from '@src/components/Button';
+import {useColor, Header} from '@src/components';
 import Scaffold from '@src/components/Scaffold';
-import ListEvent from 'src/components/Posting/ListEvent';
-
-import Client from '@src/lib/apollo';
-import {queryContentProduct} from '@src/lib/query';
-import {shadowStyle} from '@src/styles';
-import {Divider, Row} from 'src/styled';
+import { Row} from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
+import ListContentProduct from 'src/components/Content/ListContentProduct';
 
 const EventScreen = ({navigation, route}) => {
-  const [state, changeState] = useState({
-    fallback: true,
-    listProduct: [],
-  });
+  const { title, userProfileId } = route.params;
 
-  const setState = obj => {
-    changeState({...state, ...obj});
-  };
-
-  // selector
   const user = useSelector(state => state['user.auth'].login.user);
-
-  const [popupProps, showPopup] = usePopup();
-  const [loadingProps, showLoading, hideLoading] = useLoading();
-
   const {Color} = useColor();
-
-  const ref = useRef();
-
-  useEffect(() => {
-    fecthData();
-  }, []);
-
-  const fecthData = async () => {
-    setState({
-      fallback: true,
-    });
-
-    const listProduct = await fetchContentProduct(
-      Config.PRODUCT_TYPE,
-      'EVENT',
-      '',
-    );
-
-    setState({
-      fallback: false,
-      listProduct,
-    });
-  };
-
-  const fetchContentProduct = async (
-    productType,
-    productCategory,
-    productSubCategory,
-  ) => {
-    const variables = {
-      page: 0,
-      itemPerPage: 6,
-    };
-
-    if (productType !== '') {
-      variables.productType = productType;
-    }
-
-    if (productCategory !== '') {
-      variables.productCategory = productCategory;
-    }
-
-    if (productSubCategory !== '') {
-      variables.productSubCategory = productSubCategory;
-    }
-
-    const result = await Client.query({
-      query: queryContentProduct,
-      variables,
-    });
-
-    if (
-      result &&
-      result.data &&
-      result.data.contentProduct &&
-      Array.isArray(result.data.contentProduct)
-    ) {
-      return result.data.contentProduct;
-    } else {
-      return [];
-    }
-  };
 
   return (
     <Scaffold
       header={
         <Header
-          title={route.params && route.params.title ? route.params.title : ''}
+          title={title}
           actions={
             (accessClient.UserGeneratedContent ||
             (user && user.isDirector === 1)) &&
@@ -119,10 +37,7 @@ const EventScreen = ({navigation, route}) => {
                 size={26}
                 onPress={() =>
                   navigation.navigate('CreateThreadScreen', {
-                    title:
-                      route.params && route.params.title
-                        ? route.params.title
-                        : '',
+                    title,
                     productType: Config.PRODUCT_TYPE,
                     productCategory: '',
                     productSubCategory: 'EVENT',
@@ -133,43 +48,11 @@ const EventScreen = ({navigation, route}) => {
           }
         />
       }
-      fallback={state.fallback}
-      empty={!state.fallback && state.listProduct.length === 0}
-      popupProps={popupProps}
-      loadingProps={loadingProps}>
-      {/* {user && user.isDirector === 1 && <Text
-                color={Color.textInput}
-                style={{backgroundColor: Color.primary, paddingTop: 2, paddingBottom: 6}}
-                onPress={() => navigation.navigate('CreateThreadScreen', {
-                  title: route.params && route.params.title ? route.params.title : '',
-                  productType: Config.PRODUCT_TYPE,
-                  productCategory: '',
-                  productSubCategory: 'EVENT',
-                })}
-              >
-                Buat
-            </Text>} */}
-
-      {/* <View style={{paddingHorizontal: 16, paddingTop: 16}}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('MainSearch')}
-                  style={{height: 50, width: '100%', borderRadius: 25, flexDirection: 'row', backgroundColor: Color.textInput, paddingHorizontal: 16, alignItems: 'center', ...shadowStyle}}
-                >
-                    <Ionicons name='search' size={22} color={Color.primary} />
-                    <Text style={{opacity: 0.6, paddingLeft: 12}}>Cari</Text>
-                </TouchableOpacity>
-            </View> */}
-
-      <ListEvent
-        showHeader={false}
-        showAll={false}
-        data={state.listProduct}
-        onPress={item => {
-          navigation.navigate('EventDetail', { item });
-        }}
-        style={{
-          paddingBottom: 48,
-        }}
+    >
+      <ListContentProduct
+        userProfileId={userProfileId}
+        productCategory='EVENT'
+        name='Event'
       />
     </Scaffold>
   );
