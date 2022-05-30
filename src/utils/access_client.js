@@ -30,6 +30,7 @@ const useDefaultDarkThemeCode = [
     'TRIBESXRRID',
 ];
 
+const isTribes = Config.INITIAL_CODE === 'TRIBESASIA';
 const isKomoto = listKomotoFamily.includes(Config.INITIAL_CODE);
 const isSabyan = Config.INITIAL_CODE === 'TRIBESXSABYAN';
 const isGofish = Config.INITIAL_CODE === 'TRIBESXGOFISH';
@@ -40,6 +41,7 @@ const isUnitedId = Config.INITIAL_CODE === 'TRIBESXUNITEDID';
 export const accessClient = {
     // state
     InitialCode: Config.INITIAL_CODE,
+    isTribes,
     isKomoto,
     isSabyan,
     isGofish,
@@ -75,19 +77,10 @@ export const accessClient = {
         showMenuHome: isKomoto || isUnitedId ? false : true,
         showWidgetBalance: isKomoto || isSabyan ? false : true,
         showBannerHeader: isKomoto || isSabyan ? false : true,
-        showListEmergency: isKomoto,
-        showListJob: isKomoto || isSabyan ? false : true,
-        showListPlace:
-            isKomoto ? true :
-            isSabyan ? false :
-            true,
         showListAuction: isKomoto || isSabyan ? false : true,
         showListSoonAuction: isKomoto || isSabyan ? false : true,
         showListPromo: isKomoto || isSabyan ? false : true,
         showListMusicNewer: isKomoto ? false : true,
-        showListYoutube:
-            isKomoto ? false :
-            isSabyan ? true : true,
         showListVideo:
             isKomoto ? false:
             isSabyan ? true : true,

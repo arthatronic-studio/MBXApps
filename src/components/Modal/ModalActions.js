@@ -65,7 +65,7 @@ const ModalActions = ({ visible, data, selected, adjust, onPress, onClose, child
       isVisible={visible}
       swipeDirection={['up', 'down']}
       onBackdropPress={() => { onClose() }}
-      onSwipeCancel={() => { onClose() }}
+      // onSwipeCancel={() => { onClose() }}
       style={{
         justifyContent: 'flex-end', // the keys of bottom half
         margin: 0,

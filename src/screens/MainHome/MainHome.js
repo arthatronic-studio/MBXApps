@@ -35,30 +35,20 @@ import {
 } from '@src/components';
 import ListAuction from 'src/components/Posting/ListAuction';
 import ListSoonAuction from 'src/components/Posting/ListSoonAuction';
-import ListNews from 'src/components/Posting/ListNews';
-import ListPlace from 'src/components/Posting/ListPlace';
-import ListEvent from 'src/components/Posting/ListEvent';
-import ListJob from 'src/components/Posting/ListJob';
 import {Divider, Circle, Container} from '@src/styled';
 import {playNotificationSounds} from '@src/utils/notificationSounds';
 import CarouselView from 'src/components/CarouselView';
 import Banner from 'src/components/Banner';
 import Client from '@src/lib/apollo';
-import {queryContentProduct} from '@src/lib/query';
-import {queryBannerList, queryPromoBanners} from '@src/lib/query/banner';
+import {queryBannerList} from '@src/lib/query/banner';
 import ModalPosting from './ModalPosting';
-import ListEmergency from 'src/components/Posting/ListEmergency';
-import {usePreviousState} from 'src/hooks';
 import MusikTerbaru from 'src/components/MusikTerbaru';
-import MondayAccoustic from './MondayAccoustic';
 import WidgetBalance from 'src/components/WidgetBalance';
 import WidgetMenuHome from './WidgetMenuHome';
 import PostingHeader from 'src/components/Posting/PostingHeader';
 import {shadowStyle} from 'src/styles';
 import Geolocation from 'react-native-geolocation-service';
 import {accessClient} from 'src/utils/access_client';
-import VideoCardList from 'src/components/VideoCardList';
-import {trackPlayerPlay} from 'src/utils/track-player-play';
 import FloatingMusicPlayer from 'src/components/FloatingMusicPlayer';
 import TrackPlayer, {
   Event,
@@ -68,6 +58,7 @@ import {analyticMethods, GALogEvent} from 'src/utils/analytics';
 import {getSizeByRatio} from 'src/utils/get_ratio';
 import MusikAlbum from 'src/components/MusikAlbum';
 import { fetchContentProduct } from 'src/api/content';
+import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
 
 let tempShowPopupAds = true;
 
@@ -85,20 +76,8 @@ const MainHome = ({navigation, route}) => {
 
   const [loadingSoonAuction, setLoadingSoonAuction] = useState(true);
 
-  const [loadingEmergency, setLoadingEmergencyArea] = useState(true);
-  const [listEmergencyArea, setListEmergencyArea] = useState([]);
-
-  const [loadingPosting, setLoadingPosting] = useState(true);
-  const [listPosting, setListPosting] = useState([]);
-
   const [loadingNearbyPlace, setLoadingNearbyPlace] = useState(true);
   const [listNearbyPlace, setListNearbyPlace] = useState([]);
-
-  const [loadingEvent, setLoadingEvent] = useState(true);
-  const [listEvent, setListEvent] = useState([]);
-
-  const [loadingJobs, setLoadingJobs] = useState(true);
-  const [listJobs, setListJobs] = useState([]);
 
   const [loadingBanner, setLoadingBanner] = useState(true);
   const [listBanner, setListBanner] = useState([]);
@@ -250,25 +229,9 @@ const MainHome = ({navigation, route}) => {
   };
 
   const fetchData = async () => {
-    const resultEmergency = await fetchContentProduct({ productCategory: 'EMERGENCY' });
-    setListEmergencyArea(resultEmergency.data);
-    setLoadingEmergencyArea(false);
-
-    const resultPosting = await fetchContentProduct({ productCategory: 'POSTING' });
-    setListPosting(resultPosting.data);
-    setLoadingPosting(false);
-
     const resultNearbyPlace = await fetchContentProduct({ productCategory: 'NEARBY_PLACE' });
     setListNearbyPlace(resultNearbyPlace.data);
     setLoadingNearbyPlace(false);
-
-    const resultEvent = await fetchContentProduct({ productCategory: 'EVENT' });
-    setListEvent(resultEvent.data);
-    setLoadingEvent(false);
-
-    const resultJobs = await fetchContentProduct({ productCategory: 'JOBS' });
-    setListJobs(resultJobs.data);
-    setLoadingJobs(false);
 
     // not yet
     setLoadingAuction(false);
@@ -651,8 +614,8 @@ const MainHome = ({navigation, route}) => {
 
           {accessClient.MainHome.showListAuction && (
             <ListAuction
-              data={listEvent}
-              loading={loadingAuction}
+              data={[]}
+              loading={false}
               horizontal
               showHeader
               onPress={item => {
@@ -664,8 +627,8 @@ const MainHome = ({navigation, route}) => {
 
           {accessClient.MainHome.showListSoonAuction && (
             <ListSoonAuction
-              data={listEvent}
-              loading={loadingSoonAuction}
+              data={[]}
+              loading={false}
               horizontal
               showHeader
               onPress={item => {
@@ -675,31 +638,8 @@ const MainHome = ({navigation, route}) => {
             />
           )}
 
-          {accessClient.MainHome.showListEmergency && (
-            <ListEmergency
-              data={listEmergencyArea}
-              loading={loadingEmergency}
-              horizontal
-              showHeader
-              onPress={item => {
-                navigation.navigate('EmergencyDetail', {item});
-              }}
-              style={{paddingLeft: 8}}
-            />
-          )}
-
-          <ListNews
-            data={listPosting}
-            loading={loadingPosting}
-            horizontal
-            showHeader
-            onPress={item => {
-              navigation.navigate('NewsDetail', {item});
-            }}
-            style={{paddingLeft: 8}}
-          />
-
-          {accessClient.MainHome.showListPromo && (
+          {/* hide banner promo */}
+          {/* {accessClient.MainHome.showListPromo && (
             <View style={{marginBottom: 40}}>
               <PostingHeader title="Promo Untukmu" showSeeAllText={false} />
               <Divider height={8} />
@@ -768,44 +708,47 @@ const MainHome = ({navigation, route}) => {
                 })}
               </CarouselView>
             </View>
-          )}
+          )} */}
 
-          {accessClient.MainHome.showListPlace && (
-            <ListPlace
-              data={listNearbyPlace}
-              loading={loadingNearbyPlace}
-              horizontal
-              showHeader
-              onPress={item => {
-                navigation.navigate('PlaceDetail', {item});
-              }}
-              style={{paddingLeft: 8}}
-            />
-          )}
-
-          <ListEvent
-            data={listEvent}
-            loading={loadingEvent}
-            horizontal
-            showHeader
-            onPress={item => {
-              navigation.navigate('EventDetail', {item});
-            }}
-            style={{paddingLeft: 8}}
+          <HighlightContentProduct
+            productCategory='EMERGENCY'
+            name='Help Me'
+            title='Help Me'
+            nav='EmergencyScreen'
+            refresh={refreshing}
           />
 
-          {accessClient.MainHome.showListJob && (
-            <ListJob
-              data={listJobs}
-              loading={loadingJobs}
-              horizontal
-              showHeader
-              onPress={item => {
-                navigation.navigate('JobDetail', {item});
-              }}
-              style={{paddingLeft: 8}}
-            />
-          )}
+          <HighlightContentProduct
+            productCategory='POSTING'
+            name='Artikel'
+            title='Postingan Artikel'
+            nav='NewsScreen'
+            refresh={refreshing}
+          />
+
+          <HighlightContentProduct
+            productCategory='NEARBY_PLACE'
+            name='Tempat'
+            title='Tempat Favorit'
+            nav='PlaceScreen'
+            refresh={refreshing}
+          />
+
+          <HighlightContentProduct
+            productCategory='EVENT'
+            name='Event'
+            title='Event Terbaru'
+            nav='EventScreen'
+            refresh={refreshing}
+          />
+          
+          <HighlightContentProduct
+            productCategory='JOBS'
+            name='Loker'
+            title='Lowongan Pekerjaan'
+            nav='JobScreen'
+            refresh={refreshing}
+          />
 
           {accessClient.MainHome.showListMusicNewer && <MusikTerbaru />}
 
@@ -815,15 +758,23 @@ const MainHome = ({navigation, route}) => {
 
           <Divider />
 
-          {accessClient.MainHome.showListYoutube && <MondayAccoustic />}
+          <HighlightContentProduct
+            productCategory='YOUTUBE_VIDEO'
+            name='Live'
+            title='Sedang Berlangsung'
+            nav='YoutubeScreen'
+            refresh={refreshing}
+          />
 
-          {accessClient.MainHome.showListVideo && (
-            <VideoCardList
-              title='INUL & IPUL'            
-              productCategory='NEWEST_VIDEO'
-              onPress={(item) => navigation.navigate('VideoDetail', { item })}
-            />
-          )}
+          <Divider />
+
+          <HighlightContentProduct
+            productCategory='NEWEST_VIDEO'
+            name='Video'
+            title='Video Terbaru'
+            nav='VideoScreen'
+            refresh={refreshing}
+          />
 
           {accessClient.MainHome.showListEbookNewer && (
             <View style={{marginTop: 32}}>
