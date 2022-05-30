@@ -4,24 +4,22 @@ import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import {
     Header,
     Text,
     Popup, usePopup,
     Loading, useLoading,
     Submit,
-    useColor
+    useColor,
+    Scaffold
 } from '@src/components';
 
 import { queryJoinCommunity } from 'src/lib/query';
 import ModalSelectChapter from 'src/components/Modal/ModalSelectChapter'
 import validate from '@src/lib/validate';
 import Client from '@src/lib/apollo';
-
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
+import ModalActions from 'src/components/Modal/ModalActions';
 
 const LabelInput = Styled(View)`
   width: 100%;
@@ -49,6 +47,13 @@ const CustomTouch = Styled(TouchableOpacity)`
     backgroundColor: transparent;
 `;
 
+const options = {
+    mediaType: 'photo',
+    maxWidth: 640,
+    maxHeight: 640,
+    quality: 1,
+    includeBase64: true,
+}
 
 const JoinCommunity = ({ navigation, route }) => {
     const { height } = useWindowDimensions();
@@ -104,6 +109,8 @@ const JoinCommunity = ({ navigation, route }) => {
     };
 
     const [selectedChapter, setSelectedChapter] = useState();
+    const [modalAddPhoto, setModalAddPhoto] = useState(false);
+    const [modalNumberPhoto, setModalNumberPhoto] = useState(0);
 
     const [thumbImage, setThumbImage] = useState('');
     const [mimeImage, setMimeImage] = useState('image/jpeg');
@@ -221,11 +228,59 @@ const JoinCommunity = ({ navigation, route }) => {
         });
     }
 
+    const onPhotoSelected = ({ base64, type }) => {
+        switch (modalNumberPhoto) {
+            case 1:
+                setThumbImage(base64);
+                setMimeImage(type);
+                setModalNumberPhoto(0);
+                break;
+            case 2:
+                setThumbImage2(base64);
+                setMimeImage2(type);
+                setModalNumberPhoto(0);
+                break;
+            case 3:
+                setThumbImage3(base64);
+                setMimeImage3(type);
+                setModalNumberPhoto(0);
+                break;
+            case 4:
+                setThumbImage4(base64);
+                setMimeImage4(type);
+                setModalNumberPhoto(0);
+                break;
+            case 5:
+                setThumbImage5(base64);
+                setMimeImage5(type);
+                setModalNumberPhoto(0);
+                break;
+            case 6:
+                setThumbImage6(base64);
+                setMimeImage6(type);
+                setModalNumberPhoto(0);
+                break;
+            case 7:
+                setThumbImage7(base64);
+                setMimeImage7(type);
+                setModalNumberPhoto(0);
+                break;
+            case 8:
+                setThumbImage8(base64);
+                setMimeImage8(type);
+                setModalNumberPhoto(0);
+                break;
+            default:
+                break;
+        }
+    }
+
     return (
-        <MainView style={{backgroundColor: Color.theme}}>
-            <Header
-                title="Gabung Komunitas"
-            />    
+        <Scaffold
+            headerTitle='Gabung Komunitas'
+            loadingProps={loadingProps}
+            popupProps={popupProps}
+        >
             <ScrollView>
                 <View style={{paddingTop: 35, paddingBottom: 16, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center'}}>
                     <View style={{width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', borderWidth: 4, borderColor: Color.grayLight, marginRight: 8}}>
@@ -303,7 +358,7 @@ const JoinCommunity = ({ navigation, route }) => {
                             <EmailRoundedView>
                                 <CustomTextInput 
                                     placeholder='1990'
-                                    keyboardType='default'
+                                    keyboardType='numeric'
                                     placeholderTextColor={Color.gray}
                                     underlineColorAndroid='transparent'
                                     autoCorrect={false}
@@ -311,7 +366,6 @@ const JoinCommunity = ({ navigation, route }) => {
                                     selectionColor={Color.text}
                                     value={userData.carYear}
                                     onBlur={() => isValueError('carYear')}
-                                    keyboardType='numeric'
                                     style={{color: Color.text}}
                                 />
                             </EmailRoundedView>
@@ -398,25 +452,15 @@ const JoinCommunity = ({ navigation, route }) => {
                         <Text size={11} color={Color.text} align='left' >Foto Selfie</Text>
                         <TouchableOpacity
                             onPress={() => {
-                                const options = {
-                                    mediaType: 'photo',
-                                    maxWidth: 640,
-                                    maxHeight: 640,
-                                    quality: 1,
-                                    includeBase64: true,
-                                }
-
-                                launchImageLibrary(options, (callback) => {
-                                    setThumbImage6(callback.base64);
-                                    setMimeImage6(callback.type);
-                                })
+                                setModalAddPhoto(true);
+                                setModalNumberPhoto(6);
                             }}
                             style={{width: 120, height: 120, borderRadius: 16, marginVertical: 10, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
                         >
                             <Feather name='camera' size={32} style={{marginBottom: 4}} color={Color.gray} />
                             <Text size={10} color={Color.gray}>Tambah Foto</Text>
                         </TouchableOpacity>
-                        <Text size={11} color={Color.gray} align='left' >Foto selfie dengan jelas dan tidak blur</Text>
+                        <Text size={11} color={Color.gray} align='left'>Foto selfie dengan jelas dan tidak blur</Text>
                     </View>
 
 
@@ -434,18 +478,8 @@ const JoinCommunity = ({ navigation, route }) => {
                         <Text size={11} color={Color.text} align='left' >Foto Mobil</Text>
                         <TouchableOpacity
                             onPress={() => {
-                                const options = {
-                                    mediaType: 'photo',
-                                    maxWidth: 640,
-                                    maxHeight: 640,
-                                    quality: 1,
-                                    includeBase64: true,
-                                }
-
-                                launchImageLibrary(options, (callback) => {
-                                    setThumbImage(callback.base64);
-                                    setMimeImage(callback.type);
-                                })
+                                setModalAddPhoto(true);
+                                setModalNumberPhoto(1);
                             }}
                             style={{width: 120, height: 120, borderRadius: 16, marginVertical: 10, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
                         >
@@ -470,18 +504,8 @@ const JoinCommunity = ({ navigation, route }) => {
                         <Text size={11} color={Color.text} align='left' >Foto Bagian Depan Mobil</Text>
                         <TouchableOpacity
                             onPress={() => {
-                                const options = {
-                                    mediaType: 'photo',
-                                    maxWidth: 640,
-                                    maxHeight: 640,
-                                    quality: 1,
-                                    includeBase64: true,
-                                }
-
-                                launchImageLibrary(options, (callback) => {
-                                    setThumbImage2(callback.base64);
-                                    setMimeImage2(callback.type);
-                                })
+                                setModalAddPhoto(true);
+                                setModalNumberPhoto(2);
                             }}
                             style={{width: 120, height: 120, borderRadius: 16, marginVertical: 10, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
                         >
@@ -505,18 +529,8 @@ const JoinCommunity = ({ navigation, route }) => {
                         <Text size={11} color={Color.text} align='left' >Foto Bagian Samping Mobil</Text>
                         <TouchableOpacity
                             onPress={() => {
-                                const options = {
-                                    mediaType: 'photo',
-                                    maxWidth: 640,
-                                    maxHeight: 640,
-                                    quality: 1,
-                                    includeBase64: true,
-                                }
-
-                                launchImageLibrary(options, (callback) => {
-                                    setThumbImage3(callback.base64);
-                                    setMimeImage3(callback.type);
-                                })
+                                setModalAddPhoto(true);
+                                setModalNumberPhoto(3);
                             }}
                             style={{width: 120, height: 120, borderRadius: 16, marginVertical: 10, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
                         >
@@ -540,18 +554,8 @@ const JoinCommunity = ({ navigation, route }) => {
                         <Text size={11} color={Color.text} align='left' >Foto Bagian Belakang Mobil</Text>
                         <TouchableOpacity
                             onPress={() => {
-                                const options = {
-                                    mediaType: 'photo',
-                                    maxWidth: 640,
-                                    maxHeight: 640,
-                                    quality: 1,
-                                    includeBase64: true,
-                                }
-
-                                launchImageLibrary(options, (callback) => {
-                                    setThumbImage4(callback.base64);
-                                    setMimeImage4(callback.type);
-                                })
+                                setModalAddPhoto(true);
+                                setModalNumberPhoto(4);
                             }}
                             style={{width: 120, height: 120, borderRadius: 16, marginVertical: 10, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
                         >
@@ -575,18 +579,8 @@ const JoinCommunity = ({ navigation, route }) => {
                         <Text size={11} color={Color.text} align='left' >Foto SIM</Text>
                         <TouchableOpacity
                             onPress={() => {
-                                const options = {
-                                    mediaType: 'photo',
-                                    maxWidth: 640,
-                                    maxHeight: 640,
-                                    quality: 1,
-                                    includeBase64: true,
-                                }
-
-                                launchImageLibrary(options, (callback) => {
-                                    setThumbImage7(callback.base64);
-                                    setMimeImage7(callback.type);
-                                })
+                                setModalAddPhoto(true);
+                                setModalNumberPhoto(7);
                             }}
                             style={{width: 120, height: 120, borderRadius: 16, marginVertical: 10, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
                         >
@@ -611,18 +605,8 @@ const JoinCommunity = ({ navigation, route }) => {
                         <Text size={11} color={Color.text} align='left' >Foto STNK</Text>
                         <TouchableOpacity
                             onPress={() => {
-                                const options = {
-                                    mediaType: 'photo',
-                                    maxWidth: 640,
-                                    maxHeight: 640,
-                                    quality: 1,
-                                    includeBase64: true,
-                                }
-
-                                launchImageLibrary(options, (callback) => {
-                                    setThumbImage8(callback.base64);
-                                    setMimeImage8(callback.type);
-                                })
+                                setModalAddPhoto(true);
+                                setModalNumberPhoto(8);
                             }}
                             style={{width: 120, height: 120, borderRadius: 16, marginVertical: 10, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
                         >
@@ -647,18 +631,8 @@ const JoinCommunity = ({ navigation, route }) => {
                         <Text size={11} color={Color.text} align='left' >Foto Bukti Pembayaran</Text>
                         <TouchableOpacity
                             onPress={() => {
-                                const options = {
-                                    mediaType: 'photo',
-                                    maxWidth: 640,
-                                    maxHeight: 640,
-                                    quality: 1,
-                                    includeBase64: true,
-                                }
-
-                                launchImageLibrary(options, (callback) => {
-                                    setThumbImage5(callback.base64);
-                                    setMimeImage5(callback.type);
-                                })
+                                setModalAddPhoto(true);
+                                setModalNumberPhoto(5);
                             }}
                             style={{width: 120, height: 120, borderRadius: 16, marginVertical: 10, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
                         >
@@ -685,15 +659,10 @@ const JoinCommunity = ({ navigation, route }) => {
                 buttonColor={Color.primary}
                 type='bottomSingleButton'
                 buttonBorderTopWidth={0}
-                style={{backgroundColor: Color.theme, paddingTop: 25, paddingBottom: 25}}
                 onPress={()=>{
-                    onSubmit()
+                    onSubmit();
                 }}
             />
-
-            <Loading {...loadingProps} />
-
-            <Popup {...popupProps} />
 
             <ModalSelectChapter
                 ref={modalSelectChapterRef}
@@ -704,7 +673,53 @@ const JoinCommunity = ({ navigation, route }) => {
                     modalSelectChapterRef.current.close();
                 }}
             />
-        </MainView>
+
+            <ModalActions
+                visible={modalAddPhoto}
+                onClose={() => {
+                    setModalAddPhoto(false);
+                    setModalNumberPhoto(0);
+                }}
+                data={[
+                    {
+                        id: 1,
+                        name: 'Buka Kamera',
+                        onPress: () => {
+                            launchCamera(options, (callback) => {
+                                if (callback.didCancel) {}
+                                else if (callback.errorCode) {}
+                                else {
+                                    onPhotoSelected({
+                                        base64: callback.base64,
+                                        type: callback.type
+                                    });
+                                }
+
+                                setModalAddPhoto(false);
+                            });
+                        },
+                    },
+                    {
+                        id: 2,
+                        name: 'Buka Galeri',
+                        onPress: () => {
+                            launchImageLibrary(options, (callback) => {
+                                if (callback.didCancel) {}
+                                else if (callback.errorCode) {}
+                                else {
+                                    onPhotoSelected({
+                                        base64: callback.base64,
+                                        type: callback.type
+                                    });
+                                }
+
+                                setModalAddPhoto(false);
+                            });
+                        },
+                    }
+                ]}
+            />
+        </Scaffold>
     )
 }
 

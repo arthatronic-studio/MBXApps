@@ -59,9 +59,9 @@ export const accessClient = {
         isSabyan ? 'primary' :
         'primarySoft',
     UserGeneratedContent:
-        isKomoto ? true :
-        isSabyan ? false :
-        true,
+        isKomoto ? 'ONLY_MEMBER' :
+        isSabyan ? 'ONLY_ADMIN' :
+        'ALL_USER',
     // screen
     SplashScreen: {
         backgroundColor:

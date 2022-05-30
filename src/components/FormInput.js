@@ -25,6 +25,7 @@ const propTypes = {
     secureTextEntry: PropTypes.bool,
     suffixIcon: PropTypes.node,
     prefixIcon: PropTypes.node,
+    textinputProps: PropTypes.object,
 };
 
 const defaultProps = {
@@ -44,10 +45,11 @@ const defaultProps = {
     editable: true,
     format: '', // currency
     style: {},
+    textinputProps: {},
 };
 
 const FormInput = forwardRef((props, ref) => {
-    const { label, placeholder, onChangeText, value, onBlur, returnKeyType, onSubmitEditing, keyboardType, error, secureTextEntry, prefixIcon, suffixIcon, multiline, editable, format, style } = props;
+    const { label, placeholder, onChangeText, value, onBlur, returnKeyType, onSubmitEditing, keyboardType, error, secureTextEntry, prefixIcon, suffixIcon, multiline, editable, format, style, textinputProps } = props;
 
     const { Color } = useColor();
 
@@ -146,6 +148,7 @@ const FormInput = forwardRef((props, ref) => {
                             secureTextEntry={secureTextEntry}
                             multiline={multiline}
                             editable={editable}
+                            {...textinputProps}
                         />
                     }
 

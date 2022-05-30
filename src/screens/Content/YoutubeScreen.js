@@ -42,7 +42,7 @@ const YoutubeScreen = ({ navigation, route }) => {
                       color={Color.primary}
                       size={26}
                       onPress={() => {
-                        const isJoinMember = user && user.organizationId;;
+                        const isJoinMember = user && user.organizationId;
                         if (!isJoinMember) {
                           showLoading('error', 'Fitur ini hanya untuk anggota komunitas');
                           return;

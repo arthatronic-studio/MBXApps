@@ -15,14 +15,17 @@ const EventScreen = ({navigation, route}) => {
   const user = useSelector(state => state['user.auth'].login.user);
   const {Color} = useColor();
 
+  let canGeneratedContent = accessClient.UserGeneratedContent === 'ALL_USER';
+  if (accessClient.UserGeneratedContent === 'ONLY_ADMIN' && user && user.isDirector === 1) canGeneratedContent = true;
+  else if (accessClient.UserGeneratedContent === 'ONLY_MEMBER' && user && user.organizationId) canGeneratedContent = true;
+
   return (
     <Scaffold
       header={
         <Header
           title={title}
           actions={
-            (accessClient.UserGeneratedContent ||
-            (user && user.isDirector === 1)) &&
+            canGeneratedContent &&
             <Row justify="center" align="center">
               {/* <Ionicons
                       name='search'
