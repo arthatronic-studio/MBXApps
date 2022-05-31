@@ -78,16 +78,14 @@ const MyShop = ({ navigation,}) => {
           > 
             <Image source={{ uri: data.profileImg }} style={{width: '100%', height: '100%', borderRadius: 4}} />
           </TouchableOpacity>
-
-          
         </View>
 
         <View style={{marginTop: imageStoreSize / 1.4, backgroundColor: Color.theme, paddingBottom: 32, paddingLeft: 16, height: 60 }}>
           <Text align='left' type='bold' size={18}>{data.name}</Text>
           <Row style={{marginVertical: 8,}}>
-              <Row>
+              <Row style>
                 <Entypo name={'location-pin'} size={12} style={{color: Color.secondary, paddingVertical: 1, paddingHorizontal: 2}}/>
-                <Text size={10} numberOfLines={1} style={{color: Color.secondary, width: '30%', marginRight: 10}}>{data.cityName? data.cityName : 'Belum Ada Lokasi yang jelas gimana'}</Text>
+                <Text size={10} numberOfLines={1} style={{color: Color.secondary, marginRight: 10}}>{data.cityName? data.cityName : 'Belum Ada Lokasi yang jelas gimana'}</Text>
               </Row>
               <FontAwesome name={'phone'} size={12} style={{color: Color.secondary, paddingVertical: 1, marginHorizontal: 8}}/>
               <Text style={{fontSize: 10, textAlign: 'left', width: '25%'}}>{data.noTelp}</Text>
