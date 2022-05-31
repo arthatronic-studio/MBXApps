@@ -19,6 +19,7 @@ import { FormatMoney } from 'src/utils';
 import Client from '@src/lib/apollo';
 import { shadowStyle } from 'src/styles';
 import ScreenEmptyData from '../Modal/ScreenEmptyData';
+import { initialItemState } from 'src/utils/constants';
 
 const propTypes = {
   ListHeaderComponent: PropTypes.func,
@@ -33,38 +34,49 @@ const CardListLelang = ({ ListHeaderComponent, prodStatus }) => {
   const {Color} = useColor();
   const isFocused = useIsFocused();
 
-  const [list, setList] = useState({
-    data: [],
-    loading: false,
-    message: 'error',
-  });
+  const [list, setList] = useState(initialItemState);
 
   useEffect(() => {
     fetchListProduct();
   }, []);
 
+  useEffect(() => {
+    if (list.loadNext && list.page !== -1) {
+      fetchListProduct();
+    }
+  }, [list.loadNext]);
+
   const fetchListProduct = () => {
     const variables = {
       type: "HOMEPAGE",
       status: prodStatus,
+      page: list.page + 1,
+      limit: 10,
     };
 
     Client.query({
       query: queryGetAuction,
       variables,
     }).then(res => {
-      console.log('aku adalah', res.data.auctionProduct);
-
-      let newData = [];
-      if (res.data.auctionProduct) {
-        newData = res.data.auctionProduct;
+      console.log('res get auction ', res);
+      let data = list.data;
+      let page = list.page;
+      let message = '';
+      if (Array.isArray(res.data.auctionProduct) && res.data.auctionProduct.length > 0) {
+        data = data.concat(res.data.auctionProduct);
+        page++;
+      } else {
+        message = 'Not ok, silakan coba kembali';
       }
 
       setList({
         ...list,
-        data: newData,
+        data,
+        page,
         loading: false,
-        message: ''
+        loadNext: false,
+        message,
+        refresh: false,
       });
     })
     .catch((err) => {
@@ -73,7 +85,9 @@ const CardListLelang = ({ ListHeaderComponent, prodStatus }) => {
       setList({
         ...list,
         loading: false,
-        message: ''
+        loadNext: false,
+        message: 'Terjadi kesalahan',
+        refresh: false,
       });
     })
   }
@@ -171,7 +185,7 @@ const CardListLelang = ({ ListHeaderComponent, prodStatus }) => {
     <FlatList
       showsHorizontalScrollIndicator={false}
       numColumns={2}
-      data={list.data.slice(0,6)}
+      data={list.data}
       renderItem={renderItem}
       keyExtractor={(item, index) => item.id + index.toString()}
       ListHeaderComponent={() => renderHeader()}
@@ -182,6 +196,8 @@ const CardListLelang = ({ ListHeaderComponent, prodStatus }) => {
         !list.loading && list.data.length === 0 &&
           <ScreenEmptyData message='Lelang belum tersedia' />
       }
+      onEndReachedThreshold={0.3}
+      onEndReached={() => setList({ ...list, loadNext: true })}
     />
   );
 };

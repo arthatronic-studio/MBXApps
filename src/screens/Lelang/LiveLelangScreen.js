@@ -16,11 +16,9 @@ const LiveLelangScreen = ({route}) => {
         />
       }
     >
-      <View style={{width: '100%', height: '100%'}}>
-        <CardListLelang
-          prodStatus={route.params.prodStatus}
-        />
-      </View>
+      <CardListLelang
+        prodStatus={route.params.prodStatus}
+      />
     </Scaffold>
   );
 };

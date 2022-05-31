@@ -366,8 +366,21 @@ const UserProfileScreen = ({ navigation, route }) => {
                 {userContent &&
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16}}>
                         <View style={{flex: 4, flexDirection: 'row', alignItems: 'center'}}>
-                            <View>
-                                <Ionicons name='person-circle' color={Color.primary} size={56} />
+                            <View
+                                style={{
+                                    height: 56,
+                                    aspectRatio: 1,
+                                }}
+                            >
+                                <Image
+                                    source={{ uri: userContent.image }}
+                                    style={{
+                                        height: '100%',
+                                        width: '100%',
+                                        borderRadius: 28,
+                                        backgroundColor: Color.border
+                                    }}
+                                />
                             </View>
                             <View style={{marginLeft: 8}}>
                                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -458,6 +471,7 @@ const UserProfileScreen = ({ navigation, route }) => {
                     title='Sedang Berlangsung'
                     nav='YoutubeScreen'
                     refresh={false}
+                    style={{paddingHorizontal: 0}}
                 />
 
                 <HighlightContentProduct
@@ -467,6 +481,7 @@ const UserProfileScreen = ({ navigation, route }) => {
                     title='Video Terbaru'
                     nav='VideoScreen'
                     refresh={false}
+                    style={{paddingHorizontal: 0}}
                 />
             </ScrollView>
 
