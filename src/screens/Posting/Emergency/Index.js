@@ -12,6 +12,7 @@ import {
 } from '@src/components';
 import Scaffold from '@src/components/Scaffold';
 import ListContentProduct from 'src/components/Content/ListContentProduct';
+import { accessClient } from 'src/utils/access_client';
 
 const EmergencyScreen = ({ navigation, route }) => {
     const { title, userProfileId } = route.params;

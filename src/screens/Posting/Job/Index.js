@@ -10,6 +10,7 @@ import {
 import Scaffold from '@src/components/Scaffold';
 import { Row } from 'src/styled';
 import ListContentProduct from 'src/components/Content/ListContentProduct';
+import { accessClient } from 'src/utils/access_client';
 
 const JobScreen = ({ navigation, route }) => {
     const { title, userProfileId } = route.params;
