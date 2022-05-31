@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
 
 import {Text, useColor} from '@src/components';
 import YoutubePlayer from 'react-native-youtube-iframe';
@@ -22,6 +23,8 @@ const CardComponentYoutube = ({ item, name }) => {
   const {Color} = useColor();
   const {width} = useWindowDimensions();
   const user = useSelector(state => state['user.auth'].login.user);
+  const navigation = useNavigation();
+
   const [beforePlay, setBeforePlay] = useState(true);
   const [playing, setPlaying] = useState(false);
 
@@ -51,19 +54,19 @@ const CardComponentYoutube = ({ item, name }) => {
 
   return (
     <View
-      style={{paddingHorizontal: 6, marginBottom: 16}}
+      style={{paddingHorizontal: 0, marginBottom: 16}}
     >
       <View
         style={{
           backgroundColor: Color.border,
-          width: width - 32,
+          width: width,
           aspectRatio: 16/9
         }}
       >
         <YoutubePlayer
           ref={youtubeRef}
-          width={width - 32}
-          height={getSizeByRatio({ width: width - 32, ratio: 9/16 }).height}
+          width={width}
+          height={getSizeByRatio({ width: width, ratio: 9/16 }).height}
           play={playing}
           videoId={item.productName}
           onChangeState={onStateChange}
@@ -73,15 +76,15 @@ const CardComponentYoutube = ({ item, name }) => {
       <TouchableOpacity
         onPress={() => {}}
         style={{
-          width: width - 32,
+          width: width,
           height:
             beforePlay ?
-              getSizeByRatio({ width: (width - 32) / 2.4, ratio: 9/16 }).height
+              getSizeByRatio({ width: width / 2.4, ratio: 9/16 }).height
             :
             playing ?
-              getSizeByRatio({ width: (width - 32) / 3, ratio: 9/16 }).height
+              getSizeByRatio({ width: width / 3, ratio: 9/16 }).height
             :
-              getSizeByRatio({ width: (width - 32) / 1.4, ratio: 9/16 }).height,
+              getSizeByRatio({ width: width / 1.4, ratio: 9/16 }).height,
           position: 'absolute',
           top: 0,
           left: 6,
@@ -89,6 +92,45 @@ const CardComponentYoutube = ({ item, name }) => {
         }}
       >
 
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('UserProfileScreen', { userId: item.ownerId })
+        }}
+        style={{flexDirection:'row', padding: 8}}
+      >
+        <Image
+          source={{ uri: item.avatar }}
+          style={{flex: 1, aspectRatio: 1, borderRadius: 50, backgroundColor: Color.border}}
+        />
+
+        <View style={{flex: 9, paddingLeft: 8, justifyContent: 'space-between'}}>
+          <Text
+            align="left"
+            type="bold"
+            numberOfLines={1}
+            style={{
+              marginBottom: 4
+            }}
+          >
+            {item.productDescription}
+          </Text>
+          <Text
+            align="left"
+            size={12}
+            color={Color.gray}
+            numberOfLines={2}
+          >
+            {item.fullname}
+          </Text>
+        </View>
+        {/* <Entypo
+            name={'dots-three-vertical'}
+            color={Color.text}
+            size={12}
+            style={{paddingLeft: 40}}
+          /> */}
       </TouchableOpacity>
     </View>
   );

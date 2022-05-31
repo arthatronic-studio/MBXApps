@@ -47,6 +47,9 @@ const ModalNominalPicker = forwardRef((props, ref) => {
 
   return (
     <Modalize
+      scrollViewProps={{ 
+        keyboardShouldPersistTaps: 'handled'
+       }}
       ref={combinedRef}
       withHandle={false}
       adjustToContentHeight

@@ -60,12 +60,13 @@ const CircleSend = Styled(TouchableOpacity)`
   alignItems: center;
 `;
 const ChatDetailBuyer = ({navigation, route}) => {
-  const {id, merchant, users, bodyTagged} = route.params;
+  const {id, merchant, users, bodyTagged, bodyCreateRoom, bodyGetRoom} =
+    route.params;
   const {Color} = useColor();
   const [roomId, setRoomId] = useState(id);
   const user = useSelector(state => state['user.auth'].login.user);
   const [userTarget, setUserTarget] = useState(
-    users.find(item => item.user_id != user.userId),
+    users && users.find(item => item.user_id != user.userId),
   );
   const {width, height} = useWindowDimensions();
   const [message, setMessage] = useState('');
@@ -75,34 +76,81 @@ const ChatDetailBuyer = ({navigation, route}) => {
   const [tagged, setTagged] = useState(bodyTagged);
 
   const create_message = () => {
-    if (tagged) create_flag_item();
-    const community_chat_user_params = [
-      {user_id: user.userId, room_type: 'ECOMMERCE', room_user_type: 'USER'},
-      {
-        user_id: userTarget.user_id,
-        room_type: 'ECOMMERCE',
-        room_user_type: 'MERCHANT',
-      },
-    ];
-    const body = {
-      community_chat_user_params: community_chat_user_params,
-      chat_room_id: roomId,
-      chat_message: message,
-      user_id: user.userId,
-      chat_type: 'TEXT',
-    };
-    currentSocket.emit('create_community_chat_message', body);
-    console.log(body, 'body');
+    if (roomId) {
+      console.log("siniii room id");
+      if (tagged) create_flag_item(tagged);
+      const community_chat_user_params = [
+        {user_id: user.userId, room_type: 'ECOMMERCE', room_user_type: 'USER'},
+        {
+          user_id: userTarget.user_id,
+          room_type: 'ECOMMERCE',
+          room_user_type: 'MERCHANT',
+        },
+      ];
+      const body = {
+        community_chat_user_params: community_chat_user_params,
+        chat_room_id: roomId,
+        chat_message: message,
+        user_id: user.userId,
+        chat_type: 'TEXT',
+      };
+      currentSocket.emit('create_community_chat_message', body);
+      console.log(body, 'body');
+    } else {
+      console.log("siniii gaada id");
+      currentSocket.on('get_community_chat_room_id', res => {
+        console.log('get_community_chat_room_id detail', res);
+        if (res.data.chat_room_id) {
+          setUserTarget(
+            res.data.users.find(item => item.user_id != user.userId),
+          );
+          setRoomId(res.data.chat_room_id);
+          setTagged({...tagged, chat_room_id: res.data.chat_room_id});
+          if (tagged) create_flag_item({...tagged, chat_room_id: res.data.chat_room_id});
+          const community_chat_user_params = [
+            {
+              user_id: user.userId,
+              room_type: 'ECOMMERCE',
+              room_user_type: 'USER',
+            },
+            {
+              user_id: res.data.users.find(item => item.user_id != user.userId).user_id,
+              room_type: 'ECOMMERCE',
+              room_user_type: 'MERCHANT',
+            },
+          ];
+          const body = {
+            community_chat_user_params: community_chat_user_params,
+            chat_room_id: res.data.chat_room_id,
+            chat_message: message,
+            user_id: user.userId,
+            chat_type: 'TEXT',
+          };
+          currentSocket.emit('community_chat_message', {chat_room_id: res.data.chat_room_id});
+          currentSocket.emit('create_community_chat_message', body);
+          console.log(body, 'body');
+          currentSocket.off('get_community_chat_room_id');
+        }
+      });
+      create_room();
+    }
     setMessage('');
   };
 
-  const create_flag_item = () => {
+  const create_room = () => {
+    currentSocket.emit('create_community_chat_room', bodyCreateRoom);
+    currentSocket.emit('get_community_chat_room_id', bodyGetRoom);
+  };
+
+  const create_flag_item = (tagged) => {
     currentSocket.emit('create_community_chat_message', tagged);
     setTagged(null);
   };
 
   useEffect(() => {
-    currentSocket.emit('community_chat_message', {chat_room_id: roomId});
+    if(roomId){
+      currentSocket.emit('community_chat_message', {chat_room_id: roomId});
+    }
     currentSocket.on('community_chat_message', res => {
       console.log('community_chat_message', res.data);
       if (Array.isArray(res.data)) {
@@ -117,7 +165,7 @@ const ChatDetailBuyer = ({navigation, route}) => {
         <ChatEcommerceHeader
           name={merchant.name}
           merchant={true}
-          isOnline={userTarget.is_online}
+          isOnline={userTarget && userTarget.is_online}
         />
       }>
       <FlatList
@@ -138,14 +186,13 @@ const ChatDetailBuyer = ({navigation, route}) => {
             return (
               <>
                 <TouchableOpacity
-                  onPress={() =>{
+                  onPress={() => {
                     currentSocket.off('community_chat_message');
                     currentSocket.off('community_chat_room detail buyer');
                     navigation.navigate('DetailProduct', {
                       item: {id: +item.tagged_id},
                     });
-                    }
-                  }
+                  }}
                   style={{
                     paddingHorizontal: 32,
                     paddingVertical: 16,
@@ -304,8 +351,8 @@ const ChatDetailBuyer = ({navigation, route}) => {
         }}
       />
 
-      {tagged &&
-        <View style={{ backgroundColor: Color.border}}>
+      {tagged && (
+        <View style={{backgroundColor: Color.border}}>
           <View
             style={{
               paddingHorizontal: 32,
@@ -345,7 +392,7 @@ const ChatDetailBuyer = ({navigation, route}) => {
             </View>
           </View>
         </View>
-      }
+      )}
 
       <View>
         <BottomSection style={{borderColor: Color.theme}}>

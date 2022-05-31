@@ -33,8 +33,6 @@ import {
   Submit,
   useLoading,
 } from '@src/components';
-import ListAuction from 'src/components/Posting/ListAuction';
-import ListSoonAuction from 'src/components/Posting/ListSoonAuction';
 import {Divider, Circle, Container} from '@src/styled';
 import {playNotificationSounds} from '@src/utils/notificationSounds';
 import CarouselView from 'src/components/CarouselView';
@@ -58,6 +56,7 @@ import {analyticMethods, GALogEvent} from 'src/utils/analytics';
 import {getSizeByRatio} from 'src/utils/get_ratio';
 import MusikAlbum from 'src/components/MusikAlbum';
 import { fetchContentProduct } from 'src/api/content';
+import HighlightLelang from 'src/components/Card/HighlightLelang';
 import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
 import ModalMenuHome from 'src/components/Modal/ModalMenuHome';
 
@@ -179,7 +178,7 @@ const MainHome = ({navigation, route}) => {
     };
 
     Geolocation.watchPosition(successCallback, errorCallback, option);
-  }, []);
+  }, [refreshing]);
 
   useEffect(() => {
     if (isFocused) {
@@ -617,33 +616,23 @@ const MainHome = ({navigation, route}) => {
             loading={loadingBanner}
           />
 
-          <Divider height={24} />
-
           {accessClient.MainHome.showListAuction && (
-            <ListAuction
-              data={[]}
-              loading={false}
-              horizontal
-              showHeader
-              onPress={item => {
-                navigation.navigate('DetailLelang', {item});
-              }}
-              style={{paddingLeft: 8}}
+            <HighlightLelang
+              title={`Pelelangan\nSedang Berlangsung`}
+              nav='LiveLelangScreen'
+              prodStatus='ONGOING'
             />
           )}
 
           {accessClient.MainHome.showListSoonAuction && (
-            <ListSoonAuction
-              data={[]}
-              loading={false}
-              horizontal
-              showHeader
-              onPress={item => {
-                navigation.navigate('DetailLelang', {item});
-              }}
-              style={{paddingLeft: 8}}
+            <HighlightLelang
+              title={`Pelelangan\nYang Akan Datang`}
+              nav='LiveLelangScreen'
+              prodStatus='WILLCOME'
             />
           )}
+
+          <Divider />
 
           {/* hide banner promo */}
           {/* {accessClient.MainHome.showListPromo && (
@@ -771,6 +760,7 @@ const MainHome = ({navigation, route}) => {
             title='Sedang Berlangsung'
             nav='YoutubeScreen'
             refresh={refreshing}
+            style={{paddingHorizontal: 0}}
           />
 
           <Divider />
@@ -781,6 +771,7 @@ const MainHome = ({navigation, route}) => {
             title='Video Terbaru'
             nav='VideoScreen'
             refresh={refreshing}
+            style={{paddingHorizontal: 0}}
           />
 
           {accessClient.MainHome.showListEbookNewer && (

@@ -23,13 +23,17 @@ const EmergencyScreen = ({ navigation, route }) => {
     const [loadingProps, showLoading, hideLoading] = useLoading();
     const { Color } = useColor();
 
+    let canGeneratedContent = accessClient.UserGeneratedContent === 'ALL_USER';
+    if (accessClient.UserGeneratedContent === 'ONLY_ADMIN' && user && user.isDirector === 1) canGeneratedContent = true;
+    else if (accessClient.UserGeneratedContent === 'ONLY_MEMBER' && user && user.organizationId) canGeneratedContent = true;
+
     return (
         <Scaffold
           header={
             <Header
               title={title}
                 actions={
-                  <Row justify='center' align='center'>
+                  canGeneratedContent && <Row justify='center' align='center'>
                     {/* <Ionicons
                       name='search'
                       color={Color.primary}

@@ -133,11 +133,11 @@ const WidgetMenuHome = ({ itemPerPage, onPress, bgColor }) => {
 
                 if (menu.nav === 'modal') {
                   // ganti ke modal show menu all
-                  navigation.navigate('MediaPlayerScreen', menu.params);
+                  navigation.navigate('MediaPlayerScreen', { title: menu.name, ...menu.params });
                   return;
                 }
 
-                navigation.navigate(menu.nav, menu.params);
+                navigation.navigate(menu.nav, { title: menu.name, ...menu.params });
               }}
               style={{
                 width: `${widthPerMenu}%`,

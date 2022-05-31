@@ -4,9 +4,9 @@ import {
   FlatList,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {useIsFocused} from '@react-navigation/native';
 
 import {
   Text,
@@ -19,20 +19,25 @@ import { FormatMoney } from 'src/utils';
 import Client from '@src/lib/apollo';
 import { shadowStyle } from 'src/styles';
 import ScreenEmptyData from '../Modal/ScreenEmptyData';
+import PostingHeader from '../Posting/PostingHeader';
 import { initialItemState } from 'src/utils/constants';
+import ScreenIndicator from '../Modal/ScreenIndicator';
 
 const propTypes = {
-  ListHeaderComponent: PropTypes.func,
+  title: PropTypes.string,
+  nav: PropTypes.string,
+  prodStatus: PropTypes.string,
 };
 
 const defaultProps = {
-  ListHeaderComponent: () => <View />
+  title: '',
+  nav: '',
+  prodStatus: 'ONGOING',
 };
 
-const CardListLelang = ({ ListHeaderComponent, prodStatus }) => {
+const HighlightLelang = ({ title, nav, prodStatus }) => {
   const navigation = useNavigation();
   const {Color} = useColor();
-  const isFocused = useIsFocused();
 
   const [list, setList] = useState(initialItemState);
 
@@ -40,43 +45,32 @@ const CardListLelang = ({ ListHeaderComponent, prodStatus }) => {
     fetchListProduct();
   }, []);
 
-  useEffect(() => {
-    if (list.loadNext && list.page !== -1) {
-      fetchListProduct();
-    }
-  }, [list.loadNext]);
-
   const fetchListProduct = () => {
     const variables = {
       type: "HOMEPAGE",
       status: prodStatus,
-      page: list.page + 1,
-      limit: 10,
+      page: 1,
+      limit: 4,
     };
+
+    console.log('variables', variables);
 
     Client.query({
       query: queryGetAuction,
       variables,
     }).then(res => {
-      console.log('res get auction ', res);
-      let data = list.data;
-      let page = list.page;
-      let message = '';
+      console.log('aku adalah', res.data.auctionProduct);
+
+      let newData = [];
       if (Array.isArray(res.data.auctionProduct) && res.data.auctionProduct.length > 0) {
-        data = data.concat(res.data.auctionProduct);
-        page++;
-      } else {
-        message = 'Not ok, silakan coba kembali';
+        newData = res.data.auctionProduct;
       }
 
       setList({
         ...list,
-        data,
-        page,
+        data: newData,
         loading: false,
-        loadNext: false,
-        message,
-        refresh: false,
+        message: ''
       });
     })
     .catch((err) => {
@@ -85,15 +79,14 @@ const CardListLelang = ({ ListHeaderComponent, prodStatus }) => {
       setList({
         ...list,
         loading: false,
-        loadNext: false,
-        message: 'Terjadi kesalahan',
-        refresh: false,
+        message: ''
       });
     })
   }
 
-  const renderItem = ({item}) => (
+  const renderItem = (item, index) => (
     <View
+      key={index}
       style={{
         width: '45%',
         height: 260,
@@ -173,35 +166,31 @@ const CardListLelang = ({ ListHeaderComponent, prodStatus }) => {
     </View>
   );
 
-  const renderHeader = () => {
-    if (typeof ListHeaderComponent !== 'undefined') {
-      return <ListHeaderComponent />;
-    }
-
-    return <View />;
-  }
-
   return (
-    <FlatList
-      showsHorizontalScrollIndicator={false}
-      numColumns={2}
-      data={list.data}
-      renderItem={renderItem}
-      keyExtractor={(item, index) => item.id + index.toString()}
-      ListHeaderComponent={() => renderHeader()}
-      contentContainerStyle={{
-        paddingBottom: 16
-      }}
-      ListEmptyComponent={
-        !list.loading && list.data.length === 0 &&
+    <View style={{paddingTop: 32}}>
+      <PostingHeader
+        title={title}
+        onSeeAllPress={() => navigation.navigate(nav, { title, prodStatus })}
+      />
+
+      {list.loading ?
+        <View style={{ width: '100%', aspectRatio: 16/9 }}>
+          <ScreenIndicator />
+        </View> :
+      !list.loading && list.data.length > 0 ?
+        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+          {list.data.map((item, index) => {
+            return renderItem(item, index);
+          })}
+        </View> :
+        <View style={{ width: '100%', aspectRatio: 16/9 }}>
           <ScreenEmptyData message='Lelang belum tersedia' />
+        </View>
       }
-      onEndReachedThreshold={0.3}
-      onEndReached={() => setList({ ...list, loadNext: true })}
-    />
-  );
+    </View>
+  )
 };
 
-CardListLelang.propTypes = propTypes;
-CardListLelang.defaultProps = defaultProps;
-export default CardListLelang;
+HighlightLelang.propTypes = propTypes;
+HighlightLelang.defaultProps = defaultProps;
+export default HighlightLelang;

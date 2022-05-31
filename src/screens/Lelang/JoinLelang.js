@@ -42,6 +42,10 @@ const JoinLelang = ({navigation, route}) => {
   const [weeksLeft, setWeeksLeft] = useState(0);
   const [monthsLeft, setMonthsLeft] = useState(0);
   const [yearsLeft, setYearsLeft] = useState(0);
+  // 
+  const [isWillCome, setIsWillCome] = useState(false);
+  const [isOnGoing, setIsOnGoing] = useState(false);
+  const [isPassed, setIsPassed] = useState(false);
   
 	const modalBidRef = useRef();
   const { width, height } = useWindowDimensions();
@@ -55,16 +59,27 @@ const JoinLelang = ({navigation, route}) => {
     const interval = item ?
       setInterval(() => {
         const now = moment();
-        const endDate = moment(item.dateEnd);
-        const tl = endDate.diff(now, 'seconds');
-        const minl = endDate.diff(now, 'minutes');
-        const hl = endDate.diff(now, 'hours');
-        const dl = endDate.diff(now, 'days');
-        const wl = endDate.diff(now, 'weeks');
-        const ml = endDate.diff(now, 'months');
-        const yl = endDate.diff(now, 'years');
+        const _isWillCome = moment(item.dateStart).isAfter(now);
+        const _isOnGoing = moment(item.dateEnd).isAfter(now);
+        const _isPassed = moment(item.dateEnd).isBefore(now);
+        console.log('////////////////////////');
+        console.log('akan datang', _isWillCome);
+        console.log('sedang berlangsung', _isOnGoing);
+        console.log('telah lewat', _isPassed);
+        console.log('////////////////////////');
+        setIsWillCome(_isWillCome);
+        setIsOnGoing(!_isWillCome && _isOnGoing);
+        setIsPassed(_isPassed);
+        const issueDate = _isWillCome ? moment(item.dateStart) : moment(item.dateEnd);
+        const tl = issueDate.diff(now, 'seconds');
+        const minl = issueDate.diff(now, 'minutes');
+        const hl = issueDate.diff(now, 'hours');
+        const dl = issueDate.diff(now, 'days');
+        const wl = issueDate.diff(now, 'weeks');
+        const ml = issueDate.diff(now, 'months');
+        const yl = issueDate.diff(now, 'years');
         // TODO: bukain buat semua status
-        // if (tl > 0 && product.auctionStatus == 'BELUM SELESAI') {
+        // if (tl > 0 && item.auctionStatus == 'BELUM SELESAI') {
         setTimeLeft(tl > 0 ? tl : 0);
         setMinutesLeft(minl > 0 ? minl : 0);
         setHourssLeft(hl > 0 ? hl : 0);
@@ -210,7 +225,7 @@ const JoinLelang = ({navigation, route}) => {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Text size={8} style={{color: Color.textInput}}>Sisa waktu</Text>
+              <Text size={8} color={Color.textInput}>{isWillCome ? 'Dimulai Dalam' : 'Sisa Waktu'}</Text>
               <Text size={12} style={{color: Color.textInput}}>
                 {
                   yearsLeft > 0 ? `${yearsLeft} Tahun lagi` :
@@ -220,7 +235,7 @@ const JoinLelang = ({navigation, route}) => {
                   hoursLeft > 0 ? moment.duration(timeLeft, 'seconds').format('HH:mm:ss', { trim: false }) :
                   minutesLeft > 0 ? moment.duration(timeLeft, 'seconds').format('mm:ss', { trim: false }) :
                   timeLeft > 0 ? moment.duration(timeLeft, 'seconds').format('ss', { trim: false }) :
-                  item ? '-' : 'Waktu habis'
+                  isPassed ? 'Waktu habis' : '-'
                 }
               </Text>
             </View>
@@ -285,7 +300,7 @@ const JoinLelang = ({navigation, route}) => {
         keyExtractor={item => item.id}
       />
 
-      <ButtonView>
+      {isOnGoing && <ButtonView>
         <Text size={12}>
           Pasang Tawaran
         </Text>
@@ -354,7 +369,7 @@ const JoinLelang = ({navigation, route}) => {
             <Ionicons name="chevron-up-outline" color={Color.textInput} size={20} />
           </TouchableOpacity>
         </View>
-      </ButtonView>
+      </ButtonView>}
 
       <ModalBid
         ref={modalBidRef}
