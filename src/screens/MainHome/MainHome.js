@@ -463,14 +463,14 @@ const MainHome = ({navigation, route}) => {
           {/* <TouchableOpacity onPress={() => modalMenuHome.current.open()}>
             <Text>BUka Modal</Text>
             
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           {accessClient.MainHome.showWidgetBalance && (
             <>
               <WidgetBalance />
               <Divider />
             </>
-          )} */}
+          )}
 
           {accessClient.MainHome.showMenuHome && <WidgetMenuHome
             onPress={item => {
