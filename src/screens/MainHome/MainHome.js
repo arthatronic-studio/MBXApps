@@ -176,7 +176,7 @@ const MainHome = ({navigation, route}) => {
     };
 
     Geolocation.watchPosition(successCallback, errorCallback, option);
-  }, []);
+  }, [refreshing]);
 
   useEffect(() => {
     if (isFocused) {
@@ -753,6 +753,7 @@ const MainHome = ({navigation, route}) => {
             title='Sedang Berlangsung'
             nav='YoutubeScreen'
             refresh={refreshing}
+            style={{paddingHorizontal: 0}}
           />
 
           <Divider />
@@ -763,6 +764,7 @@ const MainHome = ({navigation, route}) => {
             title='Video Terbaru'
             nav='VideoScreen'
             refresh={refreshing}
+            style={{paddingHorizontal: 0}}
           />
 
           {accessClient.MainHome.showListEbookNewer && (

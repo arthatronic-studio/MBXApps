@@ -471,6 +471,7 @@ const UserProfileScreen = ({ navigation, route }) => {
                     title='Sedang Berlangsung'
                     nav='YoutubeScreen'
                     refresh={false}
+                    style={{paddingHorizontal: 0}}
                 />
 
                 <HighlightContentProduct
@@ -480,6 +481,7 @@ const UserProfileScreen = ({ navigation, route }) => {
                     title='Video Terbaru'
                     nav='VideoScreen'
                     refresh={false}
+                    style={{paddingHorizontal: 0}}
                 />
             </ScrollView>
 

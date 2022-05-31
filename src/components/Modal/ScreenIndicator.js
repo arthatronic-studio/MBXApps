@@ -49,9 +49,9 @@ const ScreenIndicator = (props) => {
             ...shadowStyle,
           }}
         >
-          <ActivityIndicator size={Platform.OS === 'android' ? 60 : type} color={Color.text}/>
+          <ActivityIndicator size={Platform.OS === 'android' ? 60 : type} color={Color.textInput}/>
           <Divider height={12} />
-          <Text>{message}</Text>
+          <Text color={Color.textInput}>{message}</Text>
         </View>
       </View>
     );
