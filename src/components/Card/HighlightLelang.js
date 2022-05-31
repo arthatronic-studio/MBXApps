@@ -20,6 +20,8 @@ import Client from '@src/lib/apollo';
 import { shadowStyle } from 'src/styles';
 import ScreenEmptyData from '../Modal/ScreenEmptyData';
 import PostingHeader from '../Posting/PostingHeader';
+import { initialItemState } from 'src/utils/constants';
+import ScreenIndicator from '../Modal/ScreenIndicator';
 
 const propTypes = {
   title: PropTypes.string,
@@ -37,11 +39,7 @@ const HighlightLelang = ({ title, nav, prodStatus }) => {
   const navigation = useNavigation();
   const {Color} = useColor();
 
-  const [list, setList] = useState({
-    data: [],
-    loading: false,
-    message: 'error',
-  });
+  const [list, setList] = useState(initialItemState);
 
   useEffect(() => {
     fetchListProduct();
@@ -64,7 +62,7 @@ const HighlightLelang = ({ title, nav, prodStatus }) => {
       console.log('aku adalah', res.data.auctionProduct);
 
       let newData = [];
-      if (res.data.auctionProduct) {
+      if (Array.isArray(res.data.auctionProduct) && res.data.auctionProduct.length > 0) {
         newData = res.data.auctionProduct;
       }
 
@@ -176,7 +174,9 @@ const HighlightLelang = ({ title, nav, prodStatus }) => {
       />
 
       {list.loading ?
-        <ActivityIndicator /> :
+        <View style={{ width: '100%', aspectRatio: 16/9 }}>
+          <ScreenIndicator />
+        </View> :
       !list.loading && list.data.length > 0 ?
         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
           {list.data.map((item, index) => {

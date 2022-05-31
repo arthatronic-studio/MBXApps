@@ -67,6 +67,7 @@ const YoutubeScreen = ({ navigation, route }) => {
             userProfileId={userProfileId}
             productCategory='YOUTUBE_VIDEO'
             name='Sedang Berlangsung'
+            style={{paddingHorizontal: 0}}
           />
         </Scaffold>
     )

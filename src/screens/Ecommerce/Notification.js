@@ -178,7 +178,7 @@ const Notification = () => {
             alignSelf: 'center',
           }} />
           
-        {item.items.length > 0 && item.items[0].products.length > 0 &&
+        {item.items && item.items.length > 0 && item.items[0].products.length > 0 &&
         <View style={{width: '100%', flexDirection: 'row', padding: 16}}>
           <View
             style={{
@@ -233,7 +233,7 @@ const Notification = () => {
           </View>
         </View>}
 
-        {item.items.length != 0 && <View style={{flexDirection: 'row', paddingHorizontal: 16, paddingBottom: 16}}>
+        {item.items && item.items.length != 0 && <View style={{flexDirection: 'row', paddingHorizontal: 16, paddingBottom: 16}}>
           <View style={{}}>
             <Text
               style={{fontSize: 8, textAlign: 'left', color: Color.secondary}}>

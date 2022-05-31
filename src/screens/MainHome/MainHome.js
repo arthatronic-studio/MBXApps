@@ -58,6 +58,7 @@ import MusikAlbum from 'src/components/MusikAlbum';
 import { fetchContentProduct } from 'src/api/content';
 import HighlightLelang from 'src/components/Card/HighlightLelang';
 import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
+import ModalMenuHome from 'src/components/Modal/ModalMenuHome';
 
 let tempShowPopupAds = true;
 
@@ -85,6 +86,7 @@ const MainHome = ({navigation, route}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [thisTrack, setThisTrack] = useState();
 
+  const modalMenuHome = useRef();
   const user = useSelector(state => state['user.auth'].login.user);
   const dispatch = useDispatch();
   const {Color} = useColor();
@@ -177,7 +179,7 @@ const MainHome = ({navigation, route}) => {
     };
 
     Geolocation.watchPosition(successCallback, errorCallback, option);
-  }, []);
+  }, [refreshing]);
 
   useEffect(() => {
     if (isFocused) {
@@ -458,12 +460,17 @@ const MainHome = ({navigation, route}) => {
             </View>
           </View>
 
+          {/* <TouchableOpacity onPress={() => modalMenuHome.current.open()}>
+            <Text>BUka Modal</Text>
+            
+          </TouchableOpacity>
+
           {accessClient.MainHome.showWidgetBalance && (
             <>
               <WidgetBalance />
               <Divider />
             </>
-          )}
+          )} */}
 
           {accessClient.MainHome.showMenuHome && <WidgetMenuHome
             onPress={item => {
@@ -754,6 +761,7 @@ const MainHome = ({navigation, route}) => {
             title='Sedang Berlangsung'
             nav='YoutubeScreen'
             refresh={refreshing}
+            style={{paddingHorizontal: 0}}
           />
 
           <Divider />
@@ -764,6 +772,7 @@ const MainHome = ({navigation, route}) => {
             title='Video Terbaru'
             nav='VideoScreen'
             refresh={refreshing}
+            style={{paddingHorizontal: 0}}
           />
 
           {accessClient.MainHome.showListEbookNewer && (
@@ -814,6 +823,12 @@ const MainHome = ({navigation, route}) => {
           modalPostingRef.current.close();
         }}
       />
+      <ModalMenuHome
+              ref={modalMenuHome}
+              onClose={() => {
+                modalPostingRef.current.close();
+              }}
+            />
 
       {dataPopupAds && (
         <Modal
