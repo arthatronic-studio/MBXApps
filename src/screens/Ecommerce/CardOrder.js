@@ -29,7 +29,7 @@ import {navigationRef} from 'App';
 const CardOrder = ({data}) => {
   const navigation = useNavigation();
   const {Color} = useColor();
-  const items = data.items.length > 0 ? data.items[0].products : [];
+  const items =  [];
   return (
     <View
       style={{
@@ -62,7 +62,7 @@ const CardOrder = ({data}) => {
                 textAlign: 'left',
                 fontWeight: 'bold',
               }}>
-              {data.address.penerimaName}
+              {data.address && data.address.penerimaName}
             </Text>
             <Text
               style={{
@@ -93,7 +93,7 @@ const CardOrder = ({data}) => {
           }}
         />
         <Divider />
-        {items.length != 0 && 
+        {items && items.length != 0 && 
             <View>
             <View style={{flexDirection: 'row'}}>
                     <Image
@@ -280,7 +280,7 @@ const CardOrder = ({data}) => {
               textAlign: 'left',
               paddingVertical: 2,
             }}>
-              {items.length > 0 && items[0].note}
+              {items && items.length > 0 && items[0].note}
             {/* Tolong anternya pake buroq ya biar cepet hehehe */}
           </Text>
         </View>
