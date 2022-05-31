@@ -143,9 +143,10 @@ const MainHome = ({navigation, route}) => {
     currentSocket.emit('auth', {id: user ? user.userId : 0});
     currentSocket.on('auth', res => {
       console.log('res auth', res);
+
+      currentSocket.emit('chat_notification');
     });
 
-    currentSocket.emit('chat_notification');
     currentSocket.on('chat_notification', res => {
       console.log('res chat_notification', res);
       if (res && res.status) {
