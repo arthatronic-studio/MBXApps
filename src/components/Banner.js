@@ -69,8 +69,6 @@ const Banner = ({ data, loading, showHeader }) => {
           onSeeAllPress={() => {}}
           showSeeAllText={false}
         />
-
-        <Divider />
       </>
     )
   }

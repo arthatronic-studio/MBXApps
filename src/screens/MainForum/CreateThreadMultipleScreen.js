@@ -393,6 +393,7 @@ const CreateThreadMultipleScreen = (props) => {
                 open={showDatePicker}   
                 date={userData.eventDate}
                 mode="date"
+                minimumDate={new Date()}
                 onConfirm={(date) => {
                     setShowDatePicker(false);
                     onChangeUserData('eventDate', date);

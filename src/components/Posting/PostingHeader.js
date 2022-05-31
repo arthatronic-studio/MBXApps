@@ -50,7 +50,7 @@ const PostingHeader = (props) => {
                 ...style,
             }}
         >
-            <Text type="bold">{title}</Text>
+            <Text type="bold" align='left'>{title}</Text>
             {showSeeAllText && <Text
                 onPress={() => onSeeAllPress()}
                 size={12}

@@ -19,7 +19,6 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
-
 import { Divider, Circle, Container, Row } from '@src/styled';
 import {
 	Text,
