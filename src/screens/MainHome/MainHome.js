@@ -755,14 +755,14 @@ const MainHome = ({navigation, route}) => {
 
           <Divider />
 
-          <HighlightContentProduct
+          {/* <HighlightContentProduct
             productCategory='YOUTUBE_VIDEO'
             name='Live'
             title='Sedang Berlangsung'
             nav='YoutubeScreen'
             refresh={refreshing}
             style={{paddingHorizontal: 0}}
-          />
+          /> */}
 
           <Divider />
 

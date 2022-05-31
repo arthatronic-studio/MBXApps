@@ -120,8 +120,8 @@ const JoinLelang = ({navigation, route}) => {
     // auction bid
     currentSocket.on('auction-bid-success', (res) => {
       console.log('res bid success', res);
-      let newArr = [res.bid].concat([listBidding]);
-      setListBidding(newArr);
+      setListBidding([res.bid, ...listBidding]);
+      setHighestBid(res.bid.bid);
       // showPopup('Berhasil', 'success');
     });
 
@@ -168,6 +168,8 @@ const JoinLelang = ({navigation, route}) => {
       <Text style={{fontSize: 14, fontWeight: 'bold', textAlign: 'right'}}>{FormatMoney.getFormattedMoney(item.bid, '')} Poin</Text>
     </Col>
   </Row>
+
+  console.log(listBidding, "list biddinggg");
 
   return (
     <Scaffold
