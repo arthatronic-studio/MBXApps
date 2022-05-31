@@ -59,6 +59,7 @@ import {getSizeByRatio} from 'src/utils/get_ratio';
 import MusikAlbum from 'src/components/MusikAlbum';
 import { fetchContentProduct } from 'src/api/content';
 import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
+import ModalMenuHome from 'src/components/Modal/ModalMenuHome';
 
 let tempShowPopupAds = true;
 
@@ -86,6 +87,7 @@ const MainHome = ({navigation, route}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [thisTrack, setThisTrack] = useState();
 
+  const modalMenuHome = useRef();
   const user = useSelector(state => state['user.auth'].login.user);
   const dispatch = useDispatch();
   const {Color} = useColor();
@@ -458,12 +460,17 @@ const MainHome = ({navigation, route}) => {
             </View>
           </View>
 
+          {/* <TouchableOpacity onPress={() => modalMenuHome.current.open()}>
+            <Text>BUka Modal</Text>
+            
+          </TouchableOpacity>
+
           {accessClient.MainHome.showWidgetBalance && (
             <>
               <WidgetBalance />
               <Divider />
             </>
-          )}
+          )} */}
 
           {accessClient.MainHome.showMenuHome && <WidgetMenuHome
             onPress={item => {
@@ -824,6 +831,12 @@ const MainHome = ({navigation, route}) => {
           modalPostingRef.current.close();
         }}
       />
+      <ModalMenuHome
+              ref={modalMenuHome}
+              onClose={() => {
+                modalPostingRef.current.close();
+              }}
+            />
 
       {dataPopupAds && (
         <Modal
