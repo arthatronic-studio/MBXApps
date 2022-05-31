@@ -171,6 +171,8 @@ const ChatGroupScreen = ({ navigation, route }) => {
     return (
         <Scaffold
             showHeader={false}
+            empty={dataRooms.data.length === 0 && !dataRooms.loading}
+            fallback={dataRooms.loading}
         >
             <View style={{backgroundColor: Color.theme}}>
                 {/* <BottomSection style={{borderColor: Color.border}}>
@@ -194,7 +196,17 @@ const ChatGroupScreen = ({ navigation, route }) => {
                     </BoxInput>
                 </BottomSection> */}
                 <View style={{backgroundColor: Color.theme, width: '100%', height: 70, justifyContent: 'center', alignItems: 'center'}}>
-                    <TextInput placeholder='Cari . . .' style={{backgroundColor: Color.border, width: '95%', height: 35, borderRadius: 5, fontSize: 10, paddingHorizontal: 10}}></TextInput>
+                    <TextInput
+                        placeholder='Cari . . .'
+                        style={{
+                            backgroundColor: Color.border,
+                            width: '95%',
+                            height: 35,
+                            borderRadius: 5,
+                            fontSize: 12,
+                            paddingHorizontal: 12,
+                        }}
+                    />
                     <AntDesign name={'search1'} size={12} style={{alignSelf: 'flex-end', right: 20,color: Color.secondary,position: 'absolute'}}/>
                 </View>
                 <FlatList
