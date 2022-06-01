@@ -205,19 +205,45 @@ const CartShop = ({navigation, route}) => {
 
   function onChecked(index, id, value, name) {
     const tempx = list;
-    if (name == 'product') {
-      tempx[index]['products'][id]['checked'] = !value;
-      setList(tempx);
-      setRefresh(refresh + 1);
-    } else {
-      tempx[index]['checked'] = !value;
-      tempx[index]['products'].forEach((element, idx) => {
-        tempx[index]['products'][idx]['checked'] = !value;
-      });
-      console.log(tempx, 111);
-      setList(tempx);
-      setRefresh(refresh + 1);
-    }
+    tempx.forEach((e, i) => {
+      if (name == 'product') {
+        // handle hanya bisa pilih 1 toko
+        if (i === index) {
+          tempx[i]['checked'] = !value;
+          tempx[i]['products'][id]['checked'] = !value;
+        } else {
+          tempx[i]['checked'] = false;
+          tempx[i]['products'].forEach((element, idx) => {
+            tempx[i]['products'][idx]['checked'] = false;
+          });
+        }
+
+        // old
+        // tempx[index]['products'][id]['checked'] = !value;
+      } else if (name === 'shop') {
+        // handle hanya bisa pilih 1 toko
+        if (i === index) {
+          tempx[i]['checked'] = !value;
+          tempx[i]['products'].forEach((element, idx) => {
+            tempx[i]['products'][idx]['checked'] = !value;
+          });
+        } else {
+          tempx[i]['checked'] = false;
+          tempx[i]['products'].forEach((element, idx) => {
+            tempx[i]['products'][idx]['checked'] = false;
+          });
+        }
+
+        // old
+        // tempx[index]['checked'] = !value;
+        // tempx[index]['products'].forEach((element, idx) => {
+        //   tempx[index]['products'][idx]['checked'] = !value;
+        // });
+      }
+    });
+
+    setList(tempx);
+    setRefresh(refresh + 1);
   }
 
   console.log('list', list);
@@ -439,15 +465,7 @@ const CartShop = ({navigation, route}) => {
         data={list}
         renderItem={renderItem}
         contentContainerStyle={{
-          paddingBottom: 16,
-        }}
-      />
-
-      <View
-        style={{
-          backgroundColor: '#rgba(255, 255, 254, 0.2)',
-          height: 2,
-          marginTop: 24,
+          paddingVertical: 16,
         }}
       />
         
