@@ -7,7 +7,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import Text from '@src/components/Text';
 import { useColor } from '@src/components/Color';
-import { usePopup } from 'src/components/Modal/Popup';
+import Popup, { usePopup } from 'src/components/Modal/Popup';
 import { shadowStyle } from '@src/styles';
 import { useTimeout } from 'src/hooks';
 import { Divider } from 'src/styled';
@@ -109,13 +109,40 @@ const Maps = ({ onCallback, name, latitude, longitude, initLocation }) => {
                         };
 
                         onCallback(param);
+                    } else {
+                        alert('Lokasi tidak ditemukan');
+                        onErrorFindLocation();
                     }
+                } else {
+                    alert('Tidak ditemukan hasil');
+                    onErrorFindLocation();
                 }
             })
             .catch((err) => {
                 console.log('error geocoding', err);
+                alert('Terjadi kesalahan, silakan coba kembali');
                 setLoading(false);
+                onErrorFindLocation();
             });
+    }
+
+    const onErrorFindLocation = () => {
+        setTimeout(() => {
+            setMarker({
+                ...marker,
+                latitude,
+                longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+            });
+            setCurrentLocation({
+                ...currentLocation,
+                latitude,
+                longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+            });
+        }, 1000);
     }
 
     const requestLocationPermission = async() => {
@@ -258,6 +285,8 @@ const Maps = ({ onCallback, name, latitude, longitude, initLocation }) => {
                     />
                 </TouchableOpacity>
             </View>}
+
+            <Popup { ...popupProps } />
         </>
     );
 }

@@ -13,6 +13,7 @@ import { Container } from 'src/styled';
 
 const propTypes = {
     label: PropTypes.string,
+    labelContainerStyle: PropTypes.object,
     placeholder: PropTypes.string,
     onChangeText: PropTypes.func,
     value: PropTypes.string,
@@ -21,6 +22,7 @@ const propTypes = {
     onSubmitEditing: PropTypes.func,
     keyboardType: PropTypes.string,
     error: PropTypes.string,
+    hideErrorHint: PropTypes.bool,
 
     secureTextEntry: PropTypes.bool,
     suffixIcon: PropTypes.node,
@@ -30,6 +32,7 @@ const propTypes = {
 
 const defaultProps = {
     label: '',
+    labelContainerStyle: {},
     placeholder: '',
     onChangeText: () => {},
     value: '',
@@ -38,6 +41,7 @@ const defaultProps = {
     onSubmitEditing: () => {},
     keyboardType: 'default',
     error: null,
+    hideErrorHint: false,
 
     secureTextEntry: false,
     suffixIcon: null,
@@ -45,7 +49,7 @@ const defaultProps = {
     onPress: () => {},
 };
 
-const FormSelect = forwardRef(({ label, placeholder, onPress, onChangeText, value, onBlur, returnKeyType, onSubmitEditing, keyboardType, error, secureTextEntry, prefixIcon, suffixIcon }, ref) => {
+const FormSelect = forwardRef(({ label, labelContainerStyle, placeholder, onPress, onChangeText, value, onBlur, returnKeyType, onSubmitEditing, keyboardType, error, hideErrorHint, secureTextEntry, prefixIcon, suffixIcon }, ref) => {
     const { Color } = useColor();
 
     useEffect(() => {
@@ -60,6 +64,7 @@ const FormSelect = forwardRef(({ label, placeholder, onPress, onChangeText, valu
                 alignItems: 'flex-start',
                 paddingHorizontal: 16,
                 paddingTop: 16,
+                ...labelContainerStyle,
             }}>
                 <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>{label}</Text>
             </View>
@@ -120,14 +125,14 @@ const FormSelect = forwardRef(({ label, placeholder, onPress, onChangeText, valu
                 </TouchableOpacity>
             </View>
 
-            <View style={{
+            {!hideErrorHint && <View style={{
                 width: '100%',
                 paddingTop: 2,
                 paddingBottom: 10,
                 alignItems: 'flex-start',
             }}>
               <Text size={12} color={Color.error} type='medium' align='left'>{error}</Text>
-            </View>
+            </View>}
         </Container>
     );
 });
