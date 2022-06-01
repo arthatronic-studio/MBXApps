@@ -64,7 +64,6 @@ const ChatEcommerceSeller = ({ navigation, route }) => {
 					renderItem={({ item }) => {
 						return (
 							<TouchableOpacity onPress={() => {
-								currentSocket.off('community_chat_room');
 								navigation.navigate('ChatDetailSeller', {id: item.id, merchant: item.merchant, users: item.users})}}
 								>
 								<CardChatEcommerce item={item} type={'seller'}/>
