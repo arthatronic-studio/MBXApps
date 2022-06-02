@@ -252,7 +252,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
             popupProps={popupProps}
             color={Color.semiwhite}
             header={
-                <DetailHeader/>
+                <DetailHeader/> 
             }
         >
             {/* hide tgl */}

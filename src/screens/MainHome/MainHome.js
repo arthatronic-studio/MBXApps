@@ -434,9 +434,12 @@ const MainHome = ({navigation, route}) => {
             </View>
           </View>
 
-          {/* <TouchableOpacity onPress={() => modalMenuHome.current.open()}>
-            <Text>Buka Modal</Text>
-          </TouchableOpacity> */}
+          <TouchableOpacity
+            // onPress={() => modalMenuHome.current.open()}
+            onPress={() => navigation.navigate('SurveyPasarScreen')}
+          >
+            <Text>Buka Survey</Text>
+          </TouchableOpacity>
 
           {accessClient.MainHome.showWidgetBalance && (
             <>
