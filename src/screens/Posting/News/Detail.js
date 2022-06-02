@@ -1,10 +1,9 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Image, ScrollView} from 'react-native';
+import {View, Image, ScrollView, Pressable, FlatList} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
 import moment from 'moment';
 
-import {useLoading, usePopup, useColor} from '@src/components';
+import {useLoading, usePopup, useColor, Header, Row, Col} from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
 import {Container, Divider} from '@src/styled';
@@ -15,8 +14,51 @@ import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
 import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 import ModalContentOptions from 'src/components/ModalContentOptions';
-
+import ImagesPath from 'src/components/ImagesPath';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
+
+
+// Fonts
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import Entypo from 'react-native-vector-icons/Entypo'
+import Feather from 'react-native-vector-icons/Feather'
+import IonIcons from 'react-native-vector-icons/Ionicons'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+
+
+
+const DATA = [
+  {
+    id: 1,
+    image: ImagesPath.productImage,
+    title: "Dua Hari Setelah Divaksin, Pelajar . . .",
+    isi: "Dua hari setelah disuntik vaksin, pelajar berusia 10 tahun yang merupakan warga Kecamatan Purbaratu, Kota Tasikmalaya . . .",
+    tanggal: "17 Jan 2021"
+  },
+  {
+      id: 2,
+      image: ImagesPath.productImage,
+      title: "Dua Hari Setelah Divaksin, Pelajar . . .",
+      isi: "Dua hari setelah disuntik vaksin, pelajar berusia 10 tahun yang merupakan warga Kecamatan Purbaratu, Kota Tasikmalaya . . .",
+      tanggal: "17 Jan 2021"
+    },
+    {
+      id: 3,
+      image: ImagesPath.productImage,
+      title: "Dua Hari Setelah Divaksin, Pelajar . . .",
+      isi: "Dua hari setelah disuntik vaksin, pelajar berusia 10 tahun yang merupakan warga Kecamatan Purbaratu, Kota Tasikmalaya . . .",
+      tanggal: "17 Jan 2021"
+    },
+    {
+      id: 4,
+      image: ImagesPath.productImage,
+      title: "Dua Hari Setelah Divaksin, Pelajar . . .",
+      isi: "Dua hari setelah disuntik vaksin, pelajar berusia 10 tahun yang merupakan warga Kecamatan Purbaratu, Kota Tasikmalaya . . .",
+      tanggal: "17 Jan 2021"
+    },
+];
+
 
 const NewsDetail = ({navigation, route}) => {
   const {item} = route.params;
@@ -74,15 +116,37 @@ const NewsDetail = ({navigation, route}) => {
 
   console.log('user', item);
 
+  const renderItem = ({ item }) => (
+    <View style={{borderRadius: 10, paddingVertical: 10,width: 170, backgroundColor: Color.theme, elevation: 5, marginHorizontal: 10, marginVertical: 10}}>
+        <Image source={item.image} style={{alignSelf: 'center',width: 150, height: 150, borderRadius: 10}}/>
+        <Text style={{fontWeight: 'bold', marginHorizontal: 10, marginVertical: 10, textAlign: 'left'}}>{item.title}</Text>
+        <Text style={{fontSize: 10, lineHeight: 15, textAlign: 'justify', marginHorizontal: 10}}>{item.isi}</Text>
+        <Divider/>
+        <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 10, textAlign: 'left'}}>{item.tanggal}</Text>
+    </View>
+  );
+
   return (
     <Scaffold
       fallback={false}
       empty={false}
       popupProps={popupProps}
-      iconRightButton={<Feather name='more-vertical' size={20} color={Color.text} />}
-      onPressRightButton={() => {
-        modalOptionsRef.current.open();
-      }}
+      header={
+        <Header
+            title=''
+            actions={
+              <View style={{flexDirection: 'row', width: '50%', alignItems: 'center',height: '80%'}}>
+                <TouchableOpacity style={{marginRight: 8}}>
+                  <Feather name={'bookmark'} size={24}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {modalOptionsRef.current.open()}}>
+                  <Entypo name={'dots-three-vertical'} size={20}/>
+                </TouchableOpacity>
+              </View>
+                
+            }
+        />
+    }
       loadingProps={loadingProps}
     >
       <ScrollView
@@ -179,21 +243,20 @@ const NewsDetail = ({navigation, route}) => {
                 justifyContent: 'space-between',
                 alignItems: 'flex-start',
                 width: '100%',
-                paddingHorizontal: 16,
+                paddingHorizontal: 15,
                 paddingBottom: 16,
               }}>
               <Text
                 type='bold'
                 align="left"
-                size={19}>
+                size={18}
+                style={{width: '80%'}}>
                 {item.productName}
+              
               </Text>
-              <Divider height={4} />
-              <Text align="left" size={11}>
-                {moment(parseInt(item.created_date)).format('DD MMM YYYY')}
-              </Text>
-              <Text align="left" size={11}>
-                Ditulis oleh {item.fullname}
+              <Divider height={6} />
+              <Text align="left" size={10} color={Color.secondary}>
+                {moment(parseInt(item.created_date)).format('DD MMM YYYY')}  |  Hiburan (Masih Dummy)  |  Ditulis oleh {item.fullname}
               </Text>
             </View>
           </View>
@@ -205,14 +268,71 @@ const NewsDetail = ({navigation, route}) => {
           }
 
         <View style={{padding: 16}}>
-          <Text lineHeight={24} align="left">
+          <Text lineHeight={24} align="justify">
             &nbsp;&nbsp;&nbsp;&nbsp;
             {item.productDescription}
           </Text>
         </View>
-
+        <Row style={{paddingVertical: 20,width: '93%', height: 65, backgroundColor: Color.border, borderRadius: 5, alignSelf: 'center'}}>
+                <View style={{flexDirection: 'row', alignItems: 'center', width: '32%', justifyContent: 'center'}}>
+                    <MaterialIcons name={"favorite-border"} size={18}/>
+                    <Text style={{fontSize: 18, marginHorizontal: 5}}>235</Text>
+                </View>
+                <View style={{flexDirection: 'row', alignItems: 'center',width: '32%', justifyContent: 'center'}}>
+                    <MaterialCommunityIcons name={"comment-processing-outline"} size={16}/>
+                    <Text style={{fontSize: 18, marginHorizontal: 5}}>0</Text>
+                </View>
+                <View style={{flexDirection: 'row', alignItems: 'center', width: '32%', justifyContent: 'center'}}>
+                    <IonIcons name={"eye-outline"} size={18}/>
+                    <Text style={{fontSize: 18, marginHorizontal: 5}}>1.2rb</Text>
+                </View>
+                
+        </Row>
+        <View style={{backgroundColor: Color.border, width: '96%', height: 1, marginVertical: 15, alignSelf: 'center'}}/>
+        <View style={{marginHorizontal: 15}}>
+                <Text style={{fontSize: 10, fontWeight: 'bold', textAlign: 'left'}}>Komentar</Text>
+                <Row style={{marginVertical: 10}}>
+                    <Image source={ImagesPath.avatar1}/>
+                    <Col style={{marginLeft: 10,backgroundColor: Color.border, paddingHorizontal: 10, paddingVertical: 10,height: 55, borderRadius: 5}}>
+                        <Row style={{alignItems: 'center'}}>
+                            <Entypo name={"shield"} color={Color.secondary} style={{marginRight: 5}}/>
+                            <Text style={{fontWeight: 'bold'}}>Dedy Cahyadi O</Text>
+                        </Row>
+                        <Divider height={5}/>
+                        <Text style={{fontSize: 11, textAlign: 'left'}}>Love It</Text>
+                    </Col>
+                </Row>
+                <Row style={{marginLeft: 40}}>
+                    <View style={{width: '90%', flexDirection: 'row'}}>
+                        <Text style={{fontSize: 8, color: Color.secondary, marginRight: 20}}>20 jam</Text>
+                        <Pressable>
+                            <Text style={{fontSize: 8, color: Color.secondary, marginRight: 20}}>Suka</Text>
+                        </Pressable>
+                        <Pressable>
+                            <Text style={{fontSize: 8, color: Color.secondary, marginRight: 20}}>Balas</Text>
+                        </Pressable>
+                    </View>
+                    <Text style={{fontSize: 8, color: Color.secondary}}>16 Suka</Text>
+                </Row>
+        </View>
+            <TouchableOpacity style={{alignItems: 'center', justifyContent: 'center',alignSelf: 'center',borderColor: Color.primary, borderWidth: 1, width: '95%', borderRadius: 30, height: 50, marginVertical: 15}}>
+                <Text style={{color: Color.primary}}>Lihat Semua Komentar</Text>
+            </TouchableOpacity>
+            <View style={{backgroundColor: Color.border, width: '96%', height: 1, marginVertical: 15, alignSelf: 'center'}}/>
+            <Text style={{fontSize: 11, marginHorizontal: 15, fontWeight: 'bold', textAlign: 'left'}}>Artikel Terkait</Text>
+            <Divider height={10}/>
+            <FlatList
+                showsHorizontalScrollIndicator={false}
+                horizontal
+                data={DATA}
+                renderItem={renderItem}
+                keyExtractor={item => item.id}
+                
+            />
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-          <View style={{alignItems: 'center'}}>
+         
+         {/* Ini buat ngelike */}
+          {/* <View style={{alignItems: 'center'}}>
             <TouchableOpacity
                 onPress={() => {
                     fetchAddLike();
@@ -234,9 +354,10 @@ const NewsDetail = ({navigation, route}) => {
             >
                 {state.im_like ? 'Disukai' : 'Suka'}
             </Text>
-        </View>
+        </View> */}
 
-        <View style={{alignItems: 'center'}}>
+                {/* Ini buat komentar */}
+        {/* <View style={{alignItems: 'center'}}>
             <TouchableOpacity
                 onPress={() => {
                     navigation.navigate('CommentListScreen', { item });
@@ -247,7 +368,7 @@ const NewsDetail = ({navigation, route}) => {
                 {item.comment > 0 && <Text>{item.comment} </Text>}
             </TouchableOpacity>
             <Text size={12}>Komentar</Text>
-        </View>
+        </View> */}
 
           {/* <View style={{alignItems: 'center'}}>
             <TouchableOpacity
