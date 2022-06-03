@@ -13,7 +13,8 @@ import {
     TouchableOpacity,
     useColor,
     Button,
-    Alert
+    Alert,
+    Row
   } from '@src/components';
 import { TouchSelect } from '@src/components/Form';
 import ModalSelectStatus from '@src/components/Modal/ModalSelectStatus';
@@ -27,6 +28,8 @@ import { accessClient } from 'src/utils/access_client';
 import FormSelect from 'src/components/FormSelect';
 import DatePicker from 'react-native-date-picker';
 import Moment from 'moment';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -50,9 +53,13 @@ const CustomTextInput = Styled(TextInput)`
   width: 100%;
   height: 100%;
   fontFamily: Inter-Regular;
-  borderBottomWidth: 1px;
-  borderColor: #666666;
+  borderWidth: 1px;
+  borderColor: #9CA3A5;
   fontSize: 14px;
+  borderRadius: 5;
+  paddingHorizontal: 10;
+  paddingTop: 16;
+  fontSize: 12;
 `;
 
 const ErrorView = Styled(View)`
@@ -215,61 +222,13 @@ const EditThreadScreen = (props) => {
             />
 
             <ScrollView>
-                <View style={{paddingHorizontal: 16, paddingTop: 16, paddingBottom: 12}}>
-                    <LabelInput>
-                        <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Gambar</Text>
-                    </LabelInput>
-                    <TouchableOpacity
-                        onPress={() => {
-                            const options = {
-                                mediaType: 'photo',
-                                maxWidth: 640,
-                                maxHeight: 640,
-                                quality: 1,
-                                includeBase64: true,
-                            }
+            
 
-                            launchImageLibrary(options, (callback) => {
-                                setThumbImage(callback.base64);
-                                setMimeImage(callback.type);
-                            })
-                        }}
-                        style={{width: '100%', height: 70, borderRadius: 4, marginTop: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
-                    >
-                        <Entypo name='folder-images' size={22} style={{marginBottom: 4}} />
-                        <Text size={10}>Pilih gambar</Text>
-                    </TouchableOpacity>
-                </View>
-
-                {thumbImage !== '' ?
-                    <TouchableOpacity
-                        onPress={() => {}}
-                        style={{width: '100%', height: height / 3, borderRadius: 4, alignItems: 'center'}}
-                    >
-                        <Image
-                            style={{height: '100%', aspectRatio: 1, borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
-                            source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
-                        />
-                    </TouchableOpacity>
-                :
-                    <TouchableOpacity
-                        onPress={() => {}}
-                        style={{width: '100%', height: height / 3, borderRadius: 4, alignItems: 'center'}}
-                    >
-                        <Image
-                            style={{height: '100%', aspectRatio: 1, borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
-                            source={{ uri: params.image }}
-                        />
-                    </TouchableOpacity>
-                }
-
-                <View style={{paddingHorizontal: 16, paddingTop: 24}}>
-                    <LabelInput>
-                        <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Judul</Text>
-                    </LabelInput>
+<View style={{paddingHorizontal: 16, paddingTop: 16}}>
+                    
                     <EmailRoundedView>
                         <CustomTextInput
-                            placeholder=''
+                            placeholder='Masukkan Judul Artikel . . . '
                             keyboardType='default'
                             placeholderTextColor={Color.gray}
                             underlineColorAndroid='transparent'
@@ -280,26 +239,30 @@ const EditThreadScreen = (props) => {
                             onBlur={() => isValueError('name')}
                             style={{color: Color.text}}
                         />
+                        <LabelInput style={{position: 'absolute', bottom: 26, left: 10}}>
+                            <Text size={7} letterSpacing={0.08} style={{opacity: 0.6}}>Judul</Text>
+                        </LabelInput>
                     </EmailRoundedView>
                     <ErrorView>
                         {/* <Text type='medium' color={Color.error}>error</Text> */}
                     </ErrorView>
                 </View>
 
-                <View style={{paddingHorizontal: 16, paddingTop: 24}}>
-                    <LabelInput>
-                        <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Deskripsi</Text>
-                    </LabelInput>
+                <View style={{paddingHorizontal: 16, paddingTop: 10}}>
+                    
                     <View
                         style={{
                             width: '100%',
-                            height: 80,
+                            height: 220,
                             alignItems: 'flex-start',
                             justifyContent: 'center',
                         }}
                     >
+                        <LabelInput style={{position: 'absolute', top: 0, paddingHorizontal: 10, paddingVertical: 5}}>
+                            <Text size={7} letterSpacing={0.08} style={{opacity: 0.6}}>Isi Artikel</Text>
+                        </LabelInput>
                         <CustomTextInput
-                            placeholder=''
+                            placeholder='Masukkan isi artikel . . .'
                             keyboardType='default'
                             placeholderTextColor={Color.gray}
                             underlineColorAndroid='transparent'
@@ -312,11 +275,72 @@ const EditThreadScreen = (props) => {
                             numberOfLines={8}
                             style={{color: Color.text, textAlignVertical: 'top'}}
                         />
+                        
                     </View>
                     <ErrorView>
                         {/* <Text type='medium' color={Color.error}>error</Text> */}
                     </ErrorView>
                 </View>
+                <View>
+                    <TouchableOpacity style={{fontSize: 12, paddingTop: 15,paddingHorizontal: 10,borderWidth: 1, borderColor: '#9CA3A5', width: '92%', height: 42, borderRadius: 5, alignSelf: 'center'}}>
+                        <Row>
+                            <Text style={{width: '94%', textAlign: 'left'}}>- Kategori Artikel -</Text>
+                            <MaterialIcons name={'keyboard-arrow-down'} size={20}/>
+                        </Row>
+                        <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', left: 10, top: 4}}>Kategori</Text>
+                    </TouchableOpacity>
+            
+                </View>
+
+                <View style={{paddingHorizontal: 16, paddingTop: 16}}>
+                    <LabelInput>
+                        <Text size={12} letterSpacing={0.08} style={{fontWeight: 'bold', marginVertical: 10}}>Gambar Cover</Text>
+                    </LabelInput>
+                    
+                </View>
+
+                {thumbImage !== '' ?
+                    <TouchableOpacity
+                        onPress={() => {}}
+                        style={{width: '100%', height: height / 3, borderRadius: 4, alignItems: 'center'}}
+                    >
+                        <Image
+                            style={{width: '92%',position: 'absolute',height: '100%', aspectRatio: 1, borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
+                            source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
+                        />
+                    </TouchableOpacity>
+                :
+                    <View
+                        onPress={() => {}}
+                        style={{width: '100%', height: height / 3, borderRadius: 4, alignItems: 'center'}}
+                    >
+                        <Image
+                            style={{width: '92%',position: 'absolute',height: '100%', aspectRatio: 1, borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
+                            source={{ uri: params.image }}
+                        />
+                        <TouchableOpacity
+                        onPress={() => {
+                            const options = {
+                                mediaType: 'photo',
+                                maxWidth: 640,
+                                maxHeight: 640,
+                                quality: 1,
+                                includeBase64: true,
+                            }
+
+                            launchImageLibrary(options, (callback) => {
+                                if (callback.base64) {
+                                    setThumbImage(callback.base64);
+                                    setMimeImage(callback.type);
+                                }
+                            })
+                        }}
+                        style={{width: '30%', backgroundColor: 'rgba(255,255,255,0.2)', top: 120,height: 40, borderRadius: 4, borderWidth: 1,marginTop: 5,borderColor: Color.textInput, alignItems: 'center', justifyContent: 'center'}}
+                    >
+                        <Text style={{color: Color.textInput, fontSize: 10}}>Ganti Gambar</Text>
+                    </TouchableOpacity>
+                    </View>
+                }
 
                 {showEvent && <FormSelect
                     label='Tanggal Event'
@@ -331,15 +355,61 @@ const EditThreadScreen = (props) => {
                     }
                 />}
 
-                {accessClient.CreatePosting.showPrivacy && <TouchSelect
+
+                {/* {accessClient.CreatePosting.showPrivacy && <TouchSelect
                     title='Siapa yang dapat melihat ini?'
                     value={selectedStatus.label}
                     iconName={selectedStatus.iconName}
                     onPress={() => modalSelectStatusRef.current.open()}
-                />}
+                />} */}
 
                 <Divider />
-
+                <View style={{paddingHorizontal: 16, paddingTop: 16}}>
+                    
+                    <EmailRoundedView>
+                        <CustomTextInput
+                            placeholder='Masukkan sumber gambar . . . '
+                            keyboardType='default'
+                            placeholderTextColor={Color.gray}
+                            underlineColorAndroid='transparent'
+                            autoCorrect={false}
+                            onChangeText={(text) => onChangeUserData('name', text)}
+                            selectionColor={Color.text}
+                            value={userData.name}
+                            onBlur={() => isValueError('name')}
+                            style={{color: Color.text}}
+                        />
+                        <LabelInput style={{position: 'absolute', bottom: 26, left: 10}}>
+                            <Text size={7} letterSpacing={0.08} style={{opacity: 0.6}}>Sumber Gambar</Text>
+                        </LabelInput>
+                    </EmailRoundedView>
+                    <ErrorView>
+                        {/* <Text type='medium' color={Color.error}>error</Text> */}
+                    </ErrorView>
+                </View>
+                <View style={{paddingHorizontal: 16, paddingTop: 16}}>
+                    
+                    <EmailRoundedView>
+                        <CustomTextInput
+                            placeholder='Masukkan sumber gambar . . . '
+                            keyboardType='default'
+                            placeholderTextColor={Color.gray}
+                            underlineColorAndroid='transparent'
+                            autoCorrect={false}
+                            onChangeText={(text) => onChangeUserData('name', text)}
+                            selectionColor={Color.text}
+                            value={userData.name}
+                            onBlur={() => isValueError('name')}
+                            style={{color: Color.text}}
+                        />
+                        <LabelInput style={{position: 'absolute', bottom: 26, left: 10}}>
+                            <Text size={7} letterSpacing={0.08} style={{opacity: 0.6}}>Tag</Text>
+                        </LabelInput>
+                    </EmailRoundedView>
+                    <ErrorView>
+                        {/* <Text type='medium' color={Color.error}>error</Text> */}
+                    </ErrorView>
+                </View>
                 <Button
                     color={Color.theme}
                     fontColor={Color.error}

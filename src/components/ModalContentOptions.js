@@ -124,10 +124,26 @@ const ModalContentOptions = forwardRef((props, ref) => {
     },
     {
       id: 1,
+      name: 'Bagikan',
+      color: Color.text,
+      onPress: () => {
+        
+      },
+    },
+    {
+      id: 2,
       name: 'Report',
       color: Color.error,
       onPress: () => {
         setModalInputText(true);
+      },
+    },
+    {
+      id: 3,
+      name: 'Hapus',
+      color: Color.error,
+      onPress: () => {
+        
       },
     },
   ];

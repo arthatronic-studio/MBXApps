@@ -22,7 +22,7 @@ import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Entypo from 'react-native-vector-icons/Entypo'
-import Feather from 'react-native-vector-icons/Feather'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import IonIcons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
@@ -61,6 +61,7 @@ const DATA = [
 
 
 const NewsDetail = ({navigation, route}) => {
+  const [bookmark, setBookmark] = useState(false)
   const {item} = route.params;
   const modalOptionsRef = useRef();
 
@@ -135,9 +136,9 @@ const NewsDetail = ({navigation, route}) => {
         <Header
             title=''
             actions={
-              <View style={{flexDirection: 'row', width: '50%', alignItems: 'center',height: '80%'}}>
-                <TouchableOpacity style={{marginRight: 8}}>
-                  <Feather name={'bookmark'} size={24}/>
+              <View style={{flexDirection: 'row', marginTop: 6,width: '50%', alignItems: 'center',height: '80%'}}>
+                <TouchableOpacity style={{marginRight: 15}} onPress={()=> setBookmark(!bookmark)}>
+                {bookmark == true ? <FontAwesome name={'bookmark'} size={24}/> : <FontAwesome name={'bookmark-o'} size={24}/>}
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {modalOptionsRef.current.open()}}>
                   <Entypo name={'dots-three-vertical'} size={20}/>
