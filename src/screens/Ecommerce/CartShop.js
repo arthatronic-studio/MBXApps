@@ -421,7 +421,7 @@ const CartShop = ({navigation, route}) => {
       item.forEach((element, index) => {
         element.products.forEach(element => {
           if (element.checked)
-            total = total + element.price * element['quantity'];
+            total = total + element.price * (element['quantity'] || element['qty']);
         });
       });
       return total;
@@ -475,8 +475,8 @@ const CartShop = ({navigation, route}) => {
             Total Harga
           </Text>
           <Text type="bold" color={Color.text}>
-            {cart 
-              ? FormatMoney.getFormattedMoney(totalProduct([cart]))
+            {list 
+              ? FormatMoney.getFormattedMoney(totalProduct(list))
               : FormatMoney.getFormattedMoney(0)}
           </Text>
         </Col>

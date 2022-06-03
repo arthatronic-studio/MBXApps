@@ -81,7 +81,7 @@ const CartAuction = ({navigation, route}) => {
   const submit = (val) => {
     const dataq = [{
       type: 'auction',
-      products: [{...val,id: val.productId, imageUrl: val.image.length > 0 ? val.image[0] : '',
+      products: [{...val,id: val.productId, imageUrl: val.image.length > 0 ? val.image : '',
         qty: val.quantity,
         price: val.latestBidPrice}],
       
@@ -104,7 +104,7 @@ const CartAuction = ({navigation, route}) => {
             }}>
             <Row style={{}}>
               <Image
-                source={{ uri: val.imageUrl }}
+                source={{ uri: val.image }}
                 style={{
                   height: 74,
                   width: 74,

@@ -369,7 +369,7 @@ const CheckoutScreen = ({ navigation, route }) => {
                 <>
                   <Row style={{marginBottom: 10}}>
                     <Image
-                      source={{uri: val.imageUrl}}
+                      source={{uri: val.imageUrl }}
                       style={{
                         height: 74,
                         width: 74,
