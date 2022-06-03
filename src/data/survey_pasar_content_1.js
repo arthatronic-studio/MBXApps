@@ -1,8 +1,9 @@
 export default [
-    // type = LABEL | TEXT_INPUT | TEXT_AREA | MAP_VIEW | UPLOAD | SELECT_MULTIPLE | TIME_PICKER
-    // validation TEXT_INPUT keyboardType = number-pad | email-address | numeric
-    // validaition UPLOAD uploadType = all | image | pdf | music
-    // validation SELECT_MULTIPLE selectType = form | tag
+    // type = LABEL | TEXT_INPUT | TEXT_AREA | MAP_VIEW | UPLOAD | SELECT_MULTIPLE | TIME_PICKER | AUTOFILL_ADDRESS
+    // validation TEXT_INPUT        keyboardType = number-pad (phone number) | email-address | numeric
+    // validation UPLOAD            uploadType = all | image | pdf | music
+    // validation SELECT_MULTIPLE   selectType = form | tag
+    // validation AUTOFILL_ADDRESS  fill_type = pin | full_address | province | city | suburb | area
     // {
     //     id: 0,
     //     order: 0,
@@ -17,14 +18,24 @@ export default [
     //     default_value: null,
     //     validation: null,
     //     multiple: true, // content bisa masukan banyak value / array
-    //     branching_code: [], // list kode yang menjadi referensi content ini ditampilkan
-    //     status: 1, // 0 = UNPUBLISH | 1 = PUBLISH | 2 = BRANCHING jika branching_code terdapat code yang di pilih pada value options sebelumnya
+    //     parent_code: null, // ref code
+    //     branching_code: [], // list kode yang menjadi referensi content ini ditampilkan (status = 2)
+    //     legacy_code: [],
+    //     status: 1, 
+                    // status yang tampil (1, 3)
+                    // status tampil dengan kondisi (2)
+                    // status yang dikirim (1, 2, 4)
+                    // 0 = UNPUBLISH
+                    // 1 = PUBLISH
+                    // 2 = BRANCHING jika branching_code terdapat code yang di pilih pada value options sebelumnya
+                    // 3 = MASTER tampil namun value tidak terkirim
+                    // 4 = HIDDEN tidak tampil namun value terkirim
     // }
     {
         id: 1,
         order: 1,
         code: 'block_1_1',
-        label: 'Informasi Pribadi',
+        label: 'Informasi Responden / Penanggung Jawab Pasar',
         placeholder: '',
         type: 'LABEL',
         header_id: 1,
@@ -34,7 +45,9 @@ export default [
         default_value: null,
         validation: null,
         multiple: false,
+        parent_code: null,
         branching_code: [],
+        legacy_code: [],
         status: 1,
     },
     {
@@ -51,7 +64,9 @@ export default [
         default_value: { ref: 'user', key: ['firstName', 'lastName'] },
         validation: null,
         multiple: false,
+        parent_code: null,
         branching_code: [],
+        legacy_code: [],
         status: 1,
     },
     {
@@ -68,7 +83,9 @@ export default [
         default_value: { ref: 'user', key: ['phoneNumber'] },
         validation: { keyboardType: 'number-pad', prefixText: '+62' },
         multiple: false,
+        parent_code: null,
         branching_code: [],
+        legacy_code: [],
         status: 1,
     },
     {
@@ -85,7 +102,9 @@ export default [
         default_value: { ref: 'user', key: ['email'] },
         validation: { keyboardType: 'email-address' },
         multiple: false,
+        parent_code: null,
         branching_code: [],
+        legacy_code: [],
         status: 1,
     },
     {
@@ -102,7 +121,9 @@ export default [
         default_value: null,
         validation: null,
         multiple: false,
+        parent_code: null,
         branching_code: [],
+        legacy_code: [],
         status: 1,
     },
     {
@@ -119,7 +140,9 @@ export default [
         default_value: null,
         validation: null,
         multiple: false,
+        parent_code: null,
         branching_code: [],
+        legacy_code: [],
         status: 1,
     },
     {
@@ -136,7 +159,9 @@ export default [
         default_value: null,
         validation: { keyboardType: 'number-pad', prefixText: '+62' },
         multiple: false,
+        parent_code: null,
         branching_code: [],
+        legacy_code: [],
         status: 1,
     },
     {
@@ -153,7 +178,9 @@ export default [
         default_value: null,
         validation: null,
         multiple: false,
+        parent_code: null,
         branching_code: [],
+        legacy_code: [],
         status: 1,
     },
     {
@@ -170,7 +197,31 @@ export default [
         default_value: null,
         validation: { keyboardType: 'number-pad', prefixText: '+62' },
         multiple: false,
+        parent_code: null,
         branching_code: [],
+        legacy_code: [],
+        status: 1,
+    },
+    {
+        id: 10,
+        order: 10,
+        code: 'block_1_10',
+        label: 'Koordinator tag',
+        placeholder: '',
+        type: 'RADIO',
+        header_id: 1,
+        client_type: 'TRIBES_SURVEY_PASAR',
+        required: true,
+        options: [
+            { id: 'hmi', name: 'HMI' },
+            { id: 'fkppi', name: 'FKPPI' },
+        ],
+        default_value: null,
+        validation: null,
+        multiple: false,
+        parent_code: null,
+        branching_code: [],
+        legacy_code: [],
         status: 1,
     },
 ]

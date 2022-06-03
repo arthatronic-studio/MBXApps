@@ -28,7 +28,7 @@ export default [
         order: 3,
         header_label: 'Seputar Pasar',
         sub_header_label: 'Survey Seputar pasar yang kamu kunjungi',
-        button_label: 'Kirim',
+        button_label: 'Review',
         client_type: 'TRIBES_SURVEY_PASAR',
     },
 ]

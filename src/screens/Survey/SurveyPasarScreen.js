@@ -42,8 +42,13 @@ import survey_pasar_content_3 from 'src/data/survey_pasar_content_3';
 import FormSelect from 'src/components/FormSelect';
 import ModalSelectMap from 'src/components/ModalSelectMap';
 import { initialLatitude, initialLongitude } from 'src/utils/constants';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import DatePicker from 'react-native-date-picker';
+import AutofillAddress from 'src/components/AutofillAddress';
+import ModalActions from 'src/components/Modal/ModalActions';
+import { fetchShipperGetAreaList, fetchShipperGetCityList, fetchShipperGetProvinceList, fetchShipperGetSuburbList } from 'src/api/shipper';
+import ModalActionScroll from 'src/components/Modal/ModalActionScroll';
+import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
 
 var crypto = require('crypto-js')
 
@@ -63,6 +68,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
     const { width } = useWindowDimensions();
 
     const [currentHeaderIndex, setCurrentHeaderIndex] = useState(0);
+    const [currentContentIndex, setCurrentContentIndex] = useState(-1);
     const [valueContent, setValueContent] = useState([]);
 
     const itemHeader = survey_pasar_header[currentHeaderIndex];
@@ -77,6 +83,8 @@ const SurveyPasarScreen = ({ navigation, route }) => {
             for (const item of arr) {
                 newData.push({
                     code: item.code,
+                    type: item.type,
+                    label: item.label,
                     value: mappingTypeContent(item),
                 });
             }
@@ -115,6 +123,8 @@ const SurveyPasarScreen = ({ navigation, route }) => {
             setCurrentHeaderIndex(currentHeaderIndex + 1);
             return;
         }
+
+        navigation.navigate('SurveyReviewScreen', { listHeader: survey_pasar_header, valueContent: valueContent });
     }
 
     const onPressLeftButton = () => {
@@ -249,14 +259,19 @@ const SurveyPasarScreen = ({ navigation, route }) => {
     const [modalSelectMap, setModalSelectMap] = useState(false);
     const renderMapView = (item, index) => {
         return (
-            <>
+            <View style={{marginBottom: 12}}>
                 <FormSelect
                     type='select'
+                    hideErrorHint
                     label={item.label}
                     value={valueContent.length > 0 && valueContent[currentHeaderIndex][index].value ? valueContent[currentHeaderIndex][index].value.fullAddress : ''}
                     placeholder={item.placeholder}
                     onPress={() => {
                         setModalSelectMap(true);
+                    }}
+                    labelContainerStyle={{
+                        paddingTop: 0,
+                        marginBottom: 4,
                     }}
                 />
 
@@ -296,10 +311,11 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                     }}
                     onClose={() => setModalSelectMap(false)}
                 />
-            </>
+            </View>
         )
     }
 
+    const [modalImagePicker, setModalImagePicker] = useState(false);
     const renderUpload = (item, index) => {
         let arr = valueContent.length > 0 ? [valueContent[currentHeaderIndex][index].value] : [];
         if (item.multiple) {
@@ -360,31 +376,8 @@ const SurveyPasarScreen = ({ navigation, route }) => {
 
                 <TouchableOpacity
                     onPress={() => {
-                        const options = {
-                            mediaType: 'photo',
-                            maxWidth: 640,
-                            maxHeight: 640,
-                            multiple: true,
-                            quality: 0.5,
-                            includeBase64: true,
-                        };
-
-                        launchImageLibrary(options, callback => {
-                            if (callback.base64 && valueContent.length > 0) {
-                                let newValues = [...valueContent];
-                                arr.push(`data:${callback.type};base64,${callback.base64}`);
-                                newValues[currentHeaderIndex][index].value = arr;
-                                setValueContent(newValues);
-
-                                // TODO
-                                // const newPhotos = [...photos];
-                                // newPhotos.push({
-                                //   uri: callback.uri,
-                                //   type: callback.type,
-                                //   name: callback.fileName
-                                // });
-                            }
-                        });
+                        setModalImagePicker(true);
+                        setCurrentContentIndex(index);
                     }}
                     style={{
                         width: '30%',
@@ -501,6 +494,86 @@ const SurveyPasarScreen = ({ navigation, route }) => {
         )
     }
 
+    const [modalSelectBox, setModalSelectBox] = useState(false);
+    const [currentData, setCurrentData] = useState([]);
+    const fetchSelectBox = async(item, index) => {
+        let newValues = [...valueContent];
+
+        const valProv = valueContent[currentHeaderIndex].filter((e) => e.code === item.parent_code)[0];
+        const valCity = valueContent[currentHeaderIndex].filter((e) => e.code === item.parent_code)[0];
+        const valSub = valueContent[currentHeaderIndex].filter((e) => e.code === item.parent_code)[0];
+
+        // legacy
+        const legacy_code = currentContent[index].legacy_code; 
+        for (let i = 0; i < legacy_code.length; i++) {
+            const element = legacy_code[i];
+            const find = currentContent.filter((f) => f.code == element)[0];
+            if (find) {
+                const idxOf = currentContent.indexOf(find);
+                if (idxOf !== -1) {
+                    newValues[currentHeaderIndex][idxOf].value = '';
+                    currentContent[idxOf].status = 2;
+                }
+            }
+        }
+
+        if (item.validation.shema === 'queryGetProvince') {
+            const result = await fetchShipperGetProvinceList({ countryCode: 228 });
+            if (result.status) {
+                setCurrentData(result.data);
+            }
+        }
+        else if (item.validation.shema === 'queryGetCity') {
+            // ambil value yg jadi brancing parent
+            const result = await fetchShipperGetCityList({ provinceId: valProv && valProv.value ? valProv.value.id : null });
+            if (result.status) {
+                setCurrentData(result.data);
+            }
+        }
+        else if (item.validation.shema === 'queryGetSub') {
+            // ambil value yg jadi brancing parent
+            const result = await fetchShipperGetSuburbList({ cityId: valCity && valCity.value ? valCity.value.id : null });
+            if (result.status) {
+                setCurrentData(result.data);
+            }
+        }
+        else if (item.validation.shema === 'queryGetArea') {
+            // ambil value yg jadi brancing parent
+            const result = await fetchShipperGetAreaList({ suburbId: valSub && valSub.value ? valSub.value.id : null });
+            if (result.status) {
+                setCurrentData(result.data);
+            }
+        }
+    }
+    const renderSelecBox = (item, index) => {
+        let arrOptions = item.options;
+        if (item.validation && item.validation.fetch) {
+            arrOptions = currentData;
+        }
+
+        return (
+            <View style={{marginBottom: 12}}>
+                <FormSelect
+                    type='select'
+                    hideErrorHint
+                    label={item.label}
+                    value={valueContent.length > 0 && valueContent[currentHeaderIndex][index].value ? valueContent[currentHeaderIndex][index].value.name : ''}
+                    placeholder={item.placeholder}
+                    onPress={() => {
+                        setModalSelectBox(true);
+                        setCurrentData([]);
+                        fetchSelectBox(item, index);
+                        setCurrentContentIndex(index);
+                    }}
+                    labelContainerStyle={{
+                        paddingTop: 0,
+                        marginBottom: 4,
+                    }}
+                />
+            </View>
+        )
+    }
+
     const [showDatePicker, setShowDatePicker] = useState(false);
     const renderTimePicker = (item, index) => {
         const val = valueContent.length > 0 ? valueContent[currentHeaderIndex][index].value : new Date();
@@ -582,31 +655,45 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                     </View>
                 }
                 renderItem={({ item, index }) => {
-                    if (item.type === 'LABEL') {
-                        return renderLabel(item, index);
-                    }
-                    if (item.type === 'TEXT_INPUT') {
-                        return renderTextInput(item, index);
-                    }
-                    if (item.type === 'MAP_VIEW') {
-                        return renderMapView(item, index);
-                    }
-                    if (item.type === 'TEXT_AREA') {
-                        return renderTextArea(item, index);
-                    }
-                    if (item.type === 'UPLOAD') {
-                        return renderUpload(item, index);
-                    }
-                    if (item.type === 'SELECT_MULTIPLE') {
-                        if (item.validation && item.validation.selectType === 'tag') {
-                            return renderSelectMultipleTag(item, index);
+                    if ([1, 3].includes(item.status)) {
+                        if (item.type === 'LABEL') {
+                            return renderLabel(item, index);
+                        }
+                        if (item.type === 'TEXT_INPUT') {
+                            return renderTextInput(item, index);
+                        }
+                        if (item.type === 'MAP_VIEW') {
+                            return renderMapView(item, index);
+                        }
+                        if (item.type === 'TEXT_AREA') {
+                            return renderTextArea(item, index);
+                        }
+                        if (item.type === 'UPLOAD') {
+                            return renderUpload(item, index);
+                        }
+                        if (item.type === 'SELECT_MULTIPLE') {
+                            if (item.validation && item.validation.selectType === 'tag') {
+                                return renderSelectMultipleTag(item, index);
+                            }
+                        }
+                        if (item.type === 'TIME_PICKER') {
+                            return renderTimePicker(item, index);
+                        }
+                        if (item.type === 'RADIO') {
+                            return renderRadio(item, index);
+                        }
+                        if (item.type === 'AUTOFILL_ADDRESS') {
+                            return <AutofillAddress />
+                        }
+                        if (item.type === 'SELECT_BOX') {
+                            return renderSelecBox(item, index);
                         }
                     }
-                    if (item.type === 'TIME_PICKER') {
-                        return renderTimePicker(item, index);
+                    else if ([2, 4].includes(item.status)) {
+                        return <View />
                     }
-                    if (item.type === 'RADIO') {
-                        return renderRadio(item, index);
+                    else {
+                        return <View />
                     }
 
                     return <Text>Not set</Text>
@@ -620,6 +707,73 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                     </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>
+
+            {/* modal for select box */}
+            <ModalActionScroll
+                data={currentData}
+                visible={modalSelectBox && currentContentIndex !== -1}
+                onPress={(val) => {
+                    if (valueContent.length > 0) {
+                        let newValues = [...valueContent];
+                        newValues[currentHeaderIndex][currentContentIndex].value = val;
+
+                        const branching_code = currentContent[currentContentIndex].branching_code;
+                        
+                        for (let i = 0; i < branching_code.length; i++) {
+                            const element = branching_code[i];
+                            const find = currentContent.filter((f) => f.code == element)[0];
+                            if (find) {
+                                const idxOf = currentContent.indexOf(find);
+                                if (idxOf !== -1) {
+                                    newValues[currentHeaderIndex][idxOf].value = '';
+                                    currentContent[idxOf].status = 1;
+                                }
+                            }
+                        }
+                        
+                        setValueContent(newValues);
+                    }
+                    setModalSelectBox(false);
+                    setCurrentContentIndex(-1);
+                }}
+                onClose={() => {
+                    setModalSelectBox(false);
+                    setCurrentContentIndex(-1);
+                }}
+            />
+
+            {/* modal upload */}
+            <ModalImagePicker
+                visible={modalImagePicker && currentContentIndex !== -1}
+                onClose={() => {
+                    setModalImagePicker(false);
+                    setCurrentContentIndex(-1);
+                }}
+                onSelected={(callback) => {
+                    if (callback.base64 && valueContent.length > 0) {
+                        let arr = valueContent.length > 0 ? [valueContent[currentHeaderIndex][currentContentIndex].value] : [];
+                        if (currentContent[currentContentIndex].multiple) {
+                            arr = valueContent.length > 0 ? valueContent[currentHeaderIndex][currentContentIndex].value : [];
+                        }
+
+                        let newValues = [...valueContent];
+                        arr.push(`data:${callback.type};base64,${callback.base64}`);
+                        newValues[currentHeaderIndex][currentContentIndex].value = arr;
+                        setValueContent(newValues);
+
+                        // TODO
+                        // const newPhotos = [...photos];
+                        // newPhotos.push({
+                        //   uri: callback.uri,
+                        //   type: callback.type,
+                        //   name: callback.fileName
+                        // });
+                    }
+
+                    setModalImagePicker(false);
+                    setCurrentContentIndex(-1);
+                }}
+            />
         </Scaffold>
     )
 }
