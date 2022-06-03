@@ -145,6 +145,8 @@ const ChatUserListScreen = ({navigation, route}) => {
       limit: itemPerPage,
     };
 
+    console.log('var', variables);
+
     Client.query({
       query: queryGetUserOrganizationRef,
       variables,
