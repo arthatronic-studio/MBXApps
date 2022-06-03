@@ -171,8 +171,8 @@ const CartShop = ({navigation, route}) => {
   const submit = () => {
     console.log(route, 'props');
     let tempData = [];
-    const newList = [cart]
-    newList.forEach(element => {
+    const newList = [list]
+    list.forEach(element => {
       element.products.forEach(element => {
         if (element.checked)
           tempData.push({
@@ -187,7 +187,7 @@ const CartShop = ({navigation, route}) => {
       tempData,
     };
     let dataq = [];
-    newList.forEach(val => {
+    list.forEach(val => {
       let datTem = [];
       val.products.forEach(element => {
         if (element.checked) {
