@@ -482,10 +482,10 @@ const CartShop = ({navigation, route}) => {
         </Col>
         <Col>
           <TouchableOpacity
-            disabled={checkButton(cart ? [cart] : [])}
+            disabled={checkButton(list)}
             onPress={() => submit()}
             style={{
-              backgroundColor: checkButton(cart ? [cart] : []) ? '#bcbcbc' : Color.primary,
+              backgroundColor: checkButton(list) ? '#bcbcbc' : Color.primary,
               borderRadius: 20,
               paddingVertical: 10,
             }}>
