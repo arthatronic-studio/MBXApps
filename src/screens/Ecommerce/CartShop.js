@@ -203,44 +203,47 @@ const CartShop = ({navigation, route}) => {
     navigation.navigate('CheckoutScreen', {item, list: dataq});
   };
 
-  function onChecked(index, id, value, name, induk) {
-    console.log(value, induk)
-    let tempx = induk
-    if (name == 'product') {
-      if(!cart){
-        tempx['products'][id]['checked'] = !value;
-        setCart(tempx);
-      }else if(cart.id == induk.id){
-        tempx = cart;
-        tempx['products'][id]['checked'] = !value;
-        setCart(tempx);
-      }else{
-        tempx['products'][id]['checked'] = !value;
-        setCart(tempx);
+  function onChecked(index, id, value, name) {
+    const tempx = list;
+    tempx.forEach((e, i) => {
+      if (name == 'product') {
+        // handle hanya bisa pilih 1 toko
+        if (i === index) {
+          tempx[i]['checked'] = !value;
+          tempx[i]['products'][id]['checked'] = !value;
+        } else {
+          tempx[i]['checked'] = false;
+          tempx[i]['products'].forEach((element, idx) => {
+            tempx[i]['products'][idx]['checked'] = false;
+          });
+        }
+
+        // old
+        // tempx[index]['products'][id]['checked'] = !value;
+      } else if (name === 'shop') {
+        // handle hanya bisa pilih 1 toko
+        if (i === index) {
+          tempx[i]['checked'] = !value;
+          tempx[i]['products'].forEach((element, idx) => {
+            tempx[i]['products'][idx]['checked'] = !value;
+          });
+        } else {
+          tempx[i]['checked'] = false;
+          tempx[i]['products'].forEach((element, idx) => {
+            tempx[i]['products'][idx]['checked'] = false;
+          });
+        }
+
+        // old
+        // tempx[index]['checked'] = !value;
+        // tempx[index]['products'].forEach((element, idx) => {
+        //   tempx[index]['products'][idx]['checked'] = !value;
+        // });
       }
-      setRefresh(refresh + 1);
-    } else {
-      tempx = {
-        ...tempx,
-        checked: !value
-      }
-      if(induk.checked){
-        console.log('trueeeee')
-        tempx['products'].forEach((element, idx) => {
-          tempx['products'][idx]['checked'] = false
-        });
-        setCart({...induk, checked: false, ...tempx})
-      }else{
-        console.log('falseeee')
-        tempx['products'].forEach((element, idx) => {
-          tempx['products'][idx]['checked'] = true
-        });
-        setCart({...induk, checked: true, ...tempx})
-      }
-      console.log(tempx, 111);
-      // setList(tempx);
-      setRefresh(refresh + 1);
-    }
+    });
+
+    setList(tempx);
+    setRefresh(refresh + 1);
   }
 
   console.log('list', list);
@@ -262,7 +265,7 @@ const CartShop = ({navigation, route}) => {
               borderWidth: 1,
               borderRadius: 4,
             }}>
-              {cart && item.id == cart.id && cart['checked'] && <AntDesign name="check" />}
+              {item.checked && <AntDesign name="check" />}
           </View>
         </TouchableOpacity>
           
@@ -302,7 +305,7 @@ const CartShop = ({navigation, route}) => {
                       borderRadius: 4,
                     }}
                   >
-                    {cart && cart['id'] == item.id && cart['products'][id]['checked'] && <AntDesign name="check" />}
+                    {val.checked && <AntDesign name="check" />}
                  </View>
               </TouchableOpacity>
             </View>
@@ -462,15 +465,7 @@ const CartShop = ({navigation, route}) => {
         data={list}
         renderItem={renderItem}
         contentContainerStyle={{
-          paddingBottom: 16,
-        }}
-      />
-
-      <View
-        style={{
-          backgroundColor: '#rgba(255, 255, 254, 0.2)',
-          height: 2,
-          marginTop: 24,
+          paddingVertical: 16,
         }}
       />
         

@@ -81,13 +81,13 @@ const DetailLelang = ({ navigation, route }) => {
 
   const getDetailLelang = () => {
     const variables = {
-      auctionProductId: id
+      auctionProductId: id ? id : item.auctionId
     };
 
     Client.query({
       query: queryGetDetailAuction,
       variables: {
-        auctionProductId: id
+        auctionProductId: id ? id : item.auctionId
       },
     }).then(res => {
       console.log('Try Data', res.data.auctionProductDetail);

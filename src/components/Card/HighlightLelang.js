@@ -22,6 +22,8 @@ import ScreenEmptyData from '../Modal/ScreenEmptyData';
 import PostingHeader from '../Posting/PostingHeader';
 import { initialItemState } from 'src/utils/constants';
 import ScreenIndicator from '../Modal/ScreenIndicator';
+import Moment from 'moment';
+import CardHighlightLelang from './CardHighlightLelang';
 
 const propTypes = {
   title: PropTypes.string,
@@ -109,35 +111,7 @@ const HighlightLelang = ({ title, nav, prodStatus }) => {
         onPress={() => {
           navigation.navigate('DetailLelang', { item })
         }}
-      >
-        <View
-        style={{
-          width: '17%',
-          position: 'absolute',
-          marginVertical: 14,
-          marginHorizontal: 20,
-        }}>
-        <TouchableOpacity
-          style={{
-            width: 53,
-            height: 23,
-          }}>
-          <View>
-            <View
-              style={{
-                backgroundColor: Color.error,
-                width: 60,
-                height: 23,
-                borderRadius: 50,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Text color={Color.textInput} size={10}>{item.time}</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </View>
+      > 
         <Image
           source={{ uri: item.product.imageUrl }}
           style={{
@@ -147,6 +121,35 @@ const HighlightLelang = ({ title, nav, prodStatus }) => {
             alignSelf: 'center',
           }}
         />
+
+        <View
+          style={{
+            width: '17%',
+            position: 'absolute',
+            marginVertical: 14,
+            marginHorizontal: 14,
+          }}>
+            {/* <TouchableOpacity
+              style={{
+                width: 53,
+                height: 23,
+              }}> */}
+              <View>
+                <View
+                  style={{
+                    backgroundColor: prodStatus === 'WILLCOME' ? '#3C58C1' : Color.danger,
+                    width: 60,
+                    height: 23,
+                    borderRadius: 50,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text color={Color.textInput} size={10}>{Moment(item.dateStart).format('DD MMM')}</Text>
+                </View>
+              </View>
+            {/* </TouchableOpacity> */}
+        </View>
 
         <View
           style={{
@@ -180,7 +183,7 @@ const HighlightLelang = ({ title, nav, prodStatus }) => {
       !list.loading && list.data.length > 0 ?
         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
           {list.data.map((item, index) => {
-            return renderItem(item, index);
+            return <CardHighlightLelang item={item} index={index} color={prodStatus === 'WILLCOME' ? '#3C58C1' : Color.danger} type={prodStatus}/>
           })}
         </View> :
         <View style={{ width: '100%', aspectRatio: 16/9 }}>

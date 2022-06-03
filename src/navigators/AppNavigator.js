@@ -158,6 +158,8 @@ import UploadVideoScreen from 'src/screens/MediaPlayer/UploadVideoScreen';
 import AlbumMusicDetail from 'src/screens/MediaPlayer/AlbumMusicDetail';
 
 // Survey
+import SurveyPasarScreen from 'src/screens/Survey/SurveyPasarScreen';
+import SurveyReviewScreen from 'src/screens/Survey/SurveyReviewScreen';
 import SurveyFirst from 'src/screens/Survey/SurveyFirst';
 import SurveySecond from 'src/screens/Survey/SurveySecond';
 import SurveyThird from 'src/screens/Survey/SurveyThird';
@@ -399,6 +401,8 @@ function MainStackNavigator() {
       <Screen name='AlbumMusicDetail' component={AlbumMusicDetail} />
 
       {/* Survey */}
+      <Screen name='SurveyPasarScreen' component={SurveyPasarScreen} />
+      <Screen name='SurveyReviewScreen' component={SurveyReviewScreen} />
       <Screen name='SurveyFirst' component={SurveyFirst} />
       <Screen name='SurveySecond' component={SurveySecond} />
       <Screen name='SurveyThird' component={SurveyThird} />
