@@ -305,7 +305,7 @@ const DetailLelang = ({ navigation, route }) => {
             align='left'
             lineHeight={20}
           >
-           {detail ? detail.description : ""}
+           {product ? product.description : ""}
           </Text>
         </View>
       </ScrollView>

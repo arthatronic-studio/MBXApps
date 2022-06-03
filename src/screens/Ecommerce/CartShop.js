@@ -43,7 +43,7 @@ const CartShop = ({navigation, route}) => {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState([]);
-  const [cart, setCart] = useState(0);
+  const [cart, setCart] = useState(null);
   const [refresh, setRefresh] = useState(0);
   const [loadingProps, showLoading, hideLoading] = useLoading();
 
@@ -68,7 +68,6 @@ const CartShop = ({navigation, route}) => {
         // hideLoading()
         console.log(res);
         if (res.data.ecommerceCartList.id) {
-          setCart(res.data.ecommerceCartList);
           const dataq = res.data.ecommerceCartList.items.map((val, id) => {
             const dateq = {
               ...val,
@@ -172,7 +171,8 @@ const CartShop = ({navigation, route}) => {
   const submit = () => {
     console.log(route, 'props');
     let tempData = [];
-    list.forEach(element => {
+    const newList = [cart]
+    newList.forEach(element => {
       element.products.forEach(element => {
         if (element.checked)
           tempData.push({
@@ -187,7 +187,7 @@ const CartShop = ({navigation, route}) => {
       tempData,
     };
     let dataq = [];
-    list.forEach(val => {
+    newList.forEach(val => {
       let datTem = [];
       val.products.forEach(element => {
         if (element.checked) {
@@ -203,19 +203,42 @@ const CartShop = ({navigation, route}) => {
     navigation.navigate('CheckoutScreen', {item, list: dataq});
   };
 
-  function onChecked(index, id, value, name) {
-    const tempx = list;
+  function onChecked(index, id, value, name, induk) {
+    console.log(value, induk)
+    let tempx = induk
     if (name == 'product') {
-      tempx[index]['products'][id]['checked'] = !value;
-      setList(tempx);
+      if(!cart){
+        tempx['products'][id]['checked'] = !value;
+        setCart(tempx);
+      }else if(cart.id == induk.id){
+        tempx = cart;
+        tempx['products'][id]['checked'] = !value;
+        setCart(tempx);
+      }else{
+        tempx['products'][id]['checked'] = !value;
+        setCart(tempx);
+      }
       setRefresh(refresh + 1);
     } else {
-      tempx[index]['checked'] = !value;
-      tempx[index]['products'].forEach((element, idx) => {
-        tempx[index]['products'][idx]['checked'] = !value;
-      });
+      tempx = {
+        ...tempx,
+        checked: !value
+      }
+      if(induk.checked){
+        console.log('trueeeee')
+        tempx['products'].forEach((element, idx) => {
+          tempx['products'][idx]['checked'] = false
+        });
+        setCart({...induk, checked: false, ...tempx})
+      }else{
+        console.log('falseeee')
+        tempx['products'].forEach((element, idx) => {
+          tempx['products'][idx]['checked'] = true
+        });
+        setCart({...induk, checked: true, ...tempx})
+      }
       console.log(tempx, 111);
-      setList(tempx);
+      // setList(tempx);
       setRefresh(refresh + 1);
     }
   }
@@ -226,7 +249,7 @@ const CartShop = ({navigation, route}) => {
     <View style={{borderBottomColor: '#00000020', borderBottomWidth: 1, marginBottom: 16}}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <TouchableOpacity
-          onPress={() => onChecked(index, null, item.checked, 'shop')}
+          onPress={() => onChecked(index, null, item.checked, 'shop', item)}
           style={{paddingLeft: 16, paddingVertical: 8}}
         >
             <View style={{
@@ -239,7 +262,7 @@ const CartShop = ({navigation, route}) => {
               borderWidth: 1,
               borderRadius: 4,
             }}>
-              {item.checked && <AntDesign name="check" />}
+              {cart && item.id == cart.id && cart['checked'] && <AntDesign name="check" />}
           </View>
         </TouchableOpacity>
           
@@ -262,7 +285,7 @@ const CartShop = ({navigation, route}) => {
                 paddingVertical: 20,
               }}>
               <TouchableOpacity
-                onPress={() => onChecked(index, id, val.checked, 'product')}
+                onPress={() => onChecked(index, id, val.checked, 'product', item)}
                 style={{
                   paddingRight: 8
                 }}
@@ -279,7 +302,7 @@ const CartShop = ({navigation, route}) => {
                       borderRadius: 4,
                     }}
                   >
-                    {val.checked && <AntDesign name="check" />}
+                    {cart && cart['id'] == item.id && cart['products'][id]['checked'] && <AntDesign name="check" />}
                  </View>
               </TouchableOpacity>
             </View>
@@ -457,17 +480,17 @@ const CartShop = ({navigation, route}) => {
             Total Harga
           </Text>
           <Text type="bold" color={Color.text}>
-            {list && list.length > 0
-              ? FormatMoney.getFormattedMoney(totalProduct(list))
+            {cart 
+              ? FormatMoney.getFormattedMoney(totalProduct([cart]))
               : FormatMoney.getFormattedMoney(0)}
           </Text>
         </Col>
         <Col>
           <TouchableOpacity
-            disabled={checkButton(list)}
+            disabled={checkButton(cart ? [cart] : [])}
             onPress={() => submit()}
             style={{
-              backgroundColor: checkButton(list) ? '#bcbcbc' : Color.primary,
+              backgroundColor: checkButton(cart ? [cart] : []) ? '#bcbcbc' : Color.primary,
               borderRadius: 20,
               paddingVertical: 10,
             }}>

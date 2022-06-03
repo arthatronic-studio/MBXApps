@@ -73,6 +73,7 @@ const CheckoutScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     const {saveAddress, saveShippment} = route.params;
+    console.log(route.params)
     if (saveAddress) {
       getAddress();
       //   setAddress(saveAddress)
@@ -253,7 +254,7 @@ const CheckoutScreen = ({ navigation, route }) => {
     let total = 0;
     if (item) {
       item.forEach((element, index) => {
-        total = total + element.price * element['qty'];
+        total = total + element.price * (element['qty'] || element['quantity'])
       });
       return total;
     }

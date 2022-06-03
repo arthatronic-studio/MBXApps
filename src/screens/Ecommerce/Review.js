@@ -106,6 +106,7 @@ const Review = ({navigation, route}) => {
     const variables = {
       page: 1,
       itemPerPage: 20,
+      type: 'PRODUCT'
     };
 
     console.log('variables', variables);
