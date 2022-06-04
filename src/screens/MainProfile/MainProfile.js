@@ -202,14 +202,14 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'join_community',
       title: 'Gabung Komunitas',
-      show: accessClient.MainProfile.showMenuJoinCommunity && user && !user.organizationId,
+      show: true || accessClient.MainProfile.showMenuJoinCommunity && user && !user.organizationId,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('JoinCommunity'),
     },
     {
       code: 'community_admin',
       title: 'Community Admin',
-      show: accessClient.MainProfile.showMenuCommunityAdmin && user && user.isDirector === 1,
+      show: true || accessClient.MainProfile.showMenuCommunityAdmin && user && user.isDirector === 1,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('CommunityAdminPage'),
     },
@@ -491,9 +491,11 @@ const MainProfile = ({navigation, route}) => {
                 <View
                   style={{
                     backgroundColor: Color.textInput,
+                    borderWidth: 1,
+                    borderColor: Color.text,
                     width: width / 6 + 16,
                     height: width / 6 + 16,
-                    borderRadius: 8,
+                    borderRadius: 4,
                     alignItems: 'center',
                     justifyContent: 'center',
                     ...shadowStyle,
@@ -607,6 +609,8 @@ const MainProfile = ({navigation, route}) => {
               aspectRatio: 1,
               padding: 16,
               backgroundColor: Color.theme,
+              borderWidth: 4,
+              borderColor: Color.text,
               borderRadius: 8,
               alignItems: 'center',
               justifyContent: 'center',

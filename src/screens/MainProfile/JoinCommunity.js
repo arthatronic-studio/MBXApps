@@ -20,6 +20,20 @@ import ModalSelectChapter from 'src/components/Modal/ModalSelectChapter'
 import validate from '@src/lib/validate';
 import Client from '@src/lib/apollo';
 import ModalActions from 'src/components/Modal/ModalActions';
+import { accessClient } from 'src/utils/access_client';
+import { Container, Divider } from 'src/styled';
+import Clipboard from '@react-native-community/clipboard';
+import { fetchCarTypeListing } from 'src/api/community';
+import FormSelect from 'src/components/FormSelect';
+
+const merchandiseSize = [
+    { id: 1, name: 'S', ukuran: 'S', lebar: '50', panjang: '68', bahu: '14', l_panjang: '24', l_pendek: '58' },
+    { id: 2, name: 'M', ukuran: 'M', lebar: '52', panjang: '70', bahu: '15', l_panjang: '25', l_pendek: '60' },
+    { id: 3, name: 'L', ukuran: 'L', lebar: '54', panjang: '72', bahu: '16', l_panjang: '26', l_pendek: '62' },
+    { id: 4, name: 'XL', ukuran: 'XL', lebar: '56', panjang: '74', bahu: '17', l_panjang: '27', l_pendek: '64' },
+    { id: 5, name: 'XXL', ukuran: 'XXL', lebar: '58', panjang: '76', bahu: '18', l_panjang: '28', l_pendek: '66' },
+    { id: 6, name: 'XXXL', ukuran: 'XXXL', lebar: '60', panjang: '78', bahu: '19', l_panjang: '29', l_pendek: '68' },
+];
 
 const LabelInput = Styled(View)`
   width: 100%;
@@ -65,7 +79,6 @@ const JoinCommunity = ({ navigation, route }) => {
     const [popupProps, showPopup] = usePopup();
 
     const [userData, setUserData] = useState({
-        carType: '',
         carColor: '',
         carYear: "",
         carIdentity: '',
@@ -83,7 +96,6 @@ const JoinCommunity = ({ navigation, route }) => {
     });
 
     const [error, setError] = useState({
-        carType: null,
         carColor: null,
         carYear: null,
         carIdentity: null,
@@ -112,6 +124,13 @@ const JoinCommunity = ({ navigation, route }) => {
     const [modalAddPhoto, setModalAddPhoto] = useState(false);
     const [modalNumberPhoto, setModalNumberPhoto] = useState(0);
 
+    const [listCarType, setListCarType] = useState([]);
+    const [selectedCarType, setSelectedCarType] = useState();
+    const [modalCarType, setModalCarType] = useState(false);
+
+    const [selectedMerchandiseSize, setSelectedMerchandiseSize] = useState(merchandiseSize[0]);
+    const [modalMerchandiseSize, setModalMerchandiseSize] = useState(false);
+
     const [thumbImage, setThumbImage] = useState('');
     const [mimeImage, setMimeImage] = useState('image/jpeg');
     
@@ -136,6 +155,22 @@ const JoinCommunity = ({ navigation, route }) => {
     const [thumbImage8, setThumbImage8] = useState('');
     const [mimeImage8, setMimeImage8] = useState('image/jpeg');
 
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async() => {
+        const resultCar = await fetchCarTypeListing();
+        if (resultCar.status) {
+            setListCarType(resultCar.data)
+        }
+    }
+
+    const copyToClipboard = (item) => {
+        Clipboard.setString(item);
+        showPopup('Nomor berhasil disalin', 'info');
+    }
+
     const onSubmit = () => {
         Keyboard.dismiss();
 
@@ -144,7 +179,7 @@ const JoinCommunity = ({ navigation, route }) => {
             return;
         }
 
-        if (userData.carType === '') {
+        if (!selectedCarType) {
             showPopup('Silahkan isi tipe mobil terlebih dulu', 'warning');
             return;
         }
@@ -183,7 +218,7 @@ const JoinCommunity = ({ navigation, route }) => {
 
         let variables = {
             body: {
-                carType: userData.carType,
+                carType: selectedCarType.name,
                 carColor: userData.carColor,
                 carYear: userData.carYear,
                 carIdentity: userData.carIdentity,
@@ -288,9 +323,54 @@ const JoinCommunity = ({ navigation, route }) => {
                     </View>
                     <View>
                         <Text size={14} color={Color.text} align='left'>Informasi Data Diri</Text>
-                        <Text size={10} color={Color.gray} align='left'>Masukkan informasi untuk gabung ke komunitas</Text>
+                        <Text size={10} color={Color.gray} align='left'>Masukan informasi untuk gabung ke komunitas</Text>
                     </View>
                 </View>
+
+                {accessClient.isRRID && <Container paddingHorizontal={16}>
+                    <Text size={12} align='left'>
+                        Form registrasi untuk member RR-ID
+                    </Text>
+                    <Text size={12} align='left'>
+                        Untuk starter pack yang didapat:
+                    </Text>
+                    <Divider height={8} />
+                    <Text size={12} align='left'>
+                        - 3 sticker (Logo rrid, nopung, Raize Rocky Indonesia)
+                    </Text>
+                    <Text size={12} align='left'>
+                        - 1 kemeja
+                    </Text>
+                    <Text size={12} align='left'>
+                        - 1 KTA (e-money saldo Rp. 0)
+                    </Text>
+                    <Divider height={8} />
+                    <Text size={12} align='left'>
+                        Note: Ongkir akan dikabari setelah starter pack siap kirim
+                    </Text>
+                    <Divider />
+                    <Text size={12} align='left'>
+                        Untuk detail CP:
+                    </Text>
+                    <Divider height={4} />
+                    <TouchableOpacity
+                        onPress={() => copyToClipboard('082111057057')}
+                    >
+                        <Text size={12} align='left'>
+                            Vico       082 111 057 057{'    '}
+                            <Ionicons name='copy-outline' size={14} color={Color.info} />
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => copyToClipboard('081320476999')}
+                    >
+                        <Text size={12} align='left'>
+                            Marco    081 320 476 999{'  '}
+                            <Ionicons name='copy-outline' size={14} color={Color.info} />
+                        </Text>
+                    </TouchableOpacity>
+                </Container>}
+
                 <View style={{backgroundColor: Color.theme, paddingBottom: 16}}>
                     <View style={{paddingHorizontal: 16, paddingTop: 16}}>
                         <CustomTouch onPress={() => modalSelectChapterRef.current.open()}>
@@ -306,29 +386,14 @@ const JoinCommunity = ({ navigation, route }) => {
                         </CustomTouch>
                     </View>
 
-                     <View style={{paddingHorizontal: 16, paddingTop: 16}}>
-                        <View style={{marginTop: 6, paddingHorizontal: 12, borderWidth: 1, borderRadius: 4, borderColor: Color.border}}>
-                            <LabelInput>
-                                <Text size={10} letterSpacing={0.08} style={{opacity: 0.6}}>Tipe Mobil</Text>
-                            </LabelInput>
-                            <EmailRoundedView>
-                                <CustomTextInput 
-                                    placeholder='Sedan'
-                                    keyboardType='default'
-                                    placeholderTextColor={Color.gray}
-                                    underlineColorAndroid='transparent'
-                                    autoCorrect={false}
-                                    onChangeText={(text) => onChangeUserData('carType', text)}
-                                    selectionColor={Color.text}
-                                    value={userData.carType}
-                                    onBlur={() => isValueError('carType')}
-                                    style={{color: Color.text}}
-                                />
-                            </EmailRoundedView>
-                        </View>
-                    </View>
+                    <FormSelect
+                        label='Tipe Mobil'
+                        placeholder='Pilih Tipe'
+                        value={selectedCarType ? selectedCarType.name : null}
+                        onPress={() => setModalCarType(true)}
+                    />
 
-                    <View style={{paddingHorizontal: 16, paddingTop: 16}}>
+                    <View style={{paddingHorizontal: 16}}>
                         <View style={{marginTop: 6, paddingHorizontal: 12, borderWidth: 1, borderRadius: 4, borderColor: Color.border}}>
                             <LabelInput>
                                 <Text size={10} letterSpacing={0.08} style={{opacity: 0.6}}>Warna Mobil</Text>
@@ -438,7 +503,14 @@ const JoinCommunity = ({ navigation, route }) => {
                         </View>
                     </View>
 
-                    <View style={{paddingTop: 35, paddingBottom: 16, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center'}}>
+                    <FormSelect
+                        label='Ukuran Kaos'
+                        placeholder='Pilih ukuran'
+                        value={selectedMerchandiseSize ? selectedMerchandiseSize.name : null}
+                        onPress={() => setModalMerchandiseSize(true)}
+                    />
+
+                    <View style={{paddingTop: 16, paddingBottom: 16, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center'}}>
                         <View style={{width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', borderWidth: 4, borderColor: Color.grayLight, marginRight: 8}}>
                             <Text type='bold' size={24} align='left' color={Color.primary}>2</Text>
                         </View>
@@ -628,7 +700,7 @@ const JoinCommunity = ({ navigation, route }) => {
                     </TouchableOpacity>}
 
                     <View style={{paddingHorizontal: 16, marginTop: 16}}>
-                        <Text size={11} color={Color.text} align='left' >Foto Bukti Pembayaran</Text>
+                        <Text size={11} color={Color.text} align='left'>Foto Bukti Pembayaran</Text>
                         <TouchableOpacity
                             onPress={() => {
                                 setModalAddPhoto(true);
@@ -639,7 +711,26 @@ const JoinCommunity = ({ navigation, route }) => {
                             <Feather name='camera' size={32} style={{marginBottom: 4}} color={Color.gray} />
                             <Text size={10} color={Color.gray}>Tambah Foto</Text>
                         </TouchableOpacity>
-                        <Text size={11} color={Color.gray} align='left' >Foto bukti pembayaranmu dengan jelas</Text>
+                        <Text size={11} color={Color.gray} align='left'>Foto bukti pembayaranmu dengan jelas</Text>
+                        {/* nomor rek khusus rrid */}
+                        {accessClient.isRRID && <View>
+                            <Divider height={10} />
+                            <Text size={11} color={Color.gray} align='left'>Mohon agar ditransfer ke bank{' <'}
+                            <Text size={11} color={Color.gray} type='bold'>BCA DIGITAL</Text>{'> '}
+                            <Text size={11} color={Color.gray} type='bold'>001120211113 an Yokhanan Adi Prasetya</Text>{' '}sebesar Rp255.000.</Text>
+                            <Divider height={8} />
+                            <TouchableOpacity
+                                onPress={() => {
+                                    copyToClipboard('001120211113');
+                                }}
+                            >
+                                <Text size={12} color={Color.gray}>
+                                    Salin Rekening{' '}
+                                    <Ionicons name='copy-outline' size={14} color={Color.info} />
+                                </Text>
+                            </TouchableOpacity>
+                            <Divider height={8} />
+                        </View>}
                     </View>
 
                     {thumbImage5 !== '' && <TouchableOpacity
@@ -671,6 +762,30 @@ const JoinCommunity = ({ navigation, route }) => {
                     onChangeUserData('chapterId', e.name);
                     setSelectedChapter(e);
                     modalSelectChapterRef.current.close();
+                }}
+            />
+
+            <ModalActions
+                visible={modalCarType}
+                onClose={() => {
+                    setModalCarType(false);
+                }}
+                data={listCarType}
+                onPress={(val) => {
+                    setSelectedCarType(val);
+                    setModalCarType(false);
+                }}
+            />
+
+            <ModalActions
+                visible={modalMerchandiseSize}
+                onClose={() => {
+                    setModalMerchandiseSize(false);
+                }}
+                data={merchandiseSize}
+                onPress={(val) => {
+                    setSelectedMerchandiseSize(val);
+                    setModalMerchandiseSize(false);
                 }}
             />
 
