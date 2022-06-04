@@ -32,6 +32,7 @@ const useDefaultDarkThemeCode = [
 
 const isTribes = Config.INITIAL_CODE === 'TRIBESASIA';
 const isKomoto = listKomotoFamily.includes(Config.INITIAL_CODE);
+const isRRID = Config.INITIAL_CODE === 'TRIBESXRRID';
 const isSabyan = Config.INITIAL_CODE === 'TRIBESXSABYAN';
 const isGofish = Config.INITIAL_CODE === 'TRIBESXGOFISH';
 const isTeukuZacky = Config.INITIAL_CODE === 'TRIBESXTEUKUZACKY';
@@ -43,6 +44,7 @@ export const accessClient = {
     InitialCode: Config.INITIAL_CODE,
     isTribes,
     isKomoto,
+    isRRID,
     isSabyan,
     isGofish,
     isTeukuZacky,

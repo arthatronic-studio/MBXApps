@@ -16,10 +16,12 @@ import {queryJoinCommunityManage} from '@src/lib/query/joinCommunityManage';
 import {joinCommunityMember} from 'src/lib/query/joinCommunityMember';
 import {Divider} from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
+import ModalInputText from 'src/components/ModalInputText';
 
 const CardCommunityAdmin = (props) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [modalInputText, setModalInputText] = useState(false);
 
   const [popupProps, showPopup] = usePopup();
   const {Color} = useColor();
@@ -56,7 +58,7 @@ const CardCommunityAdmin = (props) => {
       });
   };
 
-  const fetchJoinCommunityManage = (id, userId, status) => {
+  const fetchJoinCommunityManage = (id, userId, status, reason_reject) => {
     setLoading(true);
 
     let resMessage =
@@ -69,6 +71,7 @@ const CardCommunityAdmin = (props) => {
         status,
         id,
         organizationInitialCode: accessClient.InitialCode,
+        reason_reject,
       },
     })
       .then((res) => {
@@ -235,11 +238,7 @@ const CardCommunityAdmin = (props) => {
               {props.type !== 'notAnggota' && (
                 <TouchableOpacity
                   onPress={() => {
-                    Alert(
-                      'Tolak',
-                      'Apakah Anda yakin akan menolak anggota ini?',
-                      () => fetchJoinCommunityManage(item.id, item.user_id, 2),
-                    );
+                    setModalInputText(true);
                   }}
                   style={{
                     backgroundColor: Color.error,
@@ -277,6 +276,22 @@ const CardCommunityAdmin = (props) => {
             }}
           />
         </TouchableOpacity>
+
+        <ModalInputText
+          visible={modalInputText}
+          headerLabel='Reject'
+          placeholder='Masukan penjelasan Anda'
+          isTextArea
+          onClose={() => setModalInputText(false)}
+          onSubmit={(text) => {
+            Alert(
+              'Tolak',
+              'Apakah Anda yakin akan menolak anggota ini?',
+              () => fetchJoinCommunityManage(item.id, item.user_id, 2, text),
+            );
+            setModalInputText(false);
+          }}
+        />
       </TouchableOpacity>
     );
   };
