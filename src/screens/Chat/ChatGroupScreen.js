@@ -79,33 +79,39 @@ const ChatGroupScreen = ({ navigation, route }) => {
     const [popupProps, showPopup] = usePopup();
 
     useEffect(() => {
-        currentSocket.on('chat_rooms', (res) => {
-          console.log('chat_rooms', res);
-          if (Array.isArray(res)) {
-            setDataRooms({
-                ...dataRooms,
-                data: res,
-                loading: false,
-            });
-
-            let ids = [];
-            res.forEach((e) => {
-                ids.push(parseInt(e['room_id']));
-            })
-            setMyRoomIds(ids);
-          } else {
-            setDataRooms({
-                ...dataRooms,
-                loading: false,
-            });
-          }
+      currentSocket.on('chat_rooms', respone => {
+        var res = respone.filter(function (el) {
+          return el['room_detail'].type === 'GROUP';
         });
+        console.log('respon', res);
+
+        if (Array.isArray(res)) {
+          setDataRooms({
+            ...dataRooms,
+            data: res,
+            loading: false,
+          });
+
+          let ids = [];
+          res.forEach(e => {
+            ids.push(parseInt(e['room_id']));
+          });
+          setMyRoomIds(ids);
+        } else {
+          setDataRooms({
+            ...dataRooms,
+            loading: false,
+          });
+        }
+      });
     }, []);
 
     useEffect(() => {
         if (isFocused) {
-            currentSocket.emit('chat_rooms');
-        }
+             currentSocket.emit('chat_rooms');
+
+      }
+      //  setIsLoading(false);
     }, [isFocused]);
 
     const fetchRoomsDelete = async() => {
@@ -128,12 +134,13 @@ const ChatGroupScreen = ({ navigation, route }) => {
     const getTitle = (member) => {
         let title = '';
         
-        if (member.length === 2) {
+        if (member.length === 1) {
             member.map((i) => {
                 if (i.user_id != user.userId) title = i.first_name;
             });
-        } else if (member.length > 2) {
+        } else if (member.length >= 2) {
             member.map((i) => {
+                
                 if (i.user_id != user.userId) title = '[Grup] ' + i.first_name + ' & ' + member.length + ' lainnya';
             });
         }
@@ -169,13 +176,13 @@ const ChatGroupScreen = ({ navigation, route }) => {
     }
 
     return (
-        <Scaffold
-            showHeader={false}
-            empty={dataRooms.data.length === 0 && !dataRooms.loading}
-            fallback={dataRooms.loading}
-        >
-            <View style={{backgroundColor: Color.theme}}>
-                {/* <BottomSection style={{borderColor: Color.border}}>
+      <Scaffold
+        isLoading={isLoading}
+        showHeader={false}
+        empty={dataRooms.data.length === 0 && !dataRooms.loading}
+        fallback={dataRooms.loading}>
+        <View style={{backgroundColor: Color.theme}}>
+          {/* <BottomSection style={{borderColor: Color.border}}>
                     <BoxInput style={true ? {borderColor: Color.border} : {borderColor: Color.error}}>
                         <TextInputNumber
                             name="text"
@@ -195,126 +202,208 @@ const ChatGroupScreen = ({ navigation, route }) => {
                         </CircleSend>
                     </BoxInput>
                 </BottomSection> */}
-                <View style={{backgroundColor: Color.theme, width: '100%', height: 70, justifyContent: 'center', alignItems: 'center'}}>
-                    <TextInput
-                        placeholder='Cari . . .'
-                        style={{
-                            backgroundColor: Color.border,
-                            width: '95%',
-                            height: 35,
-                            borderRadius: 5,
-                            fontSize: 12,
-                            paddingHorizontal: 12,
-                        }}
+          <View
+            style={{
+              backgroundColor: Color.theme,
+              width: '100%',
+              height: 70,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <TextInput
+              placeholder="Cari . . ."
+              style={{
+                backgroundColor: Color.border,
+                width: '95%',
+                height: 35,
+                borderRadius: 5,
+                fontSize: 12,
+                paddingHorizontal: 12,
+              }}
+            />
+            <AntDesign
+              name={'search1'}
+              size={12}
+              style={{
+                alignSelf: 'flex-end',
+                right: 20,
+                color: Color.secondary,
+                position: 'absolute',
+              }}
+            />
+          </View>
+          <FlatList
+            keyExtractor={(item, index) =>
+              item.id.toString() + index.toString()
+            }
+            data={dataRooms.data}
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{
+              paddingTop: 8,
+              paddingBottom: statusBarHeight,
+            }}
+            onEndReachedThreshold={0.3}
+            onEndReached={() => {}}
+            renderItem={({item}) => {
+              const isSelected = selectedRoom && selectedRoom.id === item.id;
+              const notifBadge = item.unread_count > 0;
+
+              // console.log('item', item);
+
+              return (
+                <TouchableOpacity
+                  onPress={() => {
+                    let targetIds = [];
+                    item.member.map(e => {
+                      if (e['user_id'] != user.userId)
+                        targetIds.push(e['user_id']);
+                    });
+
+                    navigation.navigate('GroupDetailScreen', {
+                      roomId: item.room_id,
+                      roomName: getTitle(item.member),
+                      nameGroup: item['room_detail'].name,
+                      imageGroup: item['room_detail'].image,
+                      selected: item.member,
+                      targetIds,
+                    });
+                  }}
+                  onLongPress={() => {
+                    modalListActionRef.current.open();
+                    setSelectedRoom(item);
+                  }}
+                  style={{
+                    height: 60,
+                    paddingHorizontal: 16,
+                    marginBottom: 16,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    backgroundColor: isSelected
+                      ? Color.primarySoft
+                      : Color.textInput,
+                  }}>
+                  <View
+                    style={{
+                      width: '12%',
+                      height: '100%',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                    <Image
+                      source={{uri: item.image}}
+                      style={{
+                        width: '100%',
+                        aspectRatio: 1,
+                        borderRadius: 30,
+                        backgroundColor: Color.border,
+                      }}
                     />
-                    <AntDesign name={'search1'} size={12} style={{alignSelf: 'flex-end', right: 20,color: Color.secondary,position: 'absolute'}}/>
-                </View>
-                <FlatList
-                    keyExtractor={(item, index) => item.id.toString() + index.toString()}
-                    data={dataRooms.data}
-                    keyboardShouldPersistTaps='handled'
-                    contentContainerStyle={{paddingTop: 8, paddingBottom: statusBarHeight}}
-                    onEndReachedThreshold={0.3}
-                    onEndReached={() => {}}
-                    renderItem={({ item }) => {
-                        const isSelected = selectedRoom && selectedRoom.id === item.id;
-                        const notifBadge = item.unread_count > 0;
+                  </View>
+                  <View
+                    style={{
+                      width: '70%',
+                      height: '100%',
+                      alignItems: 'flex-start',
+                      justifyContent: 'space-around',
+                      paddingLeft: 8,
+                      paddingRight: 16,
+                      paddingVertical: 4,
+                    }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                      }}>
+                      <View
+                        style={{
+                          marginRight: 5,
+                          borderRadius: 20,
+                          width: 8,
+                          height: 8,
+                          backgroundColor: Color.green,
+                        }}
+                      />
+                      <Text type="semibold" numberOfLines={1}>
+                        {item['room_detail'].name}
+                      </Text>
+                    </View>
+                    <Text
+                      type={
+                        isUserTyping(item.typing)
+                          ? 'italic'
+                          : notifBadge
+                          ? 'bold'
+                          : 'regular'
+                      }
+                      numberOfLines={1}
+                      color={
+                        isUserTyping(item.typing) ? Color.success : Color.text
+                      }
+                      style={{opacity: 0.6}}>
+                      {item.last_chat &&
+                      item.last_chat.user_id == user.userId ? (
+                        "User's Name :   "
+                      ) : (
+                        <Ionicons name={'md-checkmark-done-sharp'} size={12} />
+                      )}
+                      {isUserTyping(item.typing)
+                        ? 'Sedang mengetik...'
+                        : item.last_chat
+                        ? item.last_chat.message
+                        : ''}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      width: '18%',
+                      height: '100%',
+                      alignItems: 'flex-end',
+                      justifyContent: 'space-around',
+                      paddingVertical: 4,
+                    }}>
+                    <Text size={8}>
+                      {item.last_chat
+                        ? managedDateUTC(item.last_chat.created_unix_date)
+                        : ''}
+                    </Text>
+                    <Circle
+                      size={20}
+                      color={notifBadge ? Color.primary : 'transparent'}>
+                      {notifBadge && (
+                        <Text color={Color.textInput} size={10}>
+                          {item.unread_count}
+                        </Text>
+                      )}
+                    </Circle>
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
+          />
 
-                        // console.log('item', item);
-
-                        return (
-                            <TouchableOpacity
-                                onPress={() => {
-                                    let targetIds = [];
-                                    item.member.map((e) => {
-                                        if (e['user_id'] != user.userId) targetIds.push(e['user_id']);
-                                    });
-
-                                    navigation.navigate('GroupDetailScreen', {
-                                        roomId: item.room_id,
-                                        roomName: getTitle(item.member),
-                                        selected: item.member,
-                                        targetIds,
-                                    });
-                                }}
-                                onLongPress={() => {
-                                    modalListActionRef.current.open();
-                                    setSelectedRoom(item);
-                                }}
-                                style={{
-                                    height: 60,
-                                    paddingHorizontal: 16,
-                                    marginBottom: 16,
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    backgroundColor: isSelected ? Color.primarySoft : Color.textInput,
-                                }}
-                            >
-                                <View style={{width: '12%', height: '100%', alignItems: 'center', justifyContent: 'center'}}>
-                                    <Image
-                                        source={{uri: item.image}}
-                                        style={{width: '100%', aspectRatio: 1, borderRadius: 30, backgroundColor: Color.border}}
-                                    />
-                                </View>
-                                <View style={{width: '70%', height: '100%', alignItems: 'flex-start', justifyContent: 'space-around', paddingLeft: 8, paddingRight: 16, paddingVertical: 4}}>
-                                    <Text
-                                        type='semibold'
-                                        numberOfLines={1}
-                                    >
-                                        Belajar Ngoding
-                                        {/* {item.name || getTitle(item.member)} */}
-                                    </Text>
-                                    <Text
-                                        type={isUserTyping(item.typing) ? 'italic' : notifBadge ? 'bold' : 'regular'}
-                                        numberOfLines={1}
-                                        color={isUserTyping(item.typing) ? Color.success : Color.text}
-                                        style={{opacity: 0.6}}
-                                    >
-                                        {item.last_chat && item.last_chat.user_id == user.userId ? "User's Name :   " : <Ionicons name={"md-checkmark-done-sharp"} size={12}/>}
-                                        {isUserTyping(item.typing) ? 'Sedang mengetik...' : item.last_chat ? item.last_chat.message : ''}
-                                    </Text>
-                                </View>
-                                <View style={{width: '18%', height: '100%', alignItems: 'flex-end', justifyContent: 'space-around', paddingVertical: 4}}>
-                                    <Text
-                                        size={8}
-                                    >
-                                        {item.last_chat ? managedDateUTC(item.last_chat.created_unix_date) : ''}
-                                    </Text>
-                                    <Circle
-                                        size={20}
-                                        color={notifBadge ? Color.primary : 'transparent'}
-                                    >
-                                        {notifBadge && <Text color={Color.textInput} size={10}>{item.unread_count}</Text>}
-                                    </Circle>
-                                </View>
-                            </TouchableOpacity>
-                        )
-                    }}
-                />
-
-                <ModalListAction
-                    ref={modalListActionRef}
-                    onClose={() => {
-                        setSelectedRoom();
-                    }}
-                    data={[
-                        {
-                            id: 0,
-                            name: 'Hapus',
-                            color: Color.red,
-                            onPress: () => {
-                                Alert('Hapus', 'Apakah Anda yakin menghapus konten?', () => {
-                                    fetchRoomsDelete();
-                                });
-                                modalListActionRef.current.close();
-                                setSelectedRoom();
-                            },
-                        }
-                    ]}
-                />
-            </View>
-        </Scaffold>
-    )
+          <ModalListAction
+            ref={modalListActionRef}
+            onClose={() => {
+              setSelectedRoom();
+            }}
+            data={[
+              {
+                id: 0,
+                name: 'Hapus',
+                color: Color.red,
+                onPress: () => {
+                  Alert('Hapus', 'Apakah Anda yakin menghapus konten?', () => {
+                    fetchRoomsDelete();
+                  });
+                  modalListActionRef.current.close();
+                  setSelectedRoom();
+                },
+              },
+            ]}
+          />
+        </View>
+      </Scaffold>
+    );
 }
 
 export default ChatGroupScreen;

@@ -1,4 +1,4 @@
-import React, {useRef, forwardRef, useState} from 'react';
+import React, {useRef, forwardRef, useState, useEffect} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -31,6 +31,10 @@ const ModalNominalPicker = forwardRef((props, ref) => {
   const {width} = useWindowDimensions();
   const [price, setPrice] = useState(null);
   const [listPrice, setListPrice] = useState(data);
+
+  useEffect(() => {
+    setListPrice(data);
+  }, [data]);
   const amountPrice = useRef();
 
   const onDelete = (item) => {
@@ -47,6 +51,9 @@ const ModalNominalPicker = forwardRef((props, ref) => {
 
   return (
     <Modalize
+      scrollViewProps={{ 
+        keyboardShouldPersistTaps: 'handled'
+       }}
       ref={combinedRef}
       withHandle={false}
       adjustToContentHeight

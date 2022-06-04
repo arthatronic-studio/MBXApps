@@ -10,6 +10,8 @@ import {Text, useColor} from '@src/components';
 
 import {useCombinedRefs} from '@src/hooks';
 import {statusBarHeight} from 'src/utils/constants';
+import WidgetMenuHome from 'src/screens/MainHome/WidgetMenuHome';
+import { Row } from '../Grid';
 
 const defaultProps = {
   data: [],
@@ -21,7 +23,7 @@ const defaultProps = {
   style: {},
 };
 
-const ModalListAction = forwardRef((props, ref) => {
+const ModalMenuHome = forwardRef((props, ref) => {
   const {data, selected, adjust, onPress, onClose, children, style, name} = props;
 
   const modalizeRef = useRef(null);
@@ -29,42 +31,6 @@ const ModalListAction = forwardRef((props, ref) => {
 
   const {Color} = useColor();
   const {width} = useWindowDimensions();
-
-  const renderContent = () => {
-    return data.map((item, idx) => {
-      if (item.show === false) return <View key={idx} />;
-
-      return (
-        <TouchableOpacity
-          key={idx}
-          onPress={() => {
-            item.onPress ? item.onPress() : onPress(item, name);
-          }}
-          style={{
-            width: width - 32,
-            paddingVertical: 8,
-            flexDirection: 'row',
-            alignItems: 'flex-start',
-            marginTop: 16,
-          }}>
-          <Text
-            size={12}
-            align="left"
-            color={
-              item.color
-                ? item.color
-                : selected && selected.id === item.id
-                ? Color.secondary
-                : Color.text
-            }>
-            {item.name}
-          </Text>
-        </TouchableOpacity>
-      );
-    });
-  };
-
-  console.log('modalList', data);
 
   return (
     <Modalize
@@ -81,7 +47,6 @@ const ModalListAction = forwardRef((props, ref) => {
       childrenStyle={{
         backgroundColor: Color.theme,
         alignItems: 'flex-start',
-        padding: 16,
         paddingBottom: statusBarHeight,
         borderTopLeftRadius: 12,
         borderTopRightRadius: 12,
@@ -91,12 +56,31 @@ const ModalListAction = forwardRef((props, ref) => {
         backgroundColor: Color.theme,
       }}
       onClose={() => onClose()}>
-      <View style={{flex: 1}}>
-        <ScrollView>{data.length > 0 ? renderContent() : children}</ScrollView>
+      <View style={{flex: 1, paddingTop: 50}}>
+        
+        <ScrollView>
+            <View style={{ alignItems: 'flex-start', paddingLeft: 16 }}>
+                <Text size={14} type='bold'>Fitur Ungulan</Text>
+            </View>
+            <WidgetMenuHome bgColor={'#F4F4F4'} />
+            
+            <View style={{ alignItems: 'flex-start', paddingLeft: 16 }}>
+                <Text size={14} type='bold'>Semua Fitur</Text>
+            </View>
+            <View style={{  paddingLeft: 16, paddingTop: 22 }}>
+                <Text size={14} align='left' type='bold' style={{ marginBottom: 12 }}>Belanja</Text>
+                <Row style={{ flexWrap: 'wrap' }}>
+                    <TouchableOpacity style={{ alignItems: 'center', width: '25%', marginBottom: 10 }}>
+                        <View style={{ height: 40, width: 40, borderRadius: 8, backgroundColor: '#558617' }} />
+                        <Text type='medium' size={12} color='#111'>Market</Text>
+                    </TouchableOpacity>
+                </Row>
+            </View>
+        </ScrollView>
       </View>
     </Modalize>
   );
 });
 
-ModalListAction.defaultProps = defaultProps;
-export default ModalListAction;
+ModalMenuHome.defaultProps = defaultProps;
+export default ModalMenuHome;

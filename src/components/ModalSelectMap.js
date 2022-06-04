@@ -157,7 +157,8 @@ const ModalSelectMap = ({
                 {searchData.length > 0 && <TouchableOpacity
                     onPress={() => setCollapse(!collapse)}
                 >
-                    <Text>{collapse ? 'Tutup' : 'Lihat'}</Text>
+                    <Text>{collapse ? 'Tutup' : 'Lihat Hasil'}</Text>
+                    <Divider />
                 </TouchableOpacity>}
 
                 {collapse && searchData.length > 0 && <FlatList

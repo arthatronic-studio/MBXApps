@@ -1,11 +1,12 @@
 import { NativeModules, Platform, Dimensions, StatusBar } from 'react-native';
 const { StatusBarManager } = NativeModules;
+import { accessClient } from 'src/utils/access_client';
 
 export const statusBarHeight = isIphoneNotch() ? 44 : StatusBarManager['HEIGHT'];
 
 export const googleApiKey = 'AIzaSyAjI_NfMmz2vSZmtvV2c3HY0ziL2WJP-Rw';
-export const initialLatitude = -6.225588;
-export const initialLongitude = 106.798553;
+export const initialLatitude = accessClient.isSurvey ? -6.3920716 : -6.225588;
+export const initialLongitude = accessClient.isSurvey ? 106.814385 : 106.798553;
 
 export function isIphoneNotch() {
     const dimen = Dimensions.get('window');

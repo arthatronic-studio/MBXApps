@@ -43,7 +43,7 @@ const CartShop = ({navigation, route}) => {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState([]);
-  const [cart, setCart] = useState(0);
+  const [cart, setCart] = useState(null);
   const [refresh, setRefresh] = useState(0);
   const [loadingProps, showLoading, hideLoading] = useLoading();
 
@@ -68,7 +68,6 @@ const CartShop = ({navigation, route}) => {
         // hideLoading()
         console.log(res);
         if (res.data.ecommerceCartList.id) {
-          setCart(res.data.ecommerceCartList);
           const dataq = res.data.ecommerceCartList.items.map((val, id) => {
             const dateq = {
               ...val,
@@ -172,6 +171,7 @@ const CartShop = ({navigation, route}) => {
   const submit = () => {
     console.log(route, 'props');
     let tempData = [];
+    const newList = [list]
     list.forEach(element => {
       element.products.forEach(element => {
         if (element.checked)
@@ -205,19 +205,45 @@ const CartShop = ({navigation, route}) => {
 
   function onChecked(index, id, value, name) {
     const tempx = list;
-    if (name == 'product') {
-      tempx[index]['products'][id]['checked'] = !value;
-      setList(tempx);
-      setRefresh(refresh + 1);
-    } else {
-      tempx[index]['checked'] = !value;
-      tempx[index]['products'].forEach((element, idx) => {
-        tempx[index]['products'][idx]['checked'] = !value;
-      });
-      console.log(tempx, 111);
-      setList(tempx);
-      setRefresh(refresh + 1);
-    }
+    tempx.forEach((e, i) => {
+      if (name == 'product') {
+        // handle hanya bisa pilih 1 toko
+        if (i === index) {
+          tempx[i]['checked'] = !value;
+          tempx[i]['products'][id]['checked'] = !value;
+        } else {
+          tempx[i]['checked'] = false;
+          tempx[i]['products'].forEach((element, idx) => {
+            tempx[i]['products'][idx]['checked'] = false;
+          });
+        }
+
+        // old
+        // tempx[index]['products'][id]['checked'] = !value;
+      } else if (name === 'shop') {
+        // handle hanya bisa pilih 1 toko
+        if (i === index) {
+          tempx[i]['checked'] = !value;
+          tempx[i]['products'].forEach((element, idx) => {
+            tempx[i]['products'][idx]['checked'] = !value;
+          });
+        } else {
+          tempx[i]['checked'] = false;
+          tempx[i]['products'].forEach((element, idx) => {
+            tempx[i]['products'][idx]['checked'] = false;
+          });
+        }
+
+        // old
+        // tempx[index]['checked'] = !value;
+        // tempx[index]['products'].forEach((element, idx) => {
+        //   tempx[index]['products'][idx]['checked'] = !value;
+        // });
+      }
+    });
+
+    setList(tempx);
+    setRefresh(refresh + 1);
   }
 
   console.log('list', list);
@@ -226,7 +252,7 @@ const CartShop = ({navigation, route}) => {
     <View style={{borderBottomColor: '#00000020', borderBottomWidth: 1, marginBottom: 16}}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <TouchableOpacity
-          onPress={() => onChecked(index, null, item.checked, 'shop')}
+          onPress={() => onChecked(index, null, item.checked, 'shop', item)}
           style={{paddingLeft: 16, paddingVertical: 8}}
         >
             <View style={{
@@ -262,7 +288,7 @@ const CartShop = ({navigation, route}) => {
                 paddingVertical: 20,
               }}>
               <TouchableOpacity
-                onPress={() => onChecked(index, id, val.checked, 'product')}
+                onPress={() => onChecked(index, id, val.checked, 'product', item)}
                 style={{
                   paddingRight: 8
                 }}
@@ -395,7 +421,7 @@ const CartShop = ({navigation, route}) => {
       item.forEach((element, index) => {
         element.products.forEach(element => {
           if (element.checked)
-            total = total + element.price * element['quantity'];
+            total = total + element.price * (element['quantity'] || element['qty']);
         });
       });
       return total;
@@ -439,15 +465,7 @@ const CartShop = ({navigation, route}) => {
         data={list}
         renderItem={renderItem}
         contentContainerStyle={{
-          paddingBottom: 16,
-        }}
-      />
-
-      <View
-        style={{
-          backgroundColor: '#rgba(255, 255, 254, 0.2)',
-          height: 2,
-          marginTop: 24,
+          paddingVertical: 16,
         }}
       />
         
@@ -457,7 +475,7 @@ const CartShop = ({navigation, route}) => {
             Total Harga
           </Text>
           <Text type="bold" color={Color.text}>
-            {list && list.length > 0
+            {list 
               ? FormatMoney.getFormattedMoney(totalProduct(list))
               : FormatMoney.getFormattedMoney(0)}
           </Text>

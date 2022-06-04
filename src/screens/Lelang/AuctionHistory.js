@@ -69,7 +69,7 @@ const AuctionHistory = () => {
     
     const [data, setData] = useState();
     const modalFilterRef = useRef();
-    const [filter, setFilter] = useState({});
+    const [filter, setFilter] = useState({name: 'Nama', value: 'NAME'});
 
     const onFilterChange = value => {
       setFilter(value);
@@ -100,18 +100,31 @@ const AuctionHistory = () => {
       getCart();
     }, [filter]);
 
+    const renderStatus = (status) => {
+      const textColor = status === 'WIN' ? '#558617' : status === 'LOSE' ? Color.danger : Color.theme;
+      const backgroundColor = status === 'WIN' ? '#F6F9F3' : status === 'LOSE' ? '#FFEAEA' : Color.danger;
+      const borderColor = status === 'WIN' ? '#558617' : Color.danger;
+      const text = status === 'WIN' ? 'Menang' : status === 'LOSE' ? 'Kalah' : 'Berlangsung';
+      return (
+        <View style={{backgroundColor: backgroundColor, borderColor: borderColor, borderWidth: 1, justifyContent: 'center', borderRadius: 120, paddingVertical: 8, paddingHorizontal: 12}}>
+          <Text size={10} color={textColor}>{text}</Text>
+        </View>
+      );
+    }
+
     const renderItem = ({ item }) => (
         <View style={{paddingHorizontal: 10, paddingVertical: 10,borderRadius: 5,alignSelf:'center',marginVertical: 10,width: '95%', backgroundColor: Color.theme, elevation: 5}}>
-            <Row>
-                <Image source={{ uri: item.image }} style={{width: '15%', height: 50, borderRadius: 10}}/>
-                <Col style={{marginHorizontal: 10,}}>
-                    <Text style={{lineHeight: 20,width: '72%', fontWeight: 'bold', textAlign: 'left'}}>{item.name}</Text>
-                    <Text style={{marginVertical: 5,fontSize: 10, color: Color.secondary, textAlign: 'left'}}>{moment(item.dateStart).format('dddd, DD MMMM YYYY')}</Text>
-                </Col>
-                <View style={{backgroundColor: '#E7F5D0',borderColor: '#558617', borderWidth: 1, width: '15%', height: 25, alignItems: 'center', justifyContent: 'center', borderRadius: 20}}>
-                    <Text style={{color: '#558617',fontSize: 10}}>{item.status}</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <View style={{ flexDirection: 'row', maxWidth: '60%'}}>
+                <Image source={{ uri: item.image }} style={{aspectRatio: 1, height: 50, borderRadius: 10}}/>
+                <View style={{flexDirection: 'column', marginLeft: 10}}>
+                    <Text lineHeight={20} type='bold' align="left" size={14} numberOfLines={2}>{item.name}</Text>
+                    <Divider height={5}/>
+                    <Text size={10} color={Color.secondary} align='left'>{moment(item.dateStart).format('dddd, DD MMMM YYYY')}</Text>
                 </View>
-            </Row>
+              </View>
+              {renderStatus(item.status)}
+            </View>
             <Divider/>
             <Row>
                 <Col >

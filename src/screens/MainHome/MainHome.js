@@ -9,7 +9,6 @@ import {
   RefreshControl,
   Platform,
   FlatList,
-  Linking,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -55,9 +54,9 @@ import TrackPlayer, {
 import {analyticMethods, GALogEvent} from 'src/utils/analytics';
 import {getSizeByRatio} from 'src/utils/get_ratio';
 import MusikAlbum from 'src/components/MusikAlbum';
-import { fetchContentProduct } from 'src/api/content';
 import HighlightLelang from 'src/components/Card/HighlightLelang';
 import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
+import ModalMenuHome from 'src/components/Modal/ModalMenuHome';
 
 let tempShowPopupAds = true;
 
@@ -70,14 +69,6 @@ const MainHome = ({navigation, route}) => {
   const [chatNotifCount, setChatNotifCount] = useState(0);
   const [dataPopupAds, setDataPopupAds] = useState();
   const [showPopupAds, setShowPopupAds] = useState(false);
-
-  const [loadingAuction, setLoadingAuction] = useState(true);
-
-  const [loadingSoonAuction, setLoadingSoonAuction] = useState(true);
-
-  const [loadingNearbyPlace, setLoadingNearbyPlace] = useState(true);
-  const [listNearbyPlace, setListNearbyPlace] = useState([]);
-
   const [loadingBanner, setLoadingBanner] = useState(true);
   const [listBanner, setListBanner] = useState([]);
 
@@ -85,6 +76,7 @@ const MainHome = ({navigation, route}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [thisTrack, setThisTrack] = useState();
 
+  const modalMenuHome = useRef();
   const user = useSelector(state => state['user.auth'].login.user);
   const dispatch = useDispatch();
   const {Color} = useColor();
@@ -143,9 +135,10 @@ const MainHome = ({navigation, route}) => {
     currentSocket.emit('auth', {id: user ? user.userId : 0});
     currentSocket.on('auth', res => {
       console.log('res auth', res);
+
+      currentSocket.emit('chat_notification');
     });
 
-    currentSocket.emit('chat_notification');
     currentSocket.on('chat_notification', res => {
       console.log('res chat_notification', res);
       if (res && res.status) {
@@ -228,13 +221,7 @@ const MainHome = ({navigation, route}) => {
   };
 
   const fetchData = async () => {
-    const resultNearbyPlace = await fetchContentProduct({ productCategory: 'NEARBY_PLACE' });
-    setListNearbyPlace(resultNearbyPlace.data);
-    setLoadingNearbyPlace(false);
-
-    // not yet
-    setLoadingAuction(false);
-    setLoadingSoonAuction(false);
+    
   };
 
   const onRefresh = () => {
@@ -264,16 +251,6 @@ const MainHome = ({navigation, route}) => {
       file: 'http://samples.leanpub.com/thereactnativebook-sample.pdf',
     });
   };
-
-  // const ModalPopupEbook = () => {
-  //     return (
-  //       <View style={{flex: 1}}>
-  //         <Modal isVisible='true'>
-
-  //         </Modal>
-  //       </View>
-  //     )
-  // }
 
   return (
     <Scaffold
@@ -456,6 +433,13 @@ const MainHome = ({navigation, route}) => {
               </Text>
             </View>
           </View>
+
+          <TouchableOpacity
+            // onPress={() => modalMenuHome.current.open()}
+            onPress={() => navigation.navigate('SurveyPasarScreen')}
+          >
+            <Text>Buka Survey</Text>
+          </TouchableOpacity>
 
           {accessClient.MainHome.showWidgetBalance && (
             <>
@@ -747,14 +731,15 @@ const MainHome = ({navigation, route}) => {
 
           <Divider />
 
-          <HighlightContentProduct
+          {/* isFocused handle android navigate crash from home */}
+          {isFocused && <HighlightContentProduct
             productCategory='YOUTUBE_VIDEO'
             name='Live'
             title='Sedang Berlangsung'
             nav='YoutubeScreen'
             refresh={refreshing}
             style={{paddingHorizontal: 0}}
-          />
+          />}
 
           <Divider />
 
@@ -814,6 +799,10 @@ const MainHome = ({navigation, route}) => {
           navigation.navigate(e.nav, e.params);
           modalPostingRef.current.close();
         }}
+      />
+
+      <ModalMenuHome
+        ref={modalMenuHome}
       />
 
       {dataPopupAds && (

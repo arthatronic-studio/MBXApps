@@ -24,7 +24,7 @@ const defaultProps = {
   onPress: () => {},
 };
 
-const WidgetMenuHome = ({ itemPerPage, onPress }) => {
+const WidgetMenuHome = ({ itemPerPage, onPress, bgColor }) => {
   const {Color} = useColor();
   const navigation = useNavigation();
   const user = useSelector(state => state['user.auth'].login.user);
@@ -100,7 +100,7 @@ const WidgetMenuHome = ({ itemPerPage, onPress }) => {
       <Container
         style={{
           ...shadowStyle,
-          backgroundColor: Color.textInput,
+          backgroundColor: bgColor ? bgColor : Color.textInput,
           width: '100%',
           borderRadius: 8,
           paddingHorizontal: 16,

@@ -7,7 +7,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import Text from '@src/components/Text';
 import { useColor } from '@src/components/Color';
-import { usePopup } from 'src/components/Modal/Popup';
+import Popup, { usePopup } from 'src/components/Modal/Popup';
 import { shadowStyle } from '@src/styles';
 import { useTimeout } from 'src/hooks';
 import { Divider } from 'src/styled';
@@ -40,6 +40,7 @@ const Maps = ({ onCallback, name, latitude, longitude, initLocation }) => {
         longitudeDelta: 0.01,
     });
     const [marker, setMarker] = useState();
+    const [triggerPick, setTriggerPick] = useState(false);
     const [locationName, setLocationName] = useState(initialLocationName);
     const [textAddress, setTextAddress] = useState('');
     const [selectedProvince, setSelectedProvince] = useState();
@@ -72,6 +73,9 @@ const Maps = ({ onCallback, name, latitude, longitude, initLocation }) => {
             latitude: parseFloat(latitude),
             longitude: parseFloat(longitude),
         });
+
+        // handle agar ke fetch hanya saat true
+        setTriggerPick(true);
     }, [name, latitude, longitude]);
 
     useEffect(() => {
@@ -79,14 +83,13 @@ const Maps = ({ onCallback, name, latitude, longitude, initLocation }) => {
     }, [hasLocationPermission, initLocation]);
 
     useTimeout(() => {
-        if (marker) {
+        if (triggerPick) {
             getGeocoding();
+            setTriggerPick(false);
         }
-    }, 500, marker);
+    }, 500, triggerPick);
 
     const getGeocoding = () => {
-        console.log('marker', marker);
-
         fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${marker.latitude},${marker.longitude}&result_type=street_address&key=${googleApiKey}`)
         // fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${-6.225588},${106.798553}&result_type=street_address&key=${googleApiKey}`)
             .then((result) => result.json())
@@ -109,13 +112,40 @@ const Maps = ({ onCallback, name, latitude, longitude, initLocation }) => {
                         };
 
                         onCallback(param);
+                    } else {
+                        alert('Lokasi tidak ditemukan');
+                        onErrorFindLocation();
                     }
+                } else {
+                    alert('Tidak ditemukan hasil');
+                    onErrorFindLocation();
                 }
             })
             .catch((err) => {
                 console.log('error geocoding', err);
+                alert('Terjadi kesalahan, silakan coba kembali');
                 setLoading(false);
+                onErrorFindLocation();
             });
+    }
+
+    const onErrorFindLocation = () => {
+        setTimeout(() => {
+            setMarker({
+                ...marker,
+                latitude,
+                longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+            });
+            setCurrentLocation({
+                ...currentLocation,
+                latitude,
+                longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+            });
+        }, 1000);
     }
 
     const requestLocationPermission = async() => {
@@ -161,6 +191,9 @@ const Maps = ({ onCallback, name, latitude, longitude, initLocation }) => {
                         latitude: parseFloat(success.coords.latitude),
                         longitude: parseFloat(success.coords.longitude),
                     });
+
+                    // handle agar ke fetch hanya saat true
+                    setTriggerPick(true);
                 },
                 (error) => {
                     console.log('error geo', error);
@@ -212,6 +245,9 @@ const Maps = ({ onCallback, name, latitude, longitude, initLocation }) => {
                             latitude: parseFloat(e.nativeEvent.coordinate.latitude),
                         });
 
+                        // handle agar ke fetch hanya saat true
+                        setTriggerPick(true);
+
                         setCurrentLocation({
                             ...currentLocation,
                             longitude: parseFloat(e.nativeEvent.coordinate.longitude),
@@ -225,6 +261,9 @@ const Maps = ({ onCallback, name, latitude, longitude, initLocation }) => {
                             longitude: parseFloat(e.nativeEvent.coordinate.longitude),
                             latitude: parseFloat(e.nativeEvent.coordinate.latitude),
                         });
+
+                        // handle agar ke fetch hanya saat true
+                        setTriggerPick(true);
 
                         setCurrentLocation({
                             ...currentLocation,
@@ -258,6 +297,8 @@ const Maps = ({ onCallback, name, latitude, longitude, initLocation }) => {
                     />
                 </TouchableOpacity>
             </View>}
+
+            <Popup { ...popupProps } />
         </>
     );
 }
