@@ -1,10 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, ScrollView, TextInput, SafeAreaView, TouchableOpacity, Image, Keyboard, BackHandler, useWindowDimensions } from 'react-native';
+import {
+  View,
+  ScrollView,
+  TextInput,
+  SafeAreaView,
+  TouchableOpacity,
+  Image,
+  Keyboard,
+  BackHandler,
+  useWindowDimensions,
+  StyleSheet,
+} from 'react-native';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+import {Table, Row, Rows} from 'react-native-table-component';
 import {
     Header,
     Text,
@@ -70,6 +82,24 @@ const options = {
 }
 
 const JoinCommunity = ({ navigation, route }) => {
+   var dataTables = {
+     tableHead: [
+       'UKURAN',
+       'LEBAR',
+       'PANJANG',
+       'BAHU',
+       'L.\nPANJANG',
+       'L.\nPENDEK',
+     ],
+     tableData: [
+       ['S', '50', '68', '14', '24', '58'],
+       ['M', '52', '70', '15', '25', '60'],
+       ['L', '54', '72', '16', '26', '62'],
+       ['XL', '56', '74', '17', '27', '64'],
+       ['XXL', '58', '76', '18', '28', '66'],
+       ['XXXL', '60', '78', '19', '29', '68'],
+     ],
+   };
     const { height } = useWindowDimensions();
     const { Color } = useColor();
 
@@ -309,533 +339,949 @@ const JoinCommunity = ({ navigation, route }) => {
                 break;
         }
     }
-
+ const state = dataTables;
     return (
-        <Scaffold
-            headerTitle='Gabung Komunitas'
-            loadingProps={loadingProps}
-            popupProps={popupProps}
-        >
-            <ScrollView>
-                <View style={{paddingTop: 35, paddingBottom: 16, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center'}}>
-                    <View style={{width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', borderWidth: 4, borderColor: Color.grayLight, marginRight: 8}}>
-                        <Text type='bold' size={24} align='left' color={Color.primary}>1</Text>
-                    </View>
-                    <View>
-                        <Text size={14} color={Color.text} align='left'>Informasi Data Diri</Text>
-                        <Text size={10} color={Color.gray} align='left'>Masukan informasi untuk gabung ke komunitas</Text>
-                    </View>
+      <Scaffold
+        headerTitle="Gabung Komunitas"
+        loadingProps={loadingProps}
+        popupProps={popupProps}>
+        <ScrollView>
+          <View
+            style={{
+              paddingTop: 35,
+              paddingBottom: 16,
+              paddingHorizontal: 16,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: 24,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderWidth: 4,
+                borderColor: Color.grayLight,
+                marginRight: 8,
+              }}>
+              <Text type="bold" size={24} align="left" color={Color.primary}>
+                1
+              </Text>
+            </View>
+            <View>
+              <Text size={14} color={Color.text} align="left">
+                Informasi Data Diri
+              </Text>
+              <Text size={10} color={Color.gray} align="left">
+                Masukan informasi untuk gabung ke komunitas
+              </Text>
+            </View>
+          </View>
+
+          {accessClient.isRRID && (
+            <Container paddingHorizontal={16}>
+              <Text size={12} align="left">
+                Form registrasi untuk member RR-ID
+              </Text>
+              <Text size={12} align="left">
+                Untuk starter pack yang didapat:
+              </Text>
+              <Divider height={8} />
+              <Text size={12} align="left">
+                - 3 sticker (Logo rrid, nopung, Raize Rocky Indonesia)
+              </Text>
+              <Text size={12} align="left">
+                - 1 kemeja
+              </Text>
+              <Text size={12} align="left">
+                - 1 KTA (e-money saldo Rp. 0)
+              </Text>
+              <Divider height={8} />
+              <Text size={12} align="left">
+                Note: Ongkir akan dikabari setelah starter pack siap kirim
+              </Text>
+              <Divider />
+              <Text size={12} align="left">
+                Untuk detail CP:
+              </Text>
+              <Divider height={4} />
+              <TouchableOpacity onPress={() => copyToClipboard('082111057057')}>
+                <Text size={12} align="left">
+                  Vico 082 111 057 057{'    '}
+                  <Ionicons name="copy-outline" size={14} color={Color.info} />
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => copyToClipboard('081320476999')}>
+                <Text size={12} align="left">
+                  Marco 081 320 476 999{'  '}
+                  <Ionicons name="copy-outline" size={14} color={Color.info} />
+                </Text>
+              </TouchableOpacity>
+            </Container>
+          )}
+
+          <View style={{backgroundColor: Color.theme, paddingBottom: 16}}>
+            <View style={{paddingHorizontal: 16, paddingTop: 16}}>
+              <CustomTouch onPress={() => modalSelectChapterRef.current.open()}>
+                <View
+                  style={{
+                    marginTop: 6,
+                    paddingHorizontal: 12,
+                    borderWidth: 1,
+                    borderRadius: 4,
+                    borderColor: Color.border,
+                  }}>
+                  <LabelInput>
+                    <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>
+                      Domisili
+                    </Text>
+                  </LabelInput>
+                  <View
+                    style={{
+                      height: 34,
+                      paddingRight: 8,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Text size={14} style={{marginTop: 2}}>
+                      {userData.chapterId || 'Pilih Domisili'}
+                    </Text>
+                    <Ionicons name="chevron-down-outline" color={Color.text} />
+                  </View>
                 </View>
+              </CustomTouch>
+            </View>
 
-                {accessClient.isRRID && <Container paddingHorizontal={16}>
-                    <Text size={12} align='left'>
-                        Form registrasi untuk member RR-ID
+            <FormSelect
+              label="Tipe Mobil"
+              placeholder="Pilih Tipe"
+              value={selectedCarType ? selectedCarType.name : null}
+              onPress={() => setModalCarType(true)}
+            />
+
+            <View style={{paddingHorizontal: 16}}>
+              <View
+                style={{
+                  marginTop: 6,
+                  paddingHorizontal: 12,
+                  borderWidth: 1,
+                  borderRadius: 4,
+                  borderColor: Color.border,
+                }}>
+                <LabelInput>
+                  <Text size={10} letterSpacing={0.08} style={{opacity: 0.6}}>
+                    Warna Mobil
+                  </Text>
+                </LabelInput>
+                <EmailRoundedView>
+                  <CustomTextInput
+                    placeholder="Merah"
+                    keyboardType="default"
+                    placeholderTextColor={Color.gray}
+                    underlineColorAndroid="transparent"
+                    autoCorrect={false}
+                    onChangeText={text => onChangeUserData('carColor', text)}
+                    selectionColor={Color.text}
+                    value={userData.carColor}
+                    onBlur={() => isValueError('carColor')}
+                    style={{color: Color.text}}
+                  />
+                </EmailRoundedView>
+              </View>
+            </View>
+
+            <View style={{paddingHorizontal: 16, paddingTop: 16}}>
+              <View
+                style={{
+                  marginTop: 6,
+                  paddingHorizontal: 12,
+                  borderWidth: 1,
+                  borderRadius: 4,
+                  borderColor: Color.border,
+                }}>
+                <LabelInput>
+                  <Text size={10} letterSpacing={0.08} style={{opacity: 0.6}}>
+                    Tahun Mobil
+                  </Text>
+                </LabelInput>
+                <EmailRoundedView>
+                  <CustomTextInput
+                    placeholder="1990"
+                    keyboardType="numeric"
+                    placeholderTextColor={Color.gray}
+                    underlineColorAndroid="transparent"
+                    autoCorrect={false}
+                    onChangeText={text => onChangeUserData('carYear', text)}
+                    selectionColor={Color.text}
+                    value={userData.carYear}
+                    onBlur={() => isValueError('carYear')}
+                    style={{color: Color.text}}
+                  />
+                </EmailRoundedView>
+              </View>
+            </View>
+
+            <View style={{paddingHorizontal: 16, paddingTop: 16}}>
+              <View
+                style={{
+                  marginTop: 6,
+                  paddingHorizontal: 12,
+                  borderWidth: 1,
+                  borderRadius: 4,
+                  borderColor: Color.border,
+                }}>
+                <LabelInput>
+                  <Text size={10} letterSpacing={0.08} style={{opacity: 0.6}}>
+                    Plat Nomor
+                  </Text>
+                </LabelInput>
+                <EmailRoundedView>
+                  <CustomTextInput
+                    placeholder="B 1234 ABC"
+                    keyboardType="default"
+                    placeholderTextColor={Color.gray}
+                    underlineColorAndroid="transparent"
+                    autoCorrect={false}
+                    onChangeText={text => onChangeUserData('carIdentity', text)}
+                    selectionColor={Color.text}
+                    value={userData.carIdentity}
+                    onBlur={() => isValueError('carIdentity')}
+                    style={{color: Color.text}}
+                  />
+                </EmailRoundedView>
+              </View>
+            </View>
+
+            <View style={{paddingHorizontal: 16, paddingTop: 16}}>
+              <View
+                style={{
+                  marginTop: 6,
+                  paddingHorizontal: 12,
+                  borderWidth: 1,
+                  borderRadius: 4,
+                  borderColor: Color.border,
+                  height: 90,
+                }}>
+                <LabelInput>
+                  <Text size={10} letterSpacing={0.08} style={{opacity: 0.6}}>
+                    Alasan Gabung
+                  </Text>
+                </LabelInput>
+                <EmailRoundedView>
+                  <CustomTextInput
+                    placeholder="Tuliskan sesuatu..."
+                    keyboardType="default"
+                    placeholderTextColor={Color.gray}
+                    underlineColorAndroid="transparent"
+                    autoCorrect={false}
+                    onChangeText={text => onChangeUserData('reason', text)}
+                    selectionColor={Color.text}
+                    value={userData.reason}
+                    onBlur={() => isValueError('reason')}
+                    style={{color: Color.text}}
+                  />
+                </EmailRoundedView>
+              </View>
+            </View>
+
+            <View style={{paddingHorizontal: 16, paddingTop: 16}}>
+              <View
+                style={{
+                  marginTop: 6,
+                  paddingHorizontal: 12,
+                  borderWidth: 1,
+                  borderRadius: 4,
+                  borderColor: Color.border,
+                  height: 90,
+                }}>
+                <LabelInput>
+                  <Text size={10} letterSpacing={0.08} style={{opacity: 0.6}}>
+                    Deskripsi
+                  </Text>
+                </LabelInput>
+                <EmailRoundedView>
+                  <CustomTextInput
+                    placeholder="Tuliskan sesuatu..."
+                    keyboardType="default"
+                    placeholderTextColor={Color.gray}
+                    underlineColorAndroid="transparent"
+                    autoCorrect={false}
+                    onChangeText={text => onChangeUserData('note', text)}
+                    selectionColor={Color.text}
+                    value={userData.note}
+                    onBlur={() => isValueError('note')}
+                    style={{color: Color.text}}
+                  />
+                </EmailRoundedView>
+              </View>
+            </View>
+
+            <FormSelect
+              label="Ukuran Kaos"
+              placeholder="Pilih ukuran"
+              value={
+                selectedMerchandiseSize ? selectedMerchandiseSize.name : null
+              }
+              onPress={() => setModalMerchandiseSize(true)}
+            />
+
+            <View
+              style={{
+                paddingTop: 16,
+                paddingBottom: 16,
+                paddingHorizontal: 16,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 24,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderWidth: 4,
+                  borderColor: Color.grayLight,
+                  marginRight: 8,
+                }}>
+                <Text type="bold" size={24} align="left" color={Color.primary}>
+                  2
+                </Text>
+              </View>
+              <View>
+                <Text size={14} color={Color.text} align="left">
+                  Unggah Foto
+                </Text>
+                <Text size={10} color={Color.gray} align="left">
+                  Unggah foto untuk memenuhi persyaratan
+                </Text>
+              </View>
+            </View>
+
+            <View style={{paddingHorizontal: 16, marginTop: 16}}>
+              <Text size={11} color={Color.text} align="left">
+                Foto Selfie
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalAddPhoto(true);
+                  setModalNumberPhoto(6);
+                }}
+                style={{
+                  width: 120,
+                  height: 120,
+                  borderRadius: 16,
+                  marginVertical: 10,
+                  borderWidth: 3,
+                  borderStyle: 'dashed',
+                  borderColor: Color.border,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Feather
+                  name="camera"
+                  size={32}
+                  style={{marginBottom: 4}}
+                  color={Color.gray}
+                />
+                <Text size={10} color={Color.gray}>
+                  Tambah Foto
+                </Text>
+              </TouchableOpacity>
+              <Text size={11} color={Color.gray} align="left">
+                Foto selfie dengan jelas dan tidak blur
+              </Text>
+            </View>
+
+            {thumbImage6 !== '' && (
+              <TouchableOpacity
+                onPress={() => {}}
+                style={{
+                  width: '100%',
+                  height: height / 3,
+                  borderRadius: 4,
+                  paddingHorizontal: 16,
+                  marginTop: 10,
+                }}>
+                <Image
+                  style={{
+                    height: '100%',
+                    aspectRatio: 1,
+                    borderRadius: 4,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  source={{uri: `data:${mimeImage6};base64,${thumbImage6}`}}
+                />
+              </TouchableOpacity>
+            )}
+
+            <View style={{paddingHorizontal: 16, marginTop: 16}}>
+              <Text size={11} color={Color.text} align="left">
+                Foto Mobil
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalAddPhoto(true);
+                  setModalNumberPhoto(1);
+                }}
+                style={{
+                  width: 120,
+                  height: 120,
+                  borderRadius: 16,
+                  marginVertical: 10,
+                  borderWidth: 3,
+                  borderStyle: 'dashed',
+                  borderColor: Color.border,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Feather
+                  name="camera"
+                  size={32}
+                  style={{marginBottom: 4}}
+                  color={Color.gray}
+                />
+                <Text size={10} color={Color.gray}>
+                  Tambah Foto
+                </Text>
+              </TouchableOpacity>
+              <Text size={11} color={Color.gray} align="left">
+                Foto mobil dengan jelas dan tidak blur
+              </Text>
+            </View>
+
+            {thumbImage !== '' && (
+              <TouchableOpacity
+                onPress={() => {}}
+                style={{
+                  width: '100%',
+                  height: height / 3,
+                  borderRadius: 4,
+                  paddingHorizontal: 16,
+                  marginTop: 10,
+                }}>
+                <Image
+                  style={{
+                    height: '100%',
+                    aspectRatio: 1,
+                    borderRadius: 4,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  source={{uri: `data:${mimeImage};base64,${thumbImage}`}}
+                />
+              </TouchableOpacity>
+            )}
+
+            <View style={{paddingHorizontal: 16, marginTop: 16}}>
+              <Text size={11} color={Color.text} align="left">
+                Foto Bagian Depan Mobil
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalAddPhoto(true);
+                  setModalNumberPhoto(2);
+                }}
+                style={{
+                  width: 120,
+                  height: 120,
+                  borderRadius: 16,
+                  marginVertical: 10,
+                  borderWidth: 3,
+                  borderStyle: 'dashed',
+                  borderColor: Color.border,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Feather
+                  name="camera"
+                  size={32}
+                  style={{marginBottom: 4}}
+                  color={Color.gray}
+                />
+                <Text size={10} color={Color.gray}>
+                  Tambah Foto
+                </Text>
+              </TouchableOpacity>
+              <Text size={11} color={Color.gray} align="left">
+                Foto tampak depan mobilmu dengan jelas
+              </Text>
+            </View>
+
+            {thumbImage2 !== '' && (
+              <TouchableOpacity
+                onPress={() => {}}
+                style={{
+                  width: '100%',
+                  height: height / 3,
+                  borderRadius: 4,
+                  paddingHorizontal: 16,
+                  marginTop: 10,
+                }}>
+                <Image
+                  style={{
+                    height: '100%',
+                    aspectRatio: 1,
+                    borderRadius: 4,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  source={{uri: `data:${mimeImage2};base64,${thumbImage2}`}}
+                />
+              </TouchableOpacity>
+            )}
+
+            <View style={{paddingHorizontal: 16, marginTop: 16}}>
+              <Text size={11} color={Color.text} align="left">
+                Foto Bagian Samping Mobil
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalAddPhoto(true);
+                  setModalNumberPhoto(3);
+                }}
+                style={{
+                  width: 120,
+                  height: 120,
+                  borderRadius: 16,
+                  marginVertical: 10,
+                  borderWidth: 3,
+                  borderStyle: 'dashed',
+                  borderColor: Color.border,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Feather
+                  name="camera"
+                  size={32}
+                  style={{marginBottom: 4}}
+                  color={Color.gray}
+                />
+                <Text size={10} color={Color.gray}>
+                  Tambah Foto
+                </Text>
+              </TouchableOpacity>
+              <Text size={11} color={Color.gray} align="left">
+                Foto tampak samping mobilmu dengan jelas
+              </Text>
+            </View>
+
+            {thumbImage3 !== '' && (
+              <TouchableOpacity
+                onPress={() => {}}
+                style={{
+                  width: '100%',
+                  height: height / 3,
+                  borderRadius: 4,
+                  paddingHorizontal: 16,
+                  marginTop: 10,
+                }}>
+                <Image
+                  style={{
+                    height: '100%',
+                    aspectRatio: 1,
+                    borderRadius: 4,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  source={{uri: `data:${mimeImage3};base64,${thumbImage3}`}}
+                />
+              </TouchableOpacity>
+            )}
+
+            <View style={{paddingHorizontal: 16, marginTop: 16}}>
+              <Text size={11} color={Color.text} align="left">
+                Foto Bagian Belakang Mobil
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalAddPhoto(true);
+                  setModalNumberPhoto(4);
+                }}
+                style={{
+                  width: 120,
+                  height: 120,
+                  borderRadius: 16,
+                  marginVertical: 10,
+                  borderWidth: 3,
+                  borderStyle: 'dashed',
+                  borderColor: Color.border,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Feather
+                  name="camera"
+                  size={32}
+                  style={{marginBottom: 4}}
+                  color={Color.gray}
+                />
+                <Text size={10} color={Color.gray}>
+                  Tambah Foto
+                </Text>
+              </TouchableOpacity>
+              <Text size={11} color={Color.gray} align="left">
+                Foto tampak belakang mobilmu dengan jelas
+              </Text>
+            </View>
+
+            {thumbImage4 !== '' && (
+              <TouchableOpacity
+                onPress={() => {}}
+                style={{
+                  width: '100%',
+                  height: height / 3,
+                  borderRadius: 4,
+                  paddingHorizontal: 16,
+                  marginTop: 10,
+                }}>
+                <Image
+                  style={{
+                    height: '100%',
+                    aspectRatio: 1,
+                    borderRadius: 4,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  source={{uri: `data:${mimeImage4};base64,${thumbImage4}`}}
+                />
+              </TouchableOpacity>
+            )}
+
+            <View style={{paddingHorizontal: 16, marginTop: 16}}>
+              <Text size={11} color={Color.text} align="left">
+                Foto SIM
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalAddPhoto(true);
+                  setModalNumberPhoto(7);
+                }}
+                style={{
+                  width: 120,
+                  height: 120,
+                  borderRadius: 16,
+                  marginVertical: 10,
+                  borderWidth: 3,
+                  borderStyle: 'dashed',
+                  borderColor: Color.border,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Feather
+                  name="camera"
+                  size={32}
+                  style={{marginBottom: 4}}
+                  color={Color.gray}
+                />
+                <Text size={10} color={Color.gray}>
+                  Tambah Foto
+                </Text>
+              </TouchableOpacity>
+              <Text size={11} color={Color.gray} align="left">
+                Foto SIM anda dengan jelas
+              </Text>
+            </View>
+
+            {thumbImage7 !== '' && (
+              <TouchableOpacity
+                onPress={() => {}}
+                style={{
+                  width: '100%',
+                  height: height / 3,
+                  borderRadius: 4,
+                  paddingHorizontal: 16,
+                  marginTop: 10,
+                }}>
+                <Image
+                  style={{
+                    height: '100%',
+                    aspectRatio: 1,
+                    borderRadius: 4,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  source={{uri: `data:${mimeImage7};base64,${thumbImage7}`}}
+                />
+              </TouchableOpacity>
+            )}
+
+            <View style={{paddingHorizontal: 16, marginTop: 16}}>
+              <Text size={11} color={Color.text} align="left">
+                Foto STNK
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalAddPhoto(true);
+                  setModalNumberPhoto(8);
+                }}
+                style={{
+                  width: 120,
+                  height: 120,
+                  borderRadius: 16,
+                  marginVertical: 10,
+                  borderWidth: 3,
+                  borderStyle: 'dashed',
+                  borderColor: Color.border,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Feather
+                  name="camera"
+                  size={32}
+                  style={{marginBottom: 4}}
+                  color={Color.gray}
+                />
+                <Text size={10} color={Color.gray}>
+                  Tambah Foto
+                </Text>
+              </TouchableOpacity>
+              <Text size={11} color={Color.gray} align="left">
+                Foto STNK anda dengan jelas
+              </Text>
+            </View>
+
+            {thumbImage8 !== '' && (
+              <TouchableOpacity
+                onPress={() => {}}
+                style={{
+                  width: '100%',
+                  height: height / 3,
+                  borderRadius: 4,
+                  paddingHorizontal: 16,
+                  marginTop: 10,
+                }}>
+                <Image
+                  style={{
+                    height: '100%',
+                    aspectRatio: 1,
+                    borderRadius: 4,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  source={{uri: `data:${mimeImage8};base64,${thumbImage8}`}}
+                />
+              </TouchableOpacity>
+            )}
+
+            <View style={{paddingHorizontal: 16, marginTop: 16}}>
+              <Text size={11} color={Color.text} align="left">
+                Foto Bukti Pembayaran
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalAddPhoto(true);
+                  setModalNumberPhoto(5);
+                }}
+                style={{
+                  width: 120,
+                  height: 120,
+                  borderRadius: 16,
+                  marginVertical: 10,
+                  borderWidth: 3,
+                  borderStyle: 'dashed',
+                  borderColor: Color.border,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Feather
+                  name="camera"
+                  size={32}
+                  style={{marginBottom: 4}}
+                  color={Color.gray}
+                />
+                <Text size={10} color={Color.gray}>
+                  Tambah Foto
+                </Text>
+              </TouchableOpacity>
+              <Text size={11} color={Color.gray} align="left">
+                Foto bukti pembayaranmu dengan jelas
+              </Text>
+              {/* nomor rek khusus rrid */}
+              {accessClient.isRRID && (
+                <View>
+                  <Divider height={10} />
+                  <Text size={11} color={Color.gray} align="left">
+                    Mohon agar ditransfer ke bank{' <'}
+                    <Text size={11} color={Color.gray} type="bold">
+                      BCA DIGITAL
                     </Text>
-                    <Text size={12} align='left'>
-                        Untuk starter pack yang didapat:
+                    {'> '}
+                    <Text size={11} color={Color.gray} type="bold">
+                      001120211113 an Yokhanan Adi Prasetya
+                    </Text>{' '}
+                    sebesar Rp255.000.
+                  </Text>
+                  <Divider height={8} />
+                  <TouchableOpacity
+                    onPress={() => {
+                      copyToClipboard('001120211113');
+                    }}>
+                    <Text size={12} color={Color.gray}>
+                      Salin Rekening{' '}
+                      <Ionicons
+                        name="copy-outline"
+                        size={14}
+                        color={Color.info}
+                      />
                     </Text>
-                    <Divider height={8} />
-                    <Text size={12} align='left'>
-                        - 3 sticker (Logo rrid, nopung, Raize Rocky Indonesia)
-                    </Text>
-                    <Text size={12} align='left'>
-                        - 1 kemeja
-                    </Text>
-                    <Text size={12} align='left'>
-                        - 1 KTA (e-money saldo Rp. 0)
-                    </Text>
-                    <Divider height={8} />
-                    <Text size={12} align='left'>
-                        Note: Ongkir akan dikabari setelah starter pack siap kirim
-                    </Text>
-                    <Divider />
-                    <Text size={12} align='left'>
-                        Untuk detail CP:
-                    </Text>
-                    <Divider height={4} />
-                    <TouchableOpacity
-                        onPress={() => copyToClipboard('082111057057')}
-                    >
-                        <Text size={12} align='left'>
-                            Vico       082 111 057 057{'    '}
-                            <Ionicons name='copy-outline' size={14} color={Color.info} />
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => copyToClipboard('081320476999')}
-                    >
-                        <Text size={12} align='left'>
-                            Marco    081 320 476 999{'  '}
-                            <Ionicons name='copy-outline' size={14} color={Color.info} />
-                        </Text>
-                    </TouchableOpacity>
-                </Container>}
-
-                <View style={{backgroundColor: Color.theme, paddingBottom: 16}}>
-                    <View style={{paddingHorizontal: 16, paddingTop: 16}}>
-                        <CustomTouch onPress={() => modalSelectChapterRef.current.open()}>
-                            <View style={{marginTop: 6, paddingHorizontal: 12, borderWidth: 1, borderRadius: 4, borderColor: Color.border}}>
-                                <LabelInput>
-                                    <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Domisili</Text>
-                                </LabelInput>
-                                <View style={{height: 34, paddingRight: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                                    <Text size={14} style={{marginTop: 2}}>{userData.chapterId || 'Pilih Domisili'}</Text>
-                                    <Ionicons name='chevron-down-outline' color={Color.text} />
-                                </View>
-                            </View>
-                        </CustomTouch>
-                    </View>
-
-                    <FormSelect
-                        label='Tipe Mobil'
-                        placeholder='Pilih Tipe'
-                        value={selectedCarType ? selectedCarType.name : null}
-                        onPress={() => setModalCarType(true)}
-                    />
-
-                    <View style={{paddingHorizontal: 16}}>
-                        <View style={{marginTop: 6, paddingHorizontal: 12, borderWidth: 1, borderRadius: 4, borderColor: Color.border}}>
-                            <LabelInput>
-                                <Text size={10} letterSpacing={0.08} style={{opacity: 0.6}}>Warna Mobil</Text>
-                            </LabelInput>
-                            <EmailRoundedView>
-                                <CustomTextInput 
-                                    placeholder='Merah'
-                                    keyboardType='default'
-                                    placeholderTextColor={Color.gray}
-                                    underlineColorAndroid='transparent'
-                                    autoCorrect={false}
-                                    onChangeText={(text) => onChangeUserData('carColor', text)}
-                                    selectionColor={Color.text}
-                                    value={userData.carColor}
-                                    onBlur={() => isValueError('carColor')}
-                                    style={{color: Color.text}}
-                                />
-                            </EmailRoundedView>
-                        </View>
-                    </View>
-
-                    <View style={{paddingHorizontal: 16, paddingTop: 16}}>
-                        <View style={{marginTop: 6, paddingHorizontal: 12, borderWidth: 1, borderRadius: 4, borderColor: Color.border}}>
-                            <LabelInput>
-                                <Text size={10} letterSpacing={0.08} style={{opacity: 0.6}}>Tahun Mobil</Text>
-                            </LabelInput>
-                            <EmailRoundedView>
-                                <CustomTextInput 
-                                    placeholder='1990'
-                                    keyboardType='numeric'
-                                    placeholderTextColor={Color.gray}
-                                    underlineColorAndroid='transparent'
-                                    autoCorrect={false}
-                                    onChangeText={(text) => onChangeUserData('carYear', text)}
-                                    selectionColor={Color.text}
-                                    value={userData.carYear}
-                                    onBlur={() => isValueError('carYear')}
-                                    style={{color: Color.text}}
-                                />
-                            </EmailRoundedView>
-                        </View>
-                    </View>
-
-                    <View style={{paddingHorizontal: 16, paddingTop: 16}}>
-                        <View style={{marginTop: 6, paddingHorizontal: 12, borderWidth: 1, borderRadius: 4, borderColor: Color.border}}>
-                            <LabelInput>
-                                <Text size={10} letterSpacing={0.08} style={{opacity: 0.6}}>Plat Nomor</Text>
-                            </LabelInput>
-                            <EmailRoundedView>
-                                <CustomTextInput 
-                                    placeholder='B 1234 ABC'
-                                    keyboardType='default'
-                                    placeholderTextColor={Color.gray}
-                                    underlineColorAndroid='transparent'
-                                    autoCorrect={false}
-                                    onChangeText={(text) => onChangeUserData('carIdentity', text)}
-                                    selectionColor={Color.text}
-                                    value={userData.carIdentity}
-                                    onBlur={() => isValueError('carIdentity')}
-                                    style={{color: Color.text}}
-                                />
-                            </EmailRoundedView>
-                        </View>
-                    </View>
-
-                    <View style={{paddingHorizontal: 16, paddingTop: 16}}>
-                        <View style={{marginTop: 6, paddingHorizontal: 12, borderWidth: 1, borderRadius: 4, borderColor: Color.border, height: 90}}>
-                            <LabelInput>
-                                <Text size={10} letterSpacing={0.08} style={{opacity: 0.6}}>Alasan Gabung</Text>
-                            </LabelInput>
-                            <EmailRoundedView>
-                                <CustomTextInput
-                                    placeholder='Tuliskan sesuatu...'
-                                    keyboardType='default'
-                                    placeholderTextColor={Color.gray}
-                                    underlineColorAndroid='transparent'
-                                    autoCorrect={false}
-                                    onChangeText={(text) => onChangeUserData('reason', text)}
-                                    selectionColor={Color.text}
-                                    value={userData.reason}
-                                    onBlur={() => isValueError('reason')}
-                                    style={{color: Color.text}}
-                                />
-                            </EmailRoundedView>
-                        </View>
-                    </View>
-
-                    <View style={{paddingHorizontal: 16, paddingTop: 16}}>
-                        <View style={{marginTop: 6, paddingHorizontal: 12, borderWidth: 1, borderRadius: 4, borderColor: Color.border, height: 90}}>
-                            <LabelInput>
-                                <Text size={10} letterSpacing={0.08} style={{opacity: 0.6}}>Deskripsi</Text>
-                            </LabelInput>
-                            <EmailRoundedView>
-                                <CustomTextInput
-                                    placeholder='Tuliskan sesuatu...'
-                                    keyboardType='default'
-                                    placeholderTextColor={Color.gray}
-                                    underlineColorAndroid='transparent'
-                                    autoCorrect={false}
-                                    onChangeText={(text) => onChangeUserData('note', text)}
-                                    selectionColor={Color.text}
-                                    value={userData.note}
-                                    onBlur={() => isValueError('note')}
-                                    style={{color: Color.text}}
-                                />
-                            </EmailRoundedView>
-                        </View>
-                    </View>
-
-                    <FormSelect
-                        label='Ukuran Kaos'
-                        placeholder='Pilih ukuran'
-                        value={selectedMerchandiseSize ? selectedMerchandiseSize.name : null}
-                        onPress={() => setModalMerchandiseSize(true)}
-                    />
-
-                    <View style={{paddingTop: 16, paddingBottom: 16, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'center'}}>
-                        <View style={{width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', borderWidth: 4, borderColor: Color.grayLight, marginRight: 8}}>
-                            <Text type='bold' size={24} align='left' color={Color.primary}>2</Text>
-                        </View>
-                        <View>
-                            <Text size={14} color={Color.text} align='left'>Unggah Foto</Text>
-                            <Text size={10} color={Color.gray} align='left'>Unggah foto untuk memenuhi persyaratan</Text>
-                        </View>
-                    </View>
-
-                    <View style={{paddingHorizontal: 16, marginTop: 16}}>
-                        <Text size={11} color={Color.text} align='left' >Foto Selfie</Text>
-                        <TouchableOpacity
-                            onPress={() => {
-                                setModalAddPhoto(true);
-                                setModalNumberPhoto(6);
-                            }}
-                            style={{width: 120, height: 120, borderRadius: 16, marginVertical: 10, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
-                        >
-                            <Feather name='camera' size={32} style={{marginBottom: 4}} color={Color.gray} />
-                            <Text size={10} color={Color.gray}>Tambah Foto</Text>
-                        </TouchableOpacity>
-                        <Text size={11} color={Color.gray} align='left'>Foto selfie dengan jelas dan tidak blur</Text>
-                    </View>
-
-
-                    {thumbImage6 !== '' && <TouchableOpacity
-                        onPress={() => {}}
-                        style={{width: '100%', height: height / 3, borderRadius: 4, paddingHorizontal: 16, marginTop: 10}}
-                    >
-                        <Image
-                            style={{height: '100%', aspectRatio: 1, borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
-                            source={{ uri: `data:${mimeImage6};base64,${thumbImage6}` }}
-                        />
-                    </TouchableOpacity>}
-
-                    <View style={{paddingHorizontal: 16, marginTop: 16}}>
-                        <Text size={11} color={Color.text} align='left' >Foto Mobil</Text>
-                        <TouchableOpacity
-                            onPress={() => {
-                                setModalAddPhoto(true);
-                                setModalNumberPhoto(1);
-                            }}
-                            style={{width: 120, height: 120, borderRadius: 16, marginVertical: 10, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
-                        >
-                            <Feather name='camera' size={32} style={{marginBottom: 4}} color={Color.gray} />
-                            <Text size={10} color={Color.gray}>Tambah Foto</Text>
-                        </TouchableOpacity>
-                        <Text size={11} color={Color.gray} align='left' >Foto mobil dengan jelas dan tidak blur</Text>
-                    </View>
-
-
-                    {thumbImage !== '' && <TouchableOpacity
-                        onPress={() => {}}
-                        style={{width: '100%', height: height / 3, borderRadius: 4, paddingHorizontal: 16, marginTop: 10}}
-                    >
-                        <Image
-                            style={{height: '100%', aspectRatio: 1, borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
-                            source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
-                        />
-                    </TouchableOpacity>}
-
-                    <View style={{paddingHorizontal: 16, marginTop: 16}}>
-                        <Text size={11} color={Color.text} align='left' >Foto Bagian Depan Mobil</Text>
-                        <TouchableOpacity
-                            onPress={() => {
-                                setModalAddPhoto(true);
-                                setModalNumberPhoto(2);
-                            }}
-                            style={{width: 120, height: 120, borderRadius: 16, marginVertical: 10, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
-                        >
-                            <Feather name='camera' size={32} style={{marginBottom: 4}} color={Color.gray} />
-                            <Text size={10} color={Color.gray}>Tambah Foto</Text>
-                        </TouchableOpacity>
-                        <Text size={11} color={Color.gray} align='left' >Foto tampak depan mobilmu dengan jelas</Text>
-                    </View>
-
-                    {thumbImage2 !== '' && <TouchableOpacity
-                        onPress={() => {}}
-                        style={{width: '100%', height: height / 3, borderRadius: 4, paddingHorizontal: 16, marginTop: 10}}
-                    >
-                        <Image
-                            style={{height: '100%', aspectRatio: 1, borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
-                            source={{ uri: `data:${mimeImage2};base64,${thumbImage2}` }}
-                        />
-                    </TouchableOpacity>}
-
-                    <View style={{paddingHorizontal: 16, marginTop: 16}}>
-                        <Text size={11} color={Color.text} align='left' >Foto Bagian Samping Mobil</Text>
-                        <TouchableOpacity
-                            onPress={() => {
-                                setModalAddPhoto(true);
-                                setModalNumberPhoto(3);
-                            }}
-                            style={{width: 120, height: 120, borderRadius: 16, marginVertical: 10, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
-                        >
-                            <Feather name='camera' size={32} style={{marginBottom: 4}} color={Color.gray} />
-                            <Text size={10} color={Color.gray}>Tambah Foto</Text>
-                        </TouchableOpacity>
-                        <Text size={11} color={Color.gray} align='left' >Foto tampak samping mobilmu dengan jelas</Text>
-                    </View>
-
-                    {thumbImage3 !== '' && <TouchableOpacity
-                        onPress={() => {}}
-                        style={{width: '100%', height: height / 3, borderRadius: 4, paddingHorizontal: 16, marginTop: 10}}
-                    >
-                        <Image
-                            style={{height: '100%', aspectRatio: 1, borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
-                            source={{ uri: `data:${mimeImage3};base64,${thumbImage3}` }}
-                        />
-                    </TouchableOpacity>}
-
-                    <View style={{paddingHorizontal: 16, marginTop: 16}}>
-                        <Text size={11} color={Color.text} align='left' >Foto Bagian Belakang Mobil</Text>
-                        <TouchableOpacity
-                            onPress={() => {
-                                setModalAddPhoto(true);
-                                setModalNumberPhoto(4);
-                            }}
-                            style={{width: 120, height: 120, borderRadius: 16, marginVertical: 10, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
-                        >
-                            <Feather name='camera' size={32} style={{marginBottom: 4}} color={Color.gray} />
-                            <Text size={10} color={Color.gray}>Tambah Foto</Text>
-                        </TouchableOpacity>
-                        <Text size={11} color={Color.gray} align='left' >Foto tampak belakang mobilmu dengan jelas</Text>
-                    </View>
-
-                    {thumbImage4 !== '' && <TouchableOpacity
-                        onPress={() => {}}
-                        style={{width: '100%', height: height / 3, borderRadius: 4, paddingHorizontal: 16, marginTop: 10}}
-                    >
-                        <Image
-                            style={{height: '100%', aspectRatio: 1, borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
-                            source={{ uri: `data:${mimeImage4};base64,${thumbImage4}` }}
-                        />
-                    </TouchableOpacity>}
-
-                    <View style={{paddingHorizontal: 16, marginTop: 16}}>
-                        <Text size={11} color={Color.text} align='left' >Foto SIM</Text>
-                        <TouchableOpacity
-                            onPress={() => {
-                                setModalAddPhoto(true);
-                                setModalNumberPhoto(7);
-                            }}
-                            style={{width: 120, height: 120, borderRadius: 16, marginVertical: 10, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
-                        >
-                            <Feather name='camera' size={32} style={{marginBottom: 4}} color={Color.gray} />
-                            <Text size={10} color={Color.gray}>Tambah Foto</Text>
-                        </TouchableOpacity>
-                        <Text size={11} color={Color.gray} align='left' >Foto SIM anda dengan jelas</Text>
-                    </View>
-
-
-                    {thumbImage7 !== '' && <TouchableOpacity
-                        onPress={() => {}}
-                        style={{width: '100%', height: height / 3, borderRadius: 4, paddingHorizontal: 16, marginTop: 10}}
-                    >
-                        <Image
-                            style={{height: '100%', aspectRatio: 1, borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
-                            source={{ uri: `data:${mimeImage7};base64,${thumbImage7}` }}
-                        />
-                    </TouchableOpacity>}
-
-                    <View style={{paddingHorizontal: 16, marginTop: 16}}>
-                        <Text size={11} color={Color.text} align='left' >Foto STNK</Text>
-                        <TouchableOpacity
-                            onPress={() => {
-                                setModalAddPhoto(true);
-                                setModalNumberPhoto(8);
-                            }}
-                            style={{width: 120, height: 120, borderRadius: 16, marginVertical: 10, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
-                        >
-                            <Feather name='camera' size={32} style={{marginBottom: 4}} color={Color.gray} />
-                            <Text size={10} color={Color.gray}>Tambah Foto</Text>
-                        </TouchableOpacity>
-                        <Text size={11} color={Color.gray} align='left' >Foto STNK anda dengan jelas</Text>
-                    </View>
-
-
-                    {thumbImage8 !== '' && <TouchableOpacity
-                        onPress={() => {}}
-                        style={{width: '100%', height: height / 3, borderRadius: 4, paddingHorizontal: 16, marginTop: 10}}
-                    >
-                        <Image
-                            style={{height: '100%', aspectRatio: 1, borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
-                            source={{ uri: `data:${mimeImage8};base64,${thumbImage8}` }}
-                        />
-                    </TouchableOpacity>}
-
-                    <View style={{paddingHorizontal: 16, marginTop: 16}}>
-                        <Text size={11} color={Color.text} align='left'>Foto Bukti Pembayaran</Text>
-                        <TouchableOpacity
-                            onPress={() => {
-                                setModalAddPhoto(true);
-                                setModalNumberPhoto(5);
-                            }}
-                            style={{width: 120, height: 120, borderRadius: 16, marginVertical: 10, borderWidth: 3, borderStyle: "dashed", borderColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
-                        >
-                            <Feather name='camera' size={32} style={{marginBottom: 4}} color={Color.gray} />
-                            <Text size={10} color={Color.gray}>Tambah Foto</Text>
-                        </TouchableOpacity>
-                        <Text size={11} color={Color.gray} align='left'>Foto bukti pembayaranmu dengan jelas</Text>
-                        {/* nomor rek khusus rrid */}
-                        {accessClient.isRRID && <View>
-                            <Divider height={10} />
-                            <Text size={11} color={Color.gray} align='left'>Mohon agar ditransfer ke bank{' <'}
-                            <Text size={11} color={Color.gray} type='bold'>BCA DIGITAL</Text>{'> '}
-                            <Text size={11} color={Color.gray} type='bold'>001120211113 an Yokhanan Adi Prasetya</Text>{' '}sebesar Rp255.000.</Text>
-                            <Divider height={8} />
-                            <TouchableOpacity
-                                onPress={() => {
-                                    copyToClipboard('001120211113');
-                                }}
-                            >
-                                <Text size={12} color={Color.gray}>
-                                    Salin Rekening{' '}
-                                    <Ionicons name='copy-outline' size={14} color={Color.info} />
-                                </Text>
-                            </TouchableOpacity>
-                            <Divider height={8} />
-                        </View>}
-                    </View>
-
-                    {thumbImage5 !== '' && <TouchableOpacity
-                        onPress={() => {}}
-                        style={{width: '100%', height: height / 3, borderRadius: 4, paddingHorizontal: 16, marginTop: 10}}
-                    >
-                        <Image
-                            style={{height: '100%', aspectRatio: 1, borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
-                            source={{ uri: `data:${mimeImage5};base64,${thumbImage5}` }}
-                        />
-                    </TouchableOpacity>}
+                  </TouchableOpacity>
+                  <Divider height={8} />
                 </View>
-            </ScrollView>
+              )}
+            </View>
 
-            <Submit
-                buttonLabel='Gabung'
-                buttonColor={Color.primary}
-                type='bottomSingleButton'
-                buttonBorderTopWidth={0}
-                onPress={()=>{
-                    onSubmit();
-                }}
-            />
+            {thumbImage5 !== '' && (
+              <TouchableOpacity
+                onPress={() => {}}
+                style={{
+                  width: '100%',
+                  height: height / 3,
+                  borderRadius: 4,
+                  paddingHorizontal: 16,
+                  marginTop: 10,
+                }}>
+                <Image
+                  style={{
+                    height: '100%',
+                    aspectRatio: 1,
+                    borderRadius: 4,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  source={{uri: `data:${mimeImage5};base64,${thumbImage5}`}}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
+          <View
+            style={{
+              flex: 3,
+                        paddingLeft: 0,
+              marginHorizontal:17
+            }}>
+            <TouchableOpacity
+              
+              style={{
+                paddingVertical: 10,
+                borderRadius: 0,
+                backgroundColor: Color.primary,
+              }}>
+              <Text size={12} type="bold" color={Color.textInput}>
+                DETAIL UKURAN
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.container}>
+            <Table borderStyle={{borderWidth: 2, borderColor: '#F3771D'}}>
+              <Row
+                data={state.tableHead}
+                style={styles.head}
+                textStyle={styles.text}
+              />
+              <Rows data={state.tableData} textStyle={styles.text} />
+            </Table>
+          </View>
+        </ScrollView>
 
-            <ModalSelectChapter
-                ref={modalSelectChapterRef}
-                selected={selectedChapter}
-                onPress={(e) => {
-                    onChangeUserData('chapterId', e.name);
-                    setSelectedChapter(e);
-                    modalSelectChapterRef.current.close();
-                }}
-            />
+        <Submit
+          buttonLabel="Gabung"
+          buttonColor={Color.primary}
+          type="bottomSingleButton"
+          buttonBorderTopWidth={0}
+          onPress={() => {
+            onSubmit();
+          }}
+        />
 
-            <ModalActions
-                visible={modalCarType}
-                onClose={() => {
-                    setModalCarType(false);
-                }}
-                data={listCarType}
-                onPress={(val) => {
-                    setSelectedCarType(val);
-                    setModalCarType(false);
-                }}
-            />
+        <ModalSelectChapter
+          ref={modalSelectChapterRef}
+          selected={selectedChapter}
+          onPress={e => {
+            onChangeUserData('chapterId', e.name);
+            setSelectedChapter(e);
+            modalSelectChapterRef.current.close();
+          }}
+        />
 
-            <ModalActions
-                visible={modalMerchandiseSize}
-                onClose={() => {
-                    setModalMerchandiseSize(false);
-                }}
-                data={merchandiseSize}
-                onPress={(val) => {
-                    setSelectedMerchandiseSize(val);
-                    setModalMerchandiseSize(false);
-                }}
-            />
+        <ModalActions
+          visible={modalCarType}
+          onClose={() => {
+            setModalCarType(false);
+          }}
+          data={listCarType}
+          onPress={val => {
+            setSelectedCarType(val);
+            setModalCarType(false);
+          }}
+        />
 
-            <ModalActions
-                visible={modalAddPhoto}
-                onClose={() => {
-                    setModalAddPhoto(false);
-                    setModalNumberPhoto(0);
-                }}
-                data={[
-                    {
-                        id: 1,
-                        name: 'Buka Kamera',
-                        onPress: () => {
-                            launchCamera(options, (callback) => {
-                                if (callback.didCancel) {}
-                                else if (callback.errorCode) {}
-                                else {
-                                    onPhotoSelected({
-                                        base64: callback.base64,
-                                        type: callback.type
-                                    });
-                                }
+        <ModalActions
+          visible={modalMerchandiseSize}
+          onClose={() => {
+            setModalMerchandiseSize(false);
+          }}
+          data={merchandiseSize}
+          onPress={val => {
+            setSelectedMerchandiseSize(val);
+            setModalMerchandiseSize(false);
+          }}
+        />
 
-                                setModalAddPhoto(false);
-                            });
-                        },
-                    },
-                    {
-                        id: 2,
-                        name: 'Buka Galeri',
-                        onPress: () => {
-                            launchImageLibrary(options, (callback) => {
-                                if (callback.didCancel) {}
-                                else if (callback.errorCode) {}
-                                else {
-                                    onPhotoSelected({
-                                        base64: callback.base64,
-                                        type: callback.type
-                                    });
-                                }
+        <ModalActions
+          visible={modalAddPhoto}
+          onClose={() => {
+            setModalAddPhoto(false);
+            setModalNumberPhoto(0);
+          }}
+          data={[
+            {
+              id: 1,
+              name: 'Buka Kamera',
+              onPress: () => {
+                launchCamera(options, callback => {
+                  if (callback.didCancel) {
+                  } else if (callback.errorCode) {
+                  } else {
+                    onPhotoSelected({
+                      base64: callback.base64,
+                      type: callback.type,
+                    });
+                  }
 
-                                setModalAddPhoto(false);
-                            });
-                        },
-                    }
-                ]}
-            />
-        </Scaffold>
-    )
+                  setModalAddPhoto(false);
+                });
+              },
+            },
+            {
+              id: 2,
+              name: 'Buka Galeri',
+              onPress: () => {
+                launchImageLibrary(options, callback => {
+                  if (callback.didCancel) {
+                  } else if (callback.errorCode) {
+                  } else {
+                    onPhotoSelected({
+                      base64: callback.base64,
+                      type: callback.type,
+                    });
+                  }
+
+                  setModalAddPhoto(false);
+                });
+              },
+            },
+          ]}
+        />
+      </Scaffold>
+    );
 }
-
+const styles = StyleSheet.create({
+  container: {flex: 1, padding: 16, paddingTop: 1, backgroundColor: '#fff'},
+  head: {height: 40, backgroundColor: '#fff'},
+  texthead: {height: 40, backgroundColor: '#fff', color: '#F3771D;',fontWeight:'bold'},
+  text: {margin: 2, fontSize: 11, textAlign: 'center'},
+});
 export default JoinCommunity;
