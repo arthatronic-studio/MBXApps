@@ -1,71 +1,45 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, KeyboardAvoidingView, FlatList, Image, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions } from 'react-native';
-import Styled from 'styled-components';
+import { View, KeyboardAvoidingView, FlatList, Image, Platform, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { useSelector } from 'react-redux';
-import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import RNSimpleCrypto from "react-native-simple-crypto";
 
 import {
     Text,
     // TouchableOpacity,
     useLoading,
     Scaffold,
-    Row,
-    Col,
-    HeaderBig,
     useColor,
-    Header
+    Header,
+    usePopup
 } from '@src/components';
-import ListForum from '@src/screens/MainForum/ListForum';
-
-import { shadowStyle } from '@src/styles';
-
-import Client from '@src/lib/apollo';
-import { queryContentProduct } from '@src/lib/query';
-import ImagesPath from 'src/components/ImagesPath';
-import Entypo from 'react-native-vector-icons/Entypo'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import axios from 'axios';
 import moment from 'moment';
-import Ecommerce from '../Ecommerce/Ecommerce';
 
 import survey_pasar_header from 'src/data/survey_pasar_header';
 import CircularProgress from 'src/components/CircularProgress';
-import { Container, Divider } from 'src/styled';
+import { Column, Row, Container, Divider } from 'src/styled';
 import survey_pasar_content_1 from 'src/data/survey_pasar_content_1';
 import survey_pasar_content_2 from 'src/data/survey_pasar_content_2';
 import survey_pasar_content_3 from 'src/data/survey_pasar_content_3';
 import FormSelect from 'src/components/FormSelect';
 import ModalSelectMap from 'src/components/ModalSelectMap';
 import { initialLatitude, initialLongitude } from 'src/utils/constants';
-import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import DatePicker from 'react-native-date-picker';
 import AutofillAddress from 'src/components/AutofillAddress';
 import ModalActions from 'src/components/Modal/ModalActions';
 import { fetchShipperGetAreaList, fetchShipperGetCityList, fetchShipperGetProvinceList, fetchShipperGetSuburbList } from 'src/api/shipper';
 import ModalActionScroll from 'src/components/Modal/ModalActionScroll';
 import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
-
-var crypto = require('crypto-js')
+import FormInput from 'src/components/FormInput';
+import { KeyboardAwareFlatList } from 'react-native-keyboard-aware-scroll-view';
 
 const SurveyPasarScreen = ({ navigation, route }) => {
     const user = useSelector((state) => state['user.auth'].login.user);
-
     const [loadingProps, showLoading, hideLoading] = useLoading();
-    const [name, setName] = useState(user ? user.firstName + ' ' + user.lastName : '');
-    const [phone, setPhone] = useState(user ? user.phoneNumber : '');
-    const [email, setEmail] = useState(user ? user.email : '');
-    const [namePetugas, setNamePetugas] = useState('');
-    const [phonePetugas, setPhonePetugas] = useState('');
-    const [nameKoor, setNameKoor] = useState('');
-    const [phoneKoor, setPhoneKoor] = useState('');
-
+    const [popupProps, showPopup] = usePopup();
     const { Color } = useColor();
     const { width } = useWindowDimensions();
+
+    const flatlistRef = useRef();
 
     const [currentHeaderIndex, setCurrentHeaderIndex] = useState(0);
     const [currentContentIndex, setCurrentContentIndex] = useState(-1);
@@ -86,6 +60,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                     type: item.type,
                     label: item.label,
                     value: mappingTypeContent(item),
+                    required: item.required,
                 });
             }
             newArr.push(newData);
@@ -119,12 +94,32 @@ const SurveyPasarScreen = ({ navigation, route }) => {
     }
 
     const onSubmit = () => {
-        if (currentHeaderIndex < (survey_pasar_header.length - 1)) {
-            setCurrentHeaderIndex(currentHeaderIndex + 1);
-            return;
+        let errorMessage = '';
+
+        if (valueContent.length > 0) {
+            const currentValue = valueContent[currentHeaderIndex];
+            for (let i = 0; i < currentValue.length; i++) {
+                const e = currentValue[i];
+                if (e.required && !e.value) {
+                    errorMessage = e.label + ' wajib diisi';
+                    break;
+                }
+            }
+        } else {
+            errorMessage = 'Harap tunggu';
         }
 
-        navigation.navigate('SurveyReviewScreen', { listHeader: survey_pasar_header, valueContent: valueContent });
+        if (errorMessage) {
+            showPopup(errorMessage, 'error');
+        } else {
+            if (currentHeaderIndex < (survey_pasar_header.length - 1)) {
+                setCurrentHeaderIndex(currentHeaderIndex + 1);
+                flatlistRef.current.scrollToOffset({ animated: true, offset: 0 });
+                return;
+            }
+
+            navigation.navigate('SurveyReviewScreen', { listHeader: survey_pasar_header, valueContent: valueContent });
+        }
     }
 
     const onPressLeftButton = () => {
@@ -134,23 +129,6 @@ const SurveyPasarScreen = ({ navigation, route }) => {
         }
         navigation.pop();
     }
-
-    const submit = async () => {
-        const label = ['name', 'phone', 'email', 'namePetugas', 'phonePetugas', 'nameKoor', 'phoneKoor']
-        const dataState = [name, phone, email, namePetugas, phonePetugas, nameKoor, phoneKoor]
-        let tempData = []
-        label.forEach((element, index) => {
-            tempData.push({
-                block: '1',
-                index: index,
-                name: element,
-                value: dataState[index]
-            })
-        });
-        const valid = tempData.every(val => val.value)
-        if (valid) navigation.navigate('SurveyPasarSecond', { item: tempData })
-        else alert('Data harus diisi semua');
-    };
 
     const renderLabel = (item, index) => {
         return (
@@ -163,95 +141,22 @@ const SurveyPasarScreen = ({ navigation, route }) => {
     const renderTextInput = (item, index) => {
         return (
             <Container paddingHorizontal={16} marginBottom={12}>
-                <View style={{ width: '100%', height: 47 }}>
-                    <TextInput
-                        placeholder={item.placeholder}
-                        keyboardType={item.validation ? item.validation.keyboardType : 'default'}
-                        style={{
-                            width: '100%',
-                            height: '100%',
-                            color: Color.text,
-                            backgroundColor: Color.textInput,
-                            borderWidth: 1,
-                            borderColor: Color.border,
-                            borderRadius: 5,
-                            paddingHorizontal: 10,
-                            paddingTop: item.label ? 20 : 0,
-                            paddingLeft: item.validation && item.validation.prefixText ? 45 : 10,
-                        }}
-                        onChangeText={(value) => {
-                            if (valueContent.length > 0) {
-                                let newValues = [...valueContent];
-                                newValues[currentHeaderIndex][index].value = value;
-                                setValueContent(newValues);
-                            }
-                        }}
-                        value={valueContent.length > 0 ? valueContent[currentHeaderIndex][index].value : null}
-                    />
-                    {item.validation &&
-                        <View
-                            style={{
-                                position: 'absolute',
-                                bottom: 5,
-                                paddingLeft: 10,
-                            }}
-                        >
-                            <Text color={Color.gray}>{item.validation.prefixText}</Text>
-                        </View>
-                    }
-                    {item.label !== '' && <Text style={{ fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5 }}>{item.label}</Text>}
-                </View>
-            </Container>
-        )
-    }
-
-    const renderTextArea = (item, index) => {
-        return (
-            <Container paddingHorizontal={16} marginBottom={12}>
-                <View
-                    style={{
-                        width: '100%',
-                        maxHeight: 140,
-                        borderWidth: 1,
-                        borderRadius: 5,
-                        borderColor: Color.border,
-                        padding: 10,
+                <FormInput
+                    label={item.label}
+                    placeholder={item.placeholder}
+                    hideErrorHint
+                    keyboardType={item.validation ? item.validation.keyboardType : 'default'}
+                    value={valueContent.length > 0 ? valueContent[currentHeaderIndex][index].value : null}
+                    onChangeText={(value) => {
+                        if (valueContent.length > 0) {
+                            let newValues = [...valueContent];
+                            newValues[currentHeaderIndex][index].value = value;
+                            setValueContent(newValues);
+                        }
                     }}
-                >
-                    <Text size={8} color={Color.secondary} align='left'>{item.label}</Text>
-                    <Divider height={4} />
-                    <TextInput
-                        placeholder={item.placeholder}
-                        keyboardType={item.validation ? item.validation.keyboardType : 'default'}
-                        style={{
-                            width: '100%',
-                            height: '90%',
-                            color: Color.text,
-                            backgroundColor: Color.textInput,
-                            paddingBottom: 8,
-                        }}
-                        multiline
-                        onChangeText={(value) => {
-                            if (valueContent.length > 0) {
-                                let newValues = [...valueContent];
-                                newValues[currentHeaderIndex][index].value = value;
-                                setValueContent(newValues);
-                            }
-                        }}
-                        value={valueContent.length > 0 ? valueContent[currentHeaderIndex][index].value : null}
-                    />
-                    {item.validation &&
-                        <View
-                            style={{
-                                position: 'absolute',
-                                bottom: 5,
-                                paddingLeft: 10,
-                            }}
-                        >
-                            <Text color={Color.gray}>{item.validation.prefixText}</Text>
-                        </View>
-                    }
-                </View>
+                    multiline={item.type === 'TEXT_AREA'}
+                    prefixText={item.validation ? item.validation.prefixText : ''}
+                />
             </Container>
         )
     }
@@ -316,7 +221,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
     }
 
     const [modalImagePicker, setModalImagePicker] = useState(false);
-    const renderUpload = (item, index) => {
+    const renderUploadImage = (item, index) => {
         let arr = valueContent.length > 0 ? [valueContent[currentHeaderIndex][index].value] : [];
         if (item.multiple) {
             arr = valueContent.length > 0 ? valueContent[currentHeaderIndex][index].value : [];
@@ -324,6 +229,9 @@ const SurveyPasarScreen = ({ navigation, route }) => {
 
         return (
             <>
+                <Container paddingHorizontal={16}>
+                    <Text align='left' size={12} color={Color.secondary}>{item.label}</Text>
+                </Container>
                 {arr.length != 0 && <Row style={{ flexWrap: 'wrap', flex: 1 }}>
                     {arr.map((val, id) => (
                         <View
@@ -346,7 +254,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                 }}
-                                source={{ uri: val }}
+                                source={{ uri: `data:${val.type};base64,${val.base64}` }}
                             />
                             <TouchableOpacity
                                 onPress={() => {
@@ -356,11 +264,6 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                                     let newValues = [...valueContent];
                                     newValues[currentHeaderIndex][index].value = arr;
                                     setValueContent(newValues);
-
-                                    // TODO
-                                    // const newPhotos = [...photos];
-                                    // newPhotos.splice(id, 1);
-                                    // setPhotos(newPhotos);
                                 }}
                                 style={{ position: 'absolute', top: 0, right: 2 }}
                             >
@@ -403,7 +306,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                 </TouchableOpacity>
 
                 <Container paddingHorizontal={16}>
-                    <Text size={10} align='left' style={{ marginBottom: 20 }}>{item.label}</Text>
+                    <Text size={10} align='left' style={{ marginBottom: 20 }}>{item.hint_label}</Text>
                 </Container>
             </>
         )
@@ -467,29 +370,35 @@ const SurveyPasarScreen = ({ navigation, route }) => {
 
         return (
             <View style={{ alignItems: 'flex-start', paddingHorizontal: 16, marginBottom: 16 }}>
-                <Text align='left' size={12} color={Color.secondary} style={{ marginBottom: 4 }}>{item.label}</Text>
-                <Row>
+                <Text align='left' size={12} color={Color.secondary} style={{ marginBottom: 8 }}>{item.label}</Text>
+                <Column>
                     {arrOptions.map((v, id) => {
                         const isSelected = val !== '' && val && v.id === val.id;
 
                         return (
-                            <View key={id} style={{paddingRight: 16, marginTop: 4}}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        let newValues = [...valueContent];
-                                        newValues[currentHeaderIndex][index].value = v;
-                                        setValueContent(newValues);
-                                    }}
-                                    style={{ height: 20, width: 20, borderRadius: 15, backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center' }}
-                                >
-                                    {isSelected && <View style={{ height: 14, width: 14, borderRadius: 7, backgroundColor: '#fff' }} />}
-                                </TouchableOpacity>
-                                <Divider height={4} />
-                                <Text size={12}>{v.name}</Text>
-                            </View>
+                            <TouchableOpacity
+                                key={id}
+                                onPress={() => {
+                                    let newValues = [...valueContent];
+                                    newValues[currentHeaderIndex][index].value = v;
+                                    setValueContent(newValues);
+                                }}
+                                style={{paddingRight: 16, marginBottom: 8}}
+                            >
+                                <Row align='center'>
+                                    <View
+                                        style={{ height: 20, width: 20, borderRadius: 15, backgroundColor: Color.primary, justifyContent: 'center', alignItems: 'center' }}
+                                    >
+                                        {isSelected && <View style={{ height: 14, width: 14, borderRadius: 7, backgroundColor: Color.textInput }} />}
+                                    </View>
+                                    <Container paddingLeft={8}>
+                                        <Text size={12}>{v.name}</Text>
+                                    </Container>
+                                </Row>
+                            </TouchableOpacity>
                         )
                     })}
-                </Row>
+                </Column>
             </View>
         )
     }
@@ -579,49 +488,33 @@ const SurveyPasarScreen = ({ navigation, route }) => {
         const val = valueContent.length > 0 ? valueContent[currentHeaderIndex][index].value : new Date();
 
         return (
-            <>
-                <View style={{ marginBottom: 12 }}>
-                    <FormSelect
-                        type='select'
-                        hideErrorHint
-                        label={item.label}
-                        placeholder={item.placeholder}
-                        value={moment(val).format('HH:mm')}
-                        onPress={() => setShowDatePicker(true)}
-                        suffixIcon={
-                            <View style={{ height: '100%', width: '10%', paddingRight: 16, justifyContent: 'center', alignItems: 'flex-end' }}>
-                                <AntDesign name='clockcircle' />
-                            </View>
-                        }
-                        labelContainerStyle={{
-                            paddingTop: 0,
-                            marginBottom: 4,
-                        }}
-                    />
-                </View>
-
-                {showDatePicker && <DatePicker
-                    modal
-                    open={showDatePicker}
-                    date={val}
-                    is24Hour
-                    mode="time"
-                    onConfirm={(date) => {
-                        console.log(date)
-                        setShowDatePicker(false);
-                        if (valueContent.length > 0) {
-                            // let newValues = [...valueContent];
-                            // newValues[currentHeaderIndex][index].value = value;
-                            // setValueContent(newValues);
-                        }
+            <View style={{ marginBottom: 12 }}>
+                <FormSelect
+                    type='select'
+                    hideErrorHint
+                    label={item.label}
+                    placeholder={item.placeholder}
+                    value={moment(val).format('HH:mm')}
+                    onPress={() => {
+                        setShowDatePicker(true);
+                        setCurrentContentIndex(index);
                     }}
-                    onCancel={() => {
-                        setShowDatePicker(false)
+                    suffixIcon={
+                        <View style={{ width: '10%', paddingRight: 16, justifyContent: 'center', alignItems: 'flex-end' }}>
+                            <AntDesign name='clockcircle' size={16} color={Color.info} />
+                        </View>
+                    }
+                    labelContainerStyle={{
+                        paddingTop: 0,
+                        marginBottom: 4,
                     }}
-                />}
-            </>
+                />
+            </View>
         )
     }
+
+    const ContentList = Platform.OS === 'ios' ? FlatList : KeyboardAwareFlatList;
+    const ButtonView = Platform.OS === 'ios' ? KeyboardAvoidingView : View;
 
     return (
         <Scaffold
@@ -634,13 +527,13 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                     onPressLeftButton={() => onPressLeftButton()}
                 />
             }
+            popupProps={popupProps}
         >
-            <FlatList
+            <ContentList
+                ref={flatlistRef}
                 keyExtractor={(item, index) => item.id.toString() + index.toString}
                 data={currentContent}
-                contentContainerStyle={{
-
-                }}
+                keyboardShouldPersistTaps='handled'
                 ListHeaderComponent={
                     <View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingBottom: 16 }}>
                         <CircularProgress
@@ -659,17 +552,16 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                         if (item.type === 'LABEL') {
                             return renderLabel(item, index);
                         }
-                        if (item.type === 'TEXT_INPUT') {
+                        if (item.type === 'TEXT_INPUT' || item.type === 'TEXT_AREA') {
                             return renderTextInput(item, index);
                         }
                         if (item.type === 'MAP_VIEW') {
                             return renderMapView(item, index);
                         }
-                        if (item.type === 'TEXT_AREA') {
-                            return renderTextArea(item, index);
-                        }
                         if (item.type === 'UPLOAD') {
-                            return renderUpload(item, index);
+                            if (item.validation && item.validation.uploadType === 'image') {
+                                return renderUploadImage(item, index);
+                            }
                         }
                         if (item.type === 'SELECT_MULTIPLE') {
                             if (item.validation && item.validation.selectType === 'tag') {
@@ -700,13 +592,13 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                 }}
             />
 
-            <KeyboardAvoidingView behavior='padding'>
-                <View style={{ width: '100%', alignItems: 'center', borderRadius: 10, paddingTop: 16 }}>
+            <ButtonView behavior='padding'>
+                <View style={{ width: '100%', alignItems: 'center', borderRadius: 10, paddingVertical: 16 }}>
                     <TouchableOpacity onPress={() => onSubmit()} style={{ backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center' }}>
                         <Text style={{ color: Color.textInput }}>{itemHeader.button_label}</Text>
                     </TouchableOpacity>
                 </View>
-            </KeyboardAvoidingView>
+            </ButtonView>
 
             {/* modal for select box */}
             <ModalActionScroll
@@ -757,23 +649,36 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                         }
 
                         let newValues = [...valueContent];
-                        arr.push(`data:${callback.type};base64,${callback.base64}`);
+                        arr.push({
+                            ...callback,
+                            uploadType: 'image',
+                        });
                         newValues[currentHeaderIndex][currentContentIndex].value = arr;
                         setValueContent(newValues);
-
-                        // TODO
-                        // const newPhotos = [...photos];
-                        // newPhotos.push({
-                        //   uri: callback.uri,
-                        //   type: callback.type,
-                        //   name: callback.fileName
-                        // });
                     }
 
                     setModalImagePicker(false);
                     setCurrentContentIndex(-1);
                 }}
             />
+
+            {valueContent.length > 0 && showDatePicker && <DatePicker
+                timeZoneOffsetInMinutes={7 * 60}
+                modal
+                open={showDatePicker}
+                date={valueContent[currentHeaderIndex][currentContentIndex].value}
+                mode="time"
+                onConfirm={(value) => {        
+                    console.log(value);            
+                    setShowDatePicker(false);
+                    let newValues = [...valueContent];
+                    newValues[currentHeaderIndex][currentContentIndex].value = value;
+                    setValueContent(newValues);
+                }}
+                onCancel={() => {
+                    setShowDatePicker(false);
+                }}
+            />}
         </Scaffold>
     )
 }

@@ -32,6 +32,7 @@ import {iconSplash, imageCardOrnament} from '@assets/images';
 import {Box, Container, Divider} from 'src/styled';
 import Clipboard from '@react-native-community/clipboard';
 import ModalinputCode from 'src/components/ModalInputCode';
+import ModalCardMember from 'src/components/ModalCardMember';
 import Client from '@src/lib/apollo';
 import { queryOrganizationMemberManage } from '@src/lib/query/organization';
 import { getCurrentUserProfile } from 'src/state/actions/user/auth';
@@ -40,6 +41,8 @@ import { accessClient } from 'src/utils/access_client';
 const MainProfile = ({navigation, route}) => {
   const [modalVirtual, setModalVirtual] = useState(false);
   const [modalInputCode, setModalInputCode] = useState(false);
+  const [modalCardMember, setModalCardMember] = useState(false);
+  
   const [responseMemberManage, setResponseMemberManage] = useState({
     data: null,
     success: false,
@@ -199,14 +202,14 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'join_community',
       title: 'Gabung Komunitas',
-      show: true || accessClient.MainProfile.showMenuJoinCommunity && user && !user.organizationId,
+      show: accessClient.MainProfile.showMenuJoinCommunity && user && !user.organizationId,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('JoinCommunity'),
     },
     {
       code: 'community_admin',
       title: 'Community Admin',
-      show: true || accessClient.MainProfile.showMenuCommunityAdmin && user && user.isDirector === 1,
+      show: accessClient.MainProfile.showMenuCommunityAdmin && user && user.isDirector === 1,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('CommunityAdminPage'),
     },
@@ -247,11 +250,8 @@ const MainProfile = ({navigation, route}) => {
   return (
     <Scaffold
       loadingProps={loadingProps}
-      header={<HeaderBig title="Profile" style={{paddingTop: 16}} />}
-    >
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-      >
+      header={<HeaderBig title="Profile" style={{paddingTop: 16}} />}>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {/* <View style={{alignItems: 'center'}}>
           <TouchableOpacity onPress={() => setModalVirtual(true)}>
             <View
@@ -304,48 +304,61 @@ const MainProfile = ({navigation, route}) => {
               borderRadius: 8,
               padding: 16,
               ...shadowStyle,
-            }}
-          >
+            }}>
             <View
               style={{
                 flexDirection: 'row',
                 width: '100%',
-                justifyContent: 'flex-start',
-              }}
-            >
-              {user && <Image
-                source={{ uri: user.photoProfile }}
+                justifyContent: 'space-between',
+              }}>
+              {user && (
+                <Image
+                  source={{uri: user.photoProfile}}
+                  style={{
+                    width: width * 0.12,
+                    height: width * 0.12,
+                    backgroundColor: Color.border,
+                    borderRadius: 50,
+                  }}
+                />
+              )}
+
+              {accessClient.isRRID && <View
                 style={{
-                  width: width * 0.12,
-                  height: width * 0.12,
-                  backgroundColor: Color.border,
-                  borderRadius: 50,
-                }}
-              />}
+                  flex: 3,
+                  paddingLeft: 180,
+                }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setModalCardMember(true);
+                  }}
+                  style={{
+                    paddingVertical: 10,
+                    borderRadius: 120,
+                    backgroundColor: Color.primary,
+                  }}>
+                  <Text size={12} type="bold" color={Color.textInput}>
+                    Card Member
+                  </Text>
+                </TouchableOpacity>
+              </View>}
             </View>
 
             <TouchableOpacity
-              onPress={() => {
-                
-              }}
+              onPress={() => {}}
               style={{
                 width: '100%',
                 marginTop: 16,
                 flexDirection: 'row',
-              }}
-            >
+              }}>
               <View
                 style={{
                   flex: 1,
                   alignItems: 'flex-start',
                   justifyContent: 'space-between',
-                }}
-              >
+                }}>
                 {user && !user.guest ? (
-                  <Text
-                    type='bold'
-                    letterSpacing={0.18}
-                  >
+                  <Text type="bold" letterSpacing={0.18}>
                     {user.firstName} {user.lastName}
                   </Text>
                 ) : (
@@ -354,59 +367,64 @@ const MainProfile = ({navigation, route}) => {
                   </Text>
                 )}
 
-                {accessClient.MainProfile.showStatusMember && user && !user.guest && (
-                  <Text
-                    size={8} 
-                    letterSpacing={0.18}
-                  >
-                    Status Member:&nbsp;
-                    <Text
-                      size={8}
-                      letterSpacing={0.18}
-                      color={user.organizationId ? Color.success : Color.error}
-                    >
-                      {user.organizationId ? 'Anggota ' + user.organizationName : 'Belum Terdaftar'}
+                {accessClient.MainProfile.showStatusMember &&
+                  user &&
+                  !user.guest && (
+                    <Text size={8} letterSpacing={0.18}>
+                      Status Member:&nbsp;
+                      <Text
+                        size={8}
+                        letterSpacing={0.18}
+                        color={
+                          user.organizationId ? Color.success : Color.error
+                        }>
+                        {user.organizationId
+                          ? 'Anggota ' + user.organizationName
+                          : 'Belum Terdaftar'}
+                      </Text>
                     </Text>
-                  </Text>
-                )}
+                  )}
               </View>
 
-              {accessClient.MainProfile.showButtonJoinCommunity && user && !user.organizationId && <View
-                style={{
-                  flex: 1,
-                  paddingLeft: 16,
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => {
-                    setModalInputCode(true);
-                  }}
-                  style={{
-                    paddingVertical: 10,
-                    borderRadius: 120,
-                    backgroundColor: Color.primary,
-                  }}
-                >
-                  <Text size={12} type='bold' color={Color.textInput}>Gabung Komunitas</Text>
-                </TouchableOpacity>
-              </View>}
+              {accessClient.MainProfile.showButtonJoinCommunity &&
+                user &&
+                !user.organizationId && (
+                  <View
+                    style={{
+                      flex: 1,
+                      paddingLeft: 16,
+                    }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setModalInputCode(true);
+                      }}
+                      style={{
+                        paddingVertical: 10,
+                        borderRadius: 120,
+                        backgroundColor: Color.primary,
+                      }}>
+                      <Text size={12} type="bold" color={Color.textInput}>
+                        Gabung Komunitas
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
             </TouchableOpacity>
           </View>
         </Container>
-        
+
         {/* card */}
         <Container paddingHorizontal={16} marginTop={16}>
           <View
             style={{
               width: '100%',
-              aspectRatio: 16/9,
+              aspectRatio: 16 / 9,
               justifyContent: 'space-between',
               backgroundColor: Color.textInput,
               borderRadius: 8,
               padding: 16,
               ...shadowStyle,
-            }}
-          >
+            }}>
             <Image
               source={imageCardOrnament}
               style={{
@@ -424,11 +442,10 @@ const MainProfile = ({navigation, route}) => {
                 flexDirection: 'row',
                 width: '100%',
                 justifyContent: 'flex-start',
-              }}
-            >
+              }}>
               <Image
                 source={iconSplash}
-                resizeMode='contain'
+                resizeMode="contain"
                 style={{
                   width: width / 6,
                   height: width / 6,
@@ -441,28 +458,25 @@ const MainProfile = ({navigation, route}) => {
                 width: '100%',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-              }}
-            >
+              }}>
               <View
                 style={{
                   alignItems: 'flex-start',
                   justifyContent: 'flex-end',
-                }}
-              >
+                }}>
                 {user && !user.guest ? (
                   <>
-                    <Text
-                      size={12} 
-                      letterSpacing={0.18}>
+                    <Text size={12} letterSpacing={0.18}>
                       {user.firstName} {user.lastName}
                     </Text>
-                    {user.idCardNumber !== '' && user.idCardNumber !== null && <Text
-                      type="bold"
-                      letterSpacing={0.9}
-                      style={{marginTop: 2}}
-                    >
-                      {user.idCardNumber}
-                    </Text>}
+                    {user.idCardNumber !== '' && user.idCardNumber !== null && (
+                      <Text
+                        type="bold"
+                        letterSpacing={0.9}
+                        style={{marginTop: 2}}>
+                        {user.idCardNumber}
+                      </Text>
+                    )}
                   </>
                 ) : (
                   <Text type="bold" letterSpacing={0.18}>
@@ -474,8 +488,7 @@ const MainProfile = ({navigation, route}) => {
                 activeOpacity={1}
                 onPress={() => {
                   setModalVirtual(true);
-                }}
-              >
+                }}>
                 <View
                   style={{
                     backgroundColor: Color.textInput,
@@ -487,12 +500,8 @@ const MainProfile = ({navigation, route}) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     ...shadowStyle,
-                  }}
-                >
-                  {user && <QRCode
-                    value={user.userCode}
-                    size={width / 6}
-                  />}
+                  }}>
+                  {user && <QRCode value={user.userCode} size={width / 6} />}
                 </View>
               </TouchableOpacity>
             </View>
@@ -509,8 +518,7 @@ const MainProfile = ({navigation, route}) => {
               marginBottom: 16,
               marginTop: 16,
               paddingTop: 16,
-            }}
-          >
+            }}>
             {menuList.map((item, idx) => {
               if (!item.show) return <View key={idx} />;
 
@@ -519,23 +527,29 @@ const MainProfile = ({navigation, route}) => {
                   key={idx}
                   paddingHorizontal={16}
                   marginTop={8}
-                  marginBottom={16}
-                >
-                  <TouchableOpacity
-                    onPress={() => item.onPress()}
-                  >
-                    <Row style={{borderBottomWidth: 0.5, borderColor: Color.placeholder, paddingBottom: 16}}>
+                  marginBottom={16}>
+                  <TouchableOpacity onPress={() => item.onPress()}>
+                    <Row
+                      style={{
+                        borderBottomWidth: 0.5,
+                        borderColor: Color.placeholder,
+                        paddingBottom: 16,
+                      }}>
                       <Col justify="center" size={0.75}>
                         {item.icon}
                       </Col>
-                      <Col size={0.25}><View /></Col>
+                      <Col size={0.25}>
+                        <View />
+                      </Col>
                       <Col align="flex-start" size={9} justify="center">
                         <Text
                           color={
-                            item.code === 'logout' ? Color.error :
-                            item.code === 'login' ? Color.info : Color.text
-                          }
-                        >
+                            item.code === 'logout'
+                              ? Color.error
+                              : item.code === 'login'
+                              ? Color.info
+                              : Color.text
+                          }>
                           {item.title}
                         </Text>
                       </Col>
@@ -549,7 +563,7 @@ const MainProfile = ({navigation, route}) => {
                     </Row>
                   </TouchableOpacity>
                 </Container>
-              )
+              );
             })}
           </View>
         </Container>
@@ -563,7 +577,15 @@ const MainProfile = ({navigation, route}) => {
       <ModalinputCode
         visible={modalInputCode}
         onClose={() => setModalInputCode(false)}
-        onSubmit={(text) => {
+        onSubmit={text => {
+          fetchOrganizationMemberManage(text);
+        }}
+        errorMessage={responseMemberManage.message}
+      />
+       <ModalCardMember
+        visible={modalCardMember}
+        onClose={() => setModalCardMember(false)}
+        onSubmit={text => {
           fetchOrganizationMemberManage(text);
         }}
         errorMessage={responseMemberManage.message}
@@ -573,8 +595,7 @@ const MainProfile = ({navigation, route}) => {
         visible={modalVirtual}
         transparent
         animationType="slide"
-        onRequestClose={() => setModalVirtual(false)}
-      >
+        onRequestClose={() => setModalVirtual(false)}>
         <View
           style={{
             flex: 1,
@@ -582,8 +603,7 @@ const MainProfile = ({navigation, route}) => {
             justifyContent: 'center',
             padding: 16,
             backgroundColor: Color.overflow,
-          }}
-        >
+          }}>
           <View
             style={{
               width: '100%',
@@ -595,8 +615,7 @@ const MainProfile = ({navigation, route}) => {
               borderRadius: 8,
               alignItems: 'center',
               justifyContent: 'center',
-            }}
-          >
+            }}>
             <QRCode value={user ? user.userCode : ''} size={width - 70} />
           </View>
 
@@ -608,13 +627,8 @@ const MainProfile = ({navigation, route}) => {
               padding: 12,
               backgroundColor: Color.error,
               borderRadius: 50,
-            }}
-          >
-            <AntDesign
-              name="close"
-              color={Color.textInput}
-              size={24}
-            />
+            }}>
+            <AntDesign name="close" color={Color.textInput} size={24} />
           </TouchableOpacity>
         </View>
       </Modal>

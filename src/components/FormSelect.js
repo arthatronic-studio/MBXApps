@@ -71,7 +71,6 @@ const FormSelect = forwardRef(({ label, labelContainerStyle, placeholder, onPres
             <View
                 style={{
                     width: '100%',
-                    height: 50,
                     paddingHorizontal: 16,
                 }}
             >
@@ -79,17 +78,17 @@ const FormSelect = forwardRef(({ label, labelContainerStyle, placeholder, onPres
                     onPress={() => onPress()}
                     style={{
                         width: '100%',
-                        height: '100%',
                         flexDirection: 'row',
                         borderRadius: 4,
                         backgroundColor: Color.textInput,
-                        borderWidth: 2,
-                        borderColor: Color.border,
+                        borderWidth: 0.5,
+                        borderColor: Color.disabled,
+                        paddingVertical: 20,
                     }}
                 >
                     {prefixIcon}
 
-                    <Container flex={1} align='flex-start' justify='center' paddingHorizontal={8}>
+                    <Container flex={1} align='flex-start' justify='center' paddingHorizontal={12}>
                         <Text color={Color.gray} numberOfLines={1} align='left'>
                             {value || placeholder}
                         </Text>
@@ -119,7 +118,7 @@ const FormSelect = forwardRef(({ label, labelContainerStyle, placeholder, onPres
                         secureTextEntry={secureTextEntry}
                     /> */}
 
-                    {suffixIcon || <View style={{height: '100%', width: '10%', paddingRight: 16, justifyContent: 'center', alignItems: 'flex-end'}}>
+                    {suffixIcon || <View style={{width: '10%', paddingRight: 16, justifyContent: 'center', alignItems: 'flex-end'}}>
                         <Fontisto size={14} name='angle-down' color={Color.gray} />
                     </View>}
                 </TouchableOpacity>

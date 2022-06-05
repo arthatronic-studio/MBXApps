@@ -334,7 +334,7 @@ const CreateThreadScreen = (props) => {
                     onPress={() => setShowDatePicker(true)}
                     // error={errorUserData.usageType}
                     suffixIcon={
-                        <View style={{height: '100%', width: '10%', paddingRight: 16, justifyContent: 'center', alignItems: 'flex-end'}}>
+                        <View style={{ width: '10%', paddingRight: 16, justifyContent: 'center', alignItems: 'flex-end'}}>
                             <Ionicons name='calendar' />
                         </View>
                     }
