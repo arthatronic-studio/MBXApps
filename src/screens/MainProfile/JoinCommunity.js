@@ -25,6 +25,7 @@ import { Container, Divider } from 'src/styled';
 import Clipboard from '@react-native-community/clipboard';
 import { fetchCarTypeListing } from 'src/api/community';
 import FormSelect from 'src/components/FormSelect';
+import ModalActionScroll from 'src/components/Modal/ModalActionScroll';
 
 const merchandiseSize = [
     { id: 1, name: 'S', ukuran: 'S', lebar: '50', panjang: '68', bahu: '14', l_panjang: '24', l_pendek: '58' },
@@ -765,7 +766,7 @@ const JoinCommunity = ({ navigation, route }) => {
                 }}
             />
 
-            <ModalActions
+            <ModalActionScroll
                 visible={modalCarType}
                 onClose={() => {
                     setModalCarType(false);
