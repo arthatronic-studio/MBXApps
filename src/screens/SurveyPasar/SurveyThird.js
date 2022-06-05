@@ -124,7 +124,7 @@ const SurveyThird = ({route, navigation}) => {
         });
         const valid = tempData.every(val => val.value);
 
-        if(!valid) return alert('Semua data harus diisi');
+        // if(!valid) return alert('Semua data harus diisi');
 
         const sha1Hash = await RNSimpleCrypto.SHA.sha1("SURVEY-20220229" + moment().format('YYYY-MM-DD HH:mm:ss') + '123!!qweQWE');
         const dataq = {
@@ -136,28 +136,28 @@ const SurveyThird = ({route, navigation}) => {
         }
         console.log(dataq, 'dataq')
 
-        try {
-            showLoading()
-            const response = await axios({
-                baseURL: 'http://panel.sw.tribesocial.id',
-                method: 'post',
-                url: '/submit-survey',
-                data: dataq,
-                headers: {
-                    Accept: 'application/json'
-                },
-                timeout: 5000,
-              });
+        // try {
+        //     showLoading()
+        //     const response = await axios({
+        //         baseURL: 'http://panel.sw.tribesocial.id',
+        //         method: 'post',
+        //         url: '/submit-survey',
+        //         data: dataq,
+        //         headers: {
+        //             Accept: 'application/json'
+        //         },
+        //         timeout: 5000,
+        //       });
 
-              hideLoading();
+        //       hideLoading();
               
-              onUploadImage();
-              console.log(response, "respon apicall")
-          } catch (error) {
-            hideLoading()
-            alert(error.response.data.message);
-            console.log(error.response, 'error apicall')
-          }
+        //       onUploadImage();
+        //       console.log(response, "respon apicall")
+        //   } catch (error) {
+        //     hideLoading()
+        //     alert(error.response.data.message);
+        //     console.log(error.response, 'error apicall')
+        //   }
     };
 
     const onUploadImage = async() => {

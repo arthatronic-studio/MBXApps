@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import { CommonActions, useIsFocused } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
     Submit,
@@ -136,11 +136,16 @@ const OnBoardingScreen = ({ navigation }) => {
     const pagerViewRef = useRef();
 
     const isFocused = useIsFocused();
+    const dispatch = useDispatch();
     const user = useSelector(state => state['user.auth'].login.user);
     const { loading, error } = useSelector(state => state['user.auth']);
 
     const [listBoarding, setListBoarding] = useState([]);
     const [loadingBoarding, setLoadingBoarding] = useState(true);
+
+    useEffect(() => {
+        dispatch({ type: 'USER.CLEAR_LOADING' });
+    }, []);
 
     useEffect(() => {
         if (isFocused) {
