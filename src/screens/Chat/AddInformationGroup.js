@@ -55,10 +55,12 @@ const AddInformationGroup = ({ navigation, route }) => {
     } else if (thumbImage === '') {
         showPopup('Gambar tidak boleh kosong', 'warning');
         return;
-    } saveGroup(selected);
+    } 
+    
+    saveGroup(selected);
   };
     const saveGroup = selected => {
-        selected.push(user.userId);
+      selected.push(user.userId);
       setIsLoading(true);
     const variables = {
       method: 'INSERT',
@@ -73,11 +75,7 @@ const AddInformationGroup = ({ navigation, route }) => {
       variables,
     })
         .then(res => {
-           <Tab.Screen
-            name="Grup"
-            component={ChatGroupScreen}
-            options={{tabBarLabel: 'Grup'}}
-          />;
+           
           console.log('succes group', res);
                 setIsLoading(false);
           showPopup('Group berhasil dibuat!', 'success');

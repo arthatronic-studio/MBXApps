@@ -72,7 +72,7 @@ const HighlightContentProduct = (props) => {
     const fetchData = async() => {
         let variables = {
             page: 1,
-            itemPerPage: userProfileId !== null ? 1 : 2,
+            itemPerPage: userProfileId !== null || productCategory === 'YOUTUBE_VIDEO' ? 1 : 2,
         }
         if (productCategory) {
             variables.productCategory = productCategory;

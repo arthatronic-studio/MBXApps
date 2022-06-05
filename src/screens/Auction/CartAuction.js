@@ -81,14 +81,14 @@ const CartAuction = ({navigation, route}) => {
   const submit = (val) => {
     const dataq = [{
       type: 'auction',
-      products: [{...val,id: val.productId, imageUrl: val.image.length > 0 ? val.image[0] : '',
+      products: [{...val,id: val.productId, imageUrl: val.image.length > 0 ? val.image : '',
         qty: val.quantity,
-        price: val.total}],
+        price: val.latestBidPrice}],
       
     }]
-    navigation.navigate('CheckoutScreen',{item: {tempData: [{...val,id: val.productId, imageUrl: val.image.length > 0 ? val.image[0] : '',
-    qty: val.quantity,
-    price: val.total}]}, list: dataq})
+    navigation.navigate('CheckoutScreen',{item: {tempData: [{...val, id: val.productId, imageUrl: val.image.length > 0 ? val.image[0] : '',
+    qty: 1,
+    price: val.latestBidPrice}]}, list: dataq})
   }
 
   return (
@@ -104,7 +104,7 @@ const CartAuction = ({navigation, route}) => {
             }}>
             <Row style={{}}>
               <Image
-                source={{ uri: val.imageUrl }}
+                source={{ uri: val.image }}
                 style={{
                   height: 74,
                   width: 74,
@@ -121,7 +121,6 @@ const CartAuction = ({navigation, route}) => {
                       style={{
                         textAlign: 'left',
                         marginBottom: 15,
-                        width: '80%',
                       }}
                       type="bold">
                       {val.name}
@@ -135,7 +134,8 @@ const CartAuction = ({navigation, route}) => {
                         borderRadius: 20,
                         justifyContent: 'center',
                         alignItems: 'center',
-                        marginHorizontal: 22,
+                        marginHorizontal: 10,
+                        marginRight: 8,
                         backgroundColor: '#E3F7BC',
                         borderColor: '#76AE0B',
                         borderWidth: 1,
@@ -162,7 +162,7 @@ const CartAuction = ({navigation, route}) => {
                         color={Color.text}
                         type="bold"
                         style={{marginRight: 5}}>
-                        {FormatMoney.getFormattedMoney(val.total)}
+                        {FormatMoney.getFormattedMoney(val.latestBidPrice)}
                       </Text>
                     </View>
                     <AntDesign

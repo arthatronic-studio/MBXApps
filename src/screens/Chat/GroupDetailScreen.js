@@ -59,7 +59,7 @@ const GroupDetailScreen = ({ navigation, route }) => {
     const [showSection, setShowSection] = useState(true)
     // params
     const { params } = route;
-
+    console.log(params,'ini parasm')
     // selector
     const user = useSelector(
         state => state['user.auth'].login.user
@@ -79,6 +79,8 @@ const GroupDetailScreen = ({ navigation, route }) => {
 
     let isInitial = useRef(true);
     let newDataIn = useRef([]);
+
+    console.log('ini chat', dataChat);
     
     // hooks
     const [popupProps, showPopup] = usePopup();
@@ -87,20 +89,59 @@ const GroupDetailScreen = ({ navigation, route }) => {
 
     const GroupHeader = () => {
       return (
-        <Pressable onPress={() => {navigation.navigate('UserGroupDetail')}} style={{width: '100%', height: 60, backgroundColor: Color.theme, alignItems: 'center', justifyContent: 'center'}}>
+        <Pressable
+          onPress={() => {
+                  navigation.navigate('UserGroupDetail', {
+                    params,
+                  });
+          }}
+          style={{
+            width: '100%',
+            height: 60,
+            backgroundColor: Color.theme,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
           <Row style={{alignItems: 'center', justifyContent: 'center'}}>
-            <AntDesign onPress={() => navigation.goBack()} name={'arrowleft'} size={20} style={{marginHorizontal: 10}}/>
-            <Image source={ImagesPath.avatar1} style={{marginHorizontal: 5}}/>
-            <Col style={{marginHorizontal: 10}}>
-              <Text style={{fontSize: 14, fontWeight: 'bold', textAlign: 'left'}}>Ngoding Bareng</Text>
-              <Text style={{fontSize: 8, color: Color.secondary, fontWeight: 'bold', textAlign: 'left'}}>Zahra Anindita, John Doe ...</Text>
+            <AntDesign
+              onPress={() => navigation.goBack()}
+              name={'arrowleft'}
+              size={20}
+              style={{marginHorizontal: 10}}
+            />
+            <Image
+              source={{uri: params.imageGroup}}
+              style={{
+                height: '80%',
+                aspectRatio: 1,
+                borderRadius: 50,
+                alignItems: 'center',
+                justifyContent: 'center',
+                alignSelf: 'center',
+              }}
+            />
+            <Col style={{marginHorizontal: 10, justifyContent: 'center', alignSelf: 'center',}}>
+              <Text
+                style={{fontSize: 14, fontWeight: 'bold', textAlign: 'left'}}>
+                {params.nameGroup}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 8,
+                  color: Color.secondary,
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                }}></Text>
             </Col>
             <View style={{width: '10%'}}>
-              <Entypo onPress={() => {
-                                setShowSection(!showSection)
-                                modalListActionRef.current.open();
-                            }} 
-                    name={'dots-three-vertical'} size={20}/>
+              <Entypo
+                onPress={() => {
+                  setShowSection(!showSection);
+                  modalListActionRef.current.open();
+                }}
+                name={'dots-three-vertical'}
+                size={20}
+              />
             </View>
           </Row>
         </Pressable>
@@ -299,25 +340,64 @@ const GroupDetailScreen = ({ navigation, route }) => {
 
                         if (isMe) {
                             return (
-                                <View style={{width, marginTop: 16, paddingHorizontal: 16, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
-                                    <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.textInput, borderRadius: 8, borderBottomRightRadius: 0, alignItems: 'flex-end'}}>
-                                        {/* <Text size={10} type='semibold' align='right' color={Color.secondary}>{item.name}</Text> */}
-                                        <Divider height={4} />
-                                        <Text align='right'>{item.message}</Text>
-                                        <Divider height={4} />
-                                    <View style={{flexDirection: 'row'}}>
-                                            <Ionicons name={"md-checkmark-done-sharp"} size={12}/>
-                                            <Text size={8} align='right' style={{opacity: 0.6}}>  {managedDateUTC(item.created_unix_date)}</Text>
-                                    </View>
-                                    </View>
-                                    <View style={{width: 30, height: 30, marginLeft: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.disabled}}>
-                                        <Image
-                                            source={{uri: item.image}}
-                                            style={{width: '100%', aspectRatio: 1, borderRadius: 30, backgroundColor: Color.disabled}}
-                                        />
-                                    </View>
+                              <View
+                                style={{
+                                  width,
+                                  marginTop: 16,
+                                  paddingHorizontal: 16,
+                                  flexDirection: 'row',
+                                  justifyContent: 'flex-end',
+                                  alignItems: 'flex-end',
+                                }}>
+                                <View
+                                  style={{
+                                    maxWidth: width - 70,
+                                    paddingHorizontal: 8,
+                                    paddingVertical: 8,
+                                    backgroundColor: Color.textInput,
+                                    borderRadius: 8,
+                                    borderBottomRightRadius: 0,
+                                    alignItems: 'flex-end',
+                                  }}>
+                                  {/* <Text size={10} type='semibold' align='right' color={Color.secondary}>{item.name}</Text> */}
+                                  <Divider height={4} />
+                                  <Text align="right">{item.message}</Text>
+                                  <Divider height={4} />
+                                  <View style={{flexDirection: 'row'}}>
+                                    <Ionicons
+                                      name={'md-checkmark-done-sharp'}
+                                      size={12}
+                                    />
+                                    <Text
+                                      size={8}
+                                      align="right"
+                                      style={{opacity: 0.6}}>
+                                      {' '}
+                                      {managedDateUTC(item.created_unix_date)}
+                                    </Text>
+                                  </View>
                                 </View>
-                            )
+                                <View
+                                  style={{
+                                    width: 30,
+                                    height: 30,
+                                    marginLeft: 8,
+                                    borderRadius: 15,
+                                    borderWidth: 2,
+                                    borderColor: Color.disabled,
+                                  }}>
+                                  <Image
+                                    source={{uri: item.photo_profile}}
+                                    style={{
+                                      width: '100%',
+                                      aspectRatio: 1,
+                                      borderRadius: 30,
+                                      backgroundColor: Color.disabled,
+                                    }}
+                                  />
+                                </View>
+                              </View>
+                            );
                         }
 
                         return (

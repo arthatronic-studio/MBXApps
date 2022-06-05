@@ -43,7 +43,7 @@ const CartShop = ({navigation, route}) => {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState([]);
-  const [cart, setCart] = useState(0);
+  const [cart, setCart] = useState(null);
   const [refresh, setRefresh] = useState(0);
   const [loadingProps, showLoading, hideLoading] = useLoading();
 
@@ -68,7 +68,6 @@ const CartShop = ({navigation, route}) => {
         // hideLoading()
         console.log(res);
         if (res.data.ecommerceCartList.id) {
-          setCart(res.data.ecommerceCartList);
           const dataq = res.data.ecommerceCartList.items.map((val, id) => {
             const dateq = {
               ...val,
@@ -172,6 +171,7 @@ const CartShop = ({navigation, route}) => {
   const submit = () => {
     console.log(route, 'props');
     let tempData = [];
+    const newList = [list]
     list.forEach(element => {
       element.products.forEach(element => {
         if (element.checked)
@@ -252,7 +252,7 @@ const CartShop = ({navigation, route}) => {
     <View style={{borderBottomColor: '#00000020', borderBottomWidth: 1, marginBottom: 16}}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <TouchableOpacity
-          onPress={() => onChecked(index, null, item.checked, 'shop')}
+          onPress={() => onChecked(index, null, item.checked, 'shop', item)}
           style={{paddingLeft: 16, paddingVertical: 8}}
         >
             <View style={{
@@ -288,7 +288,7 @@ const CartShop = ({navigation, route}) => {
                 paddingVertical: 20,
               }}>
               <TouchableOpacity
-                onPress={() => onChecked(index, id, val.checked, 'product')}
+                onPress={() => onChecked(index, id, val.checked, 'product', item)}
                 style={{
                   paddingRight: 8
                 }}
@@ -421,7 +421,7 @@ const CartShop = ({navigation, route}) => {
       item.forEach((element, index) => {
         element.products.forEach(element => {
           if (element.checked)
-            total = total + element.price * element['quantity'];
+            total = total + element.price * (element['quantity'] || element['qty']);
         });
       });
       return total;
@@ -475,7 +475,7 @@ const CartShop = ({navigation, route}) => {
             Total Harga
           </Text>
           <Text type="bold" color={Color.text}>
-            {list && list.length > 0
+            {list 
               ? FormatMoney.getFormattedMoney(totalProduct(list))
               : FormatMoney.getFormattedMoney(0)}
           </Text>

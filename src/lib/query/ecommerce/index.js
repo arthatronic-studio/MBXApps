@@ -458,6 +458,7 @@ export const queryGetCart = gql`
     ecommerceCartList(page: $page, limit: $limit) {
       id
       items {
+        id
         name
         alamat
         profileImg
