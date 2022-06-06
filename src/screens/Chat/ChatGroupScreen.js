@@ -290,7 +290,7 @@ const ChatGroupScreen = ({ navigation, route }) => {
                       justifyContent: 'center',
                     }}>
                     <Image
-                      source={{uri: item.image}}
+                      source={{uri: item['room_detail'].image}}
                       style={{
                         width: '100%',
                         aspectRatio: 1,
