@@ -53,7 +53,6 @@ const JoinLelang = ({navigation, route}) => {
   const user = useSelector(state => state['user.auth'].login.user);
   const [popupProps, showPopup] = usePopup();
   
-  console.log(route);
 
   useEffect(() => {
     const interval = item ?
@@ -121,7 +120,8 @@ const JoinLelang = ({navigation, route}) => {
     currentSocket.on('auction-bid-success', (res) => {
       console.log('res bid success', res);
       setListBidding([res.bid, ...listBidding]);
-      setHighestBid(res.bid.bid);
+      setUserLastBid(+res.bid.bid);
+      setHighestBid(+res.bid.bid);
       // showPopup('Berhasil', 'success');
     });
 
@@ -168,8 +168,6 @@ const JoinLelang = ({navigation, route}) => {
       <Text style={{fontSize: 14, fontWeight: 'bold', textAlign: 'right'}}>{FormatMoney.getFormattedMoney(item.bid, '')} Poin</Text>
     </Col>
   </Row>
-
-  console.log(listBidding, "list biddinggg");
 
   return (
     <Scaffold
@@ -378,6 +376,7 @@ const JoinLelang = ({navigation, route}) => {
         startPrice={item.startPrice}
         userLastBid={userLastBid}
         highestBid={highestBid}
+        amountData={item.bidNominal}
         onPress={(text) => {
           onSubmitAuctionBid(text);
         }}

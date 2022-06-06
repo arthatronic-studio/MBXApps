@@ -20,6 +20,7 @@ import Client from '@src/lib/apollo';
 import { shadowStyle } from 'src/styles';
 import ScreenEmptyData from '../Modal/ScreenEmptyData';
 import { initialItemState } from 'src/utils/constants';
+import CardHighlightLelang from './CardHighlightLelang';
 
 const propTypes = {
   ListHeaderComponent: PropTypes.func,
@@ -92,86 +93,90 @@ const CardListLelang = ({ ListHeaderComponent, prodStatus }) => {
     })
   }
 
-  const renderItem = ({item}) => (
-    <View
-      style={{
-        width: '45%',
-        height: 260,
-        marginHorizontal: 5,
-        marginVertical: 5,
-        borderRadius: 5,
-      }}
-    >
-      <TouchableOpacity
-        style={{
-          width: '100%',
-          height: '100%',
-          backgroundColor: Color.textInput,
-          borderRadius: 10,
-          paddingVertical: 10,
-          marginHorizontal: 5,
-          paddingHorizontal: 10,
-          ...shadowStyle,
-        }}
-        onPress={() => {
-          navigation.navigate('DetailLelang', { item })
-        }}
-      >
-        <View
-        style={{
-          width: '17%',
-          position: 'absolute',
-          marginVertical: 14,
-          marginHorizontal: 20,
-        }}>
-        <TouchableOpacity
-          style={{
-            width: 53,
-            height: 23,
-          }}>
-          <View>
-            <View
-              style={{
-                backgroundColor: Color.error,
-                width: 60,
-                height: 23,
-                borderRadius: 50,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Text color={Color.textInput} size={10}>{item.time}</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      </View>
-        <Image
-          source={{ uri: item.product.imageUrl }}
-          style={{
-            width: 160,
-            height: 150,
-            borderRadius: 10,
-            alignSelf: 'center',
-          }}
-        />
+  // const renderItem = ({item}) => (
+  //   <View
+  //     style={{
+  //       width: '45%',
+  //       height: 260,
+  //       marginHorizontal: 5,
+  //       marginVertical: 5,
+  //       borderRadius: 5,
+  //     }}
+  //   >
+  //     <TouchableOpacity
+  //       style={{
+  //         width: '100%',
+  //         height: '100%',
+  //         backgroundColor: Color.textInput,
+  //         borderRadius: 10,
+  //         paddingVertical: 10,
+  //         marginHorizontal: 5,
+  //         paddingHorizontal: 10,
+  //         ...shadowStyle,
+  //       }}
+  //       onPress={() => {
+  //         navigation.navigate('DetailLelang', { item })
+  //       }}
+  //     >
+  //       <View
+  //       style={{
+  //         width: '17%',
+  //         position: 'absolute',
+  //         marginVertical: 14,
+  //         marginHorizontal: 20,
+  //       }}>
+  //       <TouchableOpacity
+  //         style={{
+  //           width: 53,
+  //           height: 23,
+  //         }}>
+  //         <View>
+  //           <View
+  //             style={{
+  //               backgroundColor: Color.error,
+  //               width: 60,
+  //               height: 23,
+  //               borderRadius: 50,
+  //               justifyContent: 'center',
+  //               alignItems: 'center',
+  //             }}
+  //           >
+  //             <Text color={Color.textInput} size={10}>{item.time}</Text>
+  //           </View>
+  //         </View>
+  //       </TouchableOpacity>
+  //     </View>
+  //       <Image
+  //         source={{ uri: item.product.imageUrl }}
+  //         style={{
+  //           width: 160,
+  //           height: 150,
+  //           borderRadius: 10,
+  //           alignSelf: 'center',
+  //         }}
+  //       />
 
-        <View
-          style={{
-            width: '100%',
-            height: '45%',
-          }}>
-          <View style={{paddingVertical: 8}}>
-            <Text numberOfLines={1}  align='left' type='bold'>{item.product.name}</Text>
-          </View>
-          <View style={{marginVertical: 5}}>
-            <Text align='left' size={8} color={Color.disabled}>Harga Awal</Text>
-            <Divider height={4} />
-            <Text align='left' type='bold'>{FormatMoney.getFormattedMoney(item.startPrice)} <Text size={8}>Poin</Text></Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    </View>
-  );
+  //       <View
+  //         style={{
+  //           width: '100%',
+  //           height: '45%',
+  //         }}>
+  //         <View style={{paddingVertical: 8}}>
+  //           <Text numberOfLines={1}  align='left' type='bold'>{item.product.name}</Text>
+  //         </View>
+  //         <View style={{marginVertical: 5}}>
+  //           <Text align='left' size={8} color={Color.disabled}>Harga Awal</Text>
+  //           <Divider height={4} />
+  //           <Text align='left' type='bold'>{FormatMoney.getFormattedMoney(item.startPrice)} <Text size={8}>Poin</Text></Text>
+  //         </View>
+  //       </View>
+  //     </TouchableOpacity>
+  //   </View>
+  // );
+
+  const renderItem = ({item}) => {
+    return <CardHighlightLelang item={item} color={prodStatus === 'WILLCOME' ? '#3C58C1' : Color.danger} type={prodStatus}/>
+  }
 
   const renderHeader = () => {
     if (typeof ListHeaderComponent !== 'undefined') {

@@ -212,6 +212,7 @@ query(
    status
    duration
    auctionStatus
+   bidNominal
    product {
      id
      name

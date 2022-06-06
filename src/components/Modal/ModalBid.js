@@ -17,19 +17,20 @@ const defaultProps = {
 	userLastBid: 0,
 	highestBid: 0,
 	onPress: () => {},
+	amountData: [],
 };
 
-const amountData = [
-	{ id: 1, bid: 5000 },
-	{ id: 2, bid: 10000 },
-	{ id: 3, bid: 25000 },
-	{ id: 4, bid: 50000 },
-	{ id: 5, bid: 100000 },
-	{ id: 6, bid: 200000 }
-];
+// const amountData = [
+// 	{ id: 1, bid: 5000 },
+// 	{ id: 2, bid: 10000 },
+// 	{ id: 3, bid: 25000 },
+// 	{ id: 4, bid: 50000 },
+// 	{ id: 5, bid: 100000 },
+// 	{ id: 6, bid: 200000 }
+// ];
 
 const ModalBid = forwardRef((props, ref) => {
-	const { onPress, startPrice, userLastBid, highestBid } = props;
+	const { onPress, startPrice, userLastBid, highestBid, amountData} = props;
 
 	const modalizeRef = useRef(null);
 	const combinedRef = useCombinedRefs(ref, modalizeRef);
@@ -99,9 +100,9 @@ const ModalBid = forwardRef((props, ref) => {
 							<TouchableOpacity
 								activeOpacity={1}
 								onPress={() => {
-									const calculate = highestBid + item.bid;
+									const calculate = highestBid + item;
 									setText(calculate.toString());
-									setSelectedAmount(item);
+									setSelectedAmount({id: index, bid: item});
 								}}
 								style={{
 									flex: 1,
@@ -113,7 +114,7 @@ const ModalBid = forwardRef((props, ref) => {
 								}}
 							>
 								<Text size={14} color={isSelected ? Color.textInput : Color.text}>
-									+ {FormatMoney.getFormattedMoney(item.bid)}
+									+ {FormatMoney.getFormattedMoney(item)}
 								</Text>
 							</TouchableOpacity>
 						</View>
