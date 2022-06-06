@@ -48,11 +48,11 @@ const CardHighlightLelang = ({item, index, color, type}) => {
         const _isWillCome = moment(item.dateStart).isAfter(now);
         const _isOnGoing = moment(item.dateEnd).isAfter(now);
         const _isPassed = moment(item.dateEnd).isBefore(now);
-        console.log('////////////////////////');
-        console.log('akan datang', _isWillCome);
-        console.log('sedang berlangsung', _isOnGoing);
-        console.log('telah lewat', _isPassed);
-        console.log('////////////////////////');
+        // console.log('////////////////////////');
+        // console.log('akan datang', _isWillCome);
+        // console.log('sedang berlangsung', _isOnGoing);
+        // console.log('telah lewat', _isPassed);
+        // console.log('////////////////////////');
         setIsWillCome(_isWillCome);
         setIsOnGoing(!_isWillCome && _isOnGoing);
         setIsPassed(_isPassed);

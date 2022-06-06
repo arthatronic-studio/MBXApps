@@ -206,7 +206,7 @@ const JoinLelang = ({navigation, route}) => {
                 color: Color.gray,
                 paddingVertical: 5,
               }}>
-              Hijab Hardcode
+              {item.product.categoryFreeText}
             </Text>
           </View>
           <View
