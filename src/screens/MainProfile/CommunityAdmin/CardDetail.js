@@ -25,6 +25,7 @@ import {Container, Divider} from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
 import { getSizeByRatio } from 'src/utils/get_ratio';
 import { joinCommunityMember } from 'src/lib/query/joinCommunityMember';
+import ModalInputText from 'src/components/ModalInputText';
 
 const EmailRoundedView = Styled(View)`
   width: 100%;
@@ -52,6 +53,8 @@ const CardDetail = ({ navigation, route }) => {
 
   const [idNumber, setIdNumber] = useState('');
   const [loading, setLoading] = useState(false);
+  const [modalInputText, setModalInputText] = useState(false);
+
   const {width, height} = useWindowDimensions();
   const {Color} = useColor();
   const [popupProps, showPopup] = usePopup();
@@ -83,7 +86,7 @@ const CardDetail = ({ navigation, route }) => {
       });
   };
 
-  const fetchJoinCommunityManage = (id, userId, status) => {
+  const fetchJoinCommunityManage = (id, userId, status, reason_reject) => {
     setLoading(true);
 
     let resMessage =
@@ -94,6 +97,7 @@ const CardDetail = ({ navigation, route }) => {
       status,
       id,
       organizationInitialCode: accessClient.InitialCode,
+      reason_reject,
     };
 
     console.log('variables', variables);
@@ -563,11 +567,7 @@ const CardDetail = ({ navigation, route }) => {
             {props.type !== 'notAnggota' && (
               <TouchableOpacity
                 onPress={() => {
-                  Alert(
-                    'Tolak',
-                    'Apakah Anda yakin akan menolak anggota ini?',
-                    () => fetchJoinCommunityManage(item.id, item.user_id, 2),
-                  );
+                  setModalInputText(true);
                 }}
                 style={{
                   backgroundColor: Color.error,
@@ -582,6 +582,22 @@ const CardDetail = ({ navigation, route }) => {
           </View>
         )}
       </View>
+
+      <ModalInputText
+        visible={modalInputText}
+        headerLabel='Reject'
+        placeholder='Masukan penjelasan Anda'
+        isTextArea
+        onClose={() => setModalInputText(false)}
+        onSubmit={(text) => {
+          Alert(
+            'Tolak',
+            'Apakah Anda yakin akan menolak anggota ini?',
+            () => fetchJoinCommunityManage(item.id, item.user_id, 2, text),
+          );
+          setModalInputText(false);
+        }}
+      />
     </Scaffold>
   );
 };

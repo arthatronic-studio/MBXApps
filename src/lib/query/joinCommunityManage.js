@@ -6,6 +6,7 @@ query(
   $id: Int!,
   $customIdNumber: String
   $organizationInitialCode: String!
+  reason_reject: String
 ) {
     joinCommunityManage(
       status: $status,

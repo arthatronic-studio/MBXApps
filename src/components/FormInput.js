@@ -21,10 +21,12 @@ const propTypes = {
     onSubmitEditing: PropTypes.func,
     keyboardType: PropTypes.string,
     error: PropTypes.string,
+    hideErrorHint: PropTypes.bool,
 
     secureTextEntry: PropTypes.bool,
-    suffixIcon: PropTypes.node,
     prefixIcon: PropTypes.node,
+    prefixText: PropTypes.string,
+    suffixIcon: PropTypes.node,
     textinputProps: PropTypes.object,
 };
 
@@ -37,10 +39,12 @@ const defaultProps = {
     onSubmitEditing: () => {},
     keyboardType: 'default',
     error: null,
+    hideErrorHint: false,
     
     secureTextEntry: false,
-    suffixIcon: null,
     prefixIcon: null,
+    prefixText: '',
+    suffixIcon: null,
     multiline: false,
     editable: true,
     format: '', // currency
@@ -49,9 +53,12 @@ const defaultProps = {
 };
 
 const FormInput = forwardRef((props, ref) => {
-    const { label, placeholder, onChangeText, value, onBlur, returnKeyType, onSubmitEditing, keyboardType, error, secureTextEntry, prefixIcon, suffixIcon, multiline, editable, format, style, textinputProps } = props;
+    const { label, placeholder, onChangeText, value, onBlur, returnKeyType, onSubmitEditing, keyboardType, error, hideErrorHint, secureTextEntry, prefixIcon, prefixText, suffixIcon, multiline, editable, format, style, textinputProps } = props;
 
     const { Color } = useColor();
+
+    let extraStyle = {};
+    if (multiline) extraStyle.height = 120;
 
     return (
         <Container width='100%'>
@@ -59,110 +66,119 @@ const FormInput = forwardRef((props, ref) => {
                 style={{
                     width: '100%',
                     justifyContent: 'center',
-                    // height: multiline ? 100 : 50,
                     borderRadius: 6,
                     borderWidth: 0.5,
                     borderColor: Color.disabled,
                     paddingVertical: Platform.OS === 'ios' ? 12 : 6,
                     paddingHorizontal: 12,
+                    backgroundColor: Color.textInput,
                 }}
             >
-                {label !== '' && <View
-                    style={{
-                        width: '100%',
-                        justifyContent: 'flex-start',
-                        alignItems: 'flex-start',
-                        marginBottom: Platform.OS === 'ios' ? 4 : 2,
-                    }}
-                >
-                    <Text size={12} color={Color.placeholder}>{label}</Text>
-                </View>}
-
-                <Row>
+                <Row align='flex-end'>
                     {prefixIcon}
 
-                    {format === 'currency' ? 
-                        <View />
-                        // <CurrencyInput
-                        //     onChangeValue={(val) => onChangeText(val)}
-                        //     precision={0}
-
-                        //     ref={ref}
-                        //     placeholder={placeholder}
-                        //     placeholderTextColor={Color.gray}
-                        //     underlineColorAndroid='transparent'
-                        //     autoCorrect={false}
-                        //     selectionColor={Color.text}
-                        //     value={value}
-                        //     onBlur={() => onBlur()}
-                        //     returnKeyType={returnKeyType}
-                        //     onSubmitEditing={() => onSubmitEditing()}
-                        //     blurOnSubmit={false}
-                        //     keyboardType={keyboardType}
-                        //     style={{
-                        //         // width: '100%',
-                        //         // height: '100%',
-                        //         textAlignVertical: multiline ? 'top' : 'center',
-                        //         flex: 1,
-                        //         fontSize: 14,
-                        //         fontFamily: 'Inter-Regular',
-                        //         marginTop: multiline ? 8 : 0,
-                        //         paddingHorizontal: 16,
-                        //         color: Color.gray,
-                        //         includeFontPadding: false,
-                        //     }}
-                        //     secureTextEntry={secureTextEntry}
-                        //     multiline={multiline}
-                        //     editable={editable}
-                        // />
-                    :
-                        <TextInput
-                            ref={ref}
-                            placeholder={placeholder}
-                            placeholderTextColor={Color.placeholder}
-                            underlineColorAndroid='transparent'
-                            autoCorrect={false}
-                            onChangeText={(val) => onChangeText(val)}
-                            selectionColor={Color.text}
-                            value={value}
-                            onBlur={() => onBlur()}
-                            returnKeyType={returnKeyType}
-                            onSubmitEditing={() => onSubmitEditing()}
-                            blurOnSubmit={false}
-                            keyboardType={keyboardType}
-                            autoCapitalize={secureTextEntry ? 'none' : undefined}
+                    <View style={{flex: 1}}>
+                        {label !== '' && <View
                             style={{
-                                // width: '100%',
-                                // height: '100%',
-                                textAlignVertical: multiline ? 'top' : 'center',
-                                flex: 1,
-                                fontSize: 14,
-                                fontFamily: 'Inter-Regular',
-                                marginTop: multiline ? (Platform.OS === 'android' ? 8 : 0) : 0,
-                                marginBottom: multiline ? (Platform.OS === 'android' ? 0 : 8) : 0,
-                                color: Color.text,
-                                includeFontPadding: false,
-                                padding: 0,
-                                ...style,
+                                width: '100%',
+                                justifyContent: 'flex-start',
+                                alignItems: 'flex-start',
+                                marginBottom: Platform.OS === 'ios' ? 4 : 2,
                             }}
-                            secureTextEntry={secureTextEntry}
-                            multiline={multiline}
-                            editable={editable}
-                            {...textinputProps}
-                        />
-                    }
+                        >
+                            <Text size={12} color={Color.placeholder}>{label}</Text>
+                        </View>}
+
+                        {format === 'currency' ? 
+                            <View />
+                            // <CurrencyInput
+                            //     onChangeValue={(val) => onChangeText(val)}
+                            //     precision={0}
+
+                            //     ref={ref}
+                            //     placeholder={placeholder}
+                            //     placeholderTextColor={Color.gray}
+                            //     underlineColorAndroid='transparent'
+                            //     autoCorrect={false}
+                            //     selectionColor={Color.text}
+                            //     value={value}
+                            //     onBlur={() => onBlur()}
+                            //     returnKeyType={returnKeyType}
+                            //     onSubmitEditing={() => onSubmitEditing()}
+                            //     blurOnSubmit={false}
+                            //     keyboardType={keyboardType}
+                            //     style={{
+                            //         // width: '100%',
+                            //         // height: '100%',
+                            //         textAlignVertical: multiline ? 'top' : 'center',
+                            //         flex: 1,
+                            //         fontSize: 14,
+                            //         fontFamily: 'Inter-Regular',
+                            //         marginTop: multiline ? 8 : 0,
+                            //         paddingHorizontal: 16,
+                            //         color: Color.gray,
+                            //         includeFontPadding: false,
+                            //     }}
+                            //     secureTextEntry={secureTextEntry}
+                            //     multiline={multiline}
+                            //     editable={editable}
+                            // />
+                        :
+                            <Row>
+                                {prefixText !== '' && <Container paddingRight={8}>
+                                    <Text type='medium'>{prefixText}</Text>
+                                </Container>}
+                                <TextInput
+                                    ref={ref}
+                                    placeholder={placeholder}
+                                    placeholderTextColor={Color.border}
+                                    underlineColorAndroid='transparent'
+                                    autoCorrect={false}
+                                    onChangeText={(val) => onChangeText(val)}
+                                    selectionColor={Color.text}
+                                    value={value}
+                                    onBlur={() => onBlur()}
+                                    returnKeyType={returnKeyType}
+                                    onSubmitEditing={() => onSubmitEditing()}
+                                    blurOnSubmit={false}
+                                    keyboardType={keyboardType}
+                                    autoCapitalize={secureTextEntry ? 'none' : undefined}
+                                    style={{
+                                        // width: '100%',
+                                        // height: '100%',
+                                        textAlignVertical: multiline ? 'top' : 'center',
+                                        flex: 1,
+                                        fontSize: 14,
+                                        fontFamily: 'Inter-Regular',
+                                        marginTop: multiline ? (Platform.OS === 'android' ? 8 : 0) : 0,
+                                        marginBottom: multiline ? (Platform.OS === 'android' ? 0 : 4) : 0,
+                                        color: Color.text,
+                                        includeFontPadding: false,
+                                        padding: 0,
+                                        backgroundColor: Color.textInput,
+                                        ...style,
+                                        ...extraStyle,
+                                    }}
+                                    secureTextEntry={secureTextEntry}
+                                    multiline={multiline}
+                                    editable={editable}
+                                    {...textinputProps}
+                                />
+                            </Row>
+                        }
+                    </View>
 
                     {suffixIcon}
                 </Row>
             </View>
-            <View style={{
+            {!hideErrorHint && <View style={{
                 width: '100%',
                 paddingTop: 2,
                 paddingBottom: 10,
                 alignItems: 'flex-start',
             }}>
               <Text size={12} color={Color.error} type='medium' align='left'>{error}</Text>
-            </View>
+            </View>}
         </Container>
     );
 });

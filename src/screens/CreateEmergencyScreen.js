@@ -205,7 +205,7 @@ const CreateEmergencyScreen = (props) => {
             const data = res.data.contentProductManage;
 
             if (data && data.id) {
-                showLoading('success', 'Emergency berhasil dibuat!');
+                showLoading('success', 'Emergency berhasil dibuat');
 
                 currentSocket.emit('helpme', { productId: data.id });
 
@@ -214,7 +214,7 @@ const CreateEmergencyScreen = (props) => {
                     navigation.navigate('MainHome');
                 }, 2500);
             } else {
-                showLoading('error', 'Emergency berhasil dibuat!');
+                showLoading('error', 'Emergency gagal dibuat, harap coba beberapa saat');
             }
         })
         .catch((err) => {

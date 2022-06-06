@@ -171,6 +171,7 @@ mutation(
      id
      name
      categoryId
+     categoryFreeText
      description
      price
      initialPrice
@@ -217,6 +218,7 @@ query(
      id
      name
      categoryId
+     categoryFreeText
      description
      price
      initialPrice
@@ -293,6 +295,7 @@ mutation(
       id
       name
       categoryId
+      categoryFreeText
       description
       price
       initialPrice
