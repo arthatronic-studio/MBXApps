@@ -134,7 +134,7 @@ const CheckoutScreen = ({ navigation, route }) => {
         destinationAddressId: address.userAddressIdDestination,
         type: 'BOOKING',
         auctionProductId: item.tempData[0]['auctionId'],
-        winningPrice: item.tempData[0]['total']
+        winningPrice: item.tempData[0]['latestBidPrice']
       };
   
       console.log(variables, 'variables');

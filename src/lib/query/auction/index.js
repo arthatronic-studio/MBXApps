@@ -26,6 +26,7 @@ query(
       quantity
       checked
       status
+      statusLabel
       dateStart
       latestBidPrice
       userBidLatest

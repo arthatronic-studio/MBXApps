@@ -141,7 +141,7 @@ const CartAuction = ({navigation, route}) => {
                         borderWidth: 1,
                       }}>
                       <Text size={10} color="#76AE0B">
-                        {val.status}
+                        {val.statusLabel}
                       </Text>
                     </View>
                   </Col>
