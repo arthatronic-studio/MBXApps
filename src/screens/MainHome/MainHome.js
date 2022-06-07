@@ -725,14 +725,14 @@ const MainHome = ({navigation, route}) => {
           <Divider />
 
           {/* isFocused handle android navigate crash from home */}
-          {isFocused && <HighlightContentProduct
+          {/* {isFocused && <HighlightContentProduct
             productCategory='YOUTUBE_VIDEO'
             name='Live'
             title='Sedang Berlangsung'
             nav='YoutubeScreen'
             refresh={refreshing}
             style={{paddingHorizontal: 0}}
-          />}
+          />} */}
 
           <Divider />
 

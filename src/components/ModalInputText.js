@@ -79,11 +79,12 @@ const ModalInputText = ({ visible, onSubmit, onClose, style, successMessage, err
                             style={{width: 20, height: 20}}
                         />
                     </TouchableOpacity>
+                    
 
                     <Container marginVertical={16}>
                         <Text size={16} type='medium'>{headerLabel}</Text>
                     </Container>
-
+                    
                     <FormInput
                         placeholder={placeholder}
                         value={text}
@@ -115,7 +116,7 @@ const ModalInputText = ({ visible, onSubmit, onClose, style, successMessage, err
                                 onSubmit(text);
                             }}
                         >
-                            Lanjut
+                            Laporkan
                         </Button>
                     }
                 </View>

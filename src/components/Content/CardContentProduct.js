@@ -211,93 +211,57 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
                     },
                     style,
                 ]}>
-                <View
-                    style={{
-                        width: '100%',
-                        flexDirection: 'row',
-                        padding: 16,
-                        borderRadius: 4,
-                        backgroundColor: Color.textInput,
-                        ...shadowStyle,
-                    }}
-                >
-                    <View style={{ width: '25%' }}>
-                        <Image
-                            source={{ uri: item.image }}
+                    <View
                             style={{
                                 width: '100%',
-                                aspectRatio: 1,
-                                borderRadius: 8,
+                                flexDirection: 'column',
+                                padding: 16,
+                                borderRadius: 4,
+                                backgroundColor: Color.textInput,
+                                ...shadowStyle,
                             }}
-                            resizeMode="cover"
-                        />
-                    </View>
-
-                    <View style={{ width: '75%', paddingLeft: 16 }}>
-                        <View
-                            style={{
-                                width: '100%',
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                            }}>
-                            <Text type="bold" align="left" numberOfLines={2}>
-                                {item.productName}
-                            </Text>
-                            {/* <Ionicons name='bookmark-outline' size={20} color={Color.primary} /> */}
-                        </View>
-
-                        <View style={{ paddingTop: 4, flexDirection: 'row' }}>
-                            <Text size={12} align='left'>Oleh:&nbsp;</Text>
-                            <Text size={12} align='left'>{item.fullname}</Text>
-                        </View>
-
-                        <View style={{ paddingTop: 4 }}>
-                            <Text size={12} align="left" numberOfLines={2} style={{ width: '80%' }}>
-                                {item.productDescription}
-                            </Text>
-                        </View>
-
-                        {/* <View style={{paddingTop: 12, flexDirection: 'row'}}>
-                                    <Ionicons name='location' color={Color.error} style={{marginRight: 8}} />
-                                    <Text size={12} align='left'>Jakarta Selatan</Text>
-                                </View> */}
-                        <View
-                            style={{
-                                paddingTop: 14,
-                                alignItems: 'flex-end',
-                                flexDirection: 'row',
-                            }}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text
+                    >
+                        <View style={{flexDirection: 'row'}}>
+                            <View style={{ width: '25%', }}>
+                                <Image
+                                    source={{ uri: item.image }}
                                     style={{
-                                        color: Color.gray,
-                                        fontSize: 13,
-                                        fontSize: 11,
-                                        paddingTop: 10,
-                                        paddingEnd: 23,
-                                    }}>
-                                    {Moment(parseInt(item.created_date)).format('DD MMMM YYYY')}
-                                </Text>
-                            </View>
-
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text
-                                    size={11}
-                                    style={{
-                                        color: Color.primary,
-                                        paddingHorizontal: 4,
-                                    }}>
-                                    Selengkapnya
-                                </Text>
-                                <Ionicons
-                                    name={'arrow-forward'}
-                                    size={12}
-                                    style={{ color: Color.primary }}
+                                        width: '100%',
+                                        aspectRatio: 1,
+                                        borderRadius: 8,
+                                    }}
+                                    resizeMode="cover"
                                 />
                             </View>
+                            <View style={{ width: '75%', paddingLeft: 16 }}>
+                                <View
+                                    style={{
+                                        width: '100%',
+                                        flexDirection: 'row',
+                                        justifyContent: 'space-between',
+                                    }}>
+                                    <Text type="bold" align="left" numberOfLines={2}>
+                                        {item.productName}
+                                    </Text>
+                                    
+                                </View>
+                                <View style={{ paddingTop: 4 }}>
+                                    <Text size={10} align="left" numberOfLines={3} style={{ width: '90%', lineHeight: 15 }}>
+                                        {item.productDescription}
+                                    </Text>
+                                </View>
+                            </View>
+                        </View>
+                        <View style={{flexDirection: 'row', marginTop: 15}}>
+                            <View style={{width: '70%'}}>
+                                <Text color={Color.secondary} size={10} align='left'>{item.fullname} | {Moment(parseInt(item.created_date)).format('DD MMMM YYYY')}</Text>
+                            </View>
+                            <View style={{width: '30%'}}>
+                                <Text color={Color.primary} size={10} align='left'>Baca Selengkapnya</Text>
+                            </View>
                         </View>
                     </View>
-                </View>
+                
             </TouchableOpacity>
         )
     }
