@@ -59,97 +59,96 @@ import { currentSocket } from '@src/screens/MainHome/MainHome';
 //   ];
 
 
-function Anggota(props) {
-  
+function Anggota(props, route) {
   const modalListActionRef = useRef();
-
-    const {Color} = useColor();
-    const renderItem = ({item}) => (
-      <View style={{backgroundColor: Color.theme}}>
-        <Row
-          style={{
-            marginHorizontal: 0,
-            marginVertical: 12,
-            alignItems: 'center',
-          }}>
-          <Image source={ImagesPath.avatar1} style={{borderRadius: 20}} />
-          <View style={{width: '85%'}}>
-            <Text
-              style={{
-                textAlign: 'left',
-                fontSize: 14,
-                fontWeight: 'bold',
-                marginHorizontal: 8,
-              }}>
-              {item.first_name}
-            </Text>
-            <Text
-              style={{
-                fontSize: 8,
-                color: Color.error,
-                textAlign: 'left',
-                marginHorizontal: 10,
-              }}>
-              {item.status}
-            </Text>
-          </View>
-          <TouchableOpacity
-            onPress={() => {
-              modalListActionRef.current.open();
+  const { params } = route;
+  
+  const {Color} = useColor();
+  const renderItem = ({item}) => (
+    <View style={{backgroundColor: Color.theme}}>
+      <Row
+        style={{
+          marginHorizontal: 0,
+          marginVertical: 12,
+          alignItems: 'center',
+        }}>
+        <Image source={ImagesPath.avatar1} style={{borderRadius: 20}} />
+        <View style={{width: '85%'}}>
+          <Text
+            style={{
+              textAlign: 'left',
+              fontSize: 14,
+              fontWeight: 'bold',
+              marginHorizontal: 8,
             }}>
-            <Entypo name={'dots-three-horizontal'} size={15} />
-          </TouchableOpacity>
-        </Row>
-      </View>
-    );
-  
-  
-    return (
-      <ScrollView style={{backgroundColor: Color.theme}}>
-        <View
-          style={{
-            backgroundColor: Color.theme,
-            padding: 16,
-            alignItems: 'flex-start',
-          }}>
-          <FlatList
-            data={props.listAnggota}
-            renderItem={renderItem}
-            keyExtractor={item => item.id}
-          />
+            {item.first_name}
+          </Text>
+          <Text
+            style={{
+              fontSize: 8,
+              color: Color.error,
+              textAlign: 'left',
+              marginHorizontal: 10,
+            }}>
+            {item.status}
+          </Text>
         </View>
-        <ModalListAction
-          ref={modalListActionRef}
-          data={[
-            {
-              id: 0,
-              name: 'Keluarkan dari grup',
-              color: Color.text,
-              onPress: () => {
-                modalListActionRef.current.close();
-              },
-            },
-            {
-              id: 1,
-              name: 'Jadikan Admin',
-              color: Color.red,
-              onPress: () => {
-                modalListActionRef.current.close();
-              },
-            },
-            {
-              id: 2,
-              name: 'Report',
-              color: Color.red,
-              onPress: () => {
-                modalListActionRef.current.close();
-              },
-            },
-          ]}
+        <TouchableOpacity
+          onPress={() => {
+            modalListActionRef.current.open();
+          }}>
+          <Entypo name={'dots-three-horizontal'} size={15} />
+        </TouchableOpacity>
+      </Row>
+    </View>
+  );
+
+  return (
+    <ScrollView style={{backgroundColor: Color.theme}}>
+      <View
+        style={{
+          backgroundColor: Color.theme,
+          padding: 16,
+          alignItems: 'flex-start',
+        }}>
+        <FlatList
+          data={props.listAnggota}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
         />
-      </ScrollView>
-    );
-  }
+      </View>
+      <ModalListAction
+        ref={modalListActionRef}
+        data={[
+          {
+            id: 0,
+            name: 'Keluarkan dari grup',
+            color: Color.text,
+            onPress: () => {
+              modalListActionRef.current.close();
+            },
+          },
+          {
+            id: 1,
+            name: 'Jadikan Admin',
+            color: Color.red,
+            onPress: () => {
+              modalListActionRef.current.close();
+            },
+          },
+          {
+            id: 2,
+            name: 'Report',
+            color: Color.red,
+            onPress: () => {
+              modalListActionRef.current.close();
+            },
+          },
+        ]}
+      />
+    </ScrollView>
+  );
+}
 
 
   function Media(props) {
@@ -250,7 +249,10 @@ const UserGroupDetail = ({navigation, route}) => {
   const [backCover, setBackCover] = useState(true);
   // params
   const { params } = route;
-  console.log('ini parasm', params['params'].nameGroup);
+
+  console.log('ini params', params);
+  
+
   const GroupDetailHeader = () => {
     return (
       <>
@@ -278,13 +280,20 @@ const UserGroupDetail = ({navigation, route}) => {
               {params['params'].selected.length} Anggota
             </Text>
           </Col>
+
           <View style={{width: '8%', marginVertical: 5}}>
-            <Feather name={'edit-2'} />
+            <Pressable onPress={() => { navigation.navigate('EditInformationGroup', {
+              ...params,
+            });}}>
+              <Feather name={'edit-2'} />
+            </Pressable>
           </View>
         </Row>
         <Pressable
           onPress={() => {
-            navigation.navigate('AddMember');
+            navigation.navigate('AddMember', {
+              params,
+            });
           }}
           style={{
             flexDirection: 'row',

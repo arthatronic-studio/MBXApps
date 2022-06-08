@@ -9,7 +9,6 @@ import {
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Moment from 'moment';
-import { useSelector } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Text from '@src/components/Text';
@@ -31,11 +30,25 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import { queryContentChatRoomManage } from 'src/lib/query';
 import ChatGroupScreen from 'src/screens/Chat/ChatGroupScreen';
+import {useSelector, useDispatch} from 'react-redux';
+const inputs = [
+  'name',
+  'descriptions',
+ 
+];
 
 const AddInformationGroup = ({ navigation, route }) => {
     const { params } = route;
-    console.log('params',params.selected);
+  console.log('params', params.selected);
+  
+    const [allValid, setAllValid] = useState(false);
+  ``;
+  const [userData, setUserData] = useState({
+    name: params ? params['params'].namaGroup : '',
+    descriptions: params ? params['params'].descriptions : '',
     
+  });
+  
   const [isLoading, setIsLoading] = useState(false);
   const {Color} = useColor();
   const [selected, setSelected] = useState(params.selected);
@@ -48,50 +61,78 @@ const AddInformationGroup = ({ navigation, route }) => {
   const [thumbImage, setThumbImage] = useState('');
   const [mimeImage, setMimeImage] = useState('image/jpeg');
     const { height } = useWindowDimensions();
-    const [titleCounter, setTitleCounter] = useState(0);
-  const onSubmit = selected => {
-    if (nameGroup === '') {
-      showPopup('Nama group tidak boleh kosong', 'warning');
-      return;
-    } else if (thumbImage === '') {
-        showPopup('Gambar tidak boleh kosong', 'warning');
-        return;
-    } 
-    
-    saveGroup(selected);
+  const [titleCounter, setTitleCounter] = useState(0);
+  
+  useEffect(() => {
+    if (allValid) {
+      setAllValid(false);
+
+      const {
+        name,
+        descriptions,
+       
+      } = userData;
+
+     
+
+      const newUserData = {
+        name,
+        descriptions,
+        image:
+          URLSearchParams && thumbImage === ''
+            ? ''
+            : 'data:image/png;base64,' + thumbImage,
+      };
+
+      console.log('newUserData', newUserData);
+
+      // dispatch(updateCurrentUserProfile(newUserData));
+    }
+  }, [allValid]);
+   const onChangeUserData = (key, val) => {
+     setUserData({...userData, [key]: val});
+   };
+  const onSubmit = () => {
+    let valid = true;
+  
+
+
+
+    setErrorData(newErrorState);
+    setAllValid(valid);
   };
-    const saveGroup = selected => {
-      selected.push(user.userId);
-      setIsLoading(true);
-    const variables = {
-      method: 'INSERT',
-      name: nameGroup,
-      description: groupDeskripsi,
-      image: thumbImage === '' ? '' : 'data:image/png;base64,' + thumbImage,
-      type: 'GROUP',
-      userId: selected,
-    };
-    console.log('variables', variables);
-    Client.query({
-      query: queryContentChatRoomManage,
-      variables,
-    })
-        .then(res => {
+  //   const saveGroup = selected => {
+  //     selected.push(user.userId);
+  //     setIsLoading(true);
+  //   const variables = {
+  //     method: 'INSERT',
+  //     name: nameGroup,
+  //     description: groupDeskripsi,
+  //     image: thumbImage === '' ? '' : 'data:image/png;base64,' + thumbImage,
+  //     type: 'GROUP',
+  //     userId: selected,
+  //   };
+  //   console.log('variables', variables);
+  //   Client.query({
+  //     query: queryContentChatRoomManage,
+  //     variables,
+  //   })
+  //       .then(res => {
            
-          console.log('succes group', res);
-                setIsLoading(false);
-          showPopup('Group berhasil dibuat!', 'success');
+  //         console.log('succes group', res);
+  //               setIsLoading(false);
+  //         showPopup('Group berhasil dibuat!', 'success');
          
-          navigation.navigate('Chat');
+  //         navigation.navigate('Chat');
            
      
-      })
-      .catch(err => {
-        console.log('gagal group', err);
-           setIsLoading(false);
-        showPopup('Group gagal dibuat!, silakan coba lagi', 'error');
-      });
-  };
+  //     })
+  //     .catch(err => {
+  //       console.log('gagal group', err);
+  //          setIsLoading(false);
+  //       showPopup('Group gagal dibuat!, silakan coba lagi', 'error');
+  //     });
+  // };
 
   return (
     <Scaffold
@@ -190,11 +231,8 @@ const AddInformationGroup = ({ navigation, route }) => {
           <TextInput
             placeholder="Masukkan Nama Grup"
             name="groupName"
-            value={nameGroup}
-            onChangeText={groupName => {
-              setNameGroup(groupName);
-              setTitleCounter(groupName.length);
-            }}
+            value={userData.name}
+            onChangeText={text => onChangeUserData('name', text)}
             maxLength={24}
             style={{
               borderWidth: 1,
@@ -232,12 +270,8 @@ const AddInformationGroup = ({ navigation, route }) => {
           <TextInput
             placeholder="Tuliskan sesuatu tentang Group"
             name="groupDeskripsi"
-            value={groupDeskripsi}
-            onChangeText={groupDeskripsi => {
-              setgroupDeskripsi(groupDeskripsi);
-              
-            }}
-            
+            value={userData.descriptions}
+            onChangeText={text => onChangeUserData('descriptions', text)}
             style={{
               borderWidth: 1,
               borderColor: Color.border,
@@ -253,7 +287,7 @@ const AddInformationGroup = ({ navigation, route }) => {
       </ScrollView>
 
       <TouchableOpacity
-        onPress={() => onSubmit(selected)}
+        onPress={() => onSubmit()}
         style={{
           marginVertical: 10,
           backgroundColor: Color.secondary,

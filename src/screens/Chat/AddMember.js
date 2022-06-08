@@ -23,6 +23,10 @@ import Client from '@src/lib/apollo';
 import { queryContentChatRoomManage, queryContentChatMessage } from '@src/lib/query';
 import { Divider } from 'src/styled';
 import { currentSocket } from '@src/screens/MainHome/MainHome';
+import {queryGetUserOrganizationRef} from 'src/lib/query';
+
+
+const itemPerPage = 100;
 
 const DATA = [
     {
@@ -52,50 +56,302 @@ const DATA = [
       },
   ];
 
-const AddMember = () => {
-    const { Color } = useColor();
+const AddMember = ({navigation, route}) => {
+  const [itemData, setItemData] = useState({
+    data: [],
+    loading: true,
+    page: 0,
+    loadNext: false,
+  });
+  console.log('itemdata', itemData);
+  const [selected, setSelected] = useState([]);
+  const [search, setSearch] = useState('');
+  const [filterData, setFilterData] = useState([]);
+  const [filterLoading, setFilterLoading] = useState(false);
+  const {params} = route['params'].params;
+  console.log('selected', params['selected']);
+  useEffect(() => {
+    fetchGetUserOrganizationRef();
+  }, []);
 
-    const renderItem = ({ item }) => (
-        <Row style={{marginHorizontal: 15, marginVertical: 12}}>
-            <Image source={item.image} style={{borderRadius: 20}}/>
-            <Text style={{fontSize: 14, width: '60%',fontWeight: 'bold',marginVertical: 5, marginHorizontal: 8, textAlign: 'left'}}>{item.name}</Text>
-            <TouchableOpacity style={{alignItems: 'center', justifyContent: 'center',backgroundColor: Color.primary, height: 30,width: 95, borderRadius: 20}}>
-                <Text style={{color: Color.textInput, fontSize: 12}}>+ Undang</Text>
-            </TouchableOpacity>
-        </Row>
-        
-       );
+  useEffect(() => {
+    if (itemData.loadNext && itemData.page !== -1) {
+      fetchGetUserOrganizationRef();
+    }
+  }, [itemData.loadNext]);
+
+  useEffect(() => {
+    const timeout =
+      search !== ''
+        ? setTimeout(() => {
+            fetchSearchNameMember();
+          }, 500)
+        : null;
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [search]);
+  const fetchSearchNameMember = () => {
+    setFilterLoading(true);
+
+    const variables = {name: search};
+
+    Client.query({
+      query: queryGetUserOrganizationRef,
+      variables,
+    })
+      .then(res => {
+        console.log('res search', res);
+
+        const data = res.data.getUserOrganizationRef;
+
+        let newArr = [];
+
+        if (data) {
+          newArr = data;
+        }
+
+        setFilterData(newArr);
+        setFilterLoading(false);
+      })
+      .catch(err => {
+        console.log('err search', err);
+
+        setFilterData([]);
+        setFilterLoading(false);
+      });
+  };
+  const fetchGetUserOrganizationRef = () => {
+    const variables = {
+      page: itemData.page + 1,
+      limit: itemPerPage,
+    };
+    console.log('var', variables);
+
+    Client.query({
+      query: queryGetUserOrganizationRef,
+      variables,
+    })
+      .then(res => {
+        console.log(res, 'res2');
+
+        const data = res.data.getUserOrganizationRef;
+
+        let newArr = [];
+
+        if (data) {
+          newArr = itemData.data.concat(data); // compareData(itemData.data.concat(data));
+        }
+
+        console.log(data.length, 'dapet length');
+
+        setItemData({
+          ...itemData,
+          data: newArr,
+          loading: false,
+          page: data.length > 0 ? itemData.page + 1 : -1,
+          loadNext: false,
+        });
+      })
+      .catch(err => {
+        console.log(err, 'error');
+
+        setItemData({
+          ...itemData,
+          loading: false,
+          page: -1,
+          loadNext: false,
+        });
+      });
+  };
+
+  const onSelected = (index, item) => {
+    setItemData({...itemData, loading: true});
+
+    const idxOf = selected.length > 0 ? selected.indexOf(item) : -1;
+    console.log('indexof', idxOf);
+
+    const newSelected = selected;
+    if (idxOf === -1) {
+      newSelected.push(item);
+    } else {
+      newSelected.splice(idxOf, 1);
+    }
+
+    setSelected(newSelected);
+    setItemData({...itemData, loading: false});
+  };
+
+  const {Color} = useColor();
+
+  const renderItem = ({item, index}) => (
+    <Row
+      style={{
+        marginHorizontal: 15,
+        marginVertical: 12,
+        backgroundColor:
+          selected.indexOf(item) !== -1 ? Color.primary : Color.white,
+        borderRadius: selected.indexOf(item) !== -1 ? 14 : 0,
+        paddingVertical: 5,
+      }}>
+      <Image
+        source={{uri: item.photoProfile}}
+        style={{
+          borderRadius: 25,
+          width: 50,
+          height: 50,
+          backgroundColor: Color.border,
+          borderColor: Color.primary,
+          marginLeft: 5,
+        }}
+      />
+      <Text
+        style={{
+          fontSize: 14,
+          width: '60%',
+          fontWeight: 'bold',
+          marginVertical: 10,
+          marginHorizontal: 5,
+          textAlign: 'left',
+          justifyContent: 'center',
+        }}>
+        {item.firstName} {item.lastName}
+      </Text>
+
+      {selected.indexOf(item) !== -1 ? (
+        <TouchableOpacity
+          onPress={() => onSelected(index, item)}
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: Color.secondary,
+            height: 35,
+            width: 75,
+            borderRadius: 20,
+            marginVertical: 10,
+          }}>
+          <Text style={{color: Color.textInput, fontSize: 12}}>x Batal</Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          onPress={() => onSelected(index, item)}
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: Color.primary,
+            height: 35,
+            width: 75,
+            borderRadius: 20,
+            marginVertical: 10,
+          }}>
+          <Text style={{color: Color.textInput, fontSize: 12}}>+Undang</Text>
+        </TouchableOpacity>
+      )}
+    </Row>
+  );
   return (
     <Scaffold
-            header={
-                <Header
-                    title='Undang Temanmu'
-                />
-            }
-    >
-    <View>
-        <TextInput placeholder='Ayo cari temanmu' style={{fontSize: 12, paddingHorizontal: 28,backgroundColor: Color.border, width: '95%', alignSelf: 'center', borderRadius: 5, height: 40}}>
-
-        </TextInput>
-        <AntDesign name={'search1'} size={13} style={{position: 'absolute', color: Color.secondary, top: 13, left: 17}}/>
-    </View>
-    <Text style={{fontSize: 8, color: Color.secondary, marginVertical: 8, textAlign: 'left', marginHorizontal: 10}}>Anggota yang akan ditambahkan</Text>
-    <View style={{flexDirection: 'row', marginHorizontal: 10}}>
-        
-        <Image source={ImagesPath.avatar1} style={{marginRight: 10}}/>
-        <Image source={ImagesPath.avatar1}/>
-    </View>
-    <Text style={{fontSize: 14, fontWeight: 'bold', textAlign: 'left', marginHorizontal: 10, marginVertical: 10}}>Undang teman kamu</Text>
-    <FlatList
-        data={DATA}
+      fallback={itemData.loading}
+      isLoading={filterLoading}
+      header={<Header title="Undang Temanmu" />}>
+      <View>
+        <TextInput
+          placeholder="Ayo cari temanmu"
+          returnKeyType="done"
+          returnKeyLabel="Done"
+          blurOnSubmit={false}
+          onBlur={() => {}}
+          error={null}
+          onChangeText={text => {
+            setSearch(text);
+          }}
+          style={{
+            fontSize: 12,
+            paddingHorizontal: 28,
+            backgroundColor: Color.border,
+            width: '95%',
+            alignSelf: 'center',
+            borderRadius: 5,
+            height: 40,
+          }}></TextInput>
+        <AntDesign
+          name={'search1'}
+          size={13}
+          style={{
+            position: 'absolute',
+            color: Color.secondary,
+            top: 13,
+            left: 17,
+          }}
+        />
+      </View>
+      <Text
+        style={{
+          fontSize: 8,
+          color: Color.secondary,
+          marginVertical: 8,
+          textAlign: 'left',
+          marginHorizontal: 10,
+        }}>
+        Anggota yang akan ditambahkan
+      </Text>
+      <View style={{flexDirection: 'row', marginHorizontal: 10}}>
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          pagingEnabled={true}>
+          {selected.map(a => {
+            return selected.length > 0 ? (
+              <Image
+                source={{uri: a.photoProfile}}
+                style={{
+                  borderRadius: 25,
+                  width: 50,
+                  height: 50,
+                  backgroundColor: Color.border,
+                  borderColor: Color.primary,
+                  marginLeft: 5,
+                }}
+              />
+            ) : (
+              ''
+            );
+          })}
+        </ScrollView>
+      </View>
+      <Text
+        style={{
+          fontSize: 14,
+          fontWeight: 'bold',
+          textAlign: 'left',
+          marginHorizontal: 10,
+          marginVertical: 10,
+        }}>
+        Undang teman kamu
+      </Text>
+      <FlatList
+        data={search !== '' ? filterData : itemData.data}
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
-    <TouchableOpacity style={{backgroundColor: Color.primary, height: 40, justifyContent: 'center', marginVertical: 12, width: '95%', borderRadius: 20, alignSelf: 'center'}}>
-        <Text style={{fontSize: 12, color: Color.textInput, fontWeight: 'bold'}}>Tambahkan Anggota</Text>
-    </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          backgroundColor: Color.primary,
+          height: 40,
+          justifyContent: 'center',
+          marginVertical: 12,
+          width: '95%',
+          borderRadius: 20,
+          alignSelf: 'center',
+        }}>
+        <Text
+          style={{fontSize: 12, color: Color.textInput, fontWeight: 'bold'}}>
+          Tambahkan Anggota
+        </Text>
+      </TouchableOpacity>
     </Scaffold>
-  )
-}
+  );
+};
 
 export default AddMember

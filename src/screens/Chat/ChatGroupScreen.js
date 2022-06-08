@@ -264,6 +264,7 @@ const ChatGroupScreen = ({ navigation, route }) => {
                       roomName: getTitle(item.member),
                       nameGroup: item['room_detail'].name,
                       imageGroup: item['room_detail'].image,
+                      descriptions : item['room_detail'].description,
                       selected: item.member,
                       targetIds,
                     });
