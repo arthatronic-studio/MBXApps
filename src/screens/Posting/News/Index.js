@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, TextInput, Text, ScrollView} from 'react-native'
+import {View, TextInput, Text, ScrollView, TouchableOpacity} from 'react-native'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useSelector } from 'react-redux';
 import Config from 'react-native-config';
@@ -48,10 +48,10 @@ const NewsScreen = ({navigation, route}) => {
     return (
       <View style={{alignItems: 'center',backgroundColor: Color.primarySoft, width: '100%', height: 60, flexDirection: 'row'}}>
           <AntDesign onPress={() => navigation.goBack()} name={'arrowleft'} size={20} style={{marginHorizontal: 12}}/>
-          <View style={{width: '70%', height: '80%' ,justifyContent: 'center'}}>
-            <TextInput placeholder='Cari berita hari ini . . .' style={{width: '100%',height: '80%',backgroundColor: Color.theme, fontSize: 12, borderRadius: 6, paddingHorizontal: 10}}></TextInput>
+          <TouchableOpacity onPress={() => navigation.navigate('SearchArticle')} style={{width: '70%', height: '80%' ,justifyContent: 'center'}}>
+            <TextInput editable={false} placeholder='Cari berita hari ini . . .' style={{width: '100%',height: '80%',backgroundColor: Color.theme, fontSize: 12, borderRadius: 6, paddingHorizontal: 10}}></TextInput>
             <AntDesign size={14} name={'search1'} style={{position: 'absolute', color: Color.secondary, alignSelf: 'flex-end', right: 10}}/>
-          </View>
+          </TouchableOpacity>
           <IonIcons onPress={()=> navigation.navigate('Saved')} name={'md-bookmarks-outline'} size={18} style={{marginHorizontal: 12}}/>
           <IonIcons 
             onPress={() => navigation.navigate('CreateThreadScreen', {
