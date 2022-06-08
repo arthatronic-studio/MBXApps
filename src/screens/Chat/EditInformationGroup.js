@@ -31,6 +31,8 @@ import ChatGroupScreen from 'src/screens/Chat/ChatGroupScreen';
 
 const AddInformationGroup = ({navigation, route}) => {
   const {params} = route;
+
+  console.log('image', params['params'].imageGroup);
  
 
   const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +47,7 @@ const AddInformationGroup = ({navigation, route}) => {
   const [userData, setUserData] = useState({
     name: params ? params['params'].nameGroup : '',
     description: params ? params['params'].description : '',
-    image: params ? params['params'].image : '',
+    image: params ? params['params'].imageGroup : '',
   });
    const onChangeUserData = (key, val) => {
      setUserData({...userData, [key]: val});
