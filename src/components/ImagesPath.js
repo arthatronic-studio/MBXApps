@@ -240,4 +240,5 @@ export default {
   filedoc: require('../components/Images/FileDoc.png'),
   rrid1: require('../components/Images/rrid/rrid1.png'),
   rrid2: require('../components/Images/rrid/rrid2.png'),
+  articleEmpty: require('../components/Images/ArticleEmpty.png'),
 };

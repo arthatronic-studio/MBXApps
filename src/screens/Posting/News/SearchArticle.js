@@ -51,11 +51,40 @@ const DATA = [
         author: 'Adang Susanyo'
     },
   ];
+
+
+  const PENCARIAN = [
+    {
+      id: '1',
+      title: 'Ikan Iblis Merah, Predator Rakus yang Merusak Ekosistem Dan . . .',
+      image: ImagesPath.productImage,
+      author: 'Adang Susanyo',
+      date: '12 Apr 2021',
+      description : 'Ekosistem di Danau Toba, Sumatera Utara rusak akibat keberadaan ikan iblis merah atau red . . .'
+    },
+    {
+        id: '2',
+        title: 'Thor 4 Trailer Features One of the Most Comic Book',
+        image: ImagesPath.productImage,
+        author: 'Adang Susanyo',
+        date: '12 Apr 2021',
+        description : 'Ekosistem di Danau Toba, Sumatera Utara rusak akibat keberadaan ikan iblis merah atau red . . .'
+      },
+      {
+        id: '3',
+        title: 'Thor 4 Trailer Features One of the Most Comic Book',
+        image: ImagesPath.productImage,
+        author: 'Adang Susanyo',
+        date: '12 Apr 2021',
+        description : 'Ekosistem di Danau Toba, Sumatera Utara rusak akibat keberadaan ikan iblis merah atau red . . .'
+      },
+  ];
   
 const SearchArticle = ({navigation}) => {
     const {Color} = useColor();
-    const [pencarian, setPencarian] = useState(true)
-    const [rekomendasi, setRekomendasi] = useState(true)
+    const [pencarian, setPencarian] = useState(false)
+    const [rekomendasi, setRekomendasi] = useState(false)
+    const [searchArticle, setSearchArticle] = useState(true)
 
     const renderItem = ({ item }) => (
         <Pressable style={{flexDirection: 'row', alignItems: 'center',backgroundColor: Color.theme, width: '100%', height: 45}}>
@@ -73,11 +102,30 @@ const SearchArticle = ({navigation}) => {
             </View>
             <View style={{width: '82%', paddingHorizontal: 10}}>
                 <Text style={{fontSize: 12, fontWeight: 'bold', width:'80%'}}>{item.title}</Text>
-                <Text style={{fontSize: 8, marginVertical: 3}}>Adang Susanyo</Text>
+                <Text style={{fontSize: 8, marginVertical: 3}}>{item.author}</Text>
             </View>
             <View style={{width: '17%'}}>
                 <Feather name={'arrow-up-right'} color={Color.primary} size={16}/>
             </View>
+        </Pressable>
+      );
+
+      const renderSearch = ({ item }) => (
+        <Pressable style={{ borderBottomWidth: 1, borderBottomColor: Color.border,paddingVertical: 10,alignItems: 'center',backgroundColor: Color.theme, width: '100%',}}>
+            <View style={{flexDirection: 'row', paddingHorizontal: 10}}>
+                <View style={{width: '13%'}}>
+                    <Image source={item.image} style={{width: 50, height: 50, borderRadius: 5}}/>
+                </View>
+                <View style={{width: '87%', paddingHorizontal: 10}}>
+                    <Text numberOfLines={2} style={{fontSize: 12, fontWeight: 'bold', width:'95%'}}>{item.title}</Text>
+                    <Text numberOfLines={2} style={{fontSize: 8, marginVertical: 3}}>{item.description}</Text>
+                </View>
+            </View>
+            <View style={{flexDirection: 'row', paddingHorizontal: 10, marginTop: 10}}>
+                <Text style={{fontSize: 8, width: '76%',color: Color.secondary}}>{item.author} | {item.date}</Text>
+                <Text style={{fontSize: 8, color: Color.primary, width: '24%'}}>Baca Selengkapnya</Text>
+            </View>
+
         </Pressable>
       );
 
@@ -92,6 +140,8 @@ const SearchArticle = ({navigation}) => {
                 <AntDesign size={14} name={'search1'} style={{position: 'absolute', color: Color.secondary, alignSelf: 'flex-end', right: 22}}/>
             </TouchableOpacity>
         </View>
+
+        {/* Pencarian Terakhir */}
         {pencarian == true ?
             <View style={{backgroundColor: Color.theme, paddingHorizontal: 10}}>
                 <Text style={{fontSize: 12, fontWeight: 'bold', color: Color.secondary, marginVertical: 5}}>Pencarian Terakhir</Text>
@@ -103,6 +153,8 @@ const SearchArticle = ({navigation}) => {
             </View>
         :
         null}
+
+        {/* Artikel Rekomendasi */}
         {rekomendasi == true ?
             <View style={{backgroundColor: Color.theme, paddingVertical: 15,}}>
                 <Text style={{paddingHorizontal: 12, paddingBottom: 5,fontSize: 12, fontWeight: 'bold', color: Color.secondary}}>Rekomendasi Artikel</Text>
@@ -115,7 +167,35 @@ const SearchArticle = ({navigation}) => {
         :
         null}
 
-        
+        {/* Search Artikel */}
+        {searchArticle == true ?
+            <View style={{backgroundColor: Color.theme, paddingVertical: 15,}}>
+                <View style={{flexDirection: 'row'}}>
+                   <View style={{width: '75%'}}>
+                        <Text style={{paddingHorizontal: 12, paddingBottom: 2,fontSize: 12}}>Ikan</Text>
+                        <Text style={{paddingHorizontal: 12, fontSize: 6, color: Color.secondary, marginBottom: 10}}>3 hasil pencarian ditemukan</Text>
+                   </View>
+                   <TouchableOpacity style={{flexDirection: 'row',alignItems: 'center', justifyContent: 'center',borderWidth: 1, borderColor: Color.text, width: 90, borderRadius: 30, height: 30}}>
+                       <Text style={{fontSize: 10, marginHorizontal: 8}}>Terbaru</Text>
+                       <MaterialIcons name={'keyboard-arrow-down'} size={16}/>
+                   </TouchableOpacity>
+                </View>
+                <View style={{width: '100%', height: 1, backgroundColor: Color.border}}/>
+                <FlatList
+                    data={PENCARIAN}
+                    renderItem={renderSearch}
+                    keyExtractor={item => item.id}
+                />
+            </View>
+        :
+        <View style={{alignItems: 'center', justifyContent: 'center', height: '100%'}}>
+            <Image source={ImagesPath.articleEmpty}/>
+            <Text style={{marginVertical: 15,fontWeight: 'bold', color: Color.secondary}}>Pencarian tidak ditemukan</Text>
+            <TouchableOpacity style={{alignItems: 'center', justifyContent: 'center',backgroundColor: Color.primary,height: 35, width: '40%', borderRadius: 30}}>
+                <Text style={{fontSize: 12, color: Color.textInput}}>Kembali</Text>
+            </TouchableOpacity>
+        </View>
+        }
     </View>
   )
 }
