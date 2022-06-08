@@ -82,8 +82,13 @@ const ChatRoomsScreen = ({ navigation, route }) => {
     const [popupProps, showPopup] = usePopup();
 
     useEffect(() => {
-        currentSocket.on('chat_rooms', (res) => {
-          console.log('chat_rooms', res);
+        currentSocket.on('chat_rooms', (respone) => {
+          
+           var res = respone.filter(function (el) {
+             return el['room_detail'].type === 'PERSONAL';
+           });
+           console.log('respon', res);
+
           if (Array.isArray(res)) {
             setDataRooms({
                 ...dataRooms,

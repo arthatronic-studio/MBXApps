@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   FlatList,
@@ -9,33 +9,32 @@ import {
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Moment from 'moment';
-import { useSelector } from 'react-redux';
-import { useIsFocused } from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import Text from '@src/components/Text';
-import { useColor } from '@src/components/Color';
-import Feather from 'react-native-vector-icons/Feather'
-import { usePopup } from '@src/components';
+import {useColor} from '@src/components/Color';
+import Feather from 'react-native-vector-icons/Feather';
+import {usePopup} from '@src/components';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
-import Entypo from 'react-native-vector-icons/Entypo'
+import Entypo from 'react-native-vector-icons/Entypo';
 import ImagesPath from 'src/components/ImagesPath';
-import { Header, Scaffold, Alert } from 'src/components';
+import {Header, Scaffold, Alert} from 'src/components';
 import {Divider} from 'src/styled';
 import {launchImageLibrary} from 'react-native-image-picker';
-import { currentSocket } from '@src/screens/MainHome/MainHome';
+import {currentSocket} from '@src/screens/MainHome/MainHome';
 import Client from '@src/lib/apollo';
-import {
-    Row,
-    Col,
-  } from '@src/components';
-import { ScrollView } from 'react-native-gesture-handler';
-import { queryContentChatRoomManage } from 'src/lib/query';
+import {Row, Col} from '@src/components';
+import {ScrollView} from 'react-native-gesture-handler';
+import {queryContentChatRoomManage} from 'src/lib/query';
 import ChatGroupScreen from 'src/screens/Chat/ChatGroupScreen';
 
-const AddInformationGroup = ({ navigation, route }) => {
-    const { params } = route;
-    console.log('params',params.selected);
-    
+const AddInformationGroup = ({navigation, route}) => {
+  const {params} = route;
+
+  console.log('image', params['params'].imageGroup);
+ 
+
   const [isLoading, setIsLoading] = useState(false);
   const {Color} = useColor();
   const [selected, setSelected] = useState(params.selected);
@@ -44,51 +43,57 @@ const AddInformationGroup = ({ navigation, route }) => {
   const [popupProps, showPopup] = usePopup();
   const Tab = createMaterialTopTabNavigator();
   const user = useSelector(state => state['user.auth'].login.user);
+
+  const [userData, setUserData] = useState({
+    name: params ? params['params'].nameGroup : '',
+    description: params ? params['params'].description : '',
+    image: params ? params['params'].imageGroup : '',
+  });
+   const onChangeUserData = (key, val) => {
+     setUserData({...userData, [key]: val});
+   };
   //Image
   const [thumbImage, setThumbImage] = useState('');
   const [mimeImage, setMimeImage] = useState('image/jpeg');
-    const { height } = useWindowDimensions();
-    const [titleCounter, setTitleCounter] = useState(0);
-  const onSubmit = selected => {
-    if (nameGroup === '') {
-      showPopup('Nama group tidak boleh kosong', 'warning');
-      return;
-    } else if (thumbImage === '') {
-        showPopup('Gambar tidak boleh kosong', 'warning');
-        return;
-    } 
-    
-    saveGroup(selected);
-  };
-    const saveGroup = selected => {
-      selected.push(user.userId);
-      setIsLoading(true);
+  const {height} = useWindowDimensions();
+  const [titleCounter, setTitleCounter] = useState(0);
+  // const onSubmit = selected => {
+  //   if (nameGroup === '') {
+  //     showPopup('Nama group tidak boleh kosong', 'warning');
+  //     return;
+  //   } else if (thumbImage === '') {
+  //     showPopup('Gambar tidak boleh kosong', 'warning');
+  //     return;
+  //   }
+
+  //   saveGroup(selected);
+  // };
+  const saveGroup = () => {
+    // selected.push(user.userId);
+    setIsLoading(true);
     const variables = {
-      method: 'INSERT',
-      name: nameGroup,
-      description: groupDeskripsi,
-      image: thumbImage === '' ? '' : 'data:image/png;base64,' + thumbImage,
+      method: 'UPDATE',
+      roomId: parseInt(params['params'].roomId),
+      name: userData.name,
+      description: userData.description,
+      image: thumbImage === '' ?  'data:image/png;base64,' + userData.image : 'data:image/png;base64,' + thumbImage,
       type: 'GROUP',
-      userId: selected,
     };
-    console.log('variables', variables);
+    console.log('variables', thumbImage);
     Client.query({
       query: queryContentChatRoomManage,
       variables,
     })
-        .then(res => {
-           
-          console.log('succes group', res);
-                setIsLoading(false);
-          showPopup('Group berhasil dibuat!', 'success');
-         
-          navigation.navigate('Chat');
-           
-     
+      .then(res => {
+        console.log('succes group', res);
+        setIsLoading(false);
+        showPopup('Group berhasil dibuat!', 'success');
+
+        navigation.navigate('Chat');
       })
       .catch(err => {
         console.log('gagal group', err);
-           setIsLoading(false);
+        setIsLoading(false);
         showPopup('Group gagal dibuat!, silakan coba lagi', 'error');
       });
   };
@@ -190,11 +195,8 @@ const AddInformationGroup = ({ navigation, route }) => {
           <TextInput
             placeholder="Masukkan Nama Grup"
             name="groupName"
-            value={nameGroup}
-            onChangeText={groupName => {
-              setNameGroup(groupName);
-              setTitleCounter(groupName.length);
-            }}
+            value={userData.name}
+            onChangeText={text => onChangeUserData('name', text)}
             maxLength={24}
             style={{
               borderWidth: 1,
@@ -232,12 +234,8 @@ const AddInformationGroup = ({ navigation, route }) => {
           <TextInput
             placeholder="Tuliskan sesuatu tentang Group"
             name="groupDeskripsi"
-            value={groupDeskripsi}
-            onChangeText={groupDeskripsi => {
-              setgroupDeskripsi(groupDeskripsi);
-              
-            }}
-            
+            value={userData.description}
+            onChangeText={text => onChangeUserData('description', text)}
             style={{
               borderWidth: 1,
               borderColor: Color.border,
@@ -253,7 +251,7 @@ const AddInformationGroup = ({ navigation, route }) => {
       </ScrollView>
 
       <TouchableOpacity
-        onPress={() => onSubmit(selected)}
+        onPress={() => saveGroup()}
         style={{
           marginVertical: 10,
           backgroundColor: Color.secondary,
@@ -270,4 +268,4 @@ const AddInformationGroup = ({ navigation, route }) => {
   );
 };
 
-export default AddInformationGroup
+export default AddInformationGroup;
