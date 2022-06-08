@@ -134,6 +134,7 @@ const TransactionDetailSeller = ({route, navigation}) => {
       isMerchant: true
     };
 
+    console.log(variables, route.params.item)
     Client.query({query: queryDetailOrder, variables})
       .then(res => {
         console.log('res get detail order', res);

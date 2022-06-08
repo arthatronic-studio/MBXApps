@@ -155,7 +155,7 @@ const JoinLelang = ({navigation, route}) => {
     <View
       style={{width: '10%', aspectRatio: 1}}
     >
-      <Image source={item.photoFilename ? { uri: item.photoFilename } : ImagesPath.avatar1} style={{backgroundColor: Color.secondary, width: '100%', height: '100%'}}/>
+      <Image source={item.user.photoProfile ? { uri: item.user.photoProfile } : ImagesPath.avatar1} style={{backgroundColor: Color.secondary, width: '100%', height: '100%'}}/>
     </View>
 
     <Col style={{paddingHorizontal: 10,}}>
@@ -300,7 +300,7 @@ const JoinLelang = ({navigation, route}) => {
         keyExtractor={item => item.id}
       />
 
-      {isOnGoing && <ButtonView>
+      {isOnGoing && item.bidNominal.length > 0 && <ButtonView>
         <Text size={12}>
           Pasang Tawaran
         </Text>

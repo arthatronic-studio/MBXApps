@@ -29,7 +29,8 @@ import {navigationRef} from 'App';
 const CardOrder = ({data}) => {
   const navigation = useNavigation();
   const {Color} = useColor();
-  const items =  [];
+  const items =  (data.items && data.items.length > 0) ? data.items[0].products : [];
+  console.log(items, 'itermss')
   return (
     <View
       style={{
