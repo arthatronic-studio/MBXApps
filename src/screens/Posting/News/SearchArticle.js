@@ -169,7 +169,7 @@ const SearchArticle = ({navigation}) => {
 
         {/* Search Artikel */}
         {searchArticle == true ?
-            <View style={{backgroundColor: Color.theme, paddingVertical: 15,}}>
+            <View style={{backgroundColor: Color.theme, paddingTop: 15,}}>
                 <View style={{flexDirection: 'row'}}>
                    <View style={{width: '75%'}}>
                         <Text style={{paddingHorizontal: 12, paddingBottom: 2,fontSize: 12}}>Ikan</Text>

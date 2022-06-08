@@ -12,10 +12,10 @@ const Saved = ({navigation, route}) => {
 		header={<Header customIcon title="Artikel Tersimpan" type="regular" centerTitle={false} />}
 		onPressLeftButton={() => navigation.pop()}
 	>
-        <ListContentProduct
-          productCategory='POSTING'
-          name='Artikel'
-        />
+          <ListContentProduct
+            productCategory='POSTING'
+            name='Artikel'
+          />
     </Scaffold>
   )
 }

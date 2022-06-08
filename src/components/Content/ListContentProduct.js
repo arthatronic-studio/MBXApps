@@ -29,7 +29,6 @@ const defaultProps = {
 
 const ListContentProduct = ({ userProfileId, productCategory, name, horizontal, style, onLoadingEnd, }) => {
     const { width } = useWindowDimensions();
-
     const [itemData, setItemData] = useState(initialItemState);
 
     useEffect(() => {

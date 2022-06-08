@@ -13,6 +13,7 @@ import ListContentProduct from 'src/components/Content/ListContentProduct';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import IonIcons from 'react-native-vector-icons/Ionicons'
 import client from 'src/lib/apollo';
+import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
 
 const NewsScreen = ({navigation, route}) => {
 
@@ -74,7 +75,7 @@ const NewsScreen = ({navigation, route}) => {
   let canGeneratedContent = accessClient.UserGeneratedContent === 'ALL_USER';
   if (accessClient.UserGeneratedContent === 'ONLY_ADMIN' && user && user.isDirector === 1) canGeneratedContent = true;
   else if (accessClient.UserGeneratedContent === 'ONLY_MEMBER' && user && user.organizationId) canGeneratedContent = true;
-
+  const [refreshing, setRefreshing] = useState(false);
   return (
     <Scaffold
       header={
@@ -116,16 +117,28 @@ const NewsScreen = ({navigation, route}) => {
             showHeader={false}
             loading={loadingBanner}
           />
-        <Row style={{marginTop: 10}}>
-          <Text style={{fontWeight:'bold', marginHorizontal: 15, width: '68%'}}>Artikel Terbaru</Text>
-          <Text style={{fontSize: 11, color: Color.info, fontWeight: 'bold'}}>Lihat Semua</Text>
-          <AntDesign name={"arrowright"} style={{color: Color.info, marginHorizontal: 5}}/>
-        </Row>
-        <ListContentProduct
-          userProfileId={userProfileId}
-          productCategory='POSTING'
-          name='Artikel'
-        />
+          <Divider height={15}/>
+        <HighlightContentProduct
+            productCategory='POSTING'
+            name='Artikel'
+            title='Artikel Terbaru'
+            nav='NewsScreen'
+            refresh={refreshing}
+          />
+          <HighlightContentProduct
+            productCategory='POSTING'
+            name='Artikel'
+            title='Artikel Terfavorit'
+            nav='NewsScreen'
+            refresh={refreshing}
+          />
+          <HighlightContentProduct
+            productCategory='POSTING'
+            name='Artikel'
+            title='Semua Artikel'
+            nav='NewsScreen'
+            refresh={refreshing}
+          />
         </ScrollView>
     </Scaffold>
   );
