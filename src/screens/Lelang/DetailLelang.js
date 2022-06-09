@@ -213,7 +213,7 @@ const DetailLelang = ({ navigation, route }) => {
             <Divider height={1} />
             <Text size={18} type="bold" align="left">
               {product
-                ? FormatMoney.getFormattedMoney(product.buyNowPrice)
+                ? FormatMoney.getFormattedMoney(product.latestPrice,'') + ' Poin'
                 : 'Loading'}
             </Text>
           </View>
@@ -224,7 +224,7 @@ const DetailLelang = ({ navigation, route }) => {
             <Divider height={1} />
             <Text size={14} align="left">
               {product
-                ? FormatMoney.getFormattedMoney(product.startPrice)
+                ? FormatMoney.getFormattedMoney(product.startPrice,'') + ' Poin'
                 : 'Loading'}
             </Text>
           </View>

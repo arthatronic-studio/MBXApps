@@ -100,6 +100,7 @@ query(
    quantity
    description
    startPrice
+   latestPrice
    buyNowPrice
    isOpen
    status
@@ -196,50 +197,47 @@ mutation(
 `;
 
 export const queryGetDetailAuction = gql`
-query(
-   $auctionProductId : Int
- ) {
-    auctionProductDetail(
-      auctionProductId : $auctionProductId
-  ) {
-   id
-   productId
-   dateStart
-   dateEnd
-   quantity
-   description
-   startPrice
-   buyNowPrice
-   isOpen
-   status
-   duration
-   auctionStatus
-   bidNominal
-   product {
-     id
-     name
-     categoryId
-     categoryFreeText
-     description
-     price
-     initialPrice
-     imageUrl
-     imageProducts
-     stock
-     height
-     width
-     length
-     weight
-     merchantId
-     productUnit
-     minimumBuy
-     productMassa
-     status
-     rating
-     sold
-   }
+  query ($auctionProductId: Int) {
+    auctionProductDetail(auctionProductId: $auctionProductId) {
+      id
+      productId
+      dateStart
+      dateEnd
+      quantity
+      description
+      startPrice
+      latestPrice
+      buyNowPrice
+      isOpen
+      status
+      duration
+      auctionStatus
+      bidNominal
+      product {
+        id
+        name
+        categoryId
+        categoryFreeText
+        description
+        price
+        initialPrice
+        imageUrl
+        imageProducts
+        stock
+        height
+        width
+        length
+        weight
+        merchantId
+        productUnit
+        minimumBuy
+        productMassa
+        status
+        rating
+        sold
+      }
+    }
   }
- }
 `;
 
 export const mutationDeleteAuction = gql`
