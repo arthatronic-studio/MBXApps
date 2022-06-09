@@ -70,19 +70,31 @@ const AddInformationGroup = ({navigation, route}) => {
   // };
   const saveGroup = () => {
     // selected.push(user.userId);
+    setThumbImage(userData.image);
     setIsLoading(true);
-    const variables = {
-      method: 'UPDATE',
-      roomId: parseInt(params['params'].roomId),
-      name: userData.name,
-      description: userData.description,
-      image: thumbImage === '' ?  'data:image/png;base64,' + userData.image : 'data:image/png;base64,' + thumbImage,
-      type: 'GROUP',
-    };
-    console.log('variables', thumbImage);
+    const variables =
+      thumbImage === ''
+        ? {
+            method: 'UPDATE',
+            roomId: parseInt(params['params'].roomId),
+            name: userData.name,
+            description: userData.description,
+            type: 'GROUP',
+          }
+        : {
+            method: 'UPDATE',
+            roomId: parseInt(params['params'].roomId),
+            name: userData.name,
+            image: 'data:image/png;base64,' + thumbImage,
+            description: userData.description,
+            type: 'GROUP',
+          };
+    
+    console.log('variables', variables);
+
     Client.query({
       query: queryContentChatRoomManage,
-      variables,
+       variables,
     })
       .then(res => {
         console.log('succes group', res);
@@ -104,18 +116,7 @@ const AddInformationGroup = ({navigation, route}) => {
       header={<Header title="Buat Grup" />}
       popupProps={popupProps}>
       <ScrollView>
-        <Row style={{marginHorizontal: 15, marginVertical: 15}}>
-          <Image source={ImagesPath.secondChat} />
-          <Col style={{marginHorizontal: 10, paddingVertical: 5}}>
-            <Text style={{fontSize: 14, fontWeight: 'bold', textAlign: 'left'}}>
-              Tambahkan Informasi
-            </Text>
-            <Text
-              style={{fontSize: 10, textAlign: 'left', color: Color.secondary}}>
-              Tambahkan foto profile dan nama grup
-            </Text>
-          </Col>
-        </Row>
+       
         <View>
           {thumbImage !== '' ? (
             <View
