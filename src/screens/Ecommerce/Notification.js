@@ -43,7 +43,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
 import moment from 'moment';
 import Ecommerce from '../Ecommerce/Ecommerce';
-import {mutationCancel, queryListOrder} from 'src/lib/query/ecommerce';
+import {mutationCancel, queryListOrder, queryNewListOrder} from 'src/lib/query/ecommerce';
 import {FormatMoney} from 'src/utils';
 
 const itemPerPage = 20;
@@ -66,18 +66,17 @@ const Notification = () => {
     showLoading()
     console.log(user);
     let variables = {
-      page: page,
-      itemPerPage,
       status: undefined,
+      merchantId: undefined,
       userId: user.userId,
     };
     console.log(variables);
-    Client.query({query: queryListOrder, variables})
+    Client.query({query: queryNewListOrder, variables})
       .then(res => {
         hideLoading()
         console.log(res);
-        if (res.data.ecommerceOrderList.length > 0) {
-          setList(listData.concat(res.data.ecommerceOrderList));
+        if (res.data.allOrderList.length > 0) {
+          setList(listData.concat(res.data.allOrderList));
           setPage(page+1)
           // getCancelOrder()
         }

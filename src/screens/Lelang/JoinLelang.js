@@ -155,7 +155,7 @@ const JoinLelang = ({navigation, route}) => {
     <View
       style={{width: '10%', aspectRatio: 1}}
     >
-      <Image source={item.photoFilename ? { uri: item.photoFilename } : ImagesPath.avatar1} style={{backgroundColor: Color.secondary, width: '100%', height: '100%'}}/>
+      <Image source={item.user.photoProfile ? { uri: item.user.photoProfile } : ImagesPath.avatar1} style={{backgroundColor: Color.secondary, width: '100%', height: '100%'}}/>
     </View>
 
     <Col style={{paddingHorizontal: 10,}}>
@@ -300,7 +300,7 @@ const JoinLelang = ({navigation, route}) => {
         keyExtractor={item => item.id}
       />
 
-      {isOnGoing && <ButtonView>
+      {isOnGoing && item.bidNominal.length > 0 && <ButtonView>
         <Text size={12}>
           Pasang Tawaran
         </Text>
@@ -313,27 +313,30 @@ const JoinLelang = ({navigation, route}) => {
             alignItems: 'center'
           }}
         >
-          <EnterButton
-            onPress={() => {
-              Alert(
-                'Tawar',
-                `Pasang penawaran untuk harga ${FormatMoney.getFormattedMoney(highestBid + 5000)} ?`,
-                () => onSubmitAuctionBid(highestBid + 5000)
-              );
-            }}
-            style={{
-              flex: 3,
-              backgroundColor: Color.grayLight,
-            }}
-          >
-            <Text>
-              + {FormatMoney.getFormattedMoney(5000)}
-            </Text>
-          </EnterButton>
+          {item.bidNominal.map((val, id) => (
+               <>
+                {id < 2 &&<EnterButton
+                  onPress={() => {
+                    Alert(
+                      'Tawar',
+                      `Pasang penawaran untuk harga ${FormatMoney.getFormattedMoney(highestBid + val)} ?`,
+                      () => onSubmitAuctionBid(highestBid + val)
+                    );
+                  }}
+                  style={{
+                    flex: 3,
+                    marginRight: 6,
+                    backgroundColor: Color.grayLight,
+                  }}
+                >
+                  <Text>
+                    + {FormatMoney.getFormattedMoney(val)}
+                  </Text>
+                </EnterButton>}
+              </>
+          ))}
 
-          <Divider width={8} />
-
-          <EnterButton
+          {/* <EnterButton
             onPress={() => {
               Alert(
                 'Tawar',
@@ -351,7 +354,7 @@ const JoinLelang = ({navigation, route}) => {
             </Text>
           </EnterButton>
 
-          <Divider width={8} />
+          <Divider width={8} /> */}
 
           <TouchableOpacity
             style={{
