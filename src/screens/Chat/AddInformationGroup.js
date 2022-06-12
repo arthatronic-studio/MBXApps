@@ -20,7 +20,7 @@ import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Entypo from 'react-native-vector-icons/Entypo'
 import ImagesPath from 'src/components/ImagesPath';
 import { Header, Scaffold, Alert } from 'src/components';
-import {Divider} from 'src/styled';
+import {Container, Divider} from 'src/styled';
 import {launchImageLibrary} from 'react-native-image-picker';
 import { currentSocket } from '@src/screens/MainHome/MainHome';
 import Client from '@src/lib/apollo';
@@ -47,8 +47,10 @@ const AddInformationGroup = ({ navigation, route }) => {
   //Image
   const [thumbImage, setThumbImage] = useState('');
   const [mimeImage, setMimeImage] = useState('image/jpeg');
-    const { height } = useWindowDimensions();
-    const [titleCounter, setTitleCounter] = useState(0);
+  const [titleCounter, setTitleCounter] = useState(0);
+
+  const { height } = useWindowDimensions();
+
   const onSubmit = selected => {
     if (nameGroup === '') {
       showPopup('Nama group tidak boleh kosong', 'warning');
@@ -176,19 +178,20 @@ const AddInformationGroup = ({ navigation, route }) => {
             </TouchableOpacity>
           </View>
         </View>
+
         <View>
-          <Text
-            style={{
-              marginTop: 5,
-              left: 25,
-              fontSize: 6,
-              color: Color.secondary,
-              position: 'absolute',
-            }}>
-            Nama Group
-          </Text>
+          <Container paddingHorizontal={16} marginVertical={4}>
+            <Text
+              style={{
+                fontSize: 10,
+                color: Color.text,
+              }}>
+              Nama Group
+            </Text>
+          </Container>
           <TextInput
             placeholder="Masukkan Nama Grup"
+            placeholderTextColor={Color.placeholder}
             name="groupName"
             value={nameGroup}
             onChangeText={groupName => {
@@ -206,6 +209,8 @@ const AddInformationGroup = ({ navigation, route }) => {
               fontSize: 12,
               paddingHorizontal: 15,
               paddingTop: 17,
+              color: Color.text,
+              backgroundColor: Color.textInput,
             }}></TextInput>
           <Text
             style={{
@@ -218,19 +223,19 @@ const AddInformationGroup = ({ navigation, route }) => {
             {titleCounter}/24
           </Text>
         </View>
-        <View style={{marginVertical: 15}}>
-          <Text
-            style={{
-              marginTop: 5,
-              left: 25,
-              fontSize: 6,
-              color: Color.secondary,
-              position: 'absolute',
-            }}>
-            Deskripsi Group
-          </Text>
+        <View style={{}}>
+          <Container paddingHorizontal={16} marginVertical={4}>
+            <Text
+              style={{
+                fontSize: 10,
+                color: Color.text,
+              }}>
+              Deskripsi Group
+            </Text>
+          </Container>
           <TextInput
             placeholder="Tuliskan sesuatu tentang Group"
+            placeholderTextColor={Color.placeholder}
             name="groupDeskripsi"
             value={groupDeskripsi}
             onChangeText={groupDeskripsi => {
@@ -248,6 +253,8 @@ const AddInformationGroup = ({ navigation, route }) => {
               fontSize: 12,
               paddingHorizontal: 15,
               paddingTop: 17,
+              color: Color.text,
+              backgroundColor: Color.textInput,
             }}></TextInput>
         </View>
       </ScrollView>

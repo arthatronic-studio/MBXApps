@@ -57,6 +57,7 @@ import MusikAlbum from 'src/components/MusikAlbum';
 import HighlightLelang from 'src/components/Card/HighlightLelang';
 import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
 import ModalMenuHome from 'src/components/Modal/ModalMenuHome';
+import PushNotification, { Importance } from 'react-native-push-notification';
 
 let tempShowPopupAds = true;
 
@@ -105,6 +106,21 @@ const MainHome = ({navigation, route}) => {
   };
 
   useEffect(() => {
+    PushNotification.createChannel(
+      {
+        channelId: "helpme-id", // (required)
+        channelName: "Help Me", // (required)
+        channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
+        playSound: true, // (optional) default: true
+        soundName: "warning_alarm.mp3", // (optional) See `soundName` parameter of `localNotification` function
+        importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+        vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
+      },
+      (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+    );
+  }, []);
+
+  useEffect(() => {
     const timeout = thisTrack
       ? setTimeout(() => {
           // console.log('thisTrack', thisTrack);
@@ -150,13 +166,13 @@ const MainHome = ({navigation, route}) => {
       }
     });
 
+    currentSocket.on('location-tracker-user', res => {
+      console.log('res location-tracker-user', res);
+    });
+
     const successCallback = (res) => {
       const ltu = { userId: user.userId, lat: res.coords.latitude, long: res.coords.longitude };
       currentSocket.emit('location-tracker-user', ltu );
-
-      currentSocket.on('location-tracker-user', res => {
-        console.log('res location-tracker-user', res);
-      });
     };
 
     const errorCallback = err => {
@@ -355,7 +371,7 @@ const MainHome = ({navigation, route}) => {
 
                       navigation.navigate('CreateEmergencyScreen', { 
                           routeIndex: 1, 
-                          title: 'Emergency Area',
+                          title: 'Help Me',
                           productType: Config.PRODUCT_TYPE,
                           productCategory: '',
                           productSubCategory: 'EMERGENCY', 
