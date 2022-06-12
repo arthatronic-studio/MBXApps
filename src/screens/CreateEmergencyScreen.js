@@ -25,7 +25,6 @@ import { queryProductManage } from '@src/lib/query';
 import { Box, Divider } from 'src/styled';
 import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
 import { accessClient } from 'src/utils/access_client';
-import { currentSocket } from '@src/screens/MainHome/MainHome';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -80,7 +79,6 @@ const CreateEmergencyScreen = (props) => {
         type: params.productType,
         category: params.productSubCategory,
         description: '',
-        priority: 'High',
         // createdDate: Moment().format('DD-MM-YYYY'),
         latitude: '',
         longitude: '',
@@ -93,7 +91,7 @@ const CreateEmergencyScreen = (props) => {
     const [thumbImage, setThumbImage] = useState('');
     const [mimeImage, setMimeImage] = useState('image/jpeg');
     const [selectedPriority, setSelectedPriority] = useState({
-        id: 3, value: 'High'
+        id: 3, value: 'HIGH', name: 'High',
     });
     const [selectedStatus, setSelectedStatus] = useState({
         label: 'Publik', value: 'PUBLISH', iconName: 'globe'
@@ -189,6 +187,7 @@ const CreateEmergencyScreen = (props) => {
         let variables = {
             products: [{
                 ...userData,
+                priority: selectedPriority.value,
                 image: thumbImage,
             }],
         };
@@ -204,10 +203,8 @@ const CreateEmergencyScreen = (props) => {
 
             const data = res.data.contentProductManage;
 
-            if (data && data.id) {
+            if (Array.isArray(data) && data.length > 0 && data[0]['id']) {
                 showLoading('success', 'Emergency berhasil dibuat');
-
-                currentSocket.emit('helpme', { productId: data.id });
 
                 setTimeout(() => {
                     // navigation.navigate('ForumSegmentScreen', { ...params, componentType: 'LIST', refresh: true });
@@ -368,7 +365,7 @@ const CreateEmergencyScreen = (props) => {
 
                 <TouchSelect
                     title='Priority'
-                    value={userData.priority}
+                    value={selectedPriority.name}
                     onPress={() => modalSelectPriorityRef.current.open()}
                 />
             </ScrollView>
@@ -410,7 +407,6 @@ const CreateEmergencyScreen = (props) => {
                 ref={modalSelectPriorityRef}
                 selected={selectedPriority}
                 onPress={(e) => {
-                    onChangeUserData('priority', e.value);
                     setSelectedPriority(e);
                     modalSelectPriorityRef.current.close();
                 }}
