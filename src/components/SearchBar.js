@@ -21,18 +21,20 @@ const propTypes = {
     value: PropTypes.string,
     searchbar: PropTypes.string,
     onChangeText: PropTypes.func,
+    textInputProps: PropTypes.object,
 };
 
 const defaultProps = {
     label: 'Cari',
     type: 'component',
     style: {},
-    onPress: () => { },
+    onPress: () => {},
     value: '',
-    onChangeText: () => { },
+    onChangeText: () => {},
+    textInputProps: {},
 };
 
-const SearchBar = ({ type, label, style, onPress, value, onChangeText }) => {
+const SearchBar = ({ type, label, style, onPress, value, onChangeText, textInputProps }) => {
     const [state, set] = useState();
 
     const { Color } = useColor();
@@ -45,11 +47,12 @@ const SearchBar = ({ type, label, style, onPress, value, onChangeText }) => {
 
     return (
         <TouchableOpacity style={{ paddingHorizontal: 16 }}>
-            <View style={{ flexDirection: 'row', paddingHorizontal: 16, minHeight: 45, alignItems: 'center', justifyContent: 'space-between', backgroundColor: Color.border, borderRadius: 4, ...shadowStyle, ...style }}>
+            <View style={{ flexDirection: 'row', paddingHorizontal: 16, minHeight: 45, alignItems: 'center', justifyContent: 'space-between', backgroundColor: Color.textInput, borderRadius: 4, ...shadowStyle, ...style }}>
                 {isInputType ?
                 <>
                     <Octicons name='search' color={Color.text} size={16} />
                     <TextInput
+                        {...textInputProps}
                         placeholder={label}
                         value={value}
                         onChangeText={onChangeText}
@@ -57,6 +60,7 @@ const SearchBar = ({ type, label, style, onPress, value, onChangeText }) => {
                             flex: 1,
                             paddingLeft: 8,
                             color: Color.text,
+                            backgroundColor: Color.textInput,
                         }}
                     />
                     {value !== '' && <Ionicons name='close' color={Color.red} size={18} onPress={() => onChangeText('')} />}

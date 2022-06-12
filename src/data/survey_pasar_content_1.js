@@ -1,5 +1,6 @@
 export default [
     // type = LABEL | TEXT_INPUT | TEXT_AREA | MAP_VIEW | UPLOAD | SELECT_MULTIPLE | TIME_PICKER | AUTOFILL_ADDRESS
+    // khusus type UPLOAD value dibuat multiple dengan validation uploadLimit, uploadMin
     // validation TEXT_INPUT        keyboardType = number-pad (phone number) | email-address | numeric
     // validation UPLOAD            uploadType = all | image | pdf | music
     // validation SELECT_MULTIPLE   selectType = form | tag
@@ -176,7 +177,7 @@ export default [
         id: 8,
         order: 8,
         code: 'block_1_8',
-        label: 'Nama Koordinator Kab/Kota',
+        label: 'Nama Koordinator Kab atau Kota',
         placeholder: 'Masukan nama koordinator',
         hint_label: '',
         type: 'TEXT_INPUT',

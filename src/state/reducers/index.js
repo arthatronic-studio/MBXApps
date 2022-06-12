@@ -5,6 +5,7 @@ import Auth from './user/auth';
 import booking from './booking';
 import theme from './theme';
 import uploadChunkState from './upload/uploadChunkState';
+import surveyPasar from './survey/pasar';
 
 const config = {
   key: 'root',
@@ -16,6 +17,7 @@ const reducer = persistCombineReducers(config, {
   booking,
   theme,
   uploadChunkState,
+  surveyPasar,
 });
 
 export default reducer;

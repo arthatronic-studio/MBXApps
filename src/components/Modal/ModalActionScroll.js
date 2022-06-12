@@ -1,112 +1,156 @@
-import React, { Component } from 'react';
-import { ScrollView, StyleSheet, Text, View, Dimensions } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { ScrollView, View, useWindowDimensions } from 'react-native';
 import Modal from 'react-native-modal';
-import { Line } from 'src/styled';
-import { statusBarHeight } from 'src/utils/constants';
-import Color from 'src/components/Color';
+import { Container, Line } from 'src/styled';
 import { TouchableOpacity } from '../Button';
+import FormInput from '../FormInput';
+import Scaffold from '../Scaffold';
+import Text from '../Text';
+import { useColor } from 'src/components/Color';
 
-const { height, width } = Dimensions.get('window');
+const defaultProps = {
+    visible: false,
+    data: [],
+    extraData: [],
+    onClose: () => {},
+    onPress: () => {},
+    name: '',
+    selected: null,
+};
 
-class ModalActionScroll extends Component {
-    static scrollViewRef;
-    constructor(props) {
-        super(props);
-        this.state = {
-            scrollOffset: null,
-        };
+const codeNameWithId = ['block_2_0'];
 
-        this.scrollViewRef = React.createRef();
+const ModalActionScroll = ({ visible, data: propsData, extraData, onClose, onPress, name, selected, children }) => {
+    const { Color } = useColor();
+    const { height, width } = useWindowDimensions();
+    const scrollViewRef = useRef();
+
+    const [data, setData] = useState([]);
+    const [text, setText] = useState('');
+
+    useEffect(() => {
+        setData(propsData);
+        setText('');
+    }, [propsData]);
+
+    useEffect(() => {
+        const timeout = text !== '' ?
+            setTimeout(() => {
+                onSearch();
+            }, 1000) : null;
+
+        return () => {
+            clearTimeout(timeout);
+        }
+    }, [text]);
+
+    const onSearch = () => {
+        const sourceData = Array.isArray(extraData) && extraData.length > 0 ? extraData : propsData;
+        const search = new RegExp(text , 'i');
+        // let b = a.filter(item => search.test(item.name) || search.test(item.caption));
+        let newData = sourceData.filter(item => search.test(item.name));
+        setData(newData);
     }
 
-    handleOnScroll = event => {
-        this.setState({
-            scrollOffset: event.nativeEvent.contentOffset.y,
-        });
-    };
-
-    handleScrollTo = p => {
-        if (this.scrollViewRef.current) {
-            this.scrollViewRef.current.scrollTo(p);
-        }
-    };
-
-    renderContent() {
-        return this.props.data.map((item, idx) => {
+    const renderContent = () => {
+        return data.map((item, idx) => {
             if (item.show === false) return <View key={idx} />;
       
             return (
               <TouchableOpacity
                 key={idx}
                 onPress={() => {
-                  item.onPress ? item.onPress() : this.props.onPress(item, this.props.name);
+                    if (item.onPress) {
+                        item.onPress();
+                        return;
+                    }
+
+                    if (codeNameWithId.includes(name)) {
+                        const newItem = {
+                            ...item,
+                            name: `${item.id} - ${item.name}`,
+                        };
+                        onPress(newItem, name);
+                    } else {
+                        onPress(item, name);
+                    }
                 }}
                 style={{
                   width: width - 32,
                   paddingVertical: 8,
-                  flexDirection: 'row',
                   alignItems: 'flex-start',
-                  marginTop: 16,
                 }}>
                 <Text
-                  size={12}
                   align="left"
                   color={
                     item.color
                       ? item.color
-                      : this.props.selected && this.props.selected.id === item.id
+                      : selected && selected.id === item.id
                       ? Color.secondary
                       : Color.text
                   }
                 >
-                  {item.name}
+                  {codeNameWithId.includes(name) ? `${item.id} - ` : ''}{item.name}
                 </Text>
+                {item.caption !== '' && item.caption !== null && <Text
+                  size={10}
+                  align="left"
+                  color={
+                    item.color
+                      ? item.color
+                      : selected && selected.id === item.id
+                      ? Color.secondary
+                      : Color.text
+                  }
+                >
+                  {item.caption}
+                </Text>}
               </TouchableOpacity>
             );
-          });
+        });
     }
 
-    render() {
-        return (
-            <Modal
-                testID={'modal'}
-                isVisible={this.props.visible}
-                onSwipeComplete={this.props.onClose}
-                swipeDirection={['down']}
-                scrollTo={this.handleScrollTo}
-                scrollOffset={this.state.scrollOffset}
-                scrollOffsetMax={height * 0.8} // content height - ScrollView height
-                propagateSwipe={true}
-                style={{
-                    justifyContent: 'flex-end',
-                    margin: 0,
-                }}
+    return (
+        <Modal
+            testID={'modal'}
+            isVisible={visible}
+            onSwipeComplete={onClose}
+            swipeDirection={['down']}
+            propagateSwipe={true}
+            style={{
+                justifyContent: 'flex-end',
+                margin: 0,
+            }}
+        >
+            <Scaffold
+                onPressLeftButton={() => onClose()}
             >
-                <View
-                    style={{
-                        height: height * 0.8,
-                        backgroundColor: Color.textInput,
+                <Container paddingHorizontal={16}>
+                    <FormInput
+                        placeholder='Cari'
+                        value={text}
+                        onChangeText={(txt) => {
+                            setText(txt);
+
+                            if (txt === '') {
+                                setData(propsData);
+                            }
+                        }}
+                    />
+                </Container>
+
+                <ScrollView
+                    ref={scrollViewRef}
+                    contentContainerStyle={{
+                        paddingHorizontal: 16,
                     }}
                 >
-                    <View style={{paddingVertical: 16}}>
-                        <Line color={Color.primary} height={4} width={width / 6} radius={2} />
-                    </View>
-
-                    <ScrollView
-                        ref={this.scrollViewRef}
-                        onScroll={this.handleOnScroll}
-                        scrollEventThrottle={16}
-                        contentContainerStyle={{
-                            paddingHorizontal: 16,
-                            paddingBottom: statusBarHeight,
-                        }}
-                    >
-                        {Array.isArray(this.props.data) && this.props.data.length > 0 ? this.renderContent() : this.props.children}
-                    </ScrollView>
-                </View>
-            </Modal>
-        );
-    }
+                    {Array.isArray(data) && data.length > 0 ? renderContent() : children}
+                </ScrollView>
+            </Scaffold>
+        </Modal>
+    );
 }
 
+ModalActionScroll.defaultProps = defaultProps;
 export default ModalActionScroll;
