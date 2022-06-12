@@ -15,7 +15,8 @@ import {
   usePopup,
   Loading,
   useColor,
-  Scaffold
+  Scaffold,
+  Header
 } from '@src/components';
 import {
   Button,
@@ -27,6 +28,7 @@ import { usePreviousState } from '@src/hooks';
 import { Divider } from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { redirectTo } from 'src/utils';
 
 const Container = Styled(View)`
   width: 100%;
@@ -121,10 +123,32 @@ export default ({ navigation, route }) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+    return () => {
+        BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+    }
+  }, []);
+
+  const handleBackPress = () => {
+    if (navigation.canGoBack()) {
+      navigation.pop();
+    }
+    return true;
+  }
+
+  useEffect(() => {
     if (isFocused) {
       if (prevLoading && user && loading === false) {
-        navigation.pop();
         showPopup('Data berhasil diubah', 'success');
+
+        setTimeout(() => {
+          if (navigation.canGoBack()) {
+            navigation.pop();
+          } else {
+            redirectTo('MainPage');
+          }
+        }, 2500);
       } else if (error) {
         // showPopup('Terjadi Kesalaha, silahkan coba kembali', 'error');
         console.log(JSON.stringify(error), 'error');
@@ -159,7 +183,7 @@ export default ({ navigation, route }) => {
       };
 
       console.log('newUserData', newUserData);
-
+      
       dispatch(updateCurrentUserProfile(newUserData));
     }
   }, [allValid]);
@@ -186,13 +210,14 @@ export default ({ navigation, route }) => {
     setErrorData(newErrorState);
     setAllValid(valid);
   }
-
-  console.log(userData, 'ini data');
   
   return (
     <Scaffold
-      headerTitle='Ubah Profil'
       popupProps={popupProps}
+      header={
+        // handle user yg dipaksa update profile
+        <Header title='Ubah Profil' showLeftButton={navigation.canGoBack()} />
+      }
     >
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps='handled'
