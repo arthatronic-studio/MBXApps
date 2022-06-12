@@ -51,17 +51,17 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) want to access your camera</string>
+	<string>$(PRODUCT_NAME) need permission to access your camera, This will be used for you to add photos when posting for Nearby Place (Tempat), Event, HelpMe, Comment features</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) need access the location, that will be use as analytic to get a number of usage in each set of area</string>
+	<string>$(PRODUCT_NAME) need permission to access your location, This will be used to find out your current location for Nearby Place (Tempat), Event, HelpMe features</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>$(PRODUCT_NAME) need access the location, that will be use as analytic to get a number of usage in each set of area</string>
+	<string>$(PRODUCT_NAME) need permission to access your location, This will be used to find out your current location for Nearby Place (Tempat), Event, HelpMe features</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) need access the location, that will be use as analytic to get a number of usage in each set of area</string>
+	<string>$(PRODUCT_NAME) need permission to access your location, This will be used to find out your current location for Nearby Place (Tempat), Event, HelpMe features</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>$(PRODUCT_NAME) want to add to your gallery</string>
+	<string>$(PRODUCT_NAME) need permission to access add to your gallery, This will be used to save your camera capture or download images in the Gallery feature</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(PRODUCT_NAME) want to access your gallery</string>
+	<string>$(PRODUCT_NAME) need permission to access your gallery, This will be used for you to add photos when posting for Nearby Place (Tempt), Event, HelpMe, Comment features</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>$(PRODUCT_NAME) requires your permission to track in order to show you more relevant content.</string>
 	<key>UIAppFonts</key>

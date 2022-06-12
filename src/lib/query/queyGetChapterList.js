@@ -6,7 +6,8 @@ export const queryGetChapterList = gql`
             id
             name
             community_id
-            code      
+            code
+            province_id
         }
     }
 `

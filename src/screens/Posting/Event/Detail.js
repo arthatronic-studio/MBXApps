@@ -51,10 +51,10 @@ const EventDetail = ({navigation, route}) => {
         console.log(res, 'res add like');
         if (res.data.contentAddLike.id) {
           if (res.data.contentAddLike.status === 1) {
-            showLoading('success', 'Akan datang');
+            showLoading('success', 'Akan Hadir');
             set_im_like(true);
           } else {
-            showLoading('info', 'Berhasil membatalkan');
+            showLoading('info', 'Batal menghadiri');
             set_im_like(false);
           }
         }
@@ -385,7 +385,7 @@ const EventDetail = ({navigation, route}) => {
           <Text
             style={{color: Color.textInput, fontSize: 16, fontWeight: 'bold'}}
           >
-            {im_like ? 'Batalkan' : 'Akan Datang'}
+            {im_like ? 'Batal Hadir' : 'Hadir'}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
