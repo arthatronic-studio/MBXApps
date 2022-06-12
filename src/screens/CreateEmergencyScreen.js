@@ -3,9 +3,9 @@ import { View, ScrollView, TextInput, SafeAreaView, Image, Keyboard, BackHandler
 import Styled from 'styled-components';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { launchImageLibrary } from 'react-native-image-picker';
 import DatePicker from 'react-native-date-picker';
 import Moment from 'moment';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {
     Header,
@@ -25,6 +25,7 @@ import { queryProductManage } from '@src/lib/query';
 import { Box, Divider } from 'src/styled';
 import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation';
 import { accessClient } from 'src/utils/access_client';
+import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -96,6 +97,7 @@ const CreateEmergencyScreen = (props) => {
     const [selectedStatus, setSelectedStatus] = useState({
         label: 'Publik', value: 'PUBLISH', iconName: 'globe'
     });
+    const [modalImagePicker, setModalImagePicker] = useState(false);
 
     // ref
     const modalSelectPriorityRef = useRef();
@@ -227,27 +229,14 @@ const CreateEmergencyScreen = (props) => {
                 title={`Buat ${params.title}`}
             />
 
-            <ScrollView>
+            <KeyboardAwareScrollView>
                 <View style={{paddingHorizontal: 16, paddingTop: 16, paddingBottom: 12}}>
                     <LabelInput>
                         <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Gambar</Text>
                     </LabelInput>
                     <TouchableOpacity
                         onPress={() => {
-                            const options = {
-                                mediaType: 'photo',
-                                maxWidth: 640,
-                                maxHeight: 640,
-                                quality: 1,
-                                includeBase64: true,
-                            }
-
-                            launchImageLibrary(options, (callback) => {
-                                if (callback.base64) {
-                                    setThumbImage(callback.base64);
-                                    setMimeImage(callback.type);
-                                }
-                            })
+                            setModalImagePicker(true);
                         }}
                         style={{width: '100%', height: 70, borderRadius: 4, marginTop: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
                     >
@@ -368,7 +357,7 @@ const CreateEmergencyScreen = (props) => {
                     value={selectedPriority.name}
                     onPress={() => modalSelectPriorityRef.current.open()}
                 />
-            </ScrollView>
+            </KeyboardAwareScrollView>
 
             {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}
             <Box
@@ -409,6 +398,21 @@ const CreateEmergencyScreen = (props) => {
                 onPress={(e) => {
                     setSelectedPriority(e);
                     modalSelectPriorityRef.current.close();
+                }}
+            />
+
+            <ModalImagePicker
+                visible={modalImagePicker}
+                onClose={() => {
+                    setModalImagePicker(false);
+                }}
+                onSelected={(callback) => {
+                    if (callback.base64) {
+                        setThumbImage(callback.base64);
+                        setMimeImage(callback.type);
+                    }
+
+                    setModalImagePicker(false);
                 }}
             />
         </MainView>
