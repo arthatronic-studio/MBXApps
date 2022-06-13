@@ -78,7 +78,8 @@ const CardHighlightLelang = ({item, index, color, type}) => {
     return () => clearInterval(interval);
   }, [item]);
 
-  if(timeLeft<=0){
+
+  if(timeLeft<=0 || (type === 'WILLCOME' && isOnGoing) || (type === 'ONGOING' && isWillCome)){
     return(
       <>
       </>
