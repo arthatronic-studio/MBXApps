@@ -14,7 +14,7 @@ export default [
         required: true,
         options: static_pasar_master.slice(0, 300),
         default_value: null,
-        validation: { extraData: static_pasar_master },
+        validation: { extraData: static_pasar_master, promptSubmitIfNull: true },
         multiple: false,
         parent_code: null,
         branching_code: [],

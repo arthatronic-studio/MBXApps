@@ -137,7 +137,7 @@ const FormInput = forwardRef((props, ref) => {
                                     underlineColorAndroid='transparent'
                                     autoCorrect={false}
                                     onChangeText={(val) => onChangeText(val)}
-                                    selectionColor={Color.border}
+                                    selectionColor={Color.placeholder}
                                     value={value}
                                     onBlur={() => onBlur()}
                                     returnKeyType={returnKeyType}

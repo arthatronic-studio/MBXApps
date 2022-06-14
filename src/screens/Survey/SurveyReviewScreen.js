@@ -125,10 +125,16 @@ const SurveyReviewScreen = ({ navigation, route }) => {
             // }
           }
 
+          const prefixText = item.validation && item.validation.prefixText ? `${item.validation.prefixText} ` : '';
+          const suffixText = item.validation && item.validation.suffixText ? ` ${item.validation.suffixText}` : '';
+          if (typeof value === 'string') {
+            value = `${prefixText}${value.trim()}${suffixText}`;
+          }
+
           data.push({
             block: (i + 1).toString(),
             index,
-            name: item.label.replace(/ /g, ''),
+            name: item.name || item.label.replace(/ /g, ''),
             value,
           });
         // }
@@ -234,7 +240,7 @@ const SurveyReviewScreen = ({ navigation, route }) => {
           
           data.append(`data[${indexData}][block]`, (i + 1).toString());
           data.append(`data[${indexData}][index]`, index);
-          data.append(`data[${indexData}][name]`, item.label);
+          data.append(`data[${indexData}][name]`, item.name || item.label);
           data.append(`data[${indexData}][value]`, value);
           data.append(`data[${indexData}][type]`, item.type === 'UPLOAD' ? item.type + '_' + item.validation.uploadType.toUpperCase() : item.type);
         // }
@@ -242,8 +248,6 @@ const SurveyReviewScreen = ({ navigation, route }) => {
     }
 
     console.log(data);
-
-    return;
 
     let config = {
       method: 'post',

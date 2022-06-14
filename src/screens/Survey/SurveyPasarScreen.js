@@ -52,6 +52,8 @@ const SurveyPasarScreen = ({ navigation, route }) => {
     const flatlistRef = useRef();
 
     const [modalBackConfirm, setModalBackConfirm] = useState(false);
+    const [modalSubmitIfNull, setModalSubmitIfNull] = useState(false);
+
     const [currentHeaderIndex, setCurrentHeaderIndex] = useState(storeLastHeaderIndex);
     const [currentContentIndex, setCurrentContentIndex] = useState(-1);
     const [valueContent, setValueContent] = useState([]);
@@ -144,6 +146,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
 
     const onSubmit = () => {
         let errorMessage = '';
+        let promptSubmitIfNull = false;
 
         // validate required form
         if (valueContent.length > 0) {
@@ -154,8 +157,10 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                 
                 // cek status 1 dan required
                 if ([1].includes(e.status) && e.required) {
-                    if (e.type === 'UPLOAD' && e.value.length < uploadMin) {
-
+                    if (e.validation && e.validation.promptSubmitIfNull && !e.value) {
+                        promptSubmitIfNull = true;
+                    }
+                    else if (e.type === 'UPLOAD' && e.value.length < uploadMin) {
                         errorMessage = e.label + ' diisi minimal ' + uploadMin + ' foto';
                         break;
                     }
@@ -171,6 +176,12 @@ const SurveyPasarScreen = ({ navigation, route }) => {
             }
         } else {
             errorMessage = 'Harap tunggu';
+        }
+
+        // kalo gak diisi bisa langsung review/submit
+        if (promptSubmitIfNull) {
+            setModalSubmitIfNull(true);
+            return;
         }
 
         if (errorMessage) {
@@ -791,6 +802,20 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                     setModalBackConfirm(false);
                     onStoreReset();
                     navigation.pop();
+                }}
+            />
+
+            <AlertModal
+                visible={modalSubmitIfNull}
+                showCloseButton
+                title='Konfirmasi'
+                message='ID pasar wajib diisi. Jika ID yang Anda cari tidak ditemukan, Anda bisa langsung me-review survey untuk dikirim. Review Survey Sekarang?'
+                onSubmit={() => {
+                    setModalSubmitIfNull(false);
+                    navigation.navigate('SurveyReviewScreen', { listHeader: survey_pasar_header, valueContent: valueContent });
+                }}
+                onClose={() => {
+                    setModalSubmitIfNull(false);
                 }}
             />
         </Scaffold>

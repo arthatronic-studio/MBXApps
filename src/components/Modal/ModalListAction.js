@@ -64,8 +64,6 @@ const ModalListAction = forwardRef((props, ref) => {
     });
   };
 
-  console.log('modalList', data);
-
   return (
     <Modalize
       ref={combinedRef}

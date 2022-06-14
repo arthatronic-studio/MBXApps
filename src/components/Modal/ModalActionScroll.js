@@ -16,11 +16,12 @@ const defaultProps = {
     onPress: () => {},
     name: '',
     selected: null,
+    renderItem: null,
 };
 
 const codeNameWithId = ['block_2_0'];
 
-const ModalActionScroll = ({ visible, data: propsData, extraData, onClose, onPress, name, selected, children }) => {
+const ModalActionScroll = ({ visible, data: propsData, extraData, onClose, onPress, name, selected, renderItem, children }) => {
     const { Color } = useColor();
     const { height, width } = useWindowDimensions();
     const scrollViewRef = useRef();
@@ -54,6 +55,10 @@ const ModalActionScroll = ({ visible, data: propsData, extraData, onClose, onPre
 
     const renderContent = () => {
         return data.map((item, idx) => {
+            if (renderItem) {
+                return renderItem(item, idx);
+            }
+
             if (item.show === false) return <View key={idx} />;
       
             return (
