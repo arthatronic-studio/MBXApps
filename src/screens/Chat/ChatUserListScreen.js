@@ -21,6 +21,7 @@ import {queryGetUserOrganizationRef} from '@src/lib/query';
 import { Scaffold } from 'src/components';
 import { currentSocket } from '@src/screens/MainHome/MainHome';
 import { Container } from 'src/styled';
+import { accessClient } from 'src/utils/access_client';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -59,6 +60,7 @@ const itemPerPage = 100;
 
 const ChatUserListScreen = ({navigation, route}) => {
   const { params } = route;
+  const useHelpScreen = params.screenType = 'help';
 
   const [itemData, setItemData] = useState({
     data: [],
@@ -144,6 +146,12 @@ const ChatUserListScreen = ({navigation, route}) => {
       page: itemData.page + 1,
       limit: itemPerPage,
     };
+
+    if (useHelpScreen) {
+      variables.isAdmin = true;
+    }
+
+    console.log('var', variables);
 
     console.log('var', variables);
 
@@ -233,7 +241,7 @@ const ChatUserListScreen = ({navigation, route}) => {
       isLoading={filterLoading}
       header={
         <Header
-          title="Buat Room Chat"
+          title={useHelpScreen ? "Bantuan" : "Buat Room Chat"}
           // actions={
           //   selected.length > 0 ? (
           //     <TouchableOpacity
@@ -262,7 +270,7 @@ const ChatUserListScreen = ({navigation, route}) => {
         <BoxInput style={{backgroundColor: Color.textInput, borderColor: Color.border}}>
           <TextInputNumber
             name="text"
-            placeholder='Cari anggota'
+            placeholder={useHelpScreen ? 'Cari Admin' : 'Cari anggota'}
             placeholderTextColor={Color.placeholder}
             returnKeyType="done"
             returnKeyLabel="Done"
@@ -341,6 +349,7 @@ const ChatUserListScreen = ({navigation, route}) => {
           // }
 
           const isAdmin = item.isDirector === 1;
+          const idNumber = accessClient.isKomoto || accessClient.isRRID ? '- ' + item.idNumber : '';
 
           return (
             <TouchableOpacity
@@ -376,7 +385,7 @@ const ChatUserListScreen = ({navigation, route}) => {
                     justifyContent: 'space-around',
                   }}>
                   <Text size={12} type="semibold" numberOfLines={1}>
-                    {item.firstName} {item.lastName} {isAdmin && <MaterialIcons name='verified' color={Color.info} />}
+                    {item.firstName} {item.lastName} {idNumber} {isAdmin && <MaterialIcons name='verified' color={Color.info} />}
                   </Text>
                   {/* <Text size={10}>Available</Text> */}
                 </View>

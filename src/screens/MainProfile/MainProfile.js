@@ -38,6 +38,7 @@ import { queryOrganizationMemberManage } from '@src/lib/query/organization';
 import { getCurrentUserProfile } from 'src/state/actions/user/auth';
 import { accessClient } from 'src/utils/access_client';
 import { fetchCommunityMemberCheck } from 'src/api/community';
+import {currentSocket} from 'src/screens/MainHome/MainHome';
 
 const MainProfile = ({navigation, route}) => {
   const [modalVirtual, setModalVirtual] = useState(false);
@@ -53,6 +54,7 @@ const MainProfile = ({navigation, route}) => {
     status: true,
     message: '',
   })
+  const [myRoomIds, setMyRoomIds] = useState([]);
 
   const dispatch = useDispatch();
   const [loadingProps, showLoading] = useLoading();
@@ -68,6 +70,12 @@ const MainProfile = ({navigation, route}) => {
     dispatch(getCurrentUserProfile());
 
     fetchData();
+
+    currentSocket.emit('list_my_room_ids');
+      currentSocket.on('list_my_room_ids', (res) => {
+        console.log('list_my_room_ids', res);
+        setMyRoomIds(res);
+      });
   }, []);
 
   useEffect(() => {
@@ -247,10 +255,12 @@ const MainProfile = ({navigation, route}) => {
           style={{}}
         />
       ),
-      onPress: () =>
-        Linking.openURL(
-          'mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body',
-        ),
+      onPress: () => {
+        navigation.navigate('ChatUserListScreen', { myRoomIds, screenType: 'help' })
+        // Linking.openURL(
+        //   'mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body',
+        // )
+      },
     },
     // {
     //   code: 'termandcondition',

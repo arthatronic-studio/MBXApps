@@ -698,7 +698,7 @@ const MainHome = ({navigation, route}) => {
             name='Help Me'
             title='Help Me'
             nav='EmergencyScreen'
-            refresh={refreshing}
+            refresh={refreshing || isFocused}
           />
 
           <HighlightContentProduct
@@ -706,7 +706,7 @@ const MainHome = ({navigation, route}) => {
             name='Artikel'
             title='Postingan Artikel'
             nav='NewsScreen'
-            refresh={refreshing}
+            refresh={refreshing || isFocused}
           />
 
           <HighlightContentProduct
@@ -714,7 +714,7 @@ const MainHome = ({navigation, route}) => {
             name='Tempat'
             title='Tempat Favorit'
             nav='PlaceScreen'
-            refresh={refreshing}
+            refresh={refreshing || isFocused}
           />
 
           <HighlightContentProduct
@@ -722,7 +722,7 @@ const MainHome = ({navigation, route}) => {
             name='Event'
             title='Event Terbaru'
             nav='EventScreen'
-            refresh={refreshing}
+            refresh={refreshing || isFocused}
           />
           
           <HighlightContentProduct
@@ -730,7 +730,7 @@ const MainHome = ({navigation, route}) => {
             name='Loker'
             title='Lowongan Pekerjaan'
             nav='JobScreen'
-            refresh={refreshing}
+            refresh={refreshing || isFocused}
           />
 
           {accessClient.MainHome.showListMusicNewer && <MusikTerbaru />}
@@ -758,7 +758,7 @@ const MainHome = ({navigation, route}) => {
             name='Video'
             title='Video Terbaru'
             nav='VideoScreen'
-            refresh={refreshing}
+            refresh={refreshing || isFocused}
             style={{paddingHorizontal: 0}}
           />
 

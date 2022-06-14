@@ -17,6 +17,7 @@ import Client from '@src/lib/apollo';
 import { queryContentChatRoomManage, queryContentChatMessage } from '@src/lib/query';
 import { Divider } from 'src/styled';
 import { currentSocket } from '@src/screens/MainHome/MainHome';
+import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -69,11 +70,9 @@ const ChatDetailScreen = ({ navigation, route }) => {
         loadNext: false,
     });
     const [userTyping, setUserTyping] = useState(false);
+    const [modalImagePicker, setModalImagePicker] = useState(false);
+
     const modalListActionRef = useRef();
-
-
-    let isInitial = useRef(true);
-    let newDataIn = useRef([]);
     
     // hooks
     const [popupProps, showPopup] = usePopup();
@@ -110,8 +109,6 @@ const ChatDetailScreen = ({ navigation, route }) => {
             // UpdateTyping to false
         }
     }
-
-    console.log('params', params);
 
     // handdle user is typing
     useEffect(() => {
@@ -160,8 +157,8 @@ const ChatDetailScreen = ({ navigation, route }) => {
         });
     }
 
-    const onSubmit = () => {
-        if (textComment === '') {
+    const onSubmit = (imageBase64) => {
+        if (!imageBase64 && textComment === '') {
             showPopup('Teks tidak boleh kosong', 'warning');
             return;
         }
@@ -169,7 +166,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
         if (!roomId) {
             fetchContentChatRoomManage();
         } else {
-            onSendChat(roomId);
+            onSendChat(roomId, imageBase64);
         }
     }
     
@@ -192,12 +189,16 @@ const ChatDetailScreen = ({ navigation, route }) => {
         )
       }
 
-    const onSendChat = (room_id) => {
+    const onSendChat = (room_id, imageBase64) => {
         const variables = {
             method: 'INSERT',
             message: textComment.trim(),
             roomId: parseInt(room_id)
         };
+
+        if (imageBase64) {
+            variables.image = 'data:image/png;base64,' + imageBase64;
+        }
 
         console.log('variables', variables);
 
@@ -279,6 +280,13 @@ const ChatDetailScreen = ({ navigation, route }) => {
                             <View style={{width, marginTop: 16 ,paddingHorizontal: 16, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
                                 <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.textInput, borderRadius: 8, borderBottomRightRadius: 0, alignItems: 'flex-end'}}>
                                     {/* <Text size={10} type='semibold' align='right' color={Color.secondary}>{item.name}</Text> */}
+                                    <Image
+                                        source={{uri: item.image}}
+                                        style={{
+                                            width: width / 2,
+                                            height: width / 2,
+                                        }}
+                                    />
                                     <Divider height={4} />
                                     <Text align='right'>{item.message}</Text>
                                     <Divider height={4} />
@@ -344,7 +352,14 @@ const ChatDetailScreen = ({ navigation, route }) => {
                         }}
                         style={{color: Color.text}}
                     />
-                    <AntDesign name={"pluscircleo"} size={18} color={Color.secondary} style={{right: -10}}/>
+                    
+                    <AntDesign
+                        name={"pluscircleo"}
+                        size={18}
+                        color={Color.secondary}
+                        style={{right: -10}}
+                        onPress={() => setModalImagePicker(true)}
+                    />
                 </BoxInput>
                 <CircleSend
                         onPress={() => onSubmit()}
@@ -354,6 +369,16 @@ const ChatDetailScreen = ({ navigation, route }) => {
                 </CircleSend>
             </BottomSection>
             : null}
+
+            <ModalImagePicker
+                visible={modalImagePicker}
+                onClose={() => setModalImagePicker(false)}
+                onSelected={(callback) => {
+                    onSubmit(callback.base64);
+                    setModalImagePicker(false);
+                }}
+            />
+
             <ModalListAction
                 onClose={() => setShowSection(!showSection)}
                 ref={modalListActionRef}
