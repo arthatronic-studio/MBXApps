@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, FlatList, TextInput, Image, ScrollView, useWindowDimensions } from 'react-native';
+import { View, FlatList, TextInput, Image, Pressable, useWindowDimensions } from 'react-native';
 import Styled from 'styled-components';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Moment from 'moment';
@@ -82,6 +82,12 @@ const ChatRoomsScreen = ({ navigation, route }) => {
     const [popupProps, showPopup] = usePopup();
 
     useEffect(() => {
+        currentSocket.emit('list_my_room_ids');
+        currentSocket.on('list_my_room_ids', (res) => {
+            console.log('list_my_room_ids', res);
+            setMyRoomIds(res);
+        });
+
         currentSocket.on('chat_rooms', (respone) => {
           
            var res = respone.filter(function (el) {
@@ -95,12 +101,6 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                 data: res,
                 loading: false,
             });
-
-            let ids = [];
-            res.forEach((e) => {
-                ids.push(parseInt(e['room_id']));
-            })
-            setMyRoomIds(ids);
           } else {
             setDataRooms({
                 ...dataRooms,
@@ -180,9 +180,26 @@ const ChatRoomsScreen = ({ navigation, route }) => {
 
     return (
         <Scaffold
-            showHeader={false}
+            headerTitle='Obrolan'
             empty={dataRooms.data.length === 0 && !dataRooms.loading}
+            emptyTitle='Obrolan tidak tersedia'
             fallback={dataRooms.loading}
+            floatingActionButton={
+                <Pressable
+                    onPress={() => !dataRooms.loading && navigation.navigate('ChatUserListScreen', { myRoomIds })}
+                    style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: !dataRooms.loading ? Color.primary : Color.disabled,
+                        width: 60,
+                        height: 60,
+                        borderRadius: 30,
+                    }}
+                >
+                    <AntDesign name={'message1'} size={27} style={{color: Color.textInput}} />
+                </Pressable>
+            }
+
         >
             <View style={{backgroundColor: Color.theme}}>
                 {/* <BottomSection style={{borderColor: Color.border}}>
@@ -205,7 +222,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                         </CircleSend>
                     </BoxInput>
                 </BottomSection> */}
-                <View style={{backgroundColor: Color.theme, width: '100%', height: 70, justifyContent: 'center', alignItems: 'center'}}>
+                {/* <View style={{backgroundColor: Color.theme, width: '100%', height: 70, justifyContent: 'center', alignItems: 'center'}}>
                     <TextInput
                         placeholder='Cari . . .'
                         style={{
@@ -218,7 +235,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                         }}
                     />
                     <AntDesign name={'search1'} size={12} style={{alignSelf: 'flex-end', right: 20,color: Color.secondary,position: 'absolute'}}/>
-                </View>
+                </View> */}
                 <FlatList
                     keyExtractor={(item, index) => item.id.toString() + index.toString()}
                     data={dataRooms.data}
@@ -273,7 +290,8 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                                 
                                     <View style={{width: '70%', height: '100%', alignItems: 'flex-start', justifyContent: 'space-around', paddingLeft: 8, paddingRight: 16, paddingVertical: 4}}>
                                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                            <View style={{marginRight: 5,borderRadius: 20,width: 8, height: 8, backgroundColor: Color.green}}/>
+                                            {/* hide online */}
+                                            {/* <View style={{marginRight: 5,borderRadius: 20,width: 8, height: 8, backgroundColor: Color.green}}/> */}
                                             <Text
                                             type='semibold'
                                             numberOfLines={1}
