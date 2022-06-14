@@ -90,10 +90,7 @@ const SyaratdanKetentuan = ({
   const renderItem = ({item, index}) => (
     <View
       style={{
-        paddingLeft: 8,
-        marginRight: 16,
-        marginVertical:10,
-       
+        marginBottom: 12,
       }}>
       <TouchableOpacity
         onPress={() => {
@@ -101,12 +98,13 @@ const SyaratdanKetentuan = ({
           setcontent(item.page_content);
         }}
         style={{
-          paddingVertical: 10,
-          borderRadius: 12,
+          paddingVertical: 16,
+          borderRadius: 6,
           backgroundColor: Color.textInput,
+          paddingLeft: 12,
           ...shadowStyle,
         }}>
-        <Text size={12} type="bold">
+        <Text size={12} align='left' type="bold">
           {item.page_title}
         </Text>
       </TouchableOpacity>
@@ -115,7 +113,7 @@ const SyaratdanKetentuan = ({
 
   return (
     <Scaffold
-      headerTitle="Syarat&Ketentuan"
+      headerTitle="Syarat & Ketentuan"
       onPressLeftButton={() =>
         navigation.navigate('MainProfile', {refresh: true})
       }>
