@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, Modal, Keyboard, useWindowDimensions, Image } from 'react-native';
+import { View, FlatList, Modal, Keyboard, useWindowDimensions, Image } from 'react-native';
 
 import Scaffold from '@src/components/Scaffold';
 import Text from '@src/components/Text';
@@ -108,6 +108,7 @@ const ModalSelectMap = ({
 
                     setUserData(newUserData);
                     setLocationName(item.name);
+                    setCollapse(false);
                 }}
                 style={{
                     paddingHorizontal: 16,
@@ -129,11 +130,39 @@ const ModalSelectMap = ({
                     </Container>
                     <Divider width={8} />
                     <Container>
-                        <Text align='left' size={12}>{item.name}</Text>
-                        <Text align='left' size={8}>{item.formatted_address}</Text>
+                        <Text align='left' size={14} type='medium'>{item.name}</Text>
+                        <Divider height={4} />
+                        <Text align='left' size={12}>{item.formatted_address}</Text>
                     </Container>
                 </Container>
             </TouchableOpacity>
+        )
+    }
+
+    const renderListLocationSearch = () => {
+        return (
+            <>
+                <FlatList
+                    keyExtractor={(item, index) => item.place_id + index.toString()}
+                    data={searchData}
+                    nestedScrollEnabled
+                    keyboardShouldPersistTaps='handled'
+                    style={{
+                        maxHeight: height / 2.5,
+                    }}
+                    contentContainerStyle={{
+                        paddingTop: 8,
+                    }}
+                    renderItem={({ item, index }) => renderItem(item, index)}
+                />
+
+                <TouchableOpacity
+                    onPress={() => setCollapse(!collapse)}
+                    style={{padding: 16}}
+                >
+                    <Text>{collapse ? 'Tutup' : 'Lihat Hasil'}</Text>
+                </TouchableOpacity>
+            </>
         )
     }
 
@@ -150,33 +179,16 @@ const ModalSelectMap = ({
                     type='input'
                     value={value}
                     onChangeText={(val) => setValue(val)}
+                    textInputProps={{
+                        onPressIn: () => {
+                            setCollapse(true);
+                        }
+                    }}
                 />
 
                 <Divider />
 
-                {searchData.length > 0 && <TouchableOpacity
-                    onPress={() => setCollapse(!collapse)}
-                >
-                    <Text>{collapse ? 'Tutup' : 'Lihat Hasil'}</Text>
-                    <Divider />
-                </TouchableOpacity>}
-
-                {collapse && searchData.length > 0 && <FlatList
-                    keyExtractor={(item, index) => item.place_id + index.toString()}
-                    data={searchData}
-                    nestedScrollEnabled
-                    keyboardShouldPersistTaps='handled'
-                    style={{
-                        width: width,
-                        maxHeight: height / 3,
-                    }}
-                    contentContainerStyle={{
-                        paddingTop: 8,
-                    }}
-                    renderItem={({ item, index }) => renderItem(item, index)}
-                />}
-
-                <Padding padding={16}>
+                <View style={{flex: 1}}>
                     <Maps
                         name={locationName}
                         latitude={userData.latitude}
@@ -215,7 +227,13 @@ const ModalSelectMap = ({
                             setUserData(newUserData);
                         }}
                     />
-                </Padding>
+
+                    {collapse && searchData.length > 0 &&
+                        <View style={{width: '100%', position: 'absolute', backgroundColor: Color.theme}}>
+                            {renderListLocationSearch()}
+                        </View>
+                    }
+                </View>
 
                 <Padding horizontal={16} top={16}>
                     <Text>{userData.fullAddress}</Text>
@@ -229,15 +247,6 @@ const ModalSelectMap = ({
                         Terapkan Lokasi
                     </Button>
                 </Padding>
-
-                {/* <Padding horizontal={16} top={16}>
-                    <Button
-                        color={Color.secondary}
-                        onPress={() => onClose()}
-                    >
-                        Kembali
-                    </Button>
-                </Padding> */}
             </Scaffold>
         </Modal>
     );

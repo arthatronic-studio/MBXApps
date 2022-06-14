@@ -345,7 +345,6 @@ const DetailForumScreen = ({ route, navigation }) => {
                 ref={modalOptionsRef}
                 isOwner={user && user.userId === item.ownerId}
                 item={item}
-                useBlockUser
             />
         </Scaffold>
     )

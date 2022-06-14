@@ -95,10 +95,11 @@ const SurveyReviewScreen = ({ navigation, route }) => {
       const valBlock = valueContent[i];
       for (let index = 0; index < valBlock.length; index++) {
         const item = valBlock[index];
-        if (item.type === 'LABEL') {
+        // komen label tidak dikirim
+        // if (item.type === 'LABEL') {
 
-        }
-        else {
+        // }
+        // else {
           let value = item.value.toString();
 
           if (item.type === 'RADIO' || item.type === 'SELECT_BOX') {
@@ -113,14 +114,30 @@ const SurveyReviewScreen = ({ navigation, route }) => {
           if (item.type === 'UPLOAD') {
             value = '';
           }
+          if (item.type === 'SELECT_MULTIPLE') {
+            value = '';
+            for (let i = 0; i < item.value.length; i++) {
+              const val = item.value[i];
+              value = value + val.name + (i === (item.value.length - 1) ? '' : ',');
+            }
+            // for (const val of item.value) {
+            //   value.push(val.name);
+            // }
+          }
+
+          const prefixText = item.validation && item.validation.prefixText ? `${item.validation.prefixText} ` : '';
+          const suffixText = item.validation && item.validation.suffixText ? ` ${item.validation.suffixText}` : '';
+          if (typeof value === 'string') {
+            value = `${prefixText}${value.trim()}${suffixText}`;
+          }
 
           data.push({
             block: (i + 1).toString(),
             index,
-            name: item.label.replace(/ /g, ''),
+            name: item.name || item.label.replace(/ /g, ''),
             value,
           });
-        }
+        // }
       }
     }
 
@@ -138,7 +155,7 @@ const SurveyReviewScreen = ({ navigation, route }) => {
     try {
       showLoading()
       const response = await axios({
-        baseURL: 'http://test.shora.id',
+        baseURL: 'http://panel.survey.tribesocial.id',
         method: 'post',
         url: '/submit-survey',
         data: dataq,
@@ -165,17 +182,22 @@ const SurveyReviewScreen = ({ navigation, route }) => {
   const fetchSurveyFormFile = async() => {
     const sha1Hash = await RNSimpleCrypto.SHA.sha1("SURVEY-20220229" + moment().format('YYYY-MM-DD HH:mm:ss') + '123!!qweQWE');
     let data = new FormData();
+    let indexData = -1;
+
     data.append('auth', 'd57abbc8289c72b56161f3f90ef1fa5ad5dca48a');
     data.append('caption_code', 'pasar');
     data.append('survey_code', 'SURVEY-20220229');
     data.append('timestamps', '2022-05-30 11:42:59'); // moment().format('YYYY-MM-DD HH:mm:ss'),
+
     for (let i = 0; i < valueContent.length; i++) {
       const valBlock = valueContent[i];
       for (let index = 0; index < valBlock.length; index++) {
         const item = valBlock[index];
-        if (item.type === 'LABEL') {
+        // komen label tidak dikirim
+        // if (item.type === 'LABEL') {
 
-        } else {
+        // } else {
+          indexData++;
           let value = item.value.toString();
 
           if (item.type === 'RADIO' || item.type === 'SELECT_BOX') {
@@ -196,21 +218,54 @@ const SurveyReviewScreen = ({ navigation, route }) => {
                 name: val.fileName
               });
             }
+            // TODO: ambil index pertama dari api belom support array of img
+            // value = value[0];
+          }
+          if (item.type === 'SELECT_MULTIPLE') {
+            value = '';
+            for (let i = 0; i < item.value.length; i++) {
+              const val = item.value[i];
+              value = value + val.name + (i === (item.value.length - 1) ? '' : ',');
+            }
+            // for (const val of item.value) {
+            //   value.push(val.name);
+            // }
           }
 
-          data.append(`data[${i}][block]`, (i + 1).toString());
-          data.append(`data[${i}][index]`, index);
-          data.append(`data[${i}][name]`, item.label);
-          data.append(`data[${i}][value]`, value);
-        }
+          const prefixText = item.validation && item.validation.prefixText ? `${item.validation.prefixText} ` : '';
+          const suffixText = item.validation && item.validation.suffixText ? ` ${item.validation.suffixText}` : '';
+          if (typeof value === 'string') {
+            value = `${prefixText}${value.trim()}${suffixText}`;
+          }
+          
+          data.append(`data[${indexData}][block]`, (i + 1).toString());
+          data.append(`data[${indexData}][index]`, index);
+          data.append(`data[${indexData}][name]`, item.name || item.label);
+          // data.append(`data[${indexData}][value]`, value);
+          if (Array.isArray(value)) {
+            if (value.length > 0) {
+              for (let valIdx = 0; valIdx < value.length; valIdx++) {
+                const valObj = value[valIdx];
+                data.append(`data[${indexData}][value][${valIdx}]`, valObj);
+              }
+            } else {
+              data.append(`data[${indexData}][value]`, '');
+            }
+          } else {
+            data.append(`data[${indexData}][value]`, value);
+          }
+          data.append(`data[${indexData}][type]`, item.type === 'UPLOAD' ? item.type + '_' + item.validation.uploadType.toUpperCase() : item.type);
+        // }
       }
     }
 
     console.log(data);
 
+    // return;
+
     let config = {
       method: 'post',
-      url: 'http://test.shora.id/survey-form-file',
+      url: 'http://panel.survey.tribesocial.id/survey-form-file',
       headers: {
         "Content-Type": `multipart/form-data`,
       },
@@ -224,14 +279,19 @@ const SurveyReviewScreen = ({ navigation, route }) => {
         console.log(response);
         hideLoading();
 
-        alert('Survei terkirim, Terima kasih telah mengisi survei melalui aplikasi Tribes Survey')
-        setTimeout(() => {
-          navigation.popToTop();
-        }, 2500);
+        if (response.data.status) {
+          alert('Survei terkirim, Terima kasih telah mengisi survei melalui aplikasi Tribes Survey');
+          setTimeout(() => {
+            navigation.popToTop();
+          }, 2500);
+        } else {
+          alert('Not OK');
+        }
       })
       .catch(function (error) {
-        console.log(error);
+        console.log(JSON.stringify(error));
         hideLoading();
+        alert('Terjadi kesalahan');
       });
   }
 
@@ -371,7 +431,7 @@ const SurveyReviewScreen = ({ navigation, route }) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
-                source={{ uri: `data:${val.type};base64,${val.base64}` }}
+                source={{ uri: val.uri }}
               />
             </View>
           ))}
@@ -405,6 +465,10 @@ const SurveyReviewScreen = ({ navigation, route }) => {
               </View>
 
               {valueContent[indexHeader].map((item, index) => {
+                const prefixText = item.validation && item.validation.prefixText ? `${item.validation.prefixText} ` : '';
+                const suffixText = item.validation && item.validation.suffixText ? ` ${item.validation.suffixText}` : '';
+                const reviewRemoveLabel = item.validation && item.validation.reviewRemoveLabel; 
+
                 if (item.type === 'LABEL') {
                   return renderLabel(item, index);
                 }
@@ -435,13 +499,13 @@ const SurveyReviewScreen = ({ navigation, route }) => {
                         width: '100%',
                       }}>
                       <LabelInput>
-                        {item.label !== '' && <Text align='left' size={12} letterSpacing={0.08} style={{ opacity: 0.6 }}>
+                        {!reviewRemoveLabel && item.label !== '' && <Text align='left' size={12} letterSpacing={0.08} style={{ opacity: 0.6 }}>
                           {item.label}
                         </Text>}
                       </LabelInput>
                       <EmailRoundedView>
                         <FieldView>
-                          <Text align='left'>{mappingValue(item)}</Text>
+                          <Text align='left'>{prefixText}{mappingValue(item)}{suffixText}</Text>
                         </FieldView>
                       </EmailRoundedView>
                     </View>

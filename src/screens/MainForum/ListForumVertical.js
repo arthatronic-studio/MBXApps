@@ -91,7 +91,6 @@ const ListForumVertical = ({ componentType, data, loading, title, showAll, onPre
                 isOwner={user && selectedItem && user.userId === selectedItem.ownerId}
                 item={selectedItem}
                 onClose={() => setSelectedItem()}
-                useBlockUser
             />
         </Scaffold>
     )

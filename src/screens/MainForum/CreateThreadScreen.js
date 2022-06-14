@@ -3,7 +3,7 @@ import { View, ScrollView, TextInput, SafeAreaView, Image, Keyboard, BackHandler
 import Styled from 'styled-components';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { launchImageLibrary } from 'react-native-image-picker';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import {
     Header,
@@ -25,6 +25,7 @@ import { accessClient } from 'src/utils/access_client';
 import FormSelect from 'src/components/FormSelect';
 import DatePicker from 'react-native-date-picker';
 import Moment from 'moment';
+import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -63,6 +64,8 @@ const CreateThreadScreen = (props) => {
     const { navigation, route } = props;
     const { params } = route;
 
+    console.log('route', route);
+
     const { height } = useWindowDimensions();
     const { Color } = useColor();
 
@@ -90,7 +93,7 @@ const CreateThreadScreen = (props) => {
         label: 'Publik', value: 'PUBLISH', iconName: 'globe'
     });
     const [showDatePicker, setShowDatePicker] = useState(false);
-
+    const [modalImagePicker, setModalImagePicker] = useState(false);
    
     // ref
     const modalSelectStatusRef = useRef();
@@ -219,27 +222,14 @@ const CreateThreadScreen = (props) => {
             loadingProps={loadingProps}
             popupProps={popupProps}
         >
-            <ScrollView>
+            <KeyboardAwareScrollView>
                 <View style={{paddingHorizontal: 16, paddingTop: 16}}>
                     <LabelInput>
                         <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Gambar</Text>
                     </LabelInput>
                     <TouchableOpacity
                         onPress={() => {
-                            const options = {
-                                mediaType: 'photo',
-                                maxWidth: 640,
-                                maxHeight: 640,
-                                quality: 1,
-                                includeBase64: true,
-                            }
-
-                            launchImageLibrary(options, (callback) => {
-                                if (callback.base64) {
-                                    setThumbImage(callback.base64);
-                                    setMimeImage(callback.type);
-                                }
-                            })
+                            setModalImagePicker(true);
                         }}
                         style={{width: '100%', height: 70, borderRadius: 4, marginTop: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
                     >
@@ -313,20 +303,6 @@ const CreateThreadScreen = (props) => {
                     </ErrorView>
                 </View>
 
-                {/* <View style={{paddingHorizontal: 16, paddingTop: 16}}>
-                    <TouchableOpacity onPress={() => modalSelectChapterRef.current.open()}>
-                        <View style={{marginTop: 6, paddingHorizontal: 12, borderWidth: 1, borderRadius: 4, borderColor: Color.border}}>
-                            <LabelInput>
-                                <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Domisili</Text>
-                            </LabelInput>
-                            <View style={{height: 34, paddingRight: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                                <Text size={14} style={{marginTop: 2}}>{userData.chapterId || 'Pilih Domisili'}</Text>
-                                <Ionicons name='chevron-down-outline' color={Color.text} />
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                </View> */}
-
                 {showEvent && <FormSelect
                     label='Tanggal Event'
                     placeholder='Pilih Tanggal'
@@ -346,7 +322,7 @@ const CreateThreadScreen = (props) => {
                     iconName={selectedStatus.iconName}
                     onPress={() => modalSelectStatusRef.current.open()}
                 />}
-            </ScrollView>
+            </KeyboardAwareScrollView>
 
             <Submit
                 buttonLabel='Buat'
@@ -382,6 +358,21 @@ const CreateThreadScreen = (props) => {
                     setShowDatePicker(false)
                 }}
             />}
+
+            <ModalImagePicker
+                visible={modalImagePicker}
+                onClose={() => {
+                    setModalImagePicker(false);
+                }}
+                onSelected={(callback) => {
+                    if (callback.base64) {
+                        setThumbImage(callback.base64);
+                        setMimeImage(callback.type);
+                    }
+
+                    setModalImagePicker(false);
+                }}
+            />
         </Scaffold>
     )
 }

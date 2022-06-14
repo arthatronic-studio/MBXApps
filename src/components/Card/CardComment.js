@@ -93,11 +93,11 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
         </Container>}
 
         <View style={{marginBottom: 4, flexDirection: 'row', alignItems: 'center'}}>
-          <View style={isCommentFromOwnerProduct && { backgroundColor: Color.border, paddingVertical: 2, paddingHorizontal: 6, borderRadius: 8 }}>
+          <View style={isCommentFromOwnerProduct && { backgroundColor: Color.primary, paddingVertical: 2, paddingHorizontal: 6, borderRadius: 8 }}>
             <Text
               size={12}
               align='left'
-              color={Color.placeholder}
+              color={Color.text}
               numberOfLines={1}
             >
               {typeof item.fullname === 'string' ? item.fullname.slice(0, 20).trim() : ''}

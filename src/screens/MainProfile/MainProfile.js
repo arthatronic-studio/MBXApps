@@ -37,6 +37,7 @@ import Client from '@src/lib/apollo';
 import { queryOrganizationMemberManage } from '@src/lib/query/organization';
 import { getCurrentUserProfile } from 'src/state/actions/user/auth';
 import { accessClient } from 'src/utils/access_client';
+import { fetchCommunityMemberCheck } from 'src/api/community';
 
 const MainProfile = ({navigation, route}) => {
   const [modalVirtual, setModalVirtual] = useState(false);
@@ -48,6 +49,10 @@ const MainProfile = ({navigation, route}) => {
     success: false,
     message: '',
   });
+  const [memberCheck, setMemberCheck] = useState({
+    status: true,
+    message: '',
+  })
 
   const dispatch = useDispatch();
   const [loadingProps, showLoading] = useLoading();
@@ -61,6 +66,8 @@ const MainProfile = ({navigation, route}) => {
   useEffect(() => {
     // hit cuurent user profile
     dispatch(getCurrentUserProfile());
+
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -68,6 +75,15 @@ const MainProfile = ({navigation, route}) => {
       navigation.setParams({refresh: false});
     }
   }, [route]);
+
+  const fetchData = async() => {
+    const result = await fetchCommunityMemberCheck();
+    if (result.status) {
+      setMemberCheck({ ...memberCheck, ...result.data });
+    }
+  }
+
+  console.log(memberCheck);
 
   const onPressExit = () => {
     Alert('Logout', 'Apakah Anda yakin akan logout?', () => onPressLogout());
@@ -198,13 +214,12 @@ const MainProfile = ({navigation, route}) => {
       code: 'critics_opinion',
       title: 'Kritik & Saran',
       show: true,
-      icon: (
-        <AntDesign name="carryout" size={20} color={Color.text} style={{}} />
-      ),
+      icon: <AntDesign name="carryout" size={20} color={Color.text} style={{}} />,
       onPress: () =>
-        Linking.openURL(
-          'mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body',
-        ),
+      accessClient.isKomoto || accessClient.isRRID ?
+        Linking.openURL('mailto:wahyu@komoto.id?subject=Kritik dan saran&Body')
+      :
+        Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
     },
     {
       code: 'survey',
@@ -254,10 +269,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'join_community',
       title: 'Gabung Komunitas',
-      show:
-        accessClient.MainProfile.showMenuJoinCommunity &&
-        user &&
-        !user.organizationId,
+      show: accessClient.MainProfile.showMenuJoinCommunity && memberCheck.status === false,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('JoinCommunity'),
     },
@@ -454,7 +466,7 @@ const MainProfile = ({navigation, route}) => {
                         }>
                         {user.organizationId
                           ? 'Anggota ' + user.organizationName
-                          : 'Belum Terdaftar'}
+                          : memberCheck.message}
                       </Text>
                     </Text>
                   )}

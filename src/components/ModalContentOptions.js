@@ -15,7 +15,6 @@ const defaultProps = {
   item: null,
   nameType: 'PRODUCT',
   moduleType: 'CREATE',
-  useBlockUser: false,
   onClose: () => {},
 };
 
@@ -25,7 +24,7 @@ const initialMessage = {
 }
 
 const ModalContentOptions = forwardRef((props, ref) => {
-  const { isOwner, item, useBlockUser, moduleType, nameType, onClose } = props;
+  const { isOwner, item, moduleType, nameType, onClose } = props;
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
@@ -132,7 +131,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
     },
   ];
 
-  if (useBlockUser) {
+  if (item.ownerId) {
     dataOptions.push({
       id: 2,
       name: 'Block User',

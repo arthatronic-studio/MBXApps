@@ -19,20 +19,23 @@ import {
   useLoading,
   Submit,
   useColor,
-  Scaffold
+  Scaffold,
 } from '@src/components';
 import { queryJoinCommunity } from 'src/lib/query';
-import ModalSelectChapter from 'src/components/Modal/ModalSelectChapter'
 import validate from '@src/lib/validate';
 import Client from '@src/lib/apollo';
 import ModalActions from 'src/components/Modal/ModalActions';
 import { accessClient } from 'src/utils/access_client';
-import { Container, Divider } from 'src/styled';
+import { Card, Container, Divider, Row, } from 'src/styled';
 import Clipboard from '@react-native-community/clipboard';
 import { fetchCarTypeListing } from 'src/api/community';
 import FormSelect from 'src/components/FormSelect';
 import ModalActionScroll from 'src/components/Modal/ModalActionScroll';
 import { rridSticker, rridUniform } from 'assets/images/rrid';
+import { fetchLocationCity, fetchLocationProvince } from 'src/api/location';
+import CircularProgress from 'src/components/CircularProgress';
+import { fetchUserAddressList } from 'src/api/user-address';
+import { useSelector } from 'react-redux';
 
 const merchandiseHead = [
   'UKURAN',
@@ -73,10 +76,6 @@ const CustomTextInput = Styled(TextInput)`
   fontSize: 14px;
 `;
 
-const CustomTouch = Styled(TouchableOpacity)`
-    backgroundColor: transparent;
-`;
-
 const options = {
   mediaType: 'photo',
   maxWidth: 640,
@@ -85,12 +84,22 @@ const options = {
   includeBase64: true,
 };
 
+const initModalActionScrollProps = {
+  name: '',
+  visible: false,
+  selected: null,
+  data: [],
+  onPress: (val) => {},
+  onClose: () => {},
+  renderItem: null,
+};
+
 const JoinCommunity = ({ navigation, route }) => {
+  const { params } = route;
+
+  const user = useSelector((state) => state['user.auth'].login.user);
   const { height } = useWindowDimensions();
   const { Color } = useColor();
-
-  const modalSelectChapterRef = useRef();
-
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const [popupProps, showPopup] = usePopup();
 
@@ -100,7 +109,6 @@ const JoinCommunity = ({ navigation, route }) => {
     carIdentity: '',
     reason: '',
     note: '',
-    chapterId: "",
     selfiePhoto: '',
     carPhotoMain: '',
     carPhotoFront: '',
@@ -136,13 +144,16 @@ const JoinCommunity = ({ navigation, route }) => {
     setUserData({ ...userData, [key]: val });
   };
 
-  const [selectedChapter, setSelectedChapter] = useState();
   const [modalAddPhoto, setModalAddPhoto] = useState(false);
   const [modalNumberPhoto, setModalNumberPhoto] = useState(0);
 
+  const [modalActionScrollProps, setModalActionScrollProps] = useState(initModalActionScrollProps);
+  
+  const [listUserAddress, setListUserAddress] = useState([]);
+  const [selectedUserAddress, setSelectedUserAddress] = useState();
+
   const [listCarType, setListCarType] = useState([]);
   const [selectedCarType, setSelectedCarType] = useState();
-  const [modalCarType, setModalCarType] = useState(false);
 
   const [selectedMerchandiseSize, setSelectedMerchandiseSize] = useState(merchandiseSize[0]);
   const [modalMerchandiseSize, setModalMerchandiseSize] = useState(false);
@@ -175,10 +186,23 @@ const JoinCommunity = ({ navigation, route }) => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (params && params.refresh) {
+      navigation.setParams({ refresh: false });
+      fetchData();
+      console.log('reload');
+    }
+  }, [params])
+
   const fetchData = async () => {
+    const resultUserAddress = await fetchUserAddressList({ userId: user.userId });
+    if (resultUserAddress.status) {
+      setListUserAddress(resultUserAddress.data);
+    }
+
     const resultCar = await fetchCarTypeListing();
     if (resultCar.status) {
-      setListCarType(resultCar.data)
+      setListCarType(resultCar.data);
     }
   }
 
@@ -190,8 +214,8 @@ const JoinCommunity = ({ navigation, route }) => {
   const onSubmit = () => {
     Keyboard.dismiss();
 
-    if (userData.chapterId === '') {
-      showPopup('Silahkan isi domisili terlebih dulu', 'warning');
+    if (!selectedUserAddress) {
+      showPopup('Silahkan pilih domisili terlebih dulu', 'warning');
       return;
     }
 
@@ -230,29 +254,34 @@ const JoinCommunity = ({ navigation, route }) => {
       return;
     }
 
-    showLoading();
-
     let variables = {
       body: {
+        // photoProfile
+        // chapterId
         carType: selectedCarType.name,
         carColor: userData.carColor,
         carYear: userData.carYear,
         carIdentity: userData.carIdentity,
         reason: userData.reason,
-        chapterId: selectedChapter.community_id,
-        selfiePhoto: 'data:image/png;base64,' + thumbImage6,
+        note: userData.note,
         carPhotoMain: 'data:image/png;base64,' + thumbImage,
         carPhotoFront: 'data:image/png;base64,' + thumbImage2,
         carPhotoSide: 'data:image/png;base64,' + thumbImage3,
         carPhotoBack: 'data:image/png;base64,' + thumbImage4,
+        selfiePhoto: 'data:image/png;base64,' + thumbImage6,
         simPhoto: 'data:image/png;base64,' + thumbImage7,
         stnkPhoto: 'data:image/png;base64,' + thumbImage8,
         transactionProof: 'data:image/png;base64,' + thumbImage5,
-        note: userData.note,
+        userAddressId: selectedUserAddress.id,
+        sizeShirt: selectedMerchandiseSize.ukuran,
       },
     };
 
     console.log('variables', variables);
+
+    // return;
+
+    showLoading();
 
     Client.query({
       query: queryJoinCommunity,
@@ -325,6 +354,41 @@ const JoinCommunity = ({ navigation, route }) => {
         break;
     }
   }
+
+  const renderCardDomisili = (item, index) => {
+    return (
+      <TouchableOpacity
+        key={index}
+        onPress={() => {
+          setSelectedUserAddress(item);
+          setModalActionScrollProps(initModalActionScrollProps);
+        }}
+      >
+        <Card radius={8}>
+          <Container padding={16}>
+            <Row justify='space-between'>
+              <Container>
+                {item.name !== '' && item.name !== null && <Text align='left'>{item.name}</Text>}
+                {item.caption !== '' && item.caption !== null && <Text align='left' size={10}>{item.caption}</Text>}
+              </Container>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('ManageAddressScreen', { item, prevScreen: 'JoinCommunity' });
+                  setModalActionScrollProps(initModalActionScrollProps);
+                }}
+              >
+                <Container align='center'>
+                  <Text color={Color.info} align='right'>Edit</Text>
+                </Container>
+              </TouchableOpacity>
+            </Row>
+          </Container>
+        </Card>
+
+        <Divider />
+      </TouchableOpacity>
+    )
+  }
   
   return (
     <Scaffold
@@ -332,37 +396,16 @@ const JoinCommunity = ({ navigation, route }) => {
       loadingProps={loadingProps}
       popupProps={popupProps}>
       <ScrollView>
-        <View
-          style={{
-            paddingTop: 35,
-            paddingBottom: 16,
-            paddingHorizontal: 16,
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <View
-            style={{
-              width: 48,
-              height: 48,
-              borderRadius: 24,
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderWidth: 4,
-              borderColor: Color.grayLight,
-              marginRight: 8,
-            }}>
-            <Text type="bold" size={24} align="left" color={Color.primary}>
-              1
-            </Text>
-          </View>
-          <View>
-            <Text size={14} color={Color.text} align="left">
-              Informasi Data Diri
-            </Text>
-            <Text size={10} color={Color.gray} align="left">
-              Masukan informasi untuk gabung ke komunitas
-            </Text>
-          </View>
+        <View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingBottom: 16 }}>
+            <CircularProgress
+                progress={50}
+                color={Color.primary}
+                textComponent={<Text size={28} color={Color.primary} type='bold'>1</Text>}
+            />
+            <View style={{ alignItems: 'flex-start', justifyContent: 'center', paddingLeft: 8 }}>
+                <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Informasi Data Diri</Text>
+                <Text style={{ fontSize: 10, color: Color.secondary }}>Masukan informasi untuk gabung ke komunitas</Text>
+            </View>
         </View>
 
         {accessClient.isRRID && (
@@ -381,7 +424,7 @@ const JoinCommunity = ({ navigation, route }) => {
               - 1 kemeja
             </Text>
             <Text size={12} align="left">
-              - 1 KTA (e-money saldo Rp. 0)
+              - 1 KTA (E-money saldo Rp0)
             </Text>
             <Divider height={8} />
             <Text size={12} align="left">
@@ -407,47 +450,58 @@ const JoinCommunity = ({ navigation, route }) => {
           </Container>
         )}
 
-        <View style={{ backgroundColor: Color.theme, paddingBottom: 16 }}>
-          <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
-            <CustomTouch onPress={() => modalSelectChapterRef.current.open()}>
-              <View
-                style={{
-                  marginTop: 6,
-                  paddingHorizontal: 12,
-                  borderWidth: 1,
-                  borderRadius: 4,
-                  borderColor: Color.border,
-                }}>
-                <LabelInput>
-                  <Text size={12} letterSpacing={0.08} style={{ opacity: 0.6 }}>
-                    Domisili
-                  </Text>
-                </LabelInput>
-                <View
-                  style={{
-                    height: 34,
-                    paddingRight: 8,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Text size={14} style={{ marginTop: 2 }}>
-                    {userData.chapterId || 'Pilih Domisili'}
-                  </Text>
-                  <Ionicons name="chevron-down-outline" color={Color.text} />
-                </View>
-              </View>
-            </CustomTouch>
-          </View>
+        <View style={{ backgroundColor: Color.theme, paddingVertical: 16 }}>
+          <FormSelect
+            label="Domisili"
+            placeholder="Pilih Domisili"
+            hideErrorHint
+            value={selectedUserAddress ? selectedUserAddress.name : null}
+            onPress={() => {
+              setModalActionScrollProps({
+                ...modalActionScrollProps,
+                name: 'domisili',
+                visible: true,
+                selected: selectedUserAddress,
+                data: listUserAddress,
+                onPress: (val) => {
+                  setSelectedUserAddress(val);
+                  setModalActionScrollProps(initModalActionScrollProps);
+                },
+                onClose: () => setModalActionScrollProps(initModalActionScrollProps),
+                renderItem: (item, index) => renderCardDomisili(item, index),
+              });
+            }}
+          />
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate('ManageAddressScreen', { prevScreen: 'JoinCommunity' })}
+            style={{paddingVertical: 8}}
+          >
+            <Text color={Color.info}>Tambah Domisili</Text>
+          </TouchableOpacity>
 
           <FormSelect
             label="Tipe Mobil"
             placeholder="Pilih Tipe"
+            hideErrorHint
             value={selectedCarType ? selectedCarType.name : null}
-            onPress={() => setModalCarType(true)}
+            onPress={() => {
+              setModalActionScrollProps({
+                ...modalActionScrollProps,
+                name: 'carType',
+                visible: true,
+                selected: selectedCarType,
+                data: listCarType,
+                onPress: (val) => {
+                  setSelectedCarType(val);
+                  setModalActionScrollProps(initModalActionScrollProps);
+                },
+                onClose: () => setModalActionScrollProps(initModalActionScrollProps),
+              });
+            }}
           />
 
-          <View style={{ paddingHorizontal: 16 }}>
+          <View style={{ paddingHorizontal: 16, marginTop: 16 }}>
             <View
               style={{
                 marginTop: 6,
@@ -465,7 +519,7 @@ const JoinCommunity = ({ navigation, route }) => {
                 <CustomTextInput
                   placeholder="Merah"
                   keyboardType="default"
-                  placeholderTextColor={Color.gray}
+                  placeholderTextColor={Color.border}
                   underlineColorAndroid="transparent"
                   autoCorrect={false}
                   onChangeText={text => onChangeUserData('carColor', text)}
@@ -496,7 +550,7 @@ const JoinCommunity = ({ navigation, route }) => {
                 <CustomTextInput
                   placeholder="1990"
                   keyboardType="numeric"
-                  placeholderTextColor={Color.gray}
+                  placeholderTextColor={Color.border}
                   underlineColorAndroid="transparent"
                   autoCorrect={false}
                   onChangeText={text => onChangeUserData('carYear', text)}
@@ -527,7 +581,7 @@ const JoinCommunity = ({ navigation, route }) => {
                 <CustomTextInput
                   placeholder="B 1234 ABC"
                   keyboardType="default"
-                  placeholderTextColor={Color.gray}
+                  placeholderTextColor={Color.border}
                   underlineColorAndroid="transparent"
                   autoCorrect={false}
                   onChangeText={text => onChangeUserData('carIdentity', text)}
@@ -559,7 +613,7 @@ const JoinCommunity = ({ navigation, route }) => {
                 <CustomTextInput
                   placeholder="Tuliskan sesuatu..."
                   keyboardType="default"
-                  placeholderTextColor={Color.gray}
+                  placeholderTextColor={Color.border}
                   underlineColorAndroid="transparent"
                   autoCorrect={false}
                   onChangeText={text => onChangeUserData('reason', text)}
@@ -591,7 +645,7 @@ const JoinCommunity = ({ navigation, route }) => {
                 <CustomTextInput
                   placeholder="Tuliskan sesuatu..."
                   keyboardType="default"
-                  placeholderTextColor={Color.gray}
+                  placeholderTextColor={Color.border}
                   underlineColorAndroid="transparent"
                   autoCorrect={false}
                   onChangeText={text => onChangeUserData('note', text)}
@@ -605,7 +659,7 @@ const JoinCommunity = ({ navigation, route }) => {
           </View>
 
           <FormSelect
-            label="Ukuran Kaos"
+            label="Ukuran Kemeja"
             placeholder="Pilih ukuran"
             value={
               selectedMerchandiseSize ? selectedMerchandiseSize.name : null
@@ -650,37 +704,16 @@ const JoinCommunity = ({ navigation, route }) => {
             </View>
           </View>
 
-          <View
-            style={{
-              paddingTop: 16,
-              paddingBottom: 16,
-              paddingHorizontal: 16,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <View
-              style={{
-                width: 48,
-                height: 48,
-                borderRadius: 24,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderWidth: 4,
-                borderColor: Color.grayLight,
-                marginRight: 8,
-              }}>
-              <Text type="bold" size={24} align="left" color={Color.primary}>
-                2
-              </Text>
-            </View>
-            <View>
-              <Text size={14} color={Color.text} align="left">
-                Unggah Foto
-              </Text>
-              <Text size={10} color={Color.gray} align="left">
-                Unggah foto untuk memenuhi persyaratan
-              </Text>
-            </View>
+          <View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 16 }}>
+              <CircularProgress
+                  progress={100}
+                  color={Color.primary}
+                  textComponent={<Text size={28} color={Color.primary} type='bold'>2</Text>}
+              />
+              <View style={{ alignItems: 'flex-start', justifyContent: 'center', paddingLeft: 8 }}>
+                  <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Unggah Foto</Text>
+                  <Text style={{ fontSize: 10, color: Color.secondary }}>Unggah foto untuk memenuhi persyaratan</Text>
+              </View>
           </View>
 
           <View style={{ paddingHorizontal: 16, marginTop: 16 }}>
@@ -1207,27 +1240,7 @@ const JoinCommunity = ({ navigation, route }) => {
         }}
       />
 
-      <ModalSelectChapter
-        ref={modalSelectChapterRef}
-        selected={selectedChapter}
-        onPress={e => {
-          onChangeUserData('chapterId', e.name);
-          setSelectedChapter(e);
-          modalSelectChapterRef.current.close();
-        }}
-      />
-
-      <ModalActionScroll
-        visible={modalCarType}
-        onClose={() => {
-          setModalCarType(false);
-        }}
-        data={listCarType}
-        onPress={val => {
-          setSelectedCarType(val);
-          setModalCarType(false);
-        }}
-      />
+      <ModalActionScroll { ...modalActionScrollProps } />
 
       <ModalActions
         visible={modalMerchandiseSize}

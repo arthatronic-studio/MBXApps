@@ -7,6 +7,7 @@ import {
     // TouchableOpacity,
     useColor
 } from '@src/components';
+import { Divider } from 'src/styled';
 
 const ContainerModal = Styled(TouchableOpacity)`
   width: 100%;
@@ -16,21 +17,11 @@ const ContainerModal = Styled(TouchableOpacity)`
   backgroundColor: rgba(0, 0, 0, 0.4);
 `;
 
-const ButtonSubmit = Styled(TouchableOpacity)`
-  borderRadius: 8px;
-  width: 100%;
-  height: 45px;
-  justifyContent: center;
-  elevation: 2;
-  marginTop: 16px;
-`;
-
-const CardModal = Styled(View)`
+const CardModal = Styled(TouchableOpacity)`
   width: 90%;
   alignItems: center;
-  padding: 16px;
-  backgroundColor: #FFFFFF;
-  borderRadius: 8px;
+  padding: 32px 16px 16px;
+  borderRadius: 16px;
 `;
 
 const defaultProps = {
@@ -40,14 +31,12 @@ const defaultProps = {
     onClose: () => {},
     title: '',
     message: '',
+    showCloseButton: false,
 };
 
-const AlertModal = (props) => {
-    const {
-        visible, type, onSubmit, onClose,
-        title, message,
-    } = props;
-
+const AlertModal = ({
+    visible, type, onSubmit, onClose, title, message, showCloseButton,
+}) => {
     const { Color } = useColor();
 
     const rawIcon = () => {
@@ -82,33 +71,55 @@ const AlertModal = (props) => {
                 onClose();
             }}
         >
-            <SafeAreaView>
-                <ContainerModal onPress={() => onClose()}>
-                    <CardModal>
-                        <View style={{width: 74, height: 74, borderRadius: 37, borderWidth: 3, borderColor: rawIcon().color, alignItems: 'center', justifyContent: 'center', marginBottom: 8}}>
-                            <Ionicons name={rawIcon().name} size={42} color={rawIcon().color} />
-                        </View>
-                        
-                        {title !== '' && <View style={{marginBottom: 4}}>
-                            <Text type='semibold' size={18} color={rawIcon().color}>{title}</Text>
-                        </View>}
-                        <Text type='semibold' size={16}>{message}</Text>
+            <ContainerModal onPress={() => onClose()}>
+                <CardModal activeOpacity={1} style={{backgroundColor: Color.theme}}>
+                    <View style={{width: 40, height: 40, borderRadius: 20, borderWidth: 3, borderColor: rawIcon().color, alignItems: 'center', justifyContent: 'center', marginBottom: 8}}>
+                        <Ionicons name={rawIcon().name} size={30} color={rawIcon().color} />
+                    </View>
+                    
+                    {title !== '' && <View style={{marginBottom: 16}}>
+                        <Text type='bold' size={16} color={rawIcon().color}>{title}</Text>
+                    </View>}
+                    <Text>{message}</Text>
 
-                        <ButtonSubmit
-                            style={{backgroundColor: Color.theme}}
+                    <View style={{height: 45, width: '100%', flexDirection: 'row', marginTop: 32}}>
+                        {showCloseButton && <TouchableOpacity
+                            style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                backgroundColor: Color.textInput,
+                                borderRadius: 8,
+                                borderWidth: 1,
+                                borderColor: Color.primary,
+                            }}
+                            onPress={() => {
+                                onClose();
+                            }}
+                        >
+                            <Text color={Color.primary}>Tidak</Text>
+                        </TouchableOpacity>}
+
+                        {showCloseButton && <Divider />}
+
+                        <TouchableOpacity
+                            style={{
+                                flex: 1,
+                                justifyContent: 'center',
+                                backgroundColor: Color.primary,
+                                borderRadius: 8,
+                            }}
                             onPress={() => {
                                 onSubmit();
                             }}
                         >
-                            <Text>Oke</Text>
-                        </ButtonSubmit>
-                    </CardModal>
-                </ContainerModal>
-            </SafeAreaView>
+                            <Text color={Color.textInput}>Ya</Text>
+                        </TouchableOpacity>
+                    </View>
+                </CardModal>
+            </ContainerModal>
         </Modal>
     )
 }
 
 AlertModal.defaultProps = defaultProps;
-
 export default AlertModal;

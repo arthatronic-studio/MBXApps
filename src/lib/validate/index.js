@@ -7,10 +7,11 @@ const constraints = {
     email: true,
   },
   username: {
-    presence: { allowEmpty: false, message: '^Mohon isi dengan Email atau No. Telepon Anda' },
+    presence: { allowEmpty: false, message: '^Mohon isi dengan No. Telepon Anda' },
   },
   idNumber: {
     presence: { allowEmpty: false, message: '^Mohon isi NIK dengan benar' },
+    length: { minimum: 16, message: '^NIK minimal 16 karakter' },
   },
   password0: {
     presence: { allowEmpty: false, message: '^Mohon isi kata sandi lama Anda' },

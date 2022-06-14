@@ -48,12 +48,21 @@ const HighlightLelang = ({ title, nav, prodStatus }) => {
   }, []);
 
   const fetchListProduct = () => {
-    const variables = {
-      type: "HOMEPAGE",
-      status: prodStatus,
-      page: 1,
-      limit: 4,
-    };
+    let variables = {};
+    if(prodStatus === 'WILLCOME'){
+      variables = {
+        type: "HOMEPAGE",
+        status: prodStatus,
+        page: 1,
+        limit: 4,
+      };
+    }else{
+      variables = {
+        type: "HOMEPAGE",
+        page: 1,
+        limit: 4,
+      };
+    }
 
     console.log('variables', variables);
 

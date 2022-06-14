@@ -58,10 +58,10 @@ const PlaceDetail = ({navigation, route}) => {
         console.log(res, 'res add like');
         if (res.data.contentAddLike.id) {
           if (res.data.contentAddLike.status === 1) {
-            showLoading('success', 'Berhasil dipesan');
+            showLoading('success', 'Disukai');
             setState({im_like: true});
           } else {
-            showLoading('info', 'Berhasil membatalkan');
+            showLoading('info', 'Batal menyukai');
             setState({im_like: false});
           }
         }

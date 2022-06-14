@@ -117,7 +117,7 @@ const Maps = ({ onCallback, name, latitude, longitude, initLocation }) => {
                         onErrorFindLocation();
                     }
                 } else {
-                    alert('Tidak ditemukan hasil');
+                    // alert('Tidak ditemukan hasil');
                     onErrorFindLocation();
                 }
             })
@@ -229,7 +229,7 @@ const Maps = ({ onCallback, name, latitude, longitude, initLocation }) => {
                 <Text size={12} color={Color.primaryDark}>Memuat Peta</Text>
             </View>
             :    
-            <View style={{width: '100%', aspectRatio: 1, backgroundColor: Color.border, borderRadius: 8}}>
+            <View style={{flex: 1, backgroundColor: Color.border, borderRadius: 8}}>
                 <MapView
                     showsUserLocation
                     provider={PROVIDER_GOOGLE} // remove if not using Google Maps

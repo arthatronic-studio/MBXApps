@@ -3,7 +3,6 @@ import {View, FlatList, TextInput, Image, ActivityIndicator, useWindowDimensions
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
-import { launchImageLibrary } from 'react-native-image-picker';
 import { useSelector } from 'react-redux';
 import Moment from 'moment';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -25,6 +24,7 @@ import {analyticMethods, GALogEvent} from 'src/utils/analytics';
 import { Container, Divider, Row } from 'src/styled';
 import { isIphoneNotch, listContentCategory } from 'src/utils/constants';
 import CardComment from 'src/components/Card/CardComment';
+import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
 
 const itemPerPage = 10;
 const initSelectedComment = {
@@ -48,6 +48,7 @@ const CommentListScreen = ({ navigation, route }) => {
   const [thumbImage, setThumbImage] = useState('');
   const [mimeImage, setMimeImage] = useState('image/jpeg');
   const [textComment, setTextComment] = useState('');
+  const [modalImagePicker, setModalImagePicker] = useState(false);
 
   const modalListActionRef = useRef();
 
@@ -347,18 +348,7 @@ const CommentListScreen = ({ navigation, route }) => {
 
                 <TouchableOpacity
                   onPress={() => {
-                    const options = {
-                      mediaType: 'photo',
-                      maxWidth: 640,
-                      maxHeight: 640,
-                      quality: 1,
-                      includeBase64: true,
-                    }
-
-                    launchImageLibrary(options, (callback) => {
-                      setThumbImage(callback.base64);
-                      setMimeImage(callback.type);
-                    })
+                    setModalImagePicker(true);
                   }}
                 >
                   <View style={{width: 40, height: 40, alignItems:'center', justifyContent:'center'}}>
@@ -540,6 +530,21 @@ const CommentListScreen = ({ navigation, route }) => {
         onClose={() => {
           resetTempState()
         }}
+      />
+
+      <ModalImagePicker
+          visible={modalImagePicker}
+          onClose={() => {
+              setModalImagePicker(false);
+          }}
+          onSelected={(callback) => {
+              if (callback.base64) {
+                  setThumbImage(callback.base64);
+                  setMimeImage(callback.type);
+              }
+
+              setModalImagePicker(false);
+          }}
       />
     </Scaffold>
   );

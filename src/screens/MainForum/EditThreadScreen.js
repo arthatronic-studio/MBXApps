@@ -3,7 +3,8 @@ import { View, ScrollView, TextInput, SafeAreaView, Image, Keyboard, BackHandler
 import Styled from 'styled-components';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import {
     Header,
     Text,
@@ -27,6 +28,7 @@ import { accessClient } from 'src/utils/access_client';
 import FormSelect from 'src/components/FormSelect';
 import DatePicker from 'react-native-date-picker';
 import Moment from 'moment';
+import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
 
 const MainView = Styled(SafeAreaView)`
     flex: 1;
@@ -95,6 +97,7 @@ const EditThreadScreen = (props) => {
         iconName: params.status === 'PRIVATE' ? 'lock-closed' : 'globe',
     });
     const [showDatePicker, setShowDatePicker] = useState(false);
+    const [modalImagePicker, setModalImagePicker] = useState(false);
 
     // ref
     const modalSelectStatusRef = useRef();
@@ -214,25 +217,14 @@ const EditThreadScreen = (props) => {
                 // iconRightButton={<Entypo name='trash' size={18} />}
             />
 
-            <ScrollView>
+            <KeyboardAwareScrollView>
                 <View style={{paddingHorizontal: 16, paddingTop: 16, paddingBottom: 12}}>
                     <LabelInput>
                         <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Gambar</Text>
                     </LabelInput>
                     <TouchableOpacity
                         onPress={() => {
-                            const options = {
-                                mediaType: 'photo',
-                                maxWidth: 640,
-                                maxHeight: 640,
-                                quality: 1,
-                                includeBase64: true,
-                            }
-
-                            launchImageLibrary(options, (callback) => {
-                                setThumbImage(callback.base64);
-                                setMimeImage(callback.type);
-                            })
+                            setModalImagePicker(true);
                         }}
                         style={{width: '100%', height: 70, borderRadius: 4, marginTop: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
                     >
@@ -351,7 +343,7 @@ const EditThreadScreen = (props) => {
                 </Button>
 
                 <Divider />
-            </ScrollView>
+            </KeyboardAwareScrollView>
 
             <Submit
                 buttonLabel='Simpan'
@@ -391,6 +383,21 @@ const EditThreadScreen = (props) => {
                     setShowDatePicker(false)
                 }}
             />}
+
+            <ModalImagePicker
+                visible={modalImagePicker}
+                onClose={() => {
+                    setModalImagePicker(false);
+                }}
+                onSelected={(callback) => {
+                    if (callback.base64) {
+                        setThumbImage(callback.base64);
+                        setMimeImage(callback.type);
+                    }
+
+                    setModalImagePicker(false);
+                }}
+            />
         </MainView>
     )
 }

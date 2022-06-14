@@ -9,7 +9,8 @@ import {
   Text,
   usePopup,
   useColor,
-  Scaffold
+  Scaffold,
+  Header
 } from '@src/components';
 import validate from '@src/lib/validate';
 import { callChangePassword } from '@src/state/actions/user/auth';
@@ -40,7 +41,7 @@ const UserChangePassword = ({ navigation, route }) => {
     loading,
     error
   } = useSelector(state => state['user.auth']);
-
+  const shouldUpdateProfile = user && !user.firstName && (!user.email || user.email === 'test@mail.com');
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
 
@@ -75,7 +76,11 @@ const UserChangePassword = ({ navigation, route }) => {
       if (changePassword.status) {
         showPopup('Password Berhasil Diubah', 'success');
         setTimeout(() => {
-          redirectTo('MainPage');
+          if (shouldUpdateProfile) {
+            redirectTo('ChangeProfile');
+          } else {
+            redirectTo('MainPage');
+          }
         }, 2500);
       }
       // else if (error) {
@@ -122,9 +127,12 @@ const UserChangePassword = ({ navigation, route }) => {
     
   return (
     <Scaffold
-      headerTitle=''
       popupProps={popupProps}
       fallback={loading}
+      header={
+        // handle user yg dipaksa update profile
+        <Header showLeftButton={state.canGoBack} />
+      }
     >
       <ScrollView
         keyboardShouldPersistTaps='handled'

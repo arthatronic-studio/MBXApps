@@ -12,7 +12,10 @@ export const fetchShipperGetProvinceList = async(variables) => {
     try {
         const result = await Client.query({
             query: queryGetProvince,
-            variables,
+            variables: {
+                countryCode: 228,
+                ...variables,
+            },
         });
     
         if (

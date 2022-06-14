@@ -120,8 +120,10 @@ const JoinLelang = ({navigation, route}) => {
     currentSocket.on('auction-bid-success', (res) => {
       console.log('res bid success', res);
       setListBidding([res.bid, ...listBidding]);
-      setUserLastBid(+res.bid.bid);
       setHighestBid(+res.bid.bid);
+      if(res.bid.userId == user.userId){
+        setUserLastBid(+res.bid.bid);
+      }
       // showPopup('Berhasil', 'success');
     });
 
