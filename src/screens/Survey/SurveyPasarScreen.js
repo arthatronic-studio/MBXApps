@@ -157,8 +157,14 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                 
                 // cek status 1 dan required
                 if ([1].includes(e.status) && e.required) {
-                    if (e.validation && e.validation.promptSubmitIfNull && !e.value) {
-                        promptSubmitIfNull = true;
+                    if (e.validation && e.validation.promptSubmitIfNull) {
+                        if (e.value && e.value.id === e.validation.valueSubmitIfNull) {
+                            promptSubmitIfNull = true;
+                            break;
+                        } else if (!e.value) {
+                            promptSubmitIfNull = true;
+                            break;
+                        }
                     }
                     else if (e.type === 'UPLOAD' && e.value.length < uploadMin) {
                         errorMessage = e.label + ' diisi minimal ' + uploadMin + ' foto';
@@ -190,13 +196,13 @@ const SurveyPasarScreen = ({ navigation, route }) => {
             if (currentHeaderIndex < (survey_pasar_header.length - 1)) {
                 setCurrentHeaderIndex(currentHeaderIndex + 1);
                 onStoreLastHeaderIndex(currentHeaderIndex + 1);
-                onStoreData(valueContent);
                 if (flatlistRef.current) {
                     flatlistRef.current.scrollToOffset({ animated: true, offset: 0 });
                 }
                 return;
             }
 
+            onStoreData(valueContent);
             navigation.navigate('SurveyReviewScreen', { listHeader: survey_pasar_header, valueContent: valueContent });
         }
     }
@@ -808,8 +814,8 @@ const SurveyPasarScreen = ({ navigation, route }) => {
             <AlertModal
                 visible={modalSubmitIfNull}
                 showCloseButton
-                title='Konfirmasi'
-                message='ID pasar wajib diisi. Jika ID yang Anda cari tidak ditemukan, Anda bisa langsung me-review survey untuk dikirim. Review Survey Sekarang?'
+                title='Informasi'
+                message='Jika keberadaan pasar yang tidak ditemukan, Anda bisa langsung me-review survey untuk dikirim. Review Survey Sekarang?'
                 onSubmit={() => {
                     setModalSubmitIfNull(false);
                     navigation.navigate('SurveyReviewScreen', { listHeader: survey_pasar_header, valueContent: valueContent });

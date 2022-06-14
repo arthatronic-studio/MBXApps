@@ -219,7 +219,7 @@ const SurveyReviewScreen = ({ navigation, route }) => {
               });
             }
             // TODO: ambil index pertama dari api belom support array of img
-            value = value[0];
+            // value = value[0];
           }
           if (item.type === 'SELECT_MULTIPLE') {
             value = '';
@@ -241,13 +241,27 @@ const SurveyReviewScreen = ({ navigation, route }) => {
           data.append(`data[${indexData}][block]`, (i + 1).toString());
           data.append(`data[${indexData}][index]`, index);
           data.append(`data[${indexData}][name]`, item.name || item.label);
-          data.append(`data[${indexData}][value]`, value);
+          // data.append(`data[${indexData}][value]`, value);
+          if (Array.isArray(value)) {
+            if (value.length > 0) {
+              for (let valIdx = 0; valIdx < value.length; valIdx++) {
+                const valObj = value[valIdx];
+                data.append(`data[${indexData}][value][${valIdx}]`, valObj);
+              }
+            } else {
+              data.append(`data[${indexData}][value]`, '');
+            }
+          } else {
+            data.append(`data[${indexData}][value]`, value);
+          }
           data.append(`data[${indexData}][type]`, item.type === 'UPLOAD' ? item.type + '_' + item.validation.uploadType.toUpperCase() : item.type);
         // }
       }
     }
 
     console.log(data);
+
+    // return
 
     let config = {
       method: 'post',
