@@ -251,9 +251,11 @@ const ChatDetailScreen = ({ navigation, route }) => {
             fallback={dataChat.loading}
             popupProps={popupProps}
             color={Color.semiwhite}
-            header={
-                <DetailHeader/> 
-            }
+            headerTitle={params.roomName}
+            // hide online
+            // header={
+            //     <DetailHeader/> 
+            // }
         >
             {/* hide tgl */}
             {/* <View style={{backgroundColor: Color.border, width: '35%', height: 25, borderRadius: 20, alignItems: 'center', justifyContent: 'center', marginVertical: 15, alignSelf: 'center'}}>
@@ -299,13 +301,13 @@ const ChatDetailScreen = ({ navigation, route }) => {
                     // Receiver Chat
                     return (
                         <View style={{width, marginTop: 16, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'flex-end'}}>
-                            <View style={{width: 30, height: 30, marginRight: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.primary}}>
-                            <Image
-                                source={{uri: item.image}}
-                                style={{width: '100%', aspectRatio: 1, borderRadius: 15, backgroundColor: Color.primary}}
-                            />
+                            <View style={{width: 30, height: 30, marginRight: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.disabled}}>
+                                <Image
+                                    source={{uri: item.image}}
+                                    style={{width: '100%', aspectRatio: 1, borderRadius: 15, backgroundColor: Color.disabled}}
+                                />
                             </View>
-                            <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: '#E8F3FD', borderRadius: 8, borderBottomLeftRadius: 0, alignItems: 'flex-start'}}>
+                            <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.textInput, borderRadius: 8, borderBottomLeftRadius: 0, alignItems: 'flex-start'}}>
                                 {/* <Text size={10} type='semibold' align='left' color={Color.primary}>{item.name}</Text> */}
                                 <Divider height={4} />
                                 <Text align='left' color={Color.text}>{item.message}</Text>
