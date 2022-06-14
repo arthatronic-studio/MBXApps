@@ -42,6 +42,7 @@ import CardDetailForum from 'src/screens/MainForum/CardDetailForum';
 // profile
 import ChangeProfile from '@src/screens/MainProfile/ChangeProfile';
 import SettingScreen from '@src/screens/MainProfile/SettingScreen';
+import SyaratdanKetentuan from '@src/screens/MainProfile/SyaratdanKetentuan';
 import ShowAllFromProfile from '@src/screens/MainProfile/ShowAllFromProfile';
 import JoinCommunity from 'src/screens/MainProfile/JoinCommunity';
 import BlockUser from 'src/screens/MainProfile/BlockUser';
@@ -361,6 +362,8 @@ function MainStackNavigator() {
       <Screen name="ChangeProfile" component={ChangeProfile} />
       <Screen name="ShowAllFromProfile" component={ShowAllFromProfile} />
       <Screen name="SettingScreen" component={SettingScreen} />
+      <Screen name="SyaratdanKetentuan" component={SyaratdanKetentuan} />
+
       <Screen name="JoinCommunity" component={JoinCommunity} />
       <Screen name="BlockUser" component={BlockUser} />
       <Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />

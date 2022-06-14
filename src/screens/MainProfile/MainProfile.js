@@ -126,28 +126,56 @@ const MainProfile = ({navigation, route}) => {
       code: 'history',
       title: 'Riwayat',
       show: accessClient.MainProfile.showMenuHistory && user && !user.guest,
-      icon: <Ionicons name="receipt-outline" size={20} color={Color.text} style={{}} />,
+      icon: (
+        <Ionicons
+          name="receipt-outline"
+          size={20}
+          color={Color.text}
+          style={{}}
+        />
+      ),
       onPress: () => {},
     },
     {
       code: 'coupon',
       title: 'Kuponku',
       show: accessClient.MainProfile.showMenuCoupon && user && !user.guest,
-      icon: <MaterialCommunityIcons name="ticket-confirmation-outline" size={20} color={Color.text} style={{}} />,
+      icon: (
+        <MaterialCommunityIcons
+          name="ticket-confirmation-outline"
+          size={20}
+          color={Color.text}
+          style={{}}
+        />
+      ),
       onPress: () => {},
     },
     {
       code: 'myshop',
       title: 'Toko Saya',
       show: accessClient.MainProfile.showMenuMyStore && user && !user.guest,
-      icon: <MaterialCommunityIcons name="storefront-outline" size={20} color={Color.text} style={{}} />,
+      icon: (
+        <MaterialCommunityIcons
+          name="storefront-outline"
+          size={20}
+          color={Color.text}
+          style={{}}
+        />
+      ),
       onPress: () => navigation.navigate('MyShopHomepage'),
     },
     {
       code: 'auction',
       title: 'Bid Auction',
       show: accessClient.MainProfile.showMenuBidAuction && user && !user.guest,
-      icon: <MaterialCommunityIcons name="ticket-confirmation-outline" size={20} color={Color.text} style={{}} />,
+      icon: (
+        <MaterialCommunityIcons
+          name="ticket-confirmation-outline"
+          size={20}
+          color={Color.text}
+          style={{}}
+        />
+      ),
       onPress: () => navigation.navigate('Lelang'),
     },
     {
@@ -161,29 +189,53 @@ const MainProfile = ({navigation, route}) => {
       code: 'setting',
       title: 'Pengaturan',
       show: user && !user.guest,
-      icon: <AntDesign name="setting" size={20} color={Color.text} style={{}} />,
+      icon: (
+        <AntDesign name="setting" size={20} color={Color.text} style={{}} />
+      ),
       onPress: () => navigation.navigate('SettingScreen'),
     },
     {
       code: 'critics_opinion',
       title: 'Kritik & Saran',
       show: true,
-      icon: <AntDesign name="carryout" size={20} color={Color.text} style={{}} />,
-      onPress: () => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
+      icon: (
+        <AntDesign name="carryout" size={20} color={Color.text} style={{}} />
+      ),
+      onPress: () =>
+        Linking.openURL(
+          'mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body',
+        ),
     },
     {
       code: 'survey',
       title: 'Survei',
       show: accessClient.MainProfile.showMenuSurvey,
-      icon: <Ionicons name={"ios-receipt" || "ios-reader"} size={20} color={Color.text} style={{}} />,
+      icon: (
+        <Ionicons
+          name={'ios-receipt' || 'ios-reader'}
+          size={20}
+          color={Color.text}
+          style={{}}
+        />
+      ),
       onPress: () => navigation.navigate('SurveyFirst'),
     },
     {
       code: 'help',
       title: 'Bantuan',
       show: true,
-      icon: <MaterialCommunityIcons name="headphones" size={20} color={Color.text} style={{}} />,
-      onPress: () => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
+      icon: (
+        <MaterialCommunityIcons
+          name="headphones"
+          size={20}
+          color={Color.text}
+          style={{}}
+        />
+      ),
+      onPress: () =>
+        Linking.openURL(
+          'mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body',
+        ),
     },
     // {
     //   code: 'termandcondition',
@@ -202,14 +254,20 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'join_community',
       title: 'Gabung Komunitas',
-      show: accessClient.MainProfile.showMenuJoinCommunity && user && !user.organizationId,
+      show:
+        accessClient.MainProfile.showMenuJoinCommunity &&
+        user &&
+        !user.organizationId,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('JoinCommunity'),
     },
     {
       code: 'community_admin',
       title: 'Community Admin',
-      show: accessClient.MainProfile.showMenuCommunityAdmin && user && user.isDirector === 1,
+      show:
+        accessClient.MainProfile.showMenuCommunityAdmin &&
+        user &&
+        user.isDirector === 1,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('CommunityAdminPage'),
     },
@@ -225,24 +283,40 @@ const MainProfile = ({navigation, route}) => {
       title: 'Device Token',
       show: false,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
-      onPress: async() => {
+      onPress: async () => {
         const token = await messaging().getToken();
         Clipboard.setString(token);
         Alert('Berhasil disalin', token);
       },
     },
     {
+      code: 'Syarat',
+      title: 'Syarat & Ketentuan',
+      show: true,
+      icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
+      onPress: () => navigation.navigate('SyaratdanKetentuan'),
+    },
+    {
       code: 'logout',
       title: 'Keluar',
       show: user && !user.guest,
-      icon: <Ionicons name="exit-outline" size={20} color={Color.error} style={{}} />,
+      icon: (
+        <Ionicons
+          name="exit-outline"
+          size={20}
+          color={Color.error}
+          style={{}}
+        />
+      ),
       onPress: () => onPressExit(),
     },
     {
       code: 'login',
       title: 'Masuk',
       show: user && user.guest,
-      icon: <Ionicons name="exit-outline" size={20} color={Color.info} style={{}} />,
+      icon: (
+        <Ionicons name="exit-outline" size={20} color={Color.info} style={{}} />
+      ),
       onPress: () => navigation.navigate('LoginScreen'),
     },
   ];
