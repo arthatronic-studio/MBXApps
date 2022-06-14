@@ -22,6 +22,7 @@ import {
     iconLiked,
     iconLike,
 } from '@assets/images/home';
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import { Container, Divider, Row } from 'src/styled';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { useSelector } from 'react-redux';
@@ -320,38 +321,50 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
                 }}
                 style={[
                     {
-                        width: width / numColumns - (horizontal ? 32 : 16),
-                        paddingHorizontal: 8,
+                        width: width / numColumns - (horizontal ? 32 : 32),
                         marginBottom: 16,
-                        borderRadius: 4
+                        borderRadius: 8,
+                        elevation: 2,
+                        backgroundColor: Color.theme,
+                        alignSelf: 'center'
                     },
                     style,
                 ]}
             >
-                <View style={{flexDirection: 'row', width: '100%', backgroundColor: Color.textInput, borderRadius: 4, ...shadowStyle}}>
+                <View style={{flexDirection: 'row'}}>
                     <Image
                         source={{uri: item.image}}
-                        style={{width: '35%', aspectRatio: 9/16, borderTopLeftRadius: 4, borderBottomLeftRadius: 4, backgroundColor: Color.border}}
+                        style={{width: '35%', aspectRatio: 10/16, borderTopLeftRadius: 4, borderBottomLeftRadius: 4, backgroundColor: Color.border}}
                     />
-    
-                    <View style={{width: '65%', padding: 16, borderTopRightRadius: 4, borderBottomRightRadius: 4, backgroundColor: Color.textInput}}>
+                    <View style={{width: '65%', paddingHorizontal: 15, paddingVertical: 10, borderTopRightRadius: 4, borderBottomRightRadius: 4, backgroundColor: Color.textInput}}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                            <View style={{width: 70, paddingVertical: 4, paddingHorizontal: 16, borderWidth: 0.5, borderRadius: 8, borderColor: Color.primary}}>
-                                <Text size={10} color={Color.primary}>{item.productCategory}</Text>
+                            <View style={{width: 70, height: 20, alignItems: 'center', justifyContent: 'center',paddingHorizontal: 16, borderWidth: 1, borderRadius: 20, borderColor: '#2C70F7', backgroundColor: '#2C70F766'}}>
+                                <Text size={8} color={'#2C70F7'}>{item.productCategory}</Text>
                             </View>
     
                             {/* <Ionicons name='bookmark-outline' size={20} color={Color.primary} /> */}
                         </View>
     
                         <View style={{paddingTop: 8}}>
-                            <Text type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
-                            <Divider height={6} />
-                            <Text size={12} align='left' numberOfLines={2}>{item.fullname}</Text>
-                            {Moment(eventDate).isValid() && <>
-                                <Text type='bold' size={12} align='left' color={Color.primary}>{Moment(eventDate).format('DD MMM YYYY')}</Text>
-                                <Divider height={8} />
-                            </>}
-                            <Text size={12} align='left' numberOfLines={4}>{item.productDescription}</Text>
+                            <Text type='bold' align='left' numberOfLines={3} style={{lineHeight: 20}}>{item.productName}</Text>
+                            <Divider height={12} />
+                            <Row>
+                                <AntDesign name={'clockcircleo'} color={Color.secondary} size={9} style={{marginRight: 8}}/>
+                                {Moment(eventDate).isValid() && <>
+                                    <Text size={10} color={Color.secondary} align='left' numberOfLines={2}>{Moment(eventDate).format('DD MMM YYYY')}</Text>
+                                </>}
+                            </Row>
+                            <Divider height={3} />
+                            <Row>
+                                <AntDesign name={'user'} size={10} color={Color.secondary} style={{marginRight: 7}}/>
+                                <Text size={10} color={Color.secondary} align='left' numberOfLines={2}>{item.fullname}</Text>
+                            </Row>
+                            <Divider height={12} />
+                            <Text size={8} color={Color.secondary} align='left' numberOfLines={2} style={{marginBottom: 2}}>Mulai dari</Text>
+                            <Row>
+                                <Text type='bold' align='left' numberOfLines={3}>Rp 100.000</Text>
+                                <Text style={{fontSize: 8, color: Color.secondary, marginLeft: 5, textDecorationLine: 'line-through'}}>Rp 75.000</Text>
+                            </Row>
                         </View>
     
                         {/* <View style={{paddingTop: 24, flexDirection: 'row'}}>
@@ -369,6 +382,7 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
                             <Text size={10} align='left'>3 Hari lagi Pendaftaran Ditutup</Text>
                         </View> */}
                     </View>
+
                 </View>
             </TouchableOpacity>
         )
