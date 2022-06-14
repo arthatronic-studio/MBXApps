@@ -261,7 +261,7 @@ const SurveyReviewScreen = ({ navigation, route }) => {
 
     console.log(data);
 
-    // return
+    // return;
 
     let config = {
       method: 'post',
@@ -431,7 +431,7 @@ const SurveyReviewScreen = ({ navigation, route }) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
-                source={{ uri: `data:${val.type};base64,${val.base64}` }}
+                source={{ uri: val.uri }}
               />
             </View>
           ))}

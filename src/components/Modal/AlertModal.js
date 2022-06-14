@@ -17,7 +17,7 @@ const ContainerModal = Styled(TouchableOpacity)`
   backgroundColor: rgba(0, 0, 0, 0.4);
 `;
 
-const CardModal = Styled(View)`
+const CardModal = Styled(TouchableOpacity)`
   width: 90%;
   alignItems: center;
   padding: 32px 16px 16px;
@@ -72,7 +72,7 @@ const AlertModal = ({
             }}
         >
             <ContainerModal onPress={() => onClose()}>
-                <CardModal style={{backgroundColor: Color.theme}}>
+                <CardModal activeOpacity={1} style={{backgroundColor: Color.theme}}>
                     <View style={{width: 40, height: 40, borderRadius: 20, borderWidth: 3, borderColor: rawIcon().color, alignItems: 'center', justifyContent: 'center', marginBottom: 8}}>
                         <Ionicons name={rawIcon().name} size={30} color={rawIcon().color} />
                     </View>

@@ -57,18 +57,17 @@ const SurveyPasarScreen = ({ navigation, route }) => {
     const [currentHeaderIndex, setCurrentHeaderIndex] = useState(storeLastHeaderIndex);
     const [currentContentIndex, setCurrentContentIndex] = useState(-1);
     const [valueContent, setValueContent] = useState([]);
-
+    const currentContent = valueContent[currentHeaderIndex];
     const itemHeader = survey_pasar_header[currentHeaderIndex];
-    const listContent = [survey_pasar_content_1, survey_pasar_content_2, survey_pasar_content_3, survey_pasar_content_4, survey_pasar_content_5, survey_pasar_content_6, survey_pasar_content_7];
-    const currentContent = listContent[currentHeaderIndex];
+    const listStaticContent = [survey_pasar_content_1, survey_pasar_content_2, survey_pasar_content_3, survey_pasar_content_4, survey_pasar_content_5, survey_pasar_content_6, survey_pasar_content_7];
 
     useEffect(() => {
         // remap ulang takutnya ada data baru (kl udah dari server)
         let newArr = [];
 
         if (storeData.length > 0) {
-            for (let i = 0; i < listContent.length; i++) {
-                const arr = listContent[i];
+            for (let i = 0; i < listStaticContent.length; i++) {
+                const arr = listStaticContent[i];
                 let newData = [];
 
                 for (let index = 0; index < arr.length; index++) {
@@ -79,7 +78,8 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                     }
                     
                     newData.push({
-                        ...item,
+                        ...arr[index], // ambil dari static kecuali status & value
+                        status: item.status,
                         value: mappingTypeContent(item),
                     });
                 }
@@ -88,7 +88,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
             }
         }
         else {
-            for (const arr of listContent) {
+            for (const arr of listStaticContent) {
                 let newData = [];
                 for (const item of arr) {
                     newData.push({
@@ -117,6 +117,9 @@ const SurveyPasarScreen = ({ navigation, route }) => {
     const mappingTypeContent = (item) => {
         // kalo udah ada valuenya langsung balikin value tsbt
         if (item.value) {
+            if (item.type === 'TIME_PICKER') {
+                return new Date(item.value);
+            }
             return item.value;
         }
 
@@ -252,6 +255,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                             let newValues = [...valueContent];
                             newValues[currentHeaderIndex][index].value = value;
                             setValueContent(newValues);
+                            onStoreData(newValues);
                         }
                     }}
                     multiline={item.type === 'TEXT_AREA'}
@@ -313,6 +317,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                             let newValues = [...valueContent];
                             newValues[currentHeaderIndex][index].value = { fullAddress, latitude, longitude };
                             setValueContent(newValues);
+                            onStoreData(newValues);
                         }
                     }}
                     onClose={() => setModalSelectMap(false)}
@@ -355,7 +360,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                     }}
-                                    source={{ uri: `data:${val.type};base64,${val.base64}` }}
+                                    source={{ uri: val.uri }}
                                 />
                                 <TouchableOpacity
                                     onPress={() => {
@@ -365,6 +370,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                                         let newValues = [...valueContent];
                                         newValues[currentHeaderIndex][index].value = arr;
                                         setValueContent(newValues);
+                                        onStoreData(newValues);
                                     }}
                                     style={{ position: 'absolute', top: 0, right: 2 }}
                                 >
@@ -450,6 +456,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                                                 }
                                                 newValues[currentHeaderIndex][index].value = arr;
                                                 setValueContent(newValues);
+                                                onStoreData(newValues);
                                             }}
                                             style={{
                                                 borderColor: isSelected ? Color.textInput : Color.text,
@@ -488,6 +495,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                                     let newValues = [...valueContent];
                                     newValues[currentHeaderIndex][index].value = v;
                                     setValueContent(newValues);
+                                    onStoreData(newValues);
                                 }}
                                 style={{paddingRight: 16, marginBottom: 8}}
                             >
@@ -583,6 +591,8 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                         setCurrentExtraData(newExtraData);
 
                         setValueContent(newValues);
+                        onStoreData(newValues);
+
                         setModalSelectBox(true);
                         setCurrentContentIndex(index);
                     }}
@@ -626,6 +636,8 @@ const SurveyPasarScreen = ({ navigation, route }) => {
     }
 
     const ButtonView = Platform.OS === 'ios' ? KeyboardAvoidingView : View;
+
+    console.log('storeData', storeData);
 
     return (
         <Scaffold
@@ -696,6 +708,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                         }
                     }
                     else if ([2, 4].includes(item.status)) {
+                        console.log('2 4',item);
                         return <View />
                     }
                     else {
@@ -743,6 +756,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                         }
                         
                         setValueContent(newValues);
+                        onStoreData(newValues);
                     }
                     setModalSelectBox(false);
                     setCurrentContentIndex(-1);
@@ -761,15 +775,18 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                     setCurrentContentIndex(-1);
                 }}
                 onSelected={(callback) => {
-                    if (callback.base64 && valueContent.length > 0) {
+                    if (callback.uri && valueContent.length > 0) {
                         let arr = valueContent.length > 0 ? valueContent[currentHeaderIndex][currentContentIndex].value : [];
                         let newValues = [...valueContent];
                         arr.push({
-                            ...callback,
+                            fileName: callback.fileName,
+                            type: callback.type,
+                            uri: callback.uri,
                             uploadType: 'image',
                         });
                         newValues[currentHeaderIndex][currentContentIndex].value = arr;
                         setValueContent(newValues);
+                        onStoreData(newValues);
                     }
 
                     setModalImagePicker(false);
@@ -788,6 +805,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                     let newValues = [...valueContent];
                     newValues[currentHeaderIndex][currentContentIndex].value = value;
                     setValueContent(newValues);
+                    onStoreData(newValues);
                 }}
                 onCancel={() => {
                     setShowDatePicker(false);
@@ -818,7 +836,16 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                 message='Jika keberadaan pasar yang tidak ditemukan, Anda bisa langsung me-review survey untuk dikirim. Review Survey Sekarang?'
                 onSubmit={() => {
                     setModalSubmitIfNull(false);
-                    navigation.navigate('SurveyReviewScreen', { listHeader: survey_pasar_header, valueContent: valueContent });
+                    navigation.navigate('SurveyReviewScreen', {
+                        listHeader: [
+                            survey_pasar_header[0],
+                            survey_pasar_header[1],
+                        ],
+                        valueContent: [
+                            valueContent[0],
+                            valueContent[1],
+                        ]
+                    });
                 }}
                 onClose={() => {
                     setModalSubmitIfNull(false);
