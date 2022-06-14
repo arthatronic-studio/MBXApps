@@ -312,7 +312,8 @@ export default ({ navigation, route }) => {
               value={userData.idCardNumber}
               onBlur={() => isValueError('idCardNumber')}
               style={{color: Color.text}}
-              />
+              maxLength={16}
+            />
           </EmailRoundedView>
           <ErrorView>
             <Text size={12} color={Color.error} type='medium' align='left'>{errorData.idCardNumber}</Text>
@@ -325,7 +326,7 @@ export default ({ navigation, route }) => {
             <EmailRoundedView>
               <CustomTextInput
                 placeholder=' Masukan nomor punggung '
-                keyboardType='number-pad'
+                keyboardType='default'
                 placeholderTextColor={Color.gray}
                 underlineColorAndroid='transparent'
                 autoCorrect={false}

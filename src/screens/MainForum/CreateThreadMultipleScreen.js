@@ -318,20 +318,6 @@ const CreateThreadMultipleScreen = (props) => {
                     </ErrorView>
                 </View> */}
 
-                {/* <View style={{paddingHorizontal: 16, paddingTop: 16}}>
-                    <TouchableOpacity onPress={() => modalSelectChapterRef.current.open()}>
-                        <View style={{marginTop: 6, paddingHorizontal: 12, borderWidth: 1, borderRadius: 4, borderColor: Color.border}}>
-                            <LabelInput>
-                                <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Domisili</Text>
-                            </LabelInput>
-                            <View style={{height: 34, paddingRight: 8, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                                <Text size={14} style={{marginTop: 2}}>{userData.chapterId || 'Pilih Domisili'}</Text>
-                                <Ionicons name='chevron-down-outline' color={Color.text} />
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                </View> */}
-
                 {/* {showEvent && <FormSelect
                     label='Tanggal Event'
                     placeholder='Pilih Tanggal'
