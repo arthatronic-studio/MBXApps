@@ -308,8 +308,8 @@ const MainHome = ({navigation, route}) => {
 
               <TouchableOpacity
                 onPress={() => {
-                  // navigation.navigate('Chat');
-                  navigation.navigate('ChatRoomsScreen');
+                  navigation.navigate('Chat');
+                  // navigation.navigate('ChatRoomsScreen');
                 }}
                 style={{
                   width: '20%',

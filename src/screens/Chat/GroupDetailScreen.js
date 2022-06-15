@@ -3,7 +3,8 @@ import { View, FlatList, ScrollView,TextInput, Image, Pressable,useWindowDimensi
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Moment from 'moment';
-import {ModalListAction } from 'src/components';
+import { ModalListAction } from 'src/components';
+import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
 import { useSelector } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Text from '@src/components/Text';
@@ -57,8 +58,7 @@ const GroupDetailScreen = ({ navigation, route }) => {
 
     const modalListActionRef = useRef();
     const [showSection, setShowSection] = useState(true);
-     const modalListFile = useRef();
-     const [showSectionFile, setShowSectionFile] = useState(true);
+
     // params
     const { params } = route;
     console.log(params,'ini parasm')
@@ -68,8 +68,7 @@ const GroupDetailScreen = ({ navigation, route }) => {
     )
 
     //Image
-    const [thumbImage, setThumbImage] = useState('');
-    const [mimeImage, setMimeImage] = useState('image/jpeg');
+   const [modalImagePicker, setModalImagePicker] = useState(false);
 
     // state
     const [textComment, setTextComment] = useState('');
@@ -235,59 +234,58 @@ const GroupDetailScreen = ({ navigation, route }) => {
         });
     }
 
-    const onSubmit = () => {
-        if (textComment === '') {
-            showPopup('Teks tidak boleh kosong', 'warning');
-            return;
-        }
+    const onSubmit = imageBase64 => {
+      if (!imageBase64 && textComment === '') {
+        showPopup('Teks tidak boleh kosong', 'warning');
+        return;
+      }
 
-        if (!roomId) {
-            fetchContentChatRoomManage();
-        } else {
-            onSendChat(roomId);
-        }
-    }
+      if (!roomId) {
+        fetchContentChatRoomManage();
+      } else {
+        onSendChat(roomId, imageBase64);
+      }
+    };
     
-    const onSendChat = (room_id) => {
-        const variables = {
-          method: 'INSERT',
-          message: textComment.trim(),
-          roomId: parseInt(room_id),
-          image: thumbImage === '' ? '' : 'data:image/png;base64,' + thumbImage,
-        };
+    const onSendChat = (room_id, imageBase64) => {
+      const variables = {
+        method: 'INSERT',
+        message: textComment.trim(),
+        roomId: parseInt(room_id),
+      };
 
-        console.log('variables', variables);
+      if (imageBase64) {
+        variables.image = 'data:image/png;base64,' + imageBase64;
+      }
+      console.log('variables', variables);
 
-        Client.query({
-            query: queryContentChatMessage,
-            variables,
+      Client.query({
+        query: queryContentChatMessage,
+        variables,
+      })
+        .then(res => {
+          console.log('res kirim chat', res);
+
+          const data = res.data.contentChatMessage;
+          if (data) {
+            currentSocket.emit('chat_room_notifier', {
+              room_id,
+              users_ids: params.targetIds,
+            });
+            currentSocket.on('chat_room_notifier', res => {
+              // console.log('chat_room_notifier', res);
+            });
+
+            currentSocket.emit('chat_messages', {room_id});
+            currentSocket.emit('chat_rooms');
+            setTextComment('');
+          }
         })
-        .then((res) => {
-            console.log('res kirim chat', res);
-
-            const data = res.data.contentChatMessage;
-            if (data) {
-                currentSocket.emit('chat_room_notifier', { room_id, users_ids: params.targetIds });
-                currentSocket.on('chat_room_notifier', (res) => {
-                    // console.log('chat_room_notifier', res);
-                });
-
-                currentSocket.emit('chat_messages', { room_id });
-              currentSocket.emit('chat_rooms');
-              setShowSectionFile(false);
-              setThumbImage('');
-              setMimeImage('');
-              setTextComment('');
-               
-            
-               
-            }
-        })
-        .catch((err) => {
-            console.log('err kirim chat', err);
-            showPopup('Chat gagal dikirim, silakan coba lagi', 'error');
+        .catch(err => {
+          console.log('err kirim chat', err);
+          showPopup('Chat gagal dikirim, silakan coba lagi', 'error');
         });
-    }
+    };
 
     const managedDateUTC = (origin) => {
         const date = Moment(origin).utc();
@@ -380,7 +378,7 @@ const GroupDetailScreen = ({ navigation, route }) => {
                           source={{uri: item.image}}
                           style={{
                             width: 280,
-                            height:200
+                            height: 200,
                           }}
                         />
 
@@ -554,14 +552,11 @@ const GroupDetailScreen = ({ navigation, route }) => {
                   style={{color: Color.text}}
                 />
                 <AntDesign
-                  onPress={() => {
-                    setShowSectionFile(!showSectionFile);
-                    modalListFile.current.open();
-                  }}
                   name={'pluscircleo'}
                   size={18}
                   color={Color.secondary}
                   style={{right: -10}}
+                  onPress={() => setModalImagePicker(true)}
                 />
               </BoxInput>
               <CircleSend
@@ -573,6 +568,14 @@ const GroupDetailScreen = ({ navigation, route }) => {
           ) : null}
         </View>
 
+        <ModalImagePicker
+          visible={modalImagePicker}
+          onClose={() => setModalImagePicker(false)}
+          onSelected={callback => {
+            onSubmit(callback.base64);
+            setModalImagePicker(false);
+          }}
+        />
         <ModalListAction
           onClose={() => setShowSection(!showSection)}
           ref={modalListActionRef}
@@ -634,42 +637,7 @@ const GroupDetailScreen = ({ navigation, route }) => {
           ]}
         />
 
-        <ModalListAction
-          onClose={() => setShowSectionFile(!showSectionFile)}
-          ref={modalListFile}
-          data={[
-            {
-              id: 0,
-              name: 'Image',
-              color: Color.text,
-              onPress: () => {
-                const options = {
-                  mediaType: 'photo',
-                  maxWidth: 640,
-                  maxHeight: 640,
-                  quality: 1,
-                  includeBase64: true,
-                };
-
-                launchImageLibrary(options, callback => {
-                  if (callback.base64) {
-                    setThumbImage(callback.base64);
-                    setMimeImage(callback.type);
-                    
-                    }
-                    
-                });
-                
-                onSendChat(roomId);
-               
-              },
-              
-            },
-           
-           
-           
-          ]}
-        />
+        
       </Scaffold>
     );
 }
