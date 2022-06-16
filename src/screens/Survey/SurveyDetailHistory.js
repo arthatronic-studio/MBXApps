@@ -73,22 +73,13 @@ const SurveyDetailHistory = ({navigation, route}) => {
   const [listDataDetail, setListDataDetail] = useState([]);
   const [useSurveyFile, setUseSurveyFile] = useState(false);
   const isFocused = useIsFocused();
-  
-  console.log('listDataDetail', listDataDetail);
-  const [list, setList] = useState({
-    data: [],
-    loading: false,
-    message: 'error',
-  });
 
   useEffect(() => {
     fetchSurvey();
   }, [isFocused]);
 
   const fetchSurvey = async () => {
-    // params
-
-    let data = [];
+    showLoading();
 
     const dataq = {
       user_id: user.userId,
@@ -96,48 +87,23 @@ const SurveyDetailHistory = ({navigation, route}) => {
       with_detail : 1
     };
 
-    console.log(dataq, 'dataq');
-
     const PostsURL = `http://panel.survey.tribesocial.id/get-surveys?user_id=${dataq.user_id}&survey_id=${dataq.survey_id}&with_detail=${dataq.with_detail}`;
-    console.log('PostsURL', PostsURL);
 
-
-    axios.get(PostsURL).then(res => {
-      try {
+    try {
+      const res = await axios.get(PostsURL);
+      
+      if (Array.isArray(res.data)) {
         setListData(res.data);
         setListDataDetail(res.data[0].details);
-        showLoading();
-        const data = res.data;
-        console.log('ini Data', data);
-        let newData = [];
-        if (data) {
-          newData = data;
-           
-        }
-
-      
-        
-
-        setList({
-          ...list,
-          data: newData,
-          loading: false,
-          message: '',
-        });
-        hideLoading();
-      } catch (error) {
-        hideLoading();
-        alert('Gagal Mengamnil  survey, silakan coba kembali');
-        console.log(error, 'error apicall');
-
-        setList({
-          ...list,
-          loading: false,
-          message: '',
-        });
       }
-    });
+
+      hideLoading();
+    } catch (error) {
+      hideLoading();
+      console.log(error, 'error apicall');
+    }
   };
+
   const renderItem = ({item, index}) => (
     <View
       style={{
@@ -176,7 +142,7 @@ const SurveyDetailHistory = ({navigation, route}) => {
                 borderRadius: 6,
                 backgroundColor: Color.textInput,
                 paddingLeft: 12,
-                marginBottom: 13,
+                marginBottom: 4,
                 ...shadowStyle,
               }}>
               <Text size={12} align="left" type="bold">
@@ -194,7 +160,7 @@ const SurveyDetailHistory = ({navigation, route}) => {
                 borderRadius: 6,
                 backgroundColor: Color.textInput,
                 paddingLeft: 12,
-                marginBottom: 13,
+                marginBottom: 4,
                 ...shadowStyle,
               }}>
               <Text size={12} align="left" type="bold">

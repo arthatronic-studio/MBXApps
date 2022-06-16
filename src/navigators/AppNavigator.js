@@ -164,7 +164,7 @@ import AlbumMusicDetail from 'src/screens/MediaPlayer/AlbumMusicDetail';
 // Survey
 import SurveyPasarScreen from 'src/screens/Survey/SurveyPasarScreen';
 import SurveyReviewScreen from 'src/screens/Survey/SurveyReviewScreen';
-import SurveyHistoryScreen from 'src/screens/Survey/SurveyReviewScreen2';
+import SurveyHistoryScreen from 'src/screens/Survey/SurveyHistoryScreen';
 import SurveyDetailHistory from 'src/screens/Survey/SurveyDetailHistory';
 import SurveyFirst from 'src/screens/Survey/SurveyFirst';
 import SurveySecond from 'src/screens/Survey/SurveySecond';

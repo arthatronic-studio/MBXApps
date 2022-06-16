@@ -31,7 +31,7 @@ import { Container, Divider, Row } from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
 import { getSizeByRatio } from 'src/utils/get_ratio';
 import { joinCommunityMember } from 'src/lib/query/joinCommunityMember';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CircularProgress from 'src/components/CircularProgress';
 import moment from 'moment';
 
@@ -63,6 +63,7 @@ const SurveyReviewScreen = ({ navigation, route }) => {
   const { Color } = useColor();
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
+  const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
   const [useSurveyFile, setUseSurveyFile] = useState(false);
@@ -79,6 +80,10 @@ const SurveyReviewScreen = ({ navigation, route }) => {
       }
     }
   }, []);
+
+  const onStoreReset = () => {
+    dispatch({ type: 'SURVEY_PASAR.RESET' });
+  }
 
   const onSubmit = () => {
     if (useSurveyFile) {
@@ -201,32 +206,27 @@ const SurveyReviewScreen = ({ navigation, route }) => {
         }
         if (item.type === 'province_id') {
            provinsi_id = item.value.id;
-          
         }
         if (item.type === 'city_id') {
            city_id = item.value.id;
-          
         }
         if (item.type === 'suburb_id') {
            suburb_id = item.value.id;
         }
-         if (item.type === 'area_id') {
-            area_id = item.value.id;
-         }
-        
-      }
-      
+        if (item.type === 'area_id') {
+          area_id = item.value.id;
+        } 
+      } 
     }
-
 
     data.append('auth', 'd57abbc8289c72b56161f3f90ef1fa5ad5dca48a');
     data.append('caption_code', 'pasar');
     data.append('survey_code', 'SURVEY-20220229');
     data.append('timestamps', '2022-05-30 11:42:59'); // moment().format('YYYY-MM-DD HH:mm:ss'),
     data.append('user_id', user.userId);
-     data.append('area_id', area_id);
-     data.append('provinsi_id', provinsi_id);
-     data.append('city_id', city_id);
+    data.append('area_id', area_id);
+    data.append('provinsi_id', provinsi_id);
+    data.append('city_id', city_id);
     data.append('suburb_id', suburb_id);
     
     for (let i = 0; i < valueContent.length; i++) {
@@ -323,6 +323,7 @@ const SurveyReviewScreen = ({ navigation, route }) => {
           alert('Survei terkirim, Terima kasih telah mengisi survei melalui aplikasi Tribes Survey');
           setTimeout(() => {
             navigation.popToTop();
+            onStoreReset();
           }, 2500);
         } else {
           alert('Not OK');

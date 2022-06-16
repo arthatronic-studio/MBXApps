@@ -72,11 +72,11 @@ const SurveyPasarScreen = ({ navigation, route }) => {
 
                 for (let index = 0; index < arr.length; index++) {
                     let item = arr[index];
-                    
+
                     if (storeData[i] && storeData[i][index] && storeData[i][index].code === item.code) {
                         item = storeData[i][index];
                     }
-                    
+
                     newData.push({
                         ...arr[index], // ambil dari static kecuali status & value
                         status: item.status,
@@ -112,7 +112,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
     const handleBackPress = () => {
         onPressLeftButton();
         return true;
-      }
+    }
 
     const mappingTypeContent = (item) => {
         // kalo udah ada valuenya langsung balikin value tsbt
@@ -157,7 +157,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
             for (let i = 0; i < currentValue.length; i++) {
                 const e = currentValue[i];
                 const uploadMin = e.validation && e.validation.uploadMin ? e.validation.uploadMin : 0;
-                
+
                 // cek status 1 dan required
                 if ([1].includes(e.status) && e.required) {
                     if (e.validation && e.validation.promptSubmitIfNull) {
@@ -269,7 +269,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
     const [modalSelectMap, setModalSelectMap] = useState(false);
     const renderMapView = (item, index) => {
         return (
-            <View style={{marginBottom: 12}}>
+            <View style={{ marginBottom: 12 }}>
                 <FormSelect
                     type='select'
                     hideErrorHint
@@ -366,7 +366,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                                     onPress={() => {
                                         const newArr = arr;
                                         newArr.splice(id, 1);
-    
+
                                         let newValues = [...valueContent];
                                         newValues[currentHeaderIndex][index].value = arr;
                                         setValueContent(newValues);
@@ -497,7 +497,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                                     setValueContent(newValues);
                                     onStoreData(newValues);
                                 }}
-                                style={{paddingRight: 16, marginBottom: 8}}
+                                style={{ paddingRight: 16, marginBottom: 8 }}
                             >
                                 <Row align='center'>
                                     <View
@@ -520,7 +520,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
     const [modalSelectBox, setModalSelectBox] = useState(false);
     const [currentData, setCurrentData] = useState([]);
     const [currentExtraData, setCurrentExtraData] = useState([]);
-    const fetchSelectBox = async(item, index) => {
+    const fetchSelectBox = async (item, index) => {
         const valProv = valueContent[currentHeaderIndex].filter((e) => e.code === item.parent_code)[0];
         const valCity = valueContent[currentHeaderIndex].filter((e) => e.code === item.parent_code)[0];
         const valSub = valueContent[currentHeaderIndex].filter((e) => e.code === item.parent_code)[0];
@@ -557,7 +557,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
         let arrOptions = item.options;
 
         return (
-            <View style={{marginBottom: 12}}>
+            <View style={{ marginBottom: 12 }}>
                 <FormSelect
                     type='select'
                     hideErrorHint
@@ -567,7 +567,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                     onPress={() => {
                         let newValues = [...valueContent];
                         // legacy (harusnya ini pas value berubah)
-                        const legacy_code = currentContent[index].legacy_code; 
+                        const legacy_code = currentContent[index].legacy_code;
                         for (let i = 0; i < legacy_code.length; i++) {
                             const element = legacy_code[i];
                             const find = currentContent.filter((f) => f.code == element)[0];
@@ -648,8 +648,23 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                     type="regular"
                     centerTitle={false}
                     onPressLeftButton={() => onPressLeftButton()}
+                    actions={
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('SurveyHistoryScreen');
+                            }}
+                            style={{
+                                justifyContent: 'flex-start',
+                                alignItems: 'flex-end',
+                            }}>
+                            <Ionicons
+                                name="refresh-outline"
+                                size={22}
+                                color={Color.text}
+                            />
+                        </TouchableOpacity>
+                    }
                 />
-                
             }
             popupProps={popupProps}
         >
@@ -672,25 +687,6 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                             <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{itemHeader.header_label}</Text>
                             <Text style={{ fontSize: 10, color: Color.secondary }}>{itemHeader.sub_header_label}</Text>
                         </View>
-                       
-                            
-                          <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('SurveyHistoryScreen');
-                }}
-                style={{
-                  width: '20%',
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-end',
-                }}>
-                <Ionicons
-                  name="refresh-outline"
-                  size={22}
-                  color={Color.text}
-                />
-              </TouchableOpacity>
-                          
-                       
                     </View>
                 }
                 renderItem={({ item, index }) => {
@@ -728,7 +724,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                         }
                     }
                     else if ([2, 4].includes(item.status)) {
-                        console.log('2 4',item);
+                        console.log('2 4', item);
                         return <View />
                     }
                     else {
@@ -761,7 +757,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                         // cek id, kalo id null tetap hide form branching
                         if (val && val.id) {
                             const branching_code = currentContent[currentContentIndex].branching_code;
-                            
+
                             for (let i = 0; i < branching_code.length; i++) {
                                 const element = branching_code[i];
                                 const find = currentContent.filter((f) => f.code == element)[0];
@@ -774,7 +770,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                                 }
                             }
                         }
-                        
+
                         setValueContent(newValues);
                         onStoreData(newValues);
                     }
@@ -834,7 +830,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
 
             <AlertModal
                 visible={modalBackConfirm}
-                showCloseButton
+                showDiscardButton
                 title='Konfirmasi'
                 message='Anda akan keluar dari halaman Survey, Simpan perubahan?'
                 onSubmit={() => {
@@ -842,16 +838,19 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                     onStoreData(valueContent);
                     navigation.pop();
                 }}
-                onClose={() => {
+                onDiscard={() => {
                     setModalBackConfirm(false);
                     onStoreReset();
                     navigation.pop();
+                }}
+                onClose={() => {
+                    setModalBackConfirm(false);
                 }}
             />
 
             <AlertModal
                 visible={modalSubmitIfNull}
-                showCloseButton
+                showDiscardButton
                 title='Informasi'
                 message='Jika keberadaan pasar yang tidak ditemukan, Anda bisa langsung me-review survey untuk dikirim. Review Survey Sekarang?'
                 onSubmit={() => {
@@ -866,6 +865,9 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                             valueContent[1],
                         ]
                     });
+                }}
+                onDiscard={() => {
+                    setModalSubmitIfNull(false);
                 }}
                 onClose={() => {
                     setModalSubmitIfNull(false);
