@@ -137,7 +137,7 @@ const SurveyHistoryScreen = ({ navigation, route }) => {
           ...shadowStyle,
         }}>
         <Text size={12} align="left" type="bold">
-          Survey {item.area} - {item.suburb} - {item.city} {item.province}
+          Survey {item.survey_date}
         </Text>
       </TouchableOpacity>
     </View>

@@ -58,6 +58,8 @@ const LabelInput = Styled(View)`
 const SurveyReviewScreen = ({ navigation, route }) => {
   const { listHeader, valueContent } = route.params;
 
+ 
+
   const user = useSelector((state) => state['user.auth'].login.user);
   const { width, height } = useWindowDimensions();
   const { Color } = useColor();

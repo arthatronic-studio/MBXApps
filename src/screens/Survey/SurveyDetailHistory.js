@@ -103,30 +103,54 @@ const SurveyDetailHistory = ({navigation, route}) => {
       console.log(error, 'error apicall');
     }
   };
-
-  const renderItem = ({item, index}) => (
-    <View
-      style={{
-        marginBottom: 12,
-      }}>
-      <TouchableOpacity
-        onPress={() => {
-          // setmodalWebView(true);
-          // setcontent(item.page_content);
-        }}
-        style={{
-          paddingVertical: 16,
-          borderRadius: 6,
-          backgroundColor: Color.textInput,
-          paddingLeft: 12,
-          ...shadowStyle,
-        }}>
-        <Text size={12} align="left" type="bold">
-          {item.code_survey} - {item.caption_code}
+  const renderUpload = (item, index) => {
+    let arr = JSON.parse( item.value);
+    console.log('arr', arr);
+    return (
+      <View key={index}>
+        <Container paddingHorizontal={16}>
+          <Text size={10} align="left" style={{marginBottom: 8}}>
+            {item.label}
+          </Text>
+        </Container>
+        <Text size={14} align="left" fontWeight="bold" style={{marginBottom: 2}}>
+          {item.name}
         </Text>
-      </TouchableOpacity>
-    </View>
-  );
+        {arr.length != 0 && (
+          <Row style={{flexWrap: 'wrap', flex: 1}}>
+            {arr.map((val, id) => (
+              <View
+                key={id}
+                style={{
+                  borderWidth: 1,
+                  borderColor: Color.border,
+                  width: width / 2 - 40,
+                  aspectRatio: 1,
+                  justifyContent: 'center',
+
+                  alignItems: 'center',
+                  marginHorizontal: 20,
+                  marginVertical: 5,
+                }}>
+                <Image
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: 4,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  source={{uri: val.url}}
+                />
+              </View>
+            ))}
+          </Row>
+        )}
+      </View>
+    );
+    
+     
+   };
   return (
     <Scaffold
       headerTitle="Detail Survey History"
@@ -149,24 +173,27 @@ const SurveyDetailHistory = ({navigation, route}) => {
                 Code Survey : {item.code_survey}
               </Text>
             </TouchableOpacity>
-            
           </Container>
         ))}
         {listDataDetail.map((item, index) => (
           <Container key={index} paddingHorizontal={16} paddingVertical={12}>
-            <TouchableOpacity
-              style={{
-                paddingVertical: 16,
-                borderRadius: 6,
-                backgroundColor: Color.textInput,
-                paddingLeft: 12,
-                marginBottom: 4,
-                ...shadowStyle,
-              }}>
-              <Text size={12} align="left" type="bold">
-                {item.name} : {item.value}
-              </Text>
-            </TouchableOpacity>
+            {item.type !== 'UPLOAD_IMAGE' ? (
+              <TouchableOpacity
+                style={{
+                  paddingVertical: 16,
+                  borderRadius: 6,
+                  backgroundColor: Color.textInput,
+                  paddingLeft: 12,
+                  marginBottom: 13,
+                  ...shadowStyle,
+                }}>
+                <Text size={12} align="left" type="bold">
+                  {item.name} : {item.value}
+                </Text>
+              </TouchableOpacity>
+            ) : (
+               renderUpload(item, index)
+            )}
           </Container>
         ))}
       </ScrollView>
