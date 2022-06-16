@@ -75,6 +75,9 @@ const SurveyReviewScreen2 = ({navigation, route}) => {
     message: 'error',
   });
 
+  console.log('ini list', list.data);
+
+
   useEffect(() => {
     fetchSurvey();
   }, [isFocused]);
@@ -112,7 +115,7 @@ const SurveyReviewScreen2 = ({navigation, route}) => {
           hideLoading();
         } catch (error) {
           hideLoading();
-          alert('Gagal Mengamnil  survey, silakan coba kembali');
+          alert('Gagal Mengambil  survey, silakan coba kembali');
           console.log(error, 'error apicall');
            
            setList({
@@ -148,7 +151,7 @@ const renderItem = ({item, index}) => (
         ...shadowStyle,
       }}>
       <Text size={12} align="left" type="bold">
-        Survey {item.area} - {item.suburb} - {item.city} {item.province}
+        Survey {item.survey_date} 
       </Text>
     </TouchableOpacity>
   </View>

@@ -127,7 +127,7 @@ const SurveyDetailHistory = ({navigation, route}) => {
         hideLoading();
       } catch (error) {
         hideLoading();
-        alert('Gagal Mengamnil  survey, silakan coba kembali');
+        alert('Gagal Mengambil  survey, silakan coba kembali');
         console.log(error, 'error apicall');
 
         setList({
