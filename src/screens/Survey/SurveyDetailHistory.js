@@ -91,7 +91,7 @@ const SurveyDetailHistory = ({navigation, route}) => {
     let data = [];
 
     const dataq = {
-      user_id: 123,
+      user_id: user.userId,
       survey_id: params.surveyId,
       with_detail : 1
     };
