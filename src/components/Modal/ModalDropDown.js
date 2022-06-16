@@ -43,10 +43,11 @@ const defaultProps = {
   onPress: () => {},
   onClose: () => {},
   style: {},
+  label: 'Durasi',
 };
 
 const ModalDropDown = forwardRef((props, ref) => {
-  const {data, selectedValue, onPress, onClose, children, style} = props;
+  const {data, selectedValue, onPress, onClose, children, style, label} = props;
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
@@ -104,7 +105,7 @@ const ModalDropDown = forwardRef((props, ref) => {
       <View style={{flex: 1}}>
         <View style={{marginBottom: 8, paddingHorizontal: 16}}>
           <Text size={10} color={Color.text} type="bold" align="left">
-            Durasi
+            {label}
           </Text>
         </View>
         <ScrollView>{data.length > 0 ? renderContent() : children}</ScrollView>

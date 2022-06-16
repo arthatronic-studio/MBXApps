@@ -17,6 +17,7 @@ const defaultProps = {
   moduleType: 'CREATE',
   useBlockUser: false,
   onClose: () => {},
+  editScreen: "EditThreadScreen",
 };
 
 const initialMessage = {
@@ -25,7 +26,7 @@ const initialMessage = {
 }
 
 const ModalContentOptions = forwardRef((props, ref) => {
-  const { isOwner, item, useBlockUser, moduleType, nameType, onClose } = props;
+  const { isOwner, item, useBlockUser, moduleType, nameType, onClose, editScreen } = props;
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
@@ -116,7 +117,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
       color: Color.text,
       onPress: () => {
         combinedRef.current.close();
-        navigation.navigate('EditThreadScreen', {
+        navigation.navigate(editScreen, {
           ...item,
           title: 'Edit',
         });

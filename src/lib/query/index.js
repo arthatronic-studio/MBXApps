@@ -2,6 +2,7 @@ import { queryContentProduct } from './queryContentProduct';
 import { queryContentProductDetail } from './queryContentProductDetail';
 import { queryContentMyProduct } from './queryContentMyProduct';
 import { queryProductManage } from './queryContentProductManage';
+import { queryProductManageV2 } from './queryContentProductManageV2';
 import { queryAddLike } from './queryContentAddLike';
 import { queryAddComment } from './queryContentAddComment';
 import { queryReportComment } from './queryContentReportComment';
@@ -24,12 +25,15 @@ import { queryProductReport } from './queryProductReport';
 import { queryUserBlock } from './queryUserBlock';
 import { queryGetUserBlock, queryUnblockUser } from './queryBlockUser';
 import { queryMenuList } from './queryMenuList';
+import { queryGetEnumList } from './queryEnumTable';
+import { queryContentProductV2 } from './queryContentProductV2';
 
 export {
     queryContentProduct,
     queryContentProductDetail,
     queryContentMyProduct,
     queryProductManage,
+    queryProductManageV2,
     queryAddLike,
     queryAddComment,
     queryReportComment,
@@ -53,4 +57,6 @@ export {
     queryGetUserBlock,
     queryUnblockUser,
     queryMenuList,
+    queryGetEnumList,
+    queryContentProductV2,
 };

@@ -13,7 +13,7 @@ import ListContentProduct from 'src/components/Content/ListContentProduct';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import IonIcons from 'react-native-vector-icons/Ionicons'
 import client from 'src/lib/apollo';
-import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
+import HighlightContentProductV2 from 'src/components/Content/HighlightContentProductV2';
 
 const NewsScreen = ({navigation, route}) => {
 
@@ -55,11 +55,10 @@ const NewsScreen = ({navigation, route}) => {
           </TouchableOpacity>
           <IonIcons onPress={()=> navigation.navigate('Saved')} name={'md-bookmarks-outline'} size={18} style={{marginHorizontal: 12}}/>
           <IonIcons 
-            onPress={() => navigation.navigate('CreateThreadScreen', {
+            onPress={() => navigation.navigate('CreateNews', {
                     title,
-                    productType: Config.PRODUCT_TYPE,
-                    productCategory: '',
-                    productSubCategory: 'POSTING',
+                    productType: Config.INITIAL_CODE,
+                    productCategory: 'ARTIKEL',
                   })} name={'add'} size={24}/>
       </View>
     )
@@ -118,14 +117,14 @@ const NewsScreen = ({navigation, route}) => {
             loading={loadingBanner}
           />
           <Divider height={15}/>
-        <HighlightContentProduct
-            productCategory='POSTING'
+        <HighlightContentProductV2
+            productCategory='ARTIKEL'
             name='Artikel'
             title='Artikel Terbaru'
             nav='NewsScreen'
             refresh={refreshing}
           />
-          <HighlightContentProduct
+          {/* <HighlightContentProduct
             productCategory='POSTING'
             name='Artikel'
             title='Artikel Terfavorit'
@@ -138,7 +137,7 @@ const NewsScreen = ({navigation, route}) => {
             title='Semua Artikel'
             nav='NewsScreen'
             refresh={refreshing}
-          />
+          /> */}
         </ScrollView>
     </Scaffold>
   );

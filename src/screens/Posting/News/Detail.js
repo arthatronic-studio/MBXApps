@@ -65,10 +65,12 @@ const NewsDetail = ({navigation, route}) => {
   const {item} = route.params;
   const modalOptionsRef = useRef();
 
+  console.log(item, "item");
+
   const user = useSelector(state => state['user.auth'].login.user);
 
   const [state, changeState] = useState({
-    im_like: item.im_like,
+    im_like: item.im_like ? item.im_like : false,
   });
 
   const setState = (obj) => changeState({ ...state, ...obj });
@@ -408,6 +410,7 @@ const NewsDetail = ({navigation, route}) => {
         ref={modalOptionsRef}
         isOwner={user && user.userId === item.ownerId}
         item={item}
+        editScreen={'EditNews'}
       />
     </Scaffold>
   );

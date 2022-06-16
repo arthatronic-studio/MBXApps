@@ -469,7 +469,7 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
     }
 
     if (productCategory === 'EMERGENCY') return renderCardEmergency();
-    else if (productCategory === 'POSTING') return renderCardArticle();
+    else if (productCategory === 'ARTIKEL') return renderCardArticle();
     else if (productCategory === 'EVENT') return renderCardEvent();
     else if (productCategory === 'JOBS') return renderCardJobs();
     else if (productCategory === 'NEARBY_PLACE') return renderCardPlace();

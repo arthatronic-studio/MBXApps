@@ -193,8 +193,8 @@ const CreateThreadScreen = (props) => {
         console.log(variables, 'variables');
         console.log('userData', userData)
         
-        Client.query({
-            query: queryProductManage,
+        Client.mutate({
+            mutation: queryProductManage,
             variables,
         })
         .then((res) => {
