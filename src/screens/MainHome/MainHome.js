@@ -87,6 +87,7 @@ const MainHome = ({navigation, route}) => {
   const {width} = useWindowDimensions();
   const [loadingProps, showLoading] = useLoading();
 
+  console.log('ini ud');
   // handle music analytics
   //
   useTrackPlayerEvents(events, event => {

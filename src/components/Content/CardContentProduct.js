@@ -105,7 +105,8 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
                         GALogEvent('Tempat', {
                             id: item.id,
                             product_name: item.productName,
-                            user_id: user.userId,
+                            user_id: user.
+                                Id,
                             method: analyticMethods.view,
                           });
                     }}

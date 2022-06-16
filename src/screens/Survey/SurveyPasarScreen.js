@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, KeyboardAvoidingView, FlatList, Image, Platform, TouchableOpacity, useWindowDimensions, BackHandler } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
     Text,
     // TouchableOpacity,
@@ -649,6 +649,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                     centerTitle={false}
                     onPressLeftButton={() => onPressLeftButton()}
                 />
+                
             }
             popupProps={popupProps}
         >
@@ -671,6 +672,25 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                             <Text style={{ fontSize: 14, fontWeight: 'bold' }}>{itemHeader.header_label}</Text>
                             <Text style={{ fontSize: 10, color: Color.secondary }}>{itemHeader.sub_header_label}</Text>
                         </View>
+                       
+                            
+                          <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('SurveyHistoryScreen');
+                }}
+                style={{
+                  width: '20%',
+                  justifyContent: 'flex-start',
+                  alignItems: 'flex-end',
+                }}>
+                <Ionicons
+                  name="refresh-outline"
+                  size={22}
+                  color={Color.text}
+                />
+              </TouchableOpacity>
+                          
+                       
                     </View>
                 }
                 renderItem={({ item, index }) => {

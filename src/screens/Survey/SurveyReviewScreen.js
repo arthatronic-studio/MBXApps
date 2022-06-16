@@ -301,7 +301,7 @@ const SurveyReviewScreen = ({ navigation, route }) => {
 
     console.log(data);
 
-    return;
+    // return;
 
     let config = {
       method: 'post',
