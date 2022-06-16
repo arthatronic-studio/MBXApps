@@ -1,4 +1,9 @@
 export default [
+     {
+        "id": "20000",
+        "name": "PASAR BARU",
+        "caption": "PILIH UNTUK PASAR BARU"
+    },
     {
         "id": "00001",
         "name": "PASAR PARUMPANAI",

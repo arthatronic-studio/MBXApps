@@ -222,7 +222,7 @@ const MainPage =
 function MainStackNavigator() {
   return (
     <Navigator
-      initialRouteName="SplashScreen"
+      initialRouteName="SurveyPasarScreen"
       screenOptions={{
         gestureEnabled: Platform.OS === 'ios',
         headerShown: false,

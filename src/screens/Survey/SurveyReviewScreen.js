@@ -184,11 +184,51 @@ const SurveyReviewScreen = ({ navigation, route }) => {
     let data = new FormData();
     let indexData = -1;
 
+    let latitude = 0;
+    let longitude = 0;
+    let provinsi_id = 0;
+    let city_id = 0;
+    let suburb_id = 0;
+    let area_id = 0;
+    
+    for (let i = 0; i < valueContent.length; i++) {
+      const valBlock = valueContent[i];
+      for (let index = 0; index < valBlock.length; index++) {
+        const item = valBlock[index];
+        if (item.type === 'MAP_VIEW') {
+           latitude = item.value.latitude;
+           longitude = item.value.longitude;
+        }
+        if (item.type === 'province_id') {
+           provinsi_id = item.value.id;
+          
+        }
+        if (item.type === 'city_id') {
+           city_id = item.value.id;
+          
+        }
+        if (item.type === 'suburb_id') {
+           suburb_id = item.value.id;
+        }
+         if (item.type === 'area_id') {
+            area_id = item.value.id;
+         }
+        
+      }
+      
+    }
+
+
     data.append('auth', 'd57abbc8289c72b56161f3f90ef1fa5ad5dca48a');
     data.append('caption_code', 'pasar');
     data.append('survey_code', 'SURVEY-20220229');
     data.append('timestamps', '2022-05-30 11:42:59'); // moment().format('YYYY-MM-DD HH:mm:ss'),
-
+    data.append('user_id', user.userId);
+     data.append('area_id', area_id);
+     data.append('provinsi_id', provinsi_id);
+     data.append('city_id', city_id);
+    data.append('suburb_id', suburb_id);
+    
     for (let i = 0; i < valueContent.length; i++) {
       const valBlock = valueContent[i];
       for (let index = 0; index < valBlock.length; index++) {
@@ -240,7 +280,7 @@ const SurveyReviewScreen = ({ navigation, route }) => {
           
           data.append(`data[${indexData}][block]`, (i + 1).toString());
           data.append(`data[${indexData}][index]`, index);
-          data.append(`data[${indexData}][name]`, item.name || item.label);
+          data.append(`data[${indexData}][name]`, item.label || item.name);
           // data.append(`data[${indexData}][value]`, value);
           if (Array.isArray(value)) {
             if (value.length > 0) {
@@ -261,7 +301,7 @@ const SurveyReviewScreen = ({ navigation, route }) => {
 
     console.log(data);
 
-    // return;
+    return;
 
     let config = {
       method: 'post',
