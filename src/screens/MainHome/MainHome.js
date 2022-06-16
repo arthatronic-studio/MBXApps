@@ -9,6 +9,7 @@ import {
   RefreshControl,
   Platform,
   FlatList,
+  Linking,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -833,6 +834,10 @@ const MainHome = ({navigation, route}) => {
                 tempShowPopupAds = false;
                 setShowPopupAds(false);
                 // navigation.navigate('DetailPromo', {item});
+                if (accessClient.isSurvey) {
+                  const linkDownload = 'https://docs.google.com/presentation/d/12PCLiMUDLxFh_C-3JGsXmLQLhn4UEyaQ/edit?usp=sharing&ouid=107664437226771955569&rtpof=true&sd=true';
+                  Linking.openURL(linkDownload);
+                }
               }}>
               <ImageBackground
                 source={{uri: dataPopupAds.image}}

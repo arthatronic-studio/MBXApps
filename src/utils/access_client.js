@@ -117,7 +117,9 @@ export const accessClient = {
             isSabyan ? false : false,
         showMenuSurvey:
             isKomoto ? false :
-            isSabyan ? false : true,
+            isSabyan ? false :
+            isSurvey ? true :
+            true,
         showStatusMember:
             isKomoto ? true :
             isSabyan ? false : true,

@@ -231,7 +231,7 @@ const MainProfile = ({navigation, route}) => {
     },
     {
       code: 'survey',
-      title: 'Survei',
+      title: 'Survei Pasar',
       show: accessClient.MainProfile.showMenuSurvey,
       icon: (
         <Ionicons
@@ -241,7 +241,7 @@ const MainProfile = ({navigation, route}) => {
           style={{}}
         />
       ),
-      onPress: () => navigation.navigate('SurveyFirst'),
+      onPress: () => navigation.navigate('SurveyPasarScreen'),
     },
     {
       code: 'help',

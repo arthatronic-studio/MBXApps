@@ -127,7 +127,6 @@ const SurveyDetailHistory = ({navigation, route}) => {
                   width: width / 2 - 40,
                   aspectRatio: 1,
                   justifyContent: 'center',
-
                   alignItems: 'center',
                   marginHorizontal: 20,
                   marginVertical: 5,
@@ -148,9 +147,8 @@ const SurveyDetailHistory = ({navigation, route}) => {
         )}
       </View>
     );
-    
-     
-   };
+  };
+
   return (
     <Scaffold
       headerTitle="Detail Survey History"
@@ -184,7 +182,6 @@ const SurveyDetailHistory = ({navigation, route}) => {
                   borderRadius: 6,
                   backgroundColor: Color.textInput,
                   paddingLeft: 12,
-                  marginBottom: 13,
                   ...shadowStyle,
                 }}>
                 <Text size={12} align="left" type="bold">
