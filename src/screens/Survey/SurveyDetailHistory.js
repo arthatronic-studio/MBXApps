@@ -158,7 +158,7 @@ const SurveyDetailHistory = ({navigation, route}) => {
       <ScrollView>
         {listData.map(item => (
           <Container paddingHorizontal={16} paddingVertical={12}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{
                 paddingVertical: 16,
                 borderRadius: 6,
@@ -170,7 +170,7 @@ const SurveyDetailHistory = ({navigation, route}) => {
               <Text size={12} align="left" type="bold">
                 Code Survey : {item.code_survey}
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </Container>
         ))}
         {listDataDetail.map((item, index) => (
