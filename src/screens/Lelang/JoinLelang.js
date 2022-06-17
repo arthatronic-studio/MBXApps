@@ -171,6 +171,9 @@ const JoinLelang = ({navigation, route}) => {
     </Col>
   </Row>
 
+  // console.log(item.startPrice, "start");
+  // console.log(highestBid, "high");
+
   return (
     <Scaffold
       popupProps={popupProps}
@@ -321,8 +324,8 @@ const JoinLelang = ({navigation, route}) => {
                   onPress={() => {
                     Alert(
                       'Tawar',
-                      `Pasang penawaran untuk harga ${FormatMoney.getFormattedMoney(highestBid + val)} ?`,
-                      () => onSubmitAuctionBid(highestBid + val)
+                      `Pasang penawaran untuk harga ${FormatMoney.getFormattedMoney(highestBid != 0 ? highestBid : item.startPrice + val)} ?`,
+                      () => onSubmitAuctionBid(highestBid != 0 ? highestBid : item.startPrice + val)
                     );
                   }}
                   style={{
@@ -380,7 +383,7 @@ const JoinLelang = ({navigation, route}) => {
         ref={modalBidRef}
         startPrice={item.startPrice}
         userLastBid={userLastBid}
-        highestBid={highestBid}
+        highestBid={highestBid != 0 ? highestBid : item.startPrice}
         amountData={item.bidNominal}
         onPress={(text) => {
           onSubmitAuctionBid(text);
