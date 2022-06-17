@@ -88,11 +88,12 @@ const SurveyReviewScreen = ({ navigation, route }) => {
   }
 
   const onSubmit = () => {
-    if (useSurveyFile) {
-      fetchSurveyFormFile()
-    } else {
-      fetchSurveySubmit();
-    }
+    fetchSurveyFormFile();
+    // if (useSurveyFile) {
+    //   fetchSurveyFormFile()
+    // } else {
+    //   fetchSurveySubmit();
+    // }
   }
 
   const fetchSurveySubmit = async () => {
@@ -190,8 +191,8 @@ const SurveyReviewScreen = ({ navigation, route }) => {
       
     };
 
-    // console.log(dataq, 'dataq');
-    // return;
+    console.log(dataq, 'dataq');
+    return;
 
      let config = {
        method: 'post',
