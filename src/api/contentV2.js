@@ -13,7 +13,7 @@ export const fetchContentProduct = async(variables) => {
     const v = {
         page: 1,
         itemPerPage: 6,
-        // productType: Config.PRODUCT_TYPE,
+        productType: Config.INITIAL_CODE,
         ...variables,
     };
 

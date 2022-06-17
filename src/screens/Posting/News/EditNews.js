@@ -163,6 +163,7 @@ const EditNews = props => {
     let variables = {
       products: [
         {
+          code: params.code,
           name: judul,
           status: 'PUBLISH', // PUBLISH | DRAFT | PRIVATE | REMOVE
           method: 'UPDATE', // UPDATE | DELETE
@@ -172,41 +173,42 @@ const EditNews = props => {
           description: isi,
           latitude: latitude,
           longitude: longitude,
-          image: oldImage ? oldImage : image,
+          // image: oldImage ? oldImage : image,
           tag: listTag,
           imageSource: sumberGambar,
         },
       ],
     };
 
+    if(oldImage == ''){
+      variables.products[0].image = image;
+    }
+
     console.log(variables);
 
-    // Client.query({
-    //   query: queryProductManageV2,
-    //   variables,
-    // })
-    //   .then(res => {
-    //     console.log(res, '=== Berhsail ===');
-    //     hideLoading();
+    Client.query({
+      query: queryProductManageV2,
+      variables,
+    })
+      .then(res => {
+        console.log(res, '=== Berhsail ===');
+        const data = res.data.contentProductManageV2;
 
-    //     // const data = res.data.contentProductManage;
-    //     // console.log('Aticel', data);
+        if (Array.isArray(data) && data.length > 0 && data[0]['id']) {
+          showLoading('success', 'Artikel berhasil diubah!');
 
-    //     // if (Array.isArray(data) && data.length > 0 && data[0]['id']) {
-    //     // showLoading('success', 'Thread berhasil dibuat!');
-
-    //     // setTimeout(() => {
-    //     // navigation.navigate('ForumSegmentScreen', { ...params, componentType: 'LIST', refresh: true });
-    //     // navigation.popToTop();
-    //     // }, 2500);
-    //     // } else {
-    //     // showLoading('error', 'Thread gagal dibuat!');
-    //     // }
-    //   })
-    //   .catch(err => {
-    //     console.log(err, 'errrrr');
-    //     showLoading('error', 'Gagal membuat thread, Harap ulangi kembali');
-    //   });
+          setTimeout(() => {
+            navigation.popToTop();
+            navigation.navigate('NewsDetail', {item: data[0]});
+          }, 2500);
+        } else {
+          showLoading('error', 'Thread gagal dibuat!');
+        }
+      })
+      .catch(err => {
+        console.log(err, 'errrrr');
+        showLoading('error', 'Gagal membuat thread, Harap ulangi kembali');
+      });
   };
 
   const onDeleteTag = index => {
@@ -286,7 +288,7 @@ const EditNews = props => {
               source={
                 image ? {uri: `data:${mime};base64,${image}`} : {uri: oldImage}
               }
-              resizeMode="contain">
+              resizeMode="cover">
               <TouchableOpacity
                 onPress={() => {
                   setOldImage('');
@@ -494,6 +496,7 @@ const EditNews = props => {
           if (callback.base64) {
             setImage(callback.base64);
             setMime(callback.type);
+            setOldImage('');
           }
           setModalImagePicker(false);
         }}

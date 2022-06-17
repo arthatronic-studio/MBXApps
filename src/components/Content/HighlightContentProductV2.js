@@ -36,6 +36,7 @@ const defaultProps = {
     style: {},
     showHeader: true,
     showEmpty: false,
+    orderBy: '',
 };
 
 const HighlightContentProductV2 = (props) => {
@@ -50,6 +51,7 @@ const HighlightContentProductV2 = (props) => {
         style,
         showHeader,
         showEmpty,
+        orderBy,
     } = props;
 
     const { Color } = useColor();
@@ -72,13 +74,16 @@ const HighlightContentProductV2 = (props) => {
     const fetchData = async() => {
         let variables = {
             page: 1,
-            itemPerPage: userProfileId !== null || productCategory === 'YOUTUBE_VIDEO' ? 1 : 2,
+            itemPerPage: userProfileId !== null || productCategory === 'YOUTUBE_VIDEO' ? 1 : 3,
         }
         if (productCategory) {
             variables.productCategory = productCategory;
         }
         if (userProfileId !== null) {
             variables.userProfileId = userProfileId;
+        }
+        if (orderBy != ''){
+            variables.orderBy = orderBy;
         }
 
         const result = userProfileId !== null ? 

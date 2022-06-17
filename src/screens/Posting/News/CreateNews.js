@@ -275,7 +275,7 @@ const CreateNews = props => {
               }}
               imageStyle={{borderRadius: 8}}
               source={{uri: `data:${mime};base64,${image}`}}
-              resizeMode="contain">
+              resizeMode="cover">
               <TouchableOpacity
                 onPress={() => {
                   setImage('');

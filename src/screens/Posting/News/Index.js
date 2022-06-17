@@ -117,21 +117,22 @@ const NewsScreen = ({navigation, route}) => {
             loading={loadingBanner}
           />
           <Divider height={15}/>
-        <HighlightContentProductV2
+          <HighlightContentProductV2
             productCategory='ARTIKEL'
             name='Artikel'
             title='Artikel Terbaru'
             nav='NewsScreen'
             refresh={refreshing}
           />
-          {/* <HighlightContentProduct
-            productCategory='POSTING'
+          {/* <HighlightContentProductV2
+            productCategory='ARTIKEL'
             name='Artikel'
             title='Artikel Terfavorit'
             nav='NewsScreen'
             refresh={refreshing}
-          />
-          <HighlightContentProduct
+            orderBy="like"
+          /> */}
+          {/* <HighlightContentProduct
             productCategory='POSTING'
             name='Artikel'
             title='Semua Artikel'
