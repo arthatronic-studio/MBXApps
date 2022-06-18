@@ -276,8 +276,6 @@ const SurveyReviewScreen = ({ navigation, route }) => {
       const valBlock = valueContent[i];
       for (let index = 0; index < valBlock.length; index++) {
         const item = valBlock[index];
-        //  console.log('longitude', item.value);
-       
         if (item.type === 'MAP_VIEW') {
            latitude = item.value.latitude;
            longitude = item.value.longitude;
@@ -299,7 +297,6 @@ const SurveyReviewScreen = ({ navigation, route }) => {
         } 
       } 
     }
-    console.log('latitude', provinsi_id);
 
     data.append('auth', 'd57abbc8289c72b56161f3f90ef1fa5ad5dca48a');
     data.append('caption_code', 'pasar');
@@ -315,7 +312,6 @@ const SurveyReviewScreen = ({ navigation, route }) => {
     data.append('nama_pasar', nama_pasar);
     data.append('latitude', latitude);
     data.append('longitude', longitude);
-  
    
     for (let i = 0; i < valueContent.length; i++) {
       const valBlock = valueContent[i];

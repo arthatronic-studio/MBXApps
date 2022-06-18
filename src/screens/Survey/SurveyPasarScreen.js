@@ -858,10 +858,12 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                         listHeader: [
                             survey_pasar_header[0],
                             survey_pasar_header[1],
+                            survey_pasar_header[2],
                         ],
                         valueContent: [
                             valueContent[0],
                             valueContent[1],
+                            valueContent[2],
                         ]
                     });
                 }}
