@@ -64,6 +64,7 @@ const FormSelect = forwardRef(({ label, labelContainerStyle, placeholder, onPres
                 alignItems: 'flex-start',
                 paddingHorizontal: 16,
                 paddingTop: 16,
+                paddingBottom: 8,
                 ...labelContainerStyle,
             }}>
                 <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>{label}</Text>

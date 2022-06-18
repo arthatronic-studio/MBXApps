@@ -44,15 +44,20 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
     const variables = {
       referenceId: item.id,
       referenceType: 'PRODUCT_COMMENT',
-      manageType: 'CREATE'
+      referenceName: item.comment,
+      refStatus: '1',
+      reportMessage: 'Not Set',
     };
+
+    console.log('variables', variables);
+
     Client.mutate({
       mutation: queryProductReport, 
       variables,
     })
       .then(res => {
         console.log('res', res);
-        if(res.data.reportAbuseManage.status){
+        if(res.data.reportAbuseManage){
           setModalSuccess(true);
           setTimeout(() => {
             setModalSuccess(false);

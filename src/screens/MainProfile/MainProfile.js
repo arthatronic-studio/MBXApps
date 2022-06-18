@@ -39,11 +39,13 @@ import { getCurrentUserProfile } from 'src/state/actions/user/auth';
 import { accessClient } from 'src/utils/access_client';
 import { fetchCommunityMemberCheck } from 'src/api/community';
 import {currentSocket} from 'src/screens/MainHome/MainHome';
+import ModalActions from 'src/components/Modal/ModalActions';
 
 const MainProfile = ({navigation, route}) => {
   const [modalVirtual, setModalVirtual] = useState(false);
   const [modalInputCode, setModalInputCode] = useState(false);
   const [modalCardMember, setModalCardMember] = useState(false);
+  const [modalJoinCommunity, setModalJoinCommunity] = useState(false);
   
   const [responseMemberManage, setResponseMemberManage] = useState({
     data: null,
@@ -90,8 +92,6 @@ const MainProfile = ({navigation, route}) => {
       setMemberCheck({ ...memberCheck, ...result.data });
     }
   }
-
-  console.log(memberCheck);
 
   const onPressExit = () => {
     Alert('Logout', 'Apakah Anda yakin akan logout?', () => onPressLogout());
@@ -149,6 +149,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'history',
       title: 'Riwayat',
+      badgeTitle: '',
       show: accessClient.MainProfile.showMenuHistory && user && !user.guest,
       icon: (
         <Ionicons
@@ -163,6 +164,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'coupon',
       title: 'Kuponku',
+      badgeTitle: '',
       show: accessClient.MainProfile.showMenuCoupon && user && !user.guest,
       icon: (
         <MaterialCommunityIcons
@@ -177,6 +179,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'myshop',
       title: 'Toko Saya',
+      badgeTitle: '',
       show: accessClient.MainProfile.showMenuMyStore && user && !user.guest,
       icon: (
         <MaterialCommunityIcons
@@ -191,6 +194,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'auction',
       title: 'Bid Auction',
+      badgeTitle: '',
       show: accessClient.MainProfile.showMenuBidAuction && user && !user.guest,
       icon: (
         <MaterialCommunityIcons
@@ -205,6 +209,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'change_profile',
       title: 'Ubah Profil',
+      badgeTitle: '',
       show: user && !user.guest,
       icon: <FontAwesome name="edit" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('ChangeProfile'),
@@ -212,6 +217,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'setting',
       title: 'Pengaturan',
+      badgeTitle: '',
       show: user && !user.guest,
       icon: (
         <AntDesign name="setting" size={20} color={Color.text} style={{}} />
@@ -221,6 +227,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'critics_opinion',
       title: 'Kritik & Saran',
+      badgeTitle: '',
       show: true,
       icon: <AntDesign name="carryout" size={20} color={Color.text} style={{}} />,
       onPress: () =>
@@ -231,7 +238,8 @@ const MainProfile = ({navigation, route}) => {
     },
     {
       code: 'survey',
-      title: 'Survei Pasar',
+      title: 'Survei',
+      badgeTitle: '',
       show: accessClient.MainProfile.showMenuSurvey,
       icon: (
         <Ionicons
@@ -246,6 +254,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'help',
       title: 'Bantuan',
+      badgeTitle: '',
       show: true,
       icon: (
         <MaterialCommunityIcons
@@ -265,6 +274,7 @@ const MainProfile = ({navigation, route}) => {
     // {
     //   code: 'termandcondition',
     //   title: 'Ketentuan Aplikasi',
+    //   badgeTitle: '',
     //   show: true,
     //   icon: <Ionicons name="md-information-circle-outline" size={20} color={Color.text} style={{}} />,
     //   onPress: () => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
@@ -279,13 +289,15 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'join_community',
       title: 'Gabung Komunitas',
-      show: accessClient.MainProfile.showMenuJoinCommunity && memberCheck.status === false,
+      badgeTitle: memberCheck.message,
+      show: accessClient.MainProfile.showMenuJoinCommunity,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
-      onPress: () => navigation.navigate('JoinCommunity'),
+      onPress: () => setModalJoinCommunity(true),
     },
     {
       code: 'community_admin',
       title: 'Community Admin',
+      badgeTitle: '',
       show:
         accessClient.MainProfile.showMenuCommunityAdmin &&
         user &&
@@ -296,6 +308,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'ref_code',
       title: 'Kode Referal',
+      badgeTitle: '',
       show: false,
       icon: <AntDesign name="user" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('ReferralCodeScreen'),
@@ -303,7 +316,8 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'device_token',
       title: 'Device Token',
-      show: false,
+      badgeTitle: '',
+      show: user && user.isDirector === 1,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: async () => {
         const token = await messaging().getToken();
@@ -314,13 +328,15 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'Syarat',
       title: 'Syarat & Ketentuan',
-      show: true,
+      badgeTitle: '',
+      show: user && user.isDirector === 1,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('SyaratdanKetentuan'),
     },
     {
       code: 'logout',
       title: 'Keluar',
+      badgeTitle: '',
       show: user && !user.guest,
       icon: (
         <Ionicons
@@ -335,6 +351,7 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'login',
       title: 'Masuk',
+      badgeTitle: '',
       show: user && user.guest,
       icon: (
         <Ionicons name="exit-outline" size={20} color={Color.info} style={{}} />
@@ -648,6 +665,12 @@ const MainProfile = ({navigation, route}) => {
                           }>
                           {item.title}
                         </Text>
+
+                        {item.badgeTitle !== '' &&
+                          <Text size={10} color={Color.primary}>
+                            {item.badgeTitle}
+                          </Text>
+                        }
                       </Col>
                       <Col align="flex-end" size={2} justify="center">
                         <FontAwesome
@@ -685,6 +708,17 @@ const MainProfile = ({navigation, route}) => {
           fetchOrganizationMemberManage(text);
         }}
         errorMessage={responseMemberManage.message}
+      />
+
+      <ModalActions
+        visible={modalJoinCommunity}
+        data={[
+          { id: 1, name: 'Buat Formulir', show: !memberCheck.status, onPress: () => { setModalJoinCommunity(false); navigation.navigate('JoinCommunity'); } },
+          { id: 2, name: 'Lihat Formulir', show: memberCheck.status, onPress: () => { setModalJoinCommunity(false); navigation.navigate('CardDetail') } },
+        ]}
+        onClose={() => {
+          setModalJoinCommunity(false);
+        }}
       />
 
       <Modal

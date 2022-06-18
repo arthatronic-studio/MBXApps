@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, FlatList, TextInput, Image, useWindowDimensions, AppState } from 'react-native';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Moment from 'moment';
 import { useSelector } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign'
+
 import Text from '@src/components/Text';
 import { useColor } from '@src/components/Color';
 import Header from '@src/components/Header';
@@ -252,11 +254,16 @@ const ChatDetailScreen = ({ navigation, route }) => {
             fallback={dataChat.loading}
             popupProps={popupProps}
             color={Color.semiwhite}
-            headerTitle={params.roomName}
+            // headerTitle={params.roomName}
             // hide online
             // header={
             //     <DetailHeader/> 
             // }
+            header={
+                <Header
+                    title={<Text>{params.roomName} {params.isDirector ? <MaterialIcons name='verified' color={Color.info} /> : ''}</Text>}
+                />
+            }
         >
             {/* hide tgl */}
             {/* <View style={{backgroundColor: Color.border, width: '35%', height: 25, borderRadius: 20, alignItems: 'center', justifyContent: 'center', marginVertical: 15, alignSelf: 'center'}}>
@@ -274,19 +281,21 @@ const ChatDetailScreen = ({ navigation, route }) => {
                     // const isAdmin = user && user.userId === item.userId;
                     const isMe = user.userId == item.user_id;
 
+                    console.log(item);
+
                     //Sender Chat
                     if (isMe) {
                         return (
                             <View style={{width, marginTop: 16 ,paddingHorizontal: 16, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end'}}>
                                 <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: Color.textInput, borderRadius: 8, borderBottomRightRadius: 0, alignItems: 'flex-end'}}>
                                     {/* <Text size={10} type='semibold' align='right' color={Color.secondary}>{item.name}</Text> */}
-                                    <Image
+                                    {typeof item.image === 'string' && item.image !== '' && <Image
                                         source={{uri: item.image}}
                                         style={{
                                             width: width / 2,
                                             height: width / 2,
                                         }}
-                                    />
+                                    />}
                                     <Divider height={4} />
                                     <Text align='right'>{item.message}</Text>
                                     <Divider height={4} />
@@ -294,11 +303,10 @@ const ChatDetailScreen = ({ navigation, route }) => {
                                         <Ionicons name={"md-checkmark-done-sharp"} size={12}/>
                                         <Text size={8} align='right' style={{opacity: 0.6}}>  {managedDateUTC(item.created_unix_date)}</Text>
                                     </View>
-                                    
                                 </View>
                                 <View style={{width: 30, height: 30, marginLeft: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.disabled}}>
                                     <Image
-                                        source={{uri: item.image}}
+                                        source={{uri: item.photo_profile}}
                                         style={{width: '100%', aspectRatio: 1, borderRadius: 30, backgroundColor: Color.disabled}}
                                     />
                                 </View>
@@ -311,7 +319,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
                         <View style={{width, marginTop: 16, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'flex-end'}}>
                             <View style={{width: 30, height: 30, marginRight: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.disabled}}>
                                 <Image
-                                    source={{uri: item.image}}
+                                    source={{uri: item.photo_profile}}
                                     style={{width: '100%', aspectRatio: 1, borderRadius: 15, backgroundColor: Color.disabled}}
                                 />
                             </View>
@@ -321,6 +329,13 @@ const ChatDetailScreen = ({ navigation, route }) => {
                                 <Text align='left' color={Color.text}>{item.message}</Text>
                                 <Divider height={4} />
                                 <Text size={8} align='left' color={Color.text} style={{opacity: 0.6}}>{managedDateUTC(item.created_unix_date)}</Text>
+                                {typeof item.image === 'string' && item.image !== '' && <Image
+                                    source={{uri: item.image}}
+                                    style={{
+                                        width: width / 2,
+                                        height: width / 2,
+                                    }}
+                                />}
                             </View>
                         </View>
                     )

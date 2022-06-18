@@ -121,7 +121,7 @@ const CardCommunityAdmin = (props) => {
   const renderItem = (item, index) => {
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate('CardDetail', {item, props})}
+        onPress={() => navigation.navigate('CardDetail', {item, props, isAdminPage: true})}
         style={{
           borderWidth: 0.5,
           borderRadius: 8,

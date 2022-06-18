@@ -17,6 +17,7 @@ import { trackPlayerInit } from '@src/utils/track-player-init';
 import ModalNetInfo from '@src/components/ModalNetInfo';
 import { requestTrackingPermission } from 'react-native-tracking-transparency';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import { accessClient } from 'src/utils/access_client';
 
 export let navigationRef = createRef();
 
@@ -192,7 +193,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <View style={{flex: 1, backgroundColor: Color.theme}}>
+      <View style={{flex: 1, backgroundColor: accessClient.Theme === 'dark' ? '#000000' : '#FFFFFF'}}>
           <NavigationContainer
             ref={navigationRef}
             onReady={onReady}

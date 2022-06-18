@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Modal from 'react-native-modal';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import Text from '@src/components/Text';
 import { useColor } from '@src/components/Color';
@@ -18,6 +19,7 @@ import { Header, Scaffold, Alert } from 'src/components';
 import {currentSocket} from '@src/screens/MainHome/MainHome';
 import { statusBarHeight } from 'src/utils/constants';
 import ModalActions from 'src/components/Modal/ModalActions';
+import { accessClient } from 'src/utils/access_client';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -137,10 +139,15 @@ const ChatRoomsScreen = ({ navigation, route }) => {
 
     const getTitle = (member) => {
         let title = '';
+        let isDirector = false;
         
         if (member.length === 2) {
             member.map((i) => {
-                if (i.user_id != user.userId) title = i.first_name;
+                let idNumber = accessClient.isKomoto && i.id_number ? ' - ' + i.id_number : '';
+                if (i.user_id != user.userId) {
+                    title = i.first_name + idNumber;
+                    isDirector = i.is_director;
+                }
             });
         } else if (member.length > 2) {
             member.map((i) => {
@@ -148,7 +155,10 @@ const ChatRoomsScreen = ({ navigation, route }) => {
             });
         }
 
-        return title;
+        return {
+            title,
+            isDirector,
+        };
     }
 
     const managedDateUTC = (origin) => {
@@ -247,9 +257,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                         const isSelected = selectedRoom && selectedRoom.id === item.id;
                         const notifBadge = item.unread_count > 0;
 
-
                         return (
-                            
                             <TouchableOpacity
                                 onPress={() => {
                                     let targetIds = [];
@@ -259,7 +267,8 @@ const ChatRoomsScreen = ({ navigation, route }) => {
 
                                     navigation.navigate('ChatDetailScreen', {
                                         roomId: item.room_id,
-                                        roomName: getTitle(item.member),
+                                        roomName: getTitle(item.member).title,
+                                        isDirector: getTitle(item.member).isDirector,
                                         selected: item.member,
                                         targetIds,
                                     });
@@ -277,17 +286,12 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                                     backgroundColor: isSelected ? Color.primarySoft : Color.textInput,
                                 }}
                             >
-                                
-                                
                                 <View style={{width: '12%', height: '100%', alignItems: 'center', justifyContent: 'center'}}>
                                     <Image
                                         source={{uri: item.image}}
                                         style={{width: '100%', aspectRatio: 1, borderRadius: 30, backgroundColor: Color.border}}
                                     />
-                                </View>
-
-                                    
-                                
+                                </View>                                
                                     <View style={{width: '70%', height: '100%', alignItems: 'flex-start', justifyContent: 'space-around', paddingLeft: 8, paddingRight: 16, paddingVertical: 4}}>
                                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                             {/* hide online */}
@@ -296,8 +300,8 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                                             type='semibold'
                                             numberOfLines={1}
                                         >
-                                            {item.name || getTitle(item.member)}
-
+                                            {item.name || getTitle(item.member).title}&nbsp;
+                                            {getTitle(item.member).isDirector && <MaterialIcons name='verified' color={Color.info} />}
                                         </Text>
                                         </View>
                                         <Text
