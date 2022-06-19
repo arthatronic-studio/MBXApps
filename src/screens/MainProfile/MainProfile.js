@@ -25,6 +25,7 @@ import {
   useColor,
   Scaffold,
   useLoading,
+  Button,
 } from '@src/components';
 import {redirectTo} from '@src/utils';
 import {shadowStyle} from '@src/styles';
@@ -40,6 +41,7 @@ import { accessClient } from 'src/utils/access_client';
 import { fetchCommunityMemberCheck } from 'src/api/community';
 import {currentSocket} from 'src/screens/MainHome/MainHome';
 import ModalActions from 'src/components/Modal/ModalActions';
+import Axios from 'axios';
 
 const MainProfile = ({navigation, route}) => {
   const [modalVirtual, setModalVirtual] = useState(false);
@@ -59,8 +61,9 @@ const MainProfile = ({navigation, route}) => {
   const [myRoomIds, setMyRoomIds] = useState([]);
 
   const dispatch = useDispatch();
-  const [loadingProps, showLoading] = useLoading();
+  const [loadingProps, showLoading, hideLoading] = useLoading();
   const user = useSelector(state => state['user.auth'].login.user);
+  const userToken = useSelector(state => state['user.auth'].data);
 
   console.log('user', useSelector(state => state['user.auth']));
 
@@ -100,6 +103,45 @@ const MainProfile = ({navigation, route}) => {
   const onPressLogout = () => {
     dispatch({type: 'USER.LOGOUT'});
     redirectTo('LoginScreen');
+  };
+
+  const sendVerify = async () => {
+    const dataq = {
+        "email": user.email, 
+    }
+    const response = await Axios({
+      baseURL: 'http://dev.api.tribesocial.id:7171/api/resendVerifyEmail/Bearer'+userToken.access_token+'/'+user.email,
+      method: 'post',
+      headers: {
+          Accept: 'application/json',
+      },
+      timeout: 5000,
+      
+    });
+    console.log(`${userToken.token_type} ${userToken.access_token}`)
+    hideLoading()
+    // try {
+    //     showLoading()
+    //     const response = await Axios({
+    //         baseURL: 'http://dev.api.tribesocial.id:7171/api/resendVerifyEmail/Authorization/email',
+    //         method: 'post',
+    //         data: dataq,
+    //         headers: {
+    //             Accept: 'application/json',
+    //             Authorization: `${userToken.token_type} ${userToken.access_token}`
+    //         },
+    //         timeout: 5000,
+            
+    //       });
+    //       console.log(response)
+    //       hideLoading()
+    //       alert('Send email verify success')
+    //   } catch (error) {
+    //     hideLoading()
+    //     alert('Failed send verify')
+    //     // alert(error.response.data.message)
+    //     console.log(error, 'error apicall')
+    //   }
   };
 
   const fetchOrganizationMemberManage = () => {
@@ -498,6 +540,10 @@ const MainProfile = ({navigation, route}) => {
                     </Text>
                   )}
               </View>
+              {user && user.isVerify && <TouchableOpacity onPress={() => sendVerify()} style={{ height: 30, backgroundColor: Color.primary , borderRadius: 30, justifyContent: 'center', alignItems: 'center', width: 100 }}>
+                  <Text size={12} color='#fff'>Verify Email</Text>
+              </TouchableOpacity>}
+             
 
               {accessClient.MainProfile.showButtonJoinCommunity &&
                 user &&
