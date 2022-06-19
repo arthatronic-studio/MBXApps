@@ -208,6 +208,7 @@ import GroupDetailScreen from 'src/screens/Chat/GroupDetailScreen';
 import UserGroupDetail from 'src/screens/Chat/UserGroupDetail';
 import AddMember from 'src/screens/Chat/AddMember';
 import EditInformationGroup from 'src/screens/Chat/EditInformationGroup';
+import CreateEvent from 'src/screens/EventR/CreateEvent';
 
 const { Navigator, Screen } = createStackNavigator();
 const MainPage =
@@ -224,7 +225,8 @@ function MainStackNavigator() {
         headerShown: false,
       }}>
       {/* uncanny */}
-      <Screen name="SplashScreen" component={SplashScreen} />
+      <Screen name="SplashScreen" component={CreateEvent} />
+      <Screen name="CreateEvent" component={CreateEvent} />
       <Screen name="MainPage" component={MainPage} />
       <Screen name="OnBoardingScreen" component={OnBoardingScreen} />
       <Screen name="TrackingOrder" component={TrackingOrder} />
