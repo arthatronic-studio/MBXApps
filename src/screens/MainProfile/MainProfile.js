@@ -109,39 +109,30 @@ const MainProfile = ({navigation, route}) => {
     const dataq = {
         "email": user.email, 
     }
-    const response = await Axios({
-      baseURL: 'http://dev.api.tribesocial.id:7171/api/resendVerifyEmail/Bearer'+userToken.access_token+'/'+user.email,
-      method: 'post',
-      headers: {
-          Accept: 'application/json',
-      },
-      timeout: 5000,
-      
-    });
-    console.log(`${userToken.token_type} ${userToken.access_token}`)
+    
+    console.log('http://dev.api.tribesocial.id:7171/api/resendVerifyEmail/Bearer%20'+userToken.access_token+'/'+user.email)
     hideLoading()
-    // try {
-    //     showLoading()
-    //     const response = await Axios({
-    //         baseURL: 'http://dev.api.tribesocial.id:7171/api/resendVerifyEmail/Authorization/email',
-    //         method: 'post',
-    //         data: dataq,
-    //         headers: {
-    //             Accept: 'application/json',
-    //             Authorization: `${userToken.token_type} ${userToken.access_token}`
-    //         },
-    //         timeout: 5000,
-            
-    //       });
-    //       console.log(response)
-    //       hideLoading()
-    //       alert('Send email verify success')
-    //   } catch (error) {
-    //     hideLoading()
-    //     alert('Failed send verify')
-    //     // alert(error.response.data.message)
-    //     console.log(error, 'error apicall')
-    //   }
+    try {
+        showLoading()
+        const response = await Axios({
+          baseURL: 'http://dev.api.tribesocial.id:7171/api/resendVerifyEmail/Bearer%20'+userToken.access_token+'/'+user.email,
+          method: 'post',
+          headers: {
+              Accept: 'application/json',
+              Authorization: `${userToken.token_type} ${userToken.access_token}`
+          },
+          timeout: 5000,
+          
+        });
+          console.log(response)
+          hideLoading()
+          alert('Send email verify success')
+      } catch (error) {
+        hideLoading()
+        alert('Failed send verify')
+        // alert(error.response.data.message)
+        console.log(error, 'error apicall')
+      }
   };
 
   const fetchOrganizationMemberManage = () => {
@@ -540,7 +531,7 @@ const MainProfile = ({navigation, route}) => {
                     </Text>
                   )}
               </View>
-              {user && user.isVerify && <TouchableOpacity onPress={() => sendVerify()} style={{ height: 30, backgroundColor: Color.primary , borderRadius: 30, justifyContent: 'center', alignItems: 'center', width: 100 }}>
+              {user && <TouchableOpacity onPress={() => sendVerify()} style={{ height: 30, backgroundColor: Color.primary , borderRadius: 30, justifyContent: 'center', alignItems: 'center', width: 100 }}>
                   <Text size={12} color='#fff'>Verify Email</Text>
               </TouchableOpacity>}
              
