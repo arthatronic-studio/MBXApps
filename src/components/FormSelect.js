@@ -83,7 +83,7 @@ const FormSelect = forwardRef(({ label, labelContainerStyle, placeholder, onPres
                         backgroundColor: Color.textInput,
                         borderWidth: 0.5,
                         borderColor: Color.disabled,
-                        paddingVertical: 20,
+                        paddingVertical: 10,
                     }}
                 >
                     {prefixIcon}

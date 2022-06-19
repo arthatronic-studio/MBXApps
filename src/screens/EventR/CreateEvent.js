@@ -8,6 +8,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RNSimpleCrypto from "react-native-simple-crypto";
+import { initialLatitude, initialLongitude } from 'src/utils/constants';
 
 import {
 	Text,
@@ -58,7 +59,7 @@ const CreateEvent = ({navigation}) => {
     const [name, setName] = useState(user ? user.firstName+' '+user.lastName : '');
     const [phone, setPhone] = useState(user ? user.phoneNumber : '');
     const [email, setEmail] = useState(user ? user.email : '');
-    const [namePetugas, setNamePetugas] = useState('');
+    const [address, setAddress] = useState('');
     const [phonePetugas, setPhonePetugas] = useState('');
     const [nameKoor, setNameKoor] = useState('');
     const [phoneKoor, setPhoneKoor] = useState('');
@@ -67,6 +68,15 @@ const CreateEvent = ({navigation}) => {
     const [jamBukaOperasional, setjamBukaOperasional] = useState(new Date()); 
     const [jamTutupOperasional, setjamTutupOperasional] = useState(new Date()); 
 	const { Color } = useColor();
+    const [coords, setCoords] = useState({
+      latitude: initialLatitude,
+      longitude: initialLongitude,
+    });
+
+
+  const [modalSelectMap, setModalSelectMap] = useState(false);
+  const [isPinnedMap, setIsPinnedMap] = useState(false);
+  const [locationPinnedMap, setLocationPinnedMap] = useState('');
 
 	useEffect( () => {
         // submit()
@@ -140,49 +150,55 @@ const CreateEvent = ({navigation}) => {
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Nama Responden</Text>
                 </View>
             </View>
-            <View style={{ marginVertical:-10, marginHorizontal: -6 }}>
-                <FormSelect
-                    label='Jam Buka Operasional'
-                    placeholder='Pilih Jam'
-                    value={moment(jamBukaOperasional).format('HH:mm')}
-                    onPress={() => setShowDatePicker(true)}
-                    // error={errorUserData.usageType}
-                    suffixIcon={
-                        <View style={{height: '100%', width: '10%', paddingRight: 16, justifyContent: 'center', alignItems: 'flex-end'}}>
-                            <AntDesign name='clockcircle' />
-                        </View>
-                    }
-                />
-            </View>
-            {showDatePicker && <DatePicker
-                modal
-                open={showDatePicker}   
-                date={jamBukaOperasional}
-                is24Hour={true}
-                mode="time"
-                onConfirm={(date) => {
-                    console.log(date)
-                    setShowDatePicker(false);
-                    setjamBukaOperasional(date);
-                }}
-                onCancel={() => {
-                    setShowDatePicker(false)
-                }}
-            />}
-            <View style={{ marginVertical:-20, marginHorizontal: -6 }}>
-                <FormSelect
-                    label='Jam Tutup Operasional'
-                    placeholder='Pilih Jam'
-                    value={moment(jamTutupOperasional).format('HH:mm')}
-                    onPress={() => setShowDatePicker2(true)}
-                    // error={errorUserData.usageType}
-                    suffixIcon={
-                        <View style={{height: '100%', width: '10%', paddingRight: 16, justifyContent: 'center', alignItems: 'flex-end'}}>
-                            <AntDesign name='clockcircle' />
-                        </View>
-                    }
-                />
-            </View>
+            <Row>
+                <Col>
+                    <View style={{ marginVertical:-10,  marginHorizontal: -6 }}>
+                        <FormSelect
+                            label='Jam Mulai'
+                            placeholder='Pilih Jam'
+                            value={moment(jamBukaOperasional).format('HH:mm')}
+                            onPress={() => setShowDatePicker(true)}
+                            // error={errorUserData.usageType}
+                            suffixIcon={
+                                <View style={{height: 20, width: '10%', paddingRight: 16, justifyContent: 'center', alignItems: 'flex-end'}}>
+                                    <Text />
+                                </View>
+                            }
+                        />
+                </View>
+                {showDatePicker && <DatePicker
+                    modal
+                    open={showDatePicker}   
+                    date={jamBukaOperasional}
+                    is24Hour={true}
+                    mode="time"
+                    onConfirm={(date) => {
+                        console.log(date)
+                        setShowDatePicker(false);
+                        setjamBukaOperasional(date);
+                    }}
+                    onCancel={() => {
+                        setShowDatePicker(false)
+                    }}
+                />}
+                </Col>
+                <Col>
+                    <View style={{ marginVertical:-10, marginHorizontal: -6 }}>
+                    <FormSelect
+                        label='Jam Tutup'
+                        placeholder='Pilih Jam'
+                        value={moment(jamTutupOperasional).format('HH:mm')}
+                        onPress={() => setShowDatePicker2(true)}
+                        // error={errorUserData.usageType}
+                        suffixIcon={
+                            <View style={{height: 20, width: '10%', paddingRight: 16, justifyContent: 'center', alignItems: 'flex-end'}}>
+                                <Text />
+                            </View>
+                        }
+                    />
+                </View>
+                </Col>
+            </Row>
             {showDatePicker2 && <DatePicker
                 modal
                 open={showDatePicker2}   
@@ -198,74 +214,41 @@ const CreateEvent = ({navigation}) => {
                     setShowDatePicker2(false)
                 }}
             />}
-            <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
+            
+            <View style={{alignItems: 'flex-start', marginHorizontal: 15}}>
                 <View style={{width: '100%'}}>
-                    <TextInput placeholder='813-1234-5678' style={{borderWidth: 1, borderColor: Color.border, color: Color.text,
-                        width: '100%', borderRadius: 5, paddingHorizontal: 40, paddingTop: 20, height: 47}}
-                        keyboardType='number-pad'
-                        onChangeText={(value) => setPhone(value)}
-                        value={phone}
+                    <TextInput placeholder='Masukkan Lokasi Acara . . .' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
+                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, minHeight: 80}}
+						onChangeText={(value) => setAddress(value)}
+                        multiline
+                        value={address}
                     />
-                    <Text style={{position: 'absolute', marginVertical: 17, marginHorizontal: 10, fontSize: 13}}>+62</Text>
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>No Telepon</Text>
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Lokasi Acara</Text>
                 </View>
             </View>
-            <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
+            <FormSelect
+              type='select'
+              label='Pin Lokasi'
+              value={isPinnedMap ? 'Lokasi berhasil disimpan' || 'Lokasi di Pin' : ''}
+              placeholder='Pilih di Peta'
+              onPress={() => {
+                setModalSelectMap(true);
+              }}
+            />
+            <View style={{alignItems: 'flex-start', marginHorizontal: 15}}>
                 <View style={{width: '100%'}}>
-                    <TextInput placeholder='contoh@gmail.com' style={{borderWidth: 1, borderColor: Color.border, color: Color.text,
-                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
-                        onChangeText={(value) => setEmail(value)}
-                        value={email}
+                    <TextInput placeholder='Masukkan Deskripsi Event . . ' style={{borderWidth: 1, borderColor: Color.border,
+                        color: Color.text,
+                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, minHeight: 80}}
+						onChangeText={(value) => setAddress(value)}
+                        multiline
+                        value={address}
                     />
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Email</Text>
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Deskripsi Event</Text>
                 </View>
             </View>
-            {/* informasi petugas */}
-            <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
-                <Text style={{fontSize: 10, fontWeight: 'bold', marginVertical: 10}}>Informasi Petugas</Text>
-                <View style={{width: '100%'}}>
-                    <TextInput placeholder='Adang Susanyo' style={{borderWidth: 1, borderColor: Color.border, color: Color.text,
-                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
-                        onChangeText={(value) => setNamePetugas(value)}
-                        value={namePetugas}
-                    />
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Nama Petugas</Text>
-                </View>
-            </View>
-            <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
-                <View style={{width: '100%'}}>
-                    <TextInput placeholder='813-1234-5678' style={{borderWidth: 1, borderColor: Color.border, color: Color.text,
-                        width: '100%', borderRadius: 5, paddingHorizontal: 40, paddingTop: 20, height: 47}}    
-                        keyboardType='number-pad'
-                        onChangeText={(value) => setPhonePetugas(value)}
-                        value={phonePetugas}
-                    />
-                    <Text style={{position: 'absolute', marginVertical: 17,marginHorizontal: 10, fontSize: 13}}>+62</Text>
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>No Telepon</Text>
-                </View>
-            </View>
-            <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
-                <View style={{width: '100%'}}>
-                    <TextInput placeholder='Adang Susanyo' style={{borderWidth: 1, borderColor: Color.border, color: Color.text,
-                        width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47}}
-                        onChangeText={(value) => setNameKoor(value)}
-                        value={nameKoor}
-                    />
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Nama Koordinator Kab/Kota</Text>
-                </View>
-            </View>
-            <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
-                <View style={{width: '100%'}}>
-                    <TextInput placeholder='812-1234-5678' style={{borderWidth: 1, borderColor: Color.border, color: Color.text,
-                        width: '100%', borderRadius: 5, paddingHorizontal: 40, paddingTop: 20, height: 47}}
-                        keyboardType='number-pad'
-                        onChangeText={(value) => setPhoneKoor(value)}
-                        value={phoneKoor}
-                    />
-                    <Text style={{position: 'absolute', marginVertical: 17,marginHorizontal: 10, fontSize: 13}}>+62</Text>
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>No. Telepon</Text>
-                </View>
-            </View>
+
         </ScrollView>
         <View style={{width: '100%', height: 70, alignItems: 'center', borderRadius: 10}}>
             <TouchableOpacity onPress={() => submit()} style={{backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
