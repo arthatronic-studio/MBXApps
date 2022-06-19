@@ -1,12 +1,12 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Image, ScrollView, Platform, Linking} from 'react-native';
+import {View, Image, FlatList,ScrollView, Platform, Linking, Pressable} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
-
-import {useLoading, usePopup, useColor, Alert} from '@src/components';
+import Header from '@src/components/Header';
+import {useLoading, usePopup, useColor, Alert, Row, Col} from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
 import {TouchableOpacity, Button} from '@src/components/Button';
@@ -16,6 +16,50 @@ import { Container, Divider, Padding } from 'src/styled';
 import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 import ModalContentOptions from 'src/components/ModalContentOptions';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
+
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import Feather from 'react-native-vector-icons/Feather'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+
+
+
+
+const DATA = [
+  {
+    id: 1,
+    title: 'PRESALE - Reguler (A)',
+    date: '08 Feb 2022',
+    refund: 'Bisa Refund',
+    reservasi: "Tidak Perlu Reservasi",
+    harga: 'Rp 100.000'
+  },
+  {
+    id: 2,
+    title: 'PRESALE - Reguler (B)',
+    date: '08 Feb 2022',
+    refund: 'Bisa Refund',
+    reservasi: "Tidak Perlu Reservasi",
+    harga: 'Rp 100.000'
+  },
+  {
+    id: 3,
+    title: 'PRESALE - VIP (A)',
+    date: '08 Feb 2022',
+    refund: 'Bisa Refund',
+    reservasi: "Tidak Perlu Reservasi",
+    harga: 'Rp 100.000'
+  },
+  {
+    id: 4,
+    title: 'PRESALE - VIP (A)',
+    date: '08 Feb 2022',
+    refund: 'Bisa Refund',
+    reservasi: "Tidak Perlu Reservasi",
+    harga: 'Rp 100.000'
+  },
+];
+
 
 const EventDetail = ({navigation, route}) => {
   const {Color} = useColor();
@@ -37,6 +81,40 @@ const EventDetail = ({navigation, route}) => {
   //         clearTimeout(timeout);
   //     }
   // }, [trigger]);
+  const renderItem = ({ item }) => (
+   <Pressable style={{width: '100%', height: 165, marginBottom: 10,paddingHorizontal: 15, backgroundColor: Color.theme, borderWidth: 1, borderColor: Color.border, borderRadius: 8}}>
+      <Divider height={10}/>
+      <Row>
+        <Col>
+          <Text style={{fontSize: 11, textAlign: 'left',fontWeight: 'bold'}}>{item.title}</Text>
+          <Text style={{fontSize: 8, textAlign: 'left', marginVertical: 3}}>{item.date}</Text>
+        </Col>
+        <View style={{flexDirection:'row', justifyContent: 'center'}}>
+            <Text style={{fontSize: 10, color: '#3C58C1', marginHorizontal: 5}}>Lihat Detail</Text>
+            <MaterialIcons name={'arrow-forward'} size={12} color={'#3C58C1'}/>
+        </View>
+      </Row>
+      <Divider height={25}/>
+      <Row style={{alignItems: 'center', }}>
+        <MaterialCommunityIcons name={'cash-refund'} color={Color.secondary} size={22}/>
+        <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 5}}>Bisa Refund</Text>
+        <Divider width={8}/>
+        <AntDesign name='calendar' size={18} color={Color.secondary}/>
+        <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 5}}>Tidak Perlu Reservasi</Text>
+      </Row>
+      <Divider height={25}/>
+      <Row>
+        <Col>
+            <Text style={{textAlign: 'left', fontSize: 8}}>Harga</Text>
+            <Text style={{textAlign: 'left', fontWeight: 'bold'}}>{item.harga}<Text style={{fontSize: 8}}>/Pax</Text></Text>
+        </Col>
+        <TouchableOpacity style={{justifyContent: 'center',backgroundColor: Color.primary, width: '35%', borderRadius: 30}}>
+          <Text style={{fontSize: 10, color: Color.textInput}}>Pesan Sekarang</Text>
+        </TouchableOpacity>
+      </Row>
+   </Pressable>
+  );
+
 
   const fetchAddLike = () => {
     showLoading();
@@ -75,15 +153,26 @@ const EventDetail = ({navigation, route}) => {
 
   return (
     <Scaffold
-      headerTitle="Detail"
-      iconRightButton={<MaterialIcons name='more-vert' size={22} color={Color.text} />}
-      onPressRightButton={() => {
-        modalOptionsRef.current.open();
-      }}
       fallback={false}
       empty={false}
       popupProps={popupProps}
       loadingProps={loadingProps}
+      header={
+        <Header
+          type="bold"
+          centerTitle={false}
+          title="Lelang"
+          actions={
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity>
+                <Feather name='bookmark' size={22} color={Color.text} style={{marginHorizontal: 15}} />
+              </TouchableOpacity>
+              <MaterialIcons onPress={() => {modalOptionsRef.current.open();}} 
+              name='more-vert' size={22} color={Color.text} />
+            </View>
+          }
+        />
+      }
     >
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -107,20 +196,20 @@ const EventDetail = ({navigation, route}) => {
             backgroundColor: Color.theme,
             width: '100%',
             height: '100%',
-            paddingTop: 16,
+            paddingTop: 12,
           }}>
           <View>
             <Text
               style={{
                 color: Color.info,
                 fontWeight: 'bold',
-                fontSize: 11,
+                fontSize: 8,
                 textAlign: 'left',
                 paddingHorizontal: 20,
-                marginBottom: 2,
               }}>
               OFFICIAL EVENT
             </Text>
+            <Divider height={10}/>
             <Text
               style={{
                 color: Color.text,
@@ -128,6 +217,7 @@ const EventDetail = ({navigation, route}) => {
                 fontWeight: 'bold',
                 textAlign: 'justify',
                 paddingHorizontal: 20,
+                width: '70%'
               }}>
               {item.productName}
             </Text>
@@ -137,33 +227,44 @@ const EventDetail = ({navigation, route}) => {
               style={{
                 flexDirection: 'row',
                 paddingHorizontal: 20,
-                width: '50%',
+                width: '30%',
                 alignItems: 'center',
               }}>
-              <Foundation
+              <AntDesign
                 name={'calendar'}
-                size={22}
-                color={Color.primary}
+                size={13}
+                color={Color.secondary}
               />
-              
-              <Divider width={8} />
-
-              <Text style={{fontWeight: 'bold'}}>{moment(eventDate).format('DD MMM YYYY')}</Text>
+              <Divider width={6} />
+              <Text style={{fontSize: 10, color: Color.secondary, fontWeight: 'bold'}}>{moment(eventDate).format('DD MMM YYYY')}</Text>
             </View>}
             <View
               style={{
                 flexDirection: 'row',
-                paddingHorizontal: 10,
-                width: '50%',
+                width: '25%',
                 alignItems: 'center',
               }}>
-              <Ionicons
-                name='person'
-                size={20}
+              <AntDesign
+                name='clockcircleo'
+                size={11}
                 color={Color.secondary}
               />
-              <Divider width={8} />
-              <Text style={{fontWeight: 'bold'}}>{item.fullname}</Text>
+              <Divider width={6} />
+              <Text style={{fontSize: 10, color: Color.secondary, fontWeight: 'bold'}}>16.00 - 20.00</Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                width: '30%',
+                alignItems: 'center',
+              }}>
+              <EvilIcons
+                name='location'
+                size={15}
+                color={Color.secondary}
+              />
+              <Divider width={4} />
+              <Text style={{fontSize: 10, color: Color.secondary, fontWeight: 'bold'}}>Jakarta Selatan</Text>
             </View>
             {/* <View
               style={{
@@ -179,7 +280,7 @@ const EventDetail = ({navigation, route}) => {
             </View> */}
           </View>
 
-          <Container paddingHorizontal={32} paddingVertical={16}>
+          {/* <Container paddingHorizontal={32} paddingVertical={16}>
             <Button
               onPress={() => {
                 navigation.navigate('GalleryScreen', { item });
@@ -193,7 +294,7 @@ const EventDetail = ({navigation, route}) => {
             <Container paddingHorizontal={16}>
                 <WidgetUserLikes id={item.id} title='Akan Hadir' />
             </Container>
-          }
+          } */}
 
           <View>
             <Text
@@ -201,12 +302,13 @@ const EventDetail = ({navigation, route}) => {
                 textAlign: 'left',
                 paddingHorizontal: 20,
                 fontWeight: 'bold',
-                fontSize: 15,
+                fontSize: 11,
                 paddingVertical: 10,
               }}>
               Deskripsi
             </Text>
             <Text
+              numberOfLines={12}
               style={{
                 textAlign: 'justify',
                 paddingHorizontal: 20,
@@ -215,6 +317,21 @@ const EventDetail = ({navigation, route}) => {
               }}>
               {item.productDescription}
             </Text>
+            <Pressable style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center',width: '100%', paddingHorizontal: 15}}>
+              <Text style={{color: Color.primary}}>Selengkapnya</Text>
+              <MaterialIcons name={'keyboard-arrow-down'} size={20} color={Color.primary} style={{marginHorizontal: 5}}/>
+            </Pressable>
+          </View>
+          <Divider/>
+
+          <View style={{paddingHorizontal: 20}}>
+            <Text style={{fontWeight:'bold', fontSize: 11, textAlign: 'left'}}>Jenis Tiket</Text>
+            <Divider height={10}/>
+            <FlatList
+              data={DATA}
+              renderItem={renderItem}
+              keyExtractor={item => item.id}
+             />
           </View>
 
           {/* <View>
@@ -338,8 +455,18 @@ const EventDetail = ({navigation, route}) => {
             </View>
           </View> */}
         </View>
+        <Divider height={25}/>
       </ScrollView>
-      <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16}}>
+      <Row style={{height: 60, paddingHorizontal: 20,paddingVertical: 15}}>
+        <Col style={{justifyContent: 'center'}}>
+            <Text style={{textAlign: 'left', fontSize: 8}}>Mulai dari</Text>
+            <Text style={{textAlign: 'left', fontWeight: 'bold'}}>Rp. 100.000</Text>
+        </Col>
+        <TouchableOpacity style={{justifyContent: 'center',backgroundColor: Color.primary, width: '30%', borderRadius: 30, height: 35}}>
+          <Text style={{fontSize: 10, color: Color.textInput}}>Ikut Event</Text>
+        </TouchableOpacity>
+      </Row>
+      {/* <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16}}>
       <TouchableOpacity
           onPress={() => {
             navigation.navigate('CommentListScreen', { item });
@@ -420,11 +547,13 @@ const EventDetail = ({navigation, route}) => {
         </TouchableOpacity>
       </View>
 
+      */}
+
       <ModalContentOptions
           ref={modalOptionsRef}
           isOwner={user && user.userId === item.ownerId}
           item={item}
-      />
+      /> 
     </Scaffold>
   );
 };

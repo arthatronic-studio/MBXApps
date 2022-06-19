@@ -237,6 +237,11 @@ export default {
   firstChat: require('../components/Images/First.png'),
   secondChat: require('../components/Images/second.png'),
   userChat: require('../components/Images/User.png'),
+  UsersThree: require('../components/Images/UsersThree.png'),
+  ImageEvent: require('../components/Images/ImageEvent.png'),
+  CircleWavyCheck: require('../components/Images/CircleWavyCheck.png'),
+  Confetti: require('../components/Images/Confetti.png'),
+
   filedoc: require('../components/Images/FileDoc.png'),
   rrid1: require('../components/Images/rrid/rrid1.png'),
   rrid2: require('../components/Images/rrid/rrid2.png'),
