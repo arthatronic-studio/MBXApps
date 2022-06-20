@@ -132,7 +132,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
     },
   ];
 
-  if (item.ownerId) {
+  if (item && item.ownerId) {
     dataOptions.push({
       id: 2,
       name: 'Block User',

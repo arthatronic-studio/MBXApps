@@ -9,6 +9,7 @@ import {
 import Styled from 'styled-components';
 import RNSimpleCrypto from "react-native-simple-crypto";
 import axios from 'axios';
+import Config from 'react-native-config';
 
 import CarouselView from 'src/components/CarouselView';
 import {
@@ -196,7 +197,7 @@ const SurveyReviewScreen = ({ navigation, route }) => {
 
      let config = {
        method: 'post',
-       url: 'http://panel.survey.tribesocial.id/submit-survey',
+       url: `${Config.SURVEY_API_URL}/submit-survey`,
        headers: {
           Accept: 'application/json'
          },
@@ -233,7 +234,7 @@ const SurveyReviewScreen = ({ navigation, route }) => {
     // try {
     //   showLoading()
     //   const response = await axios({
-    //     baseURL: 'http://panel.survey.tribesocial.id',
+    //     baseURL: Config.SURVEY_API_URL,
     //     method: 'post',
     //     url: '/submit-survey',
     //     data: dataq,
@@ -389,7 +390,7 @@ const SurveyReviewScreen = ({ navigation, route }) => {
 
     let config = {
       method: 'post',
-      url: 'http://panel.survey.tribesocial.id/survey-form-file',
+      url: `${Config.SURVEY_API_URL}/survey-form-file`,
       headers: {
         "Content-Type": `multipart/form-data`,
       },
