@@ -41,13 +41,13 @@ const CardMerchant = (props) => {
                 alignItems: 'center'
             }}
         >
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            {item && <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Image source={{uri: item.profileImg}} style={{resizeMode: 'contain', width: 40, height: 40, marginVertical: 8}} />
                 <View style={{marginLeft: 10}}>
                     <Text align='left' type='bold' style={{marginBottom: 6}}>{item.name}</Text>
                     <Text align='left' size={10} color={Color.placeholder}>{item.alamat}</Text>
                 </View>
-            </View>
+            </View>}
             {/* hide lihat toko */}
             {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Text align='left' type='bold' color={Color.primary} size={12} style={{marginRight: 4}}>Lihat Toko</Text>

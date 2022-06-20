@@ -202,7 +202,7 @@ const ChatGroupScreen = ({ navigation, route }) => {
                         </CircleSend>
                     </BoxInput>
                 </BottomSection> */}
-          <View
+          {/* <View
             style={{
               backgroundColor: Color.theme,
               width: '100%',
@@ -231,7 +231,7 @@ const ChatGroupScreen = ({ navigation, route }) => {
                 position: 'absolute',
               }}
             />
-          </View>
+          </View> */}
           <FlatList
             keyExtractor={(item, index) =>
               item.id.toString() + index.toString()
@@ -248,7 +248,15 @@ const ChatGroupScreen = ({ navigation, route }) => {
               const isSelected = selectedRoom && selectedRoom.id === item.id;
               const notifBadge = item.unread_count > 0;
 
-              // console.log('item', item);
+              console.log('item', item);
+
+              let lastChatName = '';
+              if (Array.isArray(item.member) && item.last_chat && item.last_chat.user_id) {
+                const f = item.member.filter((e) => e.user_id == item.last_chat.user_id)[0];
+                if (f) {
+                  lastChatName = f.first_name;
+                }
+              }
 
               return (
                 <TouchableOpacity
@@ -315,20 +323,12 @@ const ChatGroupScreen = ({ navigation, route }) => {
                         flexDirection: 'row',
                         alignItems: 'center',
                       }}>
-                      <View
-                        style={{
-                          marginRight: 5,
-                          borderRadius: 20,
-                          width: 8,
-                          height: 8,
-                          backgroundColor: Color.green,
-                        }}
-                      />
                       <Text type="semibold" numberOfLines={1}>
                         {item['room_detail'].name}
                       </Text>
                     </View>
                     <Text
+                      align='left'
                       type={
                         isUserTyping(item.typing)
                           ? 'italic'
@@ -343,7 +343,7 @@ const ChatGroupScreen = ({ navigation, route }) => {
                       style={{opacity: 0.6}}>
                       {item.last_chat &&
                       item.last_chat.user_id == user.userId ? (
-                        "User's Name :   "
+                        lastChatName ? `${lastChatName}: ` : ''
                       ) : (
                         <Ionicons name={'md-checkmark-done-sharp'} size={12} />
                       )}

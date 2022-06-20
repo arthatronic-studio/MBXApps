@@ -190,10 +190,26 @@ const ChatRoomsScreen = ({ navigation, route }) => {
 
     return (
         <Scaffold
-            showHeader={false}
+            headerTitle='Obrolan'
             empty={dataRooms.data.length === 0 && !dataRooms.loading}
             emptyTitle='Obrolan tidak tersedia'
             fallback={dataRooms.loading}
+            floatingActionButton={
+                <Pressable
+                    onPress={() => !dataRooms.loading && navigation.navigate('ChatUserListScreen', { myRoomIds })}
+                    style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: !dataRooms.loading ? Color.primary : Color.disabled,
+                        width: 60,
+                        height: 60,
+                        borderRadius: 30,
+                    }}
+                >
+                    <AntDesign name={'message1'} size={27} style={{color: Color.textInput}} />
+                </Pressable>
+            }
+
         >
             <View style={{backgroundColor: Color.theme}}>
                 {/* <BottomSection style={{borderColor: Color.border}}>

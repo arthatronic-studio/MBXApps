@@ -20,6 +20,7 @@ import { currentSocket } from '@src/screens/MainHome/MainHome';
 const Chat = ({navigation}) => {
     // state
     const [myRoomIds, setMyRoomIds] = useState([]);
+    const [loadingMyRooms, setLoadingMyRooms] = useState(true);
 
     const Tab = createMaterialTopTabNavigator();
     const modalListActionRef = useRef();
@@ -34,6 +35,7 @@ const Chat = ({navigation}) => {
         currentSocket.on('list_my_room_ids', (res) => {
             console.log('list_my_room_ids', res);
             setMyRoomIds(res);
+            setLoadingMyRooms(false);
         });
     }, []);
 
@@ -55,8 +57,15 @@ const Chat = ({navigation}) => {
             }
             floatingActionButton={
                 <Pressable
-                    onPress={() => modalListActionRef.current.open()}
-                    style={{alignItems: 'center', justifyContent: 'center', backgroundColor: Color.primary, width: 60, height: 60, borderRadius: 30}}
+                    onPress={() => !loadingMyRooms && modalListActionRef.current.open()}
+                    style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: !loadingMyRooms ? Color.primary : Color.disabled,
+                        width: 60,
+                        height: 60,
+                        borderRadius: 30,
+                    }}
                 >
                     <AntDesign name={'message1'} size={27} style={{color: Color.textInput}} />
                 </Pressable>

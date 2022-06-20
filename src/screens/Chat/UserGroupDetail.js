@@ -104,7 +104,7 @@ function Anggota(props, route) {
   );
 
   return (
-    <ScrollView style={{backgroundColor: Color.theme}}>
+    <View>
       <View
         style={{
           backgroundColor: Color.theme,
@@ -146,7 +146,7 @@ function Anggota(props, route) {
           },
         ]}
       />
-    </ScrollView>
+    </View>
   );
 }
 
@@ -161,14 +161,9 @@ function Anggota(props, route) {
                 <Image source={item.gallery[1]} style={{width: 60, height: 60, borderRadius: 5}}/>
             </Row>
         </View>
-        
        );
-
-
-    console.log(props);
   
     return (
-      <ScrollView>
       <View
         style={{
           backgroundColor: Color.theme,
@@ -194,7 +189,6 @@ function Anggota(props, route) {
             keyExtractor={item => item.id}
             />
       </View>
-      </ScrollView>
     );
   }
 
@@ -207,11 +201,8 @@ function Anggota(props, route) {
         </View>
         
        );
-
-    console.log(props);
   
     return (
-      <ScrollView>
       <View
         style={{
           backgroundColor: Color.theme,
@@ -237,7 +228,6 @@ function Anggota(props, route) {
             keyExtractor={item => item.id}
             />
       </View>
-      </ScrollView>
     );
   }
 
@@ -251,7 +241,6 @@ const UserGroupDetail = ({navigation, route}) => {
   const { params } = route;
 
   console.log('ini params', params);
-  
 
   const GroupDetailHeader = () => {
     return (
@@ -357,29 +346,32 @@ const UserGroupDetail = ({navigation, route}) => {
           children={props => <Anggota listAnggota={params['params'].selected} {...props} />}
           options={{tabBarLabel: 'Anggota'}}
         />
-        <Tab.Screen
+        {/* hide media */}
+        {/* <Tab.Screen
           name="Media"
           component={Media}
           options={{tabBarLabel: 'Media'}}
-        />
-        <Tab.Screen
+        /> */}
+        {/* hide dokumen */}
+        {/* <Tab.Screen
           name="Dokumen"
           component={Dokumen}
           options={{tabBarLabel: 'Dokumen'}}
-        />
+        /> */}
       </Tab.Navigator>
 
       <ModalListAction
         ref={modalListActionRef}
         data={[
-          {
-            id: 0,
-            name: 'Matikan pemberitahuan',
-            color: Color.text,
-            onPress: () => {
-              modalListActionRef.current.close();
-            },
-          },
+          // hide options chat
+          // {
+          //   id: 0,
+          //   name: 'Matikan pemberitahuan',
+          //   color: Color.text,
+          //   onPress: () => {
+          //     modalListActionRef.current.close();
+          //   },
+          // },
           {
             id: 1,
             name: 'Keluar dari grup',
@@ -388,14 +380,14 @@ const UserGroupDetail = ({navigation, route}) => {
               modalListActionRef.current.close();
             },
           },
-          {
-            id: 2,
-            name: 'Report',
-            color: Color.red,
-            onPress: () => {
-              modalListActionRef.current.close();
-            },
-          },
+          // {
+          //   id: 2,
+          //   name: 'Report',
+          //   color: Color.red,
+          //   onPress: () => {
+          //     modalListActionRef.current.close();
+          //   },
+          // },
         ]}
       />
     </Scaffold>

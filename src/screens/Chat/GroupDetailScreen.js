@@ -5,7 +5,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Moment from 'moment';
 import { ModalListAction } from 'src/components';
 import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
-import ModalPriviewImage from 'src/components/ModalPriviewImage';
 import { useSelector } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Text from '@src/components/Text';
@@ -70,9 +69,6 @@ const GroupDetailScreen = ({ navigation, route }) => {
 
     //Image
   const [modalImagePicker, setModalImagePicker] = useState(false);
-  const [modalPriviewImage, setModalPriviewImage] = useState(false);
-  const [thumbImage, setThumbImage] = useState('');
-  const [mimeImage, setMimeImage] = useState('image/jpeg');
   
     // state
     const [textComment, setTextComment] = useState('');
@@ -574,40 +570,28 @@ const GroupDetailScreen = ({ navigation, route }) => {
 
         <ModalImagePicker
           visible={modalImagePicker}
+          withPreview
           onClose={() => setModalImagePicker(false)}
           onSelected={callback => {
-            // onSubmit(callback.base64);
-            setThumbImage(callback.base64);
-            setMimeImage(callback.type);
+            onSubmit(callback.base64);
             setModalImagePicker(false);
-            setModalPriviewImage(true);
           }}
-        />
-        <ModalPriviewImage
-          visible={modalPriviewImage}
-          thumbImage={thumbImage}
-          mimeImage={mimeImage}
-          onClose={() => setModalPriviewImage(false)}
-          onSubmit={() => {
-            onSubmit(thumbImage);
-            setModalPriviewImage(false);
-          }
-          }
         />
 
         <ModalListAction
           onClose={() => setShowSection(!showSection)}
           ref={modalListActionRef}
           data={[
-            {
-              id: 0,
-              name: 'Cari',
-              color: Color.text,
-              onPress: () => {
-                setShowSection(!showSection);
-                modalListActionRef.current.close();
-              },
-            },
+            // hide options chat
+            // {
+            //   id: 0,
+            //   name: 'Cari',
+            //   color: Color.text,
+            //   onPress: () => {
+            //     setShowSection(!showSection);
+            //     modalListActionRef.current.close();
+            //   },
+            // },
             {
               id: 1,
               name: 'Tambahkan Anggota',
@@ -617,33 +601,33 @@ const GroupDetailScreen = ({ navigation, route }) => {
                 modalListActionRef.current.close();
               },
             },
-            {
-              id: 2,
-              name: 'Matikan pemberitahuan',
-              color: Color.text,
-              onPress: () => {
-                setShowSection(!showSection);
-                modalListActionRef.current.close();
-              },
-            },
-            {
-              id: 3,
-              name: 'Bersihkan obrolan',
-              color: Color.text,
-              onPress: () => {
-                setShowSection(!showSection);
-                modalListActionRef.current.close();
-              },
-            },
-            {
-              id: 4,
-              name: 'Report',
-              color: Color.red,
-              onPress: () => {
-                setShowSection(!showSection);
-                modalListActionRef.current.close();
-              },
-            },
+            // {
+            //   id: 2,
+            //   name: 'Matikan pemberitahuan',
+            //   color: Color.text,
+            //   onPress: () => {
+            //     setShowSection(!showSection);
+            //     modalListActionRef.current.close();
+            //   },
+            // },
+            // {
+            //   id: 3,
+            //   name: 'Bersihkan obrolan',
+            //   color: Color.text,
+            //   onPress: () => {
+            //     setShowSection(!showSection);
+            //     modalListActionRef.current.close();
+            //   },
+            // },
+            // {
+            //   id: 4,
+            //   name: 'Report',
+            //   color: Color.red,
+            //   onPress: () => {
+            //     setShowSection(!showSection);
+            //     modalListActionRef.current.close();
+            //   },
+            // },
             {
               id: 5,
               name: 'Keluar dari grup',
