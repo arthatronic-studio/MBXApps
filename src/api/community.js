@@ -1,5 +1,45 @@
 import Client from '@src/lib/apollo';
-import { queryCarTypeListing, queryCommunityMemberCheck } from "src/lib/query/community";
+import { queryCarTypeListing, queryCommunityMemberCheck, queryJoinCommunityUpdate } from "src/lib/query/community";
+import { joinCommunityMember } from 'src/lib/query/joinCommunityMember';
+
+export const fetchJoinCommunityMember = async({ status, userId }) => {
+    let response = {
+        data: [],
+        status: false,
+        message: 'Terjadi kesalahan',
+        error: null,
+    };
+
+    try {
+        const result = await Client.query({
+            query: joinCommunityMember,
+            variables: {
+                status,
+                userId,
+            },
+        });
+    
+        if (
+            result &&
+            result.data &&
+            Array.isArray(result.data.joinCommunityMember)
+        ) {
+            response.data = result.data.joinCommunityMember;
+            response.status = true;
+            response.message = result.data.message || 'OK';
+        } else {
+            console.log('err joinCommunityMember', result);
+            response.message = 'Gagal, silakan coba kembali';
+            error = result;
+        }
+    
+        return response;
+    } catch (error) {
+        console.log('catch joinCommunityMember', error);
+        response.error = error;
+        return response;
+    }
+};
 
 export const fetchCarTypeListing = async() => {
     let response = {
@@ -73,6 +113,42 @@ export const fetchCommunityMemberCheck = async() => {
         return response;
     } catch (error) {
         console.log('catch joinCommunityMemberCheck', error);
+        response.error = error;
+        return response;
+    }
+};
+
+
+export const fetchJoinCommunityUpdate = async(variables) => {
+    let response = {
+        data: null,
+        status: false,
+        message: 'Terjadi kesalahan',
+        error: null,
+    };
+
+    try {
+        const result = await Client.query({
+            query: queryJoinCommunityUpdate,
+            variables,
+        });
+    
+        if (
+            result &&
+            result.data
+        ) {
+            response.data = result.data.joinCommunityUpdate;
+            response.status = true;
+            response.message = result.data.message || 'OK';
+        } else {
+            console.log('err joinCommunityUpdate', result);
+            response.message = 'Gagal, silakan coba kembali';
+            error = result;
+        }
+    
+        return response;
+    } catch (error) {
+        console.log('catch joinCommunityUpdate', error);
         response.error = error;
         return response;
     }

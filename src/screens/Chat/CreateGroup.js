@@ -217,6 +217,7 @@ const onPress = item => {
       navigation.navigate('ChatDetailScreen', {
         roomId: res,
         roomName: item.firstName,
+        isDirector: item.isDirector === 1,
         selected: [item],
         targetIds: [item.userId],
       });

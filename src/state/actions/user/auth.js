@@ -30,7 +30,7 @@ export const callAuthApi = async (tempEmail, password, refreshToken, fcm_token) 
   }
   catch (error) {
     if (error.response) {
-      console.log(error, 'error response');
+      console.log(JSON.stringify(error), 'error response');
       return { success: false, error: 'Kesalahan server' };
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx
@@ -312,6 +312,7 @@ const getUserProfileQuery = gql`
     userId
     userName
     firstName
+    isEmailVerify
     lastName
     email
     phoneCountryCode

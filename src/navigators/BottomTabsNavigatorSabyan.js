@@ -12,7 +12,7 @@ const { Navigator, Screen } = createBottomTabNavigator();
 const BottomTabsNavigatorsabyan = () => {
     return (
         <Navigator
-            initialRouteName="Home"
+            initialRouteName="MainHome"
             tabBar={(props) =>
                 <TabBarComponentSabyan {...props} />
             }

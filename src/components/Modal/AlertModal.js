@@ -28,14 +28,15 @@ const defaultProps = {
     visible: true,
     type: 'info',
     onSubmit: () => {},
+    onDiscard: () => {},
     onClose: () => {},
     title: '',
     message: '',
-    showCloseButton: false,
+    showDiscardButton: false,
 };
 
 const AlertModal = ({
-    visible, type, onSubmit, onClose, title, message, showCloseButton,
+    visible, type, onSubmit, onDiscard, onClose, title, message, showDiscardButton,
 }) => {
     const { Color } = useColor();
 
@@ -83,7 +84,7 @@ const AlertModal = ({
                     <Text>{message}</Text>
 
                     <View style={{height: 45, width: '100%', flexDirection: 'row', marginTop: 32}}>
-                        {showCloseButton && <TouchableOpacity
+                        {showDiscardButton && <TouchableOpacity
                             style={{
                                 flex: 1,
                                 justifyContent: 'center',
@@ -93,13 +94,13 @@ const AlertModal = ({
                                 borderColor: Color.primary,
                             }}
                             onPress={() => {
-                                onClose();
+                                onDiscard();
                             }}
                         >
                             <Text color={Color.primary}>Tidak</Text>
                         </TouchableOpacity>}
 
-                        {showCloseButton && <Divider />}
+                        {showDiscardButton && <Divider />}
 
                         <TouchableOpacity
                             style={{

@@ -4,19 +4,32 @@ export const queryProductReport = gql`
 mutation (
   $referenceId: Int!
   $referenceType: ReportAbuseType!
-  $manageType: ReportAbuseManageType!
-  $message: String
-  $status: ReportAbuseStatus
+  $referenceName: String!
+  $refStatus: String!
+	$reportMessage: String
 ) {
   reportAbuseManage(
     referenceId: $referenceId
     referenceType: $referenceType
-    manageType: $manageType
-    message: $message
-    status: $status
+    referenceName: $referenceName
+    refStatus: $refStatus
+    reportMessage: $reportMessage
   ) {
       id
-	    status
+			refId
+      refType
+      message
+      reportedBy
+      status
+      createdAt
+      detail {
+        id
+        reportId
+        userId
+        fullname
+        reportMessage
+        reportedAt
+      }
     }
   }
 `;

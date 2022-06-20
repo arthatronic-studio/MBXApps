@@ -60,7 +60,8 @@ const itemPerPage = 100;
 
 const ChatUserListScreen = ({navigation, route}) => {
   const { params } = route;
-  const useHelpScreen = params.screenType = 'help';
+  const useHelpScreen = typeof params.screenType !== 'undefined' && params.screenType == 'help';
+  console.log('useHelpScreen', useHelpScreen);
 
   const [itemData, setItemData] = useState({
     data: [],
@@ -153,8 +154,6 @@ const ChatUserListScreen = ({navigation, route}) => {
 
     console.log('var', variables);
 
-    console.log('var', variables);
-
     Client.query({
       query: queryGetUserOrganizationRef,
       variables,
@@ -226,6 +225,7 @@ const ChatUserListScreen = ({navigation, route}) => {
         navigation.navigate('ChatDetailScreen', {
           roomId: res,
           roomName: item.firstName,
+          isDirector: item.isDirector === 1,
           selected: [item],
           targetIds: [item.userId]
         });
@@ -349,7 +349,7 @@ const ChatUserListScreen = ({navigation, route}) => {
           // }
 
           const isAdmin = item.isDirector === 1;
-          const idNumber = accessClient.isKomoto || accessClient.isRRID ? '- ' + item.idNumber : '';
+          const idNumber = accessClient.isKomoto && item.idNumber ? ' - ' + item.idNumber : '';
 
           return (
             <TouchableOpacity
@@ -385,7 +385,7 @@ const ChatUserListScreen = ({navigation, route}) => {
                     justifyContent: 'space-around',
                   }}>
                   <Text size={12} type="semibold" numberOfLines={1}>
-                    {item.firstName} {item.lastName} {idNumber} {isAdmin && <MaterialIcons name='verified' color={Color.info} />}
+                    {item.firstName} {item.lastName}{idNumber} {isAdmin && <MaterialIcons name='verified' color={Color.info} />}
                   </Text>
                   {/* <Text size={10}>Available</Text> */}
                 </View>

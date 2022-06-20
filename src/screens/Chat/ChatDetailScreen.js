@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, FlatList, TextInput, Image, useWindowDimensions, AppState } from 'react-native';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Moment from 'moment';
 import { useSelector } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign'
+
 import Text from '@src/components/Text';
 import { useColor } from '@src/components/Color';
 import Header from '@src/components/Header';
@@ -18,7 +20,7 @@ import { queryContentChatRoomManage, queryContentChatMessage } from '@src/lib/qu
 import { Divider } from 'src/styled';
 import { currentSocket } from '@src/screens/MainHome/MainHome';
 import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
-import ModalPriviewImage from 'src/components/ModalPriviewImage';
+
 const BottomSection = Styled(View)`
   width: 100%;
   padding: 16px;
@@ -71,9 +73,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
     });
     const [userTyping, setUserTyping] = useState(false);
     const [modalImagePicker, setModalImagePicker] = useState(false);
-      const [modalPriviewImage, setModalPriviewImage] = useState(false);
-      const [thumbImage, setThumbImage] = useState('');
-      const [mimeImage, setMimeImage] = useState('image/jpeg');
+    
     const modalListActionRef = useRef();
     
     // hooks
@@ -246,8 +246,6 @@ const ChatDetailScreen = ({ navigation, route }) => {
         
         return title;
     }
-
-    
     
     return (
       <Scaffold
@@ -494,25 +492,14 @@ const ChatDetailScreen = ({ navigation, route }) => {
             </BottomSection>
           ) : null}
         </View>
+        
         <ModalImagePicker
           visible={modalImagePicker}
+          withPreview
           onClose={() => setModalImagePicker(false)}
           onSelected={callback => {
-            // onSubmit(callback.base64);
-            setThumbImage(callback.base64);
-            setMimeImage(callback.type);
+            onSubmit(callback.base64);
             setModalImagePicker(false);
-            setModalPriviewImage(true);
-          }}
-        />
-        <ModalPriviewImage
-          visible={modalPriviewImage}
-          thumbImage={thumbImage}
-          mimeImage={mimeImage}
-          onClose={() => setModalPriviewImage(false)}
-          onSubmit={() => {
-            onSubmit(thumbImage);
-            setModalPriviewImage(false);
           }}
         />
 

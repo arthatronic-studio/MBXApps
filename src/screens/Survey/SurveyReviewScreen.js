@@ -9,6 +9,7 @@ import {
 import Styled from 'styled-components';
 import RNSimpleCrypto from "react-native-simple-crypto";
 import axios from 'axios';
+import Config from 'react-native-config';
 
 import CarouselView from 'src/components/CarouselView';
 import {
@@ -31,7 +32,7 @@ import { Container, Divider, Row } from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
 import { getSizeByRatio } from 'src/utils/get_ratio';
 import { joinCommunityMember } from 'src/lib/query/joinCommunityMember';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CircularProgress from 'src/components/CircularProgress';
 import moment from 'moment';
 
@@ -58,11 +59,14 @@ const LabelInput = Styled(View)`
 const SurveyReviewScreen = ({ navigation, route }) => {
   const { listHeader, valueContent } = route.params;
 
+ 
+
   const user = useSelector((state) => state['user.auth'].login.user);
   const { width, height } = useWindowDimensions();
   const { Color } = useColor();
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
+  const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
   const [useSurveyFile, setUseSurveyFile] = useState(false);
@@ -80,16 +84,29 @@ const SurveyReviewScreen = ({ navigation, route }) => {
     }
   }, []);
 
+  const onStoreReset = () => {
+    dispatch({ type: 'SURVEY_PASAR.RESET' });
+  }
+
   const onSubmit = () => {
-    if (useSurveyFile) {
-      fetchSurveyFormFile()
-    } else {
-      fetchSurveySubmit();
-    }
+    fetchSurveyFormFile();
+    // if (useSurveyFile) {
+    //   fetchSurveyFormFile()
+    // } else {
+    //   fetchSurveySubmit();
+    // }
   }
 
   const fetchSurveySubmit = async () => {
     let data = [];
+
+   let latitude = 0;
+   let longitude = 0;
+   let provinsi_id = 0;
+   let city_id = 0;
+   let suburb_id = 0;
+   let area_id = 0;
+   let nama_pasar = '';
 
     for (let i = 0; i < valueContent.length; i++) {
       const valBlock = valueContent[i];
@@ -107,6 +124,8 @@ const SurveyReviewScreen = ({ navigation, route }) => {
           }
           if (item.type === 'MAP_VIEW') {
             value = item.value.fullAddress;
+            latitude = item.value.latitude;
+            longitude = item.value.longitude;
           }
           if (item.type === 'TIME_PICKER' && moment(item.value).isValid()) {
             value = moment(item.value).format('HH:mm');
@@ -123,7 +142,22 @@ const SurveyReviewScreen = ({ navigation, route }) => {
             // for (const val of item.value) {
             //   value.push(val.name);
             // }
-          }
+        }
+         if (item.name === 'province_id') {
+           provinsi_id = item.value.id;
+         }
+         if (item.name === 'city_id') {
+           city_id = item.value.id;
+         }
+         if (item.name === 'suburb_id') {
+           suburb_id = item.value.id;
+         }
+         if (item.name === 'area_id') {
+           area_id = item.value.id;
+         }
+         if (item.label === 'Nama Pasar') {
+           nama_pasar = item.value;
+         } 
 
           const prefixText = item.validation && item.validation.prefixText ? `${item.validation.prefixText} ` : '';
           const suffixText = item.validation && item.validation.suffixText ? ` ${item.validation.suffixText}` : '';
@@ -148,35 +182,80 @@ const SurveyReviewScreen = ({ navigation, route }) => {
       "timestamps": moment().format('YYYY-MM-DD HH:mm:ss'),
       "caption_code": "pasar",
       "data": data,
+      "latitude":latitude,
+      "longitude" : longitude,
+      "user_id": user.userId,
+      "province_id" :provinsi_id,
+      "city_id": city_id,
+      "suburb_id": suburb_id,
+      "area_id" : area_id
+      
     };
 
-    console.log(dataq, 'dataq')
+    console.log(dataq, 'dataq');
+    return;
 
-    try {
-      showLoading()
-      const response = await axios({
-        baseURL: 'http://panel.survey.tribesocial.id',
-        method: 'post',
-        url: '/submit-survey',
-        data: dataq,
-        headers: {
+     let config = {
+       method: 'post',
+       url: `${Config.SURVEY_API_URL}/submit-survey`,
+       headers: {
           Accept: 'application/json'
-        },
-        timeout: 5000,
-      });
+         },
+       data: dataq,
+     };
 
-      hideLoading();
+     showLoading();
 
-      alert('Survei terkirim, Terima kasih telah mengisi survei melalui aplikasi Tribes Survey')
-      setTimeout(() => {
-        navigation.popToTop();
-      }, 2500);
-      console.log(response, "respon apicall")
-    } catch (error) {
-      hideLoading()
-      alert('Gagal mengirim survey, silakan coba kembali');
-      console.log(error, 'error apicall')
-    }
+     axios(config)
+       .then(function (response) {
+         console.log('response', response);
+         hideLoading();
+
+         if (response.data.status ) {
+           alert(
+             'Survei terkirim, Terima kasih telah mengisi survei melalui aplikasi Tribes Survey',
+           );
+           setTimeout(() => {
+             navigation.popToTop();
+             onStoreReset();
+           }, 2500);
+         } else {
+           alert('Not OK');
+         }
+       })
+       .catch(function (error) {
+         console.log('ini error', JSON.stringify(error));
+         hideLoading();
+         alert('Terjadi kesalahan');
+       });
+
+
+
+    // try {
+    //   showLoading()
+    //   const response = await axios({
+    //     baseURL: Config.SURVEY_API_URL,
+    //     method: 'post',
+    //     url: '/submit-survey',
+    //     data: dataq,
+    //     headers: {
+    //       Accept: 'application/json'
+    //     },
+    //     timeout: 5000,
+    //   });
+
+    //   hideLoading();
+
+    //   alert('Survei terkirim, Terima kasih telah mengisi survei melalui aplikasi Tribes Survey')
+    //   setTimeout(() => {
+    //     navigation.popToTop();
+    //   }, 2500);
+    //   console.log(response, "respon apicall")
+    // } catch (error) {
+    //   hideLoading()
+    //   alert('Gagal mengirim survey, silakan coba kembali');
+    //   console.log(error, 'error apicall')
+    // }
   }
 
   const fetchSurveyFormFile = async() => {
@@ -184,11 +263,57 @@ const SurveyReviewScreen = ({ navigation, route }) => {
     let data = new FormData();
     let indexData = -1;
 
+    let latitude = 0;
+    let longitude = 0;
+    let provinsi_id = 0;
+    let city_id = 0;
+    let suburb_id = 0;
+    let area_id = 0;
+    let nama_pasar = '';
+     
+      
+    
+    for (let i = 0; i < valueContent.length; i++) {
+      const valBlock = valueContent[i];
+      for (let index = 0; index < valBlock.length; index++) {
+        const item = valBlock[index];
+        if (item.type === 'MAP_VIEW') {
+           latitude = item.value.latitude;
+           longitude = item.value.longitude;
+        }
+        if (item.name === 'province_id') {
+           provinsi_id = item.value.id;
+        }
+        if (item.name === 'city_id') {
+           city_id = item.value.id;
+        }
+        if (item.name === 'suburb_id') {
+           suburb_id = item.value.id;
+        }
+        if (item.name === 'area_id') {
+          area_id = item.value.id;
+        } 
+        if (item.label === 'Nama Pasar') {
+          nama_pasar = item.value;
+        } 
+      } 
+    }
+
     data.append('auth', 'd57abbc8289c72b56161f3f90ef1fa5ad5dca48a');
     data.append('caption_code', 'pasar');
+    // data.append('survey_code', 'SURVEY-' + moment().format('DDMMYYYY'));
+    // data.append('timestamps', moment().format('YYYY-MM-DD HH:mm:ss')); // moment().format('YYYY-MM-DD HH:mm:ss'),
     data.append('survey_code', 'SURVEY-20220229');
-    data.append('timestamps', '2022-05-30 11:42:59'); // moment().format('YYYY-MM-DD HH:mm:ss'),
-
+    data.append('timestamps', '2022-05-30 11:42:59');
+    data.append('user_id', user.userId);
+    data.append('area_id', area_id);
+    data.append('province_id', provinsi_id);
+    data.append('city_id', city_id);
+    data.append('suburb_id', suburb_id);
+    data.append('nama_pasar', nama_pasar);
+    data.append('latitude', latitude);
+    data.append('longitude', longitude);
+   
     for (let i = 0; i < valueContent.length; i++) {
       const valBlock = valueContent[i];
       for (let index = 0; index < valBlock.length; index++) {
@@ -240,7 +365,7 @@ const SurveyReviewScreen = ({ navigation, route }) => {
           
           data.append(`data[${indexData}][block]`, (i + 1).toString());
           data.append(`data[${indexData}][index]`, index);
-          data.append(`data[${indexData}][name]`, item.name || item.label);
+          data.append(`data[${indexData}][name]`, item.label || item.name);
           // data.append(`data[${indexData}][value]`, value);
           if (Array.isArray(value)) {
             if (value.length > 0) {
@@ -259,13 +384,13 @@ const SurveyReviewScreen = ({ navigation, route }) => {
       }
     }
 
-    console.log(data);
+    // console.log(data);
 
     // return;
 
     let config = {
       method: 'post',
-      url: 'http://panel.survey.tribesocial.id/survey-form-file',
+      url: `${Config.SURVEY_API_URL}/survey-form-file`,
       headers: {
         "Content-Type": `multipart/form-data`,
       },
@@ -276,20 +401,21 @@ const SurveyReviewScreen = ({ navigation, route }) => {
 
     axios(config)
       .then(function (response) {
-        console.log(response);
+        console.log('response', response);
         hideLoading();
 
         if (response.data.status) {
           alert('Survei terkirim, Terima kasih telah mengisi survei melalui aplikasi Tribes Survey');
           setTimeout(() => {
             navigation.popToTop();
+            onStoreReset();
           }, 2500);
         } else {
           alert('Not OK');
         }
       })
       .catch(function (error) {
-        console.log(JSON.stringify(error));
+        console.log('ini error',JSON.stringify(error));
         hideLoading();
         alert('Terjadi kesalahan');
       });

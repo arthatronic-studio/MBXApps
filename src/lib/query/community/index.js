@@ -17,3 +17,12 @@ export const queryCommunityMemberCheck = gql`
         }
     }
 `;
+
+export const queryJoinCommunityUpdate = gql`
+    query($joinCommunityId: Int!, $body: JoinCommunityInput!) {
+        joinCommunityUpdate(joinCommunityId: $joinCommunityId, body: $body) {
+            success
+            message
+        }
+    }
+`;

@@ -49,8 +49,9 @@ const ModalContentOptions = forwardRef((props, ref) => {
     const variables = {
       referenceId: item.id,
       referenceType: nameType,
-      manageType: moduleType,
-      message: text,
+      referenceName: item.productName,
+      refStatus: item.status,
+      reportMessage: text,
     };
 
     console.log('variables', variables);
@@ -131,7 +132,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
     },
   ];
 
-  if (item.ownerId) {
+  if (item && item.ownerId) {
     dataOptions.push({
       id: 2,
       name: 'Block User',
