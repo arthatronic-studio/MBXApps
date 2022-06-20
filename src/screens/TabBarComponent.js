@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { View, SafeAreaView, Image, Animated, useWindowDimensions, LayoutAnimation, UIManager, } from 'react-native';
+import { View, SafeAreaView, Image, Animated, useWindowDimensions, LayoutAnimation, UIManager, Platform, } from 'react-native';
 import { TouchableOpacity as TouchableOpacityAbs } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -25,7 +25,7 @@ const TabBarComponent = (props) => {
         
     const [menus] = useState([
         {id: 'ber', name: 'Beranda', iconName: 'home', iconType: 'Entypo', nav: 'MainHome', ref: useRef(new Animated.Value(1)).current, viewRef: useRef(new Animated.Value(0)).current },
-        {id: 'mer', name: 'Ecommerce', iconName: 'store', iconType: 'MaterialIcons', nav: 'Ecommerce', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
+        // {id: 'mer', name: 'Ecommerce', iconName: 'store', iconType: 'MaterialIcons', nav: 'Ecommerce', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
         {id: 'pro', name: 'Profil', iconName: 'person', iconType: 'Ionicons', nav: 'MainProfile', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
     ]);
     
@@ -111,9 +111,12 @@ const TabBarComponent = (props) => {
                                 paddingBottom: isIphoneNotch() ? 0 : 16,
                             }}
                             onPress={() => {
-                                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-                                UIManager.setLayoutAnimationEnabledExperimental &&
-                                    UIManager.setLayoutAnimationEnabledExperimental(true);
+                                if (Platform.OS === 'ios') {
+                                    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                                } else {
+                                    // UIManager.setLayoutAnimationEnabledExperimental &&
+                                    //     UIManager.setLayoutAnimationEnabledExperimental(true);
+                                }
 
                                 if (route.nav === 'MainHome') {
                                     redirectTo(route.nav);

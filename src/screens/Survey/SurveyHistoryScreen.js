@@ -10,6 +10,7 @@ import {
 import Styled from 'styled-components';
 import RNSimpleCrypto from 'react-native-simple-crypto';
 import axios from 'axios';
+import Config from 'react-native-config';
 
 import CarouselView from 'src/components/CarouselView';
 import {
@@ -84,7 +85,7 @@ const SurveyHistoryScreen = ({ navigation, route }) => {
 
     console.log(dataq, 'dataq');
 
-    const PostsURL = `http://panel.survey.tribesocial.id/get-surveys?user_id=${dataq.user_id}`;
+    const PostsURL = `${Config.SURVEY_API_URL}/get-surveys?user_id=${dataq.user_id}`;
 
     try {
       const res = await axios.get(PostsURL);
