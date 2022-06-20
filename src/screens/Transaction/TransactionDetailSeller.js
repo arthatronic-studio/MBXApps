@@ -38,6 +38,7 @@ import {Modalize} from 'react-native-modalize';
 import moment from 'moment';
 import { currentSocket } from '../MainHome/MainHome';
 import {useSelector} from 'react-redux';
+import { queryDetailOrderAuction } from 'src/lib/query/auction';
 
 const Content = Styled(View)`
     margin: 16px
@@ -134,18 +135,22 @@ const TransactionDetailSeller = ({route, navigation}) => {
       isMerchant: true
     };
 
+    const skema = route.params.item.isAuction ? queryDetailOrderAuction : queryDetailOrder
     console.log(variables, route.params.item)
-    Client.query({query: queryDetailOrder, variables})
+    Client.query({query: skema, variables})
       .then(res => {
         console.log('res get detail order', res);
-        if (res.data.ecommerceOrderDetail) {
-          setData(res.data.ecommerceOrderDetail);
-          if(res.data.ecommerceOrderDetail.start_time){
-            setSchedulePickUp({
-              start_time: res.data.ecommerceOrderDetail.start_time,
-              end_time: res.data.ecommerceOrderDetail.end_time,
-            })
+        if (res.data.ecommerceOrderDetail || res.data.auctionOrderDetail) {
+          setData(res.data.ecommerceOrderDetail || res.data.auctionOrderDetail);
+          if(res.data.ecommerceOrderDetail){
+            if(res.data.ecommerceOrderDetail.start_time){
+              setSchedulePickUp({
+                start_time: res.data.ecommerceOrderDetail.start_time,
+                end_time: res.data.ecommerceOrderDetail.end_time,
+              })
+            }
           }
+         
           
         }
        

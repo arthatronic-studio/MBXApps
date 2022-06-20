@@ -112,12 +112,7 @@ const MainProfile = ({navigation, route}) => {
   };
 
   const sendVerify = async () => {
-    const dataq = {
-        "email": user.email, 
-    }
-    
-    console.log('http://dev.api.tribesocial.id:7171/api/resendVerifyEmail/Bearer%20'+userToken.access_token+'/'+user.email)
-    hideLoading()
+
     try {
         showLoading()
         const response = await Axios({

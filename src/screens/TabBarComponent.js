@@ -25,7 +25,7 @@ const TabBarComponent = (props) => {
         
     const [menus] = useState([
         {id: 'ber', name: 'Beranda', iconName: 'home', iconType: 'Entypo', nav: 'MainHome', ref: useRef(new Animated.Value(1)).current, viewRef: useRef(new Animated.Value(0)).current },
-        // {id: 'mer', name: 'Ecommerce', iconName: 'store', iconType: 'MaterialIcons', nav: 'Ecommerce', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
+        {id: 'mer', name: 'Ecommerce', iconName: 'store', iconType: 'MaterialIcons', nav: 'Ecommerce', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
         {id: 'pro', name: 'Profil', iconName: 'person', iconType: 'Ionicons', nav: 'MainProfile', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
     ]);
     
