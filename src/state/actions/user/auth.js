@@ -312,6 +312,7 @@ const getUserProfileQuery = gql`
     userId
     userName
     firstName
+    isEmailVerify
     lastName
     email
     phoneCountryCode

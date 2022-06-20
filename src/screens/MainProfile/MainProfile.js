@@ -42,12 +42,14 @@ import { fetchCommunityMemberCheck } from 'src/api/community';
 import {currentSocket} from 'src/screens/MainHome/MainHome';
 import ModalActions from 'src/components/Modal/ModalActions';
 import Axios from 'axios';
+import { useIsFocused } from '@react-navigation/native';
 
 const MainProfile = ({navigation, route}) => {
   const [modalVirtual, setModalVirtual] = useState(false);
   const [modalInputCode, setModalInputCode] = useState(false);
   const [modalCardMember, setModalCardMember] = useState(false);
   const [modalJoinCommunity, setModalJoinCommunity] = useState(false);
+	const isFocused = useIsFocused();
   
   const [responseMemberManage, setResponseMemberManage] = useState({
     data: null,
@@ -71,8 +73,12 @@ const MainProfile = ({navigation, route}) => {
   const {width} = useWindowDimensions();
 
   useEffect(() => {
+		dispatch(getCurrentUserProfile());
+	}, [isFocused]);
+
+  useEffect(() => {
     // hit cuurent user profile
-    dispatch(getCurrentUserProfile());
+    
 
     fetchData();
 
@@ -531,7 +537,7 @@ const MainProfile = ({navigation, route}) => {
                     </Text>
                   )}
               </View>
-              {user && <TouchableOpacity onPress={() => sendVerify()} style={{ height: 30, backgroundColor: Color.primary , borderRadius: 30, justifyContent: 'center', alignItems: 'center', width: 100 }}>
+              {user && !user.isEmailVerify && <TouchableOpacity onPress={() => sendVerify()} style={{ height: 30, backgroundColor: Color.primary , borderRadius: 30, justifyContent: 'center', alignItems: 'center', width: 100 }}>
                   <Text size={12} color='#fff'>Verify Email</Text>
               </TouchableOpacity>}
              
