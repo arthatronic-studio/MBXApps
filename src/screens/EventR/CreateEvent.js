@@ -36,6 +36,8 @@ import axios from 'axios';
 import moment from 'moment';
 import Ecommerce from '../Ecommerce/Ecommerce';
 import FormSelect from 'src/components/FormSelect';
+import { mutationAddEvent } from 'src/lib/query/event';
+import ModalSelectMap from 'src/components/ModalSelectMap';
 var crypto = require('crypto-js')
 
 function sha1(data) {
@@ -56,16 +58,14 @@ const CreateEvent = ({navigation}) => {
 	const loading = useSelector((state) => state['user.auth'].loading);
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
-    const [name, setName] = useState(user ? user.firstName+' '+user.lastName : '');
-    const [phone, setPhone] = useState(user ? user.phoneNumber : '');
-    const [email, setEmail] = useState(user ? user.email : '');
+    const [name, setName] = useState( '');
     const [address, setAddress] = useState('');
-    const [phonePetugas, setPhonePetugas] = useState('');
-    const [nameKoor, setNameKoor] = useState('');
-    const [phoneKoor, setPhoneKoor] = useState('');
+    const [desc, setDes] = useState('');
+    const [showDatePicker3, setShowDatePicker3] = useState(false); 
     const [showDatePicker, setShowDatePicker] = useState(false); 
     const [showDatePicker2, setShowDatePicker2] = useState(false); 
     const [jamBukaOperasional, setjamBukaOperasional] = useState(new Date()); 
+    const [dateEvent, setDateEvent] = useState(new Date()); 
     const [jamTutupOperasional, setjamTutupOperasional] = useState(new Date()); 
 	const { Color } = useColor();
     const [coords, setCoords] = useState({
@@ -83,47 +83,25 @@ const CreateEvent = ({navigation}) => {
     }, []);
 
     const submit = async () => {
-        const label = ['name', 'phone', 'email', 'namePetugas', 'phonePetugas', 'nameKoor', 'phoneKoor']
-        const dataState = [name, phone, email, namePetugas, phonePetugas, nameKoor, phoneKoor]
-        let tempData = []
-        label.forEach((element, index) => {
-            tempData.push({
-                block: '1',
-                index: index,
-                name: element,
-                value: dataState[index]
-            })
-        });
-        console.log(tempData)
-        // const sha1Hash = await RNSimpleCrypto.SHA.sha1("SURVEY-20220229" + moment().format('YYYY-MM-DD HH:mm:ss') + '123!!qweQWE');
-        // const dataq = {
-        //     "auth": sha1Hash, 
-        //     "survey_code": "SURVEY-20220229", 
-        //     "timestamps": moment().format('YYYY-MM-DD HH:mm:ss'),
-        //     "data": tempData
-        // }
-        navigation.navigate('SurveySecond',{item: tempData})
-        // try {
-        //     const response = await axios({
-        //         baseURL: 'http://panel.sw.tribesocial.id',
-        //         method: 'post',
-        //         url: '/submit-survey',
-        //         data: dataq,
-        //         headers: {
-        //             Accept: 'application/json'
-        //         },
-        //         timeout: 5000,
-                
-        //       });
-        //       console.log(response, "respon apicall")
-        //   } catch (error) {
-        //     console.log(error.response, 'error apicall')
-        //   }
+        const data = {
+            name,
+            location: address,
+            description: desc,
+            startTime: moment(jamBukaOperasional).format('hh:mm'),
+            endTime: moment(jamTutupOperasional).format('hh:mm'),
+            date: moment(dateEvent).format('YYYY-MM-DD'),
+            lat: coords.latitude,
+            lng: coords.longitude
+        }
+        console.log(data)
+       
+        navigation.navigate('CreateEventSecond',{item: data})
+       
       };
 
   return (
     <Scaffold
-		header={<Header customIcon title="Survey" type="regular" centerTitle={false} />}
+		header={<Header customIcon title="" type="regular" centerTitle={false} />}
 		onPressLeftButton={() => navigation.pop()}
 	>
         <ScrollView>
@@ -139,7 +117,7 @@ const CreateEvent = ({navigation}) => {
                 <Text style={{fontSize: 10, fontWeight: 'bold', marginVertical: 10}}>Nama Event</Text>
                 <View style={{width: '100%'}}>
                     <TextInput
-                        placeholder='Adang Susanyo'
+                        placeholder='Masukkan Nama Event . . .'
                         style={{
                             borderWidth: 1, borderColor: Color.border, color: Color.text,
                             width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47
@@ -199,6 +177,7 @@ const CreateEvent = ({navigation}) => {
                 </View>
                 </Col>
             </Row>
+            
             {showDatePicker2 && <DatePicker
                 modal
                 open={showDatePicker2}   
@@ -214,7 +193,36 @@ const CreateEvent = ({navigation}) => {
                     setShowDatePicker2(false)
                 }}
             />}
-            
+            <View style={{ marginVertical:-10,  marginHorizontal: -6 }}>
+                <FormSelect
+                    label='Mulai Acara'
+                    placeholder='01/01/1990'
+                    value={moment(dateEvent).format('DD/MM/YYYY')}
+                    onPress={() => setShowDatePicker3(true)}
+                    minimumDate={new Date()}
+                    // error={errorUserData.usageType}
+                    suffixIcon={
+                        <View style={{height: 20, width: '10%', paddingRight: 16, justifyContent: 'center', alignItems: 'flex-end'}}>
+                            <Text />
+                        </View>
+                    }
+                />
+                {showDatePicker3 && <DatePicker
+                    modal
+                    open={showDatePicker3}   
+                    date={dateEvent}
+                    is24Hour={true}
+                    mode="date"
+                    onConfirm={(date) => {
+                        console.log(date)
+                        setShowDatePicker3(false);
+                        setDateEvent(date);
+                    }}
+                    onCancel={() => {
+                        setShowDatePicker3(false)
+                    }}
+                />}
+        </View>
             <View style={{alignItems: 'flex-start', marginHorizontal: 15}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Masukkan Lokasi Acara . . .' style={{borderWidth: 1, borderColor: Color.border,
@@ -241,9 +249,9 @@ const CreateEvent = ({navigation}) => {
                     <TextInput placeholder='Masukkan Deskripsi Event . . ' style={{borderWidth: 1, borderColor: Color.border,
                         color: Color.text,
                         width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, minHeight: 80}}
-						onChangeText={(value) => setAddress(value)}
+						onChangeText={(value) => setDes(value)}
                         multiline
-                        value={address}
+                        value={desc}
                     />
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Deskripsi Event</Text>
                 </View>
@@ -255,6 +263,44 @@ const CreateEvent = ({navigation}) => {
                 <Text style={{color: Color.textInput}}>Lanjut</Text>
             </TouchableOpacity>
         </View>
+        <ModalSelectMap
+          visible={modalSelectMap}
+          extraProps={{
+            title: 'Alamat Saya',
+            fullAddress: '',
+            ...coords,
+          }}
+          onSelect={(item) => {
+            // const name = item.name;
+            const fullAddress = item.fullAddress;
+            const latitude = item.latitude;
+            const longitude = item.longitude;
+
+            // const provinceName = item.provinceName ? item.provinceName : state.userData.provinceName;
+            // const cityName = item.cityName ? item.cityName : state.userData.cityName;
+            // const postCode = item.postCode ? item.postCode : state.userData.postCode;
+
+            setIsPinnedMap(true);
+            setLocationPinnedMap(fullAddress);
+            setCoords({
+              latitude,
+              longitude,
+            });
+
+            // setState({
+            //   userData: {
+            //     ...state.userData,
+            //     fullAddress,
+            //     latitude,
+            //     longitude,
+            //     provinceName,
+            //     cityName,
+            //     postCode,
+            //   }
+            // });
+          }}
+          onClose={() => setModalSelectMap(false)}
+        />
     </Scaffold>
   )
 }
