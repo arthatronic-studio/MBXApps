@@ -28,11 +28,11 @@ const NotificationDetail = ({ navigation, route }) => {
           borderWidth: 0.5,
         }}
       >
-        <Text align='left' type='bold'>{item.notification_title}</Text>
+        <Text align='left' type='bold'>{item.title}</Text>
         <Divider height={4} />
-        <Text align='left'>{item.notification_text}</Text>
+        <Text align='left'>{item.text}</Text>
         <Divider height={4} />
-        <Text align='left' size={12}>{Moment(item.notification_date).format('DD-MM-YYYY HH:mm')}</Text>
+        <Text align='left' size={12}>{Moment(item.date).format('DD-MM-YYYY HH:mm')}</Text>
       </View>
     </Scaffold>
   );
