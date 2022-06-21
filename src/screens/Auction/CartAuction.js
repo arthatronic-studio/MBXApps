@@ -83,12 +83,12 @@ const CartAuction = ({navigation, route}) => {
       type: 'auction',
       products: [{...val,id: val.productId, imageUrl: val.image.length > 0 ? val.image : '',
         qty: val.quantity,
-        price: 0}],
+        price: val.latestBidPrice}],
       
     }]
     navigation.navigate('CheckoutScreen',{item: {tempData: [{...val, id: val.productId, imageUrl: val.image.length > 0 ? val.image[0] : '',
     qty: 1,
-    price: 0}]}, list: dataq})
+    price: val.latestBidPrice}]}, list: dataq})
   }
 
   return (

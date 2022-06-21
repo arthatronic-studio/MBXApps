@@ -584,7 +584,7 @@ const CheckoutScreen = ({ navigation, route }) => {
             Total Harga
           </Text>
           <Text type="bold" color={Color.text} size={18}>
-            {FormatMoney.getFormattedMoney(
+            {FormatMoney.getFormattedMoney(item['tempData'][0]['auctionId'] ? shippment.price ? shippment.price : 0 :
               totalProduct(item.tempData) +
                 (shippment.price ? shippment.price : 0),
             )}
