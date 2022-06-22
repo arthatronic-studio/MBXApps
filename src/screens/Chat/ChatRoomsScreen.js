@@ -20,7 +20,6 @@ import { statusBarHeight } from 'src/utils/constants';
 import ModalActions from 'src/components/Modal/ModalActions';
 import { accessClient } from 'src/utils/access_client';
 import { initSocket } from 'src/api-socket/currentSocket';
-const currentSocket = initSocket();
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -66,6 +65,8 @@ const initialDataRooms = {
 };
 
 const ChatRoomsScreen = ({ navigation, route }) => {
+    const currentSocket = initSocket();
+    
     // state
     const [dataRooms, setDataRooms] = useState(initialDataRooms);
     const [myRoomIds, setMyRoomIds] = useState([]);

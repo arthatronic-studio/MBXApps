@@ -19,7 +19,6 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import TouchableDebounce from 'src/components/Button/TouchableDebounce';
 import { initSocket } from 'src/api-socket/currentSocket';
-const currentSocket = initSocket();
 
 import {
   Text,
@@ -43,6 +42,8 @@ import {Container, Divider} from 'src/styled';
 import { async } from 'validate.js';
 
 const DetailProduct = ({navigation, route}) => {
+  const currentSocket = initSocket();
+  
   const [detail, setDetail] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [liked, setLike] = useState(false);

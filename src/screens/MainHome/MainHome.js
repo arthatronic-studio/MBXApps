@@ -60,13 +60,14 @@ import HighlightContentProduct from 'src/components/Content/HighlightContentProd
 import ModalMenuHome from 'src/components/Modal/ModalMenuHome';
 import PushNotification, { Importance } from 'react-native-push-notification';
 import { initSocket } from 'src/api-socket/currentSocket';
-const currentSocket = initSocket();
 
 let tempShowPopupAds = true;
 
 const events = [Event.PlaybackTrackChanged];
 
 const MainHome = ({navigation, route}) => {
+  const currentSocket = initSocket();
+  
   // state
   const [chatNotifCount, setChatNotifCount] = useState(0);
   const [dataPopupAds, setDataPopupAds] = useState();

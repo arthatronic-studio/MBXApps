@@ -22,7 +22,6 @@ import { Scaffold } from 'src/components';
 import { Container } from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
 import { initSocket } from 'src/api-socket/currentSocket';
-const currentSocket = initSocket();
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -63,6 +62,8 @@ const ChatUserListScreen = ({navigation, route}) => {
   const { params } = route;
   const useHelpScreen = typeof params.screenType !== 'undefined' && params.screenType == 'help';
   console.log('useHelpScreen', useHelpScreen);
+
+  const currentSocket = initSocket();
 
   const [itemData, setItemData] = useState({
     data: [],

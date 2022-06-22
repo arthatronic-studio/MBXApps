@@ -23,7 +23,6 @@ import { queryContentChatRoomManage, queryContentChatMessage } from '@src/lib/qu
 import { Divider } from 'src/styled';
 import {launchImageLibrary} from 'react-native-image-picker';
 import { initSocket } from 'src/api-socket/currentSocket';
-const currentSocket = initSocket();
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -56,6 +55,7 @@ const CircleSend = Styled(TouchableOpacity)`
 `;
 
 const GroupDetailScreen = ({ navigation, route }) => {
+    const currentSocket = initSocket();
 
     const modalListActionRef = useRef();
     const [showSection, setShowSection] = useState(true);

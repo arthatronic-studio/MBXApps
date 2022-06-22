@@ -11,7 +11,6 @@ import ModalBid from 'src/components/Modal/ModalBid';
 import { FormatMoney } from 'src/utils';
 import moment from 'moment';
 import { initSocket } from 'src/api-socket/currentSocket';
-const currentSocket = initSocket();
 
 const ButtonView = Styled(View)`
   width: 100%;
@@ -32,6 +31,8 @@ const EnterButton = Styled(TouchableOpacity)`
 
 const JoinLelang = ({navigation, route}) => {
   const { item } = route.params;
+
+  const currentSocket = initSocket();
 
   const [listBidding, setListBidding] = useState([]);
   const [userLastBid, setUserLastBid] = useState(0);

@@ -20,13 +20,14 @@ import {
 import { queryGetUserOrganizationRef } from 'src/lib/query';
 import Client from '@src/lib/apollo';
 import { initSocket } from 'src/api-socket/currentSocket';
-const currentSocket = initSocket();
 
 const itemPerPage = 100;
 
 const CreateGroup = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { Color } = useColor();
+
+  const currentSocket = initSocket();
 
   const [itemData, setItemData] = useState({
     data: [],

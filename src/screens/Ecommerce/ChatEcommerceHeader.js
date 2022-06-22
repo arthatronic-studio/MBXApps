@@ -12,21 +12,19 @@ import ImagesPath from 'src/components/ImagesPath';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { Divider } from '@src/styled';
 import { initSocket } from 'src/api-socket/currentSocket';
-const currentSocket = initSocket();
-
-const MainView = Styled(SafeAreaView)`
-      flex: 1;
-  `;
 
 const ChatEcommerceHeader = (props) => {
 	const {
     name,
 		merchant,
 		isOnline
-  } = props;
-	const { Color } = useColor();
+  	} = props;
 
+	const currentSocket = initSocket();
+
+	const { Color } = useColor();
 	const navigation = useNavigation();
+
 	return (
 		<View
 			style={{

@@ -6,11 +6,12 @@ import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import CardChatEcommerce from './CardChatEcommerce';
 import { useIsFocused } from '@react-navigation/native';
 import { initSocket } from 'src/api-socket/currentSocket';
-const currentSocket = initSocket();
 
 const ChatEcommerceBuyer = ({ navigation, route }) => {
 	const { Color } = useColor();
 	const [rooms, setRooms] = useState([]);
+
+	const currentSocket = initSocket();
 
 	const get_list_room = () => {
 		const body = {room_type: 'ECOMMERCE', room_user_type: 'USER'};

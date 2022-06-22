@@ -7,8 +7,10 @@ export let currentSocket;
 export const initSocket = () => {
     const user = store.getState()['user.auth'].login.user;
 
+    // console.log('currentSocket', currentSocket);
+
     if (!currentSocket) {
-        console.log('init connect socket');
+        console.log('initial socket connect');
         currentSocket = io.connect(Config.SOCKET_API_URL, {
             reconnection: true,
             reconnectionDelay: 1000,
@@ -36,7 +38,7 @@ export const initSocket = () => {
           console.log('res auth', res);
         });
     } else {
-        console.log('already connect');
+        // console.log('already connect');
     }
     
     return currentSocket;

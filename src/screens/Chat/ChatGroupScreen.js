@@ -15,7 +15,6 @@ import { Circle } from '@src/styled';
 import { Header, ModalListAction, Scaffold, Alert } from 'src/components';
 import { statusBarHeight } from 'src/utils/constants';
 import { initSocket } from 'src/api-socket/currentSocket';
-const currentSocket = initSocket();
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -61,6 +60,8 @@ const initialDataRooms = {
 }
 
 const ChatGroupScreen = ({ navigation, route }) => {
+    const currentSocket = initSocket();
+
     // state
     const [dataRooms, setDataRooms] = useState(initialDataRooms);
     const [myRoomIds, setMyRoomIds] = useState([]);

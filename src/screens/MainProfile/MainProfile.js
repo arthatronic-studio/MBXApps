@@ -43,9 +43,10 @@ import ModalActions from 'src/components/Modal/ModalActions';
 import Axios from 'axios';
 import { useIsFocused } from '@react-navigation/native';
 import { initSocket } from 'src/api-socket/currentSocket';
-const currentSocket = initSocket();
 
 const MainProfile = ({navigation, route}) => {
+  const currentSocket = initSocket();
+  
   const [modalVirtual, setModalVirtual] = useState(false);
   const [modalInputCode, setModalInputCode] = useState(false);
   const [modalCardMember, setModalCardMember] = useState(false);

@@ -26,7 +26,6 @@ import Footer from 'src/components/Footer';
 import {FormatMoney} from '@src/utils';
 import moment from 'moment';
 import { initSocket } from 'src/api-socket/currentSocket';
-const currentSocket = initSocket();
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -60,9 +59,13 @@ const CircleSend = Styled(TouchableOpacity)`
   justifyContent: center;
   alignItems: center;
 `;
+
 const ChatDetailBuyer = ({navigation, route}) => {
   const {id, merchant, users, bodyTagged, bodyCreateRoom, bodyGetRoom} =
     route.params;
+
+  const currentSocket = initSocket();
+  
   const {Color} = useColor();
   const [roomId, setRoomId] = useState(id);
   const user = useSelector(state => state['user.auth'].login.user);

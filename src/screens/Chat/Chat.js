@@ -16,9 +16,10 @@ import { Header, ModalListAction, Scaffold } from 'src/components';
 import ChatRoomsScreen from 'src/screens/Chat/ChatRoomsScreen';
 import ChatGroupScreen from 'src/screens/Chat/ChatGroupScreen';
 import { initSocket } from 'src/api-socket/currentSocket';
-const currentSocket = initSocket();
 
 const Chat = ({navigation}) => {
+    const currentSocket = initSocket();
+    
     // state
     const [myRoomIds, setMyRoomIds] = useState([]);
     const [loadingMyRooms, setLoadingMyRooms] = useState(true);

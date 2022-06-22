@@ -38,16 +38,10 @@ import {Modalize} from 'react-native-modalize';
 import moment from 'moment';
 import {useSelector} from 'react-redux';
 import { initSocket } from 'src/api-socket/currentSocket';
-const currentSocket = initSocket();
-
-const Content = Styled(View)`
-    margin: 16px
-    marginBottom: 0px
-    padding: 12px
-    borderRadius: 8px
-`;
 
 const TransactionDetailSeller = ({route, navigation}) => {
+  const currentSocket = initSocket();
+  
   const dispatch = useDispatch();
   const [data, setData] = useState({});
   const [merchant, setMerchant] = useState();

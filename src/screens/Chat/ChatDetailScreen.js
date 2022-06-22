@@ -20,7 +20,6 @@ import { queryContentChatRoomManage, queryContentChatMessage } from '@src/lib/qu
 import { Divider } from 'src/styled';
 import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
 import { initSocket } from 'src/api-socket/currentSocket';
-const currentSocket = initSocket();
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -55,6 +54,8 @@ const CircleSend = Styled(TouchableOpacity)`
 const ChatDetailScreen = ({ navigation, route }) => {
     // params
     const { params } = route;
+
+    const currentSocket = initSocket();
 
     // selector
     const user = useSelector(
