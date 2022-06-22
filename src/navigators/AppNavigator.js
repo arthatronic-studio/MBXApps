@@ -210,6 +210,7 @@ import GroupDetailScreen from 'src/screens/Chat/GroupDetailScreen';
 import UserGroupDetail from 'src/screens/Chat/UserGroupDetail';
 import AddMember from 'src/screens/Chat/AddMember';
 import EditInformationGroup from 'src/screens/Chat/EditInformationGroup';
+import EventOfficial from 'src/screens/Posting/Event/EventOfficial';
 // import EventOfficial from 'src/screens/Posting/Event/EventOfficial';
 // import CommunityEvent from 'src/screens/Posting/Event/CommunityEvent';
 // import MyEvent from 'src/screens/Posting/Event/MyEvent';
@@ -339,10 +340,8 @@ function MainStackNavigator() {
       <Screen name="EventDetail" component={EventDetail} />
       <Screen name="CreateEvent" component={CreateEvent} />
       <Screen name="CreateEventSecond" component={CreateEventSecond} />
-      {/* <Screen name="EventOfficial" component={EventOfficial} />
-      <Screen name="CommunityEvent" component={CommunityEvent} />
-      <Screen name="MyEvent" component={MyEvent} />
-      <Screen name="EventDocumentation" component={EventDocumentation} /> */}
+      <Screen name="EventOfficial" component={EventOfficial} />
+
       {/* Job */}
       <Screen name="JobScreen" component={JobScreen} />
       <Screen name="JobDetail" component={JobDetail} />
