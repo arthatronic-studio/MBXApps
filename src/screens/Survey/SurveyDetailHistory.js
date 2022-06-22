@@ -10,6 +10,7 @@ import {
 import Styled from 'styled-components';
 import RNSimpleCrypto from 'react-native-simple-crypto';
 import axios from 'axios';
+import Config from 'react-native-config';
 
 import CarouselView from 'src/components/CarouselView';
 import {
@@ -87,7 +88,7 @@ const SurveyDetailHistory = ({navigation, route}) => {
       with_detail : 1
     };
 
-    const PostsURL = `http://panel.survey.tribesocial.id/get-surveys?user_id=${dataq.user_id}&survey_id=${dataq.survey_id}&with_detail=${dataq.with_detail}`;
+    const PostsURL = `${Config.SURVEY_API_URL}/get-surveys?user_id=${dataq.user_id}&survey_id=${dataq.survey_id}&with_detail=${dataq.with_detail}`;
 
     try {
       const res = await axios.get(PostsURL);
@@ -158,7 +159,7 @@ const SurveyDetailHistory = ({navigation, route}) => {
       <ScrollView>
         {listData.map(item => (
           <Container paddingHorizontal={16} paddingVertical={12}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{
                 paddingVertical: 16,
                 borderRadius: 6,
@@ -170,7 +171,7 @@ const SurveyDetailHistory = ({navigation, route}) => {
               <Text size={12} align="left" type="bold">
                 Code Survey : {item.code_survey}
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </Container>
         ))}
         {listDataDetail.map((item, index) => (

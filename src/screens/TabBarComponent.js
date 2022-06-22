@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { View, SafeAreaView, Image, Animated, useWindowDimensions, LayoutAnimation, UIManager, } from 'react-native';
+import { View, SafeAreaView, Image, Animated, useWindowDimensions, LayoutAnimation, UIManager, Platform, } from 'react-native';
 import { TouchableOpacity as TouchableOpacityAbs } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -111,9 +111,12 @@ const TabBarComponent = (props) => {
                                 paddingBottom: isIphoneNotch() ? 0 : 16,
                             }}
                             onPress={() => {
-                                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-                                UIManager.setLayoutAnimationEnabledExperimental &&
-                                    UIManager.setLayoutAnimationEnabledExperimental(true);
+                                if (Platform.OS === 'ios') {
+                                    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                                } else {
+                                    // UIManager.setLayoutAnimationEnabledExperimental &&
+                                    //     UIManager.setLayoutAnimationEnabledExperimental(true);
+                                }
 
                                 if (route.nav === 'MainHome') {
                                     redirectTo(route.nav);

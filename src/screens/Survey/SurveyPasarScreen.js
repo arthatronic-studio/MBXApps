@@ -233,6 +233,48 @@ const SurveyPasarScreen = ({ navigation, route }) => {
         dispatch({ type: 'SURVEY_PASAR.RESET' });
     }
 
+    const onSelectedSingleBranch = (val, selectedIndex) => {
+        if (valueContent.length > 0) {
+            let newValues = [...valueContent];
+            newValues[currentHeaderIndex][selectedIndex].value = val;
+
+            //
+            const legacy_code = currentContent[selectedIndex].legacy_code;
+            for (let i = 0; i < legacy_code.length; i++) {
+                const element = legacy_code[i];
+                const find = currentContent.filter((f) => f.code == element)[0];
+                if (find) {
+                    const idxOf = currentContent.indexOf(find);
+                    if (idxOf !== -1) {
+                        newValues[currentHeaderIndex][idxOf].value = '';
+                        currentContent[idxOf].status = 2;
+                    }
+                }
+            }
+            //
+
+            // cek id, kalo id null tetap hide form branching
+            if (val && val.id) {
+                const branching_code = currentContent[selectedIndex].branching_code;
+
+                for (let i = 0; i < branching_code.length; i++) {
+                    const element = branching_code[i];
+                    const find = currentContent.filter((f) => f.code == element)[0];
+                    if (find) {
+                        const idxOf = currentContent.indexOf(find);
+                        if (idxOf !== -1) {
+                            newValues[currentHeaderIndex][idxOf].value = '';
+                            currentContent[idxOf].status = 1;
+                        }
+                    }
+                }
+            }
+
+            setValueContent(newValues);
+            onStoreData(newValues);
+        }
+    }
+
     const renderLabel = (item, index) => {
         return (
             <Container paddingHorizontal={16} paddingVertical={12}>
@@ -492,10 +534,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                             <TouchableOpacity
                                 key={id}
                                 onPress={() => {
-                                    let newValues = [...valueContent];
-                                    newValues[currentHeaderIndex][index].value = v;
-                                    setValueContent(newValues);
-                                    onStoreData(newValues);
+                                    onSelectedSingleBranch(v, index);
                                 }}
                                 style={{ paddingRight: 16, marginBottom: 8 }}
                             >
@@ -565,21 +604,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                     value={valueContent.length > 0 && valueContent[currentHeaderIndex][index].value ? valueContent[currentHeaderIndex][index].value.name : ''}
                     placeholder={item.placeholder}
                     onPress={() => {
-                        let newValues = [...valueContent];
-                        // legacy (harusnya ini pas value berubah)
-                        const legacy_code = currentContent[index].legacy_code;
-                        for (let i = 0; i < legacy_code.length; i++) {
-                            const element = legacy_code[i];
-                            const find = currentContent.filter((f) => f.code == element)[0];
-                            if (find) {
-                                const idxOf = currentContent.indexOf(find);
-                                if (idxOf !== -1) {
-                                    newValues[currentHeaderIndex][idxOf].value = '';
-                                    currentContent[idxOf].status = 2;
-                                }
-                            }
-                        }
-
+                        // pindahan
                         if (item.validation && item.validation.fetch) {
                             setCurrentData([]);
                             fetchSelectBox(item, index);
@@ -589,9 +614,6 @@ const SurveyPasarScreen = ({ navigation, route }) => {
 
                         const newExtraData = item.validation && Array.isArray(item.validation.extraData) ? item.validation.extraData : [];
                         setCurrentExtraData(newExtraData);
-
-                        setValueContent(newValues);
-                        onStoreData(newValues);
 
                         setModalSelectBox(true);
                         setCurrentContentIndex(index);
@@ -750,30 +772,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                 extraData={currentExtraData}
                 name={currentContentIndex !== -1 ? currentContent[currentContentIndex].code : ''}
                 onPress={(val) => {
-                    if (valueContent.length > 0) {
-                        let newValues = [...valueContent];
-                        newValues[currentHeaderIndex][currentContentIndex].value = val;
-
-                        // cek id, kalo id null tetap hide form branching
-                        if (val && val.id) {
-                            const branching_code = currentContent[currentContentIndex].branching_code;
-
-                            for (let i = 0; i < branching_code.length; i++) {
-                                const element = branching_code[i];
-                                const find = currentContent.filter((f) => f.code == element)[0];
-                                if (find) {
-                                    const idxOf = currentContent.indexOf(find);
-                                    if (idxOf !== -1) {
-                                        newValues[currentHeaderIndex][idxOf].value = '';
-                                        currentContent[idxOf].status = 1;
-                                    }
-                                }
-                            }
-                        }
-
-                        setValueContent(newValues);
-                        onStoreData(newValues);
-                    }
+                    onSelectedSingleBranch(val, currentContentIndex);
                     setModalSelectBox(false);
                     setCurrentContentIndex(-1);
                 }}
@@ -859,10 +858,12 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                         listHeader: [
                             survey_pasar_header[0],
                             survey_pasar_header[1],
+                            survey_pasar_header[2],
                         ],
                         valueContent: [
                             valueContent[0],
                             valueContent[1],
+                            valueContent[2],
                         ]
                     });
                 }}

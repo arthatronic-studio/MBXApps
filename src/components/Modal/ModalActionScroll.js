@@ -7,6 +7,7 @@ import FormInput from '../FormInput';
 import Scaffold from '../Scaffold';
 import Text from '../Text';
 import { useColor } from 'src/components/Color';
+import ScreenEmptyData from 'src/components/Modal/ScreenEmptyData';
 
 const defaultProps = {
     visible: false,
@@ -150,7 +151,7 @@ const ModalActionScroll = ({ visible, data: propsData, extraData, onClose, onPre
                         paddingHorizontal: 16,
                     }}
                 >
-                    {Array.isArray(data) && data.length > 0 ? renderContent() : children}
+                    {Array.isArray(data) && data.length > 0 ? renderContent() : children ? children : <ScreenEmptyData /> }
                 </ScrollView>
             </Scaffold>
         </Modal>

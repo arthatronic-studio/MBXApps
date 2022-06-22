@@ -198,6 +198,9 @@ const Notification = () => {
             <Text align='left' type='bold'>
               {item.items[0].products[0]['name'].length > 58 ? item.items[0].products[0]['name'].substring(0,55)+' ...' : item.items[0].products[0]['name']}
             </Text>
+            <Row>
+              {item.isAuction && <Text size={11} style={{ backgroundColor: '#fff', borderRadius: 4, paddingVertical: 4, paddingHorizontal: 8, borderColor: Color.primary, borderWidth: 1 }} color={Color.primary} align='left'>Lelang</Text>}
+            </Row>
             {/* <View
               style={{
                 flexDirection: 'row',

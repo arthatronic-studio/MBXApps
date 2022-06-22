@@ -9,6 +9,7 @@ import {
 import Styled from 'styled-components';
 import RNSimpleCrypto from "react-native-simple-crypto";
 import axios from 'axios';
+import Config from 'react-native-config';
 
 import CarouselView from 'src/components/CarouselView';
 import {
@@ -196,7 +197,7 @@ const SurveyReviewScreen = ({ navigation, route }) => {
 
      let config = {
        method: 'post',
-       url: 'http://panel.survey.tribesocial.id/submit-survey',
+       url: `${Config.SURVEY_API_URL}/submit-survey`,
        headers: {
           Accept: 'application/json'
          },
@@ -233,7 +234,7 @@ const SurveyReviewScreen = ({ navigation, route }) => {
     // try {
     //   showLoading()
     //   const response = await axios({
-    //     baseURL: 'http://panel.survey.tribesocial.id',
+    //     baseURL: Config.SURVEY_API_URL,
     //     method: 'post',
     //     url: '/submit-survey',
     //     data: dataq,
@@ -276,8 +277,6 @@ const SurveyReviewScreen = ({ navigation, route }) => {
       const valBlock = valueContent[i];
       for (let index = 0; index < valBlock.length; index++) {
         const item = valBlock[index];
-        //  console.log('longitude', item.value);
-       
         if (item.type === 'MAP_VIEW') {
            latitude = item.value.latitude;
            longitude = item.value.longitude;
@@ -299,7 +298,6 @@ const SurveyReviewScreen = ({ navigation, route }) => {
         } 
       } 
     }
-    console.log('latitude', provinsi_id);
 
     data.append('auth', 'd57abbc8289c72b56161f3f90ef1fa5ad5dca48a');
     data.append('caption_code', 'pasar');
@@ -315,7 +313,6 @@ const SurveyReviewScreen = ({ navigation, route }) => {
     data.append('nama_pasar', nama_pasar);
     data.append('latitude', latitude);
     data.append('longitude', longitude);
-  
    
     for (let i = 0; i < valueContent.length; i++) {
       const valBlock = valueContent[i];
@@ -393,7 +390,7 @@ const SurveyReviewScreen = ({ navigation, route }) => {
 
     let config = {
       method: 'post',
-      url: 'http://panel.survey.tribesocial.id/survey-form-file',
+      url: `${Config.SURVEY_API_URL}/survey-form-file`,
       headers: {
         "Content-Type": `multipart/form-data`,
       },

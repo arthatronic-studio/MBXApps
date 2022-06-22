@@ -28,7 +28,7 @@ import ModalActions from 'src/components/Modal/ModalActions';
 import { accessClient } from 'src/utils/access_client';
 import { Card, Container, Divider, Row, } from 'src/styled';
 import Clipboard from '@react-native-community/clipboard';
-import { fetchCarTypeListing } from 'src/api/community';
+import { fetchCarTypeListing, fetchJoinCommunityUpdate } from 'src/api/community';
 import FormSelect from 'src/components/FormSelect';
 import ModalActionScroll from 'src/components/Modal/ModalActionScroll';
 import { rridSticker, rridUniform } from 'assets/images/rrid';
@@ -89,34 +89,35 @@ const initModalActionScrollProps = {
   visible: false,
   selected: null,
   data: [],
-  onPress: (val) => {},
-  onClose: () => {},
+  onPress: (val) => { },
+  onClose: () => { },
   renderItem: null,
 };
 
 const JoinCommunity = ({ navigation, route }) => {
   const { params } = route;
+  const isUpdatePage = typeof params.item !== 'undefined' && params.item.id !== null;
 
   const user = useSelector((state) => state['user.auth'].login.user);
-  const { height } = useWindowDimensions();
+  const { height, width } = useWindowDimensions();
   const { Color } = useColor();
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const [popupProps, showPopup] = usePopup();
 
   const [userData, setUserData] = useState({
-    carColor: '',
-    carYear: "",
-    carIdentity: '',
-    reason: '',
-    note: '',
-    selfiePhoto: '',
-    carPhotoMain: '',
-    carPhotoFront: '',
-    carPhotoSide: '',
-    carPhotoBack: '',
-    simPhoto: '',
-    stnkPhoto: '',
-    transactionProof: '',
+    carColor: isUpdatePage ? params.item.car_color : '',
+    carYear: isUpdatePage ? params.item.car_year : '',
+    carIdentity: isUpdatePage ? params.item.car_identity : '',
+    reason: isUpdatePage ? params.item.reason : '',
+    note: isUpdatePage ? params.item.note : '',
+    selfiePhoto: isUpdatePage ? params.item.selfie_photo : '',
+    carPhotoMain: isUpdatePage ? params.item.car_photo_main : '',
+    carPhotoFront: isUpdatePage ? params.item.car_photo_front : '',
+    carPhotoSide: isUpdatePage ? params.item.car_photo_side : '',
+    carPhotoBack: isUpdatePage ? params.item.car_photo_back : '',
+    simPhoto: isUpdatePage ? params.item.sim_photo : '',
+    stnkPhoto: isUpdatePage ? params.item.stnk_photo : '',
+    transactionProof: isUpdatePage ? params.item.transaction_proof : '',
   });
 
   const [error, setError] = useState({
@@ -125,14 +126,6 @@ const JoinCommunity = ({ navigation, route }) => {
     carIdentity: null,
     reason: null,
     note: null,
-    selfiePhoto: '',
-    carPhotoMain: '',
-    carPhotoFront: '',
-    carPhotoSide: '',
-    carPhotoBack: '',
-    simPhoto: '',
-    stnkPhoto: '',
-    transactionProof: '',
   });
 
   const isValueError = (name) => {
@@ -148,14 +141,14 @@ const JoinCommunity = ({ navigation, route }) => {
   const [modalNumberPhoto, setModalNumberPhoto] = useState(0);
 
   const [modalActionScrollProps, setModalActionScrollProps] = useState(initModalActionScrollProps);
-  
+
   const [listUserAddress, setListUserAddress] = useState([]);
   const [selectedUserAddress, setSelectedUserAddress] = useState();
 
   const [listCarType, setListCarType] = useState([]);
   const [selectedCarType, setSelectedCarType] = useState();
 
-  const [selectedMerchandiseSize, setSelectedMerchandiseSize] = useState(merchandiseSize[0]);
+  const [selectedMerchandiseSize, setSelectedMerchandiseSize] = useState(isUpdatePage && params.item.sizeShirt && merchandiseSize.filter((e) => e.ukuran === params.item.sizeShirt)[0] ? merchandiseSize.filter((e) => e.ukuran === params.item.sizeShirt.toUpperCase())[0] : merchandiseSize[0]);
   const [modalMerchandiseSize, setModalMerchandiseSize] = useState(false);
 
   const [thumbImage, setThumbImage] = useState('');
@@ -182,33 +175,100 @@ const JoinCommunity = ({ navigation, route }) => {
   const [thumbImage8, setThumbImage8] = useState('');
   const [mimeImage8, setMimeImage8] = useState('image/jpeg');
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const [fallback, setFallback] = useState(true);
 
   useEffect(() => {
-    if (params && params.refresh) {
-      navigation.setParams({ refresh: false });
-      fetchData();
-      console.log('reload');
-    }
-  }, [params])
+    console.log('params', params);
+    fetchData();
+  }, []);
 
   const fetchData = async () => {
     const resultUserAddress = await fetchUserAddressList({ userId: user.userId });
     if (resultUserAddress.status) {
       setListUserAddress(resultUserAddress.data);
+      console.log('resultUserAddress', resultUserAddress);
+      
+      if (isUpdatePage && params.item.userAddress && params.item.userAddress.id) {
+        const selected = resultUserAddress.data.filter((e) => e.id === params.item.userAddress.id)[0];
+        setSelectedUserAddress(selected);
+      }
     }
 
     const resultCar = await fetchCarTypeListing();
+    // console.log('resultCar', resultCar);
+
     if (resultCar.status) {
       setListCarType(resultCar.data);
+      
+      if (isUpdatePage && params.item.car_type) {
+        const selected = resultCar.data.filter((e) => e.name.toLowerCase() === params.item.car_type.toLowerCase())[0];
+        setSelectedCarType(selected);
+      }
     }
+
+    setFallback(false);
   }
 
   const copyToClipboard = (item) => {
     Clipboard.setString(item);
     showPopup('Nomor berhasil disalin', 'info');
+  }
+
+  const onUpdate = async() => {
+    Keyboard.dismiss();
+
+    setFallback(true);
+
+    let body = {
+      // photoProfile
+      // chapterId
+      initialCode: accessClient.InitialCode,
+    }
+
+    if (selectedCarType) body.carType = selectedCarType.name;
+    if (userData.carColor) body.carColor = userData.carColor;
+    if (userData.carYear) body.carYear = userData.carYear;
+    if (userData.carIdentity) body.carIdentity = userData.carIdentity;
+    if (userData.reason) body.reason = userData.reason;
+    if (userData.note) body.note = userData.note;
+    if (thumbImage) body.carPhotoMain = 'data:image/png;base64,' + thumbImage;
+    if (thumbImage2) body.carPhotoFront = 'data:image/png;base64,' + thumbImage2;
+    if (thumbImage3) body.carPhotoSide = 'data:image/png;base64,' + thumbImage3;
+    if (thumbImage4) body.carPhotoBack = 'data:image/png;base64,' + thumbImage4;
+    if (thumbImage6) body.selfiePhoto = 'data:image/png;base64,' + thumbImage6;
+    if (thumbImage7) body.simPhoto = 'data:image/png;base64,' + thumbImage7;
+    if (thumbImage8) body.stnkPhoto = 'data:image/png;base64,' + thumbImage8;
+    if (thumbImage5) body.transactionProof = 'data:image/png;base64,' + thumbImage5;
+    if (selectedUserAddress) body.userAddressId = selectedUserAddress.id;
+    if (selectedMerchandiseSize) body.sizeShirt = selectedMerchandiseSize.ukuran;
+
+    let variables = {
+      joinCommunityId: params.item.id,
+      body,
+    }
+
+    console.log(variables);
+
+    const result = await fetchJoinCommunityUpdate(variables);
+    console.log('result', result);
+    if (result.status) {
+      if (result.data.success) {
+        showPopup('Formulir berhasil di perbarui', 'success');
+        setTimeout(() => {
+          if (isUpdatePage && params.prevScreen) {
+            navigation.navigate(params.prevScreen, { item: params.item, refresh: true });
+          } else {
+            navigation.pop();
+          }
+        }, 2500);
+      } else {
+        showPopup('Formulir gagal di perbarui', 'error');
+      }
+    } else {
+      showPopup('Formulir gagal di perbarui', 'error');
+    }
+
+    setFallback(false);
   }
 
   const onSubmit = () => {
@@ -274,6 +334,7 @@ const JoinCommunity = ({ navigation, route }) => {
         transactionProof: 'data:image/png;base64,' + thumbImage5,
         userAddressId: selectedUserAddress.id,
         sizeShirt: selectedMerchandiseSize.ukuran,
+        initialCode: accessClient.InitialCode,
       },
     };
 
@@ -364,7 +425,7 @@ const JoinCommunity = ({ navigation, route }) => {
           setModalActionScrollProps(initModalActionScrollProps);
         }}
       >
-        <Card radius={8}>
+        <Card radius={8} color={Color.theme}>
           <Container padding={16}>
             <Row justify='space-between'>
               <Container>
@@ -389,23 +450,94 @@ const JoinCommunity = ({ navigation, route }) => {
       </TouchableOpacity>
     )
   }
-  
+
+  const renderFormSelectImage = ({ onPress = () => { }, uri, label, caption }) => {
+    let renderCardUri = (
+      <TouchableOpacity
+        onPress={onPress}
+        activeOpacity={0.7}
+        style={{
+          width: width / 3,
+          aspectRatio: 1,
+          borderRadius: 8,
+          marginVertical: 12,
+          borderWidth: 2,
+          borderStyle: 'dashed',
+          borderColor: Color.border,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Feather
+          name="camera"
+          size={32}
+          style={{ marginBottom: 4 }}
+          color={Color.border}
+        />
+        <Text size={10} color={Color.border}>
+          Tambah Foto
+        </Text>
+      </TouchableOpacity>
+    );
+
+    if (uri) {
+      renderCardUri = (
+        <TouchableOpacity
+          onPress={onPress}
+          activeOpacity={0.7}
+          style={{
+            width: '100%',
+            aspectRatio: 4 / 3,
+            marginVertical: 12,
+            alignItems: 'center',
+          }}>
+          <Image
+            style={{
+              height: '100%',
+              width: '100%',
+              borderRadius: 4,
+            }}
+            source={{ uri }}
+          />
+          <View style={{ position: 'absolute', bottom: 4, padding: 4, backgroundColor: Color.overflow }}>
+            <Text size={12}>Klik untuk memilih ulang</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
+
+    return (
+      <View style={{ paddingHorizontal: 16, marginVertical: 16 }}>
+        <Text size={12} color={Color.text} align="left">
+          {label}
+        </Text>
+
+        {renderCardUri}
+
+        <Text size={12} color={Color.gray} align="left">
+          {caption}
+        </Text>
+      </View>
+    )
+  }
+
   return (
     <Scaffold
       headerTitle="Gabung Komunitas"
       loadingProps={loadingProps}
-      popupProps={popupProps}>
+      popupProps={popupProps}
+      fallback={fallback}
+    >
       <ScrollView>
         <View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingBottom: 16 }}>
-            <CircularProgress
-                progress={50}
-                color={Color.primary}
-                textComponent={<Text size={28} color={Color.primary} type='bold'>1</Text>}
-            />
-            <View style={{ alignItems: 'flex-start', justifyContent: 'center', paddingLeft: 8 }}>
-                <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Informasi Data Diri</Text>
-                <Text style={{ fontSize: 10, color: Color.secondary }}>Masukan informasi untuk gabung ke komunitas</Text>
-            </View>
+          <CircularProgress
+            progress={50}
+            color={Color.primary}
+            textComponent={<Text size={28} color={Color.primary} type='bold'>1</Text>}
+          />
+          <View style={{ alignItems: 'flex-start', justifyContent: 'center', paddingLeft: 8 }}>
+            <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Informasi Data Diri</Text>
+            <Text style={{ fontSize: 10, color: Color.secondary }}>Masukan informasi untuk gabung ke komunitas</Text>
+          </View>
         </View>
 
         {accessClient.isRRID && (
@@ -475,7 +607,7 @@ const JoinCommunity = ({ navigation, route }) => {
 
           <TouchableOpacity
             onPress={() => navigation.navigate('ManageAddressScreen', { prevScreen: 'JoinCommunity' })}
-            style={{paddingVertical: 8}}
+            style={{ paddingVertical: 8 }}
           >
             <Text color={Color.info}>Tambah Domisili</Text>
           </TouchableOpacity>
@@ -682,22 +814,22 @@ const JoinCommunity = ({ navigation, route }) => {
               </Text>
             </View>
 
-            <View style={{flex: 1, marginVertical: 8, borderWidth: 0.25}}>
-              <View style={{flex: 1, flexDirection: 'row'}}>
+            <View style={{ flex: 1, marginVertical: 8, borderWidth: 0.25 }}>
+              <View style={{ flex: 1, flexDirection: 'row' }}>
                 {merchandiseHead.map((item, idx) => {
-                  return <Text key={idx} size={10} style={{flex: 1, borderWidth: 0.25, paddingVertical: 4}}>{item}</Text>;
+                  return <Text key={idx} size={10} style={{ flex: 1, borderWidth: 0.25, paddingVertical: 4 }}>{item}</Text>;
                 })}
               </View>
 
               {merchandiseSize.map((item, idx) => {
                 return (
-                  <View key={idx} style={{flex: 1, flexDirection: 'row'}}>
-                    <Text size={10} style={{flex: 1, borderWidth: 0.25, paddingVertical: 4}}>{item.ukuran}</Text>
-                    <Text size={10} style={{flex: 1, borderWidth: 0.25, paddingVertical: 4}}>{item.lebar}</Text>
-                    <Text size={10} style={{flex: 1, borderWidth: 0.25, paddingVertical: 4}}>{item.panjang}</Text>
-                    <Text size={10} style={{flex: 1, borderWidth: 0.25, paddingVertical: 4}}>{item.bahu}</Text>
-                    <Text size={10} style={{flex: 1, borderWidth: 0.25, paddingVertical: 4}}>{item.l_panjang}</Text>
-                    <Text size={10} style={{flex: 1, borderWidth: 0.25, paddingVertical: 4}}>{item.l_pendek}</Text>
+                  <View key={idx} style={{ flex: 1, flexDirection: 'row' }}>
+                    <Text size={10} style={{ flex: 1, borderWidth: 0.25, paddingVertical: 4 }}>{item.ukuran}</Text>
+                    <Text size={10} style={{ flex: 1, borderWidth: 0.25, paddingVertical: 4 }}>{item.lebar}</Text>
+                    <Text size={10} style={{ flex: 1, borderWidth: 0.25, paddingVertical: 4 }}>{item.panjang}</Text>
+                    <Text size={10} style={{ flex: 1, borderWidth: 0.25, paddingVertical: 4 }}>{item.bahu}</Text>
+                    <Text size={10} style={{ flex: 1, borderWidth: 0.25, paddingVertical: 4 }}>{item.l_panjang}</Text>
+                    <Text size={10} style={{ flex: 1, borderWidth: 0.25, paddingVertical: 4 }}>{item.l_pendek}</Text>
                   </View>
                 )
               })}
@@ -705,542 +837,160 @@ const JoinCommunity = ({ navigation, route }) => {
           </View>
 
           <View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 16 }}>
-              <CircularProgress
-                  progress={100}
-                  color={Color.primary}
-                  textComponent={<Text size={28} color={Color.primary} type='bold'>2</Text>}
-              />
-              <View style={{ alignItems: 'flex-start', justifyContent: 'center', paddingLeft: 8 }}>
-                  <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Unggah Foto</Text>
-                  <Text style={{ fontSize: 10, color: Color.secondary }}>Unggah foto untuk memenuhi persyaratan</Text>
-              </View>
+            <CircularProgress
+              progress={100}
+              color={Color.primary}
+              textComponent={<Text size={28} color={Color.primary} type='bold'>2</Text>}
+            />
+            <View style={{ alignItems: 'flex-start', justifyContent: 'center', paddingLeft: 8 }}>
+              <Text type='bold'>Unggah Foto</Text>
+              <Text size={10} color={Color.secondary}>Unggah foto untuk memenuhi persyaratan</Text>
+            </View>
           </View>
 
-          <View style={{ paddingHorizontal: 16, marginTop: 16 }}>
-            <Text size={11} color={Color.text} align="left">
-              Foto Selfie
+          {renderFormSelectImage({
+            onPress: () => {
+              setModalAddPhoto(true);
+              setModalNumberPhoto(6);
+            },
+            uri: thumbImage6 ? `data:${mimeImage6};base64,${thumbImage6}` : userData.selfiePhoto || '',
+            label: 'Foto Selfie',
+            caption: 'Foto selfie dengan jelas dan tidak blur',
+          })}
+
+          {renderFormSelectImage({
+            onPress: () => {
+              setModalAddPhoto(true);
+              setModalNumberPhoto(1);
+            },
+            uri: thumbImage ? `data:${mimeImage};base64,${thumbImage}` : userData.carPhotoMain || '',
+            label: 'Foto Mobil',
+            caption: 'Foto mobil dengan jelas dan tidak blur',
+          })}
+
+          {renderFormSelectImage({
+            onPress: () => {
+              setModalAddPhoto(true);
+              setModalNumberPhoto(2);
+            },
+            uri: thumbImage2 ? `data:${mimeImage2};base64,${thumbImage2}` : userData.carPhotoFront || '',
+            label: 'Foto Bagian Depan Mobil',
+            caption: 'Foto bagian depan mobil dengan jelas dan tidak blur',
+          })}
+
+          {renderFormSelectImage({
+            onPress: () => {
+              setModalAddPhoto(true);
+              setModalNumberPhoto(3);
+            },
+            uri: thumbImage3 ? `data:${mimeImage3};base64,${thumbImage3}` : userData.carPhotoSide || '',
+            label: 'Foto Bagian Samping Mobil',
+            caption: 'Foto tampak samping mobilmu dengan jelas',
+          })}
+
+          {renderFormSelectImage({
+            onPress: () => {
+              setModalAddPhoto(true);
+              setModalNumberPhoto(4);
+            },
+            uri: thumbImage4 ? `data:${mimeImage4};base64,${thumbImage4}` : userData.carPhotoBack || '',
+            label: 'Foto Bagian Belakang Mobil',
+            caption: 'Foto tampak belakang mobilmu dengan jelas',
+          })}
+
+          {renderFormSelectImage({
+            onPress: () => {
+              setModalAddPhoto(true);
+              setModalNumberPhoto(7);
+            },
+            uri: thumbImage7 ? `data:${mimeImage7};base64,${thumbImage7}` : userData.simPhoto || '',
+            label: 'Foto SIM',
+            caption: 'Foto SIM Anda dengan jelas',
+          })}
+
+          {renderFormSelectImage({
+            onPress: () => {
+              setModalAddPhoto(true);
+              setModalNumberPhoto(8);
+            },
+            uri: thumbImage8 ? `data:${mimeImage8};base64,${thumbImage8}` : userData.stnkPhoto || '',
+            label: 'Foto STNK',
+            caption: 'Foto STNK Anda dengan jelas',
+          })}
+
+          {renderFormSelectImage({
+            onPress: () => {
+              setModalAddPhoto(true);
+              setModalNumberPhoto(5);
+            },
+            uri: thumbImage5 ? `data:${mimeImage5};base64,${thumbImage5}` : userData.transactionProof || '',
+            label: 'Foto Bukti Pembayaran',
+            caption: 'Foto Bukti Pembayaran Anda dengan jelas',
+          })}
+
+          {/* nomor rek khusus rrid */}
+          {accessClient.isRRID && <View style={{ paddingHorizontal: 16 }}>
+            <Text size={11} color={Color.gray} align="left">
+              Mohon agar ditransfer ke bank{' <'}
+              <Text size={11} color={Color.gray} type="bold">
+                BCA DIGITAL
+              </Text>
+              {'> '}
+              <Text size={11} color={Color.gray} type="bold">
+                001120211113 an Yokhanan Adi Prasetya
+              </Text>{' '}
+              sebesar Rp255.000.
             </Text>
+            <Divider height={8} />
             <TouchableOpacity
               onPress={() => {
-                setModalAddPhoto(true);
-                setModalNumberPhoto(6);
-              }}
-              style={{
-                width: 120,
-                height: 120,
-                borderRadius: 16,
-                marginVertical: 10,
-                borderWidth: 3,
-                borderStyle: 'dashed',
-                borderColor: Color.border,
-                alignItems: 'center',
-                justifyContent: 'center',
+                copyToClipboard('001120211113');
               }}>
-              <Feather
-                name="camera"
-                size={32}
-                style={{ marginBottom: 4 }}
-                color={Color.gray}
-              />
-              <Text size={10} color={Color.gray}>
-                Tambah Foto
+              <Text size={12} color={Color.gray}>
+                Salin Rekening{' '}
+                <Ionicons
+                  name="copy-outline"
+                  size={14}
+                  color={Color.info}
+                />
               </Text>
             </TouchableOpacity>
-            <Text size={11} color={Color.gray} align="left">
-              Foto selfie dengan jelas dan tidak blur
-            </Text>
-          </View>
-
-          {thumbImage6 !== '' && (
-            <TouchableOpacity
-              onPress={() => { }}
-              style={{
-                width: '100%',
-                height: height / 3,
-                borderRadius: 4,
-                paddingHorizontal: 16,
-                marginTop: 10,
-              }}>
-              <Image
-                style={{
-                  height: '100%',
-                  aspectRatio: 1,
-                  borderRadius: 4,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                source={{ uri: `data:${mimeImage6};base64,${thumbImage6}` }}
-              />
-            </TouchableOpacity>
-          )}
-
-          <View style={{ paddingHorizontal: 16, marginTop: 16 }}>
-            <Text size={11} color={Color.text} align="left">
-              Foto Mobil
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                setModalAddPhoto(true);
-                setModalNumberPhoto(1);
-              }}
-              style={{
-                width: 120,
-                height: 120,
-                borderRadius: 16,
-                marginVertical: 10,
-                borderWidth: 3,
-                borderStyle: 'dashed',
-                borderColor: Color.border,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Feather
-                name="camera"
-                size={32}
-                style={{ marginBottom: 4 }}
-                color={Color.gray}
-              />
-              <Text size={10} color={Color.gray}>
-                Tambah Foto
-              </Text>
-            </TouchableOpacity>
-            <Text size={11} color={Color.gray} align="left">
-              Foto mobil dengan jelas dan tidak blur
-            </Text>
-          </View>
-
-          {thumbImage !== '' && (
-            <TouchableOpacity
-              onPress={() => { }}
-              style={{
-                width: '100%',
-                height: height / 3,
-                borderRadius: 4,
-                paddingHorizontal: 16,
-                marginTop: 10,
-              }}>
-              <Image
-                style={{
-                  height: '100%',
-                  aspectRatio: 1,
-                  borderRadius: 4,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
-              />
-            </TouchableOpacity>
-          )}
-
-          <View style={{ paddingHorizontal: 16, marginTop: 16 }}>
-            <Text size={11} color={Color.text} align="left">
-              Foto Bagian Depan Mobil
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                setModalAddPhoto(true);
-                setModalNumberPhoto(2);
-              }}
-              style={{
-                width: 120,
-                height: 120,
-                borderRadius: 16,
-                marginVertical: 10,
-                borderWidth: 3,
-                borderStyle: 'dashed',
-                borderColor: Color.border,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Feather
-                name="camera"
-                size={32}
-                style={{ marginBottom: 4 }}
-                color={Color.gray}
-              />
-              <Text size={10} color={Color.gray}>
-                Tambah Foto
-              </Text>
-            </TouchableOpacity>
-            <Text size={11} color={Color.gray} align="left">
-              Foto tampak depan mobilmu dengan jelas
-            </Text>
-          </View>
-
-          {thumbImage2 !== '' && (
-            <TouchableOpacity
-              onPress={() => { }}
-              style={{
-                width: '100%',
-                height: height / 3,
-                borderRadius: 4,
-                paddingHorizontal: 16,
-                marginTop: 10,
-              }}>
-              <Image
-                style={{
-                  height: '100%',
-                  aspectRatio: 1,
-                  borderRadius: 4,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                source={{ uri: `data:${mimeImage2};base64,${thumbImage2}` }}
-              />
-            </TouchableOpacity>
-          )}
-
-          <View style={{ paddingHorizontal: 16, marginTop: 16 }}>
-            <Text size={11} color={Color.text} align="left">
-              Foto Bagian Samping Mobil
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                setModalAddPhoto(true);
-                setModalNumberPhoto(3);
-              }}
-              style={{
-                width: 120,
-                height: 120,
-                borderRadius: 16,
-                marginVertical: 10,
-                borderWidth: 3,
-                borderStyle: 'dashed',
-                borderColor: Color.border,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Feather
-                name="camera"
-                size={32}
-                style={{ marginBottom: 4 }}
-                color={Color.gray}
-              />
-              <Text size={10} color={Color.gray}>
-                Tambah Foto
-              </Text>
-            </TouchableOpacity>
-            <Text size={11} color={Color.gray} align="left">
-              Foto tampak samping mobilmu dengan jelas
-            </Text>
-          </View>
-
-          {thumbImage3 !== '' && (
-            <TouchableOpacity
-              onPress={() => { }}
-              style={{
-                width: '100%',
-                height: height / 3,
-                borderRadius: 4,
-                paddingHorizontal: 16,
-                marginTop: 10,
-              }}>
-              <Image
-                style={{
-                  height: '100%',
-                  aspectRatio: 1,
-                  borderRadius: 4,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                source={{ uri: `data:${mimeImage3};base64,${thumbImage3}` }}
-              />
-            </TouchableOpacity>
-          )}
-
-          <View style={{ paddingHorizontal: 16, marginTop: 16 }}>
-            <Text size={11} color={Color.text} align="left">
-              Foto Bagian Belakang Mobil
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                setModalAddPhoto(true);
-                setModalNumberPhoto(4);
-              }}
-              style={{
-                width: 120,
-                height: 120,
-                borderRadius: 16,
-                marginVertical: 10,
-                borderWidth: 3,
-                borderStyle: 'dashed',
-                borderColor: Color.border,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Feather
-                name="camera"
-                size={32}
-                style={{ marginBottom: 4 }}
-                color={Color.gray}
-              />
-              <Text size={10} color={Color.gray}>
-                Tambah Foto
-              </Text>
-            </TouchableOpacity>
-            <Text size={11} color={Color.gray} align="left">
-              Foto tampak belakang mobilmu dengan jelas
-            </Text>
-          </View>
-
-          {thumbImage4 !== '' && (
-            <TouchableOpacity
-              onPress={() => { }}
-              style={{
-                width: '100%',
-                height: height / 3,
-                borderRadius: 4,
-                paddingHorizontal: 16,
-                marginTop: 10,
-              }}>
-              <Image
-                style={{
-                  height: '100%',
-                  aspectRatio: 1,
-                  borderRadius: 4,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                source={{ uri: `data:${mimeImage4};base64,${thumbImage4}` }}
-              />
-            </TouchableOpacity>
-          )}
-
-          <View style={{ paddingHorizontal: 16, marginTop: 16 }}>
-            <Text size={11} color={Color.text} align="left">
-              Foto SIM
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                setModalAddPhoto(true);
-                setModalNumberPhoto(7);
-              }}
-              style={{
-                width: 120,
-                height: 120,
-                borderRadius: 16,
-                marginVertical: 10,
-                borderWidth: 3,
-                borderStyle: 'dashed',
-                borderColor: Color.border,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Feather
-                name="camera"
-                size={32}
-                style={{ marginBottom: 4 }}
-                color={Color.gray}
-              />
-              <Text size={10} color={Color.gray}>
-                Tambah Foto
-              </Text>
-            </TouchableOpacity>
-            <Text size={11} color={Color.gray} align="left">
-              Foto SIM anda dengan jelas
-            </Text>
-          </View>
-
-          {thumbImage7 !== '' && (
-            <TouchableOpacity
-              onPress={() => { }}
-              style={{
-                width: '100%',
-                height: height / 3,
-                borderRadius: 4,
-                paddingHorizontal: 16,
-                marginTop: 10,
-              }}>
-              <Image
-                style={{
-                  height: '100%',
-                  aspectRatio: 1,
-                  borderRadius: 4,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                source={{ uri: `data:${mimeImage7};base64,${thumbImage7}` }}
-              />
-            </TouchableOpacity>
-          )}
-
-          <View style={{ paddingHorizontal: 16, marginTop: 16 }}>
-            <Text size={11} color={Color.text} align="left">
-              Foto STNK
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                setModalAddPhoto(true);
-                setModalNumberPhoto(8);
-              }}
-              style={{
-                width: 120,
-                height: 120,
-                borderRadius: 16,
-                marginVertical: 10,
-                borderWidth: 3,
-                borderStyle: 'dashed',
-                borderColor: Color.border,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Feather
-                name="camera"
-                size={32}
-                style={{ marginBottom: 4 }}
-                color={Color.gray}
-              />
-              <Text size={10} color={Color.gray}>
-                Tambah Foto
-              </Text>
-            </TouchableOpacity>
-            <Text size={11} color={Color.gray} align="left">
-              Foto STNK anda dengan jelas
-            </Text>
-          </View>
-
-          {thumbImage8 !== '' && (
-            <TouchableOpacity
-              onPress={() => { }}
-              style={{
-                width: '100%',
-                height: height / 3,
-                borderRadius: 4,
-                paddingHorizontal: 16,
-                marginTop: 10,
-              }}>
-              <Image
-                style={{
-                  height: '100%',
-                  aspectRatio: 1,
-                  borderRadius: 4,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                source={{ uri: `data:${mimeImage8};base64,${thumbImage8}` }}
-              />
-            </TouchableOpacity>
-          )}
-
-          <View style={{ paddingHorizontal: 16, marginTop: 16 }}>
-            <Text size={11} color={Color.text} align="left">
-              Foto Bukti Pembayaran
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                setModalAddPhoto(true);
-                setModalNumberPhoto(5);
-              }}
-              style={{
-                width: 120,
-                height: 120,
-                borderRadius: 16,
-                marginVertical: 10,
-                borderWidth: 3,
-                borderStyle: 'dashed',
-                borderColor: Color.border,
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <Feather
-                name="camera"
-                size={32}
-                style={{ marginBottom: 4 }}
-                color={Color.gray}
-              />
-              <Text size={10} color={Color.gray}>
-                Tambah Foto
-              </Text>
-            </TouchableOpacity>
-            <Text size={11} color={Color.gray} align="left">
-              Foto bukti pembayaranmu dengan jelas
-            </Text>
-            {/* nomor rek khusus rrid */}
-            {accessClient.isRRID && (
-              <View>
-                <Divider height={10} />
-                <Text size={11} color={Color.gray} align="left">
-                  Mohon agar ditransfer ke bank{' <'}
-                  <Text size={11} color={Color.gray} type="bold">
-                    BCA DIGITAL
-                  </Text>
-                  {'> '}
-                  <Text size={11} color={Color.gray} type="bold">
-                    001120211113 an Yokhanan Adi Prasetya
-                  </Text>{' '}
-                  sebesar Rp255.000.
-                </Text>
-                <Divider height={8} />
-                <TouchableOpacity
-                  onPress={() => {
-                    copyToClipboard('001120211113');
-                  }}>
-                  <Text size={12} color={Color.gray}>
-                    Salin Rekening{' '}
-                    <Ionicons
-                      name="copy-outline"
-                      size={14}
-                      color={Color.info}
-                    />
-                  </Text>
-                </TouchableOpacity>
-                <Divider height={8} />
-              </View>
-            )}
-          </View>
-
-          {thumbImage5 !== '' && (
-            <TouchableOpacity
-              onPress={() => { }}
-              style={{
-                width: '100%',
-                height: height / 3,
-                borderRadius: 4,
-                paddingHorizontal: 16,
-                marginTop: 10,
-              }}>
-              <Image
-                style={{
-                  height: '100%',
-                  aspectRatio: 1,
-                  borderRadius: 4,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                source={{ uri: `data:${mimeImage5};base64,${thumbImage5}` }}
-              />
-            </TouchableOpacity>
-          )}
+            <Divider height={8} />
+          </View>}
         </View>
 
         {accessClient.isRRID && <>
-          <View style={{width: '100%', aspectRatio: 4/3}}>
+          <View style={{ width: '100%', aspectRatio: 4 / 3 }}>
             <Image
               source={rridUniform}
-              style={{width: '100%', height: '100%', resizeMode: 'cover'}}
+              style={{ width: '100%', height: '100%', resizeMode: 'cover' }}
             />
           </View>
 
-          <View style={{width: '100%', aspectRatio: 4/3}}>
+          <View style={{ width: '100%', aspectRatio: 4 / 3 }}>
             <Image
               source={rridSticker}
-              style={{width: '100%', height: '100%', resizeMode: 'cover'}}
+              style={{ width: '100%', height: '100%', resizeMode: 'cover' }}
             />
           </View>
         </>}
       </ScrollView>
 
       <Submit
-        buttonLabel="Gabung"
+        buttonLabel={isUpdatePage ? 'Update' : 'Gabung'}
         buttonColor={Color.primary}
         type="bottomSingleButton"
         buttonBorderTopWidth={0}
         onPress={() => {
+          if (isUpdatePage) {
+            onUpdate();
+            return;
+          }
           onSubmit();
         }}
       />
 
-      <ModalActionScroll { ...modalActionScrollProps } />
+      <ModalActionScroll {...modalActionScrollProps} />
 
       <ModalActions
         visible={modalMerchandiseSize}

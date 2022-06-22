@@ -145,6 +145,7 @@ const FormInput = forwardRef((props, ref) => {
                                     blurOnSubmit={false}
                                     keyboardType={keyboardType}
                                     autoCapitalize={secureTextEntry ? 'none' : undefined}
+                                    keyboardAppearance={Color.colorDominant}
                                     style={{
                                         // width: '100%',
                                         // height: '100%',
