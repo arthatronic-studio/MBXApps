@@ -2,7 +2,8 @@ import React, {useState, useEffect, useRef} from 'react';
 import {View, Image, ScrollView, Pressable, FlatList} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
-
+import Banner from 'src/components/Banner';
+import {queryBannerList} from '@src/lib/query/banner';
 import {
   useLoading,
   usePopup,
@@ -44,6 +45,9 @@ const NewsDetail = ({navigation, route}) => {
   const [bookmark, setBookmark] = useState(false);
   const {item} = route.params;
   const modalOptionsRef = useRef();
+  const [loadingBanner, setLoadingBanner] = useState(true);
+  const [listBanner, setListBanner] = useState([]);
+
 
   console.log(item, 'item');
 
@@ -65,6 +69,7 @@ const NewsDetail = ({navigation, route}) => {
 
   useEffect(() => {
     fetchCommentList();
+    fetchBannerList();
     // const timeout = trigger ? setTimeout(() => {
     //     fetchAddLike();
     // }, 500) : null;
@@ -74,6 +79,27 @@ const NewsDetail = ({navigation, route}) => {
     // }
   }, []);
 
+  const fetchBannerList = () => {
+    const variables = {
+      categoryId: 1,
+    };
+
+    Client.query({
+      query: queryBannerList,
+      variables,
+    })
+      .then(res => {
+        console.log('res banner list', res);
+        setListBanner(res.data.bannerList);
+        setLoadingBanner(false);
+      })
+      .catch(err => {
+        console.log(err, 'err banner list');
+        setLoadingBanner(false);
+      });
+  };
+
+  
   const fetchAddLike = () => {
     // showLoading();
     Client.query({
@@ -126,51 +152,13 @@ const NewsDetail = ({navigation, route}) => {
 
   console.log('user', item);
 
-  const renderItem = ({item}) => (
-    <View
-      style={{
-        borderRadius: 10,
-        paddingVertical: 10,
-        width: 170,
-        backgroundColor: Color.theme,
-        elevation: 5,
-        marginHorizontal: 10,
-        marginVertical: 10,
-      }}>
-      <Image
-        source={item.image}
-        style={{alignSelf: 'center', width: 150, height: 150, borderRadius: 10}}
-      />
-      <Text
-        style={{
-          fontWeight: 'bold',
-          marginHorizontal: 10,
-          marginVertical: 10,
-          textAlign: 'left',
-        }}>
-        {item.title}
-      </Text>
-      <Text
-        style={{
-          fontSize: 10,
-          lineHeight: 15,
-          textAlign: 'justify',
-          marginHorizontal: 10,
-        }}>
-        {item.isi}
-      </Text>
-      <Divider />
-      <Text
-        style={{
-          fontSize: 10,
-          color: Color.secondary,
-          marginHorizontal: 10,
-          textAlign: 'left',
-        }}>
-        {item.tanggal}
-      </Text>
-    </View>
-  );
+
+ function Capitalize(str){
+    return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+
+  
 
   const renderComment = (item) => {
     var time = moment(+item.commentDate).fromNow()
@@ -193,7 +181,7 @@ const NewsDetail = ({navigation, route}) => {
               paddingVertical: 6,
               backgroundColor: '#F2F2F2',
               maxWidth: '95%',
-              minWidth: '75%',
+              minWidth: '92%',
             }}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Entypo
@@ -315,6 +303,7 @@ const NewsDetail = ({navigation, route}) => {
                 // position: 'absolute',
               }}
             />
+            <Text style={{position: 'absolute', color: Color.border, fontSize: 8, bottom: 10, left: 15 }}>Sumber Gambar : https://www.detik.com/index.php (HARDCORE)</Text>
           </TouchableOpacity>
 
           {/* <View
@@ -377,7 +366,7 @@ const NewsDetail = ({navigation, route}) => {
             <Divider height={6} />
             <Text align="left" size={10} color={Color.secondary}>
               {moment(parseInt(item.created_date)).format('DD MMM YYYY')} |{' '}
-              {item.productSubCategory} | Ditulis oleh {item.fullname}
+              {Capitalize(item.productSubCategory.toLowerCase())} | Ditulis oleh {item.fullname}
             </Text>
           </View>
         </View>
@@ -385,8 +374,20 @@ const NewsDetail = ({navigation, route}) => {
         {item.like > 0 && (
           <Container paddingHorizontal={16}>
             <WidgetUserLikes id={item.id} title="Disukai" />
+            <Text style={{fontSize: 8, color: Color.secondary, textAlign: 'left'}}>Rangga dan 16 lainnya menyukai ini (HARDCODE)</Text>
           </Container>
         )}
+
+        <Divider/>
+        <Row style={{paddingHorizontal: 15, alignItems: 'center'}}>
+          <MaterialCommunityIcons style={{marginRight: 5}} name={'comment-processing'} color={Color.secondary} size={12}/>
+          <Text style={{fontSize: 10, marginRight: 12}}>20 Komentar</Text>
+          <Entypo name={'share'} style={{marginRight: 5}} color={Color.secondary}/>
+          <Text style={{fontSize: 10, marginRight: 12}}>21x dibagikan</Text>
+          <AntDesign name={'eye'} style={{marginRight: 5}} size={18} color={Color.secondary} />
+          <Text style={{fontSize: 10, marginRight: 12}}>1.2rb Melihat</Text>
+        </Row>
+
 
         <View style={{padding: 16}}>
           <Text lineHeight={24} align="justify">
@@ -427,10 +428,9 @@ const NewsDetail = ({navigation, route}) => {
 
         <Row
           style={{
-            paddingVertical: 20,
+            paddingVertical: 10,
             width: '93%',
             height: 65,
-            backgroundColor: Color.border,
             borderRadius: 5,
             alignSelf: 'center',
             justifyContent: 'space-around',
@@ -446,59 +446,94 @@ const NewsDetail = ({navigation, route}) => {
               });
             }}
             style={{
-              flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'center',
+              height: 100
             }}>
             {state.im_like ? (
-              <MaterialIcons name={'favorite'} size={18} color={'red'} />
+              <View style={{width: 45, alignItems: 'center', justifyContent: 'center',height: 45, backgroundColor: Color.red, borderRadius: 25}}>
+                <MaterialIcons name={'favorite'} size={25} color={Color.theme} />
+              </View>
             ) : (
-              <MaterialIcons name={'favorite-border'} size={18} />
+              <View style={{width: 45, alignItems: 'center', justifyContent: 'center',height: 45, backgroundColor: Color.theme, elevation: 1, borderRadius: 25}}>
+                <MaterialIcons name={'favorite-border'} size={25} color={Color.text} />
+              </View>
             )}
-            <Text style={{fontSize: 18, marginHorizontal: 5}}>
+            {/* <Text style={{fontSize: 18, marginHorizontal: 5}}>
               {state.like}
+            </Text> */}
+            <Text style={{fontSize: 14, marginHorizontal: 5,marginVertical: 10}}>
+              Suka
             </Text>
           </TouchableWithoutFeedback>
 
           <TouchableWithoutFeedback
             onPress={() => navigation.navigate('CommentListScreen', {item})}
             style={{
-              flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'center',
+              height: 100
             }}>
-            <MaterialCommunityIcons
-              name={'comment-processing-outline'}
-              size={16}
-            />
-            <Text style={{fontSize: 18, marginHorizontal: 5}}>
+              <View style={{width: 45, alignItems: 'center', justifyContent: 'center',height: 45, backgroundColor: Color.theme, elevation: 1, borderRadius: 25}}>
+                <MaterialCommunityIcons name={'comment-processing-outline'} size={25} color={Color.text} />
+              </View>
+            {/* <Text style={{fontSize: 14, marginHorizontal: 5,marginVertical: 10}}>
               {item.commentCount}
+            </Text> */}
+            <Text style={{fontSize: 14, marginHorizontal: 5,marginVertical: 10}}>
+              Komentar
             </Text>
           </TouchableWithoutFeedback>
 
-          <View
+          <TouchableWithoutFeedback
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: 100
+            }}>
+            
+              <View style={{width: 45, alignItems: 'center', justifyContent: 'center',height: 45, backgroundColor: Color.theme, elevation: 1, borderRadius: 25}}>
+                <AntDesign name={'sharealt'} size={25} color={Color.text} />
+              </View>
+            {/* <Text style={{fontSize: 18, marginHorizontal: 5}}>
+              {state.like}
+            </Text> */}
+            <Text style={{fontSize: 14, marginHorizontal: 5,marginVertical: 10}}>
+              Bagikan
+            </Text>
+          </TouchableWithoutFeedback>
+
+          {/* <View
             style={{
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'center',
+              height: 100
             }}>
             <IonIcons name={'eye-outline'} size={18} />
             <Text style={{fontSize: 18, marginHorizontal: 5}}>{item.view}</Text>
-          </View>
+          </View> */}
         </Row>
-
+        <Divider height={30}/>
         <View
           style={{
             backgroundColor: Color.border,
-            width: '96%',
+            width: '90%',
             height: 1,
             marginVertical: 15,
             alignSelf: 'center',
           }}
         />
 
+        <Banner
+            data={listBanner}
+            loading={loadingBanner}
+            showHeader={false}
+        />
+        <Divider/>
+
         {listComment.length > 0 && (
-          <View style={{paddingHorizontal: 16}}>
+          <View style={{paddingHorizontal: 16,}}>
             <Text size={10} color="#000000" align="left" type="bold">
               Komentar
             </Text>
@@ -513,7 +548,9 @@ const NewsDetail = ({navigation, route}) => {
           </View>
         )}
 
-        <TouchableOpacity
+        {
+          listComment.length > 0 ? 
+          <TouchableOpacity
           onPress={() => {
             navigation.navigate('CommentListScreen', {item});
           }}
@@ -530,7 +567,18 @@ const NewsDetail = ({navigation, route}) => {
           }}>
           <Text style={{color: Color.primary}}>Lihat Semua Komentar</Text>
         </TouchableOpacity>
-
+        : null
+        }
+        
+        <View
+          style={{
+            backgroundColor: Color.border,
+            width: '90%',
+            height: 1,
+            marginVertical: 15,
+            alignSelf: 'center',
+          }}
+        />
         {/* <View
           style={{
             backgroundColor: Color.border,

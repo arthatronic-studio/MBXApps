@@ -14,6 +14,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import IonIcons from 'react-native-vector-icons/Ionicons'
 import client from 'src/lib/apollo';
 import HighlightContentProductV2 from 'src/components/Content/HighlightContentProductV2';
+import ListMyProduct from 'src/screens/Ecommerce/ListMyProduct';
 
 const NewsScreen = ({navigation, route}) => {
 
