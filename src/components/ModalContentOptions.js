@@ -136,7 +136,8 @@ const ModalContentOptions = forwardRef((props, ref) => {
       name: 'Report',
       color: Color.error,
       onPress: () => {
-        setModalInputText(true);
+        combinedRef.current.close();
+        navigation.navigate('ReportArticle')
       },
     },
     {

@@ -211,6 +211,7 @@ import AddInformationGroup from 'src/screens/Chat/AddInformationGroup';
 import GroupDetailScreen from 'src/screens/Chat/GroupDetailScreen';
 import UserGroupDetail from 'src/screens/Chat/UserGroupDetail';
 import AddMember from 'src/screens/Chat/AddMember';
+import ReportArticle from 'src/screens/Posting/News/ReportArticle';
 
 const { Navigator, Screen } = createStackNavigator();
 const MainPage =
@@ -330,6 +331,7 @@ function MainStackNavigator() {
       <Screen name="SearchArticle" component={SearchArticle} />
       <Screen name="CreateNews" component={CreateNews} />
       <Screen name="EditNews" component={EditNews} />
+      <Screen name="ReportArticle" component={ReportArticle} />
 
       {/* Place */}
       <Screen name="PlaceScreen" component={PlaceScreen} />

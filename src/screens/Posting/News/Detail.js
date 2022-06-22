@@ -394,7 +394,7 @@ const NewsDetail = ({navigation, route}) => {
             {item.productDescription}
           </Text>
         </View>
-
+        <Text style={{fontSize: 11, fontWeight: 'bold', textAlign: 'left', paddingHorizontal: 15}}>Tags</Text>
         {item.tag.length != 0 && (
           <View
             style={{
