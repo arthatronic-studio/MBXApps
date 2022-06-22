@@ -76,7 +76,7 @@ const EventScreen = ({navigation, route}) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() =>
-                      navigation.navigate('CreateThreadScreen', {
+                      navigation.navigate('CreateEvent', {
                         title,
                         productType: Config.PRODUCT_TYPE,
                         productCategory: '',

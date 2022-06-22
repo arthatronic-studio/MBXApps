@@ -72,6 +72,8 @@ import PlaceDetail from 'src/screens/Posting/Place/Detail';
 // Event
 import EventScreen from 'src/screens/Posting/Event/Index';
 import EventDetail from 'src/screens/Posting/Event/Detail';
+import CreateEvent from 'src/screens/Posting/Event/CreateEvent';
+import CreateEventSecond from 'src/screens/Posting/Event/CreateEventSecond';
 
 // Job
 import JobScreen from 'src/screens/Posting/Job/Index';
@@ -208,8 +210,10 @@ import GroupDetailScreen from 'src/screens/Chat/GroupDetailScreen';
 import UserGroupDetail from 'src/screens/Chat/UserGroupDetail';
 import AddMember from 'src/screens/Chat/AddMember';
 import EditInformationGroup from 'src/screens/Chat/EditInformationGroup';
-import CreateEvent from 'src/screens/EventR/CreateEvent';
-import CreateEventSecond from 'src/screens/EventR/CreateEventSecond';
+// import EventOfficial from 'src/screens/Posting/Event/EventOfficial';
+// import CommunityEvent from 'src/screens/Posting/Event/CommunityEvent';
+// import MyEvent from 'src/screens/Posting/Event/MyEvent';
+// import EventDocumentation from 'src/screens/Posting/Event/EventDocumentation';
 
 const { Navigator, Screen } = createStackNavigator();
 const MainPage =
@@ -226,9 +230,7 @@ function MainStackNavigator() {
         headerShown: false,
       }}>
       {/* uncanny */}
-      <Screen name="SplashScreen" component={CreateEvent} />
-      <Screen name="CreateEvent" component={CreateEvent} />
-      <Screen name="CreateEventSecond" component={CreateEventSecond} />
+      <Screen name="SplashScreen" component={SplashScreen} />
       <Screen name="MainPage" component={MainPage} />
       <Screen name="OnBoardingScreen" component={OnBoardingScreen} />
       <Screen name="TrackingOrder" component={TrackingOrder} />
@@ -335,6 +337,12 @@ function MainStackNavigator() {
       {/* Event */}
       <Screen name="EventScreen" component={EventScreen} />
       <Screen name="EventDetail" component={EventDetail} />
+      <Screen name="CreateEvent" component={CreateEvent} />
+      <Screen name="CreateEventSecond" component={CreateEventSecond} />
+      {/* <Screen name="EventOfficial" component={EventOfficial} />
+      <Screen name="CommunityEvent" component={CommunityEvent} />
+      <Screen name="MyEvent" component={MyEvent} />
+      <Screen name="EventDocumentation" component={EventDocumentation} /> */}
       {/* Job */}
       <Screen name="JobScreen" component={JobScreen} />
       <Screen name="JobDetail" component={JobDetail} />

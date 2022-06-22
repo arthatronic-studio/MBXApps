@@ -34,7 +34,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import axios from 'axios';
 import moment from 'moment';
-import Ecommerce from '../Ecommerce/Ecommerce';
+import Ecommerce from '../../Ecommerce/Ecommerce';
 import FormSelect from 'src/components/FormSelect';
 import { mutationAddEvent } from 'src/lib/query/event';
 import ModalSelectMap from 'src/components/ModalSelectMap';
