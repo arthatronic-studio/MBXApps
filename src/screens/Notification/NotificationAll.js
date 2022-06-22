@@ -21,27 +21,10 @@ const initialDataRooms = {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const managedDate = (origin) => {
-    const date = Moment(origin);
-    const now = new Moment();
-    const diff = now.diff(Moment(date), 'days');
-
-    let title = '';
-
-    if (diff === 0) {
-        title = 'Hari ini - ' + date.format('HH:mm');
-    } else if (diff === 1) {
-        title = 'Kemarin - ' + date.format('HH:mm');
-    } else {
-        title = date.format('dddd, DD/MM/YYYY - HH:mm');;
-    }
-    
-    return title;
-}
   useEffect(() => {
     const variables = {
       page : 0,
-      itemPerPage: 10
+      itemPerPage: 9999
     }
     client.query({
       query: queryGetNotification,
@@ -81,7 +64,7 @@ const initialDataRooms = {
           }}
         >
           <TouchableOpacity
-              onPress={() => {navigation.navigate('NotificationAll')}}
+              onPress={() => {}}
               style={{alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%'}}
               activeOpacity={0.75}
             >
@@ -98,7 +81,7 @@ const initialDataRooms = {
     
   return (
     <Scaffold
-      headerTitle='Notifikasi'
+      headerTitle='Semua Notifikasi'
       fallback={loading}
       empty={history.length === 0}
       emptyTitle="Notifikasi belum tersedia"
@@ -108,7 +91,6 @@ const initialDataRooms = {
         data={history}
         renderItem={({ item }) => {
           return (
-            
             <View  style={{flexDirection:'row',paddingHorizontal:16, paddingVertical: 16, borderColor: Color.border,
             borderWidth: 0.5,}}>
               
@@ -127,9 +109,6 @@ const initialDataRooms = {
                
               }}
             >
-             
-               
-             
               <Text align='left'  type='bold'>{item.title}</Text>
               <Divider height={4} />
               <View style={{paddingEnd:30}}>
@@ -137,28 +116,19 @@ const initialDataRooms = {
               <Text align='left' size={12} numberOfLines={3}>{item.text}</Text>
               </View>
               <Divider height={4} />
-
-              <View style={{flexDirection:'row',justifyContent:'space-between',paddingEnd:40}}>
-              
+              <View style={{flexDirection:'row',justifyContent:'space-between',paddingEnd:40}}>  
               <Text size={10} align='left'>{Moment(parseInt(item.date, 10)).fromNow()}</Text>
               <Text align="left" size={10}>
                 {Moment(parseInt(item.date)).format('HH:mm')}
-              </Text>
-              
-              </View>
-              
-          
+              </Text>      
+              </View>  
             </TouchableOpacity>
-
             </View>
-           
-            
-          
           )
         }}
       />
 
-      {history.length > 0 && renderPopUpNavigation()}
+      {/* {history.length > 0 && renderPopUpNavigation()} */}
     </Scaffold>
   );
 }

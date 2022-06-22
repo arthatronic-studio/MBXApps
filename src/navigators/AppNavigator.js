@@ -102,7 +102,7 @@ import OrderListPerProduct from '@src/screens/MyBooking/OrderListPerProduct';
 // notification
 import NotificationScreen from '@src/screens/Notification/NotificationScreen';
 import NotificationDetail from '@src/screens/Notification/NotificationDetail';
-
+import NotificationAll from '@src/screens/Notification/NotificationAll';
 // content-chat
 import ChatRoomsScreen from '@src/screens/Chat/ChatRoomsScreen';
 import ChatDetailScreen from '@src/screens/Chat/ChatDetailScreen';
@@ -384,6 +384,7 @@ function MainStackNavigator() {
       {/* notification */}
       <Screen name="NotificationScreen" component={NotificationScreen} />
       <Screen name="NotificationDetail" component={NotificationDetail} />
+      <Screen name="NotificationAll" component={NotificationAll} />
       {/* content-chat */}
       <Screen name="ChatRoomsScreen" component={ChatRoomsScreen} />
       <Screen name="ChatDetailScreen" component={ChatDetailScreen} />
