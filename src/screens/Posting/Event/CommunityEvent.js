@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Image, FlatList,ScrollView, Platform, Linking, Pressable} from 'react-native';
+import {View, TouchableOpacity,Image, FlatList,ScrollView, Platform, Linking, Pressable} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
@@ -9,7 +9,6 @@ import Header from '@src/components/Header';
 import {useLoading, usePopup, useColor, Alert, Row, Col} from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
-import {TouchableOpacity, Button} from '@src/components/Button';
 import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
 import Client from '@src/lib/apollo';
 import {queryAddLike} from '@src/lib/query';
@@ -24,7 +23,7 @@ import Feather from 'react-native-vector-icons/Feather'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
-const EventOfficial = ({route}) => {
+const CommunityEvent = ({route}) => {
 
     const {Color} = useColor();
 
@@ -40,7 +39,7 @@ const EventOfficial = ({route}) => {
         <Header
           type="bold"
           centerTitle={false}
-          title="Official Event"
+          title="Community Event"
           actions={
             <View>
               <TouchableOpacity>
@@ -51,12 +50,11 @@ const EventOfficial = ({route}) => {
         />
       }
     >
-    <View style={{width: '100%', height: 70, paddingHorizontal: 15,}}>
-      <TouchableOpacity style={{alignSelf: 'flex-end',backgroundColor: Color.theme, marginTop: 20,alignItems: 'center', justifyContent: 'center',flexDirection: 'row', borderWidth: 1, borderColor: Color.text, width: '25%', borderRadius: 30, height: 30}}>
+      <TouchableOpacity style={{marginHorizontal: 15,alignSelf: 'flex-end',backgroundColor: Color.theme, marginVertical: 20,alignItems: 'center', justifyContent: 'center',flexDirection: 'row', borderWidth: 1, borderColor: Color.text, width: '25%', borderRadius: 30, height: 30}}>
         <Text style={{fontSize: 10}}>Terbaru</Text>
         <MaterialIcons name={"keyboard-arrow-down"} size={18}/>
       </TouchableOpacity>
-    </View>
+
     <HighlightContentProduct
         productCategory='EVENT'
         name='Event'
@@ -68,4 +66,4 @@ const EventOfficial = ({route}) => {
   )
 }
 
-export default EventOfficial
+export default CommunityEvent

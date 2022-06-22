@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Image, FlatList,ScrollView, Platform, Linking, Pressable} from 'react-native';
+import {View, TouchableOpacity,Image, FlatList,ScrollView, Platform, Linking, Pressable} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
@@ -9,9 +9,9 @@ import Header from '@src/components/Header';
 import {useLoading, usePopup, useColor, Alert, Row, Col} from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
-import {TouchableOpacity, Button} from '@src/components/Button';
 import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
 import Client from '@src/lib/apollo';
+import MyEventBar from './MyEventBar'
 import {queryAddLike} from '@src/lib/query';
 import { Container, Divider, Padding } from 'src/styled';
 import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
@@ -19,12 +19,12 @@ import ModalContentOptions from 'src/components/ModalContentOptions';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import ImagesPath from 'src/components/ImagesPath';
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import EvilIcons from 'react-native-vector-icons/EvilIcons'
+import Entypo from 'react-native-vector-icons/Entypo'
 import Feather from 'react-native-vector-icons/Feather'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
-const EventOfficial = ({route}) => {
+const MyEvent = ({route}) => {
 
     const {Color} = useColor();
 
@@ -40,32 +40,21 @@ const EventOfficial = ({route}) => {
         <Header
           type="bold"
           centerTitle={false}
-          title="Official Event"
+          title="Eventku"
           actions={
             <View>
-              <TouchableOpacity>
-                <Ionicons name='search' size={22} color={Color.text} style={{marginHorizontal: 15}} />
+              <TouchableOpacity style={{alignItems: 'center', justifyContent: 'center',flexDirection: 'row', backgroundColor: Color.primary, height: 30, width: 110,borderRadius: 25}}>  
+                <Entypo name='plus' size={13} color={Color.textInput} style={{marginRight: 5}} />
+                <Text style={{color: Color.textInput, fontSize: 11, fontWeight: 'bold'}}>Buat Event</Text>
               </TouchableOpacity>
             </View>
           }
         />
       }
     >
-    <View style={{width: '100%', height: 70, paddingHorizontal: 15,}}>
-      <TouchableOpacity style={{alignSelf: 'flex-end',backgroundColor: Color.theme, marginTop: 20,alignItems: 'center', justifyContent: 'center',flexDirection: 'row', borderWidth: 1, borderColor: Color.text, width: '25%', borderRadius: 30, height: 30}}>
-        <Text style={{fontSize: 10}}>Terbaru</Text>
-        <MaterialIcons name={"keyboard-arrow-down"} size={18}/>
-      </TouchableOpacity>
-    </View>
-    <HighlightContentProduct
-        productCategory='EVENT'
-        name='Event'
-        nav='EventScreen'
-        showHeader={false}
-    />
-    <Divider height={20}/>
+    <MyEventBar/>
     </Scaffold>
   )
 }
 
-export default EventOfficial
+export default MyEvent
