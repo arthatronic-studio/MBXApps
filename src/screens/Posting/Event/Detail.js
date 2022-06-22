@@ -341,7 +341,7 @@ const EventDetail = ({navigation, route}) => {
             <Divider height={8}/>
             <View style={{flexDirection: 'row',alignItems: 'center', paddingHorizontal: 10 ,backgroundColor: '#F0F0F0', width: '90%', alignSelf: 'center', height: 70}}>
               <Image source={ImagesPath.LocationEvent} style={{borderRadius: 5}}/>
-              <Text style={{fontSize: 8, lineHeight: 12,textAlign: 'left', width: '75%', paddingHorizontal: 10}}>Jl. Tebet Barat I No.2, RT.1/RW.2, Tebet Bar., Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12810</Text>
+              <Text style={{fontSize: 8, lineHeight: 12,textAlign: 'left', width: '65%', paddingHorizontal: 10}}>Jl. Tebet Barat I No.2, RT.1/RW.2, Tebet Bar., Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12810</Text>
               <TouchableOpacity style={{justifyContent: 'center', alignItems: 'center',backgroundColor: Color.primary, width: 35, height: 35, borderRadius: 20, marginLeft: 35}}>
                 <Ionicons name='navigate' size={17} style={{color: Color.theme}}/>
               </TouchableOpacity>

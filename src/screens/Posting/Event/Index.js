@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Image,TextInput,StyleSheet,Text ,TouchableOpacity, useWindowDimensions} from 'react-native'
+import {View, ScrollView, Pressable,Image,TextInput,StyleSheet,Text ,TouchableOpacity, useWindowDimensions} from 'react-native'
 import {useSelector} from 'react-redux';
 import Config from 'react-native-config';
 import {useColor, Header, Col} from '@src/components';
@@ -17,7 +17,6 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import IonIcons from 'react-native-vector-icons/Ionicons'
-import { ScrollView } from 'react-native-gesture-handler';
 
 const EventScreen = ({navigation, route}) => {
   const { title, userProfileId } = route.params;
@@ -76,7 +75,7 @@ const EventScreen = ({navigation, route}) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() =>
-                      navigation.navigate('CreateEvent', {
+                      navigation.navigate('CreateThreadScreen', {
                         title,
                         productType: Config.PRODUCT_TYPE,
                         productCategory: '',
@@ -121,37 +120,37 @@ const EventScreen = ({navigation, route}) => {
   const ListOption = () => {
    return(
     <>
-    <View style={{justifyContent: 'center',backgroundColor: Color.theme, height: 100,marginHorizontal: 15, borderRadius: 8, elevation: 3}}>
-        <Row style={{justifyContent: 'center'}}>
-          <View style={{width: '23%', alignItems: 'center'}}>
-            <Image source={ImagesPath.CircleWavyCheck} />
+    
+      <Row style={{paddingHorizontal: 20,justifyContent: 'center',backgroundColor: Color.theme, height: 100,marginHorizontal: 15, borderRadius: 8, elevation: 3}}>
+        <Pressable style={{width: '25%', height: 60}}
+          onPress={() => navigation.navigate('EventOfficial')}>
+          <View style={{width: '100%',alignItems:'center', marginBottom: 3}}> 
+            <Image source={ImagesPath.CircleWavyCheck}/>
           </View>
-          <View style={{width: '23%', alignItems: 'center'}}>
-            <Image source={ImagesPath.UsersThree} />
+          <Text style={{lineHeight: 15,fontSize: 10, color: Color.secondary, width: '50%', textAlign: 'center', alignSelf: 'center'}}>Event Official</Text>
+        </Pressable>
+        <Pressable style={{width: '25%',height: 60}}
+          onPress={() => navigation.navigate('CommunityEvent')}>
+          <View style={{width: '100%',alignItems:'center', marginBottom: 3}}> 
+            <Image source={ImagesPath.UsersThree}/>
           </View>
-          <View style={{width: '23%', alignItems: 'center'}}>
-            <Image source={ImagesPath.Confetti} />
+          <Text style={{lineHeight: 15,fontSize: 10, color: Color.secondary, width: '80%', textAlign: 'center', alignSelf: 'center'}}>Event Komunitas</Text>
+        </Pressable>
+        <Pressable style={{width: '25%',height: 60}}
+          onPress={() => navigation.navigate('MyEvent')}>
+          <View style={{width: '100%',alignItems:'center',marginBottom: 3}}> 
+            <Image source={ImagesPath.Confetti}/>
           </View>
-          <View style={{width: '23%', alignItems: 'center'}}>
-            <Image source={ImagesPath.ImageEvent} />
+          <Text style={{lineHeight: 15,fontSize: 10, color: Color.secondary, width: '50%', textAlign: 'center', alignSelf: 'center'}}>Eventku</Text>
+        </Pressable>
+        <Pressable style={{width: '25%', height: 60}}
+          onPress={() => navigation.navigate('EventDocumentation')}>
+          <View style={{width: '100%',alignItems:'center', marginBottom: 3}}> 
+            <Image source={ImagesPath.ImageEvent}/>
           </View>
-        </Row>
-        <Divider height={4}/>
-        <Row style={{justifyContent: 'center'}}>
-          <View style={{width: '23%', height: 30,alignItems: 'center'}}>
-            <Text style={{fontSize: 10, color: Color.secondary, lineHeight: 14,width: '50%',textAlign: 'center'}}>Event Official</Text>
-          </View>
-          <View style={{width: '23%', height: 30, alignItems: 'center'}}>
-            <Text style={{fontSize: 10, color: Color.secondary, lineHeight: 14,width: '90%',textAlign: 'center'}}>Event Komunitas</Text>
-          </View>
-          <View style={{width: '23%', height: 30, alignItems: 'center'}}>
-            <Text style={{fontSize: 10, color: Color.secondary, lineHeight: 14,width: '50%', textAlign: 'center'}}>Eventku</Text>
-          </View>
-          <View style={{width: '23%', height: 30, alignItems: 'center'}}>
-            <Text style={{fontSize: 10, color: Color.secondary, lineHeight: 14,width: '90%', textAlign: 'center'}}>Dokumentasi Event</Text>
-          </View>
-        </Row>
-      </View>
+          <Text style={{lineHeight: 15,fontSize: 10, color: Color.secondary,width: '100%', textAlign: 'center', alignSelf: 'center'}}>Dokumentasi Event</Text>
+        </Pressable>
+      </Row>
   </>
    )
   }
@@ -189,10 +188,13 @@ const EventScreen = ({navigation, route}) => {
         <RenderHeader/>
       }
     >
-      <ScrollView>
+      <ScrollView
+      showsVerticalScrollIndicator={false}>
         <SearchEvent/>
         <Divider/>
         <ListOption/>
+        <View style={styles.container}>
+    </View>
         <Container paddingVertical={16}>
           <Banner
             data={listBanner}

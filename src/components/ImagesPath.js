@@ -241,6 +241,7 @@ export default {
   ImageEvent: require('../components/Images/ImageEvent.png'),
   CircleWavyCheck: require('../components/Images/CircleWavyCheck.png'),
   Confetti: require('../components/Images/Confetti.png'),
+  LocationEvent: require('../components/Images/Location.png'),
 
   filedoc: require('../components/Images/FileDoc.png'),
   rrid1: require('../components/Images/rrid/rrid1.png'),
