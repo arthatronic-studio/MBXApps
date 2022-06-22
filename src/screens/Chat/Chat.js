@@ -15,7 +15,8 @@ import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import { Header, ModalListAction, Scaffold } from 'src/components';
 import ChatRoomsScreen from 'src/screens/Chat/ChatRoomsScreen';
 import ChatGroupScreen from 'src/screens/Chat/ChatGroupScreen';
-import { currentSocket } from '@src/screens/MainHome/MainHome';
+import { initSocket } from 'src/api-socket/currentSocket';
+const currentSocket = initSocket();
 
 const Chat = ({navigation}) => {
     // state
@@ -33,7 +34,6 @@ const Chat = ({navigation}) => {
     useEffect(() => {
         currentSocket.emit('list_my_room_ids');
         currentSocket.on('list_my_room_ids', (res) => {
-            console.log('list_my_room_ids', res);
             setMyRoomIds(res);
             setLoadingMyRooms(false);
         });

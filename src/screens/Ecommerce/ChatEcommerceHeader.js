@@ -11,7 +11,8 @@ import { useColor, Header, Row } from '@src/components';
 import ImagesPath from 'src/components/ImagesPath';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { Divider } from '@src/styled';
-import {currentSocket} from '@src/screens/MainHome/MainHome';
+import { initSocket } from 'src/api-socket/currentSocket';
+const currentSocket = initSocket();
 
 const MainView = Styled(SafeAreaView)`
       flex: 1;

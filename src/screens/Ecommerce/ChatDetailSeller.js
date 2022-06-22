@@ -23,9 +23,10 @@ import Styled from 'styled-components';
 import ChatEcommerceHeader from './ChatEcommerceHeader';
 import {useSelector} from 'react-redux';
 import Footer from 'src/components/Footer';
-import {currentSocket} from '@src/screens/MainHome/MainHome';
 import {FormatMoney} from '@src/utils';
 import moment from 'moment';
+import { initSocket } from 'src/api-socket/currentSocket';
+const currentSocket = initSocket();
 
 const BottomSection = Styled(View)`
   width: 100%;

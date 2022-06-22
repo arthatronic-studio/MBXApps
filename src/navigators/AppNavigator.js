@@ -209,11 +209,10 @@ import AddProductAuctionSecond from 'src/screens/Lelang/AddProductAuctionSecond'
 import Chat from 'src/screens/Chat/Chat';
 import ChatGroupScreen from 'src/screens/Chat/ChatGroupScreen';
 import CreateGroup from 'src/screens/Chat/CreateGroup';
-import AddInformationGroup from 'src/screens/Chat/AddInformationGroup';
 import GroupDetailScreen from 'src/screens/Chat/GroupDetailScreen';
 import UserGroupDetail from 'src/screens/Chat/UserGroupDetail';
 import AddMember from 'src/screens/Chat/AddMember';
-import EditInformationGroup from 'src/screens/Chat/EditInformationGroup';
+import ManageGroupScreen from 'src/screens/Chat/ManageGroupScreen';
 
 const { Navigator, Screen } = createStackNavigator();
 const MainPage =
@@ -393,11 +392,10 @@ function MainStackNavigator() {
       <Screen name="Chat" component={Chat} />
       <Screen name="AddMember" component={AddMember} />
       <Screen name="UserGroupDetail" component={UserGroupDetail} />
-      <Screen name="AddInformationGroup" component={AddInformationGroup} />
       <Screen name="CreateGroup" component={CreateGroup} />
       <Screen name="GroupDetailScreen" component={GroupDetailScreen} />
       <Screen name="ChatGroupScreen" component={ChatGroupScreen} />
-      <Screen name="EditInformationGroup" component={EditInformationGroup} />
+      <Screen name="ManageGroupScreen" component={ManageGroupScreen} />
       {/* media player */}
       <Screen name="MediaPlayerScreen" component={MediaPlayerScreen} />
       <Screen name="UploadMusicScreen" component={UploadMusicScreen} />

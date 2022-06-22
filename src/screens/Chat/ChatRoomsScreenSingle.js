@@ -16,10 +16,11 @@ import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import { Circle } from '@src/styled';
 
 import { Header, Scaffold, Alert } from 'src/components';
-import {currentSocket} from '@src/screens/MainHome/MainHome';
 import { statusBarHeight } from 'src/utils/constants';
 import ModalActions from 'src/components/Modal/ModalActions';
 import { accessClient } from 'src/utils/access_client';
+import { initSocket } from 'src/api-socket/currentSocket';
+const currentSocket = initSocket();
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -86,7 +87,6 @@ const ChatRoomsScreen = ({ navigation, route }) => {
     useEffect(() => {
         currentSocket.emit('list_my_room_ids');
         currentSocket.on('list_my_room_ids', (res) => {
-            console.log('list_my_room_ids', res);
             setMyRoomIds(res);
         });
 

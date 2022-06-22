@@ -39,10 +39,11 @@ import { queryOrganizationMemberManage } from '@src/lib/query/organization';
 import { getCurrentUserProfile } from 'src/state/actions/user/auth';
 import { accessClient } from 'src/utils/access_client';
 import { fetchCommunityMemberCheck } from 'src/api/community';
-import {currentSocket} from 'src/screens/MainHome/MainHome';
 import ModalActions from 'src/components/Modal/ModalActions';
 import Axios from 'axios';
 import { useIsFocused } from '@react-navigation/native';
+import { initSocket } from 'src/api-socket/currentSocket';
+const currentSocket = initSocket();
 
 const MainProfile = ({navigation, route}) => {
   const [modalVirtual, setModalVirtual] = useState(false);
@@ -78,13 +79,10 @@ const MainProfile = ({navigation, route}) => {
 
   useEffect(() => {
     // hit cuurent user profile
-    
-
     fetchData();
 
     currentSocket.emit('list_my_room_ids');
       currentSocket.on('list_my_room_ids', (res) => {
-        console.log('list_my_room_ids', res);
         setMyRoomIds(res);
       });
   }, []);

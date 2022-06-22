@@ -20,44 +20,6 @@ import {
 	Row,
 	Col,
 } from '@src/components';
-import Client from '@src/lib/apollo';
-import { queryContentChatRoomManage, queryContentChatMessage } from '@src/lib/query';
-import { Divider } from 'src/styled';
-import { currentSocket } from '@src/screens/MainHome/MainHome';
-
-// const DATA = [
-//     {
-//       id: 1,
-//       image: ImagesPath.avatar1,
-//       name: 'Courtney Henry',
-//       status: 'Admin'
-//     },
-//     {
-//         id: 2,
-//         image: ImagesPath.avatar1,
-//         name: 'Courtney Henry',
-//         status: 'Admin'
-//       },
-//       {
-//         id: 2,
-//         image: ImagesPath.avatar1,
-//         name: 'Courtney Henry',
-//         status: 'Admin'
-//       },
-//       {
-//         id: 2,
-//         image: ImagesPath.avatar1,
-//         name: 'Courtney Henry',
-//         status: 'Admin'
-//       },
-//       {
-//         id: 2,
-//         image: ImagesPath.avatar1,
-//         name: 'Courtney Henry',
-//         status: 'Admin'
-//       },
-//   ];
-
 
 function Anggota(props, route) {
   const modalListActionRef = useRef();
@@ -72,7 +34,9 @@ function Anggota(props, route) {
           marginVertical: 12,
           alignItems: 'center',
         }}>
-        <Image source={ImagesPath.avatar1} style={{borderRadius: 20}} />
+          <View style={{width: '10%', aspectRatio: 1}}>
+            <Image source={{ uri: item.photo_profile }} style={{ width: '100%', height: '100%', borderRadius: 20}} />
+          </View>
         <View style={{width: '85%'}}>
           <Text
             style={{
@@ -102,6 +66,8 @@ function Anggota(props, route) {
       </Row>
     </View>
   );
+
+  console.log(props.listAnggota);
 
   return (
     <View>
@@ -271,8 +237,8 @@ const UserGroupDetail = ({navigation, route}) => {
           </Col>
 
           <View style={{width: '8%', marginVertical: 5}}>
-            <Pressable onPress={() => { navigation.navigate('EditInformationGroup', {
-              ...params,
+            <Pressable onPress={() => { navigation.navigate('ManageGroupScreen', {
+              ...params['params'],
             });}}>
               <Feather name={'edit-2'} />
             </Pressable>

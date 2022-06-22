@@ -22,7 +22,6 @@ import {
 import Client from '@src/lib/apollo';
 import { queryContentChatRoomManage, queryContentChatMessage } from '@src/lib/query';
 import { Divider } from 'src/styled';
-import { currentSocket } from '@src/screens/MainHome/MainHome';
 import {queryGetUserOrganizationRef} from 'src/lib/query';
 
 

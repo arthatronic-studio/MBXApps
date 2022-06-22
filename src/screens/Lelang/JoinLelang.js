@@ -9,8 +9,9 @@ import { Divider } from 'src/styled';
 import {Scaffold, Text, useColor, Header, Row, Col, TouchableOpacity, usePopup, Alert} from '@src/components';
 import ModalBid from 'src/components/Modal/ModalBid';
 import { FormatMoney } from 'src/utils';
-import {currentSocket} from '@src/screens/MainHome/MainHome';
 import moment from 'moment';
+import { initSocket } from 'src/api-socket/currentSocket';
+const currentSocket = initSocket();
 
 const ButtonView = Styled(View)`
   width: 100%;

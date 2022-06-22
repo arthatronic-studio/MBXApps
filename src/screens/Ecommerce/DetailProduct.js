@@ -17,8 +17,9 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import ImageSlider from '../../components/ImageSlider';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { currentSocket } from '@src/screens/MainHome/MainHome';
 import TouchableDebounce from 'src/components/Button/TouchableDebounce';
+import { initSocket } from 'src/api-socket/currentSocket';
+const currentSocket = initSocket();
 
 import {
   Text,

@@ -18,8 +18,9 @@ import Entypo from 'react-native-vector-icons/Entypo'
 import Client from '@src/lib/apollo';
 import { queryContentChatRoomManage, queryContentChatMessage } from '@src/lib/query';
 import { Divider } from 'src/styled';
-import { currentSocket } from '@src/screens/MainHome/MainHome';
 import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
+import { initSocket } from 'src/api-socket/currentSocket';
+const currentSocket = initSocket();
 
 const BottomSection = Styled(View)`
   width: 100%;

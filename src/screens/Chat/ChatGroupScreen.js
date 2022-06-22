@@ -13,8 +13,9 @@ import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import { Circle } from '@src/styled';
 
 import { Header, ModalListAction, Scaffold, Alert } from 'src/components';
-import {currentSocket} from '@src/screens/MainHome/MainHome';
 import { statusBarHeight } from 'src/utils/constants';
+import { initSocket } from 'src/api-socket/currentSocket';
+const currentSocket = initSocket();
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -248,7 +249,7 @@ const ChatGroupScreen = ({ navigation, route }) => {
               const isSelected = selectedRoom && selectedRoom.id === item.id;
               const notifBadge = item.unread_count > 0;
 
-              console.log('item', item);
+              // console.log('item', item);
 
               let lastChatName = '';
               if (Array.isArray(item.member) && item.last_chat && item.last_chat.user_id) {

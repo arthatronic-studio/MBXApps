@@ -59,10 +59,10 @@ import HighlightLelang from 'src/components/Card/HighlightLelang';
 import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
 import ModalMenuHome from 'src/components/Modal/ModalMenuHome';
 import PushNotification, { Importance } from 'react-native-push-notification';
+import { initSocket } from 'src/api-socket/currentSocket';
+const currentSocket = initSocket();
 
 let tempShowPopupAds = true;
-
-export let currentSocket;
 
 const events = [Event.PlaybackTrackChanged];
 
@@ -88,7 +88,6 @@ const MainHome = ({navigation, route}) => {
   const {width} = useWindowDimensions();
   const [loadingProps, showLoading] = useLoading();
 
-  console.log('ini ud');
   // handle music analytics
   //
   useTrackPlayerEvents(events, event => {
@@ -143,19 +142,7 @@ const MainHome = ({navigation, route}) => {
   useEffect(() => {
     fetchPopup();
 
-    currentSocket = io(Config.SOCKET_API_URL, {
-      extraHeaders: {
-        // Authorization: "Bearer authorization_token_here"
-        // 'Control-Allow-Credentials': true
-      },
-    });
-
-    currentSocket.emit('auth', {id: user ? user.userId : 0});
-    currentSocket.on('auth', res => {
-      console.log('res auth', res);
-
-      currentSocket.emit('chat_notification');
-    });
+    currentSocket.emit('chat_notification');
 
     currentSocket.on('chat_notification', res => {
       console.log('res chat_notification', res);

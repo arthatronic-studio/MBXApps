@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Moment from 'moment';
 import { useSelector } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Text from '@src/components/Text';
 import { useColor } from '@src/components/Color';
 import { usePopup } from '@src/components';
@@ -13,220 +13,207 @@ import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Entypo from 'react-native-vector-icons/Entypo'
 import ImagesPath from 'src/components/ImagesPath';
 import { Header, Scaffold, Alert } from 'src/components';
-import {currentSocket} from '@src/screens/MainHome/MainHome';
 import {
-    Row,
-    Col,
+  Row,
+  Col,
 } from '@src/components';
 import { queryGetUserOrganizationRef } from 'src/lib/query';
 import Client from '@src/lib/apollo';
-import {Container} from 'src/styled';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { initSocket } from 'src/api-socket/currentSocket';
+const currentSocket = initSocket();
 
 const itemPerPage = 100;
 
+const CreateGroup = ({ navigation }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const { Color } = useColor();
 
-const DATA = [
-    {
-      id: 1,
-      image: ImagesPath.avatar1,
-      name: 'Courtney Henry',
-    },
-   
-  ];
+  const [itemData, setItemData] = useState({
+    data: [],
+    loading: true,
+    page: 0,
+    loadNext: false,
+  });
+  const [selected, setSelected] = useState([]);
+  const [search, setSearch] = useState('');
+  const [filterData, setFilterData] = useState([]);
+  const [filterLoading, setFilterLoading] = useState(false);
+  const [popupProps, showPopup] = usePopup();
 
-const CreateGroup = ({navigation}) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const { Color } = useColor();
-
-
-const [itemData, setItemData] = useState({
-  data: [],
-  loading: true,
-  page: 0,
-  loadNext: false,
-});
-const [selected, setSelected] = useState([]);
-const [search, setSearch] = useState('');
-const [filterData, setFilterData] = useState([]);
-const [filterLoading, setFilterLoading] = useState(false);
-const [popupProps, showPopup] = usePopup();
-
-
-
-useEffect(() => {
-  fetchGetUserOrganizationRef();
-}, []);
-
-useEffect(() => {
-  if (itemData.loadNext && itemData.page !== -1) {
+  useEffect(() => {
     fetchGetUserOrganizationRef();
-  }
-}, [itemData.loadNext]);
+  }, []);
 
-useEffect(() => {
-  const timeout =
-    search !== ''
-      ? setTimeout(() => {
+  useEffect(() => {
+    if (itemData.loadNext && itemData.page !== -1) {
+      fetchGetUserOrganizationRef();
+    }
+  }, [itemData.loadNext]);
+
+  useEffect(() => {
+    const timeout =
+      search !== ''
+        ? setTimeout(() => {
           fetchSearchNameMember();
         }, 500)
-      : null;
+        : null;
 
-  return () => {
-    clearTimeout(timeout);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [search]);
+
+  const compareData = arr => {
+    let obj = {};
+    let newData = [];
+
+    for (let i = 0; i < arr.length; i++) {
+      obj[arr[i]['userId']] = arr[i];
+    }
+
+    for (let key in obj) {
+      newData.push(obj[key]);
+    }
+
+    return newData;
   };
-}, [search]);
 
-const compareData = arr => {
-  let obj = {};
-  let newData = [];
+  const fetchSearchNameMember = () => {
+    setFilterLoading(true);
 
-  for (let i = 0; i < arr.length; i++) {
-    obj[arr[i]['userId']] = arr[i];
-  }
+    const variables = { name: search };
 
-  for (let key in obj) {
-    newData.push(obj[key]);
-  }
-
-  return newData;
-};
-
-const fetchSearchNameMember = () => {
-  setFilterLoading(true);
-
-  const variables = {name: search};
-
-  Client.query({
-    query: queryGetUserOrganizationRef,
-    variables,
-  })
-    .then(res => {
-      console.log('res search', res);
-
-      const data = res.data.getUserOrganizationRef;
-
-      let newArr = [];
-
-      if (data) {
-        newArr = data;
-      }
-
-      setFilterData(newArr);
-      setFilterLoading(false);
+    Client.query({
+      query: queryGetUserOrganizationRef,
+      variables,
     })
-    .catch(err => {
-      console.log('err search', err);
+      .then(res => {
+        console.log('res search', res);
 
-      setFilterData([]);
-      setFilterLoading(false);
-    });
-};
+        const data = res.data.getUserOrganizationRef;
 
-const fetchGetUserOrganizationRef = () => {
-  const variables = {
-    page: itemData.page + 1,
-    limit: itemPerPage,
+        let newArr = [];
+
+        if (data) {
+          newArr = data;
+        }
+
+        setFilterData(newArr);
+        setFilterLoading(false);
+      })
+      .catch(err => {
+        console.log('err search', err);
+
+        setFilterData([]);
+        setFilterLoading(false);
+      });
   };
-  console.log('var', variables);
 
-  Client.query({
-    query: queryGetUserOrganizationRef,
-    variables,
-  })
-    .then(res => {
-      console.log(res, 'res2');
+  const fetchGetUserOrganizationRef = () => {
+    const variables = {
+      page: itemData.page + 1,
+      limit: itemPerPage,
+    };
+    console.log('var', variables);
 
-      const data = res.data.getUserOrganizationRef;
-
-      let newArr = [];
-
-      if (data) {
-        newArr = itemData.data.concat(data); // compareData(itemData.data.concat(data));
-      }
-
-      console.log(data.length, 'dapet length');
-
-      setItemData({
-        ...itemData,
-        data: newArr,
-        loading: false,
-        page: data.length > 0 ? itemData.page + 1 : -1,
-        loadNext: false,
-      });
+    Client.query({
+      query: queryGetUserOrganizationRef,
+      variables,
     })
-    .catch(err => {
-      console.log(err, 'error');
+      .then(res => {
+        console.log(res, 'res2');
 
-      setItemData({
-        ...itemData,
-        loading: false,
-        page: -1,
-        loadNext: false,
+        const data = res.data.getUserOrganizationRef;
+
+        let newArr = [];
+
+        if (data) {
+          newArr = itemData.data.concat(data); // compareData(itemData.data.concat(data));
+        }
+
+        console.log(data.length, 'dapet length');
+
+        setItemData({
+          ...itemData,
+          data: newArr,
+          loading: false,
+          page: data.length > 0 ? itemData.page + 1 : -1,
+          loadNext: false,
+        });
+      })
+      .catch(err => {
+        console.log(err, 'error');
+
+        setItemData({
+          ...itemData,
+          loading: false,
+          page: -1,
+          loadNext: false,
+        });
       });
-    });
-};
+  };
 
   const onSubmit = () => {
     if (selected.length < 1) {
-       showPopup('Minimal anggota group 2 anggota ', 'warning');
-       return;
+      showPopup('Minimal anggota group 2 anggota ', 'warning');
+      return;
     } else {
-     navigation.navigate('AddInformationGroup', {
-       selected: selected,
-     });
-       
+      navigation.navigate('ManageGroupScreen', {
+        roomId: null,
+        selected: selected,
+      });
+
     }
   }
-const onSelected = (index,item) => {
-  setItemData({...itemData, loading: true});
+  const onSelected = (index, item) => {
+    setItemData({ ...itemData, loading: true });
 
-  const idxOf = selected.length > 0 ? selected.indexOf(item) : -1;
-  console.log('indexof',idxOf);
+    const idxOf = selected.length > 0 ? selected.indexOf(item) : -1;
+    console.log('indexof', idxOf);
 
-  const newSelected = selected;
-  if (idxOf === -1) {
-  
-    newSelected.push(item);
-  } else {
-    newSelected.splice(idxOf, 1);
-  }
+    const newSelected = selected;
+    if (idxOf === -1) {
+
+      newSelected.push(item);
+    } else {
+      newSelected.splice(idxOf, 1);
+    }
 
 
-  setSelected(newSelected);
-  setItemData({...itemData, loading: false});
+    setSelected(newSelected);
+    setItemData({ ...itemData, loading: false });
   };
-  
+
   console.log('selected', selected);
 
-const onPress = item => {
-  const args = {
-    my_room_ids: params.myRoomIds,
-    user_id_target: item.userId,
+  const onPress = item => {
+    const args = {
+      my_room_ids: params.myRoomIds,
+      user_id_target: item.userId,
+    };
+
+    console.log('args', args);
+
+    currentSocket.emit('room_id_target', args);
+    currentSocket.on('room_id_target', res => {
+      console.log('room_id_target', res);
+
+      if (selected.length > 0) {
+        onSelected(item);
+      } else {
+        navigation.navigate('ChatDetailScreen', {
+          roomId: res,
+          roomName: item.firstName,
+          isDirector: item.isDirector === 1,
+          selected: [item],
+          targetIds: [item.userId],
+        });
+      }
+    });
   };
 
-  console.log('args', args);
 
-  currentSocket.emit('room_id_target', args);
-  currentSocket.on('room_id_target', res => {
-    console.log('room_id_target', res);
-
-    if (selected.length > 0) {
-      onSelected(item);
-    } else {
-      navigation.navigate('ChatDetailScreen', {
-        roomId: res,
-        roomName: item.firstName,
-        isDirector: item.isDirector === 1,
-        selected: [item],
-        targetIds: [item.userId],
-      });
-    }
-  });
-};
-  
-
-  const renderItem = ({item, index}) => (
+  const renderItem = ({ item, index }) => (
     <Row
       style={{
         marginHorizontal: 15,
@@ -235,10 +222,10 @@ const onPress = item => {
           selected.indexOf(item.userId) !== -1 ? Color.primary : Color.white,
         borderRadius: selected.indexOf(item.userId) !== -1 ? 14 : 0,
         paddingVertical: 5,
- 
+
       }}>
       <Image
-        source={{uri: item.photoProfile}}
+        source={{ uri: item.photoProfile }}
         style={{
           borderRadius: 25,
           width: 50,
@@ -273,7 +260,7 @@ const onPress = item => {
             borderRadius: 20,
             marginVertical: 10,
           }}>
-          <Text style={{color: Color.textInput, fontSize: 12}}>x Batal</Text>
+          <Text style={{ color: Color.textInput, fontSize: 12 }}>x Batal</Text>
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
@@ -286,9 +273,9 @@ const onPress = item => {
             width: 75,
             borderRadius: 20,
             marginVertical: 10,
-            
+
           }}>
-          <Text style={{color: Color.textInput, fontSize: 12}}>+Undang</Text>
+          <Text style={{ color: Color.textInput, fontSize: 12 }}>+Undang</Text>
         </TouchableOpacity>
       )}
     </Row>
@@ -299,14 +286,14 @@ const onPress = item => {
       isLoading={filterLoading}
       popupProps={popupProps}
       header={<Header title="Buat Grup" />}>
-      <Row style={{marginHorizontal: 15, marginVertical: 15}}>
+      <Row style={{ marginHorizontal: 15, marginVertical: 15 }}>
         <Image source={ImagesPath.firstChat} />
-        <Col style={{marginHorizontal: 10, paddingVertical: 5}}>
-          <Text style={{fontSize: 14, fontWeight: 'bold', textAlign: 'left'}}>
+        <Col style={{ marginHorizontal: 10, paddingVertical: 5 }}>
+          <Text style={{ fontSize: 14, fontWeight: 'bold', textAlign: 'left' }}>
             Tambahkan Anggota
           </Text>
           <Text
-            style={{fontSize: 10, textAlign: 'left', color: Color.secondary}}>
+            style={{ fontSize: 10, textAlign: 'left', color: Color.secondary }}>
             Pilih anggota grup setidaknya satu peserta
           </Text>
         </Col>
@@ -339,7 +326,7 @@ const onPress = item => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <Text style={{fontSize: 12, color: Color.textInput}}>Lanjutkan</Text>
+        <Text style={{ fontSize: 12, color: Color.textInput }}>Lanjutkan</Text>
       </TouchableOpacity>
     </Scaffold>
   );

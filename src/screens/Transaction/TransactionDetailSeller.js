@@ -36,8 +36,9 @@ import {
 import ColorPropType from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedColorPropType';
 import {Modalize} from 'react-native-modalize';
 import moment from 'moment';
-import { currentSocket } from '../MainHome/MainHome';
 import {useSelector} from 'react-redux';
+import { initSocket } from 'src/api-socket/currentSocket';
+const currentSocket = initSocket();
 
 const Content = Styled(View)`
     margin: 16px

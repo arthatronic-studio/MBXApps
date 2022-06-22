@@ -19,9 +19,10 @@ import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Client from '@src/lib/apollo';
 import {queryGetUserOrganizationRef} from '@src/lib/query';
 import { Scaffold } from 'src/components';
-import { currentSocket } from '@src/screens/MainHome/MainHome';
 import { Container } from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
+import { initSocket } from 'src/api-socket/currentSocket';
+const currentSocket = initSocket();
 
 const BottomSection = Styled(View)`
   width: 100%;
