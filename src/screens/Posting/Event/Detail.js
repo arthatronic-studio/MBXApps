@@ -16,11 +16,12 @@ import { Container, Divider, Padding } from 'src/styled';
 import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 import ModalContentOptions from 'src/components/ModalContentOptions';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
-
+import ImagesPath from 'src/components/ImagesPath';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Feather from 'react-native-vector-icons/Feather'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 
 
@@ -161,7 +162,7 @@ const EventDetail = ({navigation, route}) => {
         <Header
           type="bold"
           centerTitle={false}
-          title="Lelang"
+          title="Detail"
           actions={
             <View style={{flexDirection: 'row'}}>
               <TouchableOpacity>
@@ -334,6 +335,35 @@ const EventDetail = ({navigation, route}) => {
              />
           </View>
 
+          <Divider/>
+          <View>
+            <Text style={{fontSize: 11, textAlign: 'left', fontWeight: 'bold', paddingHorizontal: 20}}>Detail Lokasi</Text>
+            <Divider height={8}/>
+            <View style={{flexDirection: 'row',alignItems: 'center', paddingHorizontal: 10 ,backgroundColor: '#F0F0F0', width: '90%', alignSelf: 'center', height: 70}}>
+              <Image source={ImagesPath.LocationEvent} style={{borderRadius: 5}}/>
+              <Text style={{fontSize: 8, lineHeight: 12,textAlign: 'left', width: '75%', paddingHorizontal: 10}}>Jl. Tebet Barat I No.2, RT.1/RW.2, Tebet Bar., Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12810</Text>
+              <TouchableOpacity style={{justifyContent: 'center', alignItems: 'center',backgroundColor: Color.primary, width: 35, height: 35, borderRadius: 20, marginLeft: 35}}>
+                <Ionicons name='navigate' size={17} style={{color: Color.theme}}/>
+              </TouchableOpacity>
+            </View>
+          <Divider/>
+          <View>
+            <Text style={{fontSize: 11, textAlign: 'left', fontWeight: 'bold', paddingHorizontal: 20}}>Informasi Lainnya</Text>
+            <Divider height={8}/>
+            <View style={{width: '90%', alignSelf: 'center', paddingHorizontal: 15, backgroundColor: Color.border, height: 1}}/>
+            <Pressable style={{flexDirection:'row', alignItems: 'center', height: 40, width: '90%', borderBottomColor: Color.border, borderBottomWidth: 1, alignSelf: 'center'}}>
+              <FontAwesome5Icon name={"ticket-alt"} style={{width: '8%'}}/>
+              <Text style={{fontSize: 10, fontWeight: 'bold', width: '85%', textAlign: 'left'}}>Pengembalian Tiket</Text>
+              <MaterialIcons name={'keyboard-arrow-down'} size={18}/>
+            </Pressable>
+            <Pressable style={{flexDirection:'row', alignItems: 'center', height: 40, width: '90%', borderBottomColor: Color.border, borderBottomWidth: 1, alignSelf: 'center'}}>
+              <MaterialCommunityIcons size={15} name={"equal-box"} style={{width: '8%'}}/>
+              <Text style={{fontSize: 10, fontWeight: 'bold', width: '85%', textAlign: 'left'}}>Syarat & Ketentuan</Text>
+              <MaterialIcons name={'keyboard-arrow-down'} size={18}/>
+            </Pressable>
+          </View>
+
+          </View>
           {/* <View>
             <Text
               style={{
