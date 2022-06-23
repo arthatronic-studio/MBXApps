@@ -41,17 +41,16 @@ import { accessClient } from 'src/utils/access_client';
 import { fetchCommunityMemberCheck } from 'src/api/community';
 import ModalActions from 'src/components/Modal/ModalActions';
 import Axios from 'axios';
-import { useIsFocused } from '@react-navigation/native';
 import { initSocket } from 'src/api-socket/currentSocket';
 
 const MainProfile = ({navigation, route}) => {
   const currentSocket = initSocket();
-  
+
   const [modalVirtual, setModalVirtual] = useState(false);
   const [modalInputCode, setModalInputCode] = useState(false);
   const [modalCardMember, setModalCardMember] = useState(false);
   const [modalJoinCommunity, setModalJoinCommunity] = useState(false);
-	const isFocused = useIsFocused();
+  const [refreshing, setRefreshing] = useState(false);
   
   const [responseMemberManage, setResponseMemberManage] = useState({
     data: null,
@@ -75,11 +74,16 @@ const MainProfile = ({navigation, route}) => {
   const {width} = useWindowDimensions();
 
   useEffect(() => {
-		dispatch(getCurrentUserProfile());
-	}, [isFocused]);
+    if (refreshing) {
+      setRefreshing(false);
+      dispatch(getCurrentUserProfile());
+    }
+  }, [refreshing]);
 
   useEffect(() => {
     // hit cuurent user profile
+    dispatch(getCurrentUserProfile());
+
     fetchData();
 
     currentSocket.emit('list_my_room_ids');
@@ -129,9 +133,11 @@ const MainProfile = ({navigation, route}) => {
           timeout: 5000,
           
         });
-          console.log(response)
-          hideLoading()
-          alert('Send email verify success')
+
+        console.log(response)
+        hideLoading()
+        alert('Send email verify success');
+        setRefreshing(true);
       } catch (error) {
         hideLoading()
         alert('Failed send verify')
