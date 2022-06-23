@@ -673,6 +673,7 @@ const IncomingOrder = ({route, navigation}) => {
   const {height} = useWindowDimensions();
 
   const getOrder = async type => {
+    setData()
     let variables = {
       status: type,
       userId: undefined,

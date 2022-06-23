@@ -12,7 +12,7 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import { usePopup } from '@src/components/Modal/Popup';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Scaffold from '@src/components/Scaffold';
-import { Header } from 'src/components';
+import { AlertModal, Header } from 'src/components';
 import Entypo from 'react-native-vector-icons/Entypo'
 import Feather from 'react-native-vector-icons/Feather'
 import {
@@ -23,52 +23,29 @@ import Client from '@src/lib/apollo';
 import { queryContentChatRoomManage, queryContentChatMessage } from '@src/lib/query';
 import { Divider } from 'src/styled';
 import {queryGetUserOrganizationRef} from 'src/lib/query';
-
+import { fetchContentChatRoomManage } from 'src/api/chat/chat';
 
 const itemPerPage = 100;
 
-const DATA = [
-    {
-      id: 1,
-      image: ImagesPath.avatar1,
-      name: 'Courtney Henry',
-    },
-    {
-        id: 2,
-        image: ImagesPath.avatar1,
-        name: 'Courtney Henry',
-      },
-      {
-        id: 2,
-        image: ImagesPath.avatar1,
-        name: 'Courtney Henry',
-      },
-      {
-        id: 2,
-        image: ImagesPath.avatar1,
-        name: 'Courtney Henry',
-      },
-      {
-        id: 2,
-        image: ImagesPath.avatar1,
-        name: 'Courtney Henry',
-      },
-  ];
-
 const AddMember = ({navigation, route}) => {
+  const { params } = route;
+
+  const {Color} = useColor();
+
+  console.log('route', route);
+
   const [itemData, setItemData] = useState({
     data: [],
     loading: true,
     page: 0,
     loadNext: false,
   });
-  console.log('itemdata', itemData);
   const [selected, setSelected] = useState([]);
   const [search, setSearch] = useState('');
   const [filterData, setFilterData] = useState([]);
   const [filterLoading, setFilterLoading] = useState(false);
-  const {params} = route['params'].params;
-  console.log('selected', params['selected']);
+  const [alertModal, setAlertModal] = useState(false);
+
   useEffect(() => {
     fetchGetUserOrganizationRef();
   }, []);
@@ -84,13 +61,14 @@ const AddMember = ({navigation, route}) => {
       search !== ''
         ? setTimeout(() => {
             fetchSearchNameMember();
-          }, 500)
+          }, 1000)
         : null;
 
     return () => {
       clearTimeout(timeout);
     };
   }, [search]);
+
   const fetchSearchNameMember = () => {
     setFilterLoading(true);
 
@@ -121,6 +99,7 @@ const AddMember = ({navigation, route}) => {
         setFilterLoading(false);
       });
   };
+
   const fetchGetUserOrganizationRef = () => {
     const variables = {
       page: itemData.page + 1,
@@ -140,10 +119,19 @@ const AddMember = ({navigation, route}) => {
         let newArr = [];
 
         if (data) {
-          newArr = itemData.data.concat(data); // compareData(itemData.data.concat(data));
-        }
+          if (Array.isArray(params.selected)) {
+            let newData = [];
 
-        console.log(data.length, 'dapet length');
+            data.map((item) => {
+              const isExist = params.selected.filter((e) => e.user_id == item.userId)[0];
+              if (!isExist) newData.push(item);
+            })
+
+            newArr = itemData.data.concat(newData);
+          } else {
+            newArr = itemData.data.concat(data);
+          }
+        }
 
         setItemData({
           ...itemData,
@@ -165,6 +153,31 @@ const AddMember = ({navigation, route}) => {
       });
   };
 
+  const onSubmit = async() => {
+    let userIds = [];
+
+    selected.map((e) => {
+      userIds.push(e.userId);
+    });
+    
+    const variables = {
+      method: 'UPDATE',
+      roomId: parseInt(params.roomId),
+      userId: userIds,
+      userManage: 'ADD',
+    };
+
+    console.log(variables);
+
+    const result = await fetchContentChatRoomManage(variables);
+    console.log(result, 'result');
+    if (result.status) {
+      setTimeout(() => {
+        navigation.navigate('Chat');
+      }, 2500);
+    }
+  }
+
   const onSelected = (index, item) => {
     setItemData({...itemData, loading: true});
 
@@ -181,8 +194,6 @@ const AddMember = ({navigation, route}) => {
     setSelected(newSelected);
     setItemData({...itemData, loading: false});
   };
-
-  const {Color} = useColor();
 
   const renderItem = ({item, index}) => (
     <Row
@@ -249,6 +260,7 @@ const AddMember = ({navigation, route}) => {
       )}
     </Row>
   );
+
   return (
     <Scaffold
       fallback={itemData.loading}
@@ -335,8 +347,12 @@ const AddMember = ({navigation, route}) => {
         keyExtractor={item => item.id}
       />
       <TouchableOpacity
+        disabled={selected.length === 0}
+        onPress={() => {
+          setAlertModal(true);
+        }}
         style={{
-          backgroundColor: Color.primary,
+          backgroundColor: selected.length === 0 ? Color.disabled : Color.primary,
           height: 40,
           justifyContent: 'center',
           marginVertical: 12,
@@ -349,6 +365,23 @@ const AddMember = ({navigation, route}) => {
           Tambahkan Anggota
         </Text>
       </TouchableOpacity>
+
+      <AlertModal
+        visible={alertModal}
+        title='Konfirmasi'
+        message='Tambahkan anggota yang dipilih ke grup?'
+        showDiscardButton
+        onSubmit={() => {
+          onSubmit();
+          setAlertModal(false);
+        }}
+        onClose={() => {
+          setAlertModal(false);
+        }}
+        onDiscard={() => {
+          setAlertModal(false);
+        }}
+      />
     </Scaffold>
   );
 };

@@ -131,7 +131,7 @@ const JoinLelang = ({navigation, route}) => {
 
     currentSocket.on('auction-bid-failed', (res) => {
       console.log('res bid failed', res);
-      showPopup(res, 'error');
+      showPopup("Anda tidak bisa melakukan bid untuk saat ini", 'error');
     });
   }, [listBidding]);
 
@@ -326,8 +326,8 @@ const JoinLelang = ({navigation, route}) => {
                   onPress={() => {
                     Alert(
                       'Tawar',
-                      `Pasang penawaran untuk harga ${FormatMoney.getFormattedMoney(highestBid != 0 ? highestBid : item.startPrice + val)} ?`,
-                      () => onSubmitAuctionBid(highestBid != 0 ? highestBid : item.startPrice + val)
+                      `Pasang penawaran untuk harga ${FormatMoney.getFormattedMoney(highestBid != 0 ? highestBid + val : item.startPrice + val)} ?`,
+                      () => onSubmitAuctionBid(highestBid != 0 ? highestBid + val : item.startPrice + val)
                     );
                   }}
                   style={{
