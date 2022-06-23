@@ -143,7 +143,7 @@ const ManageGroupScreen = ({ navigation, route }) => {
                 source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
               />
             ) :
-              isUpdatePage && params.imageGroup !== null ?
+              isUpdatePage && params.imageGroup !== '' && params.imageGroup !== null ?
                 <Image
                   style={{
                     height: '100%',

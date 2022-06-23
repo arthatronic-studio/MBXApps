@@ -4,15 +4,15 @@ import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Moment from 'moment';
 import { useSelector } from 'react-redux';
-import AntDesign from 'react-native-vector-icons/AntDesign'
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import Text from '@src/components/Text';
 import { useColor } from '@src/components/Color';
 import ImagesPath from 'src/components/ImagesPath';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import { usePopup } from '@src/components/Modal/Popup';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Scaffold from '@src/components/Scaffold';
-import { Header } from 'src/components';
+import { Alert, Header } from 'src/components';
 import Entypo from 'react-native-vector-icons/Entypo'
 import Feather from 'react-native-vector-icons/Feather'
 import {ModalListAction } from 'src/components';
@@ -20,12 +20,38 @@ import {
 	Row,
 	Col,
 } from '@src/components';
+import ModalActions from 'src/components/Modal/ModalActions';
+import { fetchContentChatRoomManage } from 'src/api/chat/chat';
 
-function Anggota(props, route) {
-  const modalListActionRef = useRef();
-  const { params } = route;
-  
+function Anggota(props) {
+  const params = props;
+
   const {Color} = useColor();
+
+  const [modalActions, setModalActions] = useState(false);
+  const [selectedMember, setSelectedMember] = useState();
+
+  const onRemove = async() => {
+    let userIds = [parseInt(selectedMember.user_id)];
+
+    const variables = {
+      method: 'UPDATE',
+      roomId: parseInt(params.roomId),
+      userId: userIds,
+      userManage: 'DELETE',
+    };
+
+    console.log('variables', variables);
+
+    const result = await fetchContentChatRoomManage(variables);
+    console.log('result', result);
+    if (result.status) {
+      setTimeout(() => {
+        props.navigation.navigate('Chat');
+      }, 2500);
+    }
+  }
+
   const renderItem = ({item}) => (
     <View style={{backgroundColor: Color.theme}}>
       <Row
@@ -59,15 +85,14 @@ function Anggota(props, route) {
         </View>
         <TouchableOpacity
           onPress={() => {
-            modalListActionRef.current.open();
+            setModalActions(true);
+            setSelectedMember(item);
           }}>
           <Entypo name={'dots-three-horizontal'} size={15} />
         </TouchableOpacity>
       </Row>
     </View>
   );
-
-  console.log(props.listAnggota);
 
   return (
     <View>
@@ -78,38 +103,41 @@ function Anggota(props, route) {
           alignItems: 'flex-start',
         }}>
         <FlatList
-          data={props.listAnggota}
+          data={props.selected}
           renderItem={renderItem}
           keyExtractor={item => item.id}
         />
       </View>
-      <ModalListAction
-        ref={modalListActionRef}
+      <ModalActions
+        visible={modalActions}
+        onClose={() => {
+          setModalActions(false);
+          setSelectedMember();
+        }}
         data={[
           {
             id: 0,
             name: 'Keluarkan dari grup',
-            color: Color.text,
+            color: Color.error,
             onPress: () => {
-              modalListActionRef.current.close();
+              setModalActions(false);
+              Alert('Konfirmasi', 'Anda akan mengeluarkan anggota ini?', () => onRemove())
             },
           },
-          {
-            id: 1,
-            name: 'Jadikan Admin',
-            color: Color.red,
-            onPress: () => {
-              modalListActionRef.current.close();
-            },
-          },
-          {
-            id: 2,
-            name: 'Report',
-            color: Color.red,
-            onPress: () => {
-              modalListActionRef.current.close();
-            },
-          },
+          // {
+          //   id: 1,
+          //   name: 'Jadikan Admin',
+          //   onPress: () => {
+          //     setModalActions(false);
+          //   },
+          // },
+          // {
+          //   id: 2,
+          //   name: 'Report',
+          //   onPress: () => {
+          //     setModalActions(false);
+          //   },
+          // },
         ]}
       />
     </View>
@@ -198,22 +226,44 @@ function Anggota(props, route) {
   }
 
 const UserGroupDetail = ({navigation, route}) => {
-  const modalListActionRef = useRef();
-  const [isLoading, setIsLoading] = useState(false);
-  const {Color} = useColor();
-  const Tab = createMaterialTopTabNavigator();
-  const [backCover, setBackCover] = useState(true);
-  // params
   const { params } = route;
 
-  console.log('ini params', params);
+  const user = useSelector((state) => state['user.auth'].login.user);
+
+  const modalListActionRef = useRef();
+  const {Color} = useColor();
+
+  const Tab = createMaterialTopTabNavigator();
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onLeave = async() => {
+    let userIds = [user.userId];
+
+    const variables = {
+      method: 'UPDATE',
+      roomId: parseInt(params.roomId),
+      userId: userIds,
+      userManage: 'DELETE',
+    };
+
+    console.log('variables', variables);
+
+    const result = await fetchContentChatRoomManage(variables);
+    console.log('result', result);
+    if (result.status) {
+      setTimeout(() => {
+        navigation.navigate('Chat');
+      }, 2500);
+    }
+  }
 
   const GroupDetailHeader = () => {
     return (
       <>
         <Row>
           <Image
-            source={{uri: params['params'].imageGroup}}
+            source={{uri: params.imageGroup}}
             style={{
               width: 50,
               height: 50,
@@ -223,7 +273,7 @@ const UserGroupDetail = ({navigation, route}) => {
           />
           <Col>
             <Text style={{fontSize: 14, fontWeight: 'bold', textAlign: 'left'}}>
-              {params['params'].nameGroup}
+              {params.nameGroup}
             </Text>
             <Text
               style={{
@@ -232,13 +282,13 @@ const UserGroupDetail = ({navigation, route}) => {
                 textAlign: 'left',
                 marginVertical: 1,
               }}>
-              {params['params'].selected.length} Anggota
+              {params.selected.length} Anggota
             </Text>
           </Col>
 
           <View style={{width: '8%', marginVertical: 5}}>
             <Pressable onPress={() => { navigation.navigate('ManageGroupScreen', {
-              ...params['params'],
+              ...params,
             });}}>
               <Feather name={'edit-2'} />
             </Pressable>
@@ -247,7 +297,7 @@ const UserGroupDetail = ({navigation, route}) => {
         <Pressable
           onPress={() => {
             navigation.navigate('AddMember', {
-              params,
+              ...params,
             });
           }}
           style={{
@@ -309,7 +359,7 @@ const UserGroupDetail = ({navigation, route}) => {
         }}>
         <Tab.Screen
           name="Anggota"
-          children={props => <Anggota listAnggota={params['params'].selected} {...props} />}
+          children={props => <Anggota {...props} {...params} />}
           options={{tabBarLabel: 'Anggota'}}
         />
         {/* hide media */}
@@ -333,7 +383,6 @@ const UserGroupDetail = ({navigation, route}) => {
           // {
           //   id: 0,
           //   name: 'Matikan pemberitahuan',
-          //   color: Color.text,
           //   onPress: () => {
           //     modalListActionRef.current.close();
           //   },
@@ -341,15 +390,15 @@ const UserGroupDetail = ({navigation, route}) => {
           {
             id: 1,
             name: 'Keluar dari grup',
-            color: Color.red,
+            color: Color.error,
             onPress: () => {
               modalListActionRef.current.close();
+              Alert('Konfirmasi', 'Anda akan keluar dari grop?', () => onLeave())
             },
           },
           // {
           //   id: 2,
           //   name: 'Report',
-          //   color: Color.red,
           //   onPress: () => {
           //     modalListActionRef.current.close();
           //   },

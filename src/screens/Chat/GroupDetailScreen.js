@@ -3,7 +3,7 @@ import { View, FlatList, ScrollView,TextInput, Image, Pressable,useWindowDimensi
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Moment from 'moment';
-import { ModalListAction } from 'src/components';
+import { Alert, ModalListAction } from 'src/components';
 import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
 import { useSelector } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign'
@@ -23,6 +23,7 @@ import { queryContentChatRoomManage, queryContentChatMessage } from '@src/lib/qu
 import { Divider } from 'src/styled';
 import {launchImageLibrary} from 'react-native-image-picker';
 import { initSocket } from 'src/api-socket/currentSocket';
+import { fetchContentChatRoomManage } from 'src/api/chat/chat';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -93,13 +94,58 @@ const GroupDetailScreen = ({ navigation, route }) => {
     const { width } = useWindowDimensions();
     const { Color } = useColor();
 
+    const onLeave = async() => {
+      let userIds = [user.userId];
+  
+      const variables = {
+        method: 'UPDATE',
+        roomId: parseInt(params.roomId),
+        userId: userIds,
+        userManage: 'DELETE',
+      };
+  
+      console.log('variables', variables);
+  
+      const result = await fetchContentChatRoomManage(variables);
+      console.log('result', result);
+      if (result.status) {
+        setTimeout(() => {
+          navigation.navigate('Chat');
+        }, 2500);
+      }
+    }
+
+    const onCreateRoom = async() => {
+      let userId = [user.userId];
+
+      params.selected.map((e) => {
+          userId.push(e.userId);
+      });
+
+      const variables = {
+        method: 'INSERT',
+        type: params.selected.length > 1 ? 'GROUP' : 'PERSONAL',
+        userId,
+      };
+
+      console.log(variables);
+
+      const result = await fetchContentChatRoomManage(variables);
+      console.log(result);
+
+      if (result.status && result.data.contentChatRoomManage) {
+        setRoomId(result.data.contentChatRoomManage.id);
+        onSendChat(result.data.contentChatRoomManage.id);
+      }
+    }
+
     const GroupHeader = () => {
       return (
         <Pressable
           onPress={() => {
-                  navigation.navigate('UserGroupDetail', {
-                    params,
-                  });
+            navigation.navigate('UserGroupDetail', {
+              ...params,
+            });
           }}
           style={{
             width: '100%',
@@ -200,41 +246,6 @@ const GroupDetailScreen = ({ navigation, route }) => {
         };
     }, [isTyping]);
 
-    const fetchContentChatRoomManage = () => {
-        let userId = [user.userId];
-
-        params.selected.map((e) => {
-            userId.push(e.userId);
-        });
-
-        const variables = {
-            method: 'INSERT',
-            type: params.selected.length > 1 ? 'GROUP' : 'PERSONAL',
-            userId,
-        };
-
-        console.log(variables);
-        
-        Client.query({
-            query: queryContentChatRoomManage,
-            variables,
-        })
-        .then((res) => {
-            console.log('res create room', res);
-
-            const data = res.data.contentChatRoomManage;
-
-            if (data) {
-                setRoomId(data.id);
-              onSendChat(data.id);
-              
-            }
-        })
-        .catch((err) => {
-            console.log(err, 'err send chat');
-        });
-    }
-
     const onSubmit = imageBase64 => {
       if (!imageBase64 && textComment === '') {
         showPopup('Teks tidak boleh kosong', 'warning');
@@ -242,7 +253,7 @@ const GroupDetailScreen = ({ navigation, route }) => {
       }
 
       if (!roomId) {
-        fetchContentChatRoomManage();
+        onCreateRoom();
       } else {
         onSendChat(roomId, imageBase64);
       }
@@ -331,7 +342,8 @@ const GroupDetailScreen = ({ navigation, route }) => {
         //         }
         //     />
         // }
-        header={<GroupHeader />}>
+        header={<GroupHeader />}
+      >
         <View style={{flex: 1, backgroundColor: Color.semiwhite}}>
           {/* <View style={{backgroundColor: Color.border, width: '35%', height: 25, borderRadius: 20, alignItems: 'center', justifyContent: 'center', marginVertical: 15, alignSelf: 'center'}}>
                     <Text style={{fontSize: 10, color: Color.secondary, fontWeight: 'bold'}}>Senin, 03 Januari 2022</Text>
@@ -361,7 +373,6 @@ const GroupDetailScreen = ({ navigation, route }) => {
                       justifyContent: 'flex-end',
                       alignItems: 'flex-end',
                     }}>
-                    {item.image !== '' ? (
                       <View
                         style={{
                           maxWidth: width - 70,
@@ -372,46 +383,25 @@ const GroupDetailScreen = ({ navigation, route }) => {
                           borderBottomRightRadius: 0,
                           alignItems: 'flex-end',
                         }}>
-                        {/* <Text size={10} type='semibold' align='right' color={Color.secondary}>{item.name}</Text> */}
-                        <Divider height={4} />
-
-                        <Image
-                          source={{uri: item.image}}
-                          style={{
-                            width: 280,
-                            height: 200,
-                          }}
-                        />
+                        <Text size={10} type='semibold' align='right' color={Color.secondary}>{item.first_name}</Text>
 
                         <Divider height={4} />
-                        <View style={{flexDirection: 'row'}}>
-                          <Ionicons
-                            name={'md-checkmark-done-sharp'}
-                            size={12}
+
+                        {item.image !== null && item.image !== '' && <View style={{width: width / 2, aspectRatio: 1}}>
+                          <Image
+                            source={{uri: item.image}}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              borderRadius: 4,
+                            }}
                           />
-                          <Text size={8} align="right" style={{opacity: 0.6}}>
-                            {' '}
-                            {managedDateUTC(item.created_unix_date)}
-                          </Text>
-                        </View>
-                      </View>
-                    ) : (
-                      <View
-                        style={{
-                          maxWidth: width - 70,
-                          paddingHorizontal: 8,
-                          paddingVertical: 8,
-                          backgroundColor: Color.textInput,
-                          borderRadius: 8,
-                          borderBottomRightRadius: 0,
-                          alignItems: 'flex-end',
-                        }}>
-                        {/* <Text size={10} type='semibold' align='right' color={Color.secondary}>{item.name}</Text> */}
-                        <Divider height={4} />
+                        </View>}
 
                         <Text align="right">{item.message}</Text>
 
                         <Divider height={4} />
+
                         <View style={{flexDirection: 'row'}}>
                           <Ionicons
                             name={'md-checkmark-done-sharp'}
@@ -423,7 +413,6 @@ const GroupDetailScreen = ({ navigation, route }) => {
                           </Text>
                         </View>
                       </View>
-                    )}
 
                     <View
                       style={{
@@ -467,7 +456,7 @@ const GroupDetailScreen = ({ navigation, route }) => {
                       borderColor: Color.primary,
                     }}>
                     <Image
-                      source={{uri: item.image}}
+                      source={{uri: item.photo_profile}}
                       style={{
                         width: '100%',
                         aspectRatio: 1,
@@ -476,6 +465,9 @@ const GroupDetailScreen = ({ navigation, route }) => {
                       }}
                     />
                   </View>
+
+                  <Divider height={4} />
+
                   <View
                     style={{
                       maxWidth: width - 70,
@@ -491,13 +483,28 @@ const GroupDetailScreen = ({ navigation, route }) => {
                       type="semibold"
                       align="left"
                       color={Color.primary}>
-                      {item.name}
+                      {item.first_name}
                     </Text>
+
                     <Divider height={4} />
+
+                    {item.image !== null && item.image !== '' && <View style={{width: width / 2, aspectRatio: 1}}>
+                      <Image
+                        source={{uri: item.image}}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          borderRadius: 4,
+                        }}
+                      />
+                    </View>}
+
                     <Text align="left" color={Color.text}>
                       {item.message}
                     </Text>
+
                     <Divider height={4} />
+
                     <Text
                       size={8}
                       align="left"
@@ -596,10 +603,12 @@ const GroupDetailScreen = ({ navigation, route }) => {
             {
               id: 1,
               name: 'Tambahkan Anggota',
-              color: Color.text,
               onPress: () => {
                 setShowSection(!showSection);
                 modalListActionRef.current.close();
+                navigation.navigate('AddMember', {
+                  ...params
+                });
               },
             },
             // {
@@ -632,10 +641,11 @@ const GroupDetailScreen = ({ navigation, route }) => {
             {
               id: 5,
               name: 'Keluar dari grup',
-              color: Color.red,
+              color: Color.error,
               onPress: () => {
                 setShowSection(!showSection);
                 modalListActionRef.current.close();
+                Alert('Konfirmasi', 'apakah Anda akan keluar dari grup ini?', () => onLeave())
               },
             },
           ]}

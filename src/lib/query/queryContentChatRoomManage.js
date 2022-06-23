@@ -5,19 +5,21 @@ export const queryContentChatRoomManage = gql`
     $method: ContentProductMethod
     $roomId: Int
     $name: String
-    $description: String
     $image: String
     $type: ContentRoomTypeMethod
     $userId: [Int]
+    $description: String
+    $userManage: ContentRoomUserManage
   ) {
     contentChatRoomManage(
       method: $method
       roomId: $roomId
       name: $name
-      description: $description
       image: $image
       type: $type
       userId: $userId
+      description: $description
+      userManage: $userManage
     ) {
       id
       roomId
