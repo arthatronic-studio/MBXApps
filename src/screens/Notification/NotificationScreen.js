@@ -24,33 +24,21 @@ const initialDataRooms = {
   const modalListActionRef = useRef();
   const [showSection, setShowSection] = useState(true);
   const [modalBackConfirm, setModalBackConfirm] = useState(false);
-  const managedDate = (origin) => {
-    const date = Moment(origin);
-    const now = new Moment();
-    const diff = now.diff(Moment(date), 'days');
+  const [refreshing, setRefreshing] = useState(true);
 
-    let title = '';
-
-    if (diff === 0) {
-        title = 'Hari ini - ' + date.format('HH:mm');
-    } else if (diff === 1) {
-        title = 'Kemarin - ' + date.format('HH:mm');
-    } else {
-        title = date.format('dddd, DD/MM/YYYY - HH:mm');;
-    }
-    
-    return title;
-}
   useEffect(() => {
-    
-    const variables = {
-      page : 0,
-      itemPerPage: 10
-    }
-    client.query({
-      query: queryGetNotification,
-      variables,
-    })
+    if (refreshing) {
+      setRefreshing(false);
+
+      const variables = {
+        page: 0,
+        itemPerPage: 10
+      }
+
+      client.query({
+        query: queryGetNotification,
+        variables,
+      })
       .then((res) => {
         const data = res.data.getNotification;
         console.log('ini scc',data);
@@ -67,7 +55,8 @@ const initialDataRooms = {
         console.log('ini err',err);
         setLoading(false);
       })
-  }, [isFocused]);
+    }
+  }, [refreshing]);
 
   const readNotfif=(id)=>{
 
@@ -88,8 +77,7 @@ const initialDataRooms = {
     .then((res) => {
       console.log('res ecomm ulasan', res);
      
-      
-      // fetchCheckIsUlasan(id);
+      setRefreshing(true);
     })
     .catch((err) => {
       console.log('err ecomm ulasan', err);
@@ -98,12 +86,8 @@ const initialDataRooms = {
 
   }
   const ManageNotfifAll=(status)=>{
-
-    
     const variables = {
-     
       status: status,
-      
     };
     console.log('ini id',variables);
     // return;
@@ -115,8 +99,7 @@ const initialDataRooms = {
     .then((res) => {
       console.log('res Baca semua', res);
      
-      
-      // fetchCheckIsUlasan(id);
+      setRefreshing(true);
     })
     .catch((err) => {
       console.log('res Baca semua', err);
@@ -129,7 +112,7 @@ const initialDataRooms = {
     return (
       <Animated.View
         style={[
-          {position: 'absolute', bottom: 20, height: 36, width: '40%', alignSelf: 'center', alignItems: 'center', justifyContent: 'center'},
+          {position: 'absolute', bottom: 20, height: 36, width: '100%', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16},
         ]}
       >
         <View style={{width: '100%', height: 36, backgroundColor: Color.primary, borderRadius: 18, alignItems: 'center', justifyContent: 'center',
@@ -145,7 +128,7 @@ const initialDataRooms = {
               style={{alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%'}}
               activeOpacity={0.75}
             >
-              <Text color={Color.textInput}>Baca Semua</Text>
+              <Text color={Color.textInput}>Lihat Semua</Text>
             </TouchableOpacity>
         </View>
       </Animated.View>
@@ -243,8 +226,7 @@ const initialDataRooms = {
             // },
             {
               id: 1,
-              name: 'Semua udah dibaca',
-              // color: Color.primarySoft,
+              name: 'Baca Semua',
               onPress: () => {
                 ManageNotfifAll('READ');
                 setShowSection(!showSection);
@@ -255,10 +237,9 @@ const initialDataRooms = {
             {
               id: 5,
               name: 'Hapus Semua',
-              color: Color.red,
+              color: Color.error,
               onPress: () => {
                 setModalBackConfirm(true);
-               
                 setShowSection(!showSection);
                 modalListActionRef.current.close();
               },
@@ -273,11 +254,9 @@ const initialDataRooms = {
                 onSubmit={() => {
                     setModalBackConfirm(false);
                     ManageNotfifAll('DELETE');
-                    navigation.pop();
                 }}
                 onDiscard={() => {
                     setModalBackConfirm(false);
-                    navigation.pop();
                 }}
                 onClose={() => {
                     setModalBackConfirm(false);
