@@ -27,6 +27,7 @@ import {Modalize} from 'react-native-modalize';
 import FormInput from 'src/components/FormInput';
 import { queryCheckIsUlasan } from 'src/lib/query/ecommerce/queryCheckIsUlasan';
 import { currentSocket } from '../MainHome/MainHome';
+import { queryDetailOrderAuction } from 'src/lib/query/auction';
 
 const TransactionDetail = ({route, navigation}) => {
   const [data, setData] = useState({});
@@ -103,14 +104,14 @@ const TransactionDetail = ({route, navigation}) => {
       orderId: route.params.item.id,
       isMerchant: false
     };
-
+    const skema = route.params.item.isAuction ? queryDetailOrderAuction : queryDetailOrder
     client
-      .query({query: queryDetailOrder, variables})
+      .query({query: skema, variables})
       .then(res => {
         console.log("reskak",res)
-        if (res.data.ecommerceOrderDetail) {
-          setData(res.data.ecommerceOrderDetail);
-          getMerchant(res.data.ecommerceOrderDetail.merchantId);
+        if (res.data.ecommerceOrderDetail || res.data.auctionOrderDetail) {
+          setData(res.data.ecommerceOrderDetail || res.data.auctionOrderDetail);
+          getMerchant(res.data.ecommerceOrderDetail ? res.data.ecommerceOrderDetail.merchantId : res.data.auctionOrderDetail.merchantId);
         }
         // hideLoading();
         // navigation.navigate('TopUpScreen');

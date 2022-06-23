@@ -182,6 +182,7 @@ const ModalBid = forwardRef((props, ref) => {
 						<Text style={{ color: Color.grayLight }}>Penawaranmu</Text>
 						<Divider height={8} />
 						<FormInput
+							editable={false}
 							placeholder='-'
 							value={text}
 							onChangeText={(val) => {

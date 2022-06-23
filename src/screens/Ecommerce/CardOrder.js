@@ -30,7 +30,7 @@ const CardOrder = ({data}) => {
   const navigation = useNavigation();
   const {Color} = useColor();
   const items =  (data.items && data.items.length > 0) ? data.items[0].products : [];
-  console.log(items, 'itermss')
+  console.log(data, 'itermss')
   return (
     <View
       style={{
@@ -118,6 +118,9 @@ const CardOrder = ({data}) => {
                         }}>
                         Stok Barang : {items[0].stock}
                       </Text>
+                      <Row>
+                        {data.isAuction && <Text size={9} style={{ backgroundColor: '#fff', borderRadius: 4, paddingVertical: 2, paddingHorizontal: 8, borderColor: Color.primary, borderWidth: 1 }} color={Color.primary} align='left'>Lelang</Text>}
+                      </Row>
                       <Divider />
                       <View>
                         <View style={{flexDirection: 'row', marginVertical: 2}}>

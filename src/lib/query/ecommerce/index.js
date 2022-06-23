@@ -328,6 +328,7 @@ export const queryNewListOrder = gql`
         id
         name
         price
+        stock
         imageUrl
         status
       }

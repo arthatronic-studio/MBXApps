@@ -316,3 +316,95 @@ mutation(
   }
 }
 `;
+
+export const queryDetailOrderAuction = gql`
+  query (
+    $orderId: Int!
+    $isMerchant: Boolean
+  ) {
+    auctionOrderDetail(
+      orderId: $orderId
+      isMerchant: $isMerchant
+    ) {
+      userId
+      merchantId
+      id
+      bookingId
+      orderNumber
+      invoiceNumber
+      expiredDate
+      status
+      statusId
+      payment {
+        name
+      }
+      adminFee
+      paymentId
+      amount
+      vat
+      discount
+      adminFee
+      shippingCost
+      totalProductPrice
+      totalPrice
+      checkoutAt
+      createdAt
+      updatedAt
+      deletedAt
+      items {
+        userId
+        id
+        name
+        noTelp
+        socialMedia {
+          instagram
+        }
+        products {
+          id
+          name
+          description
+          width
+          height
+          length
+          width
+          price
+          imageUrl
+          stock
+          quantity
+          note
+          isReviewed
+        }
+      }
+
+      address {
+        id
+        penerimaName
+        userId
+        address
+        postalCode
+        latitude
+        longitude
+        country {
+          id
+          name
+        }
+        province {
+          id
+          name
+        }
+        city {
+          id
+          name
+        }
+        suburb {
+          id
+          name
+        }
+        area {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
