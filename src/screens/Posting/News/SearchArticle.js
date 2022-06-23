@@ -23,6 +23,8 @@ import client from 'src/lib/apollo';
 import ImagesPath from 'src/components/ImagesPath';
 import {fetchContentProduct, fetchContentUserProduct} from 'src/api/contentV2';
 import moment from 'moment';
+import { fetchViewProduct } from 'src/api/viewProduct';
+import { async } from 'validate.js';
 
 const DATA = [
   {
@@ -101,8 +103,13 @@ const SearchArticle = ({navigation}) => {
   const [search, setSearch] = useState('');
 
   const onSearch = (value) => {
-    setSearch(value)
-    fetchData(value);
+    if(value == ''){
+      setSearch(value);
+      setListData([]);
+    }else{
+      setSearch(value)
+      fetchData(value);
+    }
   }
 
   console.log(listData.data, "data");
@@ -166,7 +173,11 @@ const SearchArticle = ({navigation}) => {
 
   const renderSearch = ({item}) => (
     <Pressable
-      onPress={() => navigation.navigate('NewsDetail', {item: item})}
+      onPress={async() => {
+        await fetchViewProduct({productId: item.id});
+        navigation.navigate('NewsDetail', {item: item});
+        }
+      }
       style={{
         borderBottomWidth: 1,
         borderBottomColor: Color.border,

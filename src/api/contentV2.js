@@ -17,8 +17,6 @@ export const fetchContentProduct = async(variables) => {
         ...variables,
     };
 
-    console.log(v, "varrr");
-
     try {
         const result = await Client.query({
             query: queryContentProductV2,

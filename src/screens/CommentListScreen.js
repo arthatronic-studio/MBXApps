@@ -25,6 +25,8 @@ import {analyticMethods, GALogEvent} from 'src/utils/analytics';
 import { Container, Divider, Row } from 'src/styled';
 import { isIphoneNotch, listContentCategory } from 'src/utils/constants';
 import CardComment from 'src/components/Card/CardComment';
+import { fetchLikeComment } from 'src/api/likeComment';
+import { async } from 'validate.js';
 
 const itemPerPage = 10;
 const initSelectedComment = {
@@ -441,6 +443,14 @@ const CommentListScreen = ({ navigation, route }) => {
                           setRefreshComment(true);
                         }
                       });
+                    }}
+
+                    onPressLike={async () => {
+                      setSelectedComment({ ...itemComment, index });
+                      const res = await fetchLikeComment({commentId: itemComment.id});
+                      if(res.status == true){
+                        setRefreshComment(true);
+                      }
                     }}
                   />
                 );

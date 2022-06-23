@@ -24,6 +24,8 @@ export const queryComment = gql`
             imageVideo
             isPinned
             videoFilename
+            status
+            likeCount
             replies{
                 id
                 userId

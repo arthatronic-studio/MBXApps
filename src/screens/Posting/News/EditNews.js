@@ -198,7 +198,7 @@ const EditNews = props => {
           showLoading('success', 'Artikel berhasil diubah!');
 
           setTimeout(() => {
-            navigation.popToTop();
+            navigation.navigate('NewsScreen', {title: 'Artikel'});
             navigation.navigate('NewsDetail', {item: data[0]});
           }, 2500);
         } else {

@@ -4,6 +4,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
+import { fetchViewProduct } from 'src/api/viewProduct';
 
 import {
     Text,
@@ -27,6 +28,7 @@ import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { useSelector } from 'react-redux';
 import CardComponentYoutube from './CardComponentYoutube';
 import CardComponentVideo from './CardComponentVideo';
+import { async } from 'validate.js';
 
 const defaultProps = {
     productCategory: '',
@@ -191,7 +193,8 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
     const renderCardArticle = () => {
         return (
             <TouchableOpacity
-                onPress={() => {
+                onPress={async() => {
+                    await fetchViewProduct({productId: item.id});
                     navigation.navigate('NewsDetail', { item });
 
                     GALogEvent('Artikel', {

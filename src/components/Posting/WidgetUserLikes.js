@@ -89,14 +89,13 @@ const WidgetUserLikes = ({ id, title }) => {
         })
     }
 
-    console.log('previewData', previewData);
 
     return (
         <>
             <TouchableOpacity
                 onPress={() => setIsModalVisible(true)}
                 style={{
-                    height: 36,
+                    height: 50,
                     flexDirection: 'row',
                 }}
             >
@@ -139,6 +138,12 @@ const WidgetUserLikes = ({ id, title }) => {
                         </View>
                     )
                 })}
+                <View style={{ marginTop: 40 }}>
+                    <Text
+                        style={{fontSize: 8, color: Color.secondary, textAlign: 'left'}}>
+                        {previewData[0]?.fullname} dan {previewData.length-1} lainnya menyukai ini
+                    </Text>
+                </View>
             </TouchableOpacity>
 
             <Modal

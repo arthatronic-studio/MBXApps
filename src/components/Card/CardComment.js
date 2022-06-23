@@ -25,9 +25,10 @@ const defaultProps = {
   showOptions: false,
   onPressDots: () => {},
   onPressReply: () => {},
+  onPressLike: () => {}
 };
 
-const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots, onPressReply, }) => {
+const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots, onPressReply, onPressLike}) => {
   const {Color} = useColor();
   const user = useSelector(state => state['user.auth'].login.user);
   const {width} = useWindowDimensions();
@@ -124,47 +125,71 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
         <Text size={12} align='left'>{item.comment}</Text>
 
         {canReply ? <Container paddingTop={8}>
-          <Row>
-            <TouchableOpacity
-              onPress={() => {
-                onPressReply();
-              }}
-            >
-              <Text size={12} align='left'>Balas</Text>
-            </TouchableOpacity>
-
-            <Divider />
-            { item.userId !== user.userId &&
-              <>
-                <TouchableOpacity
-                  onPress={() => {
-                    setModalVisible(!isModalVisible);
-                  }}
-                >
-                  <Text size={12} align='left'>Laporkan</Text>
-                </TouchableOpacity>
-
-                <Divider />
-              </>
-            }
-
-            {Array.isArray(item.replies) && item.replies.length > 0 && <TouchableOpacity
-              onPress={() => {
-                onPressReply();
-              }}
+          <Row justify='space-between'>
+            <Row>
+              <TouchableOpacity
+                onPress={() => {
+                  onPressLike();
+                }}
               >
-              <Text size={12} align='left' color={Color.info} type='medium'>{item.replies.length} Balasan</Text>
-            </TouchableOpacity>}
+                <Text size={12} align='left'>Suka</Text>
+              </TouchableOpacity>
 
-            <Divider width={8} />
+              <Divider />
 
-            {itemOwnerReply && <Image source={{ uri: itemOwnerReply.image }} style={{ height: 20, width: 20, borderRadius: 10, borderWidth: 1, borderColor: Color.primary }} />}
+              <TouchableOpacity
+                onPress={() => {
+                  onPressReply();
+                }}
+              >
+                <Text size={12} align='left'>Balas</Text>
+              </TouchableOpacity>
+
+              <Divider />
+              { item.userId !== user.userId &&
+                <>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setModalVisible(!isModalVisible);
+                    }}
+                  >
+                    <Text size={12} align='left'>Laporkan</Text>
+                  </TouchableOpacity>
+
+                  <Divider />
+                </>
+              }
+
+              {Array.isArray(item.replies) && item.replies.length > 0 && <TouchableOpacity
+                onPress={() => {
+                  onPressReply();
+                }}
+                >
+                <Text size={12} align='left' color={Color.info} type='medium'>{item.replies.length} Balasan</Text>
+              </TouchableOpacity>}
+
+              <Divider width={8} />
+
+              {itemOwnerReply && <Image source={{ uri: itemOwnerReply.image }} style={{ height: 20, width: 20, borderRadius: 10, borderWidth: 1, borderColor: Color.primary }} />}
+            </Row>
+            <Text size={12}>
+              {item.likeCount} Suka
+            </Text>
           </Row>
         </Container> 
         :
         item.userId !== user.userId &&
-          <Container paddingTop={8}>
+          <Container paddingTop={8} justify="space-between">
             <Row>
+              <TouchableOpacity
+                onPress={() => {
+                  onPressLike();
+                }}
+              >
+                <Text size={12} align='left'>Suka</Text>
+              </TouchableOpacity>
+
+              <Divider />
               <TouchableOpacity
                 onPress={() => {
                   setModalVisible(!isModalVisible);
@@ -173,6 +198,9 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
                 <Text size={12} align='left'>Laporkan</Text>
               </TouchableOpacity>
             </Row>
+            <Text size={12}>
+              {item.likeCount} Suka
+            </Text>
           </Container> 
         }
       </View>

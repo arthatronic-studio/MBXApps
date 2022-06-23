@@ -27,6 +27,8 @@ import { queryGetUserBlock, queryUnblockUser } from './queryBlockUser';
 import { queryMenuList } from './queryMenuList';
 import { queryGetEnumList } from './queryEnumTable';
 import { queryContentProductV2 } from './queryContentProductV2';
+import { queryLikeComment } from './queryLikeComment';
+import { queryViewProduct } from './queryViewProduct';
 
 export {
     queryContentProduct,
@@ -59,4 +61,6 @@ export {
     queryMenuList,
     queryGetEnumList,
     queryContentProductV2,
+    queryLikeComment,
+    queryViewProduct,
 };

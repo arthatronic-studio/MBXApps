@@ -187,7 +187,7 @@ const CreateNews = props => {
           showLoading('success', 'Thread berhasil dibuat!');
 
           setTimeout(() => {
-            navigation.popToTop();
+            navigation.goBack();
             navigation.navigate('NewsDetail', {item: data[0]});
           }, 2500);
         } else {

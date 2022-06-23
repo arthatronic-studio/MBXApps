@@ -5,10 +5,7 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  onRefresh,
-  RefreshControl,
 } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import Config from 'react-native-config';
 import Banner from 'src/components/Banner';
@@ -16,53 +13,17 @@ import {useColor} from '@src/components';
 import Scaffold from '@src/components/Scaffold';
 import {queryBannerList} from 'src/lib/query/banner';
 import {Row, Divider} from 'src/styled';
-import {accessClient} from 'src/utils/access_client';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import client from 'src/lib/apollo';
 import HighlightContentProductV2 from 'src/components/Content/HighlightContentProductV2';
+import {fetchContentProduct, fetchContentUserProduct} from 'src/api/contentV2';
+import ListContentProductV2 from 'src/components/Content/ListContentProductV2';
 
-const NewsScreen = ({navigation, route}) => {
+const ShowAllNews = ({navigation, route}) => {
   const {title, userProfileId} = route.params;
   const user = useSelector(state => state['user.auth'].login.user);
   const {Color} = useColor();
-  const [loadingBanner, setLoadingBanner] = useState(true);
-  const [listBanner, setListBanner] = useState([]);
-  const colorOutputRange = [Color[accessClient.ColorBgParallax], Color.theme];
-  const isFocused = useIsFocused();
-
-  useEffect(() => {
-    fetchBannerList();
-    onRefresh();
-  }, [isFocused]);
-
-  const onRefresh = () => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
-  };
-
-  const fetchBannerList = () => {
-    const variables = {
-      categoryId: 7,
-    };
-
-    client
-      .query({
-        query: queryBannerList,
-        variables,
-      })
-      .then(res => {
-        console.log('res banner list', res);
-        setListBanner(res.data.bannerList);
-        setLoadingBanner(false);
-      })
-      .catch(err => {
-        console.log(err, 'err banner list');
-        setLoadingBanner(false);
-      });
-  };
 
   const ArticleHeader = () => {
     return (
@@ -126,57 +87,22 @@ const NewsScreen = ({navigation, route}) => {
     );
   };
 
-  let canGeneratedContent = accessClient.UserGeneratedContent === 'ALL_USER';
-  if (
-    accessClient.UserGeneratedContent === 'ONLY_ADMIN' &&
-    user &&
-    user.isDirector === 1
-  )
-    canGeneratedContent = true;
-  else if (
-    accessClient.UserGeneratedContent === 'ONLY_MEMBER' &&
-    user &&
-    user.organizationId
-  )
-    canGeneratedContent = true;
-  const [refreshing, setRefreshing] = useState(false);
   return (
     <Scaffold header={<ArticleHeader />}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }>
-        <Divider />
-        <Banner data={listBanner} showHeader={false} loading={loadingBanner} />
-        <Divider height={15} />
-        <HighlightContentProductV2
-          productCategory="ARTIKEL"
-          name="Artikel"
-          title="Artikel Terbaru"
-          nav="ShowAllNews"
-          refresh={refreshing}
-        />
-        <HighlightContentProductV2
+      <ListContentProductV2
+        userProfileId={userProfileId}
+        productCategory="ARTIKEL"
+        name={title}
+      />
+      {/* <HighlightContentProductV2
             productCategory='ARTIKEL'
             name='Artikel'
-            title='Artikel Terfavorit'
-            nav='ShowAllNews'
-            refresh={refreshing}
-            orderBy="like"
-          />
-        {/* <HighlightContentProduct
-            productCategory='POSTING'
-            name='Artikel'
-            title='Semua Artikel'
+            title='Artikel Terbaru'
             nav='NewsScreen'
             refresh={refreshing}
           /> */}
-      </ScrollView>
     </Scaffold>
   );
 };
 
-export default NewsScreen;
+export default ShowAllNews;

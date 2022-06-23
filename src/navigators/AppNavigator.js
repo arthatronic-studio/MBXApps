@@ -68,6 +68,7 @@ import Saved from 'src/screens/Posting/News/Saved';
 import SearchArticle from 'src/screens/Posting/News/SearchArticle';
 import CreateNews from 'src/screens/Posting/News/CreateNews';
 import EditNews from 'src/screens/Posting/News/EditNews';
+import ShowAllNews from 'src/screens/Posting/News/ShowAllNews';
 
 // Place
 import PlaceScreen from 'src/screens/Posting/Place/Index';
@@ -332,6 +333,7 @@ function MainStackNavigator() {
       <Screen name="CreateNews" component={CreateNews} />
       <Screen name="EditNews" component={EditNews} />
       <Screen name="ReportArticle" component={ReportArticle} />
+      <Screen name="ShowAllNews" component={ShowAllNews} />
 
       {/* Place */}
       <Screen name="PlaceScreen" component={PlaceScreen} />

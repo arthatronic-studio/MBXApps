@@ -30,7 +30,6 @@ const CommentReplyScreen = ({ navigation, route }) => {
   const [selectedComment, setSelectedComment] = useState(initSelectedComment);
   const [isOwnerComment, setIsOwnerComment] = useState(false);
   const [isPinnedComment, setIsPinnedComment] = useState(false);
-  
   const modalListActionRef = useRef();
   
   const {Color} = useColor();
@@ -73,12 +72,12 @@ const CommentReplyScreen = ({ navigation, route }) => {
         setTextReply('');
         route.params.onRefresh();
       } else {
-        showLoading('error', 'Gagal mengirimkan komentar');
+        showLoading('error', 'Gagal mengirimkan komentar else');
       }
     })
     .catch((err) => {
         console.log(err, 'err add comm');
-        showLoading('error', 'Gagal mengirimkan komentar');
+        showLoading('error', 'Gagal mengirimkan komentar catch');
     })
   }
 
