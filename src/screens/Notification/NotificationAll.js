@@ -5,12 +5,12 @@ import Moment from 'moment';
 import { Scaffold, TouchableOpacity, Text, useColor } from "src/components";
 import { Divider } from "src/styled";
 import client from "src/lib/apollo";
-import { queryGetNotificationHistory } from "src/lib/query";
-import { queryGetNotification } from "src/lib/query";
-const NotificationScreen = ({ navigation, route }) => {
+import { queryGetNotification,queryNotificationManage } from "src/lib/query";
+import Feather from 'react-native-vector-icons/Feather';
+import { useIsFocused } from '@react-navigation/native';
+const NotificationScreenAll = ({ navigation, route }) => {
   const { Color } = useColor();
-
-
+  const isFocused = useIsFocused();
 const initialDataRooms = {
   data: [],
   loading: true,
@@ -21,7 +21,25 @@ const initialDataRooms = {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const managedDate = (origin) => {
+    const date = Moment(origin);
+    const now = new Moment();
+    const diff = now.diff(Moment(date), 'days');
+
+    let title = '';
+
+    if (diff === 0) {
+        title = 'Hari ini - ' + date.format('HH:mm');
+    } else if (diff === 1) {
+        title = 'Kemarin - ' + date.format('HH:mm');
+    } else {
+        title = date.format('dddd, DD/MM/YYYY - HH:mm');;
+    }
+    
+    return title;
+}
   useEffect(() => {
+    
     const variables = {
       page : 0,
       itemPerPage: 9999
@@ -32,7 +50,7 @@ const initialDataRooms = {
     })
       .then((res) => {
         const data = res.data.getNotification;
-        console.log('ini err',data);
+        console.log('ini scc',data);
         let newArr = [];
 
         if (data) {
@@ -46,7 +64,35 @@ const initialDataRooms = {
         console.log('ini err',err);
         setLoading(false);
       })
-  }, []);
+  }, [isFocused]);
+  const readNotfif=(id)=>{
+
+    console.log('ini id',id);
+    
+    const variables = {
+      notificationId: id,
+      status: 3,
+      
+    };
+    console.log('ini id',variables);
+    // return;
+
+    client.mutate({
+      mutation: queryNotificationManage,
+      variables,
+    })
+    .then((res) => {
+      console.log('res ecomm ulasan', res);
+     
+      
+      // fetchCheckIsUlasan(id);
+    })
+    .catch((err) => {
+      console.log('err ecomm ulasan', err);
+      
+    });
+
+  }
 
   const renderPopUpNavigation = () => {
     return (
@@ -64,7 +110,7 @@ const initialDataRooms = {
           }}
         >
           <TouchableOpacity
-              onPress={() => {}}
+              onPress={() => {navigation.navigate('NotificationAll')}}
               style={{alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%'}}
               activeOpacity={0.75}
             >
@@ -76,6 +122,7 @@ const initialDataRooms = {
   }
 
   const onSelectNotif = (item) => {
+    readNotfif(item.id);
     navigation.navigate('NotificationDetail', { item });
   }
     
@@ -84,6 +131,11 @@ const initialDataRooms = {
       headerTitle='Semua Notifikasi'
       fallback={loading}
       empty={history.length === 0}
+      // iconRightButton={<Feather name='more-vertical' size={20} color={Color.text} />}
+    //   onPressRightButton={() => {
+    //     // modalOptionsRef.current.open();
+    //   }
+    // }
       emptyTitle="Notifikasi belum tersedia"
     >      
       <FlatList
@@ -91,24 +143,30 @@ const initialDataRooms = {
         data={history}
         renderItem={({ item }) => {
           return (
+            
             <View  style={{flexDirection:'row',paddingHorizontal:16, paddingVertical: 16, borderColor: Color.border,
-            borderWidth: 0.5,}}>
+            borderWidth: 0.5,backgroundColor : item.status !== 3 ? Color.primarySoft : Color.white}}>
               
               <Image
-                                        source={{uri: item.image}}
-                                        style={{width: '15%', aspectRatio: 1, borderRadius: 400/2, backgroundColor: Color.border}}
-                                    />
+                                        source={{uri: item.image}}                        style={{width: '15%', aspectRatio: 1, borderRadius: 400/2, backgroundColor: Color.border}}
+/>
               <TouchableOpacity
-              onPress={() => onSelectNotif(item)}
+              onPress={() => onSelectNotif(item)
+              
+               
+              
+              }
               activeOpacity={0.75}
               style={{
                 width: '100%',
                 paddingHorizontal: 16,
                 
-                backgroundColor: Color.textInput,
+                
                
               }}
             >
+      
+             
               <Text align='left'  type='bold'>{item.title}</Text>
               <Divider height={4} />
               <View style={{paddingEnd:30}}>
@@ -116,14 +174,23 @@ const initialDataRooms = {
               <Text align='left' size={12} numberOfLines={3}>{item.text}</Text>
               </View>
               <Divider height={4} />
-              <View style={{flexDirection:'row',justifyContent:'space-between',paddingEnd:40}}>  
+
+              <View style={{flexDirection:'row',justifyContent:'space-between',paddingEnd:40}}>
+              
               <Text size={10} align='left'>{Moment(parseInt(item.date, 10)).fromNow()}</Text>
               <Text align="left" size={10}>
                 {Moment(parseInt(item.date)).format('HH:mm')}
-              </Text>      
-              </View>  
+              </Text>
+              
+              </View>
+              
+          
             </TouchableOpacity>
+
             </View>
+           
+            
+          
           )
         }}
       />
@@ -133,4 +200,4 @@ const initialDataRooms = {
   );
 }
 
-export default NotificationScreen;
+export default NotificationScreenAll;

@@ -60,7 +60,8 @@ import HighlightContentProduct from 'src/components/Content/HighlightContentProd
 import ModalMenuHome from 'src/components/Modal/ModalMenuHome';
 import PushNotification, { Importance } from 'react-native-push-notification';
 import { initSocket } from 'src/api-socket/currentSocket';
-
+import { queryGetNotification } from "src/lib/query";
+import client from "src/lib/apollo";
 let tempShowPopupAds = true;
 
 const events = [Event.PlaybackTrackChanged];
@@ -70,6 +71,7 @@ const MainHome = ({navigation, route}) => {
   
   // state
   const [chatNotifCount, setChatNotifCount] = useState(0);
+  const [notificationCount, setNotificationCount] = useState(0);
   const [dataPopupAds, setDataPopupAds] = useState();
   const [showPopupAds, setShowPopupAds] = useState(false);
   const [loadingBanner, setLoadingBanner] = useState(true);
@@ -176,6 +178,30 @@ const MainHome = ({navigation, route}) => {
 
     Geolocation.watchPosition(successCallback, errorCallback, option);
   }, [refreshing]);
+
+  useEffect(()=>{
+    const variables = {
+      page : 0,
+      itemPerPage: 9999
+    }
+    client.query({
+      query: queryGetNotification,
+      variables,
+    })
+      .then((respone) => {
+        var response = respone['data']['getNotification'];
+        var res = response.filter(function (el) {
+          return el.status ===1 | el.status === 2 ;
+        });
+        setNotificationCount(res.length)
+        console.log('ini ',res);
+      })
+      .catch((err) => {
+        console.log('ini ',err);
+        console.log(err);
+      
+      })
+  },[isFocused]);
 
   useEffect(() => {
     if (isFocused) {
@@ -294,6 +320,16 @@ const MainHome = ({navigation, route}) => {
                   size={22}
                   color={Color.text}
                 />
+                 {notificationCount > 0 && (
+                  <Circle
+                    size={12}
+                    color={Color.error}
+                    style={{position: 'absolute', top: -4, right: -4}}>
+                    <Text size={8} color={Color.textInput}>
+                      {notificationCount > 99 ? '99' : notificationCount}
+                    </Text>
+                  </Circle>
+                )}
               </TouchableOpacity>
 
               <TouchableOpacity
