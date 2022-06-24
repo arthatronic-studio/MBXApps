@@ -62,6 +62,9 @@ import PushNotification, { Importance } from 'react-native-push-notification';
 import { initSocket } from 'src/api-socket/currentSocket';
 import { queryGetNotification } from "src/lib/query";
 import client from "src/lib/apollo";
+import MemberRank from "src/components/MemberRank";
+import MyRank from 'src/components/myRank';
+
 let tempShowPopupAds = true;
 
 const events = [Event.PlaybackTrackChanged];
@@ -484,6 +487,8 @@ const MainHome = ({navigation, route}) => {
             </>
           )}
 
+          <MyRank/>
+
           {accessClient.MainHome.showMenuHome && <WidgetMenuHome
             onPress={item => {
               console.log(item, 'item');
@@ -493,6 +498,8 @@ const MainHome = ({navigation, route}) => {
               }
             }}
           />}
+          
+          <MemberRank/>
 
           <View style={{flex: 1}}>
             <Modal
@@ -771,10 +778,12 @@ const MainHome = ({navigation, route}) => {
           {isFocused && <HighlightContentProduct
             productCategory='YOUTUBE_VIDEO'
             name='Live'
-            title='Sedang Berlangsung'
+            title='Siaran Langsung'
             nav='YoutubeScreen'
             refresh={refreshing}
             style={{paddingHorizontal: 0}}
+            iconName='radar'
+            iconType='MaterialCommunityIcons'
           />}
 
           <Divider />

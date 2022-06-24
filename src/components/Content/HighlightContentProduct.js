@@ -17,6 +17,8 @@ const propTypes = {
     productCategory: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     title: PropTypes.string,
+    iconType: PropTypes.string,
+    iconName: PropTypes.string,
     nav: PropTypes.string,
     refresh: PropTypes.bool,
     horizontal: PropTypes.bool,
@@ -30,6 +32,8 @@ const defaultProps = {
     productCategory: '',
     name: '',
     title: '',
+    iconType: null,
+    iconName: null,
     nav: '',
     refresh: false,
     horizontal: false,
@@ -50,6 +54,8 @@ const HighlightContentProduct = (props) => {
         style,
         showHeader,
         showEmpty,
+        iconName,
+        iconType,
     } = props;
 
     const { Color } = useColor();
@@ -102,6 +108,8 @@ const HighlightContentProduct = (props) => {
                 onSeeAllPress={() => {
                     navigation.navigate(nav, { title, userProfileId });
                 }}
+                iconType={iconType}
+                iconName={iconName}
             />
         )
     }
