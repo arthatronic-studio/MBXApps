@@ -63,7 +63,7 @@ import { initSocket } from 'src/api-socket/currentSocket';
 import { queryGetNotification } from "src/lib/query";
 import client from "src/lib/apollo";
 import MemberRank from "src/components/MemberRank";
-import MyRank from 'src/components/myRank';
+import MyRank from 'src/components/MyRank';
 
 let tempShowPopupAds = true;
 
