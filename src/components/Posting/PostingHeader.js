@@ -9,7 +9,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {
     Text,
     TouchableOpacity,
-    HeaderBig,
     Loading,
     useLoading,
     useColor,
@@ -76,7 +75,7 @@ const PostingHeader = (props) => {
         >   
             <Row>
                 {iconType && iconName && getIconMenu(iconType, iconName)}
-                <Text type="bold" align='left' size={17}>{title}</Text>
+                <Text type="bold" align='left' size={16}>{title}</Text>
             </Row>
             {showSeeAllText && <Text
                 onPress={() => onSeeAllPress()}

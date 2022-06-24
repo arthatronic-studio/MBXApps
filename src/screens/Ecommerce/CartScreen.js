@@ -7,14 +7,8 @@ import TopBar from '../Auction/TopBar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {
-  Text,
-  // TouchableOpacity,
-  Loading,
   useLoading,
   Scaffold,
-  Row,
-  Col,
-  HeaderBig,
   useColor,
   Header,
 } from '@src/components';

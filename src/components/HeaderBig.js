@@ -12,6 +12,8 @@ import {
   iconSplash,
   iconApp
 } from '@assets/images';
+import { Container } from 'src/styled';
+import { useSelector } from 'react-redux';
 
 const RowView = Styled(Row)`
     height: 100%;
@@ -35,6 +37,7 @@ const propTypes = {
 };
 
 const defaultProps = {
+    type: '',
     title: '',
     titleRight: '',
     actions: null,
@@ -42,19 +45,20 @@ const defaultProps = {
     useAnimated: false,
 };
 
-const HeaderBig = (props) => {
-  const {
-    title,
-    titleRight,
-    titleRightColor,
-    actions,
-    style,
-    useAnimated,
-    iconRightButton,
-    onPressRightButton,
-  } = props;
+const HeaderBig = ({
+  type,
+  title,
+  titleRight,
+  titleRightColor,
+  actions,
+  style,
+  useAnimated,
+  iconRightButton,
+  onPressRightButton,
+}) => {
 
   const { Color } = useColor();
+  const user = useSelector(state => state['user.auth'].login.user);
 
   const MainContainer = useAnimated ? Animated.View : View;
 
@@ -73,7 +77,30 @@ const HeaderBig = (props) => {
     >
       <RowView>
         <Col size={6} justify='center' align='flex-start' style={{height: '100%'}}>
-          {title === '' ?
+          {type === 'MAIN_HOME' ?
+            <Container>
+              <Text
+                align='left'
+                size={10}
+                type="medium"
+                letterSpacing={0.45}
+              >
+                Halo,
+              </Text>
+              <Text
+                align='left'
+                size={20}
+                type='medium'
+                numberOfLines={1}
+              >
+                {user && !user.guest
+                  ? user.firstName.trim() +
+                    (user.lastName ? ' ' + user.lastName.trim() : '')
+                  : 'Tamu'}
+              </Text>
+            </Container>
+          :
+          title === '' ?
             <View style={{flexDirection: 'row'}}>
               <Image source={iconSplash} style={{width: 90, height: 40}} resizeMode='contain' />
             </View>

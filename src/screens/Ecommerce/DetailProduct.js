@@ -27,9 +27,7 @@ import {
   Scaffold,
   Row,
   Col,
-  HeaderBig,
   useColor,
-  Header,
 } from '@src/components';
 import TopBar from './TopTab';
 import ImagesPath from 'src/components/ImagesPath';

@@ -35,7 +35,6 @@ import {
   useLoading,
   Row,
   Col,
-  HeaderBig,
   Header,
   Scaffold,
   useColor,

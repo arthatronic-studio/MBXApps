@@ -17,15 +17,8 @@ import ImagesPath from 'src/components/ImagesPath';
 
 import {
   Text,
-  // TouchableOpacity,
-  Loading,
   useLoading,
-  Scaffold,
-  Row,
-  Col,
-  HeaderBig,
   useColor,
-  Header,
 } from '@src/components';
 import {TouchableOpacity} from '@src/components/Button';
 import ListForum from '@src/screens/MainForum/ListForum';

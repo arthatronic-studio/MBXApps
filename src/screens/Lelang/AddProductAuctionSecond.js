@@ -20,8 +20,6 @@ import {
   // TouchableOpacity,
   useLoading,
   Scaffold,
-  Col,
-  HeaderBig,
   useColor,
   Header,
 } from '@src/components';

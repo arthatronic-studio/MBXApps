@@ -34,9 +34,6 @@ import {
   Loading,
   useLoading,
   Scaffold,
-  Row,
-  Col,
-  HeaderBig,
   useColor,
   Header,
 } from '@src/components';

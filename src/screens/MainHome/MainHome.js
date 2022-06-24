@@ -302,6 +302,7 @@ const MainHome = ({navigation, route}) => {
       loadingProps={loadingProps}
       header={
         <HeaderBig
+          type='MAIN_HOME'
           useAnimated
           style={{
             paddingTop: 8,
@@ -454,7 +455,8 @@ const MainHome = ({navigation, route}) => {
             }}
           />
 
-          <View
+          {/* hide user greetings */}
+          {/* <View
             style={{
               flexDirection: 'row',
               width: '100%',
@@ -478,16 +480,25 @@ const MainHome = ({navigation, route}) => {
                 !
               </Text>
             </View>
-          </View>
+          </View> */}
 
           {accessClient.MainHome.showWidgetBalance && (
-            <>
+            <Container paddingVertical={16}>
               <WidgetBalance />
-              <Divider />
-            </>
+            </Container>
           )}
 
-          <MyRank/>
+          <MyRank />
+
+          <Container paddingVertical={16}>
+            <Banner
+              showHeader={false}
+              data={listBanner}
+              loading={loadingBanner}
+            />
+          </Container>
+
+          <MemberRank />
 
           {accessClient.MainHome.showMenuHome && <WidgetMenuHome
             onPress={item => {
@@ -498,8 +509,6 @@ const MainHome = ({navigation, route}) => {
               }
             }}
           />}
-          
-          <MemberRank/>
 
           <View style={{flex: 1}}>
             <Modal
@@ -627,14 +636,6 @@ const MainHome = ({navigation, route}) => {
               </View>
             </Modal>
           </View>
-
-          <Divider />
-
-          <Banner
-            showHeader={accessClient.MainHome.showBannerHeader}
-            data={listBanner}
-            loading={loadingBanner}
-          />
 
           {accessClient.MainHome.showListAuction && (
             <HighlightLelang

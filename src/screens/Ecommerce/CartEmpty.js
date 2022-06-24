@@ -11,15 +11,7 @@ import RNSimpleCrypto from "react-native-simple-crypto";
 
 import {
 	Text,
-	// TouchableOpacity,
-	Loading,
-	useLoading,
-	Scaffold,
-	Row,
-	Col,
-	HeaderBig,
 	useColor,
-	Header
 } from '@src/components';
 import ListForum from '@src/screens/MainForum/ListForum';
 

@@ -21,15 +21,11 @@ import {
   Loading,
   useLoading,
   Scaffold,
-  Row,
-  Col,
-  HeaderBig,
   useColor,
   Header,
 } from '@src/components';
 
 import Filter from 'src/components/Filter';
-
 import ImagesPath from 'src/components/ImagesPath';
 import Category from 'src/components/Category';
 import CardReview from './CardReview';

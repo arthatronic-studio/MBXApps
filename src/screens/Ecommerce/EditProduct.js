@@ -7,13 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Styled from 'styled-components';
 import {
   Text,
-  // TouchableOpacity,
-  Loading,
-  useLoading,
   Scaffold,
-  Row,
-  Col,
-  HeaderBig,
   useColor,
   Header,
 } from '@src/components';

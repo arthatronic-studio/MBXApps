@@ -78,7 +78,6 @@ export const accessClient = {
     MainHome: {
         showMenuHome: isKomoto || isUnitedId ? false : true,
         showWidgetBalance: isKomoto || isSabyan ? false : true,
-        showBannerHeader: isKomoto || isSabyan ? false : true,
         showListAuction: isKomoto || isSabyan ? false : true,
         showListSoonAuction: isKomoto || isSabyan ? false : true,
         showListPromo: isKomoto || isSabyan ? false : true,

@@ -19,7 +19,6 @@ import {
   Text,
   // TouchableOpacity,
   Loading, useLoading,
-  HeaderBig,
   Submit,
   Header,
   Scaffold,

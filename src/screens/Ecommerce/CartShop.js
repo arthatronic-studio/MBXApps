@@ -16,9 +16,7 @@ import {
   Scaffold,
   Row,
   Col,
-  HeaderBig,
   useColor,
-  Header,
 } from '@src/components';
 import Loading from 'src/components/Modal/Loading';
 import {TouchableOpacity} from '@src/components/Button';

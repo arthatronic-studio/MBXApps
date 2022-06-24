@@ -16,9 +16,7 @@ import {
   Scaffold,
   Row,
   Col,
-  HeaderBig,
   useColor,
-  Header,
 } from '@src/components';
 import {TouchableOpacity} from '@src/components/Button';
 import ListForum from '@src/screens/MainForum/ListForum';

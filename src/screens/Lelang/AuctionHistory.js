@@ -14,7 +14,6 @@ import {
 	Scaffold,
 	Row,
 	Col,
-	HeaderBig,
 	Header
 } from '@src/components';
 import ListForum from '@src/screens/MainForum/ListForum';

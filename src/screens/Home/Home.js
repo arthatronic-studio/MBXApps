@@ -2,14 +2,8 @@ import {View, Text, ScrollView, Image} from 'react-native';
 import React from 'react';
 import {
   TouchableOpacity,
-  HeaderBig,
-  Loading,
-  useLoading,
   useColor,
   Scaffold,
-  Row,
-  Col,
-  Button,
 } from '@src/components';
 import ImagesPath from 'src/components/ImagesPath';
 import Ionicons from 'react-native-vector-icons/Ionicons';

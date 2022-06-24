@@ -22,13 +22,10 @@ import {useNavigation} from '@react-navigation/native';
 
 import {
   Text,
-  // TouchableOpacity,
-  Loading,
   useLoading,
   Scaffold,
   Row,
   Col,
-  HeaderBig,
   useColor,
   Header,
   Alert,
