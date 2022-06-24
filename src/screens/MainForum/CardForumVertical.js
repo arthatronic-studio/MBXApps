@@ -22,12 +22,10 @@ const defaultProps = {
     onPress: () => {},
     numColumns: 1,
     style: {},
-    onPressDot: () => {},
-    showDot: false,
     showAllText: false,
 };
 
-const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showDot, showAllText, style }) => {
+const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText, style }) => {
     const [like, setLike] = useState(item.like);
     const [im_like, setImLike] = useState(item.im_like);
     const [trigger, setTrigger] = useState(false);
@@ -109,14 +107,13 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showDot, sho
                     </View>
 
                     <View style={{ width: '80%', paddingHorizontal: 8 }}>
-                        <Text type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
+                        <Text type='bold' align='left' numberOfLines={2}>{item.fullname}</Text>
                         <View style={{flexDirection: 'row', marginTop: 4}}>
-                            <Text size={8} align='left'>{item.fullname} - </Text>
-                            <Text size={8} align='left'>{Moment(parseInt(item.created_date, 10)).fromNow()}</Text>
+                            <Text size={8} align='left'>{Moment(parseInt(item.created_date, 10)).format('DD MMM YYYY, HH:mm')}</Text>
                         </View>
                     </View>
 
-                    <TouchableOpacity
+                    {typeof onPressDot === 'function' && <TouchableOpacity
                         onPress={() => onPressDot()}
                         style={{ width: '10%', aspectRatio: 1, alignItems: 'flex-end', justifyContent: 'center' }}
                     >
@@ -125,54 +122,64 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showDot, sho
                             color={Color.text}
                             size={18}
                         />
-                    </TouchableOpacity>
+                    </TouchableOpacity>}
                 </View>
             </View>
 
-            <View style={{ marginBottom: 16}}>
-                <Text size={14} align='left' {...extraPropsText}>{item.productDescription}...</Text>
+            <View style={{ marginBottom: 8}}>
+                <Text size={14} align='left' type='medium' numberOfLines={2}>{item.productName}</Text>
             </View>
 
             <ImageBackground
                 source={{uri: item.image}}
                 style={{
                     width: '100%',
-                    aspectRatio: 4/3,
+                    aspectRatio: 16/9,
                     justifyContent: 'flex-end',
                     alignItems: 'center',
-                    marginBottom: 16
+                    marginBottom: 8,
                 }}
-                imageStyle={{borderRadius:10}}
+                imageStyle={{borderRadius: 8}}
             >
                 <View style={{position: 'absolute', height: '100%', width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: 8}} />    
             </ImageBackground>
 
-            <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
+            <Text align='left' size={12} {...extraPropsText}>{item.productDescription}...</Text>
+
+            <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', paddingTop: 16}}>
                 <TouchableOpacity
                     onPress={() => onSubmitLike()}
                     style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}
                 >
                     <AntDesign 
-                        name='like2'
-                        size={24}
-                        color={im_like ? Color.info : Color.gray}
+                        name={im_like ? 'heart' : 'hearto'}
+                        size={22}
+                        color={im_like ? Color.error : Color.gray}
                     />
                     <Text size={14} align='left' color={Color.gray} style={{marginLeft: 10}}>{like}</Text>
                 </TouchableOpacity>
-                <View>
-                    <Text align='left' size={16} color={Color.gray}>|</Text>
-                </View>
+                
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                     <MaterialCommunityIcons
                         name='comment-outline'
-                        size={24}
+                        size={22}
                         color={Color.gray}
                     />
                     <Text size={14} align='left' color={Color.gray} style={{marginLeft: 10}}>{item.comment}</Text>
                 </View>
-                <View>
-                    <Text align='left' size={16} color={Color.gray}>|</Text>
-                </View>
+                
+                <TouchableOpacity
+                    disabled
+                    style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}
+                >
+                    <AntDesign 
+                        name='eye'
+                        size={22}
+                        color={Color.gray}
+                    />
+                    <Text size={14} align='left' color={Color.gray} style={{marginLeft: 10}}>{item.view}</Text>
+                </TouchableOpacity>
+
                 <TouchableOpacity
                     onPress={async() => {
                         await Share.open({
@@ -183,10 +190,9 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showDot, sho
                 >
                     <AntDesign 
                         name='sharealt'
-                        size={24}
+                        size={22}
                         color={Color.gray}
                     />
-                    <Text size={14} align='left' color={Color.gray} style={{marginLeft: 10}}>Share</Text>
                 </TouchableOpacity>
             </View>
         </TouchableOpacity>

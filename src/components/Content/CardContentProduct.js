@@ -32,6 +32,7 @@ import CardComponentArticle from './CardComponentArticle';
 import CardComponentEvent from './CardComponentEvent';
 import CardComponentJobs from './CardComponentJobs';
 import CardComponentPlace from './CardComponentPlace';
+import CardForumVertical from '@src/screens/MainForum/CardForumVertical';
 
 const defaultProps = {
     productCategory: '',
@@ -524,6 +525,7 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
     else if (productCategory === 'NEARBY_PLACE') return <CardComponentPlace { ...props } />;
     else if (productCategory === 'YOUTUBE_VIDEO') return <CardComponentYoutube item={item} />;
     else if (productCategory === 'NEWEST_VIDEO') return <CardComponentVideo item={item} />;
+    else if (productCategory === 'FORUM') return <Container paddingHorizontal={8}><CardForumVertical item={item} onPress={(item) => navigation.navigate('DetailForumScreen', { item })} /></Container>;
     return <Text>Not Set</Text>;
 }
 

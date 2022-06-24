@@ -133,7 +133,6 @@ const WidgetMenuHome = ({ itemPerPage, onPress, bgColor }) => {
 
                 if (menu.nav === 'modal') {
                   // ganti ke modal show menu all
-                  navigation.navigate('MediaPlayerScreen', { title: menu.name, ...menu.params });
                   return;
                 }
 
