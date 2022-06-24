@@ -64,13 +64,13 @@ const HighlightLelang = ({ title, nav, prodStatus }) => {
       };
     }
 
-    console.log('variables', variables);
+    // console.log('variables', variables);
 
     Client.query({
       query: queryGetAuction,
       variables,
     }).then(res => {
-      console.log('aku adalah', res.data.auctionProduct);
+      // console.log('aku adalah', res.data.auctionProduct);
 
       let newData = [];
       if (Array.isArray(res.data.auctionProduct) && res.data.auctionProduct.length > 0) {

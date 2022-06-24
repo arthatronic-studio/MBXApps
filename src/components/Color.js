@@ -2,7 +2,7 @@ import {store} from '@src/state/redux';
 import {useSelector} from 'react-redux';
 
 const staticColors = {
-  primary: '#F3771D',
+  primary: '#3C58C1',
   primaryDark: '#033F59',
   primarySoft: '#FDE4D2',
   primaryYellow: '#FAC255',

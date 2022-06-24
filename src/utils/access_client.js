@@ -81,7 +81,6 @@ export const accessClient = {
         showListAuction: isKomoto || isSabyan ? false : true,
         showListSoonAuction: isKomoto || isSabyan ? false : true,
         showListPromo: isKomoto || isSabyan ? false : true,
-        showListMusicNewer: isKomoto ? false : true,
         showListVideo:
             isKomoto ? false:
             isSabyan ? true : true,

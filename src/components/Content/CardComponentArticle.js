@@ -104,22 +104,13 @@ const CardComponentArticle = ({ productCategory, item, numColumns, onPress, hori
                     {
                         width: width / numColumns - 16,
                         paddingHorizontal: 8,
-                        marginBottom: 16,
                         flexDirection: 'row',
+                        
                     },
                     style,
                 ]}>
-                <View
-                    style={{
-                        width: '100%',
-                        flexDirection: 'row',
-                        padding: 16,
-                        borderRadius: 4,
-                        backgroundColor: Color.textInput,
-                        ...shadowStyle,
-                    }}
-                >
-                    <View style={{ width: '25%' }}>
+                <View style={{flexDirection: 'row',width: '100%', marginBottom: 10,}}>
+                    <View style={{ width: '25%',}}>
                         <Image
                             source={{ uri: item.image }}
                             style={{
@@ -130,69 +121,17 @@ const CardComponentArticle = ({ productCategory, item, numColumns, onPress, hori
                             resizeMode="cover"
                         />
                     </View>
-
-                    <View style={{ width: '75%', paddingLeft: 16 }}>
-                        <View
-                            style={{
-                                width: '100%',
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                            }}>
-                            <Text type="bold" align="left" numberOfLines={2}>
-                                {item.productName}
-                            </Text>
-                            {/* <Ionicons name='bookmark-outline' size={20} color={Color.primary} /> */}
+                    <View style={{width: '75%',}}>
+                        <View style={{height: 55}}>
+                            <Text align={'left'}
+                            numberOfLines={3}
+                            style={{fontSize: 14, fontWeight: 'bold', paddingHorizontal: 10,paddingVertical: 2}}>{item.productName}</Text>
                         </View>
-
-                        <View style={{ paddingTop: 4, flexDirection: 'row' }}>
-                            <Text size={12} align='left'>Oleh:&nbsp;</Text>
-                            <Text size={12} align='left'>{item.fullname}</Text>
-                        </View>
-
-                        <View style={{ paddingTop: 4 }}>
-                            <Text size={12} align="left" numberOfLines={2} style={{ width: '80%' }}>
-                                {item.productDescription}
-                            </Text>
-                        </View>
-
-                        {/* <View style={{paddingTop: 12, flexDirection: 'row'}}>
-                                    <Ionicons name='location' color={Color.error} style={{marginRight: 8}} />
-                                    <Text size={12} align='left'>Jakarta Selatan</Text>
-                                </View> */}
-                        <View
-                            style={{
-                                paddingTop: 14,
-                                alignItems: 'flex-end',
-                                flexDirection: 'row',
-                            }}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text
-                                    style={{
-                                        color: Color.gray,
-                                        fontSize: 13,
-                                        fontSize: 11,
-                                        paddingTop: 10,
-                                        paddingEnd: 23,
-                                    }}>
-                                    {Moment(parseInt(item.created_date)).format('DD MMMM YYYY')}
-                                </Text>
-                            </View>
-
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text
-                                    size={11}
-                                    style={{
-                                        color: Color.primary,
-                                        paddingHorizontal: 4,
-                                    }}>
-                                    Selengkapnya
-                                </Text>
-                                <Ionicons
-                                    name={'arrow-forward'}
-                                    size={12}
-                                    style={{ color: Color.primary }}
-                                />
-                            </View>
+                        <Divider/>
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Text align={'left'} style={{fontSize: 10, paddingLeft: 10, color: Color.secondary}}>{item.fullname}</Text>
+                            <View style={{width: 3, height: 3, borderRadius: 20, backgroundColor: Color.secondary}}/>
+                            <Text align={'left'} style={{fontSize: 10,paddingLeft: 3, color: Color.secondary}}>{Moment(parseInt(item.created_date)).format('DD MMMM YYYY')}</Text>
                         </View>
                     </View>
                 </View>
