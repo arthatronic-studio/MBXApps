@@ -746,8 +746,9 @@ const MainHome = ({navigation, route}) => {
           <HighlightContentProduct
             productCategory='NEARBY_PLACE'
             name='Tempat'
-            title='Tempat Favorit'
+            title='Tempat Terdekat'
             nav='PlaceScreen'
+            horizontal={true}
             refresh={refreshing || isFocused}
           />
 
