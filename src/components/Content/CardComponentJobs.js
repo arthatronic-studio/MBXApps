@@ -37,6 +37,8 @@ const defaultProps = {
 };
 
 const CardComponentJobs = ({ productCategory, item, numColumns, onPress, horizontal, style }) => {
+
+    console.log('ini jobs',item);
     const [like, setLike] = useState(item.like);
     const [im_like, setImLike] = useState(item.im_like);
     const [trigger, setTrigger] = useState(false);
@@ -88,6 +90,7 @@ const CardComponentJobs = ({ productCategory, item, numColumns, onPress, horizon
 
     const renderCardJobs = () => {
         return (
+
             <TouchableOpacity
                 onPress={() => {
                     navigation.navigate('JobDetail', { item });
@@ -108,7 +111,9 @@ const CardComponentJobs = ({ productCategory, item, numColumns, onPress, horizon
                     style,
                 ]}
             >
-                <View style={{width: '100%', flexDirection: 'row', padding: 16, borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle}}>
+               
+                <View style={{width: '100%',  padding: 16, borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle}}>
+                    <View style={{flexDirection:'row'}}>
                     <View style={{width: '20%'}}>
                         <Image
                             source={{uri: item.image}}
@@ -132,21 +137,31 @@ const CardComponentJobs = ({ productCategory, item, numColumns, onPress, horizon
                             <Text size={12} align='left'>{item.fullname}</Text>
                         </View>
     
-                        <View style={{paddingTop: 6}}>
-                            <Text size={12} align='left' numberOfLines={2}>{item.productDescription}</Text>
-                        </View>
-    
-                        {/* <View style={{paddingTop: 12, flexDirection: 'row'}}>
-                            <Ionicons name='location' color={Color.error} style={{marginRight: 8}} />
+                      
+                    </View>
+                    </View>
+                   <View style={{flexDirection:'row',marginVertical:10}}>
+                   <Ionicons name="briefcase-outline" size={18}color={Color.gray}/>
+                 <Text  size={12}color={Color.gray} style={{marginHorizontal:5}}>Fresh Graduate </Text>
+                <Ionicons name="time-outline" size={18}color={Color.gray}/>
+                       <Text size={12}color={Color.gray} style={{marginHorizontal:5}}>FullTime</Text>
+                   </View>
+                   <View style={{flexDirection:'row'}}>
+                   <Ionicons name="cash-outline" size={18}color={Color.gray}/>
+                       <Text size={12} color={Color.gray}style={{marginHorizontal:10}}>Rp10.000.000 - Rp15.000.000</Text>
+                   </View>
+
+                   <View style={{borderBottomColor:Color.border,borderBottomWidth:1,marginVertical:10}}/>
+
+                   
+                   <View style={{paddingTop: 14, flexDirection: 'row', justifyContent: 'space-between'}}>
+                            {/* <Text size={12} color={Color.info}>{item.like} Pelamar</Text> */}
                             <Text size={12} align='left'>Jakarta Selatan</Text>
-                        </View> */}
-    
-                        <View style={{paddingTop: 14, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text size={12} color={Color.info}>{item.like} Pelamar</Text>
                             <Text size={12}>{Moment(parseInt(item.created_date)).fromNow()}</Text>
                         </View>
-                    </View>
                 </View>
+               
+                
             </TouchableOpacity>
         )
     }

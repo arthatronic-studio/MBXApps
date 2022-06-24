@@ -21,6 +21,8 @@ import {
     iconComment,
     iconLiked,
     iconLike,
+    iconStar
+    
 } from '@assets/images/home';
 import { Container, Divider, Row } from 'src/styled';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
@@ -88,6 +90,7 @@ const CardComponentPlace = ({ productCategory, item, numColumns, onPress, horizo
 
     const renderCardPlace = () => {
         return (
+
             <TouchableOpacity
                 onPress={() => {
                     navigation.navigate('PlaceDetail', { item });
@@ -100,7 +103,7 @@ const CardComponentPlace = ({ productCategory, item, numColumns, onPress, horizo
                     });
                 }}
                 style={{
-                    width: width / numColumns - (horizontal ? 16 : 8),
+                    width: width / 2 - (horizontal ? 16 : 8),
                     paddingHorizontal: 8,
                     marginBottom: 16,
                     ...style,
@@ -117,8 +120,8 @@ const CardComponentPlace = ({ productCategory, item, numColumns, onPress, horizo
                             aspectRatio: 3 / 2,
                             justifyContent: 'flex-end',
                             alignItems: 'center',
-                            borderTopLeftRadius: 4,
-                            borderTopRightRadius: 4,
+                            borderRadius: 4,
+                            // borderTopRightRadius: 14,
                             backgroundColor: Color.border,
                         }}
                     />
@@ -127,22 +130,40 @@ const CardComponentPlace = ({ productCategory, item, numColumns, onPress, horizo
                         <Text size={12} type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
                         <Divider height={4} />
                         <Row>
-                            <View style={{ width: 16 }}>
+                            {/* <View style={{ width: 16 }}>
                                 <Ionicons name='person' color={Color.text} />
-                            </View>
-                            <Text size={12} align='left' numberOfLines={2}>{item.fullname}</Text>
+                            </View> */}
+                            <Text size={12} color={Color.gray} align='left' numberOfLines={2}>Medan,Kab. Tangerang</Text>
                         </Row>
                         <Divider />
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text size={12}>{item.like}&nbsp;</Text>
+                                {/* <Text size={12}>{item.like}&nbsp;</Text>
                                 <Ionicons
                                     name={item.im_like ? 'heart' : 'heart-outline'}
                                     color={Color.primary}
-                                />
+                                /> */}
+                                 <Image
+                                        style={{ height: 17, width: 17 }}
+                                        source={iconStar}
+                                    />
+                                    <Text color={Color.gray} size={12}>4.5</Text>
+                            </View>
+                           
+                            <View style={{ flexDirection: 'row' }}>
+                            <Image
+                                        style={{ height: 17, width: 17, tintColor: Color.text }}
+                                        source={iconComment}
+                                    />
+                                <Text size={12}>{item.comment > 0 ? item.comment : '0'}</Text>
                             </View>
                             <View style={{ flexDirection: 'row' }}>
-                                <Text size={12}>{item.comment > 0 ? item.comment + ' Komentar' : 'Beri Komentar'}</Text>
+                            <Ionicons
+                                    name={'eye-outline'}
+                                    color={Color.gray}
+                                    size={18}
+                                />
+                                <Text size={12}>{item.comment > 0 ? item.comment : '0'}</Text>
                             </View>
                         </View>
                     </View>
