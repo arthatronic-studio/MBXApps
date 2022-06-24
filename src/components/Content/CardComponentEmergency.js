@@ -4,6 +4,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
+import ImagesPath from '../ImagesPath';
 
 import {
     Text,
@@ -25,6 +26,7 @@ import {
 import { Container, Divider, Row } from 'src/styled';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { useSelector } from 'react-redux';
+import Entypo from 'react-native-vector-icons/Entypo'
 import CardComponentYoutube from './CardComponentYoutube';
 import CardComponentVideo from './CardComponentVideo';
 
@@ -113,77 +115,43 @@ const CardComponentEmergency = ({ productCategory, item, numColumns, onPress, ho
                     style={{
                         flexDirection: 'row',
                         width: '100%',
-                        padding: 16,
                         backgroundColor: Color.textInput,
                         borderRadius: 8,
-                        aspectRatio: 16 / 9,
+                        aspectRatio: 11 / 9,
+                        elevation: 2
                     }}
                 >
+                    <View style={{ width: '100%', borderRadius: 10, height: 240}}>
                     <Image
                         source={{ uri: item.image }}
-                        style={{ height: '100%', width: '25%', aspectRatio: 1, borderRadius: 8, backgroundColor: Color.border }}
+                        style={{ height: '65%', width: '100%', borderRadius: 8, backgroundColor: Color.border }}
                     />
-
-                    <View style={{ height: '100%', width: '75%', justifyContent: 'space-between', paddingLeft: 16 }}>
-                        <Container>
-                            <Text size={14} type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
-                            <Divider height={4} />
-                            <Row>
-                                <Container width={16}>
-                                    <Ionicons name='person' color={Color.text} />
-                                </Container>
-                                <Text size={12} align='left' numberOfLines={1}>{item.fullname}</Text>
-                            </Row>
-                            <Divider height={4} />
-                            <Row>
-                                <Container width={16}>
-                                    <Image
-                                        style={{ height: 10, width: 10 }}
-                                        source={iconCategory}
-                                    />
-                                </Container>
-                                {/* <Text size={12}>{item.productCategory}</Text> */}
-                                <Text size={12}>HELP ME</Text>
-                            </Row>
-                            {/* <Row>
-                                <Image
-                                    style={{ height: 10, width: 10}}
-                                    source={iconLocation}
-                                />
-                                <Text size={12}>Kebon Jeruk, Jakarta</Text>
-                            </Row> */}
-
-                            <View style={{ marginTop: 8 }}>
-                                <Text size={11} align='left' numberOfLines={3} >
-                                    {item.productDescription}
-                                </Text>
-                            </View>
-                        </Container>
-
-                        <Container>
-                            <View style={{ width: '100%', flexDirection: 'row', marginTop: 16 }}>
-                                <TouchableOpacity onPress={() => onSubmitLike(item)} style={{ width: '50%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRightWidth: 1, borderColor: Color.border }}>
-                                    {/* <Image
-                                        style={{ height:20, width:20 }}
-                                        source={im_like ? iconLiked : iconLike}
-                                    /> */}
-                                    <MaterialCommunityIcons
-                                        name={im_like ? 'rocket-launch' : 'rocket-launch-outline'}
-                                        color={im_like ? Color.success : Color.text}
-                                        size={17}
-                                    />
-                                    <Text style={{ marginLeft: 4, marginBottom: 4 }} size={14}>{like} </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => navigation.navigate('CommentListScreen', { item })} style={{ width: '50%', height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                    <Image
-                                        style={{ height: 17, width: 17, tintColor: Color.text }}
-                                        source={iconComment}
-                                    />
-                                    <Text style={{ marginLeft: 4, marginBottom: 4 }} size={14}>{item.comment} </Text>
-                                </TouchableOpacity>
-                            </View>
-                        </Container>
+                    <View style={{position: 'absolute', flexDirection: 'row', alignItems: 'center', backgroundColor: Color.theme, width: 70, top: 10, left: 10, height: 25, borderRadius: 30, paddingLeft: 5}}>
+                        <View style={{width: 10, height: 10, backgroundColor: Color.yellow, borderRadius: 20}}/>
+                        <Text style={{marginLeft: 5,fontSize: 10, fontWeight: 'bold'}}>Medium</Text>
                     </View>
+                    <Text numberOfLines={1} align={'left'} style={{fontWeight: 'bold', padding:10}}>{item.productName}</Text>
+                    <Row style={{paddingHorizontal: 10}}>
+                        <Entypo name={'location-pin'} color={Color.red}/>
+                        <Text style={{fontSize: 10, color: Color.secondary, paddingLeft: 5, paddingRight: 15}}>Jakarta Barat (Core)</Text>
+                        <MaterialCommunityIcons color={Color.secondary} name='comment-processing'/>
+                        <Text style={{fontSize: 10, color: Color.secondary, paddingLeft: 5, paddingRight: 15}}>{item.comment} Komentar</Text>
+                    </Row>
+                    <Divider height={22}/>
+                    <Row style={{paddingHorizontal: 10}}>
+                        <View style={{width: '65%'}}>
+                            <View style={{width: 25, height:25, borderRadius: 30, backgroundColor: Color.secondary}}>
+
+                            </View>
+                            <Text style={{textAlign: 'left',fontSize: 8, color: Color.secondary, marginTop: 5}}>Adang Susanto dan 25 lainnya meluncur</Text>
+                        </View>
+                        <TouchableOpacity style={{width:'35%', flexDirection: 'row',alignItems: 'center', justifyContent: 'center',backgroundColor: Color.red, height: '100%', borderRadius: 8}}>
+                            <Ionicons name={'rocket-outline'} size={20} style={{color: Color.textInput}}/>
+                            <Text style={{fontSize: 12, color: Color.textInput, marginLeft: 8 }}>Meluncur</Text>
+                        </TouchableOpacity>
+                    </Row>
+                    </View>
+                    
                 </TouchableOpacity>
             </View>
         )
