@@ -72,6 +72,14 @@ const NewsDetail = ({navigation, route}) => {
 
   const {Color} = useColor();
 
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  };
+
   useEffect(() => {
     fetchCommentList();
     fetchBannerList();
@@ -135,6 +143,7 @@ const NewsDetail = ({navigation, route}) => {
               like: state.like - 1,
             });
           }
+          onRefresh();
         }
       })
       .catch(err => {
@@ -443,7 +452,7 @@ const NewsDetail = ({navigation, route}) => {
 
         {item.like > 0 && (
           <Container paddingHorizontal={16}>
-            <WidgetUserLikes id={item.id} title="Disukai" />
+            <WidgetUserLikes id={item.id} title="Disukai" refresh={refreshing} />
           </Container>
         )}
 
@@ -455,7 +464,7 @@ const NewsDetail = ({navigation, route}) => {
             color={Color.secondary}
             size={12}
           />
-          <Text style={{fontSize: 10, marginRight: 12}}>{item.commentCount} Komentar</Text>
+          <Text style={{fontSize: 10, marginRight: 12}}>{listComment.length} Komentar</Text>
           <Entypo
             name={'share'}
             style={{marginRight: 5}}

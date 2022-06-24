@@ -1,6 +1,6 @@
 import Config from 'react-native-config';
 import Client from '@src/lib/apollo';
-import { queryContentProduct, queryContentProductV2 } from 'src/lib/query';
+import { queryContentUserProduct, queryContentProductV2 } from 'src/lib/query';
 
 export const fetchContentProduct = async(variables) => {
     let response = {
@@ -16,12 +16,13 @@ export const fetchContentProduct = async(variables) => {
         productType: Config.INITIAL_CODE,
         ...variables,
     };
-
+    
     try {
         const result = await Client.query({
             query: queryContentProductV2,
             variables: v,
         });
+
 
         if (
             result &&

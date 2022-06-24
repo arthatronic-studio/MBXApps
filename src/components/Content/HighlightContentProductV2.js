@@ -18,6 +18,7 @@ const propTypes = {
     name: PropTypes.string.isRequired,
     title: PropTypes.string,
     nav: PropTypes.string,
+    timeStart: PropTypes.string,
     refresh: PropTypes.bool,
     horizontal: PropTypes.bool,
     style: PropTypes.object,
@@ -37,6 +38,7 @@ const defaultProps = {
     showHeader: true,
     showEmpty: false,
     orderBy: '',
+    timeStart: '',
 };
 
 const HighlightContentProductV2 = (props) => {
@@ -52,6 +54,7 @@ const HighlightContentProductV2 = (props) => {
         showHeader,
         showEmpty,
         orderBy,
+        timeStart,
     } = props;
 
     const { Color } = useColor();
@@ -82,8 +85,11 @@ const HighlightContentProductV2 = (props) => {
         if (userProfileId !== null) {
             variables.userProfileId = userProfileId;
         }
-        if (orderBy != ''){
+        if (orderBy != null && orderBy != ''){
             variables.orderBy = orderBy;
+        }
+        if (timeStart != null && timeStart != ''){
+            variables.timeStart = timeStart;
         }
 
         const result = userProfileId !== null ? 
@@ -105,7 +111,7 @@ const HighlightContentProductV2 = (props) => {
             <PostingHeader
                 title={title}
                 onSeeAllPress={() => {
-                    navigation.navigate(nav, { title, userProfileId });
+                    navigation.navigate(nav, { title, userProfileId, orderBy });
                 }}
             />
         )

@@ -15,7 +15,7 @@ const itemPerPage = 50;
 
 const avatarDefault = 'https://storage.googleapis.com/sabyan-prod-music-box/images/avatar/avatar-default.png';
 
-const WidgetUserLikes = ({ id, title }) => {
+const WidgetUserLikes = ({ id, title, refresh }) => {
     const { Color } = useColor();
     const { width } = useWindowDimensions();
 
@@ -30,6 +30,12 @@ const WidgetUserLikes = ({ id, title }) => {
         refresh: false,
     });
     const [previewData, setPreviewData] = useState([]);
+
+    useEffect(() => {
+        if (refresh) {
+            fetchListLike();
+        }
+    }, [refresh]);
 
     useEffect(() => {
         fetchListLike();
@@ -51,12 +57,16 @@ const WidgetUserLikes = ({ id, title }) => {
           }
         })
         .then((res) => {
-          console.log(res, 'ressss like');
 
           const data = res.data.contentLike;
 
+          console.log(data, "dataaaa");
+          console.log(itemData, "dataaaa");
+
+
           if (Array.isArray(data)) {
-            if (itemData.page === 0) {
+            // if (itemData.page === 0) {
+                console.log("siniii");
                 let newPreviewData = [];
                 const lengthData = data.length > 5 ? 5 : data.length;
                 
@@ -66,7 +76,7 @@ const WidgetUserLikes = ({ id, title }) => {
                 }
                 
                 setPreviewData(newPreviewData);
-              }
+            //   }
           }
 
           setItemData({
@@ -138,12 +148,14 @@ const WidgetUserLikes = ({ id, title }) => {
                         </View>
                     )
                 })}
-                <View style={{ marginTop: 40 }}>
-                    <Text
-                        style={{fontSize: 8, color: Color.secondary, textAlign: 'left'}}>
-                        {previewData[0]?.fullname} dan {previewData.length-1} lainnya menyukai ini
-                    </Text>
-                </View>
+                {previewData.length > 1 &&
+                    <View style={{ marginTop: 40 }}>
+                        <Text
+                            style={{fontSize: 8, color: Color.secondary, textAlign: 'left'}}>
+                            {previewData[0]?.fullname} dan {previewData.length-1} lainnya menyukai ini
+                        </Text>
+                    </View>
+                }
             </TouchableOpacity>
 
             <Modal

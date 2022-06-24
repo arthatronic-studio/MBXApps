@@ -184,7 +184,6 @@ const EditNews = props => {
       variables.products[0].image = image;
     }
 
-    console.log(variables);
 
     Client.mutate({
       mutation: queryProductManageV2,

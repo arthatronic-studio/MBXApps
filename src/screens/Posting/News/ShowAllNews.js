@@ -21,7 +21,7 @@ import {fetchContentProduct, fetchContentUserProduct} from 'src/api/contentV2';
 import ListContentProductV2 from 'src/components/Content/ListContentProductV2';
 
 const ShowAllNews = ({navigation, route}) => {
-  const {title, userProfileId} = route.params;
+  const {title, userProfileId, orderBy} = route.params;
   const user = useSelector(state => state['user.auth'].login.user);
   const {Color} = useColor();
 
@@ -93,6 +93,7 @@ const ShowAllNews = ({navigation, route}) => {
         userProfileId={userProfileId}
         productCategory="ARTIKEL"
         name={title}
+        orderBy={orderBy}
       />
     </Scaffold>
   );

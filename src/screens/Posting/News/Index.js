@@ -21,6 +21,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import client from 'src/lib/apollo';
 import HighlightContentProductV2 from 'src/components/Content/HighlightContentProductV2';
+import moment from 'moment';
 
 const NewsScreen = ({navigation, route}) => {
   const {title, userProfileId} = route.params;
@@ -158,6 +159,8 @@ const NewsScreen = ({navigation, route}) => {
           title="Artikel Terbaru"
           nav="ShowAllNews"
           refresh={refreshing}
+          orderBy="created_date"
+          timeStart={moment().subtract(7,'d').format('YYYY-MM-DD')}
         />
         <HighlightContentProductV2
             productCategory='ARTIKEL'
@@ -167,13 +170,13 @@ const NewsScreen = ({navigation, route}) => {
             refresh={refreshing}
             orderBy="like"
           />
-        {/* <HighlightContentProduct
-            productCategory='POSTING'
+        <HighlightContentProductV2
+            productCategory='ARTIKEL'
             name='Artikel'
             title='Semua Artikel'
-            nav='NewsScreen'
+            nav='ShowAllNews'
             refresh={refreshing}
-          /> */}
+          />
       </ScrollView>
     </Scaffold>
   );

@@ -53,7 +53,7 @@ const ListContentProductV2 = ({ userProfileId, productCategory, name, horizontal
             variables.userProfileId = userProfileId;
         }
 
-        if (orderBy != ''){
+        if (orderBy != null && orderBy != ''){
             variables.orderBy = orderBy;
         }
 
