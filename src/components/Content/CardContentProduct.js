@@ -27,6 +27,11 @@ import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { useSelector } from 'react-redux';
 import CardComponentYoutube from './CardComponentYoutube';
 import CardComponentVideo from './CardComponentVideo';
+import CardComponentEmergency from './CardComponentEmergency';
+import CardComponentArticle from './CardComponentArticle';
+import CardComponentEvent from './CardComponentEvent';
+import CardComponentJobs from './CardComponentJobs';
+import CardComponentPlace from './CardComponentPlace';
 
 const defaultProps = {
     productCategory: '',
@@ -505,11 +510,18 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
         )
     }
 
-    if (productCategory === 'EMERGENCY') return renderCardEmergency();
-    else if (productCategory === 'POSTING') return renderCardArticle();
-    else if (productCategory === 'EVENT') return renderCardEvent();
-    else if (productCategory === 'JOBS') return renderCardJobs();
-    else if (productCategory === 'NEARBY_PLACE') return renderCardPlace();
+    const props = { productCategory, item, numColumns, onPress, horizontal, style };
+
+    // if (productCategory === 'EMERGENCY') return renderCardEmergency();
+    // else if (productCategory === 'POSTING') return renderCardArticle();
+    // else if (productCategory === 'EVENT') return renderCardEvent();
+    // else if (productCategory === 'JOBS') return renderCardJobs();
+    // else if (productCategory === 'NEARBY_PLACE') return renderCardPlace();
+    if (productCategory === 'EMERGENCY') return <CardComponentEmergency { ...props } />;
+    else if (productCategory === 'POSTING') return <CardComponentArticle { ...props } />;
+    else if (productCategory === 'EVENT') return <CardComponentEvent { ...props } />;
+    else if (productCategory === 'JOBS') return <CardComponentJobs { ...props } />;
+    else if (productCategory === 'NEARBY_PLACE') return <CardComponentPlace { ...props } />;
     else if (productCategory === 'YOUTUBE_VIDEO') return <CardComponentYoutube item={item} />;
     else if (productCategory === 'NEWEST_VIDEO') return <CardComponentVideo item={item} />;
     return <Text>Not Set</Text>;
