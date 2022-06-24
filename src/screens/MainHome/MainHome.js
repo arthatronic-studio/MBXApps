@@ -493,7 +493,7 @@ const MainHome = ({navigation, route}) => {
 
           <MyRank />
 
-          <Container paddingVertical={16}>
+          <Container paddingVertical={24}>
             <Banner
               showHeader={false}
               data={listBanner}
@@ -503,12 +503,20 @@ const MainHome = ({navigation, route}) => {
 
           <MemberRank />
 
+          <Divider height={4} />
+
           {accessClient.MainHome.showMenuHome && <WidgetMenuHome
             onPress={item => {
               console.log(item, 'item');
 
+              if (item.nav === 'modal') {
+                modalMenuHome.current.open();
+                return;
+              }
+
               if (item.code === 'post') {
                 modalPostingRef.current.open();
+                return;
               }
             }}
           />}
@@ -639,6 +647,14 @@ const MainHome = ({navigation, route}) => {
               </View>
             </Modal>
           </View>
+
+          <HighlightContentProduct
+            productCategory='FORUM'
+            name='Forum'
+            title='Thread Populer'
+            nav='ForumScreen'
+            refresh={refreshing || isFocused}
+          />
 
           {accessClient.MainHome.showListAuction && (
             <HighlightLelang
