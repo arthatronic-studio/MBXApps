@@ -18,6 +18,7 @@ const defaultProps = {
   useBlockUser: false,
   onClose: () => {},
   editScreen: "EditThreadScreen",
+  onDelete: () => {},
 };
 
 const initialMessage = {
@@ -26,7 +27,7 @@ const initialMessage = {
 }
 
 const ModalContentOptions = forwardRef((props, ref) => {
-  const { isOwner, item, useBlockUser, moduleType, nameType, onClose, editScreen } = props;
+  const { isOwner, item, useBlockUser, moduleType, nameType, onClose, editScreen, onDelete } = props;
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
@@ -142,10 +143,12 @@ const ModalContentOptions = forwardRef((props, ref) => {
     },
     {
       id: 3,
+      show: isOwner ? true : false,
       name: 'Hapus',
       color: Color.error,
       onPress: () => {
-        
+        combinedRef.current.close();
+        onDelete();
       },
     },
   ];

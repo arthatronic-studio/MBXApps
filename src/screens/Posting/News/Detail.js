@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Image, ScrollView, Pressable, FlatList} from 'react-native';
+import {View, Image, ScrollView, Pressable, FlatList, TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 import Banner from 'src/components/Banner';
@@ -17,7 +17,6 @@ import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
 import {Container, Divider} from '@src/styled';
 import {
-  TouchableOpacity,
   TouchableWithoutFeedback,
 } from 'react-native-gesture-handler';
 import {
@@ -28,7 +27,7 @@ import {
 } from '@assets/images/home';
 import {useSelector} from 'react-redux';
 import Client from '@src/lib/apollo';
-import {queryAddLike, queryComment} from '@src/lib/query';
+import {queryAddLike, queryComment, queryProductManageV2} from '@src/lib/query';
 import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 import ModalContentOptions from 'src/components/ModalContentOptions';
 import ImagesPath from 'src/components/ImagesPath';
@@ -42,7 +41,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { fetchLikeComment } from 'src/api/likeComment';
-import { async } from 'validate.js';
+import Modal from 'react-native-modal';
+
 
 const NewsDetail = ({navigation, route}) => {
   const [refreshComment, setRefreshComment] = useState(false);
@@ -52,6 +52,7 @@ const NewsDetail = ({navigation, route}) => {
   const [loadingBanner, setLoadingBanner] = useState(true);
   const [listBanner, setListBanner] = useState([]);
   const isFocused = useIsFocused();
+  const [isModalVisible, setModalVisible] = useState(false);
 
   console.log(item, 'item');
 
@@ -159,6 +160,43 @@ const NewsDetail = ({navigation, route}) => {
         console.log(err, 'err list comm');
       });
   };
+
+  const onDelete = () => {
+    const variables = {
+      products: [
+        {
+          code: item.code,
+          name: item.productName,
+          method: 'DELETE', // UPDATE | DELETE
+        },
+      ],
+    };
+
+    console.log(variables);
+
+    Client.mutate({
+      mutation: queryProductManageV2,
+      variables,
+    })
+      .then(res => {
+        console.log(res, '=== Berhsail ===');
+        const data = res.data.contentProductManageV2;
+
+        if (Array.isArray(data) && data.length > 0 && data[0]['id']) {
+          showLoading('success', 'Artikel berhasil dihapus!');
+
+          setTimeout(() => {
+            navigation.navigate('NewsScreen', {title: 'Artikel'});
+          }, 2500);
+        } else {
+          showLoading('error', 'Artikel gagal dihapus!');
+        }
+      })
+      .catch(err => {
+        console.log(err, 'errrrr');
+        showLoading('error', 'Gagal membuat thread, Harap ulangi kembali');
+      });
+  }
 
   function Capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -778,11 +816,50 @@ const NewsDetail = ({navigation, route}) => {
         <Divider />
       </ScrollView>
 
+      <Modal isVisible={isModalVisible}>
+        <View
+          style={{
+            backgroundColor: Color.textInput,
+            borderRadius: 20,
+            paddingVertical: 16,
+            paddingHorizontal: 24,
+            alignItems: 'center',
+          }}>
+          <Text style={{fontWeight: 'bold', fontSize: 14, width: '70%'}}>
+            Apakah kamu yakin ingin menghapus ini?
+          </Text>
+          <Divider height={16}/>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width: '100%'}}>
+            <TouchableOpacity
+              onPress={() => {
+                console.log("sinii");
+                setModalVisible(false);
+              }}
+              style={{paddingVertical: 14, paddingHorizontal: 32, backgroundColor: '#9CA3A5', borderRadius: 120}}>
+              <Text size={14} color={Color.theme}>
+                Batal
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setModalVisible(!isModalVisible);
+                onDelete();
+              }}
+              style={{paddingVertical: 13, paddingHorizontal: 31, borderRadius: 120, borderColor: Color.danger, borderWidth: 1}}>
+              <Text size={14} color={Color.danger}>
+                Hapus
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       <ModalContentOptions
         ref={modalOptionsRef}
         isOwner={user && user.userId === item.ownerId}
         item={item}
         editScreen={'EditNews'}
+        onDelete={() => setModalVisible(!isModalVisible)}
       />
     </Scaffold>
   );

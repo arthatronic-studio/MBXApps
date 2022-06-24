@@ -7,8 +7,10 @@ import {
   Image,
   Platform,
   FlatList,
+  TextInput
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 import {ModalListAction, Scaffold, Text, useColor, useLoading, usePopup} from '@src/components';
 import FormInput from '@src/components/FormInput';
@@ -18,6 +20,8 @@ import { useSelector } from 'react-redux';
 import client from 'src/lib/apollo';
 import { queryAddComment, queryContentCommentPinManage, queryDelComment } from 'src/lib/query';
 import { Alert } from 'src/components/Alert';
+import { shadowStyle } from '@src/styles';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 const itemPerPage = 10;
 const initSelectedComment = {
@@ -31,6 +35,8 @@ const CommentReplyScreen = ({ navigation, route }) => {
   const [isOwnerComment, setIsOwnerComment] = useState(false);
   const [isPinnedComment, setIsPinnedComment] = useState(false);
   const modalListActionRef = useRef();
+  const [thumbImage, setThumbImage] = useState('');
+  const [mimeImage, setMimeImage] = useState('image/jpeg');
   
   const {Color} = useColor();
   const [loadingProps, showLoading] = useLoading();
@@ -51,6 +57,7 @@ const CommentReplyScreen = ({ navigation, route }) => {
       productId: route.params.item.id,
       parentCommentId: route.params.parentComment.id,
       comment: text,
+      image: thumbImage,
     };
 
     console.log(variables, 'variables');
@@ -70,6 +77,8 @@ const CommentReplyScreen = ({ navigation, route }) => {
         navigation.setParams({ parentComment: newParentComment });
 
         setTextReply('');
+        setThumbImage('');
+        setMimeImage('image/jpeg');
         route.params.onRefresh();
       } else {
         showLoading('error', 'Gagal mengirimkan komentar else');
@@ -231,22 +240,73 @@ const CommentReplyScreen = ({ navigation, route }) => {
         }
 
         <View style={{paddingTop: 8, paddingHorizontal: 16}}>
+          {thumbImage !== '' && 
+            <View style={{width: '100%', borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle, justifyContent: 'center', alignItems: 'center', paddingVertical: 16}}>
+              <View
+                style={{width: '100%', aspectRatio: 16/9}}
+              >
+                <Image
+                  style={{height: '100%', width: '100%', borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
+                  source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
+                  resizeMode='contain'
+                />
+
+                <View style={{position: 'absolute', right: 16, top: -16}}>
+                  <TouchableOpacity
+                    onPress={()=> {
+                      setThumbImage('');
+                    }}
+                  >
+                    <Entypo name='circle-with-cross' size={30} color={Color.error} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          }
+
           <FormInput
             placeholder='Masukan balasan komentar'
             multiline
             value={textReply}
             onChangeText={(val) => setTextReply(val)}
+            style={{ 
+              height: '100%'
+             }}
             suffixIcon={
-              <TouchableOpacity
-                onPress={() => {
-                  onSubmitReply(textReply);
-                }}
-                style={{width: 40, height: 40, alignItems: 'center', justifyContent: 'center'}}
-              >
-                <View style={{width: 28, height: 28, borderRadius: 14, backgroundColor: Color.primary, alignItems: 'center', justifyContent: 'center'}}>
-                  <Ionicons name='arrow-forward' color={Color.theme} size={18} />
-                </View>
-              </TouchableOpacity>
+              <>
+                <TouchableOpacity
+                  onPress={() => {
+                    const options = {
+                      mediaType: 'photo',
+                      maxWidth: 640,
+                      maxHeight: 640,
+                      quality: 1,
+                      includeBase64: true,
+                    }
+
+                    launchImageLibrary(options, (callback) => {
+                      if(callback.base64){
+                        setThumbImage(callback.base64);
+                        setMimeImage(callback.type);
+                      }
+                    })
+                  }}
+                >
+                  <View style={{width: 40, height: 40, alignItems:'center', justifyContent:'center'}}>
+                    <Entypo name="camera" size={20} />
+                  </View>
+                </TouchableOpacity> 
+                <TouchableOpacity
+                  onPress={() => {
+                    onSubmitReply(textReply);
+                  }}
+                  style={{width: 40, height: 40, alignItems: 'center', justifyContent: 'center'}}
+                >
+                  <View style={{width: 28, height: 28, borderRadius: 14, backgroundColor: Color.primary, alignItems: 'center', justifyContent: 'center'}}>
+                    <Ionicons name='arrow-forward' color={Color.theme} size={18} />
+                  </View>
+                </TouchableOpacity>
+              </>
             }
           />
         </View>

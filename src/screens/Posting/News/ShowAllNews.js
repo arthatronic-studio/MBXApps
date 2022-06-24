@@ -88,19 +88,12 @@ const ShowAllNews = ({navigation, route}) => {
   };
 
   return (
-    <Scaffold header={<ArticleHeader />}>
+    <Scaffold header={<ArticleHeader />} style={{ marginBottom: 32 }}>
       <ListContentProductV2
         userProfileId={userProfileId}
         productCategory="ARTIKEL"
         name={title}
       />
-      {/* <HighlightContentProductV2
-            productCategory='ARTIKEL'
-            name='Artikel'
-            title='Artikel Terbaru'
-            nav='NewsScreen'
-            refresh={refreshing}
-          /> */}
     </Scaffold>
   );
 };

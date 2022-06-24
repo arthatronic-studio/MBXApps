@@ -186,8 +186,8 @@ const EditNews = props => {
 
     console.log(variables);
 
-    Client.query({
-      query: queryProductManageV2,
+    Client.mutate({
+      mutation: queryProductManageV2,
       variables,
     })
       .then(res => {
