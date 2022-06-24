@@ -193,7 +193,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-      <View style={{flex: 1, backgroundColor: accessClient.Theme === 'dark' ? '#000000' : '#FFFFFF'}}>
+        <View style={{flex: 1, backgroundColor: accessClient.Theme === 'dark' ? '#000000' : '#FFFFFF'}}>
           <NavigationContainer
             ref={navigationRef}
             onReady={onReady}

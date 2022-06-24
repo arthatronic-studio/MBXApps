@@ -25,15 +25,15 @@ const staticColors = {
   bid: '#E6E9EA',
   infosecond: '#DAE9F2',
   placeholder: '#6A7479',
-  danger:'#F73347',
-  lightInfo:'#2C70F7'
+  danger: '#F73347',
+  lightInfo: '#2C70F7'
 };
 
 export const lightModeColors = {
   ...staticColors,
+  colorDominant: 'light',
   overflow: 'rgba(0, 0, 0, 0.3)',
   reverseOverflow: 'rgba(f, f, f, 0.3)',
-  colorDominant: 'light',
   theme: '#FFFFFE',
   text: '#0D0006',
   textInput: '#FFFFFF',
@@ -43,12 +43,12 @@ export const lightModeColors = {
 
 export const darkModeColors = {
   ...staticColors,
+  colorDominant: 'dark',
   overflow: 'rgba(f, f, f, 0.3)',
   reverseOverflow: 'rgba(0, 0, 0, 0.3)',
-  colorDominant: 'dark',
-  theme: '#0D0006',
+  theme: '#222222',
   text: '#FFFFFF',
-  textInput: '#0D0006',
+  textInput: '#222222',
   border: '#707070',
   semiwhite: '#353535',
 };
