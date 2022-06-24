@@ -290,15 +290,15 @@ const MainHome = ({navigation, route}) => {
   return (
     <Scaffold
       translucent={Platform.OS === 'ios' ? true : isFocused}
-      // useSafeArea={Platform.OS === 'ios' ? false : isFocused ? false : true}
       useSafeArea={Platform.OS === 'ios' ? false : true}
-      statusBarAnimatedStyle={
-        Platform.OS === 'ios'
-          ? {backgroundColor: backgroundInterpolate}
-          : isFocused
-          ? {backgroundColor: backgroundInterpolate}
-          : {}
-      }
+      // statusBarAnimatedStyle={
+      //   Platform.OS === 'ios'
+      //     ? {backgroundColor: backgroundInterpolate}
+      //     : isFocused
+      //     ? {backgroundColor: backgroundInterpolate}
+      //     : {}
+      // }
+      statusBarColor={Color.primary}
       loadingProps={loadingProps}
       header={
         <HeaderBig
@@ -306,7 +306,7 @@ const MainHome = ({navigation, route}) => {
           useAnimated
           style={{
             paddingTop: 8,
-            backgroundColor: backgroundInterpolate,
+            // backgroundColor: backgroundInterpolate,
           }}
           actions={
             <View style={{flexDirection: 'row'}}>
@@ -322,7 +322,7 @@ const MainHome = ({navigation, route}) => {
                 <Ionicons
                   name="notifications-outline"
                   size={22}
-                  color={Color.text}
+                  color={Color.textInput}
                 />
                  {notificationCount > 0 && (
                   <Circle
@@ -346,7 +346,7 @@ const MainHome = ({navigation, route}) => {
                   justifyContent: 'flex-start',
                   alignItems: 'flex-end',
                 }}>
-                <Ionicons name="chatbox-outline" size={22} color={Color.text} />
+                <Ionicons name="chatbox-outline" size={22} color={Color.textInput} />
                 {chatNotifCount > 0 && (
                   <Circle
                     size={12}
@@ -436,7 +436,7 @@ const MainHome = ({navigation, route}) => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            style={{backgroundColor: colorOutputRange[0]}}
+            // style={{backgroundColor: colorOutputRange[0]}}
           />
         }
         // style={{
@@ -451,7 +451,7 @@ const MainHome = ({navigation, route}) => {
               position: 'absolute',
               borderBottomLeftRadius: 24,
               borderBottomRightRadius: 24,
-              backgroundColor: backgroundInterpolate,
+              // backgroundColor: backgroundInterpolate,
             }}
           />
 
@@ -482,11 +482,14 @@ const MainHome = ({navigation, route}) => {
             </View>
           </View> */}
 
-          {accessClient.MainHome.showWidgetBalance && (
+          {/* hide balance */}
+          {/* {accessClient.MainHome.showWidgetBalance && (
             <Container paddingVertical={16}>
               <WidgetBalance />
             </Container>
-          )}
+          )} */}
+
+          <Divider />
 
           <MyRank />
 
@@ -768,7 +771,7 @@ const MainHome = ({navigation, route}) => {
             refresh={refreshing || isFocused}
           />
 
-          {accessClient.MainHome.showListMusicNewer && <MusikTerbaru />}
+          <MusikTerbaru />
 
           <Divider />
 
