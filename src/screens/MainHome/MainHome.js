@@ -733,7 +733,7 @@ const MainHome = ({navigation, route}) => {
           <HighlightContentProduct
             productCategory='EMERGENCY'
             name='Help Me'
-            title='Help Me'
+            title='Kondisi Darurat'
             nav='EmergencyScreen'
             refresh={refreshing || isFocused}
           />
@@ -741,7 +741,7 @@ const MainHome = ({navigation, route}) => {
           <HighlightContentProduct
             productCategory='POSTING'
             name='Artikel'
-            title='Postingan Artikel'
+            title='Artikel Populer'
             nav='NewsScreen'
             refresh={refreshing || isFocused}
           />
