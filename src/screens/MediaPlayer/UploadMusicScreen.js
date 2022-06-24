@@ -28,6 +28,7 @@ import { queryProductManage } from '@src/lib/query';
 import { accessClient } from 'src/utils/access_client';
 import { Scaffold } from 'src/components';
 import { launchImageLibrary } from 'react-native-image-picker';
+import Config from 'react-native-config';
 
 const MainView = Styled(View)`
     flex: 1;
@@ -75,7 +76,7 @@ const UploadMusicScreen = (props) => {
         price: 0,
         status: 'PUBLISH',
         method: 'INSERT',
-        type: accessClient.InitialCode, // route.params ? route.params.uploadParams.type : 'MUSIC',
+        type: Config.PRODUCT_TYPE, // route.params ? route.params.uploadParams.type : 'MUSIC',
         category: 'NEWEST_MUSIC', // route.params ? getObjSubCategoryByCode(route.params.uploadParams.subCategory).name : 'ALL',
         stream: '',
         description: '',

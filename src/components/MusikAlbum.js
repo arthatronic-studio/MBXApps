@@ -15,6 +15,7 @@ import client from 'src/lib/apollo';
 import { queryContentProduct } from 'src/lib/query';
 import { accessClient } from 'src/utils/access_client';
 import { trackPlayerPlay } from 'src/utils/track-player-play';
+import Config from 'react-native-config';
 
 const defaultProps = {
   
@@ -39,9 +40,8 @@ const MusikAlbum = ({ }) => {
     const variables = {
       page: 1,
       itemPerPage: 50,
-      productType: accessClient.InitialCode,
+      productType: Config.PRODUCT_TYPE,
       productCategory: "ALBUM_MUSIC",
-      // productSubCategory: "NEW"
     };
 
     client.query({
@@ -49,7 +49,7 @@ const MusikAlbum = ({ }) => {
       variables,
     })
     .then((res) => {
-      console.log('res', res);
+      console.log('res musik album', res);
 
       let newData = [];
       if (res.data.contentProduct) {
@@ -64,7 +64,7 @@ const MusikAlbum = ({ }) => {
       });
     })
     .catch((err) => {
-      console.log('err', err);
+      console.log('err musik album', err);
 
       setList({
         ...list,

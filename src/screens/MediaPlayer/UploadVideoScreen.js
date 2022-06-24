@@ -29,6 +29,7 @@ import { outputVideoCache, outputImageCache, getRawCodec } from '@src/utils/rawF
 import { accessClient } from 'src/utils/access_client';
 import { Scaffold } from 'src/components';
 import { launchImageLibrary } from 'react-native-image-picker';
+import Config from 'react-native-config';
 
 const MainView = Styled(View)`
     flex: 1;
@@ -75,7 +76,7 @@ const UploadVideoScreen = ({ navigation, route }) => {
         price: 0,
         status: 'PUBLISH', // PUBLISH | DRAFT | PRIVATE | REMOVE
         method: 'INSERT', // UPDATE | DELETE
-        type: accessClient.InitialCode,
+        type: Config.PRODUCT_TYPE,
         category: 'NEWEST_VIDEO', // route.params ? getObjSubCategoryByCode(route.params.uploadParams.subCategory).name : 'Semua',
         stream: '',
         description: '',

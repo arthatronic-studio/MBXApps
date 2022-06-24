@@ -70,7 +70,7 @@ const HeaderBig = ({
         elevation: 0,
         borderBottomWidth: 0,
         paddingHorizontal: 16,
-        backgroundColor: Color.theme,
+        backgroundColor: type === 'MAIN_HOME' ? Color.primary : Color.theme,
         borderColor: Color.border,
         ...style,
       }}
@@ -84,6 +84,7 @@ const HeaderBig = ({
                 size={10}
                 type="medium"
                 letterSpacing={0.45}
+                color={type === 'MAIN_HOME' ? Color.textInput : Color.text}
               >
                 Halo,
               </Text>
@@ -92,6 +93,7 @@ const HeaderBig = ({
                 size={20}
                 type='medium'
                 numberOfLines={1}
+                color={type === 'MAIN_HOME' ? Color.textInput : Color.text}
               >
                 {user && !user.guest
                   ? user.firstName.trim() +

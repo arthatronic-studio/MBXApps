@@ -37,8 +37,6 @@ const defaultProps = {
 };
 
 const CardComponentJobs = ({ productCategory, item, numColumns, onPress, horizontal, style }) => {
-
-    console.log('ini jobs',item);
     const [like, setLike] = useState(item.like);
     const [im_like, setImLike] = useState(item.im_like);
     const [trigger, setTrigger] = useState(false);
