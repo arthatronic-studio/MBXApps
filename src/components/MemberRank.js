@@ -46,8 +46,8 @@ const MemberRank = props => {
       radius={8}
       color={Color.textInput}
       style={{...shadowStyle}}>
-      <Row justify="space-evenly">
-        <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
+      <Row justify="space-between">
+        <View style={{flexDirection: 'column', alignItems: 'flex-start', width: '48%'}}>
           <Text size={10} type="reguler" color="#999999">
             Sambut Member Baru
           </Text>
@@ -79,7 +79,7 @@ const MemberRank = props => {
             </View>
           </View>
         </View>
-        <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
+        <View style={{flexDirection: 'column', alignItems: 'flex-start', width: '48%'}}>
           <Text size={10} type="reguler" color="#999999">
             Member Terbaik Bulan Ini
           </Text>
