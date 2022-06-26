@@ -71,7 +71,7 @@ const MemberRank = props => {
               }}
             />
             <Divider width={10} />
-            <View style={{flexDirection: 'column', alignItems: 'flex-start', maxWidth: '75%'}}>
+            <View style={{flexDirection: 'column', alignItems: 'flex-start', flex: 1}}>
               <Text size={14} type="bold" numberOfLines={1}>
                 {pemula.fullname}
               </Text>
@@ -104,8 +104,8 @@ const MemberRank = props => {
               }}
             />
             <Divider width={10} />
-            <View style={{flexDirection: 'column', alignItems: 'flex-start', maxWidth: '75%'}}>
-              <Text size={14} type="bold">
+            <View style={{flexDirection: 'column', alignItems: 'flex-start', flex: 1}}>
+              <Text size={14} type="bold" numberOfLines={1}>
                 {veteran.fullname}
               </Text>
               <Text size={10} color="#4579E6">
