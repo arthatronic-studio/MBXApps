@@ -109,57 +109,67 @@ const CardComponentJobs = ({ productCategory, item, numColumns, onPress, horizon
                     style,
                 ]}
             >
-               
-                <View style={{width: '100%',  padding: 16, borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle}}>
-                    <View style={{flexDirection:'row'}}>
-                    <View style={{width: '20%'}}>
-                        <Image
-                            source={{uri: item.image}}
-                            style={{
-                                width: '80%',
-                                aspectRatio: 1,
-                                borderRadius: 8,
-                            }}
-                            resizeMode='contain'
-                        />
-                    </View>
-    
-                    <View style={{width: '80%'}}>
-                        <View style={{width: '100%', flexDirection: 'row', justifyContent: 'space-between'}}>
-                            <Text type='bold' size={16} align='left' numberOfLines={2}>{item.productName}</Text>
-                            {/* <Ionicons name='bookmark-outline' size={20} color={Color.primary} /> */}
-                        </View>
-    
-                        <View style={{paddingTop: 4, flexDirection: 'row'}}>
-                            <Text size={12} align='left'>Post:&nbsp;</Text>
-                            <Text size={12} align='left'>{item.fullname}</Text>
-                        </View>
-    
-                      
-                    </View>
-                    </View>
-                   <View style={{flexDirection:'row',marginVertical:10}}>
-                   <Ionicons name="briefcase-outline" size={18}color={Color.gray}/>
-                 <Text  size={12}color={Color.gray} style={{marginHorizontal:5}}>Fresh Graduate </Text>
-                <Ionicons name="time-outline" size={18}color={Color.gray}/>
-                       <Text size={12}color={Color.gray} style={{marginHorizontal:5}}>FullTime</Text>
-                   </View>
-                   <View style={{flexDirection:'row'}}>
-                   <Ionicons name="cash-outline" size={18}color={Color.gray}/>
-                       <Text size={12} color={Color.gray}style={{marginHorizontal:10}}>Rp10.000.000 - Rp15.000.000</Text>
-                   </View>
 
-                   <View style={{borderBottomColor:Color.border,borderBottomWidth:1,marginVertical:10}}/>
-
-                   
-                   <View style={{paddingTop: 14, flexDirection: 'row', justifyContent: 'space-between'}}>
-                            {/* <Text size={12} color={Color.info}>{item.like} Pelamar</Text> */}
-                            <Text size={12} align='left'>Jakarta Selatan</Text>
-                            <Text size={12}>{Moment(parseInt(item.created_date)).fromNow()}</Text>
+                <View style={{ width: '100%', padding: 16, borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle }}>
+                    <View style={{ flexDirection: 'row' }}>
+                        <View style={{ width: '20%' }}>
+                            <Image
+                                source={{ uri: item.image }}
+                                style={{
+                                    width: '80%',
+                                    aspectRatio: 1,
+                                    borderRadius: 8,
+                                    borderColor: Color.border,
+                                    borderWidth: 0.5,
+                                }}
+                                resizeMode='contain'
+                            />
                         </View>
+
+                        <View style={{ width: '80%' }}>
+                            <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <Text type='bold' size={16} align='left' numberOfLines={2}>{item.productName}</Text>
+                                {/* <Ionicons name='bookmark-outline' size={20} color={Color.primary} /> */}
+                            </View>
+
+                            <View style={{ paddingTop: 4, flexDirection: 'row' }}>
+                                <Text size={12} align='left'>Post:&nbsp;</Text>
+                                <Text size={12} align='left'>{item.fullname}</Text>
+                            </View>
+                        </View>
+                    </View>
+                    
+                    <View style={{ flexDirection: 'row', paddingTop: 16 }}>
+                        <Row>
+                            <Ionicons name="briefcase-outline" size={18} color={Color.gray} />
+                            <Divider width={4} />
+                            <Text size={12} color={Color.gray}>Fresh Graduate </Text>
+                        </Row>
+                        <Divider />
+                        <Row>
+                            <Ionicons name="time-outline" size={18} color={Color.gray} />
+                            <Divider width={4} />
+                            <Text size={12} color={Color.gray}>Full Time</Text>
+                        </Row>
+                    </View>
+
+                    {/* hide salary */}
+                    {/* <View style={{ flexDirection: 'row' }}>
+                        <Ionicons name="cash-outline" size={18} color={Color.gray} />
+                        <Text size={12} color={Color.gray} style={{ marginHorizontal: 10 }}>Rp10.000.000 - Rp15.000.000</Text>
+                    </View> */}
+
+                    <View style={{ borderBottomColor: Color.border, borderBottomWidth: 1, marginVertical: 12 }} />
+
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Text size={12} color={Color.info}>{item.like} Pelamar</Text>
+                        {/* hide location */}
+                        {/* <Text size={12} align='left'>Jakarta Selatan</Text> */}
+                        <Text size={12}>{Moment(parseInt(item.created_date)).fromNow()}</Text>
+                    </View>
                 </View>
-               
-                
+
+
             </TouchableOpacity>
         )
     }

@@ -3,6 +3,7 @@ import {View, Image, ScrollView, Platform, Linking} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
+import Entypo from 'react-native-vector-icons/Entypo';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 
@@ -16,6 +17,7 @@ import { Container, Divider, Padding } from 'src/styled';
 import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 import ModalContentOptions from 'src/components/ModalContentOptions';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
+import { FormatMoney } from 'src/utils';
 
 const EventDetail = ({navigation, route}) => {
   const {Color} = useColor();
@@ -73,6 +75,8 @@ const EventDetail = ({navigation, route}) => {
     isPassedEventDate = false;
   }
 
+  const isPayProduct = item && typeof item.price && item.price > 0;
+
   return (
     <Scaffold
       headerTitle="Detail"
@@ -112,14 +116,14 @@ const EventDetail = ({navigation, route}) => {
           <View>
             <Text
               style={{
-                color: Color.info,
+                color: Color.success,
                 fontWeight: 'bold',
                 fontSize: 11,
                 textAlign: 'left',
                 paddingHorizontal: 20,
                 marginBottom: 2,
               }}>
-              OFFICIAL EVENT
+              Community
             </Text>
             <Text
               style={{
@@ -132,7 +136,8 @@ const EventDetail = ({navigation, route}) => {
               {item.productName}
             </Text>
           </View>
-          <View style={{flexDirection: 'row', paddingVertical: 18}}>
+
+          <View style={{flexDirection: 'row', marginTop: 16, marginBottom: 12}}>
             {moment(eventDate).isValid() && <View
               style={{
                 flexDirection: 'row',
@@ -165,18 +170,39 @@ const EventDetail = ({navigation, route}) => {
               <Divider width={8} />
               <Text style={{fontWeight: 'bold'}}>{item.fullname}</Text>
             </View>
+          </View>
+
+          <View style={{flexDirection: 'row', marginBottom: 12}}>
+            {/* hide location */}
             {/* <View
               style={{
-                width: '60%',
+                width: '50%',
                 flexDirection: 'row',
+                paddingHorizontal: 16,
               }}>
               <Entypo
                 name={'location-pin'}
-                size={20}
-                style={{paddingHorizontal: 10}}
+                size={18}
+                color={Color.info}
               />
+              <Divider width={8} />
               <Text style={{fontWeight: 'bold'}}>Jakarta Selatan</Text>
             </View> */}
+
+            <View
+              style={{
+                width: '50%',
+                flexDirection: 'row',
+                paddingHorizontal: 16,
+              }}>
+              <Entypo
+                name={'price-tag'}
+                size={18}
+                color={Color.primary}
+              />
+              <Divider width={8} />
+              <Text style={{fontWeight: 'bold'}} color={isPayProduct ? Color.text : Color.success}>{isPayProduct ? FormatMoney.getFormattedMoney(item.price) : 'Gratis'}</Text>
+            </View>
           </View>
 
           <Container paddingHorizontal={32} paddingVertical={16}>

@@ -139,9 +139,9 @@ const ModalImagePicker = ({ visible, onSelected, onClose, withPreview }) => {
         <Modal
             testID={'modal'}
             isVisible={visible}
-            swipeDirection={['up', 'down']}
-            onBackdropPress={() => { onClose(); setTempSelected() }}
-            // onSwipeCancel={() => { onClose(); }}
+            swipeDirection={['down']}
+            onBackdropPress={() => { onClose(); setTempSelected(); }}
+            onSwipeComplete={() => { onClose(); setTempSelected(); }}
             style={{
                 justifyContent: 'flex-end', // the keys of bottom half
                 margin: 0,

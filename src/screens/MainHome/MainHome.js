@@ -42,7 +42,7 @@ import {queryBannerList} from '@src/lib/query/banner';
 import ModalPosting from './ModalPosting';
 import MusikTerbaru from 'src/components/MusikTerbaru';
 import WidgetBalance from 'src/components/WidgetBalance';
-import WidgetMenuHome from './WidgetMenuHome';
+import WidgetMenuHome from 'src/screens/MainHome/WidgetMenuHome';
 import PostingHeader from 'src/components/Posting/PostingHeader';
 import {shadowStyle} from 'src/styles';
 import Geolocation from 'react-native-geolocation-service';
@@ -57,7 +57,6 @@ import {getSizeByRatio} from 'src/utils/get_ratio';
 import MusikAlbum from 'src/components/MusikAlbum';
 import HighlightLelang from 'src/components/Card/HighlightLelang';
 import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
-import ModalMenuHome from 'src/components/Modal/ModalMenuHome';
 import PushNotification, { Importance } from 'react-native-push-notification';
 import { initSocket } from 'src/api-socket/currentSocket';
 import { queryGetNotification } from "src/lib/query";
@@ -84,7 +83,6 @@ const MainHome = ({navigation, route}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [thisTrack, setThisTrack] = useState();
 
-  const modalMenuHome = useRef();
   const user = useSelector(state => state['user.auth'].login.user);
   const dispatch = useDispatch();
   const {Color} = useColor();
@@ -489,11 +487,11 @@ const MainHome = ({navigation, route}) => {
             </Container>
           )} */}
 
-          <Divider />
+          {/* <Divider /> */}
 
-          <MyRank />
+          {/* <MyRank /> */}
 
-          <Container paddingVertical={24}>
+          <Container paddingVertical={16}>
             <Banner
               showHeader={false}
               data={listBanner}
@@ -503,18 +501,12 @@ const MainHome = ({navigation, route}) => {
 
           <MemberRank />
 
-          <Divider height={4} />
-
           {accessClient.MainHome.showMenuHome && <WidgetMenuHome
-            onPress={item => {
+            showMore
+            onPress={(item) => {
               console.log(item, 'item');
 
-              if (item.nav === 'modal') {
-                modalMenuHome.current.open();
-                return;
-              }
-
-              if (item.code === 'post') {
+              if (item.code === 'CREATE_POST') {
                 modalPostingRef.current.open();
                 return;
               }
@@ -672,8 +664,6 @@ const MainHome = ({navigation, route}) => {
             />
           )}
 
-          <Divider />
-
           {/* hide banner promo */}
           {/* {accessClient.MainHome.showListPromo && (
             <View style={{marginBottom: 40}}>
@@ -767,7 +757,7 @@ const MainHome = ({navigation, route}) => {
             name='Tempat'
             title='Tempat Terdekat'
             nav='PlaceScreen'
-            horizontal={true}
+            horizontal
             refresh={refreshing || isFocused}
           />
 
@@ -803,11 +793,7 @@ const MainHome = ({navigation, route}) => {
             nav='YoutubeScreen'
             refresh={refreshing}
             style={{paddingHorizontal: 0}}
-            iconName='radar'
-            iconType='MaterialCommunityIcons'
           />}
-
-          <Divider />
 
           <HighlightContentProduct
             productCategory='NEWEST_VIDEO'
@@ -819,11 +805,12 @@ const MainHome = ({navigation, route}) => {
           />
 
           {accessClient.MainHome.showListEbookNewer && (
-            <View style={{marginTop: 32}}>
+            <View style={{  }}>
               <PostingHeader
                 title="Rilisan Terbaru"
                 showSeeAllText
                 onSeeAllPress={() => navigation.navigate('Ebook')}
+                productCategory={'NEWEST_EBOOK'}
               />
               <FlatList
                 data={[
@@ -865,10 +852,6 @@ const MainHome = ({navigation, route}) => {
           navigation.navigate(e.nav, e.params);
           modalPostingRef.current.close();
         }}
-      />
-
-      <ModalMenuHome
-        ref={modalMenuHome}
       />
 
       {dataPopupAds && (

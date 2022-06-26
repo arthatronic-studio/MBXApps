@@ -97,20 +97,18 @@ const CardComponentArticle = ({ productCategory, item, numColumns, onPress, hori
                         product_name: item.productName,
                         user_id: user.userId,
                         method: analyticMethods.view,
-                    })
-
+                    });
                 }}
-                style={[
-                    {
-                        width: width / numColumns - 16,
-                        paddingHorizontal: 8,
-                        flexDirection: 'row',
-                        
-                    },
-                    style,
-                ]}>
-                <View style={{flexDirection: 'row',width: '100%', marginBottom: 10,}}>
-                    <View style={{ width: '25%',}}>
+                style={{
+                    width: width / numColumns - 16,
+                    paddingHorizontal: 8,
+                    flexDirection: 'row',
+                    marginBottom: 16,
+                    ...style,
+                }}
+            >
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                    <View style={{ flex: 1}}>
                         <Image
                             source={{ uri: item.image }}
                             style={{
@@ -121,17 +119,27 @@ const CardComponentArticle = ({ productCategory, item, numColumns, onPress, hori
                             resizeMode="cover"
                         />
                     </View>
-                    <View style={{width: '75%',}}>
-                        <View style={{height: 55}}>
+                    <View style={{ flex: 3, paddingHorizontal: 8, paddingVertical: 4, justifyContent: 'space-between'}}>
+                        <View>
                             <Text align={'left'}
-                            numberOfLines={3}
-                            style={{fontSize: 14, fontWeight: 'bold', paddingHorizontal: 10,paddingVertical: 2}}>{item.productName}</Text>
+                                numberOfLines={2}
+                                type='bold'
+                            >
+                                {item.productName}
+                            </Text>
+                            <Divider height={2} />
+                            <Text align={'left'}
+                                size={12}
+                                numberOfLines={2}
+                            >
+                                {item.productDescription}
+                            </Text>
                         </View>
-                        <Divider/>
-                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <Text align={'left'} style={{fontSize: 10, paddingLeft: 10, color: Color.secondary}}>{item.fullname}</Text>
+
+                        <View style={{flexDirection: 'row'}}>
+                            <Text align={'left'} style={{fontSize: 10, color: Color.secondary}}>{typeof item.fullname === 'string' ? item.fullname.split(' ')[0] : ''} • </Text>
                             <View style={{width: 3, height: 3, borderRadius: 20, backgroundColor: Color.secondary}}/>
-                            <Text align={'left'} style={{fontSize: 10,paddingLeft: 3, color: Color.secondary}}>{Moment(parseInt(item.created_date)).format('DD MMMM YYYY')}</Text>
+                            <Text align={'left'} style={{fontSize: 10, color: Color.secondary}}>{Moment(parseInt(item.created_date)).format('DD MMM YYYY')}</Text>
                         </View>
                     </View>
                 </View>

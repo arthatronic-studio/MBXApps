@@ -43,12 +43,14 @@ const MemberRank = props => {
     <Container
       padding={10}
       marginHorizontal={16}
+      marginBottom={12}
       radius={8}
-      color={Color.textInput}
-      style={{...shadowStyle}}>
-      <Row justify="space-evenly">
-        <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
-          <Text size={10} type="reguler" color="#999999">
+      color={Color.theme}
+      style={{flex: 1, ...shadowStyle}}
+    >
+      <Row style={{flex: 1}}>
+        <View style={{flex: 1, paddingRight: 4}}>
+          <Text size={10} align='left' color="#999999">
             Sambut Member Baru
           </Text>
           <Divider height={4} />
@@ -79,8 +81,9 @@ const MemberRank = props => {
             </View>
           </View>
         </View>
-        <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
-          <Text size={10} type="reguler" color="#999999">
+
+        <View style={{flex: 1, paddingLeft: 4}}>
+          <Text size={10} align='left' color="#999999">
             Member Terbaik Bulan Ini
           </Text>
           <Divider height={4} />

@@ -33,6 +33,7 @@ import CardComponentEvent from './CardComponentEvent';
 import CardComponentJobs from './CardComponentJobs';
 import CardComponentPlace from './CardComponentPlace';
 import CardForumVertical from '@src/screens/MainForum/CardForumVertical';
+import { fetchContentProductDetail } from 'src/api/content';
 
 const defaultProps = {
     productCategory: '',
@@ -90,6 +91,11 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
         setLike(!im_like ? like + 1 : like - 1);
         setImLike(!im_like);
         setTrigger(true);
+    }
+
+    const onPressCard = async() => {
+        const result = await fetchContentProductDetail(item.code);
+        console.log('result', result);
     }
 
     const renderCardEmergency = () => {
@@ -518,14 +524,23 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
     // else if (productCategory === 'EVENT') return renderCardEvent();
     // else if (productCategory === 'JOBS') return renderCardJobs();
     // else if (productCategory === 'NEARBY_PLACE') return renderCardPlace();
-    if (productCategory === 'EMERGENCY') return <CardComponentEmergency { ...props } />;
-    else if (productCategory === 'POSTING') return <CardComponentArticle { ...props } />;
-    else if (productCategory === 'EVENT') return <CardComponentEvent { ...props } />;
-    else if (productCategory === 'JOBS') return <CardComponentJobs { ...props } />;
-    else if (productCategory === 'NEARBY_PLACE') return <CardComponentPlace { ...props } />;
+    if (productCategory === 'EMERGENCY') return <CardComponentEmergency onPress={() => onPressCard()} { ...props } />;
+    else if (productCategory === 'POSTING') return <CardComponentArticle onPress={() => onPressCard()} { ...props } />;
+    else if (productCategory === 'EVENT') return <CardComponentEvent onPress={() => onPressCard()} { ...props } />;
+    else if (productCategory === 'JOBS') return <CardComponentJobs onPress={() => onPressCard()} { ...props } />;
+    else if (productCategory === 'NEARBY_PLACE') return <CardComponentPlace onPress={() => onPressCard()} { ...props } />;
     else if (productCategory === 'YOUTUBE_VIDEO') return <CardComponentYoutube item={item} />;
     else if (productCategory === 'NEWEST_VIDEO') return <CardComponentVideo item={item} />;
-    else if (productCategory === 'FORUM') return <Container paddingHorizontal={8}><CardForumVertical item={item} onPress={(item) => navigation.navigate('DetailForumScreen', { item })} /></Container>;
+    else if (productCategory === 'FORUM') return <Container paddingHorizontal={8}>
+        <CardForumVertical
+            item={item}
+            onPress={(item) => {
+                onPressCard();
+                navigation.navigate('DetailForumScreen', { item });
+            }}
+        />
+    </Container>;
+    
     return <Text>Not Set</Text>;
 }
 

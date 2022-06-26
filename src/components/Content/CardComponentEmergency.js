@@ -29,6 +29,7 @@ import { useSelector } from 'react-redux';
 import Entypo from 'react-native-vector-icons/Entypo'
 import CardComponentYoutube from './CardComponentYoutube';
 import CardComponentVideo from './CardComponentVideo';
+import WidgetUserLikes from '../Posting/WidgetUserLikes';
 
 const defaultProps = {
     productCategory: '',
@@ -88,6 +89,8 @@ const CardComponentEmergency = ({ productCategory, item, numColumns, onPress, ho
         setTrigger(true);
     }
 
+    // console.log('item', item);
+
     const renderCardEmergency = () => {
         return (
             <View
@@ -97,8 +100,8 @@ const CardComponentEmergency = ({ productCategory, item, numColumns, onPress, ho
                         paddingHorizontal: 8,
                         marginBottom: 16,
                         ...shadowStyle,
+                        ...style,
                     },
-                    style
                 ]}
             >
                 <TouchableOpacity
@@ -107,51 +110,65 @@ const CardComponentEmergency = ({ productCategory, item, numColumns, onPress, ho
                         GALogEvent('Tempat', {
                             id: item.id,
                             product_name: item.productName,
-                            user_id: user.
-                                Id,
+                            user_id: user.userId,
                             method: analyticMethods.view,
                           });
                     }}
                     style={{
                         flexDirection: 'row',
                         width: '100%',
+                        aspectRatio: 6 / 5,
                         backgroundColor: Color.textInput,
                         borderRadius: 8,
-                        aspectRatio: 11 / 9,
-                        elevation: 2
                     }}
                 >
-                    <View style={{ width: '100%', borderRadius: 10, height: 240}}>
-                    <Image
-                        source={{ uri: item.image }}
-                        style={{ height: '65%', width: '100%', borderRadius: 8, backgroundColor: Color.border }}
-                    />
-                    <View style={{position: 'absolute', flexDirection: 'row', alignItems: 'center', backgroundColor: Color.theme, width: 70, top: 10, left: 10, height: 25, borderRadius: 30, paddingLeft: 5}}>
-                        <View style={{width: 10, height: 10, backgroundColor: Color.yellow, borderRadius: 20}}/>
-                        <Text style={{marginLeft: 5,fontSize: 10, fontWeight: 'bold'}}>Medium</Text>
-                    </View>
-                    <Text numberOfLines={1} align={'left'} style={{fontWeight: 'bold', padding:10}}>{item.productName}</Text>
-                    <Row style={{paddingHorizontal: 10}}>
-                        <Entypo name={'location-pin'} color={Color.red}/>
-                        <Text style={{fontSize: 10, color: Color.secondary, paddingLeft: 5, paddingRight: 15}}>Jakarta Barat (Core)</Text>
-                        <MaterialCommunityIcons color={Color.secondary} name='comment-processing'/>
-                        <Text style={{fontSize: 10, color: Color.secondary, paddingLeft: 5, paddingRight: 15}}>{item.comment} Komentar</Text>
-                    </Row>
-                    <Divider height={22}/>
-                    <Row style={{paddingHorizontal: 10}}>
-                        <View style={{width: '65%'}}>
-                            <View style={{width: 25, height:25, borderRadius: 30, backgroundColor: Color.secondary}}>
+                    <View style={{ width: '100%', height: '100%', borderRadius: 8, paddingBottom: 8}}>
+                        <Image
+                            source={{ uri: item.image }}
+                            style={{ height: '65%', width: '100%', borderRadius: 8, backgroundColor: Color.border }}
+                        />
 
-                            </View>
-                            <Text style={{textAlign: 'left',fontSize: 8, color: Color.secondary, marginTop: 5}}>Adang Susanto dan 25 lainnya meluncur</Text>
+                        <View style={{position: 'absolute', flexDirection: 'row', alignItems: 'center', backgroundColor: Color.theme, width: 70, top: 10, left: 10, height: 25, borderRadius: 30, paddingLeft: 5}}>
+                            <View style={{width: 10, height: 10, backgroundColor: Color.error, borderRadius: 20}}/>
+                            <Text style={{marginLeft: 5,fontSize: 10, fontWeight: 'bold'}}>High</Text>
                         </View>
-                        <TouchableOpacity style={{width:'35%', flexDirection: 'row',alignItems: 'center', justifyContent: 'center',backgroundColor: Color.red, height: '100%', borderRadius: 8}}>
-                            <Ionicons name={'rocket-outline'} size={20} style={{color: Color.textInput}}/>
-                            <Text style={{fontSize: 12, color: Color.textInput, marginLeft: 8 }}>Meluncur</Text>
-                        </TouchableOpacity>
-                    </Row>
+
+                        <View style={{height: '20%', width: '100%', padding: 8, justifyContent: 'space-between'}}>
+                            <Text numberOfLines={1} align={'left'} style={{fontWeight: 'bold'}}>{item.productName}</Text>
+                            <Row>
+                                {/* <Entypo name={'location-pin'} color={Color.red}/>
+                                <Text style={{fontSize: 10, color: Color.secondary, paddingLeft: 5, paddingRight: 15}}>Jakarta Barat (Core)</Text> */}
+                                <MaterialCommunityIcons color={Color.secondary} name='comment-processing'/>
+                                <Text style={{fontSize: 10, color: Color.secondary, paddingLeft: 5, paddingRight: 15}}>{item.comment} Komentar</Text>
+                            </Row>
+                        </View>
+
+                        <Row style={{height: '15%', paddingHorizontal: 8}}>
+                            <View style={{width: '65%'}}>
+                                <WidgetUserLikes
+                                    id={item.id}
+                                    title='Sedang Meluncur'
+                                    refresh={trigger === false}
+                                />
+                            </View>
+                            <TouchableOpacity
+                                onPress={() => onSubmitLike()}
+                                style={{width:'35%'}}
+                            >
+                                {im_like ?
+                                    <View style={{flexDirection: 'row', paddingVertical: 8, alignItems: 'center', justifyContent: 'center', backgroundColor: Color.theme, borderRadius: 8, borderWidth: 2, borderColor: Color.primary}}>
+                                        <Ionicons name={'rocket-outline'} size={20} style={{color: Color.primary}}/>                                    
+                                        <Text style={{fontSize: 12, color: Color.primary, marginLeft: 8 }}>Sedang OTW</Text>
+                                    </View>
+                                :
+                                    <View style={{flexDirection: 'row', paddingVertical: 8, alignItems: 'center', justifyContent: 'center', backgroundColor: Color.primary, borderRadius: 8}}>
+                                        <Ionicons name={'rocket-outline'} size={20} style={{color: Color.textInput}}/>                                    
+                                        <Text style={{fontSize: 12, color: Color.textInput, marginLeft: 8 }}>Meluncur</Text>
+                                    </View>
+                                }
+                            </TouchableOpacity>
+                        </Row>
                     </View>
-                    
                 </TouchableOpacity>
             </View>
         )
@@ -162,4 +179,3 @@ const CardComponentEmergency = ({ productCategory, item, numColumns, onPress, ho
 
 CardComponentEmergency.defaultProps = defaultProps
 export default CardComponentEmergency;
-

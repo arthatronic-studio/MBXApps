@@ -50,7 +50,6 @@ const Banner = ({ data, loading, showHeader }) => {
             borderRadius: 8,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: Color.textInput,
           }}
         >
           <ActivityIndicator size="large" color={Color.primary} />
@@ -106,7 +105,6 @@ const Banner = ({ data, loading, showHeader }) => {
                         width: '100%',
                         height: '100%',
                         borderRadius: 8,
-                        backgroundColor: Color.border,
                       }}
                       resizeMode='cover'
                     />

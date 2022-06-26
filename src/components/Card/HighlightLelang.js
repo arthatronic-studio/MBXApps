@@ -179,7 +179,7 @@ const HighlightLelang = ({ title, nav, prodStatus }) => {
   );
 
   return (
-    <View style={{paddingTop: 32}}>
+    <View style={{ }}>
       <PostingHeader
         title={title}
         onSeeAllPress={() => navigation.navigate(nav, { title, prodStatus })}

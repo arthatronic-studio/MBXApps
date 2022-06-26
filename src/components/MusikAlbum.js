@@ -16,6 +16,7 @@ import { queryContentProduct } from 'src/lib/query';
 import { accessClient } from 'src/utils/access_client';
 import { trackPlayerPlay } from 'src/utils/track-player-play';
 import Config from 'react-native-config';
+import PostingHeader from './Posting/PostingHeader';
 
 const defaultProps = {
   
@@ -118,19 +119,12 @@ const MusikAlbum = ({ }) => {
 
   return (
     <View>
-      <View>
-        <Text
-          align='left'
-          type='bold'
-          style={{
-            paddingHorizontal: 16,
-            marginTop: 8,
-            marginBottom: 4,
-          }}
-        >
-          Album
-        </Text>
-      </View>
+      <PostingHeader
+        productCategory='ALBUM_MUSIC'
+        title='Album Populer'
+        showSeeAllText={false}
+      />
+
       <FlatList
         data={list.data}
         renderItem={renderItem}
@@ -139,7 +133,6 @@ const MusikAlbum = ({ }) => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
           paddingHorizontal: 8,
-          paddingVertical: 8,
         }}
       />
     </View>

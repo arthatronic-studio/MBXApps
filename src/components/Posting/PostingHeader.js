@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList } from 'react-native';
+import { View, Image } from 'react-native';
 import PropTypes from 'prop-types';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -15,8 +15,10 @@ import {
 } from '@src/components';
 import { useNavigation } from '@react-navigation/core';
 import { Container, Row } from 'src/styled';
+import { imageContent } from '@assets/images/content';
 
 const propTypes = {
+    productCategory: PropTypes.string.isRequired,
     title: PropTypes.string,
     iconType: PropTypes.string,
     iconName: PropTypes.string,
@@ -26,6 +28,7 @@ const propTypes = {
 };
 
 const defaultProps = {
+    productCategory: 'ALL',
     title: '',
     onSeeAllPress: () => {},
     showSeeAllText: true,
@@ -36,6 +39,7 @@ const defaultProps = {
 
 const PostingHeader = (props) => {
     const {
+        productCategory,
         title,
         onSeeAllPress,
         showSeeAllText,
@@ -60,7 +64,9 @@ const PostingHeader = (props) => {
                 return <MaterialCommunityIcons name={iconName} size={30} style={{marginRight: 10}}/>
         }
     }
-
+    
+    const validImage = productCategory && imageContent[productCategory];
+    
     return (
         <Container
             width='100%'
@@ -75,6 +81,17 @@ const PostingHeader = (props) => {
         >   
             <Row>
                 {iconType && iconName && getIconMenu(iconType, iconName)}
+
+                {validImage && <View style={{ width: 24, aspectRatio: 1, marginRight: 8 }}>
+                    <Image
+                        source={imageContent[productCategory].ic_header}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                        }}
+                    />
+                </View>}
+
                 <Text type="bold" align='left' size={16}>{title}</Text>
             </Row>
             {showSeeAllText && <Text

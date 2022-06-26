@@ -10,30 +10,39 @@ import { queryLike } from '@src/lib/query';
 import ImagesPath from 'src/components/ImagesPath';
 import { Divider, Row } from 'src/styled';
 import { useSelector } from 'react-redux';
+import { initialItemState } from 'src/utils/constants';
 
 const itemPerPage = 50;
-
 const avatarDefault = 'https://storage.googleapis.com/sabyan-prod-music-box/images/avatar/avatar-default.png';
 
-const WidgetUserLikes = ({ id, title }) => {
+const defaultProps = {
+    title: '',
+    refresh: false,
+};
+
+const WidgetUserLikes = ({ id, title, refresh }) => {
     const { Color } = useColor();
     const { width } = useWindowDimensions();
 
     const user = useSelector(state => state['user.auth'].login.user);
 
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [itemData, setItemData] = useState({
-        data: [],
-        loading: true,
-        page: 0,
-        loadNext: false,
-        refresh: false,
-    });
+    const [itemData, setItemData] = useState({...initialItemState, refresh: true});
     const [previewData, setPreviewData] = useState([]);
 
     useEffect(() => {
-        fetchListLike();
-    }, []);
+        if (itemData.refresh) {
+            fetchListLike();
+        }
+    }, [itemData.refresh]);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setItemData({ ...initialItemState, refresh: true });
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [refresh]);
 
     useEffect(() => {
         if (itemData.loadNext && itemData.page !== -1) {
@@ -51,7 +60,7 @@ const WidgetUserLikes = ({ id, title }) => {
           }
         })
         .then((res) => {
-          console.log(res, 'ressss like');
+          console.log(res, 'res list like');
 
           const data = res.data.contentLike;
 
@@ -75,21 +84,21 @@ const WidgetUserLikes = ({ id, title }) => {
             loading: false,
             page: res.data.contentLike.length === itemPerPage ? itemData.page + 1 : -1,
             loadNext: false,
+            refresh: false,
           });
         })
         .catch((err) => {
-          console.log(err, 'errrrr like');
+          console.log(err, 'err list like');
           
           setItemData({
             ...itemData,
             loading: false,
             page: -1,
             loadNext: false,
+            refresh: false,
           });
         })
     }
-
-    console.log('previewData', previewData);
 
     return (
         <>
@@ -216,4 +225,5 @@ const WidgetUserLikes = ({ id, title }) => {
     );
 };
 
+WidgetUserLikes.defaultProps = defaultProps;
 export default WidgetUserLikes;

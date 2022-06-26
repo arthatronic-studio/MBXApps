@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ImageBackground, Dimensions, Image } from 'react-native';
+import { View, Image, useWindowDimensions, } from 'react-native';
 import Moment from 'moment';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -15,8 +15,7 @@ import {
 import { shadowStyle } from '@src/styles';
 import { queryAddLike } from 'src/lib/query';
 import client from 'src/lib/apollo';
-
-const { width } = Dimensions.get('window');
+import { Row } from 'src/styled';
 
 const defaultProps = {
     onPress: () => {},
@@ -31,6 +30,7 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
     const [trigger, setTrigger] = useState(false);
 
     const { Color } = useColor();
+    const { width } = useWindowDimensions();
     const user = useSelector(state => state['user.auth'].login.user);
 
     useEffect(() => {
@@ -78,17 +78,14 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
     return (
         <TouchableOpacity
             onPress={() => onPress(item)}
-            style={[
-                {
-                    width: width - 32,
-                    padding: 8,
-                    marginBottom: 16,
-                    borderRadius: 8,
-                    backgroundColor: Color.textInput,
-                    ...shadowStyle,
-                },
-                style,
-            ]}
+            style={{
+                width: width - 32,
+                marginBottom: 16,
+                borderRadius: 8,
+                backgroundColor: Color.textInput,
+                ...shadowStyle,
+                ...style,
+            }}
         >
             <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16}}>
                 <View
@@ -107,7 +104,21 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
                     </View>
 
                     <View style={{ width: '80%', paddingHorizontal: 8 }}>
-                        <Text type='bold' align='left' numberOfLines={2}>{item.fullname}</Text>
+                        <Row>
+                            <Text type='bold' align='left' numberOfLines={2}>
+                                {item.fullname}
+                            </Text>
+                            {/* hide admin post */}
+                            {/* <Image
+                                source={ImagesPath.ranking}
+                                style={{
+                                    width: 14,
+                                    height: 14,
+                                    marginLeft: 4,
+                                }}
+                            /> */}
+                        </Row>
+
                         <View style={{flexDirection: 'row', marginTop: 4}}>
                             <Text size={8} align='left'>{Moment(parseInt(item.created_date, 10)).format('DD MMM YYYY, HH:mm')}</Text>
                         </View>
@@ -130,23 +141,23 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
                 <Text size={14} align='left' type='medium' numberOfLines={2}>{item.productName}</Text>
             </View>
 
-            <ImageBackground
-                source={{uri: item.image}}
-                style={{
-                    width: '100%',
-                    aspectRatio: 16/9,
-                    justifyContent: 'flex-end',
-                    alignItems: 'center',
-                    marginBottom: 8,
-                }}
-                imageStyle={{borderRadius: 8}}
-            >
-                <View style={{position: 'absolute', height: '100%', width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: 8}} />    
-            </ImageBackground>
+            <View style={{ width: '100%', aspectRatio: 16/9, marginBottom: 8, }}>
+                <Image
+                    source={{uri: item.image}}
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: 8,
+                    }}
+                />
+
+                {/* hide overlay */}
+                {/* <View style={{position: 'absolute', height: '100%', width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: 8}} /> */}
+            </View>
 
             <Text align='left' size={12} {...extraPropsText}>{item.productDescription}...</Text>
 
-            <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', paddingTop: 16}}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', paddingVertical: 16}}>
                 <TouchableOpacity
                     onPress={() => onSubmitLike()}
                     style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}

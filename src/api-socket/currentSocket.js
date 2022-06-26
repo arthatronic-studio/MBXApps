@@ -4,7 +4,7 @@ import { store } from 'src/state/redux';
 
 export let currentSocket;
 
-export const initSocket = () => {    
+export const initSocket = () => {
     if (!currentSocket) {
         const user = store.getState()['user.auth'].login.user;
         console.log('initial socket connect');
@@ -19,20 +19,21 @@ export const initSocket = () => {
             },
         });
 
-        currentSocket.on('connect', function(){
-            console.log('connected');
-        });
-        currentSocket.on('disconnect', function (){
-            console.log('disconnected');
-            initSocket();
-        });
-
         if (user) {
             currentSocket.emit('auth', {id: user.userId});
         }
 
         currentSocket.on('auth', res => {
           console.log('res auth', res);
+        });
+
+        currentSocket.on('connect', function(){
+            console.log('connected');
+        });
+        currentSocket.on('disconnect', function (){
+            console.log('disconnected');
+            currentSocket = null;
+            initSocket();
         });
     } else {
         // console.log('already connect');

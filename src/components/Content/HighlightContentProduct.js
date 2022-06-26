@@ -17,8 +17,6 @@ const propTypes = {
     productCategory: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     title: PropTypes.string,
-    iconType: PropTypes.string,
-    iconName: PropTypes.string,
     nav: PropTypes.string,
     refresh: PropTypes.bool,
     horizontal: PropTypes.bool,
@@ -32,8 +30,6 @@ const defaultProps = {
     productCategory: '',
     name: '',
     title: '',
-    iconType: null,
-    iconName: null,
     nav: '',
     refresh: false,
     horizontal: false,
@@ -54,8 +50,6 @@ const HighlightContentProduct = (props) => {
         style,
         showHeader,
         showEmpty,
-        iconName,
-        iconType,
     } = props;
 
     const { Color } = useColor();
@@ -78,7 +72,11 @@ const HighlightContentProduct = (props) => {
     const fetchData = async() => {
         let variables = {
             page: 1,
-            itemPerPage: userProfileId !== null || productCategory === 'YOUTUBE_VIDEO' ? 1 : 2,
+            itemPerPage:
+                userProfileId !== null || productCategory === 'YOUTUBE_VIDEO' ? 1 :
+                productCategory === 'NEARBY_PLACE' ? 4 :
+                productCategory === 'POSTING' ? 3 :
+                2,
         }
         if (productCategory) {
             variables.productCategory = productCategory;
@@ -108,8 +106,7 @@ const HighlightContentProduct = (props) => {
                 onSeeAllPress={() => {
                     navigation.navigate(nav, { title, userProfileId });
                 }}
-                iconType={iconType}
-                iconName={iconName}
+                productCategory={productCategory}
             />
         )
     }
@@ -126,21 +123,33 @@ const HighlightContentProduct = (props) => {
     }
 
     let extraProps = { numColumns: 1 };
-    // if (productCategory === 'NEARBY_PLACE') extraProps.numColumns = 2;
     if (horizontal) extraProps = {};
+    if (productCategory === 'NEARBY_PLACE') extraProps.numColumns = 2;
 
-    const renderCardContent = (item, index) => (
+    const renderCardContent = (item, index, isHorizontal) => (
         <CardContentProduct
             key={index}
             productCategory={productCategory}
             item={item}
-            horizontal={horizontal}
+            horizontal={isHorizontal}
             { ...extraProps }
         />
     )
 
     const renderItem = () => {
         if (horizontal) {
+            if (typeof extraProps.numColumns !== 'undefined' && extraProps.numColumns === 2) {
+                return (
+                    <Row
+                        style={{flexWrap: 'wrap', paddingHorizontal: 8, ...style}}
+                    >
+                        {itemData.data.map((item, index) =>
+                            renderCardContent(item, index, false)
+                        )}
+                    </Row>
+                )
+            }
+
             return (
                 <ScrollView
                     horizontal={horizontal}
@@ -150,7 +159,7 @@ const HighlightContentProduct = (props) => {
                         style={{flexWrap: 'wrap', paddingHorizontal: 8, ...style}}
                     >
                         {itemData.data.map((item, index) =>
-                            renderCardContent(item, index)
+                            renderCardContent(item, index, true)
                         )}
                     </Row>
                 </ScrollView>
@@ -162,7 +171,7 @@ const HighlightContentProduct = (props) => {
                 key={index}
                 style={{paddingHorizontal: 8, ...style}}
             >
-                {renderCardContent(item, index)}
+                {renderCardContent(item, index, false)}
             </Container>
         )
     }
@@ -172,7 +181,7 @@ const HighlightContentProduct = (props) => {
     }
 
     return (
-        <View style={{paddingBottom: 8}}>
+        <View style={{paddingVertical: 12}}>
             {showHeader && renderHeader()}
 
             {itemData.loading ?

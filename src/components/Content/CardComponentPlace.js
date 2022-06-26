@@ -110,23 +110,27 @@ const CardComponentPlace = ({ productCategory, item, numColumns, onPress, horizo
                 }}
             >
                 <View style={{
-                    backgroundColor: Color.textInput,
-                    ...shadowStyle,
+                    // backgroundColor: Color.textInput,
+                    // ...shadowStyle,
                 }}>
-                    <Image
-                        source={{ uri: item.image }}
+                    <View
                         style={{
                             width: '100%',
-                            aspectRatio: 3 / 2,
-                            justifyContent: 'flex-end',
-                            alignItems: 'center',
-                            borderRadius: 4,
-                            // borderTopRightRadius: 14,
-                            backgroundColor: Color.border,
+                            aspectRatio: 4 / 3,
                         }}
-                    />
+                    >
+                        <Image
+                            source={{ uri: item.image }}
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                borderRadius: 8,
+                                backgroundColor: Color.border,
+                            }}
+                        />
+                    </View>
 
-                    <View style={{ width: '100%', padding: 16, backgroundColor: Color.textInput, borderBottomLeftRadius: 4, borderBottomRightRadius: 4 }}>
+                    <View style={{ width: '100%', paddingVertical: 8, backgroundColor: Color.textInput, borderBottomLeftRadius: 4, borderBottomRightRadius: 4 }}>
                         <Text size={12} type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
                         <Divider height={4} />
                         <Row>
@@ -135,34 +139,46 @@ const CardComponentPlace = ({ productCategory, item, numColumns, onPress, horizo
                             </View> */}
                             <Text size={12} color={Color.gray} align='left' numberOfLines={2}>Medan,Kab. Tangerang</Text>
                         </Row>
+
                         <Divider />
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                {/* <Text size={12}>{item.like}&nbsp;</Text>
+
+                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                 <Ionicons
                                     name={item.im_like ? 'heart' : 'heart-outline'}
-                                    color={Color.primary}
-                                /> */}
-                                 <Image
+                                    color={item.im_like ? Color.primary : Color.text}
+                                    size={18}
+                                />
+                                <Divider width={2} />
+                                <Text size={12}>{item.like}</Text>
+                                {/* hide rating */}
+                                 {/* <Image
                                         style={{ height: 17, width: 17 }}
                                         source={iconStar}
                                     />
-                                    <Text color={Color.gray} size={12}>4.5</Text>
+                                <Text color={Color.gray} size={12}>4.5</Text> */}
                             </View>
+
+                            <Divider width={8} />
                            
-                            <View style={{ flexDirection: 'row' }}>
-                            <Image
-                                        style={{ height: 17, width: 17, tintColor: Color.text }}
-                                        source={iconComment}
-                                    />
+                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                <Image
+                                    style={{ height: 18, width: 18, tintColor: Color.text }}
+                                    source={iconComment}
+                                />
+                                <Divider width={2} />
                                 <Text size={12}>{item.comment > 0 ? item.comment : '0'}</Text>
                             </View>
-                            <View style={{ flexDirection: 'row' }}>
-                            <Ionicons
+
+                            <Divider width={8} />
+
+                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                <Ionicons
                                     name={'eye-outline'}
                                     color={Color.gray}
                                     size={18}
                                 />
+                                <Divider width={2} />
                                 <Text size={12}>{item.comment > 0 ? item.comment : '0'}</Text>
                             </View>
                         </View>
