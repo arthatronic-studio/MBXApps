@@ -96,7 +96,7 @@ const initModalActionScrollProps = {
 
 const JoinCommunity = ({ navigation, route }) => {
   const { params } = route;
-  const isUpdatePage = typeof params.item !== 'undefined' && params.item.id !== null;
+  const isUpdatePage = params && typeof params.item !== 'undefined' && params.item.id !== null;
 
   const user = useSelector((state) => state['user.auth'].login.user);
   const { height, width } = useWindowDimensions();
