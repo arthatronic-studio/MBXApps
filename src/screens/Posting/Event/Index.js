@@ -66,7 +66,8 @@ const EventScreen = ({navigation, route}) => {
                   />
                   <View style={{bottom: 15,backgroundColor: Color.error, width: 6, height: 6, borderRadius: 30, position: 'absolute', alignSelf: 'flex-end'}}/>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity
+                onPress={()=> navigation.navigate('History')}>
                   <MaterialCommunityIcons
                       name="history"
                       color={Color.text}

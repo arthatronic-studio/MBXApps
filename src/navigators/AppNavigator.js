@@ -215,6 +215,8 @@ import CommunityEvent from 'src/screens/Posting/Event/CommunityEvent';
 import MyEvent from 'src/screens/Posting/Event/MyEvent';
 import SavedEvent from 'src/screens/Posting/Event/SavedEvent';
 import SearchEvent from 'src/screens/Posting/Event/SearchEvent';
+import History from 'src/screens/Posting/Event/History';
+import MyTicket from 'src/screens/Posting/Event/MyTicket';
 // import EventOfficial from 'src/screens/Posting/Event/EventOfficial';
 // import CommunityEvent from 'src/screens/Posting/Event/CommunityEvent';
 // import MyEvent from 'src/screens/Posting/Event/MyEvent';
@@ -349,6 +351,8 @@ function MainStackNavigator() {
       <Screen name="MyEvent" component={MyEvent} />
       <Screen name="SavedEvent" component={SavedEvent} />
       <Screen name="SearchEvent" component={SearchEvent} />
+      <Screen name="History" component={History} />
+      <Screen name="MyTicket" component={MyTicket} />
 
       {/* Job */}
       <Screen name="JobScreen" component={JobScreen} />

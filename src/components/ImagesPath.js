@@ -244,6 +244,12 @@ export default {
   LocationEvent: require('../components/Images/Location.png'),
   Magnifying: require('../components/Images/MagnifyingGlass.png'),
   nounwind: require('../components/Images/nounwind.png'),
+  tribes: require('../components/Images/Tribes.png'),
+  BlueCalendar: require('../components/Images/BlueCalendar.png'),
+  PurpleClock: require('../components/Images/PurpleClock.png'),
+  RedPin: require('../components/Images/RedPin.png'),
+  QRCode: require('../components/Images/QRCode.png'),
+
   filedoc: require('../components/Images/FileDoc.png'),
   rrid1: require('../components/Images/rrid/rrid1.png'),
   rrid2: require('../components/Images/rrid/rrid2.png'),
