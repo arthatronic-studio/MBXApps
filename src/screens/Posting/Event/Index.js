@@ -57,7 +57,8 @@ const EventScreen = ({navigation, route}) => {
                 <Text style={{fontSize: 18, fontWeight: 'bold'}}>Event</Text>
               </View>
               <View style={{width: '30%', alignItems: 'center',flexDirection: 'row'}}>
-                <TouchableOpacity style={{marginRight: 10}}>
+                <TouchableOpacity style={{marginRight: 10}}
+                onPress={()=> navigation.navigate('SavedEvent')}>
                   <MaterialCommunityIcons
                     name="bookmark-multiple-outline"
                     color={Color.text}
@@ -75,7 +76,7 @@ const EventScreen = ({navigation, route}) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() =>
-                      navigation.navigate('CreateThreadScreen', {
+                      navigation.navigate('CreateEvent', {
                         title,
                         productType: Config.PRODUCT_TYPE,
                         productCategory: '',
@@ -98,12 +99,13 @@ const EventScreen = ({navigation, route}) => {
 
   const SearchEvent = () => {
 		return (
-      <>
-        <View>
+
+        <Pressable onPress={()=> navigation.navigate('SearchEvent')}>
           <TextInput
+          editable={false}
           placeholder='Cari jadwal acara . . .'
           style={{paddingHorizontal: 10, fontSize: 12,backgroundColor: Color.theme, marginHorizontal: 15, height: 40, borderRadius: 8, borderWidth: 1, borderColor: Color.border}}>
-
+          
           </TextInput>
           <IonIcons
           name='search'
@@ -112,8 +114,7 @@ const EventScreen = ({navigation, route}) => {
           onPress={() => navigation.navigate('')}
           style={{position: 'absolute', alignSelf: 'flex-end', right: 25, top: 10}}
         />
-        </View>
-      </>
+        </Pressable>
     )
   }
 
