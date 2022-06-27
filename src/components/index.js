@@ -5,6 +5,7 @@ export {default as AlertModal} from './Modal/AlertModal';
 export {default as Loading} from './Modal/Loading';
 export { useLoading } from './Modal/Loading';
 export {default as ModalListAction} from './Modal/ModalListAction';
+export {default as ModalUnlock} from './Modal/ModalUnlock';
 export {default as Popup} from './Modal/Popup';
 export { usePopup } from './Modal/Popup';
 export {default as ScreenEmptyData} from './Modal/ScreenEmptyData';

@@ -501,6 +501,17 @@ const MainHome = ({navigation, route}) => {
 
           <MemberRank />
 
+          <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('ForumTopicScreen',{});
+                  // navigation.navigate('ChatRoomsScreen');
+                }}
+                style={{
+                  width: '20%',
+                  justifyContent: 'flex-start',
+                  alignItems: 'flex-end',
+                }}><Text>New Forum</Text></TouchableOpacity>
+
           {accessClient.MainHome.showMenuHome && <WidgetMenuHome
             showMore
             onPress={(item) => {
