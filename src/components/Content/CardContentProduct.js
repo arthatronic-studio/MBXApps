@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, useWindowDimensions } from 'react-native';
+import { View, Image, useWindowDimensions, Pressable } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Moment from 'moment';
@@ -23,7 +23,7 @@ import {
     iconLike,
 } from '@assets/images/home';
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import { Container, Divider, Row } from 'src/styled';
+import { Container, Divider, Row,} from 'src/styled';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { useSelector } from 'react-redux';
 import CardComponentYoutube from './CardComponentYoutube';
@@ -31,13 +31,14 @@ import CardComponentVideo from './CardComponentVideo';
 
 const defaultProps = {
     productCategory: '',
+    category: '',
     onPress: () => { },
     numColumns: 1,
     horizontal: false,
     style: {},
 };
 
-const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizontal, style }) => {
+const CardContentProduct = ({ productCategory, category,item, numColumns, onPress, horizontal, style }) => {
     const [like, setLike] = useState(item.like);
     const [im_like, setImLike] = useState(item.im_like);
     const [trigger, setTrigger] = useState(false);
@@ -360,11 +361,27 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
                                 <Text size={10} color={Color.secondary} align='left' numberOfLines={2}>{item.fullname}</Text>
                             </Row>
                             <Divider height={12} />
+                            {/* Difference */}
+                            {category == "MyEvent" ?
+                            <>
+                            <Row>
+                                <View style={{width: '50%'}}>
+                                    <Text size={8} color={Color.secondary} align='left' numberOfLines={2} style={{marginBottom: 2}}>Tiket Dimiliki</Text>
+                                    <Text type='bold' align='left' numberOfLines={3}>2 Tiket</Text>
+                                </View>
+                                <Pressable style={{backgroundColor: Color.primary, width: 110, borderRadius: 25, height: 30, alignItems: 'center', justifyContent: 'center'}}>
+                                    <Text style={{fontSize: 11, color: Color.textInput, fontWeight: 'bold'}}>Lihat Detail</Text>
+                                </Pressable>
+                            </Row>
+                            </>
+                            :
+                            <>
                             <Text size={8} color={Color.secondary} align='left' numberOfLines={2} style={{marginBottom: 2}}>Mulai dari</Text>
                             <Row>
                                 <Text type='bold' align='left' numberOfLines={3}>Rp 100.000</Text>
                                 <Text style={{fontSize: 8, color: Color.secondary, marginLeft: 5, textDecorationLine: 'line-through'}}>Rp 75.000</Text>
                             </Row>
+                            </>}
                         </View>
     
                         {/* <View style={{paddingTop: 24, flexDirection: 'row'}}>

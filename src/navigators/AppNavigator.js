@@ -72,6 +72,8 @@ import PlaceDetail from 'src/screens/Posting/Place/Detail';
 // Event
 import EventScreen from 'src/screens/Posting/Event/Index';
 import EventDetail from 'src/screens/Posting/Event/Detail';
+import CreateEvent from 'src/screens/Posting/Event/CreateEvent';
+import CreateEventSecond from 'src/screens/Posting/Event/CreateEventSecond';
 
 // Job
 import JobScreen from 'src/screens/Posting/Job/Index';
@@ -212,6 +214,17 @@ import CreateEvent from 'src/screens/EventR/CreateEvent';
 import CreateEventSecond from 'src/screens/EventR/CreateEventSecond';
 import CheckoutEvent from 'src/screens/EventR/CheckoutEvent';
 import PemesananTiket from 'src/screens/EventR/PemesananTiket';
+import EventOfficial from 'src/screens/Posting/Event/EventOfficial';
+import CommunityEvent from 'src/screens/Posting/Event/CommunityEvent';
+import MyEvent from 'src/screens/Posting/Event/MyEvent';
+import SavedEvent from 'src/screens/Posting/Event/SavedEvent';
+import SearchEvent from 'src/screens/Posting/Event/SearchEvent';
+import History from 'src/screens/Posting/Event/History';
+import MyTicket from 'src/screens/Posting/Event/MyTicket';
+// import EventOfficial from 'src/screens/Posting/Event/EventOfficial';
+// import CommunityEvent from 'src/screens/Posting/Event/CommunityEvent';
+// import MyEvent from 'src/screens/Posting/Event/MyEvent';
+// import EventDocumentation from 'src/screens/Posting/Event/EventDocumentation';
 
 const { Navigator, Screen } = createStackNavigator();
 const MainPage =
@@ -233,6 +246,7 @@ function MainStackNavigator() {
       <Screen name="PemesananTiket" component={PemesananTiket} />
       <Screen name="CreateEvent" component={CreateEvent} />
       <Screen name="CreateEventSecond" component={CreateEventSecond} />
+      <Screen name="SplashScreen" component={SplashScreen} />
       <Screen name="MainPage" component={MainPage} />
       <Screen name="OnBoardingScreen" component={OnBoardingScreen} />
       <Screen name="TrackingOrder" component={TrackingOrder} />
@@ -339,6 +353,16 @@ function MainStackNavigator() {
       {/* Event */}
       <Screen name="EventScreen" component={EventScreen} />
       <Screen name="EventDetail" component={EventDetail} />
+      <Screen name="CreateEvent" component={CreateEvent} />
+      <Screen name="CreateEventSecond" component={CreateEventSecond} />
+      <Screen name="EventOfficial" component={EventOfficial} />
+      <Screen name="CommunityEvent" component={CommunityEvent} />
+      <Screen name="MyEvent" component={MyEvent} />
+      <Screen name="SavedEvent" component={SavedEvent} />
+      <Screen name="SearchEvent" component={SearchEvent} />
+      <Screen name="History" component={History} />
+      <Screen name="MyTicket" component={MyTicket} />
+
       {/* Job */}
       <Screen name="JobScreen" component={JobScreen} />
       <Screen name="JobDetail" component={JobDetail} />

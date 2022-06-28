@@ -59,7 +59,7 @@ const Content = Styled(View)`
     borderRadius: 8px
 `;
 
-const PemesananTiket = ({navigation}) => {
+const CheckoutEvent = ({navigation}) => {
     const user = useSelector((state) => state['user.auth'].login.user);
 	const loading = useSelector((state) => state['user.auth'].loading);
     const route = useRoute();
@@ -182,47 +182,102 @@ const PemesananTiket = ({navigation}) => {
 
   return (
     <Scaffold
-		header={<Header customIcon title="Pemesanan Tiket" type="regular" centerTitle={false} />}
+		header={<Header customIcon title="Detail Pemesanan" type="regular" centerTitle={false} />}
 		onPressLeftButton={() => navigation.pop()}
 	>
         <ScrollView>
             <View style={{ borderColor: '#CDD1D2', margin: 16, borderWidth: 1, padding: 10, borderRadius: 10 }}>
+                <Row>
+                    <View style={{ height: 48, width: 48, borderRadius: 8, marginRight: 8, backgroundColor: '#ddd' }} />
+                    <Text type='semibold' align='left' color='#111'>Geek Con by TRIBESOCIAL at Kota Kasablanka</Text>
+                </Row>
+                <View style={{ height: 1, backgroundColor: '#DDDDDD', marginVertical: 16 }} />
                 <Row style={{ marginBottom: 5 }}>
                     <Text color='#111' type='bold' size={11}>PRESALE - Regular (A)</Text>
                     <Col>
-                        <Text size={11} color={Color.text} type='medium' align='right'>08 Feb 2022</Text>
+                        <Text size={11} color={Color.text} type='medium'>08 Feb 2022</Text>
                     </Col>
                 </Row>
-                <Row style={{ marginTop: 12, }}>
-                    <Row style={{ marginRight: 10,  alignItems: 'center' }}>
-                        <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 3, borderRadius: 14 }}>
+                <Text size={10} align='left' color='#6A7479'>1 Tiket • 1 Pax</Text>
+                <View style={{ height: 1, backgroundColor: '#DDDDDD', marginVertical: 16 }} />
+                <Row style={{ marginBottom: 10 }}>
+                    <Row style={{ marginRight: 10, alignItems: 'center' }}>
+                        <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
                             <Image source={ImagesPath.refund} style={{ width: 15, height: 15, borderRadius: 7 }} />
                         </View>
                         <Text color={Color.text} size={11}>Bisa Refund</Text>
                     </Row>
                     <Row style={{ marginRight: 10, alignItems: 'center' }}>
-                        <View style={{  width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 3, borderRadius: 14 }}>
+                        <View style={{  width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
                             <Image source={ImagesPath.calendar} style={{  width: 16, height: 16, borderRadius: 7 }} />
                         </View>
                         <Text color={Color.text} size={11}>Tidak Perlu Reservasi</Text>
                     </Row>
                 </Row>
-                <View style={{ height: 1,  marginVertical: 12 }} />
-                <Row style={{  alignItems: 'center' }}>
-                    <Col size={8} style={{   alignItems: 'flex-start', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
-                        <Text color={Color.text} size={9}>Harga</Text>
-                        <Text color={Color.text} size={14} type='semibold'>{FormatMoney.getFormattedMoney(100000)}/pax</Text>
+            </View>
+            <View style={{ height: 8, backgroundColor: '#eee', marginVertical: 10 }} />
+            <Text type='bold' size={12} align='left' style={{ marginLeft: 16 }}>Detail Pemesan</Text>
+            <View style={{ borderColor: '#CDD1D2', margin: 16, borderWidth: 1, padding: 10, borderRadius: 10 }}>
+                <Row>
+                    <Col>
+                        <Row style={{ marginRight: 10, alignItems: 'center' }}>
+                            <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
+                                <Image source={ImagesPath.phone} resizeMode='contain' style={{ width: 14,  borderRadius: 7 }} />
+                            </View>
+                            <Text color={Color.text} size={11}>+6281312345678</Text>
+                        </Row>
+                        <Row style={{ marginRight: 10, alignItems: 'center' }}>
+                            <View style={{  width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
+                                <Image source={ImagesPath.mail} style={{  width: 16, height: 16, borderRadius: 7 }} />
+                            </View>
+                            <Text color={Color.text} size={11}>Adang@email.com</Text>
+                        </Row>
                     </Col>
-                    <Col style={{ alignItems: 'flex-end' }}>
-                        <TouchableOpacity style={{ borderColor: Color.primary, borderWidth: 1, borderRadius: 30, paddingVertical: 8, paddingHorizontal: 10 }}>
-                            <Text color={Color.primary} type='medium' size={11}>Ganti Tiket</Text>
-                        </TouchableOpacity>
+                    <Col size={2} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
+                        <AntDesign name='right' size={18} />
                     </Col>
                 </Row>
             </View>
             <View style={{ height: 8, backgroundColor: '#eee', marginVertical: 10 }} />
-            
-            
+            <Text type='bold' size={12} align='left' style={{ marginLeft: 16 }}>Detail Pengunjung</Text>
+            <TouchableOpacity onPress={() => modalPassangerRef.current.open()} style={{ borderColor: '#CDD1D2', margin: 16, borderWidth: 1, padding: 10, borderRadius: 10 }}>
+                <Row>
+                    <Col>
+                        <Text color={Color.text} type='bold' align='left'>Tiket 1 (Pax)</Text>
+                    </Col>
+                    <Col size={2} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
+                        <AntDesign name='right' size={18} />
+                    </Col>
+                </Row>
+            </TouchableOpacity>
+            <View style={{ height: 8, backgroundColor: '#eee', marginVertical: 10 }} />
+            <Text type='bold' size={12} align='left' style={{ marginLeft: 16 }}>Detail Harga</Text>
+            <View style={{ backgroundColor: '#F4F5F9', margin: 16, padding: 10, borderRadius: 10 }}>
+                <Row style={{ marginBottom: 8 }}>
+                    <Col>
+                        <Text color={Color.text}  size={11} align='left'>Subtotal</Text>
+                    </Col>
+                    <Col size={2} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
+                        <Text color={Color.text}  size={11} align='left'>{FormatMoney.getFormattedMoney(0)}</Text>
+                    </Col>
+                </Row>
+                <Row style={{ marginBottom: 8 }}>
+                    <Col>
+                        <Text color={Color.text}  size={11} align='left'>Ppn 10%</Text>
+                    </Col>
+                    <Col size={2} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
+                        <Text color={Color.text}  size={11} align='left'>{FormatMoney.getFormattedMoney(0)}</Text>
+                    </Col>
+                </Row>
+                <Row style={{ marginBottom: 8 }}>
+                    <Col>
+                        <Text color={Color.text}  size={11} align='left'>Total</Text>
+                    </Col>
+                    <Col size={2} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
+                        <Text color={Color.text}  size={11} type='bold' align='left'>GRATIS</Text>
+                    </Col>
+                </Row>
+            </View>
         </ScrollView>
         <View style={{width: '100%',  height: 70, alignItems: 'center', borderRadius: 10}}>
             <TouchableOpacity onPress={() => submit()} style={{backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
@@ -241,4 +296,4 @@ const PemesananTiket = ({navigation}) => {
   )
 }
 
-export default PemesananTiket
+export default CheckoutEvent
