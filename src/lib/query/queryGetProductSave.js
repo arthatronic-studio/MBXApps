@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-export const queryContentProductV2 = gql`
+export const queryGetProductSave = gql`
   query (
     $productCode: String
     $productName: String
@@ -9,13 +9,12 @@ export const queryContentProductV2 = gql`
     $productType: String
     $productCategory: String
     $productSubCategory: String
-    $parentProductId: Int
     $timeRange: [String]
     $publishDate: String
     $orderBy: String
     $timeStart: String
   ) {
-    contentProductv2(
+    contentProductSaveV2(
       productCode: $productCode
       productName: $productName
       page: $page
@@ -23,7 +22,6 @@ export const queryContentProductV2 = gql`
       productType: $productType
       productCategory: $productCategory
       productSubCategory: $productSubCategory
-      parentProductId: $parentProductId
       timeRange: $timeRange
       publishDate: $publishDate
       orderBy: $orderBy
@@ -69,7 +67,10 @@ export const queryContentProductV2 = gql`
       commentUpdatedDate
       tag
       imageSource
-      im_save
+      locationName
+      priority
+      rating
+      isDirector
     }
   }
 `;

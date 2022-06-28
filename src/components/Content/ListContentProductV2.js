@@ -6,7 +6,7 @@ import { ScreenEmptyData } from '@src/components';
 import { Container, Row } from 'src/styled';
 import PostingSkeleton from '../Posting/PostingSkeleton';
 import { initialItemState } from 'src/utils/constants';
-import { fetchContentProduct, fetchContentUserProduct } from 'src/api/contentV2';
+import { fetchContentProduct, fetchContentUserProduct, fetchContentSavedProduct } from 'src/api/contentV2';
 import CardContentProduct from '@src/components/Content/CardContentProduct';
 
 const propTypes = {
@@ -14,6 +14,7 @@ const propTypes = {
     productCategory: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     horizontal: PropTypes.bool,
+    saved: PropTypes.bool,
     style: PropTypes.object,
     onLoadingEnd: PropTypes.func,
 };
@@ -23,12 +24,13 @@ const defaultProps = {
     productCategory: '',
     name: '',
     horizontal: false,
+    saved: false,
     style: {},
     orderBy: '',
     onLoadingEnd: () => {},
 };
 
-const ListContentProductV2 = ({ userProfileId, productCategory, name, horizontal, style, orderBy, onLoadingEnd, }) => {
+const ListContentProductV2 = ({ userProfileId, productCategory, name, horizontal, style, orderBy, onLoadingEnd, saved}) => {
     const { width } = useWindowDimensions();
     const [itemData, setItemData] = useState(initialItemState);
 
@@ -59,6 +61,8 @@ const ListContentProductV2 = ({ userProfileId, productCategory, name, horizontal
 
         const result = userProfileId !== null ?
             await fetchContentUserProduct(variables) :
+            saved === true ?
+            await fetchContentSavedProduct(variables) :
             await fetchContentProduct(variables);
         
         setItemData({

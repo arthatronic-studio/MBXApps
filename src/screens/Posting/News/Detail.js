@@ -41,13 +41,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { fetchLikeComment } from 'src/api/likeComment';
+import { fetchProductSave } from 'src/api/productSave';
 import Modal from 'react-native-modal';
 
 
 const NewsDetail = ({navigation, route}) => {
   const [refreshComment, setRefreshComment] = useState(false);
-  const [bookmark, setBookmark] = useState(false);
   const {item} = route.params;
+  const [bookmark, setBookmark] = useState(item.im_save);
   const modalOptionsRef = useRef();
   const [loadingBanner, setLoadingBanner] = useState(true);
   const [listBanner, setListBanner] = useState([]);
@@ -317,7 +318,12 @@ const NewsDetail = ({navigation, route}) => {
               }}>
               <TouchableOpacity
                 style={{marginRight: 15}}
-                onPress={() => setBookmark(!bookmark)}>
+                onPress={async() => {
+                  const res = await fetchProductSave({productId: item.id});
+                  if(res.status == true){
+                    setBookmark(!bookmark);
+                  }
+                }}>
                 {bookmark == true ? (
                   <FontAwesome name={'bookmark'} size={24} />
                 ) : (

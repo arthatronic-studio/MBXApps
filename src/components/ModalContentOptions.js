@@ -7,7 +7,7 @@ import ModalInputText from '@src/components/ModalInputText';
 import {useNavigation} from '@react-navigation/native';
 import {Alert} from './Modal/Alert';
 import {accessClient} from 'src/utils/access_client';
-import {queryProductReport, queryUserBlock} from '@src/lib/query';
+import {queryReportAbuse, queryUserBlock} from '@src/lib/query';
 import Client from '@src/lib/apollo';
 
 const defaultProps = {
@@ -59,7 +59,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
     console.log('variables', variables);
 
     Client.mutate({
-      mutation: queryProductReport,
+      mutation: queryReportAbuse,
       variables,
     })
       .then(res => {
@@ -138,7 +138,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
       color: Color.error,
       onPress: () => {
         combinedRef.current.close();
-        navigation.navigate('ReportArticle')
+        navigation.navigate('ReportArticle', {...item})
       },
     },
     {

@@ -12,7 +12,7 @@ import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Loading, { useLoading } from  '@src/components/Modal/Loading';
 
 import Client from '@src/lib/apollo';
-import { queryAddComment, queryProductReport, queryReportComment } from '@src/lib/query';
+import { queryAddComment, queryReportAbuse, queryReportComment } from '@src/lib/query';
 import { shadowStyle } from '@src/styles';
 import { isIphoneNotch } from 'src/utils/constants';
 import ImagesPath from 'src/components/ImagesPath';
@@ -48,7 +48,7 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
       manageType: 'CREATE'
     };
     Client.mutate({
-      mutation: queryProductReport, 
+      mutation: queryReportAbuse, 
       variables,
     })
       .then(res => {

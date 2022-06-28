@@ -159,7 +159,6 @@ const NewsScreen = ({navigation, route}) => {
           title="Artikel Terbaru"
           nav="ShowAllNews"
           refresh={refreshing}
-          orderBy="created_date"
           timeStart={moment().subtract(7,'d').format('YYYY-MM-DD')}
         />
         <HighlightContentProductV2
