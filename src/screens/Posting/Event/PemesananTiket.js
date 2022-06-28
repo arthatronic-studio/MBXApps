@@ -6,7 +6,7 @@ import DatePicker from 'react-native-date-picker';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import RNFetchBlob from 'rn-fetch-blob';
-
+import {Calendar} from 'react-native-calendars';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import DocumentPicker from 'react-native-document-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -175,10 +175,7 @@ const PemesananTiket = ({navigation}) => {
         }
     }
 
-    const onSave = () => {
-        modalPassangerRef.current.close();
-      }
-
+      const workout = {key: 'workout', color: 'green'};
   return (
     <Scaffold
 		header={<Header customIcon title="Pemesanan Tiket" type="regular" centerTitle={false} />}
@@ -220,8 +217,52 @@ const PemesananTiket = ({navigation}) => {
                 </Row>
             </View>
             <View style={{ height: 8, backgroundColor: '#eee', marginVertical: 10 }} />
-            
-            
+            <View style={{ borderColor: '#bcbcbc', borderWidth: 1, borderRadius: 10, overflow: 'hidden', margin: 16 }}>
+                <Calendar
+                    markingType={'custom'}
+                    onDayPress={day => {
+                        console.log('selected day', day);
+                    }}
+                    enableSwipeMonths={true}
+                    markedDates={{
+                        '2022-06-28': {
+                            customStyles: {
+                              container: {
+                                backgroundColor: '#D8DEF3'
+                              },
+                              text: {
+                                color: '#3C58C1',
+                                fontWeight: 'bold'
+                              }
+                            }
+                        },
+                    }}
+                    />
+            </View>
+            <View style={{ height: 8, backgroundColor: '#eee', marginVertical: 10 }} />
+            <View style={{ marginHorizontal: 16 }}>
+                <Text color={Color.black} type='bold' align='left' size={11}>Jumlah Tiket</Text>
+                <Text color='#9CA3A5' align='left' size={10}>Min. Pembelian 1 dan maks. pembelian 10 tiket dalam 1 kali order</Text>
+            </View>
+            <Row style={{ margin: 16 }}>
+                <Col>
+                    <Text color='#6A7479' align='left' size={10}>PAX</Text>
+                    <Text type='bold' align='left' size={14}>{FormatMoney.getFormattedMoney(100000)}</Text>
+                </Col>
+                <Col style={{ justifyContent: 'center' }}>
+                    <Row style={{justifyContent: 'flex-end', alignItems: 'center'}}>
+                        <TouchableOpacity style={{marginLeft: 24}}>
+                            <AntDesign name="minuscircleo" color={Color.disabled} size={19} />
+                        </TouchableOpacity>
+                        <View>
+                            <Text color={Color.text} type='bold' size={18} style={{marginHorizontal: 8}}>1</Text>
+                        </View>
+                        <TouchableOpacity>
+                            <AntDesign  name="pluscircleo" color={'#F3771D'} size={19}/>
+                        </TouchableOpacity>
+                    </Row>
+                </Col>
+            </Row>
         </ScrollView>
         <View style={{width: '100%',  height: 70, alignItems: 'center', borderRadius: 10}}>
             <TouchableOpacity onPress={() => submit()} style={{backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
@@ -229,13 +270,6 @@ const PemesananTiket = ({navigation}) => {
             </TouchableOpacity>
         </View>
 
-        {passangerInput && <ModalPassanger
-            ref={modalPassangerRef}
-            data={{name: 'riyan'}}
-            onClose={() => {
-                onSave();
-            }}
-        />}
     </Scaffold>
   )
 }
