@@ -75,7 +75,6 @@ const PostingHeader = (props) => {
             style={{
                 flexDirection: 'row',
                 paddingHorizontal: 16,
-                paddingBottom: 16,
                 ...style,
             }}
         >   

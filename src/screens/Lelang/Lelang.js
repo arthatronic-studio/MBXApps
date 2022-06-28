@@ -78,13 +78,13 @@ const Lelang = ({ navigation, route }) => {
         <Divider />
 
         <HighlightLelang
-          title={`Pelelangan\nSedang Berlangsung`}
+          title={`Sedang Berlangsung`}
           nav='LiveLelangScreen'
           prodStatus='ONGOING'
         />
 
         <HighlightLelang
-          title={`Pelelangan\nYang Akan Datang`}
+          title={`Akan Datang`}
           nav='LiveLelangScreen'
           prodStatus='WILLCOME'
         />

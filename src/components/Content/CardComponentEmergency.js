@@ -98,8 +98,7 @@ const CardComponentEmergency = ({ productCategory, item, numColumns, onPress, ho
                     {
                         width: width / numColumns - (horizontal ? 32 : 16),
                         paddingHorizontal: 8,
-                        marginBottom: 16,
-                        ...shadowStyle,
+                        marginTop: 16,
                         ...style,
                     },
                 ]}
@@ -122,7 +121,7 @@ const CardComponentEmergency = ({ productCategory, item, numColumns, onPress, ho
                         borderRadius: 8,
                     }}
                 >
-                    <View style={{ width: '100%', height: '100%', borderRadius: 8, paddingBottom: 8}}>
+                    <View style={{ width: '100%', height: '100%', borderRadius: 8}}>
                         <Image
                             source={{ uri: item.image }}
                             style={{ height: '65%', width: '100%', borderRadius: 8, backgroundColor: Color.border }}

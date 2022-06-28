@@ -17,6 +17,7 @@ import { accessClient } from 'src/utils/access_client';
 import { trackPlayerPlay } from 'src/utils/track-player-play';
 import Config from 'react-native-config';
 import PostingHeader from './Posting/PostingHeader';
+import { Container } from 'src/styled';
 
 const defaultProps = {
   
@@ -79,7 +80,7 @@ const MusikTerbaru = ({ }) => {
     <View
       style={{
         paddingLeft: 8,
-        marginRight: 16,
+        marginRight: 8,
       }}>
       <TouchableOpacity
         onPress={() => {
@@ -90,8 +91,8 @@ const MusikTerbaru = ({ }) => {
         <ImageBackground
           source={{ uri: item.image }}
           style={{
-            width: width / 1.7,
-            height: width / 1.7,
+            width: width / 2,
+            height: width / 2,
           }}
           imageStyle={{
             borderRadius: 16,
@@ -158,7 +159,7 @@ const MusikTerbaru = ({ }) => {
   if (list.data.length === 0) return <View />;
 
   return (
-    <View>
+    <Container paddingVertical={12}>
       <PostingHeader
         productCategory='NEWEST_MUSIC'
         title='Musik Terbaru'
@@ -171,11 +172,14 @@ const MusikTerbaru = ({ }) => {
         keyExtractor={(item, index) => item.id + index.toString()}
         horizontal
         showsHorizontalScrollIndicator={false}
+        style={{
+          marginTop: 8
+        }}
         contentContainerStyle={{
           paddingHorizontal: 8,
         }}
       />
-    </View>
+    </Container>
   );
 };
 

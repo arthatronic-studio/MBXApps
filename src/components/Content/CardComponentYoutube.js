@@ -55,7 +55,7 @@ const CardComponentYoutube = ({ item, name }) => {
 
   return (
     <View
-      style={{marginHorizontal: 16, marginBottom: 16}}
+      style={{marginHorizontal: 16, marginTop: 16,}}
     >
       <View
         style={{

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   ScrollView,
@@ -11,14 +11,14 @@ import {
   FlatList,
   Linking,
 } from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {useIsFocused} from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import Modal from 'react-native-modal';
 import Config from 'react-native-config';
-import {io} from 'socket.io-client';
+import { io } from 'socket.io-client';
 
 import ImagesPath from 'src/components/ImagesPath';
 import {
@@ -33,27 +33,27 @@ import {
   Submit,
   useLoading,
 } from '@src/components';
-import {Divider, Circle, Container} from '@src/styled';
-import {playNotificationSounds} from '@src/utils/notificationSounds';
+import { Divider, Circle, Container } from '@src/styled';
+import { playNotificationSounds } from '@src/utils/notificationSounds';
 import CarouselView from 'src/components/CarouselView';
 import Banner from 'src/components/Banner';
 import Client from '@src/lib/apollo';
-import {queryBannerList} from '@src/lib/query/banner';
+import { queryBannerList } from '@src/lib/query/banner';
 import ModalPosting from './ModalPosting';
 import MusikTerbaru from 'src/components/MusikTerbaru';
 import WidgetBalance from 'src/components/WidgetBalance';
 import WidgetMenuHome from 'src/screens/MainHome/WidgetMenuHome';
 import PostingHeader from 'src/components/Posting/PostingHeader';
-import {shadowStyle} from 'src/styles';
+import { shadowStyle } from 'src/styles';
 import Geolocation from 'react-native-geolocation-service';
-import {accessClient} from 'src/utils/access_client';
+import { accessClient } from 'src/utils/access_client';
 import FloatingMusicPlayer from 'src/components/FloatingMusicPlayer';
 import TrackPlayer, {
   Event,
   useTrackPlayerEvents,
 } from 'react-native-track-player';
-import {analyticMethods, GALogEvent} from 'src/utils/analytics';
-import {getSizeByRatio} from 'src/utils/get_ratio';
+import { analyticMethods, GALogEvent } from 'src/utils/analytics';
+import { getSizeByRatio } from 'src/utils/get_ratio';
 import MusikAlbum from 'src/components/MusikAlbum';
 import HighlightLelang from 'src/components/Card/HighlightLelang';
 import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
@@ -68,9 +68,9 @@ let tempShowPopupAds = true;
 
 const events = [Event.PlaybackTrackChanged];
 
-const MainHome = ({navigation, route}) => {
+const MainHome = ({ navigation, route }) => {
   const currentSocket = initSocket();
-  
+
   // state
   const [chatNotifCount, setChatNotifCount] = useState(0);
   const [notificationCount, setNotificationCount] = useState(0);
@@ -85,11 +85,11 @@ const MainHome = ({navigation, route}) => {
 
   const user = useSelector(state => state['user.auth'].login.user);
   const dispatch = useDispatch();
-  const {Color} = useColor();
+  const { Color } = useColor();
   const isFocused = useIsFocused();
   const modalPostingRef = useRef();
   const floatingMusicPlayerRef = useRef();
-  const {width} = useWindowDimensions();
+  const { width } = useWindowDimensions();
   const [loadingProps, showLoading] = useLoading();
 
   // handle music analytics
@@ -128,14 +128,14 @@ const MainHome = ({navigation, route}) => {
   useEffect(() => {
     const timeout = thisTrack
       ? setTimeout(() => {
-          // console.log('thisTrack', thisTrack);
-          GALogEvent(thisTrack.artist, {
-            id: thisTrack.id,
-            product_name: thisTrack.title,
-            user_id: user.userId,
-            method: analyticMethods.view,
-          });
-        }, 1000)
+        // console.log('thisTrack', thisTrack);
+        GALogEvent(thisTrack.artist, {
+          id: thisTrack.id,
+          product_name: thisTrack.title,
+          user_id: user.userId,
+          method: analyticMethods.view,
+        });
+      }, 1000)
       : null;
 
     return () => clearTimeout(timeout);
@@ -165,7 +165,7 @@ const MainHome = ({navigation, route}) => {
 
     const successCallback = (res) => {
       const ltu = { userId: user.userId, lat: res.coords.latitude, long: res.coords.longitude };
-      currentSocket.emit('location-tracker-user', ltu );
+      currentSocket.emit('location-tracker-user', ltu);
     };
 
     const errorCallback = err => {
@@ -180,9 +180,9 @@ const MainHome = ({navigation, route}) => {
     Geolocation.watchPosition(successCallback, errorCallback, option);
   }, [refreshing]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const variables = {
-      page : 0,
+      page: 0,
       itemPerPage: 9999
     }
     client.query({
@@ -192,21 +192,21 @@ const MainHome = ({navigation, route}) => {
       .then((respone) => {
         var response = respone['data']['getNotification'];
         var res = response.filter(function (el) {
-          return el.status ===1 | el.status === 2 ;
+          return el.status === 1 | el.status === 2;
         });
         setNotificationCount(res.length)
-        console.log('ini ',res);
+        console.log('ini ', res);
       })
       .catch((err) => {
-        console.log('ini ',err);
+        console.log('ini ', err);
         console.log(err);
-      
+
       })
-  },[isFocused]);
+  }, [isFocused]);
 
   useEffect(() => {
     if (isFocused) {
-      dispatch({type: 'BOOKING.CLEAR_BOOKING'});
+      dispatch({ type: 'BOOKING.CLEAR_BOOKING' });
       fetchBannerList();
       fetchData();
     }
@@ -254,7 +254,7 @@ const MainHome = ({navigation, route}) => {
   };
 
   const fetchData = async () => {
-    
+
   };
 
   const onRefresh = () => {
@@ -287,7 +287,7 @@ const MainHome = ({navigation, route}) => {
 
   return (
     <Scaffold
-      translucent={Platform.OS === 'ios' ? true : isFocused}
+      translucent={Platform.OS === 'ios' ? true : false}
       useSafeArea={Platform.OS === 'ios' ? false : true}
       // statusBarAnimatedStyle={
       //   Platform.OS === 'ios'
@@ -301,13 +301,13 @@ const MainHome = ({navigation, route}) => {
       header={
         <HeaderBig
           type='MAIN_HOME'
-          useAnimated
+          // useAnimated
           style={{
             paddingTop: 8,
             // backgroundColor: backgroundInterpolate,
           }}
           actions={
-            <View style={{flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row' }}>
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('NotificationScreen');
@@ -322,11 +322,11 @@ const MainHome = ({navigation, route}) => {
                   size={22}
                   color={Color.textInput}
                 />
-                 {notificationCount > 0 && (
+                {notificationCount > 0 && (
                   <Circle
                     size={12}
                     color={Color.error}
-                    style={{position: 'absolute', top: -4, right: -4}}>
+                    style={{ position: 'absolute', top: -4, right: -4 }}>
                     <Text size={8} color={Color.textInput}>
                       {notificationCount > 99 ? '99' : notificationCount}
                     </Text>
@@ -349,7 +349,7 @@ const MainHome = ({navigation, route}) => {
                   <Circle
                     size={12}
                     color={Color.error}
-                    style={{position: 'absolute', top: -4, right: -4}}>
+                    style={{ position: 'absolute', top: -4, right: -4 }}>
                     <Text size={8} color={Color.textInput}>
                       {chatNotifCount > 99 ? '99' : chatNotifCount}
                     </Text>
@@ -369,7 +369,7 @@ const MainHome = ({navigation, route}) => {
                 <Ionicons
                   name="person"
                   size={22}
-                  color={Color.text}
+                  color={Color.textInput}
                 />
               </TouchableOpacity>}
             </View>
@@ -379,41 +379,41 @@ const MainHome = ({navigation, route}) => {
       floatingActionButton={
         accessClient.isKomoto ?
           <View
-              style={{
-                  bottom: -16,
-                  height: width / 5 - 8,
-                  width: width / 5 - 8,
-                  borderRadius: width / 5 - 8,
-                  backgroundColor: Color.primary,
-                  alignSelf: 'center',
-                  ...shadowStyle,
-              }}
+            style={{
+              bottom: -16,
+              height: width / 5 - 8,
+              width: width / 5 - 8,
+              borderRadius: width / 5 - 8,
+              backgroundColor: Color.primary,
+              alignSelf: 'center',
+              ...shadowStyle,
+            }}
           >
-              <TouchableOpacity
-                  onPress={() => {
-                      const isJoinMember = user && user.organizationId;
+            <TouchableOpacity
+              onPress={() => {
+                const isJoinMember = user && user.organizationId;
 
-                      if (!isJoinMember) {
-                        showLoading('error', 'Fitur ini hanya untuk anggota komunitas');
-                        return;
-                      }
+                if (!isJoinMember) {
+                  showLoading('error', 'Fitur ini hanya untuk anggota komunitas');
+                  return;
+                }
 
-                      navigation.navigate('CreateEmergencyScreen', { 
-                          routeIndex: 1, 
-                          title: 'Help Me',
-                          productType: Config.PRODUCT_TYPE,
-                          productCategory: '',
-                          productSubCategory: 'EMERGENCY', 
-                      });
-                  }}
-                  style={{width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center'}}
-              >
-                  <MaterialIcons
-                    name='vibration'
-                    color={Color.textInput}
-                    size={32}
-                  />
-              </TouchableOpacity>
+                navigation.navigate('CreateEmergencyScreen', {
+                  routeIndex: 1,
+                  title: 'Help Me',
+                  productType: Config.PRODUCT_TYPE,
+                  productCategory: '',
+                  productSubCategory: 'EMERGENCY',
+                });
+              }}
+              style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}
+            >
+              <MaterialIcons
+                name='vibration'
+                color={Color.textInput}
+                size={32}
+              />
+            </TouchableOpacity>
           </View> : <View />
       }
     >
@@ -423,25 +423,25 @@ const MainHome = ({navigation, route}) => {
           [
             {
               nativeEvent: {
-                contentOffset: {y: animationValue},
+                contentOffset: { y: animationValue },
               },
             },
           ],
-          {useNativeDriver: false},
+          { useNativeDriver: false },
         )}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            // style={{backgroundColor: colorOutputRange[0]}}
+          // style={{backgroundColor: colorOutputRange[0]}}
           />
         }
-        // style={{
-        //   backgroundColor: colorOutputRange[0]
-        // }}
+      // style={{
+      //   backgroundColor: colorOutputRange[0]
+      // }}
       >
-        <Container color={Color.theme}>
+        <Container color={Color.theme} paddingTop={12}>
           <Animated.View
             style={{
               width,
@@ -491,7 +491,7 @@ const MainHome = ({navigation, route}) => {
 
           {/* <MyRank /> */}
 
-          <Container paddingVertical={16}>
+          <Container paddingVertical={12}>
             <Banner
               showHeader={false}
               data={listBanner}
@@ -499,7 +499,9 @@ const MainHome = ({navigation, route}) => {
             />
           </Container>
 
-          <MemberRank />
+          <Container paddingVertical={12}>
+            <MemberRank />
+          </Container>
 
           {accessClient.MainHome.showMenuHome && <WidgetMenuHome
             showMore
@@ -513,133 +515,6 @@ const MainHome = ({navigation, route}) => {
             }}
           />}
 
-          <View style={{flex: 1}}>
-            <Modal
-              isVisible={isModalVisible}
-              onBackdropPress={() => setIsModalVisible(false)}
-              animationIn="slideInDown"
-              animationOut="slideOutDown"
-              style={{borderRadius: 16}}>
-              <View style={{backgroundColor: Color.theme}}>
-                <View
-                  style={{
-                    width: '100%',
-                    paddingHorizontal: 16,
-                    paddingVertical: 24,
-                  }}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      toggleModal();
-                    }}
-                    style={{
-                      alignSelf: 'flex-end',
-                      backgroundColor: Color.error,
-                      borderRadius: 50,
-                      marginBottom: 12,
-                    }}>
-                    <Image
-                      source={ImagesPath.icClose}
-                      style={{width: 16, height: 16}}
-                    />
-                  </TouchableOpacity>
-                  <View style={{flexDirection: 'row'}}>
-                    <View style={{marginRight: 16}}>
-                      <Image source={ImagesPath.eBook} />
-                    </View>
-                    <View>
-                      <View style={{width: '86%'}}>
-                        <Text
-                          align="left"
-                          size={14}
-                          style={{fontWeight: 'bold'}}>
-                          Seni Berlorem Ipsum Dulur Sit Amet
-                        </Text>
-                      </View>
-                      <Text align="left" size={10}>
-                        Karya Esa Riski Hari Utama
-                      </Text>
-                      <View style={{flexDirection: 'row'}}>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            marginTop: 12,
-                            marginRight: 20,
-                          }}>
-                          <Image
-                            source={ImagesPath.eye}
-                            style={{width: 16, height: 16, marginRight: 9}}
-                          />
-                          <Text align="left" size={10}>
-                            1.7K
-                          </Text>
-                        </View>
-                        <View style={{flexDirection: 'row', marginTop: 12}}>
-                          <Image
-                            source={ImagesPath.thumbsUp}
-                            style={{width: 16, height: 16, marginRight: 9}}
-                          />
-                          <Text align="left" size={10}>
-                            240
-                          </Text>
-                        </View>
-                      </View>
-                      <View style={{marginTop: 16}}>
-                        <Text
-                          align="left"
-                          size={11}
-                          style={{fontWeight: 'bold'}}>
-                          Sinopsis
-                        </Text>
-                      </View>
-                      <View style={{width: '80%'}}>
-                        <Text align="left" size={10} numberOfLines={4}>
-                          Cookie toffee pie cupcake sesame snaps. Cupcake
-                          cupcake soufflé gummies croissant jelly beans candy
-                          canes fruitcake. Dessert cotton candy tart donut
-                          tiramisu cookie dragée wafer marzipan.
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      justifyContent: 'space-around',
-                    }}>
-                    <View
-                      style={{
-                        width: 44,
-                        height: 44,
-                        borderRadius: 21,
-                        borderWidth: 0.3,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}>
-                      <Image
-                        source={ImagesPath.thumbsUp}
-                        style={{width: 22, height: 22}}
-                      />
-                    </View>
-                    <Submit
-                      buttonLabel="Baca Sekarang"
-                      buttonColor={Color.primary}
-                      type="bottomSingleButton"
-                      buttonBorderTopWidth={0}
-                      style={{
-                        backgroundColor: Color.theme,
-                        paddingTop: 25,
-                        paddingBottom: 25,
-                        width: 250,
-                      }}
-                      onPress={() => onClickBaca()}
-                    />
-                  </View>
-                </View>
-              </View>
-            </Modal>
-          </View>
-
           <HighlightContentProduct
             productCategory='FORUM'
             name='Forum'
@@ -650,7 +525,7 @@ const MainHome = ({navigation, route}) => {
 
           {accessClient.MainHome.showListAuction && (
             <HighlightLelang
-              title={`Pelelangan\nSedang Berlangsung`}
+              title={`Sedang Berlangsung`}
               nav='LiveLelangScreen'
               prodStatus='ONGOING'
             />
@@ -658,7 +533,7 @@ const MainHome = ({navigation, route}) => {
 
           {accessClient.MainHome.showListSoonAuction && (
             <HighlightLelang
-              title={`Pelelangan\nYang Akan Datang`}
+              title={`Akan Datang`}
               nav='LiveLelangScreen'
               prodStatus='WILLCOME'
             />
@@ -768,7 +643,7 @@ const MainHome = ({navigation, route}) => {
             nav='EventScreen'
             refresh={refreshing || isFocused}
           />
-          
+
           <HighlightContentProduct
             productCategory='JOBS'
             name='Loker'
@@ -779,11 +654,7 @@ const MainHome = ({navigation, route}) => {
 
           <MusikTerbaru />
 
-          <Divider />
-
           <MusikAlbum />
-
-          <Divider />
 
           {/* isFocused handle android navigate crash from home */}
           {isFocused && <HighlightContentProduct
@@ -792,7 +663,7 @@ const MainHome = ({navigation, route}) => {
             title='Siaran Langsung'
             nav='YoutubeScreen'
             refresh={refreshing}
-            style={{paddingHorizontal: 0}}
+            style={{ paddingHorizontal: 0 }}
           />}
 
           <HighlightContentProduct
@@ -801,35 +672,36 @@ const MainHome = ({navigation, route}) => {
             title='Video Terbaru'
             nav='VideoScreen'
             refresh={refreshing || isFocused}
-            style={{paddingHorizontal: 0}}
+            style={{ paddingHorizontal: 0 }}
           />
 
           {accessClient.MainHome.showListEbookNewer && (
-            <View style={{  }}>
+            <View style={{ paddingVertical: 12 }}>
               <PostingHeader
                 title="Rilisan Terbaru"
                 showSeeAllText
                 onSeeAllPress={() => navigation.navigate('Ebook')}
                 productCategory={'NEWEST_EBOOK'}
               />
+
               <FlatList
                 data={[
-                  {image: ImagesPath.ebook1},
-                  {image: ImagesPath.ebook2},
-                  {image: ImagesPath.ebook1},
-                  {image: ImagesPath.ebook2},
-                  {image: ImagesPath.ebook1},
-                  {image: ImagesPath.ebook2},
+                  { image: ImagesPath.ebook1 },
+                  { image: ImagesPath.ebook2 },
+                  { image: ImagesPath.ebook1 },
+                  { image: ImagesPath.ebook2 },
+                  { image: ImagesPath.ebook1 },
+                  { image: ImagesPath.ebook2 },
                 ]}
                 contentContainerStyle={{
-                  marginTop: 16,
+                  marginTop: 8,
                 }}
-                renderItem={({item}) => (
+                renderItem={({ item }) => (
                   <TouchableOpacity
                     onPress={() => {
                       toggleModal();
                     }}>
-                    <Image source={item.image} style={{marginHorizontal: 15}} />
+                    <Image source={item.image} style={{ marginHorizontal: 15 }} />
                   </TouchableOpacity>
                 )}
                 horizontal={true}
@@ -865,7 +737,7 @@ const MainHome = ({navigation, route}) => {
           animationOut="slideOutDown"
           backdropColor={Color.semiwhite}>
           <View
-            style={{width: '90%', aspectRatio: 9 / 16, alignSelf: 'center'}}>
+            style={{ width: '90%', aspectRatio: 9 / 16, alignSelf: 'center' }}>
             <TouchableOpacity
               onPress={() => {
                 tempShowPopupAds = false;
@@ -877,9 +749,9 @@ const MainHome = ({navigation, route}) => {
                 }
               }}>
               <ImageBackground
-                source={{uri: dataPopupAds.image}}
-                imageStyle={{borderRadius: 12}}
-                style={{height: '100%', resizeMode: 'contain', width: '100%'}}>
+                source={{ uri: dataPopupAds.image }}
+                imageStyle={{ borderRadius: 12 }}
+                style={{ height: '100%', resizeMode: 'contain', width: '100%' }}>
                 <TouchableOpacity
                   onPress={() => {
                     tempShowPopupAds = false;
@@ -894,7 +766,7 @@ const MainHome = ({navigation, route}) => {
                   }}>
                   <Image
                     source={ImagesPath.icClose}
-                    style={{width: 20, height: 20}}
+                    style={{ width: 20, height: 20 }}
                   />
                 </TouchableOpacity>
               </ImageBackground>
@@ -902,6 +774,131 @@ const MainHome = ({navigation, route}) => {
           </View>
         </Modal>
       )}
+
+      <Modal
+        isVisible={isModalVisible}
+        onBackdropPress={() => setIsModalVisible(false)}
+        animationIn="slideInDown"
+        animationOut="slideOutDown"
+        style={{ borderRadius: 16 }}>
+        <View style={{ backgroundColor: Color.theme }}>
+          <View
+            style={{
+              width: '100%',
+              paddingHorizontal: 16,
+              paddingVertical: 24,
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                toggleModal();
+              }}
+              style={{
+                alignSelf: 'flex-end',
+                backgroundColor: Color.error,
+                borderRadius: 50,
+                marginBottom: 12,
+              }}>
+              <Image
+                source={ImagesPath.icClose}
+                style={{ width: 16, height: 16 }}
+              />
+            </TouchableOpacity>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ marginRight: 16 }}>
+                <Image source={ImagesPath.eBook} />
+              </View>
+              <View>
+                <View style={{ width: '86%' }}>
+                  <Text
+                    align="left"
+                    size={14}
+                    style={{ fontWeight: 'bold' }}>
+                    Seni Berlorem Ipsum Dulur Sit Amet
+                  </Text>
+                </View>
+                <Text align="left" size={10}>
+                  Karya Esa Riski Hari Utama
+                </Text>
+                <View style={{ flexDirection: 'row' }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      marginTop: 12,
+                      marginRight: 20,
+                    }}>
+                    <Image
+                      source={ImagesPath.eye}
+                      style={{ width: 16, height: 16, marginRight: 9 }}
+                    />
+                    <Text align="left" size={10}>
+                      1.7K
+                    </Text>
+                  </View>
+                  <View style={{ flexDirection: 'row', marginTop: 12 }}>
+                    <Image
+                      source={ImagesPath.thumbsUp}
+                      style={{ width: 16, height: 16, marginRight: 9 }}
+                    />
+                    <Text align="left" size={10}>
+                      240
+                    </Text>
+                  </View>
+                </View>
+                <View style={{ marginTop: 16 }}>
+                  <Text
+                    align="left"
+                    size={11}
+                    style={{ fontWeight: 'bold' }}>
+                    Sinopsis
+                  </Text>
+                </View>
+                <View style={{ width: '80%' }}>
+                  <Text align="left" size={10} numberOfLines={4}>
+                    Cookie toffee pie cupcake sesame snaps. Cupcake
+                    cupcake soufflé gummies croissant jelly beans candy
+                    canes fruitcake. Dessert cotton candy tart donut
+                    tiramisu cookie dragée wafer marzipan.
+                  </Text>
+                </View>
+              </View>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-around',
+              }}>
+              <View
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: 21,
+                  borderWidth: 0.3,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Image
+                  source={ImagesPath.thumbsUp}
+                  style={{ width: 22, height: 22 }}
+                />
+              </View>
+              <Submit
+                buttonLabel="Baca Sekarang"
+                buttonColor={Color.primary}
+                type="bottomSingleButton"
+                buttonBorderTopWidth={0}
+                style={{
+                  backgroundColor: Color.theme,
+                  paddingTop: 25,
+                  paddingBottom: 25,
+                  width: 250,
+                }}
+                onPress={() => onClickBaca()}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </Scaffold>
   );
 };

@@ -103,7 +103,7 @@ const CardComponentArticle = ({ productCategory, item, numColumns, onPress, hori
                     width: width / numColumns - 16,
                     paddingHorizontal: 8,
                     flexDirection: 'row',
-                    marginBottom: 16,
+                    marginTop: 12,
                     ...style,
                 }}
             >
@@ -119,27 +119,30 @@ const CardComponentArticle = ({ productCategory, item, numColumns, onPress, hori
                             resizeMode="cover"
                         />
                     </View>
-                    <View style={{ flex: 3, paddingHorizontal: 8, paddingVertical: 4, justifyContent: 'space-between'}}>
+                    <View style={{ flex: 3, paddingHorizontal: 8, justifyContent: 'space-between'}}>
                         <View>
-                            <Text align={'left'}
+                            <Text
+                                align={'left'}
                                 numberOfLines={2}
                                 type='bold'
+                                size={18}
                             >
                                 {item.productName}
                             </Text>
                             <Divider height={2} />
-                            <Text align={'left'}
-                                size={12}
+                            <Text
+                                align={'left'}
                                 numberOfLines={2}
+                                size={12}
                             >
                                 {item.productDescription}
                             </Text>
                         </View>
 
                         <View style={{flexDirection: 'row'}}>
-                            <Text align={'left'} style={{fontSize: 10, color: Color.secondary}}>{typeof item.fullname === 'string' ? item.fullname.split(' ')[0] : ''} • </Text>
+                            <Text align={'left'} style={{fontSize: 12, color: Color.secondary}}>{typeof item.fullname === 'string' ? item.fullname.split(' ')[0] : ''} • </Text>
                             <View style={{width: 3, height: 3, borderRadius: 20, backgroundColor: Color.secondary}}/>
-                            <Text align={'left'} style={{fontSize: 10, color: Color.secondary}}>{Moment(parseInt(item.created_date)).format('DD MMM YYYY')}</Text>
+                            <Text align={'left'} style={{fontSize: 12, color: Color.secondary}}>{Moment(parseInt(item.created_date)).format('DD MMM YYYY')}</Text>
                         </View>
                     </View>
                 </View>

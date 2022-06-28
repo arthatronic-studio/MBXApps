@@ -12,7 +12,7 @@ import {
   Text,
   useColor,
 } from '@src/components';
-import { Divider } from 'src/styled';
+import { Container, Divider } from 'src/styled';
 import { useNavigation } from '@react-navigation/native';
 import { queryGetAuction } from 'src/lib/query/auction';
 import { FormatMoney } from 'src/utils';
@@ -179,7 +179,7 @@ const HighlightLelang = ({ title, nav, prodStatus }) => {
   );
 
   return (
-    <View style={{ }}>
+    <Container paddingVertical={12}>
       <PostingHeader
         title={title}
         onSeeAllPress={() => navigation.navigate(nav, { title, prodStatus })}
@@ -199,7 +199,7 @@ const HighlightLelang = ({ title, nav, prodStatus }) => {
           <ScreenEmptyData message='Lelang belum tersedia' />
         </View>
       }
-    </View>
+    </Container>
   )
 };
 

@@ -121,17 +121,16 @@ const WidgetMenuHome = ({ onPress, showMore }) => {
   if (currentData.length === 0) return <View />;
 
   return (
-    <Container paddingHorizontal={16} paddingVertical={12} marginVertical={4}>
+    <Container paddingHorizontal={16} paddingVertical={12}>
       <Container
         style={{
-          ...shadowStyle,
           backgroundColor: Color.theme,
           width: '100%',
           borderRadius: 8,
-          paddingHorizontal: 16,
           paddingTop: paddingInMenu,
           flexDirection: 'row',
           flexWrap: 'wrap',
+          ...shadowStyle,
         }}
       >
         {currentData.map((menu, idx) => {
@@ -166,14 +165,14 @@ const WidgetMenuHome = ({ onPress, showMore }) => {
               style={{
                 width: `${widthPerMenu}%`,
                 alignItems: 'center',
-                paddingBottom: paddingInMenu,
+                marginBottom: paddingInMenu,
               }}
             >
               <View
                 style={{
                   height: widthIconMenu,
                   width: widthIconMenu,
-                  paddingBottom: 6,
+                  paddingBottom: 4,
                 }}
               >
                 <Image

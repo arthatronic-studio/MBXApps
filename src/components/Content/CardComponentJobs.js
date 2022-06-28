@@ -104,13 +104,13 @@ const CardComponentJobs = ({ productCategory, item, numColumns, onPress, horizon
                     {
                         width: width / numColumns - 16,
                         paddingHorizontal: 8,
-                        marginBottom: 16
+                        marginTop: 16,
                     },
                     style,
                 ]}
             >
 
-                <View style={{ width: '100%', padding: 16, borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle }}>
+                <View style={{ width: '100%', borderRadius: 4, backgroundColor: Color.textInput }}>
                     <View style={{ flexDirection: 'row' }}>
                         <View style={{ width: '20%' }}>
                             <Image

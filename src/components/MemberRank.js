@@ -43,7 +43,6 @@ const MemberRank = props => {
     <Container
       padding={10}
       marginHorizontal={16}
-      marginBottom={12}
       radius={8}
       color={Color.theme}
       style={{flex: 1, ...shadowStyle}}

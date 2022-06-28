@@ -46,9 +46,9 @@ export const darkModeColors = {
   colorDominant: 'dark',
   overflow: 'rgba(f, f, f, 0.3)',
   reverseOverflow: 'rgba(0, 0, 0, 0.3)',
-  theme: '#222222',
+  theme: '#23323',
   text: '#FFFFFF',
-  textInput: '#222222',
+  textInput: '#232323',
   border: '#707070',
   semiwhite: '#353535',
 };

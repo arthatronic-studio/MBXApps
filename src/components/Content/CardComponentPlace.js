@@ -88,6 +88,8 @@ const CardComponentPlace = ({ productCategory, item, numColumns, onPress, horizo
         setTrigger(true);
     }
 
+    const iconSIze = 20;
+
     const renderCardPlace = () => {
         return (
 
@@ -105,7 +107,7 @@ const CardComponentPlace = ({ productCategory, item, numColumns, onPress, horizo
                 style={{
                     width: width / 2 - (horizontal ? 16 : 8),
                     paddingHorizontal: 8,
-                    marginBottom: 16,
+                    marginTop: 16,
                     ...style,
                 }}
             >
@@ -116,7 +118,7 @@ const CardComponentPlace = ({ productCategory, item, numColumns, onPress, horizo
                     <View
                         style={{
                             width: '100%',
-                            aspectRatio: 4 / 3,
+                            aspectRatio: 6/5,
                         }}
                     >
                         <Image
@@ -124,59 +126,57 @@ const CardComponentPlace = ({ productCategory, item, numColumns, onPress, horizo
                             style={{
                                 width: '100%',
                                 height: '100%',
-                                borderRadius: 8,
+                                borderRadius: 4,
                                 backgroundColor: Color.border,
                             }}
                         />
                     </View>
 
-                    <View style={{ width: '100%', paddingVertical: 8, backgroundColor: Color.textInput, borderBottomLeftRadius: 4, borderBottomRightRadius: 4 }}>
+                    <View style={{ width: '100%', paddingTop: 8, backgroundColor: Color.textInput, borderBottomLeftRadius: 4, borderBottomRightRadius: 4 }}>
                         <Text size={12} type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
-                        <Divider height={4} />
-                        <Row>
+                        <Divider height={2} />
+                        <Row align='center'>
                             {/* <View style={{ width: 16 }}>
                                 <Ionicons name='person' color={Color.text} />
                             </View> */}
-                            <Text size={12} color={Color.gray} align='left' numberOfLines={2}>Medan,Kab. Tangerang</Text>
+                            <Text size={12} color={Color.gray} align='left' numberOfLines={1}>{item.fullname}</Text>
                         </Row>
 
-                        <Divider />
-
-                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                <Ionicons
-                                    name={item.im_like ? 'heart' : 'heart-outline'}
-                                    color={item.im_like ? Color.primary : Color.text}
-                                    size={18}
-                                />
-                                <Divider width={2} />
-                                <Text size={12}>{item.like}</Text>
-                                {/* hide rating */}
-                                 {/* <Image
-                                        style={{ height: 17, width: 17 }}
-                                        source={iconStar}
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: 4 }}>
+                            <Row>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                    <Ionicons
+                                        name={item.im_like ? 'heart' : 'heart-outline'}
+                                        color={item.im_like ? Color.primary : Color.text}
+                                        size={iconSIze}
                                     />
-                                <Text color={Color.gray} size={12}>4.5</Text> */}
-                            </View>
+                                    <Divider width={2} />
+                                    <Text size={12}>{item.like}</Text>
+                                    {/* hide rating */}
+                                    {/* <Image
+                                            style={{ height: 17, width: 17 }}
+                                            source={iconStar}
+                                        />
+                                    <Text color={Color.gray} size={12}>4.5</Text> */}
+                                </View>
 
-                            <Divider width={8} />
-                           
-                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                <Image
-                                    style={{ height: 18, width: 18, tintColor: Color.text }}
-                                    source={iconComment}
-                                />
-                                <Divider width={2} />
-                                <Text size={12}>{item.comment > 0 ? item.comment : '0'}</Text>
-                            </View>
-
-                            <Divider width={8} />
+                                <Divider width={12} />
+                            
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                    <Image
+                                        style={{ height: iconSIze, width: iconSIze, tintColor: Color.text }}
+                                        source={iconComment}
+                                    />
+                                    <Divider width={2} />
+                                    <Text size={12}>{item.comment > 0 ? item.comment : '0'}</Text>
+                                </View>
+                            </Row>
 
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                 <Ionicons
                                     name={'eye-outline'}
                                     color={Color.gray}
-                                    size={18}
+                                    size={iconSIze}
                                 />
                                 <Divider width={2} />
                                 <Text size={12}>{item.comment > 0 ? item.comment : '0'}</Text>

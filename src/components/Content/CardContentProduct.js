@@ -531,15 +531,16 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
     else if (productCategory === 'NEARBY_PLACE') return <CardComponentPlace onPress={() => onPressCard()} { ...props } />;
     else if (productCategory === 'YOUTUBE_VIDEO') return <CardComponentYoutube item={item} />;
     else if (productCategory === 'NEWEST_VIDEO') return <CardComponentVideo item={item} />;
-    else if (productCategory === 'FORUM') return <Container paddingHorizontal={8}>
+    else if (productCategory === 'FORUM') return (
         <CardForumVertical
             item={item}
             onPress={(item) => {
                 onPressCard();
                 navigation.navigate('DetailForumScreen', { item });
             }}
+            style={{paddingHorizontal: 8}}
         />
-    </Container>;
+    );
     
     return <Text>Not Set</Text>;
 }

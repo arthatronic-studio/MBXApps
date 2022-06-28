@@ -111,9 +111,8 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                 style={{
                     width: width / numColumns - (horizontal ? 32 : 16),
                     paddingHorizontal: 8,
-                    marginBottom: 16,
+                    marginTop: 16,
                     borderRadius: 16,
-                    ...shadowStyle,
                     ...style,
                 }}
             >
@@ -136,7 +135,7 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                         <Ionicons name='bookmark-outline' size={25} color={Color.black} style={{position:'absolute',top:10,right:12}} />
                     </View> */}
 
-                    <View style={{ width: '100%', padding: 16, }}>
+                    <View style={{ width: '100%', paddingTop: 16, paddingHorizontal: 8 }}>
                         {/* <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                             <View style={{width: 70, paddingVertical: 4, paddingHorizontal: 16, borderWidth: 0.5, borderRadius: 8, borderColor: Color.primary}}>
                                 <Text size={10} color={Color.primary}>{item.productCategory}</Text>
@@ -146,21 +145,21 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                         </View> */}
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Text size={10} type="bold" color={Color.success}>Community</Text>
+
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text size={12} align='left' numberOfLines={1}>{item.fullname}</Text>
+                                {/* hide is admin */}
+                                {/* <Image
+                                    style={{ height: 16, width: 16, marginLeft: 4 }}
+                                    source={iconverify}
+                                /> */}
+                            </View>
                         </View>
 
                         <View style={{ paddingTop: 8, width: '100%' }}>
                             <Text type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
-                            <Divider height={6} />
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text size={12} align='left' numberOfLines={1}>{item.fullname}</Text>
-                                <Image
-                                    style={{ height: 16, width: 16, marginLeft: 4 }}
-                                    source={iconverify}
-                                />
-                            </View>
 
-
-                            <View style={{ flexDirection: 'row', marginTop: 8 }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Ionicons name='calendar-outline' size={18} color={Color.grey} style={{ marginRight: 5 }} />
                                     {Moment(eventDate).isValid() && <>
@@ -180,19 +179,16 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                                     <Divider height={8} />
                                 </View> */}
 
+                                <Text
+                                    size={17}
+                                    type="bold"
+                                    align='left'
+                                    numberOfLines={1}
+                                    color={isPayProduct ? Color.text : Color.success}
+                                >
+                                    {isPayProduct ? FormatMoney.getFormattedMoney(item.price) : 'Gratis'}
+                                </Text>
                             </View>
-                            
-                            <Divider height={8} />
-
-                            <Text
-                                size={17}
-                                type="bold"
-                                align='left'
-                                numberOfLines={1}
-                                color={isPayProduct ? Color.text : Color.success}
-                            >
-                                {isPayProduct ? FormatMoney.getFormattedMoney(item.price) : 'Gratis'}
-                            </Text>
                         </View>
 
                         {/* <View style={{paddingTop: 24, flexDirection: 'row'}}>
