@@ -90,6 +90,7 @@ const ListForumVertical = ({ componentType, data, loading, title, showAll, onPre
                 ref={modalOptionsRef}
                 isOwner={user && selectedItem && user.userId === selectedItem.ownerId}
                 item={selectedItem}
+                moduleType='FORUM'
                 onClose={() => setSelectedItem()}
             />
         </Scaffold>

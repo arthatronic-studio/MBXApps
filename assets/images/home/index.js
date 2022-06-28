@@ -35,7 +35,20 @@ const iconStar = require('./star.png');
 const iconverify = require('./verify.png');
 const iconwait = require('./Hourglass.png');
 const iconPencil = require('./Pencil.png');
+const icongif = require('./gif.png');
+const icongalery = require('./galery.png');
+const iconcameravidio = require('./camera-vidio.png');
+const icontext = require('./text.png');
+const iconsmile = require('./smile.png');
+const iconListNumbers = require('./ListNumbers.png');
+const iconTextAlignCenter = require('./TextAlignCenter.png');
+const iconTextAlignJustify = require('./TextAlignJustify.png');
+const iconTextBolder = require('./TextBolder.png');
+const iconTextItalic = require('./TextItalic.png');
+const iconTextStrikethrough = require('./TextStrikethrough.png');
+const iconTextUnderline = require('./TextUnderline.png');
 export {
+
   iconBPJS,
   iconGames,
   iconInternet,
@@ -72,5 +85,17 @@ export {
   iconStar,
   iconverify,
   iconwait,
-  iconPencil
+  iconPencil,
+  iconsmile,
+  icongif,
+  icongalery,
+  icontext,
+  iconcameravidio,
+  iconListNumbers,
+  iconTextAlignCenter,
+  iconTextAlignJustify,
+  iconTextBolder,
+  iconTextItalic,
+  iconTextStrikethrough,
+  iconTextUnderline
 };

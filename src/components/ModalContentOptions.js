@@ -26,6 +26,8 @@ const initialMessage = {
 const ModalContentOptions = forwardRef((props, ref) => {
   const { isOwner, item, moduleType, nameType, onClose } = props;
 
+  console.log('ini props',props)
+
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
   const navigation = useNavigation();
@@ -127,7 +129,15 @@ const ModalContentOptions = forwardRef((props, ref) => {
       name: 'Report',
       color: Color.error,
       onPress: () => {
-        setModalInputText(true);
+        if(moduleType === 'FORUM'){
+          navigation.navigate('ForumReport', {
+            
+          });
+          // setModalInputText(true);
+        }else{
+          setModalInputText(true);
+        }
+        
       },
     },
   ];

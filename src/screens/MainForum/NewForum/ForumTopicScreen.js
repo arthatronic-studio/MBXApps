@@ -139,7 +139,7 @@ const ForumTopicScreen = ({navigation, route}) => {
    
    const renderItem = ({ item }) => (
     <TouchableOpacity onPress={()=> {
-      navigation.navigate('ForumGroupScreen')
+    
                 
     }}>
     <View style={{flexDirection:'row',backgroundColor:Color.grayLight,marginHorizontal:16,marginVertical:8,padding:10,borderRadius:10,justifyContent:'space-between'}}>
@@ -179,7 +179,7 @@ const ForumTopicScreen = ({navigation, route}) => {
       popupProps={popupProps}
       iconRightButton={<Feather name='more-vertical' size={20} color={Color.text} />}
       onPressRightButton={() => {
-        modalUnlockRef.current.open();
+        modalOptionsRef.current.open();
       }}
       loadingProps={loadingProps}
     >

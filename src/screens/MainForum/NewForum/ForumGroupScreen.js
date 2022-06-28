@@ -39,7 +39,7 @@ const ForumGroupScreen = ({ navigation, route }) => {
           }}
         >
           <TouchableOpacity
-              onPress={() => {navigation.navigate('NotificationAll')}}
+              onPress={() => {navigation.navigate('ForumBuatScreen',{})}}
               style={{alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%'}}
               activeOpacity={0.75}
             >
@@ -121,7 +121,7 @@ source={iconPencil}
         <TouchableOpacity
               onPress={() => {
 
-                navigation.navigate('ForumDetailScreen', {});
+                navigation.navigate('ForumGroupDetailScreen', {});
               }}
             >
                <FontAwesome

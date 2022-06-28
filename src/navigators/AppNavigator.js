@@ -41,10 +41,15 @@ import EditThreadScreen from '@src/screens/MainForum/EditThreadScreen';
 import ForumScreen from 'src/screens/MainForum/ForumScreen';
 import ForumSearch from 'src/screens/MainForum/ForumSearch';
 import CardDetailForum from 'src/screens/MainForum/CardDetailForum';
-import ForumReport from 'src/screens/MainForum/Report';
+import ForumReport from 'src/screens/MainForum/NewForum/Report';
+import ForumReportDetail from 'src/screens/MainForum/NewForum/ReportDetail';
 import ForumTopicScreen from 'src/screens/MainForum/NewForum/ForumTopicScreen';
 import ForumGroupScreen from 'src/screens/MainForum/NewForum/ForumGroupScreen';
-import ForumDetailScreen from 'src/screens/MainForum/NewForum/ForumDetailScreen';
+import ForumGroupDetailScreen from 'src/screens/MainForum/NewForum/ForumGroupDetailScreen';
+import ForumBuatScreen from 'src/screens/MainForum/NewForum/ForumBuatScreen';
+import ForumBuatDetailScreen from 'src/screens/MainForum/NewForum/ForumBuatDetailScreen';
+import ForumBalas from            'src/screens/MainForum/NewForum/ForumBalas';
+import ForumKutipan from          'src/screens/MainForum/NewForum/ForumKutipan';
 // import CardForumPage from 'src/screens/MainForum/CardForumPage';
 // profile
 import ChangeProfile from '@src/screens/MainProfile/ChangeProfile';
@@ -353,6 +358,7 @@ function MainStackNavigator() {
       <Screen name="ForumSegmentScreen" component={ForumSegmentScreen} />
       <Screen name="CreateThreadScreen" component={CreateThreadScreen} />
       <Screen name="ForumReport" component={ForumReport} />
+      <Screen name="ForumReportDetail" component={ForumReportDetail} />
       <Screen
         name="CreateThreadMultipleScreen"
         component={CreateThreadMultipleScreen}
@@ -361,9 +367,13 @@ function MainStackNavigator() {
       <Screen name="EditThreadScreen" component={EditThreadScreen} />
       <Screen name="ForumScreen" component={ForumScreen} />
       <Screen name="ForumSearch" component={ForumSearch} />
+      <Screen name="ForumBalas" component={ForumBalas} />
+      <Screen name="ForumKutipan" component={ForumKutipan} />
       <Screen name="ForumTopicScreen" component={ForumTopicScreen} />
       <Screen name="ForumGroupScreen" component={ForumGroupScreen} />
-      <Screen name="ForumDetailScreen" component={ForumDetailScreen} />
+      <Screen name="ForumGroupDetailScreen" component={ForumGroupDetailScreen} />
+      <Screen name="ForumBuatScreen" component={ForumBuatScreen} />
+      <Screen name="ForumBuatDetailScreen" component={ForumBuatDetailScreen} />
       <Screen name="CardDetailForum" component={CardDetailForum} />
       {/* <Screen name="CardForumPage" component={CardForumPage}/> */}
       {/* profile */}
