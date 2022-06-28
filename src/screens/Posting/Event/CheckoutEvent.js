@@ -38,7 +38,6 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import axios from 'axios';
 import moment from 'moment';
-import Ecommerce from '../Ecommerce/Ecommerce';
 import FormSelect from 'src/components/FormSelect';
 import client from '@src/lib/apollo';
 import { mutationAddEvent } from 'src/lib/query/event';

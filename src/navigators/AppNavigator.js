@@ -210,10 +210,8 @@ import GroupDetailScreen from 'src/screens/Chat/GroupDetailScreen';
 import UserGroupDetail from 'src/screens/Chat/UserGroupDetail';
 import AddMember from 'src/screens/Chat/AddMember';
 import EditInformationGroup from 'src/screens/Chat/EditInformationGroup';
-import CreateEvent from 'src/screens/EventR/CreateEvent';
-import CreateEventSecond from 'src/screens/EventR/CreateEventSecond';
-import CheckoutEvent from 'src/screens/EventR/CheckoutEvent';
-import PemesananTiket from 'src/screens/EventR/PemesananTiket';
+import CheckoutEvent from 'src/screens/Posting/Event/CheckoutEvent';
+import PemesananTiket from 'src/screens/Posting/Event/PemesananTiket';
 import EventOfficial from 'src/screens/Posting/Event/EventOfficial';
 import CommunityEvent from 'src/screens/Posting/Event/CommunityEvent';
 import MyEvent from 'src/screens/Posting/Event/MyEvent';
@@ -242,11 +240,6 @@ function MainStackNavigator() {
       }}>
       {/* uncanny */}
       <Screen name="SplashScreen" component={PemesananTiket} />
-      <Screen name="CheckoutEvent" component={CheckoutEvent} />
-      <Screen name="PemesananTiket" component={PemesananTiket} />
-      <Screen name="CreateEvent" component={CreateEvent} />
-      <Screen name="CreateEventSecond" component={CreateEventSecond} />
-      <Screen name="SplashScreen" component={SplashScreen} />
       <Screen name="MainPage" component={MainPage} />
       <Screen name="OnBoardingScreen" component={OnBoardingScreen} />
       <Screen name="TrackingOrder" component={TrackingOrder} />
@@ -351,6 +344,8 @@ function MainStackNavigator() {
       <Screen name="PlaceScreen" component={PlaceScreen} />
       <Screen name="PlaceDetail" component={PlaceDetail} />
       {/* Event */}
+      <Screen name="CheckoutEvent" component={CheckoutEvent} />
+      <Screen name="PemesananTiket" component={PemesananTiket} />
       <Screen name="EventScreen" component={EventScreen} />
       <Screen name="EventDetail" component={EventDetail} />
       <Screen name="CreateEvent" component={CreateEvent} />
