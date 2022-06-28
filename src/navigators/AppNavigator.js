@@ -228,7 +228,7 @@ function MainStackNavigator() {
         gestureEnabled: Platform.OS === 'ios',
         headerShown: false
       }}
-	>
+  >
       {/* uncanny */}
       <Screen name="SplashScreen" component={SplashScreen} />
       <Screen name="MainPage" component={MainPage} />
@@ -238,13 +238,13 @@ function MainStackNavigator() {
       <Screen name="PDFReaderScreen" component={PDFReaderScreen} />
       <Screen name="MusicPlayerScreen" component={MusicPlayerScreen} />
 
-       {/* Survey Pasar */}
+      {/* Survey Pasar */}
       <Screen name="SurveyPasarFirst" component={SurveyPasarFirst} />
       <Screen name="SurveyPasarSecond" component={SurveyPasarSecond} />
       <Screen name="SurveyPasarThird" component={SurveyPasarThird} />
 
-       {/* Survey Pasar */}
-       <Screen name="SurveyTahuTempeFirst" component={SurveyTahuTempeFirst} />
+      {/* Survey Pasar */}
+      <Screen name="SurveyTahuTempeFirst" component={SurveyTahuTempeFirst} />
       <Screen name="SurveyTahuTempeSecond" component={SurveyTahuTempeSecond} />
       <Screen name="SurveyTahuTempeThird" component={SurveyTahuTempeThird} />
       <Screen name="SurveyTahuTempeFourth" component={SurveyTahuTempeFourth} />

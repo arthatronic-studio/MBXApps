@@ -195,7 +195,7 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
             <TouchableOpacity
                 onPress={async() => {
                     await fetchViewProduct({productId: item.id});
-                    navigation.navigate('NewsDetail', { item });
+                    navigation.navigate('NewsDetail', {code: item.code });
 
                     GALogEvent('Artikel', {
                         id: item.id,

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Image, ScrollView, Pressable, FlatList, TouchableOpacity} from 'react-native';
+import {View, Image, ScrollView, Pressable, FlatList, TouchableOpacity, ActivityIndicator, useWindowDimensions} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 import Banner from 'src/components/Banner';
@@ -42,38 +42,31 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { fetchLikeComment } from 'src/api/likeComment';
 import { fetchProductSave } from 'src/api/productSave';
+import { fetchContentProduct } from 'src/api/contentV2';
 import Modal from 'react-native-modal';
 
 
 const NewsDetail = ({navigation, route}) => {
   const [refreshComment, setRefreshComment] = useState(false);
-  const {item} = route.params;
-  const [bookmark, setBookmark] = useState(item.im_save);
+  console.log(route.params, "params");
+  const {code} = route.params;
   const modalOptionsRef = useRef();
   const [loadingBanner, setLoadingBanner] = useState(true);
   const [listBanner, setListBanner] = useState([]);
   const isFocused = useIsFocused();
   const [isModalVisible, setModalVisible] = useState(false);
-
-  console.log(item, 'item');
-
   const user = useSelector(state => state['user.auth'].login.user);
-
-  const [state, changeState] = useState({
-    im_like: item.im_like,
-    like: item.like,
-  });
-
+  const [item, setItem] = useState(null);
+  // const [bookmark, setBookmark] = useState(item.im_save);
+  const [state, changeState] = useState({});
   const [listComment, setListComment] = useState([]);
-
   const setState = obj => changeState({...state, ...obj});
-
   const [popupProps, showPopup] = usePopup();
-  const [loadingProps, showLoading] = useLoading();
-
+  const [loadingProps, showLoading, hideLoading] = useLoading();
   const {Color} = useColor();
-
+  const {width} = useWindowDimensions();
   const [refreshing, setRefreshing] = useState(false);
+
   const onRefresh = () => {
     setRefreshing(true);
     setTimeout(() => {
@@ -81,17 +74,31 @@ const NewsDetail = ({navigation, route}) => {
     }, 1000);
   };
 
-  useEffect(() => {
-    fetchCommentList();
-    fetchBannerList();
-    // const timeout = trigger ? setTimeout(() => {
-    //     fetchAddLike();
-    // }, 500) : null;
+  const fetchData = async() => {
+    const variables = {
+      productCategory: 'ARTIKEL',
+      productCode: code,
+    }
+    const result = await fetchContentProduct(variables);
+    console.log(result.data[0]);
+    setItem(result.data[0]);
+    changeState({
+      im_like: result.data[0].im_like,
+      like: result.data[0].like,
+      bookmark: result.data[0].im_save
+    })
+  }
 
-    // return () => {
-    //     clearTimeout(timeout);
-    // }
+  useEffect(() => {
+    fetchData();
   }, [isFocused]);
+
+  useEffect(() => {
+    if(item){
+      fetchCommentList();
+      fetchBannerList();
+    }
+  }, [isFocused, item]);
 
   useEffect(() => {
     if (refreshComment && item && item.comment > 0) {
@@ -299,6 +306,33 @@ const NewsDetail = ({navigation, route}) => {
     );
   };
 
+  const renderskeleton = () => {
+    return (
+      <View
+        style={{
+          width: width,
+          aspectRatio: 16/9,
+          paddingHorizontal: 16,
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            width: '100%',
+            borderRadius: 8,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: Color.textInput,
+          }}
+        >
+          <ActivityIndicator size="large" color={Color.primary} />
+          <Divider />
+          <Text>Memuat</Text>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <Scaffold
       fallback={false}
@@ -321,10 +355,12 @@ const NewsDetail = ({navigation, route}) => {
                 onPress={async() => {
                   const res = await fetchProductSave({productId: item.id});
                   if(res.status == true){
-                    setBookmark(!bookmark);
+                    setState({
+                      bookmark: !state.bookmark
+                    });
                   }
                 }}>
-                {bookmark == true ? (
+                {state.bookmark == true ? (
                   <FontAwesome name={'bookmark'} size={24} />
                 ) : (
                   <FontAwesome name={'bookmark-o'} size={24} />
@@ -341,541 +377,547 @@ const NewsDetail = ({navigation, route}) => {
         />
       }
       loadingProps={loadingProps}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* <View style={{padding: 16}}>
-                    <Text size={24} type='bold' align='left' lineHeight={32}>
-                        {item.productName}
-                    </Text>
-                </View> */}
-        {/* <View style={{paddingHorizontal: 16}}>
-                    <View style={{paddingVertical: 4, width: 100, borderWidth: 0.5, borderRadius: 8, borderColor: Color.primary}}>
-                        <Text size={10} color={Color.primary}>
-                            {item.productCategory}
+      {!item ? (
+        renderskeleton()
+      ) : (
+        <>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {/* <View style={{padding: 16}}>
+                        <Text size={24} type='bold' align='left' lineHeight={32}>
+                            {item.productName}
                         </Text>
-                    </View>
-                </View> */}
+                    </View> */}
+            {/* <View style={{paddingHorizontal: 16}}>
+                        <View style={{paddingVertical: 4, width: 100, borderWidth: 0.5, borderRadius: 8, borderColor: Color.primary}}>
+                            <Text size={10} color={Color.primary}>
+                                {item.productCategory}
+                            </Text>
+                        </View>
+                    </View> */}
 
-        {/* <Divider /> */}
+            {/* <Divider /> */}
 
-        <View
-          style={{
-            width: '100%',
-            aspectRatio: 4 / 3,
-          }}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('GalleryDetailScreen', {
-                id: item.id,
-                image: item.image,
-              });
-            }}>
-            <Image
-              source={{uri: item.image}}
-              style={{
-                width: '100%',
-                height: '100%',
-                backgroundColor: Color.border,
-                // position: 'absolute',
-              }}
-            />
-            <Text
-              style={{
-                position: 'absolute',
-                color: Color.border,
-                fontSize: 8,
-                bottom: 10,
-                left: 15,
-              }}>
-              Sumber Gambar : {item.imageSource}
-            </Text>
-          </TouchableOpacity>
-
-          {/* <View
-            style={{
-              width: '100%',
-              height: '100%',
-              backgroundColor: Color.reverseOverflow,
-              position: 'absolute',
-            }} /> */}
-
-          {/* <View
-            style={{
-              width: '100%',
-              height: '100%',
-              justifyContent: 'flex-end',
-              alignItems: 'flex-start',
-            }}>
             <View
               style={{
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
                 width: '100%',
-                paddingHorizontal: 16,
-                paddingBottom: 16,
+                aspectRatio: 4 / 3,
               }}>
-              <Text
-                style={{fontWeight: 'bold', color: Color.text}}
-                align="left"
-                size={19}>
-                {item.productName}
-              </Text>
-              <Text style={{color: Color.text}} align="left" size={11}>
-                Ditulis oleh {item.fullname}
-              </Text>
-            </View>
-          </View> */}
-        </View>
-
-        <View
-          style={{
-            width: '100%',
-            // height: '100%',
-            paddingTop: 16,
-            justifyContent: 'flex-end',
-            alignItems: 'flex-start',
-          }}>
-          <View
-            style={{
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              alignItems: 'flex-start',
-              width: '100%',
-              paddingHorizontal: 15,
-              paddingBottom: 16,
-            }}>
-            <Text type="bold" align="left" size={18} style={{width: '80%'}}>
-              {item.productName}
-            </Text>
-            <Divider height={6} />
-            <Text align="left" size={10} color={Color.secondary}>
-              {moment(parseInt(item.created_date)).format('DD MMM YYYY')} |{' '}
-              {Capitalize(item.productSubCategory.toLowerCase())} | Ditulis oleh{' '}
-              {item.fullname}
-            </Text>
-          </View>
-        </View>
-
-        {item.like > 0 && (
-          <Container paddingHorizontal={16}>
-            <WidgetUserLikes id={item.id} title="Disukai" refresh={refreshing} />
-          </Container>
-        )}
-
-        <Divider />
-        <Row style={{paddingHorizontal: 15, alignItems: 'center'}}>
-          <MaterialCommunityIcons
-            style={{marginRight: 5}}
-            name={'comment-processing'}
-            color={Color.secondary}
-            size={12}
-          />
-          <Text style={{fontSize: 10, marginRight: 12}}>{listComment.length} Komentar</Text>
-          <Entypo
-            name={'share'}
-            style={{marginRight: 5}}
-            color={Color.secondary}
-          />
-          <Text style={{fontSize: 10, marginRight: 12}}>21x dibagikan</Text>
-          <AntDesign
-            name={'eye'}
-            style={{marginRight: 5}}
-            size={18}
-            color={Color.secondary}
-          />
-          <Text style={{fontSize: 10, marginRight: 12}}>{item.view} Melihat</Text>
-        </Row>
-
-        <View style={{padding: 16}}>
-          <Text lineHeight={24} align="justify">
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            {item.productDescription}
-          </Text>
-        </View>
-        <Text
-          style={{
-            fontSize: 11,
-            fontWeight: 'bold',
-            textAlign: 'left',
-            paddingHorizontal: 15,
-          }}>
-          Tags
-        </Text>
-        {item.tag.length != 0 && (
-          <View
-            style={{
-              padding: 16,
-              paddingTop: 8,
-              paddingBottom: 14,
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              width: '100%',
-              flexDirection: 'row',
-            }}>
-            {item.tag.map((item, index) => (
-              <View
-                key={index}
-                style={{
-                  paddingHorizontal: 16,
-                  paddingVertical: 10,
-                  backgroundColor: Color.text,
-                  borderRadius: 120,
-                  marginRight: 10,
-                  marginBottom: 10,
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('GalleryDetailScreen', {
+                    id: item.id,
+                    image: item.image,
+                  });
                 }}>
-                <Text size={11} type="bold" color={Color.textInput}>
-                  {item}
+                <Image
+                  source={{uri: item.image}}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: Color.border,
+                    // position: 'absolute',
+                  }}
+                />
+                <Text
+                  style={{
+                    position: 'absolute',
+                    color: Color.border,
+                    fontSize: 8,
+                    bottom: 10,
+                    left: 15,
+                  }}>
+                  Sumber Gambar : {item.imageSource}
+                </Text>
+              </TouchableOpacity>
+
+              {/* <View
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: Color.reverseOverflow,
+                  position: 'absolute',
+                }} /> */}
+
+              {/* <View
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  justifyContent: 'flex-end',
+                  alignItems: 'flex-start',
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    width: '100%',
+                    paddingHorizontal: 16,
+                    paddingBottom: 16,
+                  }}>
+                  <Text
+                    style={{fontWeight: 'bold', color: Color.text}}
+                    align="left"
+                    size={19}>
+                    {item.productName}
+                  </Text>
+                  <Text style={{color: Color.text}} align="left" size={11}>
+                    Ditulis oleh {item.fullname}
+                  </Text>
+                </View>
+              </View> */}
+            </View>
+
+            <View
+              style={{
+                width: '100%',
+                // height: '100%',
+                paddingTop: 16,
+                justifyContent: 'flex-end',
+                alignItems: 'flex-start',
+              }}>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                  width: '100%',
+                  paddingHorizontal: 15,
+                  paddingBottom: 16,
+                }}>
+                <Text type="bold" align="left" size={18} style={{width: '80%'}}>
+                  {item.productName}
+                </Text>
+                <Divider height={6} />
+                <Text align="left" size={10} color={Color.secondary}>
+                  {moment(parseInt(item.created_date)).format('DD MMM YYYY')} |{' '}
+                  {Capitalize(item.productSubCategory.toLowerCase())} | Ditulis oleh{' '}
+                  {item.fullname}
                 </Text>
               </View>
-            ))}
-          </View>
-        )}
+            </View>
 
-        <Row
-          style={{
-            paddingVertical: 10,
-            width: '93%',
-            height: 65,
-            borderRadius: 5,
-            alignSelf: 'center',
-            justifyContent: 'space-around',
-          }}>
-          <TouchableWithoutFeedback
-            onPress={() => {
-              fetchAddLike();
-              GALogEvent('Artikel', {
-                id: item.id,
-                product_name: item.productName,
-                user_id: user.userId,
-                method: analyticMethods.like,
-              });
-            }}
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: 100,
-            }}>
-            {state.im_like ? (
+            {item.like > 0 && (
+              <Container paddingHorizontal={16}>
+                <WidgetUserLikes id={item.id} title="Disukai" refresh={refreshing} />
+              </Container>
+            )}
+
+            <Divider />
+            <Row style={{paddingHorizontal: 15, alignItems: 'center'}}>
+              <MaterialCommunityIcons
+                style={{marginRight: 5}}
+                name={'comment-processing'}
+                color={Color.secondary}
+                size={12}
+              />
+              <Text style={{fontSize: 10, marginRight: 12}}>{listComment.length} Komentar</Text>
+              <Entypo
+                name={'share'}
+                style={{marginRight: 5}}
+                color={Color.secondary}
+              />
+              <Text style={{fontSize: 10, marginRight: 12}}>21x dibagikan</Text>
+              <AntDesign
+                name={'eye'}
+                style={{marginRight: 5}}
+                size={18}
+                color={Color.secondary}
+              />
+              <Text style={{fontSize: 10, marginRight: 12}}>{item.view} Melihat</Text>
+            </Row>
+
+            <View style={{padding: 16}}>
+              <Text lineHeight={24} align="justify">
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                {item.productDescription}
+              </Text>
+            </View>
+            <Text
+              style={{
+                fontSize: 11,
+                fontWeight: 'bold',
+                textAlign: 'left',
+                paddingHorizontal: 15,
+              }}>
+              Tags
+            </Text>
+            {item.tag.length != 0 && (
               <View
                 style={{
-                  width: 45,
+                  padding: 16,
+                  paddingTop: 8,
+                  paddingBottom: 14,
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  height: 45,
-                  backgroundColor: Color.red,
-                  borderRadius: 25,
+                  flexWrap: 'wrap',
+                  width: '100%',
+                  flexDirection: 'row',
                 }}>
-                <MaterialIcons
-                  name={'favorite'}
-                  size={25}
-                  color={Color.theme}
-                />
-              </View>
-            ) : (
-              <View
-                style={{
-                  width: 45,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: 45,
-                  backgroundColor: Color.theme,
-                  elevation: 1,
-                  borderRadius: 25,
-                }}>
-                <MaterialIcons
-                  name={'favorite-border'}
-                  size={25}
-                  color={Color.text}
-                />
+                {item.tag.map((item, index) => (
+                  <View
+                    key={index}
+                    style={{
+                      paddingHorizontal: 16,
+                      paddingVertical: 10,
+                      backgroundColor: Color.text,
+                      borderRadius: 120,
+                      marginRight: 10,
+                      marginBottom: 10,
+                    }}>
+                    <Text size={11} type="bold" color={Color.textInput}>
+                      {item}
+                    </Text>
+                  </View>
+                ))}
               </View>
             )}
-            {/* <Text style={{fontSize: 18, marginHorizontal: 5}}>
-              {state.like}
-            </Text> */}
-            <Text
-              style={{fontSize: 14, marginHorizontal: 5, marginVertical: 10}}>
-              Suka
-            </Text>
-          </TouchableWithoutFeedback>
 
-          <TouchableWithoutFeedback
-            onPress={() => navigation.navigate('CommentListScreen', {item})}
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: 100,
-            }}>
-            <View
+            <Row
               style={{
-                width: 45,
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: 45,
-                backgroundColor: Color.theme,
-                elevation: 1,
-                borderRadius: 25,
-              }}>
-              <MaterialCommunityIcons
-                name={'comment-processing-outline'}
-                size={25}
-                color={Color.text}
-              />
-            </View>
-            {/* <Text style={{fontSize: 14, marginHorizontal: 5,marginVertical: 10}}>
-              {item.commentCount}
-            </Text> */}
-            <Text
-              style={{fontSize: 14, marginHorizontal: 5, marginVertical: 10}}>
-              Komentar
-            </Text>
-          </TouchableWithoutFeedback>
-
-          <TouchableWithoutFeedback
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: 100,
-            }}>
-            <View
-              style={{
-                width: 45,
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: 45,
-                backgroundColor: Color.theme,
-                elevation: 1,
-                borderRadius: 25,
-              }}>
-              <AntDesign name={'sharealt'} size={25} color={Color.text} />
-            </View>
-            {/* <Text style={{fontSize: 18, marginHorizontal: 5}}>
-              {state.like}
-            </Text> */}
-            <Text
-              style={{fontSize: 14, marginHorizontal: 5, marginVertical: 10}}>
-              Bagikan
-            </Text>
-          </TouchableWithoutFeedback>
-
-          {/* <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: 100
-            }}>
-            <IonIcons name={'eye-outline'} size={18} />
-            <Text style={{fontSize: 18, marginHorizontal: 5}}>{item.view}</Text>
-          </View> */}
-        </Row>
-        <Divider height={30} />
-        <View
-          style={{
-            backgroundColor: Color.border,
-            width: '90%',
-            height: 1,
-            marginVertical: 15,
-            alignSelf: 'center',
-          }}
-        />
-
-        <Banner data={listBanner} loading={loadingBanner} showHeader={false} />
-        <Divider />
-
-        {listComment.length > 0 && (
-          <View style={{paddingHorizontal: 16}}>
-            <Text size={10} color="#000000" align="left" type="bold">
-              Komentar
-            </Text>
-            <Divider height={16} />
-            {listComment.map((comment, index) => {
-              return (
-                <View
-                  // onPress={() =>
-                  //   navigation.navigate('CommentListScreen', {item})
-                  // }
-                  key={index}>
-                  {renderComment(comment, index)}
-                </View>
-              );
-            })}
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('CommentListScreen', {item});
-              }}
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
+                paddingVertical: 10,
+                width: '93%',
+                height: 65,
+                borderRadius: 5,
                 alignSelf: 'center',
-                borderColor: Color.primary,
-                borderWidth: 1,
-                width: '100%',
-                borderRadius: 30,
-                height: 50,
+                justifyContent: 'space-around',
+              }}>
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  fetchAddLike();
+                  GALogEvent('Artikel', {
+                    id: item.id,
+                    product_name: item.productName,
+                    user_id: user.userId,
+                    method: analyticMethods.like,
+                  });
+                }}
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: 100,
+                }}>
+                {state.im_like ? (
+                  <View
+                    style={{
+                      width: 45,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      height: 45,
+                      backgroundColor: Color.red,
+                      borderRadius: 25,
+                    }}>
+                    <MaterialIcons
+                      name={'favorite'}
+                      size={25}
+                      color={Color.theme}
+                    />
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      width: 45,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      height: 45,
+                      backgroundColor: Color.theme,
+                      elevation: 1,
+                      borderRadius: 25,
+                    }}>
+                    <MaterialIcons
+                      name={'favorite-border'}
+                      size={25}
+                      color={Color.text}
+                    />
+                  </View>
+                )}
+                {/* <Text style={{fontSize: 18, marginHorizontal: 5}}>
+                  {state.like}
+                </Text> */}
+                <Text
+                  style={{fontSize: 14, marginHorizontal: 5, marginVertical: 10}}>
+                  Suka
+                </Text>
+              </TouchableWithoutFeedback>
+
+              <TouchableWithoutFeedback
+                onPress={() => navigation.navigate('CommentListScreen', {item})}
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: 100,
+                }}>
+                <View
+                  style={{
+                    width: 45,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: 45,
+                    backgroundColor: Color.theme,
+                    elevation: 1,
+                    borderRadius: 25,
+                  }}>
+                  <MaterialCommunityIcons
+                    name={'comment-processing-outline'}
+                    size={25}
+                    color={Color.text}
+                  />
+                </View>
+                {/* <Text style={{fontSize: 14, marginHorizontal: 5,marginVertical: 10}}>
+                  {item.commentCount}
+                </Text> */}
+                <Text
+                  style={{fontSize: 14, marginHorizontal: 5, marginVertical: 10}}>
+                  Komentar
+                </Text>
+              </TouchableWithoutFeedback>
+
+              <TouchableWithoutFeedback
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: 100,
+                }}>
+                <View
+                  style={{
+                    width: 45,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: 45,
+                    backgroundColor: Color.theme,
+                    elevation: 1,
+                    borderRadius: 25,
+                  }}>
+                  <AntDesign name={'sharealt'} size={25} color={Color.text} />
+                </View>
+                {/* <Text style={{fontSize: 18, marginHorizontal: 5}}>
+                  {state.like}
+                </Text> */}
+                <Text
+                  style={{fontSize: 14, marginHorizontal: 5, marginVertical: 10}}>
+                  Bagikan
+                </Text>
+              </TouchableWithoutFeedback>
+
+              {/* <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: 100
+                }}>
+                <IonIcons name={'eye-outline'} size={18} />
+                <Text style={{fontSize: 18, marginHorizontal: 5}}>{item.view}</Text>
+              </View> */}
+            </Row>
+            <Divider height={30} />
+            <View
+              style={{
+                backgroundColor: Color.border,
+                width: '90%',
+                height: 1,
                 marginVertical: 15,
+                alignSelf: 'center',
+              }}
+            />
+
+            <Banner data={listBanner} loading={loadingBanner} showHeader={false} />
+            <Divider />
+
+            {listComment.length > 0 && (
+              <View style={{paddingHorizontal: 16}}>
+                <Text size={10} color="#000000" align="left" type="bold">
+                  Komentar
+                </Text>
+                <Divider height={16} />
+                {listComment.map((comment, index) => {
+                  return (
+                    <View
+                      // onPress={() =>
+                      //   navigation.navigate('CommentListScreen', {item})
+                      // }
+                      key={index}>
+                      {renderComment(comment, index)}
+                    </View>
+                  );
+                })}
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('CommentListScreen', {item});
+                  }}
+                  style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    alignSelf: 'center',
+                    borderColor: Color.primary,
+                    borderWidth: 1,
+                    width: '100%',
+                    borderRadius: 30,
+                    height: 50,
+                    marginVertical: 15,
+                  }}>
+                  <Text style={{color: Color.primary}}>Lihat Semua Komentar</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            <View
+              style={{
+                backgroundColor: Color.border,
+                width: '90%',
+                height: 1,
+                marginVertical: 15,
+                alignSelf: 'center',
+              }}
+            />
+            {/* <View
+              style={{
+                backgroundColor: Color.border,
+                width: '96%',
+                height: 1,
+                marginVertical: 15,
+                alignSelf: 'center',
+              }}
+            /> */}
+
+            {/* artikel terkait */}
+            {/* <Text
+              style={{
+                fontSize: 11,
+                marginHorizontal: 15,
+                fontWeight: 'bold',
+                textAlign: 'left',
               }}>
-              <Text style={{color: Color.primary}}>Lihat Semua Komentar</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-
-        <View
-          style={{
-            backgroundColor: Color.border,
-            width: '90%',
-            height: 1,
-            marginVertical: 15,
-            alignSelf: 'center',
-          }}
-        />
-        {/* <View
-          style={{
-            backgroundColor: Color.border,
-            width: '96%',
-            height: 1,
-            marginVertical: 15,
-            alignSelf: 'center',
-          }}
-        /> */}
-
-        {/* artikel terkait */}
-        {/* <Text
-          style={{
-            fontSize: 11,
-            marginHorizontal: 15,
-            fontWeight: 'bold',
-            textAlign: 'left',
-          }}>
-          Artikel Terkait
-        </Text>
-        <Divider height={10} />
-        <FlatList
-          showsHorizontalScrollIndicator={false}
-          horizontal
-          data={DATA}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-        /> */}
-
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-          {/* Ini buat ngelike */}
-          {/* <View style={{alignItems: 'center'}}>
-            <TouchableOpacity
-                onPress={() => {
-                    fetchAddLike();
-                    GALogEvent('Artikel', {
-                      id: item.id,
-                      product_name: item.productName,
-                      user_id: user.userId,
-                      method: analyticMethods.like,
-                    });
-                }}
-                style={{height: 70, width: 70, flexDirection: 'row', borderRadius: 35, backgroundColor: Color.textInput, justifyContent: 'center', alignItems: 'center'}}
-            >
-                <Ionicons name='heart-outline' color={state.im_like ? Color.primary : Color.text} size={30} />
-                {item.like > 0 && <Text color={state.im_like ? Color.primary : Color.text}>{item.like} </Text>}
-            </TouchableOpacity>
-            <Text
-                size={12}
-                color={state.im_like ? Color.primary : Color.text}
-            >
-                {state.im_like ? 'Disukai' : 'Suka'}
+              Artikel Terkait
             </Text>
-        </View> */}
+            <Divider height={10} />
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              data={DATA}
+              renderItem={renderItem}
+              keyExtractor={item => item.id}
+            /> */}
 
-          {/* Ini buat komentar */}
-          {/* <View style={{alignItems: 'center'}}>
-            <TouchableOpacity
-                onPress={() => {
-                    navigation.navigate('CommentListScreen', { item });
-                }}
-                style={{height: 70, width: 70, flexDirection: 'row', borderRadius: 35, backgroundColor: Color.textInput, justifyContent: 'center', alignItems: 'center'}}
-            >
-                <Ionicons name='chatbubble-ellipses-outline' color={Color.text} size={30} />
-                {item.comment > 0 && <Text>{item.comment} </Text>}
-            </TouchableOpacity>
-            <Text size={12}>Komentar</Text>
-        </View> */}
+            <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+              {/* Ini buat ngelike */}
+              {/* <View style={{alignItems: 'center'}}>
+                <TouchableOpacity
+                    onPress={() => {
+                        fetchAddLike();
+                        GALogEvent('Artikel', {
+                          id: item.id,
+                          product_name: item.productName,
+                          user_id: user.userId,
+                          method: analyticMethods.like,
+                        });
+                    }}
+                    style={{height: 70, width: 70, flexDirection: 'row', borderRadius: 35, backgroundColor: Color.textInput, justifyContent: 'center', alignItems: 'center'}}
+                >
+                    <Ionicons name='heart-outline' color={state.im_like ? Color.primary : Color.text} size={30} />
+                    {item.like > 0 && <Text color={state.im_like ? Color.primary : Color.text}>{item.like} </Text>}
+                </TouchableOpacity>
+                <Text
+                    size={12}
+                    color={state.im_like ? Color.primary : Color.text}
+                >
+                    {state.im_like ? 'Disukai' : 'Suka'}
+                </Text>
+            </View> */}
 
-          {/* <View style={{alignItems: 'center'}}>
-            <TouchableOpacity
+              {/* Ini buat komentar */}
+              {/* <View style={{alignItems: 'center'}}>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.navigate('CommentListScreen', { item });
+                    }}
+                    style={{height: 70, width: 70, flexDirection: 'row', borderRadius: 35, backgroundColor: Color.textInput, justifyContent: 'center', alignItems: 'center'}}
+                >
+                    <Ionicons name='chatbubble-ellipses-outline' color={Color.text} size={30} />
+                    {item.comment > 0 && <Text>{item.comment} </Text>}
+                </TouchableOpacity>
+                <Text size={12}>Komentar</Text>
+            </View> */}
+
+              {/* <View style={{alignItems: 'center'}}>
+                <TouchableOpacity
+                  style={{
+                    height: 70,
+                    width: 70,
+                    borderRadius: 35,
+                    backgroundColor: Color.textInput,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Image source={iconShare} />
+                </TouchableOpacity>
+                <Text size={12}>Share</Text>
+              </View> */}
+
+              {/* <View style={{alignItems: 'center'}}>
+                <TouchableOpacity
+                  onPress={() => {}}
+                  style={{
+                    height: 70,
+                    width: 70,
+                    borderRadius: 35,
+                    backgroundColor: Color.textInput,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Image source={iconWarning} />
+                </TouchableOpacity>
+                <Text size={12}>Lapor</Text>
+              </View> */}
+            </View>
+            <Divider />
+          </ScrollView>
+
+          <Modal isVisible={isModalVisible}>
+            <View
               style={{
-                height: 70,
-                width: 70,
-                borderRadius: 35,
                 backgroundColor: Color.textInput,
-                justifyContent: 'center',
+                borderRadius: 20,
+                paddingVertical: 16,
+                paddingHorizontal: 24,
                 alignItems: 'center',
               }}>
-              <Image source={iconShare} />
-            </TouchableOpacity>
-            <Text size={12}>Share</Text>
-          </View> */}
-
-          {/* <View style={{alignItems: 'center'}}>
-            <TouchableOpacity
-              onPress={() => {}}
-              style={{
-                height: 70,
-                width: 70,
-                borderRadius: 35,
-                backgroundColor: Color.textInput,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Image source={iconWarning} />
-            </TouchableOpacity>
-            <Text size={12}>Lapor</Text>
-          </View> */}
-        </View>
-        <Divider />
-      </ScrollView>
-
-      <Modal isVisible={isModalVisible}>
-        <View
-          style={{
-            backgroundColor: Color.textInput,
-            borderRadius: 20,
-            paddingVertical: 16,
-            paddingHorizontal: 24,
-            alignItems: 'center',
-          }}>
-          <Text style={{fontWeight: 'bold', fontSize: 14, width: '70%'}}>
-            Apakah kamu yakin ingin menghapus ini?
-          </Text>
-          <Divider height={16}/>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width: '100%'}}>
-            <TouchableOpacity
-              onPress={() => {
-                console.log("sinii");
-                setModalVisible(false);
-              }}
-              style={{paddingVertical: 14, paddingHorizontal: 32, backgroundColor: '#9CA3A5', borderRadius: 120}}>
-              <Text size={14} color={Color.theme}>
-                Batal
+              <Text style={{fontWeight: 'bold', fontSize: 14, width: '70%'}}>
+                Apakah kamu yakin ingin menghapus ini?
               </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                setModalVisible(!isModalVisible);
-                onDelete();
-              }}
-              style={{paddingVertical: 13, paddingHorizontal: 31, borderRadius: 120, borderColor: Color.danger, borderWidth: 1}}>
-              <Text size={14} color={Color.danger}>
-                Hapus
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+              <Divider height={16}/>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width: '100%'}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    console.log("sinii");
+                    setModalVisible(false);
+                  }}
+                  style={{paddingVertical: 14, paddingHorizontal: 32, backgroundColor: '#9CA3A5', borderRadius: 120}}>
+                  <Text size={14} color={Color.theme}>
+                    Batal
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setModalVisible(!isModalVisible);
+                    onDelete();
+                  }}
+                  style={{paddingVertical: 13, paddingHorizontal: 31, borderRadius: 120, borderColor: Color.danger, borderWidth: 1}}>
+                  <Text size={14} color={Color.danger}>
+                    Hapus
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
 
-      <ModalContentOptions
-        ref={modalOptionsRef}
-        isOwner={user && user.userId === item.ownerId}
-        item={item}
-        editScreen={'EditNews'}
-        onDelete={() => setModalVisible(!isModalVisible)}
-      />
+          <ModalContentOptions
+            ref={modalOptionsRef}
+            isOwner={user && user.userId === item.ownerId}
+            item={item}
+            editScreen={'EditNews'}
+            onDelete={() => setModalVisible(!isModalVisible)}
+          />
+        </>
+      )}
     </Scaffold>
   );
 };

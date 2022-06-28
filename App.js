@@ -16,6 +16,7 @@ import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation
 import { trackPlayerInit } from '@src/utils/track-player-init';
 import ModalNetInfo from '@src/components/ModalNetInfo';
 import { requestTrackingPermission } from 'react-native-tracking-transparency';
+import linking from 'src/navigators/linking';
 
 export let navigationRef = createRef();
 
@@ -189,6 +190,7 @@ const App = () => {
       <PersistGate persistor={persistor}>
         <View style={{flex: 1, backgroundColor: Color.theme}}>
           <NavigationContainer
+            linking={linking}
             ref={navigationRef}
             onReady={onReady}
           >

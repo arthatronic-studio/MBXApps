@@ -175,7 +175,7 @@ const SearchArticle = ({navigation}) => {
     <Pressable
       onPress={async() => {
         await fetchViewProduct({productId: item.id});
-        navigation.navigate('NewsDetail', {item: item});
+        navigation.navigate('NewsDetail', {code: item.code});
         }
       }
       style={{
