@@ -16,7 +16,7 @@ import {
 import { shadowStyle } from '@src/styles';
 import { queryAddLike } from 'src/lib/query';
 import client from 'src/lib/apollo';
-import { Divider, Padding, Row } from 'src/styled';
+import { Divider, Line, Padding, Row } from 'src/styled';
 
 const defaultProps = {
     onPress: () => {},
@@ -167,7 +167,7 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
 
             <Text align='left' size={12} type='medium' {...extraPropsText}>{item.productDescription}</Text>
 
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 8, paddingTop: 16}}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 8, paddingVertical: 16}}>
                 <Row>
                     <TouchableOpacity
                         onPress={() => onSubmitLike()}
@@ -241,6 +241,8 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
                     </TouchableOpacity>
                 </Row>
             </View>
+
+            <Line color={Color.border} width={width} />
         </TouchableOpacity>
     )
 }

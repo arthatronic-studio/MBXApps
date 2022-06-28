@@ -103,7 +103,7 @@ const CardComponentArticle = ({ productCategory, item, numColumns, onPress, hori
                     width: width / numColumns - 16,
                     paddingHorizontal: 8,
                     flexDirection: 'row',
-                    marginTop: 12,
+                    marginTop: 16,
                     ...style,
                 }}
             >
@@ -125,7 +125,7 @@ const CardComponentArticle = ({ productCategory, item, numColumns, onPress, hori
                                 align={'left'}
                                 numberOfLines={2}
                                 type='bold'
-                                size={18}
+                                size={16}
                             >
                                 {item.productName}
                             </Text>

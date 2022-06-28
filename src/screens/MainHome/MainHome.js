@@ -33,7 +33,7 @@ import {
   Submit,
   useLoading,
 } from '@src/components';
-import { Divider, Circle, Container } from '@src/styled';
+import { Divider, Circle, Container, Line } from '@src/styled';
 import { playNotificationSounds } from '@src/utils/notificationSounds';
 import CarouselView from 'src/components/CarouselView';
 import Banner from 'src/components/Banner';
@@ -285,6 +285,8 @@ const MainHome = ({ navigation, route }) => {
     });
   };
 
+  const spaceContentSize = 8;
+
   return (
     <Scaffold
       translucent={Platform.OS === 'ios' ? true : false}
@@ -441,7 +443,7 @@ const MainHome = ({ navigation, route }) => {
       //   backgroundColor: colorOutputRange[0]
       // }}
       >
-        <Container color={Color.theme} paddingTop={12}>
+        <Container color={Color.theme} paddingTop={8}>
           <Animated.View
             style={{
               width,
@@ -491,7 +493,7 @@ const MainHome = ({ navigation, route }) => {
 
           {/* <MyRank /> */}
 
-          <Container paddingVertical={12}>
+          <Container paddingVertical={spaceContentSize}>
             <Banner
               showHeader={false}
               data={listBanner}
@@ -499,9 +501,15 @@ const MainHome = ({ navigation, route }) => {
             />
           </Container>
 
-          <Container paddingVertical={12}>
+          <Divider height={spaceContentSize} />
+
+          <Line color={Color.border} width={width} />
+
+          <Container paddingVertical={spaceContentSize}>
             <MemberRank />
           </Container>
+
+          <Line color={Color.border} width={width} />
 
           {accessClient.MainHome.showMenuHome && <WidgetMenuHome
             showMore
@@ -514,6 +522,10 @@ const MainHome = ({ navigation, route }) => {
               }
             }}
           />}
+
+          <Line color={Color.border} width={width} />
+
+          <Divider height={spaceContentSize} />
 
           <HighlightContentProduct
             productCategory='FORUM'
@@ -689,19 +701,30 @@ const MainHome = ({ navigation, route }) => {
                   { image: ImagesPath.ebook1 },
                   { image: ImagesPath.ebook2 },
                   { image: ImagesPath.ebook1 },
-                  { image: ImagesPath.ebook2 },
-                  { image: ImagesPath.ebook1 },
-                  { image: ImagesPath.ebook2 },
                 ]}
                 contentContainerStyle={{
                   marginTop: 8,
+                  paddingHorizontal: 8,
                 }}
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     onPress={() => {
                       toggleModal();
-                    }}>
-                    <Image source={item.image} style={{ marginHorizontal: 15 }} />
+                    }}
+                    style={{
+                      width: width / 2.2,
+                      aspectRatio: 14/20,
+                      paddingHorizontal: 8,
+                    }}
+                  >
+                    <Image
+                      source={item.image}
+                      style={{
+                        borderRadius: 8,
+                        width: '100%',
+                        height: '100%',
+                      }}
+                    />
                   </TouchableOpacity>
                 )}
                 horizontal={true}

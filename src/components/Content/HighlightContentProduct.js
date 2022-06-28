@@ -181,7 +181,12 @@ const HighlightContentProduct = (props) => {
     }
 
     return (
-        <View style={{ paddingVertical: 12 }}>
+        <View
+            style={{
+                paddingTop: 8,
+                paddingBottom: ['POSTING', 'NEARBY_PLACE'].includes(productCategory) ? 16 : 8
+            }}
+        >
             {showHeader && renderHeader()}
 
             {itemData.loading ?

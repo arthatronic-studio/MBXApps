@@ -532,14 +532,16 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
     else if (productCategory === 'YOUTUBE_VIDEO') return <CardComponentYoutube item={item} />;
     else if (productCategory === 'NEWEST_VIDEO') return <CardComponentVideo item={item} />;
     else if (productCategory === 'FORUM') return (
-        <CardForumVertical
-            item={item}
-            onPress={(item) => {
-                onPressCard();
-                navigation.navigate('DetailForumScreen', { item });
-            }}
-            style={{paddingHorizontal: 8}}
-        />
+        <Container paddingHorizontal={8}>
+            <CardForumVertical
+                item={item}
+                onPress={(item) => {
+                    onPressCard();
+                    navigation.navigate('DetailForumScreen', { item });
+                }}
+            />
+        </Container>
+
     );
     
     return <Text>Not Set</Text>;

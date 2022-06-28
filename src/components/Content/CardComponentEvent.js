@@ -124,8 +124,7 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                             aspectRatio: 3 / 2,
                             justifyContent: 'flex-end',
                             alignItems: 'center',
-                            borderTopLeftRadius: 16,
-                            borderTopRightRadius: 16,
+                            borderRadius: 12,
                             backgroundColor: Color.border,
                         }}
                     />
@@ -135,7 +134,7 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                         <Ionicons name='bookmark-outline' size={25} color={Color.black} style={{position:'absolute',top:10,right:12}} />
                     </View> */}
 
-                    <View style={{ width: '100%', paddingTop: 16, paddingHorizontal: 8 }}>
+                    <View style={{ width: '100%', paddingVertical: 8 }}>
                         {/* <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                             <View style={{width: 70, paddingVertical: 4, paddingHorizontal: 16, borderWidth: 0.5, borderRadius: 8, borderColor: Color.primary}}>
                                 <Text size={10} color={Color.primary}>{item.productCategory}</Text>

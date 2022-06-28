@@ -115,22 +115,24 @@ const WidgetMenuHome = ({ onPress, showMore }) => {
   const currentData = showMore ? listMenuHome : itemData.data;
   currentData.map((e) => e.show ? menuRealLength +=1 : null);
   const widthPerMenu = menuRealLength < 4 ? 100 / menuRealLength : 25;
-  const widthIconMenu = (width / (menuRealLength < 4 ? menuRealLength : 4) - 16) / 2.0;
+  const widthIconMenu = (width / (menuRealLength < 4 ? menuRealLength : 4) - 16) / 1.8;
   const paddingInMenu = 16;
 
   if (currentData.length === 0) return <View />;
 
+  const spaceContentSize = 8;
+
   return (
-    <Container paddingHorizontal={16} paddingVertical={12}>
+    <Container paddingHorizontal={0} paddingTop={paddingInMenu}>
       <Container
         style={{
           backgroundColor: Color.theme,
           width: '100%',
           borderRadius: 8,
-          paddingTop: paddingInMenu,
+          // paddingTop: paddingInMenu,
           flexDirection: 'row',
           flexWrap: 'wrap',
-          ...shadowStyle,
+          // ...shadowStyle,
         }}
       >
         {currentData.map((menu, idx) => {

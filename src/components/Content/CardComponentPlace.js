@@ -92,7 +92,6 @@ const CardComponentPlace = ({ productCategory, item, numColumns, onPress, horizo
 
     const renderCardPlace = () => {
         return (
-
             <TouchableOpacity
                 onPress={() => {
                     navigation.navigate('PlaceDetail', { item });
@@ -107,7 +106,7 @@ const CardComponentPlace = ({ productCategory, item, numColumns, onPress, horizo
                 style={{
                     width: width / 2 - (horizontal ? 16 : 8),
                     paddingHorizontal: 8,
-                    marginTop: 16,
+                    marginTop: 12,
                     ...style,
                 }}
             >

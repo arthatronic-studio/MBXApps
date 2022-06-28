@@ -41,11 +41,10 @@ const MemberRank = props => {
 
   return (
     <Container
-      padding={10}
+      paddingHorizontal={10}
       marginHorizontal={16}
-      radius={8}
       color={Color.theme}
-      style={{flex: 1, ...shadowStyle}}
+      style={{flex: 1}}
     >
       <Row style={{flex: 1}}>
         <View style={{flex: 1, paddingRight: 4}}>

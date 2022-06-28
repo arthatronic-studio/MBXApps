@@ -179,7 +179,7 @@ const HighlightLelang = ({ title, nav, prodStatus }) => {
   );
 
   return (
-    <Container paddingVertical={12}>
+    <Container paddingVertical={8}>
       <PostingHeader
         title={title}
         onSeeAllPress={() => navigation.navigate(nav, { title, prodStatus })}
