@@ -109,7 +109,7 @@ const EventDetail = ({navigation, route}) => {
             <Text style={{textAlign: 'left', fontSize: 8}}>Harga</Text>
             <Text style={{textAlign: 'left', fontWeight: 'bold'}}>{item.harga}<Text style={{fontSize: 8}}>/Pax</Text></Text>
         </Col>
-        <TouchableOpacity style={{justifyContent: 'center',backgroundColor: Color.primary, width: '35%', borderRadius: 30}}>
+        <TouchableOpacity onPress={() => navigation.navigate('PemesananTiket')} style={{justifyContent: 'center',backgroundColor: Color.primary, width: '35%', borderRadius: 30}}>
           <Text style={{fontSize: 10, color: Color.textInput}}>Pesan Sekarang</Text>
         </TouchableOpacity>
       </Row>
@@ -492,7 +492,7 @@ const EventDetail = ({navigation, route}) => {
             <Text style={{textAlign: 'left', fontSize: 8}}>Mulai dari</Text>
             <Text style={{textAlign: 'left', fontWeight: 'bold'}}>Rp. 100.000</Text>
         </Col>
-        <TouchableOpacity style={{justifyContent: 'center',backgroundColor: Color.primary, width: '30%', borderRadius: 30, height: 35}}>
+        <TouchableOpacity onPress={() => navigation.navigate('PemesananTiket')} style={{justifyContent: 'center',backgroundColor: Color.primary, width: '30%', borderRadius: 30, height: 35}}>
           <Text style={{fontSize: 10, color: Color.textInput}}>Ikut Event</Text>
         </TouchableOpacity>
       </Row>

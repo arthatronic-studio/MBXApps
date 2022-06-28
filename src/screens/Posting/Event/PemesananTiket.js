@@ -43,6 +43,7 @@ import client from '@src/lib/apollo';
 import { mutationAddEvent } from 'src/lib/query/event';
 import { FormatMoney } from 'src/utils';
 import ModalPassanger from './ModalPassanger';
+import ModalChangeTicket from './ModalChangeTicket';
 var crypto = require('crypto-js')
 
 function sha1(data) {
@@ -71,7 +72,7 @@ const PemesananTiket = ({navigation}) => {
     const [refresh, setRefresh] = useState(0);
     const [tnc, setTnc] = useState(0);
     const [refundPolicy, setRefundPolicy] = useState(0);
-    const modalPassangerRef = useRef();
+    const modalChangeTicketRef = useRef();
     const [tickets, setTickets] = useState([{
             name: '',
             quota: 1,
@@ -105,74 +106,8 @@ const PemesananTiket = ({navigation}) => {
         setTickets(temp)
         setRefresh(refresh + 1);
     }
-
-    const submit = async () => {
-        console.log(route.params)
-        const variables = {
-            type: 'CREATE',
-            newEvent: {
-                ...route.params.item,
-                category: "OFFICIAL",
-                refundPolicy: refundPolicy,
-                tnc: tnc,
-                image: [],
-                tickets
-                // tickets: [{
-                //     name: 'Regular',
-                //     quota: 10,
-                //     type: 'FREE',
-                //     refund: true,
-                //     reservation: true,
-                // }]
-            }
-        }
-        console.log(variables)
-        client.mutate({mutation: mutationAddEvent, variables})
-        .then(res => {
-            // hideLoading();
-            console.log(res);
-            if (res.data.eventManage) {
-           
-            }
-        })
-        .catch(reject => {
-            // hideLoading();
-            console.log(reject.message, 'reject');
-        });
-
-        navigation.navigate('CreateEventSecond',{item: tempData})
-       
-      };
-
-      const onChange = (value,name, id) => {
-        const tempx = tickets
-        tickets[id][name] = value
-        setTickets(tempx)
-        setRefresh(refresh + 1);
-        
-      }
-
-      const getDocument = async(name) => {
-        const res = await DocumentPicker.pick({
-            type: [DocumentPicker.types.pdf],
-            allowMultiSelection: false,
-        });
-
-        console.log(res, 'res get document');
-
-        let objOrigin;
-        let uri;
-
-        if (Array.isArray(res) && res.length > 0) {
-           
-            RNFetchBlob.fs
-            .readFile(res[0].uri, 'base64')
-            .then((data) => {
-                if(name == 'tnc') setTnc(data)
-                else setRefundPolicy(data)
-            })
-            .catch((err) => {});
-        }
+    const onSave = () => {
+        modalChangeTicketRef.current.close()
     }
 
       const workout = {key: 'workout', color: 'green'};
@@ -210,7 +145,7 @@ const PemesananTiket = ({navigation}) => {
                         <Text color={Color.text} size={14} type='semibold'>{FormatMoney.getFormattedMoney(100000)}/pax</Text>
                     </Col>
                     <Col style={{ alignItems: 'flex-end' }}>
-                        <TouchableOpacity style={{ borderColor: Color.primary, borderWidth: 1, borderRadius: 30, paddingVertical: 8, paddingHorizontal: 10 }}>
+                        <TouchableOpacity onPress={() => modalChangeTicketRef.current.open()} style={{ borderColor: Color.primary, borderWidth: 1, borderRadius: 30, paddingVertical: 8, paddingHorizontal: 10 }}>
                             <Text color={Color.primary} type='medium' size={11}>Ganti Tiket</Text>
                         </TouchableOpacity>
                     </Col>
@@ -264,8 +199,14 @@ const PemesananTiket = ({navigation}) => {
                 </Col>
             </Row>
         </ScrollView>
+        <ModalChangeTicket
+            ref={modalChangeTicketRef}
+            data={{name: 'riyan'}}
+            adjust={true}
+            onClose={onSave}
+        />
         <View style={{width: '100%',  height: 70, alignItems: 'center', borderRadius: 10}}>
-            <TouchableOpacity onPress={() => submit()} style={{backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
+            <TouchableOpacity onPress={() => navigation.navigate('CheckoutEvent')} style={{backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
                 <Text style={{color: Color.textInput}}>Pesan Tiket</Text>
             </TouchableOpacity>
         </View>

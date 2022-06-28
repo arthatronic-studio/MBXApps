@@ -53,11 +53,10 @@ const ModalPassanger = forwardRef((props, ref) => {
       }}
       modalStyle={{
         backgroundColor: Color.theme,
-      }}
-      onClose={() => onClose()}>
+      }} >
       <View style={{height, width, padding: 16}}>
         <ScrollView>
-          <Text type='bold' align='left' style={{ marginTop: 15 }}>Detail Pengunjung</Text>
+          <Text type='bold' align='left' style={{ marginTop: 15, marginBottom: 10 }}>Tambah Pengunjung</Text>
           <View style={{ borderColor: '#CDD1D2', alignItems: 'flex-start', borderWidth: 1, borderRadius: 8, padding: 10 }}>
             <Text size={12} style={{ marginBottom: 16 }} type='bold'>Tiket 1</Text>
             <Text size={10}>Sapaan</Text>

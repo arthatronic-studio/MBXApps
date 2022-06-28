@@ -78,20 +78,18 @@ const EditEvent = ({navigation}) => {
                     <Text size={13} type='bold' align='left'>Workshop Mengenai Seni Pahat Kayu</Text>
                 </Col>
             </Row>
-            <Row style={{ marginBottom: 20 }}>
-                <Col size={2}>
-                </Col>
+            <Row style={{ marginBottom: 20, alignItems: 'center' }}>
+                <Image source={ImagesPath.editevent} style={{ height: 20, width: 20, marginRight: 10 }} resizeMode='contain' />
                 <Col size={9} style={{ alignItems: 'flex-start' }}>
                     <Text type='semibold' color={Color.black}>Informasi Dasar</Text>
-                    <Text size={10} color='#6A7479'>Pengaturan seputar nama event, lokasi, dan lainnya</Text>
+                    <Text size={10} color='#6A7479' align='left'>Pengaturan seputar nama event, lokasi, dan lainnya</Text>
                 </Col>
                 <Col style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
                     <Image source={ImagesPath.arrowRight} />
                 </Col>
             </Row>
-            <Row style={{ marginBottom: 20 }}>
-                <Col size={2}>
-                </Col>
+            <Row style={{ marginBottom: 20, alignItems: 'center' }}>
+                <Image source={ImagesPath.ticket} style={{ height: 20, width: 20, marginRight: 10 }} resizeMode='contain' />
                 <Col size={9} style={{ alignItems: 'flex-start' }}>
                     <Text type='semibold' color={Color.black}>Seputar Tiket</Text>
                     <Text size={10} color='#6A7479'>Edit informasi seputar harga, tipe, dan stok tiket</Text>

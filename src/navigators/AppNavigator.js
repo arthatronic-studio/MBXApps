@@ -240,7 +240,7 @@ function MainStackNavigator() {
         headerShown: false,
       }}>
       {/* uncanny */}
-      <Screen name="SplashScreen" component={EditEventMain} />
+      <Screen name="SplashScreen" component={MyEvent} />
       <Screen name="MainPage" component={MainPage} />
       <Screen name="OnBoardingScreen" component={OnBoardingScreen} />
       <Screen name="TrackingOrder" component={TrackingOrder} />
@@ -351,9 +351,10 @@ function MainStackNavigator() {
       <Screen name="EventDetail" component={EventDetail} />
       <Screen name="CreateEvent" component={CreateEvent} />
       <Screen name="CreateEventSecond" component={CreateEventSecond} />
+      <Screen name="EditEventMain" component={EditEventMain} />
+
       <Screen name="EventOfficial" component={EventOfficial} />
       <Screen name="CommunityEvent" component={CommunityEvent} />
-      <Screen name="EditEventMain" component={EditEventMain} />
       <Screen name="MyEvent" component={MyEvent} />
       <Screen name="SavedEvent" component={SavedEvent} />
       <Screen name="SearchEvent" component={SearchEvent} />

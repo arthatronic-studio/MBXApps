@@ -284,13 +284,13 @@ const CheckoutEvent = ({navigation}) => {
             </TouchableOpacity>
         </View>
 
-        {passangerInput && <ModalPassanger
+        <ModalPassanger
             ref={modalPassangerRef}
             data={{name: 'riyan'}}
             onClose={() => {
                 onSave();
             }}
-        />}
+        />
     </Scaffold>
   )
 }
