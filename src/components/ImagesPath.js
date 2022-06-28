@@ -108,6 +108,8 @@ export default {
   scales: require('../components/Images/scales.png'),
   mail: require('../components/Images/mail.png'),
   phone: require('../components/Images/phone.png'),
+  ticket: require('../components/Images/ticket.png'),
+  editevent: require('../components/Images/editevent.png'),
   chatimage: require('../components/Images/chatimage.png'),
   toko: require('../components/Images/Toko.png'),
   BannerPink: require('../components/Images/BannerPink.png'),

@@ -217,6 +217,7 @@ import CommunityEvent from 'src/screens/Posting/Event/CommunityEvent';
 import MyEvent from 'src/screens/Posting/Event/MyEvent';
 import SavedEvent from 'src/screens/Posting/Event/SavedEvent';
 import SearchEvent from 'src/screens/Posting/Event/SearchEvent';
+import EditEventMain from 'src/screens/Posting/Event/EditEventMain';
 import History from 'src/screens/Posting/Event/History';
 import MyTicket from 'src/screens/Posting/Event/MyTicket';
 // import EventOfficial from 'src/screens/Posting/Event/EventOfficial';
@@ -239,7 +240,7 @@ function MainStackNavigator() {
         headerShown: false,
       }}>
       {/* uncanny */}
-      <Screen name="SplashScreen" component={PemesananTiket} />
+      <Screen name="SplashScreen" component={EditEventMain} />
       <Screen name="MainPage" component={MainPage} />
       <Screen name="OnBoardingScreen" component={OnBoardingScreen} />
       <Screen name="TrackingOrder" component={TrackingOrder} />
@@ -352,6 +353,7 @@ function MainStackNavigator() {
       <Screen name="CreateEventSecond" component={CreateEventSecond} />
       <Screen name="EventOfficial" component={EventOfficial} />
       <Screen name="CommunityEvent" component={CommunityEvent} />
+      <Screen name="EditEventMain" component={EditEventMain} />
       <Screen name="MyEvent" component={MyEvent} />
       <Screen name="SavedEvent" component={SavedEvent} />
       <Screen name="SearchEvent" component={SearchEvent} />
