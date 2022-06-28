@@ -210,6 +210,8 @@ import AddMember from 'src/screens/Chat/AddMember';
 import EditInformationGroup from 'src/screens/Chat/EditInformationGroup';
 import CreateEvent from 'src/screens/EventR/CreateEvent';
 import CreateEventSecond from 'src/screens/EventR/CreateEventSecond';
+import CheckoutEvent from 'src/screens/EventR/CheckoutEvent';
+import PemesananTiket from 'src/screens/EventR/PemesananTiket';
 
 const { Navigator, Screen } = createStackNavigator();
 const MainPage =
@@ -226,7 +228,9 @@ function MainStackNavigator() {
         headerShown: false,
       }}>
       {/* uncanny */}
-      <Screen name="SplashScreen" component={CreateEvent} />
+      <Screen name="SplashScreen" component={PemesananTiket} />
+      <Screen name="CheckoutEvent" component={CheckoutEvent} />
+      <Screen name="PemesananTiket" component={PemesananTiket} />
       <Screen name="CreateEvent" component={CreateEvent} />
       <Screen name="CreateEventSecond" component={CreateEventSecond} />
       <Screen name="MainPage" component={MainPage} />

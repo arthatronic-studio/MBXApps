@@ -4,7 +4,11 @@ import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import DatePicker from 'react-native-date-picker';
 import Fontisto from 'react-native-vector-icons/Fontisto';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import RNFetchBlob from 'rn-fetch-blob';
+
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import DocumentPicker from 'react-native-document-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RNSimpleCrypto from "react-native-simple-crypto";
@@ -56,11 +60,14 @@ const Content = Styled(View)`
 const CreateEventSecond = ({navigation}) => {
     const user = useSelector((state) => state['user.auth'].login.user);
 	const loading = useSelector((state) => state['user.auth'].loading);
+    const route = useRoute();
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
     const [name, setName] = useState(user ? user.firstName+' '+user.lastName : '');
     const [isTicket, setSwitch] = useState();
     const [refresh, setRefresh] = useState(0);
+    const [tnc, setTnc] = useState(0);
+    const [refundPolicy, setRefundPolicy] = useState(0);
     const [tickets, setTickets] = useState([{
             name: '',
             quota: 1,
@@ -96,27 +103,23 @@ const CreateEventSecond = ({navigation}) => {
     }
 
     const submit = async () => {
+        console.log(route.params)
         const variables = {
             type: 'CREATE',
             newEvent: {
-                name: "PESTA",
-                description: "rame",
+                ...route.params.item,
                 category: "OFFICIAL",
-                lat: "123123123",
-                lng: "234234234",
-                location: "Rumah Kita Berssama",
-                date: "2022/10/12",
-                startTime: "12:00",
-                endTime: "17:00",
-                images: [],
-                tickets: [{
-                    name: 'Regular',
-                    quota: 10,
-                    type: 'FREE',
-                    refund: true,
-                    reservation: true,
-    
-                }]
+                refundPolicy: refundPolicy,
+                tnc: tnc,
+                image: [],
+                tickets
+                // tickets: [{
+                //     name: 'Regular',
+                //     quota: 10,
+                //     type: 'FREE',
+                //     refund: true,
+                //     reservation: true,
+                // }]
             }
         }
         console.log(variables)
@@ -133,7 +136,7 @@ const CreateEventSecond = ({navigation}) => {
             console.log(reject.message, 'reject');
         });
 
-        // navigation.navigate('CreateEventSecond',{item: tempData})
+        navigation.navigate('CreateEventSecond',{item: tempData})
        
       };
 
@@ -144,6 +147,29 @@ const CreateEventSecond = ({navigation}) => {
         setRefresh(refresh + 1);
         
       }
+
+      const getDocument = async(name) => {
+        const res = await DocumentPicker.pick({
+            type: [DocumentPicker.types.pdf],
+            allowMultiSelection: false,
+        });
+
+        console.log(res, 'res get document');
+
+        let objOrigin;
+        let uri;
+
+        if (Array.isArray(res) && res.length > 0) {
+           
+            RNFetchBlob.fs
+            .readFile(res[0].uri, 'base64')
+            .then((data) => {
+                if(name == 'tnc') setTnc(data)
+                else setRefundPolicy(data)
+            })
+            .catch((err) => {});
+        }
+    }
 
   return (
     <Scaffold
@@ -237,7 +263,7 @@ const CreateEventSecond = ({navigation}) => {
             </TouchableOpacity>
 
             <Text style={{color: Color.text,marginLeft: 10}} align='left' type='semibold'>Kebijakan Refund</Text>
-            <TouchableOpacity style={{ borderWidth: 1, margin: 10, paddingVertical: 23, paddingHorizontal: 13, borderRadius: 8, borderColor: '#CDD1D2' }}>
+            <TouchableOpacity onPress={() => getDocument('refundPolicy')} style={{ borderWidth: 1, margin: 10, paddingVertical: 23, paddingHorizontal: 13, borderRadius: 8, borderColor: '#CDD1D2' }}>
                 <Row>
                     <Col>
                         <Text color='#3C58C1' align='left' size={15} type='medium'>Upload PDF</Text>
@@ -247,7 +273,7 @@ const CreateEventSecond = ({navigation}) => {
             </TouchableOpacity>
 
             <Text style={{color: Color.text,marginLeft: 10}} align='left' type='semibold'>Syarat & Ketentuan</Text>
-            <TouchableOpacity style={{ borderWidth: 1, margin: 10, paddingVertical: 23, paddingHorizontal: 13, borderRadius: 8, borderColor: '#CDD1D2' }}>
+            <TouchableOpacity  onPress={() => getDocument('tnc')} style={{ borderWidth: 1, margin: 10, paddingVertical: 23, paddingHorizontal: 13, borderRadius: 8, borderColor: '#CDD1D2' }}>
                 <Row>
                     <Col>
                         <Text color='#3C58C1' align='left' size={15} type='medium'>Upload PDF</Text>
