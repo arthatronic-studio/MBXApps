@@ -14,6 +14,7 @@ import { accessClient } from 'src/utils/access_client';
 
 const PlaceScreen = ({ navigation, route }) => {
     const { title, userProfileId } = route.params;
+    const isMainScreen =  route.params && route.params.routeIndex;
 
     const user = useSelector(
       state => state['user.auth'].login.user
@@ -29,6 +30,7 @@ const PlaceScreen = ({ navigation, route }) => {
             header={
               <Header
                 title={title}
+                showLeftButton={!isMainScreen}
                 actions={
                   canGeneratedContent && <Row justify='center' align='center'>
                     {/* <Ionicons

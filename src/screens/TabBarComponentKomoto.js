@@ -25,9 +25,9 @@ const TabBarComponentKomoto = (props) => {
         
     const [menus] = useState([
         {id: 'ber', name: 'Beranda', iconName: 'home', iconType: 'Entypo', nav: 'MainHome', ref: useRef(new Animated.Value(1)).current, viewRef: useRef(new Animated.Value(0)).current },
-        {id: 'mer', name: 'PlaceScreen', iconName: 'map', iconType: 'MaterialIcons', nav: 'PlaceScreen', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
-        {id: 'pro', name: 'EventScreen', iconName: 'calendar', iconType: 'Ionicons', nav: 'EventScreen', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
-        {id: 'pro', name: 'PostingScreen', iconName: 'speaker-notes', iconType: 'MaterialIcons', nav: 'PostingScreen', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
+        {id: 'mer', name: 'Tempat Favorit', iconName: 'map', iconType: 'MaterialIcons', nav: 'PlaceScreen', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
+        {id: 'pro', name: 'Event Terbaru', iconName: 'calendar', iconType: 'Ionicons', nav: 'EventScreen', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
+        {id: 'pro', name: 'Artikel Populer', iconName: 'speaker-notes', iconType: 'MaterialIcons', nav: 'PostingScreen', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
     ]);
     
     const { Color } = useColor();
@@ -143,7 +143,7 @@ const TabBarComponentKomoto = (props) => {
                                 }}
                             >
                                 {getIconMenu(route.iconType, route.iconName, isRouteActive)}
-                                {isRouteActive && <Divider width={15} />}
+                                {isRouteActive && <Divider width={8} />}
                                 {isRouteActive && <Animated.Text
                                     style={{
                                         fontSize: 14,

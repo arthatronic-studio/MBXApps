@@ -11,6 +11,7 @@ import ListContentProduct from 'src/components/Content/ListContentProduct';
 
 const NewsScreen = ({navigation, route}) => {
   const { title, userProfileId } = route.params;
+  const isMainScreen =  route.params && route.params.routeIndex;
 
   const user = useSelector(state => state['user.auth'].login.user);
   const {Color} = useColor();
@@ -24,6 +25,7 @@ const NewsScreen = ({navigation, route}) => {
       header={
         <Header
           title={title}
+          showLeftButton={!isMainScreen}
           actions={
             canGeneratedContent &&
             <Row justify='center' align='center'>

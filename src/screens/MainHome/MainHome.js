@@ -523,7 +523,7 @@ const MainHome = ({ navigation, route }) => {
             }}
           />}
 
-          <Line color={Color.border} width={width} />
+          {accessClient.MainHome.showMenuHome && <Line color={Color.border} width={width} />}
 
           <Divider height={spaceContentSize} />
 
