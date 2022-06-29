@@ -48,7 +48,7 @@ const MemberRank = props => {
     >
       <Row style={{flex: 1}}>
         <View style={{flex: 1, paddingRight: 4}}>
-          <Text size={10} align='left' color={Color.border}>
+          <Text size={10} align='left'>
             Sambut Member Baru
           </Text>
           <Divider height={4} />
@@ -81,7 +81,7 @@ const MemberRank = props => {
         </View>
 
         <View style={{flex: 1, paddingLeft: 4}}>
-          <Text size={10} align='left' color={Color.border}>
+          <Text size={10} align='left'>
             Member Terbaik Bulan Ini
           </Text>
           <Divider height={4} />
