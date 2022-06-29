@@ -43,6 +43,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { fetchLikeComment } from 'src/api/likeComment';
 import { fetchProductSave } from 'src/api/productSave';
 import { fetchContentProduct } from 'src/api/contentV2';
+import Share from 'react-native-share';
 import Modal from 'react-native-modal';
 
 
@@ -213,6 +214,20 @@ const NewsDetail = ({navigation, route}) => {
         console.log(err, 'errrrr');
         showLoading('error', 'Gagal membuat thread, Harap ulangi kembali');
       });
+  }
+
+  const onShare = (value) => {
+    const shareOptions = {
+      message: value
+    }
+
+    Share.open(shareOptions)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+      err && console.log(err);
+    });
   }
 
   function Capitalize(str) {
@@ -671,6 +686,7 @@ const NewsDetail = ({navigation, route}) => {
               </TouchableWithoutFeedback>
 
               <TouchableWithoutFeedback
+                onPress={() => onShare(item.share_link)}
                 style={{
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -688,9 +704,6 @@ const NewsDetail = ({navigation, route}) => {
                   }}>
                   <AntDesign name={'sharealt'} size={25} color={Color.text} />
                 </View>
-                {/* <Text style={{fontSize: 18, marginHorizontal: 5}}>
-                  {state.like}
-                </Text> */}
                 <Text
                   style={{fontSize: 14, marginHorizontal: 5, marginVertical: 10}}>
                   Bagikan
