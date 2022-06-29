@@ -10,36 +10,40 @@ import { queryLike } from '@src/lib/query';
 import ImagesPath from 'src/components/ImagesPath';
 import { Divider, Row } from 'src/styled';
 import { useSelector } from 'react-redux';
+import { initialItemState } from 'src/utils/constants';
 
 const itemPerPage = 50;
-
 const avatarDefault = 'https://storage.googleapis.com/sabyan-prod-music-box/images/avatar/avatar-default.png';
 
-const WidgetUserLikes = ({ id, title, refresh }) => {
+const defaultProps = {
+    title: '',
+    refresh: false,
+    contentPosition: 'left',
+};
+
+const WidgetUserLikes = ({ id, title, refresh, contentPosition }) => {
     const { Color } = useColor();
     const { width } = useWindowDimensions();
 
     const user = useSelector(state => state['user.auth'].login.user);
 
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [itemData, setItemData] = useState({
-        data: [],
-        loading: true,
-        page: 0,
-        loadNext: false,
-        refresh: false,
-    });
+    const [itemData, setItemData] = useState({...initialItemState, refresh: true});
     const [previewData, setPreviewData] = useState([]);
 
     useEffect(() => {
-        if (refresh) {
+        if (itemData.refresh) {
             fetchListLike();
         }
-    }, [refresh]);
+    }, [itemData.refresh]);
 
     useEffect(() => {
-        fetchListLike();
-    }, []);
+        const timeout = setTimeout(() => {
+            setItemData({ ...initialItemState, refresh: true });
+        }, 1000);
+
+        return () => clearTimeout(timeout);
+    }, [refresh]);
 
     useEffect(() => {
         if (itemData.loadNext && itemData.page !== -1) {
@@ -57,16 +61,12 @@ const WidgetUserLikes = ({ id, title, refresh }) => {
           }
         })
         .then((res) => {
+          console.log(res, 'res list like');
 
           const data = res.data.contentLike;
 
-          console.log(data, "dataaaa");
-          console.log(itemData, "dataaaa");
-
-
           if (Array.isArray(data)) {
-            // if (itemData.page === 0) {
-                console.log("siniii");
+            if (itemData.page === 0) {
                 let newPreviewData = [];
                 const lengthData = data.length > 5 ? 5 : data.length;
                 
@@ -76,7 +76,7 @@ const WidgetUserLikes = ({ id, title, refresh }) => {
                 }
                 
                 setPreviewData(newPreviewData);
-            //   }
+              }
           }
 
           setItemData({
@@ -85,31 +85,36 @@ const WidgetUserLikes = ({ id, title, refresh }) => {
             loading: false,
             page: res.data.contentLike.length === itemPerPage ? itemData.page + 1 : -1,
             loadNext: false,
+            refresh: false,
           });
         })
         .catch((err) => {
-          console.log(err, 'errrrr like');
+          console.log(err, 'err list like');
           
           setItemData({
             ...itemData,
             loading: false,
             page: -1,
             loadNext: false,
+            refresh: false,
           });
         })
     }
-
 
     return (
         <>
             <TouchableOpacity
                 onPress={() => setIsModalVisible(true)}
                 style={{
-                    height: 50,
+                    height: 36,
                     flexDirection: 'row',
                 }}
             >
                 {previewData.map((item, idx) => {
+                    let extraProps = { left: 18 * idx };
+                    if (contentPosition === 'right') {
+                        extraProps = {right: 18 * idx,}
+                    }
                     return (
                         <View
                             key={idx}
@@ -122,7 +127,7 @@ const WidgetUserLikes = ({ id, title, refresh }) => {
                                 justifyContent: 'center',
                                 backgroundColor: Color.textInput,
                                 position: 'absolute',
-                                left: 18 * idx,
+                                ...extraProps,
                             }}
                         >
                             <Image
@@ -148,14 +153,6 @@ const WidgetUserLikes = ({ id, title, refresh }) => {
                         </View>
                     )
                 })}
-                {previewData.length > 1 &&
-                    <View style={{ marginTop: 40 }}>
-                        <Text
-                            style={{fontSize: 8, color: Color.secondary, textAlign: 'left'}}>
-                            {previewData[0]?.fullname} dan {previewData.length-1} lainnya menyukai ini
-                        </Text>
-                    </View>
-                }
             </TouchableOpacity>
 
             <Modal
@@ -233,4 +230,5 @@ const WidgetUserLikes = ({ id, title, refresh }) => {
     );
 };
 
+WidgetUserLikes.defaultProps = defaultProps;
 export default WidgetUserLikes;

@@ -27,6 +27,7 @@ import { isIphoneNotch, listContentCategory } from 'src/utils/constants';
 import CardComment from 'src/components/Card/CardComment';
 import { fetchLikeComment } from 'src/api/likeComment';
 import { async } from 'validate.js';
+import { useIsFocused } from '@react-navigation/native';
 
 const itemPerPage = 10;
 const initSelectedComment = {
@@ -50,6 +51,7 @@ const CommentListScreen = ({ navigation, route }) => {
   const [thumbImage, setThumbImage] = useState('');
   const [mimeImage, setMimeImage] = useState('image/jpeg');
   const [textComment, setTextComment] = useState('');
+  const isFocused = useIsFocused();
 
   const modalListActionRef = useRef();
 
@@ -72,7 +74,7 @@ const CommentListScreen = ({ navigation, route }) => {
         loadNext: false,
       });
     }
-  }, [item]);
+  }, [item, isFocused]);
 
   useEffect(() => {
     if (dataComment.page !== -1 && item) {

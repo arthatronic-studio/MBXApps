@@ -40,6 +40,8 @@ export const queryComment = gql`
                 imageVideo
                 videoFilename
             }
+            refCommentId
+            im_like
         }
     }
 `;

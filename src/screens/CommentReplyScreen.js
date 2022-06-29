@@ -1,4 +1,4 @@
-import React, {useRef, forwardRef, useState} from 'react';
+import React, {useRef, forwardRef, useState, useEffect} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -18,10 +18,11 @@ import { Container, Divider, Row } from 'src/styled';
 import CardComment from '@src/components/Card/CardComment';
 import { useSelector } from 'react-redux';
 import client from 'src/lib/apollo';
-import { queryAddComment, queryContentCommentPinManage, queryDelComment } from 'src/lib/query';
+import { queryAddComment, queryContentCommentPinManage, queryDelComment, queryComment } from 'src/lib/query';
 import { Alert } from 'src/components/Alert';
 import { shadowStyle } from '@src/styles';
 import { launchImageLibrary } from 'react-native-image-picker';
+import { fetchLikeComment } from 'src/api/likeComment';
 
 const itemPerPage = 10;
 const initSelectedComment = {
@@ -33,10 +34,12 @@ const CommentReplyScreen = ({ navigation, route }) => {
   const [textReply, setTextReply] = useState('');
   const [selectedComment, setSelectedComment] = useState(initSelectedComment);
   const [isOwnerComment, setIsOwnerComment] = useState(false);
+  const [refreshComment, setRefreshComment] = useState(false);
   const [isPinnedComment, setIsPinnedComment] = useState(false);
   const modalListActionRef = useRef();
   const [thumbImage, setThumbImage] = useState('');
   const [mimeImage, setMimeImage] = useState('image/jpeg');
+  const [page, setPage] = useState(0);
   
   const {Color} = useColor();
   const [loadingProps, showLoading] = useLoading();
@@ -44,6 +47,36 @@ const CommentReplyScreen = ({ navigation, route }) => {
   const {width} = useWindowDimensions();
   const user = useSelector(state => state['user.auth'].login.user);
   const isOwnerProduct = user && !user.guest && user.userId === route.params.item.ownerId;
+
+  useEffect(() => {
+    if (refreshComment && route.params.item) {
+      fetchCommentList();
+      setRefreshComment(false);
+    }
+  }, [refreshComment]);
+
+  const fetchCommentList = () => {
+    client.query({
+      query: queryComment,
+      variables: {
+        page: page + 1,
+        itemPerPage: itemPerPage,
+        productId: route.params.item.id,
+      },
+    })
+      .then(res => {
+        console.log(res, 'res list comm');
+        const data = res.data.contentComment.filter(data => data.id === route.params.parentComment.id);
+        if(data.length === 0){
+          setRefreshComment(true);
+          setPage(page+1);
+        }
+        navigation.setParams({ parentComment: data[0] });
+      })
+      .catch(err => {
+        console.log(err, 'err list comm');
+      });
+  };
 
   const onSubmitReply = (text) => {
     if (!selectedComment) return;
@@ -196,6 +229,7 @@ const CommentReplyScreen = ({ navigation, route }) => {
   //   });
   // }
 
+  
   return (
     <Scaffold
       loadingProps={loadingProps}
@@ -209,6 +243,15 @@ const CommentReplyScreen = ({ navigation, route }) => {
                 productOwnerId={route.params.item.ownerId}
                 canReply={false}
                 showOptions={false}
+                onPressLike={async () => {
+                  console.log("cokkk", route.params.parentComment.id);
+                  // setSelectedComment({ ...itemComment, index });
+                  const res = await fetchLikeComment({commentId: route.params.parentComment.id});
+                  console.log(res, "res");
+                  if(res.status == true){
+                    setRefreshComment(true);
+                  }
+                }}
               />
             </Container>
 
@@ -230,6 +273,13 @@ const CommentReplyScreen = ({ navigation, route }) => {
                         setSelectedComment({ ...itemReply, index });
                         setIsOwnerComment(_isOwnerComment);
                         setIsPinnedComment(itemReply.isPinned);
+                      }}
+                      onPressLike={async () => {
+                        setSelectedComment({ ...itemComment, index });
+                        const res = await fetchLikeComment({commentId: itemReply.id});
+                        if(res.status == true){
+                          setRefreshComment(true);
+                        }
                       }}
                     />
                   </Container>

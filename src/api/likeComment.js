@@ -12,6 +12,8 @@ export const fetchLikeComment = async variables => {
     ...variables,
   };
 
+  console.log("siniii");
+
   try {
     const result = await Client.query({
       query: queryLikeComment,

@@ -67,13 +67,18 @@ const NewsDetail = ({navigation, route}) => {
   const {Color} = useColor();
   const {width} = useWindowDimensions();
   const [refreshing, setRefreshing] = useState(false);
+  const [trigger, setTrigger] = useState(false);
 
-  const onRefresh = () => {
-    setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1000);
-  };
+
+  useEffect(() => {
+    const timeout = trigger ? setTimeout(() => {
+        fetchAddLike();
+    }, 500) : null;
+
+    return () => {
+        clearTimeout(timeout);
+    }
+}, [trigger]);
 
   const fetchData = async() => {
     const variables = {
@@ -140,19 +145,10 @@ const NewsDetail = ({navigation, route}) => {
         console.log(res, 'res add like');
         if (res.data.contentAddLike.id) {
           if (res.data.contentAddLike.status === 1) {
-            // showLoading('success', 'Berhasil disukai');
-            setState({
-              im_like: true,
-              like: state.like + 1,
-            });
+            setTrigger(false);
           } else {
-            // showLoading('info', 'Batal disukai');
-            setState({
-              im_like: false,
-              like: state.like - 1,
-            });
+            setTrigger(false);
           }
-          onRefresh();
         }
       })
       .catch(err => {
@@ -160,6 +156,22 @@ const NewsDetail = ({navigation, route}) => {
         // hideLoading();
       });
   };
+
+  const onSubmitLike = () => {
+    console.log("siniii");
+    if(state.im_like){
+      setState({
+        im_like: false,
+        like: state.like - 1,
+      });
+    }else{
+      setState({
+        im_like: true,
+        like: state.like + 1,
+      });
+    }
+    setTrigger(true);
+  }
 
   const fetchCommentList = () => {
     Client.query({
@@ -513,7 +525,7 @@ const NewsDetail = ({navigation, route}) => {
 
             {item.like > 0 && (
               <Container paddingHorizontal={16}>
-                <WidgetUserLikes id={item.id} title="Disukai" refresh={refreshing} />
+                <WidgetUserLikes id={item.id} title="Disukai" refresh={trigger === false} />
               </Container>
             )}
 
@@ -597,7 +609,7 @@ const NewsDetail = ({navigation, route}) => {
               }}>
               <TouchableWithoutFeedback
                 onPress={() => {
-                  fetchAddLike();
+                  onSubmitLike();
                   GALogEvent('Artikel', {
                     id: item.id,
                     product_name: item.productName,
