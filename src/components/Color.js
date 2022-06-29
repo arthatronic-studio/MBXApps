@@ -3,10 +3,10 @@ import {useSelector} from 'react-redux';
 
 const staticColors = {
   primary: '#3C58C1',
-  primaryDark: '#033F59',
-  primarySoft: '#FDE4D2',
-  primaryYellow: '#FAC255',
+  primaryDark: '#5D41C9',
+  primarySoft: '#4579E6',
   secondary: '#6A7479',
+  textButtonInline: '#FFFFFF',
   oldGreen: '#557D09',
   disabled: '#A1A1A1',
   success: '#0BBC2E',
@@ -18,8 +18,9 @@ const staticColors = {
   grayLight: '#CDD1D2',
   red: '#D83030',
   yellow: '#FFD35B',
+  black: '#000000',
+  white: '#FFFFFF',
   blue: '#027BC9',
-  blueLight: '#D5E2FD',
   timer: '#F94918',
   icon: '#667786',
   bid: '#E6E9EA',
@@ -49,7 +50,7 @@ export const darkModeColors = {
   theme: '#232323',
   text: '#FFFFFF',
   textInput: '#232323',
-  border: '#707070',
+  border: '#E0E0E0',
   semiwhite: '#353535',
 };
 

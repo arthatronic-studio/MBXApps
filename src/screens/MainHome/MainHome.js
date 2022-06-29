@@ -322,14 +322,14 @@ const MainHome = ({ navigation, route }) => {
                 <Ionicons
                   name="notifications-outline"
                   size={22}
-                  color={Color.textInput}
+                  color={Color.textButtonInline}
                 />
                 {notificationCount > 0 && (
                   <Circle
                     size={12}
                     color={Color.error}
                     style={{ position: 'absolute', top: -4, right: -4 }}>
-                    <Text size={8} color={Color.textInput}>
+                    <Text size={8} color={Color.textButtonInline}>
                       {notificationCount > 99 ? '99' : notificationCount}
                     </Text>
                   </Circle>
@@ -346,13 +346,13 @@ const MainHome = ({ navigation, route }) => {
                   justifyContent: 'flex-start',
                   alignItems: 'flex-end',
                 }}>
-                <Ionicons name="chatbox-outline" size={22} color={Color.textInput} />
+                <Ionicons name="chatbox-outline" size={22} color={Color.textButtonInline} />
                 {chatNotifCount > 0 && (
                   <Circle
                     size={12}
                     color={Color.error}
                     style={{ position: 'absolute', top: -4, right: -4 }}>
-                    <Text size={8} color={Color.textInput}>
+                    <Text size={8} color={Color.textButtonInline}>
                       {chatNotifCount > 99 ? '99' : chatNotifCount}
                     </Text>
                   </Circle>
@@ -371,7 +371,7 @@ const MainHome = ({ navigation, route }) => {
                 <Ionicons
                   name="person"
                   size={22}
-                  color={Color.textInput}
+                  color={Color.textButtonInline}
                 />
               </TouchableOpacity>}
             </View>
@@ -412,7 +412,7 @@ const MainHome = ({ navigation, route }) => {
             >
               <MaterialIcons
                 name='vibration'
-                color={Color.textInput}
+                color={Color.textButtonInline}
                 size={32}
               />
             </TouchableOpacity>
@@ -576,7 +576,7 @@ const MainHome = ({ navigation, route }) => {
                       <Container
                         padding={16}
                         radius={16}
-                        color={Color.textInput}
+                        color={Color.textButtonInline}
                         style={{...shadowStyle}}>
                         <Row>
                           <Col size={5} align="flex-start">
@@ -603,11 +603,11 @@ const MainHome = ({ navigation, route }) => {
                                 borderRadius: 20,
                               }}>
                               <Row>
-                                <Text color={Color.textInput} size={10}>
+                                <Text color={Color.textButtonInline} size={10}>
                                   Selengkapnya
                                   <AntDesign
                                     name="arrowright"
-                                    color={Color.textInput}
+                                    color={Color.textButtonInline}
                                     style={{alignSelf: 'center'}}
                                   />
                                 </Text>

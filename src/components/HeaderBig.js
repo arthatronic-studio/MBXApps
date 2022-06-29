@@ -84,7 +84,7 @@ const HeaderBig = ({
                 size={10}
                 type="medium"
                 letterSpacing={0.45}
-                color={type === 'MAIN_HOME' ? Color.textInput : Color.text}
+                color={type === 'MAIN_HOME' ? Color.textButtonInline : Color.text}
               >
                 Halo,
               </Text>
@@ -93,7 +93,7 @@ const HeaderBig = ({
                 size={20}
                 type='medium'
                 numberOfLines={1}
-                color={type === 'MAIN_HOME' ? Color.textInput : Color.text}
+                color={type === 'MAIN_HOME' ? Color.textButtonInline : Color.text}
               >
                 {user && !user.guest
                   ? user.firstName.trim() +

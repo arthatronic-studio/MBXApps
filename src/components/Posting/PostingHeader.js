@@ -77,7 +77,7 @@ const PostingHeader = (props) => {
                 paddingHorizontal: 16,
                 ...style,
             }}
-        >   
+        >
             <Row>
                 {iconType && iconName && getIconMenu(iconType, iconName)}
 
@@ -96,9 +96,9 @@ const PostingHeader = (props) => {
             {showSeeAllText && <Text
                 onPress={() => onSeeAllPress()}
                 size={12}
-                color={Color.primary}>
+            >
                 Lihat Semua{' '}
-                <Ionicons name="arrow-forward" size={12} color={Color.primary} />
+                <Ionicons name="arrow-forward" size={12} color={Color.text} />
             </Text>}
         </Container>
     )

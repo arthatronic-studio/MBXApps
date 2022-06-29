@@ -141,56 +141,42 @@ const initialDataRooms = {
       <FlatList
         keyExtractor={(item, index) => item.id+index.toString()}
         data={history}
+        contentContainerStyle={{
+          paddingBottom: 16
+        }}
         renderItem={({ item }) => {
+          const isNotReaded = item.status !== 3;
           return (
-            
-            <View  style={{flexDirection:'row',paddingHorizontal:16, paddingVertical: 16, borderColor: Color.border,
-            borderWidth: 0.5,backgroundColor : item.status !== 3 ? Color.primarySoft : Color.white}}>
-              
+            <View style={{
+              flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 16, borderColor: Color.border,
+              borderBottomWidth: 0.5, backgroundColor: isNotReaded ? Color.primarySoft : Color.theme
+            }}>
               <Image
-                                        source={{uri: item.image}}                        style={{width: '15%', aspectRatio: 1, borderRadius: 400/2, backgroundColor: Color.border}}
-/>
+                source={{ uri: item.image }} style={{ width: '15%', aspectRatio: 1, borderRadius: 400 / 2, backgroundColor: Color.border }}
+              />
               <TouchableOpacity
-              onPress={() => onSelectNotif(item)
-              
-               
-              
-              }
-              activeOpacity={0.75}
-              style={{
-                width: '100%',
-                paddingHorizontal: 16,
-                
-                
-               
-              }}
-            >
-      
-             
-              <Text align='left'  type='bold'>{item.title}</Text>
-              <Divider height={4} />
-              <View style={{paddingEnd:30}}>
-                
-              <Text align='left' size={12} numberOfLines={3}>{item.text}</Text>
-              </View>
-              <Divider height={4} />
+                onPress={() => onSelectNotif(item)}
+                activeOpacity={0.75}
+                style={{
+                  width: '100%',
+                  paddingHorizontal: 16,
+                }}
+              >
+                <Text align='left' type='bold' color={isNotReaded ? Color.textInput : Color.text}>{item.title}</Text>
+                <Divider height={4} />
+                <View style={{ paddingEnd: 30 }}>
+                  <Text align='left' size={12} numberOfLines={3} color={isNotReaded ? Color.textInput : Color.text}>{item.text}</Text>
+                </View>
+                <Divider height={4} />
 
-              <View style={{flexDirection:'row',justifyContent:'space-between',paddingEnd:40}}>
-              
-              <Text size={10} align='left'>{Moment(parseInt(item.date, 10)).fromNow()}</Text>
-              <Text align="left" size={10}>
-                {Moment(parseInt(item.date)).format('HH:mm')}
-              </Text>
-              
-              </View>
-              
-          
-            </TouchableOpacity>
-
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingEnd: 40 }}>
+                  <Text size={10} align='left' color={isNotReaded ? Color.textInput : Color.text}>{Moment(parseInt(item.date, 10)).fromNow()}</Text>
+                  <Text align="left" size={10} color={isNotReaded ? Color.textInput : Color.text}>
+                    {Moment(parseInt(item.date)).format('HH:mm')}
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </View>
-           
-            
-          
           )
         }}
       />

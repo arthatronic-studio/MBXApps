@@ -164,7 +164,7 @@ const GalleryDetailScreen = ({ navigation, route }) => {
 
                         <Container
                             width='100%'
-                            color={Color.primaryDark}
+                            color={Color.primary}
                             style={{position: 'absolute', aspectRatio: 3/1, opacity: 0.7}}
                         />
 
@@ -195,7 +195,7 @@ const GalleryDetailScreen = ({ navigation, route }) => {
                                     width: '100%',
                                     aspectRatio: 3/2,
                                     borderRadius: 20,
-                                    backgroundColor: Color.primaryDark,
+                                    backgroundColor: Color.primary,
                                 }}
                             />
                             
