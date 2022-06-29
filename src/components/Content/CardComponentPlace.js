@@ -174,7 +174,7 @@ const CardComponentPlace = ({ productCategory, item, numColumns, onPress, horizo
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                 <Ionicons
                                     name={'eye-outline'}
-                                    color={Color.gray}
+                                    color={Color.text}
                                     size={iconSIze}
                                 />
                                 <Divider width={2} />
