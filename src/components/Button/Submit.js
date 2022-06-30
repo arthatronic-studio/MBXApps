@@ -125,7 +125,7 @@ const Submit = (props) => {
                 style={{backgroundColor: Color.theme, ...style}}
             >
                 <PayButton backgroundColor={buttonColor || Color.disabled} width='100%' buttonBorderColor={buttonBorderColor} onPress={() => onPress()}>
-                    <Text size={16} letterSpacing={0.02} color={buttonTextColor || Color.theme}>{buttonLabel}</Text>
+                    <Text size={16} letterSpacing={0.02} color={buttonTextColor || Color.textButtonInline}>{buttonLabel}</Text>
                 </PayButton>
             </ButtonView>
         )

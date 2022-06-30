@@ -56,7 +56,7 @@ TouchableDebounce.defaultProps = {
   delay: 0,
   style: {},
   disabled: false,
-  activeOpacity: 1,
+  activeOpacity: 0.75,
   onPress: () => {},
   onLongPress: () => {},
 };
