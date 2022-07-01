@@ -46,6 +46,8 @@ import ForumReportDetail from 'src/screens/MainForum/NewForum/ReportDetail';
 import ForumTopicScreen from 'src/screens/MainForum/NewForum/ForumTopicScreen';
 import ForumGroupScreen from 'src/screens/MainForum/NewForum/ForumGroupScreen';
 import ForumGroupDetailScreen from 'src/screens/MainForum/NewForum/ForumGroupDetailScreen';
+import ForumGroupPermintaanScreen from 'src/screens/MainForum/NewForum/ForumGroupPermintaanScreen';
+import ForumGroupAllMemberScreen from 'src/screens/MainForum/NewForum/ForumGroupAllMemberScreen';
 import ForumBuatScreen from 'src/screens/MainForum/NewForum/ForumBuatScreen';
 import ForumBuatDetailScreen from 'src/screens/MainForum/NewForum/ForumBuatDetailScreen';
 import ForumBalas from            'src/screens/MainForum/NewForum/ForumBalas';
@@ -372,6 +374,8 @@ function MainStackNavigator() {
       <Screen name="ForumTopicScreen" component={ForumTopicScreen} />
       <Screen name="ForumGroupScreen" component={ForumGroupScreen} />
       <Screen name="ForumGroupDetailScreen" component={ForumGroupDetailScreen} />
+      <Screen name="ForumGroupPermintaanScreen" component={ForumGroupPermintaanScreen} />
+      <Screen name="ForumGroupAllMemberScreen" component={ForumGroupAllMemberScreen} />
       <Screen name="ForumBuatScreen" component={ForumBuatScreen} />
       <Screen name="ForumBuatDetailScreen" component={ForumBuatDetailScreen} />
       <Screen name="CardDetailForum" component={CardDetailForum} />

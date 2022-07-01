@@ -35,6 +35,7 @@ const ModalListAction = forwardRef((props, ref) => {
       if (item.show === false) return <View key={idx} />;
 
       return (
+        
         <TouchableOpacity
           key={idx}
           onPress={() => {
@@ -90,6 +91,7 @@ const ModalListAction = forwardRef((props, ref) => {
       }}
       onClose={() => onClose()}>
       <View style={{flex: 1}}>
+        <Text align="left"type="bold"size="14">Opsi</Text>
         <ScrollView>{data.length > 0 ? renderContent() : children}</ScrollView>
       </View>
     </Modalize>

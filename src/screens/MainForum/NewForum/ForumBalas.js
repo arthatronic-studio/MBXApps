@@ -6,13 +6,13 @@ import {TouchableOpacity} from '@src/components/Button';
 import {queryContentProduct} from '@src/lib/query';
 import {useColor} from '@src/components/Color';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import CardForumPopular from './CardForumPopular';
+// import CardForumPopular from './CardForumPopular';
 import {Container, Divider, MainView} from 'src/styled';
 import SearchBar from 'src/components/SearchBar';
 import ImagesPath from 'src/components/ImagesPath';
 import Config from 'react-native-config';
 import client from 'src/lib/apollo';
-import ListForumVertical from './ListForumVertical';
+// import ListForumVertical from './ListForumVertical';
 import { ModalListText } from 'src/components';
 import { initialItemState } from 'src/utils/constants';
 import {

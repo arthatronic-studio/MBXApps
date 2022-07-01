@@ -177,10 +177,7 @@ const ForumTopicScreen = ({navigation, route}) => {
       fallback={false}
       empty={false}
       popupProps={popupProps}
-      iconRightButton={<Feather name='more-vertical' size={20} color={Color.text} />}
-      onPressRightButton={() => {
-        modalOptionsRef.current.open();
-      }}
+   
       loadingProps={loadingProps}
     >
       <ScrollView

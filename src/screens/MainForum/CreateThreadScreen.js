@@ -94,6 +94,8 @@ const CreateThreadScreen = (props) => {
     });
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [modalImagePicker, setModalImagePicker] = useState(false);
+    const [disabled, setDisabled] = useState(true);
+   
    
     // ref
     const modalSelectStatusRef = useRef();
@@ -101,6 +103,7 @@ const CreateThreadScreen = (props) => {
     // hooks
     const [loadingProps, showLoading, hideLoading] = useLoading();
     const [popupProps, showPopup] = usePopup();
+    
 
     useEffect(() => {
         // BackHandler.addEventListener('hardwareBackPress', handleBackPress);
@@ -151,6 +154,16 @@ const CreateThreadScreen = (props) => {
 
     const onChangeUserData = (key, val) => {
         setUserData({ ...userData, [key]: val });
+    }
+    const onValueText = (key,val) => {
+        let name = key !== 'name'  ? val: '';
+        
+        if (name === ''  ) {
+            setDisabled(true);
+        }else{
+            setDisabled(false);
+        }
+       
     }
 
     const onSubmit = () => {
@@ -259,7 +272,7 @@ const CreateThreadScreen = (props) => {
                             placeholderTextColor={Color.gray}
                             underlineColorAndroid='transparent'
                             autoCorrect={false}
-                            onChangeText={(text) => onChangeUserData('name', text)}
+                            onChangeText={(text) => { onChangeUserData('name', text);onValueText('name',text) } }
                             selectionColor={Color.text}
                             value={userData.name}
                             onBlur={() => isValueError('name')}
@@ -289,7 +302,7 @@ const CreateThreadScreen = (props) => {
                             placeholderTextColor={Color.gray}
                             underlineColorAndroid='transparent'
                             autoCorrect={false}
-                            onChangeText={(text) => onChangeUserData('description', text)}
+                            onChangeText={(text) => { onChangeUserData('description', text);onValueText('description',text) } }
                             selectionColor={Color.text}
                             value={userData.description}
                             onBlur={() => isValueError('description')}
@@ -326,7 +339,8 @@ const CreateThreadScreen = (props) => {
 
             <Submit
                 buttonLabel='Buat'
-                buttonColor={Color.primary}
+                buttonColor={disabled ? Color.grayLight: Color.primary}
+                disabled={disabled}
                 type='bottomSingleButton'
                 buttonBorderTopWidth={0.5}
                 onPress={() => {
