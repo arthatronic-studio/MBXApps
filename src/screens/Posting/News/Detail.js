@@ -43,13 +43,13 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { fetchLikeComment } from 'src/api/likeComment';
 import { fetchProductSave } from 'src/api/productSave';
 import { fetchContentProduct } from 'src/api/contentV2';
+import { fetchContentShare } from 'src/api/contentShare';
 import Share from 'react-native-share';
 import Modal from 'react-native-modal';
 
 
 const NewsDetail = ({navigation, route}) => {
   const [refreshComment, setRefreshComment] = useState(false);
-  console.log(route.params, "params");
   const {code} = route.params;
   const modalOptionsRef = useRef();
   const [loadingBanner, setLoadingBanner] = useState(true);
@@ -235,10 +235,10 @@ const NewsDetail = ({navigation, route}) => {
 
     Share.open(shareOptions)
       .then((res) => {
-        console.log(res);
+        if(res.success) fetchContentShare({code: code});
       })
       .catch((err) => {
-      err && console.log(err);
+      err && console.log(err, "err share");
     });
   }
 
@@ -543,7 +543,7 @@ const NewsDetail = ({navigation, route}) => {
                 style={{marginRight: 5}}
                 color={Color.secondary}
               />
-              <Text style={{fontSize: 10, marginRight: 12}}>21x dibagikan</Text>
+              <Text style={{fontSize: 10, marginRight: 12}}>{item.shareCount}x dibagikan</Text>
               <AntDesign
                 name={'eye'}
                 style={{marginRight: 5}}

@@ -22,6 +22,7 @@ import { queryGetUserOrganizationRef } from './queryGetUserOrganizationRef';
 import { queryContentUserProfile } from './queryContentUserProfile';
 import { queryContentUserProduct } from './queryContentUserProduct';
 import { queryReportAbuse } from './queryReportAbuse';
+import { queryReportAbuseV2 } from './queryReportAbuseV2';
 import { queryUserBlock } from './queryUserBlock';
 import { queryGetUserBlock, queryUnblockUser } from './queryBlockUser';
 import { queryMenuList } from './queryMenuList';
@@ -30,6 +31,8 @@ import { queryContentProductV2 } from './queryContentProductV2';
 import { queryLikeComment } from './queryLikeComment';
 import { queryViewProduct } from './queryViewProduct';
 import { queryGetProductSave } from './queryGetProductSave';
+import { queryReportAlasan } from './queryReportAlasan';
+import { queryContentShare } from './queryContentShare';
 
 export {
     queryContentProduct,
@@ -64,5 +67,8 @@ export {
     queryContentProductV2,
     queryLikeComment,
     queryViewProduct,
-    queryGetProductSave
+    queryGetProductSave,
+    queryReportAlasan,
+    queryReportAbuseV2,
+    queryContentShare,
 };

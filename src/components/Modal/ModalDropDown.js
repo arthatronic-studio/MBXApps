@@ -47,7 +47,7 @@ const defaultProps = {
 };
 
 const ModalDropDown = forwardRef((props, ref) => {
-  const {data, selectedValue, onPress, onClose, children, style, label} = props;
+  const {data, selectedValue, onPress, onClose, children, style, label, name} = props;
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
@@ -57,8 +57,7 @@ const ModalDropDown = forwardRef((props, ref) => {
 
   const renderContent = () => {
     return data.map((item, idx) => {
-      const _isActive = item.value === selectedValue;
-
+      const _isActive = item === selectedValue;
       return (
         <TouchableOpacity
           style={{
@@ -70,8 +69,8 @@ const ModalDropDown = forwardRef((props, ref) => {
             flexDirection: 'row',
           }}
           key={idx}
-          onPress={() => onPress(item.value)}>
-          <Text align="left">{item.name}</Text>
+          onPress={() => onPress(item)}>
+          <Text align="left">{item[name]}</Text>
           {_isActive && (
             <MaterialIcons
               name="check"

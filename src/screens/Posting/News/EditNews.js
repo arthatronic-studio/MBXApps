@@ -104,6 +104,10 @@ const EditNews = props => {
       });
   };
 
+  function Capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   useEffect(() => {
     requestLocationPermission();
     getKategori();
@@ -129,7 +133,7 @@ const EditNews = props => {
 
     setJudul(params.productName);
     setIsi(params.productDescription);
-    setKategori(params.productSubCategory);
+    setKategori({name: Capitalize(params.productSubCategory.toLowerCase()), value: params.productSubCategory});
     setSumberGambar(params.imageSource);
     setListTag(params.tag);
     setOldImage(params.image);
@@ -169,7 +173,7 @@ const EditNews = props => {
           method: 'UPDATE', // UPDATE | DELETE
           type: params.productType,
           category: params.productCategory,
-          categorySub: kategori,
+          categorySub: kategori.value,
           description: isi,
           latitude: latitude,
           longitude: longitude,
@@ -254,7 +258,7 @@ const EditNews = props => {
             type="select"
             hideErrorHint
             label="Kategori"
-            value={kategori}
+            value={kategori.name}
             placeholder="- Kategori Artikel -"
             onPress={() => {
               modalDropDownRef.current.open();
@@ -483,6 +487,7 @@ const EditNews = props => {
           setKategori(value);
           modalDropDownRef.current.close();
         }}
+        name="name"
         label={'Kategori'}
       />
 

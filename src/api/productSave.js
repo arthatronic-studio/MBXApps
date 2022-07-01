@@ -18,6 +18,8 @@ export const fetchProductSave = async variables => {
       variables: v,
     });
 
+    console.log(result, "res save");
+
     if (result && result.data && result.data.productSave && result.data.productSave.success) {
       response.status = result.data.productSave.success;
       response.message = result.data.productSave.message || 'OK';

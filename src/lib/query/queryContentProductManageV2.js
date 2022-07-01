@@ -43,6 +43,7 @@ export const queryProductManageV2 = gql`
       commentUpdatedDate
       tag
       imageSource
+      shareCount
     }
   }
 `;

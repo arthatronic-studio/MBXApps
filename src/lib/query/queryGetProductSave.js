@@ -71,6 +71,7 @@ export const queryGetProductSave = gql`
       priority
       rating
       isDirector
+      shareCount
     }
   }
 `;

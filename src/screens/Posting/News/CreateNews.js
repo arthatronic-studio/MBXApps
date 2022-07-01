@@ -161,7 +161,7 @@ const CreateNews = props => {
           method: 'INSERT', // UPDATE | DELETE
           type: params.productType,
           category: params.productCategory,
-          categorySub: kategori,
+          categorySub: kategori.value,
           description: isi,
           latitude: latitude,
           longitude: longitude,
@@ -244,7 +244,7 @@ const CreateNews = props => {
             type="select"
             hideErrorHint
             label="Kategori"
-            value={kategori}
+            value={kategori.name}
             placeholder="- Kategori Artikel -"
             onPress={() => {
               modalDropDownRef.current.open();
@@ -471,6 +471,7 @@ const CreateNews = props => {
           modalDropDownRef.current.close();
         }}
         label={'Kategori'}
+        name="name"
       />
 
       <ModalImagePicker

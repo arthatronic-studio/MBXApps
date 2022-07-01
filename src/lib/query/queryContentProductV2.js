@@ -70,6 +70,7 @@ export const queryContentProductV2 = gql`
       tag
       imageSource
       im_save
+      shareCount
     }
   }
 `;
