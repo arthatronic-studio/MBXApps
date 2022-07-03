@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, ScrollView, Platform, Image, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
+import { View, ScrollView, useWindowDimensions, Image, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
 import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import DatePicker from 'react-native-date-picker';
-import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -56,6 +55,7 @@ const Content = Styled(View)`
 const CreateEvent = ({navigation}) => {
     const user = useSelector((state) => state['user.auth'].login.user);
 	const loading = useSelector((state) => state['user.auth'].loading);
+    const {width} = useWindowDimensions();
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
     const [name, setName] = useState( '');
@@ -113,6 +113,10 @@ const CreateEvent = ({navigation}) => {
                     <Text style={{fontSize: 10, color: Color.secondary}}>Masukkan Informasi Seputar Event</Text>
                 </View>
             </View>
+            <TouchableOpacity style={{ height: width/2+40, justifyContent: 'center', marginVertical: 15, backgroundColor: '#CDD1D2' }}>
+                <FontAwesome name='image' color='#111' size={25} style={{ alignSelf: 'center', marginBottom: 9 }}  />
+                <Text type='medium'>Upload Poster Event</Text>
+            </TouchableOpacity>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <Text style={{fontSize: 10, fontWeight: 'bold', marginVertical: 10}}>Nama Event</Text>
                 <View style={{width: '100%'}}>
@@ -128,11 +132,11 @@ const CreateEvent = ({navigation}) => {
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Nama Responden</Text>
                 </View>
             </View>
-            <Row>
+            <Row style={{ marginTop: -20, marginBottom: -30 }}>
                 <Col>
-                    <View style={{ marginVertical:-10,  marginHorizontal: -6 }}>
+                    <View style={{   marginHorizontal: -6 }}>
                         <FormSelect
-                            label='Jam Mulai'
+                            labelInside='Jam Mulai'
                             placeholder='Pilih Jam'
                             value={moment(jamBukaOperasional).format('HH:mm')}
                             onPress={() => setShowDatePicker(true)}
@@ -161,9 +165,9 @@ const CreateEvent = ({navigation}) => {
                 />}
                 </Col>
                 <Col>
-                    <View style={{ marginVertical:-10, marginHorizontal: -6 }}>
+                    <View style={{  marginHorizontal: -6 }}>
                     <FormSelect
-                        label='Jam Tutup'
+                        labelInside='Jam Tutup'
                         placeholder='Pilih Jam'
                         value={moment(jamTutupOperasional).format('HH:mm')}
                         onPress={() => setShowDatePicker2(true)}
@@ -195,7 +199,7 @@ const CreateEvent = ({navigation}) => {
             />}
             <View style={{ marginVertical:-10,  marginHorizontal: -6 }}>
                 <FormSelect
-                    label='Mulai Acara'
+                    labelInside='Mulai Acara'
                     placeholder='01/01/1990'
                     value={moment(dateEvent).format('DD/MM/YYYY')}
                     onPress={() => setShowDatePicker3(true)}
@@ -223,7 +227,7 @@ const CreateEvent = ({navigation}) => {
                     }}
                 />}
         </View>
-            <View style={{alignItems: 'flex-start', marginHorizontal: 15}}>
+            <View style={{alignItems: 'flex-start', marginHorizontal: 10}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Masukkan Lokasi Acara . . .' style={{borderWidth: 1, borderColor: Color.border,
                         color: Color.text,
@@ -235,16 +239,18 @@ const CreateEvent = ({navigation}) => {
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Lokasi Acara</Text>
                 </View>
             </View>
-            <FormSelect
-              type='select'
-              label='Pin Lokasi'
-              value={isPinnedMap ? 'Lokasi berhasil disimpan' || 'Lokasi di Pin' : ''}
-              placeholder='Pilih di Peta'
-              onPress={() => {
-                setModalSelectMap(true);
-              }}
-            />
-            <View style={{alignItems: 'flex-start', marginHorizontal: 15}}>
+            <View style={{ marginHorizontal: -6, marginVertical: -10 }}>
+                <FormSelect
+                type='select'
+                labelInside='Pin Lokasi'
+                value={isPinnedMap ? 'Lokasi berhasil disimpan' || 'Lokasi di Pin' : ''}
+                placeholder='Pilih di Peta'
+                onPress={() => {
+                    setModalSelectMap(true);
+                }}
+                />
+            </View>
+            <View style={{alignItems: 'flex-start', marginHorizontal: 10}}>
                 <View style={{width: '100%'}}>
                     <TextInput placeholder='Masukkan Deskripsi Event . . ' style={{borderWidth: 1, borderColor: Color.border,
                         color: Color.text,

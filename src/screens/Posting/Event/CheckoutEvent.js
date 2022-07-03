@@ -219,6 +219,7 @@ const CheckoutEvent = ({navigation}) => {
             <View style={{ borderColor: '#CDD1D2', margin: 16, borderWidth: 1, padding: 10, borderRadius: 10 }}>
                 <Row>
                     <Col>
+                        <Text size={11} type='bold' align='left'>Adang Susanyo</Text>
                         <Row style={{ marginRight: 10, alignItems: 'center' }}>
                             <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
                                 <Image source={ImagesPath.phone} resizeMode='contain' style={{ width: 14,  borderRadius: 7 }} />

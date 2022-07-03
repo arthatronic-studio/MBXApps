@@ -43,7 +43,7 @@ const MyEvent = ({route, navigation}) => {
           title="Eventku"
           actions={
             <View>
-              <TouchableOpacity onPress={() => navigation.navigate('CreateEvent')} style={{alignItems: 'center', justifyContent: 'center',flexDirection: 'row', backgroundColor: Color.primary, height: 30, width: 110,borderRadius: 25}}>  
+              <TouchableOpacity onPress={() => navigation.navigate('OnBoardEvent')} style={{alignItems: 'center', justifyContent: 'center',flexDirection: 'row', backgroundColor: Color.primary, height: 30, width: 110,borderRadius: 25}}>  
                 <Entypo name='plus' size={13} color={Color.textInput} style={{marginRight: 5}} />
                 <Text style={{color: Color.textInput, fontSize: 11, fontWeight: 'bold'}}>Buat Event</Text>
               </TouchableOpacity>

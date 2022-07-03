@@ -23,7 +23,7 @@ import Feather from 'react-native-vector-icons/Feather'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
-const CommunityEvent = ({route}) => {
+const CommunityEvent = ({navigation, route}) => {
 
     const {Color} = useColor();
 
@@ -42,7 +42,7 @@ const CommunityEvent = ({route}) => {
           title="Community Event"
           actions={
             <View>
-              <TouchableOpacity>
+              <TouchableOpacity  onPress={()=> navigation.navigate('SearchEvent')}>
                 <Ionicons name='search' size={22} color={Color.text} style={{marginHorizontal: 15}} />
               </TouchableOpacity>
             </View>

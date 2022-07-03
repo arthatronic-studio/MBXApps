@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Image, FlatList,ScrollView, Platform, Linking, Pressable} from 'react-native';
+import {View, Image, FlatList,ScrollView, Platform, Linking, Pressable, Touchable} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
@@ -90,10 +90,10 @@ const EventDetail = ({navigation, route}) => {
           <Text style={{fontSize: 11, textAlign: 'left',fontWeight: 'bold'}}>{item.title}</Text>
           <Text style={{fontSize: 8, textAlign: 'left', marginVertical: 3}}>{item.date}</Text>
         </Col>
-        <View style={{flexDirection:'row', justifyContent: 'center'}}>
+        {/* <View style={{flexDirection:'row', justifyContent: 'center'}}>
             <Text style={{fontSize: 10, color: '#3C58C1', marginHorizontal: 5}}>Lihat Detail</Text>
             <MaterialIcons name={'arrow-forward'} size={12} color={'#3C58C1'}/>
-        </View>
+        </View> */}
       </Row>
       <Divider height={25}/>
       <Row style={{alignItems: 'center', }}>
@@ -296,6 +296,19 @@ const EventDetail = ({navigation, route}) => {
                 <WidgetUserLikes id={item.id} title='Akan Hadir' />
             </Container>
           } */}
+          <Row style={{ backgroundColor: '#FAF3ED', marginHorizontal: 10, padding: 13, borderRadius: 8 }}>
+            <Col>
+              <Text size={11} type='bold' align='left'>Kamu telah memiliki tiket untuk event ini</Text>
+            </Col>
+            <Col style={{ alignItems: 'flex-end' }}>
+              <TouchableOpacity onPress={()=> navigation.navigate('MyTicket')} style={{ backgroundColor: '#F3771D', paddingHorizontal: 10, paddingVertical: 8, borderRadius: 20 }}>
+                <Row style={{ alignItems: 'center' }}>
+                  <Text size={10} color='#fff' style={{ marginRight: 8 }}>Lihat Tiket</Text>
+                  <AntDesign name='arrowright' color='#fff' />
+                </Row>
+              </TouchableOpacity>
+            </Col>
+          </Row>
 
           <View>
             <Text
@@ -581,6 +594,7 @@ const EventDetail = ({navigation, route}) => {
 
       <ModalContentOptions
           ref={modalOptionsRef}
+          event={true}
           isOwner={user && user.userId === item.ownerId}
           item={item}
       /> 

@@ -64,7 +64,7 @@ const EventScreen = ({navigation, route}) => {
                     color={Color.text}
                     size={18}
                   />
-                  <View style={{bottom: 15,backgroundColor: Color.error, width: 6, height: 6, borderRadius: 30, position: 'absolute', alignSelf: 'flex-end'}}/>
+                  {/* <View style={{bottom: 15,backgroundColor: Color.error, width: 6, height: 6, borderRadius: 30, position: 'absolute', alignSelf: 'flex-end'}}/> */}
                 </TouchableOpacity>
                 <TouchableOpacity
                 onPress={()=> navigation.navigate('History')}>
@@ -77,7 +77,7 @@ const EventScreen = ({navigation, route}) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() =>
-                      navigation.navigate('CreateEvent', {
+                      navigation.navigate('OnBoardEvent', {
                         title,
                         productType: Config.PRODUCT_TYPE,
                         productCategory: '',
@@ -129,14 +129,14 @@ const EventScreen = ({navigation, route}) => {
           <View style={{width: '100%',alignItems:'center', marginBottom: 3}}> 
             <Image source={ImagesPath.CircleWavyCheck}/>
           </View>
-          <Text style={{lineHeight: 15,fontSize: 10, color: Color.secondary, width: '50%', textAlign: 'center', alignSelf: 'center'}}>Event Official</Text>
+          <Text style={{lineHeight: 15,fontSize: 10, color: Color.secondary, width: '50%', textAlign: 'center', alignSelf: 'center'}}>Event{'\n'}Official</Text>
         </Pressable>
         <Pressable style={{width: '25%',height: 60}}
           onPress={() => navigation.navigate('CommunityEvent')}>
           <View style={{width: '100%',alignItems:'center', marginBottom: 3}}> 
             <Image source={ImagesPath.UsersThree}/>
           </View>
-          <Text style={{lineHeight: 15,fontSize: 10, color: Color.secondary, width: '80%', textAlign: 'center', alignSelf: 'center'}}>Event Komunitas</Text>
+          <Text style={{lineHeight: 15,fontSize: 10, color: Color.secondary, width: '80%', textAlign: 'center', alignSelf: 'center'}}>Event{'\n'}Komunitas</Text>
         </Pressable>
         <Pressable style={{width: '25%',height: 60}}
           onPress={() => navigation.navigate('MyEvent')}>
@@ -150,7 +150,7 @@ const EventScreen = ({navigation, route}) => {
           <View style={{width: '100%',alignItems:'center', marginBottom: 3}}> 
             <Image source={ImagesPath.ImageEvent}/>
           </View>
-          <Text style={{lineHeight: 15,fontSize: 10, color: Color.secondary,width: '100%', textAlign: 'center', alignSelf: 'center'}}>Dokumentasi Event</Text>
+          <Text style={{lineHeight: 15,fontSize: 10, color: Color.secondary,width: '100%', textAlign: 'center', alignSelf: 'center'}}>Dokumentasi{'\n'}Event</Text>
         </Pressable>
       </Row>
   </>

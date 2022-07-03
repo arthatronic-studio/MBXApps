@@ -220,6 +220,9 @@ import SearchEvent from 'src/screens/Posting/Event/SearchEvent';
 import EditEventMain from 'src/screens/Posting/Event/EditEventMain';
 import History from 'src/screens/Posting/Event/History';
 import MyTicket from 'src/screens/Posting/Event/MyTicket';
+import DocumentasiEvent from 'src/screens/Posting/Event/DocumentasiEvent';
+import EventHistory from 'src/screens/Posting/Event/EventHistory';
+import OnBoardEvent from 'src/screens/Posting/Event/OnBoardEvent';
 // import EventOfficial from 'src/screens/Posting/Event/EventOfficial';
 // import CommunityEvent from 'src/screens/Posting/Event/CommunityEvent';
 // import MyEvent from 'src/screens/Posting/Event/MyEvent';
@@ -239,8 +242,12 @@ function MainStackNavigator() {
         gestureEnabled: Platform.OS === 'ios',
         headerShown: false,
       }}>
+        
       {/* uncanny */}
-      <Screen name="SplashScreen" component={MyEvent} />
+      <Screen name="SplashScreen" component={SplashScreen} />
+
+      <Screen name="DocumentasiEvent" component={DocumentasiEvent} />
+      <Screen name="OnBoardEvent" component={OnBoardEvent} />
       <Screen name="MainPage" component={MainPage} />
       <Screen name="OnBoardingScreen" component={OnBoardingScreen} />
       <Screen name="TrackingOrder" component={TrackingOrder} />

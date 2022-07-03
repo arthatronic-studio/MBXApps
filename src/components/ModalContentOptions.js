@@ -16,6 +16,7 @@ const defaultProps = {
   nameType: 'PRODUCT',
   moduleType: 'CREATE',
   onClose: () => {},
+  event: false,
 };
 
 const initialMessage = {
@@ -24,7 +25,7 @@ const initialMessage = {
 }
 
 const ModalContentOptions = forwardRef((props, ref) => {
-  const { isOwner, item, moduleType, nameType, onClose } = props;
+  const { isOwner, item, event, moduleType, nameType, onClose } = props;
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
@@ -127,6 +128,16 @@ const ModalContentOptions = forwardRef((props, ref) => {
       color: Color.error,
       onPress: () => {
         setModalInputText(true);
+      },
+    },
+    {
+      id: 2,
+      show: event ? true : false,
+      name: 'Edit',
+      color: Color.error,
+      onPress: () => {
+        combinedRef.current.close();
+        navigation.navigate('EditEventMain')
       },
     },
   ];

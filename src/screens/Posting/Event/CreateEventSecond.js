@@ -252,7 +252,7 @@ const CreateEventSecond = ({navigation}) => {
                 </View>
             ))}
             <TouchableOpacity onPress={() => addTicket()} style={{borderColor: Color.primary, borderWidth: 3, alignSelf: 'center', width: '95%', height: 50, borderRadius: 50, marginBottom: 16, justifyContent: 'center'}}>
-                <Text style={{color: Color.primary}} type='semibold'>Tambah Kategori Lainny</Text>
+                <Text style={{color: Color.primary}} type='semibold'>Tambah Kategori Lainnya</Text>
             </TouchableOpacity>
 
             <Text style={{color: Color.text,marginLeft: 10}} align='left' type='semibold'>Kebijakan Refund</Text>
@@ -280,7 +280,7 @@ const CreateEventSecond = ({navigation}) => {
         </ScrollView>
         <View style={{width: '100%',  height: 70, alignItems: 'center', borderRadius: 10}}>
             <TouchableOpacity onPress={() => submit()} style={{backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
-                <Text style={{color: Color.textInput}}>Lanjuts</Text>
+                <Text style={{color: Color.textInput}}>Lanjut</Text>
             </TouchableOpacity>
         </View>
     </Scaffold>

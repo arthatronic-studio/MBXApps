@@ -174,6 +174,14 @@ const PemesananTiket = ({navigation}) => {
                     }}
                     />
             </View>
+            <Row style={{ alignItems: 'center', marginLeft: 16 }}>
+                <View style={{ backgroundColor: '#3C58C1', marginRight: 4, height: 9, width: 9, borderRadius: 5 }} />
+                <Text type='bold' size={9} style={{ marginRight: 10 }}>Dipilih</Text>
+                <View style={{ backgroundColor: '#07181F', marginRight: 4, height: 9, width: 9, borderRadius: 5 }} />
+                <Text type='bold' size={9} style={{ marginRight: 10 }}>Tersedia</Text>
+                <View style={{ backgroundColor: '#9CA3A5', marginRight: 4, height: 9, width: 9, borderRadius: 5 }} />
+                <Text type='bold' size={9} style={{ marginRight: 10 }}>Tidak Tersedia</Text>
+            </Row>
             <View style={{ height: 8, backgroundColor: '#eee', marginVertical: 10 }} />
             <View style={{ marginHorizontal: 16 }}>
                 <Text color={Color.black} type='bold' align='left' size={11}>Jumlah Tiket</Text>
