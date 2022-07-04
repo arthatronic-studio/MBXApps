@@ -354,7 +354,7 @@ const EventDetail = ({navigation, route}) => {
                   width: '23%',
                   lineHeight: 23,
                 }}>
-                Tribesocial
+                Tribes Social
               </Text>
               <Octions
                 name={'verified'}

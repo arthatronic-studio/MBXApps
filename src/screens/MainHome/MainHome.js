@@ -591,7 +591,7 @@ const MainHome = ({ navigation, route }) => {
                             align="flex-start"
                             justifyContent="center">
                             <Text size={12} align="left">
-                              Sekarang di TRIBESOCIAL {'\n'} udah ada fitur{' '}
+                              Sekarang di Tribes Social {'\n'} udah ada fitur{' '}
                               <Text type="bold">lelang</Text> loh !
                             </Text>
                             <Button

@@ -573,7 +573,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.tribesocial;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tribessocial;
 				PRODUCT_NAME = TribesSocial;
 				SWIFT_OBJC_BRIDGING_HEADER = "TribesSocial-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -601,7 +601,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.tribesocial;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tribessocial;
 				PRODUCT_NAME = TribesSocial;
 				SWIFT_OBJC_BRIDGING_HEADER = "TribesSocial-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

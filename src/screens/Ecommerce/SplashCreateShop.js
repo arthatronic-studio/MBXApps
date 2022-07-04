@@ -45,7 +45,7 @@ const SplashCreateShop = () => {
             <Image source={ImagesPath.createshop}/>
             <Divider height={60}/>
             <Text style={{fontSize: 18, fontSize: 18, fontWeight: 'bold'}}>Buat Peluang Kamu Di Sini</Text>
-            <Text style={{marginVertical: 20, fontSize: 10, width: '85%', lineHeight: 18}}>Tribesocial adalah platform komunitas cerdas yang memberikan rekomendasi 
+            <Text style={{marginVertical: 20, fontSize: 10, width: '85%', lineHeight: 18}}>Tribes Social adalah platform komunitas cerdas yang memberikan rekomendasi 
                 konten yang 
                 dipersonalisasi kepada setiap pengguna berdasarkan minat mereka. </Text>
             <Divider/>

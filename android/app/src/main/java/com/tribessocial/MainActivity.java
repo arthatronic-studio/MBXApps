@@ -1,4 +1,4 @@
-package com.tribes;
+package com.tribessocial;
 
 import com.facebook.react.ReactActivity;
 
