@@ -28,6 +28,7 @@ const listInitialCode = [
 const useDefaultDarkThemeCode = [
     'TRIBESXMOBILITY',
     'TRIBESXRRID',
+    
 ];
 
 const isTribes = Config.INITIAL_CODE === 'TRIBESASIA';
