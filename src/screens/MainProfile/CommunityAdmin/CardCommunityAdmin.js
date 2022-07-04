@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {View, FlatList, TextInput, Image} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, FlatList, TextInput, Image } from 'react-native';
 import {
   Text,
   TouchableOpacity,
@@ -9,15 +9,16 @@ import {
   Alert,
 } from '@src/components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useNavigation, useIsFocused} from '@react-navigation/core';
+import { useNavigation, useIsFocused } from '@react-navigation/core';
 
 import Client from '@src/lib/apollo';
-import {queryJoinCommunityManage} from '@src/lib/query/joinCommunityManage';
-import {joinCommunityMember} from 'src/lib/query/joinCommunityMember';
-import {Divider} from 'src/styled';
+import { queryJoinCommunityManage } from '@src/lib/query/joinCommunityManage';
+import { joinCommunityMember } from 'src/lib/query/joinCommunityMember';
+import { Divider } from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
 import ModalInputText from 'src/components/ModalInputText';
 import Styled from 'styled-components';
+
 const BottomSection = Styled(View)`
   width: 100%;
   padding: 16px;
@@ -55,7 +56,7 @@ const CardCommunityAdmin = (props) => {
   const [modalInputText, setModalInputText] = useState(false);
 
   const [popupProps, showPopup] = usePopup();
-  const {Color} = useColor();
+  const { Color } = useColor();
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const [filterData, setFilterData] = useState([]);
@@ -79,7 +80,7 @@ const CardCommunityAdmin = (props) => {
       clearTimeout(timeout);
     };
   }, [search]);
-  
+
   const fetchData = () => {
     let status = 2;
     if (props.type === 'newAnggota') {
@@ -87,7 +88,7 @@ const CardCommunityAdmin = (props) => {
     } else if (props.type === 'Anggota') {
       status = 1;
     }
-   
+
 
     Client.query({
       query: joinCommunityMember,
@@ -96,7 +97,7 @@ const CardCommunityAdmin = (props) => {
       },
     })
       .then((res) => {
-        
+
         setData(res.data.joinCommunityMember);
         setLoading(false);
       })
@@ -113,7 +114,7 @@ const CardCommunityAdmin = (props) => {
 
     let resMessage =
       status === 1 ? 'Diterima' :
-      status === 2 ? 'Ditolak' : 'Dihapus';
+        status === 2 ? 'Ditolak' : 'Dihapus';
 
     Client.query({
       query: queryJoinCommunityManage,
@@ -174,8 +175,10 @@ const CardCommunityAdmin = (props) => {
     } else if (props.type === 'Anggota') {
       status = 1;
     }
-    const variables = { status: status,
-       name: search };
+    const variables = {
+      status: status,
+      name: search
+    };
 
     Client.query({
       query: joinCommunityMember,
@@ -205,7 +208,7 @@ const CardCommunityAdmin = (props) => {
   const renderItem = (item, index) => {
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate('CardDetail', {item, props, isAdminPage: true})}
+        onPress={() => navigation.navigate('CardDetail', { item, props, isAdminPage: true })}
         style={{
           borderWidth: 0.5,
           borderRadius: 8,
@@ -246,7 +249,7 @@ const CardCommunityAdmin = (props) => {
           <Divider height={12} />
 
           {props.type === 'Anggota' ? (
-            <View style={{flexDirection: 'row', width: '100%', height: 45}}>
+            <View style={{ flexDirection: 'row', width: '100%', height: 45 }}>
               <TextInput
                 placeholder={item.userDetail.idNumber || 'Input Nomor ID'}
                 placeholderTextColor={Color.gray}
@@ -300,7 +303,7 @@ const CardCommunityAdmin = (props) => {
               </View>
             </View>
           ) : (
-            <View style={{flexDirection: 'row', width: '100%', height: 33}}>
+            <View style={{ flexDirection: 'row', width: '100%', height: 33 }}>
               <TouchableOpacity
                 onPress={() => {
                   Alert(
@@ -388,8 +391,8 @@ const CardCommunityAdmin = (props) => {
       isLoading={filterLoading}
     >
 
-<BottomSection style={{borderColor: Color.border}}>
-        <BoxInput style={{backgroundColor: Color.textInput, borderColor: Color.border}}>
+      <BottomSection style={{ borderColor: Color.border }}>
+        <BoxInput style={{ backgroundColor: Color.textInput, borderColor: Color.border }}>
           <TextInputNumber
             name="text"
             placeholder='Cari anggota'
@@ -397,7 +400,7 @@ const CardCommunityAdmin = (props) => {
             returnKeyType="done"
             returnKeyLabel="Done"
             blurOnSubmit={false}
-            onBlur={() => {}}
+            onBlur={() => { }}
             error={null}
             onChangeText={(text) => {
               setSearch(text);
@@ -407,23 +410,24 @@ const CardCommunityAdmin = (props) => {
               color: Color.text,
             }}
           />
-          <CircleSend style={{backgroundColor: Color.primary}} onPress={() => {}}>
+          <CircleSend style={{ backgroundColor: Color.primary }} onPress={() => { }}>
             <Ionicons name='search' size={16} color={Color.text} />
           </CircleSend>
         </BoxInput>
       </BottomSection>
+
       {data.length > 0 ? (
         <FlatList
           keyExtractor={(item, index) => item.id + index.toString()}
           // data={data}
           data={search !== '' ? filterData : data}
-          renderItem={({item, index}) => renderItem(item, index)}
+          renderItem={({ item, index }) => renderItem(item, index)}
           contentContainerStyle={{
-            padding: 16,
+            paddingHorizontal: 16,
           }}
         />
       ) : (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <Text>Data belum tersedia</Text>
         </View>
       )}

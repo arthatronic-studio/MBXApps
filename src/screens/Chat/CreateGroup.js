@@ -8,7 +8,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Text from '@src/components/Text';
 import { useColor } from '@src/components/Color';
-import { usePopup } from '@src/components';
+import { Button, usePopup } from '@src/components';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Entypo from 'react-native-vector-icons/Entypo'
 import ImagesPath from 'src/components/ImagesPath';
@@ -20,8 +20,10 @@ import {
 import { queryGetUserOrganizationRef } from 'src/lib/query';
 import Client from '@src/lib/apollo';
 import { initSocket } from 'src/api-socket/currentSocket';
+import { Container } from 'src/styled';
 
 const itemPerPage = 100;
+
 const BottomSection = Styled(View)`
   width: 100%;
   padding: 16px;
@@ -53,7 +55,7 @@ const CircleSend = Styled(TouchableOpacity)`
   alignItems: center;
 `;
 const CreateGroup = ({ navigation }) => {
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const { Color } = useColor();
 
@@ -186,16 +188,16 @@ const CreateGroup = ({ navigation }) => {
 
   const onSubmit = () => {
     if (selected.length < 1) {
-      showPopup('Minimal anggota group 2 anggota ', 'warning');
+      showPopup('Minimal anggota group 1 anggota ', 'warning');
       return;
     } else {
       navigation.navigate('ManageGroupScreen', {
         roomId: null,
         selected: selected,
       });
-
     }
   }
+  
   const onSelected = (index, item) => {
     setItemData({ ...itemData, loading: true });
 
@@ -247,70 +249,67 @@ const CreateGroup = ({ navigation }) => {
   const renderItem = ({ item, index }) => (
     <Row
       style={{
-        marginHorizontal: 15,
-        marginVertical: 12,
+        marginBottom: 12,
         backgroundColor:
           selected.indexOf(item.userId) !== -1 ? Color.primary : Color.theme,
-        borderRadius: selected.indexOf(item.userId) !== -1 ? 14 : 0,
-        paddingVertical: 5,
-
+        borderRadius: 8,
+        padding: 8,
       }}>
-      <Image
-        source={{ uri: item.photoProfile }}
-        style={{
-          borderRadius: 25,
-          width: 50,
-          height: 50,
-          backgroundColor: Color.border,
-          borderColor: Color.primary,
-          marginLeft: 5,
-        }}
-      />
-      <Text
-        style={{
-          fontSize: 14,
-          width: '60%',
-          fontWeight: 'bold',
-          marginVertical: 10,
-          marginHorizontal: 5,
-          textAlign: 'left',
-          justifyContent: 'center',
-        }}>
-        {item.firstName} {item.lastName}
-      </Text>
-
-      {selected.indexOf(item.userId) !== -1 ? (
-        <TouchableOpacity
-          onPress={() => onSelected(index, item.userId)}
+      <View style={{ flex: 1 }}>
+        <Image
+          source={{ uri: item.photoProfile }}
           style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: Color.secondary,
-            height: 35,
-            width: 75,
-            borderRadius: 20,
-            marginVertical: 10,
-          }}>
-          <Text style={{ color: Color.textInput, fontSize: 12 }}>x Batal</Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity
-          onPress={() => onSelected(index, item.userId)}
+            width: '100%',
+            aspectRatio: 1,
+            borderRadius: 25,
+            backgroundColor: Color.border,
+            borderColor: Color.primary,
+          }}
+        />
+      </View>
+      <View style={{ flex: 7, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingLeft: 8 }}>
+        <Text
+          numberOfLines={2}
           style={{
-            alignItems: 'center',
+            width: '60%',
+            fontWeight: 'bold',
+            textAlign: 'left',
             justifyContent: 'center',
-            backgroundColor: Color.primary,
-            height: 35,
-            width: 75,
-            borderRadius: 20,
-            marginVertical: 10,
-
           }}>
-          <Text style={{ color: Color.textInput, fontSize: 12 }}>+Undang</Text>
-        </TouchableOpacity>
-      )}
+          {item.firstName} {item.lastName}
+        </Text>
+
+        {selected.indexOf(item.userId) !== -1 ? (
+          <TouchableOpacity
+            onPress={() => onSelected(index, item.userId)}
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: Color.secondary,
+              width: 75,
+              borderRadius: 20,
+              paddingVertical: 8,
+            }}>
+            <Text style={{ color: Color.textButtonInline, fontSize: 12 }}>x Batal</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={() => onSelected(index, item.userId)}
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: Color.primary,
+              width: 75,
+              borderRadius: 20,
+              paddingVertical: 8,
+            }}>
+            <Text style={{ color: Color.textButtonInline, fontSize: 12 }}>+Undang</Text>
+          </TouchableOpacity>
+        )}
+      </View>
     </Row>
   );
+
   return (
     <Scaffold
       fallback={itemData.loading}
@@ -329,7 +328,8 @@ const CreateGroup = ({ navigation }) => {
           </Text>
         </Col>
       </Row>
-      <Text
+
+      {/* <Text
         style={{
           fontWeight: 'bold',
           textAlign: 'left',
@@ -337,9 +337,10 @@ const CreateGroup = ({ navigation }) => {
           marginVertical: 15,
         }}>
         Undang teman kamu
-      </Text>
-      <BottomSection style={{borderColor: Color.border}}>
-        <BoxInput style={{backgroundColor: Color.textInput, borderColor: Color.border}}>
+      </Text> */}
+
+      <BottomSection style={{ borderColor: Color.border }}>
+        <BoxInput style={{ backgroundColor: Color.textInput, borderColor: Color.border }}>
           <TextInputNumber
             name="text"
             placeholder='Cari anggota'
@@ -347,7 +348,7 @@ const CreateGroup = ({ navigation }) => {
             returnKeyType="done"
             returnKeyLabel="Done"
             blurOnSubmit={false}
-            onBlur={() => {}}
+            onBlur={() => { }}
             error={null}
             onChangeText={(text) => {
               setSearch(text);
@@ -357,7 +358,7 @@ const CreateGroup = ({ navigation }) => {
               color: Color.text,
             }}
           />
-          <CircleSend style={{backgroundColor: Color.primary}} onPress={() => {}}>
+          <CircleSend style={{ backgroundColor: Color.primary }} onPress={() => { }}>
             <Ionicons name='search' size={16} color={Color.text} />
           </CircleSend>
         </BoxInput>
@@ -367,23 +368,18 @@ const CreateGroup = ({ navigation }) => {
         keyExtractor={(item, index) => item.toString() + index}
         data={search !== '' ? filterData : itemData.data}
         renderItem={renderItem}
-      />
-      <TouchableOpacity
-        onPress={() => {
-          onSubmit();
+        contentContainerStyle={{
+          paddingHorizontal: 16,
         }}
-        style={{
-          marginVertical: 10,
-          backgroundColor: Color.secondary,
-          height: 40,
-          width: '92%',
-          alignSelf: 'center',
-          borderRadius: 20,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <Text style={{ fontSize: 12, color: Color.textInput }}>Lanjutkan</Text>
-      </TouchableOpacity>
+      />
+
+      <Container padding={16}>
+        <Button
+          onPress={() => onSubmit()}
+        >
+          Lanjutkan
+        </Button>
+      </Container>
     </Scaffold>
   );
 }

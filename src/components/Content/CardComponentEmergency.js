@@ -42,7 +42,7 @@ const defaultProps = {
 const CardComponentEmergency = ({ productCategory, item, numColumns, onPress, horizontal, style }) => {
     const [like, setLike] = useState(item.like);
     const [im_like, setImLike] = useState(item.im_like);
-    const [trigger, setTrigger] = useState(false);
+    const [trigger, setTrigger] = useState(-1);
 
     const { Color } = useColor();
     const navigation = useNavigation();
@@ -55,9 +55,9 @@ const CardComponentEmergency = ({ productCategory, item, numColumns, onPress, ho
     }, [item]);
 
     useEffect(() => {
-        const timeout = trigger ? setTimeout(() => {
+        const timeout = trigger !== 0 ? setTimeout(() => {
             fetchAddLike();
-        }, 500) : null;
+        }, 1000) : null;
 
         return () => {
             clearTimeout(timeout);
@@ -65,28 +65,31 @@ const CardComponentEmergency = ({ productCategory, item, numColumns, onPress, ho
     }, [trigger]);
 
     const fetchAddLike = () => {
-        console.log('trigger emergency');
+        const variables = {
+            productId: item.id,
+            status: im_like ? 1 : 0,
+        };
+
+        console.log('trigger emergency', variables);
 
         Client.query({
             query: queryAddLike,
-            variables: {
-                productId: item.id
-            }
+            variables,
         })
             .then((res) => {
                 console.log(res, 'res add like');
-                setTrigger(false);
+                setTrigger(0);
             })
             .catch((err) => {
                 console.log(err, 'err add like');
-                setTrigger(false);
+                setTrigger(0);
             });
     }
 
     const onSubmitLike = () => {
         setLike(!im_like ? like + 1 : like - 1);
         setImLike(!im_like);
-        setTrigger(true);
+        setTrigger(trigger+1);
     }
 
     // console.log('item', item);
@@ -150,7 +153,7 @@ const CardComponentEmergency = ({ productCategory, item, numColumns, onPress, ho
                                 <WidgetUserLikes
                                     id={item.id}
                                     title='Sedang Meluncur'
-                                    refresh={trigger === false}
+                                    refresh={trigger === 0}
                                     contentPosition='right'
                                 />
 
@@ -167,8 +170,8 @@ const CardComponentEmergency = ({ productCategory, item, numColumns, onPress, ho
                                         </View>
                                     :
                                         <View style={{flexDirection: 'row', paddingVertical: 8, alignItems: 'center', justifyContent: 'center', backgroundColor: Color.primary, borderRadius: 8, borderWidth: 2, borderColor: Color.textInput}}>
-                                            <Ionicons name={'rocket-outline'} size={20} style={{color: Color.textInput}}/>                                    
-                                            <Text style={{fontSize: 12, color: Color.textInput, marginLeft: 8 }}>Meluncur</Text>
+                                            <Ionicons name={'rocket-outline'} size={20} style={{color: Color.textButtonInline}}/>                                    
+                                            <Text style={{fontSize: 12, color: Color.textButtonInline, marginLeft: 8 }}>Meluncur</Text>
                                         </View>
                                     }
                                 </TouchableOpacity>
