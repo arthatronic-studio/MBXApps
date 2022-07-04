@@ -17,6 +17,37 @@ import {joinCommunityMember} from 'src/lib/query/joinCommunityMember';
 import {Divider} from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
 import ModalInputText from 'src/components/ModalInputText';
+import Styled from 'styled-components';
+const BottomSection = Styled(View)`
+  width: 100%;
+  padding: 16px;
+  flexDirection: row;
+  alignItems: center;
+  borderTopWidth: 0.5px;
+`;
+const BoxInput = Styled(View)`
+  width: 100%;
+  padding: 4px 16px 4px 16px;
+  borderRadius: 32px;
+  borderWidth: 0.5px;
+  flexDirection: row;
+`;
+
+const TextInputNumber = Styled(TextInput)`
+  width: 90%;
+  alignContent: flex-start;
+  fontFamily: Inter-Regular;
+  letterSpacing: 0.23;
+  height: 40px;
+`;
+
+const CircleSend = Styled(TouchableOpacity)`
+  width: 40px;
+  height: 40px;
+  borderRadius: 20px;
+  justifyContent: center;
+  alignItems: center;
+`;
 
 const CardCommunityAdmin = (props) => {
   const [data, setData] = useState([]);
@@ -27,13 +58,28 @@ const CardCommunityAdmin = (props) => {
   const {Color} = useColor();
   const isFocused = useIsFocused();
   const navigation = useNavigation();
-
+  const [filterData, setFilterData] = useState([]);
+  const [search, setSearch] = useState('');
+  const [filterLoading, setFilterLoading] = useState(false);
   useEffect(() => {
     if (isFocused) {
       fetchData();
     }
   }, [isFocused]);
 
+  useEffect(() => {
+    const timeout =
+      search !== ''
+        ? setTimeout(() => {
+          fetchSearchNameMember();
+        }, 500)
+        : null;
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [search]);
+  
   const fetchData = () => {
     let status = 2;
     if (props.type === 'newAnggota') {
@@ -41,6 +87,7 @@ const CardCommunityAdmin = (props) => {
     } else if (props.type === 'Anggota') {
       status = 1;
     }
+   
 
     Client.query({
       query: joinCommunityMember,
@@ -49,6 +96,7 @@ const CardCommunityAdmin = (props) => {
       },
     })
       .then((res) => {
+        
         setData(res.data.joinCommunityMember);
         setLoading(false);
       })
@@ -60,6 +108,8 @@ const CardCommunityAdmin = (props) => {
 
   const fetchJoinCommunityManage = (id, userId, status, reason_reject) => {
     setLoading(true);
+
+
 
     let resMessage =
       status === 1 ? 'Diterima' :
@@ -97,7 +147,6 @@ const CardCommunityAdmin = (props) => {
 
   const fetchUpdateMember = item => {
     setLoading(true);
-
     Client.query({
       query: queryJoinCommunityManage,
       variables: {
@@ -117,7 +166,42 @@ const CardCommunityAdmin = (props) => {
         setLoading(false);
       });
   };
+  const fetchSearchNameMember = () => {
+    setFilterLoading(true);
+    let status = 2;
+    if (props.type === 'newAnggota') {
+      status = 0;
+    } else if (props.type === 'Anggota') {
+      status = 1;
+    }
+    const variables = { status: status,
+       name: search };
 
+    Client.query({
+      query: joinCommunityMember,
+      variables,
+    })
+      .then(res => {
+        console.log('res search', res);
+
+        const data = res.data.joinCommunityMember;
+
+        let newArr = [];
+
+        if (data) {
+          newArr = data;
+        }
+
+        setFilterData(newArr);
+        setFilterLoading(false);
+      })
+      .catch(err => {
+        console.log('err search', err);
+
+        setFilterData([]);
+        setFilterLoading(false);
+      });
+  };
   const renderItem = (item, index) => {
     return (
       <TouchableOpacity
@@ -301,11 +385,38 @@ const CardCommunityAdmin = (props) => {
       header={<View />}
       fallback={loading}
       popupProps={popupProps}
+      isLoading={filterLoading}
     >
+
+<BottomSection style={{borderColor: Color.border}}>
+        <BoxInput style={{backgroundColor: Color.textInput, borderColor: Color.border}}>
+          <TextInputNumber
+            name="text"
+            placeholder='Cari anggota'
+            placeholderTextColor={Color.placeholder}
+            returnKeyType="done"
+            returnKeyLabel="Done"
+            blurOnSubmit={false}
+            onBlur={() => {}}
+            error={null}
+            onChangeText={(text) => {
+              setSearch(text);
+            }}
+            style={{
+              backgroundColor: Color.textInput,
+              color: Color.text,
+            }}
+          />
+          <CircleSend style={{backgroundColor: Color.primary}} onPress={() => {}}>
+            <Ionicons name='search' size={16} color={Color.text} />
+          </CircleSend>
+        </BoxInput>
+      </BottomSection>
       {data.length > 0 ? (
         <FlatList
           keyExtractor={(item, index) => item.id + index.toString()}
-          data={data}
+          // data={data}
+          data={search !== '' ? filterData : data}
           renderItem={({item, index}) => renderItem(item, index)}
           contentContainerStyle={{
             padding: 16,

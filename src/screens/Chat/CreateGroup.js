@@ -22,8 +22,38 @@ import Client from '@src/lib/apollo';
 import { initSocket } from 'src/api-socket/currentSocket';
 
 const itemPerPage = 100;
+const BottomSection = Styled(View)`
+  width: 100%;
+  padding: 16px;
+  flexDirection: row;
+  alignItems: center;
+  borderTopWidth: 0.5px;
+`;
+const BoxInput = Styled(View)`
+  width: 100%;
+  padding: 4px 16px 4px 16px;
+  borderRadius: 32px;
+  borderWidth: 0.5px;
+  flexDirection: row;
+`;
 
+const TextInputNumber = Styled(TextInput)`
+  width: 90%;
+  alignContent: flex-start;
+  fontFamily: Inter-Regular;
+  letterSpacing: 0.23;
+  height: 40px;
+`;
+
+const CircleSend = Styled(TouchableOpacity)`
+  width: 40px;
+  height: 40px;
+  borderRadius: 20px;
+  justifyContent: center;
+  alignItems: center;
+`;
 const CreateGroup = ({ navigation }) => {
+  
   const [isLoading, setIsLoading] = useState(false);
   const { Color } = useColor();
 
@@ -220,7 +250,7 @@ const CreateGroup = ({ navigation }) => {
         marginHorizontal: 15,
         marginVertical: 12,
         backgroundColor:
-          selected.indexOf(item.userId) !== -1 ? Color.primary : Color.white,
+          selected.indexOf(item.userId) !== -1 ? Color.primary : Color.theme,
         borderRadius: selected.indexOf(item.userId) !== -1 ? 14 : 0,
         paddingVertical: 5,
 
@@ -286,7 +316,7 @@ const CreateGroup = ({ navigation }) => {
       fallback={itemData.loading}
       isLoading={filterLoading}
       popupProps={popupProps}
-      header={<Header title="Buat Grup" />}>
+      header={<Header title="Buat Group" />}>
       <Row style={{ marginHorizontal: 15, marginVertical: 15 }}>
         <Image source={ImagesPath.firstChat} />
         <Col style={{ marginHorizontal: 10, paddingVertical: 5 }}>
@@ -308,6 +338,31 @@ const CreateGroup = ({ navigation }) => {
         }}>
         Undang teman kamu
       </Text>
+      <BottomSection style={{borderColor: Color.border}}>
+        <BoxInput style={{backgroundColor: Color.textInput, borderColor: Color.border}}>
+          <TextInputNumber
+            name="text"
+            placeholder='Cari anggota'
+            placeholderTextColor={Color.placeholder}
+            returnKeyType="done"
+            returnKeyLabel="Done"
+            blurOnSubmit={false}
+            onBlur={() => {}}
+            error={null}
+            onChangeText={(text) => {
+              setSearch(text);
+            }}
+            style={{
+              backgroundColor: Color.textInput,
+              color: Color.text,
+            }}
+          />
+          <CircleSend style={{backgroundColor: Color.primary}} onPress={() => {}}>
+            <Ionicons name='search' size={16} color={Color.text} />
+          </CircleSend>
+        </BoxInput>
+      </BottomSection>
+
       <FlatList
         keyExtractor={(item, index) => item.toString() + index}
         data={search !== '' ? filterData : itemData.data}
