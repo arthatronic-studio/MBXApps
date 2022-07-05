@@ -23,13 +23,23 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Feather from 'react-native-vector-icons/Feather'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import ModalFilterEvent from './ModalFilterEvent';
 
 const EventOfficial = ({navigation, route}) => {
 
     const {Color} = useColor();
+    const modalOptionsRef = useRef();
+    const [filter, setFilter] = useState({name: 'Nama', value: 'NAME'});
 
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
+
+
+  const onFilterChange = value => {
+    setFilter(value);
+    modalOptionsRef.current.close();
+  };
+
   return (
     <Scaffold
       fallback={false}
@@ -51,19 +61,29 @@ const EventOfficial = ({navigation, route}) => {
         />
       }
     >
-    <View style={{width: '100%', height: 70, paddingHorizontal: 15,}}>
-      <TouchableOpacity style={{alignSelf: 'flex-end',backgroundColor: Color.theme, marginTop: 20,alignItems: 'center', justifyContent: 'center',flexDirection: 'row', borderWidth: 1, borderColor: Color.text, width: '25%', borderRadius: 30, height: 30}}>
-        <Text style={{fontSize: 10}}>Terbaru</Text>
-        <MaterialIcons name={"keyboard-arrow-down"} size={18}/>
-      </TouchableOpacity>
-    </View>
-    <HighlightContentProduct
-        productCategory='EVENT'
-        name='Event'
-        nav='EventScreen'
-        showHeader={false}
-    />
-    <Divider height={20}/>
+      <ScrollView>
+        <View style={{ height: 70, paddingHorizontal: 15,}}>
+          <TouchableOpacity onPress={() => modalOptionsRef.current.open()} style={{alignSelf: 'flex-end',backgroundColor: Color.theme, marginTop: 20,alignItems: 'center', justifyContent: 'center',flexDirection: 'row', borderWidth: 1, borderColor: Color.text, width: '25%', borderRadius: 30, height: 30}}>
+            <Text style={{fontSize: 10}}>Terbaru</Text>
+            <MaterialIcons name={"keyboard-arrow-down"} size={18}/>
+            
+          </TouchableOpacity>
+        </View>
+        <View>
+          <HighlightContentProduct
+              productCategory='EVENT'
+              name='Event'
+              nav='EventScreen'
+              showHeader={false}
+          />
+        </View>
+        <Divider height={20}/>
+      </ScrollView>
+        <ModalFilterEvent
+              ref={modalOptionsRef}
+              selectedValue={filter}
+              onPress={value => onFilterChange(value)}
+          /> 
     </Scaffold>
   )
 }

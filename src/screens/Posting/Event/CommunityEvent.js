@@ -22,13 +22,24 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Feather from 'react-native-vector-icons/Feather'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import ModalFilterEvent from './ModalFilterEvent';
 
 const CommunityEvent = ({navigation, route}) => {
 
     const {Color} = useColor();
+    const modalOptionsRef = useRef();
+    const [filter, setFilter] = useState({name: 'Nama', value: 'NAME'});
 
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
+
+
+
+  const onFilterChange = value => {
+    setFilter(value);
+    modalOptionsRef.current.close();
+  };
+
   return (
     <Scaffold
       fallback={false}
@@ -50,18 +61,26 @@ const CommunityEvent = ({navigation, route}) => {
         />
       }
     >
-      <TouchableOpacity style={{marginHorizontal: 15,alignSelf: 'flex-end',backgroundColor: Color.theme, marginVertical: 20,alignItems: 'center', justifyContent: 'center',flexDirection: 'row', borderWidth: 1, borderColor: Color.text, width: '25%', borderRadius: 30, height: 30}}>
-        <Text style={{fontSize: 10}}>Terbaru</Text>
-        <MaterialIcons name={"keyboard-arrow-down"} size={18}/>
-      </TouchableOpacity>
+      <ScrollView>
+          <TouchableOpacity onPress={() => modalOptionsRef.current.open()} style={{marginHorizontal: 15,alignSelf: 'flex-end',backgroundColor: Color.theme, marginVertical: 20,alignItems: 'center', justifyContent: 'center',flexDirection: 'row', borderWidth: 1, borderColor: Color.text, width: '25%', borderRadius: 30, height: 30}}>
+            <Text style={{fontSize: 10}}>Terbaru</Text>
+            <MaterialIcons name={"keyboard-arrow-down"} size={18}/>
+          </TouchableOpacity>
 
-    <HighlightContentProduct
-        productCategory='EVENT'
-        name='Event'
-        nav='EventScreen'
-        showHeader={false}
-    />
-    <Divider height={20}/>
+        <HighlightContentProduct
+            productCategory='EVENT'
+            name='Event'
+            nav='EventScreen'
+            showHeader={false}
+        />
+        <Divider height={20}/>
+      </ScrollView>
+    <ModalFilterEvent
+              ref={modalOptionsRef}
+              selectedValue={filter}
+              onPress={value => {setFilter(value);
+                modalOptionsRef.current.close();}}
+          /> 
     </Scaffold>
   )
 }

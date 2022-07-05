@@ -22,6 +22,7 @@ import IonIcons from 'react-native-vector-icons/Ionicons'
 import Feather from 'react-native-vector-icons/Feather'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import ModalFilterEvent from './ModalFilterEvent';
 
 const SearchEvent = ({navigation}) => {
 
@@ -31,8 +32,12 @@ const [loadingProps, showLoading, hideLoading] = useLoading();
 const [search, setSearch] = useState(true);
 const [found, setFound] = useState(false);
 
+
+const modalOptionsRef = useRef();
+const [filter, setFilter] = useState({name: 'Nama', value: 'NAME'});
+
   return (
-    <View style={{backgroundColor: Color.theme}}>
+    <ScrollView style={{backgroundColor: Color.theme}}>
       <Pressable 
     style={{flexDirection: 'row', alignItems: 'center', marginVertical: 10,}}
     >
@@ -114,7 +119,7 @@ const [found, setFound] = useState(false);
         <Text style={{textAlign: 'left', fontWeight: 'bold'}}>Gathering</Text>
         <Text style={{textAlign: 'left', fontSize: 8, color: Color.secondary}}>2 hasil ditemukan</Text>
       </View>
-      <TouchableOpacity style={{flexDirection: 'row',alignItems: 'center', justifyContent: 'center',borderWidth: 1, borderColor: Color.text, width: 95, borderRadius: 30, height: 30}}>
+      <TouchableOpacity onPress={() => modalOptionsRef.current.open()} style={{flexDirection: 'row',alignItems: 'center', justifyContent: 'center',borderWidth: 1, borderColor: Color.text, width: 95, borderRadius: 30, height: 30}}>
         <Text style={{fontSize: 10, marginRight: 10}}>Terbaru</Text>
         <MaterialIcons name={'keyboard-arrow-down'} size={15}/>
       </TouchableOpacity>
@@ -152,7 +157,14 @@ const [found, setFound] = useState(false);
         <Text style={{fontSize: 11, color: Color.textInput}}>Kembali</Text>
       </TouchableOpacity>
     </View>}
-</View>
+
+    <ModalFilterEvent
+        ref={modalOptionsRef}
+        selectedValue={filter}
+        onPress={value => {setFilter(value);
+          modalOptionsRef.current.close();}}
+    /> 
+</ScrollView>
   )
 }
 
