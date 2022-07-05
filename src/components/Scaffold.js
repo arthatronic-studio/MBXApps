@@ -133,7 +133,7 @@ const Scaffold = ({
           translucent={translucent}
           backgroundColor={statusBarColor || Color.theme}
           barStyle={
-            Color.colorDominant === 'light' ? 'light-content' : 'dark-content'
+            Color.colorDominant === 'dark' ? 'light-content' : 'dark-content'
           }
         />
       )}

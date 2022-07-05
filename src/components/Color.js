@@ -34,11 +34,10 @@ export const lightModeColors = {
   ...staticColors,
   colorDominant: 'light',
   overflow: 'rgba(0, 0, 0, 0.3)',
-  reverseOverflow: 'rgba(f, f, f, 0.3)',
   theme: '#FFFFFE',
   text: '#0D0006',
   textInput: '#FFFFFF',
-  border: '#DDDDDD',
+  border: '#E0E0E0',
   semiwhite: '#E5E5E5',
 };
 
@@ -46,11 +45,10 @@ export const darkModeColors = {
   ...staticColors,
   colorDominant: 'dark',
   overflow: 'rgba(f, f, f, 0.3)',
-  reverseOverflow: 'rgba(0, 0, 0, 0.3)',
   theme: '#232323',
   text: '#FFFFFF',
   textInput: '#232323',
-  border: '#E0E0E0',
+  border: '#404040',
   semiwhite: '#353535',
 };
 

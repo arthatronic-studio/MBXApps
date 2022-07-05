@@ -59,7 +59,7 @@ export const accessClient = {
     ColorBgParallax:
         useDefaultDarkThemeCode.includes(Config.INITIAL_CODE) ? 'theme' :
         isSabyan ? 'primary' :
-        'primarySoft',
+        'theme',
     UserGeneratedContent:
         isKomoto ? 'ONLY_MEMBER' :
         isSabyan ? 'ONLY_ADMIN' :
