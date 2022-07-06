@@ -35,7 +35,7 @@ const BoxInput = Styled(View)`
 `;
 
 const TextInputNumber = Styled(TextInput)`
-  width: 90%;
+  width: 75%;
   alignContent: flex-start;
   fontFamily: Inter-Regular;
   letterSpacing: 0.23;
@@ -403,21 +403,20 @@ const CardCommunityAdmin = (props) => {
       header={<View />}
       fallback={loading}
       popupProps={popupProps}
-      isLoading={filterLoading}
-    >
-
-      <BottomSection style={{ borderColor: Color.border }}>
-        <BoxInput style={{ backgroundColor: Color.textInput, borderColor: Color.border }}>
+      isLoading={filterLoading}>
+      <BottomSection style={{borderColor: Color.border}}>
+        <BoxInput
+          style={{backgroundColor: Color.textInput, borderColor: Color.border}}>
           <TextInputNumber
             name="text"
-            placeholder='Cari anggota'
+            placeholder="Cari anggota"
             placeholderTextColor={Color.placeholder}
             returnKeyType="done"
             returnKeyLabel="Done"
             blurOnSubmit={false}
-            onBlur={() => { }}
+            onBlur={() => {}}
             error={null}
-            onChangeText={(text) => {
+            onChangeText={text => {
               setSearch(text);
             }}
             style={{
@@ -425,14 +424,28 @@ const CardCommunityAdmin = (props) => {
               color: Color.text,
             }}
           />
-          <CircleSend style={{ backgroundColor: Color.primary }} onPress={() => { }}>
-            <Ionicons name='search' size={16} color={Color.text} />
+          <CircleSend
+            style={{backgroundColor: Color.primary}}
+            onPress={() => {}}>
+            <Ionicons name="search" size={16} color={Color.textButtonInline} />
           </CircleSend>
-          <CircleSend style={{ backgroundColor: Color.primary }} onPress={() => { setSorting(!sorting);
-            dataSorting()}}>
-            <View style={{flexDirection:'row'}}>
-            <Ionicons name='search' size={16} color={Color.text} />
-            <Ionicons name='search' size={16} color={Color.text} />
+          <CircleSend
+            style={{backgroundColor: Color.primary, marginLeft: 5}}
+            onPress={() => {
+              setSorting(!sorting);
+              dataSorting();
+            }}>
+            <View style={{flexDirection: 'row'}}>
+              <Ionicons
+                name="arrow-up"
+                size={16}
+                color={Color.textButtonInline}
+              />
+              <Ionicons
+                name="arrow-down"
+                size={16}
+                color={Color.textButtonInline}
+              />
             </View>
           </CircleSend>
         </BoxInput>
@@ -443,13 +456,13 @@ const CardCommunityAdmin = (props) => {
           keyExtractor={(item, index) => item.id + index.toString()}
           // data={data}
           data={search !== '' ? filterData : data}
-          renderItem={({ item, index }) => renderItem(item, index)}
+          renderItem={({item, index}) => renderItem(item, index)}
           contentContainerStyle={{
             paddingHorizontal: 16,
           }}
         />
       ) : (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <Text>Data belum tersedia</Text>
         </View>
       )}
