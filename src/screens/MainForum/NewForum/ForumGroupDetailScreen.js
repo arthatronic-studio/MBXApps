@@ -236,7 +236,7 @@ const ForumDetailScreen = ({ navigation, route }) => {
     <Scaffold
       header={
         <Header
-          title='Group Forum'
+          title={params.name}
          centerTitle={false}
           
         />

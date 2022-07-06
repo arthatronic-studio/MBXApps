@@ -22,7 +22,7 @@ const { Navigator, Screen } = createMaterialTopTabNavigator();
 
 const ForumGroupScreen = ({ navigation, route }) => {
   const { Color } = useColor();
-
+  const params  = route.params.data;
   const renderPopUpNavigation = () => {
     return (
       <Animated.View
@@ -55,7 +55,7 @@ source={iconPencil}
     <Scaffold
       header={
         <Header
-          title='Group Forum'
+          title={params.name}
          centerTitle={false}
           
         />
@@ -110,18 +110,25 @@ source={iconPencil}
       </Container>
        */}
        <View style={{marginLeft:16}}>
-       <Text style={{fontSize:15,fontWeight:'bold'}}>Bahas Serba-Serbi Seri A</Text>
-       <Text style={{color:Color.gray,fontSize:12}}>19k</Text>
+       <Text style={{fontSize:15,fontWeight:'bold'}}>{params.name}</Text>
+       {/* <Text style={{color:Color.gray,fontSize:12}}>19k</Text> */}
        <Text style={{color:Color.gray,fontSize:13,fontWeight:'bold'}}>Desckripsi</Text>
 
-       <Text>Bahas Serba - Serbi Seri A adalah forum santai buat kau penggemar liga italia.</Text>
+       <Text>{params.description}</Text>
 
        <View style={{flexDirection:'row'}}>
         <Text style={{color:'#F3771D',marginRight:5}} >Selengkapnya</Text>
         <TouchableOpacity
               onPress={() => {
-
-                navigation.navigate('ForumGroupDetailScreen', {});
+                const varData = {
+                  id: params.id,
+                  imageCover:params.imageCover,
+                  name:params.name,
+                  description:params.description,
+                  status:params.status,
+                  date:params.date
+                }
+                navigation.navigate('ForumGroupDetailScreen', {data:varData});
               }}
             >
                <FontAwesome

@@ -258,7 +258,7 @@ const ForumTopicScreen = ({navigation, route}) => {
           status:item.status,
           date:item.createdAt
         }
-        {item.status="PUBLISH" ?  navigation.navigate('ForumGroupDetailScreen',{data:varData}) : '' }
+        {item.status =="PUBLISH" ?  navigation.navigate('ForumGroupScreen',{data:varData}) : '' }
        
     
                 
