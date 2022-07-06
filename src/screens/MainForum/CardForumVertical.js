@@ -5,7 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Share from 'react-native-share';
 import { useSelector } from 'react-redux';
-
+import Entypo from 'react-native-vector-icons/Entypo';
 import ImagesPath from '../../components/ImagesPath';
 import {imageContentItem} from 'assets/images/content-item';
 import {
@@ -85,40 +85,44 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
     const iconSize = 18;
 
     return (
-        <TouchableOpacity
-            onPress={() => onPress(item)}
-            style={{
-                width: width - 32,
-                marginTop: 16,
-                borderRadius: 8,
-                backgroundColor: Color.textInput,
-                ...style,
-            }}
-        >
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16}}>
-                <View
-                    style={{flexDirection: 'row', alignItems: 'center', width: '100%'}}
-                >
-                    <View style={{ flex: 1, aspectRatio: 1, justifyContent: 'center' }}>
-                        <Image 
-                            source={{uri: item.avatar}}
-                            style={{
-                                width: '100%',
-                                aspectRatio: 1,
-                                borderRadius: 50,
-                                backgroundColor: Color.primary,
-                            }}
-                        />
-                    </View>
+      <TouchableOpacity
+        onPress={() => onPress(item)}
+        style={{
+          width: width - 32,
+          marginTop: 16,
+          borderRadius: 8,
+          backgroundColor: Color.textInput,
+          ...style,
+        }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 16,
+          }}>
+          <View
+            style={{flexDirection: 'row', alignItems: 'center', width: '100%'}}>
+            <View style={{flex: 1, aspectRatio: 1, justifyContent: 'center'}}>
+              <Image
+                source={{uri: item.avatar}}
+                style={{
+                  width: '100%',
+                  aspectRatio: 1,
+                  borderRadius: 50,
+                  backgroundColor: Color.primary,
+                }}
+              />
+            </View>
 
-                    <View style={{ flex: 8 }}>
-                        <Padding horizontal={10}>
-                            <Row>
-                                <Text type='bold' align='left' numberOfLines={2}>
-                                    {item.fullname}
-                                </Text>
-                                {/* hide admin post */}
-                                {/* <Image
+            <View style={{flex: 8}}>
+              <Padding horizontal={10}>
+                <Row>
+                  <Text type="bold" align="left" numberOfLines={2}>
+                    {item.fullname}
+                  </Text>
+                  {/* hide admin post */}
+                  {/* <Image
                                     source={ImagesPath.ranking}
                                     style={{
                                         width: 14,
@@ -126,59 +130,81 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
                                         marginLeft: 4,
                                     }}
                                 /> */}
-                            </Row>
+                </Row>
 
-                            <View style={{flexDirection: 'row', marginTop: 4}}>
-                                <Text size={8} align='left'>{dateLabel}</Text>
-                            </View>
-                        </Padding>
-                    </View>
-
-                    {typeof onPressDot === 'function' && <TouchableOpacity
-                        onPress={() => onPressDot()}
-                        style={{ flex: 1, aspectRatio: 1, alignItems: 'flex-end', justifyContent: 'center' }}
-                    >
-                        <MaterialCommunityIcons
-                            name='dots-vertical'
-                            color={Color.text}
-                            size={18}
-                        />
-                    </TouchableOpacity>}
+                <View style={{flexDirection: 'row', marginTop: 4}}>
+                  <Text size={8} align="left">
+                    {dateLabel}
+                  </Text>
                 </View>
+              </Padding>
             </View>
 
-            <View style={{ width: '100%', aspectRatio: 16/9, marginBottom: 8, }}>
-                <Image
-                    source={{uri: item.image}}
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        borderRadius: 8,
-                    }}
+            {typeof onPressDot === 'function' && (
+              <TouchableOpacity
+                onPress={() => onPressDot()}
+                style={{
+                  flex: 1,
+                  aspectRatio: 1,
+                  alignItems: 'flex-end',
+                  justifyContent: 'center',
+                }}>
+                <MaterialCommunityIcons
+                  name="dots-vertical"
+                  color={Color.text}
+                  size={18}
                 />
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
 
-                {/* hide overlay */}
-                {/* <View style={{position: 'absolute', height: '100%', width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: 8}} /> */}
-            </View>
+        <View style={{width: '100%', aspectRatio: 16 / 9, marginBottom: 8}}>
+          <Image
+            source={{uri: item.image}}
+            style={{
+              width: '100%',
+              height: '100%',
+              borderRadius: 8,
+            }}
+          />
 
-            <View style={{ marginBottom: 4 }}>
-                <Text align='left' type='bold' numberOfLines={2}>{item.productName}</Text>
-            </View>
+          {/* hide overlay */}
+          {/* <View style={{position: 'absolute', height: '100%', width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: 8}} /> */}
+        </View>
 
-            <Text align='left' size={12} type='medium' {...extraPropsText}>{item.productDescription}</Text>
+        <View style={{marginBottom: 4}}>
+          <Text align="left" type="bold" numberOfLines={2}>
+            {item.productName}
+          </Text>
+        </View>
 
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 8, paddingVertical: 16}}>
-                <Row>
-                    <TouchableOpacity
-                        onPress={() => onSubmitLike()}
-                        style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}
-                    >
-                        <AntDesign 
-                            name={im_like ? 'heart' : 'hearto'}
-                            size={iconSize}
-                            color={im_like ? Color.error : Color.gray}
-                        />
-                        {/* <Image
+        <Text align="left" size={12} type="medium" {...extraPropsText}>
+          {item.productDescription}
+        </Text>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingHorizontal: 8,
+            paddingVertical: 16,
+          }}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
+            <TouchableOpacity
+              onPress={() => onSubmitLike()}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Entypo
+                name={im_like ? 'arrow-bold-up' : 'arrow-bold-up'}
+                size={iconSize}
+                color={im_like ? Color.error : Color.gray}
+              />
+              {/* <Image
                             source={imageContentItem.heart_active}
                             style={{
                                 width: iconSize,
@@ -186,65 +212,124 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
                                 resizeMode: 'contain',
                             }}
                         /> */}
-                        <Text size={14} align='left' color={Color.gray} style={{marginLeft: 10}}>{like}</Text>
-                    </TouchableOpacity>
+              <Text
+                size={14}
+                align="left"
+                color={Color.gray}
+                style={{marginLeft: 10}}>
+                {like}
+              </Text>
+            </TouchableOpacity>
 
-                    <Divider width={24} />
-
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                        <Image
-                            source={imageContentItem.comment}
+            <Divider width={54} />
+            <TouchableOpacity
+              onPress={() => onSubmitLike()}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Entypo
+                name={!im_like ? 'arrow-bold-down' : 'arrow-bold-down'}
+                size={iconSize}
+                color={!im_like ? Color.error : Color.gray}
+              />
+              {/* <Image
+                            source={imageContentItem.heart_active}
                             style={{
                                 width: iconSize,
                                 height: iconSize,
                                 resizeMode: 'contain',
                             }}
-                        />
-                        <Text size={14} align='left' color={Color.gray} style={{marginLeft: 10}}>{item.comment}</Text>
-                    </View>
-                </Row>
+                        /> */}
+              <Text
+                size={14}
+                align="left"
+                color={Color.gray}
+                style={{marginLeft: 10}}>
+                {like}
+              </Text>
+            </TouchableOpacity>
 
-                <Row>
-                    <TouchableOpacity
-                        disabled
-                        style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}
-                    >
-                        <Image
-                            source={imageContentItem.view}
-                            style={{
-                                width: iconSize,
-                                height: iconSize,
-                                resizeMode: 'contain',
-                            }}
-                        />
-                        <Text size={14} align='left' color={Color.gray} style={{marginLeft: 10}}>{item.view}</Text>
-                    </TouchableOpacity>
+            <Divider width={54} />
 
-                    <Divider width={24} />
-
-                    <TouchableOpacity
-                        onPress={async() => {
-                            await Share.open({
-                                url: item.share_link,
-                            });
-                        }}
-                        style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}
-                    >
-                        <Image
-                            source={imageContentItem.share}
-                            style={{
-                                width: iconSize + 2,
-                                height: iconSize + 2,
-                                resizeMode: 'contain',
-                            }}
-                        />
-                    </TouchableOpacity>
-                </Row>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Image
+                source={imageContentItem.comment}
+                style={{
+                  width: iconSize,
+                  height: iconSize,
+                  resizeMode: 'contain',
+                }}
+              />
+              <Text
+                size={14}
+                align="left"
+                color={Color.gray}
+                style={{marginLeft: 10}}>
+                {item.comment}
+              </Text>
             </View>
 
-            <Line color={Color.border} width={width} />
-        </TouchableOpacity>
-    )
+            <Divider width={54} />
+
+            <TouchableOpacity
+              disabled
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Image
+                source={imageContentItem.view}
+                style={{
+                  width: iconSize,
+                  height: iconSize,
+                  resizeMode: 'contain',
+                }}
+              />
+              <Text
+                size={14}
+                align="left"
+                color={Color.gray}
+                style={{marginLeft: 10}}>
+                {item.view}
+              </Text>
+            </TouchableOpacity>
+
+            <Divider width={54} />
+
+            <TouchableOpacity
+              onPress={async () => {
+                await Share.open({
+                  url: item.share_link,
+                });
+              }}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Image
+                source={imageContentItem.share}
+                style={{
+                  width: iconSize + 2,
+                  height: iconSize + 2,
+                  resizeMode: 'contain',
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <Line color={Color.border} width={width} />
+      </TouchableOpacity>
+    );
 }
 
 CardForumVertical.defaultProps = defaultProps;

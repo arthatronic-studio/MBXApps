@@ -52,53 +52,35 @@ source={iconPencil}
     )
   }
   return (
-    <Scaffold
-      header={
-        <Header
-          title={params.name}
-         centerTitle={false}
-          
-        />
-      }
-    >
-
-
+    <Scaffold header={<Header title={params.name} centerTitle={false} />}>
       <Container paddingVertical={16}>
-      
-                    <Container
-                  
-                  width='100%'
-                  height='50%'
-                  paddingHorizontal={0}
-                >
-                  <TouchableOpacity
-                  >
-                    <Image
-                      source={{uri: 'https://i.postimg.cc/Yq0XG2XF/Rectangle-96.png'}}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                       
-                      }}
-                      // resizeMode='stretch'
-                    />
-                  </TouchableOpacity>
-                </Container>
+        <Container width="100%" height="50%" paddingHorizontal={0}>
+          <TouchableOpacity>
+            <Image
+              source={{uri: 'https://i.postimg.cc/Yq0XG2XF/Rectangle-96.png'}}
+              style={{
+                width: '100%',
+                height: '100%',
+              }}
+              // resizeMode='stretch'
+            />
+          </TouchableOpacity>
+        </Container>
+      </Container>
+      <Image
+        source={{
+          uri: 'https://i.postimg.cc/mr5FQWfb/unsplash-6-Hqv-Y1-E7-NI.png',
+        }}
+        style={{
+          width: '20%',
+          height: '10%',
+          marginTop: -230,
+          marginLeft: 10,
+          borderRadius: 50,
+        }}
+        // resizeMode='stretch'
+      />
 
-       </Container>
-       <Image
-                      source={{uri: 'https://i.postimg.cc/mr5FQWfb/unsplash-6-Hqv-Y1-E7-NI.png'}}
-                      style={{
-                        width: '20%',
-                        height: '10%',
-                        marginTop:-230,
-                        marginLeft:10,
-                        borderRadius:50,
-                       
-                      }}
-                      // resizeMode='stretch'
-                    />
-       
       {/* <Container marginTop={0}>
         <SearchBar
           type='select'
@@ -109,67 +91,64 @@ source={iconPencil}
         />
       </Container>
        */}
-       <View style={{marginLeft:16}}>
-       <Text style={{fontSize:15,fontWeight:'bold'}}>{params.name}</Text>
-       {/* <Text style={{color:Color.gray,fontSize:12}}>19k</Text> */}
-       <Text style={{color:Color.gray,fontSize:13,fontWeight:'bold'}}>Desckripsi</Text>
+      <View style={{marginLeft: 16}}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={{fontSize: 15, fontWeight: 'bold'}}>{params.name}</Text>
+          <AntDesign name="pushpin" color="#F3771D" size={25} style={{ marginRight:18}} />
+        </View>
 
-       <Text>{params.description}</Text>
+        <Text style={{color: Color.gray, fontSize: 14, marginBottom: 12}}>
+          19k Thread
+        </Text>
+        <Text style={{color: Color.gray, fontSize: 13, fontWeight: 'bold'}}>
+          Desckripsi
+        </Text>
 
-       <View style={{flexDirection:'row'}}>
-        <Text style={{color:'#F3771D',marginRight:5}} >Selengkapnya</Text>
-        <TouchableOpacity
-              onPress={() => {
-                const varData = {
-                  id: params.id,
-                  imageCover:params.imageCover,
-                  name:params.name,
-                  description:params.description,
-                  status:params.status,
-                  date:params.date
-                }
-                navigation.navigate('ForumGroupDetailScreen', {data:varData});
-              }}
-            >
-               <FontAwesome
-                          name="angle-down"
-                          color='#F3771D'
-                          size={30}
-                        />
-            </TouchableOpacity>
-       </View>
-       
+        <Text>{params.description}</Text>
 
-       </View>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={{color: '#F3771D', marginRight: 5}}>Selengkapnya</Text>
+          <TouchableOpacity
+            onPress={() => {
+              const varData = {
+                id: params.id,
+                imageCover: params.imageCover,
+                name: params.name,
+                description: params.description,
+                status: params.status,
+                date: params.date,
+              };
+              navigation.navigate('ForumGroupDetailScreen', {data: varData});
+            }}>
+            <FontAwesome name="angle-down" color="#F3771D" size={30} />
+          </TouchableOpacity>
+        </View>
+      </View>
       <Navigator
         initialRouteName="TabNewPost"
         tabBarOptions={{
           activeTintColor: Color.text,
           inactiveColor: Color.border,
-          labelStyle: { fontSize: 12, fontWeight: 'bold' },
+          labelStyle: {fontSize: 12, fontWeight: 'bold'},
           style: {
             backgroundColor: Color.textInput,
           },
-          labelStyle: { textTransform: 'none' },
-          indicatorStyle: { backgroundColor: Color.primary },
+          labelStyle: {textTransform: 'none'},
+          indicatorStyle: {backgroundColor: Color.primary},
         }}
-        screenOptions={{
-          
-        }}
-      >
+        screenOptions={{}}>
         <Screen
           name="TabNewPost"
           component={TabForumNewPost}
-          options={{ tabBarLabel: 'Beranda' }}
+          options={{tabBarLabel: 'Thread'}}
         />
         <Screen
           name="TabMyPost"
           component={TabForumMyPost}
-          options={{ tabBarLabel: 'Postingan Saya' }}
+          options={{tabBarLabel: 'Postinganku'}}
         />
       </Navigator>
-     { renderPopUpNavigation()}
-      
+      {renderPopUpNavigation()}
     </Scaffold>
   );
 }

@@ -126,25 +126,50 @@ const ModalContentOptions = forwardRef((props, ref) => {
     },
     {
       id: 1,
+      name: 'Bagikan',
+      color: Color.text,
+      onPress: () => {
+        if (moduleType === 'FORUM') {
+
+          // setModalInputText(true);
+        } else {
+          // setModalInputText(true);
+        }
+      },
+    },
+    {
+      id: 3,
       name: 'Report',
       color: Color.error,
       onPress: () => {
-        if(moduleType === 'FORUM'){
-          navigation.navigate('ForumReport', {
-            
-          });
+        if (moduleType === 'FORUM') {
+          navigation.navigate('ForumReport', {});
           // setModalInputText(true);
-        }else{
+        } else {
           setModalInputText(true);
         }
-        
       },
     },
   ];
+ if (item && item.ownerId) {
+   dataOptions.push({
+     id: 2,
+     name: 'Hapus',
+     color: Color.error,
+     onPress: () => {
+       combinedRef.current.close();
+       // Alert(
+       //   'Block',
+       //   'Apakah Anda yakin akan memblok semua postingan user ini?',
+       //   () => fetchBlockUser(),
+       // );
+     },
+   });
+ }
 
   if (item && item.ownerId) {
     dataOptions.push({
-      id: 2,
+      id: 4,
       name: 'Block User',
       color: Color.error,
       onPress: () => {
@@ -157,7 +182,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
       },
     });
   }
-
+ 
   return (
     <>
       <ModalListAction

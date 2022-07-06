@@ -4,7 +4,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import moment from 'moment';
 import { ModalUnlock } from 'src/components';
-import {useLoading, usePopup, useColor} from '@src/components';
+import {useLoading, usePopup, useColor, Header} from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
 import {Container, Divider} from '@src/styled';
@@ -233,113 +233,122 @@ const ForumTopicScreen = ({navigation, route}) => {
       fallback={false}
       empty={false}
       popupProps={popupProps}
-   
-      loadingProps={loadingProps}
-    >
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-      >
-       
-     
-       {/* <FlatList
+      header={<Header title="Forum untuk kamu" centerTitle={false} />}
+      loadingProps={loadingProps}>
+      {/* <FlatList
         data={search !== '' ? filterData : itemData.data}
         renderItem={renderItem}
         keyExtractor={item => item.id}
       /> */}
-       <SectionList
-      sections={itemData.data}
-      keyExtractor={(item, index) => item + index}
-      renderItem={({ item }) =>  <TouchableOpacity onPress={()=> {
-        const varData = {
-          id: item.id,
-          imageCover:item.imageCover,
-          name:item.name,
-          description:item.description,
-          status:item.status,
-          date:item.createdAt
-        }
-        {item.status =="PUBLISH" ?  navigation.navigate('ForumGroupScreen',{data:varData}) : '' }
-       
-    
-                
-      }}>
-      <View style={{flexDirection:'row',backgroundColor:Color.grayLight,marginHorizontal:16,marginVertical:8,padding:10,borderRadius:10,justifyContent:'space-between'}}>
-      
-        <View style={{flexDirection:'row'}}>
-        <Image
-          source={{uri: item.image}}
-          style={{
-            borderRadius: 25,
-            width: 50,
-            height: 50,
-            backgroundColor: Color.border,
-            borderColor: Color.primary,
-            marginHorizontal:5
-          }}
-        />
-        <View style={{marginTop:5,justifyContent:'flex-start'}}>
-          <Text type="bold">{item.name}</Text>
-          {/* <Text style={{textAlign: 'left'}}>{item.descriptions}</Text> */}
-        </View>
-        </View>
-        
-        {
-        item.status !== "PUBLISH" ?
-         <Feather onPress={()=>{
-          modalUnlockRef.current.open();
-        }} name='lock' size={20} color={Color.danger} /> : <Text></Text>
-      }
-       
-  
-      </View>
-      </TouchableOpacity> }
-      renderSectionHeader={({ section: { name,imageIcon } }) => (
-        <View style={{flexDirection:'row',marginHorizontal:16}}>
-               <Image
-          source={{uri: imageIcon}}
-          style={{
-            borderRadius: 25,
-            width: 30,
-            height: 30,
-            backgroundColor: Color.border,
-            borderColor: Color.primary,
-            marginHorizontal:5
-          }}
-        />
-          <Text style={{textAlign:'left',fontSize:17,fontWeight:'bold'}}>{name}</Text>
-        </View>
-      )}
-    />
- 
+      <SectionList
+        sections={itemData.data}
+        keyExtractor={(item, index) => item + index}
+        renderItem={({item}) => (
+          <TouchableOpacity
+            onPress={() => {
+              const varData = {
+                id: item.id,
+                imageCover: item.imageCover,
+                name: item.name,
+                description: item.description,
+                status: item.status,
+                date: item.createdAt,
+              };
+              {
+                item.status == 'PUBLISH'
+                  ? navigation.navigate('ForumGroupScreen', {data: varData})
+                  : modalUnlockRef.current.open();
+              }
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                backgroundColor: Color.grayLight,
+                marginHorizontal: 16,
+                marginVertical: 8,
+                padding: 10,
+                borderRadius: 10,
+                justifyContent: 'space-between',
+              }}>
+              <View style={{flexDirection: 'row'}}>
+                <Image
+                  source={{uri: item.image}}
+                  style={{
+                    borderRadius: 25,
+                    width: 50,
+                    height: 50,
+                    backgroundColor: Color.border,
+                    borderColor: Color.primary,
+                    marginHorizontal: 5,
+                  }}
+                />
+                <View style={{marginTop: 5, justifyContent: 'flex-start'}}>
+                  <Text type="bold">{item.name}</Text>
+                  {/* <Text style={{textAlign: 'left'}}>{item.descriptions}</Text> */}
+                </View>
+              </View>
 
-        
-        <Divider />
-      </ScrollView>
+              {item.status !== 'PUBLISH' ? (
+                <Feather
+                  onPress={() => {
+                  
+                  }}
+                  name="lock"
+                  size={20}
+                  color={Color.danger}
+                />
+              ) : (
+                <Text></Text>
+              )}
+            </View>
+          </TouchableOpacity>
+        )}
+        renderSectionHeader={({section: {name, imageIcon}}) => (
+          <View style={{flexDirection: 'row', marginHorizontal: 16}}>
+            <Image
+              source={{uri: imageIcon}}
+              style={{
+                borderRadius: 25,
+                width: 30,
+                height: 30,
+                backgroundColor: Color.border,
+                borderColor: Color.primary,
+                marginHorizontal: 5,
+              }}
+            />
+            <Text style={{textAlign: 'left', fontSize: 17, fontWeight: 'bold'}}>
+              {name}
+            </Text>
+          </View>
+        )}
+      />
+
+      <Divider />
       <ModalContentOptions
         ref={modalOptionsRef}
         // isOwner={user && user.userId === item.ownerId}
         item={item}
       />
       <ModalUnlock
-          onClose={() => setShowSection(!showSection)}
-          ref={modalUnlockRef}
-          data={[
-            // hide options chat
-            {
-              id: 0,
-              name: 'Minta Bergabung',
-              color: Color.text,
-              onPress: () => {
-                navigation.navigate('ForumGroupScreen')
-                showLoading('wait', 'Permintaan kamu sedang di tinjau oleh moderator');
-                setShowSection(!showSection);
-               
-              },
+        onClose={() => setShowSection(!showSection)}
+        ref={modalUnlockRef}
+        data={[
+          // hide options chat
+          {
+            id: 0,
+            name: 'Minta Bergabung',
+            color: Color.text,
+            onPress: () => {
+              navigation.navigate('ForumGroupScreen');
+              showLoading(
+                'wait',
+                'Permintaan kamu sedang di tinjau oleh moderator',
+              );
+              setShowSection(!showSection);
             },
-            
-          ]}
-        />
-      
+          },
+        ]}
+      />
     </Scaffold>
   );
 };

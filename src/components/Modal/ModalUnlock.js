@@ -88,7 +88,8 @@ const ModalUnlock = forwardRef((props, ref) => {
         backgroundColor: Color.theme,
       }}
       onClose={() => onClose()}>
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
+        <Text type='bold' style={{fontSize:16,marginTop:5 }}>Forum ini bersifat privasi </Text>
         <ScrollView>{data.length > 0 ? renderContent() : children}</ScrollView>
       </View>
     </Modalize>
