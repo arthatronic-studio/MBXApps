@@ -35,7 +35,7 @@ const DATA_POPULER = [
   },
   {
     id: 2,
-    title: 'Tribesocial',
+    title: 'Tribes Social',
     subtitle: 'Gaming Hub & 1 lainnya',
   },
 ];

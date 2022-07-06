@@ -41,7 +41,7 @@ const ListForumVertical = ({ componentType, data, loading, title, showAll, onPre
     return (
         <Scaffold
             showHeader={false}
-            style={{paddingBottom: 8, paddingTop: showHeader ? 0 : 8}}
+            style={{paddingBottom: 8}}
         >
             {showHeader && <View style={{width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12, paddingTop: 24, paddingHorizontal: 16}}>
                 <Text type='semibold' size={12}>{title}</Text>
@@ -57,7 +57,7 @@ const ListForumVertical = ({ componentType, data, loading, title, showAll, onPre
                     key={componentType}
                     keyExtractor={(item, index) => item.toString() + index}
                     data={data}
-                    contentContainerStyle={{paddingHorizontal: 16, paddingTop: 16}}
+                    contentContainerStyle={{paddingHorizontal: 16}}
                     renderItem={({ item, index }) => {
                         return (
                             <CardForumVertical

@@ -2,9 +2,9 @@ import { accessClient } from 'src/utils/access_client';
 
 const indexing = {
     'TRIBESASIA': [
-        {imageAsset: require('./icon-1.png'), title: 'Smart Technology', subTitle: 'Tribesocial is an intelligent community platform that delivers personalized content recommendations to every user based on their interests.'},
-        {imageAsset: require('./icon-2.png'), title: 'Diversified Community', subTitle: 'Users are actively engaged on Tribesocial, they like to express, discuss, show their attitudes and share content with others.'},
-        {imageAsset: require('./icon-3.png'), title: 'High Quality Users', subTitle: 'Users are loyal to our platform, they use Tribesocial frequently.'},
+        {imageAsset: require('./icon-1.png'), title: 'Smart Technology', subTitle: 'Tribes Social is an intelligent community platform that delivers personalized content recommendations to every user based on their interests.'},
+        {imageAsset: require('./icon-2.png'), title: 'Diversified Community', subTitle: 'Users are actively engaged on Tribes Social, they like to express, discuss, show their attitudes and share content with others.'},
+        {imageAsset: require('./icon-3.png'), title: 'High Quality Users', subTitle: 'Users are loyal to our platform, they use Tribes Social frequently.'},
     ],
     'TRIBESXSABYAN': [
         {imageAsset: require('./sabyan/icon-1.png'), title: 'Selamat Datang di Aplikasi Sabyan', subTitle: ''},

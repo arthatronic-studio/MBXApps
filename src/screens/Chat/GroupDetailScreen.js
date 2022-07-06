@@ -473,7 +473,7 @@ const GroupDetailScreen = ({ navigation, route }) => {
                       maxWidth: width - 70,
                       paddingHorizontal: 8,
                       paddingVertical: 8,
-                      backgroundColor: '#E8F3FD',
+                      backgroundColor: Color.secondary,
                       borderRadius: 8,
                       borderBottomLeftRadius: 0,
                       alignItems: 'flex-start',

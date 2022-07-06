@@ -68,7 +68,7 @@ const Chat = ({navigation}) => {
                         borderRadius: 30,
                     }}
                 >
-                    <AntDesign name={'message1'} size={27} style={{color: Color.textInput}} />
+                    <AntDesign name={'message1'} size={27} style={{color: Color.textButtonInline}} />
                 </Pressable>
             }
         >

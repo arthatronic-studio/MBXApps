@@ -132,7 +132,7 @@ const NewsDetail = ({navigation, route}) => {
             style={{
               width: '100%',
               height: '100%',
-              backgroundColor: Color.reverseOverflow,
+              backgroundColor: Color.theme,
               position: 'absolute',
             }} /> */}
 

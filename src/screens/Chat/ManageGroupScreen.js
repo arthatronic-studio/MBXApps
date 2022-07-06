@@ -185,7 +185,7 @@ const ManageGroupScreen = ({ navigation, route }) => {
                 <Feather
                   size={16}
                   name={'camera'}
-                  color={Color.theme}
+                  color={Color.textButtonInline}
                   style={{ alignSelf: 'center' }}
                 />
               </TouchableOpacity>

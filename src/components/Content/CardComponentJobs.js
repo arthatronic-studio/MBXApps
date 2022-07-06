@@ -104,13 +104,13 @@ const CardComponentJobs = ({ productCategory, item, numColumns, onPress, horizon
                     {
                         width: width / numColumns - 16,
                         paddingHorizontal: 8,
-                        marginBottom: 16
+                        marginTop: 16,
                     },
                     style,
                 ]}
             >
 
-                <View style={{ width: '100%', padding: 16, borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle }}>
+                <View style={{ width: '100%', borderRadius: 4, backgroundColor: Color.textInput, padding: 16, ...shadowStyle, elevation: 2 }}>
                     <View style={{ flexDirection: 'row' }}>
                         <View style={{ width: '20%' }}>
                             <Image
@@ -159,7 +159,7 @@ const CardComponentJobs = ({ productCategory, item, numColumns, onPress, horizon
                         <Text size={12} color={Color.gray} style={{ marginHorizontal: 10 }}>Rp10.000.000 - Rp15.000.000</Text>
                     </View> */}
 
-                    <View style={{ borderBottomColor: Color.border, borderBottomWidth: 1, marginVertical: 12 }} />
+                    <View style={{ borderBottomColor: Color.border, borderBottomWidth: 1, marginVertical: 8 }} />
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text size={12} color={Color.info}>{item.like} Pelamar</Text>

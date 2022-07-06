@@ -140,13 +140,13 @@ const HighlightContentProduct = (props) => {
         if (horizontal) {
             if (typeof extraProps.numColumns !== 'undefined' && extraProps.numColumns === 2) {
                 return (
-                    <Row
-                        style={{flexWrap: 'wrap', paddingHorizontal: 8, ...style}}
+                    <View
+                        style={{flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 8, ...style}}
                     >
                         {itemData.data.map((item, index) =>
                             renderCardContent(item, index, false)
                         )}
-                    </Row>
+                    </View>
                 )
             }
 
@@ -155,13 +155,13 @@ const HighlightContentProduct = (props) => {
                     horizontal={horizontal}
                     showsHorizontalScrollIndicator={false}
                 >
-                    <Row
-                        style={{flexWrap: 'wrap', paddingHorizontal: 8, ...style}}
+                    <View
+                        style={{flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 8, ...style}}
                     >
                         {itemData.data.map((item, index) =>
                             renderCardContent(item, index, true)
                         )}
-                    </Row>
+                    </View>
                 </ScrollView>
             )
         }
@@ -181,7 +181,12 @@ const HighlightContentProduct = (props) => {
     }
 
     return (
-        <View style={{paddingVertical: 12}}>
+        <View
+            style={{
+                paddingTop: 8,
+                paddingBottom: ['POSTING', 'NEARBY_PLACE'].includes(productCategory) ? 16 : 8
+            }}
+        >
             {showHeader && renderHeader()}
 
             {itemData.loading ?

@@ -109,12 +109,13 @@ const Pagination = ({
                 style={[
                     styles.paginationIndicator,
                     {
-                        color: Color.border,
+                        borderColor: Color.primary,
                         position: 'absolute',
                         transform: [{ translateX: translateX }],
                     },
                 ]}
             />
+            
             {data.map((item, idx) => {
                 return (
                     <View key={idx} style={styles.paginationDotContainer}>

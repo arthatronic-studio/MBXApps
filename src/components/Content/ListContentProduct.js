@@ -86,7 +86,7 @@ const ListContentProduct = ({ userProfileId, productCategory, name, horizontal, 
     if (horizontal) extraProps = {};
 
     return (
-        <View style={{paddingBottom: 8}}>
+        <View style={{paddingBottom: 16}}>
             {itemData.loading ?
                 renderSkeleton()
             :
@@ -95,7 +95,7 @@ const ListContentProduct = ({ userProfileId, productCategory, name, horizontal, 
                     data={itemData.data}
                     horizontal={horizontal}
                     showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{paddingVertical: 16, paddingHorizontal: 8, ...style}}
+                    contentContainerStyle={{paddingBottom: 16, paddingHorizontal: 8, ...style}}
                     onEndReachedThreshold={0.3}
                     onEndReached={() => setItemData({ ...itemData, loadNext: true })}
                     { ...extraProps }

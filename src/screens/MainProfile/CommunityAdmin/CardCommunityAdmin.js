@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {View, FlatList, TextInput, Image} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, FlatList, TextInput, Image } from 'react-native';
 import {
   Text,
   TouchableOpacity,
@@ -9,14 +9,46 @@ import {
   Alert,
 } from '@src/components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useNavigation, useIsFocused} from '@react-navigation/core';
+import { useNavigation, useIsFocused } from '@react-navigation/core';
 
 import Client from '@src/lib/apollo';
-import {queryJoinCommunityManage} from '@src/lib/query/joinCommunityManage';
-import {joinCommunityMember} from 'src/lib/query/joinCommunityMember';
-import {Divider} from 'src/styled';
+import { queryJoinCommunityManage } from '@src/lib/query/joinCommunityManage';
+import { joinCommunityMember } from 'src/lib/query/joinCommunityMember';
+import { Divider } from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
 import ModalInputText from 'src/components/ModalInputText';
+import Styled from 'styled-components';
+
+const BottomSection = Styled(View)`
+  width: 100%;
+  padding: 16px;
+  flexDirection: row;
+  alignItems: center;
+  borderTopWidth: 0.5px;
+`;
+const BoxInput = Styled(View)`
+  width: 100%;
+  padding: 4px 16px 4px 16px;
+  borderRadius: 32px;
+  borderWidth: 0.5px;
+  flexDirection: row;
+`;
+
+const TextInputNumber = Styled(TextInput)`
+  width: 75%;
+  alignContent: flex-start;
+  fontFamily: Inter-Regular;
+  letterSpacing: 0.23;
+  height: 40px;
+`;
+
+const CircleSend = Styled(TouchableOpacity)`
+  width: 40px;
+  height: 40px;
+  borderRadius: 20px;
+  justifyContent: center;
+  alignItems: center;
+`;
 
 const CardCommunityAdmin = (props) => {
   const [data, setData] = useState([]);
@@ -24,16 +56,46 @@ const CardCommunityAdmin = (props) => {
   const [modalInputText, setModalInputText] = useState(false);
 
   const [popupProps, showPopup] = usePopup();
-  const {Color} = useColor();
+  const { Color } = useColor();
   const isFocused = useIsFocused();
   const navigation = useNavigation();
+  const [filterData, setFilterData] = useState([]);
+  const [search, setSearch] = useState('');
+  const [filterLoading, setFilterLoading] = useState(false);
+  const [sorting, setSorting] = useState(false);
 
+  console.log('ini data',data);
   useEffect(() => {
     if (isFocused) {
       fetchData();
     }
   }, [isFocused]);
 
+  useEffect(() => {
+    const timeout =
+      search !== ''
+        ? setTimeout(() => {
+          fetchSearchNameMember();
+        }, 500)
+        : null;
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [search]);
+
+
+  const dataSorting = () =>{
+   
+    if(sorting){
+      const sort = data.sort((a, b) => a.userDetail.firstName.localeCompare(b.userDetail.firstName))
+      setData(sort);
+
+    }else{
+      const sort = data.sort((a, b) => b.userDetail.firstName.localeCompare(a.userDetail.firstName))
+      setData(sort);
+    }
+  }
   const fetchData = () => {
     let status = 2;
     if (props.type === 'newAnggota') {
@@ -42,6 +104,7 @@ const CardCommunityAdmin = (props) => {
       status = 1;
     }
 
+
     Client.query({
       query: joinCommunityMember,
       variables: {
@@ -49,6 +112,7 @@ const CardCommunityAdmin = (props) => {
       },
     })
       .then((res) => {
+
         setData(res.data.joinCommunityMember);
         setLoading(false);
       })
@@ -61,9 +125,11 @@ const CardCommunityAdmin = (props) => {
   const fetchJoinCommunityManage = (id, userId, status, reason_reject) => {
     setLoading(true);
 
+
+
     let resMessage =
       status === 1 ? 'Diterima' :
-      status === 2 ? 'Ditolak' : 'Dihapus';
+        status === 2 ? 'Ditolak' : 'Dihapus';
 
     Client.query({
       query: queryJoinCommunityManage,
@@ -97,7 +163,6 @@ const CardCommunityAdmin = (props) => {
 
   const fetchUpdateMember = item => {
     setLoading(true);
-
     Client.query({
       query: queryJoinCommunityManage,
       variables: {
@@ -117,11 +182,48 @@ const CardCommunityAdmin = (props) => {
         setLoading(false);
       });
   };
+  const fetchSearchNameMember = () => {
+    setFilterLoading(true);
+    let status = 2;
+    if (props.type === 'newAnggota') {
+      status = 0;
+    } else if (props.type === 'Anggota') {
+      status = 1;
+    }
+    const variables = {
+      status: status,
+      name: search
+    };
 
+    Client.query({
+      query: joinCommunityMember,
+      variables,
+    })
+      .then(res => {
+        console.log('res search', res);
+
+        const data = res.data.joinCommunityMember;
+
+        let newArr = [];
+
+        if (data) {
+          newArr = data;
+        }
+
+        setFilterData(newArr);
+        setFilterLoading(false);
+      })
+      .catch(err => {
+        console.log('err search', err);
+
+        setFilterData([]);
+        setFilterLoading(false);
+      });
+  };
   const renderItem = (item, index) => {
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate('CardDetail', {item, props, isAdminPage: true})}
+        onPress={() => navigation.navigate('CardDetail', { item, props, isAdminPage: true })}
         style={{
           borderWidth: 0.5,
           borderRadius: 8,
@@ -162,7 +264,7 @@ const CardCommunityAdmin = (props) => {
           <Divider height={12} />
 
           {props.type === 'Anggota' ? (
-            <View style={{flexDirection: 'row', width: '100%', height: 45}}>
+            <View style={{ flexDirection: 'row', width: '100%', height: 45 }}>
               <TextInput
                 placeholder={item.userDetail.idNumber || 'Input Nomor ID'}
                 placeholderTextColor={Color.gray}
@@ -216,7 +318,7 @@ const CardCommunityAdmin = (props) => {
               </View>
             </View>
           ) : (
-            <View style={{flexDirection: 'row', width: '100%', height: 33}}>
+            <View style={{ flexDirection: 'row', width: '100%', height: 33 }}>
               <TouchableOpacity
                 onPress={() => {
                   Alert(
@@ -301,14 +403,62 @@ const CardCommunityAdmin = (props) => {
       header={<View />}
       fallback={loading}
       popupProps={popupProps}
-    >
+      isLoading={filterLoading}>
+      <BottomSection style={{borderColor: Color.border}}>
+        <BoxInput
+          style={{backgroundColor: Color.textInput, borderColor: Color.border}}>
+          <TextInputNumber
+            name="text"
+            placeholder="Cari anggota"
+            placeholderTextColor={Color.placeholder}
+            returnKeyType="done"
+            returnKeyLabel="Done"
+            blurOnSubmit={false}
+            onBlur={() => {}}
+            error={null}
+            onChangeText={text => {
+              setSearch(text);
+            }}
+            style={{
+              backgroundColor: Color.textInput,
+              color: Color.text,
+            }}
+          />
+          <CircleSend
+            style={{backgroundColor: Color.primary}}
+            onPress={() => {}}>
+            <Ionicons name="search" size={16} color={Color.textButtonInline} />
+          </CircleSend>
+          <CircleSend
+            style={{backgroundColor: Color.primary, marginLeft: 5}}
+            onPress={() => {
+              setSorting(!sorting);
+              dataSorting();
+            }}>
+            <View style={{flexDirection: 'row'}}>
+              <Ionicons
+                name="arrow-up"
+                size={16}
+                color={Color.textButtonInline}
+              />
+              <Ionicons
+                name="arrow-down"
+                size={16}
+                color={Color.textButtonInline}
+              />
+            </View>
+          </CircleSend>
+        </BoxInput>
+      </BottomSection>
+
       {data.length > 0 ? (
         <FlatList
           keyExtractor={(item, index) => item.id + index.toString()}
-          data={data}
+          // data={data}
+          data={search !== '' ? filterData : data}
           renderItem={({item, index}) => renderItem(item, index)}
           contentContainerStyle={{
-            padding: 16,
+            paddingHorizontal: 16,
           }}
         />
       ) : (

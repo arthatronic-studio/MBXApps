@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "650083720470",
+    "firebase_url": "https://tribes-social-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "tribes-social",
     "storage_bucket": "tribes-social.appspot.com"
   },
@@ -29,6 +30,49 @@
             {
               "client_id": "650083720470-4aiu0iq4ossoa9b2orusi91lopb32tkc.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "650083720470-50ri3k6fka7ucicrrp3mil1pue3l70mp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tribes"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:650083720470:android:ca8a997f1a92b26c848437",
+        "android_client_info": {
+          "package_name": "com.tribessocial"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "650083720470-4aiu0iq4ossoa9b2orusi91lopb32tkc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_S_7U5Mr0E5FSnUK4RoaOW6epSlSnKkI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "650083720470-4aiu0iq4ossoa9b2orusi91lopb32tkc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "650083720470-50ri3k6fka7ucicrrp3mil1pue3l70mp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tribes"
+              }
             }
           ]
         }

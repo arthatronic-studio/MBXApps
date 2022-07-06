@@ -41,16 +41,14 @@ const MemberRank = props => {
 
   return (
     <Container
-      padding={10}
+      paddingHorizontal={10}
       marginHorizontal={16}
-      marginBottom={12}
-      radius={8}
       color={Color.theme}
-      style={{flex: 1, ...shadowStyle}}
+      style={{flex: 1}}
     >
       <Row style={{flex: 1}}>
         <View style={{flex: 1, paddingRight: 4}}>
-          <Text size={10} align='left' color="#999999">
+          <Text size={10} align='left'>
             Sambut Member Baru
           </Text>
           <Divider height={4} />
@@ -75,7 +73,7 @@ const MemberRank = props => {
               <Text size={14} type="bold" numberOfLines={1}>
                 {pemula.fullname}
               </Text>
-              <Text size={10} color="#4579E6">
+              <Text size={10} color={Color.primarySoft}>
                 {pemula.rank}
               </Text>
             </View>
@@ -83,7 +81,7 @@ const MemberRank = props => {
         </View>
 
         <View style={{flex: 1, paddingLeft: 4}}>
-          <Text size={10} align='left' color="#999999">
+          <Text size={10} align='left'>
             Member Terbaik Bulan Ini
           </Text>
           <Divider height={4} />
@@ -108,7 +106,7 @@ const MemberRank = props => {
               <Text size={14} type="bold" numberOfLines={1}>
                 {veteran.fullname}
               </Text>
-              <Text size={10} color="#4579E6">
+              <Text size={10} color={Color.primaryDark}>
                 {veteran.rank}
               </Text>
             </View>

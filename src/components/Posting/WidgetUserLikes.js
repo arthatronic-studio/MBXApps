@@ -18,9 +18,10 @@ const avatarDefault = 'https://storage.googleapis.com/sabyan-prod-music-box/imag
 const defaultProps = {
     title: '',
     refresh: false,
+    contentPosition: 'left',
 };
 
-const WidgetUserLikes = ({ id, title, refresh }) => {
+const WidgetUserLikes = ({ id, title, refresh, contentPosition }) => {
     const { Color } = useColor();
     const { width } = useWindowDimensions();
 
@@ -110,6 +111,10 @@ const WidgetUserLikes = ({ id, title, refresh }) => {
                 }}
             >
                 {previewData.map((item, idx) => {
+                    let extraProps = { left: 18 * idx };
+                    if (contentPosition === 'right') {
+                        extraProps = {right: 18 * idx,}
+                    }
                     return (
                         <View
                             key={idx}
@@ -122,7 +127,7 @@ const WidgetUserLikes = ({ id, title, refresh }) => {
                                 justifyContent: 'center',
                                 backgroundColor: Color.textInput,
                                 position: 'absolute',
-                                left: 18 * idx,
+                                ...extraProps,
                             }}
                         >
                             <Image

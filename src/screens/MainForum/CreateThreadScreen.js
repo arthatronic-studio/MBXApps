@@ -244,7 +244,7 @@ const CreateThreadScreen = (props) => {
                         onPress={() => {
                             setModalImagePicker(true);
                         }}
-                        style={{width: '100%', height: 70, borderRadius: 4, marginTop: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
+                        style={{width: '100%', height: 70, borderRadius: 4, marginTop: 16, backgroundColor: Color.secondary, alignItems: 'center', justifyContent: 'center'}}
                     >
                         <Entypo name='folder-images' size={22} style={{marginBottom: 4}} />
                         <Text size={10}>Pilih gambar</Text>

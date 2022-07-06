@@ -61,13 +61,13 @@ const TabBarComponent = (props) => {
     const getIconMenu = (iconType, iconName, isRouteActive) => {
         switch(iconType) {
             case 'MaterialIcons':
-                return <MaterialIcons name={iconName} size={32} color={isRouteActive ? Color.textInput : Color.secondary} />
+                return <MaterialIcons name={iconName} size={32} color={isRouteActive ? Color.textButtonInline : Color.text} />
             case 'AntDesign':
-                return <AntDesign name={iconName} size={28} color={isRouteActive ? Color.textInput : Color.secondary} />
+                return <AntDesign name={iconName} size={28} color={isRouteActive ? Color.textButtonInline : Color.text} />
             case 'Ionicons': 
-                return <Ionicons name={iconName} size={28} color={isRouteActive ? Color.textInput : Color.secondary} />
+                return <Ionicons name={iconName} size={28} color={isRouteActive ? Color.textButtonInline : Color.text} />
             case 'Entypo':
-                return <Entypo name={iconName} size={30} color={isRouteActive ? Color.textInput : Color.secondary} />
+                return <Entypo name={iconName} size={30} color={isRouteActive ? Color.textButtonInline : Color.text} />
         }
     }
 
@@ -146,7 +146,7 @@ const TabBarComponent = (props) => {
                                     style={{
                                         fontSize: 14,
                                         fontWeight: '500',
-                                        color: isRouteActive ? Color.textInput : Color.secondary,
+                                        color: isRouteActive ? Color.textButtonInline : Color.text,
                                         opacity: route.ref,
                                     }}
                                 >

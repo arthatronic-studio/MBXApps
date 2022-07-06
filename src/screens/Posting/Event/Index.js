@@ -8,12 +8,15 @@ import Scaffold from '@src/components/Scaffold';
 import { Row} from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
 import ListContentProduct from 'src/components/Content/ListContentProduct';
+import { useIsFocused } from '@react-navigation/native';
 
 const EventScreen = ({navigation, route}) => {
   const { title, userProfileId } = route.params;
+  const isMainScreen =  route.params && route.params.routeIndex;
 
   const user = useSelector(state => state['user.auth'].login.user);
   const {Color} = useColor();
+  const isFocused = useIsFocused();
 
   let canGeneratedContent = accessClient.UserGeneratedContent === 'ALL_USER';
   if (accessClient.UserGeneratedContent === 'ONLY_ADMIN' && user && user.isDirector === 1) canGeneratedContent = true;
@@ -24,6 +27,7 @@ const EventScreen = ({navigation, route}) => {
       header={
         <Header
           title={title}
+          showLeftButton={!isMainScreen}
           actions={
             canGeneratedContent &&
             <Row justify="center" align="center">
@@ -52,11 +56,11 @@ const EventScreen = ({navigation, route}) => {
         />
       }
     >
-      <ListContentProduct
+      {isFocused && <ListContentProduct
         userProfileId={userProfileId}
         productCategory='EVENT'
         name='Event'
-      />
+      />}
     </Scaffold>
   );
 };

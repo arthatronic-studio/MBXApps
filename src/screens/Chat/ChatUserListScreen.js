@@ -33,7 +33,6 @@ const BottomSection = Styled(View)`
 
 const BoxInput = Styled(View)`
   width: 100%;
-  backgroundColor: #FFFFFF;
   padding: 4px 16px 4px 16px;
   borderRadius: 32px;
   borderWidth: 0.5px;
