@@ -62,6 +62,9 @@ const CardCommunityAdmin = (props) => {
   const [filterData, setFilterData] = useState([]);
   const [search, setSearch] = useState('');
   const [filterLoading, setFilterLoading] = useState(false);
+  const [sorting, setSorting] = useState(false);
+
+  console.log('ini data',data);
   useEffect(() => {
     if (isFocused) {
       fetchData();
@@ -81,6 +84,18 @@ const CardCommunityAdmin = (props) => {
     };
   }, [search]);
 
+
+  const dataSorting = () =>{
+   
+    if(sorting){
+      const sort = data.sort((a, b) => a.userDetail.firstName.localeCompare(b.userDetail.firstName))
+      setData(sort);
+
+    }else{
+      const sort = data.sort((a, b) => b.userDetail.firstName.localeCompare(a.userDetail.firstName))
+      setData(sort);
+    }
+  }
   const fetchData = () => {
     let status = 2;
     if (props.type === 'newAnggota') {
@@ -412,6 +427,13 @@ const CardCommunityAdmin = (props) => {
           />
           <CircleSend style={{ backgroundColor: Color.primary }} onPress={() => { }}>
             <Ionicons name='search' size={16} color={Color.text} />
+          </CircleSend>
+          <CircleSend style={{ backgroundColor: Color.primary }} onPress={() => { setSorting(!sorting);
+            dataSorting()}}>
+            <View style={{flexDirection:'row'}}>
+            <Ionicons name='search' size={16} color={Color.text} />
+            <Ionicons name='search' size={16} color={Color.text} />
+            </View>
           </CircleSend>
         </BoxInput>
       </BottomSection>
