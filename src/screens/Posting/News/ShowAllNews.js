@@ -1,15 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  TextInput,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import {View, TextInput, ScrollView, TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 import Config from 'react-native-config';
 import Banner from 'src/components/Banner';
-import {useColor} from '@src/components';
+import {useColor, Text} from '@src/components';
 import Scaffold from '@src/components/Scaffold';
 import {queryBannerList} from 'src/lib/query/banner';
 import {Row, Divider} from 'src/styled';
@@ -34,61 +28,31 @@ const ShowAllNews = ({navigation, route}) => {
           width: '100%',
           height: 60,
           flexDirection: 'row',
+          paddingHorizontal: 16,
         }}>
-        <AntDesign
-          onPress={() => navigation.goBack()}
-          name={'arrowleft'}
-          size={20}
-          style={{marginHorizontal: 12}}
-        />
-        <TouchableOpacity
-          onPress={() => navigation.navigate('SearchArticle')}
-          style={{width: '70%', height: '80%', justifyContent: 'center'}}>
-          <TextInput
-            editable={false}
-            placeholder="Cari berita hari ini . . ."
-            style={{
-              width: '100%',
-              height: '80%',
-              backgroundColor: Color.theme,
-              fontSize: 12,
-              borderRadius: 6,
-              paddingHorizontal: 10,
-            }}></TextInput>
+        <View style={{width: '10%'}}>
           <AntDesign
-            size={14}
-            name={'search1'}
-            style={{
-              position: 'absolute',
-              color: Color.secondary,
-              alignSelf: 'flex-end',
-              right: 10,
-            }}
+            onPress={() => navigation.goBack()}
+            name={'arrowleft'}
+            size={20}
           />
-        </TouchableOpacity>
-        <IonIcons
-          onPress={() => navigation.navigate('Saved')}
-          name={'md-bookmarks-outline'}
-          size={18}
-          style={{marginHorizontal: 12}}
-        />
-        <IonIcons
-          onPress={() =>
-            navigation.navigate('CreateNews', {
-              title,
-              productType: Config.INITIAL_CODE,
-              productCategory: 'ARTIKEL',
-            })
-          }
-          name={'add'}
-          size={24}
-        />
+        </View>
+        <View style={{width: '80%', alignItems: 'center'}}>
+          <Text
+            align="center"
+            type="bold"
+            size={16}
+            letterSpacing={0.23}
+            color={Color.text}>
+            {title}
+          </Text>
+        </View>
       </View>
     );
   };
 
   return (
-    <Scaffold header={<ArticleHeader />} style={{ marginBottom: 32 }}>
+    <Scaffold header={<ArticleHeader />} style={{marginBottom: 32}}>
       <ListContentProductV2
         userProfileId={userProfileId}
         productCategory="ARTIKEL"

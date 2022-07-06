@@ -17,6 +17,8 @@ const propTypes = {
     saved: PropTypes.bool,
     style: PropTypes.object,
     onLoadingEnd: PropTypes.func,
+    orderBy: PropTypes.string,
+    timeStart: PropTypes.string,
 };
 
 const defaultProps = {
@@ -27,10 +29,11 @@ const defaultProps = {
     saved: false,
     style: {},
     orderBy: '',
+    timeStart: '',
     onLoadingEnd: () => {},
 };
 
-const ListContentProductV2 = ({ userProfileId, productCategory, name, horizontal, style, orderBy, onLoadingEnd, saved}) => {
+const ListContentProductV2 = ({ userProfileId, productCategory, name, horizontal, style, orderBy, onLoadingEnd, saved, timeStart}) => {
     const { width } = useWindowDimensions();
     const [itemData, setItemData] = useState(initialItemState);
 
@@ -57,6 +60,9 @@ const ListContentProductV2 = ({ userProfileId, productCategory, name, horizontal
 
         if (orderBy != null && orderBy != ''){
             variables.orderBy = orderBy;
+        }
+        if (timeStart != null && timeStart != ''){
+            variables.timeStart = timeStart;
         }
 
         const result = userProfileId !== null ?

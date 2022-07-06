@@ -232,14 +232,16 @@ const NewsDetail = ({navigation, route}) => {
     const shareOptions = {
       message: value
     }
-
-    Share.open(shareOptions)
-      .then((res) => {
-        if(res.success) fetchContentShare({code: code});
-      })
-      .catch((err) => {
-      err && console.log(err, "err share");
-    });
+    Share.open(shareOptions);
+    fetchContentShare({code: code});
+    // Share.open(shareOptions)
+    //   .then((res) => {
+    //     console.log(res, "res");
+    //     if(res.success) fetchContentShare({code: code});
+    //   })
+    //   .catch((err) => {
+    //   err && console.log(err, "err share");
+    // });
   }
 
   function Capitalize(str) {

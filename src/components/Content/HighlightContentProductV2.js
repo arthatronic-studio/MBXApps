@@ -19,6 +19,7 @@ const propTypes = {
     title: PropTypes.string,
     nav: PropTypes.string,
     timeStart: PropTypes.string,
+    orderBy: PropTypes.string,
     refresh: PropTypes.bool,
     horizontal: PropTypes.bool,
     style: PropTypes.object,
@@ -111,7 +112,7 @@ const HighlightContentProductV2 = (props) => {
             <PostingHeader
                 title={title}
                 onSeeAllPress={() => {
-                    navigation.navigate(nav, { title, userProfileId, orderBy });
+                    navigation.navigate(nav, { title, userProfileId, orderBy, timeStart });
                 }}
             />
         )
