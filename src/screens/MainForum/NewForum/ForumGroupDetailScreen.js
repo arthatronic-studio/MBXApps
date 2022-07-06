@@ -17,10 +17,16 @@ import Config from 'react-native-config';
 import { Container } from 'src/styled';
 import SearchBar from 'src/components/SearchBar';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import Moment from 'moment';
 const { Navigator, Screen } = createMaterialTopTabNavigator();
 
 const ForumDetailScreen = ({ navigation, route }) => {
+
+  
+  const params  = route.params.data;
+
+  console.log('ini route ',params);
+
   const { Color } = useColor();
   const modalOptionsRef = useRef();
   const DATAMODERATOR = [
@@ -290,15 +296,20 @@ const ForumDetailScreen = ({ navigation, route }) => {
        <ScrollView style={{marginHorizontal:14}}  showsVerticalScrollIndicator={false}>
          
       <View style={{flexDirection:'row'}}>
-      <Text style={{fontSize:15,fontWeight:'bold',marginRight:5}}>Bahas Serba-Serbi Seri A</Text>
-      <Feather onPress={()=>{
+      <Text style={{fontSize:15,fontWeight:'bold',marginRight:5}}>{params.name}</Text>
+
+      {
+        params.status !== 'PUBLISH' ?  <Feather onPress={()=>{
        
-      }} name='lock' size={20} color={Color.danger} />
+        }} name='lock' size={20} color={Color.danger} /> :
+        <Text></Text>
+      }
+    
 
       </View>
        
 
-       <Text style={{color:Color.gray,fontSize:12}}>19k Thread</Text>
+       {/* <Text style={{color:Color.gray,fontSize:12}}>19k Thread</Text> */}
        <Text style={{color:Color.gray,fontSize:13,fontWeight:'bold'}}>Moderator</Text>
        <FlatList
         data={DATAMODERATOR}
@@ -312,7 +323,7 @@ const ForumDetailScreen = ({ navigation, route }) => {
 
       <Text lineHeight={24} align="left">
             &nbsp;&nbsp;&nbsp;&nbsp;
-            Bahas Serba - Serbi Seri A adalah forum santai buat kau penggemar liga italia seputar bursa tranfer, hasil pertandingan dan berita terupdate. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi et amet laoreet dignissim pretium tortor tortor. Proin urna habitant neque placerat lacus, non ut mauris. In lacus augue et gravida id diam commodo. Integer metus, non donec quam facilisis pharetra bibendum mollis. Non consequat integer sit nec aenean lectus. Tortor et platea aliquet rhoncus egestas. Tristique dictum purus euismod posuere non aliquam vulputate sociis. Id arcu amet commodo et, rhoncus, magna. Sed vestibulum, lacus, scelerisque sapien vel orci pretium. Dis integer feugiat dolor faucibus scelerisque. Vel vitae et condimentum vitae nisl sed eget. Tellus lacus, nec a sed eleifend convallis lectus lorem. Mattis orci gravida in nulla. 
+            {params.description}
           </Text>
 
           <Text style={{color: Color.gray,fontWeight:"bold",marginVertical:5}}>Topic</Text>
@@ -321,7 +332,7 @@ const ForumDetailScreen = ({ navigation, route }) => {
           <Text style={{color: Color.gray,fontWeight:"bold",marginVertical:5}}>History Forum</Text>
           <View  style={{flexDirection:'row'}}>
           <Text size={15}>Forum dibuat pada</Text>
-          <Text style={{fontWeight:"bold"}}>&nbsp;16 Juni 2022 </Text>
+          <Text style={{fontWeight:"bold"}}>&nbsp; {Moment(parseInt(params.date)).format('Do MMMM YYYY')}</Text>
           </View>
           <View  style={{flexDirection:'row',justifyContent:'space-between'}}>
           <Text size={15}>14 Anggota Forum</Text>

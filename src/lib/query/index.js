@@ -29,6 +29,7 @@ import { queryUserBlock } from './queryUserBlock';
 import { queryGetUserBlock, queryUnblockUser } from './queryBlockUser';
 import { queryMenuList } from './queryMenuList';
 import {querySyaratKetentuan} from './querySyaratKetentuan';
+import {queryproductTopicList} from './queryproductTopicList';
 
 export {
   queryContentProduct,
@@ -63,4 +64,5 @@ export {
   queryUnblockUser,
   queryMenuList,
   querySyaratKetentuan,
+  queryproductTopicList
 };
