@@ -158,7 +158,12 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
             )}
           </View>
         </View>
-
+        <View style={{marginBottom: 4,flexDirection:'row',justifyContent:'space-between'}}>
+          <Text align="left" type="bold" numberOfLines={2}>
+            {item.productName}
+          </Text>
+          <AntDesign name="pushpin" color="#F3771D" size={25} style={{ marginRight:18}} />
+        </View>
         <View style={{width: '100%', aspectRatio: 16 / 9, marginBottom: 8}}>
           <Image
             source={{uri: item.image}}
@@ -173,11 +178,7 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
           {/* <View style={{position: 'absolute', height: '100%', width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: 8}} /> */}
         </View>
 
-        <View style={{marginBottom: 4}}>
-          <Text align="left" type="bold" numberOfLines={2}>
-            {item.productName}
-          </Text>
-        </View>
+      
 
         <Text align="left" size={12} type="medium" {...extraPropsText}>
           {item.productDescription}

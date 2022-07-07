@@ -280,7 +280,7 @@ const ForumDetailScreen = ({ navigation, route }) => {
       <Text style={{fontSize:15,fontWeight:'bold',marginRight:5}}>{params.name}</Text>
 
       {
-        params.status !== 'PUBLISH' ?  <Feather onPress={()=>{
+        params.status == 'PRIVASI' ?  <Feather onPress={()=>{
        
         }} name='lock' size={20} color={Color.danger} /> :
         <Text></Text>

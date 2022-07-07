@@ -210,7 +210,7 @@ source={iconPencil}
       <View style={{marginLeft: 16}}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={{fontSize: 15, fontWeight: 'bold'}}>{params.name}</Text>
-          <AntDesign name="pushpin" color="#F3771D" size={25} style={{ marginRight:18}} />
+        
         </View>
 
         <Text style={{color: Color.gray, fontSize: 14, marginBottom: 12}}>
