@@ -27,6 +27,8 @@ import {
 import CardForumVertical from './CardForumVertical';
 import { Container, Divider } from 'src/styled';
 import ModalContentOptions from 'src/components/ModalContentOptions';
+import { queryGroupMemberList } from 'src/lib/query';
+import Client from '@src/lib/apollo';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -61,10 +63,64 @@ const DetailForumScreen = ({ route, navigation }) => {
     const user = useSelector(
         state => state['user.auth'].login.user
     );
+    const itemPerPage = 100;
+    const [itemData, setItemData] = useState({
+        data:[],
+        loading: true,
+        page: 0,
+        loadNext: false,
+      });
 
     useEffect(() => {
         fetchContentProduct();
+        fetchGroupMemberList();
     }, []);
+
+    const fetchGroupMemberList = () => {
+        const variables = {
+           
+          page: itemData.page + 1,
+          limit: itemPerPage,
+          id:params.id
+        };
+        console.log('vario', variables);
+    
+        Client.query({
+          query: queryGroupMemberList,
+          variables,
+        })
+          .then(res => {
+            console.log(res, 'res2');
+    
+            const data = res.data.fetchGroupMemberList;
+    
+            let newArr = [];  
+    
+            if (data) {
+              newArr = itemData.data.concat(data); // compareData(itemData.data.concat(data));
+            }
+    
+            console.log(data.length, 'dapet length');
+    
+            setItemData({
+              ...itemData,
+              data: newArr,
+              loading: false,
+              page: data.length > 0 ? itemData.page + 1 : -1,
+              loadNext: false,
+            });
+          })
+          .catch(err => {
+            console.log(err, 'error');
+    
+            setItemData({
+              ...itemData,
+              loading: false,
+              page: -1,
+              loadNext: false,
+            });
+          });
+      };
 
     useEffect(() => {
         if (refreshComment) {

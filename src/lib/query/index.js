@@ -30,7 +30,9 @@ import { queryGetUserBlock, queryUnblockUser } from './queryBlockUser';
 import { queryMenuList } from './queryMenuList';
 import {querySyaratKetentuan} from './querySyaratKetentuan';
 import {queryproductTopicList} from './queryproductTopicList';
-
+import {queryproductGroupList} from './queryproductGroupList';
+import {queryGroupMemberList} from './queryGroupMemberList';
+import {queryChekMemberJoinGroup} from './queryChekMemberJoinGroup';
 export {
   queryContentProduct,
   queryContentProductDetail,
@@ -64,5 +66,7 @@ export {
   queryUnblockUser,
   queryMenuList,
   querySyaratKetentuan,
-  queryproductTopicList
+  queryproductTopicList,
+  queryproductGroupList,
+  queryChekMemberJoinGroup
 };

@@ -27,8 +27,15 @@ export const queryproductTopicList = gql`
                 imageCover,
                 description,
                 status,
-                createdAt
+                createdAt,
+                moderatorInfo{
+                    firstName
+                }
+                topic{
+                    name
+                }
             }
+
         }
     }
 `;

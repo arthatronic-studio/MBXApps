@@ -17,7 +17,9 @@ import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 import ModalContentOptions from 'src/components/ModalContentOptions';
 import { queryproductTopicList } from 'src/lib/query';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
-
+import { fetchTopicList } from 'src/api/forum/topiclist';
+import { checkJoinMember } from 'src/api/forum/checkMemberjoinGroup';
+import { async } from 'validate.js';
 const ForumTopicScreen = ({navigation, route}) => {
   const {item} = route.params;
   const modalOptionsRef = useRef();
@@ -47,98 +49,7 @@ const ForumTopicScreen = ({navigation, route}) => {
  
   const itemPerPage = 100;
 
-  
-  const DATA = [
-    
-    {
-      id: '1',
-      title: 'Kumpulan Hokage',
-      sub: '19k Thread',
-      loc: true,
-      image: 'https://i.postimg.cc/2680mCM2/Bola-kita.png',
-      
-    },
-    {
-      id: '2',
-      title: 'Kumpulan Meme',
-      sub: '19k Thread',
-      loc: true,
-      image: 'https://i.postimg.cc/KzMDm4Q7/uxrmp8fzc50w1nw3iqav.jpg',
-      
-    },
-    {
-      id: '3',
-      title: 'Assosciasi Sunda euy Posting',
-      sub: '19k Thread',
-      loc: true,
-      image: 'https://i.postimg.cc/NfzFkbQM/icon-app.png',
-      
-    },
-    {
-      id: '3',
-      title: 'Barudak Lembur',
-      sub: '19k Thread',
-      loc: true,
-      image: 'https://i.postimg.cc/GprCFsTt/image-payment-success.png',
-      
-    },
-    {
-      id: '4',
-      title: 'Jual Cepat Ciamis',
-      sub: '19k Thread',
-      loc: true,
-      image: 'https://i.postimg.cc/tJnwQXn8/image-payment-banner.png',
-      
-    },
-    {
-      id: '5',
-      title: 'Pemuda Tersesat',
-      sub: '19k Thread',
-      loc: true,
-       image: 'https://reactjs.org/logo-og.png',
-      
-    },
-    {
-      id: '6',
-      title: 'Juara  Dagang',
-      sub: '19k Thread',
-      loc: true,
-      image: 'https://reactjs.org/logo-og.png',
-      
-    },
-    {
-      id: '7',
-      title: 'Komunitas Kerupuk',
-      sub: '19k Thread',
-      loc: true,
-      image: 'https://reactjs.org/logo-og.png',
-      
-    },
-    {
-      id: '8',
-      title: 'Pemuda Pancasila',
-      sub: '19k Thread',
-      loc: true,
-      image: 'https://reactjs.org/logo-og.png',
-      
-    },
-    {
-      id: '9',
-      title: 'Pemuda lembur',
-      sub: '19k Thread',
-      loc: true,
-      image: 'https://reactjs.org/logo-og.png',
-      
-    },
-     {
-      id: '10',
-      title: 'Komunitas Pencinta Padi',
-      sub: '19k Thread',
-      loc: true,
-     image: 'https://reactjs.org/logo-og.png',
-          },
-    
-  ];  const [itemData, setItemData] = useState({
+  const [itemData, setItemData] = useState({
     data:[],
     loading: true,
     page: 0,
@@ -146,52 +57,56 @@ const ForumTopicScreen = ({navigation, route}) => {
   });
 
   console.log('itemdata', itemData.data);
+  const [joinMember, setJoinMember] = useState();
   useEffect(() => {
-    fetchTopicList();
+
+    fetchTopic();
+    ChekJoin();
+   
   }, []);
-  const fetchTopicList = () => {
-    const variables = {
-       page: itemData.page + 1,
-      limit: itemPerPage,
-    };
-    console.log('var', variables);
 
-    Client.query({
-      query: queryproductTopicList,
-      variables,
-    })
-      .then(res => {
-        console.log(res, 'res2');
+  const ChekJoin=  async()=>{
+  
+   
+    const result = await checkJoinMember();
+      console.log(result, 'result join');
+      if (result.status) {
+        setTimeout(() => {
+          const data = result.data;
+          console.log('ini join',data);
+          // setJoinMember(data)
+              
+        
+        }, 2500);
+      }
+  }
+const fetchTopic =  async()=>{
+  
+  const variables = {
+    page: itemData.page + 1,
+   limit: itemPerPage,
+ };
+  const result = await fetchTopicList(variables);
+    console.log(result, 'result');
+    if (result.status) {
+      setTimeout(() => {
+        const data = result.data;
 
-        const data = res.data.productTopicList;
-
-        let newArr = [];  
-
-        if (data) {
-          newArr = itemData.data.concat(data); // compareData(itemData.data.concat(data));
-        }
-
-        console.log(data.length, 'dapet length');
-
+            let newArr = [];  
+    
+            if (data) {
+              newArr = itemData.data.concat(data); // compareData(itemData.data.concat(data));
+            }
         setItemData({
-          ...itemData,
-          data: newArr,
-          loading: false,
-          page: data.length > 0 ? itemData.page + 1 : -1,
-          loadNext: false,
-        });
-      })
-      .catch(err => {
-        console.log(err, 'error');
-
-        setItemData({
-          ...itemData,
-          loading: false,
-          page: -1,
-          loadNext: false,
-        });
-      });
-  };
+                ...itemData,
+                data: newArr,
+                loading: false,
+                page: data.length > 0 ? itemData.page + 1 : -1,
+                loadNext: false,
+              });
+      }, 2500);
+    }
+}
    
    const renderItem = ({ item }) => (
     <TouchableOpacity onPress={()=> {
@@ -253,11 +168,14 @@ const ForumTopicScreen = ({navigation, route}) => {
                 description: item.description,
                 status: item.status,
                 date: item.createdAt,
+                moderator: item.moderatorInfo,
+                topic: item.topic.name
               };
               {
-                item.status == 'PUBLISH'
-                  ? navigation.navigate('ForumGroupScreen', {data: varData})
-                  : modalUnlockRef.current.open();
+                item.status == 'PRIVASI'
+                  ? modalUnlockRef.current.open()
+                  : 
+                  navigation.navigate('ForumGroupScreen', {data: varData});
               }
             }}>
             <View
@@ -288,7 +206,7 @@ const ForumTopicScreen = ({navigation, route}) => {
                 </View>
               </View>
 
-              {item.status !== 'PUBLISH' ? (
+              {item.status == 'PRIVASI' ? (
                 <Feather
                   onPress={() => {
                   
@@ -339,7 +257,7 @@ const ForumTopicScreen = ({navigation, route}) => {
             name: 'Minta Bergabung',
             color: Color.text,
             onPress: () => {
-              navigation.navigate('ForumGroupScreen');
+              navigation.navigate('ForumGroupScreen',{});
               showLoading(
                 'wait',
                 'Permintaan kamu sedang di tinjau oleh moderator',

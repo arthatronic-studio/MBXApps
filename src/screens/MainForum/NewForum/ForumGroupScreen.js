@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { View,TextInput,Text,Image,Animated } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -17,12 +17,128 @@ import TabForumMyPost from '../TabForumMyPost';
 import Config from 'react-native-config';
 import { Container } from 'src/styled';
 import SearchBar from 'src/components/SearchBar';
-
+import { queryproductGroupList } from 'src/lib/query';
+import Client from '@src/lib/apollo';
 const { Navigator, Screen } = createMaterialTopTabNavigator();
-
+import { fetchGroupMemberList } from 'src/api/forum/listmemberGroup';
 const ForumGroupScreen = ({ navigation, route }) => {
   const { Color } = useColor();
   const params  = route.params.data;
+  const itemPerPage = 100;
+  const [memberData,setMemberDataAll]= useState([]);
+  const [memberDataReq,setMemberDataReq]= useState([]);
+
+  console.log('params',params);
+  const [itemData, setItemData] = useState({
+    data:[],
+    loading: true,
+    page: 0,
+    loadNext: false,
+  });
+  // useEffect(() => {
+  //   fetchGroupList();
+  // }, []);
+  useEffect(() => {
+
+    fetchMemberAll();
+    fetchMemberReq();
+   
+  }, []);
+  const fetchMemberAll =  async()=>{
+    const variables = {
+      groupId: params.id,
+     status: 1,
+   };
+
+   console.log('dani hidayat,',variables);
+
+    const result = await fetchGroupMemberList(variables);
+      console.log(result, 'result');
+      if (result.status) {
+        setTimeout(() => {
+          const data = result.data;
+  
+              let newArr = [];  
+      
+              if (data) {
+                newArr = itemData.data.concat(data); // compareData(itemData.data.concat(data));
+              }
+
+              setMemberDataAll(data);
+         
+        }, 2500);
+      }
+  }
+  const fetchMemberReq =  async()=>{
+    const variables = {
+      groupId: params.id,
+     status: 0,
+   };
+
+   console.log('dani hidayat,',variables);
+
+    const result = await fetchGroupMemberList(variables);
+      console.log(result, 'result');
+      if (result.status) {
+        setTimeout(() => {
+          const data = result.data;
+  
+              let newArr = [];  
+      
+              if (data) {
+                newArr = itemData.data.concat(data); // compareData(itemData.data.concat(data));
+              }
+
+              setMemberDataReq(data);
+         
+        }, 2500);
+      }
+  }
+  const fetchGroupList = () => {
+    const variables = {
+       
+      page: itemData.page + 1,
+      limit: itemPerPage,
+      id:params.id
+    };
+    console.log('var', variables);
+
+    Client.query({
+      query: queryproductGroupList,
+      variables,
+    })
+      .then(res => {
+        console.log(res, 'res2');
+
+        const data = res.data.productGroupList;
+
+        let newArr = [];  
+
+        if (data) {
+          newArr = itemData.data.concat(data); // compareData(itemData.data.concat(data));
+        }
+
+        console.log(data.length, 'dapet length');
+
+        setItemData({
+          ...itemData,
+          data: newArr,
+          loading: false,
+          page: data.length > 0 ? itemData.page + 1 : -1,
+          loadNext: false,
+        });
+      })
+      .catch(err => {
+        console.log(err, 'error');
+
+        setItemData({
+          ...itemData,
+          loading: false,
+          page: -1,
+          loadNext: false,
+        });
+      });
+  };
   const renderPopUpNavigation = () => {
     return (
       <Animated.View
@@ -117,6 +233,9 @@ source={iconPencil}
                 description: params.description,
                 status: params.status,
                 date: params.date,
+                member : memberData,
+                memberDataReq : memberDataReq,
+                topic:params.topic
               };
               navigation.navigate('ForumGroupDetailScreen', {data: varData});
             }}>

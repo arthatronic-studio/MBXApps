@@ -18,6 +18,7 @@ import { Container } from 'src/styled';
 import SearchBar from 'src/components/SearchBar';
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
+
 const { Navigator, Screen } = createMaterialTopTabNavigator();
 
 const ForumDetailScreen = ({ navigation, route }) => {
@@ -29,6 +30,11 @@ const ForumDetailScreen = ({ navigation, route }) => {
 
   const { Color } = useColor();
   const modalOptionsRef = useRef();
+
+
+
+ 
+
   const DATAMODERATOR = [
     
     {
@@ -206,32 +212,7 @@ const ForumDetailScreen = ({ navigation, route }) => {
     </TouchableOpacity>
 
   );
-  const renderPopUpNavigation = () => {
-    return (
-      <Animated.View
-        style={[
-          {position: 'absolute', bottom: 20, height: 36, width: '100%', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16},
-        ]}
-      >
-        <View style={{width: 200, height: 50,  borderRadius: 50, alignItems: 'center', justifyContent: 'center',
-            shadowColor: "#00000029",
-            shadowOffset: { width: 0, height: 2, },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5,
-          }}
-        >
-          <TouchableOpacity
-              onPress={() => {navigation.navigate('ForumGroupAllMemberScreen')}}
-              style={{alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%'}}
-             
-            >
-                     <Text style={{color:'#F3771D',fontWeight:'bold'}}> Lihat Semua Anggota</Text>
-            </TouchableOpacity>
-        </View>
-      </Animated.View>
-    )
-  }
+
   return (
     <Scaffold
       header={
@@ -255,7 +236,7 @@ const ForumDetailScreen = ({ navigation, route }) => {
                   <TouchableOpacity
                   >
                     <Image
-                      source={{uri: 'https://i.postimg.cc/Yq0XG2XF/Rectangle-96.png'}}
+                      source={{uri: params.imageCover}}
                       style={{
                         width: '100%',
                         height: '100%',
@@ -269,7 +250,7 @@ const ForumDetailScreen = ({ navigation, route }) => {
        </Container>
 
        <Image
-                      source={{uri: 'https://i.postimg.cc/mr5FQWfb/unsplash-6-Hqv-Y1-E7-NI.png'}}
+                      source={{uri: params.imageCover}}
                       style={{
                         width: '20%',
                         height: '10%',
@@ -328,38 +309,52 @@ const ForumDetailScreen = ({ navigation, route }) => {
 
           <Text style={{color: Color.gray,fontWeight:"bold",marginVertical:5}}>Topic</Text>
 
-          <Text size={15}>Sepakbola</Text>
+          <Text size={15}>{params.topic}</Text>
           <Text style={{color: Color.gray,fontWeight:"bold",marginVertical:5}}>History Forum</Text>
           <View  style={{flexDirection:'row'}}>
           <Text size={15}>Forum dibuat pada</Text>
           <Text style={{fontWeight:"bold"}}>&nbsp; {Moment(parseInt(params.date)).format('Do MMMM YYYY')}</Text>
           </View>
+          {params.status == 'PUBLISH'? 
           <View  style={{flexDirection:'row',justifyContent:'space-between'}}>
-          <Text size={15}>14 Anggota Forum</Text>
+
+            
+          <Text size={15}>{params.member.length} Anggota Forum</Text>
           <TouchableOpacity onPress={()=>{
             navigation.navigate('ForumGroupPermintaanScreen')
           }}>
-          <Text style={{fontWeight:"bold",color:'#F3771D'}}>(7 Permintaan) </Text>
+          <Text style={{fontWeight:"bold",color:'#F3771D'}}>({params.memberDataReq.length} Permintaan) </Text>
           </TouchableOpacity>
-        
           </View>
-          <FlatList
-        data={DATA}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-      />
- <View style={{width: 200, height: 50, marginLeft:80,  borderRadius: 50, alignItems: 'center', justifyContent: 'center',
+          :
+          <Text></Text> }
+          {params.status !== 'PUBLISH'?
+           <FlatList
+           data={params.member}
+           renderItem={renderItem}
+           keyExtractor={item => item.id}
+         /> 
+         
+         : <Text></Text>
+        }
+         
+         {params.status !== 'PUBLISH'?
+          <View style={{width: 200, height: 50, marginLeft:80,  borderRadius: 50, alignItems: 'center', justifyContent: 'center',
            
-          }}
-        >
-          <TouchableOpacity
-              onPress={() => {navigation.navigate('ForumGroupAllMemberScreen')}}
-              style={{alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%'}}
-             
-            >
-                     <Text style={{color:'#F3771D',fontWeight:'bold'}}> Lihat Semua Anggota</Text>
-            </TouchableOpacity>
-        </View>
+        }}
+      >
+        <TouchableOpacity
+            onPress={() => {navigation.navigate('ForumGroupAllMemberScreen')}}
+            style={{alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%'}}
+           
+          >
+                   <Text style={{color:'#F3771D',fontWeight:'bold'}}> Lihat Semua Anggota</Text>
+          </TouchableOpacity>
+      </View>
+         
+         : <Text></Text>
+        }
+         
 
       </ScrollView>
       {/* { renderPopUpNavigation()} */}
