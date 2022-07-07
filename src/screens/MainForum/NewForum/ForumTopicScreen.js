@@ -61,23 +61,24 @@ const ForumTopicScreen = ({navigation, route}) => {
   useEffect(() => {
 
     fetchTopic();
-    ChekJoin();
+    
    
   }, []);
 
-  const ChekJoin=  async()=>{
+  const ChekJoin=  async(varData)=>{
   
-   
-    const result = await checkJoinMember();
+    const variables = {
+      groupId: varData.id
+   };
+   console.log('varibels id', variables);
+    const result = await checkJoinMember(variables);
       console.log(result, 'result join');
       if (result.status) {
-        setTimeout(() => {
-          const data = result.data;
-          console.log('ini join',data);
-          // setJoinMember(data)
-              
         
-        }, 2500);
+          navigation.navigate('ForumGroupScreen', {data: varData});
+       
+      }else{
+        modalUnlockRef.current.open()
       }
   }
 const fetchTopic =  async()=>{
@@ -172,10 +173,12 @@ const fetchTopic =  async()=>{
                 topic: item.topic.name
               };
               {
-                item.status == 'PRIVASI'
-                  ? modalUnlockRef.current.open()
-                  : 
-                  navigation.navigate('ForumGroupScreen', {data: varData});
+                ChekJoin(varData);
+                // item.status == 'PRIVASI'
+                //   ? modalUnlockRef.current.open()
+                //   : 
+                //   ChekJoin(item.id);
+                //   navigation.navigate('ForumGroupScreen', {data: varData});
               }
             }}>
             <View

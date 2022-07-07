@@ -29,7 +29,10 @@ export const queryproductTopicList = gql`
                 status,
                 createdAt,
                 moderatorInfo{
-                    firstName
+                    firstName,
+                    lastName,
+                    photoProfile
+                    image
                 }
                 topic{
                     name

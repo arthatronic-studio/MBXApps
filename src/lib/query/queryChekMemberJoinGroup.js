@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const queryChekMemberJoinGroup = gql`
-query{
-    checkMemberJoinGroup{
+query($groupId:Int!){
+    checkMemberJoinGroup(groupId: $groupId){
       success,
       message
       

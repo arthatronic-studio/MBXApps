@@ -234,6 +234,7 @@ source={iconPencil}
                 status: params.status,
                 date: params.date,
                 member : memberData,
+                moderator: params.moderator,
                 memberDataReq : memberDataReq,
                 topic:params.topic
               };

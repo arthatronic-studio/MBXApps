@@ -1,7 +1,7 @@
 import Client from '@src/lib/apollo';
 import { queryChekMemberJoinGroup } from 'src/lib/query';
 
-export const checkJoinMember = async()  => {
+export const checkJoinMember = async(variables)  => {
 
     
 
@@ -15,6 +15,7 @@ export const checkJoinMember = async()  => {
     try {
         const result = await Client.query({
             query: queryChekMemberJoinGroup,
+            variables,
         });
     
         if (

@@ -285,20 +285,30 @@ const ForumDetailScreen = ({ navigation, route }) => {
         }} name='lock' size={20} color={Color.danger} /> :
         <Text></Text>
       }
-    
-
       </View>
-       
-
-       {/* <Text style={{color:Color.gray,fontSize:12}}>19k Thread</Text> */}
+       <Text style={{color:Color.gray,fontSize:12}}>19k Thread</Text>
        <Text style={{color:Color.gray,fontSize:13,fontWeight:'bold'}}>Moderator</Text>
-       <FlatList
-        data={DATAMODERATOR}
-        renderItem={renderItemModerator}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        keyExtractor={item => item.id}
-      />
+    
+ <TouchableOpacity onPress={()=> {          
+  }}>
+  
+    <View style={{flexDirection:'row',marginVertical:8}}>
+    <Image
+      source={{uri: params.moderator.photoProfile ? params.moderator.photoProfile : 'https://i.postimg.cc/y6RYmPvd/Sample-User-Icon.png'}}
+      style={{
+        borderRadius: 25,
+        width: 35,
+        height: 35,
+        backgroundColor: Color.border,
+        borderColor: Color.primary,
+        marginRight:5,
+       
+      }}
+    />
+      <Text style={{color:Color.text,marginTop:5}} >{params.moderator.firstName} {params.moderator.lastName}</Text>
+    </View>
+    
+  </TouchableOpacity>
        <Text style={{color:Color.gray,fontSize:13,fontWeight:'bold'}}>Desckripsi</Text>
 
 
