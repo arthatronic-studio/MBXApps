@@ -21,6 +21,7 @@ import { queryGetUserOrganizationRef } from 'src/lib/query';
 import Client from '@src/lib/apollo';
 import { initSocket } from 'src/api-socket/currentSocket';
 import { Container } from 'src/styled';
+import { accessClient } from 'src/utils/access_client';
 
 const itemPerPage = 100;
 
@@ -114,7 +115,10 @@ const CreateGroup = ({ navigation }) => {
   const fetchSearchNameMember = () => {
     setFilterLoading(true);
 
-    const variables = { name: search };
+    const variables = {
+      name: search,
+      initialCode: accessClient.InitialCode,
+    };
 
     Client.query({
       query: queryGetUserOrganizationRef,
@@ -146,7 +150,9 @@ const CreateGroup = ({ navigation }) => {
     const variables = {
       page: itemData.page + 1,
       limit: itemPerPage,
+      initialCode: accessClient.InitialCode,
     };
+
     console.log('var', variables);
 
     Client.query({
@@ -197,7 +203,7 @@ const CreateGroup = ({ navigation }) => {
       });
     }
   }
-  
+
   const onSelected = (index, item) => {
     setItemData({ ...itemData, loading: true });
 
@@ -359,7 +365,7 @@ const CreateGroup = ({ navigation }) => {
             }}
           />
           <CircleSend style={{ backgroundColor: Color.primary }} onPress={() => { }}>
-            <Ionicons name='search' size={16} color={Color.text} />
+            <Ionicons name='search' size={16} color={Color.textButtonInline} />
           </CircleSend>
         </BoxInput>
       </BottomSection>

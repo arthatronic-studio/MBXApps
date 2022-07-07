@@ -24,6 +24,7 @@ import { initialItemState } from 'src/utils/constants';
 import ScreenIndicator from '../Modal/ScreenIndicator';
 import Moment from 'moment';
 import CardHighlightLelang from './CardHighlightLelang';
+import { imageEmptyAuction } from 'assets/images';
 
 const propTypes = {
   title: PropTypes.string,
@@ -196,7 +197,7 @@ const HighlightLelang = ({ title, nav, prodStatus }) => {
           })}
         </View> :
         <View style={{ width: '100%', aspectRatio: 16/9 }}>
-          <ScreenEmptyData message='Lelang belum tersedia' />
+          <ScreenEmptyData message='Lelang belum tersedia' imageAsset={imageEmptyAuction} />
         </View>
       }
     </Container>

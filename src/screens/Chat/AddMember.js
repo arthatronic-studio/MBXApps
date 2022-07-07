@@ -24,6 +24,7 @@ import { queryContentChatRoomManage, queryContentChatMessage } from '@src/lib/qu
 import { Divider } from 'src/styled';
 import {queryGetUserOrganizationRef} from 'src/lib/query';
 import { fetchContentChatRoomManage } from 'src/api/chat/chat';
+import { accessClient } from 'src/utils/access_client';
 
 const itemPerPage = 100;
 
@@ -72,7 +73,10 @@ const AddMember = ({navigation, route}) => {
   const fetchSearchNameMember = () => {
     setFilterLoading(true);
 
-    const variables = {name: search};
+    const variables = {
+      name: search,
+      initialCode: accessClient.InitialCode,
+    };
 
     Client.query({
       query: queryGetUserOrganizationRef,
@@ -104,7 +108,9 @@ const AddMember = ({navigation, route}) => {
     const variables = {
       page: itemData.page + 1,
       limit: itemPerPage,
+      initialCode: accessClient.InitialCode,
     };
+
     console.log('var', variables);
 
     Client.query({

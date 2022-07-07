@@ -25,7 +25,6 @@ import {queryJoinCommunityManage} from '@src/lib/query/joinCommunityManage';
 import {Container, Divider} from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
 import { getSizeByRatio } from 'src/utils/get_ratio';
-import { joinCommunityMember } from 'src/lib/query/joinCommunityMember';
 import ModalInputText from 'src/components/ModalInputText';
 import { fetchJoinCommunityMember } from 'src/api/community';
 import { useSelector } from 'react-redux';
@@ -89,13 +88,13 @@ const CardDetail = ({ navigation, route }) => {
   
   const fetchAsync = async() => {
     const result = await fetchJoinCommunityMember({ userId: user.userId });
+    console.log('result', result);
+    
     if (result.status && result.data.length > 0) {
       setItem(result.data[0]);
       setUserDetail(result.data[0].userDetail);
       setIdNumber(result.data[0].userDetail.idNumber);
     }
-
-    console.log('result', result);
 
     setLoading(false);
   }

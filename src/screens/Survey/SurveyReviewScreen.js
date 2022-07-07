@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   View,
-  TextInput,
   Image,
   ScrollView,
   useWindowDimensions,
@@ -11,27 +10,18 @@ import RNSimpleCrypto from "react-native-simple-crypto";
 import axios from 'axios';
 import Config from 'react-native-config';
 
-import CarouselView from 'src/components/CarouselView';
 import {
   Text,
   TouchableOpacity,
   useColor,
   Scaffold,
-  Alert,
   Button,
   useLoading,
 } from '@src/components';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Popup, { usePopup } from '@src/components/Modal/Popup';
+import { usePopup } from '@src/components/Modal/Popup';
 
-import Client from '@src/lib/apollo';
-import { queryJoinCommunityManage } from '@src/lib/query/joinCommunityManage';
 import { Container, Divider, Row } from 'src/styled';
-import { accessClient } from 'src/utils/access_client';
 import { getSizeByRatio } from 'src/utils/get_ratio';
-import { joinCommunityMember } from 'src/lib/query/joinCommunityMember';
 import { useDispatch, useSelector } from 'react-redux';
 import CircularProgress from 'src/components/CircularProgress';
 import moment from 'moment';
@@ -58,8 +48,6 @@ const LabelInput = Styled(View)`
 
 const SurveyReviewScreen = ({ navigation, route }) => {
   const { listHeader, valueContent } = route.params;
-
- 
 
   const user = useSelector((state) => state['user.auth'].login.user);
   const { width, height } = useWindowDimensions();

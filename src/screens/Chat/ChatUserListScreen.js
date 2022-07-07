@@ -115,7 +115,10 @@ const ChatUserListScreen = ({navigation, route}) => {
   const fetchSearchNameMember = () => {
     setFilterLoading(true);
 
-    const variables = { name: search };
+    const variables = {
+      name: search,
+      initialCode: accessClient.InitialCode,
+    };
 
     Client.query({
       query: queryGetUserOrganizationRef,
@@ -147,6 +150,7 @@ const ChatUserListScreen = ({navigation, route}) => {
     const variables = {
       page: itemData.page + 1,
       limit: itemPerPage,
+      initialCode: accessClient.InitialCode,
     };
 
     if (useHelpScreen) {
@@ -287,7 +291,7 @@ const ChatUserListScreen = ({navigation, route}) => {
             }}
           />
           <CircleSend style={{backgroundColor: Color.primary}} onPress={() => {}}>
-            <Ionicons name='search' size={16} color={Color.text} />
+            <Ionicons name='search' size={16} color={Color.textButtonInline} />
           </CircleSend>
         </BoxInput>
       </BottomSection>

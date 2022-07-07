@@ -1,8 +1,9 @@
 import Client from '@src/lib/apollo';
 import { queryCarTypeListing, queryCommunityMemberCheck, queryJoinCommunityUpdate } from "src/lib/query/community";
 import { joinCommunityMember } from 'src/lib/query/joinCommunityMember';
+import { accessClient } from 'src/utils/access_client';
 
-export const fetchJoinCommunityMember = async({ status, userId }) => {
+export const fetchJoinCommunityMember = async({ status, userId, name }) => {
     let response = {
         data: [],
         status: false,
@@ -10,13 +11,15 @@ export const fetchJoinCommunityMember = async({ status, userId }) => {
         error: null,
     };
 
+    let variables = { initialCode: accessClient.InitialCode }
+    if (status) variables.status = status;
+    if (userId) variables.userId = userId
+    if (name) variables.name = name;
+
     try {
         const result = await Client.query({
             query: joinCommunityMember,
-            variables: {
-                status,
-                userId,
-            },
+            variables,
         });
     
         if (
@@ -95,6 +98,9 @@ export const fetchCommunityMemberCheck = async() => {
     try {
         const result = await Client.query({
             query: queryCommunityMemberCheck,
+            variables: {
+                initialCode: accessClient.InitialCode,
+            }
         });
     
         if (

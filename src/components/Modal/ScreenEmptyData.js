@@ -27,9 +27,6 @@ const Body = Styled(View)`
   width: ${props => (props.type === 'small' ? '50%' : '100%')};
 `;
 
-const ContainerIndicator = Styled(View)`
-`;
-
 const BodyText = Styled(View)`
   width: 100%
   margin-top: 15px;
@@ -41,6 +38,7 @@ const propTypes = {
   type: PropTypes.string,
   transparent: PropTypes.bool,
   style: PropTypes.object,
+  imageAsset: PropTypes.any,
 }
 
 const defaultProps = {
@@ -48,10 +46,11 @@ const defaultProps = {
   type: 'big',
   transparent: false,
   style: {},
+  imageAsset: null,
 }
 
 const ScreenEmptyData = (props) => {
-    const { message, type, transparent, style } = props;
+    const { message, type, transparent, style, imageAsset } = props;
 
     const { Color } = useColor();
     const { width } = useWindowDimensions();
@@ -59,9 +58,22 @@ const ScreenEmptyData = (props) => {
     return (
       <Wrapper transparent={transparent} backgroundColor={Color.theme} {...style}>
         <Body type={type} transparent={transparent} backgroundColor={Color.theme}>
-          <ContainerIndicator>
-            <Image style={{height: width / 5, aspectRatio: 1}} resizeMode='contain' source={imageEmpty} />
-          </ContainerIndicator>
+          <View
+            style={{
+              height: width / 5,
+              aspectRatio: 1,
+            }}
+          >
+            <Image
+              style={{
+                width: '100%',
+                height: '100%',
+              }}
+              resizeMode='contain'
+              source={imageAsset || imageEmpty}
+            />
+          </View>
+
           {message && <BodyText>
             <Text>{message}</Text>
           </BodyText>}
