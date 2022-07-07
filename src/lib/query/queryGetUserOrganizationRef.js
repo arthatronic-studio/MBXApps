@@ -6,6 +6,7 @@ query(
   $limit: Int
   $name: String
   $organizationId: Int
+  $initialCode: String
   $isAdmin: Boolean
 ) {
   getUserOrganizationRef(
@@ -13,6 +14,7 @@ query(
     limit: $limit
     name: $name
     organizationId: $organizationId
+    initialCode: $initialCode
     isAdmin: $isAdmin
   ) {
     userId

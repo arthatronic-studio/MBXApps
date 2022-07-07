@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
   View,
-  TextInput,
-  Image,
-  ScrollView,
   useWindowDimensions,
   FlatList,
 } from 'react-native';
-import Styled from 'styled-components';
-import RNSimpleCrypto from 'react-native-simple-crypto';
 import axios from 'axios';
 import Config from 'react-native-config';
 
-import CarouselView from 'src/components/CarouselView';
 import {
   Text,
   TouchableOpacity,
@@ -21,40 +15,9 @@ import {
   useLoading,
 } from '@src/components';
 import { shadowStyle } from '@src/styles';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Popup, { usePopup } from '@src/components/Modal/Popup';
-import Client from '@src/lib/apollo';
-import { queryJoinCommunityManage } from '@src/lib/query/joinCommunityManage';
-import { Container, Divider, Row } from 'src/styled';
-import { accessClient } from 'src/utils/access_client';
-import { getSizeByRatio } from 'src/utils/get_ratio';
-import { joinCommunityMember } from 'src/lib/query/joinCommunityMember';
+import { usePopup } from '@src/components/Modal/Popup';
 import { useSelector } from 'react-redux';
-import CircularProgress from 'src/components/CircularProgress';
-import moment from 'moment';
-import { useIsFocused, useRoute } from '@react-navigation/native';
-
-const EmailRoundedView = Styled(View)`
-  width: 100%;
-  alignItems: flex-start;
-  justifyContent: center;
-  flexDirection: column;
-  padding: 6px 0px;
-`;
-
-const FieldView = Styled(View)`
-  width: 100%;
-  alignItems: flex-start;
-`;
-
-const LabelInput = Styled(View)`
-  width: 100%;
-  justifyContent: flex-start;
-  alignItems: flex-start;
-  paddingTop: 4px;
-`;
+import { useIsFocused } from '@react-navigation/native';
 
 const SurveyHistoryScreen = ({ navigation, route }) => {
   const user = useSelector(state => state['user.auth'].login.user);

@@ -5,11 +5,13 @@ query(
   $status: Int
   $name: String
 	$userId: Int
+  $initialCode: String
 ) {
   joinCommunityMember(
     status: $status
     name: $name
     userId: $userId
+    initialCode: $initialCode
   ) {
     id
     car_type

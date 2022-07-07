@@ -10,8 +10,12 @@ export const queryCarTypeListing = gql`
 `;
 
 export const queryCommunityMemberCheck = gql`
-    query{
-        joinCommunityMemberCheck{
+    query(
+        $initialCode: String
+    ){
+        joinCommunityMemberCheck(
+            initialCode: $initialCode
+        ){
             status
             message
         }

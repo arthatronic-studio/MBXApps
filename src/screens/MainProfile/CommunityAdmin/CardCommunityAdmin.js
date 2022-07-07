@@ -13,11 +13,11 @@ import { useNavigation, useIsFocused } from '@react-navigation/core';
 
 import Client from '@src/lib/apollo';
 import { queryJoinCommunityManage } from '@src/lib/query/joinCommunityManage';
-import { joinCommunityMember } from 'src/lib/query/joinCommunityMember';
 import { Divider } from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
 import ModalInputText from 'src/components/ModalInputText';
 import Styled from 'styled-components';
+import { fetchJoinCommunityMember } from 'src/api/community';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -96,7 +96,8 @@ const CardCommunityAdmin = (props) => {
       setData(sort);
     }
   }
-  const fetchData = () => {
+
+  const fetchData = async() => {
     let status = 2;
     if (props.type === 'newAnggota') {
       status = 0;
@@ -104,28 +105,18 @@ const CardCommunityAdmin = (props) => {
       status = 1;
     }
 
+    const result = await fetchJoinCommunityMember({ status });
+    console.log('result', result);
 
-    Client.query({
-      query: joinCommunityMember,
-      variables: {
-        status: status,
-      },
-    })
-      .then((res) => {
+    if (result.status) {
+      setData(result.data);
+    }
 
-        setData(res.data.joinCommunityMember);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log('err', err);
-        setLoading(false);
-      });
+    setLoading(false);
   };
 
   const fetchJoinCommunityManage = (id, userId, status, reason_reject) => {
     setLoading(true);
-
-
 
     let resMessage =
       status === 1 ? 'Diterima' :
@@ -182,44 +173,27 @@ const CardCommunityAdmin = (props) => {
         setLoading(false);
       });
   };
-  const fetchSearchNameMember = () => {
+
+  const fetchSearchNameMember = async() => {
     setFilterLoading(true);
+
     let status = 2;
     if (props.type === 'newAnggota') {
       status = 0;
     } else if (props.type === 'Anggota') {
       status = 1;
     }
-    const variables = {
-      status: status,
-      name: search
-    };
 
-    Client.query({
-      query: joinCommunityMember,
-      variables,
-    })
-      .then(res => {
-        console.log('res search', res);
+    const result = await fetchJoinCommunityMember({ status, name: search });
+    console.log('result search', result);
+    
+    if (result.status) {
+      setFilterData(result.data);
+    }
 
-        const data = res.data.joinCommunityMember;
-
-        let newArr = [];
-
-        if (data) {
-          newArr = data;
-        }
-
-        setFilterData(newArr);
-        setFilterLoading(false);
-      })
-      .catch(err => {
-        console.log('err search', err);
-
-        setFilterData([]);
-        setFilterLoading(false);
-      });
+    setFilterLoading(false);
   };
+
   const renderItem = (item, index) => {
     return (
       <TouchableOpacity
