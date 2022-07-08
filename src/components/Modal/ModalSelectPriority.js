@@ -18,9 +18,9 @@ const defaultProps = {
 };
 
 const data = [
-    { id: 1, value: 'LOW', name: 'Low' },
-    { id: 2, value: 'MEDIUM', name: 'Medium' },
-    { id: 3, value: 'HIGH', name: 'High' },
+  { id: 1, value: 'LOW', name: 'Low (> 20 Km)' },
+  { id: 2, value: 'MEDIUM', name: 'Medium (10 - 20 Km)' },
+  { id: 3, value: 'HIGH', name: 'High (< 10 Km)' },
 ];
 
 const ModalSelectPriority = forwardRef((props, ref) => {

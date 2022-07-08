@@ -55,6 +55,9 @@ export const fetchCarTypeListing = async() => {
     try {
         const result = await Client.query({
             query: queryCarTypeListing,
+            variables: {
+                initialCode: accessClient.InitialCode
+            },
         });
     
         if (

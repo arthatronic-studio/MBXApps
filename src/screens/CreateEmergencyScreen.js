@@ -93,7 +93,7 @@ const CreateEmergencyScreen = (props) => {
     const [thumbImage, setThumbImage] = useState('');
     const [mimeImage, setMimeImage] = useState('image/jpeg');
     const [selectedPriority, setSelectedPriority] = useState({
-        id: 3, value: 'HIGH', name: 'High',
+        id: 3, value: 'HIGH', name: 'High (< 10 Km)',
     });
     const [selectedStatus, setSelectedStatus] = useState({
         label: 'Publik', value: 'PUBLISH', iconName: 'globe'
