@@ -18,6 +18,7 @@ import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 import ModalContentOptions from 'src/components/ModalContentOptions';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { FormatMoney } from 'src/utils';
+import { accessClient } from 'src/utils/access_client';
 
 const EventDetail = ({navigation, route}) => {
   const {Color} = useColor();
@@ -201,7 +202,12 @@ const EventDetail = ({navigation, route}) => {
                 color={Color.primary}
               />
               <Divider width={8} />
-              <Text style={{fontWeight: 'bold'}} color={isPayProduct ? Color.text : Color.success}>{isPayProduct ? FormatMoney.getFormattedMoney(item.price) : 'Gratis'}</Text>
+              {!accessClient.isMobility && <Text
+                style={{fontWeight: 'bold'}}
+                color={isPayProduct ? Color.text : Color.success}
+              >
+                {isPayProduct ? FormatMoney.getFormattedMoney(item.price) : 'Gratis'}
+              </Text>}
             </View>
           </View>
 

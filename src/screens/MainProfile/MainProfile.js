@@ -330,7 +330,7 @@ const MainProfile = ({navigation, route}) => {
       code: 'join_community',
       title: 'Gabung Komunitas',
       badgeTitle: memberCheck.message,
-      show: accessClient.MainProfile.showMenuJoinCommunity,
+      show: !accessClient.isMobility && accessClient.MainProfile.showMenuJoinCommunity,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: () => setModalJoinCommunity(true),
     },
