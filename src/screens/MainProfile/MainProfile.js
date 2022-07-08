@@ -112,6 +112,7 @@ const MainProfile = ({navigation, route}) => {
   const onPressLogout = () => {
     dispatch({type: 'USER.LOGOUT'});
     redirectTo('LoginScreen');
+    currentSocket.disconnect();
   };
 
   const sendVerify = async () => {
