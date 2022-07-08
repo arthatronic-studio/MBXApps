@@ -13,6 +13,7 @@ import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import { Circle } from '@src/styled';
 
 import { Header, ModalListAction, Scaffold, Alert } from 'src/components';
+import ModalActions from 'src/components/Modal/ModalActions';
 import { statusBarHeight } from 'src/utils/constants';
 import { initSocket } from 'src/api-socket/currentSocket';
 
@@ -67,7 +68,8 @@ const ChatGroupScreen = ({ navigation, route }) => {
     const [selectedRoom, setSelectedRoom] = useState();
     const [isLoading, setIsLoading] = useState(false);
 
-    const modalListActionRef = useRef();
+    // const modalListActionRef = useRef();
+    const [showModal, setShowModal] = useState(false);
 
     // selector
     const user = useSelector(
@@ -275,11 +277,14 @@ const ChatGroupScreen = ({ navigation, route }) => {
                       imageGroup: item['room_detail'].image,
                       description : item['room_detail'].description,
                       selected: item.member,
+                      is_admin_room: item.is_admin_room,
+                      is_owner_room: item.is_owner_room,
                       targetIds,
                     });
                   }}
                   onLongPress={() => {
-                    modalListActionRef.current.open();
+                    // modalListActionRef.current.open();
+                    setShowModal(!showModal);
                     setSelectedRoom(item);
                   }}
                   style={{
@@ -383,8 +388,9 @@ const ChatGroupScreen = ({ navigation, route }) => {
             }}
           />
 
-          <ModalListAction
-            ref={modalListActionRef}
+          <ModalActions
+            // ref={modalListActionRef}
+            visible={showModal}
             onClose={() => {
               setSelectedRoom();
             }}
@@ -397,7 +403,8 @@ const ChatGroupScreen = ({ navigation, route }) => {
                   Alert('Hapus', 'Apakah Anda yakin menghapus konten?', () => {
                     fetchRoomsDelete();
                   });
-                  modalListActionRef.current.close();
+                  setShowModal(!showModal);
+                  // modalListActionRef.current.close();
                   setSelectedRoom();
                 },
               },

@@ -12,7 +12,7 @@ import ImagesPath from 'src/components/ImagesPath';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Scaffold from '@src/components/Scaffold';
-import { Alert, Header } from 'src/components';
+import { Alert, Header, AlertModal } from 'src/components';
 import Entypo from 'react-native-vector-icons/Entypo'
 import Feather from 'react-native-vector-icons/Feather'
 import {ModalListAction } from 'src/components';
@@ -23,8 +23,10 @@ import {
 import ModalActions from 'src/components/Modal/ModalActions';
 import { fetchContentChatRoomManage } from 'src/api/chat/chat';
 
+
 function Anggota(props) {
   const params = props;
+  const { is_admin_room, is_owner_room } = params;
 
   const {Color} = useColor();
 
@@ -83,6 +85,7 @@ function Anggota(props) {
             {item.status}
           </Text>
         </View>
+        {(is_admin_room || is_owner_room) && 
         <TouchableOpacity
           onPress={() => {
             setModalActions(true);
@@ -90,6 +93,7 @@ function Anggota(props) {
           }}>
           <Entypo name={'dots-three-horizontal'} size={15} />
         </TouchableOpacity>
+        }
       </Row>
     </View>
   );
@@ -227,6 +231,9 @@ function Anggota(props) {
 
 const UserGroupDetail = ({navigation, route}) => {
   const { params } = route;
+  const { is_admin_room, is_owner_room } = route.params;
+  const [modalHapus, setModalHapus] = useState(false);
+  const [modalKeluar, setModalKeluar] = useState(false);
 
   const user = useSelector((state) => state['user.auth'].login.user);
 
@@ -286,6 +293,7 @@ const UserGroupDetail = ({navigation, route}) => {
             </Text>
           </Col>
 
+        {(is_admin_room || is_owner_room) && 
           <View style={{width: '8%', marginVertical: 5}}>
             <Pressable onPress={() => { navigation.navigate('ManageGroupScreen', {
               ...params,
@@ -293,31 +301,51 @@ const UserGroupDetail = ({navigation, route}) => {
               <Feather name={'edit-2'} />
             </Pressable>
           </View>
+        }
         </Row>
-        <Pressable
-          onPress={() => {
-            navigation.navigate('AddMember', {
-              ...params,
-            });
-          }}
-          style={{
-            flexDirection: 'row',
-            marginHorizontal: 15,
-            marginVertical: 15,
-          }}>
-          <Ionicons
-            name={'person-add-outline'}
-            size={16}
-            style={{color: Color.primary}}
-          />
-          <Text
-            style={{color: Color.primary, fontSize: 12, marginHorizontal: 10}}>
-            Tambahkan anggota grup
-          </Text>
-        </Pressable>
+        {(is_admin_room || is_owner_room) && 
+          <Pressable
+            onPress={() => {
+              navigation.navigate('AddMember', {
+                ...params,
+              });
+            }}
+            style={{
+              flexDirection: 'row',
+              marginHorizontal: 15,
+              marginVertical: 15,
+            }}>
+            <Ionicons
+              name={'person-add-outline'}
+              size={16}
+              style={{color: Color.primary}}
+            />
+            <Text
+              style={{color: Color.primary, fontSize: 12, marginHorizontal: 10}}>
+              Tambahkan anggota grup
+            </Text>
+          </Pressable>
+        }
       </>
     );
   };
+
+  const onDeleteGrup = async() => {
+    const variables = {
+      method: 'DELETE',
+      roomId: parseInt(params.roomId),
+    };
+
+    console.log('variables', variables);
+
+    const result = await fetchContentChatRoomManage(variables);
+    console.log('result', result);
+    if (result.status) {
+      setTimeout(() => {
+        navigation.navigate('Chat');
+      }, 2500);
+    }
+  }
 
   return (
     <Scaffold
@@ -393,7 +421,17 @@ const UserGroupDetail = ({navigation, route}) => {
             color: Color.error,
             onPress: () => {
               modalListActionRef.current.close();
-              Alert('Konfirmasi', 'Anda akan keluar dari grop?', () => onLeave())
+              setModalKeluar(!modalKeluar);
+            },
+          },
+          {
+            id: 2,
+            name: 'hapus grup',
+            color: Color.error,
+            show: is_admin_room,
+            onPress: () => {
+              modalListActionRef.current.close();
+              setModalHapus(!modalHapus);
             },
           },
           // {
@@ -404,6 +442,40 @@ const UserGroupDetail = ({navigation, route}) => {
           //   },
           // },
         ]}
+      />
+
+      <AlertModal
+        visible={modalKeluar}
+        title='Konfirmasi'
+        message='Anda akan keluar dari grup?'
+        showDiscardButton
+        onSubmit={() => {
+          onLeave();
+          setModalKeluar(!modalKeluar);
+        }}
+        onClose={() => {
+          setModalKeluar(!modalKeluar);
+        }}
+        onDiscard={() => {
+          setModalKeluar(!modalKeluar);
+        }}
+      />
+
+      <AlertModal
+        visible={modalHapus}
+        title='Konfirmasi'
+        message='Anda akan menghapus grup?'
+        showDiscardButton
+        onSubmit={() => {
+          onDeleteGrup();
+          setModalHapus(!modalHapus);
+        }}
+        onClose={() => {
+          setModalHapus(!modalHapus);
+        }}
+        onDiscard={() => {
+          setModalHapus(!modalHapus);
+        }}
       />
     </Scaffold>
   );

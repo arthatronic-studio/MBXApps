@@ -63,6 +63,7 @@ const GroupDetailScreen = ({ navigation, route }) => {
   
     // params
     const { params } = route;
+    const { is_admin_room, is_owner_room } = route.params;
     console.log(params,'ini parasm')
     // selector
     const user = useSelector(
@@ -603,6 +604,7 @@ const GroupDetailScreen = ({ navigation, route }) => {
             {
               id: 1,
               name: 'Tambahkan Anggota',
+              show: is_admin_room || is_owner_room ? true : false,
               onPress: () => {
                 setShowSection(!showSection);
                 modalListActionRef.current.close();
