@@ -1,4 +1,4 @@
-import React, {useRef, forwardRef} from 'react';
+import React, {useRef,useState, forwardRef} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -16,20 +16,36 @@ const defaultProps = {
   data: [],
   adjust: true,
   selected: null,
-  name: '',
   onPress: () => {},
   onClose: () => {},
   style: {},
 };
 
 const ModalPassanger = forwardRef((props, ref) => {
-  const {data, selected, adjust, onPress, onClose, children, style, name} = props;
+  const {data, selected, adjust, onPress, onClose, onSave, children, style} = props;
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
+  const [title, setTitle] = useState('MR');
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [idCardNumber, setIdCardNumber] = useState('');
 
   const {Color} = useColor();
   const {width, height} = useWindowDimensions();
+
+  const onSubmit = () => {
+    const data = {
+      title,
+      name,
+      phone,
+      email,
+      idCardNumber
+    }
+
+    onSave([data])
+  }
 
   return (
     <Modalize
@@ -61,15 +77,15 @@ const ModalPassanger = forwardRef((props, ref) => {
             <Text size={12} style={{ marginBottom: 16 }} type='bold'>Tiket 1</Text>
             <Text size={10}>Sapaan</Text>
             <Row style={{ marginTop: 4, marginBottom: 16 }}>
-              <View style={{ paddingVertical: 8, marginRight: 8, backgroundColor: '#CDD1D2', paddingHorizontal: 14, borderRadius: 40 }}>
-                <Text size={12} type='medium'>Tuan</Text>
-              </View>
-              <View style={{ paddingVertical: 8, marginRight: 8, backgroundColor: '#CDD1D2', paddingHorizontal: 14, borderRadius: 40 }}>
-                <Text size={12} type='medium'>Nyonya</Text>
-              </View>
-              <View style={{ paddingVertical: 8, marginRight: 8, backgroundColor: '#CDD1D2', paddingHorizontal: 14, borderRadius: 40 }}>
-                <Text size={12} type='medium'>Nona</Text>
-              </View>
+              <TouchableOpacity onPress={() => setTitle('MR')} style={{ paddingVertical: 8, marginRight: 8, backgroundColor: title == 'MR' ? Color.primary : '#CDD1D2', paddingHorizontal: 14, borderRadius: 40 }}>
+                <Text size={12} color={title == 'MR' ? Color.semiwhite : Color.text} type='medium'>Tuan</Text>
+              </TouchableOpacity>
+              <TouchableOpacity  onPress={() => setTitle('MRS')} style={{ paddingVertical: 8, marginRight: 8, backgroundColor: title == 'MRS' ? Color.primary : '#CDD1D2', paddingHorizontal: 14, borderRadius: 40 }}>
+                <Text size={12} color={title == 'MRS' ? Color.semiwhite : Color.text} type='medium'>Nyonya</Text>
+              </TouchableOpacity>
+              <TouchableOpacity  onPress={() => setTitle('MS')} style={{ paddingVertical: 8, marginRight: 8, backgroundColor: title == 'MS' ? Color.primary : '#CDD1D2', paddingHorizontal: 14, borderRadius: 40 }}>
+                <Text size={12} color={title == 'MS' ? Color.semiwhite : Color.text} type='medium'>Nona</Text>
+              </TouchableOpacity>
             </Row>
             <View style={{alignItems: 'flex-start',width: '100%',  marginVertical: 5}}>
                 <View style={{width: '100%'}}>
@@ -89,12 +105,13 @@ const ModalPassanger = forwardRef((props, ref) => {
                 <View style={{width: '100%'}}>
                     <TextInput
                         placeholder='81212345678'
+                        keyboardType='numeric'
                         style={{
                             borderWidth: 1, borderColor: Color.border, color: Color.text,
                             width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47
                         }}
-                        onChangeText={(value) => setName(value)}
-                        value={name}
+                        onChangeText={(value) => setPhone(value)}
+                        value={phone}
                     />
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>No. Telepon</Text>
                 </View>
@@ -107,8 +124,8 @@ const ModalPassanger = forwardRef((props, ref) => {
                             borderWidth: 1, borderColor: Color.border, color: Color.text,
                             width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47
                         }}
-                        onChangeText={(value) => setName(value)}
-                        value={name}
+                        onChangeText={(value) => setEmail(value)}
+                        value={email}
                     />
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Email</Text>
                 </View>
@@ -121,18 +138,18 @@ const ModalPassanger = forwardRef((props, ref) => {
                             borderWidth: 1, borderColor: Color.border, color: Color.text,
                             width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47
                         }}
-                        onChangeText={(value) => setName(value)}
-                        value={name}
+                        onChangeText={(value) => setIdCardNumber(value)}
+                        value={idCardNumber}
                     />
                     <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>No. KTP</Text>
                 </View>
             </View>
           </View>
-          {/* <View style={{ marginTop: 20,  height: 70, alignItems: 'center'}}>
-              <TouchableOpacity onPress={() => submit()} style={{backgroundColor: Color.primary, width: width-40, height: 45, borderRadius: 20, justifyContent: 'center'}}>
-                  <Text style={{color: Color.textInput}}>Simpant</Text>
+          <View style={{ marginTop: 20,  height: 70, alignItems: 'center'}}>
+              <TouchableOpacity onPress={() => onSubmit()} style={{backgroundColor: Color.primary, width: width-40, height: 45, borderRadius: 20, justifyContent: 'center'}}>
+                  <Text style={{color: Color.textInput}}>Simpan</Text>
               </TouchableOpacity>
-          </View> */}
+          </View>
         </ScrollView>
       </View>
     </Modalize>

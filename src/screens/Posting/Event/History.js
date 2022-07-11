@@ -23,13 +23,49 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Feather from 'react-native-vector-icons/Feather'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import {useIsFocused, useRoute} from '@react-navigation/native';
+import { getHistory } from 'src/lib/query/event';
+import { FormatMoney } from 'src/utils';
 
 
-const History = ({navigation}) => {
+const History = ({navigation, route}) => {
 
 const {Color} = useColor();
 const [popupProps, showPopup] = usePopup();
 const [loadingProps, showLoading, hideLoading] = useLoading();
+
+const [loading, setLoading] = useState(true);
+const [data, setData] = useState([]);
+const isFocused = useIsFocused();
+
+  useEffect(() => {
+    getList();
+  }, []);
+
+    const getList = () => {
+      console.log(route, 'props');
+      // showLoading();
+      let variables = {
+        page: 0,
+        itemPerPage: 20,
+      };
+      console.log(variables);
+      Client.query({query: getHistory, variables})
+        .then(res => {
+          // hideLoading()
+          if(res.data.eventTicketOrderList){
+            setData(res.data.eventTicketOrderList)
+          }
+          console.log(res);
+
+          setLoading(false);
+        })
+        .catch(reject => {
+          // hideLoading()
+          console.log(reject, 'reject');
+          setLoading(false);
+        });
+    };
 
   return (
     <Scaffold
@@ -48,22 +84,14 @@ const [loadingProps, showLoading, hideLoading] = useLoading();
     >
         <Divider/>
         <FlatList
-          data={[
-            {Recipt: '100006485791', status: 'Menunggu Pembayaran', title: 'Geek Con by TRIBESOCIAL at Kota Kasablanka',
-        totalTicket: 1, pax: 1, totalHarga: '110.000', image: ImagesPath.produklelang3},
-            {Recipt: '100006485791', status: 'Lunas', title: 'Geek Con by TRIBESOCIAL at Kota Kasablanka',
-        totalTicket: 1, pax: 1, totalHarga: '110.000', image: ImagesPath.produklelang2},
-            {Recipt: '100006485791', status: 'Menunggu Pembayaran', title: 'Geek Con by TRIBESOCIAL at Kota Kasablanka',
-        totalTicket: 1, pax: 1, totalHarga: '110.000',image: ImagesPath.produklelang5},
-          ]}
-          
+          data={data}
           renderItem={({item}) => 
           <Pressable
           style={{borderRadius: 5, marginBottom: 10,backgroundColor: Color.theme, width:'95%', alignSelf: 'center'}}>
             <View style={{flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 10,}}>
                 <Col style={{width: '60%'}}>
                     <Text align={'left'} style={{fontSize: 8}}>No. Receipt</Text>
-                    <Text align={'left'} style={{fontSize: 10, fontWeight: 'bold'}}>{item.Recipt}</Text>
+                    <Text align={'left'} style={{fontSize: 10, fontWeight: 'bold'}}>{item.orderNumber}</Text>
                 </Col>
                 {item.status == "Lunas"?
                 <View style={{backgroundColor: '#E7F5D0', borderRadius: 8,paddingHorizontal: 10, justifyContent: 'center', alignItems:'center'}}>
@@ -77,14 +105,14 @@ const [loadingProps, showLoading, hideLoading] = useLoading();
             <View style={{borderWidth: 0.6, borderColor: Color.border, width: '95%', alignSelf: 'center'}}/>
             <View style={{paddingVertical: 10, flexDirection: 'row', paddingHorizontal: 10}}>
                 <View style={{width: 50, height: 50, backgroundColor: Color.secondary, borderRadius: 5}}>
-                    <Image source={item.image} style={{width: '100%', height: '100%'}}/>
+                    <Image source={{ uri: item.event.images[0]}} style={{width: '100%', height: '100%'}}/>
                 </View>
                 <View style={{paddingHorizontal: 10, width: '70%'}}>
                     <Text numberOfLines={2} align={'left'} style={{fontWeight: 'bold'}}>{item.title}</Text>
                     <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
-                        <Text style={{fontSize: 10, color: Color.secondary}}>{item.totalTicket} Tiket</Text>
+                        <Text style={{fontSize: 10, color: Color.secondary}}>{item.qty} Tiket</Text>
                         <View style={{width: 3, height: 3, backgroundColor: Color.secondary, borderRadius: 20, marginHorizontal: 5}}/>
-                        <Text style={{fontSize: 10, color: Color.secondary}}>{item.pax} Pax</Text>
+                        <Text style={{fontSize: 10, color: Color.secondary}}>{item.qty} Pax</Text>
                     </View>
                 </View>
             </View>
@@ -92,7 +120,7 @@ const [loadingProps, showLoading, hideLoading] = useLoading();
             <View style={{paddingVertical: 10, flexDirection: 'row'}}>
                 <View style={{width: '70%', paddingHorizontal: 10}}>
                     <Text align={'left'} style={{fontSize: 8, color: Color.secondary}}>Harga Total</Text>
-                    <Text align={'left'} style={{fontWeight: 'bold'}}>Rp. {item.totalHarga}</Text>
+                    <Text align={'left'} style={{fontWeight: 'bold'}}>{FormatMoney.getFormattedMoney(item.price)}</Text>
                 </View>
                 <Pressable onPress={()=> navigation.navigate('MyTicket')}
                 style={{backgroundColor: Color.primary, borderRadius: 20,alignItems:'center', justifyContent: 'center',paddingHorizontal: 17}}>

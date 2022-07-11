@@ -367,7 +367,7 @@ const CardContentProduct = ({ productCategory, category,item, numColumns, onPres
                             <Row>
                                 <View style={{width: '50%'}}>
                                     <Text size={8} color={Color.secondary} align='left' numberOfLines={2} style={{marginBottom: 2}}>Tiket Dimiliki</Text>
-                                    <Text type='bold' align='left' numberOfLines={3}>2 Tiket</Text>
+                                    <Text type='bold' align='left' numberOfLines={3}>{item.qty} Tiket</Text>
                                 </View>
                                 <Pressable style={{backgroundColor: Color.primary, width: 110, borderRadius: 25, height: 30, alignItems: 'center', justifyContent: 'center'}}>
                                     <Text style={{fontSize: 11, color: Color.textInput, fontWeight: 'bold'}}>Lihat Detail</Text>

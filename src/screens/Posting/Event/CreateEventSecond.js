@@ -3,6 +3,7 @@ import { View, ScrollView, Platform, Image, SafeAreaView, TextInput, TouchableOp
 import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import DatePicker from 'react-native-date-picker';
+import DropDownPicker from 'react-native-dropdown-picker';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import RNFetchBlob from 'rn-fetch-blob';
@@ -58,14 +59,20 @@ const CreateEventSecond = ({navigation}) => {
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
     const [name, setName] = useState(user ? user.firstName+' '+user.lastName : '');
     const [isTicket, setSwitch] = useState();
-    const [refresh, setRefresh] = useState(0);
-    const [tnc, setTnc] = useState(0);
+    const [refresh, setRefresh] = useState('');
+    const [tnc, setTnc] = useState('');
     const [refundPolicy, setRefundPolicy] = useState(0);
     const [tickets, setTickets] = useState([{
             name: '',
             quota: 1,
+            type: "PAID",
             refund: true,
             reservation: true,
+            discountType: null,
+            discountValue: 0,
+            price: 1,
+            userId: user.userId,
+            categories: ["REGULER I"]
         }
     ])
 	const { Color } = useColor();
@@ -73,6 +80,14 @@ const CreateEventSecond = ({navigation}) => {
       latitude: initialLatitude,
       longitude: initialLongitude,
     });
+
+
+  const [openProductUnit, setOpenProductUnit] = useState([false]);
+  const [valueProductUnit, setValueProductUnit] = useState(null);
+  const [itemsProductUnit, setItemsProductUnit] = useState([
+    {label: 'Percentage', value: 'PERCENTAGE'},
+    {label: 'Price', value: 'PRICE'},
+  ]);
 
 
   const [modalSelectMap, setModalSelectMap] = useState(false);
@@ -83,57 +98,88 @@ const CreateEventSecond = ({navigation}) => {
         // submit()
     }, []);
 
+    const valueproductunits = (value, id) => {
+        setValueProductUnit(value)
+            console.log(valueProductUnit, value)
+            onChange(valueProductUnit,'discountType', id)
+    }
+
+    const setOpenProductUnitAct = (value, id) => {
+        const tempx = openProductUnit
+        tempx[id] = !value
+        console.log(tempx, id)
+        setOpenProductUnit(tempx)
+        setRefresh(refresh + 1);
+
+    }
+
     const addTicket = () => {
         const temp = tickets;
+        const tempb = openProductUnit
         temp.push({
             name: '',
             quota: 1,
+            type: "PAID",
             refund: true,
             reservation: true,
+            discountType: null,
+            discountValue: null,
+            price: '',
+            userId: user.userId,
+            categories: ["REGULER I"]
         })
+        tempb.push(false)
         setTickets(temp)
+        setOpenProductUnit(tempb)
         setRefresh(refresh + 1);
     }
 
     const submit = async () => {
-        console.log(route.params)
+        showLoading()
+        const updateData = tickets.map(val => {
+            return{
+                ...val,
+                quota: parseFloat(val.quota),
+                discountType: null,
+                discountValue: parseFloat(val.discountValue),
+                price: parseFloat(val.price),
+                userId: user.userId,
+                categories: ["REGULER I"]
+            }
+        })
         const variables = {
             type: 'CREATE',
             newEvent: {
                 ...route.params.item,
                 category: "OFFICIAL",
-                refundPolicy: refundPolicy,
-                tnc: tnc,
-                image: [],
-                tickets
-                // tickets: [{
-                //     name: 'Regular',
-                //     quota: 10,
-                //     type: 'FREE',
-                //     refund: true,
-                //     reservation: true,
-                // }]
+                refundPolicy: 'data:application/pdf;base64,'+refundPolicy,
+                tnc: 'data:application/pdf;base64,'+tnc,
+                tickets: updateData
             }
         }
         console.log(variables)
         client.mutate({mutation: mutationAddEvent, variables})
         .then(res => {
-            // hideLoading();
+            hideLoading();
             console.log(res);
             if (res.data.eventManage) {
-           
+                alert('Event berhasil dibuat')
+                setTimeout(() => {
+                    navigation.popToTop()
+                }, 1000);
             }
         })
         .catch(reject => {
-            // hideLoading();
+            hideLoading();
             console.log(reject.message, 'reject');
         });
 
-        navigation.navigate('CreateEventSecond',{item: tempData})
+        // navigation.navigate('CreateEventSecond',{item: tempData})
        
       };
 
       const onChange = (value,name, id) => {
+        console.log(value, name , id)
         const tempx = tickets
         tickets[id][name] = value
         setTickets(tempx)
@@ -166,6 +212,7 @@ const CreateEventSecond = ({navigation}) => {
 
   return (
     <Scaffold
+    loadingProps={loadingProps}
 		header={<Header customIcon title="" type="regular" centerTitle={false} />}
 		onPressLeftButton={() => navigation.pop()}
 	>
@@ -218,6 +265,71 @@ const CreateEventSecond = ({navigation}) => {
                             value={val.quota}
                         />
                         <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Kuota Tiket</Text>
+                    </View>
+                    <View
+                        style={{marginBottom: 10, }}>
+                        <Text
+                        style={{
+                            paddingHorizontal: 15,
+                            paddingTop: 5,
+                            color: Color.secondary,
+                            fontSize: 8,
+                            fontWeight: '400',
+                            textAlign: 'left',
+                        }}>
+                        Tipe Diskon
+                        </Text>
+                        <DropDownPicker
+                        placeholder="- Pilih Type Diskon -"
+                        open={openProductUnit[id]}
+                        value={val.discountType}
+                        items={itemsProductUnit}
+                        setOpen={(vals) => setOpenProductUnitAct(openProductUnit[id], id)}
+                        setValue={(val) => valueproductunits(val, id)}
+                        setItems={setItemsProductUnit}
+                        style={{
+                            height: 28,
+                            borderWidth: 0,
+                            width: '99%',
+                            marginHorizontal: 2,
+                        }}
+                        />
+                        <View
+                        style={{
+                            position: 'absolute',
+                            width: '100%',
+                            height: 47,
+                            borderWidth: 1,
+                            borderColor: Color.border,
+                            borderRadius: 5,
+                        }}
+                        />
+                    </View>
+                    <View  style={{marginBottom: 10}}>
+                        <TextInput
+                            placeholder='0'
+                            keyboardType='numeric'
+                            style={{
+                                borderWidth: 1, borderColor: Color.border, color: Color.text,
+                                width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47
+                            }}
+                            onChangeText={(value) => onChange(value,'discountValue', id)}
+                            value={val.discountValue}
+                        />
+                        <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Diskon</Text>
+                    </View>
+                    <View  style={{marginBottom: 10}}>
+                        <TextInput
+                            placeholder='0'
+                            keyboardType='numeric'
+                            style={{
+                                borderWidth: 1, borderColor: Color.border, color: Color.text,
+                                width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47
+                            }}
+                            onChangeText={(value) => onChange(value,'price', id)}
+                            value={val.price}
+                        />
+                        <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Harga Tiket</Text>
                     </View>
                     <Text type='semibold' size={10} align='left' style={{marginBottom: 5 }}>Bisa Refund?</Text>
                     <Row style={{ marginBottom: 10 }}>

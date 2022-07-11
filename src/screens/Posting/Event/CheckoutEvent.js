@@ -3,6 +3,7 @@ import { View, ScrollView, Platform, Image, SafeAreaView, TextInput, TouchableOp
 import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import DatePicker from 'react-native-date-picker';
+import {connect, useDispatch, useStore} from 'react-redux';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import RNFetchBlob from 'rn-fetch-blob';
@@ -40,7 +41,7 @@ import axios from 'axios';
 import moment from 'moment';
 import FormSelect from 'src/components/FormSelect';
 import client from '@src/lib/apollo';
-import { mutationAddEvent } from 'src/lib/query/event';
+import { mutationAddEvent, mutationOrderEvent } from 'src/lib/query/event';
 import { FormatMoney } from 'src/utils';
 import ModalPassanger from './ModalPassanger';
 var crypto = require('crypto-js')
@@ -61,16 +62,16 @@ const Content = Styled(View)`
 const CheckoutEvent = ({navigation}) => {
     const user = useSelector((state) => state['user.auth'].login.user);
 	const loading = useSelector((state) => state['user.auth'].loading);
+
+  const dispatch = useDispatch();
     const route = useRoute();
+    const {params} = route
+    console.log(params, user, 'paramsss')
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
     const [name, setName] = useState(user ? user.firstName+' '+user.lastName : '');
-    const [isTicket, setSwitch] = useState();
-    const [passanger, setPassanger] = useState();
-    const [passangerInput, setPassangerInput] = useState(null);
+    const [passanger, setPassanger] = useState([]);
     const [refresh, setRefresh] = useState(0);
-    const [tnc, setTnc] = useState(0);
-    const [refundPolicy, setRefundPolicy] = useState(0);
     const modalPassangerRef = useRef();
     const [tickets, setTickets] = useState([{
             name: '',
@@ -107,41 +108,45 @@ const CheckoutEvent = ({navigation}) => {
     }
 
     const submit = async () => {
-        console.log(route.params)
+        showLoading()
         const variables = {
-            type: 'CREATE',
-            newEvent: {
-                ...route.params.item,
-                category: "OFFICIAL",
-                refundPolicy: refundPolicy,
-                tnc: tnc,
-                image: [],
-                tickets
-                // tickets: [{
-                //     name: 'Regular',
-                //     quota: 10,
-                //     type: 'FREE',
-                //     refund: true,
-                //     reservation: true,
-                // }]
-            }
+            type: 'BOOKING',
+            newOrder: {
+                userId: user.userId,
+                eventId: params.ticket.eventId,
+                ticketId: params.ticket.ticketId,
+                userOrderName:params.ticket.userOrderName,
+                userOrderPhone:params.ticket.userOrderPhone,
+                userOrderEmail:params.ticket.userOrderEmail,
+                orderItems: passanger,
+              }
         }
         console.log(variables)
-        client.mutate({mutation: mutationAddEvent, variables})
+        client.mutate({mutation: mutationOrderEvent, variables})
         .then(res => {
-            // hideLoading();
-            console.log(res);
-            if (res.data.eventManage) {
-           
+            hideLoading();
+            console.log(res.data);
+            if (res.data.eventTicketOrderManage.success) {
+                console.log('manage')
+                dispatch({
+                    type: 'BOOKING.ADD_BOOKING',
+                    data: {
+                      ...res.data.eventTicketOrderManage.data,
+                      id: res.data.eventTicketOrderManage.data.bookingId,
+                      vestaBiller: true,
+                      finalAmount: res.data.eventTicketOrderManage.data.totalAmount,
+                    },
+                  });
+                  setTimeout(() => {
+                    navigation.navigate('PaymentScreen', {back: true});
+                    // navigation.popToTop()
+                  }, 1000);
             }
         })
         .catch(reject => {
-            // hideLoading();
+            hideLoading();
             console.log(reject.message, 'reject');
         });
-
-        navigation.navigate('CreateEventSecond',{item: tempData})
-       
       };
 
       const onChange = (value,name, id) => {
@@ -175,26 +180,34 @@ const CheckoutEvent = ({navigation}) => {
         }
     }
 
-    const onSave = () => {
+    const onClose = () => {
         modalPassangerRef.current.close();
+      }
+
+      const onSave = (data) => {
+        console.log(data)
+        setPassanger(data)
+        onClose()
       }
 
   return (
     <Scaffold
 		header={<Header customIcon title="Detail Pemesanan" type="regular" centerTitle={false} />}
 		onPressLeftButton={() => navigation.pop()}
+        loadingProps={loadingProps}
 	>
+        {console.log(user)}
         <ScrollView>
             <View style={{ borderColor: '#CDD1D2', margin: 16, borderWidth: 1, padding: 10, borderRadius: 10 }}>
                 <Row>
-                    <View style={{ height: 48, width: 48, borderRadius: 8, marginRight: 8, backgroundColor: '#ddd' }} />
-                    <Text type='semibold' align='left' color='#111'>Geek Con by TRIBESOCIAL at Kota Kasablanka</Text>
+                    <Image source={{ uri:params.ticket.image  }} style={{ height: 48, width: 48, borderRadius: 8, marginRight: 8, backgroundColor: '#ddd' }} />
+                    <Text type='semibold' align='left' color='#111'>{params.ticket.nameEvent}</Text>
                 </Row>
                 <View style={{ height: 1, backgroundColor: '#DDDDDD', marginVertical: 16 }} />
                 <Row style={{ marginBottom: 5 }}>
-                    <Text color='#111' type='bold' size={11}>PRESALE - Regular (A)</Text>
+                    <Text color='#111' type='bold' size={11}>{params.ticket.name}</Text>
                     <Col>
-                        <Text size={11} color={Color.text} type='medium'>08 Feb 2022</Text>
+                        <Text size={11} color={Color.text} type='medium'>{moment(params.ticket.date).format('DD MMM YYYY')}</Text>
                     </Col>
                 </Row>
                 <Text size={10} align='left' color='#6A7479'>1 Tiket • 1 Pax</Text>
@@ -204,13 +217,13 @@ const CheckoutEvent = ({navigation}) => {
                         <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
                             <Image source={ImagesPath.refund} style={{ width: 15, height: 15, borderRadius: 7 }} />
                         </View>
-                        <Text color={Color.text} size={11}>Bisa Refund</Text>
+                        <Text color={Color.text} size={11}>{params.ticket.refund ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
                     </Row>
                     <Row style={{ marginRight: 10, alignItems: 'center' }}>
                         <View style={{  width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
                             <Image source={ImagesPath.calendar} style={{  width: 16, height: 16, borderRadius: 7 }} />
                         </View>
-                        <Text color={Color.text} size={11}>Tidak Perlu Reservasi</Text>
+                        <Text color={Color.text} size={11}>{params.ticket.reservation ? 'Bisa Reservasi' : 'Tidak Bisa Reservasi'}</Text>
                     </Row>
                 </Row>
             </View>
@@ -219,18 +232,18 @@ const CheckoutEvent = ({navigation}) => {
             <View style={{ borderColor: '#CDD1D2', margin: 16, borderWidth: 1, padding: 10, borderRadius: 10 }}>
                 <Row>
                     <Col>
-                        <Text size={11} type='bold' align='left'>Adang Susanyo</Text>
+                        <Text size={11} type='bold' align='left'>{user.firstName} {user.lastName}</Text>
                         <Row style={{ marginRight: 10, alignItems: 'center' }}>
                             <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
                                 <Image source={ImagesPath.phone} resizeMode='contain' style={{ width: 14,  borderRadius: 7 }} />
                             </View>
-                            <Text color={Color.text} size={11}>+6281312345678</Text>
+                            <Text color={Color.text} size={11}>+{user.phoneCountryCode}{user.phoneNumber}</Text>
                         </Row>
                         <Row style={{ marginRight: 10, alignItems: 'center' }}>
                             <View style={{  width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
                                 <Image source={ImagesPath.mail} style={{  width: 16, height: 16, borderRadius: 7 }} />
                             </View>
-                            <Text color={Color.text} size={11}>Adang@email.com</Text>
+                            <Text color={Color.text} size={11}>{user.email}</Text>
                         </Row>
                     </Col>
                     <Col size={2} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
@@ -257,24 +270,24 @@ const CheckoutEvent = ({navigation}) => {
                     <Col>
                         <Text color={Color.text}  size={11} align='left'>Subtotal</Text>
                     </Col>
-                    <Col size={2} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
-                        <Text color={Color.text}  size={11} align='left'>{FormatMoney.getFormattedMoney(0)}</Text>
+                    <Col size={4} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
+                        <Text color={Color.text}  size={11} align='left'>{FormatMoney.getFormattedMoney(params.ticket.price)}</Text>
                     </Col>
                 </Row>
                 <Row style={{ marginBottom: 8 }}>
                     <Col>
                         <Text color={Color.text}  size={11} align='left'>Ppn 10%</Text>
                     </Col>
-                    <Col size={2} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
-                        <Text color={Color.text}  size={11} align='left'>{FormatMoney.getFormattedMoney(0)}</Text>
+                    <Col size={4} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
+                        <Text color={Color.text}  size={11} align='left'>{FormatMoney.getFormattedMoney(params.ticket.price*0.1)}</Text>
                     </Col>
                 </Row>
                 <Row style={{ marginBottom: 8 }}>
                     <Col>
                         <Text color={Color.text}  size={11} align='left'>Total</Text>
                     </Col>
-                    <Col size={2} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
-                        <Text color={Color.text}  size={11} type='bold' align='left'>GRATIS</Text>
+                    <Col size={4} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
+                        <Text color={Color.text}  size={11} type='bold' align='left'>{FormatMoney.getFormattedMoney(params.ticket.price+params.ticket.price*0.1)}</Text>
                     </Col>
                 </Row>
             </View>
@@ -287,9 +300,10 @@ const CheckoutEvent = ({navigation}) => {
 
         <ModalPassanger
             ref={modalPassangerRef}
-            data={{name: 'riyan'}}
+            data={passanger}
+            onSave={onSave}
             onClose={() => {
-                onSave();
+                onClose();
             }}
         />
     </Scaffold>

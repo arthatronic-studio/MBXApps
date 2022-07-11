@@ -63,16 +63,19 @@ const PemesananTiket = ({navigation}) => {
     const user = useSelector((state) => state['user.auth'].login.user);
 	const loading = useSelector((state) => state['user.auth'].loading);
     const route = useRoute();
+    const {params} = route
+    console.log(route, 'route')
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
     const [name, setName] = useState(user ? user.firstName+' '+user.lastName : '');
     const [isTicket, setSwitch] = useState();
-    const [passanger, setPassanger] = useState();
+    const [qty, setQty] = useState();
     const [passangerInput, setPassangerInput] = useState(null);
     const [refresh, setRefresh] = useState(0);
     const [tnc, setTnc] = useState(0);
     const [refundPolicy, setRefundPolicy] = useState(0);
     const modalChangeTicketRef = useRef();
+    const [ticketSelected, setSelected] = useState(params.item)
     const [tickets, setTickets] = useState([{
             name: '',
             quota: 1,
@@ -106,7 +109,7 @@ const PemesananTiket = ({navigation}) => {
         setTickets(temp)
         setRefresh(refresh + 1);
     }
-    const onSave = () => {
+    const onClose = () => {
         modalChangeTicketRef.current.close()
     }
 
@@ -119,9 +122,10 @@ const PemesananTiket = ({navigation}) => {
         <ScrollView>
             <View style={{ borderColor: '#CDD1D2', margin: 16, borderWidth: 1, padding: 10, borderRadius: 10 }}>
                 <Row style={{ marginBottom: 5 }}>
-                    <Text color='#111' type='bold' size={11}>PRESALE - Regular (A)</Text>
+                    {console.log(ticketSelected, 'ticketSelected')}
+                    <Text color='#111' type='bold' size={11}>{ticketSelected.name}</Text>
                     <Col>
-                        <Text size={11} color={Color.text} type='medium' align='right'>08 Feb 2022</Text>
+                        <Text size={11} color={Color.text} type='medium' align='right'>{moment(params.dataEvent.date).format('DD MMM YYYY')}</Text>
                     </Col>
                 </Row>
                 <Row style={{ marginTop: 12, }}>
@@ -129,20 +133,20 @@ const PemesananTiket = ({navigation}) => {
                         <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 3, borderRadius: 14 }}>
                             <Image source={ImagesPath.refund} style={{ width: 15, height: 15, borderRadius: 7 }} />
                         </View>
-                        <Text color={Color.text} size={11}>Bisa Refund</Text>
+                        <Text color={Color.text} size={11}>{ticketSelected.refund ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
                     </Row>
                     <Row style={{ marginRight: 10, alignItems: 'center' }}>
                         <View style={{  width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 3, borderRadius: 14 }}>
                             <Image source={ImagesPath.calendar} style={{  width: 16, height: 16, borderRadius: 7 }} />
                         </View>
-                        <Text color={Color.text} size={11}>Tidak Perlu Reservasi</Text>
+                        <Text color={Color.text} size={11}>{ticketSelected.reservation ? 'Bisa Reservasi' : 'Tidak Bisa Reservasi'}</Text>
                     </Row>
                 </Row>
                 <View style={{ height: 1,  marginVertical: 12 }} />
                 <Row style={{  alignItems: 'center' }}>
                     <Col size={8} style={{   alignItems: 'flex-start', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
                         <Text color={Color.text} size={9}>Harga</Text>
-                        <Text color={Color.text} size={14} type='semibold'>{FormatMoney.getFormattedMoney(100000)}/pax</Text>
+                        <Text color={Color.text} size={14} type='semibold'>{FormatMoney.getFormattedMoney(ticketSelected.price)}/pax</Text>
                     </Col>
                     <Col style={{ alignItems: 'flex-end' }}>
                         <TouchableOpacity onPress={() => modalChangeTicketRef.current.open()} style={{ borderColor: Color.primary, borderWidth: 1, borderRadius: 30, paddingVertical: 8, paddingHorizontal: 10 }}>
@@ -190,17 +194,17 @@ const PemesananTiket = ({navigation}) => {
             <Row style={{ margin: 16 }}>
                 <Col>
                     <Text color='#6A7479' align='left' size={10}>PAX</Text>
-                    <Text type='bold' align='left' size={14}>{FormatMoney.getFormattedMoney(100000)}</Text>
+                    <Text type='bold' align='left' size={14}>{FormatMoney.getFormattedMoney(ticketSelected.price)}</Text>
                 </Col>
                 <Col style={{ justifyContent: 'center' }}>
                     <Row style={{justifyContent: 'flex-end', alignItems: 'center'}}>
-                        <TouchableOpacity style={{marginLeft: 24}}>
+                        <TouchableOpacity onPress={() => setQty(qty-1 < 1  ? 1 : qty-1)} style={{marginLeft: 24}}>
                             <AntDesign name="minuscircleo" color={Color.disabled} size={19} />
                         </TouchableOpacity>
                         <View>
-                            <Text color={Color.text} type='bold' size={18} style={{marginHorizontal: 8}}>1</Text>
+                            <Text color={Color.text} type='bold' size={18} style={{marginHorizontal: 8}}>{qty}</Text>
                         </View>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => setQty(qty+1)}>
                             <AntDesign  name="pluscircleo" color={'#F3771D'} size={19}/>
                         </TouchableOpacity>
                     </Row>
@@ -211,10 +215,10 @@ const PemesananTiket = ({navigation}) => {
             ref={modalChangeTicketRef}
             data={{name: 'riyan'}}
             adjust={true}
-            onClose={onSave}
+            onClose={onClose}
         />
         <View style={{width: '100%',  height: 70, alignItems: 'center', borderRadius: 10}}>
-            <TouchableOpacity onPress={() => navigation.navigate('CheckoutEvent')} style={{backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
+            <TouchableOpacity onPress={() => navigation.navigate('CheckoutEvent',{ticket: {...ticketSelected, nameEvent: params.dataEvent.name, date: params.dataEvent.date, image: params.dataEvent.images ? params.dataEvent.images[0] : '', eventId: params.dataEvent.id, ticketId: ticketSelected.id, userOrderEmail: params.itemRoute.userOrderEmail, userOrderName: params.itemRoute.userOrderName, userOrderPhone: params.itemRoute.userOrderPhone}})} style={{backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
                 <Text style={{color: Color.textInput}}>Pesan Tiket</Text>
             </TouchableOpacity>
         </View>

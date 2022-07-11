@@ -9,6 +9,7 @@ import Header from '@src/components/Header';
 import {useLoading, usePopup, useColor, Alert, Row, Col} from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
+import {useIsFocused, useRoute} from '@react-navigation/native';
 import {TouchableOpacity, Button} from '@src/components/Button';
 import Client from '@src/lib/apollo';
 import {queryAddLike} from '@src/lib/query';
@@ -22,6 +23,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Feather from 'react-native-vector-icons/Feather'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import { getDetailEvent } from 'src/lib/query/event';
 
 
 
@@ -64,31 +66,55 @@ const DATA = [
 
 const EventDetail = ({navigation, route}) => {
   const {Color} = useColor();
-  const {item} = route.params;
+  const items = route.params.item;
   const modalOptionsRef = useRef();
   const user = useSelector(state => state['user.auth'].login.user);
 
-  const [im_like, set_im_like] = useState(item.im_like);
+  const [im_like, set_im_like] = useState(items.im_like);
 
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(true);
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
+  const isFocused = useIsFocused();
 
-  // useEffect(() => {
-  //     const timeout = trigger ? setTimeout(() => {
-  //         fetchAddLike();
-  //     }, 500) : null;
+  useEffect(() => {
+    getDetail();
+  }, [isFocused]);
 
-  //     return () => {
-  //         clearTimeout(timeout);
-  //     }
-  // }, [trigger]);
+    const getDetail = () => {
+      // showLoading();
+      console.log(items)
+      let variables = {
+        id: items.id,
+      };
+      console.log(variables);
+      Client.query({query: getDetailEvent, variables})
+        .then(res => {
+          // hideLoading()
+          if(res.data.eventDetail){
+            setData(res.data.eventDetail)
+          }
+          console.log(res);
+
+          setLoading(false);
+        })
+        .catch(reject => {
+          // hideLoading()
+          alert(reject.message)
+          console.log(reject.message, 'reject');
+          setLoading(false);
+        });
+    };
+
+
   const renderItem = ({ item }) => (
    <Pressable style={{width: '100%', height: 165, marginBottom: 10,paddingHorizontal: 15, backgroundColor: Color.theme, borderWidth: 1, borderColor: Color.border, borderRadius: 8}}>
       <Divider height={10}/>
       <Row>
         <Col>
-          <Text style={{fontSize: 11, textAlign: 'left',fontWeight: 'bold'}}>{item.title}</Text>
-          <Text style={{fontSize: 8, textAlign: 'left', marginVertical: 3}}>{item.date}</Text>
+          <Text style={{fontSize: 11, textAlign: 'left',fontWeight: 'bold'}}>{item.name}</Text>
+          <Text style={{fontSize: 8, textAlign: 'left', marginVertical: 3}}>{items.event.date}</Text>
         </Col>
         {/* <View style={{flexDirection:'row', justifyContent: 'center'}}>
             <Text style={{fontSize: 10, color: '#3C58C1', marginHorizontal: 5}}>Lihat Detail</Text>
@@ -98,18 +124,18 @@ const EventDetail = ({navigation, route}) => {
       <Divider height={25}/>
       <Row style={{alignItems: 'center', }}>
         <MaterialCommunityIcons name={'cash-refund'} color={Color.secondary} size={22}/>
-        <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 5}}>Bisa Refund</Text>
+        <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 5}}>{item.refund ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
         <Divider width={8}/>
         <AntDesign name='calendar' size={18} color={Color.secondary}/>
-        <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 5}}>Tidak Perlu Reservasi</Text>
+        <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 5}}>{item.reservation ? 'Perlu Reservasi' : 'Tidak Perlu Reservasi'}</Text>
       </Row>
       <Divider height={25}/>
       <Row>
         <Col>
             <Text style={{textAlign: 'left', fontSize: 8}}>Harga</Text>
-            <Text style={{textAlign: 'left', fontWeight: 'bold'}}>{item.harga}<Text style={{fontSize: 8}}>/Pax</Text></Text>
+            <Text style={{textAlign: 'left', fontWeight: 'bold'}}>{items.price}<Text style={{fontSize: 8}}>/Pax</Text></Text>
         </Col>
-        <TouchableOpacity onPress={() => navigation.navigate('PemesananTiket')} style={{justifyContent: 'center',backgroundColor: Color.primary, width: '35%', borderRadius: 30}}>
+        <TouchableOpacity onPress={() => navigation.navigate('PemesananTiket', {item, dataEvent: data, itemRoute: items})} style={{justifyContent: 'center',backgroundColor: Color.primary, width: '35%', borderRadius: 30}}>
           <Text style={{fontSize: 10, color: Color.textInput}}>Pesan Sekarang</Text>
         </TouchableOpacity>
       </Row>
@@ -123,7 +149,7 @@ const EventDetail = ({navigation, route}) => {
     Client.query({
       query: queryAddLike,
       variables: {
-        productId: item.id,
+        productId: items.id,
       },
     })
       .then(res => {
@@ -144,13 +170,15 @@ const EventDetail = ({navigation, route}) => {
       });
   };
 
-  let eventDate = !isNaN(parseInt(item.eventDate)) ? parseInt(item.eventDate) : null;
-  if (!eventDate) eventDate = !isNaN(parseInt(item.updated_date)) ? parseInt(item.updated_date) : null;
+  let eventDate = !isNaN(parseInt(items.eventDate)) ? parseInt(items.eventDate) : null;
+  if (!eventDate) eventDate = !isNaN(parseInt(items.updated_date)) ? parseInt(items.updated_date) : null;
 
   let isPassedEventDate = true;
   if (moment(eventDate).isValid() && moment(eventDate).isAfter(moment())) {
     isPassedEventDate = false;
   }
+
+  if(!data) return <View />
 
   return (
     <Scaffold
@@ -181,13 +209,13 @@ const EventDetail = ({navigation, route}) => {
         <TouchableOpacity
           onPress={() => {
             navigation.navigate('GalleryDetailScreen', {
-              id: item.id,
-              image: item.image,
+              id: items.id,
+              image: items.image,
             });
           }}
         >
           <Image
-            source={{uri: item.image}}
+            source={{uri: items.image}}
             style={{width: '100%', aspectRatio: 4/3, backgroundColor: Color.border}}
           />
         </TouchableOpacity>
@@ -220,7 +248,7 @@ const EventDetail = ({navigation, route}) => {
                 paddingHorizontal: 20,
                 width: '70%'
               }}>
-              {item.productName}
+              {items.productName}
             </Text>
           </View>
           <View style={{flexDirection: 'row', paddingVertical: 18}}>
@@ -237,7 +265,7 @@ const EventDetail = ({navigation, route}) => {
                 color={Color.secondary}
               />
               <Divider width={6} />
-              <Text style={{fontSize: 10, color: Color.secondary, fontWeight: 'bold'}}>{moment(eventDate).format('DD MMM YYYY')}</Text>
+              <Text style={{fontSize: 10, color: Color.secondary, fontWeight: 'bold'}}>{moment(data.date).format('DD MMM YYYY')}</Text>
             </View>}
             <View
               style={{
@@ -251,7 +279,7 @@ const EventDetail = ({navigation, route}) => {
                 color={Color.secondary}
               />
               <Divider width={6} />
-              <Text style={{fontSize: 10, color: Color.secondary, fontWeight: 'bold'}}>16.00 - 20.00</Text>
+              <Text style={{fontSize: 10, color: Color.secondary, fontWeight: 'bold'}}>{data.startTime} - {data.endTime}</Text>
             </View>
             <View
               style={{
@@ -265,7 +293,7 @@ const EventDetail = ({navigation, route}) => {
                 color={Color.secondary}
               />
               <Divider width={4} />
-              <Text style={{fontSize: 10, color: Color.secondary, fontWeight: 'bold'}}>Jakarta Selatan</Text>
+              <Text style={{fontSize: 10, color: Color.secondary, fontWeight: 'bold'}}>{data.kota}</Text>
             </View>
             {/* <View
               style={{
@@ -291,24 +319,24 @@ const EventDetail = ({navigation, route}) => {
             </Button>
           </Container>
           
-          {item.like > 0 &&
+          {items.like > 0 &&
             <Container paddingHorizontal={16}>
-                <WidgetUserLikes id={item.id} title='Akan Hadir' />
+                <WidgetUserLikes id={items.id} title='Akan Hadir' />
             </Container>
           } */}
-          <Row style={{ backgroundColor: '#FAF3ED', marginHorizontal: 10, padding: 13, borderRadius: 8 }}>
+          {data.ordered && <Row style={{ backgroundColor: '#FAF3ED', marginHorizontal: 10, padding: 13, borderRadius: 8 }}>
             <Col>
               <Text size={11} type='bold' align='left'>Kamu telah memiliki tiket untuk event ini</Text>
             </Col>
             <Col style={{ alignItems: 'flex-end' }}>
-              <TouchableOpacity onPress={()=> navigation.navigate('MyTicket')} style={{ backgroundColor: '#F3771D', paddingHorizontal: 10, paddingVertical: 8, borderRadius: 20 }}>
+              <TouchableOpacity onPress={()=> navigation.navigate('MyTicket', {item: data})} style={{ backgroundColor: '#F3771D', paddingHorizontal: 10, paddingVertical: 8, borderRadius: 20 }}>
                 <Row style={{ alignItems: 'center' }}>
                   <Text size={10} color='#fff' style={{ marginRight: 8 }}>Lihat Tiket</Text>
                   <AntDesign name='arrowright' color='#fff' />
                 </Row>
               </TouchableOpacity>
             </Col>
-          </Row>
+          </Row>}
 
           <View>
             <Text
@@ -329,7 +357,7 @@ const EventDetail = ({navigation, route}) => {
                 color: Color.secondary,
                 marginBottom: 16,
               }}>
-              {item.productDescription}
+              {items.productDescription}
             </Text>
             <Pressable style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center',width: '100%', paddingHorizontal: 15}}>
               <Text style={{color: Color.primary}}>Selengkapnya</Text>
@@ -342,9 +370,9 @@ const EventDetail = ({navigation, route}) => {
             <Text style={{fontWeight:'bold', fontSize: 11, textAlign: 'left'}}>Jenis Tiket</Text>
             <Divider height={10}/>
             <FlatList
-              data={DATA}
+              data={data.tickets}
               renderItem={renderItem}
-              keyExtractor={item => item.id}
+              keyExtractor={item => items.id}
              />
           </View>
 
@@ -505,7 +533,7 @@ const EventDetail = ({navigation, route}) => {
             <Text style={{textAlign: 'left', fontSize: 8}}>Mulai dari</Text>
             <Text style={{textAlign: 'left', fontWeight: 'bold'}}>Rp. 100.000</Text>
         </Col>
-        <TouchableOpacity onPress={() => navigation.navigate('PemesananTiket')} style={{justifyContent: 'center',backgroundColor: Color.primary, width: '30%', borderRadius: 30, height: 35}}>
+        <TouchableOpacity onPress={() => console.log()} style={{justifyContent: 'center',backgroundColor: Color.primary, width: '30%', borderRadius: 30, height: 35}}>
           <Text style={{fontSize: 10, color: Color.textInput}}>Ikut Event</Text>
         </TouchableOpacity>
       </Row>
@@ -528,8 +556,8 @@ const EventDetail = ({navigation, route}) => {
           disabled={isPassedEventDate}
           onPress={() => {
             GALogEvent('Event', {
-              id: item.id,
-              product_name: item.productName,
+              id: items.id,
+              product_name: items.productName,
               user_id: user.userId,
               method: analyticMethods.like,
             });
@@ -562,12 +590,12 @@ const EventDetail = ({navigation, route}) => {
           onPress={() => {
             let daddr = `-6.311272,106.793541`;
 
-            if (!item.latitude || !item.longitude) {
+            if (!items.latitude || !items.longitude) {
                 alert('Alamat tidak valid');
                 return;
             }
 
-            daddr = item.latitude + ',' + item.longitude;
+            daddr = items.latitude + ',' + items.longitude;
             
             if (Platform.OS === 'ios') {
                 Linking.openURL('http://maps.apple.com/maps?daddr=' + daddr);
@@ -595,8 +623,8 @@ const EventDetail = ({navigation, route}) => {
       <ModalContentOptions
           ref={modalOptionsRef}
           event={true}
-          isOwner={user && user.userId === item.ownerId}
-          item={item}
+          isOwner={user && user.userId === items.ownerId}
+          item={items}
       /> 
     </Scaffold>
   );

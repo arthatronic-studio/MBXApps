@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, ScrollView, useWindowDimensions, Image, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
+import { View, ScrollView, useWindowDimensions, Image, SafeAreaView, TextInput, TouchableOpacity, ImageBackground } from 'react-native';
 import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import DatePicker from 'react-native-date-picker';
@@ -7,6 +7,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RNSimpleCrypto from "react-native-simple-crypto";
+import {launchImageLibrary} from 'react-native-image-picker';
 import { initialLatitude, initialLongitude } from 'src/utils/constants';
 
 import {
@@ -60,6 +61,12 @@ const CreateEvent = ({navigation}) => {
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
     const [name, setName] = useState( '');
     const [address, setAddress] = useState('');
+
+    const [province, setProvince] = useState('');
+    const [city, setCity] = useState('');
+    const [kecamatan, setKecamatan] = useState('');
+    const [kelurahan, setKelurahan] = useState('');
+
     const [desc, setDes] = useState('');
     const [showDatePicker3, setShowDatePicker3] = useState(false); 
     const [showDatePicker, setShowDatePicker] = useState(false); 
@@ -77,21 +84,46 @@ const CreateEvent = ({navigation}) => {
   const [modalSelectMap, setModalSelectMap] = useState(false);
   const [isPinnedMap, setIsPinnedMap] = useState(false);
   const [locationPinnedMap, setLocationPinnedMap] = useState('');
+  const [thumbImage, setThumbImage] = useState('');
+  const [mimeImage, setMimeImage] = useState('image/jpeg');
 
 	useEffect( () => {
         // submit()
     }, []);
 
+    const addImage = () => {
+        const options = {
+          mediaType: 'photo',
+          maxWidth: 640,
+          maxHeight: 640,
+          quality: 1,
+          includeBase64: true,
+        };
+    
+        launchImageLibrary(options, callback => {
+          if (callback.base64) {
+            setThumbImage(callback.base64);
+            setMimeImage(callback.type);
+            // listThumbImage.push('data:image/png;base64,'+ callback.base64)
+          }
+        });
+      };
+
     const submit = async () => {
         const data = {
             name,
+            provinsi: province,
+            kota: city,
+            kecamatan,
+            kelurahan,
             location: address,
             description: desc,
             startTime: moment(jamBukaOperasional).format('hh:mm'),
             endTime: moment(jamTutupOperasional).format('hh:mm'),
             date: moment(dateEvent).format('YYYY-MM-DD'),
-            lat: coords.latitude,
-            lng: coords.longitude
+            lat: ""+coords.latitude,
+            lng: ""+coords.longitude,
+            images: thumbImage ? ['data:image/png;base64,'+thumbImage] : []
         }
         console.log(data)
        
@@ -113,9 +145,13 @@ const CreateEvent = ({navigation}) => {
                     <Text style={{fontSize: 10, color: Color.secondary}}>Masukkan Informasi Seputar Event</Text>
                 </View>
             </View>
-            <TouchableOpacity style={{ height: width/2+40, justifyContent: 'center', marginVertical: 15, backgroundColor: '#CDD1D2' }}>
-                <FontAwesome name='image' color='#111' size={25} style={{ alignSelf: 'center', marginBottom: 9 }}  />
-                <Text type='medium'>Upload Poster Event</Text>
+            <TouchableOpacity onPress={() => {
+                addImage();
+              }} style={{ height: width/2+40,  marginVertical: 15, backgroundColor: '#CDD1D2' }}>
+                <ImageBackground source={{uri: thumbImage ? 'data:image/png;base64,'+thumbImage : ''}} style={{ height: width/2+40,justifyContent: 'center', }}>
+                    <FontAwesome name='image' color='#111' size={25} style={{ alignSelf: 'center', marginBottom: 9 }}  />
+                    <Text type='medium'>Upload Poster Event</Text>
+                </ImageBackground>
             </TouchableOpacity>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
                 <Text style={{fontSize: 10, fontWeight: 'bold', marginVertical: 10}}>Nama Event</Text>
@@ -278,13 +314,24 @@ const CreateEvent = ({navigation}) => {
           }}
           onSelect={(item) => {
             // const name = item.name;
+            const spl = item.fullAddress.split(",");
             const fullAddress = item.fullAddress;
             const latitude = item.latitude;
             const longitude = item.longitude;
 
+            const provinceName = item.provinceName
+            const cityName = item.cityName
+            const kecName = spl[3]
+            const kelName = spl[2]
+
             // const provinceName = item.provinceName ? item.provinceName : state.userData.provinceName;
             // const cityName = item.cityName ? item.cityName : state.userData.cityName;
             // const postCode = item.postCode ? item.postCode : state.userData.postCode;
+
+            setProvince(provinceName)
+            setCity(cityName)
+            setKecamatan(kecName)
+            setKelurahan(kelName)
 
             setIsPinnedMap(true);
             setLocationPinnedMap(fullAddress);

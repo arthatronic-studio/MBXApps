@@ -146,7 +146,7 @@ const EventScreen = ({navigation, route}) => {
           <Text style={{lineHeight: 15,fontSize: 10, color: Color.secondary, width: '50%', textAlign: 'center', alignSelf: 'center'}}>Eventku</Text>
         </Pressable>
         <Pressable style={{width: '25%', height: 60}}
-          onPress={() => navigation.navigate('EventDocumentation')}>
+          onPress={() => navigation.navigate('DocumentasiEvent')}>
           <View style={{width: '100%',alignItems:'center', marginBottom: 3}}> 
             <Image source={ImagesPath.ImageEvent}/>
           </View>
