@@ -41,7 +41,7 @@ import axios from 'axios';
 import moment from 'moment';
 import FormSelect from 'src/components/FormSelect';
 import client from '@src/lib/apollo';
-import { mutationAddEvent, mutationOrderEvent } from 'src/lib/query/event';
+import { mutatuinEventManage, mutationOrderEvent } from 'src/lib/query/event';
 import { FormatMoney } from 'src/utils';
 import ModalPassanger from './ModalPassanger';
 var crypto = require('crypto-js')
