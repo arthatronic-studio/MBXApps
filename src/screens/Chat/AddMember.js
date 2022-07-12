@@ -1,39 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, TextInput,ScrollView,Image, FlatList,Pressable,useWindowDimensions, AppState } from 'react-native';
-import Styled from 'styled-components';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Moment from 'moment';
-import { useSelector } from 'react-redux';
+import { View, TextInput, ScrollView, Image, FlatList } from 'react-native';
+
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Text from '@src/components/Text';
 import { useColor } from '@src/components/Color';
-import ImagesPath from 'src/components/ImagesPath';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import { usePopup } from '@src/components/Modal/Popup';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Scaffold from '@src/components/Scaffold';
 import { AlertModal, Header } from 'src/components';
-import Entypo from 'react-native-vector-icons/Entypo'
-import Feather from 'react-native-vector-icons/Feather'
 import {
-	Row,
-	Col,
+  Row,
+  Col,
 } from '@src/components';
 import Client from '@src/lib/apollo';
-import { queryContentChatRoomManage, queryContentChatMessage } from '@src/lib/query';
-import { Divider } from 'src/styled';
-import {queryGetUserOrganizationRef} from 'src/lib/query';
+import { queryGetUserOrganizationRef } from 'src/lib/query';
 import { fetchContentChatRoomManage } from 'src/api/chat/chat';
 import { accessClient } from 'src/utils/access_client';
 
 const itemPerPage = 100;
 
-const AddMember = ({navigation, route}) => {
+const AddMember = ({ navigation, route }) => {
   const { params } = route;
 
-  const {Color} = useColor();
-
-  console.log('route', route);
+  const { Color } = useColor();
 
   const [itemData, setItemData] = useState({
     data: [],
@@ -61,8 +49,8 @@ const AddMember = ({navigation, route}) => {
     const timeout =
       search !== ''
         ? setTimeout(() => {
-            fetchSearchNameMember();
-          }, 1000)
+          fetchSearchNameMember();
+        }, 1000)
         : null;
 
     return () => {
@@ -159,13 +147,13 @@ const AddMember = ({navigation, route}) => {
       });
   };
 
-  const onSubmit = async() => {
+  const onSubmit = async () => {
     let userIds = [];
 
     selected.map((e) => {
       userIds.push(e.userId);
     });
-    
+
     const variables = {
       method: 'UPDATE',
       roomId: parseInt(params.roomId),
@@ -178,14 +166,12 @@ const AddMember = ({navigation, route}) => {
     const result = await fetchContentChatRoomManage(variables);
     console.log(result, 'result');
     if (result.status) {
-      setTimeout(() => {
-        navigation.navigate('Chat');
-      }, 2500);
+      navigation.navigate('Chat');
     }
   }
 
   const onSelected = (index, item) => {
-    setItemData({...itemData, loading: true});
+    setItemData({ ...itemData, loading: true });
 
     const idxOf = selected.length > 0 ? selected.indexOf(item) : -1;
     console.log('indexof', idxOf);
@@ -198,21 +184,21 @@ const AddMember = ({navigation, route}) => {
     }
 
     setSelected(newSelected);
-    setItemData({...itemData, loading: false});
+    setItemData({ ...itemData, loading: false });
   };
 
-  const renderItem = ({item, index}) => (
+  const renderItem = ({ item, index }) => (
     <Row
       style={{
         marginHorizontal: 15,
         marginVertical: 12,
         backgroundColor:
-          selected.indexOf(item) !== -1 ? Color.primary : Color.white,
+          selected.indexOf(item) !== -1 ? Color.primary : Color.theme,
         borderRadius: selected.indexOf(item) !== -1 ? 14 : 0,
         paddingVertical: 5,
       }}>
       <Image
-        source={{uri: item.photoProfile}}
+        source={{ uri: item.photoProfile }}
         style={{
           borderRadius: 25,
           width: 50,
@@ -247,7 +233,7 @@ const AddMember = ({navigation, route}) => {
             borderRadius: 20,
             marginVertical: 10,
           }}>
-          <Text style={{color: Color.textInput, fontSize: 12}}>x Batal</Text>
+          <Text style={{ color: Color.textButtonInline, fontSize: 12 }}>x Batal</Text>
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
@@ -261,7 +247,7 @@ const AddMember = ({navigation, route}) => {
             borderRadius: 20,
             marginVertical: 10,
           }}>
-          <Text style={{color: Color.textInput, fontSize: 12}}>+Undang</Text>
+          <Text style={{ color: Color.textButtonInline, fontSize: 12 }}>+Undang</Text>
         </TouchableOpacity>
       )}
     </Row>
@@ -271,14 +257,14 @@ const AddMember = ({navigation, route}) => {
     <Scaffold
       fallback={itemData.loading}
       isLoading={filterLoading}
-      header={<Header title="Undang Temanmu" />}>
+      header={<Header title="Tambah Anggota" />}>
       <View>
         <TextInput
           placeholder="Ayo cari temanmu"
           returnKeyType="done"
           returnKeyLabel="Done"
           blurOnSubmit={false}
-          onBlur={() => {}}
+          onBlur={() => { }}
           error={null}
           onChangeText={text => {
             setSearch(text);
@@ -313,7 +299,7 @@ const AddMember = ({navigation, route}) => {
         }}>
         Anggota yang akan ditambahkan
       </Text>
-      <View style={{flexDirection: 'row', marginHorizontal: 10}}>
+      <View style={{ flexDirection: 'row', marginHorizontal: 10 }}>
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
@@ -321,7 +307,7 @@ const AddMember = ({navigation, route}) => {
           {selected.map(a => {
             return selected.length > 0 ? (
               <Image
-                source={{uri: a.photoProfile}}
+                source={{ uri: a.photoProfile }}
                 style={{
                   borderRadius: 25,
                   width: 50,
@@ -337,6 +323,7 @@ const AddMember = ({navigation, route}) => {
           })}
         </ScrollView>
       </View>
+
       <Text
         style={{
           fontSize: 14,
@@ -347,6 +334,7 @@ const AddMember = ({navigation, route}) => {
         }}>
         Undang teman kamu
       </Text>
+
       <FlatList
         data={search !== '' ? filterData : itemData.data}
         renderItem={renderItem}
@@ -367,7 +355,7 @@ const AddMember = ({navigation, route}) => {
           alignSelf: 'center',
         }}>
         <Text
-          style={{fontSize: 12, color: Color.textInput, fontWeight: 'bold'}}>
+          style={{ fontSize: 12, color: Color.textButtonInline, fontWeight: 'bold' }}>
           Tambahkan Anggota
         </Text>
       </TouchableOpacity>
