@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, ScrollView,Image, FlatList,Pressable,useWindowDimensions, AppState } from 'react-native';
+import { View, ScrollView, Image, FlatList, Pressable, useWindowDimensions, AppState } from 'react-native';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Moment from 'moment';
@@ -9,31 +9,32 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Text from '@src/components/Text';
 import { useColor } from '@src/components/Color';
 import ImagesPath from 'src/components/ImagesPath';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Scaffold from '@src/components/Scaffold';
 import { Alert, Header, AlertModal } from 'src/components';
 import Entypo from 'react-native-vector-icons/Entypo'
 import Feather from 'react-native-vector-icons/Feather'
-import {ModalListAction } from 'src/components';
+import { ModalListAction } from 'src/components';
 import {
-	Row,
-	Col,
+  Row,
+  Col,
 } from '@src/components';
 import ModalActions from 'src/components/Modal/ModalActions';
 import { fetchContentChatRoomManage } from 'src/api/chat/chat';
+import { Container } from 'src/styled';
 
 
 function Anggota(props) {
   const params = props;
   const { is_admin_room, is_owner_room } = params;
 
-  const {Color} = useColor();
+  const { Color } = useColor();
 
   const [modalActions, setModalActions] = useState(false);
   const [selectedMember, setSelectedMember] = useState();
 
-  const onRemove = async() => {
+  const onRemove = async () => {
     let userIds = [parseInt(selectedMember.user_id)];
 
     const variables = {
@@ -48,24 +49,22 @@ function Anggota(props) {
     const result = await fetchContentChatRoomManage(variables);
     console.log('result', result);
     if (result.status) {
-      setTimeout(() => {
-        props.navigation.navigate('Chat');
-      }, 2500);
+      props.navigation.navigate('Chat');
     }
   }
 
-  const renderItem = ({item}) => (
-    <View style={{backgroundColor: Color.theme}}>
+  const renderItem = ({ item }) => (
+    <View style={{ backgroundColor: Color.theme }}>
       <Row
         style={{
           marginHorizontal: 0,
           marginVertical: 12,
           alignItems: 'center',
         }}>
-          <View style={{width: '10%', aspectRatio: 1}}>
-            <Image source={{ uri: item.photo_profile }} style={{ width: '100%', height: '100%', borderRadius: 20}} />
-          </View>
-        <View style={{width: '85%'}}>
+        <View style={{ width: '10%', aspectRatio: 1 }}>
+          <Image source={{ uri: item.photo_profile }} style={{ width: '100%', height: '100%', borderRadius: 20 }} />
+        </View>
+        <View style={{ width: '85%' }}>
           <Text
             style={{
               textAlign: 'left',
@@ -85,21 +84,23 @@ function Anggota(props) {
             {item.status}
           </Text>
         </View>
-        {(is_admin_room || is_owner_room) && 
-        <TouchableOpacity
-          onPress={() => {
-            setModalActions(true);
-            setSelectedMember(item);
-          }}>
-          <Entypo name={'dots-three-horizontal'} size={15} />
-        </TouchableOpacity>
+        {(is_admin_room || is_owner_room) &&
+          <TouchableOpacity
+            onPress={() => {
+              setModalActions(true);
+              setSelectedMember(item);
+            }}>
+            <Entypo name={'dots-three-horizontal'} size={16} color={Color.text} />
+          </TouchableOpacity>
         }
       </Row>
     </View>
   );
 
   return (
-    <View>
+    <Scaffold
+      showHeader={false}
+    >
       <View
         style={{
           backgroundColor: Color.theme,
@@ -144,92 +145,95 @@ function Anggota(props) {
           // },
         ]}
       />
-    </View>
+    </Scaffold>
   );
 }
 
+function Media(props) {
+  const { Color } = useColor();
+  const render = ({ item }) => (
+    <View>
+      <Text style={{ fontSize: 10, fontWeight: 'bold', color: Color.text, textAlign: 'left', marginVertical: 10 }}>{item.waktu}</Text>
+      <Row>
+        <Image source={item.gallery[0]} style={{ width: 60, height: 60, borderRadius: 5, marginRight: 8 }} />
+        <Image source={item.gallery[1]} style={{ width: 60, height: 60, borderRadius: 5 }} />
+      </Row>
+    </View>
+  );
 
-  function Media(props) {
-    const {Color} = useColor();
-    const render = ({ item }) => (
-        <View>
-            <Text style={{fontSize: 10, fontWeight: 'bold', color: Color.text, textAlign: 'left', marginVertical: 10}}>{item.waktu}</Text>
-            <Row>
-                <Image source={item.gallery[0]} style={{width: 60, height: 60, borderRadius: 5, marginRight: 8}}/>
-                <Image source={item.gallery[1]} style={{width: 60, height: 60, borderRadius: 5}}/>
-            </Row>
-        </View>
-       );
-  
-    return (
-      <View
-        style={{
-          backgroundColor: Color.theme,
-          padding: 16,
-          alignItems: 'flex-start',
-        }}>
-          <FlatList
-            data={[
-                {
-                    waktu: 'Minggu ini',
-                    gallery: [ImagesPath.productImage, ImagesPath.produklelang]
-                },
-                {
-                    waktu: 'Minggu ini',
-                    gallery: [ImagesPath.productImage, ImagesPath.produklelang]
-                },
-                {
-                    waktu: 'Minggu ini',
-                    gallery: [ImagesPath.productImage, ImagesPath.produklelang]
-                }
-            ]}
-            renderItem={render}
-            keyExtractor={item => item.id}
-            />
-      </View>
-    );
-  }
+  return (
+    <Scaffold
+      showHeader={false}
+      style={{
+        backgroundColor: Color.theme,
+        padding: 16,
+        alignItems: 'flex-start',
+      }}
+    >
+      <FlatList
+        data={[
+          {
+            waktu: 'Minggu ini',
+            gallery: [ImagesPath.productImage, ImagesPath.produklelang]
+          },
+          {
+            waktu: 'Minggu ini',
+            gallery: [ImagesPath.productImage, ImagesPath.produklelang]
+          },
+          {
+            waktu: 'Minggu ini',
+            gallery: [ImagesPath.productImage, ImagesPath.produklelang]
+          }
+        ]}
+        renderItem={render}
+        keyExtractor={item => item.id}
+      />
+    </Scaffold>
+  );
+}
 
-  function Dokumen(props) {
-    const {Color} = useColor();
-    const tampil = ({ item }) => (
-        <View>
-            <Text style={{fontSize: 10, fontWeight: 'bold', color: Color.text, textAlign: 'left', marginVertical: 10}}>{item.waktu}</Text>
-            <Image source={item.file}/>
-        </View>
-        
-       );
-  
-    return (
-      <View
-        style={{
-          backgroundColor: Color.theme,
-          padding: 16,
-          alignItems: 'flex-start',
-        }}>
-          <FlatList
-            data={[
-                {
-                    waktu: 'Minggu ini',
-                    file: ImagesPath.filedoc
-                },
-                {
-                    waktu: 'Bulan lalu',
-                    file: ImagesPath.filedoc
-                },
-                {
-                    waktu: 'Minggu ini',
-                    file: ImagesPath.filedoc
-                },
-            ]}
-            renderItem={tampil}
-            keyExtractor={item => item.id}
-            />
-      </View>
-    );
-  }
+function Dokumen(props) {
+  const { Color } = useColor();
+  const tampil = ({ item }) => (
+    <View>
+      <Text style={{ fontSize: 10, fontWeight: 'bold', color: Color.text, textAlign: 'left', marginVertical: 10 }}>{item.waktu}</Text>
+      <Image source={item.file} />
+    </View>
 
-const UserGroupDetail = ({navigation, route}) => {
+  );
+
+  return (
+    <Scaffold
+      showHeader={false}
+      style={{
+        backgroundColor: Color.theme,
+        padding: 16,
+        alignItems: 'flex-start',
+      }}
+    >
+      <FlatList
+        data={[
+          {
+            waktu: 'Minggu ini',
+            file: ImagesPath.filedoc
+          },
+          {
+            waktu: 'Bulan lalu',
+            file: ImagesPath.filedoc
+          },
+          {
+            waktu: 'Minggu ini',
+            file: ImagesPath.filedoc
+          },
+        ]}
+        renderItem={tampil}
+        keyExtractor={item => item.id}
+      />
+    </Scaffold>
+  );
+}
+
+const UserGroupDetail = ({ navigation, route }) => {
   const { params } = route;
   const { is_admin_room, is_owner_room } = route.params;
   const [modalHapus, setModalHapus] = useState(false);
@@ -238,13 +242,13 @@ const UserGroupDetail = ({navigation, route}) => {
   const user = useSelector((state) => state['user.auth'].login.user);
 
   const modalListActionRef = useRef();
-  const {Color} = useColor();
+  const { Color } = useColor();
 
   const Tab = createMaterialTopTabNavigator();
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const onLeave = async() => {
+  const onLeave = async () => {
     let userIds = [user.userId];
 
     const variables = {
@@ -259,18 +263,16 @@ const UserGroupDetail = ({navigation, route}) => {
     const result = await fetchContentChatRoomManage(variables);
     console.log('result', result);
     if (result.status) {
-      setTimeout(() => {
-        navigation.navigate('Chat');
-      }, 2500);
+      navigation.navigate('Chat');
     }
   }
 
   const GroupDetailHeader = () => {
     return (
-      <>
+      <Container paddingVertical={16}>
         <Row>
           <Image
-            source={{uri: params.imageGroup}}
+            source={{ uri: params.imageGroup }}
             style={{
               width: 50,
               height: 50,
@@ -279,13 +281,13 @@ const UserGroupDetail = ({navigation, route}) => {
             }}
           />
           <Col>
-            <Text style={{fontSize: 14, fontWeight: 'bold', textAlign: 'left'}}>
+            <Text style={{ fontSize: 14, fontWeight: 'bold', textAlign: 'left' }}>
               {params.nameGroup}
             </Text>
             <Text
               style={{
                 fontSize: 8,
-                color: Color.secondary,
+                color: Color.text,
                 textAlign: 'left',
                 marginVertical: 1,
               }}>
@@ -293,17 +295,20 @@ const UserGroupDetail = ({navigation, route}) => {
             </Text>
           </Col>
 
-        {(is_admin_room || is_owner_room) && 
-          <View style={{width: '8%', marginVertical: 5}}>
-            <Pressable onPress={() => { navigation.navigate('ManageGroupScreen', {
-              ...params,
-            });}}>
-              <Feather name={'edit-2'} />
-            </Pressable>
-          </View>
-        }
+          {(is_admin_room || is_owner_room) &&
+            <View style={{ width: '8%', marginVertical: 5 }}>
+              <Pressable onPress={() => {
+                navigation.navigate('ManageGroupScreen', {
+                  ...params,
+                });
+              }}>
+                <Feather name={'edit-2'} color={Color.text} size={16} />
+              </Pressable>
+            </View>
+          }
         </Row>
-        {(is_admin_room || is_owner_room) && 
+
+        {(is_admin_room || is_owner_room) &&
           <Pressable
             onPress={() => {
               navigation.navigate('AddMember', {
@@ -312,25 +317,25 @@ const UserGroupDetail = ({navigation, route}) => {
             }}
             style={{
               flexDirection: 'row',
-              marginHorizontal: 15,
-              marginVertical: 15,
+              paddingHorizontal: 16,
+              marginTop: 16,
             }}>
             <Ionicons
               name={'person-add-outline'}
               size={16}
-              style={{color: Color.primary}}
+              style={{ color: Color.text }}
             />
             <Text
-              style={{color: Color.primary, fontSize: 12, marginHorizontal: 10}}>
+              style={{ fontSize: 12, marginLeft: 8 }}>
               Tambahkan anggota grup
             </Text>
           </Pressable>
         }
-      </>
+      </Container>
     );
   };
 
-  const onDeleteGrup = async() => {
+  const onDeleteGrup = async () => {
     const variables = {
       method: 'DELETE',
       roomId: parseInt(params.roomId),
@@ -341,9 +346,7 @@ const UserGroupDetail = ({navigation, route}) => {
     const result = await fetchContentChatRoomManage(variables);
     console.log('result', result);
     if (result.status) {
-      setTimeout(() => {
-        navigation.navigate('Chat');
-      }, 2500);
+      navigation.navigate('Chat');
     }
   }
 
@@ -358,37 +361,39 @@ const UserGroupDetail = ({navigation, route}) => {
               onPress={() => {
                 modalListActionRef.current.open();
               }}
-              style={{justifyContent: 'center', alignItems: 'center'}}>
-              <Entypo name="dots-three-vertical" color={Color.text} size={20} />
+              style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <Entypo name="dots-three-vertical" color={Color.text} size={18} />
             </TouchableOpacity>
           }
         />
       }>
+
       <GroupDetailHeader />
+
       <Tab.Navigator
         initialRouteName={'Belanjaan'}
         tabBarOptions={{
-          indicatorStyle: {backgroundColor: Color.theme, height: '100%'},
-          activeTintColor: Color.primary,
-          activeBackgroundColor: Color.primary,
+          indicatorStyle: {
+            backgroundColor: Color.theme,
+            height: '100%'
+          },
+          activeTintColor: Color.text,
           inactiveTintColor: Color.secondary,
           labelStyle: {
             fontSize: 12,
-            fontWeight: 'bold',
-            color: Color.secondary,
           },
           indicatorStyle: {
             borderBottomColor: Color.primary,
             borderBottomWidth: 2,
           },
-          labelStyle: {
-            fontSize: 12,
-          },
+          style: {
+            backgroundColor: Color.theme,
+          }
         }}>
         <Tab.Screen
           name="Anggota"
           children={props => <Anggota {...props} {...params} />}
-          options={{tabBarLabel: 'Anggota'}}
+          options={{ tabBarLabel: 'Anggota' }}
         />
         {/* hide media */}
         {/* <Tab.Screen
