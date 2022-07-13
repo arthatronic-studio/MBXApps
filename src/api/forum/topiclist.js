@@ -32,7 +32,7 @@ export const fetchTopicList = async(variables)  => {
     
         return response;
     } catch (error) {
-        console.log('catch contentChatRoomManage', error);
+        console.log('catch queryproductTopicList', error);
         response.error = error;
         return response;
     }

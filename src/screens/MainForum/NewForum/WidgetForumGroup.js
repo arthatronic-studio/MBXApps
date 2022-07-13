@@ -3,6 +3,7 @@ import { View, Image, useWindowDimensions } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Feather from 'react-native-vector-icons/Feather';
 
 import {
   Text,
@@ -22,23 +23,23 @@ import { queryproductGroupList } from 'src/lib/query';
 import Client from '@src/lib/apollo';
 import { fetchGroupMemberList } from 'src/api/forum/listmemberGroup';
 import { shadowStyle } from 'src/styles';
-import WidgetForumGroup from './WidgetForumGroup';
-import Config from 'react-native-config';
+import { useNavigation } from '@react-navigation/native';
 
 const { Navigator, Screen } = createMaterialTopTabNavigator();
 const itemPerPage = 100;
 
-const ForumGroupScreen = ({ navigation, route }) => {
-  const params = route.params.data;
+const WidgetForumGroup = ({ item, isHighlight }) => {
+  const params = item;
 
   const { Color } = useColor();
-  const {width, height} = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
+  const navigation = useNavigation();
 
   const [memberData, setMemberDataAll] = useState([]);
   const [memberDataReq, setMemberDataReq] = useState([]);
 
   console.log('params', params);
-  
+
   const [itemData, setItemData] = useState({
     data: [],
     loading: true,
@@ -51,8 +52,8 @@ const ForumGroupScreen = ({ navigation, route }) => {
   // }, []);
 
   useEffect(() => {
-    fetchMemberAll();
-    fetchMemberReq();
+    // fetchMemberAll();
+    // fetchMemberReq();
   }, []);
 
   const fetchMemberAll = async () => {
@@ -120,7 +121,7 @@ const ForumGroupScreen = ({ navigation, route }) => {
         let newArr = [];
 
         if (data) {
-          newArr = itemData.data.concat(data); // compareData(itemData.data.concat(data));
+          newArr = itemData.data.concat(data);
         }
 
         console.log(data.length, 'dapet length');
@@ -144,83 +145,87 @@ const ForumGroupScreen = ({ navigation, route }) => {
         });
       });
   };
-  
+
+  let extraPropsDescription = { numberOfLines: 1 };
+  if (!isHighlight) extraPropsDescription = {};
+
   return (
-    <Scaffold
-      header={<Header title={params.name} centerTitle={false} />}
-      floatingActionButton={
-        <View
-          style={{
-            width: width / 6,
-            aspectRatio: 1,
-          }}
-        >
-          <View
-            style={{
-              width: '100%',
-              height: '100%',
-              backgroundColor: Color.primary,
-              borderRadius: 50,
-              alignItems: 'center',
-              justifyContent: 'center',
-              ...shadowStyle,
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('ForumBuatScreen');
-                // navigation.navigate('CreateThreadScreen', {
-                //   title: 'Buat Posting',
-                //   productType: Config.PRODUCT_TYPE,
-                //   productCategory: '',
-                //   productSubCategory: 'FORUM'
-                // });
-              }}
-              style={{ alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}
-              activeOpacity={0.75}
-            >
-              <Image style={{ height: '50%', width: '50%' }}
-                source={iconPencil}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-      }
-    >
-      <WidgetForumGroup
-        item={params}
-        isHighlight
-      />
-      
-      <Navigator
-        initialRouteName="TabNewPost"
-        tabBarOptions={{
-          activeTintColor: Color.text,
-          inactiveColor: Color.border,
-          labelStyle: { fontSize: 12, fontWeight: 'bold' },
-          style: {
-            backgroundColor: Color.textInput,
-          },
-          labelStyle: { textTransform: 'none' },
-          indicatorStyle: { backgroundColor: Color.primary },
-        }}
-        screenOptions={{
-          
+    <>
+      <View
+        style={{
+          width: '100%',
+          aspectRatio: 16 / 9,
+          backgroundColor: Color.border,
         }}
       >
-        <Screen
-          name="TabNewPost"
-          component={TabForumNewPost}
-          options={{ tabBarLabel: 'Thread' }}
+        <Image
+          source={{ uri: params.imageCover || 'https://i.postimg.cc/Yq0XG2XF/Rectangle-96.png' }}
+          style={{
+            width: '100%',
+            height: '100%',
+          }}
         />
-        <Screen
-          name="TabMyPost"
-          component={TabForumMyPost}
-          options={{ tabBarLabel: 'Postinganku' }}
+
+        <Image
+          source={{
+            uri: params.image || 'https://i.postimg.cc/mr5FQWfb/unsplash-6-Hqv-Y1-E7-NI.png',
+          }}
+          style={{
+            width: width / 6,
+            height: width / 6,
+            position: 'absolute',
+            bottom: -(width / 12),
+            left: 16,
+            borderRadius: 50,
+          }}
         />
-      </Navigator>
-    </Scaffold>
+      </View>
+
+      <Divider height={(width / 12) + 16} />
+
+      {/* <Container marginTop={0}>
+        <SearchBar
+          type='select'
+          label='Cari postingan'
+          onPress={() => {
+            navigation.navigate('ForumSearch');
+          }}
+        />
+      </Container> */}
+
+      <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}>
+        <Text size={18} type='bold'>{params.name}</Text>
+        {params.status == 'PRIVASI' &&
+          <Feather name='lock' size={18} color={Color.danger} />
+        }
+        <Divider height={4} />
+        <Text size={12} color={Color.gray} type='bold'>
+          19k Thread
+        </Text>
+        <Divider />
+        <Text size={12} color={Color.gray} type='bold'>
+          Deskripsi
+        </Text>
+        <Divider height={8} />
+        <Text align='left' {...extraPropsDescription}>{params.description}</Text>
+        <Divider height={8} />
+        {isHighlight && <TouchableOpacity
+          onPress={() => {
+            const varData = {
+              ...params,
+              member: memberData,
+              memberDataReq: memberDataReq,
+            };
+            navigation.navigate('ForumGroupDetailScreen', { data: varData });
+          }}
+          style={{ flexDirection: 'row', alignItems: 'center' }}
+        >
+          <Text color={Color.primary} style={{ marginRight: 5 }}>Selengkapnya</Text>
+          <FontAwesome name="angle-down" color={Color.primary} size={18} />
+        </TouchableOpacity>}
+      </View>
+    </>
   );
 }
 
-export default ForumGroupScreen;
+export default WidgetForumGroup;

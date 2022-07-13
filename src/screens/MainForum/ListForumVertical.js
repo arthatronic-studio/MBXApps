@@ -46,20 +46,21 @@ const ListForumVertical = ({ componentType, data, loading, title, showAll, onPre
 
     return (
       <Scaffold showHeader={false} style={{paddingBottom: 8}}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        {/* <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text type="bold" style={{marginLeft: 16}}>
             List Thread
           </Text>
           <View style={{flexDirection: 'row',marginRight:16}}>
-            <Text style={{color: '#F3771D',}}>Terbaru</Text>
+            <Text style={{color: Color.primary,}}>Terbaru</Text>
             <TouchableOpacity
               onPress={() => {
                 ''
               }}>
-              <FontAwesome name="angle-down" color="#F3771D" size={25} />
+              <FontAwesome name="angle-down" color={Color.primary} size={25} />
             </TouchableOpacity>
           </View>
-        </View>
+        </View> */}
+
         {showHeader && (
           <View
             style={{

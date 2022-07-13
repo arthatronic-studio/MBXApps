@@ -17,15 +17,18 @@ import { shadowStyle } from '@src/styles';
 import { queryAddLike } from 'src/lib/query';
 import client from 'src/lib/apollo';
 import { Divider, Line, Padding, Row } from 'src/styled';
+import VideoPlayerIos from 'src/components/VideoPlayerIos';
+import { VideoPlayerAndroid } from 'src/components/VideoPlayerAndroid';
 
 const defaultProps = {
     onPress: () => {},
     numColumns: 1,
     style: {},
     showAllText: false,
+    showVideo: false,
 };
 
-const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText, style }) => {
+const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText, showVideo, style }) => {
     const [like, setLike] = useState(item.like);
     const [im_like, setImLike] = useState(item.im_like);
     const [trigger, setTrigger] = useState(false);
@@ -72,6 +75,27 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
         setLike(!im_like ? like + 1 : like - 1);
         setImLike(!im_like);
         setTrigger(true);
+    }
+
+    const renderVideoPlayer = (videoFilename) => {
+      if (Platform.OS === 'ios') {
+        return (
+          <VideoPlayerIos
+            item={{
+              videoFilename
+            }}
+          />
+        )
+      }
+  
+      return (
+        <VideoPlayerAndroid
+          item={{
+            videoFilename
+          }}
+          autoplay={false}
+        />
+      )
     }
 
     const extraPropsText = showAllText ? {} : { numberOfLines: 3 };
@@ -178,7 +202,7 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
           {/* <View style={{position: 'absolute', height: '100%', width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: 8}} /> */}
         </View>
 
-      
+        {showVideo && renderVideoPlayer(item.videoFilename)}
 
         <Text align="left" size={12} type="medium" {...extraPropsText}>
           {item.productDescription}

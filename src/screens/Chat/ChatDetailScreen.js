@@ -373,6 +373,9 @@ const ChatDetailScreen = ({ navigation, route }) => {
                           backgroundColor: Color.disabled,
                         }}
                       />
+                      <View style={{position: 'absolute', right: -8, top: -4}}>
+                        {item.is_director && <MaterialIcons name='verified' color={Color.info} />}
+                      </View>
                     </View>
                   </View>
                 );
@@ -398,7 +401,7 @@ const ChatDetailScreen = ({ navigation, route }) => {
                       borderColor: Color.disabled,
                     }}>
                     <Image
-                      source={{uri: item.image}}
+                      source={{uri: item.photo_profile}}
                       style={{
                         width: '100%',
                         aspectRatio: 1,
@@ -406,6 +409,9 @@ const ChatDetailScreen = ({ navigation, route }) => {
                         backgroundColor: Color.disabled,
                       }}
                     />
+                    <View style={{position: 'absolute', right: -8, top: -4}}>
+                      {item.is_director && <MaterialIcons name='verified' color={Color.info} />}
+                    </View>
                   </View>
                   <View
                     style={{

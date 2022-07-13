@@ -1,23 +1,16 @@
 import gql from 'graphql-tag';
 
 export const queryGroupMemberList = gql`
-    query(
-  
-        $groupId: Int!
-        $status: Int!,
-       
-        
-    ){
-        groupMemberList(
-            groupId:$groupId,
-            status: $status
-            
-        ) {
+    query($groupId: Int!, $status: Int!) {
+        groupMemberList(groupId: $groupId, status: $status) {
             id
-            name,
-            
-           
-           
+            createdDate
+            status
+            userId
+            groupId
+            fullname
+            image
         }
     }
+  
 `;

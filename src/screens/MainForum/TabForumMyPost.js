@@ -32,7 +32,7 @@ const TabForumMyPost = ({ navigation, route }) => {
 
 
   const fecthData = async () => {
-    const newListMyPost = await fetchContentMyProduct(Config.PRODUCT_TYPE, 'FORUM', 'ALL');
+    const newListMyPost = await fetchContentMyProduct(Config.PRODUCT_TYPE, 'FORUM');
     setListMyPost({
       ...listMyPost,
       data: newListMyPost,
@@ -61,6 +61,8 @@ const TabForumMyPost = ({ navigation, route }) => {
     if (productSubCategory !== '') {
       variables.productSubCategory = productSubCategory;
     }
+
+    console.log('variables', variables);
 
     try {
       const result = await Client.query({

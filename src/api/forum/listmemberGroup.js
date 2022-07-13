@@ -34,7 +34,7 @@ export const fetchGroupMemberList = async(variables)  => {
     
         return response;
     } catch (error) {
-        console.log('catch contentChatRoomManage', error);
+        console.log('catch queryGroupMemberList', error);
         response.error = error;
         return response;
     }

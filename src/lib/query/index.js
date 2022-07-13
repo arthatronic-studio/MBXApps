@@ -68,5 +68,6 @@ export {
   querySyaratKetentuan,
   queryproductTopicList,
   queryproductGroupList,
+  queryGroupMemberList,
   queryChekMemberJoinGroup
 };

@@ -140,6 +140,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
     const getTitle = (member) => {
         let title = '';
         let isDirector = false;
+        let photoProfile = '';
         
         if (member.length === 2) {
             member.map((i) => {
@@ -147,6 +148,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                 if (i.user_id != user.userId) {
                     title = i.first_name + idNumber;
                     isDirector = i.is_director;
+                    photoProfile = i.photo_profile;
                 }
             });
         } else if (member.length > 2) {
@@ -158,6 +160,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
         return {
             title,
             isDirector,
+            photoProfile,
         };
     }
 
@@ -241,6 +244,8 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                         const isSelected = selectedRoom && selectedRoom.id === item.id;
                         const notifBadge = item.unread_count > 0;
 
+                        // console.log('item', item);
+
                         return (
                             <TouchableOpacity
                                 onPress={() => {
@@ -272,7 +277,7 @@ const ChatRoomsScreen = ({ navigation, route }) => {
                             >
                                 <View style={{width: '12%', height: '100%', alignItems: 'center', justifyContent: 'center'}}>
                                     <Image
-                                        source={{uri: item.image}}
+                                        source={{uri: getTitle(item.member).photoProfile}}
                                         style={{width: '100%', aspectRatio: 1, borderRadius: 30, backgroundColor: Color.border}}
                                     />
                                 </View>                                

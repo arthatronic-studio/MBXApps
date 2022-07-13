@@ -34,7 +34,7 @@ export const checkJoinMember = async(variables)  => {
     
         return response;
     } catch (error) {
-        console.log('catch contentChatRoomManage', error);
+        console.log('catch queryChekMemberJoinGroup', error);
         response.error = error;
         return response;
     }

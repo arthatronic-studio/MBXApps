@@ -31,7 +31,7 @@ const TabForumNewPost = ({ navigation, route }) => {
   }, [listNewPost.loadNext]);
 
   const fecthData = async () => {
-    const newListNewPost = await fetchContentUserProduct(Config.PRODUCT_TYPE, "FORUM", "ALL");
+    const newListNewPost = await fetchContentUserProduct(Config.PRODUCT_TYPE, "FORUM");
     setListNewPost({
       ...listNewPost,
       data: listNewPost.data.concat(newListNewPost),
