@@ -10,7 +10,7 @@ import ImagesPath from 'src/components/ImagesPath';
 import Banner from 'src/components/Banner';
 import Client from 'src/lib/apollo';
 import {queryBannerList} from '@src/lib/query/banner';
-import ListContentProduct from 'src/components/Content/ListContentProduct';
+import ListContentProductV2 from 'src/components/Content/ListContentProductV2';
 
 //Fonts
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -205,8 +205,7 @@ const EventScreen = ({navigation, route}) => {
           />
         </Container>
         <Text style={{width: '100%', paddingHorizontal: 15, fontWeight: 'bold'}}>Event Terfavorit</Text>
-        <ListContentProduct
-          userProfileId={userProfileId}
+        <ListContentProductV2
           productCategory='EVENT'
           name='Event'
         />

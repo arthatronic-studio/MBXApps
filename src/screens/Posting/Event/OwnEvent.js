@@ -4,7 +4,7 @@ import HighlightContentProduct from 'src/components/Content/HighlightContentProd
 import { Divider } from 'src/styled'
 import Client from '@src/lib/apollo';
 import {useIsFocused, useRoute} from '@react-navigation/native';
-import { getHistory, getOwnEvent } from 'src/lib/query/event'
+import { getHistory, getEventList } from 'src/lib/query/event'
 import CardContentProduct from 'src/components/Content/CardContentProduct';
 import { Row } from 'src/components';
 
@@ -25,7 +25,7 @@ const OwnEvent = () => {
           itemPerPage: 20,
         };
         console.log(variables);
-        Client.query({query: getOwnEvent, variables})
+        Client.query({query: getEventList, variables})
           .then(res => {
             // hideLoading()
             if(res.data.eventTicketOrderList){

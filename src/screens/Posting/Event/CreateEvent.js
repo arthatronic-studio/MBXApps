@@ -36,7 +36,7 @@ import axios from 'axios';
 import moment from 'moment';
 import Ecommerce from '../../Ecommerce/Ecommerce';
 import FormSelect from 'src/components/FormSelect';
-import { mutationAddEvent } from 'src/lib/query/event';
+import { mutatuinEventManage } from 'src/lib/query/event';
 import ModalSelectMap from 'src/components/ModalSelectMap';
 var crypto = require('crypto-js')
 
