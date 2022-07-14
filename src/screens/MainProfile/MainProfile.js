@@ -74,6 +74,7 @@ const MainProfile = ({navigation, route}) => {
   };
 
   const onPressLogout = () => {
+    dispatch({type: 'ARTICLE.CLEAR_HISTORY'})
     dispatch({type: 'USER.LOGOUT'});
     redirectTo('LoginScreen');
   };

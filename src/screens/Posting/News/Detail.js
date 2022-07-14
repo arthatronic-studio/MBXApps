@@ -68,7 +68,7 @@ const NewsDetail = ({navigation, route}) => {
   const {width} = useWindowDimensions();
   const [refreshing, setRefreshing] = useState(false);
   const [trigger, setTrigger] = useState(false);
-
+  const scrollRef = useRef();
 
   useEffect(() => {
     const timeout = trigger ? setTimeout(() => {
@@ -93,10 +93,15 @@ const NewsDetail = ({navigation, route}) => {
       like: result.data[0].like,
       bookmark: result.data[0].im_save
     })
+    scrollRef.current?.scrollTo({
+      y: 0,
+      // animated: true,
+    });
   }
 
   useEffect(() => {
     fetchData();
+
   }, [isFocused]);
 
   useEffect(() => {
@@ -410,7 +415,7 @@ const NewsDetail = ({navigation, route}) => {
         renderskeleton()
       ) : (
         <>
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView showsVerticalScrollIndicator={false} ref={scrollRef}>
             {/* <View style={{padding: 16}}>
                         <Text size={24} type='bold' align='left' lineHeight={32}>
                             {item.productName}
@@ -592,9 +597,13 @@ const NewsDetail = ({navigation, route}) => {
                       marginRight: 10,
                       marginBottom: 10,
                     }}>
-                    <Text size={11} type="bold" color={Color.textInput}>
-                      {item}
-                    </Text>
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate('ShowAllNews', {title: item, tag: [item] })}
+                      >
+                        <Text size={11} type="bold" color={Color.textInput}>
+                          {item}
+                        </Text>
+                      </TouchableOpacity>
                   </View>
                 ))}
               </View>
@@ -942,6 +951,7 @@ const NewsDetail = ({navigation, route}) => {
             item={item}
             editScreen={'EditNews'}
             onDelete={() => setModalVisible(!isModalVisible)}
+            onShare={() => onShare(item.share_link)}
           />
         </>
       )}

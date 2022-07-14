@@ -14,6 +14,7 @@ export const queryContentProductV2 = gql`
     $publishDate: String
     $orderBy: String
     $timeStart: String
+    $tag: [String]
   ) {
     contentProductv2(
       productCode: $productCode
@@ -28,6 +29,7 @@ export const queryContentProductV2 = gql`
       publishDate: $publishDate
       orderBy: $orderBy
       timeStart: $timeStart
+      tag: $tag
     ) {
       id
       code

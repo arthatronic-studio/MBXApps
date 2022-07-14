@@ -19,6 +19,7 @@ const defaultProps = {
   onClose: () => {},
   editScreen: "EditThreadScreen",
   onDelete: () => {},
+  onShare: () => {},
 };
 
 const initialMessage = {
@@ -27,7 +28,7 @@ const initialMessage = {
 }
 
 const ModalContentOptions = forwardRef((props, ref) => {
-  const { isOwner, item, useBlockUser, moduleType, nameType, onClose, editScreen, onDelete } = props;
+  const { isOwner, item, useBlockUser, moduleType, nameType, onClose, editScreen, onDelete, onShare } = props;
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
@@ -129,8 +130,9 @@ const ModalContentOptions = forwardRef((props, ref) => {
       name: 'Bagikan',
       color: Color.text,
       onPress: () => {
-        
-      },
+        combinedRef.current.close();
+        onShare();
+      }
     },
     {
       id: 2,

@@ -8,7 +8,6 @@ import {
   Image,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {useSelector} from 'react-redux';
 import Config from 'react-native-config';
 import Banner from 'src/components/Banner';
 import {useColor, Text} from '@src/components';
@@ -16,7 +15,6 @@ import Scaffold from '@src/components/Scaffold';
 import {queryBannerList} from 'src/lib/query/banner';
 import {Row, Divider} from 'src/styled';
 import {accessClient} from 'src/utils/access_client';
-import ListContentProduct from 'src/components/Content/ListContentProduct';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import client from 'src/lib/apollo';
@@ -25,21 +23,7 @@ import {fetchContentProduct, fetchContentUserProduct} from 'src/api/contentV2';
 import moment from 'moment';
 import { fetchViewProduct } from 'src/api/viewProduct';
 import { async } from 'validate.js';
-
-const DATA = [
-  {
-    id: '1',
-    title: 'Comic',
-  },
-  {
-    id: '2',
-    title: '3D Designer',
-  },
-  {
-    id: '3',
-    title: 'Juventus',
-  },
-];
+import { useSelector, useDispatch } from 'react-redux';
 
 const REKOMENDASI = [
   {
@@ -64,36 +48,6 @@ const REKOMENDASI = [
   },
 ];
 
-const PENCARIAN = [
-  {
-    id: '1',
-    title: 'Ikan Iblis Merah, Predator Rakus yang Merusak Ekosistem Dan . . .',
-    image: ImagesPath.productImage,
-    author: 'Adang Susanyo',
-    date: '12 Apr 2021',
-    description:
-      'Ekosistem di Danau Toba, Sumatera Utara rusak akibat keberadaan ikan iblis merah atau red . . .',
-  },
-  {
-    id: '2',
-    title: 'Thor 4 Trailer Features One of the Most Comic Book',
-    image: ImagesPath.productImage,
-    author: 'Adang Susanyo',
-    date: '12 Apr 2021',
-    description:
-      'Ekosistem di Danau Toba, Sumatera Utara rusak akibat keberadaan ikan iblis merah atau red . . .',
-  },
-  {
-    id: '3',
-    title: 'Thor 4 Trailer Features One of the Most Comic Book',
-    image: ImagesPath.productImage,
-    author: 'Adang Susanyo',
-    date: '12 Apr 2021',
-    description:
-      'Ekosistem di Danau Toba, Sumatera Utara rusak akibat keberadaan ikan iblis merah atau red . . .',
-  },
-];
-
 const SearchArticle = ({navigation}) => {
   const {Color} = useColor();
   const [pencarian, setPencarian] = useState(false);
@@ -101,18 +55,28 @@ const SearchArticle = ({navigation}) => {
   const [searchArticle, setSearchArticle] = useState(false);
   const [listData, setListData] = useState([]);
   const [search, setSearch] = useState('');
+  const dispatch = useDispatch();
+  const history = useSelector((state) => state['history.article'].data);
+
+  useEffect(() => {
+    if(history.length > 0 && listData.length == 0){
+      setPencarian(true);
+    }else{
+      setPencarian(false);
+    }
+  }, [history])
 
   const onSearch = (value) => {
     if(value == ''){
       setSearch(value);
       setListData([]);
+      setPencarian(true);
     }else{
       setSearch(value)
       fetchData(value);
+      setPencarian(false);
     }
   }
-
-  console.log(listData.data, "data");
 
   const fetchData = async search => {
     let variables = {
@@ -131,13 +95,16 @@ const SearchArticle = ({navigation}) => {
       style={{
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
         backgroundColor: Color.theme,
         width: '100%',
         height: 45,
       }}>
-      <Text style={{fontWeight: 'bold', width: '92%'}}>{item.title}</Text>
-      <TouchableOpacity>
-        <Text style={{fontSize: 10, color: Color.primary}}>Lihat</Text>
+      <Text size={11} type="bold">{item.history}</Text>
+      <TouchableOpacity
+       onPress={() => dispatch({ type: 'ARTICLE.REMOVE_HISTORY', data: item.history})}
+      >
+        <MaterialIcons name='cancel' size={14} color={Color.secondary}/>
       </TouchableOpacity>
     </Pressable>
   );
@@ -265,8 +232,12 @@ const SearchArticle = ({navigation}) => {
               borderColor: Color.border,
               paddingHorizontal: 10,
             }}
+            onSubmitEditing={() => search !== '' ? dispatch({ type: 'ARTICLE.ADD_HISTORY', search: {history: search}}) : {}}
+            returnKeyType="done"
           />
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => search !== '' ? dispatch({ type: 'ARTICLE.ADD_HISTORY', search: {history: search}}) : {}}
+          >
             <AntDesign
               size={14}
               name={'search1'}
@@ -285,17 +256,11 @@ const SearchArticle = ({navigation}) => {
       {/* Pencarian Terakhir */}
       {pencarian == true ? (
         <View style={{backgroundColor: Color.theme, paddingHorizontal: 10}}>
-          <Text
-            style={{
-              fontSize: 12,
-              fontWeight: 'bold',
-              color: Color.secondary,
-              marginVertical: 5,
-            }}>
+          <Text size={11} type="bold" align="left" color="#999999">
             Pencarian Terakhir
           </Text>
           <FlatList
-            data={DATA}
+            data={history}
             renderItem={renderItem}
             keyExtractor={item => item.id}
           />
@@ -366,7 +331,7 @@ const SearchArticle = ({navigation}) => {
             keyExtractor={item => item.id}
           />
         </View>
-      ) : (
+      ) : pencarian !== true ? (
         <View
           style={{
             alignItems: 'center',
@@ -394,7 +359,9 @@ const SearchArticle = ({navigation}) => {
             <Text style={{fontSize: 12, color: Color.textInput}}>Kembali</Text>
           </TouchableOpacity>
         </View>
-      )}
+      ) :
+      null
+      }
     </View>
   );
 };
