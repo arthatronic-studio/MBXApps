@@ -120,7 +120,7 @@ const CreateEvent = ({navigation}) => {
             description: desc,
             startTime: moment(jamBukaOperasional).format('hh:mm'),
             endTime: moment(jamTutupOperasional).format('hh:mm'),
-            date: moment(dateEvent).format('YYYY-MM-DD'),
+            date: moment(dateEvent).format('YYYY/MM/DD'),
             lat: ""+coords.latitude,
             lng: ""+coords.longitude,
             images: thumbImage ? ['data:image/png;base64,'+thumbImage] : []
