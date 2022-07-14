@@ -25,7 +25,7 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import ModalFilterEvent from './ModalFilterEvent';
 import moment from 'moment';
 import {fetchContentProduct, fetchContentUserProduct} from 'src/api/content';
-const SearchEvent = ({navigation}) => {
+const DocumentasiSearchEvent = ({navigation}) => {
 
 const {Color} = useColor();
 const [popupProps, showPopup] = usePopup();
@@ -49,6 +49,8 @@ const onSearch = (value) => {
     fetchData(value);
   }
 }
+
+
 const fetchData = async search => {
   let variables = {
     page: 1,
@@ -57,9 +59,25 @@ const fetchData = async search => {
   };
   variables.productCategory = 'EVENT';
 
+  Client.query({
+    query: queyGetDokumentasiEnventList,
+  
+  })
+  .then((res) => {
+   
+      console.log('ini res',res);
+    const data = res.data.eventDocumentationList;
+    
 
-  const result = await fetchContentProduct(variables);
-  setListData(result);
+    if (data) {
+      setListData(result);
+    }
+   
+  })
+  .catch((err) => {
+    console.log('err YOUTUBE_VIDEO', err);
+  });
+  
 };
 const renderSearch = ({item}) => (
   <Pressable
@@ -141,7 +159,7 @@ const renderSearch = ({item}) => (
             justifyContent: 'center',
           }}>
           <TextInput
-            placeholder="Cari Jadwal Acara"
+            placeholder="Cari Documentasi Event"
             value={search}
             onChangeText={(value) => onSearch(value)}
             style={{
@@ -313,4 +331,4 @@ const renderSearch = ({item}) => (
   )
 }
 
-export default SearchEvent
+export default DocumentasiSearchEvent

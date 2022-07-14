@@ -161,7 +161,9 @@ const CreateEventSecond = ({navigation}) => {
         client.mutate({mutation: mutationAddEvent, variables})
         .then(res => {
             hideLoading();
-            console.log(res);
+            console.log('ini hasil',res);
+
+            return;
             if (res.data.eventManage) {
                 alert('Event berhasil dibuat')
                 setTimeout(() => {

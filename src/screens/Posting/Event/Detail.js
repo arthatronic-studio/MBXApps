@@ -309,17 +309,17 @@ const EventDetail = ({navigation, route}) => {
             </View> */}
           </View>
 
-          {/* <Container paddingHorizontal={32} paddingVertical={16}>
+          <Container paddingHorizontal={32} paddingVertical={16}>
             <Button
               onPress={() => {
-                navigation.navigate('GalleryScreen', { item });
+                navigation.navigate('GalleryScreen', {  });
               }}
             >
               Lihat Event Galeri
             </Button>
           </Container>
           
-          {items.like > 0 &&
+          {/* {items.like > 0 &&
             <Container paddingHorizontal={16}>
                 <WidgetUserLikes id={items.id} title='Akan Hadir' />
             </Container>
