@@ -25,6 +25,7 @@ import Feather from 'react-native-vector-icons/Feather'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import { getDetailOrderEvent } from 'src/lib/query/event';
+import moment from 'moment';
 
 const MyTicket = ({navigation, route}) => {
     const {item} = route.params
@@ -87,11 +88,11 @@ const MyTicket = ({navigation, route}) => {
                 <Image source={ImagesPath.produklelang3} style={{width:'100%', height: '100%'}}/>
             </View>
             <View style={{width: '70%', paddingHorizontal: 10}}>
-                <Text align={'left'} style={{fontWeight: 'bold'}}>Festival Pemuda Karang Taruna Jabodetabek</Text>
+                <Text align={'left'} style={{fontWeight: 'bold'}}>{data.event.name}</Text>
                 <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
-                    <Text style={{fontSize: 10, color: Color.secondary}}>1 Tiket</Text>
+                    <Text style={{fontSize: 10, color: Color.secondary}}>{data.items.length} Tiket</Text>
                     <View style={{width: 3, height: 3, backgroundColor: Color.secondary, borderRadius: 20, marginHorizontal: 5}}/>
-                    <Text style={{fontSize: 10, color: Color.secondary}}>1 Pax</Text>
+                    <Text style={{fontSize: 10, color: Color.secondary}}>{data.items.length} Pax</Text>
                 </View>
             </View>
         </View>
@@ -100,7 +101,7 @@ const MyTicket = ({navigation, route}) => {
             <Divider/>
             <View style={{paddingHorizontal: 15, flexDirection: 'row'}}>
                 <View style={{width: '85%'}}>
-                    <Text align={'left'} style={{fontWeight: 'bold'}}>Tn. Adang Susanyo</Text>
+                    <Text align={'left'} style={{fontWeight: 'bold'}}>{data.items[0]['title']}. {data.items[0]['name']}</Text>
                     <Text align={'left'} style={{fontSize: 8, color: Color.secondary,marginTop: 2}}>Tiket Masuk Partisipasi</Text>
                     <Divider/>
                 </View>
@@ -122,11 +123,11 @@ const MyTicket = ({navigation, route}) => {
             <Row style={{alignItems:'center', justifyContent: 'center'}}>
                 <View style={{paddingHorizontal: 10,paddingVertical: 10,borderWidth: 1, borderRadius: 8,marginRight: 5,borderColor: Color.border, width: '45%'}}>
                     <Image source={ImagesPath.PurpleClock}/>
-                    <Text align={'left'} style={{fontWeight: 'bold', marginTop: 3}}>10:00 - 22:00</Text>
+                    <Text align={'left'} style={{fontWeight: 'bold', marginTop: 3}}>{data.event.startTime} - {data.event.endTime}</Text>
                 </View>
                 <View style={{paddingHorizontal: 10,paddingVertical: 10,borderWidth: 1, borderRadius: 8,marginLeft: 5,borderColor: Color.border, width: '45%'}}>
                     <Image source={ImagesPath.BlueCalendar}/>
-                    <Text align={'left'} style={{fontWeight: 'bold', marginTop: 3}}>12 Januari 2022</Text>
+                    <Text align={'left'} style={{fontWeight: 'bold', marginTop: 3}}>{moment(data.event.date).format('DD MMMM YYYY')}</Text>
                 </View>
             </Row>
             <Divider height={10}/>
@@ -144,7 +145,7 @@ const MyTicket = ({navigation, route}) => {
             <Divider height={10}/>
             <View style={{width: '92%', alignItems: 'center',padding: 20,borderWidth: 1,borderRadius: 8,height: 350, marginBottom: 20,borderColor: Color.border, alignSelf:'center'}}>
                     <Image source={ImagesPath.QRCode} style={{width: '95%', height: '89%'}}/>
-                    <Text style={{fontWeight: 'bold', padding: 15}}>10000000013654987</Text>
+                    <Text style={{fontWeight: 'bold', padding: 15}}>{data.items[0]['uniqueCode']}</Text>
             </View>
             <Divider/>
             <View style={{justifyContent: 'center', alignItems:'center',flexDirection:'row',backgroundColor: '#3C58C1', width: '100%', height: 40, borderBottomLeftRadius: 15,borderBottomRightRadius: 15}}>
