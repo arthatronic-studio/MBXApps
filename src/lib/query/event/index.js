@@ -52,7 +52,6 @@ export const mutatuinEventManage = gql`
         updatedAt
         deletedAt
       }
->>>>>>> c156821c26e86bad8488913fa77df1e423d3ac64
     }
   }
 `;
@@ -63,25 +62,66 @@ mutation(
   $newEvent: EventInput
   $eventId: Int
 ){
-eventManage(
+  eventManage(
     type: $type
     newEvent: $newEvent
     eventId: $eventId
   ){
-    message
     success
+    message
     data{
+      id
+      userId
+      author
+      category
       name
+      description
+      date
+      startTime
+      endTime
+      location
+      lat
+      lng
+      images
+      startPrice
+      discountPrice
+      bookedCounts
+      isFavorite
+      tickets{
+        id
+        userId
+        eventId
+        name
+        quota
+        type
+        refund
+        reservation
+        categories
+        price
+        discountType
+        discountValue
+        createdAt
+        updatedAt
+        deletedAt
+      }
+      refundPolicy
+      tnc
+      provinsi
+      kota
+      kecamatan
+      kelurahan
+      ordered
+      bookmarked
+      createdAt
+      updatedAt
+      deletedAt
     }
   }
+}
 `;
 
 export const getHistory = gql`
-  query (
-    $page: Int
-    $itemPerPage: Int
-    $userId: Int
-  ) {
+  query ($page: Int, $itemPerPage: Int, $userId: Int) {
     eventTicketOrderList(
       page: $page
       itemPerPage: $itemPerPage
@@ -123,12 +163,8 @@ export const getHistory = gql`
 `;
 
 export const getDetailOrderEvent = gql`
-  query (
-    $id: Int
-  ) {
-    eventTicketOrderDetail(
-      id: $id
-    ) {
+  query ($id: Int) {
+    eventTicketOrderDetail(id: $id) {
       id
       eventId
       orderNumber
@@ -144,7 +180,7 @@ export const getDetailOrderEvent = gql`
       userOrderPhone
       userOrderEmail
       qty
-      event{
+      event {
         images
         ordered
         name
@@ -157,7 +193,7 @@ export const getDetailOrderEvent = gql`
         kota
         kecamatan
         kelurahan
-        tickets{
+        tickets {
           name
           id
           eventId
@@ -178,7 +214,7 @@ export const getDetailOrderEvent = gql`
         idCardNumber
         uniqueCode
       }
-      ticket{
+      ticket {
         name
         id
         eventId
@@ -189,7 +225,7 @@ export const getDetailOrderEvent = gql`
         createdAt
         userId
       }
-      payment{
+      payment {
         name
       }
     }
@@ -235,7 +271,7 @@ export const getEventList = gql`
       isFavorite
       refundPolicy
       ordered
-      tickets{
+      tickets {
         id
         userId
         eventId

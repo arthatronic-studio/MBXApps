@@ -137,7 +137,7 @@ const EventDetail = ({navigation, route}) => {
       <Row>
         <Col>
             <Text style={{textAlign: 'left', fontSize: 8}}>Harga</Text>
-            <Text style={{textAlign: 'left', fontWeight: 'bold'}}>{items.price}<Text style={{fontSize: 8}}>/Pax</Text></Text>
+            <Text style={{textAlign: 'left', fontWeight: 'bold'}}>{items.type === 'FREE' ? 'GRATIS' : items.price}<Text style={{fontSize: 8}}>/Pax</Text></Text>
         </Col>
         <TouchableOpacity onPress={() => navigation.navigate('PemesananTiket', {item, dataEvent: data, itemRoute: items})} style={{justifyContent: 'center',backgroundColor: Color.primary, width: '35%', borderRadius: 30}}>
           <Text style={{fontSize: 10, color: Color.textInput}}>Pesan Sekarang</Text>
