@@ -371,21 +371,7 @@ const SearchEvent = ({ navigation }) => {
       <View>
       </View>
 
-      {showRecomed ?
-     <View style={{marginTop:100,alignItems: 'center',
-     justifyContent: 'center',}}>
-<Image source={ImagesPath.nounwind} />
-<Text
-            style={{
-              marginVertical: 15,
-              fontWeight: 'bold',
-              color: Color.secondary,
-            }}>
-            Pencarian tidak ditemukan
-          </Text>
-
-</View>
-      :
+      {
       listData.data && listData.data.length != 0 ? (
         <View style={{ backgroundColor: Color.theme }}>
           <View
