@@ -1,8 +1,15 @@
 import gql from 'graphql-tag';
 
 export const queyGetDokumentasiEnventList = gql`
-    query{
-        eventDocumentationList {
+    query($page: Int
+        $itemPerPage: Int
+        $search: String
+       ){
+        eventDocumentationList(
+            page: $page
+            itemPerPage: $itemPerPage
+            search: $search
+        ) {
             id
             userId
             category

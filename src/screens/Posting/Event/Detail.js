@@ -324,7 +324,7 @@ const EventDetail = ({navigation, route}) => {
             </View> */}
           </View>
 
-          <Container paddingHorizontal={32} paddingVertical={16}>
+          {/* <Container paddingHorizontal={32} paddingVertical={16}>
             <Button
               onPress={() => {
                 navigation.navigate('GalleryScreen', {  });
@@ -332,7 +332,7 @@ const EventDetail = ({navigation, route}) => {
             >
               Lihat Event Galeri
             </Button>
-          </Container>
+          </Container> */}
           
           {/* {items.like > 0 &&
             <Container paddingHorizontal={16}>

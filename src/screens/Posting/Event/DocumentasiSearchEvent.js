@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, TextInput,Image,TouchableOpacity, FlatList,ScrollView, Platform, Linking, Pressable} from 'react-native';
+import {View, TextInput,Image,TouchableOpacity, FlatList,ScrollView, Platform, Linking, Pressable,ImageBackground} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
@@ -25,6 +25,7 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import ModalFilterEvent from './ModalFilterEvent';
 import moment from 'moment';
 import {fetchContentProduct, fetchContentUserProduct} from 'src/api/content';
+import { fetchEventDocumentList } from 'src/api/event/eventDocumentList';
 const DocumentasiSearchEvent = ({navigation}) => {
 
 const {Color} = useColor();
@@ -39,7 +40,7 @@ const [filter, setFilter] = useState({name: 'Nama', value: 'NAME'});
 const [listData, setListData] = useState([]);
 const [search, setSearch] = useState('');
 
-console.log('ini search',search);
+console.log('ini listData',listData);
 const onSearch = (value) => {
   if(value == ''){
     setSearch(value);
@@ -55,76 +56,103 @@ const fetchData = async search => {
   let variables = {
     page: 1,
     itemPerPage: 10,
-    productName: search,
-  };
-  variables.productCategory = 'EVENT';
-
-  Client.query({
-    query: queyGetDokumentasiEnventList,
-  
-  })
-  .then((res) => {
-   
-      console.log('ini res',res);
-    const data = res.data.eventDocumentationList;
+    search: search,
     
-
-    if (data) {
-      setListData(result);
-    }
-   
-  })
-  .catch((err) => {
-    console.log('err YOUTUBE_VIDEO', err);
-  });
+  };
+  const result = await fetchEventDocumentList(variables);
+  setListData(result);
   
 };
 const renderSearch = ({item}) => (
-  <Pressable
-    onPress={async() => {
-      await fetchViewProduct({productId: item.id});
-      navigation.navigate('NewsDetail', {code: item.code});
-      }
-    }
-    style={{
-      borderBottomWidth: 1,
-      borderBottomColor: Color.border,
-      paddingVertical: 12,
-      backgroundColor: Color.theme,
-      width: '100%',
-      paddingHorizontal: 16,
-    }}>
-    <View style={{flexDirection: 'row'}}>
-      <Image
-        source={{ uri: item.image }}
-        style={{width: 80, aspectRatio: 1, borderRadius: 4}}
-      />
-      <Divider width={10} />
-      <View
-        style={{
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          maxWidth: '75%',
-        }}>
-        <Text numberOfLines={2} align="left" size={14} type="bold">
-          {item.productName}
-        </Text>
-        <Divider height={4} />
-        <Text numberOfLines={2} size={10} align="left">
-          {item.productDescription}
-        </Text>
-      </View>
-    </View>
-    <Divider height={10} />
-    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-      <Text size={10} color={'#121212'} style={{opacity: 0.8}}>
-        {item.fullname} | {moment(+item.created_date).format('DD MMM YYYY')}
-      </Text>
-      <Text size={10} color={Color.primary}>
-        Baca Selengkapnya
-      </Text>
-    </View>
-  </Pressable>
+  <View style={{
+    flex: 1,
+    width: '48%', 
+    minHeight: 225,
+    padding: 10, 
+    
+  }}>
+     <Pressable onPress={()=> navigation.navigate('DocumentasiEventDetail',{id: item.id,cImage: item.mediaCounts.image,cVideo: item.mediaCounts.video})}>
+<ImageBackground source={{uri: item.latestMedia !== null ? item.latestMedia : item.images[0]}} resizeMode="cover"  imageStyle={{ borderRadius: 6}} style={{
+flex: 1,
+justifyContent: "flex-end",
+borderRadius: 4,
+minHeight: 225,
+marginBottom: 0, 
+padding: 10,
+borderRadius: 9, 
+// borderWidth: 1,
+backgroundColor: 'grey'
+}}> 
+
+
+<View style={{position: 'absolute',left:88,top:0,flexDirection:'row',marginVertical:5,}}>
+<Text size={10} align='center'  type="bold" color={Color.border}>{item.mediaCounts.image}</Text>
+<IonIcons
+  name='image-outline'
+  color={Color.border}
+  size={15}
+  style={{marginHorizontal: 3}}
+ 
+/>
+<Text size={10} align='center'  type="bold" color={Color.border}>{item.mediaCounts.video}</Text>
+<IonIcons
+  name='play-outline'
+  color={Color.border}
+  size={15}
+  style={{marginHorizontal: 3}}
+ 
+/>
+</View>
+  <Text color={Color.border} align='left' style={{ marginBottom: 4,  }} type={'bold'}>{item.name}</Text>
+  <Text size={9} align='left' color={Color.border}>{item.category} • {Moment(item.date).format('DD MMM YYYY')}</Text>
+</ImageBackground>
+</Pressable>
+</View>
+  // <Pressable
+  //   onPress={async() => {
+  //     await fetchViewProduct({productId: item.id});
+  //     navigation.navigate('NewsDetail', {code: item.code});
+  //     }
+  //   }
+  //   style={{
+  //     borderBottomWidth: 1,
+  //     borderBottomColor: Color.border,
+  //     paddingVertical: 12,
+  //     backgroundColor: Color.theme,
+  //     width: '100%',
+  //     paddingHorizontal: 16,
+  //   }}>
+  //   <View style={{flexDirection: 'row'}}>
+  //     <Image
+  //       source={{ uri: item.image }}
+  //       style={{width: 80, aspectRatio: 1, borderRadius: 4}}
+  //     />
+  //     <Divider width={10} />
+  //     <View
+  //       style={{
+  //         flexDirection: 'column',
+  //         alignItems: 'flex-start',
+  //         maxWidth: '75%',
+  //       }}>
+  //       <Text numberOfLines={2} align="left" size={14} type="bold">
+  //         {item.productName}
+  //       </Text>
+  //       <Divider height={4} />
+  //       <Text numberOfLines={2} size={10} align="left">
+  //         {item.productDescription}
+  //       </Text>
+  //     </View>
+  //   </View>
+  //   <Divider height={10} />
+  //   <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+  //     <Text size={10} color={'#121212'} style={{opacity: 0.8}}>
+  //       {item.fullname} | {moment(+item.created_date).format('DD MMM YYYY')}
+  //     </Text>
+  //     <Text size={10} color={Color.primary}>
+  //       Baca Selengkapnya
+  //     </Text>
+  //   </View>
+  // </Pressable>
 );
 
   return (
@@ -262,28 +290,16 @@ const renderSearch = ({item}) => (
                 {listData.data.length} hasil pencarian ditemukan
               </Text>
             </View>
-            <TouchableOpacity onPress={() => modalOptionsRef.current.open()} style={{flexDirection: 'row',alignItems: 'center', justifyContent: 'center',borderWidth: 1, borderColor: Color.text, width: 95, borderRadius: 30, height: 30}}>
-        <Text style={{fontSize: 10, marginRight: 10}}>Terbaru</Text>
-        <MaterialIcons name={'keyboard-arrow-down'} size={15}/>
-      </TouchableOpacity>
+          
           </View>
-          <View style={{flexDirection: 'row', paddingHorizontal: 15,marginVertical:10}}>
-          <Pressable style={{marginRight: 8,alignItems: 'center', justifContent: 'center',borderWidth: 1, borderColor: Color.secondary, paddingVertical: 7, borderRadius: 20,paddingHorizontal: 17}}>
-            <Text style={{fontSize: 10, color: Color.secondary}}>Semua</Text>
-          </Pressable>
-          <Pressable style={{marginRight: 8,alignItems: 'center', justifContent: 'center',borderWidth: 1, borderColor: Color.secondary, paddingVertical: 7, borderRadius: 20,paddingHorizontal: 17}}>
-            <Text style={{fontSize: 10, color: Color.secondary}}>Official</Text>
-          </Pressable>
-          <Pressable style={{alignItems: 'center', justifContent: 'center',borderWidth: 1, borderColor: Color.secondary, paddingVertical: 7, borderRadius: 20,paddingHorizontal: 17}}>
-            <Text style={{fontSize: 10, color: Color.secondary}}>Komunitas</Text>
-          </Pressable>
-        </View>
+    
           <View
             style={{width: '100%', height: 1, backgroundColor: Color.border}}
           />
 
           <FlatList
             data={listData.data}
+             numColumns={2}
             renderItem={renderSearch}
             keyExtractor={item => item.id}
           />
