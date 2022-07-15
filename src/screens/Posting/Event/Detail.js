@@ -73,7 +73,7 @@ const EventDetail = ({navigation, route}) => {
   const [im_like, set_im_like] = useState(items.im_like);
 
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState(true);
+  const [data, setData] = useState(null);
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const isFocused = useIsFocused();
@@ -207,15 +207,16 @@ const EventDetail = ({navigation, route}) => {
         showsVerticalScrollIndicator={false}
       >
         <TouchableOpacity
-          onPress={() => {
+          onPress={() => { data ? data.images.length == 0 ? console.log()  :
             navigation.navigate('GalleryDetailScreen', {
-              id: items.id,
-              image: items.image,
-            });
+              id: data.id,
+              image: data.images[0],
+            })
+            : console.log()
           }}
         >
           <Image
-            source={{uri: items.image}}
+            source={{uri: data ? data.images.length == 0 ? '' : data.images[0] : ""}}
             style={{width: '100%', aspectRatio: 4/3, backgroundColor: Color.border}}
           />
         </TouchableOpacity>
@@ -236,7 +237,7 @@ const EventDetail = ({navigation, route}) => {
                 textAlign: 'left',
                 paddingHorizontal: 20,
               }}>
-              OFFICIAL EVENT
+              {data.category}
             </Text>
             <Divider height={10}/>
             <Text
@@ -248,7 +249,7 @@ const EventDetail = ({navigation, route}) => {
                 paddingHorizontal: 20,
                 width: '70%'
               }}>
-              {items.productName}
+              {data.name}
             </Text>
           </View>
           <View style={{flexDirection: 'row', paddingVertical: 18}}>
@@ -624,7 +625,7 @@ const EventDetail = ({navigation, route}) => {
           ref={modalOptionsRef}
           event={true}
           isOwner={user && user.userId === items.ownerId}
-          item={items}
+          item={data}
       /> 
     </Scaffold>
   );

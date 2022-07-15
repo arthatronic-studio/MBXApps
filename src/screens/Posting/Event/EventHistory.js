@@ -10,7 +10,7 @@ import { Row } from 'src/components';
 
 const EventHistory = () => {
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading, hideLoading] = useState(true);
   const [list, setList] = useState([]);
   const isFocused = useIsFocused();
 

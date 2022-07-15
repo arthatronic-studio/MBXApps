@@ -122,7 +122,7 @@ const isFocused = useIsFocused();
                     <Text align={'left'} style={{fontSize: 8, color: Color.secondary}}>Harga Total</Text>
                     <Text align={'left'} style={{fontWeight: 'bold'}}>{FormatMoney.getFormattedMoney(item.price)}</Text>
                 </View>
-                <Pressable onPress={()=> navigation.navigate('MyTicket')}
+                <Pressable onPress={()=> navigation.navigate('OrderEventDetail',{item})}
                 style={{backgroundColor: Color.primary, borderRadius: 20,alignItems:'center', justifyContent: 'center',paddingHorizontal: 17}}>
                     <Text style={{fontSize:12, color: Color.textInput}}>Lihat Detail</Text>
                 </Pressable>

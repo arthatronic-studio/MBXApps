@@ -3,6 +3,7 @@ import React, {useState, useEffect, useRef} from 'react'
 import HighlightContentProduct from 'src/components/Content/HighlightContentProduct'
 import { Divider } from 'src/styled'
 import Client from '@src/lib/apollo';
+import { useSelector } from 'react-redux';
 import {useIsFocused, useRoute} from '@react-navigation/native';
 import { getHistory, getOwnEvent } from 'src/lib/query/event'
 import CardContentProduct from 'src/components/Content/CardContentProduct';
@@ -10,6 +11,7 @@ import { Row } from 'src/components';
 
 const OwnEvent = () => {
 
+  const user = useSelector(state => state['user.auth'].login.user);
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState([]);
   const isFocused = useIsFocused();
@@ -18,29 +20,31 @@ const OwnEvent = () => {
       getList();
     }, [isFocused]);
 
-      const getList = () => {
-        // showLoading();
-        let variables = {
-          page: 0,
-          itemPerPage: 20,
-        };
-        console.log(variables);
-        Client.query({query: getOwnEvent, variables})
-          .then(res => {
-            // hideLoading()
-            if(res.data.eventTicketOrderList){
-              setList(res.data.eventTicketOrderList)
-            }
-            console.log(res);
-
-            setLoading(false);
-          })
-          .catch(reject => {
-            // hideLoading()
-            console.log(reject, 'reject');
-            setLoading(false);
-          });
+    const getList = () => {
+      // showLoading();
+      let variables = {
+        page: 0,
+        itemPerPage: 20,
+        userId: user.userId
       };
+      console.log(variables);
+      Client.query({query: getHistory, variables})
+        .then(res => {
+          // hideLoading()
+          if(res.data.eventTicketOrderList){
+            setList(res.data.eventTicketOrderList)
+          }
+          console.log(res);
+
+          setLoading(false);
+        })
+        .catch(reject => {
+          // hideLoading()
+          console.log(reject, 'reject');
+          setLoading(false);
+        });
+    };
+
 
     const renderCardContent = (item, index) => (
       <CardContentProduct
