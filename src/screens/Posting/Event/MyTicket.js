@@ -1,10 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Image, FlatList,ScrollView, Platform, Linking, Pressable} from 'react-native';
+import {View, Image, FlatList,ScrollView,useWindowDimensions, Platform, Linking, Pressable} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import Moment from 'moment';
 import { useSelector } from 'react-redux';
+import QRCode from 'react-native-qrcode-svg';
 import {useIsFocused, useRoute} from '@react-navigation/native';
 import Header from '@src/components/Header';
 import {useLoading, usePopup, useColor, Alert, Row, Col} from '@src/components';
@@ -29,6 +30,7 @@ import moment from 'moment';
 
 const MyTicket = ({navigation, route}) => {
     const {item} = route.params
+    const {width} = useWindowDimensions();
     const isFocused = useIsFocused();
     const {Color} = useColor();
     const [data, setData] = useState(null);
@@ -144,17 +146,17 @@ const MyTicket = ({navigation, route}) => {
             </Row>
             <Divider height={10}/>
             <View style={{width: '92%', alignItems: 'center',padding: 20,borderWidth: 1,borderRadius: 8,height: 350, marginBottom: 20,borderColor: Color.border, alignSelf:'center'}}>
-                    <Image source={ImagesPath.QRCode} style={{width: '95%', height: '89%'}}/>
+                    <QRCode value={data.items[0]['uniqueCode']} size={width / 6} />
                     <Text style={{fontWeight: 'bold', padding: 15}}>{data.items[0]['uniqueCode']}</Text>
             </View>
             <Divider/>
-            <View style={{justifyContent: 'center', alignItems:'center',flexDirection:'row',backgroundColor: '#3C58C1', width: '100%', height: 40, borderBottomLeftRadius: 15,borderBottomRightRadius: 15}}>
-                <MaterialCommunityIcons size={14} name={'cash-refund'} color={Color.textInput}/>
-                <Text style={{fontSize: 10, color: Color.textInput, marginLeft: 5}}>Bisa Refund</Text>
-                <View style={{backgroundColor: Color.theme, width: 4, height: 4, borderRadius: 20, marginHorizontal: 8}}/>
-                <AntDesign name={'calendar'} color={Color.textInput}/>
-                <Text style={{fontSize: 10, color: Color.textInput, marginLeft: 5}}>Tidak Perlu Reservasi</Text>
-            </View>
+            <Row style={{alignItems: 'center', }}>
+                <MaterialCommunityIcons name={'cash-refund'} color={Color.secondary} size={22}/>
+                <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 5}}>{data.ticket.refund ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
+                <Divider width={8}/>
+                <AntDesign name='calendar' size={18} color={Color.secondary}/>
+                <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 5}}>{data.ticket.reservation ? 'Perlu Reservasi' : 'Tidak Perlu Reservasi'}</Text>
+            </Row>
         </View>
         <Divider height={50}/>
         </ScrollView>
