@@ -69,7 +69,7 @@ const PemesananTiket = ({navigation}) => {
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
     const [name, setName] = useState(user ? user.firstName+' '+user.lastName : '');
     const [isTicket, setSwitch] = useState();
-    const [qty, setQty] = useState();
+    const [qty, setQty] = useState(1);
     const [passangerInput, setPassangerInput] = useState(null);
     const [refresh, setRefresh] = useState(0);
     const [tnc, setTnc] = useState(0);
@@ -146,7 +146,7 @@ const PemesananTiket = ({navigation}) => {
                 <Row style={{  alignItems: 'center' }}>
                     <Col size={8} style={{   alignItems: 'flex-start', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
                         <Text color={Color.text} size={9}>Harga</Text>
-                        <Text color={Color.text} size={14} type='semibold'>{FormatMoney.getFormattedMoney(ticketSelected.price)}/pax</Text>
+                        <Text color={Color.text} size={14} type='semibold'>{ticketSelected.type === 'FREE' ? 'GRATIS' : FormatMoney.getFormattedMoney(ticketSelected.price)}/pax</Text>
                     </Col>
                     <Col style={{ alignItems: 'flex-end' }}>
                         <TouchableOpacity onPress={() => modalChangeTicketRef.current.open()} style={{ borderColor: Color.primary, borderWidth: 1, borderRadius: 30, paddingVertical: 8, paddingHorizontal: 10 }}>
@@ -194,7 +194,7 @@ const PemesananTiket = ({navigation}) => {
             <Row style={{ margin: 16 }}>
                 <Col>
                     <Text color='#6A7479' align='left' size={10}>PAX</Text>
-                    <Text type='bold' align='left' size={14}>{FormatMoney.getFormattedMoney(ticketSelected.price)}</Text>
+                    <Text type='bold' align='left' size={14}>{ticketSelected.type === 'FREE' ? 'GRATIS' : FormatMoney.getFormattedMoney(ticketSelected.price)}</Text>
                 </Col>
                 <Col style={{ justifyContent: 'center' }}>
                     <Row style={{justifyContent: 'flex-end', alignItems: 'center'}}>
