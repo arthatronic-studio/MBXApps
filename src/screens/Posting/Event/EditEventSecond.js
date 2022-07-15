@@ -35,7 +35,7 @@ import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
 import ImagesPath from 'src/components/ImagesPath';
 import client from '@src/lib/apollo';
-import { mutatuinEventManage } from 'src/lib/query/event';
+import { mutationAddEvent } from 'src/lib/query/event';
 var crypto = require('crypto-js')
 
 function sha1(data) {
@@ -51,7 +51,7 @@ const Content = Styled(View)`
     borderRadius: 8px
 `;
 
-const CreateEventSecond = ({navigation}) => {
+const EditEventSecond = ({navigation}) => {
     const user = useSelector((state) => state['user.auth'].login.user);
 	const loading = useSelector((state) => state['user.auth'].loading);
     const route = useRoute();
@@ -152,17 +152,16 @@ const CreateEventSecond = ({navigation}) => {
             newEvent: {
                 ...route.params.item,
                 category: "OFFICIAL",
-                // refundPolicy: refundPolicy ? 'data:application/pdf;base64,'+refundPolicy : null,
-                // tnc: tnc ? 'data:application/pdf;base64,'+tnc : null,
+                refundPolicy: 'data:application/pdf;base64,'+refundPolicy,
+                tnc: 'data:application/pdf;base64,'+tnc,
                 tickets: updateData
             }
         }
-        console.log(variables, "varrr");
-        client.mutate({mutation: mutatuinEventManage, variables})
+        console.log(variables)
+        client.mutate({mutation: mutationAddEvent, variables})
         .then(res => {
             hideLoading();
-            console.log(res, "hasil");
-
+            console.log(res);
             if (res.data.eventManage) {
                 alert('Event berhasil dibuat')
                 setTimeout(() => {
@@ -174,6 +173,9 @@ const CreateEventSecond = ({navigation}) => {
             hideLoading();
             console.log(reject.message, 'reject');
         });
+
+        // navigation.navigate('CreateEventSecond',{item: tempData})
+       
       };
 
       const onChange = (value,name, id) => {
@@ -397,4 +399,4 @@ const CreateEventSecond = ({navigation}) => {
   )
 }
 
-export default CreateEventSecond
+export default EditEventSecond

@@ -52,19 +52,46 @@ export const mutatuinEventManage = gql`
         updatedAt
         deletedAt
       }
+>>>>>>> c156821c26e86bad8488913fa77df1e423d3ac64
+    }
+  }
+`;
+
+export const mutationAddEvent = gql`
+mutation(
+  $type: EventManageEnum!
+  $newEvent: EventInput
+  $eventId: Int
+){
+eventManage(
+    type: $type
+    newEvent: $newEvent
+    eventId: $eventId
+  ){
+    message
+    success
+    data{
+      name
     }
   }
 `;
 
 export const getHistory = gql`
-  query ($page: Int, $itemPerPage: Int) {
-    eventTicketOrderList(page: $page, itemPerPage: $itemPerPage) {
+  query (
+    $page: Int
+    $itemPerPage: Int
+    $userId: Int
+  ) {
+    eventTicketOrderList(
+      page: $page
+      itemPerPage: $itemPerPage
+      userId: $userId
+    ) {
       id
       status
       orderNumber
       discount
       totalAmount
-      uniqueCode
       price
       createdAt
       expiredAt
@@ -90,6 +117,80 @@ export const getHistory = gql`
         phone
         email
         idCardNumber
+      }
+    }
+  }
+`;
+
+export const getDetailOrderEvent = gql`
+  query (
+    $id: Int
+  ) {
+    eventTicketOrderDetail(
+      id: $id
+    ) {
+      id
+      eventId
+      orderNumber
+      bookingId
+      status
+      orderNumber
+      discount
+      totalAmount
+      price
+      createdAt
+      expiredAt
+      userOrderName
+      userOrderPhone
+      userOrderEmail
+      qty
+      event{
+        images
+        ordered
+        name
+        date
+        startTime
+        endTime
+        author
+        images
+        provinsi
+        kota
+        kecamatan
+        kelurahan
+        tickets{
+          name
+          id
+          eventId
+          quota
+          reservation
+          refund
+          type
+          createdAt
+          userId
+        }
+      }
+      items {
+        name
+        title
+        name
+        phone
+        email
+        idCardNumber
+        uniqueCode
+      }
+      ticket{
+        name
+        id
+        eventId
+        quota
+        reservation
+        refund
+        type
+        createdAt
+        userId
+      }
+      payment{
+        name
       }
     }
   }

@@ -24,7 +24,8 @@ import { queryProductReport } from './queryProductReport';
 import { queryUserBlock } from './queryUserBlock';
 import { queryGetUserBlock, queryUnblockUser } from './queryBlockUser';
 import { queryMenuList } from './queryMenuList';
-
+import {queyGetDokumentasiEnventList}  from './queyGetDokumentasiEnventList';
+import {queyGetDokumentasiEnventDetail}  from './queyGetDokumentasiEnventDetail';
 export {
     queryContentProduct,
     queryContentProductDetail,
@@ -53,4 +54,6 @@ export {
     queryGetUserBlock,
     queryUnblockUser,
     queryMenuList,
+    queyGetDokumentasiEnventList,
+    queyGetDokumentasiEnventDetail
 };

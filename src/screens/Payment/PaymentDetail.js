@@ -363,7 +363,7 @@ export default ({ navigation, route }) => {
           </HeaderVoucher>
           <VoucherRoundedView>
             <CustomTextInput
-              style={{ width: '88%' }}
+              style={{ width: '88%', color: Color.text }}
               placeholder='Kode voucher'
               placeholderTextColor='#DDDDDD'
               underlineColorAndroid='transparent'
@@ -374,9 +374,7 @@ export default ({ navigation, route }) => {
                 setVoucherFailed('');
               }}
               selectionColor={Color.text}
-              style={{
-                color: Color.text
-              }}
+              
             />
             {kdVoucher.length > 0 && <ResetTextVoucher
               onPress={() => {

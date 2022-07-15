@@ -76,7 +76,7 @@ const EventDetail = ({navigation, route}) => {
 
   const [loading, setLoading] = useState(true);
   const [bookmark, setBookmark] = useState(false);
-  const [data, setData] = useState(true);
+  const [data, setData] = useState(null);
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const isFocused = useIsFocused();
@@ -222,15 +222,16 @@ const EventDetail = ({navigation, route}) => {
         showsVerticalScrollIndicator={false}
       >
         <TouchableOpacity
-          onPress={() => {
+          onPress={() => { data ? data.images.length == 0 ? console.log()  :
             navigation.navigate('GalleryDetailScreen', {
-              id: items.id,
-              image: items.image,
-            });
+              id: data.id,
+              image: data.images[0],
+            })
+            : console.log()
           }}
         >
           <Image
-            source={{uri: data.images ? data.images[0] : ''}}
+            source={{uri: data ? data.images.length == 0 ? '' : data.images[0] : ""}}
             style={{width: '100%', aspectRatio: 4/3, backgroundColor: Color.border}}
           />
         </TouchableOpacity>
@@ -324,17 +325,17 @@ const EventDetail = ({navigation, route}) => {
             </View> */}
           </View>
 
-          {/* <Container paddingHorizontal={32} paddingVertical={16}>
+          <Container paddingHorizontal={32} paddingVertical={16}>
             <Button
               onPress={() => {
-                navigation.navigate('GalleryScreen', { item });
+                navigation.navigate('GalleryScreen', {  });
               }}
             >
               Lihat Event Galeri
             </Button>
           </Container>
           
-          {items.like > 0 &&
+          {/* {items.like > 0 &&
             <Container paddingHorizontal={16}>
                 <WidgetUserLikes id={items.id} title='Akan Hadir' />
             </Container>
@@ -640,7 +641,7 @@ const EventDetail = ({navigation, route}) => {
           ref={modalOptionsRef}
           event={true}
           isOwner={user && user.userId === items.ownerId}
-          item={items}
+          item={data}
       /> 
     </Scaffold>
   );

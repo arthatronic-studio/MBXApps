@@ -5,6 +5,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import Moment from 'moment';
 import { useSelector } from 'react-redux';
+import {useIsFocused, useRoute} from '@react-navigation/native';
 import Header from '@src/components/Header';
 import {useLoading, usePopup, useColor, Alert, Row, Col} from '@src/components';
 import Text from '@src/components/Text';
@@ -23,12 +24,45 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Feather from 'react-native-vector-icons/Feather'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import { getDetailOrderEvent } from 'src/lib/query/event';
 
-const MyTicket = () => {
-
+const MyTicket = ({navigation, route}) => {
+    const {item} = route.params
+    const isFocused = useIsFocused();
     const {Color} = useColor();
+    const [data, setData] = useState(null);
     const [popupProps, showPopup] = usePopup();
     const [loadingProps, showLoading, hideLoading] = useLoading();
+    console.log(route)
+
+    useEffect(() => {
+        getDetail()
+      }, []);
+    
+    const getDetail = () => {
+        showLoading();
+        let variables = {
+        id: item.id,
+        };
+        console.log(variables);
+        Client.query({query: getDetailOrderEvent, variables})
+        .then(res => {
+            hideLoading()
+            if(res.data.eventTicketOrderDetail){
+                setData(res.data.eventTicketOrderDetail)
+            }
+            console.log(res);
+
+        })
+        .catch(reject => {
+            hideLoading()
+            alert(reject.message)
+            console.log(reject.message, 'reject');
+        });
+    };
+
+
+  if(!data) return <View />
 
   return (
     <Scaffold

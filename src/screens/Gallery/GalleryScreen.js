@@ -104,6 +104,28 @@ const GalleryScreen = ({ navigation, route }) => {
             setIsLoading(false);
         })
     }
+    const DATA2 = [
+        {
+          id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+          title: 'First Item',
+          image: 'https://reactjs.org/logo-og.png'
+        },
+        {
+          id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
+          title: 'Second Item',
+          image: 'https://reactjs.org/logo-og.png'
+          
+        },
+        {
+          id: '58694a0f-3da1-471f-bd96-145571e29d72',
+          title: 'Third Item',
+          image: 'https://reactjs.org/logo-og.png'
+        }, {
+            id: '586d94a0f-3da1-471f-bd96-145571e29d72',
+            title: 'For Item',
+            image: 'https://reactjs.org/logo-og.png'
+          },
+      ];
 
     return (
         <Scaffold
@@ -162,7 +184,7 @@ const GalleryScreen = ({ navigation, route }) => {
 
                 <Container paddingHorizontal={8}>
                     <Row width='100%' style={{flexWrap: 'wrap'}}>
-                        {listing.map((e, idx) =>
+                        {DATA2.map((e, idx) =>
                             <Container key={idx} width='50%' padding={8}>
                                 <TouchableOpacity
                                     onPress={() => {

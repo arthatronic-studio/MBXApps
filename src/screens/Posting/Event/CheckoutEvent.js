@@ -133,6 +133,7 @@ const CheckoutEvent = ({navigation}) => {
                     data: {
                       ...res.data.eventTicketOrderManage.data,
                       id: res.data.eventTicketOrderManage.data.bookingId,
+                      invoiceNumber: res.data.eventTicketOrderManage.data.orderNumber,
                       vestaBiller: true,
                       finalAmount: res.data.eventTicketOrderManage.data.totalAmount,
                     },

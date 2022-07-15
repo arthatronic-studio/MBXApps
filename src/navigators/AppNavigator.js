@@ -198,6 +198,7 @@ import CreateShop from 'src/screens/Ecommerce/CreateShop';
 import GalleryScreen from 'src/screens/Gallery/GalleryScreen';
 import GalleryDetailScreen from 'src/screens/Gallery/GalleryDetailScreen';
 import GalleryDetailSliderScreen from 'src/screens/Gallery/GalleryDetailSliderScreen';
+import GalleryDetailSliderScreenEvent from 'src/screens/Gallery/GalleryDetailSliderScreenEvent';
 import IncomingOrder from 'src/screens/Ecommerce/IncomingOrder';
 import SearchScreen from 'src/screens/Ecommerce/SearchScreen';
 import TrackingOrder from 'src/screens/Transaction/TrackingOrder';
@@ -217,12 +218,17 @@ import CommunityEvent from 'src/screens/Posting/Event/CommunityEvent';
 import MyEvent from 'src/screens/Posting/Event/MyEvent';
 import SavedEvent from 'src/screens/Posting/Event/SavedEvent';
 import SearchEvent from 'src/screens/Posting/Event/SearchEvent';
+import DocumentasiSearchEvent from 'src/screens/Posting/Event/DocumentasiSearchEvent';
 import EditEventMain from 'src/screens/Posting/Event/EditEventMain';
 import History from 'src/screens/Posting/Event/History';
 import MyTicket from 'src/screens/Posting/Event/MyTicket';
 import DocumentasiEvent from 'src/screens/Posting/Event/DocumentasiEvent';
+import DocumentasiEventDetail from 'src/screens/Posting/Event/DocumentasiEventDetail';
 import EventHistory from 'src/screens/Posting/Event/EventHistory';
 import OnBoardEvent from 'src/screens/Posting/Event/OnBoardEvent';
+import EditEvent from 'src/screens/Posting/Event/EditEvent';
+import EditEventSecond from 'src/screens/Posting/Event/EditEventSecond';
+import OrderEventDetail from 'src/screens/Posting/Event/OrderEventDetail';
 // import EventOfficial from 'src/screens/Posting/Event/EventOfficial';
 // import CommunityEvent from 'src/screens/Posting/Event/CommunityEvent';
 // import MyEvent from 'src/screens/Posting/Event/MyEvent';
@@ -247,7 +253,11 @@ function MainStackNavigator() {
       <Screen name="SplashScreen" component={SplashScreen} />
 
       <Screen name="DocumentasiEvent" component={DocumentasiEvent} />
+      <Screen name="DocumentasiEventDetail" component={DocumentasiEventDetail} />
       <Screen name="OnBoardEvent" component={OnBoardEvent} />
+      <Screen name="EditEvent" component={EditEvent} />
+      <Screen name="EditEventSecond" component={EditEventSecond} />
+      <Screen name="OrderEventDetail" component={OrderEventDetail} />
       <Screen name="MainPage" component={MainPage} />
       <Screen name="OnBoardingScreen" component={OnBoardingScreen} />
       <Screen name="TrackingOrder" component={TrackingOrder} />
@@ -365,6 +375,7 @@ function MainStackNavigator() {
       <Screen name="MyEvent" component={MyEvent} />
       <Screen name="SavedEvent" component={SavedEvent} />
       <Screen name="SearchEvent" component={SearchEvent} />
+      <Screen name="DocumentasiSearchEvent" component={DocumentasiSearchEvent} />
       <Screen name="History" component={History} />
       <Screen name="MyTicket" component={MyTicket} />
 
@@ -469,6 +480,11 @@ function MainStackNavigator() {
         name="GalleryDetailSliderScreen"
         component={GalleryDetailSliderScreen}
       />
+      <Screen
+        name="GalleryDetailSliderScreenEvent"
+        component={GalleryDetailSliderScreenEvent}
+      />
+      
     </Navigator>
   );
 }

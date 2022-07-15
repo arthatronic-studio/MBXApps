@@ -137,7 +137,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
       color: Color.error,
       onPress: () => {
         combinedRef.current.close();
-        navigation.navigate('EditEventMain')
+        navigation.navigate('EditEventMain',{item})
       },
     },
   ];

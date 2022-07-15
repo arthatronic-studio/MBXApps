@@ -810,11 +810,11 @@ const MainHome = ({navigation, route}) => {
         }}
       />
 
-      <ModalMenuHome
+      {/* <ModalMenuHome
         ref={modalMenuHome}
-      />
+      /> */}
 
-      {dataPopupAds && (
+      {/* {dataPopupAds && (
         <Modal
           isVisible={tempShowPopupAds && showPopupAds}
           onBackdropPress={() => {
@@ -857,7 +857,7 @@ const MainHome = ({navigation, route}) => {
             </TouchableOpacity>
           </View>
         </Modal>
-      )}
+      )} */}
     </Scaffold>
   );
 };
