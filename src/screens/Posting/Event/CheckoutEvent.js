@@ -128,19 +128,24 @@ const CheckoutEvent = ({navigation}) => {
             console.log(res.data);
             if (res.data.eventTicketOrderManage.success) {
                 console.log('manage')
-                dispatch({
-                    type: 'BOOKING.ADD_BOOKING',
-                    data: {
-                      ...res.data.eventTicketOrderManage.data,
-                      id: res.data.eventTicketOrderManage.data.bookingId,
-                      vestaBiller: true,
-                      finalAmount: res.data.eventTicketOrderManage.data.totalAmount,
-                    },
-                  });
-                  setTimeout(() => {
-                    navigation.navigate('PaymentScreen', {back: true});
-                    // navigation.popToTop()
-                  }, 1000);
+                if(res.data.eventTicketOrderManage.data.status === 'PAID'){
+                    navigation.navigate('OrderEventDetail',{item: res.data.eventTicketOrderManage.data});
+                }else{
+                    dispatch({
+                        type: 'BOOKING.ADD_BOOKING',
+                        data: {
+                        ...res.data.eventTicketOrderManage.data,
+                          id: res.data.eventTicketOrderManage.data.bookingId,
+                          invoiceNumber: res.data.eventTicketOrderManage.data.orderNumber,
+                          vestaBiller: true,
+                          finalAmount: res.data.eventTicketOrderManage.data.totalAmount,
+                        },
+                      });
+                    setTimeout(() => {
+                        navigation.navigate('PaymentScreen', {back: true});
+                        // navigation.popToTop()
+                    }, 1000);
+                }
             }
         })
         .catch(reject => {
@@ -182,13 +187,13 @@ const CheckoutEvent = ({navigation}) => {
 
     const onClose = () => {
         modalPassangerRef.current.close();
-      }
+    }
 
-      const onSave = (data) => {
+    const onSave = (data) => {
         console.log(data)
         setPassanger(data)
         onClose()
-      }
+    }
 
   return (
     <Scaffold
@@ -256,7 +261,7 @@ const CheckoutEvent = ({navigation}) => {
             <TouchableOpacity onPress={() => modalPassangerRef.current.open()} style={{ borderColor: '#CDD1D2', margin: 16, borderWidth: 1, padding: 10, borderRadius: 10 }}>
                 <Row>
                     <Col>
-                        <Text color={Color.text} type='bold' align='left'>Tiket 1 (Pax)</Text>
+                        <Text color={Color.text} type='bold' align='left'>{passanger.length > 0 ? passanger[0].title + ' ' + passanger[0].name : 'Tiket 1 (Pax)'}</Text>
                     </Col>
                     <Col size={2} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
                         <AntDesign name='right' size={18} />
@@ -287,7 +292,7 @@ const CheckoutEvent = ({navigation}) => {
                         <Text color={Color.text}  size={11} align='left'>Total</Text>
                     </Col>
                     <Col size={4} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
-                        <Text color={Color.text}  size={11} type='bold' align='left'>{FormatMoney.getFormattedMoney(params.ticket.price+params.ticket.price*0.1)}</Text>
+                        <Text color={Color.text}  size={11} type='bold' align='left'>{params.ticket.type === 'FREE' ? 'GRATIS' : FormatMoney.getFormattedMoney(params.ticket.price+params.ticket.price*0.1)}</Text>
                     </Col>
                 </Row>
             </View>

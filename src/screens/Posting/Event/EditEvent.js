@@ -26,7 +26,6 @@ import ListForum from '@src/screens/MainForum/ListForum';
 
 import { shadowStyle } from '@src/styles';
 
-import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
 import ImagesPath from 'src/components/ImagesPath';
 import Entypo from 'react-native-vector-icons/Entypo'
@@ -36,8 +35,9 @@ import axios from 'axios';
 import moment from 'moment';
 import Ecommerce from '../../Ecommerce/Ecommerce';
 import FormSelect from 'src/components/FormSelect';
-import { mutatuinEventManage } from 'src/lib/query/event';
+import { mutationAddEvent } from 'src/lib/query/event';
 import ModalSelectMap from 'src/components/ModalSelectMap';
+import client from '@src/lib/apollo';
 var crypto = require('crypto-js')
 
 function sha1(data) {
@@ -53,38 +53,40 @@ const Content = Styled(View)`
     borderRadius: 8px
 `;
 
-const CreateEvent = ({navigation}) => {
+const EditEvent = ({navigation, route}) => {
     const user = useSelector((state) => state['user.auth'].login.user);
 	const loading = useSelector((state) => state['user.auth'].loading);
     const {width} = useWindowDimensions();
+    console.log(route)
+    const {item} = route.params
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
-    const [name, setName] = useState( '');
-    const [address, setAddress] = useState('');
+    const [name, setName] = useState(item.name);
+    const [address, setAddress] = useState(item.location);
 
-    const [province, setProvince] = useState('');
-    const [city, setCity] = useState('');
-    const [kecamatan, setKecamatan] = useState('');
-    const [kelurahan, setKelurahan] = useState('');
+    const [province, setProvince] = useState(item.provinsi);
+    const [city, setCity] = useState(item.kota);
+    const [kecamatan, setKecamatan] = useState(item.kecamatan);
+    const [kelurahan, setKelurahan] = useState(item.kelurahan);
 
-    const [desc, setDes] = useState('');
+    const [desc, setDes] = useState(item.description);
     const [showDatePicker3, setShowDatePicker3] = useState(false); 
     const [showDatePicker, setShowDatePicker] = useState(false); 
     const [showDatePicker2, setShowDatePicker2] = useState(false); 
-    const [jamBukaOperasional, setjamBukaOperasional] = useState(new Date()); 
-    const [dateEvent, setDateEvent] = useState(new Date()); 
-    const [jamTutupOperasional, setjamTutupOperasional] = useState(new Date()); 
+    const [jamBukaOperasional, setjamBukaOperasional] = useState(new Date(item.date+' '+item.endTime)); 
+    const [dateEvent, setDateEvent] = useState(new Date(item.date)); 
+    const [jamTutupOperasional, setjamTutupOperasional] = useState(new Date(item.date+' '+item.startTime)); 
 	const { Color } = useColor();
     const [coords, setCoords] = useState({
-      latitude: initialLatitude,
-      longitude: initialLongitude,
+      latitude: item.lat ? item.lat : initialLatitude,
+      longitude: item.lng ? item.lng : initialLongitude,
     });
 
 
   const [modalSelectMap, setModalSelectMap] = useState(false);
-  const [isPinnedMap, setIsPinnedMap] = useState(false);
+  const [isPinnedMap, setIsPinnedMap] = useState(item.lat ? true: false);
   const [locationPinnedMap, setLocationPinnedMap] = useState('');
-  const [thumbImage, setThumbImage] = useState('');
+  const [thumbImage, setThumbImage] = useState(item.images.length == 0 ? '' : item.images[0]);
   const [mimeImage, setMimeImage] = useState('image/jpeg');
 
 	useEffect( () => {
@@ -109,26 +111,43 @@ const CreateEvent = ({navigation}) => {
         });
       };
 
-    const submit = async () => {
-        const data = {
-            name,
-            provinsi: province,
-            kota: city,
-            kecamatan,
-            kelurahan,
-            location: address,
-            description: desc,
-            startTime: moment(jamBukaOperasional).format('hh:mm'),
-            endTime: moment(jamTutupOperasional).format('hh:mm'),
-            date: moment(dateEvent).format('YYYY/MM/DD'),
-            lat: ""+coords.latitude,
-            lng: ""+coords.longitude,
-            images: thumbImage ? ['data:image/png;base64,'+thumbImage] : []
+      const submit = async () => {
+        showLoading()
+        const variables = {
+            type: 'UPDATE',
+            newEvent: {
+                id:item.id,
+                name,
+                provinsi: province,
+                kota: city,
+                kecamatan,
+                kelurahan,
+                location: address,
+                description: desc,
+                startTime: moment(jamBukaOperasional).format('hh:mm'),
+                endTime: moment(jamTutupOperasional).format('hh:mm'),
+                date: moment(dateEvent).format('YYYY-MM-DD'),
+                lat: ""+coords.latitude,
+                lng: ""+coords.longitude,
+                images: thumbImage ? item.images.length ==  0 ? ['data:image/png;base64,'+thumbImage] : item.images[0] == thumbImage ? undefined : ['data:image/png;base64,'+thumbImage] : undefined
+            },
         }
-        console.log(data)
-       
-        navigation.navigate('CreateEventSecond',{item: data})
-       
+        console.log(variables)
+        client.mutate({mutation: mutationAddEvent, variables})
+        .then(res => {
+            hideLoading();
+            console.log(res);
+            if (res.data.eventManage) {
+                alert('Event berhasil diupdate')
+                setTimeout(() => {
+                    navigation.pop()
+                }, 1000);
+            }
+        })
+        .catch(reject => {
+            hideLoading();
+            console.log(reject.message, 'reject');
+        });
       };
 
   return (
@@ -148,7 +167,7 @@ const CreateEvent = ({navigation}) => {
             <TouchableOpacity onPress={() => {
                 addImage();
               }} style={{ height: width/2+40,  marginVertical: 15, backgroundColor: '#CDD1D2' }}>
-                <ImageBackground source={{uri: thumbImage ? 'data:image/png;base64,'+thumbImage : ''}} style={{ height: width/2+40,justifyContent: 'center', }}>
+                <ImageBackground source={{uri: item.images.length == 0 ? '' : item.images[0] == thumbImage ? thumbImage :  thumbImage ? 'data:image/png;base64,'+thumbImage : ''}} style={{ height: width/2+40,justifyContent: 'center', }}>
                     <FontAwesome name='image' color='#111' size={25} style={{ alignSelf: 'center', marginBottom: 9 }}  />
                     <Text type='medium'>Upload Poster Event</Text>
                 </ImageBackground>
@@ -358,4 +377,4 @@ const CreateEvent = ({navigation}) => {
   )
 }
 
-export default CreateEvent
+export default EditEvent

@@ -1,10 +1,12 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, Image, FlatList,ScrollView, Platform, Linking, Pressable} from 'react-native';
+import {View, Image, FlatList,ScrollView,useWindowDimensions, Platform, Linking, Pressable} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import Moment from 'moment';
 import { useSelector } from 'react-redux';
+import QRCode from 'react-native-qrcode-svg';
+import {useIsFocused, useRoute} from '@react-navigation/native';
 import Header from '@src/components/Header';
 import {useLoading, usePopup, useColor, Alert, Row, Col} from '@src/components';
 import Text from '@src/components/Text';
@@ -23,12 +25,47 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Feather from 'react-native-vector-icons/Feather'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import { getDetailOrderEvent } from 'src/lib/query/event';
+import moment from 'moment';
 
-const MyTicket = () => {
-
+const MyTicket = ({navigation, route}) => {
+    const {item} = route.params
+    const {width} = useWindowDimensions();
+    const isFocused = useIsFocused();
     const {Color} = useColor();
+    const [data, setData] = useState(null);
     const [popupProps, showPopup] = usePopup();
     const [loadingProps, showLoading, hideLoading] = useLoading();
+    console.log(route)
+
+    useEffect(() => {
+        getDetail()
+      }, []);
+    
+    const getDetail = () => {
+        showLoading();
+        let variables = {
+        id: item.id,
+        };
+        console.log(variables);
+        Client.query({query: getDetailOrderEvent, variables})
+        .then(res => {
+            hideLoading()
+            if(res.data.eventTicketOrderDetail){
+                setData(res.data.eventTicketOrderDetail)
+            }
+            console.log(res);
+
+        })
+        .catch(reject => {
+            hideLoading()
+            alert(reject.message)
+            console.log(reject.message, 'reject');
+        });
+    };
+
+
+  if(!data) return <View />
 
   return (
     <Scaffold
@@ -53,11 +90,11 @@ const MyTicket = () => {
                 <Image source={ImagesPath.produklelang3} style={{width:'100%', height: '100%'}}/>
             </View>
             <View style={{width: '70%', paddingHorizontal: 10}}>
-                <Text align={'left'} style={{fontWeight: 'bold'}}>Festival Pemuda Karang Taruna Jabodetabek</Text>
+                <Text align={'left'} style={{fontWeight: 'bold'}}>{data.event.name}</Text>
                 <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
-                    <Text style={{fontSize: 10, color: Color.secondary}}>1 Tiket</Text>
+                    <Text style={{fontSize: 10, color: Color.secondary}}>{data.items.length} Tiket</Text>
                     <View style={{width: 3, height: 3, backgroundColor: Color.secondary, borderRadius: 20, marginHorizontal: 5}}/>
-                    <Text style={{fontSize: 10, color: Color.secondary}}>1 Pax</Text>
+                    <Text style={{fontSize: 10, color: Color.secondary}}>{data.items.length} Pax</Text>
                 </View>
             </View>
         </View>
@@ -66,7 +103,7 @@ const MyTicket = () => {
             <Divider/>
             <View style={{paddingHorizontal: 15, flexDirection: 'row'}}>
                 <View style={{width: '85%'}}>
-                    <Text align={'left'} style={{fontWeight: 'bold'}}>Tn. Adang Susanyo</Text>
+                    <Text align={'left'} style={{fontWeight: 'bold'}}>{data.items[0]['title']}. {data.items[0]['name']}</Text>
                     <Text align={'left'} style={{fontSize: 8, color: Color.secondary,marginTop: 2}}>Tiket Masuk Partisipasi</Text>
                     <Divider/>
                 </View>
@@ -88,11 +125,11 @@ const MyTicket = () => {
             <Row style={{alignItems:'center', justifyContent: 'center'}}>
                 <View style={{paddingHorizontal: 10,paddingVertical: 10,borderWidth: 1, borderRadius: 8,marginRight: 5,borderColor: Color.border, width: '45%'}}>
                     <Image source={ImagesPath.PurpleClock}/>
-                    <Text align={'left'} style={{fontWeight: 'bold', marginTop: 3}}>10:00 - 22:00</Text>
+                    <Text align={'left'} style={{fontWeight: 'bold', marginTop: 3}}>{data.event.startTime} - {data.event.endTime}</Text>
                 </View>
                 <View style={{paddingHorizontal: 10,paddingVertical: 10,borderWidth: 1, borderRadius: 8,marginLeft: 5,borderColor: Color.border, width: '45%'}}>
                     <Image source={ImagesPath.BlueCalendar}/>
-                    <Text align={'left'} style={{fontWeight: 'bold', marginTop: 3}}>12 Januari 2022</Text>
+                    <Text align={'left'} style={{fontWeight: 'bold', marginTop: 3}}>{moment(data.event.date).format('DD MMMM YYYY')}</Text>
                 </View>
             </Row>
             <Divider height={10}/>
@@ -109,17 +146,17 @@ const MyTicket = () => {
             </Row>
             <Divider height={10}/>
             <View style={{width: '92%', alignItems: 'center',padding: 20,borderWidth: 1,borderRadius: 8,height: 350, marginBottom: 20,borderColor: Color.border, alignSelf:'center'}}>
-                    <Image source={ImagesPath.QRCode} style={{width: '95%', height: '89%'}}/>
-                    <Text style={{fontWeight: 'bold', padding: 15}}>10000000013654987</Text>
+                    <QRCode value={data.items[0]['uniqueCode']} size={width / 6} />
+                    <Text style={{fontWeight: 'bold', padding: 15}}>{data.items[0]['uniqueCode']}</Text>
             </View>
             <Divider/>
-            <View style={{justifyContent: 'center', alignItems:'center',flexDirection:'row',backgroundColor: '#3C58C1', width: '100%', height: 40, borderBottomLeftRadius: 15,borderBottomRightRadius: 15}}>
-                <MaterialCommunityIcons size={14} name={'cash-refund'} color={Color.textInput}/>
-                <Text style={{fontSize: 10, color: Color.textInput, marginLeft: 5}}>Bisa Refund</Text>
-                <View style={{backgroundColor: Color.theme, width: 4, height: 4, borderRadius: 20, marginHorizontal: 8}}/>
-                <AntDesign name={'calendar'} color={Color.textInput}/>
-                <Text style={{fontSize: 10, color: Color.textInput, marginLeft: 5}}>Tidak Perlu Reservasi</Text>
-            </View>
+            <Row style={{alignItems: 'center', }}>
+                <MaterialCommunityIcons name={'cash-refund'} color={Color.secondary} size={22}/>
+                <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 5}}>{data.ticket.refund ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
+                <Divider width={8}/>
+                <AntDesign name='calendar' size={18} color={Color.secondary}/>
+                <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 5}}>{data.ticket.reservation ? 'Perlu Reservasi' : 'Tidak Perlu Reservasi'}</Text>
+            </Row>
         </View>
         <Divider height={50}/>
         </ScrollView>

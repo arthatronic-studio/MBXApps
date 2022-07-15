@@ -15,6 +15,7 @@ const staticColors = {
   error: '#D83030',
   green: '#59A12F',
   gray: '#666666',
+  textGray: '#9CA3A5',
   grayLight: '#CDD1D2',
   red: '#D83030',
   yellow: '#FFD35B',

@@ -76,7 +76,7 @@ const EventDetail = ({navigation, route}) => {
 
   const [loading, setLoading] = useState(true);
   const [bookmark, setBookmark] = useState(false);
-  const [data, setData] = useState(true);
+  const [data, setData] = useState(null);
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const isFocused = useIsFocused();
@@ -137,7 +137,7 @@ const EventDetail = ({navigation, route}) => {
       <Row>
         <Col>
             <Text style={{textAlign: 'left', fontSize: 8}}>Harga</Text>
-            <Text style={{textAlign: 'left', fontWeight: 'bold'}}>{items.price}<Text style={{fontSize: 8}}>/Pax</Text></Text>
+            <Text style={{textAlign: 'left', fontWeight: 'bold'}}>{items.type === 'FREE' ? 'GRATIS' : items.price}<Text style={{fontSize: 8}}>/Pax</Text></Text>
         </Col>
         <TouchableOpacity onPress={() => navigation.navigate('PemesananTiket', {item, dataEvent: data, itemRoute: items})} style={{justifyContent: 'center',backgroundColor: Color.primary, width: '35%', borderRadius: 30}}>
           <Text style={{fontSize: 10, color: Color.textInput}}>Pesan Sekarang</Text>
@@ -222,15 +222,16 @@ const EventDetail = ({navigation, route}) => {
         showsVerticalScrollIndicator={false}
       >
         <TouchableOpacity
-          onPress={() => {
+          onPress={() => { data ? data.images.length == 0 ? console.log()  :
             navigation.navigate('GalleryDetailScreen', {
-              id: items.id,
-              image: items.image,
-            });
+              id: data.id,
+              image: data.images[0],
+            })
+            : console.log()
           }}
         >
           <Image
-            source={{uri: data.images ? data.images[0] : ''}}
+            source={{uri: data ? data.images.length == 0 ? '' : data.images[0] : ""}}
             style={{width: '100%', aspectRatio: 4/3, backgroundColor: Color.border}}
           />
         </TouchableOpacity>
@@ -640,7 +641,7 @@ const EventDetail = ({navigation, route}) => {
           ref={modalOptionsRef}
           event={true}
           isOwner={user && user.userId === items.ownerId}
-          item={items}
+          item={data}
       /> 
     </Scaffold>
   );

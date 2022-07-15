@@ -226,6 +226,9 @@ import DocumentasiEvent from 'src/screens/Posting/Event/DocumentasiEvent';
 import DocumentasiEventDetail from 'src/screens/Posting/Event/DocumentasiEventDetail';
 import EventHistory from 'src/screens/Posting/Event/EventHistory';
 import OnBoardEvent from 'src/screens/Posting/Event/OnBoardEvent';
+import EditEvent from 'src/screens/Posting/Event/EditEvent';
+import EditEventSecond from 'src/screens/Posting/Event/EditEventSecond';
+import OrderEventDetail from 'src/screens/Posting/Event/OrderEventDetail';
 // import EventOfficial from 'src/screens/Posting/Event/EventOfficial';
 // import CommunityEvent from 'src/screens/Posting/Event/CommunityEvent';
 // import MyEvent from 'src/screens/Posting/Event/MyEvent';
@@ -252,6 +255,9 @@ function MainStackNavigator() {
       <Screen name="DocumentasiEvent" component={DocumentasiEvent} />
       <Screen name="DocumentasiEventDetail" component={DocumentasiEventDetail} />
       <Screen name="OnBoardEvent" component={OnBoardEvent} />
+      <Screen name="EditEvent" component={EditEvent} />
+      <Screen name="EditEventSecond" component={EditEventSecond} />
+      <Screen name="OrderEventDetail" component={OrderEventDetail} />
       <Screen name="MainPage" component={MainPage} />
       <Screen name="OnBoardingScreen" component={OnBoardingScreen} />
       <Screen name="TrackingOrder" component={TrackingOrder} />

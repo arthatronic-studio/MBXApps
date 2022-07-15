@@ -70,7 +70,7 @@ const ModalPassanger = forwardRef((props, ref) => {
       modalStyle={{
         backgroundColor: Color.theme,
       }} >
-      <View style={{height, width, padding: 16}}>
+      <View style={{width, padding: 16}}>
         <ScrollView>
           <Text type='bold' align='left' style={{ marginTop: 15, marginBottom: 10 }}>Tambah Pengunjung</Text>
           <View style={{ borderColor: '#CDD1D2', alignItems: 'flex-start', borderWidth: 1, borderRadius: 8, padding: 10 }}>
