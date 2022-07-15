@@ -214,14 +214,18 @@ export const getEventList = gql`
       bookmarked: $bookmarked
     ) {
       id
+      userId
       author
       category
+      type
       name
       description
       date
       startTime
       endTime
       location
+      lat
+      lng
       images
       startPrice
       discountPrice
@@ -229,7 +233,7 @@ export const getEventList = gql`
       isFavorite
       refundPolicy
       ordered
-      tickets {
+      tickets{
         id
         userId
         eventId
@@ -271,6 +275,7 @@ export const getDetailEvent = gql`
       description
       date
       startTime
+      type
       endTime
       location
       images

@@ -152,18 +152,17 @@ const CreateEventSecond = ({navigation}) => {
             newEvent: {
                 ...route.params.item,
                 category: "OFFICIAL",
-                refundPolicy: 'data:application/pdf;base64,'+refundPolicy,
-                tnc: 'data:application/pdf;base64,'+tnc,
+                // refundPolicy: refundPolicy ? 'data:application/pdf;base64,'+refundPolicy : null,
+                // tnc: tnc ? 'data:application/pdf;base64,'+tnc : null,
                 tickets: updateData
             }
         }
-        console.log(variables)
+        console.log(variables, "varrr");
         client.mutate({mutation: mutatuinEventManage, variables})
         .then(res => {
             hideLoading();
-            console.log('ini hasil',res);
+            console.log(res, "hasil");
 
-            return;
             if (res.data.eventManage) {
                 alert('Event berhasil dibuat')
                 setTimeout(() => {
