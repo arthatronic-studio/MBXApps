@@ -242,14 +242,14 @@ const MainHome = ({ navigation, route }) => {
       variables,
     })
       .then(res => {
-        console.log('res banner list', res);
+        console.log('res popup list', res);
         if (Array.isArray(res.data.bannerList)) {
           setDataPopupAds(res.data.bannerList[0]);
         }
         setShowPopupAds(true);
       })
       .catch(err => {
-        console.log(err, 'err banner list');
+        console.log(err, 'err popup list');
       });
   };
 
