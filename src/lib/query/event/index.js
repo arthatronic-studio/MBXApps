@@ -52,10 +52,10 @@ export const mutatuinEventManage = gql`
         updatedAt
         deletedAt
       }
->>>>>>> c156821c26e86bad8488913fa77df1e423d3ac64
     }
   }
 `;
+
 
 export const mutationAddEvent = gql`
 mutation(
@@ -70,10 +70,8 @@ eventManage(
   ){
     message
     success
-    data{
-      name
-    }
   }
+}
 `;
 
 export const getHistory = gql`
