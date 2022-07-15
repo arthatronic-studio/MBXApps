@@ -56,6 +56,7 @@ export const mutatuinEventManage = gql`
   }
 `;
 
+
 export const mutationAddEvent = gql`
 mutation(
   $type: EventManageEnum!
