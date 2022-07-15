@@ -116,6 +116,7 @@ const EditEvent = ({navigation, route}) => {
         const variables = {
             type: 'UPDATE',
             newEvent: {
+                id:item.id,
                 name,
                 provinsi: province,
                 kota: city,
@@ -130,7 +131,6 @@ const EditEvent = ({navigation, route}) => {
                 lng: ""+coords.longitude,
                 images: thumbImage ? item.images.length ==  0 ? ['data:image/png;base64,'+thumbImage] : item.images[0] == thumbImage ? undefined : ['data:image/png;base64,'+thumbImage] : undefined
             },
-            eventId: item.id
         }
         console.log(variables)
         client.mutate({mutation: mutationAddEvent, variables})

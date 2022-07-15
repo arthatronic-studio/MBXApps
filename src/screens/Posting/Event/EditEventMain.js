@@ -60,9 +60,9 @@ const Content = Styled(View)`
 const EditEvent = ({navigation}) => {
     const user = useSelector((state) => state['user.auth'].login.user);
 	const loading = useSelector((state) => state['user.auth'].loading);
-    const route = useRoute();
+    // const route = useRoute();
     const isFocused = useIsFocused();
-    const items = route.params.item;
+    // const items = route.params.item;
     const [data, setData] = useState(null);
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
@@ -74,9 +74,9 @@ const EditEvent = ({navigation}) => {
     
     const getDetail = () => {
         showLoading();
-        console.log(items)
+        // console.log(items)
         let variables = {
-            id: items.id,
+            id: 13,
         };
         console.log(variables);
         Client.query({query: getDetailEvent, variables})

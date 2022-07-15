@@ -61,15 +61,16 @@ export const mutationAddEvent = gql`
 mutation(
   $type: EventManageEnum!
   $newEvent: EventInput
-  $eventId: Int
 ){
 eventManage(
     type: $type
     newEvent: $newEvent
-    eventId: $eventId
   ){
     message
     success
+    data{
+      name
+    }
   }
 }
 `;
@@ -298,9 +299,6 @@ export const getDetailEvent = gql`
         price
         discountType
         discountValue
-        createdAt
-        updatedAt
-        deletedAt
       }
       refundPolicy
       tnc

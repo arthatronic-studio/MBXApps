@@ -57,29 +57,11 @@ const EditEventSecond = ({navigation}) => {
     const route = useRoute();
 
 	const [ loadingProps, showLoading, hideLoading ] = useLoading();
-    const [name, setName] = useState(user ? user.firstName+' '+user.lastName : '');
-    const [isTicket, setSwitch] = useState();
     const [refresh, setRefresh] = useState('');
-    const [tnc, setTnc] = useState('');
-    const [refundPolicy, setRefundPolicy] = useState(0);
-    const [tickets, setTickets] = useState([{
-            name: '',
-            quota: 1,
-            type: "PAID",
-            refund: true,
-            reservation: true,
-            discountType: null,
-            discountValue: 0,
-            price: 1,
-            userId: user.userId,
-            categories: ["REGULER I"]
-        }
-    ])
+    const [tnc, setTnc] = useState(route.params.item.tnc);
+    const [refundPolicy, setRefundPolicy] = useState(route.params.item.refundPolicy);
+    const [tickets, setTickets] = useState(route.params.item.tickets)
 	const { Color } = useColor();
-    const [coords, setCoords] = useState({
-      latitude: initialLatitude,
-      longitude: initialLongitude,
-    });
 
 
   const [openProductUnit, setOpenProductUnit] = useState([false]);
@@ -139,21 +121,23 @@ const EditEventSecond = ({navigation}) => {
         const updateData = tickets.map(val => {
             return{
                 ...val,
+                __typename: undefined,
+                eventId: undefined,
                 quota: parseFloat(val.quota),
-                discountType: null,
+                discountType: val.discountType ? val.discountType : '',
                 discountValue: parseFloat(val.discountValue),
                 price: parseFloat(val.price),
-                userId: user.userId,
+                userId: undefined,
                 categories: ["REGULER I"]
             }
         })
         const variables = {
-            type: 'CREATE',
+            type: 'UPDATE',
             newEvent: {
-                ...route.params.item,
+                id: route.params.item.id,
                 category: "OFFICIAL",
-                refundPolicy: 'data:application/pdf;base64,'+refundPolicy,
-                tnc: 'data:application/pdf;base64,'+tnc,
+                refundPolicy: refundPolicy == route.params.item.refundPolicy ? undefined : 'data:application/pdf;base64,'+refundPolicy,
+                tnc: tnc == route.params.item.tnc ? undefined : 'data:application/pdf;base64,'+tnc,
                 tickets: updateData
             }
         }
@@ -165,7 +149,7 @@ const EditEventSecond = ({navigation}) => {
             if (res.data.eventManage) {
                 alert('Event berhasil dibuat')
                 setTimeout(() => {
-                    navigation.popToTop()
+                    navigation.pop()
                 }, 1000);
             }
         })
@@ -262,7 +246,7 @@ const EditEventSecond = ({navigation}) => {
                                 width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47
                             }}
                             onChangeText={(value) => onChange(value,'quota', id)}
-                            value={val.quota}
+                            value={""+val.quota}
                         />
                         <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Kuota Tiket</Text>
                     </View>
@@ -314,7 +298,7 @@ const EditEventSecond = ({navigation}) => {
                                 width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47
                             }}
                             onChangeText={(value) => onChange(value,'discountValue', id)}
-                            value={val.discountValue}
+                            value={val.discountValue == null ? '' : ''+val.discountValue}
                         />
                         <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Diskon</Text>
                     </View>
