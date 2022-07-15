@@ -23,7 +23,9 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Feather from 'react-native-vector-icons/Feather'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { getDetailEvent } from 'src/lib/query/event';
+import { fetchSaveEvent } from 'src/api/event/saveEvent';
 
 
 
@@ -73,6 +75,7 @@ const EventDetail = ({navigation, route}) => {
   const [im_like, set_im_like] = useState(items.im_like);
 
   const [loading, setLoading] = useState(true);
+  const [bookmark, setBookmark] = useState(false);
   const [data, setData] = useState(null);
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
@@ -94,9 +97,8 @@ const EventDetail = ({navigation, route}) => {
           // hideLoading()
           if(res.data.eventDetail){
             setData(res.data.eventDetail)
+            setBookmark(res.data.eventDetail.bookmarked);
           }
-          console.log(res);
-
           setLoading(false);
         })
         .catch(reject => {
@@ -107,6 +109,8 @@ const EventDetail = ({navigation, route}) => {
         });
     };
 
+  console.log(data, "data");
+
 
   const renderItem = ({ item }) => (
    <Pressable style={{width: '100%', height: 165, marginBottom: 10,paddingHorizontal: 15, backgroundColor: Color.theme, borderWidth: 1, borderColor: Color.border, borderRadius: 8}}>
@@ -114,7 +118,7 @@ const EventDetail = ({navigation, route}) => {
       <Row>
         <Col>
           <Text style={{fontSize: 11, textAlign: 'left',fontWeight: 'bold'}}>{item.name}</Text>
-          <Text style={{fontSize: 8, textAlign: 'left', marginVertical: 3}}>{items.event.date}</Text>
+          <Text style={{fontSize: 8, textAlign: 'left', marginVertical: 3}}>{items.date}</Text>
         </Col>
         {/* <View style={{flexDirection:'row', justifyContent: 'center'}}>
             <Text style={{fontSize: 10, color: '#3C58C1', marginHorizontal: 5}}>Lihat Detail</Text>
@@ -193,8 +197,19 @@ const EventDetail = ({navigation, route}) => {
           title="Detail"
           actions={
             <View style={{flexDirection: 'row'}}>
-              <TouchableOpacity>
-                <Feather name='bookmark' size={22} color={Color.text} style={{marginHorizontal: 15}} />
+              <TouchableOpacity
+                style={{marginRight: 15}}
+                onPress={async() => {
+                  const res = await fetchSaveEvent({eventId: data.id, type: bookmark ? 'UNBOOKMARK' : 'BOOKMARK'});
+                  if(res.status == true){
+                    setBookmark(!bookmark);
+                  }
+                }}>
+                {bookmark == true ? (
+                  <FontAwesome name={'bookmark'} size={24} />
+                ) : (
+                  <FontAwesome name={'bookmark-o'} size={24} />
+                )}
               </TouchableOpacity>
               <MaterialIcons onPress={() => {modalOptionsRef.current.open();}} 
               name='more-vert' size={22} color={Color.text} />
@@ -237,7 +252,7 @@ const EventDetail = ({navigation, route}) => {
                 textAlign: 'left',
                 paddingHorizontal: 20,
               }}>
-              {data.category}
+              {data.category} EVENT
             </Text>
             <Divider height={10}/>
             <Text
@@ -253,7 +268,7 @@ const EventDetail = ({navigation, route}) => {
             </Text>
           </View>
           <View style={{flexDirection: 'row', paddingVertical: 18}}>
-            {moment(eventDate).isValid() && <View
+            <View
               style={{
                 flexDirection: 'row',
                 paddingHorizontal: 20,
@@ -267,7 +282,7 @@ const EventDetail = ({navigation, route}) => {
               />
               <Divider width={6} />
               <Text style={{fontSize: 10, color: Color.secondary, fontWeight: 'bold'}}>{moment(data.date).format('DD MMM YYYY')}</Text>
-            </View>}
+            </View>
             <View
               style={{
                 flexDirection: 'row',
@@ -310,17 +325,17 @@ const EventDetail = ({navigation, route}) => {
             </View> */}
           </View>
 
-          {/* <Container paddingHorizontal={32} paddingVertical={16}>
+          <Container paddingHorizontal={32} paddingVertical={16}>
             <Button
               onPress={() => {
-                navigation.navigate('GalleryScreen', { item });
+                navigation.navigate('GalleryScreen', {  });
               }}
             >
               Lihat Event Galeri
             </Button>
           </Container>
           
-          {items.like > 0 &&
+          {/* {items.like > 0 &&
             <Container paddingHorizontal={16}>
                 <WidgetUserLikes id={items.id} title='Akan Hadir' />
             </Container>
@@ -358,7 +373,7 @@ const EventDetail = ({navigation, route}) => {
                 color: Color.secondary,
                 marginBottom: 16,
               }}>
-              {items.productDescription}
+              {data.description}
             </Text>
             <Pressable style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center',width: '100%', paddingHorizontal: 15}}>
               <Text style={{color: Color.primary}}>Selengkapnya</Text>
@@ -373,7 +388,7 @@ const EventDetail = ({navigation, route}) => {
             <FlatList
               data={data.tickets}
               renderItem={renderItem}
-              keyExtractor={item => items.id}
+              keyExtractor={item => item.id}
              />
           </View>
 
@@ -383,7 +398,8 @@ const EventDetail = ({navigation, route}) => {
             <Divider height={8}/>
             <View style={{flexDirection: 'row',alignItems: 'center', paddingHorizontal: 10 ,backgroundColor: '#F0F0F0', width: '90%', alignSelf: 'center', height: 70}}>
               <Image source={ImagesPath.LocationEvent} style={{borderRadius: 5}}/>
-              <Text style={{fontSize: 8, lineHeight: 12,textAlign: 'left', width: '65%', paddingHorizontal: 10}}>Jl. Tebet Barat I No.2, RT.1/RW.2, Tebet Bar., Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12810</Text>
+              {/* <Text style={{fontSize: 8, lineHeight: 12,textAlign: 'left', width: '65%', paddingHorizontal: 10}}>Jl. Tebet Barat I No.2, RT.1/RW.2, Tebet Bar., Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12810</Text> */}
+              <Text style={{fontSize: 8, lineHeight: 12,textAlign: 'left', width: '65%', paddingHorizontal: 10}}>{data?.location}, {data?.kelurahan}, Kec. {data?.kecamatan}, Kota {data?.kota}, {data?.provinsi}</Text>
               <TouchableOpacity style={{justifyContent: 'center', alignItems: 'center',backgroundColor: Color.primary, width: 35, height: 35, borderRadius: 20, marginLeft: 35}}>
                 <Ionicons name='navigate' size={17} style={{color: Color.theme}}/>
               </TouchableOpacity>

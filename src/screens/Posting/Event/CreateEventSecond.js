@@ -35,7 +35,7 @@ import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
 import ImagesPath from 'src/components/ImagesPath';
 import client from '@src/lib/apollo';
-import { mutationAddEvent } from 'src/lib/query/event';
+import { mutatuinEventManage } from 'src/lib/query/event';
 var crypto = require('crypto-js')
 
 function sha1(data) {
@@ -158,10 +158,12 @@ const CreateEventSecond = ({navigation}) => {
             }
         }
         console.log(variables)
-        client.mutate({mutation: mutationAddEvent, variables})
+        client.mutate({mutation: mutatuinEventManage, variables})
         .then(res => {
             hideLoading();
-            console.log(res);
+            console.log('ini hasil',res);
+
+            return;
             if (res.data.eventManage) {
                 alert('Event berhasil dibuat')
                 setTimeout(() => {

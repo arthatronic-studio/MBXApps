@@ -1,5 +1,62 @@
 import gql from 'graphql-tag';
 
+export const mutatuinEventManage = gql`
+  mutation ($type: EventManageEnum!, $newEvent: EventInput, $eventId: Int) {
+    eventManage(type: $type, newEvent: $newEvent, eventId: $eventId) {
+      success
+      message
+      data {
+        id
+        userId
+        author
+        category
+        name
+        description
+        date
+        startTime
+        endTime
+        location
+        lat
+        lng
+        images
+        startPrice
+        discountPrice
+        bookedCounts
+        isFavorite
+        tickets {
+          id
+          userId
+          eventId
+          name
+          quota
+          type
+          refund
+          reservation
+          categories
+          price
+          discountType
+          discountValue
+          createdAt
+          updatedAt
+          deletedAt
+        }
+        refundPolicy
+        tnc
+        provinsi
+        kota
+        kecamatan
+        kelurahan
+        ordered
+        bookmarked
+        createdAt
+        updatedAt
+        deletedAt
+      }
+>>>>>>> c156821c26e86bad8488913fa77df1e423d3ac64
+    }
+  }
+`;
+
 export const mutationAddEvent = gql`
 mutation(
   $type: EventManageEnum!
@@ -17,7 +74,6 @@ eventManage(
       name
     }
   }
-}
 `;
 
 export const getHistory = gql`
@@ -43,7 +99,7 @@ export const getHistory = gql`
       userOrderPhone
       userOrderEmail
       qty
-      event{
+      event {
         name
         date
         startTime
@@ -65,7 +121,6 @@ export const getHistory = gql`
     }
   }
 `;
-
 
 export const getDetailOrderEvent = gql`
   query (
@@ -141,16 +196,24 @@ export const getDetailOrderEvent = gql`
   }
 `;
 
-export const getOwnEvent = gql`
+export const getEventList = gql`
   query (
     $page: Int
     $itemPerPage: Int
     $isFavorite: Boolean
+    $category: EventCategoryEnum
+    $type: EventTypeEnum
+    $userId: Int
+    $bookmarked: Boolean
   ) {
     eventList(
       page: $page
       itemPerPage: $itemPerPage
       isFavorite: $isFavorite
+      category: $category
+      type: $type
+      userId: $userId
+      bookmarked: $bookmarked
     ) {
       id
       author
@@ -168,72 +231,98 @@ export const getOwnEvent = gql`
       isFavorite
       refundPolicy
       ordered
-      tickets{
+      tickets {
         id
+        userId
+        eventId
         name
         quota
-        price
-        discountValue
-        discountType
+        type
+        refund
+        reservation
         categories
-        event{
-          name
-        }
+        price
+        discountType
+        discountValue
+        createdAt
+        updatedAt
+        deletedAt
       }
+      refundPolicy
+      tnc
+      provinsi
+      kota
+      kecamatan
+      kelurahan
+      ordered
+      bookmarked
+      createdAt
+      updatedAt
+      deletedAt
     }
   }
 `;
 
 export const getDetailEvent = gql`
-  query (
-    $id: Int
-  ) {
-    eventDetail(
-      id: $id
-    ) {
+  query ($id: Int) {
+    eventDetail(id: $id) {
       id
       author
       category
-      userId
       name
       description
       date
       startTime
       endTime
-      images
-      kota
-      lat
-      lng
       location
-      provinsi
-      kecamatan
-      kelurahan
-      tickets{
-        name
+      images
+      startPrice
+      discountPrice
+      bookedCounts
+      isFavorite
+      refundPolicy
+      ordered
+      tickets {
         id
+        userId
+        eventId
+        name
         quota
         type
-        reservation
-        price
         refund
+        reservation
+        categories
         price
-        event{
-          name
-          author
-          date
-        }
+        discountType
+        discountValue
+        createdAt
+        updatedAt
+        deletedAt
       }
+      refundPolicy
+      tnc
+      provinsi
+      kota
+      kecamatan
+      kelurahan
       ordered
+      bookmarked
+      createdAt
+      updatedAt
+      deletedAt
     }
   }
 `;
 
 export const mutationOrderEvent = gql`
-  mutation eventTicketOrderManage($type: EventTicketOrderManageEnum!, $newOrder: EventTicketOrderInput) {
+  mutation eventTicketOrderManage(
+    $type: EventTicketOrderManageEnum!
+    $newOrder: EventTicketOrderInput
+  ) {
     eventTicketOrderManage(type: $type, newOrder: $newOrder) {
       success
       message
-      data{
+      data {
         id
         bookingId
         ticketId

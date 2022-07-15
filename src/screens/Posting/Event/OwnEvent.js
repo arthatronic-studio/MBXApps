@@ -5,7 +5,7 @@ import { Divider } from 'src/styled'
 import Client from '@src/lib/apollo';
 import { useSelector } from 'react-redux';
 import {useIsFocused, useRoute} from '@react-navigation/native';
-import { getHistory, getOwnEvent } from 'src/lib/query/event'
+import { getHistory, getEventList } from 'src/lib/query/event'
 import CardContentProduct from 'src/components/Content/CardContentProduct';
 import { Row } from 'src/components';
 
