@@ -42,6 +42,7 @@ import ForumScreen from 'src/screens/MainForum/ForumScreen';
 import ForumSearch from 'src/screens/MainForum/ForumSearch';
 import CardDetailForum from 'src/screens/MainForum/CardDetailForum';
 // import CardForumPage from 'src/screens/MainForum/CardForumPage';
+
 // profile
 import ChangeProfile from '@src/screens/MainProfile/ChangeProfile';
 import SettingScreen from '@src/screens/MainProfile/SettingScreen';
@@ -52,6 +53,7 @@ import BlockUser from 'src/screens/MainProfile/BlockUser';
 import ReferralCodeScreen from '@src/screens/MainProfile/ReferralCodeScreen';
 import UserProfileScreen from '@src/screens/MainProfile/UserProfileScreen';
 import TermsCondition from 'src/screens/MainProfile/TermCondition';
+import ContentProductSaveScreen from 'src/screens/MainProfile/ContentProductSaveScreen';
 
 // community admin
 import CommunityAdminPage from '@src/screens/MainProfile/CommunityAdmin/CommunityAdminPage';
@@ -365,6 +367,7 @@ function MainStackNavigator() {
       <Screen name="BlockUser" component={BlockUser} />
       <Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />
       <Screen name="TermsCondition" component={TermsCondition} />
+      <Screen name="ContentProductSaveScreen" component={ContentProductSaveScreen} />
       <Screen name="UserProfileScreen" component={UserProfileScreen} />
       {/* community admin */}
       <Screen name="CommunityAdminPage" component={CommunityAdminPage} />

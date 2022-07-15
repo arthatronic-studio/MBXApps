@@ -194,10 +194,12 @@ const HighlightContentProduct = (props) => {
             : itemData.data.length > 0 ?
                 renderItem()
             :
-                <ScreenEmptyData
-                    message={`${name} belum tersedia`}
-                    style={{width: width - 16, aspectRatio: 16/9}}
-                />
+                <View style={{ width: '100%', aspectRatio: 16/9 }}>
+                    <ScreenEmptyData
+                        message={`${name} belum tersedia`}
+                        style={{width: width - 16, aspectRatio: 16/9}}
+                    />
+                </View>
             }
         </View>
     )

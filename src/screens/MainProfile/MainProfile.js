@@ -187,6 +187,24 @@ const MainProfile = ({navigation, route}) => {
 
   const menuList = [
     {
+      code: 'pinned_product',
+      title: 'Konten di Pin',
+      badgeTitle: '',
+      show: true,
+      icon: (
+        <Ionicons
+          name="pricetags-outline"
+          size={20}
+          color={Color.text}
+        />
+      ),
+      onPress: () => {
+        navigation.navigate('ContentProductSaveScreen', {
+          title: 'Konten di Pin'
+        });
+      },
+    },
+    {
       code: 'history',
       title: 'Riwayat',
       badgeTitle: '',

@@ -28,7 +28,16 @@ import { queryProductReport } from './queryProductReport';
 import { queryUserBlock } from './queryUserBlock';
 import { queryGetUserBlock, queryUnblockUser } from './queryBlockUser';
 import { queryMenuList } from './queryMenuList';
-import {querySyaratKetentuan} from './querySyaratKetentuan';
+import { querySyaratKetentuan } from './querySyaratKetentuan';
+import { queryGetEnumList } from './queryEnumTable';
+import { queryContentProductV2 } from './queryContentProductV2';
+import { queryLikeComment } from './queryLikeComment';
+import { queryViewProduct } from './queryViewProduct';
+import { queryGetProductSave } from './queryGetProductSave';
+import { queryReportAlasan } from './queryReportAlasan';
+import { queryReportAbuseV2 } from './queryReportAbuseV2';
+import { queryContentShare } from './queryContentShare';
+import { queryProductSave } from './queryProductSave';
 
 export {
   queryContentProduct,
@@ -63,4 +72,13 @@ export {
   queryUnblockUser,
   queryMenuList,
   querySyaratKetentuan,
+  queryGetEnumList,
+  queryContentProductV2,
+  queryLikeComment,
+  queryViewProduct,
+  queryGetProductSave,
+  queryReportAlasan,
+  queryReportAbuseV2,
+  queryContentShare,
+  queryProductSave,
 };
