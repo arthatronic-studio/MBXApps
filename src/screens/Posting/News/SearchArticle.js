@@ -100,7 +100,9 @@ const SearchArticle = ({navigation}) => {
         width: '100%',
         height: 45,
       }}>
-      <Text size={11} type="bold">{item.history}</Text>
+      <TouchableOpacity onPress={() => onSearch(item.history)}>
+        <Text size={11} type="bold">{item.history}</Text>
+      </TouchableOpacity>
       <TouchableOpacity
        onPress={() => dispatch({ type: 'ARTICLE.REMOVE_HISTORY', data: item.history})}
       >
@@ -305,20 +307,6 @@ const SearchArticle = ({navigation}) => {
                 {listData.data.length} hasil pencarian ditemukan
               </Text>
             </View>
-            <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderWidth: 1,
-                borderColor: Color.text,
-                width: 90,
-                borderRadius: 30,
-                height: 30,
-              }}>
-              <Text style={{fontSize: 10, marginHorizontal: 8}}>Terbaru</Text>
-              <MaterialIcons name={'keyboard-arrow-down'} size={16} />
-            </TouchableOpacity>
           </View>
 
           <View
