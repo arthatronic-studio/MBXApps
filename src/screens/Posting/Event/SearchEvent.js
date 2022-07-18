@@ -4,7 +4,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import Moment from 'moment';
-import { useSelector } from 'react-redux';
 import Header from '@src/components/Header';
 import { useLoading, usePopup, useColor, Alert, Row, Col } from '@src/components';
 import Text from '@src/components/Text';
@@ -27,8 +26,10 @@ import moment from 'moment';
 import { fetchContentProduct, fetchContentUserProduct } from 'src/api/content';
 import { fetchEventList } from 'src/api/event/event';
 import ModalActions from 'src/components/Modal/ModalActions';
+import { useSelector, useDispatch } from 'react-redux';
 import ListContentProductV2 from 'src/components/Content/ListContentProductV2';
 import { initialItemState, statusBarHeight } from 'src/utils/constants';
+import { async } from 'validate.js';
 const SearchEvent = ({ navigation }) => {
 
   const { Color } = useColor();
@@ -42,20 +43,44 @@ const SearchEvent = ({ navigation }) => {
     loadNext: false,
     refresh: false
   });
+  const [listDataFavorite, setListDataFavorite] = useState({
+    data: [],
+    loading: true,
+    page: 0,
+    loadNext: false,
+    refresh: false
+  });
 
-  console.log('ini data',listData);
+  console.log('ini newDataFavorite', listDataFavorite);
 
   const modalOptionsRef = useRef();
   const [search, setSearch] = useState('');
+  const [pencarian, setPencarian] = useState(false);
   const [filter, setFilter] = useState('TERBARU');
   const [category, setCategory] = useState('ALL');
   const [visible, setVisible] = useState(false);
   const [showRecomed, setRecomend] = useState(true);
+  const dispatch = useDispatch();
+  const history = useSelector((state) => state['history.event'].data);
+
+  console.log('ini history event', history);
+
+  useEffect(()=>{
+    fectRekomendasi();
+  },[]);
+  useEffect(() => {
+    if (history.length > 0 && listData.length == 0) {
+      setPencarian(true);
+    } else {
+      setPencarian(false);
+    }
+  }, [history]);
+
 
   const itemPerPage = 6;
   useEffect(() => {
     if (listData.refresh) {
-       fetchData(search);
+      fetchData(search);
     }
   }, [listData.refresh]);
   console.log('ini search', category);
@@ -64,7 +89,7 @@ const SearchEvent = ({ navigation }) => {
 
     console.log('value', value);
     if (value == '') {
-     
+
       setCategory(value);
       setListData({
         data: [],
@@ -75,17 +100,17 @@ const SearchEvent = ({ navigation }) => {
       })
     } else {
       setCategory(value)
-      
+
       setListData({ ...listData, refresh: true })
-      
-      
+
+
     }
   }
   const onFilter = value => {
 
     console.log('value', value);
     if (value == '') {
-     
+
       setFilter(value);
       setListData({
         data: [],
@@ -96,28 +121,59 @@ const SearchEvent = ({ navigation }) => {
       })
     } else {
       setFilter(value)
-      
+
       setListData({ ...listData, refresh: true })
-      
-      
+
+
     }
   }
   const onSearch = (value) => {
 
     if (value == '') {
-     
+
       setSearch(value);
-      setListData({ data: [],
+      setListData({
+        data: [],
         loading: true,
         page: 0,
         loadNext: false,
-        refresh: false})
+        refresh: false
+      });
+      setPencarian(false);
+
     } else {
       setSearch(value)
+      setPencarian(true);
       setListData({ ...listData, refresh: true })
     }
   }
 
+  const fectRekomendasi = async()=> {
+    let variables = {
+      page: 0,
+      itemPerPage: 5,
+      isFavorite:true,
+      
+    };
+    
+    const result = await fetchEventList(variables);
+    let newData = [];
+    if (Array.isArray(result.data)) {
+      newData = result.data;
+    }
+    console.log('ini varaibel  fav',variables);
+   
+
+    setListDataFavorite({
+      ...listDataFavorite,
+      data: listDataFavorite.refresh ? newData : listDataFavorite.data.concat(newData),
+      page: newData.length === itemPerPage ? listDataFavorite.page + 1 : -1,
+      loading: false,
+      loadNext: false,
+      refresh: false,
+    });
+
+  }
   const fetchData = async search => {
     let variables = {
       page: 0,
@@ -133,9 +189,9 @@ const SearchEvent = ({ navigation }) => {
     const result = await fetchEventList(variables);
     let newData = [];
     if (Array.isArray(result.data)) {
-        newData = result.data;
+      newData = result.data;
     }
-    console.log('ini newData',listData);
+    console.log('ini newData', listData);
 
     setListData({
       ...listData,
@@ -144,7 +200,7 @@ const SearchEvent = ({ navigation }) => {
       loading: false,
       loadNext: false,
       refresh: false,
-  });
+    });
 
 
     // setListData(result);
@@ -153,16 +209,16 @@ const SearchEvent = ({ navigation }) => {
 
 
     <Pressable
-    onPress={() => {
-      navigation.navigate('EventDetail', { item });
+      onPress={() => {
+        navigation.navigate('EventDetail', { item });
 
-      GALogEvent('Event', {
+        GALogEvent('Event', {
           id: item.id,
           product_name: item.name,
-          user_id: user.userId,
+          user_id: item.userId,
           method: analyticMethods.view,
-      });
-  }}
+        });
+      }}
       style={{
         borderBottomWidth: 1,
         borderBottomColor: Color.border,
@@ -295,9 +351,14 @@ const SearchEvent = ({ navigation }) => {
               borderWidth: 1,
               borderColor: Color.border,
               paddingHorizontal: 10,
+
             }}
+            onSubmitEditing={() => search !== '' ? dispatch({ type: 'EVENT.ADD_HISTORY', search: { history: search } }) : {}}
+            returnKeyType="done"
           />
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => search !== '' ? dispatch({ type: 'EVENT.ADD_HISTORY', search: { history: search } }) : {}}
+          >
+
             <AntDesign
               size={14}
               name={'search1'}
@@ -314,56 +375,80 @@ const SearchEvent = ({ navigation }) => {
       </View>
 
       {/* Recent Search */}
-      {/* <View style={{borderTopColor: Color.border, borderTopWidth: 1, borderBottomColor: Color.border, borderBottomWidth: 1, paddingVertical: 15, marginTop: 5}}>
-      {search == false
-      ?
-        <View style={{width: '100%', alignItems: 'center', justifyContent: 'center', height: 150}}>
-          <Image source={ImagesPath.Magnifying}/>
-          <Text style={{fontSize: 8, color: Color.secondary, width: '100%', marginTop: 10}}>Kamu belum pernah melakukan pencarian apapun</Text>
-        </View>
-      :
+
+      {
+        pencarian == true ?
         <View>
-          <Text style={{fontSize: 11, fontWeight: 'bold', textAlign: 'left', paddingHorizontal: 10}}>Pencarian Sebelumnya</Text>
-          <FlatList
-          data={[
-            {search: 'Gathering'},
-            {search: 'Workshop'},
-            {search: 'Seminar'},
-            {search: 'TribesSocial'},
-            {search: 'Tribes'},
-          ]}
-          renderItem={({item}) => 
-          <Pressable style={{width: '95%', paddingVertical: 12, alignSelf: 'center',flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: Color.border}}>
-            <Text style={{fontSize: 10, width: '95%', textAlign: 'left'}}>{item.search}</Text>
-            <Feather name={'arrow-up-right'} color={Color.primary}/>
-          </Pressable>}
-        />
-        </View>}
-    </View>
-    <View>
-          <Divider/>
-          <Text style={{fontSize: 11, fontWeight: 'bold', textAlign: 'left', paddingHorizontal: 10}}>Rekomendasi</Text>
-          <FlatList
-          data={[
-            {image: ImagesPath.produklelang6, kategori: 'OFFICIAL', judul: 'Geek Con by TRIBESOCIAL at Kota Kasablanka'},
-            {image: ImagesPath.produklelang6, kategori: 'OFFICIAL', judul: 'Geek Con by TRIBESOCIAL at Kota Kasablanka'},
-            {image: ImagesPath.produklelang6, kategori: 'OFFICIAL', judul: 'Geek Con by TRIBESOCIAL at Kota Kasablanka'},
-            {image: ImagesPath.produklelang6, kategori: 'OFFICIAL', judul: 'Geek Con by TRIBESOCIAL at Kota Kasablanka'},
-            {image: ImagesPath.produklelang6, kategori: 'OFFICIAL', judul: 'Geek Con by TRIBESOCIAL at Kota Kasablanka'},
-          ]}
-          renderItem={({item}) => 
-          <Pressable style={{width: '95%', flexDirection: 'row',paddingVertical: 10, alignItems:'center',alignSelf: 'center',flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: Color.border}}>
-            <View style={{width: 35, height: 35, borderRadius: 5, backgroundColor: Color.secondary}}>
-              <Image source={item.image} style={{width: '100%', height: '100%'}}/>
-            </View>
-            <View style={{paddingHorizontal: 10, justifyContent: 'center', width: '85%'}}>
-              <Text style={{fontSize: 8, textAlign: 'left', color: Color.secondary, fontWeight: 'bold'}}>{item.kategori}</Text>
-              <Text numberOfLines={1} style={{fontSize: 11, textAlign: 'left', fontWeight: 'bold'}}>{item.judul}</Text>
-            </View>
-            <Feather name={'arrow-up-right'} color={Color.primary}/>
-          </Pressable>}
-        />
-    </View> */}
+            <Text style={{ fontSize: 11, fontWeight: 'bold', textAlign: 'left', paddingHorizontal: 10 }}>Pencarian Sebelumnya</Text>
+            <FlatList
+              data={history}
+              renderItem={({ item }) =>
+                <Pressable  onPress={() => onSearch(item.history)}style={{ width: '95%', paddingVertical: 12, alignSelf: 'center', flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: Color.border }}>
+                  <Text style={{ fontSize: 10, width: '95%', textAlign: 'left' }}>{item.history}</Text>
+
+                  <TouchableOpacity
+                    onPress={() => onSearch(item.history)}
+                  >
+                    <Feather name={'arrow-up-right'} color={Color.primary} />
+                  </TouchableOpacity>
+                </Pressable>}
+            />
+          </View>
+        :
+        <View onTouchEnd={(e) => {
+          e.stopPropagation()
+       }}>
+            <Text style={{ fontSize: 11, fontWeight: 'bold', textAlign: 'left', paddingHorizontal: 10 }}>Pencarian Sebelumnya</Text>
+            <FlatList
+              data={history}
+              renderItem={({ item }) =>
+                <Pressable onPress={() => onSearch(item.history)} style={{ width: '95%', paddingVertical: 12, alignSelf: 'center', flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: Color.border }}>
+                  
+                  <Text style={{ fontSize: 10, width: '95%', textAlign: 'left' }}>{item.history}</Text>
+
+                  <TouchableOpacity
+                    onPress={() => dispatch({ type: 'EVENT.REMOVE_HISTORY', data: item.history })}
+                  >
+                     <MaterialIcons name='cancel' size={14} color={Color.secondary}/>
+                  </TouchableOpacity>
+                </Pressable>}
+            />
+          </View>
+      }
+      <View style={{ borderTopColor: Color.border, borderTopWidth: 0, borderBottomColor: Color.border, borderBottomWidth: 1, paddingVertical: 15, marginTop: 5 }}>
+        {history.length == 0 &&
+          
+          <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center', height: 150 }}>
+            <Image source={ImagesPath.Magnifying} />
+            <Text style={{ fontSize: 8, color: Color.secondary, width: '100%', marginTop: 10 }}>Kamu belum pernah melakukan pencarian apapun</Text>
+          </View>
+         }
+      </View>
+      {!pencarian &&
+       <View>
+       
+       <Text style={{ fontSize: 11, fontWeight: 'bold', textAlign: 'left', paddingHorizontal: 10 }}>Rekomendasi</Text>
+       <FlatList
+         data={listDataFavorite.data}
+         renderItem={({ item }) =>
+           <Pressable onPress={() => onSearch(item.name)} style={{ width: '95%', flexDirection: 'row', paddingVertical: 10, alignItems: 'center', alignSelf: 'center', flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: Color.border }}>
+             <View style={{ width: 35, height: 35, borderRadius: 5, backgroundColor: Color.secondary }}>
+               <Image source={{uri:item.images[0]}} style={{ width: '100%', height: '100%' }} />
+             </View>
+             <View style={{ paddingHorizontal: 10, justifyContent: 'center', width: '85%' }}>
+               <Text style={{ fontSize: 8, textAlign: 'left', color: Color.secondary, fontWeight: 'bold' }}>{item.category}</Text>
+               <Text numberOfLines={1} style={{ fontSize: 11, textAlign: 'left', fontWeight: 'bold' }}>{item.name}</Text>
+             </View>
+             <TouchableOpacity
+                    onPress={() => onSearch(item.name)}
+                  >
+                    <Feather name={'arrow-up-right'} color={Color.primary} />
+                  </TouchableOpacity>
+           </Pressable>}
+       />
+     </View>
+      }
+     
 
       {/* Hasil Pencarian */}
 
@@ -372,128 +457,131 @@ const SearchEvent = ({ navigation }) => {
       </View>
 
       {
-      listData.data && listData.data.length != 0 ? (
-        <View style={{ backgroundColor: Color.theme }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingHorizontal: 16,
-              paddingVertical: 14,
-            }}>
-            <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
-              <Text size={14}>{search}</Text>
-              <Divider height={4} />
-              <Text size={6} color={Color.secondary}>
-                {listData.data.length} hasil pencarian ditemukan
-              </Text>
+        listData.data && listData.data.length != 0 ? (
+          <View style={{ backgroundColor: Color.theme }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingHorizontal: 16,
+                paddingVertical: 14,
+              }}>
+              <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+                <Text size={14}>{search}</Text>
+                <Divider height={4} />
+                <Text size={6} color={Color.secondary}>
+                  {listData.data.length} hasil pencarian ditemukan
+                </Text>
+              </View>
+              <TouchableOpacity onPress={() => setVisible(true)} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: Color.text, width: 95, borderRadius: 30, height: 30 }}>
+                <Text style={{ fontSize: 10, marginRight: 10, textTransform: 'capitalize' }}>{filter}</Text>
+                <MaterialIcons name={'keyboard-arrow-down'} size={15} />
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={() => setVisible(true)} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: Color.text, width: 95, borderRadius: 30, height: 30 }}>
-              <Text style={{ fontSize: 10, marginRight: 10, textTransform: 'capitalize' }}>{filter}</Text>
-              <MaterialIcons name={'keyboard-arrow-down'} size={15} />
-            </TouchableOpacity>
-          </View>
-          <View style={{ flexDirection: 'row', paddingHorizontal: 15, marginVertical: 10 }}>
-            
-            <Pressable onPress={() => {
-              onCategory('ALL');
-            }} style={{ backgroundColor: category == 'ALL' ? '#07181F' :Color.textInput , marginRight: 8, alignItems: 'center', justifContent: 'center', borderWidth: 1, borderColor: Color.secondary, paddingVertical: 7, borderRadius: 20, paddingHorizontal: 17 }}>
-              <Text style={{ fontSize: 10, color: category == 'ALL' ?Color.textInput :  Color.text }}>Semua</Text>
-            </Pressable>
+            <View style={{ flexDirection: 'row', paddingHorizontal: 15, marginVertical: 10 }}>
 
-            <Pressable  onPress={() => {
-              onCategory('OFFICIAL');
-            }}style={{ backgroundColor: category == 'OFFICIAL' ? '#07181F' :Color.textInput , marginRight: 8, alignItems: 'center', justifContent: 'center', borderWidth: 1, borderColor: Color.secondary, paddingVertical: 7, borderRadius: 20, paddingHorizontal: 17 }}>
-            <Text style={{ fontSize: 10, color: category == 'OFFICIAL' ?Color.textInput :  Color.text }}>Official</Text>
-          </Pressable>
-            <Pressable onPress={() => {
-              onCategory('UNOFFICIAL');
-            }} style={{ backgroundColor: category == 'UNOFFICIAL' ? '#07181F' :Color.textInput , marginRight: 8, alignItems: 'center', justifContent: 'center', borderWidth: 1, borderColor: Color.secondary, paddingVertical: 7, borderRadius: 20, paddingHorizontal: 17 }}>
-            <Text style={{ fontSize: 10, color: category == 'UNOFFICIAL' ?Color.textInput :  Color.text }}>Komunitas</Text>
-          </Pressable>
-          </View>
-          <View
-            style={{ width: '100%', height: 1, backgroundColor: Color.border }}
-          />
+              <Pressable onPress={() => {
+                onCategory('ALL');
+              }} style={{ backgroundColor: category == 'ALL' ? '#07181F' : Color.textInput, marginRight: 8, alignItems: 'center', justifContent: 'center', borderWidth: 1, borderColor: Color.secondary, paddingVertical: 7, borderRadius: 20, paddingHorizontal: 17 }}>
+                <Text style={{ fontSize: 10, color: category == 'ALL' ? Color.textInput : Color.text }}>Semua</Text>
+              </Pressable>
 
-          <FlatList
-            data={listData.data}
-            renderItem={renderSearch}
-            keyExtractor={item => item.id}
-          />
-        </View>
-      ) : (
-        <View style={{ backgroundColor: Color.theme }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingHorizontal: 16,
-            paddingVertical: 14,
-          }}>
-          <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
-            <Text size={14}>{search}</Text>
-            <Divider height={4} />
-            <Text size={6} color={Color.secondary}>
-              {listData.data.length} hasil pencarian ditemukan
-            </Text>
-          </View>
-          <TouchableOpacity onPress={() => setVisible(true)} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: Color.text, width: 95, borderRadius: 30, height: 30 }}>
-            <Text style={{ fontSize: 10, marginRight: 10, textTransform: 'capitalize' }}>{filter}</Text>
-            <MaterialIcons name={'keyboard-arrow-down'} size={15} />
-          </TouchableOpacity>
-        </View>
-        <View style={{ flexDirection: 'row', paddingHorizontal: 15, marginVertical: 10 }}>
-          <Pressable onPress={() => {
-            onCategory('ALL');
-          }} style={{ marginRight: 8, alignItems: 'center', justifContent: 'center', borderWidth: 1, borderColor: Color.secondary, paddingVertical: 7, borderRadius: 20, paddingHorizontal: 17 }}>
-            <Text style={{ fontSize: 10, color: Color.secondary }}>Semua</Text>
-          </Pressable>
-          <Pressable  onPress={() => {
-            onCategory('OFFICIAL');
-          }}style={{ marginRight: 8, alignItems: 'center', justifContent: 'center', borderWidth: 1, borderColor: Color.secondary, paddingVertical: 7, borderRadius: 20, paddingHorizontal: 17 }}>
-            <Text style={{ fontSize: 10, color: Color.secondary }}>Official</Text>
-          </Pressable>
-          <Pressable onPress={() => {
-            onCategory('UNOFFICIAL');
-          }} style={{  alignItems: 'center', justifContent: 'center', borderWidth: 1, borderColor: Color.secondary, paddingVertical: 7, borderRadius: 20, paddingHorizontal: 17 }}>
-            <Text style={{ fontSize: 10, color: Color.secondary }}>Komunitas</Text>
-          </Pressable>
-        </View>
-        <View
-          style={{ width: '100%', height: 1, backgroundColor: Color.border }}
-        />
+              <Pressable onPress={() => {
+                onCategory('OFFICIAL');
+              }} style={{ backgroundColor: category == 'OFFICIAL' ? '#07181F' : Color.textInput, marginRight: 8, alignItems: 'center', justifContent: 'center', borderWidth: 1, borderColor: Color.secondary, paddingVertical: 7, borderRadius: 20, paddingHorizontal: 17 }}>
+                <Text style={{ fontSize: 10, color: category == 'OFFICIAL' ? Color.textInput : Color.text }}>Official</Text>
+              </Pressable>
+              <Pressable onPress={() => {
+                onCategory('UNOFFICIAL');
+              }} style={{ backgroundColor: category == 'UNOFFICIAL' ? '#07181F' : Color.textInput, marginRight: 8, alignItems: 'center', justifContent: 'center', borderWidth: 1, borderColor: Color.secondary, paddingVertical: 7, borderRadius: 20, paddingHorizontal: 17 }}>
+                <Text style={{ fontSize: 10, color: category == 'UNOFFICIAL' ? Color.textInput : Color.text }}>Komunitas</Text>
+              </Pressable>
+            </View>
+            <View
+              style={{ width: '100%', height: 1, backgroundColor: Color.border }}
+            />
 
-        <View style={{marginTop:100,alignItems: 'center',
-              justifyContent: 'center',}}>
-        <Image source={ImagesPath.nounwind} />
-        <Text
-            style={{
-              marginVertical: 15,
-              fontWeight: 'bold',
-              color: Color.secondary,
-            }}>
-            Pencarian tidak ditemukan
-          </Text>
-          <TouchableOpacity
-           onPress={()=>{
-            navigation.navigate('EventScreen');
-           }}
-            style={{
-              alignItems: 'center',
+            <FlatList
+              data={listData.data}
+              renderItem={renderSearch}
+              keyExtractor={item => item.id}
+            />
+          </View>
+        ) : (
+           history.length > 0 &&
+          <View style={{ backgroundColor: Color.theme }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingHorizontal: 16,
+                paddingVertical: 14,
+              }}>
+              <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+                <Text size={14}>{search}</Text>
+                <Divider height={4} />
+                <Text size={6} color={Color.secondary}>
+                  {listData.data.length} hasil pencarian ditemukan
+                </Text>
+              </View>
+              <TouchableOpacity onPress={() => setVisible(true)} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: Color.text, width: 95, borderRadius: 30, height: 30 }}>
+                <Text style={{ fontSize: 10, marginRight: 10, textTransform: 'capitalize' }}>{filter}</Text>
+                <MaterialIcons name={'keyboard-arrow-down'} size={15} />
+              </TouchableOpacity>
+            </View>
+            <View style={{ flexDirection: 'row', paddingHorizontal: 15, marginVertical: 10 }}>
+              <Pressable onPress={() => {
+                onCategory('ALL');
+              }} style={{ marginRight: 8, alignItems: 'center', justifContent: 'center', borderWidth: 1, borderColor: Color.secondary, paddingVertical: 7, borderRadius: 20, paddingHorizontal: 17 }}>
+                <Text style={{ fontSize: 10, color: Color.secondary }}>Semua</Text>
+              </Pressable>
+              <Pressable onPress={() => {
+                onCategory('OFFICIAL');
+              }} style={{ marginRight: 8, alignItems: 'center', justifContent: 'center', borderWidth: 1, borderColor: Color.secondary, paddingVertical: 7, borderRadius: 20, paddingHorizontal: 17 }}>
+                <Text style={{ fontSize: 10, color: Color.secondary }}>Official</Text>
+              </Pressable>
+              <Pressable onPress={() => {
+                onCategory('UNOFFICIAL');
+              }} style={{ alignItems: 'center', justifContent: 'center', borderWidth: 1, borderColor: Color.secondary, paddingVertical: 7, borderRadius: 20, paddingHorizontal: 17 }}>
+                <Text style={{ fontSize: 10, color: Color.secondary }}>Komunitas</Text>
+              </Pressable>
+            </View>
+            <View
+              style={{ width: '100%', height: 1, backgroundColor: Color.border }}
+            />
+
+            <View style={{
+              marginTop: 100, alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: Color.primary,
-              height: 35,
-              width: '40%',
-              borderRadius: 30,
             }}>
-            <Text style={{fontSize: 12, color: Color.textInput}}>Kembali</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      )}
-      
-      
+              <Image source={ImagesPath.nounwind} />
+              <Text
+                style={{
+                  marginVertical: 15,
+                  fontWeight: 'bold',
+                  color: Color.secondary,
+                }}>
+                Pencarian tidak ditemukan
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('EventScreen');
+                }}
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: Color.primary,
+                  height: 35,
+                  width: '40%',
+                  borderRadius: 30,
+                }}>
+                <Text style={{ fontSize: 12, color: Color.textInput }}>Kembali</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+
+
 
 
       <ModalActions
