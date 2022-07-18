@@ -53,6 +53,7 @@ const Content = Styled(View)`
 
 const CreateEventSecond = ({navigation}) => {
     const user = useSelector((state) => state['user.auth'].login.user);
+    console.log(user)
 	const loading = useSelector((state) => state['user.auth'].loading);
     const route = useRoute();
 
@@ -151,7 +152,7 @@ const CreateEventSecond = ({navigation}) => {
             type: 'CREATE',
             newEvent: {
                 ...route.params.item,
-                category: "OFFICIAL",
+                category: user.isDirector ? "OFFICIAL" : "UNOFFICIAL",
                 // refundPolicy: refundPolicy ? 'data:application/pdf;base64,'+refundPolicy : null,
                 // tnc: tnc ? 'data:application/pdf;base64,'+tnc : null,
                 tickets: updateData
@@ -264,7 +265,7 @@ const CreateEventSecond = ({navigation}) => {
                         />
                         <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Kuota Tiket</Text>
                     </View>
-                    <View
+                    {val.type == 'PAID' && <View
                         style={{marginBottom: 10, }}>
                         <Text
                         style={{
@@ -302,8 +303,8 @@ const CreateEventSecond = ({navigation}) => {
                             borderRadius: 5,
                         }}
                         />
-                    </View>
-                    <View  style={{marginBottom: 10}}>
+                    </View>}
+                    {val.type == 'PAID' && <View  style={{marginBottom: 10}}>
                         <TextInput
                             placeholder='0'
                             keyboardType='numeric'
@@ -315,8 +316,8 @@ const CreateEventSecond = ({navigation}) => {
                             value={val.discountValue}
                         />
                         <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Diskon</Text>
-                    </View>
-                    {val.type == "FREE" && <View  style={{marginBottom: 10}}>
+                    </View>}
+                     <View  style={{marginBottom: 10}}>
                         <TextInput
                             placeholder='0'
                             keyboardType='numeric'
@@ -328,7 +329,7 @@ const CreateEventSecond = ({navigation}) => {
                             value={val.price}
                         />
                         <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Harga Tiket</Text>
-                    </View>}
+                    </View>
                     <Text type='semibold' size={10} align='left' style={{marginBottom: 5 }}>Bisa Refund?</Text>
                     <Row style={{ marginBottom: 10 }}>
                         <Row style={{ marginRight: 10 }}>
