@@ -556,8 +556,8 @@ const MainProfile = ({navigation, route}) => {
                     </Text>
                   )}
               </View>
-              {user && !user.isEmailVerify && <TouchableOpacity onPress={() => sendVerify()} style={{ height: 30, backgroundColor: Color.primary , borderRadius: 30, justifyContent: 'center', alignItems: 'center', width: 100 }}>
-                  <Text size={12} color='#fff'>Verify Email</Text>
+              {user && !user.isEmailVerify && <TouchableOpacity onPress={() => sendVerify()} style={{ paddingVertical: 10, backgroundColor: Color.primary , borderRadius: 120, justifyContent: 'center', alignItems: 'center', width: 100 }}>
+                  <Text size={12} color='#fff'  type="semibold">Verify Email</Text>
               </TouchableOpacity>}
              
 
