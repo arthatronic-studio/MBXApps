@@ -26,6 +26,7 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { getDetailEvent } from 'src/lib/query/event';
 import { fetchSaveEvent } from 'src/api/event/saveEvent';
+import { FormatMoney } from 'src/utils';
 
 
 
@@ -76,6 +77,7 @@ const EventDetail = ({navigation, route}) => {
 
   const [loading, setLoading] = useState(true);
   const [bookmark, setBookmark] = useState(false);
+  const [desc, setDesc] = useState(false);
   const [data, setData] = useState(null);
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
@@ -130,14 +132,14 @@ const EventDetail = ({navigation, route}) => {
         <MaterialCommunityIcons name={'cash-refund'} color={Color.secondary} size={22}/>
         <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 5}}>{item.refund ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
         <Divider width={8}/>
-        <AntDesign name='calendar' size={18} color={Color.secondary}/>
-        <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 5}}>{item.reservation ? 'Perlu Reservasi' : 'Tidak Perlu Reservasi'}</Text>
+        {/* <AntDesign name='calendar' size={18} color={Color.secondary}/>
+        <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 5}}>{item.reservation ? 'Perlu Reservasi' : 'Tidak Perlu Reservasi'}</Text> */}
       </Row>
       <Divider height={25}/>
       <Row>
         <Col>
             <Text style={{textAlign: 'left', fontSize: 8}}>Harga</Text>
-            <Text style={{textAlign: 'left', fontWeight: 'bold'}}>{items.type === 'FREE' ? 'GRATIS' : items.price}<Text style={{fontSize: 8}}>/Pax</Text></Text>
+            <Text style={{textAlign: 'left', fontWeight: 'bold'}}>{items.type === 'FREE' ? 'GRATIS' : FormatMoney.getFormattedMoney(item.price)}<Text style={{fontSize: 8}}>/Pax</Text></Text>
         </Col>
         <TouchableOpacity onPress={() => navigation.navigate('PemesananTiket', {item, dataEvent: data, itemRoute: items})} style={{justifyContent: 'center',backgroundColor: Color.primary, width: '35%', borderRadius: 30}}>
           <Text style={{fontSize: 10, color: Color.textInput}}>Pesan Sekarang</Text>
@@ -183,6 +185,13 @@ const EventDetail = ({navigation, route}) => {
   }
 
   if(!data) return <View />
+
+  const closest = data ? data.tickets ? data.tickets.reduce(
+    (acc, loc) =>
+      acc.price < loc.price
+        ? acc
+        : loc
+  ) : 0 : 0
 
   return (
     <Scaffold
@@ -325,7 +334,7 @@ const EventDetail = ({navigation, route}) => {
             </View> */}
           </View>
 
-          <Container paddingHorizontal={32} paddingVertical={16}>
+          {/* <Container paddingHorizontal={32} paddingVertical={16}>
             <Button
               onPress={() => {
                 navigation.navigate('GalleryScreen', {  });
@@ -333,7 +342,7 @@ const EventDetail = ({navigation, route}) => {
             >
               Lihat Event Galeri
             </Button>
-          </Container>
+          </Container> */}
           
           {/* {items.like > 0 &&
             <Container paddingHorizontal={16}>
@@ -365,7 +374,7 @@ const EventDetail = ({navigation, route}) => {
               }}>
               Deskripsi
             </Text>
-            <Text
+            {data.description && <Text
               numberOfLines={12}
               style={{
                 textAlign: 'justify',
@@ -373,12 +382,12 @@ const EventDetail = ({navigation, route}) => {
                 color: Color.secondary,
                 marginBottom: 16,
               }}>
-              {data.description}
-            </Text>
-            <Pressable style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center',width: '100%', paddingHorizontal: 15}}>
-              <Text style={{color: Color.primary}}>Selengkapnya</Text>
+              {data.description.length > 40 && !desc ? data.description.substring(0, 40) : data.description}
+            </Text>}
+            {data.description && data.description.length > 40 && <Pressable onPress={() => setDesc(!desc)} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center',width: '100%', paddingHorizontal: 15}}>
+              <Text style={{color: Color.primary}}>{desc ? 'Lebih sedikit' : 'Selengkapnya'}</Text>
               <MaterialIcons name={'keyboard-arrow-down'} size={20} color={Color.primary} style={{marginHorizontal: 5}}/>
-            </Pressable>
+            </Pressable>}
           </View>
           <Divider/>
 
@@ -548,7 +557,8 @@ const EventDetail = ({navigation, route}) => {
       <Row style={{height: 60, paddingHorizontal: 20,paddingVertical: 15}}>
         <Col style={{justifyContent: 'center'}}>
             <Text style={{textAlign: 'left', fontSize: 8}}>Mulai dari</Text>
-            <Text style={{textAlign: 'left', fontWeight: 'bold'}}>Rp. 100.000</Text>
+            {console.log(closest, 'cneasas')}
+            <Text style={{textAlign: 'left', fontWeight: 'bold'}}>{FormatMoney.getFormattedMoney(closest ? closest.price  : 0)}</Text>
         </Col>
         <TouchableOpacity onPress={() => console.log()} style={{justifyContent: 'center',backgroundColor: Color.primary, width: '30%', borderRadius: 30, height: 35}}>
           <Text style={{fontSize: 10, color: Color.textInput}}>Ikut Event</Text>

@@ -57,7 +57,7 @@ const Content = Styled(View)`
     borderRadius: 8px
 `;
 
-const EditEvent = ({navigation}) => {
+const EditEvent = ({navigation, route}) => {
     const user = useSelector((state) => state['user.auth'].login.user);
 	const loading = useSelector((state) => state['user.auth'].loading);
     // const route = useRoute();
@@ -76,7 +76,7 @@ const EditEvent = ({navigation}) => {
         showLoading();
         // console.log(items)
         let variables = {
-            id: 13,
+            id: route.params.item.id,
         };
         console.log(variables);
         Client.query({query: getDetailEvent, variables})

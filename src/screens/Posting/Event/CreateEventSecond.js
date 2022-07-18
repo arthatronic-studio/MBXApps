@@ -65,7 +65,7 @@ const CreateEventSecond = ({navigation}) => {
     const [tickets, setTickets] = useState([{
             name: '',
             quota: 1,
-            type: "PAID",
+            type: "FREE",
             refund: true,
             reservation: true,
             discountType: null,
@@ -119,7 +119,7 @@ const CreateEventSecond = ({navigation}) => {
         temp.push({
             name: '',
             quota: 1,
-            type: "PAID",
+            type: "FREE",
             refund: true,
             reservation: true,
             discountType: null,
@@ -166,7 +166,7 @@ const CreateEventSecond = ({navigation}) => {
             if (res.data.eventManage) {
                 alert('Event berhasil dibuat')
                 setTimeout(() => {
-                    navigation.popToTop()
+                    navigation.pop(2)
                 }, 1000);
             }
         })
@@ -316,7 +316,7 @@ const CreateEventSecond = ({navigation}) => {
                         />
                         <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Diskon</Text>
                     </View>
-                    <View  style={{marginBottom: 10}}>
+                    {val.type == "FREE" && <View  style={{marginBottom: 10}}>
                         <TextInput
                             placeholder='0'
                             keyboardType='numeric'
@@ -328,7 +328,7 @@ const CreateEventSecond = ({navigation}) => {
                             value={val.price}
                         />
                         <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Harga Tiket</Text>
-                    </View>
+                    </View>}
                     <Text type='semibold' size={10} align='left' style={{marginBottom: 5 }}>Bisa Refund?</Text>
                     <Row style={{ marginBottom: 10 }}>
                         <Row style={{ marginRight: 10 }}>
@@ -344,7 +344,7 @@ const CreateEventSecond = ({navigation}) => {
                             <Text color={Color.text}>Ya</Text>
                         </Row>
                     </Row>
-                    <Text type='semibold' color={Color.text} size={10} align='left' style={{marginBottom: 5 }}>Bisa Reservasi?</Text>
+                    {/* <Text type='semibold' color={Color.text} size={10} align='left' style={{marginBottom: 5 }}>Bisa Reservasi?</Text>
                     <Row>
                         <Row style={{ marginRight: 10 }}>
                             <TouchableOpacity onPress={() => onChange(false,'reservation', id)} style={{ borderColor: '#6A7479', borderWidth: 1, width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
@@ -358,7 +358,7 @@ const CreateEventSecond = ({navigation}) => {
                             </TouchableOpacity>
                             <Text color={Color.text}>Ya</Text>
                         </Row>
-                    </Row>
+                    </Row> */}
                 </View>
             ))}
             <TouchableOpacity onPress={() => addTicket()} style={{borderColor: Color.primary, borderWidth: 3, alignSelf: 'center', width: '95%', height: 50, borderRadius: 50, marginBottom: 16, justifyContent: 'center'}}>

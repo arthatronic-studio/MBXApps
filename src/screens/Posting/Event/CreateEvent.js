@@ -154,7 +154,7 @@ const CreateEvent = ({navigation}) => {
                 </ImageBackground>
             </TouchableOpacity>
             <View style={{alignItems: 'flex-start', marginHorizontal: 10, marginVertical: 5}}>
-                <Text style={{fontSize: 10, fontWeight: 'bold', marginVertical: 10}}>Nama Event</Text>
+                {/* <Text style={{fontSize: 10, fontWeight: 'bold', marginVertical: 10}}>Nama Event</Text> */}
                 <View style={{width: '100%'}}>
                     <TextInput
                         placeholder='Masukkan Nama Event . . .'
@@ -165,7 +165,7 @@ const CreateEvent = ({navigation}) => {
                         onChangeText={(value) => setName(value)}
                         value={name}
                     />
-                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Nama Responden</Text>
+                    <Text style={{fontSize: 8, color: Color.secondary, position: 'absolute', paddingHorizontal: 10, paddingVertical: 5}}>Nama Event</Text>
                 </View>
             </View>
             <Row style={{ marginTop: -20, marginBottom: -30 }}>
@@ -203,7 +203,7 @@ const CreateEvent = ({navigation}) => {
                 <Col>
                     <View style={{  marginHorizontal: -6 }}>
                     <FormSelect
-                        labelInside='Jam Tutup'
+                        labelInside='Jam Berakhir'
                         placeholder='Pilih Jam'
                         value={moment(jamTutupOperasional).format('HH:mm')}
                         onPress={() => setShowDatePicker2(true)}
@@ -300,7 +300,7 @@ const CreateEvent = ({navigation}) => {
             </View>
 
         </ScrollView>
-        <View style={{width: '100%', height: 70, alignItems: 'center', borderRadius: 10}}>
+        <View style={{width: '100%', height: 70, marginTop: 20, alignItems: 'center', borderRadius: 10}}>
             <TouchableOpacity onPress={() => submit()} style={{backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
                 <Text style={{color: Color.textInput}}>Lanjut</Text>
             </TouchableOpacity>
