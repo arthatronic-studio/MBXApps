@@ -236,6 +236,8 @@ export const getEventList = gql`
     $page: Int
     $itemPerPage: Int
     $isFavorite: Boolean
+    $search: String
+    $sort: EventSortEnum
     $category: EventCategoryEnum
     $type: EventTypeEnum
     $userId: Int
@@ -245,6 +247,8 @@ export const getEventList = gql`
       page: $page
       itemPerPage: $itemPerPage
       isFavorite: $isFavorite
+      search: $search
+      sort: $sort
       category: $category
       type: $type
       userId: $userId
@@ -377,3 +381,4 @@ export const mutationOrderEvent = gql`
     }
   }
 `;
+

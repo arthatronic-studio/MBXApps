@@ -138,7 +138,7 @@ const DocumentasiEvent = ({navigation}) => {
             
           }}>
              <Pressable onPress={()=> navigation.navigate('DocumentasiEventDetail',{id: item.id,cImage: item.mediaCounts.image,cVideo: item.mediaCounts.video})}>
-        <ImageBackground source={{uri: item.latestMedia !=="" ? item.latestMedia : item.images[0]}} resizeMode="cover"  imageStyle={{ borderRadius: 6}} style={{
+        <ImageBackground source={{uri: item.latestMedia !== null ? item.latestMedia : item.images[0]}} resizeMode="cover"  imageStyle={{ borderRadius: 6}} style={{
     flex: 1,
     justifyContent: "flex-end",
     borderRadius: 4,
