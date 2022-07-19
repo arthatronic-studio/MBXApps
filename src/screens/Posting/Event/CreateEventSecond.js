@@ -62,7 +62,9 @@ const CreateEventSecond = ({navigation}) => {
     const [isTicket, setSwitch] = useState();
     const [refresh, setRefresh] = useState('');
     const [tnc, setTnc] = useState('');
-    const [refundPolicy, setRefundPolicy] = useState(0);
+    const [refundPolicy, setRefundPolicy] = useState('');
+    const [tncShow, setTncShow] = useState('');
+    const [refundPolicyShow, setRefundPolicyShow] = useState('');
     const [tickets, setTickets] = useState([{
             name: '',
             quota: 1,
@@ -153,8 +155,8 @@ const CreateEventSecond = ({navigation}) => {
             newEvent: {
                 ...route.params.item,
                 category: user.isDirector ? "OFFICIAL" : "UNOFFICIAL",
-                // refundPolicy: refundPolicy ? 'data:application/pdf;base64,'+refundPolicy : null,
-                // tnc: tnc ? 'data:application/pdf;base64,'+tnc : null,
+                refundPolicy: refundPolicy ? 'data:application/pdf;base64,'+refundPolicy : null,
+                tnc: tnc ? 'data:application/pdf;base64,'+tnc : null,
                 tickets: updateData
             }
         }
@@ -198,12 +200,14 @@ const CreateEventSecond = ({navigation}) => {
         let uri;
 
         if (Array.isArray(res) && res.length > 0) {
-           
+            if(res[0].size/1000000 > 10 ) return alert('File terlalu besar')
             RNFetchBlob.fs
             .readFile(res[0].uri, 'base64')
             .then((data) => {
-                if(name == 'tnc') setTnc(data)
-                else setRefundPolicy(data)
+                console.log(data)
+                
+                if(name == 'tnc') {setTnc(data); setTncShow(res[0])}
+                else {setRefundPolicy(data); setRefundPolicyShow(res[0])}
             })
             .catch((err) => {});
         }
@@ -370,8 +374,8 @@ const CreateEventSecond = ({navigation}) => {
             <TouchableOpacity onPress={() => getDocument('refundPolicy')} style={{ borderWidth: 1, margin: 10, paddingVertical: 23, paddingHorizontal: 13, borderRadius: 8, borderColor: '#CDD1D2' }}>
                 <Row>
                     <Col>
-                        <Text color='#3C58C1' align='left' size={15} type='medium'>Upload PDF</Text>
-                        <Text align='left' size={10}>Ukuran file tidak boleh melebihi 10MB</Text>
+                        <Text color='#3C58C1' align='left' size={15} type='medium'>{refundPolicyShow ? refundPolicyShow.name : 'Upload PDF'}</Text>
+                        <Text align='left' size={10}>{refundPolicyShow ? parseFloat(refundPolicyShow.size/1000000).toFixed(2)+'MB' : 'Ukuran file tidak boleh melebihi 10MB'}</Text>
                     </Col>
                 </Row>
             </TouchableOpacity>
@@ -380,8 +384,8 @@ const CreateEventSecond = ({navigation}) => {
             <TouchableOpacity  onPress={() => getDocument('tnc')} style={{ borderWidth: 1, margin: 10, paddingVertical: 23, paddingHorizontal: 13, borderRadius: 8, borderColor: '#CDD1D2' }}>
                 <Row>
                     <Col>
-                        <Text color='#3C58C1' align='left' size={15} type='medium'>Upload PDF</Text>
-                        <Text align='left' size={10}>Ukuran file tidak boleh melebihi 10MB</Text>
+                        <Text color='#3C58C1' align='left' size={15} type='medium'>{tncShow ? tncShow.name : 'Upload PDF'}</Text>
+                        <Text align='left' size={10}>{tncShow ? parseFloat(tncShow.size/1000000).toFixed(2)+'MB' : 'Ukuran file tidak boleh melebihi 10MB'}</Text>
                     </Col>
                 </Row>
             </TouchableOpacity>

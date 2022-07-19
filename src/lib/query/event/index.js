@@ -319,6 +319,8 @@ export const getDetailEvent = gql`
       type
       endTime
       location
+      lat
+      lng
       images
       startPrice
       discountPrice

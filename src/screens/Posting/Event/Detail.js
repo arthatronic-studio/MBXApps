@@ -89,7 +89,6 @@ const EventDetail = ({navigation, route}) => {
 
     const getDetail = () => {
       // showLoading();
-      console.log(items)
       let variables = {
         id: items.id,
       };
@@ -98,6 +97,7 @@ const EventDetail = ({navigation, route}) => {
         .then(res => {
           // hideLoading()
           if(res.data.eventDetail){
+            console.log(res.data)
             setData(res.data.eventDetail)
             setBookmark(res.data.eventDetail.bookmarked);
           }
@@ -182,6 +182,14 @@ const EventDetail = ({navigation, route}) => {
   let isPassedEventDate = true;
   if (moment(eventDate).isValid() && moment(eventDate).isAfter(moment())) {
     isPassedEventDate = false;
+  }
+
+  const openGps = (lat, lng) => {
+    // var scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
+    // var url = scheme + `${lat},${lng}`;
+    const latLng = `${lat},${lng}`;
+    // return `google.navigation:q=${latLng}`;
+    Linking.openURL(`google.navigation:q=${latLng}`);
   }
 
   if(!data) return <View />
@@ -409,7 +417,7 @@ const EventDetail = ({navigation, route}) => {
               <Image source={ImagesPath.LocationEvent} style={{borderRadius: 5}}/>
               {/* <Text style={{fontSize: 8, lineHeight: 12,textAlign: 'left', width: '65%', paddingHorizontal: 10}}>Jl. Tebet Barat I No.2, RT.1/RW.2, Tebet Bar., Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12810</Text> */}
               <Text style={{fontSize: 8, lineHeight: 12,textAlign: 'left', width: '65%', paddingHorizontal: 10}}>{data?.location}, {data?.kelurahan}, Kec. {data?.kecamatan}, Kota {data?.kota}, {data?.provinsi}</Text>
-              <TouchableOpacity style={{justifyContent: 'center', alignItems: 'center',backgroundColor: Color.primary, width: 35, height: 35, borderRadius: 20, marginLeft: 35}}>
+              <TouchableOpacity onPress={() => openGps(data.lat, data.lng)} style={{justifyContent: 'center', alignItems: 'center',backgroundColor: Color.primary, width: 35, height: 35, borderRadius: 20, marginLeft: 35}}>
                 <Ionicons name='navigate' size={17} style={{color: Color.theme}}/>
               </TouchableOpacity>
             </View>
@@ -418,16 +426,16 @@ const EventDetail = ({navigation, route}) => {
             <Text style={{fontSize: 11, textAlign: 'left', fontWeight: 'bold', paddingHorizontal: 20}}>Informasi Lainnya</Text>
             <Divider height={8}/>
             <View style={{width: '90%', alignSelf: 'center', paddingHorizontal: 15, backgroundColor: Color.border, height: 1}}/>
-            <Pressable style={{flexDirection:'row', alignItems: 'center', height: 40, width: '90%', borderBottomColor: Color.border, borderBottomWidth: 1, alignSelf: 'center'}}>
+            {data.refundPolicy && <Pressable style={{flexDirection:'row', alignItems: 'center', height: 40, width: '90%', borderBottomColor: Color.border, borderBottomWidth: 1, alignSelf: 'center'}}>
               <FontAwesome5Icon name={"ticket-alt"} style={{width: '8%'}}/>
               <Text style={{fontSize: 10, fontWeight: 'bold', width: '85%', textAlign: 'left'}}>Pengembalian Tiket</Text>
               <MaterialIcons name={'keyboard-arrow-down'} size={18}/>
-            </Pressable>
-            <Pressable style={{flexDirection:'row', alignItems: 'center', height: 40, width: '90%', borderBottomColor: Color.border, borderBottomWidth: 1, alignSelf: 'center'}}>
+            </Pressable>}
+            {data.tnc && <Pressable style={{flexDirection:'row', alignItems: 'center', height: 40, width: '90%', borderBottomColor: Color.border, borderBottomWidth: 1, alignSelf: 'center'}}>
               <MaterialCommunityIcons size={15} name={"equal-box"} style={{width: '8%'}}/>
               <Text style={{fontSize: 10, fontWeight: 'bold', width: '85%', textAlign: 'left'}}>Syarat & Ketentuan</Text>
               <MaterialIcons name={'keyboard-arrow-down'} size={18}/>
-            </Pressable>
+            </Pressable>}
           </View>
 
           </View>
@@ -557,7 +565,6 @@ const EventDetail = ({navigation, route}) => {
       <Row style={{height: 60, paddingHorizontal: 20,paddingVertical: 15}}>
         <Col style={{justifyContent: 'center'}}>
             <Text style={{textAlign: 'left', fontSize: 8}}>Mulai dari</Text>
-            {console.log(closest, 'cneasas')}
             <Text style={{textAlign: 'left', fontWeight: 'bold'}}>{FormatMoney.getFormattedMoney(closest ? closest.price  : 0)}</Text>
         </Col>
         <TouchableOpacity onPress={() => console.log()} style={{justifyContent: 'center',backgroundColor: Color.primary, width: '30%', borderRadius: 30, height: 35}}>

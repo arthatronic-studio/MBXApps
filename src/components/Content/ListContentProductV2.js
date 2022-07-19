@@ -61,6 +61,7 @@ const ListContentProductV2 = ({ userProfileId, productCategory, name, horizontal
         if(productCategory === 'EVENT'){
             result = await fetchEventList(variables);
         }
+        console.log(result, 'price result landing')
 
         setItemData({
             ...itemData,
