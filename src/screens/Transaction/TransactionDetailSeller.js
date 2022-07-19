@@ -4,7 +4,6 @@ import {Divider, Line} from 'src/styled';
 import {connect, useDispatch, useStore} from 'react-redux';
 import {TouchableOpacity} from '@src/components/Button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Styled from 'styled-components';
 import Text from '@src/components/Text';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Header, Loading, useLoading} from 'src/components';
@@ -25,7 +24,6 @@ import Client from '@src/lib/apollo';
 import Moment from 'moment';
 import {FormatMoney} from 'src/utils';
 import {
-  HeaderBig,
   useColor,
   Scaffold,
   Row,
@@ -36,17 +34,13 @@ import {
 import ColorPropType from 'react-native/Libraries/DeprecatedPropTypes/DeprecatedColorPropType';
 import {Modalize} from 'react-native-modalize';
 import moment from 'moment';
-import { currentSocket } from '../MainHome/MainHome';
 import {useSelector} from 'react-redux';
-
-const Content = Styled(View)`
-    margin: 16px
-    marginBottom: 0px
-    padding: 12px
-    borderRadius: 8px
-`;
+import { initSocket } from 'src/api-socket/currentSocket';
+import { queryDetailOrderAuction } from 'src/lib/query/auction';
 
 const TransactionDetailSeller = ({route, navigation}) => {
+  const currentSocket = initSocket();
+  
   const dispatch = useDispatch();
   const [data, setData] = useState({});
   const [merchant, setMerchant] = useState();
@@ -134,17 +128,22 @@ const TransactionDetailSeller = ({route, navigation}) => {
       isMerchant: true
     };
 
-    Client.query({query: queryDetailOrder, variables})
+    const skema = route.params.item.isAuction ? queryDetailOrderAuction : queryDetailOrder
+    console.log(variables, route.params.item)
+    Client.query({query: skema, variables})
       .then(res => {
         console.log('res get detail order', res);
-        if (res.data.ecommerceOrderDetail) {
-          setData(res.data.ecommerceOrderDetail);
-          if(res.data.ecommerceOrderDetail.start_time){
-            setSchedulePickUp({
-              start_time: res.data.ecommerceOrderDetail.start_time,
-              end_time: res.data.ecommerceOrderDetail.end_time,
-            })
+        if (res.data.ecommerceOrderDetail || res.data.auctionOrderDetail) {
+          setData(res.data.ecommerceOrderDetail || res.data.auctionOrderDetail);
+          if(res.data.ecommerceOrderDetail){
+            if(res.data.ecommerceOrderDetail.start_time){
+              setSchedulePickUp({
+                start_time: res.data.ecommerceOrderDetail.start_time,
+                end_time: res.data.ecommerceOrderDetail.end_time,
+              })
+            }
           }
+         
           
         }
        

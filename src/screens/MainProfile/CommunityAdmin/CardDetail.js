@@ -14,6 +14,7 @@ import {
   useColor,
   Scaffold,
   Alert,
+  Button,
 } from '@src/components';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -24,8 +25,9 @@ import {queryJoinCommunityManage} from '@src/lib/query/joinCommunityManage';
 import {Container, Divider} from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
 import { getSizeByRatio } from 'src/utils/get_ratio';
-import { joinCommunityMember } from 'src/lib/query/joinCommunityMember';
 import ModalInputText from 'src/components/ModalInputText';
+import { fetchJoinCommunityMember } from 'src/api/community';
+import { useSelector } from 'react-redux';
 
 const EmailRoundedView = Styled(View)`
   width: 100%;
@@ -48,21 +50,55 @@ const LabelInput = Styled(View)`
 `;
 
 const CardDetail = ({ navigation, route }) => {
-  const { item, props } = route.params;
-  const userDetail = item.userDetail;
+  const { params } = route;
+  const isAdminPage = params && params.isAdminPage;
 
-  const [idNumber, setIdNumber] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [item, setItem] = useState(params ? params.item : null);
+  const [props, setProps] = useState(params ? params.props : '');
+  const [userDetail, setUserDetail] = useState(params ? params.item.userDetail : null);
+  const [idNumber, setIdNumber] = useState(params ? params.item.userDetail.idNumber : '');
+  const [loading, setLoading] = useState(true);
   const [modalInputText, setModalInputText] = useState(false);
 
   const {width, height} = useWindowDimensions();
   const {Color} = useColor();
   const [popupProps, showPopup] = usePopup();
+  const user = useSelector((state) => state['user.auth'].login.user);
 
   useEffect(() => {
-    setIdNumber(userDetail.idNumber);
+    if (params) {
+      setItem(params.item);
+      setProps(params.props);
+      setUserDetail(params.item.userDetail);
+      setIdNumber(params.item.userDetail.idNumber);
+      setLoading(false);
+    } else {
+      fetchAsync();
+    }
   }, []);
+
+  useEffect(() => {
+    if (params && params.refresh) {
+      navigation.setParams({
+        refresh: false
+      });
+      fetchAsync();
+    }
+  }, [params]);
   
+  const fetchAsync = async() => {
+    const result = await fetchJoinCommunityMember({ userId: user.userId });
+    console.log('result', result);
+    
+    if (result.status && result.data.length > 0) {
+      setItem(result.data[0]);
+      setUserDetail(result.data[0].userDetail);
+      setIdNumber(result.data[0].userDetail.idNumber);
+    }
+
+    setLoading(false);
+  }
+
   const fetchUpdateMember = item => {
     setLoading(true);
 
@@ -162,12 +198,11 @@ const CardDetail = ({ navigation, route }) => {
       fallback={loading}
       popupProps={popupProps}
     >
-      <ScrollView>
+      {item && userDetail && <ScrollView>
         <View
           style={{
             alignItems: 'flex-start',
-            marginTop: 24,
-            borderTopWidth: 1,
+            marginTop: 16,
             borderTopColor: Color.border,
             paddingHorizontal: 16,
           }}
@@ -180,10 +215,18 @@ const CardDetail = ({ navigation, route }) => {
                 paddingBottom: 16,
               }}>
               <Text style={{fontWeight: 'bold', paddingBottom: 10}}>
-                PROFILE
+                MESSAGE
+              </Text>
+              <Text style={{fontWeight: 'bold', paddingBottom: 10}}>
+                {item.reasonReject || '-'}
               </Text>
 
-              <View style={{height: 120, aspectRatio: 1/1, borderRadius: 8, backgroundColor: Color.disabled}}>
+              <Divider />
+
+              <Text style={{fontWeight: 'bold', paddingBottom: 10}}>
+                PROFILE
+              </Text>
+              <View style={{height: width / 2, aspectRatio: 1, borderRadius: 8, backgroundColor: Color.disabled}}>
                 {userDetail.photoProfile === null ? (
                   <View
                     style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}
@@ -193,7 +236,7 @@ const CardDetail = ({ navigation, route }) => {
                 ) : (
                   <Image
                     source={{uri: userDetail.photoProfile}}
-                    style={{height: 120, width: 120, borderRadius: 8}}
+                    style={{height: '100%', width: '100%', borderRadius: 8}}
                   />
                 )}
               </View>
@@ -214,7 +257,7 @@ const CardDetail = ({ navigation, route }) => {
                   </LabelInput>
                   <EmailRoundedView>
                     <FieldView>
-                      <Text>{item.chapter ? item.chapter.name : '-'}</Text>
+                      <Text>{item.userAddress ? item.userAddress.labelAddress + ' - ' + item.userAddress.provinceName : ''}</Text>
                     </FieldView>
                   </EmailRoundedView>
                 </View>
@@ -285,6 +328,7 @@ const CardDetail = ({ navigation, route }) => {
                   </EmailRoundedView>
                 </View>
               </View>
+
               <View style={{width: '100%'}}>
                 <View
                   style={{
@@ -297,12 +341,12 @@ const CardDetail = ({ navigation, route }) => {
                   }}>
                   <LabelInput>
                     <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>
-                      ALAMAT
+                      Ukuran Kemeja
                     </Text>
                   </LabelInput>
                   <EmailRoundedView>
                     <FieldView>
-                      <Text>{userDetail.address}</Text>
+                      <Text>{item.sizeShirt}</Text>
                     </FieldView>
                   </EmailRoundedView>
                 </View>
@@ -478,110 +522,121 @@ const CardDetail = ({ navigation, route }) => {
         </View>
 
         <Divider />
-      </ScrollView>
-      <View
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: 16,
-          borderTopWidth: 0.5,
-          borderColor: Color.border,
-        }}
-      >
-        {props.type === 'Anggota' ? (
-          <View style={{flexDirection: 'row', width: '100%', height: 45}}>
-            <TextInput
-              placeholder='Input Nomor ID'
-              placeholderTextColor={Color.gray}
-              value={idNumber}
-              onChangeText={val => setIdNumber(val)}
-              style={{
-                color: Color.text,
-                fontSize: 14,
-                fontFamily: 'Inter-Regular',
-                width: '85%',
-                backgroundColor: Color.semiwhite,
-                borderRadius: 4,
-                includeFontPadding: false,
-                paddingLeft: 8,
-              }}
-            />
+      </ScrollView>}
 
-            <View
-              style={{
-                width: '15%',
-                height: '100%',
-                alignItems: 'flex-end',
-              }}
-            >
-              <TouchableOpacity
+      {isAdminPage ?
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 16,
+            borderTopWidth: 0.5,
+            borderColor: Color.border,
+          }}
+        >
+          {props.type === 'Anggota' ? (
+            <View style={{flexDirection: 'row', width: '100%', height: 45}}>
+              <TextInput
+                placeholder='Input Nomor ID'
+                placeholderTextColor={Color.gray}
+                value={idNumber}
+                onChangeText={val => setIdNumber(val)}
                 style={{
-                  height: '100%',
-                  aspectRatio: 1,
-                  borderRadius: 50,
-                  backgroundColor: Color.info,
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  color: Color.text,
+                  fontSize: 14,
+                  fontFamily: 'Inter-Regular',
+                  width: '85%',
+                  backgroundColor: Color.semiwhite,
+                  borderRadius: 4,
+                  includeFontPadding: false,
+                  paddingLeft: 8,
                 }}
-                onPress={() => {
-                  Alert(
-                    'Konfirmasi',
-                    'Apakah Anda yakin akan mengubah data anggota ini?',
-                    () => fetchUpdateMember(),
-                  );
+              />
+
+              <View
+                style={{
+                  width: '15%',
+                  height: '100%',
+                  alignItems: 'flex-end',
                 }}
               >
-                <Ionicons
-                  name="save"
-                  color={Color.theme}
-                  size={16}
-                />
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    height: '100%',
+                    aspectRatio: 1,
+                    borderRadius: 50,
+                    backgroundColor: Color.info,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  onPress={() => {
+                    Alert(
+                      'Konfirmasi',
+                      'Apakah Anda yakin akan mengubah data anggota ini?',
+                      () => fetchUpdateMember(),
+                    );
+                  }}
+                >
+                  <Ionicons
+                    name="save"
+                    color={Color.theme}
+                    size={16}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        ) : (
-          <View
-            style={{
-              flexDirection: 'row',
-              height: 33,
-              justifyContent: 'center',
-            }}>
-            <TouchableOpacity
-              onPress={() => {
-                Alert(
-                  'Terima',
-                  'Apakah Anda yakin akan menerima anggota ini?',
-                  () => fetchJoinCommunityManage(item.id, item.user_id, 1),
-                );
-              }}
+          ) : (
+            <View
               style={{
-                backgroundColor: Color.info,
-                flex: 1,
+                flexDirection: 'row',
+                height: 33,
                 justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: 4,
               }}>
-              <Text color={Color.textInput}>Approve</Text>
-            </TouchableOpacity>
-            {props.type !== 'notAnggota' && <Divider />}
-            {props.type !== 'notAnggota' && (
               <TouchableOpacity
                 onPress={() => {
-                  setModalInputText(true);
+                  Alert(
+                    'Terima',
+                    'Apakah Anda yakin akan menerima anggota ini?',
+                    () => fetchJoinCommunityManage(item.id, item.user_id, 1),
+                  );
                 }}
                 style={{
-                  backgroundColor: Color.error,
+                  backgroundColor: Color.info,
                   flex: 1,
                   justifyContent: 'center',
                   alignItems: 'center',
                   borderRadius: 4,
                 }}>
-                <Text color={Color.textInput}>Reject</Text>
+                <Text color={Color.textInput}>Approve</Text>
               </TouchableOpacity>
-            )}
-          </View>
-        )}
-      </View>
+              {props.type !== 'notAnggota' && <Divider />}
+              {props.type !== 'notAnggota' && (
+                <TouchableOpacity
+                  onPress={() => {
+                    setModalInputText(true);
+                  }}
+                  style={{
+                    backgroundColor: Color.error,
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 4,
+                  }}>
+                  <Text color={Color.textInput}>Reject</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          )}
+        </View>
+        :
+        <Container padding={16}>
+          <Button
+            onPress={() => navigation.navigate('JoinCommunity', { item, prevScreen: 'CardDetail' })}
+          >
+            Edit
+          </Button>
+        </Container>  
+      }
 
       <ModalInputText
         visible={modalInputText}

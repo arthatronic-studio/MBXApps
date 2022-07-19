@@ -14,6 +14,7 @@ import YoutubePlayer from 'react-native-youtube-iframe';
 import { getSizeByRatio } from 'src/utils/get_ratio';
 import { useSelector } from 'react-redux';
 import { analyticMethods } from 'src/utils/analytics';
+import { Divider } from 'src/styled';
 
 const defaultProps = {
   name: 'Live',
@@ -54,23 +55,28 @@ const CardComponentYoutube = ({ item, name }) => {
 
   return (
     <View
-      style={{paddingHorizontal: 0, marginBottom: 16}}
+      style={{marginHorizontal: 16, marginTop: 16,}}
     >
       <View
         style={{
           backgroundColor: Color.border,
-          width: width,
-          aspectRatio: 16/9
+          width: '100%',
+          aspectRatio: 16/9,
+          borderRadius: 8,
+          overflow: 'hidden'
         }}
       >
         <YoutubePlayer
           ref={youtubeRef}
-          width={width}
-          height={getSizeByRatio({ width: width, ratio: 9/16 }).height}
+          width={'100%'}
+          height={getSizeByRatio({ width: width-32, ratio: 9/16 }).height}
           play={playing}
           videoId={item.productName}
           onChangeState={onStateChange}
+          borderRadius={true}
+          webViewStyle={ {opacity:0.99} }
         />
+
       </View>
 
       <TouchableOpacity
@@ -94,32 +100,27 @@ const CardComponentYoutube = ({ item, name }) => {
 
       </TouchableOpacity>
 
+      <Divider height={8}/>
+
       <TouchableOpacity
         onPress={() => {
           navigation.navigate('UserProfileScreen', { userId: item.ownerId })
         }}
-        style={{flexDirection:'row', padding: 8}}
+        style={{flexDirection:'row'}}
       >
-        <Image
-          source={{ uri: item.avatar }}
-          style={{flex: 1, aspectRatio: 1, borderRadius: 50, backgroundColor: Color.border}}
-        />
-
-        <View style={{flex: 9, paddingLeft: 8, justifyContent: 'space-between'}}>
+        <View style={{flex: 9, justifyContent: 'space-between'}}>
           <Text
             align="left"
             type="bold"
             numberOfLines={1}
-            style={{
-              marginBottom: 4
-            }}
+            size={14}
           >
             {item.productDescription}
           </Text>
+          <Divider height={4}/>
           <Text
             align="left"
-            size={12}
-            color={Color.gray}
+            size={10}
             numberOfLines={2}
           >
             {item.fullname}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, Modal, Keyboard, useWindowDimensions, Image } from 'react-native';
+import { View, FlatList, Modal, Keyboard, useWindowDimensions, Image } from 'react-native';
 
 import Scaffold from '@src/components/Scaffold';
 import Text from '@src/components/Text';
@@ -46,6 +46,21 @@ const ModalSelectMap = ({
         latitude: isNaN(parseFloat(extraProps.latitude)) ? initialLatitude : parseFloat(extraProps.latitude),
         longitude: isNaN(parseFloat(extraProps.longitude)) ? initialLongitude : parseFloat(extraProps.longitude),
     });
+    const [showAddress, setShowAddress] = useState(true);
+    
+      const keyboardShowListener = Keyboard.addListener( //for check keyboard
+        'keyboardDidShow',
+        () => {
+            setShowAddress(false);
+        },
+      );
+      const keyboardHideListener = Keyboard.addListener(
+        'keyboardDidHide',
+        () => {
+          setShowAddress(true);
+        },
+    );
+    
     const [collapse, setCollapse] = useState(true);
 
     const [popupProps, showPopup] = usePopup();
@@ -108,6 +123,7 @@ const ModalSelectMap = ({
 
                     setUserData(newUserData);
                     setLocationName(item.name);
+                    setCollapse(false);
                 }}
                 style={{
                     paddingHorizontal: 16,
@@ -129,117 +145,137 @@ const ModalSelectMap = ({
                     </Container>
                     <Divider width={8} />
                     <Container>
-                        <Text align='left' size={12}>{item.name}</Text>
-                        <Text align='left' size={8}>{item.formatted_address}</Text>
+                        <Text align='left' size={14} type='medium'>{item.name}</Text>
+                        <Divider height={4} />
+                        <Text align='left' size={12}>{item.formatted_address}</Text>
                     </Container>
                 </Container>
             </TouchableOpacity>
         )
     }
 
-    return (
-        <Modal
-            visible={visible}
-        >
-            <Scaffold
-                header={<Header title='Pin Lokasi' onPressLeftButton={() => onClose()} />}
-                popupProps={popupProps}
-                isLoading={searchLoading}
-            >
-                <SearchBar
-                    type='input'
-                    value={value}
-                    onChangeText={(val) => setValue(val)}
-                />
-
-                <Divider />
-
-                {searchData.length > 0 && <TouchableOpacity
-                    onPress={() => setCollapse(!collapse)}
-                >
-                    <Text>{collapse ? 'Tutup' : 'Lihat Hasil'}</Text>
-                    <Divider />
-                </TouchableOpacity>}
-
-                {collapse && searchData.length > 0 && <FlatList
+    const renderListLocationSearch = () => {
+       
+        return (
+            <>
+                <FlatList
                     keyExtractor={(item, index) => item.place_id + index.toString()}
                     data={searchData}
                     nestedScrollEnabled
                     keyboardShouldPersistTaps='handled'
                     style={{
-                        width: width,
-                        maxHeight: height / 3,
+                        maxHeight: height / 2.5,
                     }}
                     contentContainerStyle={{
                         paddingTop: 8,
                     }}
                     renderItem={({ item, index }) => renderItem(item, index)}
-                />}
+                />
 
-                <Padding padding={16}>
-                    <Maps
-                        name={locationName}
-                        latitude={userData.latitude}
-                        longitude={userData.longitude}
-                        initLocation={false}
-                        onCallback={(param) => {
-                            console.log('Map', param);
-                            let province = '';
-                            let city = '';
-                            let post = '';
+                <TouchableOpacity
+                    onPress={() => setCollapse(!collapse)}
+                    style={{padding: 16}}
+                >
+                    <Text>{collapse ? 'Tutup' : 'Lihat Hasil'}</Text>
+                </TouchableOpacity>
+            </>
+        )
+    }
 
-                            if (Array.isArray(param.address_components)) {
-                                param.address_components.map((item) => {
-                                    if (item.types.includes('administrative_area_level_1')) {
-                                        province = item.long_name;
-                                    } else if (item.types.includes('administrative_area_level_2')) {
-                                        city = item.long_name;
-                                    } else if (item.types.includes('postal_code')) {
-                                        post = item.long_name;
-                                    }
-                                });
-                            }
+    return (
+      <Modal visible={visible}>
+        <Scaffold
+          header={
+            <Header title="Pin Lokasi" onPressLeftButton={() => onClose()} />
+          }
+          popupProps={popupProps}
+          isLoading={searchLoading}>
+          <SearchBar
+            type="input"
+            value={value}
+            onSubmitEditing={Keyboard.dismiss}
+            onChangeText={val => setValue(val)}
+            textInputProps={{
+              onPressIn: () => {
+                setCollapse(true);
+              },
+            }}
+          />
 
-                            const newUserData = {
-                                ...userData,
-                                longitude: param.longitude,
-                                latitude: param.latitude,
-                                fullAddress: param.formatted_address,
-                                provinceName: province,
-                                cityName: city,
-                                postCode: post,
-                            };
+          <Divider />
 
-                            onSelect(newUserData);
+          <View style={{flex: 1}}>
+            <Maps
+              name={locationName}
+              latitude={userData.latitude}
+              longitude={userData.longitude}
+              initLocation={false}
+              onCallback={param => {
+                console.log('Map', param);
+                let province = '';
+                let city = '';
+                let post = '';
 
-                            setUserData(newUserData);
-                        }}
-                    />
-                </Padding>
+                if (Array.isArray(param.address_components)) {
+                  param.address_components.map(item => {
+                    if (item.types.includes('administrative_area_level_1')) {
+                      province = item.long_name;
+                    } else if (
+                      item.types.includes('administrative_area_level_2')
+                    ) {
+                      city = item.long_name;
+                    } else if (item.types.includes('postal_code')) {
+                      post = item.long_name;
+                    }
+                  });
+                }
 
-                <Padding horizontal={16} top={16}>
-                    <Text>{userData.fullAddress}</Text>
-                    <Divider />
-                    <Button
-                        onPress={() => {
-                            onSelect(userData);
-                            onClose();
-                        }}
-                    >
-                        Terapkan Lokasi
-                    </Button>
-                </Padding>
+                const newUserData = {
+                  ...userData,
+                  longitude: param.longitude,
+                  latitude: param.latitude,
+                  fullAddress: param.formatted_address,
+                  provinceName: province,
+                  cityName: city,
+                  postCode: post,
+                };
 
-                {/* <Padding horizontal={16} top={16}>
-                    <Button
-                        color={Color.secondary}
-                        onPress={() => onClose()}
-                    >
-                        Kembali
-                    </Button>
-                </Padding> */}
-            </Scaffold>
-        </Modal>
+                onSelect(newUserData);
+
+                setUserData(newUserData);
+              }}
+            />
+
+            {collapse && searchData.length > 0 && (
+              <View
+                style={{
+                  width: '100%',
+                  position: 'absolute',
+                  backgroundColor: Color.theme,
+                }}>
+                {renderListLocationSearch()}
+              </View>
+            )}
+          </View>
+
+          <Padding horizontal={16} top={16}>
+            {showAddress ? (
+              <Text>{userData.fullAddress}</Text>
+            ) : (
+              <Text></Text>
+            )}
+
+            <Divider />
+            <Button
+              onPress={() => {
+                onSelect(userData);
+                onClose();
+              }}>
+              Terapkan Lokasi
+            </Button>
+          </Padding>
+        </Scaffold>
+      </Modal>
     );
 };
 

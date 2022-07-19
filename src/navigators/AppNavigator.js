@@ -13,6 +13,9 @@ import CreateEmergencyScreen from '@src/screens/CreateEmergencyScreen';
 import PDFReaderScreen from 'src/screens/PDFReaderScreen';
 import MusicPlayerScreen from 'src/screens/MusicPlayerScreen';
 
+// address
+import ManageAddressScreen from 'src/screens/Address/ManageAddressScreen';
+
 // user
 import LoginScreen from '@src/screens/User/LoginScreen';
 import RegisterScreen from '@src/screens/User/RegisterScreen';
@@ -39,15 +42,18 @@ import ForumScreen from 'src/screens/MainForum/ForumScreen';
 import ForumSearch from 'src/screens/MainForum/ForumSearch';
 import CardDetailForum from 'src/screens/MainForum/CardDetailForum';
 // import CardForumPage from 'src/screens/MainForum/CardForumPage';
+
 // profile
 import ChangeProfile from '@src/screens/MainProfile/ChangeProfile';
 import SettingScreen from '@src/screens/MainProfile/SettingScreen';
+import SyaratdanKetentuan from '@src/screens/MainProfile/SyaratdanKetentuan';
 import ShowAllFromProfile from '@src/screens/MainProfile/ShowAllFromProfile';
 import JoinCommunity from 'src/screens/MainProfile/JoinCommunity';
 import BlockUser from 'src/screens/MainProfile/BlockUser';
 import ReferralCodeScreen from '@src/screens/MainProfile/ReferralCodeScreen';
 import UserProfileScreen from '@src/screens/MainProfile/UserProfileScreen';
 import TermsCondition from 'src/screens/MainProfile/TermCondition';
+import ContentProductSaveScreen from 'src/screens/MainProfile/ContentProductSaveScreen';
 
 // community admin
 import CommunityAdminPage from '@src/screens/MainProfile/CommunityAdmin/CommunityAdminPage';
@@ -103,7 +109,7 @@ import OrderListPerProduct from '@src/screens/MyBooking/OrderListPerProduct';
 // notification
 import NotificationScreen from '@src/screens/Notification/NotificationScreen';
 import NotificationDetail from '@src/screens/Notification/NotificationDetail';
-
+import NotificationAll from '@src/screens/Notification/NotificationAll';
 // content-chat
 import ChatRoomsScreen from '@src/screens/Chat/ChatRoomsScreen';
 import ChatDetailScreen from '@src/screens/Chat/ChatDetailScreen';
@@ -165,6 +171,8 @@ import AlbumMusicDetail from 'src/screens/MediaPlayer/AlbumMusicDetail';
 // Survey
 import SurveyPasarScreen from 'src/screens/Survey/SurveyPasarScreen';
 import SurveyReviewScreen from 'src/screens/Survey/SurveyReviewScreen';
+import SurveyHistoryScreen from 'src/screens/Survey/SurveyHistoryScreen';
+import SurveyDetailHistory from 'src/screens/Survey/SurveyDetailHistory';
 import SurveyFirst from 'src/screens/Survey/SurveyFirst';
 import SurveySecond from 'src/screens/Survey/SurveySecond';
 import SurveyThird from 'src/screens/Survey/SurveyThird';
@@ -208,11 +216,11 @@ import AddProductAuctionSecond from 'src/screens/Lelang/AddProductAuctionSecond'
 import Chat from 'src/screens/Chat/Chat';
 import ChatGroupScreen from 'src/screens/Chat/ChatGroupScreen';
 import CreateGroup from 'src/screens/Chat/CreateGroup';
-import AddInformationGroup from 'src/screens/Chat/AddInformationGroup';
 import GroupDetailScreen from 'src/screens/Chat/GroupDetailScreen';
 import UserGroupDetail from 'src/screens/Chat/UserGroupDetail';
 import AddMember from 'src/screens/Chat/AddMember';
 import ReportArticle from 'src/screens/Posting/News/ReportArticle';
+import ManageGroupScreen from 'src/screens/Chat/ManageGroupScreen';
 
 const { Navigator, Screen } = createStackNavigator();
 const MainPage =
@@ -224,11 +232,11 @@ function MainStackNavigator() {
   return (
     <Navigator
       initialRouteName="SplashScreen"
+      // SurveyPasarScreen
       screenOptions={{
         gestureEnabled: Platform.OS === 'ios',
         headerShown: false
-      }}
-  >
+      }}>
       {/* uncanny */}
       <Screen name="SplashScreen" component={SplashScreen} />
       <Screen name="MainPage" component={MainPage} />
@@ -237,35 +245,34 @@ function MainStackNavigator() {
       <Screen name="CreateEmergencyScreen" component={CreateEmergencyScreen} />
       <Screen name="PDFReaderScreen" component={PDFReaderScreen} />
       <Screen name="MusicPlayerScreen" component={MusicPlayerScreen} />
-
+      {/* address */}
+      <Screen name="ManageAddressScreen" component={ManageAddressScreen} />
       {/* Survey Pasar */}
       <Screen name="SurveyPasarFirst" component={SurveyPasarFirst} />
       <Screen name="SurveyPasarSecond" component={SurveyPasarSecond} />
       <Screen name="SurveyPasarThird" component={SurveyPasarThird} />
-
       {/* Survey Pasar */}
       <Screen name="SurveyTahuTempeFirst" component={SurveyTahuTempeFirst} />
       <Screen name="SurveyTahuTempeSecond" component={SurveyTahuTempeSecond} />
       <Screen name="SurveyTahuTempeThird" component={SurveyTahuTempeThird} />
       <Screen name="SurveyTahuTempeFourth" component={SurveyTahuTempeFourth} />
-
       {/* Auction */}
       <Screen name="CartAuction" component={CartAuction} />
-
       {/* Lelang */}
       <Screen name="Lelang" component={Lelang} />
       <Screen name="DetailLelang" component={DetailLelang} />
       <Screen name="LiveLelangScreen" component={LiveLelangScreen} />
-      <Screen name="DirectOrder" component={DirectOrder}/>
-      <Screen name="JoinLelang" component={JoinLelang}/>
-      <Screen name="AuctionHistory" component={AuctionHistory}/>
-      <Screen name="TestLelang" component={TestLelang}/>
-      <Screen name="AddProductAuction" component={AddProductAuction}/>
-      <Screen name="AddProductAuctionSecond" component={AddProductAuctionSecond}/>
-
+      <Screen name="DirectOrder" component={DirectOrder} />
+      <Screen name="JoinLelang" component={JoinLelang} />
+      <Screen name="AuctionHistory" component={AuctionHistory} />
+      <Screen name="TestLelang" component={TestLelang} />
+      <Screen name="AddProductAuction" component={AddProductAuction} />
+      <Screen
+        name="AddProductAuctionSecond"
+        component={AddProductAuctionSecond}
+      />
       {/* Promo Popup */}
       <Screen name="DetailPromo" component={DetailPromo} />
-
       {/* Ecommerce */}
       <Screen name="MerchScreen" component={MerchScreen} />
       <Screen name="DetailProduct" component={DetailProduct} />
@@ -300,18 +307,16 @@ function MainStackNavigator() {
       <Screen name="EditProduct" component={EditProduct} />
       <Screen name="CardBid" component={CardBid} />
       <Screen name="MyAuction" component={MyAuction} />
-
       {/* <Screen name="PopUpCouponSucces" component={PopUpCouponSucces}/> */}
       <Screen name="DetailCoupon" component={DetailCoupon} />
-      <Screen name='SearchResult' component={SearchResult} />
-      <Screen name='SearchScreen' component={SearchScreen} />
-      <Screen name='PaymentStatus' component={PaymentStatus} />
-      <Screen name='PaymentMethod' component={PaymentMethod} />
-      <Screen name='PaidPaymentStatus' component={PaidPaymentStatus} />
-      <Screen name='SplashCreateShop' component={SplashCreateShop} />
-      <Screen name='CreateShop' component={CreateShop} />
-      <Screen name='IncomingOrder' component={IncomingOrder} />
-
+      <Screen name="SearchResult" component={SearchResult} />
+      <Screen name="SearchScreen" component={SearchScreen} />
+      <Screen name="PaymentStatus" component={PaymentStatus} />
+      <Screen name="PaymentMethod" component={PaymentMethod} />
+      <Screen name="PaidPaymentStatus" component={PaidPaymentStatus} />
+      <Screen name="SplashCreateShop" component={SplashCreateShop} />
+      <Screen name="CreateShop" component={CreateShop} />
+      <Screen name="IncomingOrder" component={IncomingOrder} />
       {/* user */}
       <Screen name="LoginScreen" component={LoginScreen} />
       <Screen name="RegisterScreen" component={RegisterScreen} />
@@ -320,8 +325,8 @@ function MainStackNavigator() {
       {/* topup */}
       <Screen name="TopUpScreen" component={TopUpScreen} />
       {/* content */}
-      <Screen name='VideoScreen' component={VideoScreen} />
-      <Screen name='YoutubeScreen' component={YoutubeScreen} />
+      <Screen name="VideoScreen" component={VideoScreen} />
+      <Screen name="YoutubeScreen" component={YoutubeScreen} />
       {/* Emergency */}
       <Screen name="EmergencyScreen" component={EmergencyScreen} />
       <Screen name="EmergencyDetail" component={EmergencyDetail} />
@@ -346,7 +351,6 @@ function MainStackNavigator() {
       <Screen name="JobDetail" component={JobDetail} />
       {/* Video */}
       <Screen name="VideoDetail" component={VideoDetail} />
-
       {/* screen */}
       <Screen name="Ebook" component={Ebook} />
       <Screen name="CommentListScreen" component={CommentListScreen} />
@@ -357,7 +361,10 @@ function MainStackNavigator() {
       <Screen name="ShowAllFromForum" component={ShowAllFromForum} />
       <Screen name="ForumSegmentScreen" component={ForumSegmentScreen} />
       <Screen name="CreateThreadScreen" component={CreateThreadScreen} />
-      <Screen name='CreateThreadMultipleScreen' component={CreateThreadMultipleScreen} />
+      <Screen
+        name="CreateThreadMultipleScreen"
+        component={CreateThreadMultipleScreen}
+      />
       <Screen name="DetailForumScreen" component={DetailForumScreen} />
       <Screen name="EditThreadScreen" component={EditThreadScreen} />
       <Screen name="ForumScreen" component={ForumScreen} />
@@ -368,12 +375,13 @@ function MainStackNavigator() {
       <Screen name="ChangeProfile" component={ChangeProfile} />
       <Screen name="ShowAllFromProfile" component={ShowAllFromProfile} />
       <Screen name="SettingScreen" component={SettingScreen} />
+      <Screen name="SyaratdanKetentuan" component={SyaratdanKetentuan} />
       <Screen name="JoinCommunity" component={JoinCommunity} />
-      <Screen name='BlockUser' component={BlockUser} />
+      <Screen name="BlockUser" component={BlockUser} />
       <Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />
       <Screen name="TermsCondition" component={TermsCondition} />
+      <Screen name="ContentProductSaveScreen" component={ContentProductSaveScreen} />
       <Screen name="UserProfileScreen" component={UserProfileScreen} />
-
       {/* community admin */}
       <Screen name="CommunityAdminPage" component={CommunityAdminPage} />
       <Screen name="CardDetail" component={CardDetail} />
@@ -389,11 +397,10 @@ function MainStackNavigator() {
       {/* order */}
       {/* <Screen name='OrderListScreen' component={OrderListScreen} options={{ headerShown: true, headerTitle: 'Riwayat Pesanan' }} /> */}
       <Screen name="OrderListPerProduct" component={OrderListPerProduct} />
-
       {/* notification */}
       <Screen name="NotificationScreen" component={NotificationScreen} />
       <Screen name="NotificationDetail" component={NotificationDetail} />
-
+      <Screen name="NotificationAll" component={NotificationAll} />
       {/* content-chat */}
       <Screen name="ChatRoomsScreen" component={ChatRoomsScreen} />
       <Screen name="ChatDetailScreen" component={ChatDetailScreen} />
@@ -402,33 +409,42 @@ function MainStackNavigator() {
       <Screen name="Chat" component={Chat} />
       <Screen name="AddMember" component={AddMember} />
       <Screen name="UserGroupDetail" component={UserGroupDetail} />
-      <Screen name="AddInformationGroup" component={AddInformationGroup} />
       <Screen name="CreateGroup" component={CreateGroup} />
       <Screen name="GroupDetailScreen" component={GroupDetailScreen} />
       <Screen name="ChatGroupScreen" component={ChatGroupScreen} />
-
+      <Screen name="ManageGroupScreen" component={ManageGroupScreen} />
       {/* media player */}
       <Screen name="MediaPlayerScreen" component={MediaPlayerScreen} />
       <Screen name="UploadMusicScreen" component={UploadMusicScreen} />
       <Screen name="UploadVideoScreen" component={UploadVideoScreen} />
-      <Screen name='AlbumMusicDetail' component={AlbumMusicDetail} />
-
+      <Screen name="AlbumMusicDetail" component={AlbumMusicDetail} />
       {/* Survey */}
-      <Screen name='SurveyPasarScreen' component={SurveyPasarScreen} />
-      <Screen name='SurveyReviewScreen' component={SurveyReviewScreen} />
-      <Screen name='SurveyFirst' component={SurveyFirst} />
-      <Screen name='SurveySecond' component={SurveySecond} />
-      <Screen name='SurveyThird' component={SurveyThird} />
-      <Screen name='SurveyFourth' component={SurveyFourth} />
-      {/* Transaction */}
-      <Screen name='TransactionDetail' component={TransactionDetail} />
-      <Screen name='TransactionDetailSucces' component={TransactionDetailSucces}/>
-      <Screen name='TransactionDetailSeller' component={TransactionDetailSeller}/>
+      <Screen name="SurveyPasarScreen" component={SurveyPasarScreen} />
+      <Screen name="SurveyReviewScreen" component={SurveyReviewScreen} />
+      <Screen name="SurveyHistoryScreen" component={SurveyHistoryScreen} />
+      <Screen name="SurveyDetailHistory" component={SurveyDetailHistory} />
+      <Screen name="SurveyFirst" component={SurveyFirst} />
 
+      <Screen name="SurveySecond" component={SurveySecond} />
+      <Screen name="SurveyThird" component={SurveyThird} />
+      <Screen name="SurveyFourth" component={SurveyFourth} />
+      {/* Transaction */}
+      <Screen name="TransactionDetail" component={TransactionDetail} />
+      <Screen
+        name="TransactionDetailSucces"
+        component={TransactionDetailSucces}
+      />
+      <Screen
+        name="TransactionDetailSeller"
+        component={TransactionDetailSeller}
+      />
       {/* gallery */}
-      <Screen name='GalleryScreen' component={GalleryScreen} />
-      <Screen name='GalleryDetailScreen' component={GalleryDetailScreen} />
-      <Screen name='GalleryDetailSliderScreen' component={GalleryDetailSliderScreen} />
+      <Screen name="GalleryScreen" component={GalleryScreen} />
+      <Screen name="GalleryDetailScreen" component={GalleryDetailScreen} />
+      <Screen
+        name="GalleryDetailSliderScreen"
+        component={GalleryDetailSliderScreen}
+      />
     </Navigator>
   );
 }

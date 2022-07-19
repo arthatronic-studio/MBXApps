@@ -29,6 +29,7 @@ import WidgetBgFixIcon from './WidgetBgFixIcon';
 import { accessClient } from 'src/utils/access_client';
 
 const inputs = ['username', 'password'];
+const shouldChangePassword = ['tribes123'];
 
 const LoginScreen = ({navigation, route}) => {
   const [state, changeState] = useState({
@@ -65,7 +66,7 @@ const LoginScreen = ({navigation, route}) => {
   const {register, forgetPassword, loading, error} = useSelector(
     state => state['user.auth'],
   );
-
+  const shouldUpdateProfile = user && !user.firstName && (!user.email || user.email === 'test@mail.com');
   const {Color} = useColor();
   const [popupProps, showPopup] = usePopup();
 
@@ -120,13 +121,22 @@ const LoginScreen = ({navigation, route}) => {
             });
             dispatch({ type: 'USER.CHANGE_PASSWORD', status: false });
           } else {
-            // redirectTo('MainPage');
             showPopup(
               'Berhasil masuk',
               'success',
             );
             setTimeout(() => {
-              setModalTerm(true);
+              if (shouldChangePassword.includes(state.password)) {
+                navigation.navigate('UserChangePassword', {
+                  password: state.password,
+                  canGoBack: false,
+                });
+                dispatch({ type: 'USER.CHANGE_PASSWORD', status: false });
+              } else if (shouldUpdateProfile) {
+                redirectTo('ChangeProfile');
+              } else {
+                setModalTerm(true);
+              }
             }, 1000);
           }
         }

@@ -13,6 +13,7 @@ import {
 import Scaffold from '@src/components/Scaffold';
 import ListContentProduct from 'src/components/Content/ListContentProduct';
 import { accessClient } from 'src/utils/access_client';
+import { useIsFocused } from '@react-navigation/native';
 
 const EmergencyScreen = ({ navigation, route }) => {
     const { title, userProfileId } = route.params;
@@ -23,6 +24,7 @@ const EmergencyScreen = ({ navigation, route }) => {
     const [popupProps, showPopup] = usePopup();
     const [loadingProps, showLoading, hideLoading] = useLoading();
     const { Color } = useColor();
+    const isFocused = useIsFocused();
 
     let canGeneratedContent = accessClient.UserGeneratedContent === 'ALL_USER';
     if (accessClient.UserGeneratedContent === 'ONLY_ADMIN' && user && user.isDirector === 1) canGeneratedContent = true;
@@ -68,11 +70,11 @@ const EmergencyScreen = ({ navigation, route }) => {
             popupProps={popupProps}
             loadingProps={loadingProps}
         >
-          <ListContentProduct
+          {isFocused && <ListContentProduct
             userProfileId={userProfileId}
             productCategory='EMERGENCY'
             name='Help Me'
-          />
+          />}
         </Scaffold>
     )
 }

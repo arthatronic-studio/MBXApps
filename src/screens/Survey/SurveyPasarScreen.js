@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, KeyboardAvoidingView, FlatList, Image, Platform, TouchableOpacity, useWindowDimensions } from 'react-native';
-import { useSelector } from 'react-redux';
+import { View, KeyboardAvoidingView, FlatList, Image, Platform, TouchableOpacity, useWindowDimensions, BackHandler } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
     Text,
     // TouchableOpacity,
@@ -10,7 +10,8 @@ import {
     Scaffold,
     useColor,
     Header,
-    usePopup
+    usePopup,
+    AlertModal
 } from '@src/components';
 import moment from 'moment';
 
@@ -31,44 +32,97 @@ import ModalActionScroll from 'src/components/Modal/ModalActionScroll';
 import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
 import FormInput from 'src/components/FormInput';
 import { KeyboardAwareFlatList } from 'react-native-keyboard-aware-scroll-view';
+import survey_pasar_content_4 from 'src/data/survey_pasar_content_4';
+import survey_pasar_content_5 from 'src/data/survey_pasar_content_5';
+import survey_pasar_content_6 from 'src/data/survey_pasar_content_6';
+import survey_pasar_content_7 from 'src/data/survey_pasar_content_7';
 
 const SurveyPasarScreen = ({ navigation, route }) => {
     const user = useSelector((state) => state['user.auth'].login.user);
+    const surveyPasar = useSelector((state) => state['surveyPasar']);
+    const storeData = surveyPasar ? surveyPasar.data : [];
+    const storeLastHeaderIndex = surveyPasar ? surveyPasar.lastHeaderIndex : 0;
+
     const [loadingProps, showLoading, hideLoading] = useLoading();
     const [popupProps, showPopup] = usePopup();
     const { Color } = useColor();
-    const { width } = useWindowDimensions();
+    const { width, height } = useWindowDimensions();
+    const dispatch = useDispatch();
 
     const flatlistRef = useRef();
 
-    const [currentHeaderIndex, setCurrentHeaderIndex] = useState(0);
+    const [modalBackConfirm, setModalBackConfirm] = useState(false);
+    const [modalSubmitIfNull, setModalSubmitIfNull] = useState(false);
+
+    const [currentHeaderIndex, setCurrentHeaderIndex] = useState(storeLastHeaderIndex);
     const [currentContentIndex, setCurrentContentIndex] = useState(-1);
     const [valueContent, setValueContent] = useState([]);
-
+    const currentContent = valueContent[currentHeaderIndex];
     const itemHeader = survey_pasar_header[currentHeaderIndex];
-    const listContent = [survey_pasar_content_1, survey_pasar_content_2, survey_pasar_content_3];
-    const currentContent = listContent[currentHeaderIndex];
+    const listStaticContent = [survey_pasar_content_1, survey_pasar_content_2, survey_pasar_content_3, survey_pasar_content_4, survey_pasar_content_5, survey_pasar_content_6, survey_pasar_content_7];
 
     useEffect(() => {
         // remap ulang takutnya ada data baru (kl udah dari server)
         let newArr = [];
-        for (const arr of listContent) {
-            let newData = [];
-            for (const item of arr) {
-                newData.push({
-                    code: item.code,
-                    type: item.type,
-                    label: item.label,
-                    value: mappingTypeContent(item),
-                    required: item.required,
-                });
+
+        if (storeData.length > 0) {
+            for (let i = 0; i < listStaticContent.length; i++) {
+                const arr = listStaticContent[i];
+                let newData = [];
+
+                for (let index = 0; index < arr.length; index++) {
+                    let item = arr[index];
+
+                    if (storeData[i] && storeData[i][index] && storeData[i][index].code === item.code) {
+                        item = storeData[i][index];
+                    }
+
+                    newData.push({
+                        ...arr[index], // ambil dari static kecuali status & value
+                        status: item.status,
+                        value: mappingTypeContent(item),
+                    });
+                }
+
+                newArr.push(newData);
             }
-            newArr.push(newData);
         }
+        else {
+            for (const arr of listStaticContent) {
+                let newData = [];
+                for (const item of arr) {
+                    newData.push({
+                        ...item,
+                        value: mappingTypeContent(item),
+                    });
+                }
+                newArr.push(newData);
+            }
+        }
+
         setValueContent(newArr);
+
+        BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+        return () => {
+            BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+        }
     }, []);
 
+    const handleBackPress = () => {
+        onPressLeftButton();
+        return true;
+    }
+
     const mappingTypeContent = (item) => {
+        // kalo udah ada valuenya langsung balikin value tsbt
+        if (item.value) {
+            if (item.type === 'TIME_PICKER') {
+                return new Date(item.value);
+            }
+            return item.value;
+        }
+
         let result = '';
         if (item.multiple) {
             result = [];
@@ -95,18 +149,48 @@ const SurveyPasarScreen = ({ navigation, route }) => {
 
     const onSubmit = () => {
         let errorMessage = '';
+        let promptSubmitIfNull = false;
 
+        // validate required form
         if (valueContent.length > 0) {
             const currentValue = valueContent[currentHeaderIndex];
             for (let i = 0; i < currentValue.length; i++) {
                 const e = currentValue[i];
-                if (e.required && !e.value) {
-                    errorMessage = e.label + ' wajib diisi';
-                    break;
+                const uploadMin = e.validation && e.validation.uploadMin ? e.validation.uploadMin : 0;
+
+                // cek status 1 dan required
+                if ([1].includes(e.status) && e.required) {
+                    if (e.validation && e.validation.promptSubmitIfNull) {
+                        if (e.value && e.value.id === e.validation.valueSubmitIfNull) {
+                            promptSubmitIfNull = true;
+                            break;
+                        } else if (!e.value) {
+                            promptSubmitIfNull = true;
+                            break;
+                        }
+                    }
+                    else if (e.type === 'UPLOAD' && e.value.length < uploadMin) {
+                        errorMessage = e.label + ' diisi minimal ' + uploadMin + ' foto';
+                        break;
+                    }
+                    else if (e.type === 'SELECT_MULTIPLE' && e.value.length === 0) {
+                        errorMessage = e.label + ' wajib diisi';
+                        break;
+                    }
+                    else if (!e.value) {
+                        errorMessage = (e.label ? e.label : e.placeholder) + ' wajib diisi';
+                        break;
+                    }
                 }
             }
         } else {
             errorMessage = 'Harap tunggu';
+        }
+
+        // kalo gak diisi bisa langsung review/submit
+        if (promptSubmitIfNull) {
+            setModalSubmitIfNull(true);
+            return;
         }
 
         if (errorMessage) {
@@ -114,10 +198,14 @@ const SurveyPasarScreen = ({ navigation, route }) => {
         } else {
             if (currentHeaderIndex < (survey_pasar_header.length - 1)) {
                 setCurrentHeaderIndex(currentHeaderIndex + 1);
-                flatlistRef.current.scrollToOffset({ animated: true, offset: 0 });
+                onStoreLastHeaderIndex(currentHeaderIndex + 1);
+                if (flatlistRef.current) {
+                    flatlistRef.current.scrollToOffset({ animated: true, offset: 0 });
+                }
                 return;
             }
 
+            onStoreData(valueContent);
             navigation.navigate('SurveyReviewScreen', { listHeader: survey_pasar_header, valueContent: valueContent });
         }
     }
@@ -125,9 +213,66 @@ const SurveyPasarScreen = ({ navigation, route }) => {
     const onPressLeftButton = () => {
         if (currentHeaderIndex > 0) {
             setCurrentHeaderIndex(currentHeaderIndex - 1);
+            onStoreLastHeaderIndex(currentHeaderIndex - 1);
+            onStoreData(valueContent);
             return;
         }
-        navigation.pop();
+
+        setModalBackConfirm(true);
+    }
+
+    const onStoreLastHeaderIndex = (index) => {
+        dispatch({ type: 'SURVEY_PASAR.SET_LAST_HEADER_INDEX', data: index });
+    }
+
+    const onStoreData = (data) => {
+        dispatch({ type: 'SURVEY_PASAR.SET_DATA', data });
+    }
+
+    const onStoreReset = () => {
+        dispatch({ type: 'SURVEY_PASAR.RESET' });
+    }
+
+    const onSelectedSingleBranch = (val, selectedIndex) => {
+        if (valueContent.length > 0) {
+            let newValues = [...valueContent];
+            newValues[currentHeaderIndex][selectedIndex].value = val;
+
+            //
+            const legacy_code = currentContent[selectedIndex].legacy_code;
+            for (let i = 0; i < legacy_code.length; i++) {
+                const element = legacy_code[i];
+                const find = currentContent.filter((f) => f.code == element)[0];
+                if (find) {
+                    const idxOf = currentContent.indexOf(find);
+                    if (idxOf !== -1) {
+                        newValues[currentHeaderIndex][idxOf].value = '';
+                        currentContent[idxOf].status = 2;
+                    }
+                }
+            }
+            //
+
+            // cek id, kalo id null tetap hide form branching
+            if (val && val.id) {
+                const branching_code = currentContent[selectedIndex].branching_code;
+
+                for (let i = 0; i < branching_code.length; i++) {
+                    const element = branching_code[i];
+                    const find = currentContent.filter((f) => f.code == element)[0];
+                    if (find) {
+                        const idxOf = currentContent.indexOf(find);
+                        if (idxOf !== -1) {
+                            newValues[currentHeaderIndex][idxOf].value = '';
+                            currentContent[idxOf].status = 1;
+                        }
+                    }
+                }
+            }
+
+            setValueContent(newValues);
+            onStoreData(newValues);
+        }
     }
 
     const renderLabel = (item, index) => {
@@ -152,10 +297,12 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                             let newValues = [...valueContent];
                             newValues[currentHeaderIndex][index].value = value;
                             setValueContent(newValues);
+                            onStoreData(newValues);
                         }
                     }}
                     multiline={item.type === 'TEXT_AREA'}
                     prefixText={item.validation ? item.validation.prefixText : ''}
+                    suffixText={item.validation ? item.validation.suffixText : ''}
                 />
             </Container>
         )
@@ -164,7 +311,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
     const [modalSelectMap, setModalSelectMap] = useState(false);
     const renderMapView = (item, index) => {
         return (
-            <View style={{marginBottom: 12}}>
+            <View style={{ marginBottom: 12 }}>
                 <FormSelect
                     type='select'
                     hideErrorHint
@@ -212,6 +359,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                             let newValues = [...valueContent];
                             newValues[currentHeaderIndex][index].value = { fullAddress, latitude, longitude };
                             setValueContent(newValues);
+                            onStoreData(newValues);
                         }
                     }}
                     onClose={() => setModalSelectMap(false)}
@@ -222,62 +370,64 @@ const SurveyPasarScreen = ({ navigation, route }) => {
 
     const [modalImagePicker, setModalImagePicker] = useState(false);
     const renderUploadImage = (item, index) => {
-        let arr = valueContent.length > 0 ? [valueContent[currentHeaderIndex][index].value] : [];
-        if (item.multiple) {
-            arr = valueContent.length > 0 ? valueContent[currentHeaderIndex][index].value : [];
-        }
+        let arr = arr = valueContent.length > 0 ? valueContent[currentHeaderIndex][index].value : [];
+        const uploadLimit = item.validation.uploadLimit;
+        const uploadMin = item.validation.uploadMin;
 
         return (
             <>
                 <Container paddingHorizontal={16}>
                     <Text align='left' size={12} color={Color.secondary}>{item.label}</Text>
                 </Container>
-                {arr.length != 0 && <Row style={{ flexWrap: 'wrap', flex: 1 }}>
-                    {arr.map((val, id) => (
-                        <View
-                            key={id}
-                            style={{
-                                borderWidth: 1,
-                                borderColor: Color.border,
-                                width: (width / 2) - 40,
-                                aspectRatio: 1,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                marginHorizontal: 20,
-                                marginVertical: 12,
-                            }}>
-                            <Image
+                {arr.length > 0 && <Row style={{ flexWrap: 'wrap', flex: 1 }}>
+                    {arr.map((val, id) => {
+                        return (
+                            <View
+                                key={id}
                                 style={{
-                                    width: '100%',
-                                    height: '100%',
-                                    borderRadius: 4,
-                                    alignItems: 'center',
+                                    borderWidth: 1,
+                                    borderColor: Color.border,
+                                    width: (width / 2) - 40,
+                                    aspectRatio: 1,
                                     justifyContent: 'center',
-                                }}
-                                source={{ uri: `data:${val.type};base64,${val.base64}` }}
-                            />
-                            <TouchableOpacity
-                                onPress={() => {
-                                    const newArr = arr;
-                                    newArr.splice(id, 1);
-
-                                    let newValues = [...valueContent];
-                                    newValues[currentHeaderIndex][index].value = arr;
-                                    setValueContent(newValues);
-                                }}
-                                style={{ position: 'absolute', top: 0, right: 2 }}
-                            >
-                                <AntDesign
-                                    name={'close'}
-                                    size={22}
-                                    style={{ color: Color.error, padding: 5 }}
+                                    alignItems: 'center',
+                                    marginHorizontal: 20,
+                                    marginVertical: 12,
+                                }}>
+                                <Image
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        borderRadius: 4,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}
+                                    source={{ uri: val.uri }}
                                 />
-                            </TouchableOpacity>
-                        </View>
-                    ))}
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        const newArr = arr;
+                                        newArr.splice(id, 1);
+
+                                        let newValues = [...valueContent];
+                                        newValues[currentHeaderIndex][index].value = arr;
+                                        setValueContent(newValues);
+                                        onStoreData(newValues);
+                                    }}
+                                    style={{ position: 'absolute', top: 0, right: 2 }}
+                                >
+                                    <AntDesign
+                                        name={'close'}
+                                        size={22}
+                                        style={{ color: Color.error, padding: 5 }}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        )
+                    })}
                 </Row>}
 
-                <TouchableOpacity
+                {arr.length < uploadLimit && <TouchableOpacity
                     onPress={() => {
                         setModalImagePicker(true);
                         setCurrentContentIndex(index);
@@ -303,10 +453,14 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                     <Text style={{ color: Color.secondary, fontSize: 12 }}>
                         {item.placeholder}
                     </Text>
-                </TouchableOpacity>
+                </TouchableOpacity>}
+
+                {item.hint_label !== '' && <Container paddingHorizontal={16}>
+                    <Text size={10} align='left' style={{ marginBottom: 16 }}>{item.hint_label}</Text>
+                </Container>}
 
                 <Container paddingHorizontal={16}>
-                    <Text size={10} align='left' style={{ marginBottom: 20 }}>{item.hint_label}</Text>
+                    <Text size={10} align='left' color={Color.error} style={{ marginBottom: 16 }}>* Minimal upload {uploadMin} Foto</Text>
                 </Container>
             </>
         )
@@ -344,6 +498,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                                                 }
                                                 newValues[currentHeaderIndex][index].value = arr;
                                                 setValueContent(newValues);
+                                                onStoreData(newValues);
                                             }}
                                             style={{
                                                 borderColor: isSelected ? Color.textInput : Color.text,
@@ -379,11 +534,9 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                             <TouchableOpacity
                                 key={id}
                                 onPress={() => {
-                                    let newValues = [...valueContent];
-                                    newValues[currentHeaderIndex][index].value = v;
-                                    setValueContent(newValues);
+                                    onSelectedSingleBranch(v, index);
                                 }}
-                                style={{paddingRight: 16, marginBottom: 8}}
+                                style={{ paddingRight: 16, marginBottom: 8 }}
                             >
                                 <Row align='center'>
                                     <View
@@ -405,26 +558,11 @@ const SurveyPasarScreen = ({ navigation, route }) => {
 
     const [modalSelectBox, setModalSelectBox] = useState(false);
     const [currentData, setCurrentData] = useState([]);
-    const fetchSelectBox = async(item, index) => {
-        let newValues = [...valueContent];
-
+    const [currentExtraData, setCurrentExtraData] = useState([]);
+    const fetchSelectBox = async (item, index) => {
         const valProv = valueContent[currentHeaderIndex].filter((e) => e.code === item.parent_code)[0];
         const valCity = valueContent[currentHeaderIndex].filter((e) => e.code === item.parent_code)[0];
         const valSub = valueContent[currentHeaderIndex].filter((e) => e.code === item.parent_code)[0];
-
-        // legacy
-        const legacy_code = currentContent[index].legacy_code; 
-        for (let i = 0; i < legacy_code.length; i++) {
-            const element = legacy_code[i];
-            const find = currentContent.filter((f) => f.code == element)[0];
-            if (find) {
-                const idxOf = currentContent.indexOf(find);
-                if (idxOf !== -1) {
-                    newValues[currentHeaderIndex][idxOf].value = '';
-                    currentContent[idxOf].status = 2;
-                }
-            }
-        }
 
         if (item.validation.shema === 'queryGetProvince') {
             const result = await fetchShipperGetProvinceList({ countryCode: 228 });
@@ -456,12 +594,9 @@ const SurveyPasarScreen = ({ navigation, route }) => {
     }
     const renderSelecBox = (item, index) => {
         let arrOptions = item.options;
-        if (item.validation && item.validation.fetch) {
-            arrOptions = currentData;
-        }
 
         return (
-            <View style={{marginBottom: 12}}>
+            <View style={{ marginBottom: 12 }}>
                 <FormSelect
                     type='select'
                     hideErrorHint
@@ -469,9 +604,18 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                     value={valueContent.length > 0 && valueContent[currentHeaderIndex][index].value ? valueContent[currentHeaderIndex][index].value.name : ''}
                     placeholder={item.placeholder}
                     onPress={() => {
+                        // pindahan
+                        if (item.validation && item.validation.fetch) {
+                            setCurrentData([]);
+                            fetchSelectBox(item, index);
+                        } else {
+                            setCurrentData(arrOptions);
+                        }
+
+                        const newExtraData = item.validation && Array.isArray(item.validation.extraData) ? item.validation.extraData : [];
+                        setCurrentExtraData(newExtraData);
+
                         setModalSelectBox(true);
-                        setCurrentData([]);
-                        fetchSelectBox(item, index);
                         setCurrentContentIndex(index);
                     }}
                     labelContainerStyle={{
@@ -513,8 +657,9 @@ const SurveyPasarScreen = ({ navigation, route }) => {
         )
     }
 
-    const ContentList = Platform.OS === 'ios' ? FlatList : KeyboardAwareFlatList;
     const ButtonView = Platform.OS === 'ios' ? KeyboardAvoidingView : View;
+
+    console.log('storeData', storeData);
 
     return (
         <Scaffold
@@ -525,15 +670,34 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                     type="regular"
                     centerTitle={false}
                     onPressLeftButton={() => onPressLeftButton()}
+                    actions={
+                        <TouchableOpacity
+                            onPress={() => {
+                                navigation.navigate('SurveyHistoryScreen');
+                            }}
+                            style={{
+                                justifyContent: 'flex-start',
+                                alignItems: 'flex-end',
+                            }}>
+                            <Ionicons
+                                name="refresh-outline"
+                                size={22}
+                                color={Color.text}
+                            />
+                        </TouchableOpacity>
+                    }
                 />
             }
             popupProps={popupProps}
         >
-            <ContentList
+            <FlatList
                 ref={flatlistRef}
                 keyExtractor={(item, index) => item.id.toString() + index.toString}
                 data={currentContent}
                 keyboardShouldPersistTaps='handled'
+                contentContainerStyle={{
+                    paddingBottom: 16,
+                }}
                 ListHeaderComponent={
                     <View style={{ flexDirection: 'row', paddingHorizontal: 16, paddingBottom: 16 }}>
                         <CircularProgress
@@ -582,6 +746,7 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                         }
                     }
                     else if ([2, 4].includes(item.status)) {
+                        console.log('2 4', item);
                         return <View />
                     }
                     else {
@@ -602,29 +767,12 @@ const SurveyPasarScreen = ({ navigation, route }) => {
 
             {/* modal for select box */}
             <ModalActionScroll
-                data={currentData}
                 visible={modalSelectBox && currentContentIndex !== -1}
+                data={currentData}
+                extraData={currentExtraData}
+                name={currentContentIndex !== -1 ? currentContent[currentContentIndex].code : ''}
                 onPress={(val) => {
-                    if (valueContent.length > 0) {
-                        let newValues = [...valueContent];
-                        newValues[currentHeaderIndex][currentContentIndex].value = val;
-
-                        const branching_code = currentContent[currentContentIndex].branching_code;
-                        
-                        for (let i = 0; i < branching_code.length; i++) {
-                            const element = branching_code[i];
-                            const find = currentContent.filter((f) => f.code == element)[0];
-                            if (find) {
-                                const idxOf = currentContent.indexOf(find);
-                                if (idxOf !== -1) {
-                                    newValues[currentHeaderIndex][idxOf].value = '';
-                                    currentContent[idxOf].status = 1;
-                                }
-                            }
-                        }
-                        
-                        setValueContent(newValues);
-                    }
+                    onSelectedSingleBranch(val, currentContentIndex);
                     setModalSelectBox(false);
                     setCurrentContentIndex(-1);
                 }}
@@ -642,19 +790,18 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                     setCurrentContentIndex(-1);
                 }}
                 onSelected={(callback) => {
-                    if (callback.base64 && valueContent.length > 0) {
-                        let arr = valueContent.length > 0 ? [valueContent[currentHeaderIndex][currentContentIndex].value] : [];
-                        if (currentContent[currentContentIndex].multiple) {
-                            arr = valueContent.length > 0 ? valueContent[currentHeaderIndex][currentContentIndex].value : [];
-                        }
-
+                    if (callback.uri && valueContent.length > 0) {
+                        let arr = valueContent.length > 0 ? valueContent[currentHeaderIndex][currentContentIndex].value : [];
                         let newValues = [...valueContent];
                         arr.push({
-                            ...callback,
+                            fileName: callback.fileName,
+                            type: callback.type,
+                            uri: callback.uri,
                             uploadType: 'image',
                         });
                         newValues[currentHeaderIndex][currentContentIndex].value = arr;
                         setValueContent(newValues);
+                        onStoreData(newValues);
                     }
 
                     setModalImagePicker(false);
@@ -668,17 +815,65 @@ const SurveyPasarScreen = ({ navigation, route }) => {
                 open={showDatePicker}
                 date={valueContent[currentHeaderIndex][currentContentIndex].value}
                 mode="time"
-                onConfirm={(value) => {        
-                    console.log(value);            
+                onConfirm={(value) => {
                     setShowDatePicker(false);
                     let newValues = [...valueContent];
                     newValues[currentHeaderIndex][currentContentIndex].value = value;
                     setValueContent(newValues);
+                    onStoreData(newValues);
                 }}
                 onCancel={() => {
                     setShowDatePicker(false);
                 }}
             />}
+
+            <AlertModal
+                visible={modalBackConfirm}
+                showDiscardButton
+                title='Konfirmasi'
+                message='Anda akan keluar dari halaman Survey, Simpan perubahan?'
+                onSubmit={() => {
+                    setModalBackConfirm(false);
+                    onStoreData(valueContent);
+                    navigation.pop();
+                }}
+                onDiscard={() => {
+                    setModalBackConfirm(false);
+                    onStoreReset();
+                    navigation.pop();
+                }}
+                onClose={() => {
+                    setModalBackConfirm(false);
+                }}
+            />
+
+            <AlertModal
+                visible={modalSubmitIfNull}
+                showDiscardButton
+                title='Informasi'
+                message='Jika keberadaan pasar yang tidak ditemukan, Anda bisa langsung me-review survey untuk dikirim. Review Survey Sekarang?'
+                onSubmit={() => {
+                    setModalSubmitIfNull(false);
+                    navigation.navigate('SurveyReviewScreen', {
+                        listHeader: [
+                            survey_pasar_header[0],
+                            survey_pasar_header[1],
+                            survey_pasar_header[2],
+                        ],
+                        valueContent: [
+                            valueContent[0],
+                            valueContent[1],
+                            valueContent[2],
+                        ]
+                    });
+                }}
+                onDiscard={() => {
+                    setModalSubmitIfNull(false);
+                }}
+                onClose={() => {
+                    setModalSubmitIfNull(false);
+                }}
+            />
         </Scaffold>
     )
 }

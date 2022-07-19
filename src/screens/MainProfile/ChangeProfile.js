@@ -15,7 +15,8 @@ import {
   usePopup,
   Loading,
   useColor,
-  Scaffold
+  Scaffold,
+  Header
 } from '@src/components';
 import {
   Button,
@@ -27,6 +28,7 @@ import { usePreviousState } from '@src/hooks';
 import { Divider } from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { redirectTo } from 'src/utils';
 
 const Container = Styled(View)`
   width: 100%;
@@ -121,12 +123,35 @@ export default ({ navigation, route }) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+    return () => {
+        BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+    }
+  }, []);
+
+  const handleBackPress = () => {
+    if (navigation.canGoBack()) {
+      navigation.pop();
+    }
+    return true;
+  }
+
+  useEffect(() => {
     if (isFocused) {
-      if (prevLoading && user && loading === false) {
-        navigation.pop();
+      if (prevLoading && user && loading === false && error === '') {
         showPopup('Data berhasil diubah', 'success');
+
+        setTimeout(() => {
+          if (navigation.canGoBack()) {
+            navigation.pop();
+          } else {
+            redirectTo('MainPage');
+          }
+        }, 2500);
       } else if (error) {
-        // showPopup('Terjadi Kesalaha, silahkan coba kembali', 'error');
+        showPopup('Terjadi Kesalahan, silahkan coba kembali', 'error');
+        // showPopup(error?.message, 'error');
         console.log(JSON.stringify(error), 'error');
       }
     }
@@ -159,7 +184,7 @@ export default ({ navigation, route }) => {
       };
 
       console.log('newUserData', newUserData);
-
+      
       dispatch(updateCurrentUserProfile(newUserData));
     }
   }, [allValid]);
@@ -182,17 +207,26 @@ export default ({ navigation, route }) => {
       if (error) valid = false;
       newErrorState[input] = error;
     }
-
+    
     setErrorData(newErrorState);
     setAllValid(valid);
   }
-
-  console.log(userData, 'ini data');
   
   return (
     <Scaffold
-      headerTitle='Ubah Profil'
       popupProps={popupProps}
+      header={
+        // handle user yg dipaksa update profile
+        <Header 
+          title='Ubah Profil' 
+          showLeftButton={navigation.canGoBack()} 
+          onPressLeftButton={() => {
+            dispatch({ type: 'USER.CLEAR_ERROR' });
+            navigation.goBack();
+            }
+          }
+        />
+      }
     >
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps='handled'
@@ -287,6 +321,7 @@ export default ({ navigation, route }) => {
               value={userData.idCardNumber}
               onBlur={() => isValueError('idCardNumber')}
               style={{color: Color.text}}
+              maxLength={16}
               />
           </EmailRoundedView>
           <ErrorView>
@@ -300,7 +335,7 @@ export default ({ navigation, route }) => {
             <EmailRoundedView>
               <CustomTextInput
                 placeholder=' Masukan nomor punggung '
-                keyboardType='number-pad'
+                keyboardType='default'
                 placeholderTextColor={Color.gray}
                 underlineColorAndroid='transparent'
                 autoCorrect={false}

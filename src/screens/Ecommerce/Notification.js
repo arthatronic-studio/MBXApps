@@ -22,13 +22,10 @@ import {useNavigation} from '@react-navigation/native';
 
 import {
   Text,
-  // TouchableOpacity,
-  Loading,
   useLoading,
   Scaffold,
   Row,
   Col,
-  HeaderBig,
   useColor,
   Header,
   Alert,
@@ -43,7 +40,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
 import moment from 'moment';
 import Ecommerce from '../Ecommerce/Ecommerce';
-import {mutationCancel, queryListOrder} from 'src/lib/query/ecommerce';
+import {mutationCancel, queryListOrder, queryNewListOrder} from 'src/lib/query/ecommerce';
 import {FormatMoney} from 'src/utils';
 
 const itemPerPage = 20;
@@ -66,18 +63,17 @@ const Notification = () => {
     showLoading()
     console.log(user);
     let variables = {
-      page: page,
-      itemPerPage,
       status: undefined,
+      merchantId: undefined,
       userId: user.userId,
     };
     console.log(variables);
-    Client.query({query: queryListOrder, variables})
+    Client.query({query: queryNewListOrder, variables})
       .then(res => {
         hideLoading()
         console.log(res);
-        if (res.data.ecommerceOrderList.length > 0) {
-          setList(listData.concat(res.data.ecommerceOrderList));
+        if (res.data.allOrderList.length > 0) {
+          setList(listData.concat(res.data.allOrderList));
           setPage(page+1)
           // getCancelOrder()
         }
@@ -199,6 +195,9 @@ const Notification = () => {
             <Text align='left' type='bold'>
               {item.items[0].products[0]['name'].length > 58 ? item.items[0].products[0]['name'].substring(0,55)+' ...' : item.items[0].products[0]['name']}
             </Text>
+            <Row>
+              {item.isAuction && <Text size={11} style={{ backgroundColor: Color.theme, borderRadius: 4, paddingVertical: 4, paddingHorizontal: 8, borderColor: Color.primary, borderWidth: 1 }} color={Color.primary} align='left'>Lelang</Text>}
+            </Row>
             {/* <View
               style={{
                 flexDirection: 'row',

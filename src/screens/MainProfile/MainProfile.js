@@ -25,6 +25,7 @@ import {
   useColor,
   Scaffold,
   useLoading,
+  Button,
 } from '@src/components';
 import {redirectTo} from '@src/utils';
 import {shadowStyle} from '@src/styles';
@@ -37,21 +38,35 @@ import Client from '@src/lib/apollo';
 import { queryOrganizationMemberManage } from '@src/lib/query/organization';
 import { getCurrentUserProfile } from 'src/state/actions/user/auth';
 import { accessClient } from 'src/utils/access_client';
+import { fetchCommunityMemberCheck } from 'src/api/community';
+import ModalActions from 'src/components/Modal/ModalActions';
+import Axios from 'axios';
+import { initSocket } from 'src/api-socket/currentSocket';
 
 const MainProfile = ({navigation, route}) => {
+  const currentSocket = initSocket();
+
   const [modalVirtual, setModalVirtual] = useState(false);
   const [modalInputCode, setModalInputCode] = useState(false);
   const [modalCardMember, setModalCardMember] = useState(false);
+  const [modalJoinCommunity, setModalJoinCommunity] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   
   const [responseMemberManage, setResponseMemberManage] = useState({
     data: null,
     success: false,
     message: '',
   });
+  const [memberCheck, setMemberCheck] = useState({
+    status: true,
+    message: '',
+  })
+  const [myRoomIds, setMyRoomIds] = useState([]);
 
   const dispatch = useDispatch();
-  const [loadingProps, showLoading] = useLoading();
+  const [loadingProps, showLoading, hideLoading] = useLoading();
   const user = useSelector(state => state['user.auth'].login.user);
+  const userToken = useSelector(state => state['user.auth'].data);
 
   console.log('user', useSelector(state => state['user.auth']));
 
@@ -59,8 +74,22 @@ const MainProfile = ({navigation, route}) => {
   const {width} = useWindowDimensions();
 
   useEffect(() => {
+    if (refreshing) {
+      setRefreshing(false);
+      dispatch(getCurrentUserProfile());
+    }
+  }, [refreshing]);
+
+  useEffect(() => {
     // hit cuurent user profile
     dispatch(getCurrentUserProfile());
+
+    fetchData();
+
+    currentSocket.emit('list_my_room_ids');
+      currentSocket.on('list_my_room_ids', (res) => {
+        setMyRoomIds(res);
+      });
   }, []);
 
   useEffect(() => {
@@ -68,6 +97,13 @@ const MainProfile = ({navigation, route}) => {
       navigation.setParams({refresh: false});
     }
   }, [route]);
+
+  const fetchData = async() => {
+    const result = await fetchCommunityMemberCheck();
+    if (result.status) {
+      setMemberCheck({ ...memberCheck, ...result.data });
+    }
+  }
 
   const onPressExit = () => {
     Alert('Logout', 'Apakah Anda yakin akan logout?', () => onPressLogout());
@@ -77,6 +113,34 @@ const MainProfile = ({navigation, route}) => {
     dispatch({type: 'ARTICLE.CLEAR_HISTORY'})
     dispatch({type: 'USER.LOGOUT'});
     redirectTo('LoginScreen');
+    currentSocket.disconnect();
+  };
+
+  const sendVerify = async () => {
+
+    try {
+        showLoading()
+        const response = await Axios({
+          baseURL: 'http://dev.api.tribesocial.id:7171/api/resendVerifyEmail/Bearer%20'+userToken.access_token+'/'+user.email,
+          method: 'post',
+          headers: {
+              Accept: 'application/json',
+              Authorization: `${userToken.token_type} ${userToken.access_token}`
+          },
+          timeout: 5000,
+          
+        });
+
+        console.log(response)
+        hideLoading()
+        alert('Send email verify success');
+        setRefreshing(true);
+      } catch (error) {
+        hideLoading()
+        alert('Failed send verify')
+        // alert(error.response.data.message)
+        console.log(error, 'error apicall')
+      }
   };
 
   const fetchOrganizationMemberManage = () => {
@@ -124,36 +188,87 @@ const MainProfile = ({navigation, route}) => {
 
   const menuList = [
     {
+      code: 'pinned_product',
+      title: 'Konten di Pin',
+      badgeTitle: '',
+      show: true,
+      icon: (
+        <Ionicons
+          name="pricetags-outline"
+          size={20}
+          color={Color.text}
+        />
+      ),
+      onPress: () => {
+        navigation.navigate('ContentProductSaveScreen', {
+          title: 'Konten di Pin'
+        });
+      },
+    },
+    {
       code: 'history',
       title: 'Riwayat',
+      badgeTitle: '',
       show: accessClient.MainProfile.showMenuHistory && user && !user.guest,
-      icon: <Ionicons name="receipt-outline" size={20} color={Color.text} style={{}} />,
+      icon: (
+        <Ionicons
+          name="receipt-outline"
+          size={20}
+          color={Color.text}
+          style={{}}
+        />
+      ),
       onPress: () => {},
     },
     {
       code: 'coupon',
       title: 'Kuponku',
+      badgeTitle: '',
       show: accessClient.MainProfile.showMenuCoupon && user && !user.guest,
-      icon: <MaterialCommunityIcons name="ticket-confirmation-outline" size={20} color={Color.text} style={{}} />,
+      icon: (
+        <MaterialCommunityIcons
+          name="ticket-confirmation-outline"
+          size={20}
+          color={Color.text}
+          style={{}}
+        />
+      ),
       onPress: () => {},
     },
     {
       code: 'myshop',
       title: 'Toko Saya',
+      badgeTitle: '',
       show: accessClient.MainProfile.showMenuMyStore && user && !user.guest,
-      icon: <MaterialCommunityIcons name="storefront-outline" size={20} color={Color.text} style={{}} />,
+      icon: (
+        <MaterialCommunityIcons
+          name="storefront-outline"
+          size={20}
+          color={Color.text}
+          style={{}}
+        />
+      ),
       onPress: () => navigation.navigate('MyShopHomepage'),
     },
     {
       code: 'auction',
       title: 'Bid Auction',
+      badgeTitle: '',
       show: accessClient.MainProfile.showMenuBidAuction && user && !user.guest,
-      icon: <MaterialCommunityIcons name="ticket-confirmation-outline" size={20} color={Color.text} style={{}} />,
+      icon: (
+        <MaterialCommunityIcons
+          name="ticket-confirmation-outline"
+          size={20}
+          color={Color.text}
+          style={{}}
+        />
+      ),
       onPress: () => navigation.navigate('Lelang'),
     },
     {
       code: 'change_profile',
       title: 'Ubah Profil',
+      badgeTitle: '',
       show: user && !user.guest,
       icon: <FontAwesome name="edit" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('ChangeProfile'),
@@ -161,34 +276,64 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'setting',
       title: 'Pengaturan',
+      badgeTitle: '',
       show: user && !user.guest,
-      icon: <AntDesign name="setting" size={20} color={Color.text} style={{}} />,
+      icon: (
+        <AntDesign name="setting" size={20} color={Color.text} style={{}} />
+      ),
       onPress: () => navigation.navigate('SettingScreen'),
     },
     {
       code: 'critics_opinion',
       title: 'Kritik & Saran',
+      badgeTitle: '',
       show: true,
       icon: <AntDesign name="carryout" size={20} color={Color.text} style={{}} />,
-      onPress: () => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
+      onPress: () =>
+      accessClient.isKomoto || accessClient.isRRID ?
+        Linking.openURL('mailto:wahyu@komoto.id?subject=Kritik dan saran&Body')
+      :
+        Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
     },
     {
       code: 'survey',
       title: 'Survei',
+      badgeTitle: '',
       show: accessClient.MainProfile.showMenuSurvey,
-      icon: <Ionicons name={"ios-receipt" || "ios-reader"} size={20} color={Color.text} style={{}} />,
-      onPress: () => navigation.navigate('SurveyFirst'),
+      icon: (
+        <Ionicons
+          name={'ios-receipt' || 'ios-reader'}
+          size={20}
+          color={Color.text}
+          style={{}}
+        />
+      ),
+      onPress: () => navigation.navigate('SurveyPasarScreen'),
     },
     {
       code: 'help',
       title: 'Bantuan',
+      badgeTitle: '',
       show: true,
-      icon: <MaterialCommunityIcons name="headphones" size={20} color={Color.text} style={{}} />,
-      onPress: () => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
+      icon: (
+        <MaterialCommunityIcons
+          name="headphones"
+          size={20}
+          color={Color.text}
+          style={{}}
+        />
+      ),
+      onPress: () => {
+        navigation.navigate('ChatUserListScreen', { myRoomIds, screenType: 'help' })
+        // Linking.openURL(
+        //   'mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body',
+        // )
+      },
     },
     // {
     //   code: 'termandcondition',
     //   title: 'Ketentuan Aplikasi',
+    //   badgeTitle: '',
     //   show: true,
     //   icon: <Ionicons name="md-information-circle-outline" size={20} color={Color.text} style={{}} />,
     //   onPress: () => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
@@ -203,20 +348,26 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'join_community',
       title: 'Gabung Komunitas',
-      show: accessClient.MainProfile.showMenuJoinCommunity && user && !user.organizationId,
+      badgeTitle: memberCheck.message,
+      show: !accessClient.isMobility && accessClient.MainProfile.showMenuJoinCommunity,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
-      onPress: () => navigation.navigate('JoinCommunity'),
+      onPress: () => setModalJoinCommunity(true),
     },
     {
       code: 'community_admin',
       title: 'Community Admin',
-      show: accessClient.MainProfile.showMenuCommunityAdmin && user && user.isDirector === 1,
+      badgeTitle: '',
+      show:
+        accessClient.MainProfile.showMenuCommunityAdmin &&
+        user &&
+        user.isDirector === 1,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('CommunityAdminPage'),
     },
     {
       code: 'ref_code',
       title: 'Kode Referal',
+      badgeTitle: '',
       show: false,
       icon: <AntDesign name="user" size={20} color={Color.text} style={{}} />,
       onPress: () => navigation.navigate('ReferralCodeScreen'),
@@ -224,26 +375,46 @@ const MainProfile = ({navigation, route}) => {
     {
       code: 'device_token',
       title: 'Device Token',
-      show: false,
+      badgeTitle: '',
+      show: user && user.isDirector === 1,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
-      onPress: async() => {
+      onPress: async () => {
         const token = await messaging().getToken();
         Clipboard.setString(token);
         Alert('Berhasil disalin', token);
       },
     },
     {
+      code: 'Syarat',
+      title: 'Syarat & Ketentuan',
+      badgeTitle: '',
+      show: user && user.isDirector === 1,
+      icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
+      onPress: () => navigation.navigate('SyaratdanKetentuan'),
+    },
+    {
       code: 'logout',
       title: 'Keluar',
+      badgeTitle: '',
       show: user && !user.guest,
-      icon: <Ionicons name="exit-outline" size={20} color={Color.error} style={{}} />,
+      icon: (
+        <Ionicons
+          name="exit-outline"
+          size={20}
+          color={Color.error}
+          style={{}}
+        />
+      ),
       onPress: () => onPressExit(),
     },
     {
       code: 'login',
       title: 'Masuk',
+      badgeTitle: '',
       show: user && user.guest,
-      icon: <Ionicons name="exit-outline" size={20} color={Color.info} style={{}} />,
+      icon: (
+        <Ionicons name="exit-outline" size={20} color={Color.info} style={{}} />
+      ),
       onPress: () => navigation.navigate('LoginScreen'),
     },
   ];
@@ -381,11 +552,15 @@ const MainProfile = ({navigation, route}) => {
                         }>
                         {user.organizationId
                           ? 'Anggota ' + user.organizationName
-                          : 'Belum Terdaftar'}
+                          : memberCheck.message}
                       </Text>
                     </Text>
                   )}
               </View>
+              {user && !user.isEmailVerify && <TouchableOpacity onPress={() => sendVerify()} style={{ paddingVertical: 10, backgroundColor: Color.primary , borderRadius: 120, justifyContent: 'center', alignItems: 'center', width: 100 }}>
+                  <Text size={12} color='#fff'  type="semibold">Verify Email</Text>
+              </TouchableOpacity>}
+             
 
               {accessClient.MainProfile.showButtonJoinCommunity &&
                 user &&
@@ -553,6 +728,12 @@ const MainProfile = ({navigation, route}) => {
                           }>
                           {item.title}
                         </Text>
+
+                        {item.badgeTitle !== '' &&
+                          <Text size={10} color={Color.primary}>
+                            {item.badgeTitle}
+                          </Text>
+                        }
                       </Col>
                       <Col align="flex-end" size={2} justify="center">
                         <FontAwesome
@@ -590,6 +771,17 @@ const MainProfile = ({navigation, route}) => {
           fetchOrganizationMemberManage(text);
         }}
         errorMessage={responseMemberManage.message}
+      />
+
+      <ModalActions
+        visible={modalJoinCommunity}
+        data={[
+          { id: 1, name: 'Buat Formulir', show: !memberCheck.status, onPress: () => { setModalJoinCommunity(false); navigation.navigate('JoinCommunity'); } },
+          { id: 2, name: 'Lihat Formulir', show: memberCheck.status, onPress: () => { setModalJoinCommunity(false); navigation.navigate('CardDetail') } },
+        ]}
+        onClose={() => {
+          setModalJoinCommunity(false);
+        }}
       />
 
       <Modal

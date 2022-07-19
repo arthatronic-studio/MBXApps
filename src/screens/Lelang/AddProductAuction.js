@@ -22,7 +22,6 @@ import {
   useLoading,
   Scaffold,
   Col,
-  HeaderBig,
   useColor,
   Header,
   Alert,

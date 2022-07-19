@@ -9,13 +9,13 @@ import {Alert} from './Modal/Alert';
 import {accessClient} from 'src/utils/access_client';
 import {queryReportAbuse, queryUserBlock} from '@src/lib/query';
 import Client from '@src/lib/apollo';
+import { fetchProductSave } from 'src/api/productSave';
 
 const defaultProps = {
   isOwner: false,
   item: null,
   nameType: 'PRODUCT',
   moduleType: 'CREATE',
-  useBlockUser: false,
   onClose: () => {},
   editScreen: "EditThreadScreen",
   onDelete: () => {},
@@ -53,8 +53,9 @@ const ModalContentOptions = forwardRef((props, ref) => {
     const variables = {
       referenceId: item.id,
       referenceType: nameType,
-      manageType: moduleType,
-      message: text,
+      referenceName: item.productName,
+      refStatus: item.status,
+      reportMessage: text,
     };
 
     console.log('variables', variables);
@@ -111,7 +112,31 @@ const ModalContentOptions = forwardRef((props, ref) => {
       });
   }
 
+  const onPinProduct = async() => {
+    const result = await fetchProductSave({ productId: item.id });
+    console.log('result save', result);
+    if (result.status) {
+      alert(
+        'Postingan disimpan',
+      );
+    } else {
+      alert(
+        'Postingan batal disimpan',
+      );
+    }
+  }
+
   const dataOptions = [
+    {
+      id: -1,
+      show: isOwner ? false : true,
+      name: 'Pin Postingan',
+      color: Color.text,
+      onPress: () => {
+        combinedRef.current.close();
+        onPinProduct();
+      },
+    },
     {
       id: 0,
       show: isOwner ? true : false,
@@ -155,7 +180,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
     },
   ];
 
-  if (useBlockUser) {
+  if (item && item.ownerId) {
     dataOptions.push({
       id: 2,
       name: 'Block User',

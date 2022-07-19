@@ -14,9 +14,6 @@ const { width } = Dimensions.get('window');
 
 import {
   Text,
-  // TouchableOpacity,
-  Loading, useLoading,
-  HeaderBig,
   Header,
   Scaffold,
   useColor

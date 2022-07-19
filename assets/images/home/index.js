@@ -31,7 +31,8 @@ const iconShare = require('./ShareNetwork.png');
 const iconHeart = require('./Heart.png');
 const iconSurvey = require('./iconSurvey.png');
 const iconBookmarks = require('./BookmarksSimple.png');
-
+const iconStar = require('./star.png');
+const iconverify = require('./verify.png');
 export {
   iconBPJS,
   iconGames,
@@ -65,5 +66,7 @@ export {
   iconShare,
   iconHeart,
   iconSurvey,
-  iconBookmarks
+  iconBookmarks,
+  iconStar,
+  iconverify
 };

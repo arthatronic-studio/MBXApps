@@ -11,6 +11,7 @@ import { fetchVestaBalance } from 'src/api/vestaBalance';
 import { statusBarHeight } from 'src/utils/constants';
 import { Divider } from 'src/styled';
 import { Button } from '../Button';
+import { useIsFocused } from '@react-navigation/native';
 
 const defaultProps = {
 	startPrice: 0,
@@ -38,6 +39,7 @@ const ModalBid = forwardRef((props, ref) => {
 	const [ popupProps, showPopup ] = usePopup();
 	const { Color } = useColor();
 	const { width } = useWindowDimensions();
+	const isFocused = useIsFocused();
 
 	const handlePosition = (position) => {
 		setHandle(position === 'top');
@@ -70,6 +72,7 @@ const ModalBid = forwardRef((props, ref) => {
 				showPopup('Minimal bid adalah Rp 5.000', 'warning');
 			} else {
 				onPress(text);
+				setVestaAmount(vestaAmount-parseInt(text));
 				combinedRef.current.close();
 			}
 		} else {
@@ -179,6 +182,7 @@ const ModalBid = forwardRef((props, ref) => {
 						<Text style={{ color: Color.grayLight }}>Penawaranmu</Text>
 						<Divider height={8} />
 						<FormInput
+							editable={false}
 							placeholder='-'
 							value={text}
 							onChangeText={(val) => {

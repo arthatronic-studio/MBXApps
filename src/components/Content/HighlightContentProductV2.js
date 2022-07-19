@@ -9,8 +9,9 @@ import { Container, Row } from 'src/styled';
 import PostingSkeleton from '../Posting/PostingSkeleton';
 import { useSelector } from 'react-redux';
 import { initialItemState } from 'src/utils/constants';
-import { fetchContentProduct, fetchContentUserProduct } from 'src/api/contentV2';
+import { fetchContentProduct, fetchContentSavedProduct, fetchContentUserProduct } from 'src/api/contentV2';
 import CardContentProduct from '@src/components/Content/CardContentProduct';
+import CardContentProductV2 from './CardContentProductV2';
 
 const propTypes = {
     userProfileId: PropTypes.number,
@@ -22,6 +23,7 @@ const propTypes = {
     orderBy: PropTypes.string,
     refresh: PropTypes.bool,
     horizontal: PropTypes.bool,
+    saved: PropTypes.bool,
     style: PropTypes.object,
     showHeader: PropTypes.bool,
     showEmpty: PropTypes.bool,
@@ -35,6 +37,7 @@ const defaultProps = {
     nav: '',
     refresh: false,
     horizontal: false,
+    saved: false,
     style: {},
     showHeader: true,
     showEmpty: false,
@@ -52,6 +55,7 @@ const HighlightContentProductV2 = (props) => {
         refresh,
         horizontal,
         style,
+        saved,
         showHeader,
         showEmpty,
         orderBy,
@@ -95,7 +99,11 @@ const HighlightContentProductV2 = (props) => {
 
         const result = userProfileId !== null ? 
             await fetchContentUserProduct(variables) :
+            saved === true ?
+            await fetchContentSavedProduct(variables) :
             await fetchContentProduct(variables);
+
+            console.log('result', result);
 
         setItemData({
             ...itemData,
@@ -111,6 +119,8 @@ const HighlightContentProductV2 = (props) => {
         return (
             <PostingHeader
                 title={title}
+                showSeeAllText={false}
+                productCategory={productCategory}
                 onSeeAllPress={() => {
                     navigation.navigate(nav, { title, userProfileId, orderBy, timeStart });
                 }}
@@ -134,7 +144,7 @@ const HighlightContentProductV2 = (props) => {
     if (horizontal) extraProps = {};
 
     const renderCardContent = (item, index) => (
-        <CardContentProduct
+        <CardContentProductV2
             key={index}
             productCategory={productCategory}
             item={item}
@@ -184,10 +194,12 @@ const HighlightContentProductV2 = (props) => {
             : itemData.data.length > 0 ?
                 renderItem()
             :
-                <ScreenEmptyData
-                    message={`${name} belum tersedia`}
-                    style={{width: width - 16, aspectRatio: 16/9}}
-                />
+                <View style={{ width: '100%', aspectRatio: 16/9 }}>
+                    <ScreenEmptyData
+                        message={`${name} belum tersedia`}
+                        style={{width: width - 16, aspectRatio: 16/9}}
+                    />
+                </View>
             }
         </View>
     )

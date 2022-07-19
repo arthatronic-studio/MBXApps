@@ -3,6 +3,7 @@ import {View, Image, ScrollView, Platform, Linking} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
+import Entypo from 'react-native-vector-icons/Entypo';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 
@@ -16,6 +17,8 @@ import { Container, Divider, Padding } from 'src/styled';
 import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 import ModalContentOptions from 'src/components/ModalContentOptions';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
+import { FormatMoney } from 'src/utils';
+import { accessClient } from 'src/utils/access_client';
 
 const EventDetail = ({navigation, route}) => {
   const {Color} = useColor();
@@ -51,10 +54,10 @@ const EventDetail = ({navigation, route}) => {
         console.log(res, 'res add like');
         if (res.data.contentAddLike.id) {
           if (res.data.contentAddLike.status === 1) {
-            showLoading('success', 'Akan datang');
+            showLoading('success', 'Akan Hadir');
             set_im_like(true);
           } else {
-            showLoading('info', 'Berhasil membatalkan');
+            showLoading('info', 'Batal menghadiri');
             set_im_like(false);
           }
         }
@@ -72,6 +75,8 @@ const EventDetail = ({navigation, route}) => {
   if (moment(eventDate).isValid() && moment(eventDate).isAfter(moment())) {
     isPassedEventDate = false;
   }
+
+  const isPayProduct = item && typeof item.price && item.price > 0;
 
   return (
     <Scaffold
@@ -112,14 +117,14 @@ const EventDetail = ({navigation, route}) => {
           <View>
             <Text
               style={{
-                color: Color.info,
+                color: Color.success,
                 fontWeight: 'bold',
                 fontSize: 11,
                 textAlign: 'left',
                 paddingHorizontal: 20,
                 marginBottom: 2,
               }}>
-              OFFICIAL EVENT
+              Community
             </Text>
             <Text
               style={{
@@ -132,7 +137,8 @@ const EventDetail = ({navigation, route}) => {
               {item.productName}
             </Text>
           </View>
-          <View style={{flexDirection: 'row', paddingVertical: 18}}>
+
+          <View style={{flexDirection: 'row', marginTop: 16, marginBottom: 12}}>
             {moment(eventDate).isValid() && <View
               style={{
                 flexDirection: 'row',
@@ -165,18 +171,44 @@ const EventDetail = ({navigation, route}) => {
               <Divider width={8} />
               <Text style={{fontWeight: 'bold'}}>{item.fullname}</Text>
             </View>
+          </View>
+
+          <View style={{flexDirection: 'row', marginBottom: 12}}>
+            {/* hide location */}
             {/* <View
               style={{
-                width: '60%',
+                width: '50%',
                 flexDirection: 'row',
+                paddingHorizontal: 16,
               }}>
               <Entypo
                 name={'location-pin'}
-                size={20}
-                style={{paddingHorizontal: 10}}
+                size={18}
+                color={Color.info}
               />
+              <Divider width={8} />
               <Text style={{fontWeight: 'bold'}}>Jakarta Selatan</Text>
             </View> */}
+
+            <View
+              style={{
+                width: '50%',
+                flexDirection: 'row',
+                paddingHorizontal: 16,
+              }}>
+              <Entypo
+                name={'price-tag'}
+                size={18}
+                color={Color.primary}
+              />
+              <Divider width={8} />
+              {!accessClient.isMobility && <Text
+                style={{fontWeight: 'bold'}}
+                color={isPayProduct ? Color.text : Color.success}
+              >
+                {isPayProduct ? FormatMoney.getFormattedMoney(item.price) : 'Gratis'}
+              </Text>}
+            </View>
           </View>
 
           <Container paddingHorizontal={32} paddingVertical={16}>
@@ -328,7 +360,7 @@ const EventDetail = ({navigation, route}) => {
                   width: '23%',
                   lineHeight: 23,
                 }}>
-                Tribesocial
+                Tribes Social
               </Text>
               <Octions
                 name={'verified'}
@@ -385,7 +417,7 @@ const EventDetail = ({navigation, route}) => {
           <Text
             style={{color: Color.textInput, fontSize: 16, fontWeight: 'bold'}}
           >
-            {im_like ? 'Batalkan' : 'Akan Datang'}
+            {im_like ? 'Batal Hadir' : 'Hadir'}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity

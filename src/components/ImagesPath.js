@@ -241,4 +241,5 @@ export default {
   rrid1: require('../components/Images/rrid/rrid1.png'),
   rrid2: require('../components/Images/rrid/rrid2.png'),
   articleEmpty: require('../components/Images/ArticleEmpty.png'),
+  ranking: require('../components/Images/ranking.png'),
 };

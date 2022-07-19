@@ -117,7 +117,7 @@ const Maps = ({ onCallback, name, latitude, longitude, initLocation }) => {
                         onErrorFindLocation();
                     }
                 } else {
-                    alert('Tidak ditemukan hasil');
+                    // alert('Tidak ditemukan hasil');
                     onErrorFindLocation();
                 }
             })
@@ -223,13 +223,13 @@ const Maps = ({ onCallback, name, latitude, longitude, initLocation }) => {
     return (
         <>
             {loading ?
-            <View style={{width: '100%', aspectRatio: 1, backgroundColor: Color.blueStroke, borderRadius: 8, alignItems: 'center', justifyContent: 'center'}}>
-                <ActivityIndicator color={Color.primaryDark} size='large' />
+            <View style={{width: '100%', aspectRatio: 1, backgroundColor: Color.primary, borderRadius: 8, alignItems: 'center', justifyContent: 'center'}}>
+                <ActivityIndicator color={Color.text} size='large' />
                 <Divider height={4} />
-                <Text size={12} color={Color.primaryDark}>Memuat Peta</Text>
+                <Text size={12}>Memuat Peta</Text>
             </View>
             :    
-            <View style={{width: '100%', aspectRatio: 1, backgroundColor: Color.border, borderRadius: 8}}>
+            <View style={{flex: 1, backgroundColor: Color.border, borderRadius: 8}}>
                 <MapView
                     showsUserLocation
                     provider={PROVIDER_GOOGLE} // remove if not using Google Maps

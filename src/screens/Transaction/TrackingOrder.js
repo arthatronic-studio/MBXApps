@@ -14,11 +14,9 @@ import client from 'src/lib/apollo';
 import Moment from 'moment';
 import {FormatMoney} from 'src/utils';
 import {
-  HeaderBig,
   useColor,
   Scaffold,
   Row,
-  Col,
   Button,
   Submit,
 } from '@src/components';

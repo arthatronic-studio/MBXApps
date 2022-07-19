@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Image, useWindowDimensions, Platform } from 'react-native';
 import {
     Scaffold,
@@ -19,8 +19,8 @@ import FormInput from 'src/components/FormInput';
 import { Divider } from 'src/styled';
 import VideoPlayerIos from 'src/components/VideoPlayerIos';
 import moment from 'moment';
-import { queryContentProductDetail, queryAddLike } from 'src/lib/query';
-import { getSizeByRatio } from 'src/utils/get_ratio';
+import { queryAddLike } from 'src/lib/query';
+import { fetchContentProductDetail } from 'src/api/content';
 
 const Detail = ({ navigation, route }) => {
     const { item } = route.params;
@@ -31,30 +31,15 @@ const Detail = ({ navigation, route }) => {
     const [itemDetail, setItemDetail] = useState(item);
 
     useEffect(() => {
-        fetchContentProductDetail();
+        fetchData();
     }, []);
 
-    const fetchContentProductDetail = () => {
-        const variables = {
-            productCode: item.code,
+    const fetchData = async() => {
+        const result = await fetchContentProductDetail(item.code);
+        console.log('result', result);
+        if (result.status && result.data) {
+            setItemDetail({ ...itemDetail, ...result.data });
         }
-
-        console.log('variabels', variables);
-
-        Client.query({
-            query: queryContentProductDetail,
-            variables,
-        })
-        .then((res) => {
-            console.log('res content detail', res);
-
-            if (res.data.contentProductDetail) {
-                setItemDetail({ ...itemDetail, ...res.data.contentProductDetail });
-            }
-        })
-        .catch((err) => {
-            console.log('err content detail', err);
-        });
     }
 
     const fetchContentAddLike = () => {

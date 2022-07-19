@@ -18,19 +18,23 @@ import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import client from 'src/lib/apollo';
 import { queryMenuList } from 'src/lib/query';
 import { accessClient } from 'src/utils/access_client';
+import { initialItemState } from 'src/utils/constants';
+import ModalMenuHome from 'src/components/Modal/ModalMenuHome';
 
 const defaultProps = {
-  itemPerPage: 8,
   onPress: () => {},
+  showMore: true,
 };
 
-const WidgetMenuHome = ({ itemPerPage, onPress, bgColor }) => {
+const WidgetMenuHome = ({ onPress, showMore }) => {
   const {Color} = useColor();
   const navigation = useNavigation();
   const user = useSelector(state => state['user.auth'].login.user);
   const {width} = useWindowDimensions();
 
   const [listMenuHome, setListMenuHome] = useState([]);
+  const [itemData, setItemData] = useState(initialItemState);
+  const [modalMenuHome, setModalMenuHome] = useState(false);
 
   useEffect(() => {
     fetchMenuList();
@@ -38,8 +42,8 @@ const WidgetMenuHome = ({ itemPerPage, onPress, bgColor }) => {
 
   const fetchMenuList = () => {
     const variables = {
-      page: 1,
-      itemPerPage,
+      page: showMore ? 1 : itemData.page + 1,
+      itemPerPage: showMore ? 8 : 80,
       orderDir: 'ASC',
       type: accessClient.InitialCode,
       category: 'HOME',
@@ -53,9 +57,28 @@ const WidgetMenuHome = ({ itemPerPage, onPress, bgColor }) => {
       console.log('res menu list', res);
 
       const data = res.data.menuList;
+      let newData = [];
+
       if (Array.isArray(data)) {
-        setListMenuHome(data);
+        data.map((e) => {
+          if (e.code === 'SHOW_ALL') {
+            if (showMore) newData.push(e);
+          } else {
+            newData.push(e);
+          }
+        });
       }
+
+      setListMenuHome(newData);
+
+      setItemData({
+        ...itemData,
+        data: itemData.data.concat(newData),
+        page: newData.length > 0 ? itemData.page + 1 : -1,
+        loading: false,
+        loadNext: false,
+        refresh: false,
+      });
     })
     .catch((err) => {
       console.log('err menu list', err);
@@ -89,27 +112,30 @@ const WidgetMenuHome = ({ itemPerPage, onPress, bgColor }) => {
   };
 
   let menuRealLength = 0;
-  listMenuHome.map((e) => e.show ? menuRealLength +=1 : null);
+  const currentData = showMore ? listMenuHome : itemData.data;
+  currentData.map((e) => e.show ? menuRealLength +=1 : null);
   const widthPerMenu = menuRealLength < 4 ? 100 / menuRealLength : 25;
-  const widthIconMenu = (width / (menuRealLength < 4 ? menuRealLength : 4) - 16) / 2.5;
+  const widthIconMenu = (width / (menuRealLength < 4 ? menuRealLength : 4) - 16) / 1.8;
+  const paddingInMenu = 16;
 
-  if (listMenuHome.length === 0) return <View />;
+  if (currentData.length === 0) return <View />;
+
+  const spaceContentSize = 8;
 
   return (
-    <Container padding={16}>
+    <Container paddingHorizontal={0} paddingTop={paddingInMenu}>
       <Container
         style={{
-          ...shadowStyle,
-          backgroundColor: bgColor ? bgColor : Color.textInput,
+          backgroundColor: Color.theme,
           width: '100%',
           borderRadius: 8,
-          paddingHorizontal: 16,
-          paddingTop: 24,
+          // paddingTop: paddingInMenu,
           flexDirection: 'row',
           flexWrap: 'wrap',
+          // ...shadowStyle,
         }}
       >
-        {listMenuHome.map((menu, idx) => {
+        {currentData.map((menu, idx) => {
           if (!menu.show || (Platform.OS === 'ios' && menu.comingsoon)) {
             return null;
           }
@@ -122,7 +148,7 @@ const WidgetMenuHome = ({ itemPerPage, onPress, bgColor }) => {
               onPress={() => {
                 onPress(menu);
 
-                if (menu.nav === '') return;
+                if (!menu.nav) return;
 
                 GALogEvent(menu.name, {
                   id: menu.code,
@@ -132,8 +158,7 @@ const WidgetMenuHome = ({ itemPerPage, onPress, bgColor }) => {
                 });
 
                 if (menu.nav === 'modal') {
-                  // ganti ke modal show menu all
-                  navigation.navigate('MediaPlayerScreen', { title: menu.name, ...menu.params });
+                  setModalMenuHome(true);
                   return;
                 }
 
@@ -142,14 +167,14 @@ const WidgetMenuHome = ({ itemPerPage, onPress, bgColor }) => {
               style={{
                 width: `${widthPerMenu}%`,
                 alignItems: 'center',
-                paddingBottom: 24,
+                marginBottom: paddingInMenu,
               }}
             >
               <View
                 style={{
                   height: widthIconMenu,
                   width: widthIconMenu,
-                  paddingBottom: 6,
+                  paddingBottom: 4,
                 }}
               >
                 <Image
@@ -171,6 +196,13 @@ const WidgetMenuHome = ({ itemPerPage, onPress, bgColor }) => {
           );
         })}
       </Container>
+
+      <ModalMenuHome
+        visible={modalMenuHome}
+        onClose={() => {
+          setModalMenuHome(false);
+        }}
+      />
     </Container>
   );
 };

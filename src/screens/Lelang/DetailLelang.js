@@ -37,6 +37,7 @@ const DetailLelang = ({ navigation, route }) => {
 
   const { item, myAuction } = route.params;
   const { id } = item;
+  console.log('ini product', product);
   
   useEffect(() => {
     const interval = product ?
@@ -140,8 +141,8 @@ const DetailLelang = ({ navigation, route }) => {
               justifyContent: 'center',
               paddingHorizontal: 15,
             }}>
-            <Text numberOfLines={3} size={18} type='bold' align='left'>
-              {detail ? detail.name : "Loading"}
+            <Text numberOfLines={3} size={18} type="bold" align="left">
+              {detail ? detail.name : 'Loading'}
             </Text>
           </View>
           <View
@@ -161,18 +162,33 @@ const DetailLelang = ({ navigation, route }) => {
                 justifyContent: 'center',
               }}>
               <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                <Text size={8} color={Color.textInput}>{isWillCome ? 'Dimulai Dalam' : 'Sisa Waktu'}</Text>
+                <Text size={8} color={Color.textInput}>
+                  {isWillCome ? 'Dimulai Dalam' : 'Sisa Waktu'}
+                </Text>
                 <Text color={Color.textInput} size={12}>
-                  {
-                    yearsLeft > 0 ? `${yearsLeft} Tahun lagi` :
-                    monthsLeft > 0 ? monthsLeft + ' Bulan lagi' :
-                    weeksLeft > 0 ? weeksLeft + ' Minggu lagi' :
-                    daysLeft > 0 ? daysLeft + ' Hari lagi' :
-                    hoursLeft > 0 ? moment.duration(timeLeft, 'seconds').format('HH:mm:ss', { trim: false }) :
-                    minutesLeft > 0 ? moment.duration(timeLeft, 'seconds').format('mm:ss', { trim: false }) :
-                    timeLeft > 0 ? moment.duration(timeLeft, 'seconds').format('ss', { trim: false }) :
-                    isPassed ? 'Waktu habis' : '-'
-                  }
+                  {yearsLeft > 0
+                    ? `${yearsLeft} Tahun lagi`
+                    : monthsLeft > 0
+                    ? monthsLeft + ' Bulan lagi'
+                    : weeksLeft > 0
+                    ? weeksLeft + ' Minggu lagi'
+                    : daysLeft > 0
+                    ? daysLeft + ' Hari lagi'
+                    : hoursLeft > 0
+                    ? moment
+                        .duration(timeLeft, 'seconds')
+                        .format('HH:mm:ss', {trim: false})
+                    : minutesLeft > 0
+                    ? moment
+                        .duration(timeLeft, 'seconds')
+                        .format('mm:ss', {trim: false})
+                    : timeLeft > 0
+                    ? moment
+                        .duration(timeLeft, 'seconds')
+                        .format('ss', {trim: false})
+                    : isPassed
+                    ? 'Waktu habis'
+                    : '-'}
                 </Text>
               </View>
             </View>
@@ -185,28 +201,31 @@ const DetailLelang = ({ navigation, route }) => {
             flexDirection: 'row',
             paddingVertical: 8,
             paddingHorizontal: 16,
-          }}
-        >
+          }}>
           <View
             style={{
               width: '40%',
               justifyContent: 'center',
             }}>
-            <Text align='left' style={{fontSize: 10, color: Color.secondary}}>
-            Harga Tertinggi
+            <Text align="left" style={{fontSize: 10, color: Color.secondary}}>
+              Harga Tertinggi
             </Text>
             <Divider height={1} />
-            <Text size={18} type='bold' align='left'>
-              {product ? FormatMoney.getFormattedMoney(product.buyNowPrice) : "Loading"}
+            <Text size={18} type="bold" align="left">
+              {product
+                ? FormatMoney.getFormattedMoney(product.latestPrice,'') + ' Poin'
+                : 'Loading'}
             </Text>
           </View>
           <View style={{width: '60%', justifyContent: 'center'}}>
-            <Text align='left' style={{fontSize: 10, color: Color.secondary}}>
+            <Text align="left" style={{fontSize: 10, color: Color.secondary}}>
               Harga Buka
             </Text>
             <Divider height={1} />
-            <Text size={14} align='left'>
-              {product ? FormatMoney.getFormattedMoney(product.startPrice) : "Loading"}
+            <Text size={14} align="left">
+              {product
+                ? FormatMoney.getFormattedMoney(product.startPrice,'') + ' Poin'
+                : 'Loading'}
             </Text>
           </View>
         </View>
@@ -224,7 +243,8 @@ const DetailLelang = ({ navigation, route }) => {
               height: 60,
               backgroundColor: Color.semiwhite,
               flexDirection: 'row',
-              borderRadius: 5
+              justifyContent: 'space-between',
+              borderRadius: 5,
             }}>
             <View
               style={{
@@ -232,11 +252,15 @@ const DetailLelang = ({ navigation, route }) => {
                 justifyContent: 'center',
                 paddingHorizontal: 10,
               }}>
-              <Text size={10} color={Color.gray} align='left'>Jenis Barang</Text>
-              <Divider height={1}/>
-              <Text size={11} type='bold' align='left'>{detail ? detail.categoryFreeText : null}</Text>
+              <Text size={10} color={Color.gray} align="left">
+                Jenis Barang
+              </Text>
+              <Divider height={1} />
+              <Text size={11} type="bold" align="left">
+                {detail ? detail.categoryFreeText : null}
+              </Text>
             </View>
-            <View
+            {/* <View
               style={{
                 width: '25%',
                 justifyContent: 'center',
@@ -245,6 +269,20 @@ const DetailLelang = ({ navigation, route }) => {
               <Text size={10} color={Color.gray}>Jumlah</Text>
               <Divider height={1}/>
               <Text size={11} type='bold'>{detail ? detail.stock : "Loading"} Unit</Text>
+            </View> */}
+            <View
+              style={{
+                width: '25%',
+                justifyContent: 'center',
+                paddingHorizontal: 10,
+              }}>
+              <Text size={10} color={Color.gray}>
+                Jam Mulai
+              </Text>
+              <Divider height={1} />
+              <Text size={11} type="bold">
+                {product ? moment(product.dateStart).format('HH:mm') : ''} WIB
+              </Text>
             </View>
             <View
               style={{
@@ -252,60 +290,50 @@ const DetailLelang = ({ navigation, route }) => {
                 justifyContent: 'center',
                 paddingHorizontal: 10,
               }}>
-              <Text size={10} color={Color.gray}>Jam Mulai</Text>
-              <Divider height={1}/>
-              <Text size={11} type='bold'>{product ? moment(product.dateStart).format("HH:mm") : ""} WIB</Text>
-            </View>
-            <View
-              style={{
-                width: '25%',
-                justifyContent: 'center',
-                paddingHorizontal: 10,
-              }}>
-               <Text size={10} color={Color.gray}>Durasi</Text>
-              
-              <Divider height={1}/>
+              <Text size={10} color={Color.gray}>
+                Durasi
+              </Text>
+
+              <Divider height={1} />
               <Text>
-                {product ? moment.duration(product.duration, 'seconds').humanize() : '-'}
+                {product
+                  ? moment.duration(product.duration, 'minutes').humanize()
+                  : '-'}
               </Text>
             </View>
           </View>
         </View>
         {/* Foto Produk */}
-        
+
         <View
-            style={{
-              marginVertical: 10,
-              width: '95%',
-              alignSelf: 'center',
-              aspectRatio: 6/6,
-            }}>
-            <ImageSlider
-              data={image ? image: [detail.imageUrl, detail.imageUrl, detail.imageUrl]}
-            />
-          </View>
+          style={{
+            marginVertical: 10,
+            width: '95%',
+            alignSelf: 'center',
+            aspectRatio: 6 / 6,
+          }}>
+          <ImageSlider
+            data={
+              image
+                ? image
+                : [detail.imageUrl, detail.imageUrl, detail.imageUrl]
+            }
+          />
+        </View>
         {/* Deskripsi */}
         <View
           style={{
             width: '100%',
             height: 20,
             paddingHorizontal: 15,
-          }}
-        >
-          <Text
-            color={Color.gray}
-            align='left'
-            size={10}
-          >
+          }}>
+          <Text color={Color.gray} align="left" size={10}>
             Deskripsi
           </Text>
         </View>
         <View style={{width: '100%', marginTop: 3, paddingHorizontal: 16}}>
-          <Text
-            align='left'
-            lineHeight={20}
-          >
-           {product ? product.description : ""}
+          <Text align="left" lineHeight={20}>
+            {product ? product.description : ''}
           </Text>
         </View>
       </ScrollView>
@@ -332,27 +360,25 @@ const DetailLelang = ({ navigation, route }) => {
             </Text>
           </TouchableOpacity>
         </View>} */}
-        
-        {!myAuction && isOnGoing &&
-          <View>
-            <TouchableOpacity
-              disabled={!product || timeLeft === 0}
-              onPress={() => navigation.navigate('JoinLelang', { item: product })}
-              style={{
-                width: '92%',
-                height: 45,
-                backgroundColor: Color.primary,
-                borderRadius: 30,
-                marginHorizontal: 15,
-                paddingVertical: 10,
-                marginVertical: 10
-              }}>
-              <Text color={Color.textInput} >
-                Ikuti Lelang
-              </Text>
-            </TouchableOpacity>
-          </View>
-        }
+
+      {!myAuction && isOnGoing && (
+        <View>
+          <TouchableOpacity
+            disabled={!product || timeLeft === 0}
+            onPress={() => navigation.navigate('JoinLelang', {item: product})}
+            style={{
+              width: '92%',
+              height: 45,
+              backgroundColor: Color.primary,
+              borderRadius: 30,
+              marginHorizontal: 15,
+              paddingVertical: 10,
+              marginVertical: 10,
+            }}>
+            <Text color={Color.textInput}>Ikuti Lelang</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </Scaffold>
   );
 };

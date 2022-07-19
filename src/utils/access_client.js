@@ -33,6 +33,7 @@ const useDefaultDarkThemeCode = [
 const isTribes = Config.INITIAL_CODE === 'TRIBESASIA';
 const isKomoto = listKomotoFamily.includes(Config.INITIAL_CODE);
 const isRRID = Config.INITIAL_CODE === 'TRIBESXRRID';
+const isMobility = Config.INITIAL_CODE === 'TRIBESXMOBILITY';
 const isSabyan = Config.INITIAL_CODE === 'TRIBESXSABYAN';
 const isGofish = Config.INITIAL_CODE === 'TRIBESXGOFISH';
 const isTeukuZacky = Config.INITIAL_CODE === 'TRIBESXTEUKUZACKY';
@@ -45,6 +46,7 @@ export const accessClient = {
     isTribes,
     isKomoto,
     isRRID,
+    isMobility,
     isSabyan,
     isGofish,
     isTeukuZacky,
@@ -59,7 +61,7 @@ export const accessClient = {
     ColorBgParallax:
         useDefaultDarkThemeCode.includes(Config.INITIAL_CODE) ? 'theme' :
         isSabyan ? 'primary' :
-        'primarySoft',
+        'theme',
     UserGeneratedContent:
         isKomoto ? 'ONLY_MEMBER' :
         isSabyan ? 'ONLY_ADMIN' :
@@ -78,11 +80,9 @@ export const accessClient = {
     MainHome: {
         showMenuHome: isKomoto || isUnitedId ? false : true,
         showWidgetBalance: isKomoto || isSabyan ? false : true,
-        showBannerHeader: isKomoto || isSabyan ? false : true,
         showListAuction: isKomoto || isSabyan ? false : true,
         showListSoonAuction: isKomoto || isSabyan ? false : true,
         showListPromo: isKomoto || isSabyan ? false : true,
-        showListMusicNewer: isKomoto ? false : true,
         showListVideo:
             isKomoto ? false:
             isSabyan ? true : true,
@@ -117,7 +117,9 @@ export const accessClient = {
             isSabyan ? false : false,
         showMenuSurvey:
             isKomoto ? false :
-            isSabyan ? false : true,
+            isSabyan ? false :
+            isSurvey ? true :
+            true,
         showStatusMember:
             isKomoto ? true :
             isSabyan ? false : true,

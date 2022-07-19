@@ -9,8 +9,8 @@ import { Divider } from 'src/styled';
 import {Scaffold, Text, useColor, Header, Row, Col, TouchableOpacity, usePopup, Alert} from '@src/components';
 import ModalBid from 'src/components/Modal/ModalBid';
 import { FormatMoney } from 'src/utils';
-import {currentSocket} from '@src/screens/MainHome/MainHome';
 import moment from 'moment';
+import { initSocket } from 'src/api-socket/currentSocket';
 
 const ButtonView = Styled(View)`
   width: 100%;
@@ -31,6 +31,8 @@ const EnterButton = Styled(TouchableOpacity)`
 
 const JoinLelang = ({navigation, route}) => {
   const { item } = route.params;
+
+  const currentSocket = initSocket();
 
   const [listBidding, setListBidding] = useState([]);
   const [userLastBid, setUserLastBid] = useState(0);
@@ -120,14 +122,16 @@ const JoinLelang = ({navigation, route}) => {
     currentSocket.on('auction-bid-success', (res) => {
       console.log('res bid success', res);
       setListBidding([res.bid, ...listBidding]);
-      setUserLastBid(+res.bid.bid);
       setHighestBid(+res.bid.bid);
+      if(res.bid.userId == user.userId){
+        setUserLastBid(+res.bid.bid);
+      }
       // showPopup('Berhasil', 'success');
     });
 
     currentSocket.on('auction-bid-failed', (res) => {
       console.log('res bid failed', res);
-      showPopup(res, 'error');
+      showPopup("Anda tidak bisa melakukan bid untuk saat ini", 'error');
     });
   }, [listBidding]);
 
@@ -155,7 +159,7 @@ const JoinLelang = ({navigation, route}) => {
     <View
       style={{width: '10%', aspectRatio: 1}}
     >
-      <Image source={item.photoFilename ? { uri: item.photoFilename } : ImagesPath.avatar1} style={{backgroundColor: Color.secondary, width: '100%', height: '100%'}}/>
+      <Image source={item.user.photoProfile ? { uri: item.user.photoProfile } : ImagesPath.avatar1} style={{backgroundColor: Color.secondary, width: '100%', height: '100%'}}/>
     </View>
 
     <Col style={{paddingHorizontal: 10,}}>
@@ -168,6 +172,9 @@ const JoinLelang = ({navigation, route}) => {
       <Text style={{fontSize: 14, fontWeight: 'bold', textAlign: 'right'}}>{FormatMoney.getFormattedMoney(item.bid, '')} Poin</Text>
     </Col>
   </Row>
+
+  // console.log(item.startPrice, "start");
+  // console.log(highestBid, "high");
 
   return (
     <Scaffold
@@ -300,7 +307,7 @@ const JoinLelang = ({navigation, route}) => {
         keyExtractor={item => item.id}
       />
 
-      {isOnGoing && <ButtonView>
+      {isOnGoing && item.bidNominal.length > 0 && <ButtonView>
         <Text size={12}>
           Pasang Tawaran
         </Text>
@@ -313,27 +320,30 @@ const JoinLelang = ({navigation, route}) => {
             alignItems: 'center'
           }}
         >
-          <EnterButton
-            onPress={() => {
-              Alert(
-                'Tawar',
-                `Pasang penawaran untuk harga ${FormatMoney.getFormattedMoney(highestBid + 5000)} ?`,
-                () => onSubmitAuctionBid(highestBid + 5000)
-              );
-            }}
-            style={{
-              flex: 3,
-              backgroundColor: Color.grayLight,
-            }}
-          >
-            <Text>
-              + {FormatMoney.getFormattedMoney(5000)}
-            </Text>
-          </EnterButton>
+          {item.bidNominal.map((val, id) => (
+               <>
+                {id < 2 &&<EnterButton
+                  onPress={() => {
+                    Alert(
+                      'Tawar',
+                      `Pasang penawaran untuk harga ${FormatMoney.getFormattedMoney(highestBid != 0 ? highestBid + val : item.startPrice + val)} ?`,
+                      () => onSubmitAuctionBid(highestBid != 0 ? highestBid + val : item.startPrice + val)
+                    );
+                  }}
+                  style={{
+                    flex: 3,
+                    marginRight: 6,
+                    backgroundColor: Color.grayLight,
+                  }}
+                >
+                  <Text>
+                    + {FormatMoney.getFormattedMoney(val)}
+                  </Text>
+                </EnterButton>}
+              </>
+          ))}
 
-          <Divider width={8} />
-
-          <EnterButton
+          {/* <EnterButton
             onPress={() => {
               Alert(
                 'Tawar',
@@ -351,7 +361,7 @@ const JoinLelang = ({navigation, route}) => {
             </Text>
           </EnterButton>
 
-          <Divider width={8} />
+          <Divider width={8} /> */}
 
           <TouchableOpacity
             style={{
@@ -375,7 +385,7 @@ const JoinLelang = ({navigation, route}) => {
         ref={modalBidRef}
         startPrice={item.startPrice}
         userLastBid={userLastBid}
-        highestBid={highestBid}
+        highestBid={highestBid != 0 ? highestBid : item.startPrice}
         amountData={item.bidNominal}
         onPress={(text) => {
           onSubmitAuctionBid(text);

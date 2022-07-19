@@ -19,8 +19,9 @@ import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Client from '@src/lib/apollo';
 import {queryGetUserOrganizationRef} from '@src/lib/query';
 import { Scaffold } from 'src/components';
-import { currentSocket } from '@src/screens/MainHome/MainHome';
 import { Container } from 'src/styled';
+import { accessClient } from 'src/utils/access_client';
+import { initSocket } from 'src/api-socket/currentSocket';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -32,7 +33,6 @@ const BottomSection = Styled(View)`
 
 const BoxInput = Styled(View)`
   width: 100%;
-  backgroundColor: #FFFFFF;
   padding: 4px 16px 4px 16px;
   borderRadius: 32px;
   borderWidth: 0.5px;
@@ -59,6 +59,10 @@ const itemPerPage = 100;
 
 const ChatUserListScreen = ({navigation, route}) => {
   const { params } = route;
+  const useHelpScreen = typeof params.screenType !== 'undefined' && params.screenType == 'help';
+  console.log('useHelpScreen', useHelpScreen);
+
+  const currentSocket = initSocket();
 
   const [itemData, setItemData] = useState({
     data: [],
@@ -111,7 +115,10 @@ const ChatUserListScreen = ({navigation, route}) => {
   const fetchSearchNameMember = () => {
     setFilterLoading(true);
 
-    const variables = { name: search };
+    const variables = {
+      name: search,
+      initialCode: accessClient.InitialCode,
+    };
 
     Client.query({
       query: queryGetUserOrganizationRef,
@@ -143,7 +150,12 @@ const ChatUserListScreen = ({navigation, route}) => {
     const variables = {
       page: itemData.page + 1,
       limit: itemPerPage,
+      initialCode: accessClient.InitialCode,
     };
+
+    if (useHelpScreen) {
+      variables.isAdmin = true;
+    }
 
     console.log('var', variables);
 
@@ -218,6 +230,7 @@ const ChatUserListScreen = ({navigation, route}) => {
         navigation.navigate('ChatDetailScreen', {
           roomId: res,
           roomName: item.firstName,
+          isDirector: item.isDirector === 1,
           selected: [item],
           targetIds: [item.userId]
         });
@@ -233,7 +246,7 @@ const ChatUserListScreen = ({navigation, route}) => {
       isLoading={filterLoading}
       header={
         <Header
-          title="Buat Room Chat"
+          title={useHelpScreen ? "Bantuan" : "Buat Room Chat"}
           // actions={
           //   selected.length > 0 ? (
           //     <TouchableOpacity
@@ -262,7 +275,7 @@ const ChatUserListScreen = ({navigation, route}) => {
         <BoxInput style={{backgroundColor: Color.textInput, borderColor: Color.border}}>
           <TextInputNumber
             name="text"
-            placeholder='Cari anggota'
+            placeholder={useHelpScreen ? 'Cari Admin' : 'Cari anggota'}
             placeholderTextColor={Color.placeholder}
             returnKeyType="done"
             returnKeyLabel="Done"
@@ -278,7 +291,7 @@ const ChatUserListScreen = ({navigation, route}) => {
             }}
           />
           <CircleSend style={{backgroundColor: Color.primary}} onPress={() => {}}>
-            <Ionicons name='search' size={16} color={Color.text} />
+            <Ionicons name='search' size={16} color={Color.textButtonInline} />
           </CircleSend>
         </BoxInput>
       </BottomSection>
@@ -341,6 +354,7 @@ const ChatUserListScreen = ({navigation, route}) => {
           // }
 
           const isAdmin = item.isDirector === 1;
+          const idNumber = accessClient.isKomoto && item.idNumber ? ' - ' + item.idNumber : '';
 
           return (
             <TouchableOpacity
@@ -376,7 +390,7 @@ const ChatUserListScreen = ({navigation, route}) => {
                     justifyContent: 'space-around',
                   }}>
                   <Text size={12} type="semibold" numberOfLines={1}>
-                    {item.firstName} {item.lastName} {isAdmin && <MaterialIcons name='verified' color={Color.info} />}
+                    {item.firstName} {item.lastName}{idNumber} {isAdmin && <MaterialIcons name='verified' color={Color.info} />}
                   </Text>
                   {/* <Text size={10}>Available</Text> */}
                 </View>

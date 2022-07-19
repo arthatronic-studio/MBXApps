@@ -5,10 +5,11 @@ import { Col, Scaffold, Text, TouchableOpacity, useColor } from '@src/components
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 import CardChatEcommerce from './CardChatEcommerce';
 import { useIsFocused } from '@react-navigation/native';
-import { currentSocket } from '@src/screens/MainHome/MainHome';
-
+import { initSocket } from 'src/api-socket/currentSocket';
 
 const ChatEcommerceSeller = ({ navigation, route }) => {
+	const currentSocket = initSocket();
+	
 	const { Color } = useColor();
 	const [roomSellers, setRoomSellers] = useState([]);
 

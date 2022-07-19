@@ -26,7 +26,7 @@ const CardComponentVideo = ({ item, name, horizontal }) => {
   const user = useSelector(state => state['user.auth'].login.user);
 
   return (
-    <View style={{width: width - (horizontal ? 16 : 0), paddingHorizontal: 0, marginBottom: 16}}>
+    <View style={{width: width - (horizontal ? 16 : 0), paddingHorizontal: 0, marginTop: 16,}}>
       <TouchableOpacity
         style={{ width: '100%' }}
         onPress={() => {
@@ -57,7 +57,7 @@ const CardComponentVideo = ({ item, name, horizontal }) => {
         onPress={() => {
           navigation.navigate('UserProfileScreen', { userId: item.ownerId })
         }}
-        style={{flexDirection:'row', padding: 8}}
+        style={{flexDirection:'row', paddingTop: 8, paddingHorizontal: 8}}
       >
         <Image
           source={{ uri: item.avatar }}

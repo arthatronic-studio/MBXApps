@@ -16,9 +16,7 @@ import {
   Scaffold,
   Row,
   Col,
-  HeaderBig,
   useColor,
-  Header,
 } from '@src/components';
 import {TouchableOpacity} from '@src/components/Button';
 import ListForum from '@src/screens/MainForum/ListForum';
@@ -141,7 +139,7 @@ const CartAuction = ({navigation, route}) => {
                         borderWidth: 1,
                       }}>
                       <Text size={10} color="#76AE0B">
-                        {val.status}
+                        {val.statusLabel}
                       </Text>
                     </View>
                   </Col>

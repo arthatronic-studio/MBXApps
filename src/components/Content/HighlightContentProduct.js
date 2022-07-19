@@ -72,7 +72,11 @@ const HighlightContentProduct = (props) => {
     const fetchData = async() => {
         let variables = {
             page: 1,
-            itemPerPage: userProfileId !== null || productCategory === 'YOUTUBE_VIDEO' ? 1 : 2,
+            itemPerPage:
+                userProfileId !== null || productCategory === 'YOUTUBE_VIDEO' ? 1 :
+                productCategory === 'NEARBY_PLACE' ? 4 :
+                productCategory === 'POSTING' ? 3 :
+                2,
         }
         if (productCategory) {
             variables.productCategory = productCategory;
@@ -102,6 +106,7 @@ const HighlightContentProduct = (props) => {
                 onSeeAllPress={() => {
                     navigation.navigate(nav, { title, userProfileId });
                 }}
+                productCategory={productCategory}
             />
         )
     }
@@ -118,33 +123,45 @@ const HighlightContentProduct = (props) => {
     }
 
     let extraProps = { numColumns: 1 };
-    // if (productCategory === 'NEARBY_PLACE') extraProps.numColumns = 2;
     if (horizontal) extraProps = {};
+    if (productCategory === 'NEARBY_PLACE') extraProps.numColumns = 2;
 
-    const renderCardContent = (item, index) => (
+    const renderCardContent = (item, index, isHorizontal) => (
         <CardContentProduct
             key={index}
             productCategory={productCategory}
             item={item}
-            horizontal={horizontal}
+            horizontal={isHorizontal}
             { ...extraProps }
         />
     )
 
     const renderItem = () => {
         if (horizontal) {
+            if (typeof extraProps.numColumns !== 'undefined' && extraProps.numColumns === 2) {
+                return (
+                    <View
+                        style={{flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 8, ...style}}
+                    >
+                        {itemData.data.map((item, index) =>
+                            renderCardContent(item, index, false)
+                        )}
+                    </View>
+                )
+            }
+
             return (
                 <ScrollView
                     horizontal={horizontal}
                     showsHorizontalScrollIndicator={false}
                 >
-                    <Row
-                        style={{flexWrap: 'wrap', paddingHorizontal: 8, ...style}}
+                    <View
+                        style={{flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 8, ...style}}
                     >
                         {itemData.data.map((item, index) =>
-                            renderCardContent(item, index)
+                            renderCardContent(item, index, true)
                         )}
-                    </Row>
+                    </View>
                 </ScrollView>
             )
         }
@@ -154,7 +171,7 @@ const HighlightContentProduct = (props) => {
                 key={index}
                 style={{paddingHorizontal: 8, ...style}}
             >
-                {renderCardContent(item, index)}
+                {renderCardContent(item, index, false)}
             </Container>
         )
     }
@@ -164,7 +181,12 @@ const HighlightContentProduct = (props) => {
     }
 
     return (
-        <View style={{paddingBottom: 8}}>
+        <View
+            style={{
+                paddingTop: 8,
+                paddingBottom: ['POSTING', 'NEARBY_PLACE'].includes(productCategory) ? 16 : 8
+            }}
+        >
             {showHeader && renderHeader()}
 
             {itemData.loading ?
@@ -172,10 +194,12 @@ const HighlightContentProduct = (props) => {
             : itemData.data.length > 0 ?
                 renderItem()
             :
-                <ScreenEmptyData
-                    message={`${name} belum tersedia`}
-                    style={{width: width - 16, aspectRatio: 16/9}}
-                />
+                <View style={{ width: '100%', aspectRatio: 16/9 }}>
+                    <ScreenEmptyData
+                        message={`${name} belum tersedia`}
+                        style={{width: width - 16, aspectRatio: 16/9}}
+                    />
+                </View>
             }
         </View>
     )

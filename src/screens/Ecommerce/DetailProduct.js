@@ -17,8 +17,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import ImageSlider from '../../components/ImageSlider';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { currentSocket } from '@src/screens/MainHome/MainHome';
 import TouchableDebounce from 'src/components/Button/TouchableDebounce';
+import { initSocket } from 'src/api-socket/currentSocket';
 
 import {
   Text,
@@ -27,9 +27,7 @@ import {
   Scaffold,
   Row,
   Col,
-  HeaderBig,
   useColor,
-  Header,
 } from '@src/components';
 import TopBar from './TopTab';
 import ImagesPath from 'src/components/ImagesPath';
@@ -42,6 +40,8 @@ import {Container, Divider} from 'src/styled';
 import { async } from 'validate.js';
 
 const DetailProduct = ({navigation, route}) => {
+  const currentSocket = initSocket();
+  
   const [detail, setDetail] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [liked, setLike] = useState(false);

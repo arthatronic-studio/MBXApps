@@ -14,9 +14,6 @@ import {
 	
 	useLoading,
 	Scaffold,
-	Row,
-	Col,
-	HeaderBig,
 	useColor,
 	Header
 } from '@src/components';
@@ -78,7 +75,7 @@ const SurveyFirst = ({navigation}) => {
                 value: dataState[index]
             })
         });
-        console.log(tempData)
+        console.log('tempData', tempData);
         // const sha1Hash = await RNSimpleCrypto.SHA.sha1("SURVEY-20220229" + moment().format('YYYY-MM-DD HH:mm:ss') + '123!!qweQWE');
         // const dataq = {
         //     "auth": sha1Hash, 

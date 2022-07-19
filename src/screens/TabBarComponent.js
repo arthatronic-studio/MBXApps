@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { View, SafeAreaView, Image, Animated, useWindowDimensions, LayoutAnimation, UIManager, } from 'react-native';
+import { View, SafeAreaView, Image, Animated, useWindowDimensions, LayoutAnimation, UIManager, Platform, } from 'react-native';
 import { TouchableOpacity as TouchableOpacityAbs } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -61,13 +61,13 @@ const TabBarComponent = (props) => {
     const getIconMenu = (iconType, iconName, isRouteActive) => {
         switch(iconType) {
             case 'MaterialIcons':
-                return <MaterialIcons name={iconName} size={32} color={isRouteActive ? Color.textInput : Color.secondary} />
+                return <MaterialIcons name={iconName} size={32} color={isRouteActive ? Color.textButtonInline : Color.text} />
             case 'AntDesign':
-                return <AntDesign name={iconName} size={28} color={isRouteActive ? Color.textInput : Color.secondary} />
+                return <AntDesign name={iconName} size={28} color={isRouteActive ? Color.textButtonInline : Color.text} />
             case 'Ionicons': 
-                return <Ionicons name={iconName} size={28} color={isRouteActive ? Color.textInput : Color.secondary} />
+                return <Ionicons name={iconName} size={28} color={isRouteActive ? Color.textButtonInline : Color.text} />
             case 'Entypo':
-                return <Entypo name={iconName} size={30} color={isRouteActive ? Color.textInput : Color.secondary} />
+                return <Entypo name={iconName} size={30} color={isRouteActive ? Color.textButtonInline : Color.text} />
         }
     }
 
@@ -111,9 +111,12 @@ const TabBarComponent = (props) => {
                                 paddingBottom: isIphoneNotch() ? 0 : 16,
                             }}
                             onPress={() => {
-                                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-                                UIManager.setLayoutAnimationEnabledExperimental &&
-                                    UIManager.setLayoutAnimationEnabledExperimental(true);
+                                if (Platform.OS === 'ios') {
+                                    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                                } else {
+                                    // UIManager.setLayoutAnimationEnabledExperimental &&
+                                    //     UIManager.setLayoutAnimationEnabledExperimental(true);
+                                }
 
                                 if (route.nav === 'MainHome') {
                                     redirectTo(route.nav);
@@ -143,7 +146,7 @@ const TabBarComponent = (props) => {
                                     style={{
                                         fontSize: 14,
                                         fontWeight: '500',
-                                        color: isRouteActive ? Color.textInput : Color.secondary,
+                                        color: isRouteActive ? Color.textButtonInline : Color.text,
                                         opacity: route.ref,
                                     }}
                                 >

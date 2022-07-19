@@ -287,6 +287,61 @@ export const queryListOrder = gql`
   }
 `;
 
+export const queryNewListOrder = gql`
+  query(
+    $status: EcommerceOrderStatusEnum
+    $userId: Int
+    $merchantId: Int
+  ) {
+    allOrderList(
+     status: $status
+     userId: $userId
+     merchantId: $merchantId
+   ) {
+    id
+    userId
+    orderNumber
+    expiredDate
+    status
+    shippingAddressId
+    shippingIsCod
+    shippingRateId
+    shippingUseInsurance
+    shipperOrderNumber
+    isAuction
+    start_time
+    end_time
+    paymentId
+    shippingCost
+    totalProductPrice
+    totalPrice
+    checkoutAt
+    createdAt
+    updatedAt
+    deletedAt
+    items {
+      id
+      name
+      alamat
+      profileImg
+      products {
+        id
+        name
+        price
+        stock
+        imageUrl
+        status
+      }
+    }
+    address{
+      penerimaName
+      noTelp
+    }
+    
+  }
+  }
+`;
+
 export const queryAddCart = gql`
   mutation ecommerceCartAdd($productId: Int!, $quantity: Int!) {
     ecommerceCartAdd(productId: $productId, quantity: $quantity) {

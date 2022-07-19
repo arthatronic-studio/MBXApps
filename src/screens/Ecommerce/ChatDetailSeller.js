@@ -23,9 +23,9 @@ import Styled from 'styled-components';
 import ChatEcommerceHeader from './ChatEcommerceHeader';
 import {useSelector} from 'react-redux';
 import Footer from 'src/components/Footer';
-import {currentSocket} from '@src/screens/MainHome/MainHome';
 import {FormatMoney} from '@src/utils';
 import moment from 'moment';
+import { initSocket } from 'src/api-socket/currentSocket';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -61,6 +61,9 @@ const CircleSend = Styled(TouchableOpacity)`
 `;
 const ChatDetailSeller = ({navigation, route}) => {
   const {id, merchant, users} = route.params;
+
+  const currentSocket = initSocket();
+  
   const {Color} = useColor();
   const [roomId, setRoomId] = useState(id);
   const user = useSelector(state => state['user.auth'].login.user);

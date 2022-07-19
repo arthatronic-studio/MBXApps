@@ -13,8 +13,9 @@ import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import { Circle } from '@src/styled';
 
 import { Header, ModalListAction, Scaffold, Alert } from 'src/components';
-import {currentSocket} from '@src/screens/MainHome/MainHome';
+import ModalActions from 'src/components/Modal/ModalActions';
 import { statusBarHeight } from 'src/utils/constants';
+import { initSocket } from 'src/api-socket/currentSocket';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -28,7 +29,6 @@ const BottomSection = Styled(View)`
 
 const BoxInput = Styled(View)`
   width: 100%;
-  backgroundColor: #FFFFFF;
   padding: 8px 16px 8px 16px;
   borderRadius: 32px;
   borderWidth: 0.5px;
@@ -60,13 +60,16 @@ const initialDataRooms = {
 }
 
 const ChatGroupScreen = ({ navigation, route }) => {
+    const currentSocket = initSocket();
+
     // state
     const [dataRooms, setDataRooms] = useState(initialDataRooms);
     const [myRoomIds, setMyRoomIds] = useState([]);
     const [selectedRoom, setSelectedRoom] = useState();
     const [isLoading, setIsLoading] = useState(false);
 
-    const modalListActionRef = useRef();
+    // const modalListActionRef = useRef();
+    const [showModal, setShowModal] = useState(false);
 
     // selector
     const user = useSelector(
@@ -202,7 +205,7 @@ const ChatGroupScreen = ({ navigation, route }) => {
                         </CircleSend>
                     </BoxInput>
                 </BottomSection> */}
-          <View
+          {/* <View
             style={{
               backgroundColor: Color.theme,
               width: '100%',
@@ -231,7 +234,7 @@ const ChatGroupScreen = ({ navigation, route }) => {
                 position: 'absolute',
               }}
             />
-          </View>
+          </View> */}
           <FlatList
             keyExtractor={(item, index) =>
               item.id.toString() + index.toString()
@@ -250,6 +253,14 @@ const ChatGroupScreen = ({ navigation, route }) => {
 
               // console.log('item', item);
 
+              let lastChatName = '';
+              if (Array.isArray(item.member) && item.last_chat && item.last_chat.user_id) {
+                const f = item.member.filter((e) => e.user_id == item.last_chat.user_id)[0];
+                if (f) {
+                  lastChatName = f.first_name;
+                }
+              }
+
               return (
                 <TouchableOpacity
                   onPress={() => {
@@ -264,12 +275,16 @@ const ChatGroupScreen = ({ navigation, route }) => {
                       roomName: getTitle(item.member),
                       nameGroup: item['room_detail'].name,
                       imageGroup: item['room_detail'].image,
+                      description : item['room_detail'].description,
                       selected: item.member,
+                      is_admin_room: item.is_admin_room,
+                      is_owner_room: item.is_owner_room,
                       targetIds,
                     });
                   }}
                   onLongPress={() => {
-                    modalListActionRef.current.open();
+                    // modalListActionRef.current.open();
+                    setShowModal(!showModal);
                     setSelectedRoom(item);
                   }}
                   style={{
@@ -314,20 +329,12 @@ const ChatGroupScreen = ({ navigation, route }) => {
                         flexDirection: 'row',
                         alignItems: 'center',
                       }}>
-                      <View
-                        style={{
-                          marginRight: 5,
-                          borderRadius: 20,
-                          width: 8,
-                          height: 8,
-                          backgroundColor: Color.green,
-                        }}
-                      />
                       <Text type="semibold" numberOfLines={1}>
                         {item['room_detail'].name}
                       </Text>
                     </View>
                     <Text
+                      align='left'
                       type={
                         isUserTyping(item.typing)
                           ? 'italic'
@@ -342,7 +349,7 @@ const ChatGroupScreen = ({ navigation, route }) => {
                       style={{opacity: 0.6}}>
                       {item.last_chat &&
                       item.last_chat.user_id == user.userId ? (
-                        "User's Name :   "
+                        lastChatName ? `${lastChatName}: ` : ''
                       ) : (
                         <Ionicons name={'md-checkmark-done-sharp'} size={12} />
                       )}
@@ -381,8 +388,9 @@ const ChatGroupScreen = ({ navigation, route }) => {
             }}
           />
 
-          <ModalListAction
-            ref={modalListActionRef}
+          <ModalActions
+            // ref={modalListActionRef}
+            visible={showModal}
             onClose={() => {
               setSelectedRoom();
             }}
@@ -395,7 +403,8 @@ const ChatGroupScreen = ({ navigation, route }) => {
                   Alert('Hapus', 'Apakah Anda yakin menghapus konten?', () => {
                     fetchRoomsDelete();
                   });
-                  modalListActionRef.current.close();
+                  setShowModal(!showModal);
+                  // modalListActionRef.current.close();
                   setSelectedRoom();
                 },
               },

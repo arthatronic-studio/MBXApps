@@ -18,7 +18,6 @@ import {
   Scaffold,
   Row,
   Col,
-  HeaderBig,
   useColor,
   Header,
 } from '@src/components';
@@ -134,7 +133,7 @@ const CheckoutScreen = ({ navigation, route }) => {
         destinationAddressId: address.userAddressIdDestination,
         type: 'BOOKING',
         auctionProductId: item.tempData[0]['auctionId'],
-        winningPrice: item.tempData[0]['total']
+        winningPrice: item.tempData[0]['latestBidPrice']
       };
   
       console.log(variables, 'variables');
@@ -584,7 +583,7 @@ const CheckoutScreen = ({ navigation, route }) => {
             Total Harga
           </Text>
           <Text type="bold" color={Color.text} size={18}>
-            {FormatMoney.getFormattedMoney(
+            {FormatMoney.getFormattedMoney(item['tempData'][0]['auctionId'] ? shippment.price ? shippment.price : 0 :
               totalProduct(item.tempData) +
                 (shippment.price ? shippment.price : 0),
             )}

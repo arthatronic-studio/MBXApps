@@ -28,7 +28,6 @@ export {default as PopupEbook} from './PopupEbook';
 // import ScreenIndicator from './Modal/ScreenIndicator';
 // import Color, { darkModeColors, lightModeColors, useColor } from './Color';
 // import Header from './Header';
-// import HeaderBig from './HeaderBig';
 // import Text from './Text';
 // import Scaffold from './Scaffold';
 
@@ -39,7 +38,6 @@ export {default as PopupEbook} from './PopupEbook';
 //     Color, useColor, darkModeColors, lightModeColors,
 //     Grid, Row, Col,
 //     Header,
-//     HeaderBig,
 //     Loading, useLoading,
 //     ModalListAction,
 //     Popup, usePopup,

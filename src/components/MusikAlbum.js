@@ -15,6 +15,9 @@ import client from 'src/lib/apollo';
 import { queryContentProduct } from 'src/lib/query';
 import { accessClient } from 'src/utils/access_client';
 import { trackPlayerPlay } from 'src/utils/track-player-play';
+import Config from 'react-native-config';
+import PostingHeader from './Posting/PostingHeader';
+import { Container } from 'src/styled';
 
 const defaultProps = {
   
@@ -39,9 +42,8 @@ const MusikAlbum = ({ }) => {
     const variables = {
       page: 1,
       itemPerPage: 50,
-      productType: accessClient.InitialCode,
+      productType: Config.PRODUCT_TYPE,
       productCategory: "ALBUM_MUSIC",
-      // productSubCategory: "NEW"
     };
 
     client.query({
@@ -49,7 +51,7 @@ const MusikAlbum = ({ }) => {
       variables,
     })
     .then((res) => {
-      console.log('res', res);
+      console.log('res musik album', res);
 
       let newData = [];
       if (res.data.contentProduct) {
@@ -64,7 +66,7 @@ const MusikAlbum = ({ }) => {
       });
     })
     .catch((err) => {
-      console.log('err', err);
+      console.log('err musik album', err);
 
       setList({
         ...list,
@@ -88,8 +90,8 @@ const MusikAlbum = ({ }) => {
         <ImageBackground
           source={{ uri: item.image }}
           style={{
-            width: width / 1.7,
-            height: width / 1.7,
+            width: width / 2,
+            height: width / 2,
           }}
           imageStyle={{
             borderRadius: 16,
@@ -117,32 +119,27 @@ const MusikAlbum = ({ }) => {
   if (list.data.length === 0) return <View />;
 
   return (
-    <View>
-      <View>
-        <Text
-          align='left'
-          type='bold'
-          style={{
-            paddingHorizontal: 16,
-            marginTop: 8,
-            marginBottom: 4,
-          }}
-        >
-          Album
-        </Text>
-      </View>
+    <Container paddingVertical={12}>
+      <PostingHeader
+        productCategory='ALBUM_MUSIC'
+        title='Album Populer'
+        showSeeAllText={false}
+      />
+
       <FlatList
         data={list.data}
         renderItem={renderItem}
         keyExtractor={(item, index) => item.id + index.toString()}
         horizontal
         showsHorizontalScrollIndicator={false}
+        style={{
+          marginTop: 8
+        }}
         contentContainerStyle={{
           paddingHorizontal: 8,
-          paddingVertical: 8,
         }}
       />
-    </View>
+    </Container>
   );
 };
 

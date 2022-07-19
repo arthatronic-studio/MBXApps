@@ -12,7 +12,7 @@ import {
   Text,
   useColor,
 } from '@src/components';
-import { Divider } from 'src/styled';
+import { Container, Divider } from 'src/styled';
 import { useNavigation } from '@react-navigation/native';
 import { queryGetAuction } from 'src/lib/query/auction';
 import { FormatMoney } from 'src/utils';
@@ -24,6 +24,7 @@ import { initialItemState } from 'src/utils/constants';
 import ScreenIndicator from '../Modal/ScreenIndicator';
 import Moment from 'moment';
 import CardHighlightLelang from './CardHighlightLelang';
+import { imageEmptyAuction } from 'assets/images';
 
 const propTypes = {
   title: PropTypes.string,
@@ -48,20 +49,29 @@ const HighlightLelang = ({ title, nav, prodStatus }) => {
   }, []);
 
   const fetchListProduct = () => {
-    const variables = {
-      type: "HOMEPAGE",
-      status: prodStatus,
-      page: 1,
-      limit: 4,
-    };
+    let variables = {};
+    if(prodStatus === 'WILLCOME'){
+      variables = {
+        type: "HOMEPAGE",
+        status: prodStatus,
+        page: 1,
+        limit: 4,
+      };
+    }else{
+      variables = {
+        type: "HOMEPAGE",
+        page: 1,
+        limit: 4,
+      };
+    }
 
-    console.log('variables', variables);
+    // console.log('variables', variables);
 
     Client.query({
       query: queryGetAuction,
       variables,
     }).then(res => {
-      console.log('aku adalah', res.data.auctionProduct);
+      // console.log('aku adalah', res.data.auctionProduct);
 
       let newData = [];
       if (Array.isArray(res.data.auctionProduct) && res.data.auctionProduct.length > 0) {
@@ -170,7 +180,7 @@ const HighlightLelang = ({ title, nav, prodStatus }) => {
   );
 
   return (
-    <View style={{paddingTop: 32}}>
+    <Container paddingVertical={8}>
       <PostingHeader
         title={title}
         onSeeAllPress={() => navigation.navigate(nav, { title, prodStatus })}
@@ -187,10 +197,10 @@ const HighlightLelang = ({ title, nav, prodStatus }) => {
           })}
         </View> :
         <View style={{ width: '100%', aspectRatio: 16/9 }}>
-          <ScreenEmptyData message='Lelang belum tersedia' />
+          <ScreenEmptyData message='Lelang belum tersedia' imageAsset={imageEmptyAuction} />
         </View>
       }
-    </View>
+    </Container>
   )
 };
 

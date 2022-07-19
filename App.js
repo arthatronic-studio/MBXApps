@@ -17,6 +17,8 @@ import { trackPlayerInit } from '@src/utils/track-player-init';
 import ModalNetInfo from '@src/components/ModalNetInfo';
 import { requestTrackingPermission } from 'react-native-tracking-transparency';
 import linking from 'src/navigators/linking';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import { accessClient } from 'src/utils/access_client';
 
 export let navigationRef = createRef();
 
@@ -71,13 +73,7 @@ const App = () => {
       }
 
       function onNotification(data) {
-        const { messageId, title, body } = data;
-        // console.log('=== notif ===', notif);
-        localPushNotification.showNotification(
-          messageId,
-          title,
-          body
-        );
+        localPushNotification.showNotification(data);
       }
 
       function onOpenNotification(notif) {
@@ -88,11 +84,12 @@ const App = () => {
         console.log('=== A new FCM message arrived! ===', remoteMessage);
 
         if (remoteMessage) {
-          console.log('=== remoteMessage ===', remoteMessage);
           const data = {
             messageId: remoteMessage.messageId,
-            title: Platform.OS === 'ios' ? remoteMessage.data.notification.title : remoteMessage.notification.title,
-            body: Platform.OS === 'ios' ? remoteMessage.data.notification.body : remoteMessage.notification.body,
+            title: remoteMessage.notification.title,
+            body: remoteMessage.notification.body,
+            channelId: Platform.OS === 'ios' ? '' : remoteMessage.notification.android.channelId,
+            soundName: Platform.OS === 'ios' ? remoteMessage.notification.sound : remoteMessage.notification.android.sound,
           };
 
           onNotification(data);
@@ -104,6 +101,15 @@ const App = () => {
         localPushNotification.unregister();
       }
   }, []);
+
+  useEffect(() => {
+    PushNotificationIOS.addEventListener('notification', onRemoteNotification);
+  });
+
+  const onRemoteNotification = (notification) => {
+    const actionIdentifier = notification.getActionIdentifier();
+    console.log('=== notification ios ===', notification);
+  };
 
   const requestLocationPermission = async () => {
     const isGranted = await geoLocationPermission();
@@ -188,7 +194,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <View style={{flex: 1, backgroundColor: Color.theme}}>
+        <View style={{flex: 1, backgroundColor: accessClient.Theme === 'dark' ? '#000000' : '#FFFFFF'}}>
           <NavigationContainer
             linking={linking}
             ref={navigationRef}

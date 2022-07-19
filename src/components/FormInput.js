@@ -27,6 +27,7 @@ const propTypes = {
     prefixIcon: PropTypes.node,
     prefixText: PropTypes.string,
     suffixIcon: PropTypes.node,
+    suffixText: PropTypes.string,
     textinputProps: PropTypes.object,
 };
 
@@ -45,6 +46,7 @@ const defaultProps = {
     prefixIcon: null,
     prefixText: '',
     suffixIcon: null,
+    suffixText: '',
     multiline: false,
     editable: true,
     format: '', // currency
@@ -53,7 +55,7 @@ const defaultProps = {
 };
 
 const FormInput = forwardRef((props, ref) => {
-    const { label, placeholder, onChangeText, value, onBlur, returnKeyType, onSubmitEditing, keyboardType, error, hideErrorHint, secureTextEntry, prefixIcon, prefixText, suffixIcon, multiline, editable, format, style, textinputProps } = props;
+    const { label, placeholder, onChangeText, value, onBlur, returnKeyType, onSubmitEditing, keyboardType, error, hideErrorHint, secureTextEntry, prefixIcon, prefixText, suffixIcon, suffixText, multiline, editable, format, style, textinputProps } = props;
 
     const { Color } = useColor();
 
@@ -135,7 +137,7 @@ const FormInput = forwardRef((props, ref) => {
                                     underlineColorAndroid='transparent'
                                     autoCorrect={false}
                                     onChangeText={(val) => onChangeText(val)}
-                                    selectionColor={Color.text}
+                                    selectionColor={Color.placeholder}
                                     value={value}
                                     onBlur={() => onBlur()}
                                     returnKeyType={returnKeyType}
@@ -143,6 +145,7 @@ const FormInput = forwardRef((props, ref) => {
                                     blurOnSubmit={false}
                                     keyboardType={keyboardType}
                                     autoCapitalize={secureTextEntry ? 'none' : undefined}
+                                    keyboardAppearance={Color.colorDominant}
                                     style={{
                                         // width: '100%',
                                         // height: '100%',
@@ -164,6 +167,9 @@ const FormInput = forwardRef((props, ref) => {
                                     editable={editable}
                                     {...textinputProps}
                                 />
+                                {suffixText !== '' && <Container paddingRight={8}>
+                                    <Text type='medium'>{suffixText}</Text>
+                                </Container>}
                             </Row>
                         }
                     </View>

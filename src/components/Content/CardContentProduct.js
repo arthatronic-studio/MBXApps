@@ -28,7 +28,13 @@ import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { useSelector } from 'react-redux';
 import CardComponentYoutube from './CardComponentYoutube';
 import CardComponentVideo from './CardComponentVideo';
-import { async } from 'validate.js';
+import CardComponentEmergency from './CardComponentEmergency';
+import CardComponentArticle from './CardComponentArticle';
+import CardComponentEvent from './CardComponentEvent';
+import CardComponentJobs from './CardComponentJobs';
+import CardComponentPlace from './CardComponentPlace';
+import CardForumVertical from '@src/screens/MainForum/CardForumVertical';
+import { fetchContentProductDetail } from 'src/api/content';
 
 const defaultProps = {
     productCategory: '',
@@ -88,6 +94,11 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
         setTrigger(true);
     }
 
+    const onPressCard = async() => {
+        const result = await fetchContentProductDetail(item.code);
+        console.log('result', result);
+    }
+
     const renderCardEmergency = () => {
         return (
             <View
@@ -107,7 +118,8 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
                         GALogEvent('Tempat', {
                             id: item.id,
                             product_name: item.productName,
-                            user_id: user.userId,
+                            user_id: user.
+                                Id,
                             method: analyticMethods.view,
                           });
                     }}
@@ -471,13 +483,33 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
         )
     }
 
-    if (productCategory === 'EMERGENCY') return renderCardEmergency();
-    else if (productCategory === 'ARTIKEL') return renderCardArticle();
-    else if (productCategory === 'EVENT') return renderCardEvent();
-    else if (productCategory === 'JOBS') return renderCardJobs();
-    else if (productCategory === 'NEARBY_PLACE') return renderCardPlace();
+    const props = { productCategory, item, numColumns, onPress, horizontal, style };
+
+    // if (productCategory === 'EMERGENCY') return renderCardEmergency();
+    // else if (productCategory === 'POSTING') return renderCardArticle();
+    // else if (productCategory === 'EVENT') return renderCardEvent();
+    // else if (productCategory === 'JOBS') return renderCardJobs();
+    // else if (productCategory === 'NEARBY_PLACE') return renderCardPlace();
+    if (productCategory === 'EMERGENCY') return <CardComponentEmergency onPress={() => onPressCard()} { ...props } />;
+    else if (productCategory === 'POSTING') return <CardComponentArticle onPress={() => onPressCard()} { ...props } />;
+    else if (productCategory === 'EVENT') return <CardComponentEvent onPress={() => onPressCard()} { ...props } />;
+    else if (productCategory === 'JOBS') return <CardComponentJobs onPress={() => onPressCard()} { ...props } />;
+    else if (productCategory === 'NEARBY_PLACE') return <CardComponentPlace onPress={() => onPressCard()} { ...props } />;
     else if (productCategory === 'YOUTUBE_VIDEO') return <CardComponentYoutube item={item} />;
     else if (productCategory === 'NEWEST_VIDEO') return <CardComponentVideo item={item} />;
+    else if (productCategory === 'FORUM') return (
+        <Container paddingHorizontal={8}>
+            <CardForumVertical
+                item={item}
+                onPress={(item) => {
+                    onPressCard();
+                    navigation.navigate('DetailForumScreen', { item });
+                }}
+            />
+        </Container>
+
+    );
+    
     return <Text>Not Set</Text>;
 }
 

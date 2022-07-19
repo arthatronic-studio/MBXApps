@@ -32,7 +32,7 @@ import ImagesPath from 'src/components/ImagesPath';
 import {Container, Divider} from 'src/styled';
 import {ScrollView} from 'react-native-gesture-handler';
 import TopTabShop from './TopTabShop';
-import {queryListOrder} from 'src/lib/query/ecommerce';
+import {queryListOrder, queryNewListOrder} from 'src/lib/query/ecommerce';
 import CardOrder from './CardOrder';
 
 function BelumDibayar({data, getData}) {
@@ -673,18 +673,18 @@ const IncomingOrder = ({route, navigation}) => {
   const {height} = useWindowDimensions();
 
   const getOrder = async type => {
+    setData()
     let variables = {
-      page: 1,
-      itemPerPage: 10,
       status: type,
+      userId: undefined,
       merchantId: route.params.item.id,
     };
 
-    await Client.query({query: queryListOrder, variables})
+    await Client.query({query: queryNewListOrder, variables})
       .then(res => {
         console.log(res, 'incoming order')
-        if (res.data.ecommerceOrderList) {
-          setData(res.data.ecommerceOrderList);
+        if (res.data.allOrderList) {
+          setData(res.data.allOrderList);
           setLoadingIncoming(false);
         }
       })

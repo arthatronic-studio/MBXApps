@@ -2,8 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, FlatList, ScrollView,TextInput, Image, Pressable,useWindowDimensions, AppState } from 'react-native';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 import Moment from 'moment';
-import {ModalListAction } from 'src/components';
+
+import { Alert, ModalListAction } from 'src/components';
+import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
 import { useSelector } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Text from '@src/components/Text';
@@ -20,8 +23,9 @@ import {
 import Client from '@src/lib/apollo';
 import { queryContentChatRoomManage, queryContentChatMessage } from '@src/lib/query';
 import { Divider } from 'src/styled';
-import { currentSocket } from '@src/screens/MainHome/MainHome';
-
+import {launchImageLibrary} from 'react-native-image-picker';
+import { initSocket } from 'src/api-socket/currentSocket';
+import { fetchContentChatRoomManage } from 'src/api/chat/chat';
 
 const BottomSection = Styled(View)`
   width: 100%;
@@ -54,17 +58,23 @@ const CircleSend = Styled(TouchableOpacity)`
 `;
 
 const GroupDetailScreen = ({ navigation, route }) => {
+    const currentSocket = initSocket();
 
     const modalListActionRef = useRef();
-    const [showSection, setShowSection] = useState(true)
+    const [showSection, setShowSection] = useState(true);
+  
     // params
     const { params } = route;
+    const { is_admin_room, is_owner_room } = route.params;
     console.log(params,'ini parasm')
     // selector
     const user = useSelector(
         state => state['user.auth'].login.user
     )
 
+    //Image
+  const [modalImagePicker, setModalImagePicker] = useState(false);
+  
     // state
     const [textComment, setTextComment] = useState('');
     const [isTyping, setIsTyping] = useState(false);
@@ -87,13 +97,56 @@ const GroupDetailScreen = ({ navigation, route }) => {
     const { width } = useWindowDimensions();
     const { Color } = useColor();
 
+    const onLeave = async() => {
+      let userIds = [user.userId];
+  
+      const variables = {
+        method: 'UPDATE',
+        roomId: parseInt(params.roomId),
+        userId: userIds,
+        userManage: 'DELETE',
+      };
+  
+      console.log('variables', variables);
+  
+      const result = await fetchContentChatRoomManage(variables);
+      console.log('result', result);
+      if (result.status) {
+        navigation.navigate('Chat');
+      }
+    }
+
+    const onCreateRoom = async() => {
+      let userId = [user.userId];
+
+      params.selected.map((e) => {
+          userId.push(e.userId);
+      });
+
+      const variables = {
+        method: 'INSERT',
+        type: params.selected.length > 1 ? 'GROUP' : 'PERSONAL',
+        userId,
+      };
+
+      console.log(variables);
+
+      const result = await fetchContentChatRoomManage(variables);
+      console.log(result);
+
+      if (result.status && result.data.contentChatRoomManage) {
+        setRoomId(result.data.contentChatRoomManage.id);
+        onSendChat(result.data.contentChatRoomManage.id);
+      }
+    }
+
     const GroupHeader = () => {
       return (
         <Pressable
           onPress={() => {
-                  navigation.navigate('UserGroupDetail', {
-                    params,
-                  });
+            navigation.navigate('UserGroupDetail', {
+              ...params,
+            });
           }}
           style={{
             width: '100%',
@@ -103,12 +156,18 @@ const GroupDetailScreen = ({ navigation, route }) => {
             justifyContent: 'center',
           }}>
           <Row style={{alignItems: 'center', justifyContent: 'center'}}>
-            <AntDesign
+            <TouchableOpacity
               onPress={() => navigation.goBack()}
-              name={'arrowleft'}
-              size={20}
-              style={{marginHorizontal: 10}}
-            />
+              style={{height: '100%', justifyContent: 'center'}}
+            >
+              <Fontisto
+                name='angle-left'
+                size={18}
+                style={{marginHorizontal: 16}}
+                color={Color.text}
+              />
+            </TouchableOpacity>
+
             <Image
               source={{uri: params.imageGroup}}
               style={{
@@ -133,16 +192,19 @@ const GroupDetailScreen = ({ navigation, route }) => {
                   textAlign: 'center',
                 }}></Text>
             </Col>
-            <View style={{width: '10%'}}>
+            <TouchableOpacity
+              onPress={() => {
+                setShowSection(!showSection);
+                modalListActionRef.current.open();
+              }}
+              style={{width: '10%'}}
+            >
               <Entypo
-                onPress={() => {
-                  setShowSection(!showSection);
-                  modalListActionRef.current.open();
-                }}
                 name={'dots-three-vertical'}
-                size={20}
+                size={18}
+                color={Color.text}
               />
-            </View>
+            </TouchableOpacity>
           </Row>
         </Pressable>
       );
@@ -194,86 +256,58 @@ const GroupDetailScreen = ({ navigation, route }) => {
         };
     }, [isTyping]);
 
-    const fetchContentChatRoomManage = () => {
-        let userId = [user.userId];
+    const onSubmit = imageBase64 => {
+      if (!imageBase64 && textComment === '') {
+        showPopup('Teks tidak boleh kosong', 'warning');
+        return;
+      }
 
-        params.selected.map((e) => {
-            userId.push(e.userId);
-        });
-
-        const variables = {
-            method: 'INSERT',
-            type: params.selected.length > 1 ? 'GROUP' : 'PERSONAL',
-            userId,
-        };
-
-        console.log(variables);
-        
-        Client.query({
-            query: queryContentChatRoomManage,
-            variables,
-        })
-        .then((res) => {
-            console.log('res create room', res);
-
-            const data = res.data.contentChatRoomManage;
-
-            if (data) {
-                setRoomId(data.id);
-                onSendChat(data.id);
-            }
-        })
-        .catch((err) => {
-            console.log(err, 'err send chat');
-        });
-    }
-
-    const onSubmit = () => {
-        if (textComment === '') {
-            showPopup('Teks tidak boleh kosong', 'warning');
-            return;
-        }
-
-        if (!roomId) {
-            fetchContentChatRoomManage();
-        } else {
-            onSendChat(roomId);
-        }
-    }
+      if (!roomId) {
+        onCreateRoom();
+      } else {
+        onSendChat(roomId, imageBase64);
+      }
+    };
     
-    const onSendChat = (room_id) => {
-        const variables = {
-            method: 'INSERT',
-            message: textComment.trim(),
-            roomId: parseInt(room_id)
-        };
+    const onSendChat = (room_id, imageBase64) => {
+      const variables = {
+        method: 'INSERT',
+        message: textComment.trim(),
+        roomId: parseInt(room_id),
+      };
 
-        console.log('variables', variables);
+      if (imageBase64) {
+        variables.image = 'data:image/png;base64,' + imageBase64;
+      }
+      console.log('variables', variables);
 
-        Client.query({
-            query: queryContentChatMessage,
-            variables,
+      Client.query({
+        query: queryContentChatMessage,
+        variables,
+      })
+        .then(res => {
+          console.log('res kirim chat', res);
+
+          const data = res.data.contentChatMessage;
+          if (data) {
+            currentSocket.emit('chat_room_notifier', {
+              room_id,
+              users_ids: params.targetIds,
+            });
+            currentSocket.on('chat_room_notifier', res => {
+              // console.log('chat_room_notifier', res);
+            });
+
+            currentSocket.emit('chat_messages', {room_id});
+            currentSocket.emit('chat_rooms');
+            setTextComment('');
+          }
         })
-        .then((res) => {
-            console.log('res kirim chat', res);
-
-            const data = res.data.contentChatMessage;
-            if (data) {
-                currentSocket.emit('chat_room_notifier', { room_id, users_ids: params.targetIds });
-                currentSocket.on('chat_room_notifier', (res) => {
-                    // console.log('chat_room_notifier', res);
-                });
-
-                currentSocket.emit('chat_messages', { room_id });
-                currentSocket.emit('chat_rooms');
-                setTextComment('');
-            }
-        })
-        .catch((err) => {
-            console.log('err kirim chat', err);
-            showPopup('Chat gagal dikirim, silakan coba lagi', 'error');
+        .catch(err => {
+          console.log('err kirim chat', err);
+          showPopup('Chat gagal dikirim, silakan coba lagi', 'error');
         });
-    }
+    };
 
     const managedDateUTC = (origin) => {
         const date = Moment(origin).utc();
@@ -294,231 +328,342 @@ const GroupDetailScreen = ({ navigation, route }) => {
     }
     
     return (
-        <Scaffold
-            fallback={dataChat.loading}
-            popupProps={popupProps}
-            color={Color.semiwhite}
-            // header={
-            //     <Header
-            //         // title={params.roomName}
-            //         title={'Ngoding Bareng'}
-            //         subTitle={userTyping && 'sedang mengetik...'}
-            //         subTitleColor={userTyping && Color.success}
-            //         centerTitle
-            //         iconRightButton={
-            //             user && user.isDirector === 1 ?
-            //                 <Ionicons
-            //                     name='information-circle-outline'
-            //                     size={22}
-            //                     color={Color.text}
-            //                     onPress={() => navigation.navigate('ChatInfoScreen', { member: params.selected })}
-            //                 />
-            //             :
-            //                 <View />
-            //         }
-            //     />
-            // }
-            header={
-              <GroupHeader />
-            }
-        >
-            <View style={{flex: 1, backgroundColor: Color.semiwhite}}>
-                {/* <View style={{backgroundColor: Color.border, width: '35%', height: 25, borderRadius: 20, alignItems: 'center', justifyContent: 'center', marginVertical: 15, alignSelf: 'center'}}>
+      <Scaffold
+        fallback={dataChat.loading}
+        popupProps={popupProps}
+        color={Color.semiwhite}
+        // header={
+        //     <Header
+        //         // title={params.roomName}
+        //         title={'Ngoding Bareng'}
+        //         subTitle={userTyping && 'sedang mengetik...'}
+        //         subTitleColor={userTyping && Color.success}
+        //         centerTitle
+        //         iconRightButton={
+        //             user && user.isDirector === 1 ?
+        //                 <Ionicons
+        //                     name='information-circle-outline'
+        //                     size={22}
+        //                     color={Color.text}
+        //                     onPress={() => navigation.navigate('ChatInfoScreen', { member: params.selected })}
+        //                 />
+        //             :
+        //                 <View />
+        //         }
+        //     />
+        // }
+        header={<GroupHeader />}
+      >
+        <View style={{flex: 1, backgroundColor: Color.semiwhite}}>
+          {/* <View style={{backgroundColor: Color.border, width: '35%', height: 25, borderRadius: 20, alignItems: 'center', justifyContent: 'center', marginVertical: 15, alignSelf: 'center'}}>
                     <Text style={{fontSize: 10, color: Color.secondary, fontWeight: 'bold'}}>Senin, 03 Januari 2022</Text>
                 </View> */}
-                <FlatList
-                    keyExtractor={(item, index) => item.id + index.toString()}
-                    data={dataChat.data}
-                    inverted
-                    keyboardShouldPersistTaps='handled'
-                    contentContainerStyle={{paddingTop: 16}}
-                    onEndReachedThreshold={0.3}
-                    onEndReached={() => dataChat.page !== -1 && setDataChat({ ...dataChat, loadNext: true })}
-                    renderItem={({ item }) => {
-                        // const isAdmin = user && user.userId === item.userId;
-                        const isMe = user.userId == item.user_id;
+          <FlatList
+            keyExtractor={(item, index) => item.id + index.toString()}
+            data={dataChat.data}
+            inverted
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{paddingTop: 16}}
+            onEndReachedThreshold={0.3}
+            onEndReached={() =>
+              dataChat.page !== -1 && setDataChat({...dataChat, loadNext: true})
+            }
+            renderItem={({item}) => {
+              // const isAdmin = user && user.userId === item.userId;
+              const isMe = user.userId == item.user_id;
 
-                        if (isMe) {
-                            return (
-                              <View
-                                style={{
-                                  width,
-                                  marginTop: 16,
-                                  paddingHorizontal: 16,
-                                  flexDirection: 'row',
-                                  justifyContent: 'flex-end',
-                                  alignItems: 'flex-end',
-                                }}>
-                                <View
-                                  style={{
-                                    maxWidth: width - 70,
-                                    paddingHorizontal: 8,
-                                    paddingVertical: 8,
-                                    backgroundColor: Color.textInput,
-                                    borderRadius: 8,
-                                    borderBottomRightRadius: 0,
-                                    alignItems: 'flex-end',
-                                  }}>
-                                  {/* <Text size={10} type='semibold' align='right' color={Color.secondary}>{item.name}</Text> */}
-                                  <Divider height={4} />
-                                  <Text align="right">{item.message}</Text>
-                                  <Divider height={4} />
-                                  <View style={{flexDirection: 'row'}}>
-                                    <Ionicons
-                                      name={'md-checkmark-done-sharp'}
-                                      size={12}
-                                    />
-                                    <Text
-                                      size={8}
-                                      align="right"
-                                      style={{opacity: 0.6}}>
-                                      {' '}
-                                      {managedDateUTC(item.created_unix_date)}
-                                    </Text>
-                                  </View>
-                                </View>
-                                <View
-                                  style={{
-                                    width: 30,
-                                    height: 30,
-                                    marginLeft: 8,
-                                    borderRadius: 15,
-                                    borderWidth: 2,
-                                    borderColor: Color.disabled,
-                                  }}>
-                                  <Image
-                                    source={{uri: item.photo_profile}}
-                                    style={{
-                                      width: '100%',
-                                      aspectRatio: 1,
-                                      borderRadius: 30,
-                                      backgroundColor: Color.disabled,
-                                    }}
-                                  />
-                                </View>
-                              </View>
-                            );
-                        }
+              if (isMe) {
+                return (
+                  <View
+                    style={{
+                      width,
+                      marginTop: 16,
+                      paddingHorizontal: 16,
+                      flexDirection: 'row',
+                      justifyContent: 'flex-end',
+                      alignItems: 'flex-end',
+                    }}>
+                      <View
+                        style={{
+                          maxWidth: width - 70,
+                          paddingHorizontal: 8,
+                          paddingVertical: 8,
+                          backgroundColor: Color.textInput,
+                          borderRadius: 8,
+                          borderBottomRightRadius: 0,
+                          alignItems: 'flex-end',
+                        }}>
+                        <Text size={10} type='semibold' align='right' color={Color.secondary}>{item.first_name}</Text>
 
-                        return (
-                            <View style={{width, marginTop: 16, paddingHorizontal: 16, flexDirection: 'row', alignItems: 'flex-end'}}>
-                                <View style={{width: 30, height: 30, marginRight: 8, borderRadius: 15, borderWidth: 2, borderColor: Color.primary}}>
-                                <Image
-                                    source={{uri: item.image}}
-                                    style={{width: '100%', aspectRatio: 1, borderRadius: 15, backgroundColor: Color.primary}}
-                                />
-                                </View>
-                                <View style={{maxWidth: width - 70, paddingHorizontal: 8, paddingVertical: 8, backgroundColor: '#E8F3FD', borderRadius: 8, borderBottomLeftRadius: 0, alignItems: 'flex-start'}}>
-                                    <Text size={10} type='semibold' align='left' color={Color.primary}>{item.name}</Text>
-                                    <Divider height={4} />
-                                    <Text align='left' color={Color.text}>{item.message}</Text>
-                                    <Divider height={4} />
-                                    <Text size={8} align='left' color={Color.text} style={{opacity: 0.6}}>{managedDateUTC(item.created_unix_date)}</Text>
-                                </View>
-                            </View>
-                        )
-                    }}
-                />
-            
-                    {showSection == true ?
-                    <BottomSection style={{flexDirection: 'row', alignItems: 'center',backgroundColor: Color.theme, borderColor: Color.theme, elevation: 5}}>
-                    <BoxInput style={{alignItems: 'center',borderColor: Color.secondary, borderRadius: 30, flexDirection: 'row'}}>
-                        <CustomTextInput
-                            name="text"
-                            placeholder='Kirim Pesan ...'
-                            placeholderTextColor={Color.secondary}
-                            selectionColor={Color.primary}
-                            returnKeyType="done"
-                            returnKeyLabel="Done"
-                            blurOnSubmit={false}
-                            onBlur={() => {}}
-                            error={null}
-                            multiline
-                            value={textComment}
-                            onChangeText={(text) => {
-                                if (isTyping === false && text.length > textComment.length) {
-                                    setIsTyping(true);
-                                    // UpdateTyping to true
-                                }
+                        <Divider height={4} />
 
-                                setTextComment(text);
+                        {item.image !== null && item.image !== '' && <View style={{width: width / 2, aspectRatio: 1}}>
+                          <Image
+                            source={{uri: item.image}}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              borderRadius: 4,
                             }}
-                            style={{color: Color.text}}
-                        />
-                        <AntDesign name={"pluscircleo"} size={18} color={Color.secondary} style={{right: -10}}/>
-                    </BoxInput>
-                    <CircleSend
-                            onPress={() => onSubmit()}
-                            style={{backgroundColor: Color.primary, marginHorizontal: 8}}
-                        >
-                            <Ionicons name='send' color={Color.textInput} size={16}/>
-                    </CircleSend>
-                </BottomSection>
-                : null }
-            </View>
+                          />
+                        </View>}
 
-            <ModalListAction
-                onClose={() => setShowSection(!showSection)}
-                ref={modalListActionRef}
-                data={[
-                    {
-                        id: 0,
-                        name: 'Cari',
-                        color: Color.text,
-                        onPress: () => {
-                            setShowSection(!showSection)
-                            modalListActionRef.current.close();
-                        },
-                    },
-                    {
-                        id: 1,
-                        name: 'Tambahkan Anggota',
-                        color: Color.text,
-                        onPress: () => {
-                            setShowSection(!showSection)
-                            modalListActionRef.current.close();
-                        },
-                    },
-                    {
-                        id: 2,
-                        name: 'Matikan pemberitahuan',
-                        color: Color.text,
-                        onPress: () => {
-                            setShowSection(!showSection)
-                            modalListActionRef.current.close();
-                        },
-                    },
-                    {
-                        id: 3,
-                        name: 'Bersihkan obrolan',
-                        color: Color.text,
-                        onPress: () => {
-                            setShowSection(!showSection)
-                            modalListActionRef.current.close();
-                        },
-                    },
-                    {
-                        id: 4,
-                        name: 'Report',
-                        color: Color.red,
-                        onPress: () => {
-                            setShowSection(!showSection)
-                            modalListActionRef.current.close();
-                        },
-                    },
-                    {
-                        id: 5,
-                        name: 'Keluar dari grup',
-                        color: Color.red,
-                        onPress: () => {
-                            setShowSection(!showSection)
-                            modalListActionRef.current.close();
-                        },
-                    },
-                ]}
-            />
-        </Scaffold>
-    )
+                        <Text align="right">{item.message}</Text>
+
+                        <Divider height={4} />
+
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                          <Ionicons
+                            name={'md-checkmark-done-sharp'}
+                            size={12}
+                            color={Color.success}
+                          />
+                          <Text size={8} align="right" style={{opacity: 0.6}}>
+                            {' '}
+                            {managedDateUTC(item.created_unix_date)}
+                          </Text>
+                        </View>
+                      </View>
+
+                    <View
+                      style={{
+                        width: 30,
+                        height: 30,
+                        marginLeft: 8,
+                        borderRadius: 15,
+                        borderWidth: 2,
+                        borderColor: Color.disabled,
+                      }}>
+                      <Image
+                        source={{uri: item.photo_profile}}
+                        style={{
+                          width: '100%',
+                          aspectRatio: 1,
+                          borderRadius: 30,
+                          backgroundColor: Color.disabled,
+                        }}
+                      />
+                    </View>
+                  </View>
+                );
+              }
+
+              return (
+                <View
+                  style={{
+                    width,
+                    marginTop: 16,
+                    paddingHorizontal: 16,
+                    flexDirection: 'row',
+                    alignItems: 'flex-end',
+                  }}>
+                  <View
+                    style={{
+                      width: 30,
+                      height: 30,
+                      marginRight: 8,
+                      borderRadius: 15,
+                      borderWidth: 2,
+                      borderColor: Color.primary,
+                    }}>
+                    <Image
+                      source={{uri: item.photo_profile}}
+                      style={{
+                        width: '100%',
+                        aspectRatio: 1,
+                        borderRadius: 15,
+                        backgroundColor: Color.primary,
+                      }}
+                    />
+                  </View>
+
+                  <Divider height={4} />
+
+                  <View
+                    style={{
+                      maxWidth: width - 70,
+                      paddingHorizontal: 8,
+                      paddingVertical: 8,
+                      backgroundColor: Color.textInput,
+                      borderRadius: 8,
+                      borderBottomLeftRadius: 0,
+                      alignItems: 'flex-start',
+                    }}>
+                    <Text
+                      size={10}
+                      type="semibold"
+                      align="left"
+                      color={Color.primary}>
+                      {item.first_name}
+                    </Text>
+
+                    <Divider height={4} />
+
+                    {item.image !== null && item.image !== '' && <View style={{width: width / 2, aspectRatio: 1}}>
+                      <Image
+                        source={{uri: item.image}}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          borderRadius: 4,
+                        }}
+                      />
+                    </View>}
+
+                    <Text align="left" color={Color.text}>
+                      {item.message}
+                    </Text>
+
+                    <Divider height={4} />
+
+                    <Text
+                      size={8}
+                      align="left"
+                      color={Color.text}
+                      style={{opacity: 0.6}}>
+                      {managedDateUTC(item.created_unix_date)}
+                    </Text>
+                  </View>
+                </View>
+              );
+            }}
+          />
+
+          {showSection == true ? (
+            <BottomSection
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                backgroundColor: Color.theme,
+                borderColor: Color.theme,
+                elevation: 5,
+              }}>
+              <BoxInput
+                style={{
+                  alignItems: 'center',
+                  borderColor: Color.secondary,
+                  borderRadius: 30,
+                  flexDirection: 'row',
+                }}>
+                <CustomTextInput
+                  name="text"
+                  placeholder="Kirim Pesan ..."
+                  placeholderTextColor={Color.secondary}
+                  selectionColor={Color.primary}
+                  returnKeyType="done"
+                  returnKeyLabel="Done"
+                  blurOnSubmit={false}
+                  onBlur={() => {}}
+                  error={null}
+                  multiline
+                  value={textComment}
+                  onChangeText={text => {
+                    if (
+                      isTyping === false &&
+                      text.length > textComment.length
+                    ) {
+                      setIsTyping(true);
+                      // UpdateTyping to true
+                    }
+
+                    setTextComment(text);
+                  }}
+                  style={{color: Color.text}}
+                />
+                <AntDesign
+                  name={'pluscircleo'}
+                  size={18}
+                  color={Color.secondary}
+                  style={{right: -10}}
+                  onPress={() => setModalImagePicker(true)}
+                />
+              </BoxInput>
+              <CircleSend
+                onPress={() => onSubmit()}
+                style={{backgroundColor: Color.primary, marginHorizontal: 8}}>
+                <Ionicons name="send" color={Color.textInput} size={16} />
+              </CircleSend>
+            </BottomSection>
+          ) : null}
+        </View>
+
+        <ModalImagePicker
+          visible={modalImagePicker}
+          withPreview
+          onClose={() => setModalImagePicker(false)}
+          onSelected={callback => {
+            onSubmit(callback.base64);
+            setModalImagePicker(false);
+          }}
+        />
+
+        <ModalListAction
+          onClose={() => setShowSection(!showSection)}
+          ref={modalListActionRef}
+          data={[
+            // hide options chat
+            // {
+            //   id: 0,
+            //   name: 'Cari',
+            //   color: Color.text,
+            //   onPress: () => {
+            //     setShowSection(!showSection);
+            //     modalListActionRef.current.close();
+            //   },
+            // },
+            {
+              id: 1,
+              name: 'Tambahkan Anggota',
+              show: is_admin_room || is_owner_room ? true : false,
+              onPress: () => {
+                setShowSection(!showSection);
+                modalListActionRef.current.close();
+                navigation.navigate('AddMember', {
+                  ...params
+                });
+              },
+            },
+            // {
+            //   id: 2,
+            //   name: 'Matikan pemberitahuan',
+            //   color: Color.text,
+            //   onPress: () => {
+            //     setShowSection(!showSection);
+            //     modalListActionRef.current.close();
+            //   },
+            // },
+            // {
+            //   id: 3,
+            //   name: 'Bersihkan obrolan',
+            //   color: Color.text,
+            //   onPress: () => {
+            //     setShowSection(!showSection);
+            //     modalListActionRef.current.close();
+            //   },
+            // },
+            // {
+            //   id: 4,
+            //   name: 'Report',
+            //   color: Color.red,
+            //   onPress: () => {
+            //     setShowSection(!showSection);
+            //     modalListActionRef.current.close();
+            //   },
+            // },
+            {
+              id: 5,
+              name: 'Keluar dari grup',
+              color: Color.error,
+              onPress: () => {
+                setShowSection(!showSection);
+                modalListActionRef.current.close();
+                Alert('Konfirmasi', 'apakah Anda akan keluar dari grup ini?', () => onLeave())
+              },
+            },
+          ]}
+        />
+      </Scaffold>
+    );
 }
 
 export default GroupDetailScreen;

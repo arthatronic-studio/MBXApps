@@ -11,14 +11,17 @@ import Scaffold from '@src/components/Scaffold';
 import { Row } from 'src/styled';
 import ListContentProduct from 'src/components/Content/ListContentProduct';
 import { accessClient } from 'src/utils/access_client';
+import { useIsFocused } from '@react-navigation/native';
 
 const PlaceScreen = ({ navigation, route }) => {
     const { title, userProfileId } = route.params;
+    const isMainScreen =  route.params && route.params.routeIndex;
 
     const user = useSelector(
       state => state['user.auth'].login.user
     );
     const { Color } = useColor();
+    const isFocused = useIsFocused();
 
     let canGeneratedContent = accessClient.UserGeneratedContent === 'ALL_USER';
     if (accessClient.UserGeneratedContent === 'ONLY_ADMIN' && user && user.isDirector === 1) canGeneratedContent = true;
@@ -29,6 +32,7 @@ const PlaceScreen = ({ navigation, route }) => {
             header={
               <Header
                 title={title}
+                showLeftButton={!isMainScreen}
                 actions={
                   canGeneratedContent && <Row justify='center' align='center'>
                     {/* <Ionicons
@@ -54,11 +58,11 @@ const PlaceScreen = ({ navigation, route }) => {
               />
             }
         >
-          <ListContentProduct
+          {isFocused && <ListContentProduct
             userProfileId={userProfileId}
             productCategory='NEARBY_PLACE'
             name='Tempat'
-          />
+          />}
         </Scaffold>
     )
 }

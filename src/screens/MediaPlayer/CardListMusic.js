@@ -18,6 +18,7 @@ import { accessClient } from 'src/utils/access_client';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { useSelector } from 'react-redux';
 import { statusBarHeight } from 'src/utils/constants';
+import Config from 'react-native-config';
 
 const MainView = Styled(View)`
 `;
@@ -70,9 +71,8 @@ const CardListMusic = ({
         const variables = {
             page: 1,
             itemPerPage: 50,
-            productType: accessClient.InitialCode,
+            productType: Config.PRODUCT_TYPE,
             productCategory: "MUSIC",
-            // productSubCategory: "POPULAR"
         };
 
         if (parentProductId) {

@@ -34,9 +34,6 @@ import {
   Loading,
   useLoading,
   Scaffold,
-  Row,
-  Col,
-  HeaderBig,
   useColor,
   Header,
 } from '@src/components';
@@ -99,7 +96,7 @@ const AddProduct = ({navigation, route}) => {
         itemPerPage: 10,
       },
     }).then(res => {
-      console.log('aku adalah', res.data.ecommerceProductCategoryList);
+      // console.log('aku adalah', res.data.ecommerceProductCategoryList);
       // if(route.params.type == 'edit'){
       //   const idx = res.data.ecommerceProductCategoryList.findIndex(val => val.id == route.params.item.categoryId)
       //   setValue(res.data.ecommerceProductCategoryList[idx].id);

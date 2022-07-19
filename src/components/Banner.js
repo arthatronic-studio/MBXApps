@@ -1,14 +1,13 @@
 import React from 'react';
-import {useWindowDimensions, ActivityIndicator} from 'react-native';
-import {View, Image, Text} from 'react-native';
+import {View, Image, useWindowDimensions, ActivityIndicator} from 'react-native';
 import PropTypes from 'prop-types';
+import {useNavigation} from '@react-navigation/native';
 
 import CarouselView from 'src/components/CarouselView';
 import {Container, Divider} from 'src/styled';
-import {useColor} from '@src/components';
+import {Text, useColor} from '@src/components';
 import TouchableOpacity from 'src/components/Button/TouchableDebounce';
-import {useNavigation} from '@react-navigation/native';
-import PostingHeader from './Posting/PostingHeader';
+import PostingHeader from 'src/components/Posting/PostingHeader';
 import { getSizeByRatio } from 'src/utils/get_ratio';
 
 const propTypes = {
@@ -50,7 +49,6 @@ const Banner = ({ data, loading, showHeader }) => {
             borderRadius: 8,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: Color.textInput,
           }}
         >
           <ActivityIndicator size="large" color={Color.primary} />
@@ -106,7 +104,6 @@ const Banner = ({ data, loading, showHeader }) => {
                         width: '100%',
                         height: '100%',
                         borderRadius: 8,
-                        backgroundColor: Color.border,
                       }}
                       resizeMode='cover'
                     />

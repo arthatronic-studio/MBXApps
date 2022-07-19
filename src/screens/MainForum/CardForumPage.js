@@ -14,7 +14,6 @@ import {
   Text,
   // TouchableOpacity,
   Loading, useLoading,
-  HeaderBig,
   Header,
   Scaffold,
   useColor

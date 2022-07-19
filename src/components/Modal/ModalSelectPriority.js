@@ -13,14 +13,14 @@ import { useCombinedRefs } from '@src/hooks';
 const { width } = Dimensions.get('window');
 
 const defaultProps = {
-    selected: { id: 3, value: 'HIGH' },
+    selected: { id: 3, value: 'HIGH', name: 'High' },
     onPress: () => {},
 };
 
 const data = [
-    { id: 1, value: 'Low' },
-    { id: 2, value: 'Mid' },
-    { id: 3, value: 'High' },
+  { id: 1, value: 'LOW', name: 'Low (> 20 Km)' },
+  { id: 2, value: 'MEDIUM', name: 'Medium (10 - 20 Km)' },
+  { id: 3, value: 'HIGH', name: 'High (< 10 Km)' },
 ];
 
 const ModalSelectPriority = forwardRef((props, ref) => {
@@ -46,7 +46,7 @@ const ModalSelectPriority = forwardRef((props, ref) => {
             style={{flexDirection: 'row', paddingVertical: 8}}
         >
             <Text size={12} color={selected.id === item.id ? Color.primary : Color.text}>
-                {item.value}
+                {item.name}
             </Text>
         </TouchableOpacity>
     )

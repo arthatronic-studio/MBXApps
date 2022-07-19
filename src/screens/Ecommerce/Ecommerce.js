@@ -22,13 +22,9 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import { Divider, Circle, Container, Row } from '@src/styled';
 import {
 	Text,
-	// TouchableOpacity,
-	Loading,
 	useLoading,
 	Scaffold,
-	HeaderBig,
 	useColor,
-	Header,
 } from '@src/components';
 import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';

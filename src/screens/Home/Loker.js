@@ -10,14 +10,7 @@ import {
 import ImagesPath from 'src/components/ImagesPath';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {
-  HeaderBig,
-  Loading,
-  useLoading,
   useColor,
-  Scaffold,
-  Row,
-  Col,
-  Button,
 } from '@src/components';
 
 const DATA = [

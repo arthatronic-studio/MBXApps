@@ -7,7 +7,7 @@ import { Container, Row } from 'src/styled';
 import PostingSkeleton from '../Posting/PostingSkeleton';
 import { initialItemState } from 'src/utils/constants';
 import { fetchContentProduct, fetchContentUserProduct, fetchContentSavedProduct } from 'src/api/contentV2';
-import CardContentProduct from '@src/components/Content/CardContentProduct';
+import CardContentProductV2 from '@src/components/Content/CardContentProductV2';
 
 const propTypes = {
     userProfileId: PropTypes.number,
@@ -119,7 +119,7 @@ const ListContentProductV2 = ({ userProfileId, productCategory, name, horizontal
                     onEndReached={() => setItemData({ ...itemData, loadNext: true })}
                     { ...extraProps }
                     renderItem={({ item, index }) =>
-                        <CardContentProduct
+                        <CardContentProductV2
                             productCategory={productCategory}
                             item={item}
                             horizontal={horizontal}

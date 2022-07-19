@@ -15,11 +15,14 @@ import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import { Header, ModalListAction, Scaffold } from 'src/components';
 import ChatRoomsScreen from 'src/screens/Chat/ChatRoomsScreen';
 import ChatGroupScreen from 'src/screens/Chat/ChatGroupScreen';
-import { currentSocket } from '@src/screens/MainHome/MainHome';
+import { initSocket } from 'src/api-socket/currentSocket';
 
 const Chat = ({navigation}) => {
+    const currentSocket = initSocket();
+    
     // state
     const [myRoomIds, setMyRoomIds] = useState([]);
+    const [loadingMyRooms, setLoadingMyRooms] = useState(true);
 
     const Tab = createMaterialTopTabNavigator();
     const modalListActionRef = useRef();
@@ -32,8 +35,8 @@ const Chat = ({navigation}) => {
     useEffect(() => {
         currentSocket.emit('list_my_room_ids');
         currentSocket.on('list_my_room_ids', (res) => {
-            console.log('list_my_room_ids', res);
             setMyRoomIds(res);
+            setLoadingMyRooms(false);
         });
     }, []);
 
@@ -55,10 +58,17 @@ const Chat = ({navigation}) => {
             }
             floatingActionButton={
                 <Pressable
-                    onPress={() => modalListActionRef.current.open()}
-                    style={{alignItems: 'center', justifyContent: 'center', backgroundColor: Color.primary, width: 60, height: 60, borderRadius: 30}}
+                    onPress={() => !loadingMyRooms && modalListActionRef.current.open()}
+                    style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: !loadingMyRooms ? Color.primary : Color.disabled,
+                        width: 60,
+                        height: 60,
+                        borderRadius: 30,
+                    }}
                 >
-                    <AntDesign name={'message1'} size={27} style={{color: Color.textInput}} />
+                    <AntDesign name={'message1'} size={27} style={{color: Color.textButtonInline}} />
                 </Pressable>
             }
         >
@@ -69,20 +79,14 @@ const Chat = ({navigation}) => {
                         backgroundColor: Color.theme,
                         height: '100%'
                     },
-                    activeTintColor: Color.primary,
-                    activeBackgroundColor: Color.primary,
+                    activeTintColor: Color.text,
                     inactiveTintColor: Color.secondary,
                     labelStyle: {
                         fontSize: 12,
-                        fontWeight: 'bold',
-                        color: Color.secondary,
                     },
                     indicatorStyle: {
                         borderBottomColor: Color.primary,
                         borderBottomWidth: 2,
-                    },
-                    labelStyle: {
-                        fontSize: 12,
                     },
                     style: {
                         backgroundColor: Color.theme,

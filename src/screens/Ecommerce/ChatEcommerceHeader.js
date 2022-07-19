@@ -11,21 +11,20 @@ import { useColor, Header, Row } from '@src/components';
 import ImagesPath from 'src/components/ImagesPath';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { Divider } from '@src/styled';
-import {currentSocket} from '@src/screens/MainHome/MainHome';
-
-const MainView = Styled(SafeAreaView)`
-      flex: 1;
-  `;
+import { initSocket } from 'src/api-socket/currentSocket';
 
 const ChatEcommerceHeader = (props) => {
 	const {
     name,
 		merchant,
 		isOnline
-  } = props;
-	const { Color } = useColor();
+  	} = props;
 
+	const currentSocket = initSocket();
+
+	const { Color } = useColor();
 	const navigation = useNavigation();
+
 	return (
 		<View
 			style={{
