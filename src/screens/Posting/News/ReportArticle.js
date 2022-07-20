@@ -52,7 +52,7 @@ const ReportArticle = ({navigation, route}) => {
     if(result.status){
       showLoading('success', 'Laporan Berhasil');
       setTimeout(() => {
-        navigation.navigate('NewsScreen', {title: 'Artikel'});
+        navigation.navigate('NewsScreenV2', {title: 'Artikel'});
       }, 2500);
     }else{
       showLoading('error', 'Gagal melaporkan');

@@ -69,7 +69,9 @@ import EmergencyDetail from 'src/screens/Posting/Emergency/Detail';
 
 // News
 import NewsScreen from 'src/screens/Posting/News/Index';
+import NewsScreenV2 from 'src/screens/Posting/News/NewsScreenV2';
 import NewsDetail from 'src/screens/Posting/News/Detail';
+import NewsDetailV2 from 'src/screens/Posting/News/DetailV2';
 import Saved from 'src/screens/Posting/News/Saved';
 import SearchArticle from 'src/screens/Posting/News/SearchArticle';
 import CreateNews from 'src/screens/Posting/News/CreateNews';
@@ -332,7 +334,9 @@ function MainStackNavigator() {
       <Screen name="EmergencyDetail" component={EmergencyDetail} />
       {/* News */}
       <Screen name="NewsScreen" component={NewsScreen} />
+      <Screen name="NewsScreenV2" component={NewsScreenV2} />
       <Screen name="NewsDetail" component={NewsDetail} />
+      <Screen name="NewsDetailV2" component={NewsDetailV2} />
       <Screen name="Saved" component={Saved} />
       <Screen name="SearchArticle" component={SearchArticle} />
       <Screen name="CreateNews" component={CreateNews} />

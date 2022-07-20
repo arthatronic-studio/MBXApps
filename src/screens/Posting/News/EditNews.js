@@ -201,8 +201,8 @@ const EditNews = props => {
           showLoading('success', 'Artikel berhasil diubah!');
 
           setTimeout(() => {
-            navigation.navigate('NewsScreen', {title: 'Artikel'});
-            navigation.navigate('NewsDetail', {code: data[0].code});
+            navigation.navigate('NewsScreenV2', {title: 'Artikel'});
+            navigation.navigate('NewsDetailV2', {code: data[0].code});
           }, 2500);
         } else {
           showLoading('error', 'Thread gagal dibuat!');

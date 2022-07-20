@@ -632,7 +632,7 @@ const MainHome = ({ navigation, route }) => {
             refresh={refreshing || isFocused}
           />
 
-          {/* <HighlightContentProductV2
+          {/* <HighlightContentProduct
             productCategory='Artikel'
             name='Artikel'
             title='Artikel Populer'
@@ -644,7 +644,7 @@ const MainHome = ({ navigation, route }) => {
             productCategory='ARTIKEL'
             name='Artikel'
             title='Artikel Populer'
-            nav='NewsScreen'
+            nav='NewsScreenV2'
             refresh={refreshing || isFocused}
             orderBy="like"
           />

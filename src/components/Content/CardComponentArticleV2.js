@@ -96,7 +96,7 @@ const CardComponentArticleV2 = ({
       onPress={async () => {
         await fetchViewProduct({productId: item.id});
         console.log('sini');
-        navigation.navigate('NewsDetail', {code: item.code});
+        navigation.navigate('NewsDetailV2', {code: item.code});
 
         GALogEvent('Artikel', {
           id: item.id,

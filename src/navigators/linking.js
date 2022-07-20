@@ -4,7 +4,7 @@ const config = {
       path: "notification",
     },
     Chat: 'chat',
-    NewsDetail: {
+    NewsDetailV2: {
       path: "artikel/:code",
       parse: {
         code: (code) => `${code}`,

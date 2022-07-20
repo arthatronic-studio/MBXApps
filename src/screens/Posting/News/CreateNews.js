@@ -188,7 +188,7 @@ const CreateNews = props => {
 
           setTimeout(() => {
             navigation.goBack();
-            navigation.navigate('NewsDetail', {code: data[0].code});
+            navigation.navigate('NewsDetailV2', {code: data[0].code});
           }, 2500);
         } else {
           showLoading('error', 'Thread gagal dibuat!');
