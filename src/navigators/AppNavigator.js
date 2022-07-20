@@ -74,7 +74,9 @@ import NewsDetail from 'src/screens/Posting/News/Detail';
 // Place
 import PlaceScreen from 'src/screens/Posting/Place/Index';
 import PlaceDetail from 'src/screens/Posting/Place/Detail';
-
+import PlaceMore from 'src/screens/Posting/Place/PlaceMore';
+import PlaceDetailCategory from 'src/screens/Posting/Place/PlaceDetailCategory';
+import CreateReview from 'src/screens/Posting/Place/CreateReview';
 // Event
 import EventScreen from 'src/screens/Posting/Event/Index';
 import EventDetail from 'src/screens/Posting/Event/Detail';
@@ -330,6 +332,9 @@ function MainStackNavigator() {
       {/* Place */}
       <Screen name="PlaceScreen" component={PlaceScreen} />
       <Screen name="PlaceDetail" component={PlaceDetail} />
+      <Screen name="PlaceMore" component={PlaceMore} />
+      <Screen name="PlaceDetailCategory" component={PlaceDetailCategory} />
+      <Screen name="CreateReview" component={CreateReview} />
       {/* Event */}
       <Screen name="EventScreen" component={EventScreen} />
       <Screen name="EventDetail" component={EventDetail} />

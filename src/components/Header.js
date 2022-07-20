@@ -131,6 +131,7 @@ const Header = (props) => {
                       color={Color.text}
                       size={18}
                     />
+                    
                   )}
                 </TransparentBackView>
               </LeftButton>

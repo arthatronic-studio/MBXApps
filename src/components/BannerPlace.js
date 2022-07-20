@@ -1,0 +1,194 @@
+import React from 'react';
+import { View, Image, useWindowDimensions, ActivityIndicator } from 'react-native';
+import PropTypes from 'prop-types';
+import { useNavigation } from '@react-navigation/native';
+
+import CarouselView from 'src/components/CarouselView';
+import { Container, Divider } from 'src/styled';
+import { Text, useColor } from '@src/components';
+import TouchableOpacity from 'src/components/Button/TouchableDebounce';
+import PostingHeader from 'src/components/Posting/PostingHeader';
+import { getSizeByRatio } from 'src/utils/get_ratio';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
+import {
+  iconStar
+} from 'assets/images/place';
+const propTypes = {
+  data: PropTypes.array,
+  loading: PropTypes.bool,
+  showHeader: PropTypes.bool,
+};
+
+const defaultProps = {
+  data: [],
+  loading: false,
+  showHeader: true,
+};
+
+const Banner = ({ data, loading, showHeader }) => {
+  const { width } = useWindowDimensions();
+  const { Color } = useColor();
+  const navigation = useNavigation();
+
+  const onPress = (e) => {
+    if (e.link) {
+      navigation.navigate(e.link);
+    }
+  }
+
+  const renderskeleton = () => {
+    return (
+      <View
+        style={{
+          width: width,
+          aspectRatio: 16 / 9,
+          paddingHorizontal: 16,
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            width: '100%',
+            borderRadius: 8,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <ActivityIndicator size="large" color={Color.primary} />
+          <Divider />
+          <Text>Memuat</Text>
+        </View>
+      </View>
+    );
+  };
+
+  const renderHeader = () => {
+    return (
+      <>
+        <PostingHeader
+          title='Tribes Special Deals'
+          onSeeAllPress={() => { }}
+          showSeeAllText={false}
+        />
+      </>
+    )
+  }
+
+  return (
+    <View style={{ marginBottom: 16 }}>
+      {showHeader && renderHeader()}
+
+      {loading ? (
+        renderskeleton()
+      ) : (
+        <>
+          <CarouselView
+            delay={3000}
+            showIndicator
+            style={{
+              width,
+              height: getSizeByRatio({ width: width - 32, ratio: 9 / 16 }).height,
+            }}
+          >
+            {data.map((e, idx) => {
+              return (
+                <Container
+                  key={idx}
+                  width='100%'
+                  height='100%'
+                  paddingHorizontal={16}
+                >
+                  <TouchableOpacity
+                    onPress={() => onPress(e)}
+                  >
+
+                    <Image
+                      source={{ uri: e.image }}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: 8,
+                      }}
+                      resizeMode='cover'
+                    />
+                  </TouchableOpacity>
+
+                  {/* lokasi */}
+                  <View style={{
+                    position: 'absolute', backgroundColor: Color.textInput,
+                    top: 10,
+                    right: 220,
+                    paddingHorizontal: 4,
+                    paddingVertical: 7,
+                    borderRadius: 24
+                  }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+                      <MaterialIcons
+                        onPress={() => navigation.navigate('Saved')}
+                        name={'place'}
+                        size={18}
+                        color={'#E40C33'}
+                        style={{ marginHorizontal: 6, }}
+                      />
+                      <Text>Jakarta Selatan</Text>
+                    </View>
+                  </View>
+
+                  {/* rating */}
+
+                  <View style={{
+                    position: 'absolute', backgroundColor: Color.textInput,
+                    top: 10,
+                    right: 20,
+                    paddingHorizontal: 15,
+                    paddingVertical: 7,
+                    borderRadius: 24
+                  }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+                      <Image
+                        source={iconStar}
+                        style={{ height: 20, width: 20 }}
+                        resizeMode='contain'
+                      />
+                      <Text type='bold'>4.3</Text>
+                    </View>
+                  </View>
+                  {/* Name and category */}
+                  <View style={{
+                    position: 'absolute',
+                    top: 150,
+                    right: 280,
+                    paddingHorizontal: 15,
+                    paddingVertical: 7,
+                    borderRadius: 24
+                  }}>
+                    <View style={{ justifyContent: 'flex-start' }}>
+
+                      <Text type='bold' color={Color.textInput}>Ivo Coffee</Text>
+                      <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+                        <Ionicons
+                          onPress={() => navigation.navigate('Saved')}
+                          name={'cafe-outline'}
+                          size={18}
+                          color={Color.textInput}
+
+                        />
+                        <Text align="left" color={Color.textInput}>Kafe</Text>
+                      </View>
+                    </View>
+                  </View>
+                </Container>
+              )
+            })}
+          </CarouselView>
+        </>
+      )}
+    </View>
+  );
+};
+
+Banner.defaultProps = defaultProps;
+Banner.propTypes = propTypes;
+export default Banner;

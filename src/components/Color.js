@@ -27,7 +27,8 @@ const staticColors = {
   infosecond: '#DAE9F2',
   placeholder: '#6A7479',
   danger: '#F73347',
-  lightInfo: '#2C70F7'
+  lightInfo: '#2C70F7',
+  menuPlace: '#178FB5'
 };
 
 export const lightModeColors = {

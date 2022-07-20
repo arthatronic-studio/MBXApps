@@ -115,7 +115,7 @@ const Review = ({navigation, route}) => {
 
       const data = res.data.ecommerceProductUlasan;
       if (Array.isArray(data)) {
-        setListReview(data);
+      setListReview(data);
       }
     })
     .catch((err) => {

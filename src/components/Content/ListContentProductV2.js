@@ -38,6 +38,7 @@ const ListContentProductV2 = ({ userProfileId, productCategory, name, horizontal
     const { width } = useWindowDimensions();
     const [itemData, setItemData] = useState(initialItemState);
 
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -69,13 +70,14 @@ const ListContentProductV2 = ({ userProfileId, productCategory, name, horizontal
         if(tag.length != 0){
             variables.tag = tag;
         }
+       
 
         const result = userProfileId !== null ?
             await fetchContentUserProduct(variables) :
             saved === true ?
             await fetchContentSavedProduct(variables) :
             await fetchContentProduct(variables);
-        
+            console.log('iniresutl',result);
         setItemData({
             ...itemData,
             data: itemData.data.concat(result.data),

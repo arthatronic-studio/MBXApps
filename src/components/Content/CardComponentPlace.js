@@ -4,7 +4,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
-
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {
     Text,
     TouchableOpacity,
@@ -47,6 +47,8 @@ const CardComponentPlace = ({ productCategory, item, numColumns, onPress, horizo
     const navigation = useNavigation();
     const { width } = useWindowDimensions();
     const user = useSelector(state => state['user.auth'].login.user);
+
+    console.log('item place3',item);
 
     useEffect(() => {
         setLike(item.like);
@@ -130,10 +132,38 @@ const CardComponentPlace = ({ productCategory, item, numColumns, onPress, horizo
                             }}
                         />
                     </View>
+                    {/* rating  */}
+                    <View style={{
+                    position: 'absolute', backgroundColor: Color.textInput,
+                    top: 5,
+                    right: 10,
+                    paddingHorizontal: 15,
+                    paddingVertical: 7,
+                    borderRadius: 24
+                  }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+                    <Image
+                        source={iconStar}
+                        style={{ height: 20, width: 20 }}
+                        resizeMode='contain'
+                      />
+                      <Text type='bold'>4.3</Text>
+                    </View>
+                  </View>
 
                     <View style={{ width: '100%', paddingTop: 8, backgroundColor: Color.textInput, borderBottomLeftRadius: 4, borderBottomRightRadius: 4 }}>
+
+                    <Row align='center'>
+                            <View style={{ width: 16 }}>
+                                <Ionicons name='cafe-outline' color={Color.text} size={16} />
+                            </View>
+                            <Text size={12} color={Color.text} align='left' numberOfLines={1}>Kafe</Text>
+                        </Row>
+
                         <Text size={12} type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
                         <Divider height={2} />
+
+                     
                         <Row align='center'>
                             {/* <View style={{ width: 16 }}>
                                 <Ionicons name='person' color={Color.text} />
@@ -142,6 +172,7 @@ const CardComponentPlace = ({ productCategory, item, numColumns, onPress, horizo
                         </Row>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: 4 }}>
+
                             <Row>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                     <Ionicons
@@ -151,12 +182,7 @@ const CardComponentPlace = ({ productCategory, item, numColumns, onPress, horizo
                                     />
                                     <Divider width={2} />
                                     <Text size={12}>{item.like}</Text>
-                                    {/* hide rating */}
-                                    {/* <Image
-                                            style={{ height: 17, width: 17 }}
-                                            source={iconStar}
-                                        />
-                                    <Text color={Color.gray} size={12}>4.5</Text> */}
+                                  
                                 </View>
 
                                 <Divider width={12} />
@@ -180,6 +206,7 @@ const CardComponentPlace = ({ productCategory, item, numColumns, onPress, horizo
                                 <Divider width={2} />
                                 <Text size={12}>{item.comment > 0 ? item.comment : '0'}</Text>
                             </View>
+                           
                         </View>
                     </View>
                 </View>

@@ -3,6 +3,7 @@ import Client from '@src/lib/apollo';
 import { queryContentProduct, queryContentProductDetail, queryContentUserProduct } from 'src/lib/query';
 
 export const fetchContentProduct = async(variables) => {
+  
     let response = {
         data: [],
         status: false,

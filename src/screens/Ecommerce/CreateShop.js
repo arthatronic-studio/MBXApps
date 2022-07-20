@@ -48,7 +48,7 @@ import Client from '@src/lib/apollo';
 import {queryCreateMerchant} from 'src/lib/query/ecommerce';
 import ModalSelectMap from 'src/components/ModalSelectMap';
 import FormSelect from 'src/components/FormSelect';
-
+import CardReview from './CardReview';
 const CreateShop = () => {
   const navigation = useNavigation();
   const [nameModal, setnameModal] = useState(null);
