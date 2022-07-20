@@ -311,7 +311,7 @@ const NewsDetail = ({navigation, route}) => {
                   setRefreshComment(true);
                 }
               }}>
-              <Text color={Color.gray} size={8}>
+              <Text color={item.im_like ? Color.red : Color.gray} size={8}>
                 Suka
               </Text>
               </TouchableOpacity>
@@ -452,6 +452,7 @@ const NewsDetail = ({navigation, route}) => {
                     // position: 'absolute',
                   }}
                 />
+                {item.imageSource != null && item.imageSource != "" &&
                 <Text
                   style={{
                     position: 'absolute',
@@ -461,7 +462,7 @@ const NewsDetail = ({navigation, route}) => {
                     left: 15,
                   }}>
                   Sumber Gambar : {item.imageSource}
-                </Text>
+                </Text>}
               </TouchableOpacity>
 
               {/* <View
@@ -946,6 +947,7 @@ const NewsDetail = ({navigation, route}) => {
           </Modal>
 
           <ModalContentOptions
+            showpin={false}
             ref={modalOptionsRef}
             isOwner={user && user.userId === item.ownerId}
             item={item}

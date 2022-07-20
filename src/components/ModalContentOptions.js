@@ -20,6 +20,7 @@ const defaultProps = {
   editScreen: "EditThreadScreen",
   onDelete: () => {},
   onShare: () => {},
+  showpin: true
 };
 
 const initialMessage = {
@@ -28,7 +29,7 @@ const initialMessage = {
 }
 
 const ModalContentOptions = forwardRef((props, ref) => {
-  const { isOwner, item, useBlockUser, moduleType, nameType, onClose, editScreen, onDelete, onShare } = props;
+  const { isOwner, item, useBlockUser, moduleType, nameType, onClose, editScreen, onDelete, onShare, showpin } = props;
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
@@ -129,7 +130,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
   const dataOptions = [
     {
       id: -1,
-      show: isOwner ? false : true,
+      show: isOwner ? false : showpin ? true : false,
       name: 'Pin Postingan',
       color: Color.text,
       onPress: () => {
@@ -162,6 +163,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
     {
       id: 2,
       name: 'Report',
+      show: isOwner ? false : true,
       color: Color.error,
       onPress: () => {
         combinedRef.current.close();
@@ -184,6 +186,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
     dataOptions.push({
       id: 2,
       name: 'Block User',
+      show: isOwner ? false : true,
       color: Color.error,
       onPress: () => {
         combinedRef.current.close();

@@ -139,7 +139,7 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
                     onPressLike();
                   }}
                 >
-                  <Text size={12} align='left'>Suka</Text>
+                  <Text size={12} align='left' type={item.im_like ? 'bold' : ''} color={item.im_like ? Color.red : Color.text}>Suka</Text>
                 </TouchableOpacity>
 
                 <Divider />

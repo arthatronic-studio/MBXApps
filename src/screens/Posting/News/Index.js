@@ -160,6 +160,8 @@ const NewsScreen = ({navigation, route}) => {
           nav="ShowAllNews"
           refresh={refreshing}
           timeStart={moment().subtract(7,'d').format('YYYY-MM-DD')}
+          showSeeAllText={true}
+          showEmpty={true}
         />
         <HighlightContentProductV2
             productCategory='ARTIKEL'
@@ -168,6 +170,8 @@ const NewsScreen = ({navigation, route}) => {
             nav='ShowAllNews'
             refresh={refreshing}
             orderBy="like"
+            showSeeAllText={true}
+            showEmpty={true}
           />
         <HighlightContentProductV2
             productCategory='ARTIKEL'
@@ -175,6 +179,8 @@ const NewsScreen = ({navigation, route}) => {
             title='Semua Artikel'
             nav='ShowAllNews'
             refresh={refreshing}
+            showSeeAllText={true}
+            showEmpty={true}
           />
       </ScrollView>
     </Scaffold>

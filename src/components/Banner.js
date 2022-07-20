@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Image, useWindowDimensions, ActivityIndicator} from 'react-native';
+import {View, Image, useWindowDimensions, ActivityIndicator, Linking} from 'react-native';
 import PropTypes from 'prop-types';
 import {useNavigation} from '@react-navigation/native';
 
@@ -30,6 +30,7 @@ const Banner = ({ data, loading, showHeader }) => {
   const onPress = (e) => {
     if (e.link) {
       navigation.navigate(e.link);
+      Linking.openURL(e.link);
     }
   }
 
