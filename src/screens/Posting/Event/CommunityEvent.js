@@ -5,6 +5,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import Moment from 'moment';
 import { useSelector } from 'react-redux';
+import {useIsFocused, useRoute} from '@react-navigation/native';
 import Header from '@src/components/Header';
 import {useLoading, usePopup, useColor, Alert, Row, Col} from '@src/components';
 import Text from '@src/components/Text';
@@ -23,6 +24,8 @@ import Feather from 'react-native-vector-icons/Feather'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import ModalFilterEvent from './ModalFilterEvent';
+import { getEventList } from 'src/lib/query/event';
+import CardContentProduct from 'src/components/Content/CardContentProduct';
 
 const CommunityEvent = ({navigation, route}) => {
 
@@ -31,7 +34,10 @@ const CommunityEvent = ({navigation, route}) => {
     const [filter, setFilter] = useState({name: 'Nama', value: 'NAME'});
 
   const [popupProps, showPopup] = usePopup();
+  const [list, setList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [loadingProps, showLoading, hideLoading] = useLoading();
+  const isFocused = useIsFocused();
 
 
 
@@ -39,6 +45,45 @@ const CommunityEvent = ({navigation, route}) => {
     setFilter(value);
     modalOptionsRef.current.close();
   };
+
+  useEffect(() => {
+    getList();
+  }, [isFocused]);
+
+  const getList = () => {
+    // showLoading();
+    let variables = {
+      page: 0,
+      itemPerPage: 20,
+      category: 'UNOFFICIAL'
+    };
+    console.log(variables);
+    Client.query({query: getEventList, variables})
+      .then(res => {
+        // hideLoading()
+        if(res.data.eventList){
+          setList(res.data.eventList)
+        }
+        console.log(res, 'comunity');
+
+        setLoading(false);
+      })
+      .catch(reject => {
+        // hideLoading()
+        console.log(reject, 'reject');
+        setLoading(false);
+      });
+  };
+
+  const renderCardContent = (item, index) => (
+    <CardContentProduct
+        key={index}
+        productCategory={'EVENT'}
+        category={'MyEvent'}
+        item={{...item,productCategory: 'event', productName: item.name, image: item.images[0], fullname: item.userOrderName, eventDate: item.startTime}}
+        horizontal={false}
+    />
+)
 
   return (
     <Scaffold
@@ -61,26 +106,28 @@ const CommunityEvent = ({navigation, route}) => {
         />
       }
     >
-      <ScrollView>
-          <TouchableOpacity onPress={() => modalOptionsRef.current.open()} style={{marginHorizontal: 15,alignSelf: 'flex-end',backgroundColor: Color.theme, marginVertical: 20,alignItems: 'center', justifyContent: 'center',flexDirection: 'row', borderWidth: 1, borderColor: Color.text, width: '25%', borderRadius: 30, height: 30}}>
+      <ScrollView
+          horizontal={false}
+          showsHorizontalScrollIndicator={false}
+      >
+        <TouchableOpacity onPress={() => modalOptionsRef.current.open()} style={{marginHorizontal: 15,alignSelf: 'flex-end',backgroundColor: Color.theme, marginVertical: 20,alignItems: 'center', justifyContent: 'center',flexDirection: 'row', borderWidth: 1, borderColor: Color.text, width: '25%', borderRadius: 30, height: 30}}>
             <Text style={{fontSize: 10}}>Terbaru</Text>
             <MaterialIcons name={"keyboard-arrow-down"} size={18}/>
           </TouchableOpacity>
-
-        <HighlightContentProduct
-            productCategory='EVENT'
-            name='Event'
-            nav='EventScreen'
-            showHeader={false}
-        />
-        <Divider height={20}/>
+          <Row
+              style={{flexWrap: 'wrap', paddingRight: 8, paddingLeft: 16}}
+          >
+              {list.map((item, index) =>
+                  renderCardContent(item, index)
+              )}
+          </Row>
       </ScrollView>
-    <ModalFilterEvent
-              ref={modalOptionsRef}
-              selectedValue={filter}
-              onPress={value => {setFilter(value);
-                modalOptionsRef.current.close();}}
-          /> 
+      <ModalFilterEvent
+          ref={modalOptionsRef}
+          selectedValue={filter}
+          onPress={value => {setFilter(value);
+            modalOptionsRef.current.close();}}
+      /> 
     </Scaffold>
   )
 }

@@ -24,7 +24,7 @@ const OwnEvent = () => {
       // showLoading();
       let variables = {
         page: 0,
-        itemPerPage: 20,
+        itemPerPage: 50,
         userId: user.userId
       };
       console.log(variables);
