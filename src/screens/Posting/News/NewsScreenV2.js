@@ -151,7 +151,7 @@ const NewsScreenV2 = ({navigation, route}) => {
           />
         }>
         <Divider />
-        <Banner data={listBanner} showHeader={false} loading={loadingBanner} />
+        <Banner data={listBanner} showHeader={false} loading={loadingBanner} forArticle={true} leftIndicator/>
         <Divider height={15} />
         <HighlightContentProductV2
           productCategory="ARTIKEL"

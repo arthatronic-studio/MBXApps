@@ -51,6 +51,7 @@ import Modal from 'react-native-modal';
 const NewsDetailV2 = ({navigation, route}) => {
   const [refreshComment, setRefreshComment] = useState(false);
   const {code} = route.params;
+  console.log(code, "codeee");
   const modalOptionsRef = useRef();
   const [loadingBanner, setLoadingBanner] = useState(true);
   const [listBanner, setListBanner] = useState([]);
@@ -98,6 +99,8 @@ const NewsDetailV2 = ({navigation, route}) => {
       // animated: true,
     });
   }
+
+  console.log(item, "items");
 
   useEffect(() => {
     fetchData();
@@ -311,7 +314,7 @@ const NewsDetailV2 = ({navigation, route}) => {
                   setRefreshComment(true);
                 }
               }}>
-              <Text color={item.im_like ? Color.red : Color.gray} size={8}>
+              <Text type={itemComment.im_like ? 'bold' : ''} color={itemComment.im_like ? Color.red : Color.gray} size={8}>
                 Suka
               </Text>
               </TouchableOpacity>

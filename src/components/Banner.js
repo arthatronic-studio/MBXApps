@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Image, useWindowDimensions, ActivityIndicator, Linking} from 'react-native';
+import {View, Image, useWindowDimensions, ActivityIndicator, Linking, ImageBackground} from 'react-native';
 import PropTypes from 'prop-types';
 import {useNavigation} from '@react-navigation/native';
 
@@ -14,23 +14,34 @@ const propTypes = {
   data: PropTypes.array,
   loading: PropTypes.bool,
   showHeader: PropTypes.bool,
+  forArticle: PropTypes.bool,
+  leftIndicator: PropTypes.bool,
 };
 
 const defaultProps = {
   data: [],
   loading: false,
   showHeader: true,
+  categoryId: null,
+  forArticle: false,
+  leftIndicator: false,
 };
 
-const Banner = ({ data, loading, showHeader }) => {
+const Banner = ({ data, loading, showHeader, forArticle, leftIndicator }) => {
   const {width} = useWindowDimensions();
   const {Color} = useColor();
   const navigation = useNavigation();
 
   const onPress = (e) => {
     if (e.link) {
-      navigation.navigate(e.link);
-      Linking.openURL(e.link);
+      if(forArticle){
+        const myArray = e.link.split("/");
+        const params = myArray[1].split(":");
+        const objectParams = {[params[0]]: params[1]};
+        navigation.navigate(myArray[0], {...objectParams})
+      }else{
+        navigation.navigate(e.link);
+      }
     }
   }
 
@@ -83,6 +94,7 @@ const Banner = ({ data, loading, showHeader }) => {
           <CarouselView
             delay={3000}
             showIndicator
+            leftIndicator={leftIndicator}
             style={{
               width,
               height: getSizeByRatio({ width: width - 32, ratio: 9/16 }).height,
@@ -99,15 +111,48 @@ const Banner = ({ data, loading, showHeader }) => {
                   <TouchableOpacity
                     onPress={() => onPress(e)}
                   >
-                    <Image
-                      source={{uri: e.image}}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        borderRadius: 8,
-                      }}
-                      resizeMode='cover'
-                    />
+                    {forArticle ? (
+                      <ImageBackground
+                        source={{uri: e.image}}
+                        style={{ 
+                          width: '100%', 
+                          height: '100%',
+                          justifyContent: 'flex-end',
+                          alignItems: 'flex-start',
+                        }}
+                        imageStyle={{
+                          borderRadius: 8,
+                        }}
+                        resizeMode='cover'
+                      >
+                        <View
+                          style={{ 
+                            paddingHorizontal: 8,
+                            paddingBottom: 28
+                          }}
+                        >
+                          <Text 
+                            color={Color.textInput}
+                            type="bold"
+                            size={16}
+                            align="left"
+                            numberOfLines={2}
+                          >
+                            {e.title}
+                          </Text>
+                        </View>
+                      </ImageBackground>
+                    ) : (
+                      <Image
+                        source={{uri: e.image}}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          borderRadius: 8,
+                        }}
+                        resizeMode='cover'
+                      />
+                    )}
                   </TouchableOpacity>
                 </Container>
               )
