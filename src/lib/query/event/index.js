@@ -127,6 +127,7 @@ export const getHistory = gql`
       userId: $userId
     ) {
       id
+      eventId
       status
       orderNumber
       discount
@@ -242,6 +243,7 @@ export const getEventList = gql`
     $type: EventTypeEnum
     $userId: Int
     $bookmarked: Boolean
+    $createdByUser: Boolean
   ) {
     eventList(
       page: $page
@@ -253,6 +255,7 @@ export const getEventList = gql`
       type: $type
       userId: $userId
       bookmarked: $bookmarked
+      createdByUser: $createdByUser
     ) {
       id
       userId

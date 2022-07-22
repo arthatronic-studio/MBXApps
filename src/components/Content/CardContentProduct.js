@@ -311,7 +311,7 @@ const CardContentProduct = ({ productCategory, category,item, numColumns, onPres
         return (
             <TouchableOpacity
                 onPress={() => {
-                    navigation.navigate('EventDetail', { item });
+                    navigation.navigate('EventDetail', { item: {...item, id: item.eventId ? item.eventId : item.id} });
 
                     GALogEvent('Event', {
                         id: item.id,

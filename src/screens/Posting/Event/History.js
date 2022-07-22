@@ -108,7 +108,7 @@ const isFocused = useIsFocused();
                     <Image source={{ uri: item.event.images[0]}} style={{width: '100%', height: '100%'}}/>
                 </View>
                 <View style={{paddingHorizontal: 10, width: '70%'}}>
-                    <Text numberOfLines={2} align={'left'} style={{fontWeight: 'bold'}}>{item.title}</Text>
+                    <Text numberOfLines={2} align={'left'} style={{fontWeight: 'bold'}}>{item.event.name}</Text>
                     <View style={{flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
                         <Text style={{fontSize: 10, color: Color.secondary}}>{item.qty} Tiket</Text>
                         <View style={{width: 3, height: 3, backgroundColor: Color.secondary, borderRadius: 20, marginHorizontal: 5}}/>

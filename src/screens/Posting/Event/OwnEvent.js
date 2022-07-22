@@ -25,14 +25,15 @@ const OwnEvent = () => {
       let variables = {
         page: 0,
         itemPerPage: 50,
-        userId: user.userId
+        userId: user.userId,
+        createdByUser: true
       };
       console.log(variables);
-      Client.query({query: getHistory, variables})
+      Client.query({query: getEventList, variables})
         .then(res => {
           // hideLoading()
-          if(res.data.eventTicketOrderList){
-            setList(res.data.eventTicketOrderList)
+          if(res.data.eventList){
+            setList(res.data.eventList)
           }
           console.log(res);
 
@@ -51,7 +52,7 @@ const OwnEvent = () => {
           key={index}
           productCategory={'EVENT'}
           category={'MyEvent'}
-          item={{...item,productCategory: 'event', productName: item.event.name, image: item.event.images[0], fullname: item.userOrderName, eventDate: item.event.startTime}}
+          item={{...item,productCategory: 'event', productName: item.name, image: item.images[0], fullname: item.userOrderName, eventDate: item.date}}
           horizontal={false}
       />
   )
