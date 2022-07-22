@@ -197,7 +197,7 @@ const EventScreen = ({navigation, route}) => {
         <ListOption/>
         <View style={styles.container}>
     </View>
-        <Container paddingVertical={16}>
+        <Container paddingBottom={16}>
           <Banner
             data={listBanner}
             showHeader={false}
