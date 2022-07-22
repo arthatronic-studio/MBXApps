@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Auth from './user/auth';
 import booking from './booking';
 import theme from './theme';
+import Article from './history/article';
 import uploadChunkState from './upload/uploadChunkState';
 import surveyPasar from './survey/pasar';
 
@@ -17,6 +18,7 @@ const reducer = persistCombineReducers(config, {
   booking,
   theme,
   uploadChunkState,
+  'history.article': Article,
   surveyPasar,
 });
 

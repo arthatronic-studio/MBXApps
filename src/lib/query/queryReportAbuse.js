@@ -1,24 +1,35 @@
 import gql from 'graphql-tag';
 
-export const queryReportAbuseV2 = gql`
+export const queryReportAbuse = gql`
 mutation(
   $referenceId: Int!
   $referenceType: ReportAbuseType!
   $referenceName: String!
   $refStatus: String!
-  $reportType: String
   $reportMessage: String
 ){
-  reportAbuseManageV2(
+  reportAbuseManage(
     referenceId: $referenceId
     referenceType: $referenceType
     referenceName: $referenceName
     refStatus: $refStatus
-    reportType: $reportType
     reportMessage: $reportMessage
   ){
-    success
+    id
+    refId
+    refType
     message
+    reportedBy
+    status
+    createdAt
+    detail{
+      id
+      reportId
+      userId
+      fullname
+      reportMessage
+      reportedAt
+    }
   }
 }
 `;

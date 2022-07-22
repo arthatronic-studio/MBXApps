@@ -24,6 +24,8 @@ import {analyticMethods, GALogEvent} from 'src/utils/analytics';
 import { Container, Divider, Row } from 'src/styled';
 import { isIphoneNotch, listContentCategory } from 'src/utils/constants';
 import CardComment from 'src/components/Card/CardComment';
+import { fetchLikeComment } from 'src/api/likeComment';
+import { useIsFocused } from '@react-navigation/native';
 import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
 
 const itemPerPage = 10;
@@ -48,6 +50,7 @@ const CommentListScreen = ({ navigation, route }) => {
   const [thumbImage, setThumbImage] = useState('');
   const [mimeImage, setMimeImage] = useState('image/jpeg');
   const [textComment, setTextComment] = useState('');
+  const isFocused = useIsFocused();
   const [modalImagePicker, setModalImagePicker] = useState(false);
 
   const modalListActionRef = useRef();
@@ -71,7 +74,7 @@ const CommentListScreen = ({ navigation, route }) => {
         loadNext: false,
       });
     }
-  }, [item]);
+  }, [item, isFocused]);
 
   useEffect(() => {
     if (dataComment.page !== -1 && item) {
@@ -431,6 +434,14 @@ const CommentListScreen = ({ navigation, route }) => {
                           setRefreshComment(true);
                         }
                       });
+                    }}
+
+                    onPressLike={async () => {
+                      setSelectedComment({ ...itemComment, index });
+                      const res = await fetchLikeComment({commentId: itemComment.id});
+                      if(res.status == true){
+                        setRefreshComment(true);
+                      }
                     }}
                   />
                 );

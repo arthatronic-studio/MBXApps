@@ -214,7 +214,7 @@ const PlaceScreen = ({navigation, route}) => {
 
             <Divider height={16}/>
 
-            <ListContentProduct
+            <ListContentProductV2
               userProfileId={userProfileId}
               productCategory="NEARBY_PLACE"
               name="Tempat"

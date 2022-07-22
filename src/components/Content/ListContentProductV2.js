@@ -7,7 +7,7 @@ import { Container, Row } from 'src/styled';
 import PostingSkeleton from '../Posting/PostingSkeleton';
 import { initialItemState } from 'src/utils/constants';
 import { fetchContentProduct, fetchContentUserProduct, fetchContentSavedProduct } from 'src/api/contentV2';
-import CardContentProduct from '@src/components/Content/CardContentProduct';
+import CardContentProductV2 from '@src/components/Content/CardContentProductV2';
 
 const propTypes = {
     userProfileId: PropTypes.number,
@@ -37,7 +37,6 @@ const defaultProps = {
 const ListContentProductV2 = ({ userProfileId, productCategory, name, horizontal, style, orderBy, onLoadingEnd, saved, timeStart, tag}) => {
     const { width } = useWindowDimensions();
     const [itemData, setItemData] = useState(initialItemState);
-
 
     useEffect(() => {
         fetchData();
@@ -70,14 +69,13 @@ const ListContentProductV2 = ({ userProfileId, productCategory, name, horizontal
         if(tag.length != 0){
             variables.tag = tag;
         }
-       
 
         const result = userProfileId !== null ?
             await fetchContentUserProduct(variables) :
             saved === true ?
             await fetchContentSavedProduct(variables) :
             await fetchContentProduct(variables);
-            console.log('iniresutl',result);
+        
         setItemData({
             ...itemData,
             data: itemData.data.concat(result.data),
@@ -121,7 +119,7 @@ const ListContentProductV2 = ({ userProfileId, productCategory, name, horizontal
                     onEndReached={() => setItemData({ ...itemData, loadNext: true })}
                     { ...extraProps }
                     renderItem={({ item, index }) =>
-                        <CardContentProduct
+                        <CardContentProductV2
                             productCategory={productCategory}
                             item={item}
                             horizontal={horizontal}

@@ -30,9 +30,11 @@ import CardComponentYoutube from './CardComponentYoutube';
 import CardComponentVideo from './CardComponentVideo';
 import CardComponentEmergency from './CardComponentEmergency';
 import CardComponentArticle from './CardComponentArticle';
+import CardComponentArticleV2 from './CardComponentArticleV2';
 import CardComponentEvent from './CardComponentEvent';
 import CardComponentJobs from './CardComponentJobs';
 import CardComponentPlace from './CardComponentPlace';
+import CardComponentPlaceV2 from './CardComponentPlaceV2';
 import CardForumVertical from '@src/screens/MainForum/CardForumVertical';
 import { fetchContentProductDetail } from 'src/api/content';
 
@@ -44,7 +46,7 @@ const defaultProps = {
     style: {},
 };
 
-const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizontal, style }) => {
+const CardContentProductV2 = ({ productCategory, item, numColumns, onPress, horizontal, style }) => {
     const [like, setLike] = useState(item.like);
     const [im_like, setImLike] = useState(item.im_like);
     const [trigger, setTrigger] = useState(false);
@@ -207,7 +209,7 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
             <TouchableOpacity
                 onPress={async() => {
                     await fetchViewProduct({productId: item.id});
-                    navigation.navigate('NewsDetail', {code: item.code });
+                    navigation.navigate('NewsDetailV2', {code: item.code });
 
                     GALogEvent('Artikel', {
                         id: item.id,
@@ -491,10 +493,11 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
     // else if (productCategory === 'JOBS') return renderCardJobs();
     // else if (productCategory === 'NEARBY_PLACE') return renderCardPlace();
     if (productCategory === 'EMERGENCY') return <CardComponentEmergency onPress={() => onPressCard()} { ...props } />;
-    else if (productCategory === 'POSTING') return <CardComponentArticle onPress={() => onPressCard()} { ...props } />;
+    // else if (productCategory === 'ARTIKEL') return <CardComponentArticleV2 onPress={() => onPressCard()} { ...props } />;
+    else if (productCategory === 'ARTIKEL') return renderCardArticle();
     else if (productCategory === 'EVENT') return <CardComponentEvent onPress={() => onPressCard()} { ...props } />;
     else if (productCategory === 'JOBS') return <CardComponentJobs onPress={() => onPressCard()} { ...props } />;
-    else if (productCategory === 'NEARBY_PLACE') return <CardComponentPlace onPress={() => onPressCard()} { ...props } />;
+    else if (productCategory === 'NEARBY_PLACE') return <CardComponentPlaceV2 onPress={() => onPressCard()} { ...props } />;
     else if (productCategory === 'YOUTUBE_VIDEO') return <CardComponentYoutube item={item} />;
     else if (productCategory === 'NEWEST_VIDEO') return <CardComponentVideo item={item} />;
     else if (productCategory === 'FORUM') return (
@@ -513,6 +516,6 @@ const CardContentProduct = ({ productCategory, item, numColumns, onPress, horizo
     return <Text>Not Set</Text>;
 }
 
-CardContentProduct.defaultProps = defaultProps
-export default CardContentProduct;
+CardContentProductV2.defaultProps = defaultProps
+export default CardContentProductV2;
 

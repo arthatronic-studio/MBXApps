@@ -7,7 +7,7 @@ import ModalInputText from '@src/components/ModalInputText';
 import {useNavigation} from '@react-navigation/native';
 import {Alert} from './Modal/Alert';
 import {accessClient} from 'src/utils/access_client';
-import {queryProductReport, queryUserBlock} from '@src/lib/query';
+import {queryReportAbuse, queryUserBlock} from '@src/lib/query';
 import Client from '@src/lib/apollo';
 import { fetchProductSave } from 'src/api/productSave';
 
@@ -17,6 +17,10 @@ const defaultProps = {
   nameType: 'PRODUCT',
   moduleType: 'CREATE',
   onClose: () => {},
+  editScreen: "EditThreadScreen",
+  onDelete: () => {},
+  onShare: () => {},
+  showpin: true
 };
 
 const initialMessage = {
@@ -25,7 +29,7 @@ const initialMessage = {
 }
 
 const ModalContentOptions = forwardRef((props, ref) => {
-  const { isOwner, item, moduleType, nameType, onClose } = props;
+  const { isOwner, item, useBlockUser, moduleType, nameType, onClose, editScreen, onDelete, onShare, showpin } = props;
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
@@ -58,7 +62,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
     console.log('variables', variables);
 
     Client.mutate({
-      mutation: queryProductReport,
+      mutation: queryReportAbuse,
       variables,
     })
       .then(res => {
@@ -126,7 +130,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
   const dataOptions = [
     {
       id: -1,
-      show: isOwner ? false : true,
+      show: isOwner ? false : showpin ? true : false,
       name: 'Pin Postingan',
       color: Color.text,
       onPress: () => {
@@ -141,7 +145,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
       color: Color.text,
       onPress: () => {
         combinedRef.current.close();
-        navigation.navigate('EditThreadScreen', {
+        navigation.navigate(editScreen, {
           ...item,
           title: 'Edit',
         });
@@ -149,10 +153,31 @@ const ModalContentOptions = forwardRef((props, ref) => {
     },
     {
       id: 1,
+      name: 'Bagikan',
+      color: Color.text,
+      onPress: () => {
+        combinedRef.current.close();
+        onShare();
+      }
+    },
+    {
+      id: 2,
       name: 'Report',
+      show: isOwner ? false : true,
       color: Color.error,
       onPress: () => {
-        setModalInputText(true);
+        combinedRef.current.close();
+        navigation.navigate('ReportArticle', {...item})
+      },
+    },
+    {
+      id: 3,
+      show: isOwner ? true : false,
+      name: 'Hapus',
+      color: Color.error,
+      onPress: () => {
+        combinedRef.current.close();
+        onDelete();
       },
     },
   ];
@@ -161,6 +186,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
     dataOptions.push({
       id: 2,
       name: 'Block User',
+      show: isOwner ? false : true,
       color: Color.error,
       onPress: () => {
         combinedRef.current.close();

@@ -16,6 +16,7 @@ import { geoCurrentPosition, geoLocationPermission } from 'src/utils/geolocation
 import { trackPlayerInit } from '@src/utils/track-player-init';
 import ModalNetInfo from '@src/components/ModalNetInfo';
 import { requestTrackingPermission } from 'react-native-tracking-transparency';
+import linking from 'src/navigators/linking';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { accessClient } from 'src/utils/access_client';
 
@@ -195,6 +196,7 @@ const App = () => {
       <PersistGate persistor={persistor}>
         <View style={{flex: 1, backgroundColor: accessClient.Theme === 'dark' ? '#000000' : '#FFFFFF'}}>
           <NavigationContainer
+            linking={linking}
             ref={navigationRef}
             onReady={onReady}
           >

@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { initialItemState } from 'src/utils/constants';
 import { fetchContentProduct, fetchContentSavedProduct, fetchContentUserProduct } from 'src/api/contentV2';
 import CardContentProduct from '@src/components/Content/CardContentProduct';
+import CardContentProductV2 from './CardContentProductV2';
 
 const propTypes = {
     userProfileId: PropTypes.number,
@@ -26,6 +27,7 @@ const propTypes = {
     style: PropTypes.object,
     showHeader: PropTypes.bool,
     showEmpty: PropTypes.bool,
+    showSeeAllText: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -42,6 +44,7 @@ const defaultProps = {
     showEmpty: false,
     orderBy: '',
     timeStart: '',
+    showSeeAllText: false,
 };
 
 const HighlightContentProductV2 = (props) => {
@@ -59,6 +62,7 @@ const HighlightContentProductV2 = (props) => {
         showEmpty,
         orderBy,
         timeStart,
+        showSeeAllText,
     } = props;
 
     const { Color } = useColor();
@@ -118,7 +122,7 @@ const HighlightContentProductV2 = (props) => {
         return (
             <PostingHeader
                 title={title}
-                showSeeAllText={false}
+                showSeeAllText={showSeeAllText}
                 productCategory={productCategory}
                 onSeeAllPress={() => {
                     navigation.navigate(nav, { title, userProfileId, orderBy, timeStart });
@@ -143,7 +147,7 @@ const HighlightContentProductV2 = (props) => {
     if (horizontal) extraProps = {};
 
     const renderCardContent = (item, index) => (
-        <CardContentProduct
+        <CardContentProductV2
             key={index}
             productCategory={productCategory}
             item={item}

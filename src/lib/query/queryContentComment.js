@@ -24,6 +24,8 @@ export const queryComment = gql`
             imageVideo
             isPinned
             videoFilename
+            status
+            likeCount
             replies{
                 id
                 userId
@@ -38,6 +40,8 @@ export const queryComment = gql`
                 imageVideo
                 videoFilename
             }
+            refCommentId
+            im_like
         }
     }
 `;

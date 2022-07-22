@@ -69,7 +69,14 @@ import EmergencyDetail from 'src/screens/Posting/Emergency/Detail';
 
 // News
 import NewsScreen from 'src/screens/Posting/News/Index';
+import NewsScreenV2 from 'src/screens/Posting/News/NewsScreenV2';
 import NewsDetail from 'src/screens/Posting/News/Detail';
+import NewsDetailV2 from 'src/screens/Posting/News/DetailV2';
+import Saved from 'src/screens/Posting/News/Saved';
+import SearchArticle from 'src/screens/Posting/News/SearchArticle';
+import CreateNews from 'src/screens/Posting/News/CreateNews';
+import EditNews from 'src/screens/Posting/News/EditNews';
+import ShowAllNews from 'src/screens/Posting/News/ShowAllNews';
 
 // Place
 import PlaceScreen from 'src/screens/Posting/Place/Index';
@@ -216,6 +223,7 @@ import CreateGroup from 'src/screens/Chat/CreateGroup';
 import GroupDetailScreen from 'src/screens/Chat/GroupDetailScreen';
 import UserGroupDetail from 'src/screens/Chat/UserGroupDetail';
 import AddMember from 'src/screens/Chat/AddMember';
+import ReportArticle from 'src/screens/Posting/News/ReportArticle';
 import ManageGroupScreen from 'src/screens/Chat/ManageGroupScreen';
 
 const { Navigator, Screen } = createStackNavigator();
@@ -231,7 +239,7 @@ function MainStackNavigator() {
       // SurveyPasarScreen
       screenOptions={{
         gestureEnabled: Platform.OS === 'ios',
-        headerShown: false,
+        headerShown: false
       }}>
       {/* uncanny */}
       <Screen name="SplashScreen" component={SplashScreen} />
@@ -328,7 +336,16 @@ function MainStackNavigator() {
       <Screen name="EmergencyDetail" component={EmergencyDetail} />
       {/* News */}
       <Screen name="NewsScreen" component={NewsScreen} />
+      <Screen name="NewsScreenV2" component={NewsScreenV2} />
       <Screen name="NewsDetail" component={NewsDetail} />
+      <Screen name="NewsDetailV2" component={NewsDetailV2} />
+      <Screen name="Saved" component={Saved} />
+      <Screen name="SearchArticle" component={SearchArticle} />
+      <Screen name="CreateNews" component={CreateNews} />
+      <Screen name="EditNews" component={EditNews} />
+      <Screen name="ReportArticle" component={ReportArticle} />
+      <Screen name="ShowAllNews" component={ShowAllNews} />
+
       {/* Place */}
       <Screen name="PlaceScreen" component={PlaceScreen} />
       <Screen name="PlaceDetail" component={PlaceDetail} />

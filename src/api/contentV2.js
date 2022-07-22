@@ -16,7 +16,7 @@ export const fetchContentProduct = async(variables) => {
         productType: Config.INITIAL_CODE,
         ...variables,
     };
-    
+
     try {
         const result = await Client.query({
             query: queryContentProductV2,

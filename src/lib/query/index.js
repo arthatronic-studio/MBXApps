@@ -2,6 +2,7 @@ import { queryContentProduct } from './queryContentProduct';
 import { queryContentProductDetail } from './queryContentProductDetail';
 import { queryContentMyProduct } from './queryContentMyProduct';
 import { queryProductManage } from './queryContentProductManage';
+import { queryProductManageV2 } from './queryContentProductManageV2';
 import { queryAddLike } from './queryContentAddLike';
 import { queryAddComment } from './queryContentAddComment';
 import { queryReportComment } from './queryContentReportComment';
@@ -24,7 +25,7 @@ import { queryGetNotificationWithCount } from './queryGetNotificationWithCount';
 import { queryGetUserOrganizationRef } from './queryGetUserOrganizationRef';
 import { queryContentUserProfile } from './queryContentUserProfile';
 import { queryContentUserProduct } from './queryContentUserProduct';
-import { queryProductReport } from './queryProductReport';
+import { queryReportAbuse } from './queryReportAbuse';
 import { queryUserBlock } from './queryUserBlock';
 import { queryGetUserBlock, queryUnblockUser } from './queryBlockUser';
 import { queryMenuList } from './queryMenuList';
@@ -38,47 +39,51 @@ import { queryReportAlasan } from './queryReportAlasan';
 import { queryReportAbuseV2 } from './queryReportAbuseV2';
 import { queryContentShare } from './queryContentShare';
 import { queryProductSave } from './queryProductSave';
+import { queryProductReport } from './queryProductReport';
+
 
 export {
-  queryContentProduct,
-  queryContentProductDetail,
-  queryContentMyProduct,
-  queryProductManage,
-  queryAddLike,
-  queryAddComment,
-  queryReportComment,
-  queryDelComment,
-  queryLike,
-  queryComment,
-  queryContentCommentPinManage,
-  queryJoinCommunity,
-  queryGetChapterList,
-  queryCheckVersion,
-  queryContentChatRooms,
-  queryContentChatRoomManage,
-  queryContentChatRoomDetail,
-  queryContentChatMessage,
-  queryGetNotificationHistory,
-  queryGetNotification,
-  queryNotificationManage,
-  queryNotificationManageAll,
-  queryGetNotificationWithCount,
-  queryGetUserOrganizationRef,
-  queryContentUserProfile,
-  queryContentUserProduct,
-  queryProductReport,
-  queryUserBlock,
-  queryGetUserBlock,
-  queryUnblockUser,
-  queryMenuList,
-  querySyaratKetentuan,
-  queryGetEnumList,
-  queryContentProductV2,
-  queryLikeComment,
-  queryViewProduct,
-  queryGetProductSave,
-  queryReportAlasan,
-  queryReportAbuseV2,
-  queryContentShare,
-  queryProductSave,
+    queryContentProduct,
+    queryContentProductDetail,
+    queryContentMyProduct,
+    queryProductManage,
+    queryProductManageV2,
+    queryAddLike,
+    queryAddComment,
+    queryReportComment,
+    queryDelComment,
+    queryLike,
+    queryComment,
+    queryContentCommentPinManage,
+    queryJoinCommunity,
+    queryGetChapterList,
+    queryCheckVersion,
+    queryContentChatRooms,
+    queryContentChatRoomManage,
+    queryContentChatRoomDetail,
+    queryContentChatMessage,
+    queryGetNotificationHistory,
+    queryGetNotification,
+    queryNotificationManage,
+    queryNotificationManageAll,
+    queryGetNotificationWithCount,
+    queryGetUserOrganizationRef,
+    queryContentUserProfile,
+    queryContentUserProduct,
+    queryProductReport,
+    queryReportAbuse,
+    queryUserBlock,
+    queryGetUserBlock,
+    queryUnblockUser,
+    queryMenuList,
+    querySyaratKetentuan,
+    queryGetEnumList,
+    queryContentProductV2,
+    queryLikeComment,
+    queryViewProduct,
+    queryGetProductSave,
+    queryReportAlasan,
+    queryReportAbuseV2,
+    queryContentShare,
+    queryProductSave,  
 };

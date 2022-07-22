@@ -82,7 +82,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
     if (
       date.length != 0 &&
       time.length != 0 &&
-      duration != 0 &&
+      duration.value != 0 &&
       description.length != 0 &&
       price != 0 &&
       quickAccess.length != 0
@@ -91,7 +91,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
         productId: item.id,
         dateStart: Moment(dateRef.current.getRawValue()).format('YYYY-MM-DD'),
         timeStart: time,
-        timeDuration: duration,
+        timeDuration: duration.value,
         description: description,
         startPrice: amountPrice.current.getRawValue(),
         buyNowPrice: amountPrice.current.getRawValue(),
@@ -122,7 +122,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
     if (
       date.length != 0 &&
       time.length != 0 &&
-      duration != 0 &&
+      duration.value != 0 &&
       description.length != 0 &&
       price != 0 &&
       quickAccess.length != 0
@@ -132,7 +132,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
         productId: item.id,
         dateStart: Moment(dateRef.current.getRawValue()).format('YYYY-MM-DD'),
         timeStart: time,
-        timeDuration: duration,
+        timeDuration: duration.value,
         description: description,
         startPrice: typeof amountPrice.current.props.value === 'number' ? amountPrice.current.props.value : amountPrice.current.getRawValue(),
         buyNowPrice: typeof amountPrice.current.props.value === 'number' ? amountPrice.current.props.value : amountPrice.current.getRawValue(),
@@ -161,7 +161,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
 
   useEffect(() => {
     if(edit){
-      setDuration(edit.duration);
+      setDuration({name: `${edit.duration} Menit`, 'value': edit.duration});
       setDescription(edit.description);
       setPrice(edit.startPrice);
       // setPriceBuyNow(edit.buyNowPrice);
@@ -346,7 +346,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
                 alignItems: 'center',
               }}>
               <Text size={14}>
-                {duration ? duration + ' Menit' : 'Pilih Durasi'}
+                {duration ? duration.name : 'Pilih Durasi'}
               </Text>
               <IonIcons
                 name="chevron-down-outline"
@@ -582,6 +582,7 @@ const AddProductAuctionSecond = ({navigation, route}) => {
         ref={modalDropDownRef}
         selectedValue={duration}
         onPress={value => onDurationChange(value)}
+        name="name"
       />
       <ModalNominalPicker
         ref={modalNominalPickerRef}
