@@ -5,6 +5,7 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 
 
 import Text from '@src/components/Text';
@@ -70,12 +71,10 @@ const SearchBar = ({ type, label, style, onPress, value, onChangeText, textInput
                 <>
                     <TouchableOpacity
                         onPress={() => onPress()}
-                        style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}
-                    >
-                      
-                        <Divider width={8} />
-                        <Text color={Color.placeholder}>{label}</Text>
-                        <Octicons style={{marginLeft:130}} name='search' color={Color.placeholder} size={27} />
+                        style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
+                    >                      
+                        <Text size={14} color={Color.placeholder}>{label}</Text>
+                        <Feather name='search' color={Color.placeholder} size={19} />
                     </TouchableOpacity>
                 </>
                 }
