@@ -5,6 +5,7 @@ import {
   useWindowDimensions,
   Platform,
   Keyboard,
+  Image,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -27,6 +28,7 @@ import FormInput from 'src/components/FormInput';
 import WidgetBgFixIcon from './WidgetBgFixIcon';
 import { statusBarHeight } from 'src/utils/constants';
 import { accessClient } from 'src/utils/access_client';
+import imageAssets from 'assets/images';
 
 const inputs = ['fullName', 'email', 'username', 'password', 'password2'];
 
@@ -160,18 +162,18 @@ const RegisterScreen = ({navigation, route}) => {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          marginTop: height / 3,
-          paddingBottom: height / 3,
+          marginTop: 36, // height / 3,
+          // paddingBottom: height / 3,
           backgroundColor: Color.theme
         }}
       >
         <View
           style={{
-            borderColor: Color.border,
-            borderWidth: 0.5,
-            borderBottomWidth: 0,
-            borderTopLeftRadius: 16,
-            borderTopRightRadius: 16,
+            // borderColor: Color.border,
+            // borderWidth: 0.5,
+            // borderBottomWidth: 0,
+            // borderTopLeftRadius: 16,
+            // borderTopRightRadius: 16,
           }}
         >
           <Container padding={16}>
@@ -207,7 +209,7 @@ const RegisterScreen = ({navigation, route}) => {
             <FormInput
               ref={phoneRef}
               label='No. Telepon'
-              placeholder='081312345678'
+              placeholder='81312345678'
               value={state.userData.username}
               onChangeText={text => onChangeUserData('username', text)}
               onBlur={() => isValueError('username')}
@@ -215,6 +217,11 @@ const RegisterScreen = ({navigation, route}) => {
               keyboardType="default"
               onSubmitEditing={() => passwordRef.current.focus()}
               error={state.error.username}
+              prefixIcon={
+                <Container paddingRight={8}>
+                  <Text>+62</Text>
+                </Container>
+              }
             />
 
             <FormInput
@@ -245,10 +252,19 @@ const RegisterScreen = ({navigation, route}) => {
                       alignItems: 'flex-end',
                     }}
                   >
-                    <Ionicons
+                    {/* <Ionicons
                       size={16}
                       name={state.showPassword ? 'eye-off' : 'eye'}
                       color={Color.gray}
+                    /> */}
+
+                    <Image
+                      source={imageAssets.eyeSlash}
+                      style={{
+                        height: 24,
+                        width: 24,
+                        opacity: state.showPassword ? 0.5 : 1,
+                      }}
                     />
                   </NativeTouchable>
                 </View>
@@ -283,10 +299,19 @@ const RegisterScreen = ({navigation, route}) => {
                       alignItems: 'flex-end',
                     }}
                   >
-                    <Ionicons
+                    {/* <Ionicons
                       size={16}
                       name={state.showPassword ? 'eye-off' : 'eye'}
                       color={Color.gray}
+                    /> */}
+
+                    <Image
+                      source={imageAssets.eyeSlash}
+                      style={{
+                        height: 24,
+                        width: 24,
+                        opacity: state.showPassword ? 0.5 : 1,
+                      }}
                     />
                   </NativeTouchable>
                 </View>
@@ -294,14 +319,25 @@ const RegisterScreen = ({navigation, route}) => {
             />
 
             {/* <View style={{width: '100%', paddingVertical: 2, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-              <MaterialIcons size={16} name='check-box-outline-blank' color={Color.theme} style={{marginRight: 4}} />
-              <Text align='left' size={12} color={Color.theme}>Saya ingin menerima berita terbaru lewat email</Text>
+              <MaterialIcons size={16} name='check-box-outline-blank' color={Color.border} style={{marginRight: 4}} />
+              <Text align='left' size={12} color={Color.border}>Saya ingin menerima berita terbaru lewat email</Text>
             </View> */}
 
-            {/* <View style={{width: '100%', paddingVertical: 2, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-              <MaterialIcons size={16} name='check-box-outline-blank' color={Color.theme} style={{marginRight: 4}} />
-              <Text align='left' size={12} color={Color.theme}>Saya setuju dengan <Text color={Color.primary}>Syarat & Ketentuan</Text> yang berlaku.</Text>
-            </View> */}
+            <View style={{width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+              <MaterialIcons
+                size={16}
+                name='check-box-outline-blank'
+                color={Color.border}
+              />
+              <View style={{flex: 1, paddingLeft: 8}}>
+                <Text
+                  align='left'
+                  color={Color.border}
+                >
+                  Saya setuju dengan <Text color={Color.primary}>Syarat & Ketentuan</Text> yang berlaku.
+                </Text>
+              </View>
+            </View>
 
             <Divider height={24} />
 

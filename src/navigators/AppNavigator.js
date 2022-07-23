@@ -5,6 +5,8 @@ import { accessClient } from 'src/utils/access_client';
 
 // uncanny
 import SplashScreen from 'src/screens/SplashScreen';
+import MainHome from 'src/screens/MainHome/MainHome';
+import MainProfile from 'src/screens/MainProfile/MainProfile';
 import BottomTabsNavigator from '@src/navigators/BottomTabsNavigator';
 import BottomTabsNavigatorKomoto from '@src/navigators/BottomTabsNavigatorKomoto';
 import BottomTabsNavigatorsabyan from '@src/navigators/BottomTabsNavigatorSabyan';
@@ -21,6 +23,7 @@ import LoginScreen from '@src/screens/User/LoginScreen';
 import RegisterScreen from '@src/screens/User/RegisterScreen';
 import ForgotPasswordScreen from '@src/screens/User/ForgotPasswordScreen';
 import UserChangePassword from '@src/screens/User/UserChangePassword';
+import OtpScreen from 'src/screens/User/OtpScreen';
 
 // topup
 import TopUpScreen from '@src/screens/Topup/TopUpScreen';
@@ -225,10 +228,10 @@ import ReportArticle from 'src/screens/Posting/News/ReportArticle';
 import ManageGroupScreen from 'src/screens/Chat/ManageGroupScreen';
 
 const { Navigator, Screen } = createStackNavigator();
-const MainPage =
-	accessClient.BottomTabsNavigator.type === 'komoto'
-		? BottomTabsNavigatorKomoto
-		: accessClient.BottomTabsNavigator.type === 'sabyan' ? BottomTabsNavigatorsabyan : BottomTabsNavigator;
+const MainPage = MainHome;
+	// accessClient.BottomTabsNavigator.type === 'komoto'
+		// ? BottomTabsNavigatorKomoto
+		// : accessClient.BottomTabsNavigator.type === 'sabyan' ? BottomTabsNavigatorsabyan : BottomTabsNavigator;
 
 function MainStackNavigator() {
   return (
@@ -242,6 +245,7 @@ function MainStackNavigator() {
       {/* uncanny */}
       <Screen name="SplashScreen" component={SplashScreen} />
       <Screen name="MainPage" component={MainPage} />
+      <Screen name="MainProfile" component={MainProfile} />
       <Screen name="OnBoardingScreen" component={OnBoardingScreen} />
       <Screen name="TrackingOrder" component={TrackingOrder} />
       <Screen name="CreateEmergencyScreen" component={CreateEmergencyScreen} />
@@ -324,6 +328,7 @@ function MainStackNavigator() {
       <Screen name="RegisterScreen" component={RegisterScreen} />
       <Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} />
       <Screen name="UserChangePassword" component={UserChangePassword} />
+      <Screen name="OtpScreen" component={OtpScreen} />
       {/* topup */}
       <Screen name="TopUpScreen" component={TopUpScreen} />
       {/* content */}

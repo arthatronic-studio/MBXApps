@@ -68,10 +68,10 @@ const FormInput = forwardRef((props, ref) => {
                 style={{
                     width: '100%',
                     justifyContent: 'center',
-                    borderRadius: 6,
-                    borderWidth: 0.5,
-                    borderColor: Color.disabled,
-                    paddingVertical: Platform.OS === 'ios' ? 12 : 6,
+                    borderRadius: 8,
+                    borderWidth: 1,
+                    borderColor: Color.border,
+                    paddingVertical: Platform.OS === 'ios' ? 18 : 10,
                     paddingHorizontal: 12,
                     backgroundColor: Color.textInput,
                 }}
@@ -80,7 +80,7 @@ const FormInput = forwardRef((props, ref) => {
                     {prefixIcon}
 
                     <View style={{flex: 1}}>
-                        {label !== '' && <View
+                        {/* {label !== '' && <View
                             style={{
                                 width: '100%',
                                 justifyContent: 'flex-start',
@@ -88,8 +88,8 @@ const FormInput = forwardRef((props, ref) => {
                                 marginBottom: Platform.OS === 'ios' ? 4 : 2,
                             }}
                         >
-                            <Text size={12} color={Color.placeholder}>{label}</Text>
-                        </View>}
+                            <Text size={12}>{label}</Text>
+                        </View>} */}
 
                         {format === 'currency' ? 
                             <View />
@@ -133,7 +133,7 @@ const FormInput = forwardRef((props, ref) => {
                                 <TextInput
                                     ref={ref}
                                     placeholder={placeholder}
-                                    placeholderTextColor={Color.border}
+                                    placeholderTextColor={Color.placeholder}
                                     underlineColorAndroid='transparent'
                                     autoCorrect={false}
                                     onChangeText={(val) => onChangeText(val)}
@@ -176,6 +176,21 @@ const FormInput = forwardRef((props, ref) => {
 
                     {suffixIcon}
                 </Row>
+
+                {label !== '' && <View
+                    style={{
+                        position: 'absolute',
+                        top: -8,
+                        left: 8,
+                        paddingHorizontal: 4,
+                        justifyContent: 'flex-start',
+                        alignItems: 'flex-start',
+                        marginBottom: Platform.OS === 'ios' ? 4 : 2,
+                        backgroundColor: Color.theme,
+                    }}
+                >
+                    <Text size={12} color={Color.border}>{label}</Text>
+                </View>}
             </View>
             {!hideErrorHint && <View style={{
                 width: '100%',

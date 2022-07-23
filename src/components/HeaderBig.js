@@ -70,7 +70,7 @@ const HeaderBig = ({
         elevation: 0,
         borderBottomWidth: 0,
         paddingHorizontal: 16,
-        backgroundColor: type === 'MAIN_HOME' ? Color.primary : Color.theme,
+        backgroundColor: Color.theme,
         borderColor: Color.border,
         ...style,
       }}
@@ -81,19 +81,18 @@ const HeaderBig = ({
             <Container>
               <Text
                 align='left'
-                size={10}
-                type="medium"
+                size={12}
                 letterSpacing={0.45}
-                color={type === 'MAIN_HOME' ? Color.textButtonInline : Color.text}
+                color={Color.text}
               >
                 Halo,
               </Text>
               <Text
                 align='left'
                 size={20}
-                type='medium'
+                type='bold'
                 numberOfLines={1}
-                color={type === 'MAIN_HOME' ? Color.textButtonInline : Color.text}
+                color={Color.text}
               >
                 {user && !user.guest
                   ? user.firstName.trim() +
@@ -107,7 +106,7 @@ const HeaderBig = ({
               <Image source={iconSplash} style={{width: 90, height: 40}} resizeMode='contain' />
             </View>
           :
-            <Text size={18} type='bold'>{title}</Text>
+            <Text size={28} type='bold'>{title}</Text>
           }
         </Col>
 

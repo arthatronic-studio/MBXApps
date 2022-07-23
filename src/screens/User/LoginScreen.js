@@ -5,6 +5,7 @@ import {
   useWindowDimensions,
   Platform,
   Keyboard,
+  Image,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -16,6 +17,7 @@ import {
   usePopup,
   useColor,
   Scaffold,
+  HeaderBig,
 } from '@src/components';
 import {Button, TouchableOpacity} from '@src/components/Button';
 import Text from '@src/components/Text';
@@ -23,10 +25,11 @@ import validate from '@src/lib/validate';
 import {login} from '@src/state/actions/user/auth';
 import {redirectTo} from '@src//utils';
 import FormInput from 'src/components/FormInput';
-import { Container, Row, Line } from 'src/styled';
+import { Container, Row, Line, Divider } from 'src/styled';
 import PopupTermCondition from 'src/components/PopupTermCondition';
 import WidgetBgFixIcon from './WidgetBgFixIcon';
 import { accessClient } from 'src/utils/access_client';
+import imageAssets from 'assets/images';
 
 const inputs = ['username', 'password'];
 const shouldChangePassword = ['tribes123'];
@@ -179,37 +182,48 @@ const LoginScreen = ({navigation, route}) => {
 
   return (
     <Scaffold
-      showHeader={false}
+      header={
+        <HeaderBig
+          title='Login'
+          titleRight='Register'
+          titleRightColor={Color.primarySoft}
+          onPressRightButton={() => {
+            navigation.navigate('RegisterScreen');
+            dispatch({ type: 'USER.REGISTER', status: false });
+          }}
+          style={{ backgroundColor: 'transparent', paddingTop: 16 }}
+        />
+      }
       popupProps={popupProps}
       fallback={loading}
       statusBarColor={Color[accessClient.ColorBgParallax]}
       translucent={Platform.OS === 'ios' ? true : isFocused}
       useSafeArea={Platform.OS === 'ios' ? false : true}
     >
-      <WidgetBgFixIcon />
+      {/* <WidgetBgFixIcon /> */}
 
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          marginTop: height / 3,
-          paddingBottom: height / 3,
+          marginTop: height / 4, // height / 3,
+          // paddingBottom: height / 3,
           backgroundColor: Color.theme
         }}
       >
         <View
           style={{
-            borderColor: Color.border,
-            borderWidth: 0.5,
-            borderBottomWidth: 0,
-            borderTopLeftRadius: 16,
-            borderTopRightRadius: 16,
+            // borderColor: Color.border,
+            // borderWidth: 0.5,
+            // borderBottomWidth: 0,
+            // borderTopLeftRadius: 16,
+            // borderTopRightRadius: 16,
           }}
         >
           <Container padding={16}>
-            <Container marginTop={24} marginBottom={48}>
+            {/* <Container marginTop={24} marginBottom={48}>
               <Text align='left' size={24} type='semibold'>Masuk</Text>
-            </Container>
+            </Container> */}
 
             {state.isSucceddForgot && (
               <View
@@ -270,17 +284,26 @@ const LoginScreen = ({navigation, route}) => {
                       alignItems: 'flex-end',
                     }}
                   >
-                    <Ionicons
+                    {/* <Ionicons
                       size={16}
                       name={state.showPassword ? 'eye-off' : 'eye'}
                       color={Color.gray}
+                    /> */}
+
+                    <Image
+                      source={imageAssets.eyeSlash}
+                      style={{
+                        height: 24,
+                        width: 24,
+                        opacity: state.showPassword ? 0.5 : 1,
+                      }}
                     />
                   </NativeTouchable>
                 </View>
               }
             />
 
-            <Container paddingTop={4} paddingBottom={30}>
+            <Container paddingBottom={24}>
               <TouchableOpacity
                 activeOpacity={1}
                 onPress={() => {
@@ -292,8 +315,8 @@ const LoginScreen = ({navigation, route}) => {
                   alignItems: 'flex-end',
                 }}
               >
-                <Text type="semibold" color={Color.primary}>
-                  Lupa Kata Sandi?
+                <Text type="semibold" color={Color.primarySoft}>
+                  Lupa Password?
                 </Text>
               </TouchableOpacity>
             </Container>
@@ -304,23 +327,10 @@ const LoginScreen = ({navigation, route}) => {
               Masuk
             </Button>
 
-            <Container paddingVertical={24}>
-              <Row justify='space-between'>
-                <Line height={1} width='40%' color={Color.placeholder} />
-                <Text size={12}>Atau</Text>
-                <Line height={1} width='40%' color={Color.placeholder} />
-              </Row>
-            </Container>
-
-            <Button
-              color={Color.secondary}
-              onPress={() => {
-                navigation.navigate('RegisterScreen');
-                dispatch({ type: 'USER.REGISTER', status: false });
-              }}
-            >
-              Daftar
-            </Button>
+            <Divider />
+            <Text onPress={() => navigation.navigate('OtpScreen')}>
+              OTP TES
+            </Text>
           </Container>
         </View>
       </KeyboardAwareScrollView>

@@ -64,6 +64,9 @@ import { queryGetNotification } from "src/lib/query";
 import client from "src/lib/apollo";
 import MemberRank from "src/components/MemberRank";
 import MyRank from 'src/components/MyRank';
+import imageAssets from 'assets/images';
+import WidgetHomeMenuStatic from './WidgetHomeMenuStatic';
+import { statusBarHeight } from 'src/utils/constants';
 
 let tempShowPopupAds = true;
 
@@ -299,7 +302,7 @@ const MainHome = ({ navigation, route }) => {
       //     ? {backgroundColor: backgroundInterpolate}
       //     : {}
       // }
-      statusBarColor={Color.primary}
+      statusBarColor={Color.theme}
       loadingProps={loadingProps}
       header={
         <HeaderBig
@@ -311,7 +314,7 @@ const MainHome = ({ navigation, route }) => {
           }}
           actions={
             <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('NotificationScreen');
                 }}
@@ -335,12 +338,11 @@ const MainHome = ({ navigation, route }) => {
                     </Text>
                   </Circle>
                 )}
-              </TouchableOpacity>
+              </TouchableOpacity> */}
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('Chat');
-                  // navigation.navigate('ChatRoomsScreen');
                 }}
                 style={{
                   width: '20%',
@@ -358,9 +360,27 @@ const MainHome = ({ navigation, route }) => {
                     </Text>
                   </Circle>
                 )}
+              </TouchableOpacity> */}
+
+              <TouchableOpacity
+                onPress={() => {
+                  
+                }}
+                style={{
+                  width: '20%',
+                  justifyContent: 'flex-start',
+                  alignItems: 'flex-end',
+                }}>
+                <Image
+                  source={imageAssets.ticket}
+                  style={{
+                    height: 20,
+                    width: 20,
+                  }}
+                />
               </TouchableOpacity>
 
-              {accessClient.isKomoto && <TouchableOpacity
+              <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('MainProfile');
                 }}
@@ -369,12 +389,14 @@ const MainHome = ({ navigation, route }) => {
                   justifyContent: 'flex-start',
                   alignItems: 'flex-end',
                 }}>
-                <Ionicons
-                  name="person"
-                  size={22}
-                  color={Color.textButtonInline}
+                <Image
+                  source={imageAssets.profile}
+                  style={{
+                    height: 20,
+                    width: 20,
+                  }}
                 />
-              </TouchableOpacity>}
+              </TouchableOpacity>
             </View>
           }
         />
@@ -444,7 +466,7 @@ const MainHome = ({ navigation, route }) => {
       //   backgroundColor: colorOutputRange[0]
       // }}
       >
-        <Container color={Color.theme} paddingTop={8}>
+        <Container color={Color.theme} paddingTop={8} paddingBottom={statusBarHeight}>
           <Animated.View
             style={{
               width,
@@ -504,15 +526,15 @@ const MainHome = ({ navigation, route }) => {
 
           <Divider height={spaceContentSize} />
 
-          <Line color={Color.border} width={width} />
+          {/* <Line color={Color.border} width={width} /> */}
 
-          <Container paddingVertical={spaceContentSize}>
+          {/* <Container paddingVertical={spaceContentSize}>
             <MemberRank />
-          </Container>
+          </Container> */}
 
-          <Line color={Color.border} width={width} />
+          {/* <Line color={Color.border} width={width} /> */}
 
-          {accessClient.MainHome.showMenuHome && <WidgetMenuHome
+          {/* {accessClient.MainHome.showMenuHome && <WidgetMenuHome
             showMore
             onPress={(item) => {
               console.log(item, 'item');
@@ -522,35 +544,37 @@ const MainHome = ({ navigation, route }) => {
                 return;
               }
             }}
-          />}
+          />} */}
 
-          {accessClient.MainHome.showMenuHome && <Line color={Color.border} width={width} />}
+          <WidgetHomeMenuStatic />
 
-          <Divider height={spaceContentSize} />
+          {/* {accessClient.MainHome.showMenuHome && <Line color={Color.border} width={width} />} */}
 
-          <HighlightContentProduct
+          {/* <Divider height={spaceContentSize} /> */}
+
+          {/* <HighlightContentProduct
             productCategory='FORUM'
             name='Forum'
             title='Thread Populer'
             nav='ForumScreen'
             refresh={refreshing || isFocused}
-          />
+          /> */}
 
-          {accessClient.MainHome.showListAuction && (
+          {/* {accessClient.MainHome.showListAuction && (
             <HighlightLelang
               title={`Sedang Berlangsung`}
               nav='LiveLelangScreen'
               prodStatus='ONGOING'
             />
-          )}
+          )} */}
 
-          {accessClient.MainHome.showListSoonAuction && (
+          {/* {accessClient.MainHome.showListSoonAuction && (
             <HighlightLelang
               title={`Akan Datang`}
               nav='LiveLelangScreen'
               prodStatus='WILLCOME'
             />
-          )}
+          )} */}
 
           {/* hide banner promo */}
           {/* {accessClient.MainHome.showListPromo && (
@@ -624,13 +648,13 @@ const MainHome = ({ navigation, route }) => {
             </View>
           )} */}
 
-          <HighlightContentProduct
+          {/* <HighlightContentProduct
             productCategory='EMERGENCY'
             name='Help Me'
             title='Kondisi Darurat'
             nav='EmergencyScreen'
             refresh={refreshing || isFocused}
-          />
+          /> */}
 
           {/* <HighlightContentProduct
             productCategory='Artikel'
@@ -640,23 +664,23 @@ const MainHome = ({ navigation, route }) => {
             refresh={refreshing || isFocused}
           /> */}
 
-          <HighlightContentProductV2
+          {/* <HighlightContentProductV2
             productCategory='ARTIKEL'
             name='Artikel'
             title='Artikel Populer'
             nav='NewsScreenV2'
             refresh={refreshing || isFocused}
             orderBy="like"
-          />
+          /> */}
 
-          <HighlightContentProduct
+          {/* <HighlightContentProduct
             productCategory='NEARBY_PLACE'
             name='Tempat'
             title='Tempat Terdekat'
             nav='PlaceScreen'
             horizontal
             refresh={refreshing || isFocused}
-          />
+          /> */}
 
           <HighlightContentProduct
             productCategory='EVENT'
@@ -664,19 +688,20 @@ const MainHome = ({ navigation, route }) => {
             title='Event Terbaru'
             nav='EventScreen'
             refresh={refreshing || isFocused}
+            showHeader={false}
           />
 
-          <HighlightContentProduct
+          {/* <HighlightContentProduct
             productCategory='JOBS'
             name='Loker'
             title='Lowongan Pekerjaan'
             nav='JobScreen'
             refresh={refreshing || isFocused}
-          />
+          /> */}
 
-          <MusikTerbaru />
+          {/* <MusikTerbaru /> */}
 
-          <MusikAlbum />
+          {/* <MusikAlbum /> */}
 
           {/* isFocused handle android navigate crash from home */}
           {/* {isFocused && <HighlightContentProduct
@@ -688,16 +713,16 @@ const MainHome = ({ navigation, route }) => {
             style={{paddingHorizontal: 0}}
           />} */}
 
-          <HighlightContentProduct
+          {/* <HighlightContentProduct
             productCategory='NEWEST_VIDEO'
             name='Video'
             title='Video Terbaru'
             nav='VideoScreen'
             refresh={refreshing || isFocused}
             style={{ paddingHorizontal: 0 }}
-          />
+          /> */}
 
-          {accessClient.MainHome.showListEbookNewer && (
+          {/* {accessClient.MainHome.showListEbookNewer && (
             <View style={{ paddingVertical: 12 }}>
               <PostingHeader
                 title="Rilisan Terbaru"
@@ -740,7 +765,7 @@ const MainHome = ({ navigation, route }) => {
                 horizontal={true}
               />
             </View>
-          )}
+          )} */}
         </Container>
       </ScrollView>
 
@@ -770,40 +795,56 @@ const MainHome = ({ navigation, route }) => {
           animationOut="slideOutDown"
           backdropColor={Color.semiwhite}>
           <View
-            style={{ width: '90%', aspectRatio: 9 / 16, alignSelf: 'center' }}>
-            <TouchableOpacity
-              onPress={() => {
-                tempShowPopupAds = false;
-                setShowPopupAds(false);
-                // navigation.navigate('DetailPromo', {item});
-                if (accessClient.isSurvey) {
-                  const linkDownload = 'https://docs.google.com/presentation/d/12PCLiMUDLxFh_C-3JGsXmLQLhn4UEyaQ/edit?usp=sharing&ouid=107664437226771955569&rtpof=true&sd=true';
-                  Linking.openURL(linkDownload);
-                }
-              }}>
-              <ImageBackground
-                source={{ uri: dataPopupAds.image }}
-                imageStyle={{ borderRadius: 12 }}
-                style={{ height: '100%', resizeMode: 'contain', width: '100%' }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    tempShowPopupAds = false;
-                    setShowPopupAds(false);
-                  }}
+            style={{ width: '100%', aspectRatio: 1, borderRadius: 16, backgroundColor: Color.primaryDark, }}
+          >
+            <View
+              style={{
+                flex: 1,
+                padding: 32,
+                alignItems: 'center',
+              }}
+            >
+              <View
+                style={{
+                  flex: 1
+                }}
+              >
+                <View
                   style={{
-                    alignSelf: 'flex-end',
-                    padding: 4,
-                    margin: 8,
-                    backgroundColor: Color.error,
-                    borderRadius: 50,
-                  }}>
+                    height: '100%',
+                    aspectRatio: 1,
+                  }}
+                >
                   <Image
-                    source={ImagesPath.icClose}
-                    style={{ width: 20, height: 20 }}
+                    source={imageAssets.shake}
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                    }}
                   />
-                </TouchableOpacity>
-              </ImageBackground>
-            </TouchableOpacity>
+                </View>
+              </View>
+
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  justifyContent: 'space-evenly',
+                }}
+              >
+                <Text>Shake your device to verify the tickets</Text>
+                <Container width='50%'>
+                  <Button
+                    onPress={() => {
+                      tempShowPopupAds = false;
+                      setShowPopupAds(false);
+                    }}
+                  >
+                    I Understand
+                  </Button>
+                </Container>
+              </View>
+            </View>
           </View>
         </Modal>
       )}

@@ -601,7 +601,7 @@ const MainProfile = ({navigation, route}) => {
               padding: 16,
               ...shadowStyle,
             }}>
-            <Image
+            {/* <Image
               source={imageCardOrnament}
               style={{
                 position: 'absolute',
@@ -611,7 +611,7 @@ const MainProfile = ({navigation, route}) => {
                 height: Image.resolveAssetSource(imageCardOrnament).height,
                 width: Image.resolveAssetSource(imageCardOrnament).width,
               }}
-            />
+            /> */}
 
             <View
               style={{
@@ -729,11 +729,11 @@ const MainProfile = ({navigation, route}) => {
                           {item.title}
                         </Text>
 
-                        {item.badgeTitle !== '' &&
+                        {/* {item.badgeTitle !== '' &&
                           <Text size={10} color={Color.primary}>
                             {item.badgeTitle}
                           </Text>
-                        }
+                        } */}
                       </Col>
                       <Col align="flex-end" size={2} justify="center">
                         <FontAwesome

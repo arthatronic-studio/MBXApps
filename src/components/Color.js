@@ -2,11 +2,11 @@ import {store} from '@src/state/redux';
 import {useSelector} from 'react-redux';
 
 const staticColors = {
-  primary: '#3C58C1',
-  primaryDark: '#5D41C9',
-  primarySoft: '#4579E6',
+  primary: '#EBC300',
+  primaryDark: '#4B4639',
+  primarySoft: '#D6C694',
   secondary: '#6A7479',
-  textButtonInline: '#FFFFFF',
+  textButtonInline: '#4B4639',
   oldGreen: '#557D09',
   disabled: '#A1A1A1',
   success: '#0BBC2E',
@@ -25,7 +25,7 @@ const staticColors = {
   icon: '#667786',
   bid: '#E6E9EA',
   infosecond: '#DAE9F2',
-  placeholder: '#6A7479',
+  placeholder: '#979080',
   danger: '#F73347',
   lightInfo: '#2C70F7'
 };
@@ -45,10 +45,10 @@ export const darkModeColors = {
   ...staticColors,
   colorDominant: 'dark',
   overflow: 'rgba(f, f, f, 0.3)',
-  theme: '#232323',
-  text: '#FFFFFF',
-  textInput: '#232323',
-  border: '#2E2E2E',
+  theme: '#1D1B16',
+  text: '#E8E2D9',
+  textInput: '#1D1B16',
+  border: '#979080',
   semiwhite: '#353535',
 };
 
@@ -57,7 +57,7 @@ export const useColor = isRoot => {
     ? store.getState()['theme'].theme
     : useSelector(state => state['theme'].theme);
 
-  const Color = theme === 'dark' ? darkModeColors : lightModeColors;
+  const Color = darkModeColors; // theme === 'dark' ? darkModeColors : lightModeColors;
   return {Color};
 };
 

@@ -16,7 +16,7 @@ const CustomButton = Styled(TouchableOpacity)`
   backgroundColor: ${(props) => (props.color)};
   width: 100%;
   padding: 16px;
-  borderRadius: 50px;
+  borderRadius: 8px;
   alignItems: center;
   justifyContent: center;
   flexDirection: row;
@@ -59,7 +59,7 @@ const Button = (props) => {
           fontSize={fontSize}
           type={type || 'semibold'}
           color={
-            disabled ? Color.border : props.fontColor ? props.fontColor : Color.textButtonInline
+            disabled ? Color.border : (props.fontColor || Color.textButtonInline)
           }>
           {children}
         </Text>
