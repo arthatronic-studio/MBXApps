@@ -1,4 +1,4 @@
-package com.tribessocial;
+package com.mblockspacesapp;
 
 import com.facebook.react.ReactActivity;
 
@@ -12,7 +12,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "TribesSocial";
+    return "MBlocSpaces";
   }
   // @Override
   // protected ReactActivityDelegate createReactActivityDelegate() {

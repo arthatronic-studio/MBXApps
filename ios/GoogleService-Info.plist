@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>650083720470-q5tkd5d0mvc36ki48t9vifen91qmuu31.apps.googleusercontent.com</string>
+	<string>945872571263-06gj2b5jurvco84bi14ho2ld9pbktpac.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.650083720470-q5tkd5d0mvc36ki48t9vifen91qmuu31</string>
+	<string>com.googleusercontent.apps.945872571263-06gj2b5jurvco84bi14ho2ld9pbktpac</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCenGXX-EeG7x4IoPv45BJY5ZEg0pjs5xQ</string>
+	<string>AIzaSyADK4-ZhUjEGGag4knL9cN2nOQxtdIUT64</string>
 	<key>GCM_SENDER_ID</key>
-	<string>650083720470</string>
+	<string>945872571263</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.tribessocial</string>
+	<string>com.mblockspacesapp</string>
 	<key>PROJECT_ID</key>
-	<string>tribes-social</string>
+	<string>mbloc-27b6a</string>
 	<key>STORAGE_BUCKET</key>
-	<string>tribes-social.appspot.com</string>
+	<string>mbloc-27b6a.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:650083720470:ios:7418aefb9c73fbe5848437</string>
-	<key>DATABASE_URL</key>
-	<string>https://tribes-social-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+	<string>1:945872571263:ios:d0d7df2741920f1d8a684a</string>
 </dict>
 </plist>

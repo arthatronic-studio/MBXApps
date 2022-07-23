@@ -3,7 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '11.0'
 
-target 'TribesSocial' do
+target 'MBlocSpaces' do
   pod 'react-native-ffmpeg/full-gpl-lts', :podspec => '../node_modules/react-native-ffmpeg/react-native-ffmpeg.podspec'
   rn_maps_path = '../node_modules/react-native-maps'
   pod 'react-native-google-maps', :path => rn_maps_path
@@ -16,7 +16,7 @@ target 'TribesSocial' do
     :hermes_enabled => false
   )
 
-  target 'TribesSocialTests' do
+  target 'MBlocSpacesTests' do
     inherit! :complete
     # Pods for testing
   end

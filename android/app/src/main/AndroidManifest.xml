@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.tribessocial">
+  package="com.mblockspacesapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -14,8 +14,8 @@
 
     <!-- QUERY_ALL_PACKAGES instead -->
     <queries>
-        <package android:name="com.tribessocial.store" />
-        <package android:name="com.tribessocial.services" />
+        <package android:name="com.mblockspacesapp.store" />
+        <package android:name="com.mblockspacesapp.services" />
     </queries>
 
     <application
@@ -46,7 +46,7 @@
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="tribessocial" />
+            <data android:scheme="mblockspacesapp" />
         </intent-filter>
       </activity>
       <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationActions" />
