@@ -24,6 +24,8 @@ import { fetchGroupMemberList } from 'src/api/forum/listmemberGroup';
 import { shadowStyle } from 'src/styles';
 import WidgetForumGroup from './WidgetForumGroup';
 import Config from 'react-native-config';
+import TabViewCollapsible from 'src/components/TabViewCollapsible';
+import { statusBarHeight } from 'src/utils/constants';
 
 const { Navigator, Screen } = createMaterialTopTabNavigator();
 const itemPerPage = 100;
@@ -32,13 +34,11 @@ const ForumGroupScreen = ({ navigation, route }) => {
   const params = route.params.data;
 
   const { Color } = useColor();
-  const {width, height} = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
 
   const [memberData, setMemberDataAll] = useState([]);
   const [memberDataReq, setMemberDataReq] = useState([]);
 
-  console.log('params', params);
-  
   const [itemData, setItemData] = useState({
     data: [],
     loading: true,
@@ -144,10 +144,11 @@ const ForumGroupScreen = ({ navigation, route }) => {
         });
       });
   };
-  
+
   return (
     <Scaffold
-      header={<Header title={params.name} centerTitle={false} />}
+      showHeader={false}
+      useSafeArea={false}
       floatingActionButton={
         <View
           style={{
@@ -168,13 +169,9 @@ const ForumGroupScreen = ({ navigation, route }) => {
           >
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('ForumBuatScreen');
-                // navigation.navigate('CreateThreadScreen', {
-                //   title: 'Buat Posting',
-                //   productType: Config.PRODUCT_TYPE,
-                //   productCategory: '',
-                //   productSubCategory: 'FORUM'
-                // });
+                navigation.navigate('ForumBuatScreen', {
+                  groupId: params.id
+                });
               }}
               style={{ alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}
               activeOpacity={0.75}
@@ -191,32 +188,31 @@ const ForumGroupScreen = ({ navigation, route }) => {
         item={params}
         isHighlight
       />
-      
+
       <Navigator
         initialRouteName="TabNewPost"
         tabBarOptions={{
           activeTintColor: Color.text,
           inactiveColor: Color.border,
-          labelStyle: { fontSize: 12, fontWeight: 'bold' },
+          labelStyle: { fontSize: 14, fontWeight: 'bold' },
           style: {
             backgroundColor: Color.textInput,
           },
           labelStyle: { textTransform: 'none' },
           indicatorStyle: { backgroundColor: Color.primary },
         }}
-        screenOptions={{
-          
-        }}
       >
         <Screen
           name="TabNewPost"
           component={TabForumNewPost}
           options={{ tabBarLabel: 'Thread' }}
+          initialParams={{ groupId: params.id }}
         />
         <Screen
           name="TabMyPost"
           component={TabForumMyPost}
           options={{ tabBarLabel: 'Postinganku' }}
+          initialParams={{ groupId: params.id }}
         />
       </Navigator>
     </Scaffold>

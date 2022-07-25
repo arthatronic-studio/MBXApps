@@ -5,7 +5,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import moment from 'moment';
 import { actions, RichEditor, RichToolbar } from "react-native-pell-rich-editor";
 
-import { Button, ModalUnlock } from 'src/components';
+import { Button, Loading } from 'src/components';
 import { useLoading, usePopup, useColor, Header, Submit } from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
@@ -13,7 +13,6 @@ import { Container, Divider, Row } from '@src/styled';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import Client from '@src/lib/apollo';
-import { ModalListText } from 'src/components';
 import {
   iconsmile,
   icongif,
@@ -34,7 +33,6 @@ import { EmojiView } from './EmojiView';
 import ModalVideoPicker from 'src/components/Modal/ModalVideoPicker';
 import VideoPlayerIos from 'src/components/VideoPlayerIos';
 import { VideoPlayerAndroid } from 'src/components/VideoPlayerAndroid';
-import { accessClient } from 'src/utils/access_client';
 import Config from 'react-native-config';
 import { queryProductManage } from 'src/lib/query';
 import { uploadChunkActionsNoStateSave } from 'src/state/actions/upload';
@@ -43,7 +41,6 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
   const { params } = route;
   const { item } = params;
   const modalOptionsRef = useRef();
-  const modalUnlockRef = useRef();
   const user = useSelector(state => state['user.auth'].login.user);
   const uploadChunkState = useSelector(state => state.uploadChunkState);
   const dispatch = useDispatch();
@@ -61,6 +58,8 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
     latitude: '',
     longitude: '',
     eventDate: new Date(),
+    fullDescription: '',
+    groupId: params.groupId,
   });
   const [showSection, setShowSection] = useState(true);
   const [textIsi, setTextisi] = useState('');
@@ -71,7 +70,6 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
   const [modalVideoPicker, setModalVideoPicker] = useState(false);
   const [emojiVisible, setEmojiVisible] = useState(false);
 
-  const modalListTextckRef = useRef();
   const richTextRef = useRef();
 
   const [popupProps, showPopup] = usePopup();
@@ -85,8 +83,8 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
-    if (selectedImages.length > 0 && uploadChunkState.endUpload === true) {
-      // showLoading();
+    if (uploadChunkState.endUpload === true) {
+      showLoading();
 
       let variables = {
         products: [{
@@ -98,9 +96,18 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
           description: userData.description,
           category: userData.category,
           categorySub: 'ALL',
-          image: selectedImages[0].base64,
+          fullDescription: userData.fullDescription,
+          groupId: userData.groupId,
         }],
       };
+
+      if (selectedImages.length > 0) {
+        variables.products[0]['image'] = selectedImages[0].base64;
+      }
+
+      if (params.parentProductId) {
+        variables.products[0]['parentProductId'] = params.parentProductId;
+      }
 
       console.log('COMPLETE_UPLOAD', variables);
 
@@ -116,25 +123,18 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
           console.log('res upload video', res);
           resetManage();
 
-          // showLoading(
-          //   'success',
-          //   'Berhasil Mengupload',
-          //   () => navigation.navigate('ShowAllScreen', {
-          //     title: 'Terbaru',
-          //     subTitle: 'Semua Video',
-          //     componentType: 'SHOW_ALL_VIDEO', //tergantung file
-          //     productType: 'CASTING',
-          //     popToTop: true
-          //   }
-          //   )
-          // );
+          showLoading(
+            'success',
+            'Berhasil Mengupload',
+            () => navigation.popToTop(),
+          );
         })
         .catch((err) => {
           console.log(err, 'errrrr');
-          // showLoading('error', 'Gagal Upload, Harap ulangi kembali');
+          showLoading('error', 'Gagal Upload, Harap ulangi kembali');
         })
     } else if (uploadChunkState.errorUpload) {
-      // showLoading('error', 'Gagal Upload, Harap ulangi kembali');
+      showLoading('error', 'Gagal Upload, Harap ulangi kembali');
       dispatch({ type: 'UPLOAD_CHUNK_STATE.SET_ERROR_UPLOAD', data: false });
     }
   }, [uploadChunkState]);
@@ -146,7 +146,19 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
   }
 
   const onSubmit = () => {
+    if (userData.fullDescription === '') {
+      showPopup('Silakan masukan deskripsi terlebih dulu', 'danger');
+      return;
+    }
+
     Keyboard.dismiss();
+
+    showLoading();
+
+    if (selectedVideos.length === 0) {
+      onSubmitWithoutVideo();
+      return;
+    }
 
     let variables = {
       products: [{
@@ -158,8 +170,14 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
         description: userData.description,
         category: userData.category,
         categorySub: 'ALL',
+        fullDescription: userData.fullDescription,
+        groupId: userData.groupId,
       }],
     };
+
+    if (params.parentProductId) {
+      variables.products[0]['parentProductId'] = params.parentProductId;
+    }
 
     console.log('variables', variables);
 
@@ -180,56 +198,70 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
             description: userData.description,
             category: userData.category,
             categorySub: 'ALL',
+            fullDescription: userData.fullDescription,
+            groupId: userData.groupId,
           }],
         };
+
+        if (params.parentProductId) {
+          dataVariables.products[0]['parentProductId'] = params.parentProductId;
+        }
 
         dispatch(uploadChunkActionsNoStateSave(selectedVideos[0].uri, dataVariables));
       })
       .catch((err) => {
         console.log(err, 'errrrr');
-        // showLoading('error', 'Gagal Upload, Harap ulangi kembali');
+        showLoading('error', 'Gagal Upload, Harap ulangi kembali');
       });
 
-    // showLoading('success', 'Thread berhasil dibuat!');
+    showLoading('success', 'Thread berhasil dibuat!');
 
     // setTimeout(() => {
     //   navigation.navigate('ForumGroupScreen', {});
     // }, 2500);
   }
 
-  const renderPopUpNavigation = () => {
-    return (
-      <Animated.View
-        style={[
-          { position: 'absolute', bottom: 300, height: 36, width: '100%', justifyContent: 'space-evenly', paddingHorizontal: 16 },
-        ]}
-      >
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+  const onSubmitWithoutVideo = () => {
+    let variables = {
+      products: [{
+        ...userData,
+      }],
+    };
 
-          <TouchableOpacity>
-            <Image
-              style={{ height: 45, width: 25 }}
-              source={iconsmile} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              style={{ height: 45, width: 25 }}
-              source={icongif} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
+    if (selectedImages.length > 0) {
+      variables.products[0]['image'] = selectedImages[0].base64;
+    }
 
-            Keyboard.dismiss();
-            modalListTextckRef.current.open();
+    if (params.parentProductId) {
+      variables.products[0]['parentProductId'] = params.parentProductId;
+    }
 
-          }} >
-            <Image
-              style={{ height: 45, width: 25 }}
-              source={icontext} />
-          </TouchableOpacity>
+    console.log(variables, 'variables');
 
-        </View>
-      </Animated.View>
-    )
+    Client.query({
+      query: queryProductManage,
+      variables,
+    })
+      .then((res) => {
+        console.log(res, '=== Berhsail ===');
+
+        const data = res.data.contentProductManage;
+
+        if (Array.isArray(data) && data.length > 0 && data[0]['id']) {
+          showLoading('success', 'Thread berhasil dibuat!');
+
+          setTimeout(() => {
+            // navigation.navigate('ForumSegmentScreen', { ...params, componentType: 'LIST', refresh: true });
+            navigation.popToTop();
+          }, 2500);
+        } else {
+          showLoading('error', 'Thread gagal dibuat!');
+        }
+      })
+      .catch((err) => {
+        console.log(err, 'errrrr');
+        showLoading('error', 'Gagal membuat thread, Harap ulangi kembali');
+      });
   }
 
   let onPressAddImage = (callback) => {
@@ -314,11 +346,13 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
   }
 
   // console.log('richTextRef', richTextRef.current);
-  console.log('selectedVideos', selectedVideos);
+  // console.log('selectedVideos', selectedVideos);
+  console.log(params);
 
   return (
     <Scaffold
       loadingProps={loadingProps}
+      popupProps={popupProps}
       header={
         <Header
           title='Buat Posting'
@@ -337,8 +371,8 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
     >
       <Divider />
 
-      <ScrollView>
-        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+        <ScrollView>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -386,156 +420,59 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
             <RichEditor
               ref={richTextRef}
               placeholder="Apa yang sedang kamu pikirkan..."
-              onChange={descriptionText => {
-                console.log("descriptionText:", descriptionText);
+              onChange={(val) => {
+                setUserData({
+                  ...userData,
+                  fullDescription: val
+                });
               }}
             />
           </Container>
+        </ScrollView>
 
-          <RichToolbar
-            editor={richTextRef}
-            onPressAddImage={() => setModalImagePicker(true)}
-            insertVideo={() => setModalVideoPicker(true)}
-            insertEmoji={onPressAddEmoji}
-            selectedButtonStyle={{
-              backgroundColor: Color.primary,
-            }}
-            actions={[
-              actions.insertImage,
-              actions.insertVideo,
-              'insertEmoji',
-              actions.setBold,
-              actions.setItalic,
-              actions.setUnderline,
-              actions.heading1,
-            ]}
-            iconMap={{
-              [actions.insertImage]: ({ }) => (
-                <Image
-                  style={{ height: 22, width: 22 }}
-                  source={icongalery} />
-              ),
-              [actions.insertVideo]: ({ }) => (
-                <Image
-                  style={{ height: 34, width: 34 }}
-                  source={iconcameravidio} />
-              ),
-              insertEmoji: ({ }) => (
-                <Image
-                  style={{ height: 34, width: 34 }}
-                  source={iconsmile} />
-              ),
-              [actions.heading1]: (props) => {
-                return (
-                  <Text size={props.iconGap} color={props.tintColor}>H1</Text>
-                )
-              },
-            }}
-          />
-
-          {emojiVisible && <EmojiView onSelect={handleInsertEmoji} />}
-        </KeyboardAvoidingView>
-      </ScrollView>
-
-      {/* {showfeature ? (
-        renderPopUpNavigation()
-      ) : (
-        <Text></Text>
-      )} */}
-
-
-      <ModalListText
-        onClose={() => setShowSection(!showSection)}
-        ref={modalListTextckRef}
-        data={[
-          // hide options chat
-          {
-            id: 0,
-            name: 'Hurub Tebal',
-            color: Color.text,
-            image: iconTextBolder,
-            onPress: () => {
-              navigation.navigate('ForumGroupScreen')
-              showLoading('wait', 'Permintaan kamu sedang di tinjau oleh moderator');
-              setShowSection(!showSection);
-
+        <RichToolbar
+          editor={richTextRef}
+          onPressAddImage={() => setModalImagePicker(true)}
+          insertVideo={() => setModalVideoPicker(true)}
+          insertEmoji={onPressAddEmoji}
+          selectedButtonStyle={{
+            backgroundColor: Color.primary,
+          }}
+          actions={[
+            actions.insertImage,
+            actions.insertVideo,
+            'insertEmoji',
+            actions.setBold,
+            actions.setItalic,
+            actions.setUnderline,
+            actions.heading1,
+          ]}
+          iconMap={{
+            [actions.insertImage]: ({ }) => (
+              <Image
+                style={{ height: 22, width: 22 }}
+                source={icongalery} />
+            ),
+            [actions.insertVideo]: ({ }) => (
+              <Image
+                style={{ height: 34, width: 34 }}
+                source={iconcameravidio} />
+            ),
+            insertEmoji: ({ }) => (
+              <Image
+                style={{ height: 34, width: 34 }}
+                source={iconsmile} />
+            ),
+            [actions.heading1]: (props) => {
+              return (
+                <Text size={props.iconGap} color={props.tintColor}>H1</Text>
+              )
             },
-          },
-          {
-            id: 1,
-            name: 'Italic',
-            image: iconTextItalic,
-            color: Color.text,
-            onPress: () => {
-              navigation.navigate('ForumGroupScreen')
-              showLoading('wait', 'Permintaan kamu sedang di tinjau oleh moderator');
-              setShowSection(!showSection);
+          }}
+        />
 
-            },
-          },
-          {
-            id: 2,
-            name: 'Underline',
-            color: Color.text,
-            image: iconTextUnderline,
-            onPress: () => {
-              navigation.navigate('ForumGroupScreen')
-              showLoading('wait', 'Permintaan kamu sedang di tinjau oleh moderator');
-              setShowSection(!showSection);
-
-            },
-          },
-          {
-            id: 3,
-            name: 'Strikethrough',
-            color: Color.text,
-            image: iconTextStrikethrough,
-            onPress: () => {
-              navigation.navigate('ForumGroupScreen')
-              showLoading('wait', 'Permintaan kamu sedang di tinjau oleh moderator');
-              setShowSection(!showSection);
-
-            },
-          },
-          {
-            id: 4,
-            name: 'Justify',
-            color: Color.text,
-            image: iconTextAlignJustify,
-            onPress: () => {
-              navigation.navigate('ForumGroupScreen')
-              showLoading('wait', 'Permintaan kamu sedang di tinjau oleh moderator');
-              setShowSection(!showSection);
-
-            },
-          },
-          {
-            id: 5,
-            name: 'Center',
-            color: Color.text,
-            image: iconTextAlignCenter,
-            onPress: () => {
-              navigation.navigate('ForumGroupScreen')
-              showLoading('wait', 'Permintaan kamu sedang di tinjau oleh moderator');
-              setShowSection(!showSection);
-
-            },
-          },
-          {
-            id: 6,
-            name: 'List',
-            color: Color.text,
-            image: iconListNumbers,
-            onPress: () => {
-              navigation.navigate('ForumGroupScreen')
-              showLoading('wait', 'Permintaan kamu sedang di tinjau oleh moderator');
-              setShowSection(!showSection);
-
-            },
-          },
-
-        ]}
-      />
+        {emojiVisible && <EmojiView onSelect={handleInsertEmoji} />}
+      </KeyboardAvoidingView>
 
       <ModalImagePicker
         visible={modalImagePicker}
@@ -560,6 +497,15 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
             setSelectedVideos(currSelectedVideos);
           }, 1500);
         }}
+      />
+
+      <Loading
+        visible={uploadChunkState.onUpload}
+        message={uploadChunkState.isProses ?
+          `Memproses Video ${uploadChunkState.countProses}/${uploadChunkState.totalProses}` :
+          `Mengupload Video ${uploadChunkState.progress}/${uploadChunkState.total}`}
+        usingPercentage
+        percentage={uploadChunkState.progress * 100 / uploadChunkState.total}
       />
     </Scaffold>
   );

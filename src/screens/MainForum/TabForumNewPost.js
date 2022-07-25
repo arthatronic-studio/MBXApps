@@ -17,6 +17,8 @@ const initialListData = {
 const itemPerPage = 10;
 
 const TabForumNewPost = ({ navigation, route }) => {
+  const { params } = route;
+  console.log('params params', params);
   // state
   const [listNewPost, setListNewPost] = useState(initialListData);
 
@@ -32,6 +34,7 @@ const TabForumNewPost = ({ navigation, route }) => {
 
   const fecthData = async () => {
     const newListNewPost = await fetchContentUserProduct(Config.PRODUCT_TYPE, "FORUM");
+    console.log('newListNewPost', newListNewPost);
     setListNewPost({
       ...listNewPost,
       data: listNewPost.data.concat(newListNewPost),
@@ -48,17 +51,23 @@ const TabForumNewPost = ({ navigation, route }) => {
       itemPerPage,
     };
 
-    if (productType !== '') {
+    if (productType) {
       variables.productType = productType;
     }
 
-    if (productCategory !== '') {
+    if (productCategory) {
       variables.productCategory = productCategory;
     }
 
-    if (productSubCategory !== '') {
+    if (productSubCategory) {
       variables.productSubCategory = productSubCategory;
     }
+
+    if (params && typeof params.groupId !== 'undefined') {
+      variables.groupId = params.groupId;
+    }
+
+    console.log('variables tab forum new post', variables);
 
     try {
       const result = await Client.query({

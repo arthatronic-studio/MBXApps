@@ -3,7 +3,7 @@ import { View, Image, ScrollView, FlatList, Row, SectionList } from 'react-nativ
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import moment from 'moment';
-import { ModalUnlock } from 'src/components';
+import { ModalUnlock, ScreenEmptyData } from 'src/components';
 import { useLoading, usePopup, useColor, Header } from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
@@ -19,6 +19,7 @@ import { queryproductTopicList } from 'src/lib/query';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { fetchTopicList } from 'src/api/forum/topiclist';
 import { checkJoinMember } from 'src/api/forum/checkMemberjoinGroup';
+import ImagesPath from 'src/components/ImagesPath';
 
 const ForumTopicScreen = ({ navigation, route }) => {
   const { item } = route.params;
@@ -26,15 +27,14 @@ const ForumTopicScreen = ({ navigation, route }) => {
   const modalUnlockRef = useRef();
   const user = useSelector(state => state['user.auth'].login.user);
   const [showSection, setShowSection] = useState(true);
-
-
-
+  const [currentProductId, setCurrentProductId] = useState();
 
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading] = useLoading();
   const [search, setSearch] = useState('');
   const { Color } = useColor();
   const [filterData, setFilterData] = useState([]);
+
   // useEffect(() => {
   //     const timeout = trigger ? setTimeout(() => {
   //         fetchAddLike();
@@ -62,19 +62,33 @@ const ForumTopicScreen = ({ navigation, route }) => {
     fetchTopic();
   }, []);
 
-  const ChekJoin = async (varData) => {
+  const onCheckJoin = async (varData) => {
+    if (varData.status !== "PRIVATE") {
+      navigation.navigate('ForumGroupScreen', { data: varData });
+      return;
+    }
+
     const variables = {
       groupId: varData.id
     };
-    console.log('varibels id', variables);
 
     const result = await checkJoinMember(variables);
     console.log(result, 'result join');
 
     if (result.status) {
-      navigation.navigate('ForumGroupScreen', { data: varData });
+      if (result.data.success) {
+        if (result.data.status === 1) {
+          navigation.navigate('ForumGroupScreen', { data: varData });
+        } else {
+          alert(result.data.message);
+        }
+      } else {
+        modalUnlockRef.current.open();
+        setCurrentProductId(varData.id);
+      }
     } else {
       modalUnlockRef.current.open();
+      setCurrentProductId(varData.id);
     }
   }
 
@@ -153,24 +167,35 @@ const ForumTopicScreen = ({ navigation, route }) => {
       <SectionList
         sections={itemData.data}
         keyExtractor={(item, index) => item + index}
+        renderSectionHeader={({ section: { name, imageIcon } }) => (
+          <View style={{ flexDirection: 'row', marginHorizontal: 16, paddingVertical: 8, backgroundColor: Color.theme }}>
+            <Image
+              source={{ uri: imageIcon }}
+              style={{
+                borderRadius: 25,
+                width: 22,
+                height: 22,
+                backgroundColor: Color.border,
+                borderColor: Color.primary,
+                marginHorizontal: 5,
+              }}
+            />
+            <Text style={{ textAlign: 'left', fontSize: 17, fontWeight: 'bold' }}>
+              {name}
+            </Text>
+          </View>
+        )}
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => {
-              {
-                ChekJoin(item);
-                // item.status == 'PRIVASI'
-                //   ? modalUnlockRef.current.open()
-                //   : 
-                //   ChekJoin(item.id);
-                //   navigation.navigate('ForumGroupScreen', {data: varData});
-              }
+              onCheckJoin(item);
             }}>
             <View
               style={{
                 flexDirection: 'row',
                 backgroundColor: Color.semiwhite,
                 marginHorizontal: 16,
-                marginVertical: 4,
+                marginBottom: 10,
                 padding: 8,
                 borderRadius: 8,
                 justifyContent: 'space-between',
@@ -193,11 +218,11 @@ const ForumTopicScreen = ({ navigation, route }) => {
                 <View style={{ flex: 8, paddingHorizontal: 8, justifyContent: 'center', alignItems: 'flex-start' }}>
                   <Text numberOfLines={1} type="semibold">{item.name}</Text>
                   <Divider height={2} />
-                  <Text numberOfLines={1} size={12}>{item.description}</Text>
+                  <Text numberOfLines={1} size={12}>{item.threadCount || '0'} Thread</Text>
                 </View>
 
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}>
-                  {item.status === 'PRIVASI' &&
+                  {item.status === "PRIVATE" &&
                     <Feather
                       name="lock"
                       size={16}
@@ -209,24 +234,25 @@ const ForumTopicScreen = ({ navigation, route }) => {
             </View>
           </TouchableOpacity>
         )}
-        renderSectionHeader={({ section: { name, imageIcon } }) => (
-          <View style={{ flexDirection: 'row', marginHorizontal: 16, paddingVertical: 8, backgroundColor: Color.theme }}>
-            <Image
-              source={{ uri: imageIcon }}
-              style={{
-                borderRadius: 25,
-                width: 22,
-                height: 22,
-                backgroundColor: Color.border,
-                borderColor: Color.primary,
-                marginHorizontal: 5,
-              }}
-            />
-            <Text style={{ textAlign: 'left', fontSize: 17, fontWeight: 'bold' }}>
-              {name}
-            </Text>
-          </View>
-        )}
+        renderSectionFooter={({ section }) => {
+          if(section.data.length == 0){
+            return (
+              <View style={{ padding: 8, justifyContent: 'center', alignItems: 'center' }}>
+                <Image
+                  source={ImagesPath.productempty}
+                  style={{
+                    height: 45,
+                    width: 45,
+                    marginBottom: 8,
+                  }}
+                />
+                <Text>Group Tidak Tersedia</Text>
+              </View>
+            )
+          }
+          
+          return null
+        }}
       />
 
       <Divider />
@@ -235,22 +261,27 @@ const ForumTopicScreen = ({ navigation, route }) => {
         // isOwner={user && user.userId === item.ownerId}
         item={item}
       />
+
       <ModalUnlock
-        onClose={() => setShowSection(!showSection)}
+        onClose={() => {
+          setShowSection(!showSection);
+          // modalUnlockRef.current.close();
+        }}
         ref={modalUnlockRef}
+        productId={currentProductId}
         data={[
-          // hide options chat
           {
             id: 0,
             name: 'Minta Bergabung',
             color: Color.text,
-            onPress: () => {
-              navigation.navigate('ForumGroupScreen', {});
+            onPress: (result) => {
+              console.log(result, 'resault 2');
               showLoading(
                 'wait',
                 'Permintaan kamu sedang di tinjau oleh moderator',
               );
               setShowSection(!showSection);
+              setCurrentProductId();
             },
           },
         ]}

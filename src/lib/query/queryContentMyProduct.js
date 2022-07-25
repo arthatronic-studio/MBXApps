@@ -9,6 +9,7 @@ export const queryContentMyProduct = gql`
         $productSubCategory: ContentProductSubCategory
         $page: Int
         $itemPerPage: Int
+        $groupId: Int
     ){
         contentMyProduct(
             productCode: $productCode
@@ -18,6 +19,7 @@ export const queryContentMyProduct = gql`
             productSubCategory: $productSubCategory
             page: $page
             itemPerPage: $itemPerPage
+            groupId: $groupId
         ) {
             id
             code
@@ -51,6 +53,8 @@ export const queryContentMyProduct = gql`
             longitude
             mainImage
             eventDate
+            fullDescription
+            im_save
         }
     }
 `;

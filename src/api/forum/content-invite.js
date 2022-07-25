@@ -1,7 +1,7 @@
 import Client from '@src/lib/apollo';
-import { queryChekMemberJoinGroup } from 'src/lib/query';
+import { queryContentInvite } from 'src/lib/query';
 
-export const checkJoinMember = async(variables)  => {
+export const fetchContentInvite = async(variables)  => {
     let response = {
         data: null,
         status: false,
@@ -11,27 +11,27 @@ export const checkJoinMember = async(variables)  => {
 
     try {
         const result = await Client.query({
-            query: queryChekMemberJoinGroup,
+            query: queryContentInvite,
             variables,
         });
     
         if (
             result &&
             result.data &&
-            result.data.checkMemberJoinGroup
+            result.data.productTopicList
         ) {
-            response.data = result.data.checkMemberJoinGroup;
+            response.data = result.data.productTopicList;
             response.status = true;
             response.message = result.data.message || 'OK';
         } else {
-            console.log('err ChekMemberJoinGroup', result);
+            console.log('err queryContentInvite', result);
             response.message = 'Gagal, silakan coba kembali';
             response.error = result;
         }
     
         return response;
     } catch (error) {
-        console.log('catch queryChekMemberJoinGroup', error);
+        console.log('catch queryContentInvite', error);
         response.error = error;
         return response;
     }

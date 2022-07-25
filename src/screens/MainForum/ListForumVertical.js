@@ -11,7 +11,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Scaffold, ScreenEmptyData, ScreenIndicator, useColor } from '@src/components';
 import Text from '@src/components/Text';
 import CardForumVertical from '@src/screens/MainForum/CardForumVertical';
-import { Container } from 'src/styled';
+import { Container, Divider } from 'src/styled';
 import ModalContentOptions from 'src/components/ModalContentOptions';
 import { useSelector } from 'react-redux';
 
@@ -46,19 +46,23 @@ const ListForumVertical = ({ componentType, data, loading, title, showAll, onPre
 
     return (
       <Scaffold showHeader={false} style={{paddingBottom: 8}}>
-        {/* <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text type="bold" style={{marginLeft: 16}}>
-            List Thread
-          </Text>
-          <View style={{flexDirection: 'row',marginRight:16}}>
-            <Text style={{color: Color.primary,}}>Terbaru</Text>
-            <TouchableOpacity
-              onPress={() => {
-                ''
-              }}>
-              <FontAwesome name="angle-down" color={Color.primary} size={25} />
-            </TouchableOpacity>
+        {/* <View style={{paddingHorizontal: 16, paddingTop: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+          <View>
+            <Text type="semibold">
+              List Thread
+            </Text>
           </View>
+
+          <TouchableOpacity
+            onPress={() => {
+              
+            }}
+            style={{flexDirection: 'row', alignItems: 'center'}}
+          >
+            <Text size={12} color={Color.primary}>Terbaru</Text>
+            <Divider width={8} />
+            <FontAwesome name="angle-down" color={Color.primary} size={16} />
+          </TouchableOpacity>
         </View> */}
 
         {showHeader && (
@@ -101,6 +105,7 @@ const ListForumVertical = ({ componentType, data, loading, title, showAll, onPre
             keyExtractor={(item, index) => item.toString() + index}
             data={data}
             contentContainerStyle={{paddingHorizontal: 16}}
+            onScroll={e => console.log(e.nativeEvent.contentOffset.y)}
             renderItem={({item, index}) => {
               return (
                 <CardForumVertical

@@ -19,17 +19,19 @@ import FormInput from 'src/components/FormInput';
 import { Divider } from 'src/styled';
 
 const defaultProps = {
+    autoplay: true,
     item: {
         videoFilename: '',
     },
 }
 
-const VideoPlayerIos = ({ item }) => {
+const VideoPlayerIos = ({ autoplay, item }) => {
     const { height, width } = useWindowDimensions();
     const { Color } = useColor();
 
     const [loading, setLoading] = useState(false);
     const [show, setShow] = useState(true);
+    const [play, setPlay] = useState(autoplay);
 
     const onLoadStart = (e) => {
         console.log('onLoadStart', e);
@@ -64,7 +66,7 @@ const VideoPlayerIos = ({ item }) => {
                 }}
                 controls
                 fullscreen={false}
-                paused={false}
+                paused={!play}
                 resizeMode='cover'
                 onBuffer={onBuffer}
                 onLoadStart={onLoadStart}
@@ -73,6 +75,7 @@ const VideoPlayerIos = ({ item }) => {
                     console.log('err', err);
                     setShow(false);
                 }}
+                
             />
 
             {loading && <View

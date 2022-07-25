@@ -1,7 +1,7 @@
 import Client from '@src/lib/apollo';
-import { queryChekMemberJoinGroup } from 'src/lib/query';
+import { queryGroupMemberManage } from 'src/lib/query';
 
-export const checkJoinMember = async(variables)  => {
+export const fetchGroupMemberManage = async(variables)  => {
     let response = {
         data: null,
         status: false,
@@ -10,28 +10,28 @@ export const checkJoinMember = async(variables)  => {
     };
 
     try {
-        const result = await Client.query({
-            query: queryChekMemberJoinGroup,
+        const result = await Client.mutate({
+            mutation: queryGroupMemberManage,
             variables,
         });
     
         if (
             result &&
             result.data &&
-            result.data.checkMemberJoinGroup
+            result.data.groupMemberManage
         ) {
-            response.data = result.data.checkMemberJoinGroup;
+            response.data = result.data.groupMemberManage;
             response.status = true;
             response.message = result.data.message || 'OK';
         } else {
-            console.log('err ChekMemberJoinGroup', result);
+            console.log('err groupMemberManage', result);
             response.message = 'Gagal, silakan coba kembali';
             response.error = result;
         }
     
         return response;
     } catch (error) {
-        console.log('catch queryChekMemberJoinGroup', error);
+        console.log('catch groupMemberManage', error);
         response.error = error;
         return response;
     }

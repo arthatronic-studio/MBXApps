@@ -32,7 +32,10 @@ import {querySyaratKetentuan} from './querySyaratKetentuan';
 import {queryproductTopicList} from './queryproductTopicList';
 import {queryproductGroupList} from './queryproductGroupList';
 import {queryGroupMemberList} from './queryGroupMemberList';
+import {queryGroupMemberManage} from './queryGroupMemberManage';
 import {queryChekMemberJoinGroup} from './queryChekMemberJoinGroup';
+import {queryContentInvite} from './queryContentInvite';
+
 export {
   queryContentProduct,
   queryContentProductDetail,
@@ -69,5 +72,7 @@ export {
   queryproductTopicList,
   queryproductGroupList,
   queryGroupMemberList,
-  queryChekMemberJoinGroup
+  queryGroupMemberManage,
+  queryChekMemberJoinGroup,
+  queryContentInvite,
 };

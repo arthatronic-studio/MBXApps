@@ -1,13 +1,13 @@
-import React, {useRef, forwardRef, useState} from 'react';
+import React, { useRef, forwardRef, useState } from 'react';
 
-import {useColor} from '@src/components';
-import {useCombinedRefs} from '@src/hooks';
+import { useColor } from '@src/components';
+import { useCombinedRefs } from '@src/hooks';
 import ModalListAction from './Modal/ModalListAction';
 import ModalInputText from '@src/components/ModalInputText';
-import {useNavigation} from '@react-navigation/native';
-import {Alert} from './Modal/Alert';
-import {accessClient} from 'src/utils/access_client';
-import {queryProductReport, queryUserBlock} from '@src/lib/query';
+import { useNavigation } from '@react-navigation/native';
+import { Alert } from './Modal/Alert';
+import { accessClient } from 'src/utils/access_client';
+import { queryProductManage, queryProductReport, queryUserBlock } from '@src/lib/query';
 import Client from '@src/lib/apollo';
 
 const defaultProps = {
@@ -15,7 +15,7 @@ const defaultProps = {
   item: null,
   nameType: 'PRODUCT',
   moduleType: 'CREATE',
-  onClose: () => {},
+  onClose: () => { },
 };
 
 const initialMessage = {
@@ -26,12 +26,12 @@ const initialMessage = {
 const ModalContentOptions = forwardRef((props, ref) => {
   const { isOwner, item, moduleType, nameType, onClose } = props;
 
-  console.log('ini props',props)
+  console.log('ini props', props)
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
   const navigation = useNavigation();
-  const {Color} = useColor();
+  const { Color } = useColor();
 
   const [modalInputText, setModalInputText] = useState(false);
   const [message, setMessage] = useState(initialMessage);
@@ -110,6 +110,50 @@ const ModalContentOptions = forwardRef((props, ref) => {
       });
   }
 
+  const onUpdateContentStatus = (item, status) => {
+    // showLoading();
+
+    let objProduct = {
+      code: item.code,
+      name: item.productName,
+      status,
+      method: 'UPDATE',
+      type: item.productType,
+      category: item.productCategory,
+      description: item.productDescription,
+    };
+
+    let variables = {
+        products: [objProduct],
+    };
+
+    console.log(variables, 'variables');
+    
+    Client.query({
+        query: queryProductManage,
+        variables,
+    })
+    .then((res) => {
+        console.log(res, '=== Berhsail ===');
+        if (Array.isArray(res.data.contentProductManage) && res.data.contentProductManage.length > 0 && res.data.contentProductManage[0] && res.data.contentProductManage[0].id) {
+          alert('Berhasil');
+        } else {
+          alert('Gagal menghapus konten');
+        }
+        // showLoading('success', 'Berhasil!');
+
+        // setTimeout(() => {
+        //     // navigation.navigate('ForumSegmentScreen', { ...params, componentType: 'LIST', refresh: true });
+        //     // navigation.popToTop();
+        // }, 2500);
+    })
+    .catch((err) => {
+        console.log(err, 'errrrr');
+        // showLoading('error', 'Gagal, Harap ulangi kembali');
+        alert('Gagal, Harap ulangi kembali');
+    });
+  }
+
   const dataOptions = [
     {
       id: 0,
@@ -126,46 +170,50 @@ const ModalContentOptions = forwardRef((props, ref) => {
     },
     {
       id: 1,
-      name: 'Bagikan',
+      name: 'Simpan Postingan',
       color: Color.text,
       onPress: () => {
-        if (moduleType === 'FORUM') {
-
-          // setModalInputText(true);
-        } else {
-          // setModalInputText(true);
-        }
+        
       },
     },
+    // {
+    //   id: 1,
+    //   name: 'Bagikan',
+    //   color: Color.text,
+    //   onPress: () => {
+    //     combinedRef.current.close();
+    //   },
+    // },
     {
       id: 3,
       name: 'Report',
       color: Color.error,
       onPress: () => {
+        combinedRef.current.close();
         if (moduleType === 'FORUM') {
-          navigation.navigate('ForumReport', {});
-          // setModalInputText(true);
+          navigation.navigate('ForumReport', { item });
         } else {
           setModalInputText(true);
         }
       },
     },
   ];
- if (item && item.ownerId) {
-   dataOptions.push({
-     id: 2,
-     name: 'Hapus',
-     color: Color.error,
-     onPress: () => {
-       combinedRef.current.close();
-       // Alert(
-       //   'Block',
-       //   'Apakah Anda yakin akan memblok semua postingan user ini?',
-       //   () => fetchBlockUser(),
-       // );
-     },
-   });
- }
+  
+  if (item && item.ownerId) {
+    dataOptions.push({
+      id: 2,
+      name: 'Hapus',
+      color: Color.error,
+      onPress: () => {
+        combinedRef.current.close();
+        Alert(
+          'Hapus',
+          'Apakah Anda yakin akan memnghapus postingan ini?',
+          () => onUpdateContentStatus(item, 'REMOVE'),
+        );
+      },
+    });
+  }
 
   if (item && item.ownerId) {
     dataOptions.push({
@@ -182,7 +230,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
       },
     });
   }
- 
+
   return (
     <>
       <ModalListAction
@@ -190,7 +238,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
         data={dataOptions}
         onClose={() => onClose()}
       />
-      
+
       <ModalInputText
         visible={modalInputText}
         headerLabel='Alasan Anda melaporkan konten'

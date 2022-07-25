@@ -17,6 +17,8 @@ const initialListData = {
 const itemPerPage = 10;
 
 const TabForumMyPost = ({ navigation, route }) => {
+  const { params } = route;
+
   // state
   const [listMyPost, setListMyPost] = useState(initialListData);
 
@@ -29,7 +31,6 @@ const TabForumMyPost = ({ navigation, route }) => {
       fecthData();
     }
   }, [listMyPost.loadNext]);
-
 
   const fecthData = async () => {
     const newListMyPost = await fetchContentMyProduct(Config.PRODUCT_TYPE, 'FORUM');
@@ -50,16 +51,20 @@ const TabForumMyPost = ({ navigation, route }) => {
       itemPerPage,
     };
 
-    if (productType !== '') {
+    if (productType) {
       variables.productType = productType;
     }
 
-    if (productCategory !== '') {
+    if (productCategory) {
       variables.productCategory = productCategory;
     }
 
-    if (productSubCategory !== '') {
+    if (productSubCategory) {
       variables.productSubCategory = productSubCategory;
+    }
+
+    if (params && typeof params.groupId !== 'undefined') {
+      variables.groupId = params.groupId;
     }
 
     console.log('variables', variables);

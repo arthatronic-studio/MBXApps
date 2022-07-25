@@ -50,8 +50,8 @@ import ForumGroupPermintaanScreen from 'src/screens/MainForum/NewForum/ForumGrou
 import ForumGroupAllMemberScreen from 'src/screens/MainForum/NewForum/ForumGroupAllMemberScreen';
 import ForumBuatScreen from 'src/screens/MainForum/NewForum/ForumBuatScreen';
 import ForumBuatDetailScreen from 'src/screens/MainForum/NewForum/ForumBuatDetailScreen';
-import ForumBalas from            'src/screens/MainForum/NewForum/ForumBalas';
-import ForumKutipan from          'src/screens/MainForum/NewForum/ForumKutipan';
+import ForumBalas from 'src/screens/MainForum/NewForum/ForumBalas';
+import ForumKutipan from 'src/screens/MainForum/NewForum/ForumKutipan';
 // import CardForumPage from 'src/screens/MainForum/CardForumPage';
 // profile
 import ChangeProfile from '@src/screens/MainProfile/ChangeProfile';
@@ -228,9 +228,9 @@ import ManageGroupScreen from 'src/screens/Chat/ManageGroupScreen';
 
 const { Navigator, Screen } = createStackNavigator();
 const MainPage =
-	accessClient.BottomTabsNavigator.type === 'komoto'
-		? BottomTabsNavigatorKomoto
-		: accessClient.BottomTabsNavigator.type === 'sabyan' ? BottomTabsNavigatorsabyan : BottomTabsNavigator;
+  accessClient.BottomTabsNavigator.type === 'komoto'
+    ? BottomTabsNavigatorKomoto
+    : accessClient.BottomTabsNavigator.type === 'sabyan' ? BottomTabsNavigatorsabyan : BottomTabsNavigator;
 
 function MainStackNavigator() {
   return (
@@ -337,7 +337,7 @@ function MainStackNavigator() {
       {/* News */}
       <Screen name="NewsScreen" component={NewsScreen} />
       <Screen name="NewsDetail" component={NewsDetail} />
-   
+
       {/* Place */}
       <Screen name="PlaceScreen" component={PlaceScreen} />
       <Screen name="PlaceDetail" component={PlaceDetail} />
@@ -367,7 +367,8 @@ function MainStackNavigator() {
       />
       <Screen name="DetailForumScreen" component={DetailForumScreen} />
       <Screen name="EditThreadScreen" component={EditThreadScreen} />
-      <Screen name="ForumScreen" component={ForumScreen} />
+      {/* <Screen name="ForumScreen" component={ForumScreen} /> */}
+      <Screen name="ForumScreen" component={ForumTopicScreen} />
       <Screen name="ForumSearch" component={ForumSearch} />
       <Screen name="ForumBalas" component={ForumBalas} />
       <Screen name="ForumKutipan" component={ForumKutipan} />

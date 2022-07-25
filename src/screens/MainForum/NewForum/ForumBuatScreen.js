@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Image, ScrollView, FlatList, Row, TextInput, Animated } from 'react-native';
+import { ScrollView, KeyboardAvoidingView } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import moment from 'moment';
-import { ModalUnlock } from 'src/components';
+
 import { useLoading, usePopup, useColor, Header, Submit } from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
@@ -19,19 +19,20 @@ import FormInput from 'src/components/FormInput';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 
 const ForumBuatScreen = ({ navigation, route }) => {
+  const { params } = route;
+
   const modalOptionsRef = useRef();
-  const modalUnlockRef = useRef();
   const user = useSelector(state => state['user.auth'].login.user);
 
   const [showSection, setShowSection] = useState(true);
   const [textJudul, setTextJudul] = useState('');
   const [textDesc, setTextDesc] = useState('');
-  const [disabled, setDisabled] = useState(true);
-
 
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading] = useLoading();
   const { Color } = useColor();
+
+  const disabled = textJudul === '' || textDesc === '';
 
   return (
     <Scaffold
@@ -42,45 +43,46 @@ const ForumBuatScreen = ({ navigation, route }) => {
         />
       }
     >
-      <ScrollView>
-        <Container paddingHorizontal={16}>
-          <FormInput
-            label="Judul Posting"
-            placeholder="Masukan Judul Posting"
-            value={textJudul}
-            onChangeText={(e) => {
-              setTextJudul(e);
-              if (e === '') setDisabled(true);
-              else setDisabled(false);
-            }}
-            multiline={false}
-          />
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+        <ScrollView>
+          <Container paddingHorizontal={16}>
+            <FormInput
+              label="Judul Posting"
+              placeholder="Masukan Judul Posting"
+              value={textJudul}
+              onChangeText={(e) => {
+                setTextJudul(e);
+              }}
+              multiline={false}
+            />
 
-          <FormInput
-            label="Deskripsi Singkat"
-            placeholder="Masukan Deskripsi Singkat"
-            value={textDesc}
-            onChangeText={(e) => {
-              setTextDesc(e);
-            }}
-            multiline
-          />
-        </Container>
-      </ScrollView>
+            <FormInput
+              label="Deskripsi Singkat"
+              placeholder="Masukan Deskripsi Singkat"
+              value={textDesc}
+              onChangeText={(e) => {
+                setTextDesc(e);
+              }}
+              multiline
+            />
+          </Container>
+        </ScrollView>
 
-      <Submit
-        buttonLabel='Lanjut'
-        buttonColor={disabled ? Color.grayLight : Color.primary}
-        disabled={disabled}
-        type='bottomSingleButton'
-        buttonBorderTopWidth={0.5}
-        onPress={() => {
-          navigation.navigate('ForumBuatDetailScreen', {
-            title: textJudul,
-            description: textDesc,
-          });
-        }}
-      />
+        <Submit
+          buttonLabel='Lanjut'
+          buttonColor={disabled ? Color.grayLight : Color.primary}
+          disabled={disabled}
+          type='bottomSingleButton'
+          buttonBorderTopWidth={0.5}
+          onPress={() => {
+            navigation.navigate('ForumBuatDetailScreen', {
+              title: textJudul,
+              description: textDesc,
+              groupId: params.groupId,
+            });
+          }}
+        />
+      </KeyboardAvoidingView>
     </Scaffold>
   );
 };

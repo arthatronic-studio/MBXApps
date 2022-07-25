@@ -7,11 +7,11 @@ import Share from 'react-native-share';
 import { useSelector } from 'react-redux';
 import Entypo from 'react-native-vector-icons/Entypo';
 import ImagesPath from '../../components/ImagesPath';
-import {imageContentItem} from 'assets/images/content-item';
+import { imageContentItem } from 'assets/images/content-item';
 import {
-    Text,
-    TouchableOpacity,
-    useColor
+  Text,
+  TouchableOpacity,
+  useColor
 } from '@src/components';
 import { shadowStyle } from '@src/styles';
 import { queryAddLike } from 'src/lib/query';
@@ -19,134 +19,137 @@ import client from 'src/lib/apollo';
 import { Divider, Line, Padding, Row } from 'src/styled';
 import VideoPlayerIos from 'src/components/VideoPlayerIos';
 import { VideoPlayerAndroid } from 'src/components/VideoPlayerAndroid';
+import HtmlView from 'src/components/HtmlView';
 
 const defaultProps = {
-    onPress: () => {},
-    numColumns: 1,
-    style: {},
-    showAllText: false,
-    showVideo: false,
+  onPress: () => { },
+  numColumns: 1,
+  style: {},
+  showAllText: false,
+  showVideo: false,
 };
 
 const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText, showVideo, style }) => {
-    const [like, setLike] = useState(item.like);
-    const [im_like, setImLike] = useState(item.im_like);
-    const [trigger, setTrigger] = useState(false);
+  const [like, setLike] = useState(item.like);
+  const [im_like, setImLike] = useState(item.im_like);
+  const [trigger, setTrigger] = useState(false);
+  const [withImage, setWithImage] = useState(true);
 
-    const { Color } = useColor();
-    const { width } = useWindowDimensions();
-    const user = useSelector(state => state['user.auth'].login.user);
+  const { Color } = useColor();
+  const { width } = useWindowDimensions();
+  const user = useSelector(state => state['user.auth'].login.user);
 
-    useEffect(() => {
-        setLike(item.like);
-        setImLike(item.im_like);
-    }, [item]);
+  useEffect(() => {
+    setLike(item.like);
+    setImLike(item.im_like);
+  }, [item]);
 
-    useEffect(() => {
-        const timeout = trigger ? setTimeout(() => {
-            fetchAddLike();
-        }, 500) : null;
+  useEffect(() => {
+    const timeout = trigger ? setTimeout(() => {
+      fetchAddLike();
+    }, 500) : null;
 
-        return () => {
-            clearTimeout(timeout);
-        }
-    }, [trigger]);
-
-    const fetchAddLike = () => {
-        console.log('trigger emergency');
-
-        client.query({
-            query: queryAddLike,
-            variables: {
-                productId: item.id
-            }
-        })
-        .then((res) => {
-          console.log(res, 'res add like');
-          setTrigger(false);
-        })
-        .catch((err) => {
-            console.log(err, 'err add like');
-            setTrigger(false);
-        });
+    return () => {
+      clearTimeout(timeout);
     }
+  }, [trigger]);
 
-    const onSubmitLike = () => {
-        setLike(!im_like ? like + 1 : like - 1);
-        setImLike(!im_like);
-        setTrigger(true);
-    }
+  const fetchAddLike = () => {
+    console.log('trigger emergency');
 
-    const renderVideoPlayer = (videoFilename) => {
-      if (Platform.OS === 'ios') {
-        return (
-          <VideoPlayerIos
-            item={{
-              videoFilename
-            }}
-          />
-        )
+    client.query({
+      query: queryAddLike,
+      variables: {
+        productId: item.id
       }
-  
+    })
+      .then((res) => {
+        console.log(res, 'res add like');
+        setTrigger(false);
+      })
+      .catch((err) => {
+        console.log(err, 'err add like');
+        setTrigger(false);
+      });
+  }
+
+  const onSubmitLike = () => {
+    setLike(!im_like ? like + 1 : like - 1);
+    setImLike(!im_like);
+    setTrigger(true);
+  }
+
+  const renderVideoPlayer = (videoFilename) => {
+    if (Platform.OS === 'ios') {
       return (
-        <VideoPlayerAndroid
+        <VideoPlayerIos
+          autoplay={false}
           item={{
             videoFilename
           }}
-          autoplay={false}
         />
       )
     }
 
-    const extraPropsText = showAllText ? {} : { numberOfLines: 3 };
-    const now = Moment();
-    const createdDate = parseInt(item.created_date, 10);
-    const isToday = Moment(createdDate).isSame(now, 'day');
-    let dateLabel = Moment(createdDate).format('DD MMM YYYY, HH:mm');
-    if (isToday) {
-        dateLabel = `${Moment(createdDate).fromNow()}, ${Moment(createdDate).format('HH:mm')}}`;
-    }
-    const iconSize = 18;
-
     return (
-      <TouchableOpacity
-        onPress={() => onPress(item)}
+      <VideoPlayerAndroid
+        item={{
+          videoFilename
+        }}
+        autoplay={false}
+      />
+    )
+  }
+
+  const extraPropsText = showAllText ? {} : { numberOfLines: 3 };
+  const now = Moment();
+  const createdDate = parseInt(item.created_date, 10);
+  const isToday = Moment(createdDate).isSame(now, 'day');
+  let dateLabel = Moment(createdDate).format('DD MMM YYYY, HH:mm');
+  if (isToday) {
+    dateLabel = `${Moment(createdDate).fromNow()}, ${Moment(createdDate).format('HH:mm')}}`;
+  }
+  const iconSize = 18;
+
+  return (
+    <TouchableOpacity
+      onPress={() => onPress(item)}
+      style={{
+        width: width - 32,
+        marginTop: 16,
+        borderRadius: 8,
+        backgroundColor: Color.textInput,
+        ...style,
+      }}>
+      <View
         style={{
-          width: width - 32,
-          marginTop: 16,
-          borderRadius: 8,
-          backgroundColor: Color.textInput,
-          ...style,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 16,
         }}>
         <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 16,
-          }}>
-          <View
-            style={{flexDirection: 'row', alignItems: 'center', width: '100%'}}>
-            <View style={{flex: 1, aspectRatio: 1, justifyContent: 'center'}}>
-              <Image
-                source={{uri: item.avatar}}
-                style={{
-                  width: '100%',
-                  aspectRatio: 1,
-                  borderRadius: 50,
-                  backgroundColor: Color.primary,
-                }}
-              />
-            </View>
+          style={{ flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+          <View style={{ flex: 1, aspectRatio: 1, justifyContent: 'center' }}>
+            <Image
+              source={{ uri: item.avatar }}
+              style={{
+                width: '100%',
+                aspectRatio: 1,
+                borderRadius: 50,
+                backgroundColor: Color.primary,
+              }}
+            />
+          </View>
 
-            <View style={{flex: 8}}>
-              <Padding horizontal={10}>
-                <Row>
-                  <Text type="bold" align="left" numberOfLines={2}>
-                    {item.fullname}
-                  </Text>
-                  {/* hide admin post */}
-                  {/* <Image
+          <View style={{ flex: 8 }}>
+            <Padding horizontal={10}>
+              <Row>
+                <Text type="bold" align="left" numberOfLines={2}>
+                  {item.fullname}
+                </Text>
+                {/* hide admin post */}
+                {/* <Image
                                     source={ImagesPath.ranking}
                                     style={{
                                         width: 14,
@@ -154,207 +157,195 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
                                         marginLeft: 4,
                                     }}
                                 /> */}
-                </Row>
+              </Row>
 
-                <View style={{flexDirection: 'row', marginTop: 4}}>
-                  <Text size={8} align="left">
-                    {dateLabel}
-                  </Text>
-                </View>
-              </Padding>
-            </View>
-
-            {typeof onPressDot === 'function' && (
-              <TouchableOpacity
-                onPress={() => onPressDot()}
-                style={{
-                  flex: 1,
-                  aspectRatio: 1,
-                  alignItems: 'flex-end',
-                  justifyContent: 'center',
-                }}>
-                <MaterialCommunityIcons
-                  name="dots-vertical"
-                  color={Color.text}
-                  size={18}
-                />
-              </TouchableOpacity>
-            )}
+              <View style={{ flexDirection: 'row', marginTop: 4 }}>
+                <Text size={8} align="left">
+                  {dateLabel}
+                </Text>
+              </View>
+            </Padding>
           </View>
-        </View>
-        <View style={{marginBottom: 4,flexDirection:'row',justifyContent:'space-between'}}>
-          <Text align="left" type="bold" numberOfLines={2}>
-            {item.productName}
-          </Text>
-          <AntDesign name="pushpin" color="#F3771D" size={25} style={{ marginRight:18}} />
-        </View>
-        <View style={{width: '100%', aspectRatio: 16 / 9, marginBottom: 8}}>
-          <Image
-            source={{uri: item.image}}
-            style={{
-              width: '100%',
-              height: '100%',
-              borderRadius: 8,
-            }}
-          />
 
-          {/* hide overlay */}
-          {/* <View style={{position: 'absolute', height: '100%', width: '100%', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: 8}} /> */}
+          {typeof onPressDot === 'function' && (
+            <TouchableOpacity
+              onPress={() => onPressDot()}
+              style={{
+                flex: 1,
+                aspectRatio: 1,
+                alignItems: 'flex-end',
+                justifyContent: 'center',
+              }}>
+              <MaterialCommunityIcons
+                name="dots-vertical"
+                color={Color.text}
+                size={18}
+              />
+            </TouchableOpacity>
+          )}
         </View>
-
-        {showVideo && renderVideoPlayer(item.videoFilename)}
-
-        <Text align="left" size={12} type="medium" {...extraPropsText}>
-          {item.productDescription}
+      </View>
+      <View style={{ marginBottom: 8, flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text align="left" type="bold" numberOfLines={2}>
+          {item.productName}
         </Text>
 
-        <View
+        {item.im_save && <Image
+          source={imageContentItem.pin}
           style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingHorizontal: 8,
-            paddingVertical: 16,
-          }}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-            <TouchableOpacity
-              onPress={() => onSubmitLike()}
+            width: iconSize,
+            height: iconSize,
+            resizeMode: 'contain',
+          }}
+        />}
+      </View>
+
+      {withImage && <View
+        style={{
+          width: '100%',
+          aspectRatio: 16 / 9,
+          marginBottom: 8,
+        }}
+      >
+        <Image
+          source={{ uri: item.image }}
+          style={{
+            width: '100%',
+            height: '100%',
+            borderRadius: 8,
+            backgroundColor: Color.border,
+          }}
+          onError={(err) => {
+            console.log('err image', err);
+            if (err) {
+              setWithImage(false);
+            }
+          }}
+        />
+      </View>}
+
+      <Text align="left" size={12} type="medium" {...extraPropsText}>
+        {item.productDescription}
+      </Text>
+
+      {showAllText && <HtmlView
+        html={item.fullDescription}
+        fontSize={12}
+        style={{
+          paddingTop: 8,
+        }}
+      />}
+
+      <Divider />
+
+      {showVideo && renderVideoPlayer(item.videoFilename)}
+
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          paddingHorizontal: 8,
+          paddingVertical: 16,
+        }}>
+        <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <TouchableOpacity
+            onPress={() => onSubmitLike()}
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={im_like ? imageContentItem.heart_active : imageContentItem.heart_nonactive}
               style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <Entypo
-                name={im_like ? 'arrow-bold-up' : 'arrow-bold-up'}
-                size={iconSize}
-                color={im_like ? Color.error : Color.gray}
-              />
-              {/* <Image
-                            source={imageContentItem.heart_active}
-                            style={{
-                                width: iconSize,
-                                height: iconSize,
-                                resizeMode: 'contain',
-                            }}
-                        /> */}
-              <Text
-                size={14}
-                align="left"
-                color={Color.gray}
-                style={{marginLeft: 10}}>
-                {like}
-              </Text>
-            </TouchableOpacity>
-
-            <Divider width={54} />
-            <TouchableOpacity
-              onPress={() => onSubmitLike()}
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <Entypo
-                name={!im_like ? 'arrow-bold-down' : 'arrow-bold-down'}
-                size={iconSize}
-                color={!im_like ? Color.error : Color.gray}
-              />
-              {/* <Image
-                            source={imageContentItem.heart_active}
-                            style={{
-                                width: iconSize,
-                                height: iconSize,
-                                resizeMode: 'contain',
-                            }}
-                        /> */}
-              <Text
-                size={14}
-                align="left"
-                color={Color.gray}
-                style={{marginLeft: 10}}>
-                {like}
-              </Text>
-            </TouchableOpacity>
-
-            <Divider width={54} />
-
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <Image
-                source={imageContentItem.comment}
-                style={{
-                  width: iconSize,
-                  height: iconSize,
-                  resizeMode: 'contain',
-                }}
-              />
-              <Text
-                size={14}
-                align="left"
-                color={Color.gray}
-                style={{marginLeft: 10}}>
-                {item.comment}
-              </Text>
-            </View>
-
-            <Divider width={54} />
-
-            <TouchableOpacity
-              disabled
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <Image
-                source={imageContentItem.view}
-                style={{
-                  width: iconSize,
-                  height: iconSize,
-                  resizeMode: 'contain',
-                }}
-              />
-              <Text
-                size={14}
-                align="left"
-                color={Color.gray}
-                style={{marginLeft: 10}}>
-                {item.view}
-              </Text>
-            </TouchableOpacity>
-
-            <Divider width={54} />
-
-            <TouchableOpacity
-              onPress={async () => {
-                await Share.open({
-                  url: item.share_link,
-                });
+                width: iconSize,
+                height: iconSize,
+                resizeMode: 'contain',
               }}
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <Image
-                source={imageContentItem.share}
-                style={{
-                  width: iconSize + 2,
-                  height: iconSize + 2,
-                  resizeMode: 'contain',
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
+            />
+            <Text
+              size={14}
+              align="left"
+              color={Color.gray}
+              style={{ marginLeft: 10 }}>
+              {like}
+            </Text>
+          </TouchableOpacity>
 
-        <Line color={Color.border} width={width} />
-      </TouchableOpacity>
-    );
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={imageContentItem.comment}
+              style={{
+                width: iconSize,
+                height: iconSize,
+                resizeMode: 'contain',
+              }}
+            />
+            <Text
+              size={14}
+              align="left"
+              color={Color.gray}
+              style={{ marginLeft: 10 }}>
+              {item.comment}
+            </Text>
+          </View>
+
+          <TouchableOpacity
+            disabled
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={imageContentItem.view}
+              style={{
+                width: iconSize,
+                height: iconSize,
+                resizeMode: 'contain',
+              }}
+            />
+            <Text
+              size={14}
+              align="left"
+              color={Color.gray}
+              style={{ marginLeft: 10 }}>
+              {item.view}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={async () => {
+              await Share.open({
+                url: item.share_link,
+              });
+            }}
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <Image
+              source={imageContentItem.share}
+              style={{
+                width: iconSize + 2,
+                height: iconSize + 2,
+                resizeMode: 'contain',
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <Line color={Color.border} width={width} />
+    </TouchableOpacity>
+  );
 }
 
 CardForumVertical.defaultProps = defaultProps;

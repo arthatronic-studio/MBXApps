@@ -10,7 +10,7 @@ export const queryGroupMemberList = gql`
             groupId
             fullname
             image
+            type
         }
     }
-  
 `;

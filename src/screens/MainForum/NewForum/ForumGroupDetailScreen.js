@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, TextInput, Text, Image, FlatList, Animated } from 'react-native';
+import { View, Image, FlatList, Animated } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -7,38 +7,35 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import ModalContentOptionsGroupForum from 'src/components/ModalContentOptionsGroupForum';
 import {
   Header,
+  Text,
   Scaffold,
   useColor
 } from '@src/components';
-import { TouchableOpacity } from '@src/components/Button';
-import TabForumNewPost from '../TabForumNewPost';
-import TabForumMyPost from '../TabForumMyPost';
+import { Button, TouchableOpacity } from '@src/components/Button';
 import Config from 'react-native-config';
 import { Container } from 'src/styled';
 import SearchBar from 'src/components/SearchBar';
 import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
 import WidgetForumGroup from './WidgetForumGroup';
+import { statusBarHeight } from 'src/utils/constants';
 
-const { Navigator, Screen } = createMaterialTopTabNavigator();
-
-const ForumDetailScreen = ({ navigation, route }) => {
-
-
+const ForumGroupDetailScreen = ({ navigation, route }) => {
   const params = route.params.data;
 
-  console.log('ini route ', params);
+  const [selectedMember, setSelectedMember] = useState();
 
   const { Color } = useColor();
   const modalOptionsRef = useRef();
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => {
-
-
-    }}>
-      <View style={{ flexDirection: 'row', marginVertical: 8, padding: 10, borderRadius: 10, justifyContent: 'space-between' }}>
-
+    <View
+      style={{
+        marginTop: 16,
+        paddingHorizontal: 16,
+      }}
+    >
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <View style={{ flexDirection: 'row' }}>
           <Image
             source={{ uri: item.image }}
@@ -48,118 +45,70 @@ const ForumDetailScreen = ({ navigation, route }) => {
               height: 50,
               backgroundColor: Color.border,
               borderColor: Color.primary,
-              marginHorizontal: 5
+              marginRight: 8
             }}
           />
-          <View style={{ marginTop: 10, justifyContent: 'flex-start' }}>
-            <Text type="bold">{item.title}</Text>
-
+          <View style={{ justifyContent: 'center', alignItems: 'flex-start' }}>
+            <Text type="bold">{item.fullname}</Text>
+            <Text size={10}>{Moment(item.createdDate).format('DD MMM YYYY')}</Text>
           </View>
         </View>
 
-
-        <Feather onPress={() => {
-          modalOptionsRef.current.open();
-        }} name='more-vertical' size={20} />
-
+        <Feather
+          onPress={() => {
+            setSelectedMember(item);
+            modalOptionsRef.current.open();
+          }}
+          name='more-vertical'
+          size={20}
+        />
       </View>
-    </TouchableOpacity>
-
+    </View>
   );
 
   return (
     <Scaffold
-      header={
-        <Header
-          title={params.name}
-          centerTitle={false}
-        />
-      }
+      showHeader={false}
+      useSafeArea={false}
     >
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <WidgetForumGroup
-          item={params}
-          isHighlight={false}
-        />
+      <FlatList
+        keyExtractor={(item, index) => item.id}
+        data={params.member}
+        renderItem={params.status !== 'PUBLISH' ? renderItem : () => <View />}
+        ListHeaderComponent={
+          <WidgetForumGroup
+            item={params}
+            isHighlight={false}
+          />
+        }
+        contentContainerStyle={{
+          paddingBottom: statusBarHeight,
+        }}
+      />
 
-        <View style={{ paddingHorizontal: 16 }}>
-          <Text style={{ color: Color.gray, fontSize: 12, fontWeight: 'bold' }}>Moderator</Text>
+      {params.status !== 'PUBLISH' && <Container paddingHorizontal={16} paddingTop={16} paddingBottom={statusBarHeight}>
+        <Button
+          onPress={() => {
+            navigation.navigate('ForumGroupAllMemberScreen', { groupId: params.id });
+          }}
+        >
+          Lihat Semua Anggota
+        </Button>
+      </Container>}
 
-          <View style={{ flexDirection: 'row', marginVertical: 8 }}>
-            <Image
-              source={{ uri: params.moderatorInfo.photoProfile ? params.moderatorInfo.photoProfile : 'https://i.postimg.cc/y6RYmPvd/Sample-User-Icon.png' }}
-              style={{
-                borderRadius: 25,
-                width: 35,
-                height: 35,
-                backgroundColor: Color.border,
-                borderColor: Color.primary,
-                marginRight: 5,
-
-              }}
-            />
-            <Text style={{ color: Color.text, marginTop: 5 }} >{params.moderatorInfo.firstName} {params.moderatorInfo.lastName}</Text>
-          </View>
-
-          <Text style={{ color: Color.gray, fontWeight: "bold", marginVertical: 5 }}>Topic</Text>
-          <Text size={15}>{params.topic.name}</Text>
-
-          <Text style={{ color: Color.gray, fontWeight: "bold", marginVertical: 5 }}>History Forum</Text>
-          <View style={{ flexDirection: 'row' }}>
-            <Text size={15}>Forum dibuat pada</Text>
-            <Text style={{ fontWeight: "bold" }}> {Moment(parseInt(params.createdAt)).format('Do MMMM YYYY')}</Text>
-          </View>
-
-          {params.status == 'PUBLISH' ?
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-
-
-              <Text size={15}>{params.member.length} Anggota Forum</Text>
-              <TouchableOpacity onPress={() => {
-                navigation.navigate('ForumGroupPermintaanScreen')
-              }}>
-                <Text style={{ fontWeight: "bold", color: '#F3771D' }}>({params.memberDataReq.length} Permintaan) </Text>
-              </TouchableOpacity>
-            </View>
-            :
-            <Text></Text>}
-          {params.status !== 'PUBLISH' ?
-            <FlatList
-              data={params.member}
-              renderItem={renderItem}
-              keyExtractor={item => item.id}
-            />
-
-            : <Text></Text>
-          }
-
-          {params.status !== 'PUBLISH' ?
-            <View style={{
-              width: 200, height: 50, marginLeft: 80, borderRadius: 50, alignItems: 'center', justifyContent: 'center',
-
-            }}
-            >
-              <TouchableOpacity
-                onPress={() => { navigation.navigate('ForumGroupAllMemberScreen') }}
-                style={{ alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}
-
-              >
-                <Text style={{ color: '#F3771D', fontWeight: 'bold' }}> Lihat Semua Anggota</Text>
-              </TouchableOpacity>
-            </View>
-
-            : <Text></Text>
-          }
-        </View>
-      </ScrollView>
+      <View style={{ position: 'absolute', top: statusBarHeight }}>
+        <Header transparentMode />
+      </View>
 
       <ModalContentOptionsGroupForum
         ref={modalOptionsRef}
-
-
+        selectedMember={selectedMember}
+        onClose={() => {
+          setSelectedMember();
+        }}
       />
     </Scaffold>
   );
 }
 
-export default ForumDetailScreen;
+export default ForumGroupDetailScreen;

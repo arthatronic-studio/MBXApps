@@ -78,6 +78,7 @@
     "react-native-portalize": "^1.0.7",
     "react-native-push-notification": "^8.1.1",
     "react-native-qrcode-svg": "^6.1.1",
+    "react-native-render-html": "^6.3.4",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "3.13.1",
     "react-native-share": "^7.3.7",
