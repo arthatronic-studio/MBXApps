@@ -20,7 +20,8 @@ const defaultProps = {
   editScreen: "EditThreadScreen",
   onDelete: () => {},
   onShare: () => {},
-  showpin: true
+  showpin: true,
+  event: false,
 };
 
 const initialMessage = {
@@ -29,7 +30,7 @@ const initialMessage = {
 }
 
 const ModalContentOptions = forwardRef((props, ref) => {
-  const { isOwner, item, useBlockUser, moduleType, nameType, onClose, editScreen, onDelete, onShare, showpin } = props;
+  const { isOwner, item, event, useBlockUser, moduleType, nameType, onClose, editScreen, onDelete, onShare, showpin } = props;
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
@@ -178,6 +179,16 @@ const ModalContentOptions = forwardRef((props, ref) => {
       onPress: () => {
         combinedRef.current.close();
         onDelete();
+      },
+    },
+    {
+      id: 2,
+      show: event ? true : false,
+      name: 'Edit',
+      color: Color.error,
+      onPress: () => {
+        combinedRef.current.close();
+        navigation.navigate('EditEventMain',{item})
       },
     },
   ];

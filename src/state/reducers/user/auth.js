@@ -5,6 +5,7 @@ const initialState = {
         user: null,
         bookingHistory: []
     },
+    createEvent: false,
     register: {
       status: false
     },
@@ -73,6 +74,11 @@ const Auth = (state = initialState, action) => {
             ...state,
             login: { ...state.login, bookingHistory: state.login.bookingHistory.concat(action.data) },
             loading: false,
+          };
+        case 'USER.CREATE_EVENT':
+          return {
+            ...state,
+            createEvent: true,
           };
         case 'USER.UPDATE_BOOKING_STATUS':
           return {

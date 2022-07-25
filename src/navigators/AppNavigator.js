@@ -88,6 +88,8 @@ import PlaceDetail from 'src/screens/Posting/Place/Detail';
 // Event
 import EventScreen from 'src/screens/Posting/Event/Index';
 import EventDetail from 'src/screens/Posting/Event/Detail';
+import CreateEvent from 'src/screens/Posting/Event/CreateEvent';
+import CreateEventSecond from 'src/screens/Posting/Event/CreateEventSecond';
 
 // Job
 import JobScreen from 'src/screens/Posting/Job/Index';
@@ -214,6 +216,7 @@ import CreateShop from 'src/screens/Ecommerce/CreateShop';
 import GalleryScreen from 'src/screens/Gallery/GalleryScreen';
 import GalleryDetailScreen from 'src/screens/Gallery/GalleryDetailScreen';
 import GalleryDetailSliderScreen from 'src/screens/Gallery/GalleryDetailSliderScreen';
+import GalleryDetailSliderScreenEvent from 'src/screens/Gallery/GalleryDetailSliderScreenEvent';
 import IncomingOrder from 'src/screens/Ecommerce/IncomingOrder';
 import SearchScreen from 'src/screens/Ecommerce/SearchScreen';
 import TrackingOrder from 'src/screens/Transaction/TrackingOrder';
@@ -226,6 +229,29 @@ import UserGroupDetail from 'src/screens/Chat/UserGroupDetail';
 import AddMember from 'src/screens/Chat/AddMember';
 import ReportArticle from 'src/screens/Posting/News/ReportArticle';
 import ManageGroupScreen from 'src/screens/Chat/ManageGroupScreen';
+import EditInformationGroup from 'src/screens/Chat/EditInformationGroup';
+import CheckoutEvent from 'src/screens/Posting/Event/CheckoutEvent';
+import PemesananTiket from 'src/screens/Posting/Event/PemesananTiket';
+import EventOfficial from 'src/screens/Posting/Event/EventOfficial';
+import CommunityEvent from 'src/screens/Posting/Event/CommunityEvent';
+import MyEvent from 'src/screens/Posting/Event/MyEvent';
+import SavedEvent from 'src/screens/Posting/Event/SavedEvent';
+import SearchEvent from 'src/screens/Posting/Event/SearchEvent';
+import DocumentasiSearchEvent from 'src/screens/Posting/Event/DocumentasiSearchEvent';
+import EditEventMain from 'src/screens/Posting/Event/EditEventMain';
+import History from 'src/screens/Posting/Event/History';
+import MyTicket from 'src/screens/Posting/Event/MyTicket';
+import DocumentasiEvent from 'src/screens/Posting/Event/DocumentasiEvent';
+import DocumentasiEventDetail from 'src/screens/Posting/Event/DocumentasiEventDetail';
+import EventHistory from 'src/screens/Posting/Event/EventHistory';
+import OnBoardEvent from 'src/screens/Posting/Event/OnBoardEvent';
+import EditEvent from 'src/screens/Posting/Event/EditEvent';
+import EditEventSecond from 'src/screens/Posting/Event/EditEventSecond';
+import OrderEventDetail from 'src/screens/Posting/Event/OrderEventDetail';
+// import EventOfficial from 'src/screens/Posting/Event/EventOfficial';
+// import CommunityEvent from 'src/screens/Posting/Event/CommunityEvent';
+// import MyEvent from 'src/screens/Posting/Event/MyEvent';
+// import EventDocumentation from 'src/screens/Posting/Event/EventDocumentation';
 
 const { Navigator, Screen } = createStackNavigator();
 const MainPage = MainHome;
@@ -242,8 +268,16 @@ function MainStackNavigator() {
         gestureEnabled: Platform.OS === 'ios',
         headerShown: false
       }}>
+        
       {/* uncanny */}
       <Screen name="SplashScreen" component={SplashScreen} />
+
+      <Screen name="DocumentasiEvent" component={DocumentasiEvent} />
+      <Screen name="DocumentasiEventDetail" component={DocumentasiEventDetail} />
+      <Screen name="OnBoardEvent" component={OnBoardEvent} />
+      <Screen name="EditEvent" component={EditEvent} />
+      <Screen name="EditEventSecond" component={EditEventSecond} />
+      <Screen name="OrderEventDetail" component={OrderEventDetail} />
       <Screen name="MainPage" component={MainPage} />
       <Screen name="MainProfile" component={MainProfile} />
       <Screen name="OnBoardingScreen" component={OnBoardingScreen} />
@@ -353,8 +387,23 @@ function MainStackNavigator() {
       <Screen name="PlaceScreen" component={PlaceScreen} />
       <Screen name="PlaceDetail" component={PlaceDetail} />
       {/* Event */}
+      <Screen name="CheckoutEvent" component={CheckoutEvent} />
+      <Screen name="PemesananTiket" component={PemesananTiket} />
       <Screen name="EventScreen" component={EventScreen} />
       <Screen name="EventDetail" component={EventDetail} />
+      <Screen name="CreateEvent" component={CreateEvent} />
+      <Screen name="CreateEventSecond" component={CreateEventSecond} />
+      <Screen name="EditEventMain" component={EditEventMain} />
+
+      <Screen name="EventOfficial" component={EventOfficial} />
+      <Screen name="CommunityEvent" component={CommunityEvent} />
+      <Screen name="MyEvent" component={MyEvent} />
+      <Screen name="SavedEvent" component={SavedEvent} />
+      <Screen name="SearchEvent" component={SearchEvent} />
+      <Screen name="DocumentasiSearchEvent" component={DocumentasiSearchEvent} />
+      <Screen name="History" component={History} />
+      <Screen name="MyTicket" component={MyTicket} />
+
       {/* Job */}
       <Screen name="JobScreen" component={JobScreen} />
       <Screen name="JobDetail" component={JobDetail} />
@@ -454,6 +503,11 @@ function MainStackNavigator() {
         name="GalleryDetailSliderScreen"
         component={GalleryDetailSliderScreen}
       />
+      <Screen
+        name="GalleryDetailSliderScreenEvent"
+        component={GalleryDetailSliderScreenEvent}
+      />
+      
     </Navigator>
   );
 }

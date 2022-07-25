@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, useWindowDimensions } from 'react-native';
+import { View, Image, useWindowDimensions, Pressable } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Moment from 'moment';
@@ -23,7 +23,8 @@ import {
     iconLiked,
     iconLike,
 } from '@assets/images/home';
-import { Container, Divider, Row } from 'src/styled';
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import { Container, Divider, Row,} from 'src/styled';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { useSelector } from 'react-redux';
 import CardComponentYoutube from './CardComponentYoutube';
@@ -36,16 +37,18 @@ import CardComponentJobs from './CardComponentJobs';
 import CardComponentPlace from './CardComponentPlace';
 import CardForumVertical from '@src/screens/MainForum/CardForumVertical';
 import { fetchContentProductDetail } from 'src/api/content';
+import CardComponentEventV2 from './CardComponentEventV2';
 
 const defaultProps = {
     productCategory: '',
+    category: '',
     onPress: () => { },
     numColumns: 1,
     horizontal: false,
     style: {},
 };
 
-const CardContentProductV2 = ({ productCategory, item, numColumns, onPress, horizontal, style }) => {
+const CardContentProductV2 = ({ productCategory, category,item, numColumns, onPress, horizontal, style }) => {
     const [like, setLike] = useState(item.like);
     const [im_like, setImLike] = useState(item.im_like);
     const [trigger, setTrigger] = useState(false);
@@ -119,8 +122,7 @@ const CardContentProductV2 = ({ productCategory, item, numColumns, onPress, hori
                         GALogEvent('Tempat', {
                             id: item.id,
                             product_name: item.productName,
-                            user_id: user.
-                                Id,
+                            user_id: user.userId,
                             method: analyticMethods.view,
                           });
                     }}
@@ -300,38 +302,66 @@ const CardContentProductV2 = ({ productCategory, item, numColumns, onPress, hori
                 }}
                 style={[
                     {
-                        width: width / numColumns - (horizontal ? 32 : 16),
-                        paddingHorizontal: 8,
+                        width: width / numColumns - (horizontal ? 32 : 32),
                         marginBottom: 16,
-                        borderRadius: 4
+                        borderRadius: 8,
+                        elevation: 2,
+                        backgroundColor: Color.theme,
+                        alignSelf: 'center'
                     },
                     style,
                 ]}
             >
-                <View style={{flexDirection: 'row', width: '100%', backgroundColor: Color.textInput, borderRadius: 4, ...shadowStyle}}>
+                <View style={{flexDirection: 'row'}}>
                     <Image
                         source={{uri: item.image}}
-                        style={{width: '35%', aspectRatio: 9/16, borderTopLeftRadius: 4, borderBottomLeftRadius: 4, backgroundColor: Color.border}}
+                        style={{width: '35%', aspectRatio: 10/16, borderTopLeftRadius: 4, borderBottomLeftRadius: 4, backgroundColor: Color.border}}
                     />
-    
-                    <View style={{width: '65%', padding: 16, borderTopRightRadius: 4, borderBottomRightRadius: 4, backgroundColor: Color.textInput}}>
+                    <View style={{width: '65%', paddingHorizontal: 15, paddingVertical: 10, borderTopRightRadius: 4, borderBottomRightRadius: 4, backgroundColor: Color.textInput}}>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                            <View style={{width: 70, paddingVertical: 4, paddingHorizontal: 16, borderWidth: 0.5, borderRadius: 8, borderColor: Color.primary}}>
-                                <Text size={10} color={Color.primary}>{item.productCategory}</Text>
+                            <View style={{width: 70, height: 20, alignItems: 'center', justifyContent: 'center',paddingHorizontal: 16, borderWidth: 1, borderRadius: 20, borderColor: '#2C70F7', backgroundColor: '#2C70F766'}}>
+                                <Text size={8} color={'#2C70F7'}>{item.productCategory}</Text>
                             </View>
     
                             {/* <Ionicons name='bookmark-outline' size={20} color={Color.primary} /> */}
                         </View>
     
                         <View style={{paddingTop: 8}}>
-                            <Text type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
-                            <Divider height={6} />
-                            <Text size={12} align='left' numberOfLines={2}>{item.fullname}</Text>
-                            {Moment(eventDate).isValid() && <>
-                                <Text type='bold' size={12} align='left' color={Color.primary}>{Moment(eventDate).format('DD MMM YYYY')}</Text>
-                                <Divider height={8} />
+                            <Text type='bold' align='left' numberOfLines={3} style={{lineHeight: 20}}>{item.productName}</Text>
+                            <Divider height={12} />
+                            <Row>
+                                <AntDesign name={'clockcircleo'} color={Color.secondary} size={9} style={{marginRight: 8}}/>
+                                {Moment(eventDate).isValid() && <>
+                                    <Text size={10} color={Color.secondary} align='left' numberOfLines={2}>{Moment(eventDate).format('DD MMM YYYY')}</Text>
+                                </>}
+                            </Row>
+                            <Divider height={3} />
+                            <Row>
+                                <AntDesign name={'user'} size={10} color={Color.secondary} style={{marginRight: 7}}/>
+                                <Text size={10} color={Color.secondary} align='left' numberOfLines={2}>{item.fullname}</Text>
+                            </Row>
+                            <Divider height={12} />
+                            {/* Difference */}
+                            {category == "MyEvent" ?
+                            <>
+                            <Row>
+                                <View style={{width: '50%'}}>
+                                    <Text size={8} color={Color.secondary} align='left' numberOfLines={2} style={{marginBottom: 2}}>Tiket Dimiliki</Text>
+                                    <Text type='bold' align='left' numberOfLines={3}>{item.qty} Tiket</Text>
+                                </View>
+                                <Pressable style={{backgroundColor: Color.primary, width: 110, borderRadius: 25, height: 30, alignItems: 'center', justifyContent: 'center'}}>
+                                    <Text style={{fontSize: 11, color: Color.textInput, fontWeight: 'bold'}}>Lihat Detail</Text>
+                                </Pressable>
+                            </Row>
+                            </>
+                            :
+                            <>
+                            <Text size={8} color={Color.secondary} align='left' numberOfLines={2} style={{marginBottom: 2}}>Mulai dari</Text>
+                            <Row>
+                                <Text type='bold' align='left' numberOfLines={3}>Rp 100.000</Text>
+                                <Text style={{fontSize: 8, color: Color.secondary, marginLeft: 5, textDecorationLine: 'line-through'}}>Rp 75.000</Text>
+                            </Row>
                             </>}
-                            <Text size={12} align='left' numberOfLines={4}>{item.productDescription}</Text>
                         </View>
     
                         {/* <View style={{paddingTop: 24, flexDirection: 'row'}}>
@@ -349,6 +379,7 @@ const CardContentProductV2 = ({ productCategory, item, numColumns, onPress, hori
                             <Text size={10} align='left'>3 Hari lagi Pendaftaran Ditutup</Text>
                         </View> */}
                     </View>
+
                 </View>
             </TouchableOpacity>
         )
@@ -494,7 +525,7 @@ const CardContentProductV2 = ({ productCategory, item, numColumns, onPress, hori
     if (productCategory === 'EMERGENCY') return <CardComponentEmergency onPress={() => onPressCard()} { ...props } />;
     // else if (productCategory === 'ARTIKEL') return <CardComponentArticleV2 onPress={() => onPressCard()} { ...props } />;
     else if (productCategory === 'ARTIKEL') return renderCardArticle();
-    else if (productCategory === 'EVENT') return <CardComponentEvent onPress={() => onPressCard()} { ...props } />;
+    else if (productCategory === 'EVENT') return <CardComponentEventV2 item={item} numColumns={numColumns} horizontal={horizontal} style={style} category={category} />; // <CardComponentEvent onPress={() => onPressCard()} { ...props } />;
     else if (productCategory === 'JOBS') return <CardComponentJobs onPress={() => onPressCard()} { ...props } />;
     else if (productCategory === 'NEARBY_PLACE') return <CardComponentPlace onPress={() => onPressCard()} { ...props } />;
     else if (productCategory === 'YOUTUBE_VIDEO') return <CardComponentYoutube item={item} />;

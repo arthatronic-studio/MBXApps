@@ -17,6 +17,7 @@ const propTypes = {
     productCategory: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     title: PropTypes.string,
+    category: PropTypes.string,
     nav: PropTypes.string,
     refresh: PropTypes.bool,
     horizontal: PropTypes.bool,
@@ -30,6 +31,7 @@ const defaultProps = {
     productCategory: '',
     name: '',
     title: '',
+    category: '',
     nav: '',
     refresh: false,
     horizontal: false,
@@ -44,6 +46,7 @@ const HighlightContentProduct = (props) => {
         productCategory,
         name,
         title,
+        category,
         nav,
         refresh,
         horizontal,
@@ -130,6 +133,7 @@ const HighlightContentProduct = (props) => {
         <CardContentProduct
             key={index}
             productCategory={productCategory}
+            category={category}
             item={item}
             horizontal={isHorizontal}
             { ...extraProps }

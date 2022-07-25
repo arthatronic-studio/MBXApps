@@ -7,7 +7,7 @@ import theme from './theme';
 import Article from './history/article';
 import uploadChunkState from './upload/uploadChunkState';
 import surveyPasar from './survey/pasar';
-
+import Event from './history/event';
 const config = {
   key: 'root',
   storage: AsyncStorage,
@@ -20,6 +20,7 @@ const reducer = persistCombineReducers(config, {
   uploadChunkState,
   'history.article': Article,
   surveyPasar,
+  'history.event': Event,
 });
 
 export default reducer;

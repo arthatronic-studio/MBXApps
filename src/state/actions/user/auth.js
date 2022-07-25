@@ -164,6 +164,10 @@ export const getCurrentUserProfile = () => async (dispatch, getState) => {
  });
 };
 
+export const onBoardingEvent = () => async (dispatch, getState) => {
+  dispatch({ type: 'USER.CREATE_EVENT' });
+};
+
 
 export const updateCurrentUserProfile = (params) => async (dispatch, getState) => {
   const {

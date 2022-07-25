@@ -6,8 +6,9 @@ import { ScreenEmptyData } from '@src/components';
 import { Container, Row } from 'src/styled';
 import PostingSkeleton from '../Posting/PostingSkeleton';
 import { initialItemState } from 'src/utils/constants';
-import { fetchContentProduct, fetchContentUserProduct, fetchContentSavedProduct } from 'src/api/contentV2';
+import { fetchContentProduct, fetchContentUserProduct, fetchContentSavedProduct } from 'src/api/content';
 import CardContentProductV2 from '@src/components/Content/CardContentProductV2';
+import { fetchEventList } from 'src/api/event/event';
 
 const propTypes = {
     userProfileId: PropTypes.number,

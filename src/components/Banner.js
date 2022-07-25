@@ -111,48 +111,15 @@ const Banner = ({ data, loading, showHeader, forArticle, leftIndicator }) => {
                   <TouchableOpacity
                     onPress={() => onPress(e)}
                   >
-                    {forArticle ? (
-                      <ImageBackground
-                        source={{uri: e.image}}
-                        style={{ 
-                          width: '100%', 
-                          height: '100%',
-                          justifyContent: 'flex-end',
-                          alignItems: 'flex-start',
-                        }}
-                        imageStyle={{
-                          borderRadius: 8,
-                        }}
-                        resizeMode='cover'
-                      >
-                        <View
-                          style={{ 
-                            paddingHorizontal: 8,
-                            paddingBottom: 28
-                          }}
-                        >
-                          <Text 
-                            color={Color.textInput}
-                            type="bold"
-                            size={16}
-                            align="left"
-                            numberOfLines={2}
-                          >
-                            {e.title}
-                          </Text>
-                        </View>
-                      </ImageBackground>
-                    ) : (
-                      <Image
-                        source={{uri: e.image}}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          borderRadius: 8,
-                        }}
-                        resizeMode='cover'
-                      />
-                    )}
+                    <Image
+                      source={{uri: e.image}}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: 8,
+                      }}
+                      resizeMode='cover'
+                    />
                   </TouchableOpacity>
                 </Container>
               )

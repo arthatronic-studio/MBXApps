@@ -40,8 +40,8 @@ import { queryReportAbuseV2 } from './queryReportAbuseV2';
 import { queryContentShare } from './queryContentShare';
 import { queryProductSave } from './queryProductSave';
 import { queryProductReport } from './queryProductReport';
-
-
+import {queyGetDokumentasiEnventList}  from './queyGetDokumentasiEnventList';
+import {queyGetDokumentasiEnventDetail}  from './queyGetDokumentasiEnventDetail';
 export {
     queryContentProduct,
     queryContentProductDetail,
@@ -86,4 +86,6 @@ export {
     queryReportAbuseV2,
     queryContentShare,
     queryProductSave,  
+    queyGetDokumentasiEnventList,
+    queyGetDokumentasiEnventDetail
 };

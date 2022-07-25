@@ -42,14 +42,14 @@ const defaultProps = {
     keyboardType: 'default',
     error: null,
     hideErrorHint: false,
-
+    labelInside:'',
     secureTextEntry: false,
     suffixIcon: null,
     prefixIcon: null,
     onPress: () => {},
 };
 
-const FormSelect = forwardRef(({ label, labelContainerStyle, placeholder, onPress, onChangeText, value, onBlur, returnKeyType, onSubmitEditing, keyboardType, error, hideErrorHint, secureTextEntry, prefixIcon, suffixIcon }, ref) => {
+const FormSelect = forwardRef(({ label,labelInside, labelContainerStyle, placeholder, onPress, onChangeText, value, onBlur, returnKeyType, onSubmitEditing, keyboardType, error, hideErrorHint, secureTextEntry, prefixIcon, suffixIcon }, ref) => {
     const { Color } = useColor();
 
     useEffect(() => {
@@ -75,22 +75,22 @@ const FormSelect = forwardRef(({ label, labelContainerStyle, placeholder, onPres
                     paddingHorizontal: 16,
                 }}
             >
-                <TouchableOpacity
-                    onPress={() => onPress()}
-                    style={{
-                        width: '100%',
-                        flexDirection: 'row',
+                <View  style={{
                         borderRadius: 4,
                         backgroundColor: Color.textInput,
                         borderWidth: 0.5,
                         borderColor: Color.disabled,
-                        paddingVertical: 20,
-                    }}
+                        paddingVertical: 10,
+                    }}>
+                <Text size={10} align='left' letterSpacing={0.08} style={{opacity: 0.6 ,position: 'absolute', top: 0,  marginLeft: 10}}>{labelInside}</Text>
+                <TouchableOpacity
+                    onPress={() => onPress()}
+                   style={{ flexDirection: 'row', width: '100%',}}
                 >
                     {prefixIcon}
 
                     <Container flex={1} align='flex-start' justify='center' paddingHorizontal={12}>
-                        <Text color={Color.gray} numberOfLines={1} align='left'>
+                        <Text color={Color.gray} numberOfLines={1} align='left' style={{ marginTop: labelInside == '' ? 0 : 5 }}>
                             {value || placeholder}
                         </Text>
                     </Container>
@@ -123,6 +123,7 @@ const FormSelect = forwardRef(({ label, labelContainerStyle, placeholder, onPres
                         <Fontisto size={14} name='angle-down' color={Color.gray} />
                     </View>}
                 </TouchableOpacity>
+                </View>
             </View>
 
             {!hideErrorHint && <View style={{
