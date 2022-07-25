@@ -60,7 +60,8 @@ const Button = (props) => {
           type={type || 'semibold'}
           color={
             disabled ? Color.border : (props.fontColor || Color.textButtonInline)
-          }>
+          }
+        >
           {children}
         </Text>
       </CustomButton>

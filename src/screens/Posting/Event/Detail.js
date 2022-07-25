@@ -70,7 +70,7 @@ const EventDetail = ({ navigation, route }) => {
       })
       .catch(reject => {
         // hideLoading()
-        alert(reject.message)
+        // alert(reject.message)
         console.log(reject.message, 'reject');
         setLoading(false);
       });
@@ -155,8 +155,6 @@ const EventDetail = ({ navigation, route }) => {
     Linking.openURL(`google.navigation:q=${latLng}`);
   }
 
-  if (!data) return <View />
-
   const closest = data ? data.tickets ? data.tickets.reduce(
     (acc, loc) =>
       acc.price < loc.price
@@ -198,7 +196,7 @@ const EventDetail = ({ navigation, route }) => {
               textAlign: 'left',
               paddingHorizontal: 20,
             }}>
-            {data.category} EVENT
+            {data && data.category} EVENT
           </Text>
           <Divider height={10} />
           <Text
@@ -210,7 +208,7 @@ const EventDetail = ({ navigation, route }) => {
               paddingHorizontal: 20,
               width: '70%'
             }}>
-            {data.name}
+            {data && data.name}
           </Text>
         </View>
 
@@ -228,7 +226,7 @@ const EventDetail = ({ navigation, route }) => {
               color={Color.secondary}
             />
             <Divider width={6} />
-            <Text style={{ fontSize: 10, color: Color.secondary, fontWeight: 'bold' }}>{moment(data.date).format('DD MMM YYYY')}</Text>
+            <Text style={{ fontSize: 10, color: Color.secondary, fontWeight: 'bold' }}>{data && moment(data.date).format('DD MMM YYYY')}</Text>
           </View>
           <View
             style={{
@@ -242,7 +240,7 @@ const EventDetail = ({ navigation, route }) => {
               color={Color.secondary}
             />
             <Divider width={6} />
-            <Text style={{ fontSize: 10, color: Color.secondary, fontWeight: 'bold' }}>{data.startTime} - {data.endTime}</Text>
+            {data ? <Text style={{ fontSize: 10, color: Color.secondary, fontWeight: 'bold' }}>{data.startTime} - {data.endTime}</Text> : <Text>-</Text>}
           </View>
           <View
             style={{
@@ -256,7 +254,7 @@ const EventDetail = ({ navigation, route }) => {
               color={Color.secondary}
             />
             <Divider width={4} />
-            <Text style={{ fontSize: 10, color: Color.secondary, fontWeight: 'bold' }}>{data.kota}</Text>
+            <Text style={{ fontSize: 10, color: Color.secondary, fontWeight: 'bold' }}>{data && data.kota}</Text>
           </View>
         </View>
 
@@ -276,7 +274,7 @@ const EventDetail = ({ navigation, route }) => {
             </Container>
           } */}
 
-        {data.ordered && <Row style={{ backgroundColor: '#FAF3ED', marginHorizontal: 10, padding: 13, borderRadius: 8 }}>
+        {data && data.ordered && <Row style={{ backgroundColor: '#FAF3ED', marginHorizontal: 10, padding: 13, borderRadius: 8 }}>
           <Col>
             <Text size={11} type='bold' align='left'>Kamu telah memiliki tiket untuk event ini</Text>
           </Col>
@@ -301,7 +299,7 @@ const EventDetail = ({ navigation, route }) => {
             }}>
             Deskripsi
           </Text>
-          {data.description && <Text
+          {data && data.description && <Text
             numberOfLines={12}
             style={{
               textAlign: 'justify',
@@ -309,9 +307,9 @@ const EventDetail = ({ navigation, route }) => {
               color: Color.secondary,
               marginBottom: 16,
             }}>
-            {data.description.length > 40 && !desc ? data.description.substring(0, 40) : data.description}
+            {data && data.description.length > 40 && !desc ? data.description.substring(0, 40) : data.description}
           </Text>}
-          {data.description && data.description.length > 40 && <Pressable onPress={() => setDesc(!desc)} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: '100%', paddingHorizontal: 15 }}>
+          {data && data.description && data.description.length > 40 && <Pressable onPress={() => setDesc(!desc)} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: '100%', paddingHorizontal: 15 }}>
             <Text style={{ color: Color.primary }}>{desc ? 'Lebih sedikit' : 'Selengkapnya'}</Text>
             <MaterialIcons name={'keyboard-arrow-down'} size={20} color={Color.primary} style={{ marginHorizontal: 5 }} />
           </Pressable>}
@@ -395,11 +393,11 @@ const EventDetail = ({ navigation, route }) => {
     >
       <FlatList
         ref={flatlistRef}
-        data={data.tickets}
+        data={data && data.tickets}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         ListHeaderComponent={renderHeader}
-        ListFooterComponent={renderFooter}
+        ListFooterComponent={data && renderFooter}
       />
 
       <Row style={{ height: 60, paddingHorizontal: 20, paddingVertical: 15 }}>

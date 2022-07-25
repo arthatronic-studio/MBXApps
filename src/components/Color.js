@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux';
 const staticColors = {
   primary: '#EBC300',
   primaryDark: '#4B4639',
+  primaryMoreDark: '#33302A',
   primarySoft: '#D6C694',
   secondary: '#6A7479',
   textButtonInline: '#4B4639',

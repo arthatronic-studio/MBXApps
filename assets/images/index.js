@@ -18,8 +18,11 @@ const homeMenuShop = require('./home-menu-shop.png');
 const profile = require('./profile.png');
 const shake = require('./shake.png');
 const ticket = require('./ticket.png');
+const archive = require('./archive.png');
+const calendar = require('./calendar.png');
+const location = require('./location.png');
 
-const imageAssets = {
+export {
   iconApp,
   iconSplash,
   imageBlank,
@@ -40,7 +43,35 @@ const imageAssets = {
   profile,
   shake,
   ticket,
+  archive,
+  calendar,
+  location,
 };
 
-export { imageAssets };
+export const imageAssets = {
+  iconApp,
+  iconSplash,
+  imageBlank,
+  imageEmptyAuction,
+  imageEmpty,
+  imagePaymentBanner,
+  imagePaymentSuccess,
+  imageCarousel,
+  imageCardOrnament,
+
+  buildings,
+  direction,
+  eyeSlash,
+  homeMenuEats,
+  homeMenuEvent,
+  homeMenuPromo,
+  homeMenuShop,
+  profile,
+  shake,
+  ticket,
+  archive,
+  calendar,
+  location,
+};
+
 export default imageAssets;

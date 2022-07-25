@@ -229,7 +229,6 @@ import UserGroupDetail from 'src/screens/Chat/UserGroupDetail';
 import AddMember from 'src/screens/Chat/AddMember';
 import ReportArticle from 'src/screens/Posting/News/ReportArticle';
 import ManageGroupScreen from 'src/screens/Chat/ManageGroupScreen';
-import EditInformationGroup from 'src/screens/Chat/EditInformationGroup';
 import CheckoutEvent from 'src/screens/Posting/Event/CheckoutEvent';
 import PemesananTiket from 'src/screens/Posting/Event/PemesananTiket';
 import EventOfficial from 'src/screens/Posting/Event/EventOfficial';

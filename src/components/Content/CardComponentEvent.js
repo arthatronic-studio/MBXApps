@@ -9,6 +9,7 @@ import {
     Text,
     TouchableOpacity,
     useColor,
+    Button,
 } from '@src/components';
 import { shadowStyle } from '@src/styles';
 
@@ -31,6 +32,7 @@ import CardComponentYoutube from './CardComponentYoutube';
 import CardComponentVideo from './CardComponentVideo';
 import { FormatMoney } from 'src/utils';
 import { accessClient } from 'src/utils/access_client';
+import imageAssets from 'assets/images';
 
 const defaultProps = {
     productCategory: '',
@@ -113,98 +115,65 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                     width: width / numColumns - (horizontal ? 32 : 16),
                     paddingHorizontal: 8,
                     marginTop: 16,
-                    borderRadius: 16,
+                    borderRadius: 8,
                     ...style,
                 }}
             >
-                <View style={{ width: '100%', backgroundColor: Color.textInput, borderRadius: 16 }}>
+                <View style={{ width: '100%', backgroundColor: Color.primaryMoreDark, borderRadius: 8 }}>
                     <Image
                         source={{ uri: item.image }}
                         style={{
                             width: '100%',
-                            aspectRatio: 3 / 2,
+                            aspectRatio: 2 / 1,
                             justifyContent: 'flex-end',
                             alignItems: 'center',
-                            borderRadius: 12,
-                            backgroundColor: Color.border,
+                            borderTopLeftRadius: 8,
+                            borderTopRightRadius: 8,
                         }}
                     />
 
-                    {/* hide save */}
-                    {/* <View style={{backgroundColor:Color.textInput,width:50,height:50,borderRadius:50,position:'absolute', top: 10, right: 15,}}>
-                        <Ionicons name='bookmark-outline' size={25} color={Color.black} style={{position:'absolute',top:10,right:12}} />
-                    </View> */}
+                    <View style={{ backgroundColor: Color.theme, width: 40, aspectRatio: 1, borderRadius: 20, position: 'absolute', top: 10, right: 10, alignItems: 'center', justifyContent: 'center' }}>
+                        <Ionicons name='bookmark-outline' size={22} color={Color.primarySoft} />
+                    </View>
 
-                    <View style={{ width: '100%', paddingVertical: 8 }}>
-                        {/* <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                            <View style={{width: 70, paddingVertical: 4, paddingHorizontal: 16, borderWidth: 0.5, borderRadius: 8, borderColor: Color.primary}}>
-                                <Text size={10} color={Color.primary}>{item.productCategory}</Text>
-                            </View>
-    
-                            <Ionicons name='bookmark-outline' size={20} color={Color.primary} />
-                        </View> */}
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Text size={10} type="bold" color={Color.success}>Community</Text>
+                    <View style={{ width: '100%', padding: 10 }}>
+                        <Text type='bold' align='left' numberOfLines={1}>{item.productName}</Text>
 
+                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 8 }}>
                             <View style={{ flexDirection: 'row' }}>
-                                <Text size={12} align='left' numberOfLines={1}>{item.fullname}</Text>
-                                {/* hide is admin */}
-                                {/* <Image
-                                    style={{ height: 16, width: 16, marginLeft: 4 }}
-                                    source={iconverify}
-                                /> */}
+                                <Image
+                                    style={{ height: 16, width: 16 }}
+                                    source={imageAssets.location}
+                                />
+                                <Divider width={4} />
+                                <Text type='bold' size={12} align='left' color={Color.grey}>Bandung</Text>
                             </View>
-                        </View>
-
-                        <View style={{ paddingTop: 8, width: '100%' }}>
-                            <Text type='bold' align='left' numberOfLines={2}>{item.productName}</Text>
-
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <Ionicons name='calendar-outline' size={18} color={Color.grey} style={{ marginRight: 5 }} />
-                                    {Moment(eventDate).isValid() && <>
-                                        <Text type='bold' size={12} align='left' color={Color.grey}>{Moment(eventDate).format('DD MMM YYYY')}</Text>
-                                        <Divider height={8} />
-                                    </>}
-                                </View>
-
-                                {/* hide location */}
-                                {/* <View style={{ flexDirection: 'row' }}>
-                                    <Image
-                                        style={{ height: 17, width: 17, marginLeft: 5, backgroundColor: Color.gray }}
-                                        source={iconTempat}
-                                    />
-
-                                    <Text type='bold' size={12} align='left' color={Color.grey}>Bandung</Text>
+                            <Divider />
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Image
+                                    style={{ height: 16, width: 16 }}
+                                    source={imageAssets.calendar}
+                                />
+                                <Divider width={4} />
+                                {Moment(eventDate).isValid() && <>
+                                    <Text type='bold' size={12} align='left' color={Color.grey}>{Moment(eventDate).format('DD MMM YYYY')}</Text>
                                     <Divider height={8} />
-                                </View> */}
-
-                                {!accessClient.isMobility && <Text
-                                    size={17}
-                                    type="bold"
-                                    align='left'
-                                    numberOfLines={1}
-                                    color={isPayProduct ? Color.text : Color.success}
-                                >
-                                    {isPayProduct ? FormatMoney.getFormattedMoney(item.price) : 'Gratis'}
-                                </Text>}
+                                </>}
                             </View>
                         </View>
 
-                        {/* <View style={{paddingTop: 24, flexDirection: 'row'}}>
-                            <Foundation name='calendar' color={Color.yellow} style={{marginRight: 8}} />
-                            <Text size={10} align='left'>3 Bulan</Text>
-                        </View> */}
-
-                        {/* <View style={{paddingTop: 6, flexDirection: 'row'}}>
-                            <Ionicons name='location' color={Color.error} style={{marginRight: 8}} />
-                            <Text size={10} align='left'>Cilandak, Jakarta Selatan</Text>
-                        </View> */}
-
-                        {/* <View style={{paddingTop: 6, flexDirection: 'row'}}>
-                            <Ionicons name='information-circle-outline' color={Color.error} style={{marginRight: 8}} />
-                            <Text size={10} align='left'>3 Hari lagi Pendaftaran Ditutup</Text>
-                        </View> */}
+                        <View style={{width: '100%', flexDirection: 'row', paddingTop: 16}}>
+                            <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'center'}}>
+                                <Text size={12}>Start From</Text>
+                                <Text size={16} type='medium'>{FormatMoney.getFormattedMoney(450000)}</Text>
+                            </View>
+                            <View style={{flex: 1}}>
+                                <Button>
+                                    Check Now{' '}
+                                    <Ionicons name='arrow-forward' size={16} color={Color.textButtonInline} />
+                                </Button>
+                            </View>
+                        </View>
                     </View>
                 </View>
             </TouchableOpacity>

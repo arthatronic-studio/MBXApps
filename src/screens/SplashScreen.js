@@ -21,7 +21,8 @@ const SplashScreen = ({navigation, route}) => {
       if (user) {
         redirectTo('MainPage');
       } else {
-        redirectTo('OnBoardingScreen');
+        // redirectTo('OnBoardingScreen');
+        redirectTo('LoginScreen');
       }
     }, 3000);
   }, []);
