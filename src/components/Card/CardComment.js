@@ -21,15 +21,17 @@ import { Container, Divider, Row } from 'src/styled';
 import { useSelector } from 'react-redux';
 import { imageContentItem } from 'assets/images/content-item';
 import { useNavigation } from '@react-navigation/native';
+import CardKutipan from 'src/screens/MainForum/NewForum/CardKutipan';
 
 const defaultProps = {
   canReply: false,
   showOptions: false,
   onPressDots: () => { },
   onPressReply: () => { },
+  onRefresh: () => { },
 };
 
-const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots, onPressReply, }) => {
+const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots, onPressReply, onRefresh }) => {
   const { Color } = useColor();
   const user = useSelector(state => state['user.auth'].login.user);
   const { width } = useWindowDimensions();
@@ -88,8 +90,8 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
   }, [item]);
 
   return (
-    <View style={{width: '100%', marginBottom: 8, paddingVertical: 8, paddingHorizontal: 16}}>
-      <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center'}}>
+    <View style={{ width: '100%', paddingVertical: 8, paddingHorizontal: 16 }}>
+      <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center' }}>
         <View style={{ width: '10%', aspectRatio: 1 }}>
           <Image source={{ uri: item.image }} style={{ width: '100%', height: '100%', borderRadius: 50, backgroundColor: Color.border }} />
         </View>
@@ -142,85 +144,111 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
       </View>
 
       <View style={{ width: '100%', flexDirection: 'row' }}>
-        <View style={{ width: '10%', aspectRatio: 1}}>
+        <View style={{ width: '10%' }}>
 
         </View>
 
-        <View style={{width: '90%', paddingLeft: 8}}>
-        {item.imageVideo &&
-            <View style={{ width: width / 3, aspectRatio: 1, paddingVertical: 4 }}>
-              <Image source={{ uri: item.imageVideo }} style={{ width: '100%', height: '100%', backgroundColor: Color.border }} />
+        <View style={{ width: '90%', paddingLeft: 8 }}>
+          {item.imageVideo &&
+            <View style={{ width: width / 3, aspectRatio: 1 }}>
+              <Image
+                source={{ uri: item.imageVideo }}
+                style={{ width: '100%', height: '100%', backgroundColor: Color.border }}
+              />
             </View>
           }
 
-          <Text size={12} align='left'>{item.comment}</Text>
+          <View
+            style={{
+              backgroundColor: item.commentQuote ? Color.border : Color.theme,
+              padding: item.commentQuote ? 8 : 0,
+              borderRadius: 8,
+            }}
+          >
+            {item.commentQuote &&
+              <CardKutipan
+                tagged
+                item={item.commentQuote}
+              />
+            }
 
-          {canReply ? <Container paddingTop={8}>
-            <Row>
-              <TouchableOpacity
-                onPress={() => {
+            {item.comment !== '' &&
+              <Container paddingTop={4}>
+                <Text size={12} align='left'>{item.comment}</Text>
+              </Container>
+            }
+          </View>
 
-                }}
-              >
-                <Image
-                  source={imageContentItem.heart_nonactive}
-                  style={{
-                    height: 16,
-                    width: 16,
+          {canReply ?
+            <Container paddingTop={8}>
+              <Row>
+                <TouchableOpacity
+                  onPress={() => {
+
                   }}
-                />
-              </TouchableOpacity>
-              <Divider />
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('ForumKutipan', {});
-                }}
-              >
-                <Image
-                  source={imageContentItem.quotes}
-                  style={{
-                    height: 16,
-                    width: 16,
-                  }}
-                />
-              </TouchableOpacity>
-              <Divider />
-              <TouchableOpacity
-                onPress={() => {
-                  onPressReply();
-                }}
-              >
-                <Text size={12} align='left'>Balas</Text>
-              </TouchableOpacity>
-
-              <Divider />
-              {item.userId !== user.userId &&
-                <>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setModalVisible(!isModalVisible);
+                >
+                  <Image
+                    source={imageContentItem.heart_nonactive}
+                    style={{
+                      height: 16,
+                      width: 16,
                     }}
-                  >
-                    <Text size={12} align='left'>Laporkan</Text>
-                  </TouchableOpacity>
+                  />
+                </TouchableOpacity>
+                <Divider />
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('ForumKutipan', {
+                      item,
+                      onRefresh: () => onRefresh(),
+                    });
+                  }}
+                >
+                  <Image
+                    source={imageContentItem.quotes}
+                    style={{
+                      height: 16,
+                      width: 16,
+                    }}
+                  />
+                </TouchableOpacity>
+                <Divider />
+                <TouchableOpacity
+                  onPress={() => {
+                    onPressReply();
+                  }}
+                >
+                  <Text size={12} align='left'>Balas</Text>
+                </TouchableOpacity>
 
-                  <Divider />
-                </>
-              }
+                <Divider />
+                {item.userId !== user.userId &&
+                  <>
+                    <TouchableOpacity
+                      onPress={() => {
+                        setModalVisible(!isModalVisible);
+                      }}
+                    >
+                      <Text size={12} align='left'>Laporkan</Text>
+                    </TouchableOpacity>
 
-              {Array.isArray(item.replies) && item.replies.length > 0 && <TouchableOpacity
-                onPress={() => {
-                  onPressReply();
-                }}
-              >
-                <Text size={12} align='left' color={Color.info} type='medium'>{item.replies.length} Balasan</Text>
-              </TouchableOpacity>}
+                    <Divider />
+                  </>
+                }
 
-              <Divider width={8} />
+                {Array.isArray(item.replies) && item.replies.length > 0 && <TouchableOpacity
+                  onPress={() => {
+                    onPressReply();
+                  }}
+                >
+                  <Text size={12} align='left' color={Color.info} type='medium'>{item.replies.length} Balasan</Text>
+                </TouchableOpacity>}
 
-              {itemOwnerReply && <Image source={{ uri: itemOwnerReply.image }} style={{ height: 20, width: 20, borderRadius: 10, borderWidth: 1, borderColor: Color.primary }} />}
-            </Row>
-          </Container>
+                <Divider width={8} />
+
+                {itemOwnerReply && <Image source={{ uri: itemOwnerReply.image }} style={{ height: 20, width: 20, borderRadius: 10, borderWidth: 1, borderColor: Color.primary }} />}
+              </Row>
+            </Container>
             :
             item.userId !== user.userId &&
             <Container paddingTop={8}>

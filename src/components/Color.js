@@ -37,7 +37,7 @@ export const lightModeColors = {
   theme: '#FFFFFE',
   text: '#0D0006',
   textInput: '#FFFFFF',
-  border: '#E0E0E0',
+  border: '#EEEEEE',
   semiwhite: '#E5E5E5',
 };
 

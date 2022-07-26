@@ -509,7 +509,7 @@ const MainHome = ({ navigation, route }) => {
             <MemberRank />
           </Container>
 
-          <Line color={Color.border} width={width} />
+          {accessClient.MainHome.showMenuHome && <Line color={Color.border} width={width} />}
 
           {accessClient.MainHome.showMenuHome && <WidgetMenuHome
             showMore

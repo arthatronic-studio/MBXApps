@@ -320,7 +320,7 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
         {!isHighlight && <>
           <Divider height={4} />
           <Text size={12} color={Color.gray} type='bold'>
-            {params.threadCount || 0} Thread
+            {params.threadCount} Thread
           </Text>
 
           <Divider />

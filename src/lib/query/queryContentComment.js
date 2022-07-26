@@ -38,6 +38,24 @@ export const queryComment = gql`
                 imageVideo
                 videoFilename
             }
+            commentQuoteId
+            commentQuote{
+                id
+                userId
+                fullname
+                commentDate
+                comment
+                isDirector
+                isPinned
+                status
+                image
+                image
+                parentCommentId
+                imageVideo
+                videoFilename
+                likeCount
+                im_like
+            }
         }
     }
 `;

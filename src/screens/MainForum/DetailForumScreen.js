@@ -260,6 +260,7 @@ const DetailForumScreen = ({ route, navigation }) => {
                                     fontSize: 12,
                                     fontFamily: 'Inter-Regular',
                                     color: Color.text,
+                                    backgroundColor: Color.border,
                                     marginTop: 6,
                                     marginBottom: 10,
                                     paddingHorizontal: 8,
@@ -345,6 +346,9 @@ const DetailForumScreen = ({ route, navigation }) => {
                             setRefreshComment(true);
                         }
                     });
+                }}
+                onRefresh={() => {
+                    setRefreshComment(true);
                 }}
             />
         );

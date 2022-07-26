@@ -1,23 +1,22 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Image, TextInput, FlatList, useWindowDimensions, Animated, Keyboard } from 'react-native';
-import Styled from 'styled-components';
+import { View, Image, TextInput, useWindowDimensions, Animated, Keyboard } from 'react-native';
+import Moment from 'moment';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import { Col, Row, Scaffold, Text, Header } from '@src/components';
 import { TouchableOpacity } from '@src/components/Button';
-import { queryContentProduct } from '@src/lib/query';
+import { queryAddComment, queryContentProduct } from '@src/lib/query';
 import { useColor } from '@src/components/Color';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-// import CardForumPopular from '../CardForumPopular';
 import { Container, Divider, MainView } from 'src/styled';
 import SearchBar from 'src/components/SearchBar';
 import ImagesPath from 'src/components/ImagesPath';
 import Config from 'react-native-config';
 import client from 'src/lib/apollo';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-// import ListForumVertical from '../ListForumVertical';
+
 import { ModalListText } from 'src/components';
 import { initialItemState } from 'src/utils/constants';
 import {
-
   iconsmile,
   icongif,
   icongalery,
@@ -30,34 +29,12 @@ import {
   iconTextItalic,
   iconTextStrikethrough,
   iconTextUnderline,
-
 } from '@assets/images/home';
-const DATA = [
-  {
-    id: 1,
-    title: 'Gaming',
-  },
-  {
-    id: 2,
-    title: 'Coding',
-  },
-
-];
-
-const DATA_POPULER = [
-  {
-    id: 1,
-    title: 'Sabyan',
-    subtitle: 'Gaming Hub & 1 lainnya',
-  },
-  {
-    id: 2,
-    title: 'Tribesocial',
-    subtitle: 'Gaming Hub & 1 lainnya',
-  },
-];
+import CardKutipan from './CardKutipan';
 
 const ForumKutipan = ({ navigation, route }) => {
+  const { params } = route;
+
   const { Color } = useColor();
   const { height } = useWindowDimensions();
   const [textComment, setTextComment] = useState('');
@@ -67,53 +44,43 @@ const ForumKutipan = ({ navigation, route }) => {
   const [showSection, setShowSection] = useState(false);
   const modalListTextckRef = useRef();
 
-  useEffect(() => {
-    const timeout = textSearch !== '' ?
-      setTimeout(() => {
-        fetchContentProduct();
-      }, 500) : null;
+  const onSubmitComment = () => {
+    if (textComment === '') {
+      alert('Isi komentar tidak boleh kosong');
+      return;
+    }
 
-    return () => clearTimeout(timeout);
-  }, [textSearch]);
-
-  const fetchContentProduct = () => {
     const variables = {
-      productType: Config.PRODUCT_TYPE,
-      productCategory: 'FORUM',
-      productName: textSearch,
-      page: 0,
-      itemPerPage: 6,
+      productId: params.item.productId,
+      comment: textComment,
+      // image: thumbImage,
+      commentQuoteId: params.item.id,
     };
 
+    console.log(variables, 'variables');
+
     client.query({
-      query: queryContentProduct,
+      query: queryAddComment,
       variables,
     })
       .then((res) => {
-        console.log('res search', res);
+        console.log(res, 'res add comm');
 
-        let newList = [];
-
-        if (res.data.contentProduct) {
-          newList = res.data.contentProduct;
+        if (res.data.contentAddComment.id) {
+          if (typeof params.onRefresh === 'function') {
+            params.onRefresh();
+          }
+          navigation.pop();
+        } else {
+          showLoading('error', 'Gagal mengirimkan komentar');
         }
-
-        setItemData({
-          ...itemData,
-          data: newList,
-          loading: false,
-        });
       })
       .catch((err) => {
-        console.log('err search', err);
-
-        setItemData({
-          ...itemData,
-          // data: [],
-          loading: false,
-        });
-      });
+        console.log(err, 'err add comm');
+        showLoading('error', 'Gagal mengirimkan komentar');
+      })
   }
+
   const renderPopUpNavigation = () => {
     return (
       <Animated.View
@@ -122,8 +89,6 @@ const ForumKutipan = ({ navigation, route }) => {
         ]}
       >
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-
-
           <TouchableOpacity>
             <Image
               style={{ height: 30, width: 30, marginTop: 9 }}
@@ -135,34 +100,32 @@ const ForumKutipan = ({ navigation, route }) => {
               style={{ height: 45, width: 35 }}
               source={iconcameravidio} />
           </TouchableOpacity>
+
           <TouchableOpacity>
             <Image
               style={{ height: 45, width: 25 }}
               source={iconsmile} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
-
-          }} >
+          <TouchableOpacity onPress={() => {}}>
             <Image
               style={{ height: 45, width: 25 }}
               source={icongif} />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => {
-
             Keyboard.dismiss();
             modalListTextckRef.current.open();
-
-          }} >
+          }}>
             <Image
               style={{ height: 45, width: 25 }}
               source={icontext} />
           </TouchableOpacity>
-
         </View>
       </Animated.View>
     )
   }
+
+  console.log(params, 'paramms');
 
   return (
     <Scaffold
@@ -172,66 +135,39 @@ const ForumKutipan = ({ navigation, route }) => {
           centerTitle={false}
           actions={
             <TouchableOpacity
-              style={{ backgroundColor: '#F3771D', borderRadius: 20, paddingVertical: 10, paddingHorizontal: 10, marginTop: 10 }}
+              style={{ backgroundColor: Color.primary, borderRadius: 20, padding: 12 }}
               onPress={() => {
-
+                onSubmitComment();
               }}
             >
-              <Text style={{ color: Color.textInput, }}>Posting</Text>
+              <Text size={12} color={Color.textButtonInline}>Posting</Text>
             </TouchableOpacity>
           }
         />
       }
     >
-      <Divider />
-
-      <View style={{ width: '100%', borderRadius: 4, borderColor: Color.border, borderWidth: 0, justifyContent: 'center' }}>
+      <View style={{ width: '100%', padding: 16 }}>
         <TextInput
-          placeholder='Tulis pendapatmu...'
-          placeholderTextColor={Color.border}
+          placeholder='Tulis pendapatmu'
+          placeholderTextColor={Color.placeholder}
           autoFocus={true}
-          style={{ fontWeight: '500', fontSize: 12, fontFamily: 'Inter-Regular', color: Color.text, marginTop: 8, marginBottom: 50, paddingLeft: 16, paddingRight: 40 }}
+          style={{
+            fontWeight: '500',
+            fontSize: 12,
+            fontFamily: 'Inter-Regular',
+            color: Color.text,
+            backgroundColor: Color.theme,
+          }}
           value={textComment}
           multiline
           onChangeText={(e) => setTextComment(e)}
         />
       </View>
 
-
-      <View style={{ borderRadius: 10, borderColor: Color.black, borderWidth: 1, justifyContent: 'center', marginHorizontal: 20, }}>
-        <View style={
-          { width: '100%', flexDirection: 'row', marginBottom: 2, paddingVertical: 0, paddingRight: 16 }}>
-          <View style={{ width: '23%', alignItems: 'center', paddingTop: 4, paddingRight: 8, paddingLeft: 16 }}>
-            <Image source={{ uri: '' }} style={{ width: '100%', aspectRatio: 1, borderRadius: 50, backgroundColor: Color.primary }} />
-          </View>
-          <View style={{ width: '84%' }}>
-            <View style={{ flexDirection: 'row', padding: 8, borderRadius: 8 }}>
-              <View style={{ flex: 1 }}>
-                <View style={{ flexDirection: 'row' }}>
-                  <Image
-                    source={ImagesPath.ranking}
-                    style={{
-                      width: 14,
-                      height: 14,
-
-                    }}
-                  />
-                  <Text size={12} align='left' style={{ opacity: 0.75, marginRight: 5, fontWeight: 'bold' }}>Abdul Jaelani</Text>
-
-                  <Text size={12} align='left' style={{ opacity: 0.75, fontWeight: 'bold' }}> Kamis, 14:10 wib</Text>
-                </View>
-
-                <Divider height={8} />
-                <Text size={12} align='left' type='medium'>hallo </Text>
-              </View>
-
-            </View>
-
-
-          </View>
-        </View>
-
-      </View>
+      <CardKutipan
+        tagged={false}
+        item={params.item}
+      />
 
       {/* {showfeature ? (
         renderPopUpNavigation()

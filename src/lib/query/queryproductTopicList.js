@@ -22,9 +22,9 @@ query($page: Int, $limit: Int, $id: Int) {
         productCategory
         productType
         productTopicId
-        status
-        createdAt
         moderator
+        threadCount
+        status
         createdAt
         updatedAt
         moderatorInfo{

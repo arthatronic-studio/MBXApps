@@ -218,7 +218,7 @@ const ForumTopicScreen = ({ navigation, route }) => {
                 <View style={{ flex: 8, paddingHorizontal: 8, justifyContent: 'center', alignItems: 'flex-start' }}>
                   <Text numberOfLines={1} type="semibold">{item.name}</Text>
                   <Divider height={2} />
-                  <Text numberOfLines={1} size={12}>{item.threadCount || '0'} Thread</Text>
+                  <Text numberOfLines={1} size={12}>{item.threadCount} Thread</Text>
                 </View>
 
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}>

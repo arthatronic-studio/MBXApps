@@ -241,45 +241,6 @@ const CommentListScreen = ({ navigation, route }) => {
       })
   }
 
-  const onSubmitReply = (text) => {
-    if (!selectedComment) return;
-
-    if (text === '') {
-      alert('Isi komentar tidak boleh kosong');
-      return;
-    }
-
-    const variables = {
-      productId: item.id,
-      parentCommentId: selectedComment.id,
-      comment: text,
-    };
-
-    console.log(variables, 'variables');
-
-    Client.query({
-      query: queryAddComment,
-      variables,
-    })
-      .then((res) => {
-        console.log(res, 'res add comm');
-
-        if (res.data.contentAddComment.id) {
-          // const arrNew = [res.data.contentAddComment].concat(dataComment.data);
-
-          // setTextComment('');
-          // setDataComment({ ...dataComment, data: arrNew });
-          onSuccessComment(res.data.contentAddComment.productId);
-        } else {
-          showLoading('error', 'Gagal mengirimkan komentar');
-        }
-      })
-      .catch((err) => {
-        console.log(err, 'err add comm');
-        showLoading('error', 'Gagal mengirimkan komentar');
-      })
-  }
-
   const onSuccessComment = (id) => {
     setRefreshComment(true);
     const getObj = listContentCategory.filter((e => e.code === item.productCategory))[0];
@@ -351,6 +312,7 @@ const CommentListScreen = ({ navigation, route }) => {
                   fontSize: 12,
                   fontFamily: 'Inter-Regular',
                   color: Color.text,
+                  backgroundColor: Color.border,
                   marginTop: 6,
                   marginBottom: 10,
                   paddingHorizontal: 8,
@@ -443,6 +405,9 @@ const CommentListScreen = ({ navigation, route }) => {
                         setRefreshComment(true);
                       }
                     });
+                  }}
+                  onRefresh={() => {
+                    setRefreshComment(true);
                   }}
                 />
               );

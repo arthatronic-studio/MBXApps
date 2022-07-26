@@ -107,7 +107,7 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
   const isToday = Moment(createdDate).isSame(now, 'day');
   let dateLabel = Moment(createdDate).format('DD MMM YYYY, HH:mm');
   if (isToday) {
-    dateLabel = `${Moment(createdDate).fromNow()}, ${Moment(createdDate).format('HH:mm')}}`;
+    dateLabel = `${Moment(createdDate).fromNow()}, ${Moment(createdDate).format('HH:mm')}`;
   }
   const iconSize = 18;
 
