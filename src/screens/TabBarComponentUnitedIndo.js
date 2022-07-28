@@ -13,13 +13,18 @@ import { useColor } from '@src/components/Color';
 import { shadowStyle } from 'src/styles';
 import { CommonActions } from '@react-navigation/routers';
 import { startAnimation } from '@src/utils/animations';
-import { Divider, Line } from 'src/styled';
+import { Divider, Line, Circle } from 'src/styled';
 import { isIphoneNotch, statusBarHeight } from 'src/utils/constants';
+import { queryGetNotification } from "src/lib/query";
+import { useIsFocused } from '@react-navigation/native';
+import client from '@src/lib/apollo';
 
 const sizePerMenu = 24;
 
 const TabBarComponentUnitedIndo = (props) => {
     const { state } = props;
+    const [notificationCount, setNotificationCount] = useState(0);
+    const isFocused = useIsFocused();
 
     const { index: activeRouteIndex } = state;
         
@@ -46,6 +51,30 @@ const TabBarComponentUnitedIndo = (props) => {
             }).start();
         });
     }, [activeRouteIndex, width]);
+
+    useEffect(() => {
+        const variables = {
+          page: 0,
+          itemPerPage: 9999
+        }
+        client.query({
+          query: queryGetNotification,
+          variables,
+        })
+          .then((respone) => {
+            var response = respone['data']['getNotification'];
+            var res = response.filter(function (el) {
+              return el.status === 1 | el.status === 2;
+            });
+            setNotificationCount(res.length)
+            console.log('ini ', res);
+          })
+          .catch((err) => {
+            console.log('ini ', err);
+            console.log(err);
+    
+          })
+      }, [isFocused]);
 
     const redirectTo = (name, params) => {
         props.navigation.dispatch(
@@ -141,7 +170,19 @@ const TabBarComponentUnitedIndo = (props) => {
                                     opacity: route.ref,
                                 }}
                             >
+                                <Animated.View>
                                 {getIconMenu(route.iconType, route.iconName, isRouteActive)}
+                                {notificationCount > 0 && route.id === 'not' && (
+                                    <Circle
+                                        size={12}
+                                        color={Color.error}
+                                        style={{ position: 'absolute', top: -4, right: -4 }}>
+                                        <Text size={8} color={Color.textButtonInline}>
+                                        {notificationCount > 99 ? '99' : notificationCount}
+                                        </Text>
+                                    </Circle>
+                                )}
+                                </Animated.View>
                                 {isRouteActive && <Divider width={15} />}
                                 {isRouteActive && <Animated.Text
                                     style={{

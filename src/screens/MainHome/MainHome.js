@@ -311,7 +311,7 @@ const MainHome = ({ navigation, route }) => {
           }}
           actions={
             <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('NotificationScreen');
                 }}
@@ -335,7 +335,7 @@ const MainHome = ({ navigation, route }) => {
                     </Text>
                   </Circle>
                 )}
-              </TouchableOpacity>
+              </TouchableOpacity> */}
 
               <TouchableOpacity
                 onPress={() => {
