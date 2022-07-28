@@ -8,6 +8,7 @@ import SplashScreen from 'src/screens/SplashScreen';
 import BottomTabsNavigator from '@src/navigators/BottomTabsNavigator';
 import BottomTabsNavigatorKomoto from '@src/navigators/BottomTabsNavigatorKomoto';
 import BottomTabsNavigatorsabyan from '@src/navigators/BottomTabsNavigatorSabyan';
+import BottomTabsNavigatorUnitedIndo from './BottomTabsNavigatorUnitedIndo';
 import OnBoardingScreen from '@src/screens/OnBoardingScreen';
 import CreateEmergencyScreen from '@src/screens/CreateEmergencyScreen';
 import PDFReaderScreen from 'src/screens/PDFReaderScreen';
@@ -228,7 +229,7 @@ const { Navigator, Screen } = createStackNavigator();
 const MainPage =
 	accessClient.BottomTabsNavigator.type === 'komoto'
 		? BottomTabsNavigatorKomoto
-		: accessClient.BottomTabsNavigator.type === 'sabyan' ? BottomTabsNavigatorsabyan : BottomTabsNavigator;
+		: accessClient.BottomTabsNavigator.type === 'sabyan' ? BottomTabsNavigatorsabyan : BottomTabsNavigatorUnitedIndo;
 
 function MainStackNavigator() {
   return (
