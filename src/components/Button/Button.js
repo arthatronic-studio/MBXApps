@@ -20,6 +20,8 @@ const CustomButton = Styled(TouchableOpacity)`
   alignItems: center;
   justifyContent: center;
   flexDirection: row;
+  borderWidth: 1px;
+  borderColor: ${(props) => (props.borderColor)};
 `;
 
 const CustomImage = Styled(Image)`
@@ -27,6 +29,10 @@ const CustomImage = Styled(Image)`
   height: 10;
   marginRight: 3;
 `;
+
+const defaultProps = {
+  outline: false,
+};
 
 const Button = (props) => {
   const {
@@ -38,29 +44,39 @@ const Button = (props) => {
     disabled,
     type,
     source,
-    style
+    style,
+    outline,
   } = props;
 
   const {Color} = useColor();
+
+  let buttonColor = color || Color.primary;
+  let textColor = disabled ? Color.border : fontColor || Color.textButtonInline;
+  let borderColor = buttonColor;
+
+  if (outline) {
+    buttonColor = disabled ? Color.border : fontColor || Color.textButtonInline;
+    textColor = color || Color.primary;
+    borderColor = textColor;
+  }
 
   return (
     <MainButton
       style={disabled && { opacity: 0.6 }}
     >
       <CustomButton
-        color={color || Color.primary}
+        color={buttonColor}
+        borderColor={borderColor}
         onPress={!disabled && onPress}
         {...style}
-        {...props}
       >
         {source && <CustomImage source={source} />}
         
         <Text
-          fontSize={fontSize}
+          size={fontSize}
           type={type || 'semibold'}
-          color={
-            disabled ? Color.border : props.fontColor ? props.fontColor : Color.textButtonInline
-          }>
+          color={textColor}
+        >
           {children}
         </Text>
       </CustomButton>
@@ -68,4 +84,5 @@ const Button = (props) => {
   );
 };
 
+Button.defaultProps = defaultProps;
 export default Button;

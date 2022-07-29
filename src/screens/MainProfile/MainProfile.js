@@ -415,7 +415,7 @@ const MainProfile = ({navigation, route}) => {
       icon: (
         <Ionicons name="exit-outline" size={20} color={Color.info} style={{}} />
       ),
-      onPress: () => navigation.navigate('LoginScreen'),
+      onPress: () => onPressLogout(),
     },
   ];
 

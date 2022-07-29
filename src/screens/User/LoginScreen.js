@@ -16,11 +16,12 @@ import {
   usePopup,
   useColor,
   Scaffold,
+  Alert,
 } from '@src/components';
 import {Button, TouchableOpacity} from '@src/components/Button';
 import Text from '@src/components/Text';
 import validate from '@src/lib/validate';
-import {login} from '@src/state/actions/user/auth';
+import {guestLogin, login} from '@src/state/actions/user/auth';
 import {redirectTo} from '@src//utils';
 import FormInput from 'src/components/FormInput';
 import { Container, Row, Line } from 'src/styled';
@@ -140,7 +141,12 @@ const LoginScreen = ({navigation, route}) => {
             }, 1000);
           }
         }
-      } else if (!user && error !== '') {
+      }
+      else if (user && user.guest) {
+        // Alert('Guest Login', 'Login sebagai Tamu?', () => redirectTo('MainPage'));
+        redirectTo('MainPage');
+      }
+      else if (!user && error !== '') {
         showPopup(
           'Nomor telepon / Password yang Anda masukan salah atau Terjadi Kesalahan Server',
           'error',
@@ -321,6 +327,17 @@ const LoginScreen = ({navigation, route}) => {
             >
               Daftar
             </Button>
+
+            <Container paddingTop={16}>
+              <Button
+                outline
+                onPress={() => {
+                  dispatch(guestLogin());
+                }}
+              >
+                Guest Mode
+              </Button>
+            </Container>
           </Container>
         </View>
       </KeyboardAwareScrollView>

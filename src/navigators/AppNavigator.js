@@ -227,9 +227,8 @@ import ManageGroupScreen from 'src/screens/Chat/ManageGroupScreen';
 
 const { Navigator, Screen } = createStackNavigator();
 const MainPage =
-	accessClient.BottomTabsNavigator.type === 'komoto'
-		? BottomTabsNavigatorKomoto
-		: accessClient.BottomTabsNavigator.type === 'sabyan' ? BottomTabsNavigatorsabyan : BottomTabsNavigatorUnitedIndo;
+	// accessClient.BottomTabsNavigator.type === 'komoto' ? BottomTabsNavigatorKomoto : 
+  accessClient.BottomTabsNavigator.type === 'sabyan' ? BottomTabsNavigatorsabyan : BottomTabsNavigatorUnitedIndo;
 
 function MainStackNavigator() {
   return (

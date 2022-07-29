@@ -359,22 +359,6 @@ const MainHome = ({ navigation, route }) => {
                   </Circle>
                 )}
               </TouchableOpacity>
-
-              {accessClient.isKomoto && <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('MainProfile');
-                }}
-                style={{
-                  width: '20%',
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-end',
-                }}>
-                <Ionicons
-                  name="person"
-                  size={22}
-                  color={Color.textButtonInline}
-                />
-              </TouchableOpacity>}
             </View>
           }
         />
@@ -523,8 +507,6 @@ const MainHome = ({ navigation, route }) => {
               }
             }}
           />}
-
-          {accessClient.MainHome.showMenuHome && <Line color={Color.border} width={width} />}
 
           <Divider height={spaceContentSize} />
 

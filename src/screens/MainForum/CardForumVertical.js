@@ -17,6 +17,7 @@ import { shadowStyle } from '@src/styles';
 import { queryAddLike } from 'src/lib/query';
 import client from 'src/lib/apollo';
 import { Divider, Line, Padding, Row } from 'src/styled';
+import { useNavigation } from '@react-navigation/native';
 
 const defaultProps = {
     onPress: () => {},
@@ -33,6 +34,7 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
     const { Color } = useColor();
     const { width } = useWindowDimensions();
     const user = useSelector(state => state['user.auth'].login.user);
+    const navigation = useNavigation();
 
     useEffect(() => {
         setLike(item.like);
@@ -99,7 +101,12 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
                 <View
                     style={{flexDirection: 'row', alignItems: 'center', width: '100%'}}
                 >
-                    <View style={{ flex: 1, aspectRatio: 1, justifyContent: 'center' }}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('UserProfileScreen', { userId: item.ownerId })
+                        }}
+                        style={{ flex: 1, aspectRatio: 1, justifyContent: 'center' }}
+                    >
                         <Image 
                             source={{uri: item.avatar}}
                             style={{
@@ -109,9 +116,14 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
                                 backgroundColor: Color.primary,
                             }}
                         />
-                    </View>
+                    </TouchableOpacity>
 
-                    <View style={{ flex: 8 }}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            navigation.navigate('UserProfileScreen', { userId: item.ownerId })
+                        }}
+                        style={{ flex: 8 }}
+                    >
                         <Padding horizontal={10}>
                             <Row>
                                 <Text type='bold' align='left' numberOfLines={2}>
@@ -132,7 +144,7 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
                                 <Text size={8} align='left'>{dateLabel}</Text>
                             </View>
                         </Padding>
-                    </View>
+                    </TouchableOpacity>
 
                     {typeof onPressDot === 'function' && <TouchableOpacity
                         onPress={() => onPressDot()}

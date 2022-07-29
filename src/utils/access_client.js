@@ -78,7 +78,7 @@ export const accessClient = {
             isSabyan ? 'sabyan' : 'default',
     },
     MainHome: {
-        showMenuHome: isKomoto || isUnitedId ? false : true,
+        showMenuHome: isUnitedId ? false : true,
         showWidgetBalance: isKomoto || isSabyan ? false : true,
         showListAuction: isKomoto || isSabyan ? false : true,
         showListSoonAuction: isKomoto || isSabyan ? false : true,

@@ -25,12 +25,29 @@ import moment from 'moment';
 
 const NewsScreenV2 = ({navigation, route}) => {
   const {title, userProfileId} = route.params;
+
   const user = useSelector(state => state['user.auth'].login.user);
   const {Color} = useColor();
+  const isFocused = useIsFocused();
+
   const [loadingBanner, setLoadingBanner] = useState(true);
   const [listBanner, setListBanner] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  
   const colorOutputRange = [Color[accessClient.ColorBgParallax], Color.theme];
-  const isFocused = useIsFocused();
+  let canGeneratedContent = accessClient.UserGeneratedContent === 'ALL_USER';
+  if (
+    accessClient.UserGeneratedContent === 'ONLY_ADMIN' &&
+    user &&
+    user.isDirector === 1
+  )
+    canGeneratedContent = true;
+  else if (
+    accessClient.UserGeneratedContent === 'ONLY_MEMBER' &&
+    user &&
+    user.organizationId
+  )
+    canGeneratedContent = true;
 
   useEffect(() => {
     fetchBannerList();
@@ -74,16 +91,17 @@ const NewsScreenV2 = ({navigation, route}) => {
           width: '100%',
           height: 60,
           flexDirection: 'row',
+          paddingHorizontal: 16,
         }}>
         <AntDesign
           onPress={() => navigation.goBack()}
           name={'arrowleft'}
           size={20}
-          style={{marginHorizontal: 12}}
+          style={{marginRight: 12}}
         />
         <TouchableOpacity
           onPress={() => navigation.navigate('SearchArticle')}
-          style={{width: '70%', height: '80%', justifyContent: 'center'}}>
+          style={{flex: 1, height: '80%', justifyContent: 'center'}}>
           <TextInput
             editable={false}
             placeholder="Cari berita hari ini . . ."
@@ -106,13 +124,13 @@ const NewsScreenV2 = ({navigation, route}) => {
             }}
           />
         </TouchableOpacity>
-        <IonIcons
+        {canGeneratedContent && <IonIcons
           onPress={() => navigation.navigate('Saved')}
           name={'md-bookmarks-outline'}
           size={18}
           style={{marginHorizontal: 12}}
-        />
-        <IonIcons
+        />}
+        {canGeneratedContent && <IonIcons
           onPress={() =>
             navigation.navigate('CreateNews', {
               title,
@@ -122,27 +140,18 @@ const NewsScreenV2 = ({navigation, route}) => {
           }
           name={'add'}
           size={24}
-        />
+        />}
       </View>
     );
   };
 
-  let canGeneratedContent = accessClient.UserGeneratedContent === 'ALL_USER';
-  if (
-    accessClient.UserGeneratedContent === 'ONLY_ADMIN' &&
-    user &&
-    user.isDirector === 1
-  )
-    canGeneratedContent = true;
-  else if (
-    accessClient.UserGeneratedContent === 'ONLY_MEMBER' &&
-    user &&
-    user.organizationId
-  )
-    canGeneratedContent = true;
-  const [refreshing, setRefreshing] = useState(false);
   return (
-    <Scaffold header={<ArticleHeader />}>
+    <Scaffold
+      header={<ArticleHeader />}
+      translucent
+      useSafeArea={false}
+      statusBarColor={Color.primarySoft}
+    >
       <ScrollView
         refreshControl={
           <RefreshControl
