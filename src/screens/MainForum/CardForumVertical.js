@@ -32,8 +32,9 @@ const defaultProps = {
 const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText, showVideo, style }) => {
   const [like, setLike] = useState(item.like);
   const [im_like, setImLike] = useState(item.im_like);
+  const [view, setView] = useState(item.view);
   const [trigger, setTrigger] = useState(false);
-  const [withImage, setWithImage] = useState(true);
+  const [withImage, setWithImage] = useState(item.image !== '' && true);
 
   const { Color } = useColor();
   const { width } = useWindowDimensions();
@@ -42,6 +43,7 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
   useEffect(() => {
     setLike(item.like);
     setImLike(item.im_like);
+    setView(item.view);
   }, [item]);
 
   useEffect(() => {
@@ -96,6 +98,7 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
         item={{
           videoFilename
         }}
+        hideOnError
         autoplay={false}
       />
     )
@@ -110,6 +113,10 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
     dateLabel = `${Moment(createdDate).fromNow()}, ${Moment(createdDate).format('HH:mm')}`;
   }
   const iconSize = 18;
+
+  const isEmptyVideo = item.videoFilename !== '';
+
+  console.log(view, item.productName);
 
   return (
     <TouchableOpacity
@@ -238,7 +245,7 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
 
       <Divider />
 
-      {showVideo && renderVideoPlayer(item.videoFilename)}
+      {isEmptyVideo && showVideo && renderVideoPlayer(item.videoFilename)}
 
       <View
         style={{
@@ -316,7 +323,7 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
               align="left"
               color={Color.gray}
               style={{ marginLeft: 10 }}>
-              {item.view}
+              {view}
             </Text>
           </TouchableOpacity>
 

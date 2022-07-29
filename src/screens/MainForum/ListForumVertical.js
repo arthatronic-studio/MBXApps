@@ -105,7 +105,6 @@ const ListForumVertical = ({ componentType, data, loading, title, showAll, onPre
             keyExtractor={(item, index) => item.toString() + index}
             data={data}
             contentContainerStyle={{paddingHorizontal: 16}}
-            onScroll={e => console.log(e.nativeEvent.contentOffset.y)}
             renderItem={({item, index}) => {
               return (
                 <CardForumVertical

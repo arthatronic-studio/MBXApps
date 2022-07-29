@@ -24,29 +24,17 @@ query($page: Int, $limit: Int, $id: Int) {
         productTopicId
         moderator
         threadCount
+        statusMe
         status
         createdAt
         updatedAt
-        moderatorInfo{
-            userId
-            userName
-            firstName
-            lastName
-            email
-            phoneCountryCode
-            phoneNumber
-            address
-            city
-            postalCode
-            country
-            organizationId
-            organizationName
-            userCode
-            idCardNumber
-            idNumber
-            isDirector
-            image
-            photoProfile
+        memberModerator{
+          userId
+          fullname
+          image
+          status
+          status_name
+          type
         }
         topic{
             id
@@ -60,5 +48,5 @@ query($page: Int, $limit: Int, $id: Int) {
         }
       }
     }
-  }  
+  }
 `;

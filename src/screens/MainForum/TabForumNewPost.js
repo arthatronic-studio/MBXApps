@@ -18,9 +18,10 @@ const itemPerPage = 10;
 
 const TabForumNewPost = ({ navigation, route }) => {
   const { params } = route;
-  console.log('params params', params);
+  
   // state
   const [listNewPost, setListNewPost] = useState(initialListData);
+  
 
   useEffect(() => {
     fecthData();

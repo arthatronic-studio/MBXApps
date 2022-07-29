@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Image, useWindowDimensions, Animated } from 'react-native';
+import { View, Image, useWindowDimensions, Animated, Platform } from 'react-native';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -22,23 +22,23 @@ import { queryproductGroupList } from 'src/lib/query';
 import Client from '@src/lib/apollo';
 import { fetchGroupMemberList } from 'src/api/forum/listmemberGroup';
 import { shadowStyle } from 'src/styles';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { statusBarHeight } from 'src/utils/constants';
+import { useSelector } from 'react-redux';
 
-const { Navigator, Screen } = createMaterialTopTabNavigator();
 const itemPerPage = 100;
 
 const WidgetForumGroup = ({ item, isHighlight }) => {
   const params = item;
 
+  const user = useSelector(state => state['user.auth'].login.user);
   const { Color } = useColor();
   const { width, height } = useWindowDimensions();
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   const [memberData, setMemberDataAll] = useState([]);
   const [memberDataReq, setMemberDataReq] = useState([]);
-
-  console.log('params', params);
 
   const [itemData, setItemData] = useState({
     data: [],
@@ -51,10 +51,14 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
   //   fetchGroupList();
   // }, []);
 
+  console.log('isHighlight', isHighlight);
+
   useEffect(() => {
-    fetchMemberAll();
-    fetchMemberReq();
-  }, []);
+    if (!isHighlight && isFocused) {
+      fetchMemberAll();
+      fetchMemberReq();
+    }
+  }, [isFocused]);
 
   const fetchMemberAll = async () => {
     const variables = {
@@ -78,6 +82,7 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
       setMemberDataAll(data);
     }
   }
+
   const fetchMemberReq = async () => {
     const variables = {
       groupId: params.id,
@@ -100,6 +105,7 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
       setMemberDataReq(data);
     }
   }
+
   const fetchGroupList = () => {
     const variables = {
 
@@ -149,6 +155,18 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
   let extraPropsDescription = { numberOfLines: 1 };
   if (!isHighlight) extraPropsDescription = {};
 
+  let isMeModerator = false;
+  const isPrivateGroup = params.status === 'PRIVATE';
+
+  if (user && params && Array.isArray(params.memberModerator)) {
+    const isMeExist = params.memberModerator.filter((e) => e.userId == user.userId)[0];
+    if (isMeExist) {
+      isMeModerator = true;
+    }
+  }
+
+  console.log(params.memberModerator);
+
   return (
     <View>
       {isHighlight ?
@@ -158,7 +176,7 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
               width: '100%',
               flexDirection: 'row',
               alignItems: 'flex-end',
-              height: (width / 6) + statusBarHeight + 16,
+              height: (width / 6) + 16 + (Platform.OS === 'android' ? 0 : statusBarHeight),
               backgroundColor: Color.primary,
             }}
           >
@@ -244,7 +262,7 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
                     <FontAwesome name="angle-right" color={Color.textButtonInline} size={18} />
                   </View>
 
-                  {params.status == "PRIVATE" &&
+                  {isPrivateGroup &&
                     <View
                       style={{
                         position: 'absolute',
@@ -312,7 +330,7 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
 
       {!isHighlight && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}>
         <Text size={18} type='bold' align='left'>
-          {params.name} {params.status == "PRIVATE" &&
+          {params.name} {isPrivateGroup &&
             <Feather name='lock' size={18} color={Color.danger} />
           }
         </Text>
@@ -355,21 +373,25 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
           <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}>
           <Text style={{ color: Color.gray, fontSize: 12, fontWeight: 'bold' }}>Moderator</Text>
 
-          <View style={{ flexDirection: 'row', marginVertical: 8 }}>
-            <Image
-              source={{ uri: params.moderatorInfo.photoProfile ? params.moderatorInfo.photoProfile : 'https://i.postimg.cc/y6RYmPvd/Sample-User-Icon.png' }}
-              style={{
-                borderRadius: 25,
-                width: 35,
-                height: 35,
-                backgroundColor: Color.border,
-                borderColor: Color.primary,
-                marginRight: 5,
-              }}
-            />
+          {params.memberModerator.map((item, idx) => {
+            return (
+              <View key={idx} style={{ flexDirection: 'row', marginVertical: 8 }}>
+                <Image
+                  source={{ uri: item.image ? item.image : 'https://i.postimg.cc/y6RYmPvd/Sample-User-Icon.png' }}
+                  style={{
+                    borderRadius: 25,
+                    width: 35,
+                    height: 35,
+                    backgroundColor: Color.border,
+                    borderColor: Color.primary,
+                    marginRight: 5,
+                  }}
+                />
 
-            <Text style={{ color: Color.text, marginTop: 5 }} >{params.moderatorInfo.firstName} {params.moderatorInfo.lastName}</Text>
-          </View>
+                <Text style={{ color: Color.text, marginTop: 5 }}>{item.fullname}</Text>
+              </View>
+            )
+          })}
 
           <Text style={{ color: Color.gray, fontWeight: "bold", marginVertical: 5 }}>Topic</Text>
           <Text size={15}>{params.topic.name}</Text>
@@ -380,12 +402,12 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
             <Text style={{ fontWeight: "bold" }}> {Moment(parseInt(params.createdAt)).format('Do MMMM YYYY')}</Text>
           </View>
 
-          {params.status !== 'PUBLISH' &&<View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 16 }}>
-            <Text size={15}>{params.member.length} Anggota Forum</Text>
+          {isPrivateGroup && isMeModerator && <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 16 }}>
+            <Text size={15}>{memberData.length} Anggota Forum</Text>
             <TouchableOpacity onPress={() => {
               navigation.navigate('ForumGroupPermintaanScreen', { groupId: params.id })
             }}>
-              <Text type='bold' color={Color.primary}>({params.memberDataReq.length} Permintaan) </Text>
+              <Text type='bold' color={Color.primary}>({memberDataReq.length} Permintaan) </Text>
             </TouchableOpacity>
           </View>}
         </View>

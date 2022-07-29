@@ -34,8 +34,6 @@ const ModalUnlock = forwardRef((props, ref) => {
   const { width } = useWindowDimensions();
   const user = useSelector((state) => state['user.auth'].login.user);
 
-  console.log('productId', productId);
-
   const onRequestJoinGroup = async(item) => {    
     const result = await fetchGroupMemberManage({
       userId: user.userId,

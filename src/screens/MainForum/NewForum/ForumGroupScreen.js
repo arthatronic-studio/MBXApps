@@ -31,13 +31,10 @@ const { Navigator, Screen } = createMaterialTopTabNavigator();
 const itemPerPage = 100;
 
 const ForumGroupScreen = ({ navigation, route }) => {
-  const params = route.params.data;
+  const { params } = route;
 
   const { Color } = useColor();
   const { width, height } = useWindowDimensions();
-
-  const [memberData, setMemberDataAll] = useState([]);
-  const [memberDataReq, setMemberDataReq] = useState([]);
 
   const [itemData, setItemData] = useState({
     data: [],
@@ -51,61 +48,19 @@ const ForumGroupScreen = ({ navigation, route }) => {
   // }, []);
 
   useEffect(() => {
-    fetchMemberAll();
-    fetchMemberReq();
-  }, []);
+    if (params && params.refresh) {
+      navigation.setParams({ refresh: false });
 
-  const fetchMemberAll = async () => {
-    const variables = {
-      groupId: params.id,
-      status: 1,
-    };
-
-    console.log('variables', variables);
-
-    const result = await fetchGroupMemberList(variables);
-    console.log(result, 'result all');
-    if (result.status) {
-      const data = result.data;
-
-      let newArr = [];
-
-      if (data) {
-        newArr = itemData.data.concat(data);
-      }
-
-      setMemberDataAll(data);
     }
-  }
-  const fetchMemberReq = async () => {
-    const variables = {
-      groupId: params.id,
-      status: 0,
-    };
+  }, [params]);
 
-    console.log('dani hidayat,', variables);
-
-    const result = await fetchGroupMemberList(variables);
-    console.log(result, 'result req');
-    if (result.status) {
-      const data = result.data;
-
-      let newArr = [];
-
-      if (data) {
-        newArr = itemData.data.concat(data);
-      }
-
-      setMemberDataReq(data);
-    }
-  }
   const fetchGroupList = () => {
     const variables = {
-
       page: itemData.page + 1,
       limit: itemPerPage,
-      id: params.id
+      id: params.data.id
     };
+    
     console.log('var', variables);
 
     Client.query({
@@ -147,6 +102,7 @@ const ForumGroupScreen = ({ navigation, route }) => {
 
   return (
     <Scaffold
+      fallback={params && params.refresh}
       showHeader={false}
       useSafeArea={false}
       floatingActionButton={
@@ -170,7 +126,8 @@ const ForumGroupScreen = ({ navigation, route }) => {
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('ForumBuatScreen', {
-                  groupId: params.id
+                  ...params,
+                  groupId: params.data.id
                 });
               }}
               style={{ alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}
@@ -185,7 +142,7 @@ const ForumGroupScreen = ({ navigation, route }) => {
       }
     >
       <WidgetForumGroup
-        item={params}
+        item={params.data}
         isHighlight
       />
 
@@ -206,13 +163,13 @@ const ForumGroupScreen = ({ navigation, route }) => {
           name="TabNewPost"
           component={TabForumNewPost}
           options={{ tabBarLabel: 'Thread' }}
-          initialParams={{ groupId: params.id }}
+          initialParams={{ groupId: params.data.id }}
         />
         <Screen
           name="TabMyPost"
           component={TabForumMyPost}
           options={{ tabBarLabel: 'Postinganku' }}
-          initialParams={{ groupId: params.id }}
+          initialParams={{ groupId: params.data.id }}
         />
       </Navigator>
     </Scaffold>

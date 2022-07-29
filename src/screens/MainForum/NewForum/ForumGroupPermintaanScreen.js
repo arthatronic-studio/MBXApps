@@ -10,7 +10,8 @@ import {
   Text,
   Scaffold,
   useColor,
-  Alert
+  Alert,
+  usePopup
 } from '@src/components';
 import { TouchableOpacity } from '@src/components/Button';
 import Config from 'react-native-config';
@@ -23,7 +24,9 @@ import { fetchGroupMemberManage } from 'src/api/forum/group-member-manage';
 const ForumGroupPermintaanScreen = ({ navigation, route }) => {
   const { params } = route;
   console.log('params', params);
+
   const { Color } = useColor();
+  const [popupProps, showPopup] = usePopup();
 
   const [itemData, setItemData] = useState(initialItemState);
 
@@ -31,15 +34,34 @@ const ForumGroupPermintaanScreen = ({ navigation, route }) => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (itemData.refresh) {
+      fetchData();
+    }
+  }, [itemData.refresh]);
+
   const fetchData = async() => {
     const result = await fetchGroupMemberList({ groupId: params.groupId, status: 0 });
     console.log('result', result);
+
+    let newData = [];
     if (result.status) {
-      setItemData({
-        ...itemData,
-        data: result.data,
-      });
+      if (itemData.refresh) {
+        newData = result.data;
+      } else {
+        newData = itemData.data.concat(result.data);
+      }
     }
+
+    console.log('newData', newData);
+
+    setItemData({
+      ...itemData,
+      data: newData,
+      loading: false,
+      loadNext: false,
+      refresh: false,
+    });
   }
 
   const onMemberManage = async(userId, groupId, status) => {
@@ -48,16 +70,18 @@ const ForumGroupPermintaanScreen = ({ navigation, route }) => {
       status,
       groupId,
     });
+
     console.log('result', result);
+
     if (result.status) {
-      Alert('', result.data.message);
+      setItemData({ ...itemData, refresh: true });
+      showPopup(result.data.message, 'success');
     } else {
-      Alert('Error', result.message);
+      showPopup(result.message, 'error');
     }
   }
 
   const renderItem = ({ item }) => (
-    console.log(item),
     <View
       style={{
         marginBottom: 16,
@@ -77,7 +101,7 @@ const ForumGroupPermintaanScreen = ({ navigation, route }) => {
             }}
           />
           <View style={{ alignItems: 'flex-start' }}>
-            <Text type="bold">{item.title}</Text>
+            <Text type="bold">{item.fullname}</Text>
           </View>
         </View>
 
@@ -118,9 +142,11 @@ const ForumGroupPermintaanScreen = ({ navigation, route }) => {
 
   return (
     <Scaffold
+      fallback={itemData.loading}
+      popupProps={popupProps}
       header={
         <Header
-          title='Permintaan Join'
+          title='Permintaan Gabung'
           centerTitle={false}
         />
       }

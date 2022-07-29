@@ -56,7 +56,7 @@ const Button = (props) => {
         {source && <CustomImage source={source} />}
         
         <Text
-          fontSize={fontSize}
+          size={fontSize}
           type={type || 'semibold'}
           color={
             disabled ? Color.border : props.fontColor ? props.fontColor : Color.textButtonInline

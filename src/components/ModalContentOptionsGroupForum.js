@@ -39,80 +39,6 @@ const ModalContentOptionsGroupForum = forwardRef((props, ref) => {
   const [modalInputText, setModalInputText] = useState(false);
   const [message, setMessage] = useState(initialMessage);
 
-  const fetchProductReportCheck = (text) => {
-    if (!item) {
-      setMessage({
-        ...message,
-        text: 'Konten tidak tersedia',
-      });
-      setTimeout(() => {
-        setMessage(initialMessage);
-      }, 3000);
-      return;
-    }
-
-    const variables = {
-      referenceId: item.id,
-      referenceType: nameType,
-      referenceName: item.productName,
-      refStatus: item.status,
-      reportMessage: text,
-    };
-
-    console.log('variables', variables);
-
-    Client.mutate({
-      mutation: queryProductReport,
-      variables,
-    })
-      .then(res => {
-        console.log("res report", res);
-        setMessage({
-          ...message,
-          status: true,
-          text: 'Laporan terkirim, Terima kasih telah membantu kami melakukan report'
-        });
-        setTimeout(() => {
-          setMessage(initialMessage);
-          setModalInputText(false);
-          combinedRef.current.close();
-        }, 3000);
-      })
-      .catch(err => {
-        console.log('error', err);
-        setMessage({
-          ...message,
-          text: 'Terjadi kesalahan, silakan coba beberapa saat'
-        });
-        setTimeout(() => {
-          setMessage(initialMessage);
-          setModalInputText(false);
-          combinedRef.current.close();
-        }, 3000);
-      });
-  };
-
-  const fetchBlockUser = () => {
-    const variables = {
-      blockUserId: item.ownerId,
-    };
-
-    Client.mutate({
-      mutation: queryUserBlock,
-      variables,
-    })
-      .then(res => {
-        console.log("res block", res)
-        alert(
-          'User di blok',
-        );
-      })
-      .catch(err => {
-        console.log('error', err);
-        alert('terjadi kesalahan, silakan coba beberapa saat');
-      });
-  }
-
   const onMemberManage = async(status, type) => {
     const result = await fetchGroupMemberManage({
       userId: selectedMember.userId,
@@ -138,6 +64,7 @@ const ModalContentOptionsGroupForum = forwardRef((props, ref) => {
         name: 'Jadikan Moderator',
         color: Color.text,
         onPress: () => {
+          combinedRef.current.close();
           Alert('Konfirmasi', 'Jadikan member sebagai moderator group?', () => onMemberManage(1, 'MODERATOR'))
         },
       });
@@ -148,6 +75,7 @@ const ModalContentOptionsGroupForum = forwardRef((props, ref) => {
         name: 'Turunkan ke Member',
         color: Color.text,
         onPress: () => {
+          combinedRef.current.close();
           Alert('Konfirmasi', 'Jadikan moderator sebagai mmember group?', () => onMemberManage(1, 'MEMBER'))
         },
       })
@@ -155,10 +83,11 @@ const ModalContentOptionsGroupForum = forwardRef((props, ref) => {
 
     dataOptions.push({
       id: 1,
-      name: 'Keluarkan dari Group',
+      name: 'Keluarkan dari Grup',
       color: Color.error,
       show: selectedMember ? true : false,
       onPress: () => {
+        combinedRef.current.close();
         Alert('Konfirmasi', 'Hapus member dari group?', () => onMemberManage(2, 'MEMBER'))
       },
     });

@@ -26,8 +26,6 @@ const initialMessage = {
 const ModalContentOptions = forwardRef((props, ref) => {
   const { isOwner, item, moduleType, nameType, onClose } = props;
 
-  console.log('ini props', props)
-
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
   const navigation = useNavigation();
@@ -154,10 +152,13 @@ const ModalContentOptions = forwardRef((props, ref) => {
     });
   }
 
+  const showForOwner = isOwner ? true : false;
+  const showForOther = isOwner ? false : true;
+
   const dataOptions = [
     {
       id: 0,
-      show: isOwner ? true : false,
+      show: showForOwner,
       name: 'Edit',
       color: Color.text,
       onPress: () => {
@@ -170,6 +171,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
     },
     {
       id: 1,
+      show: showForOther,
       name: 'Simpan Postingan',
       color: Color.text,
       onPress: () => {
@@ -187,6 +189,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
     {
       id: 3,
       name: 'Report',
+      show: showForOther,
       color: Color.error,
       onPress: () => {
         combinedRef.current.close();
@@ -199,7 +202,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
     },
   ];
   
-  if (item && item.ownerId) {
+  if (showForOwner) {
     dataOptions.push({
       id: 2,
       name: 'Hapus',
@@ -215,7 +218,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
     });
   }
 
-  if (item && item.ownerId) {
+  if (showForOther) {
     dataOptions.push({
       id: 4,
       name: 'Block User',

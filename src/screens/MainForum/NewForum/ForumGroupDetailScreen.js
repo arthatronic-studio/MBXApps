@@ -11,22 +11,61 @@ import {
   Scaffold,
   useColor
 } from '@src/components';
-import { Button, TouchableOpacity } from '@src/components/Button';
-import Config from 'react-native-config';
+import { Button } from '@src/components/Button';
 import { Container } from 'src/styled';
-import SearchBar from 'src/components/SearchBar';
-import { ScrollView } from 'react-native-gesture-handler';
 import Moment from 'moment';
 import WidgetForumGroup from './WidgetForumGroup';
 import { statusBarHeight } from 'src/utils/constants';
+import { useSelector } from 'react-redux';
+import { fetchGroupMemberList } from 'src/api/forum/listmemberGroup';
 
 const ForumGroupDetailScreen = ({ navigation, route }) => {
   const params = route.params.data;
 
+  console.log('route', route);
+
+  const [memberData, setMemberDataAll] = useState([]);
+  const [memberDataReq, setMemberDataReq] = useState([]);
   const [selectedMember, setSelectedMember] = useState();
 
   const { Color } = useColor();
   const modalOptionsRef = useRef();
+  const user = useSelector(state => state['user.auth'].login.user);
+
+  useEffect(() => {
+    fetchMemberAll();
+    fetchMemberReq();
+  }, []);
+
+  const fetchMemberAll = async () => {
+    const variables = {
+      groupId: params.id,
+      status: 1,
+    };
+
+    console.log('variables', variables);
+
+    const result = await fetchGroupMemberList(variables);
+    console.log(result, 'result all');
+    if (result.status) {
+      setMemberDataAll(result.data);
+    }
+  }
+
+  const fetchMemberReq = async () => {
+    const variables = {
+      groupId: params.id,
+      status: 0,
+    };
+
+    console.log('dani hidayat,', variables);
+
+    const result = await fetchGroupMemberList(variables);
+    console.log(result, 'result req');
+    if (result.status) {
+      setMemberDataReq(result.data);
+    }
+  }
 
   const renderItem = ({ item }) => (
     <View
@@ -54,17 +93,27 @@ const ForumGroupDetailScreen = ({ navigation, route }) => {
           </View>
         </View>
 
-        <Feather
+        {isMeModerator && <Feather
           onPress={() => {
             setSelectedMember(item);
             modalOptionsRef.current.open();
           }}
           name='more-vertical'
           size={20}
-        />
+        />}
       </View>
     </View>
   );
+
+  let isMeModerator = false;
+  if (user && params && Array.isArray(params.memberModerator)) {
+    const isMeExist = params.memberModerator.filter((e) => e.userId == user.userId)[0];
+    if (isMeExist) {
+      isMeModerator = true;
+    }
+  }
+
+  console.log('memberData', memberData);
 
   return (
     <Scaffold
@@ -73,7 +122,7 @@ const ForumGroupDetailScreen = ({ navigation, route }) => {
     >
       <FlatList
         keyExtractor={(item, index) => item.id}
-        data={params.member}
+        data={memberData}
         renderItem={params.status !== 'PUBLISH' ? renderItem : () => <View />}
         ListHeaderComponent={
           <WidgetForumGroup

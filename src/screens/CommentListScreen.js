@@ -313,8 +313,9 @@ const CommentListScreen = ({ navigation, route }) => {
                   fontFamily: 'Inter-Regular',
                   color: Color.text,
                   backgroundColor: Color.border,
-                  marginTop: 6,
-                  marginBottom: 10,
+                  includeFontPadding: false,
+                  marginTop: Platform.OS === 'android' ? 0 : 6,
+                  marginBottom: Platform.OS === 'android' ? 0 : 10,
                   paddingHorizontal: 8,
                   maxHeight: 120,
                 }}

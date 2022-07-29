@@ -36,6 +36,7 @@ import { VideoPlayerAndroid } from 'src/components/VideoPlayerAndroid';
 import Config from 'react-native-config';
 import { queryProductManage } from 'src/lib/query';
 import { uploadChunkActionsNoStateSave } from 'src/state/actions/upload';
+import { statusBarHeight } from 'src/utils/constants';
 
 const ForumBuatDetailScreen = ({ navigation, route }) => {
   const { params } = route;
@@ -213,12 +214,6 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
         console.log(err, 'errrrr');
         showLoading('error', 'Gagal Upload, Harap ulangi kembali');
       });
-
-    showLoading('success', 'Thread berhasil dibuat!');
-
-    // setTimeout(() => {
-    //   navigation.navigate('ForumGroupScreen', {});
-    // }, 2500);
   }
 
   const onSubmitWithoutVideo = () => {
@@ -251,8 +246,7 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
           showLoading('success', 'Thread berhasil dibuat!');
 
           setTimeout(() => {
-            // navigation.navigate('ForumSegmentScreen', { ...params, componentType: 'LIST', refresh: true });
-            navigation.popToTop();
+            navigation.navigate('ForumGroupScreen', { ...params, refresh: true });
           }, 2500);
         } else {
           showLoading('error', 'Thread gagal dibuat!');
@@ -340,6 +334,7 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
         item={{
           videoFilename: item.uri,
         }}
+        hideOnError
         autoplay={false}
       />
     )
@@ -362,6 +357,7 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
               onPress={() => {
                 onSubmit();
               }}
+              fontSize={12}
             >
               Posting
             </Button>
@@ -371,8 +367,11 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
     >
       <Divider />
 
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
-        <ScrollView>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        <ScrollView keyboardShouldPersistTaps='handled'>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -430,46 +429,56 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
           </Container>
         </ScrollView>
 
-        <RichToolbar
-          editor={richTextRef}
-          onPressAddImage={() => setModalImagePicker(true)}
-          insertVideo={() => setModalVideoPicker(true)}
-          insertEmoji={onPressAddEmoji}
-          selectedButtonStyle={{
-            backgroundColor: Color.primary,
-          }}
-          actions={[
-            actions.insertImage,
-            actions.insertVideo,
-            'insertEmoji',
-            actions.setBold,
-            actions.setItalic,
-            actions.setUnderline,
-            actions.heading1,
-          ]}
-          iconMap={{
-            [actions.insertImage]: ({ }) => (
-              <Image
-                style={{ height: 22, width: 22 }}
-                source={icongalery} />
-            ),
-            [actions.insertVideo]: ({ }) => (
-              <Image
-                style={{ height: 34, width: 34 }}
-                source={iconcameravidio} />
-            ),
-            insertEmoji: ({ }) => (
-              <Image
-                style={{ height: 34, width: 34 }}
-                source={iconsmile} />
-            ),
-            [actions.heading1]: (props) => {
-              return (
-                <Text size={props.iconGap} color={props.tintColor}>H1</Text>
-              )
-            },
-          }}
-        />
+        <Container
+          paddingVertical={Platform.OS === 'ios' ? 2 : 6}
+          color={Color.border}
+          marginBottom={Platform.OS === 'ios' ? 0 : statusBarHeight}
+        >
+          <RichToolbar
+            editor={richTextRef}
+            onPressAddImage={() => setModalImagePicker(true)}
+            insertVideo={() => setModalVideoPicker(true)}
+            insertEmoji={onPressAddEmoji}
+            selectedIconTint={Color.border}
+            selectedButtonStyle={{
+              backgroundColor: Color.primary,
+            }}
+            style={{
+              backgroundColor: Color.border,
+            }}
+            actions={[
+              actions.insertImage,
+              actions.insertVideo,
+              'insertEmoji',
+              actions.setBold,
+              actions.setItalic,
+              actions.setUnderline,
+              actions.heading1,
+            ]}
+            iconMap={{
+              [actions.insertImage]: ({ }) => (
+                <Image
+                  style={{ height: 22, width: 22 }}
+                  source={icongalery} />
+              ),
+              [actions.insertVideo]: ({ }) => (
+                <Image
+                  style={{ height: 34, width: 34 }}
+                  source={iconcameravidio} />
+              ),
+              insertEmoji: ({ }) => (
+                <Image
+                  style={{ height: 34, width: 34 }}
+                  source={iconsmile} />
+              ),
+              [actions.heading1]: (props) => {
+                return (
+                  <Text size={props.iconGap} color={props.tintColor}>H1</Text>
+                )
+              },
+            }}
+          />
+        </Container>
 
         {emojiVisible && <EmojiView onSelect={handleInsertEmoji} />}
       </KeyboardAvoidingView>

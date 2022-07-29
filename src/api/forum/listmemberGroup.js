@@ -27,7 +27,7 @@ export const fetchGroupMemberList = async(variables)  => {
             response.status = true;
             response.message = result.data.message || 'OK';
         } else {
-            console.log('err productTopicList', result);
+            console.log('err queryGroupMemberList', result);
             response.message = 'Gagal, silakan coba kembali';
             error = result;
         }

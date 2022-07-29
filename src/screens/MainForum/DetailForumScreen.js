@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Image, TextInput, Dimensions, SafeAreaView, FlatList } from 'react-native';
-import Styled from 'styled-components';
-import Moment from 'moment';
+import { View, Image, TextInput, FlatList } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { useSelector } from 'react-redux';
@@ -14,7 +12,8 @@ import {
     TouchableOpacity,
     Scaffold,
     useColor,
-    ScreenEmptyData
+    ScreenEmptyData,
+    usePopup
 } from '@src/components';
 
 import Client from '@src/lib/apollo';
@@ -30,6 +29,7 @@ import { imageContentItem } from 'assets/images/content-item';
 import CardComment from 'src/components/Card/CardComment';
 import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
 import { shadowStyle } from 'src/styles';
+import { fetchContentProductDetail, fetchContentProductViewManage } from 'src/api/content';
 
 const initSelectedComment = {
     id: 0,
@@ -53,8 +53,8 @@ const DetailForumScreen = ({ route, navigation }) => {
     });
     const [refreshComment, setRefreshComment] = useState(false);
 
-  const [thumbImage, setThumbImage] = useState('');
-  const [mimeImage, setMimeImage] = useState('image/jpeg');
+    const [thumbImage, setThumbImage] = useState('');
+    const [mimeImage, setMimeImage] = useState('image/jpeg');
     const [modalImagePicker, setModalImagePicker] = useState(false);
 
     // ref
@@ -63,6 +63,7 @@ const DetailForumScreen = ({ route, navigation }) => {
 
     // hooks
     const [loadingProps, showLoading] = useLoading();
+    const [popupProps, showPopup] = usePopup();
     const { Color } = useColor();
 
     // selector
@@ -71,8 +72,14 @@ const DetailForumScreen = ({ route, navigation }) => {
     );
 
     useEffect(() => {
+        onInitData();
         fetchContentProduct();
     }, []);
+
+    const onInitData = async() => {
+        const result = await fetchContentProductViewManage(item.id);
+        console.log('result', result);
+    }
 
     useEffect(() => {
         if (refreshComment) {
@@ -164,7 +171,7 @@ const DetailForumScreen = ({ route, navigation }) => {
 
     const onSubmitComment = () => {
         if (textComment === '') {
-            alert('Isi komentar tidak boleh kosong');
+            showPopup('Isi komentar tidak boleh kosong', 'warning');
             return;
         }
 
@@ -228,94 +235,101 @@ const DetailForumScreen = ({ route, navigation }) => {
 
     const renderHeader = () => {
         return (
-            <View style={{ alignItems: 'center' }}>
-                <CardForumVertical
-                    item={item}
-                    onPressDot={() => modalOptionsRef.current.open()}
-                    showAllText
-                    showVideo
-                />
+            <>
+                <View style={{ alignItems: 'center' }}>
+                    <CardForumVertical
+                        item={item}
+                        onPressDot={() => modalOptionsRef.current.open()}
+                        showAllText
+                        showVideo
+                    />
 
-                <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <View style={{ width: '100%', paddingHorizontal: 16, paddingVertical: 12, flexDirection: 'row', borderColor: Color.border, borderWidth: 0.5, borderColor: Color.border, alignItems: 'flex-end' }}>
-                        <TouchableOpacity
-                            onPress={() => setModalImagePicker(true)}
-                            style={{ paddingRight: 8 }}
-                        >
-                            <Image
-                                source={imageContentItem.camera}
-                                style={{
-                                    height: 32,
-                                    width: 32,
-                                    resizeMode: 'contain',
-                                }}
-                            />
-                        </TouchableOpacity>
-
-                        <View style={{ flex: 1, borderRadius: 8, backgroundColor: Color.border }}>
-                            <TextInput
-                                placeholder='Tulis pendapat kamu'
-                                placeholderTextColor={Color.text}
-                                style={{
-                                    fontSize: 12,
-                                    fontFamily: 'Inter-Regular',
-                                    color: Color.text,
-                                    backgroundColor: Color.border,
-                                    marginTop: 6,
-                                    marginBottom: 10,
-                                    paddingHorizontal: 8,
-                                    maxHeight: 120,
-                                }}
-                                value={textComment}
-                                multiline
-                                onChangeText={(e) => setTextComment(e)}
-                            />
-                        </View>
-
-                        <View style={{ paddingLeft: 8 }}>
+                    <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <View style={{ width: '100%', paddingHorizontal: 16, paddingVertical: 12, flexDirection: 'row', borderColor: Color.border, borderWidth: 0.5, borderColor: Color.border, alignItems: 'flex-end' }}>
                             <TouchableOpacity
-                                onPress={() => {
-                                    onSubmitComment();
-                                }}
-                                style={{
-                                    width: 32,
-                                    height: 32,
-                                    borderRadius: 16,
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    backgroundColor: Color.primary,
-                                }}
+                                onPress={() => setModalImagePicker(true)}
+                                style={{ paddingRight: 8 }}
                             >
-                                <Ionicons name='arrow-forward' color={Color.theme} size={18} />
+                                <Image
+                                    source={imageContentItem.camera}
+                                    style={{
+                                        height: 32,
+                                        width: 32,
+                                        resizeMode: 'contain',
+                                    }}
+                                />
                             </TouchableOpacity>
+
+                            <View style={{ flex: 1, borderRadius: 8, backgroundColor: Color.border }}>
+                                <TextInput
+                                    placeholder='Tulis pendapat kamu'
+                                    placeholderTextColor={Color.text}
+                                    style={{
+                                        fontSize: 12,
+                                        fontFamily: 'Inter-Regular',
+                                        color: Color.text,
+                                        backgroundColor: Color.border,
+                                        includeFontPadding: false,
+                                        marginTop: Platform.OS === 'android' ? 0 : 6,
+                                        marginBottom: Platform.OS === 'android' ? 0 : 10,
+                                        paddingHorizontal: 8,
+                                        maxHeight: 120,
+                                    }}
+                                    value={textComment}
+                                    multiline
+                                    onChangeText={(e) => setTextComment(e)}
+                                />
+                            </View>
+
+                            <View style={{ paddingLeft: 8 }}>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        onSubmitComment();
+                                    }}
+                                    style={{
+                                        width: 32,
+                                        height: 32,
+                                        borderRadius: 16,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        backgroundColor: Color.primary,
+                                    }}
+                                >
+                                    <Ionicons name='arrow-forward' color={Color.theme} size={18} />
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
+
+                    {thumbImage !== '' &&
+                        <View style={{ width: '100%', borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle, justifyContent: 'center', alignItems: 'center', paddingVertical: 16 }}>
+                            <View
+                                style={{ width: '100%', aspectRatio: 16 / 9 }}
+                            >
+                                <Image
+                                    style={{ height: '100%', width: '100%', borderRadius: 4, alignItems: 'center', justifyContent: 'center' }}
+                                    source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
+                                    resizeMode='contain'
+                                />
+
+                                <View style={{ position: 'absolute', right: 16, top: -16 }}>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            setThumbImage('');
+                                        }}
+                                    >
+                                        <Entypo name='circle-with-cross' size={30} color={Color.error} />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    }
                 </View>
 
-                {thumbImage !== '' &&
-            <View style={{ width: '100%', borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle, justifyContent: 'center', alignItems: 'center', paddingVertical: 16 }}>
-              <View
-                style={{ width: '100%', aspectRatio: 16 / 9 }}
-              >
-                <Image
-                  style={{ height: '100%', width: '100%', borderRadius: 4, alignItems: 'center', justifyContent: 'center' }}
-                  source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
-                  resizeMode='contain'
-                />
-
-                <View style={{ position: 'absolute', right: 16, top: -16 }}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setThumbImage('');
-                    }}
-                  >
-                    <Entypo name='circle-with-cross' size={30} color={Color.error} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          }
-            </View>
+                <Container paddingHorizontal={16} paddingTop={16} paddingBottom={10}>
+                    <Text align='left'>Komentar Orang Lain</Text>
+                </Container>
+            </>
         )
     }
 
@@ -330,7 +344,8 @@ const DetailForumScreen = ({ route, navigation }) => {
                 item={itemComment}
                 productOwnerId={item.ownerId}
                 canReply
-                showOptions={_isOwnerComment || isOwnerProduct}
+                // showOptions={_isOwnerComment || isOwnerProduct}
+                showOptions={_isOwnerComment}
                 onPressDots={() => {
                     modalListActionRef.current.open();
                     setSelectedComment({ ...itemComment, index });
@@ -359,35 +374,40 @@ const DetailForumScreen = ({ route, navigation }) => {
             headerTitle='Detail'
             fallback={!item || dataComment.loading}
             loadingProps={loadingProps}
+            popupProps={popupProps}
         >
-            {renderHeader()}
-
             <FlatList
                 keyExtractor={(item, index) => item.toString() + index}
-                data={dataComment.data}
+                data={dataComment.data.length > 0 ? dataComment.data : [{ init: true }]}
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps='handled'
-                renderItem={({ item, index }) => renderItem(item, index)}
-                ListHeaderComponent={
-                    <Container paddingHorizontal={16} paddingTop={16} paddingBottom={8}>
-                        <Row>
-                            <Text>Komentar Orang Lain</Text>
-                        </Row>
-                    </Container>
-                }
-                ListEmptyComponent={(props) => {
-                    if (!dataComment.loading && dataComment.data.length === 0) {
+                renderItem={({ item, index }) => {
+                    if (index === 0) {
+                        if (item.init) {
+                            return (
+                                <>
+                                    {renderHeader()}
+                                    {!dataComment.loading && dataComment.data.length === 0 &&
+                                        <View style={{width: '100%', aspectRatio: 16/9}}>
+                                            <ScreenEmptyData
+                                                message='Komentar belum tersedia'
+                                            />
+                                        </View>
+                                    }
+                                </>
+                            )
+                        }
+
                         return (
-                            <Container>
-                                <ScreenEmptyData
-                                    message='Komentar belum tersedia'
-                                />
-                            </Container>
+                            <>
+                                {renderHeader()}
+                                {renderItem(item, index)}
+                            </>
                         )
                     }
 
                     return (
-                        <View />
+                        renderItem(item, index)
                     )
                 }}
                 onEndReached={() => dataComment.page !== -1 && setDataComment({ ...dataComment, loadNext: true })}
@@ -415,21 +435,21 @@ const DetailForumScreen = ({ route, navigation }) => {
                 item={item}
             />
 
-<ModalImagePicker
-        visible={modalImagePicker}
-        withPreview
-        onClose={() => {
-          setModalImagePicker(false);
-        }}
-        onSelected={(callback) => {
-          if (callback.base64) {
-            setThumbImage(callback.base64);
-            setMimeImage(callback.type);
-          }
+            <ModalImagePicker
+                visible={modalImagePicker}
+                withPreview
+                onClose={() => {
+                    setModalImagePicker(false);
+                }}
+                onSelected={(callback) => {
+                    if (callback.base64) {
+                        setThumbImage(callback.base64);
+                        setMimeImage(callback.type);
+                    }
 
-          setModalImagePicker(false);
-        }}
-      />
+                    setModalImagePicker(false);
+                }}
+            />
         </Scaffold>
     )
 }

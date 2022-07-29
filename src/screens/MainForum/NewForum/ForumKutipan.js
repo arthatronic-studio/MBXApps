@@ -4,7 +4,7 @@ import Moment from 'moment';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { Col, Row, Scaffold, Text, Header } from '@src/components';
+import { Col, Row, Scaffold, Text, Header, usePopup } from '@src/components';
 import { TouchableOpacity } from '@src/components/Button';
 import { queryAddComment, queryContentProduct } from '@src/lib/query';
 import { useColor } from '@src/components/Color';
@@ -37,6 +37,8 @@ const ForumKutipan = ({ navigation, route }) => {
 
   const { Color } = useColor();
   const { height } = useWindowDimensions();
+  const [popupProps, showPopup] = usePopup();
+
   const [textComment, setTextComment] = useState('');
   const [textSearch, setTextSearch] = useState('');
   const [itemData, setItemData] = useState(initialItemState);
@@ -46,7 +48,7 @@ const ForumKutipan = ({ navigation, route }) => {
 
   const onSubmitComment = () => {
     if (textComment === '') {
-      alert('Isi komentar tidak boleh kosong');
+      showPopup('Isi komentar tidak boleh kosong', 'warning');
       return;
     }
 
@@ -129,6 +131,7 @@ const ForumKutipan = ({ navigation, route }) => {
 
   return (
     <Scaffold
+      popupProps={popupProps}
       header={
         <Header
           title='Buat Kutipan'

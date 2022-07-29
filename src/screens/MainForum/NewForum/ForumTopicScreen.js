@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Image, ScrollView, FlatList, Row, SectionList } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import moment from 'moment';
 import { ModalUnlock, ScreenEmptyData } from 'src/components';
@@ -22,8 +22,6 @@ import { checkJoinMember } from 'src/api/forum/checkMemberjoinGroup';
 import ImagesPath from 'src/components/ImagesPath';
 
 const ForumTopicScreen = ({ navigation, route }) => {
-  const { item } = route.params;
-  const modalOptionsRef = useRef();
   const modalUnlockRef = useRef();
   const user = useSelector(state => state['user.auth'].login.user);
   const [showSection, setShowSection] = useState(true);
@@ -55,10 +53,13 @@ const ForumTopicScreen = ({ navigation, route }) => {
     page: 0,
     loadNext: false,
   });
-
-  console.log('itemdata', itemData.data);
   const [joinMember, setJoinMember] = useState();
+
   useEffect(() => {
+    // setInterval(() => {
+    //   showLoading('wait', 'Thread berhasil dibuat!');
+    // }, 3000);
+
     fetchTopic();
   }, []);
 
@@ -72,15 +73,20 @@ const ForumTopicScreen = ({ navigation, route }) => {
       groupId: varData.id
     };
 
+    console.log(variables, 'variables');
+
     const result = await checkJoinMember(variables);
-    console.log(result, 'result join');
+    console.log(result, 'result checkJoinMember');
 
     if (result.status) {
       if (result.data.success) {
         if (result.data.status === 1) {
           navigation.navigate('ForumGroupScreen', { data: varData });
+        } else if (result.data.status === 2) {
+          modalUnlockRef.current.open();
+          setCurrentProductId(varData.id);
         } else {
-          alert(result.data.message);
+          showPopup(result.data.message, 'info');
         }
       } else {
         modalUnlockRef.current.open();
@@ -150,8 +156,6 @@ const ForumTopicScreen = ({ navigation, route }) => {
     </TouchableOpacity>
   );
 
-  console.log('itemData', itemData);
-
   return (
     <Scaffold
       fallback={itemData.loading}
@@ -185,57 +189,81 @@ const ForumTopicScreen = ({ navigation, route }) => {
             </Text>
           </View>
         )}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() => {
-              onCheckJoin(item);
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                backgroundColor: Color.semiwhite,
-                marginHorizontal: 16,
-                marginBottom: 10,
-                padding: 8,
-                borderRadius: 8,
-                justifyContent: 'space-between',
+        renderItem={({ item }) => {
+          const isWaitingApproval = item.statusMe === 0;
+          const isRejected = item.statusMe === 2;
+          const isPrivateGroup = item.status === 'PRIVATE';
+
+          return (
+            <TouchableOpacity
+              onPress={() => {
+                if (isWaitingApproval) {
+                  showPopup('Menunggu Approval Admin', 'info');
+                  return;
+                }
+
+                if (isRejected) {
+                  modalUnlockRef.current.open();
+                  setCurrentProductId(item.id);
+                  return;
+                }
+
+                onCheckJoin(item);
               }}>
-              <View style={{ flex: 1, flexDirection: 'row' }}>
-                <View style={{ flex: 1.5 }}>
-                  <View style={{ width: '100%', aspectRatio: 1 }}>
-                    <Image
-                      source={{ uri: item.image }}
-                      style={{
-                        borderRadius: 50,
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: Color.secondary,
-                      }}
-                    />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  backgroundColor: Color.border,
+                  marginHorizontal: 16,
+                  marginBottom: 10,
+                  padding: 8,
+                  borderRadius: 8,
+                  justifyContent: 'space-between',
+                }}>
+                <View style={{ flex: 1, flexDirection: 'row' }}>
+                  <View style={{ flex: 1.5 }}>
+                    <View style={{ width: '100%', aspectRatio: 1 }}>
+                      <Image
+                        source={{ uri: item.image }}
+                        style={{
+                          borderRadius: 50,
+                          width: '100%',
+                          height: '100%',
+                          backgroundColor: Color.secondary,
+                        }}
+                      />
+                    </View>
+                  </View>
+
+                  <View style={{ flex: 8, paddingHorizontal: 8, justifyContent: 'center', alignItems: 'flex-start' }}>
+                    <Text numberOfLines={1} type="semibold">{item.name}</Text>
+                    <Divider height={2} />
+                    <Text numberOfLines={1} size={12}>{item.threadCount} Thread</Text>
+                  </View>
+
+                  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}>
+                    {
+                      isWaitingApproval ?
+                        <MaterialIcons
+                          name="history"
+                          size={18}
+                          color={Color.info}
+                        />
+                        : isPrivateGroup &&
+                        <Feather
+                          name="lock"
+                          size={16}
+                          color={Color.danger}
+                        />
+                    }
                   </View>
                 </View>
-
-                <View style={{ flex: 8, paddingHorizontal: 8, justifyContent: 'center', alignItems: 'flex-start' }}>
-                  <Text numberOfLines={1} type="semibold">{item.name}</Text>
-                  <Divider height={2} />
-                  <Text numberOfLines={1} size={12}>{item.threadCount} Thread</Text>
-                </View>
-
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}>
-                  {item.status === "PRIVATE" &&
-                    <Feather
-                      name="lock"
-                      size={16}
-                      color={Color.danger}
-                    />
-                  }
-                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-        )}
+            </TouchableOpacity>
+          )
+        }}
         renderSectionFooter={({ section }) => {
-          if(section.data.length == 0){
+          if (section.data.length == 0) {
             return (
               <View style={{ padding: 8, justifyContent: 'center', alignItems: 'center' }}>
                 <Image
@@ -250,22 +278,14 @@ const ForumTopicScreen = ({ navigation, route }) => {
               </View>
             )
           }
-          
+
           return null
         }}
-      />
-
-      <Divider />
-      <ModalContentOptions
-        ref={modalOptionsRef}
-        // isOwner={user && user.userId === item.ownerId}
-        item={item}
       />
 
       <ModalUnlock
         onClose={() => {
           setShowSection(!showSection);
-          // modalUnlockRef.current.close();
         }}
         ref={modalUnlockRef}
         productId={currentProductId}
@@ -280,6 +300,7 @@ const ForumTopicScreen = ({ navigation, route }) => {
                 'wait',
                 'Permintaan kamu sedang di tinjau oleh moderator',
               );
+              modalUnlockRef.current.close();
               setShowSection(!showSection);
               setCurrentProductId();
             },

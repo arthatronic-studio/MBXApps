@@ -11,24 +11,26 @@ import {
   useColor,
   ScreenEmptyData
 } from '@src/components';
-import { TouchableOpacity } from '@src/components/Button';
-import Config from 'react-native-config';
 import { Container } from 'src/styled';
 import SearchBar from 'src/components/SearchBar';
 import ModalContentOptionsGroupForum from 'src/components/ModalContentOptionsGroupForum';
 import { fetchGroupMemberList } from 'src/api/forum/listmemberGroup';
 import { initialItemState } from 'src/utils/constants';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
 
 const ForumGroupAllMemberScreen = ({ navigation, route }) => {
   const { params } = route;
-  console.log('params', params);
+
+  console.log('params mmmita', params);
 
   const modalOptionsRef = useRef();
   const { Color } = useColor();
+  const user = useSelector(state => state['user.auth'].login.user);
 
   const [itemData, setItemData] = useState(initialItemState);
   const [selectedMember, setSelectedMember] = useState();
+  const [isMeModerator, setIsMeModerator] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -37,12 +39,25 @@ const ForumGroupAllMemberScreen = ({ navigation, route }) => {
   const fetchData = async() => {
     const result = await fetchGroupMemberList({ groupId: params.groupId, status: 1 });
     console.log('result', result);
+    let newData = [];
     if (result.status) {
-      setItemData({
-        ...itemData,
-        data: result.data,
-      })
+      const isMeExist = result.data.filter((e) => e.type === 'MODERATOR' && e.userId == user.userId)[0];
+      setIsMeModerator(typeof isMeExist !== 'undefined');
+
+      if (itemData.refresh) {
+        newData = result.data;
+      } else {
+        newData = itemData.data.concat(result.data);
+      }
     }
+
+    setItemData({
+      ...itemData,
+      data: newData,
+      loading: false,
+      loadNext: false,
+      refresh: false,
+    });
   }
 
   const renderItem = ({ item }) => (
@@ -70,20 +85,21 @@ const ForumGroupAllMemberScreen = ({ navigation, route }) => {
           </View>
         </View>
 
-        <Feather
+        {isMeModerator && <Feather
           onPress={() => {
             setSelectedMember(item);
             modalOptionsRef.current.open();
           }}
           name='more-vertical'
           size={20}
-        />
+        />}
       </View>
     </View>
   );
 
   return (
     <Scaffold
+      fallback={itemData.loading}
       header={
         <Header
           title='Anggota'

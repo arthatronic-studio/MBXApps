@@ -116,8 +116,10 @@ const ModalVideoPicker = ({ visible, onSelected, onClose }) => {
         setCompressPercentage(0);
         RNFFmpegConfig.resetStatistics();
 
-        const removeFilePath = await RNFetchBlobDf.fs.unlink(outputVideoCache);
-        console.log(removeFilePath, 'res removeFilePath');
+        console.log('outputVideoCache', outputVideoCache);
+
+        // const removeFilePath = await RNFetchBlobDf.fs.unlink(outputVideoCache);
+        // console.log(removeFilePath, 'res removeFilePath');
 
         const result = await getRaw(callback);
         console.log('result get Raw', result);
@@ -149,6 +151,12 @@ const ModalVideoPicker = ({ visible, onSelected, onClose }) => {
         };
 
         let uri = callback.uri;
+
+        // tidak support content:// harus file://
+        if (Platform.OS === 'android') {
+            const getPath = await RNFetchBlobDf.fs.stat(callback.uri);
+            uri = `file://${getPath.path}`;
+        }
 
         // if (Platform.OS === 'ios') {
             // const ext = uri.split('.')[1];
@@ -320,8 +328,10 @@ const ModalVideoPicker = ({ visible, onSelected, onClose }) => {
             testID={'modal'}
             isVisible={visible}
             swipeDirection={['down']}
-            onBackdropPress={() => { !processingVideo && onEndCompress(); }}
-            onSwipeComplete={() => { !processingVideo && onEndCompress(); }}
+            // onBackdropPress={() => { !processingVideo && onEndCompress(); }}
+            // onSwipeComplete={() => { !processingVideo && onEndCompress(); }}
+            onBackdropPress={() => { onEndCompress(); }}
+            onSwipeComplete={() => { onEndCompress(); }}
             style={{
                 justifyContent: 'flex-end', // the keys of bottom half
                 margin: 0,
