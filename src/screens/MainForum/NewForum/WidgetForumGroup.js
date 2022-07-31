@@ -51,8 +51,6 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
   //   fetchGroupList();
   // }, []);
 
-  console.log('isHighlight', isHighlight);
-
   useEffect(() => {
     if (!isHighlight && isFocused) {
       fetchMemberAll();
@@ -164,8 +162,6 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
       isMeModerator = true;
     }
   }
-
-  console.log(params.memberModerator);
 
   return (
     <View>

@@ -18,6 +18,7 @@ import WidgetForumGroup from './WidgetForumGroup';
 import { statusBarHeight } from 'src/utils/constants';
 import { useSelector } from 'react-redux';
 import { fetchGroupMemberList } from 'src/api/forum/listmemberGroup';
+import CardGroupMember from './CardGroupMember';
 
 const ForumGroupDetailScreen = ({ navigation, route }) => {
   const params = route.params.data;
@@ -67,44 +68,6 @@ const ForumGroupDetailScreen = ({ navigation, route }) => {
     }
   }
 
-  const renderItem = ({ item }) => (
-    <View
-      style={{
-        marginTop: 16,
-        paddingHorizontal: 16,
-      }}
-    >
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <View style={{ flexDirection: 'row' }}>
-          <Image
-            source={{ uri: item.image }}
-            style={{
-              borderRadius: 25,
-              width: 50,
-              height: 50,
-              backgroundColor: Color.border,
-              borderColor: Color.primary,
-              marginRight: 8
-            }}
-          />
-          <View style={{ justifyContent: 'center', alignItems: 'flex-start' }}>
-            <Text type="bold">{item.fullname}</Text>
-            <Text size={10}>{Moment(item.createdDate).format('DD MMM YYYY')}</Text>
-          </View>
-        </View>
-
-        {isMeModerator && <Feather
-          onPress={() => {
-            setSelectedMember(item);
-            modalOptionsRef.current.open();
-          }}
-          name='more-vertical'
-          size={20}
-        />}
-      </View>
-    </View>
-  );
-
   let isMeModerator = false;
   if (user && params && Array.isArray(params.memberModerator)) {
     const isMeExist = params.memberModerator.filter((e) => e.userId == user.userId)[0];
@@ -123,12 +86,28 @@ const ForumGroupDetailScreen = ({ navigation, route }) => {
       <FlatList
         keyExtractor={(item, index) => item.id}
         data={memberData}
-        renderItem={params.status !== 'PUBLISH' ? renderItem : () => <View />}
+        renderItem={({ item }) =>
+          params.status !== 'PUBLISH' ?
+            <Container paddingHorizontal={16}>
+              <CardGroupMember
+                item={item}
+                isMeModerator={isMeModerator}
+                onPressOptions={() => {
+                  setSelectedMember(item);
+                  modalOptionsRef.current.open();
+                }}
+              />
+            </Container>
+          :
+            <View />
+        }
         ListHeaderComponent={
-          <WidgetForumGroup
-            item={params}
-            isHighlight={false}
-          />
+          <Container paddingBottom={16}>
+            <WidgetForumGroup
+              item={params}
+              isHighlight={false}
+            />
+          </Container>
         }
         contentContainerStyle={{
           paddingBottom: statusBarHeight,
@@ -152,6 +131,12 @@ const ForumGroupDetailScreen = ({ navigation, route }) => {
       <ModalContentOptionsGroupForum
         ref={modalOptionsRef}
         selectedMember={selectedMember}
+        callback={(result) => {
+          if (result && result.status) {
+            fetchMemberAll();
+            fetchMemberReq();
+          }
+        }}
         onClose={() => {
           setSelectedMember();
         }}

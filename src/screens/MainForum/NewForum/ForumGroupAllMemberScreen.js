@@ -18,6 +18,7 @@ import { fetchGroupMemberList } from 'src/api/forum/listmemberGroup';
 import { initialItemState } from 'src/utils/constants';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
+import CardGroupMember from './CardGroupMember';
 
 const ForumGroupAllMemberScreen = ({ navigation, route }) => {
   const { params } = route;
@@ -60,43 +61,6 @@ const ForumGroupAllMemberScreen = ({ navigation, route }) => {
     });
   }
 
-  const renderItem = ({ item }) => (
-    <View
-      style={{
-        marginBottom: 16,
-      }}
-    >
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <View style={{ flexDirection: 'row' }}>
-          <Image
-            source={{ uri: item.image }}
-            style={{
-              borderRadius: 25,
-              width: 50,
-              height: 50,
-              backgroundColor: Color.border,
-              borderColor: Color.primary,
-              marginRight: 8
-            }}
-          />
-          <View style={{ justifyContent: 'center', alignItems: 'flex-start' }}>
-            <Text type="bold">{item.fullname}</Text>
-            <Text size={10}>{moment(item.createdDate).format('DD MMM YYYY')}</Text>
-          </View>
-        </View>
-
-        {isMeModerator && <Feather
-          onPress={() => {
-            setSelectedMember(item);
-            modalOptionsRef.current.open();
-          }}
-          name='more-vertical'
-          size={20}
-        />}
-      </View>
-    </View>
-  );
-
   return (
     <Scaffold
       fallback={itemData.loading}
@@ -114,7 +78,16 @@ const ForumGroupAllMemberScreen = ({ navigation, route }) => {
       <FlatList
         keyExtractor={(item, index) => item.id + index.toString()}
         data={itemData.data}
-        renderItem={renderItem}
+        renderItem={({ item }) =>
+          <CardGroupMember
+            item={item}
+            isMeModerator={isMeModerator}
+            onPressOptions={() => {
+              setSelectedMember(item);
+              modalOptionsRef.current.open();
+            }}
+          />
+        }
         contentContainerStyle={{
           padding: 16,
         }}
@@ -128,6 +101,11 @@ const ForumGroupAllMemberScreen = ({ navigation, route }) => {
       <ModalContentOptionsGroupForum
         ref={modalOptionsRef}
         selectedMember={selectedMember}
+        callback={(result) => {
+          if (result && result.status) {
+            fetchData();
+          }
+        }}
         onClose={() => {
           setSelectedMember();
         }}

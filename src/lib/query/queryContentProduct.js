@@ -55,6 +55,7 @@ export const queryContentProduct = gql`
             longitude
             mainImage
             eventDate
+            groupId
             fullDescription
             im_save
         }

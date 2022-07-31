@@ -125,8 +125,7 @@ const ForumGroupScreen = ({ navigation, route }) => {
           >
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('ForumBuatScreen', {
-                  ...params,
+                navigation.navigate('ForumThreadManageScreen', {
                   groupId: params.data.id
                 });
               }}

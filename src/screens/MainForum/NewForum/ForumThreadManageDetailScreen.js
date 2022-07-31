@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, Image, ScrollView, useWindowDimensions, Animated, Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
-import moment from 'moment';
+import Moment from 'moment';
 import { actions, RichEditor, RichToolbar } from "react-native-pell-rich-editor";
 
 import { Button, Loading } from 'src/components';
@@ -38,46 +38,43 @@ import { queryProductManage } from 'src/lib/query';
 import { uploadChunkActionsNoStateSave } from 'src/state/actions/upload';
 import { statusBarHeight } from 'src/utils/constants';
 
-const ForumBuatDetailScreen = ({ navigation, route }) => {
+const ForumThreadManageDetailScreen = ({ navigation, route }) => {
   const { params } = route;
-  const { item } = params;
-  const modalOptionsRef = useRef();
+  const isUpdatePage = typeof params.id !== 'undefined';
+  
+  const [popupProps, showPopup] = usePopup();
+  const [loadingProps, showLoading] = useLoading();
+  const { Color } = useColor();
+  const { width, height } = useWindowDimensions();
   const user = useSelector(state => state['user.auth'].login.user);
   const uploadChunkState = useSelector(state => state.uploadChunkState);
   const dispatch = useDispatch();
 
   const [userData, setUserData] = useState({
-    code: '',
-    name: params.title,
-    price: 0,
-    image: '',
-    status: 'PUBLISH',
-    method: 'INSERT',
+    code: isUpdatePage ? params.code : '',
+    name: params.textTitle,
+    price: isUpdatePage ? params.price : 0,
+    status: isUpdatePage ? params.status : 'PUBLISH',
+    method: isUpdatePage ? 'UPDATE' : 'INSERT',
     type: Config.PRODUCT_TYPE,
-    category: 'FORUM' || params.productSubCategory,
-    description: params.description,
-    latitude: '',
-    longitude: '',
-    eventDate: new Date(),
-    fullDescription: '',
+    category: 'FORUM',
+    description: params.textDescription,
+    latitude: isUpdatePage ? params.latitude : '',
+    longitude: isUpdatePage ? params.longitude : '',
+    eventDate: isUpdatePage && Moment(params.eventDate).isValid() ? new Date(params.eventDate) : new Date(),
+    fullDescription: isUpdatePage ? params.fullDescription : '',
     groupId: params.groupId,
   });
-  const [showSection, setShowSection] = useState(true);
-  const [textIsi, setTextisi] = useState('');
-  const [selectedImages, setSelectedImages] = useState([]);
-  const [selectedVideos, setSelectedVideos] = useState([]);
-  const [showfeature, setShowFeature] = useState(true);
+  const [selectedImages, setSelectedImages] = useState(isUpdatePage && params.image ? [{ fromServer: true, uri: params.image }] : []);
+  const [selectedVideos, setSelectedVideos] = useState(isUpdatePage && params.videoFilename ? [{ fromServer: true, uri: params.videoFilename }] : []);
   const [modalImagePicker, setModalImagePicker] = useState(false);
   const [modalVideoPicker, setModalVideoPicker] = useState(false);
   const [emojiVisible, setEmojiVisible] = useState(false);
 
+  const mainScrollViewRef = useRef();
   const richTextRef = useRef();
 
-  const [popupProps, showPopup] = usePopup();
-  const [loadingProps, showLoading] = useLoading();
-
-  const { Color } = useColor();
-  const { width, height } = useWindowDimensions();
+  console.log(selectedVideos);
 
   useEffect(() => {
     resetManage();
@@ -92,7 +89,7 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
           name: userData.name,
           price: userData.price,
           status: userData.status,
-          method: 'COMPLETE_UPLOAD',
+          method: isUpdatePage ? 'COMPLETE_UPDATE' : 'COMPLETE_UPLOAD',
           type: userData.type,
           description: userData.description,
           category: userData.category,
@@ -101,8 +98,12 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
           groupId: userData.groupId,
         }],
       };
+      
+      if (isUpdatePage) {
+        variables.products[0]['code'] = params.code;
+      }
 
-      if (selectedImages.length > 0) {
+      if (selectedImages.length > 0 && selectedImages[0].base64) {
         variables.products[0]['image'] = selectedImages[0].base64;
       }
 
@@ -127,7 +128,7 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
           showLoading(
             'success',
             'Berhasil Mengupload',
-            () => navigation.popToTop(),
+            () => navigation.navigate('ForumGroupScreen', { ...params, refresh: true }),
           );
         })
         .catch((err) => {
@@ -153,10 +154,9 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
     }
 
     Keyboard.dismiss();
-
     showLoading();
 
-    if (selectedVideos.length === 0) {
+    if (selectedVideos.length === 0 || (selectedVideos.length > 0 && selectedVideos[0].fromServer)) {
       onSubmitWithoutVideo();
       return;
     }
@@ -175,6 +175,10 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
         groupId: userData.groupId,
       }],
     };
+
+    if (isUpdatePage) {
+      variables.products[0]['code'] = params.code;
+    }
 
     if (params.parentProductId) {
       variables.products[0]['parentProductId'] = params.parentProductId;
@@ -204,6 +208,10 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
           }],
         };
 
+        if (isUpdatePage) {
+          dataVariables.products[0]['code'] = params.code;
+        }
+
         if (params.parentProductId) {
           dataVariables.products[0]['parentProductId'] = params.parentProductId;
         }
@@ -223,7 +231,7 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
       }],
     };
 
-    if (selectedImages.length > 0) {
+    if (selectedImages.length > 0 && selectedImages[0].base64) {
       variables.products[0]['image'] = selectedImages[0].base64;
     }
 
@@ -342,7 +350,7 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
 
   // console.log('richTextRef', richTextRef.current);
   // console.log('selectedVideos', selectedVideos);
-  console.log(params);
+  console.log(selectedImages);
 
   return (
     <Scaffold
@@ -350,7 +358,7 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
       popupProps={popupProps}
       header={
         <Header
-          title='Buat Posting'
+          title={`${isUpdatePage ? 'Edit' : 'Buat'} Posting`}
           centerTitle={false}
           actions={
             <Button
@@ -371,7 +379,10 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
       >
-        <ScrollView keyboardShouldPersistTaps='handled'>
+        <ScrollView
+          ref={mainScrollViewRef}
+          keyboardShouldPersistTaps='handled'
+        >
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -418,6 +429,11 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
           <Container paddingHorizontal={8}>
             <RichEditor
               ref={richTextRef}
+              useContainer
+              onCursorPosition={(scrollY) => {
+                mainScrollViewRef.current.scrollTo({y: scrollY - 30, animated: true});
+              }}
+              initialContentHTML={isUpdatePage ? params.fullDescription : ''}
               placeholder="Apa yang sedang kamu pikirkan..."
               onChange={(val) => {
                 setUserData({
@@ -488,7 +504,9 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
         onClose={() => setModalImagePicker(false)}
         onSelected={(callback) => {
           setModalImagePicker(false);
-          let currSelectedImages = [...selectedImages, callback];
+          // hide select multi
+          // let currSelectedImages = [...selectedImages, callback];
+          let currSelectedImages = [callback];
           setSelectedImages(currSelectedImages);
         }}
       />
@@ -499,9 +517,10 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
         onSelected={(callback) => {
           console.log(callback);
           setModalVideoPicker(false);
-          // let currSelectedVideos = [...selectedVideos, callback];
           setSelectedVideos([]);
           setTimeout(() => {
+            // hide sselect multi
+            // let currSelectedVideos = [...selectedVideos, callback];
             let currSelectedVideos = [callback];
             setSelectedVideos(currSelectedVideos);
           }, 1500);
@@ -520,4 +539,4 @@ const ForumBuatDetailScreen = ({ navigation, route }) => {
   );
 };
 
-export default ForumBuatDetailScreen;
+export default ForumThreadManageDetailScreen;

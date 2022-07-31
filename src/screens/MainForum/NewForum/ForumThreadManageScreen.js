@@ -18,15 +18,16 @@ import ModalContentOptions from 'src/components/ModalContentOptions';
 import FormInput from 'src/components/FormInput';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 
-const ForumBuatScreen = ({ navigation, route }) => {
+const ForumThreadManageScreen = ({ navigation, route }) => {
   const { params } = route;
+  const isUpdatePage = typeof params.id !== 'undefined';
 
   const modalOptionsRef = useRef();
   const user = useSelector(state => state['user.auth'].login.user);
 
   const [showSection, setShowSection] = useState(true);
-  const [textJudul, setTextJudul] = useState('');
-  const [textDesc, setTextDesc] = useState('');
+  const [textJudul, setTextJudul] = useState(params.productName);
+  const [textDesc, setTextDesc] = useState(params.productDescription);
 
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading] = useLoading();
@@ -34,11 +35,13 @@ const ForumBuatScreen = ({ navigation, route }) => {
 
   const disabled = textJudul === '' || textDesc === '';
 
+  console.log('params', params, isUpdatePage);
+
   return (
     <Scaffold
       header={
         <Header
-          title='Buat Posting'
+          title={`${isUpdatePage ? 'Edit' : 'Buat'} Posting`}
           centerTitle={false}
         />
       }
@@ -75,9 +78,10 @@ const ForumBuatScreen = ({ navigation, route }) => {
           type='bottomSingleButton'
           buttonBorderTopWidth={0.5}
           onPress={() => {
-            navigation.navigate('ForumBuatDetailScreen', {
-              title: textJudul,
-              description: textDesc,
+            navigation.navigate('ForumThreadManageDetailScreen', {
+              ...params,
+              textTitle: textJudul,
+              textDescription: textDesc,
               groupId: params.groupId,
             });
           }}
@@ -87,4 +91,4 @@ const ForumBuatScreen = ({ navigation, route }) => {
   );
 };
 
-export default ForumBuatScreen;
+export default ForumThreadManageScreen;

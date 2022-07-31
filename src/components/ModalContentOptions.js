@@ -14,7 +14,7 @@ const defaultProps = {
   isOwner: false,
   item: null,
   nameType: 'PRODUCT',
-  moduleType: 'CREATE',
+  moduleType: '',
   onClose: () => { },
 };
 
@@ -163,6 +163,14 @@ const ModalContentOptions = forwardRef((props, ref) => {
       color: Color.text,
       onPress: () => {
         combinedRef.current.close();
+        
+        if (moduleType === 'FORUM') {
+          navigation.navigate('ForumThreadManageScreen', {
+            ...item,
+          });
+          return;
+        }
+
         navigation.navigate('EditThreadScreen', {
           ...item,
           title: 'Edit',
@@ -193,11 +201,13 @@ const ModalContentOptions = forwardRef((props, ref) => {
       color: Color.error,
       onPress: () => {
         combinedRef.current.close();
+
         if (moduleType === 'FORUM') {
           navigation.navigate('ForumReport', { item });
-        } else {
-          setModalInputText(true);
+          return;
         }
+        
+        setModalInputText(true);
       },
     },
   ];

@@ -20,6 +20,7 @@ import { Divider, Line, Padding, Row } from 'src/styled';
 import VideoPlayerIos from 'src/components/VideoPlayerIos';
 import { VideoPlayerAndroid } from 'src/components/VideoPlayerAndroid';
 import HtmlView from 'src/components/HtmlView';
+import { fetchContentProductViewManage } from 'src/api/content';
 
 const defaultProps = {
   onPress: () => { },
@@ -75,6 +76,16 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
       });
   }
 
+  const onPressCard = async(item) => {
+    onPress(item);
+
+    const result = await fetchContentProductViewManage(item.id);
+    console.log('result', result);
+    if (result.status) {
+      setView(view + 1);
+    }
+  }
+
   const onSubmitLike = () => {
     setLike(!im_like ? like + 1 : like - 1);
     setImLike(!im_like);
@@ -116,11 +127,9 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
 
   const isEmptyVideo = item.videoFilename !== '';
 
-  console.log(view, item.productName);
-
   return (
     <TouchableOpacity
-      onPress={() => onPress(item)}
+      onPress={() => onPressCard(item)}
       style={{
         width: width - 32,
         marginTop: 16,

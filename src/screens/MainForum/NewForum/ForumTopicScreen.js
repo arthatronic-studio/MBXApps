@@ -21,56 +21,42 @@ import { fetchTopicList } from 'src/api/forum/topiclist';
 import { checkJoinMember } from 'src/api/forum/checkMemberjoinGroup';
 import ImagesPath from 'src/components/ImagesPath';
 
+const initialCurrentData = {
+  item: null,
+  index: -1,
+  section: null,
+};
+
+const itemPerPage = 100;
+
 const ForumTopicScreen = ({ navigation, route }) => {
   const modalUnlockRef = useRef();
   const user = useSelector(state => state['user.auth'].login.user);
-  const [showSection, setShowSection] = useState(true);
-  const [currentProductId, setCurrentProductId] = useState();
-
+  const { Color } = useColor();
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading] = useLoading();
-  const [search, setSearch] = useState('');
-  const { Color } = useColor();
-  const [filterData, setFilterData] = useState([]);
 
-  // useEffect(() => {
-  //     const timeout = trigger ? setTimeout(() => {
-  //         fetchAddLike();
-  //     }, 500) : null;
-
-  //     return () => {
-  //         clearTimeout(timeout);
-  //     }
-  // }, [trigger]);
-
-
-
-  const itemPerPage = 100;
-
+  const [showSection, setShowSection] = useState(true);
+  const [currentData, setCurrentData] = useState(initialCurrentData);
   const [itemData, setItemData] = useState({
     data: [],
     loading: true,
     page: 0,
     loadNext: false,
   });
-  const [joinMember, setJoinMember] = useState();
 
   useEffect(() => {
-    // setInterval(() => {
-    //   showLoading('wait', 'Thread berhasil dibuat!');
-    // }, 3000);
-
     fetchTopic();
   }, []);
 
-  const onCheckJoin = async (varData) => {
-    if (varData.status !== "PRIVATE") {
-      navigation.navigate('ForumGroupScreen', { data: varData });
+  const onCheckJoin = async (item, index, section) => {
+    if (item.status !== "PRIVATE") {
+      navigation.navigate('ForumGroupScreen', { data: item });
       return;
     }
 
     const variables = {
-      groupId: varData.id
+      groupId: item.id
     };
 
     console.log(variables, 'variables');
@@ -81,20 +67,33 @@ const ForumTopicScreen = ({ navigation, route }) => {
     if (result.status) {
       if (result.data.success) {
         if (result.data.status === 1) {
-          navigation.navigate('ForumGroupScreen', { data: varData });
+          navigation.navigate('ForumGroupScreen', { data: item });
         } else if (result.data.status === 2) {
           modalUnlockRef.current.open();
-          setCurrentProductId(varData.id);
         } else {
           showPopup(result.data.message, 'info');
         }
       } else {
         modalUnlockRef.current.open();
-        setCurrentProductId(varData.id);
       }
+
+      onChangeItem('statusMe', result.data.status);
     } else {
       modalUnlockRef.current.open();
-      setCurrentProductId(varData.id);
+    }
+  }
+
+  const onChangeItem = (key, value) => {
+    if (currentData.item && currentData.index !== -1 && currentData.section) {
+      let newData = [...itemData.data];
+      const idxOfSection = itemData.data.indexOf(currentData.section);
+      if (idxOfSection !== -1) {
+        newData[idxOfSection]['data'][index][key] = value;
+        setItemData({
+          ...itemData,
+          data: newData,
+        });
+      }
     }
   }
 
@@ -122,52 +121,14 @@ const ForumTopicScreen = ({ navigation, route }) => {
     });
   }
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => {
-
-
-    }}>
-      <View style={{ flexDirection: 'row', backgroundColor: Color.grayLight, marginHorizontal: 16, marginVertical: 8, padding: 10, borderRadius: 10, justifyContent: 'space-between' }}>
-
-        <View style={{ flexDirection: 'row' }}>
-          <Image
-            source={{ uri: item.image }}
-            style={{
-              borderRadius: 25,
-              width: 50,
-              height: 50,
-              backgroundColor: Color.border,
-              borderColor: Color.primary,
-              marginHorizontal: 5
-            }}
-          />
-          <View style={{ marginTop: 5, justifyContent: 'flex-start' }}>
-            <Text type="bold">{item.title}</Text>
-            <Text style={{ textAlign: 'left' }}>{item.sub}</Text>
-          </View>
-        </View>
-
-
-        <Feather onPress={() => {
-          modalUnlockRef.current.open();
-        }} name='lock' size={20} color={Color.danger} />
-
-      </View>
-    </TouchableOpacity>
-  );
-
   return (
     <Scaffold
       fallback={itemData.loading}
       empty={false}
       popupProps={popupProps}
       header={<Header title="Forum untuk kamu" centerTitle={false} />}
-      loadingProps={loadingProps}>
-      {/* <FlatList
-        data={search !== '' ? filterData : itemData.data}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-      /> */}
+      loadingProps={loadingProps}
+    >
       <SectionList
         sections={itemData.data}
         keyExtractor={(item, index) => item + index}
@@ -189,7 +150,7 @@ const ForumTopicScreen = ({ navigation, route }) => {
             </Text>
           </View>
         )}
-        renderItem={({ item }) => {
+        renderItem={({ item, index, section }) => {
           const isWaitingApproval = item.statusMe === 0;
           const isRejected = item.statusMe === 2;
           const isPrivateGroup = item.status === 'PRIVATE';
@@ -197,18 +158,23 @@ const ForumTopicScreen = ({ navigation, route }) => {
           return (
             <TouchableOpacity
               onPress={() => {
+                setCurrentData({
+                  item,
+                  index,
+                  section,
+                });
+
                 if (isWaitingApproval) {
-                  showPopup('Menunggu Approval Admin', 'info');
+                  showLoading('wait', 'Permintaan kamu sedang di tinjau oleh moderator');
                   return;
                 }
 
                 if (isRejected) {
                   modalUnlockRef.current.open();
-                  setCurrentProductId(item.id);
                   return;
                 }
 
-                onCheckJoin(item);
+                onCheckJoin(item, index, section);
               }}>
               <View
                 style={{
@@ -288,21 +254,23 @@ const ForumTopicScreen = ({ navigation, route }) => {
           setShowSection(!showSection);
         }}
         ref={modalUnlockRef}
-        productId={currentProductId}
+        productId={currentData.item ? currentData.item.id : null}
         data={[
           {
             id: 0,
             name: 'Minta Bergabung',
             color: Color.text,
             onPress: (result) => {
-              console.log(result, 'resault 2');
-              showLoading(
-                'wait',
-                'Permintaan kamu sedang di tinjau oleh moderator',
-              );
+              if (result.status && result.data.success) {
+                onChangeItem('statusMe', 0);
+                showLoading('wait', 'Permintaan kamu sedang di tinjau oleh moderator');
+              } else {
+                showPopup('Gabung Group gagal, seilakan coba kembali', 'error');
+              }
+              
               modalUnlockRef.current.close();
               setShowSection(!showSection);
-              setCurrentProductId();
+              setCurrentData(initialCurrentData);
             },
           },
         ]}

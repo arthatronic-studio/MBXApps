@@ -14,11 +14,8 @@ import Text from '@src/components/Text';
 import { fetchGroupMemberManage } from 'src/api/forum/group-member-manage';
 
 const defaultProps = {
-  isOwner: false,
-  item: null,
-  nameType: 'PRODUCT',
-  moduleType: 'CREATE',
-  onClose: () => { },
+  callback: () => {},
+  onClose: () => {},
 };
 
 const initialMessage = {
@@ -27,7 +24,7 @@ const initialMessage = {
 }
 
 const ModalContentOptionsGroupForum = forwardRef((props, ref) => {
-  const { isOwner, item, selectedMember, moduleType, nameType, onClose } = props;
+  const { selectedMember, callback, onClose } = props;
 
   console.log('ini props', props)
 
@@ -46,9 +43,13 @@ const ModalContentOptionsGroupForum = forwardRef((props, ref) => {
       groupId: selectedMember.groupId,
       type,
     });
+
     console.log('result', result);
+
+    callback(result);
+
     if (result.status) {
-      alert(result.data.message);
+      alert('Berhasil');
     } else {
       alert(result.message);
     }
@@ -94,13 +95,11 @@ const ModalContentOptionsGroupForum = forwardRef((props, ref) => {
   }
 
   return (
-    <>
-      <ModalListAction
-        ref={combinedRef}
-        data={dataOptions}
-        onClose={() => onClose()}
-      />
-    </>
+    <ModalListAction
+      ref={combinedRef}
+      data={dataOptions}
+      onClose={() => onClose()}
+    />
   )
 });
 

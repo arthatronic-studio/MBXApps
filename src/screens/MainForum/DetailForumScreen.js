@@ -15,13 +15,8 @@ import {
     ScreenEmptyData,
     usePopup
 } from '@src/components';
-
 import Client from '@src/lib/apollo';
 import { queryContentProduct, queryComment, queryAddComment, queryDelComment } from '@src/lib/query';
-
-import {
-    imageBlank,
-} from '@assets/images';
 import CardForumVertical from './CardForumVertical';
 import { Container, Divider, Row } from 'src/styled';
 import ModalContentOptions from 'src/components/ModalContentOptions';
@@ -29,7 +24,6 @@ import { imageContentItem } from 'assets/images/content-item';
 import CardComment from 'src/components/Card/CardComment';
 import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
 import { shadowStyle } from 'src/styles';
-import { fetchContentProductDetail, fetchContentProductViewManage } from 'src/api/content';
 
 const initSelectedComment = {
     id: 0,
@@ -72,23 +66,14 @@ const DetailForumScreen = ({ route, navigation }) => {
     );
 
     useEffect(() => {
-        onInitData();
         fetchContentProduct();
     }, []);
-
-    const onInitData = async() => {
-        const result = await fetchContentProductViewManage(item.id);
-        console.log('result', result);
-    }
 
     useEffect(() => {
         if (refreshComment) {
             fetchContentProduct();
-
-            if (item && item.comment > 0) {
-                fetchCommentList('initial');
-                setRefreshComment(false);
-            }
+            fetchCommentList('initial');
+            setRefreshComment(false);
         }
     }, [refreshComment]);
 
@@ -191,8 +176,6 @@ const DetailForumScreen = ({ route, navigation }) => {
                 console.log(res, 'res add comm');
 
                 if (res.data.contentAddComment.id) {
-                    const arrNew = [res.data.contentAddComment].concat([]);
-
                     setTextComment('');
                     setRefreshComment(true);
                     setThumbImage('');
@@ -433,6 +416,7 @@ const DetailForumScreen = ({ route, navigation }) => {
                 ref={modalOptionsRef}
                 isOwner={user && user.userId === item.ownerId}
                 item={item}
+                moduleType="FORUM"
             />
 
             <ModalImagePicker
