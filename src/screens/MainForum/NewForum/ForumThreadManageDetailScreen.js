@@ -128,7 +128,7 @@ const ForumThreadManageDetailScreen = ({ navigation, route }) => {
           showLoading(
             'success',
             'Berhasil Mengupload',
-            () => navigation.navigate('ForumGroupScreen', { ...params, refresh: true }),
+            () => navigation.navigate('ForumGroupScreen', { groupId: userData.groupId, refresh: true }),
           );
         })
         .catch((err) => {
@@ -254,7 +254,7 @@ const ForumThreadManageDetailScreen = ({ navigation, route }) => {
           showLoading('success', 'Thread berhasil dibuat!');
 
           setTimeout(() => {
-            navigation.navigate('ForumGroupScreen', { ...params, refresh: true });
+            navigation.navigate('ForumGroupScreen', { groupId: userData.groupId, refresh: true });
           }, 2500);
         } else {
           showLoading('error', 'Thread gagal dibuat!');

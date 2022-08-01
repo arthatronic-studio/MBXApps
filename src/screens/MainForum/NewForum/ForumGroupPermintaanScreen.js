@@ -150,6 +150,7 @@ const ForumGroupPermintaanScreen = ({ navigation, route }) => {
           centerTitle={false}
         />
       }
+      empty={!itemData.loading && itemData.data.length === 0}
     >
       <SearchBar
         type='input'

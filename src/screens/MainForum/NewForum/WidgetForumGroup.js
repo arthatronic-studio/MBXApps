@@ -1,36 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Image, useWindowDimensions, Animated, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Image, useWindowDimensions, Platform } from 'react-native';
 import Fontisto from 'react-native-vector-icons/Fontisto';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import Moment from 'moment';
 
 import {
   Text,
-  Header,
-  Scaffold,
   useColor
 } from '@src/components';
-import {
-  iconPencil,
-} from '@assets/images/home';
 import { TouchableOpacity } from '@src/components/Button';
-import { Container, Divider } from 'src/styled';
-import SearchBar from 'src/components/SearchBar';
-import { queryproductGroupList } from 'src/lib/query';
-import Client from '@src/lib/apollo';
+import { Divider } from 'src/styled';
 import { fetchGroupMemberList } from 'src/api/forum/listmemberGroup';
-import { shadowStyle } from 'src/styles';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { statusBarHeight } from 'src/utils/constants';
 import { useSelector } from 'react-redux';
 
-const itemPerPage = 100;
-
 const WidgetForumGroup = ({ item, isHighlight }) => {
-  const params = item;
-
   const user = useSelector(state => state['user.auth'].login.user);
   const { Color } = useColor();
   const { width, height } = useWindowDimensions();
@@ -47,10 +33,6 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
     loadNext: false,
   });
 
-  // useEffect(() => {
-  //   fetchGroupList();
-  // }, []);
-
   useEffect(() => {
     if (!isHighlight && isFocused) {
       fetchMemberAll();
@@ -60,7 +42,7 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
 
   const fetchMemberAll = async () => {
     const variables = {
-      groupId: params.id,
+      groupId: item.id,
       status: 1,
     };
 
@@ -83,7 +65,7 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
 
   const fetchMemberReq = async () => {
     const variables = {
-      groupId: params.id,
+      groupId: item.id,
       status: 0,
     };
 
@@ -104,60 +86,14 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
     }
   }
 
-  const fetchGroupList = () => {
-    const variables = {
-
-      page: itemData.page + 1,
-      limit: itemPerPage,
-      id: params.id
-    };
-    console.log('var', variables);
-
-    Client.query({
-      query: queryproductGroupList,
-      variables,
-    })
-      .then(res => {
-        console.log(res, 'res2');
-
-        const data = res.data.productGroupList;
-
-        let newArr = [];
-
-        if (data) {
-          newArr = itemData.data.concat(data);
-        }
-
-        console.log(data.length, 'dapet length');
-
-        setItemData({
-          ...itemData,
-          data: newArr,
-          loading: false,
-          page: data.length > 0 ? itemData.page + 1 : -1,
-          loadNext: false,
-        });
-      })
-      .catch(err => {
-        console.log(err, 'error');
-
-        setItemData({
-          ...itemData,
-          loading: false,
-          page: -1,
-          loadNext: false,
-        });
-      });
-  };
-
   let extraPropsDescription = { numberOfLines: 1 };
   if (!isHighlight) extraPropsDescription = {};
 
   let isMeModerator = false;
-  const isPrivateGroup = params.status === 'PRIVATE';
+  const isPrivateGroup = item.status === 'PRIVATE';
 
-  if (user && params && Array.isArray(params.memberModerator)) {
-    const isMeExist = params.memberModerator.filter((e) => e.userId == user.userId)[0];
+  if (user && item && Array.isArray(item.memberModerator)) {
+    const isMeExist = item.memberModerator.filter((e) => e.userId == user.userId)[0];
     if (isMeExist) {
       isMeModerator = true;
     }
@@ -177,7 +113,7 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
             }}
           >
             {/* <Image
-              source={{ uri: params.imageCover || 'https://i.postimg.cc/Yq0XG2XF/Rectangle-96.png' }}
+              source={{ uri: item.imageCover || 'https://i.postimg.cc/Yq0XG2XF/Rectangle-96.png' }}
               style={{
                 width,
                 height: '100%',
@@ -221,7 +157,7 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
                   <View style={{width: '100%', aspectRatio: 1}}>
                     <Image
                       source={{
-                        uri: params.image || 'https://i.postimg.cc/mr5FQWfb/unsplash-6-Hqv-Y1-E7-NI.png',
+                        uri: item.image || 'https://i.postimg.cc/mr5FQWfb/unsplash-6-Hqv-Y1-E7-NI.png',
                       }}
                       style={{
                         width: '100%',
@@ -235,12 +171,7 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
 
               <TouchableOpacity
                 onPress={() => {
-                  const varData = {
-                    ...params,
-                    member: memberData,
-                    memberDataReq: memberDataReq,
-                  };
-                  navigation.navigate('ForumGroupDetailScreen', { data: varData });
+                  navigation.navigate('ForumGroupDetailScreen', { groupId: item.id });
                 }}
                 style={{
                   flex: 4,
@@ -249,7 +180,7 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
               >
                 <View style={{ justifyContent: 'center' }}>
                   <Text size={16} type='bold' color={Color.textButtonInline} numberOfLines={1}>
-                    {params.name}
+                    {item.name}
                   </Text>
                   <View
                     style={{ flexDirection: 'row', alignItems: 'center' }}
@@ -288,7 +219,7 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
             }}
           >
             <Image
-              source={{ uri: params.imageCover || 'https://i.postimg.cc/Yq0XG2XF/Rectangle-96.png' }}
+              source={{ uri: item.imageCover || 'https://i.postimg.cc/Yq0XG2XF/Rectangle-96.png' }}
               style={{
                 width: '100%',
                 height: '100%',
@@ -297,7 +228,7 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
 
             <Image
               source={{
-                uri: params.image || 'https://i.postimg.cc/mr5FQWfb/unsplash-6-Hqv-Y1-E7-NI.png',
+                uri: item.image || 'https://i.postimg.cc/mr5FQWfb/unsplash-6-Hqv-Y1-E7-NI.png',
               }}
               style={{
                 width: width / 6,
@@ -326,7 +257,7 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
 
       {!isHighlight && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}>
         <Text size={18} type='bold' align='left'>
-          {params.name} {isPrivateGroup &&
+          {item.name} {isPrivateGroup &&
             <Feather name='lock' size={18} color={Color.danger} />
           }
         </Text>
@@ -334,7 +265,7 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
         {!isHighlight && <>
           <Divider height={4} />
           <Text size={12} color={Color.gray} type='bold'>
-            {params.threadCount} Thread
+            {item.threadCount} Thread
           </Text>
 
           <Divider />
@@ -343,19 +274,14 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
           </Text>
 
           <Divider height={8} />
-          <Text align='left' {...extraPropsDescription}>{params.description}</Text>
+          <Text align='left' {...extraPropsDescription}>{item.description}</Text>
         </>}
 
         <Divider height={8} />
 
         {isHighlight && <TouchableOpacity
           onPress={() => {
-            const varData = {
-              ...params,
-              member: memberData,
-              memberDataReq: memberDataReq,
-            };
-            navigation.navigate('ForumGroupDetailScreen', { data: varData });
+            navigation.navigate('ForumGroupDetailScreen', { groupId: item.id });
           }}
           style={{ flexDirection: 'row', alignItems: 'center' }}
         >
@@ -369,7 +295,7 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
           <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}>
           <Text style={{ color: Color.gray, fontSize: 12, fontWeight: 'bold' }}>Moderator</Text>
 
-          {params.memberModerator.map((item, idx) => {
+          {item.memberModerator.map((item, idx) => {
             return (
               <View key={idx} style={{ flexDirection: 'row', marginVertical: 8 }}>
                 <Image
@@ -390,18 +316,18 @@ const WidgetForumGroup = ({ item, isHighlight }) => {
           })}
 
           <Text style={{ color: Color.gray, fontWeight: "bold", marginVertical: 5 }}>Topic</Text>
-          <Text size={15}>{params.topic.name}</Text>
+          <Text size={15}>{item.topic.name}</Text>
 
           <Text style={{ color: Color.gray, fontWeight: "bold", marginVertical: 5 }}>History Forum</Text>
           <View style={{ flexDirection: 'row' }}>
             <Text size={15}>Forum dibuat pada</Text>
-            <Text style={{ fontWeight: "bold" }}> {Moment(parseInt(params.createdAt)).format('Do MMMM YYYY')}</Text>
+            <Text style={{ fontWeight: "bold" }}> {Moment(parseInt(item.createdAt)).format('Do MMMM YYYY')}</Text>
           </View>
 
           {isPrivateGroup && isMeModerator && <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', marginTop: 16 }}>
             <Text size={15}>{memberData.length} Anggota Forum</Text>
             <TouchableOpacity onPress={() => {
-              navigation.navigate('ForumGroupPermintaanScreen', { groupId: params.id })
+              navigation.navigate('ForumGroupPermintaanScreen', { groupId: item.id })
             }}>
               <Text type='bold' color={Color.primary}>({memberDataReq.length} Permintaan) </Text>
             </TouchableOpacity>

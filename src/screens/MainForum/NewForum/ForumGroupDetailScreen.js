@@ -19,28 +19,32 @@ import { statusBarHeight } from 'src/utils/constants';
 import { useSelector } from 'react-redux';
 import { fetchGroupMemberList } from 'src/api/forum/listmemberGroup';
 import CardGroupMember from './CardGroupMember';
+import { queryproductGroupList } from 'src/lib/query';
+import client from 'src/lib/apollo';
 
 const ForumGroupDetailScreen = ({ navigation, route }) => {
-  const params = route.params.data;
-
-  console.log('route', route);
+  const { params } = route;
 
   const [memberData, setMemberDataAll] = useState([]);
   const [memberDataReq, setMemberDataReq] = useState([]);
   const [selectedMember, setSelectedMember] = useState();
+  const [itemDetail, setItemDetail] = useState();
+  const [itemLoading, setItemLoading] = useState(true);
+  const [isMeModerator, setIsMeModerator] = useState(false);
 
   const { Color } = useColor();
   const modalOptionsRef = useRef();
   const user = useSelector(state => state['user.auth'].login.user);
 
   useEffect(() => {
+    fetchGroupList();
     fetchMemberAll();
-    fetchMemberReq();
+    // fetchMemberReq();
   }, []);
 
   const fetchMemberAll = async () => {
     const variables = {
-      groupId: params.id,
+      groupId: params.groupId,
       status: 1,
     };
 
@@ -50,12 +54,17 @@ const ForumGroupDetailScreen = ({ navigation, route }) => {
     console.log(result, 'result all');
     if (result.status) {
       setMemberDataAll(result.data);
+
+      const isMeExist = result.data.filter((e) => e.userId == user.userId)[0];
+      if (isMeExist) {
+        setIsMeModerator(true);
+      }
     }
   }
 
   const fetchMemberReq = async () => {
     const variables = {
-      groupId: params.id,
+      groupId: params.groupId,
       status: 0,
     };
 
@@ -68,26 +77,51 @@ const ForumGroupDetailScreen = ({ navigation, route }) => {
     }
   }
 
-  let isMeModerator = false;
-  if (user && params && Array.isArray(params.memberModerator)) {
-    const isMeExist = params.memberModerator.filter((e) => e.userId == user.userId)[0];
-    if (isMeExist) {
-      isMeModerator = true;
-    }
-  }
+  const fetchGroupList = () => {
+    const variables = {
+      page: 1,
+      limit: 1,
+      id: params.groupId,
+    };
+    
+    console.log('var', variables);
 
-  console.log('memberData', memberData);
+    client.query({
+      query: queryproductGroupList,
+      variables,
+    })
+      .then(res => {
+        console.log(res, 'res2');
+
+        const data = res.data.productGroupList;
+
+        let newItemDetail;
+
+        if (Array.isArray(data) && data.length > 0) {
+          newItemDetail = data[0];
+        }
+
+        setItemDetail(newItemDetail);
+        setItemLoading(false);
+      })
+      .catch(err => {
+        console.log(err, 'error');
+
+        setItemLoading(false);
+      });
+  };
 
   return (
     <Scaffold
       showHeader={false}
       useSafeArea={false}
+      fallback={itemLoading}
     >
       <FlatList
         keyExtractor={(item, index) => item.id}
         data={memberData}
         renderItem={({ item }) =>
-          params.status !== 'PUBLISH' ?
+          itemDetail && itemDetail.status !== 'PUBLISH' ?
             <Container paddingHorizontal={16}>
               <CardGroupMember
                 item={item}
@@ -102,9 +136,9 @@ const ForumGroupDetailScreen = ({ navigation, route }) => {
             <View />
         }
         ListHeaderComponent={
-          <Container paddingBottom={16}>
+          itemDetail && <Container paddingBottom={16}>
             <WidgetForumGroup
-              item={params}
+              item={itemDetail}
               isHighlight={false}
             />
           </Container>
@@ -114,10 +148,10 @@ const ForumGroupDetailScreen = ({ navigation, route }) => {
         }}
       />
 
-      {params.status !== 'PUBLISH' && <Container paddingHorizontal={16} paddingTop={16} paddingBottom={statusBarHeight}>
+      {itemDetail && itemDetail.status !== 'PUBLISH' && <Container paddingHorizontal={16} paddingTop={16} paddingBottom={statusBarHeight}>
         <Button
           onPress={() => {
-            navigation.navigate('ForumGroupAllMemberScreen', { groupId: params.id });
+            navigation.navigate('ForumGroupAllMemberScreen', { groupId: params.groupId });
           }}
         >
           Lihat Semua Anggota

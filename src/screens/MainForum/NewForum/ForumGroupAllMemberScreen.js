@@ -9,7 +9,8 @@ import {
   Text,
   Scaffold,
   useColor,
-  ScreenEmptyData
+  ScreenEmptyData,
+  usePopup
 } from '@src/components';
 import { Container } from 'src/styled';
 import SearchBar from 'src/components/SearchBar';
@@ -28,6 +29,7 @@ const ForumGroupAllMemberScreen = ({ navigation, route }) => {
   const modalOptionsRef = useRef();
   const { Color } = useColor();
   const user = useSelector(state => state['user.auth'].login.user);
+  const [popupProps, showPopup] = usePopup();
 
   const [itemData, setItemData] = useState(initialItemState);
   const [selectedMember, setSelectedMember] = useState();
@@ -36,6 +38,12 @@ const ForumGroupAllMemberScreen = ({ navigation, route }) => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (itemData.refresh) {
+      fetchData();
+    }
+  }, [itemData.refresh]);
 
   const fetchData = async() => {
     const result = await fetchGroupMemberList({ groupId: params.groupId, status: 1 });
@@ -64,12 +72,14 @@ const ForumGroupAllMemberScreen = ({ navigation, route }) => {
   return (
     <Scaffold
       fallback={itemData.loading}
+      popupProps={popupProps}
       header={
         <Header
           title='Anggota'
           centerTitle={false}
         />
       }
+      empty={!itemData.loading && itemData.data.length === 0}
     >
       <SearchBar
         type='input'
@@ -102,9 +112,13 @@ const ForumGroupAllMemberScreen = ({ navigation, route }) => {
         ref={modalOptionsRef}
         selectedMember={selectedMember}
         callback={(result) => {
-          if (result && result.status) {
-            fetchData();
+          if (result.status && result.data.success) {
+            showPopup("Berhasil menghapus", 'success');
+          } else {
+            showPopup(result.data.message, 'error');
           }
+
+          setItemData({ ...itemData, refresh: true });
         }}
         onClose={() => {
           setSelectedMember();

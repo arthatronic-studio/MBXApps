@@ -51,7 +51,7 @@ const ForumTopicScreen = ({ navigation, route }) => {
 
   const onCheckJoin = async (item, index, section) => {
     if (item.status !== "PRIVATE") {
-      navigation.navigate('ForumGroupScreen', { data: item });
+      navigation.navigate('ForumGroupScreen', { groupId: item.id });
       return;
     }
 
@@ -67,7 +67,7 @@ const ForumTopicScreen = ({ navigation, route }) => {
     if (result.status) {
       if (result.data.success) {
         if (result.data.status === 1) {
-          navigation.navigate('ForumGroupScreen', { data: item });
+          navigation.navigate('ForumGroupScreen', { groupId: item.id });
         } else if (result.data.status === 2) {
           modalUnlockRef.current.open();
         } else {
@@ -88,7 +88,7 @@ const ForumTopicScreen = ({ navigation, route }) => {
       let newData = [...itemData.data];
       const idxOfSection = itemData.data.indexOf(currentData.section);
       if (idxOfSection !== -1) {
-        newData[idxOfSection]['data'][index][key] = value;
+        newData[idxOfSection]['data'][currentData.index][key] = value;
         setItemData({
           ...itemData,
           data: newData,

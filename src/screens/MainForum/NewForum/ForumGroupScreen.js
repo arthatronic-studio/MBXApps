@@ -43,22 +43,21 @@ const ForumGroupScreen = ({ navigation, route }) => {
     loadNext: false,
   });
 
-  // useEffect(() => {
-  //   fetchGroupList();
-  // }, []);
+  useEffect(() => {
+    fetchGroupList();
+  }, []);
 
   useEffect(() => {
-    if (params && params.refresh) {
+    if (params.refresh) {
       navigation.setParams({ refresh: false });
-
     }
-  }, [params]);
+  }, [params.refresh]);
 
   const fetchGroupList = () => {
     const variables = {
       page: itemData.page + 1,
       limit: itemPerPage,
-      id: params.data.id
+      id: params.groupId
     };
     
     console.log('var', variables);
@@ -102,7 +101,7 @@ const ForumGroupScreen = ({ navigation, route }) => {
 
   return (
     <Scaffold
-      fallback={params && params.refresh}
+      fallback={params.refresh || itemData.loading}
       showHeader={false}
       useSafeArea={false}
       floatingActionButton={
@@ -126,7 +125,7 @@ const ForumGroupScreen = ({ navigation, route }) => {
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('ForumThreadManageScreen', {
-                  groupId: params.data.id
+                  groupId: params.groupId
                 });
               }}
               style={{ alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}
@@ -140,10 +139,10 @@ const ForumGroupScreen = ({ navigation, route }) => {
         </View>
       }
     >
-      <WidgetForumGroup
-        item={params.data}
+      {itemData.data.length > 0 && itemData.data[0] && <WidgetForumGroup
+        item={itemData.data[0]}
         isHighlight
-      />
+      />}
 
       <Navigator
         initialRouteName="TabNewPost"
@@ -162,13 +161,13 @@ const ForumGroupScreen = ({ navigation, route }) => {
           name="TabNewPost"
           component={TabForumNewPost}
           options={{ tabBarLabel: 'Thread' }}
-          initialParams={{ groupId: params.data.id }}
+          initialParams={{ groupId: params.groupId }}
         />
         <Screen
           name="TabMyPost"
           component={TabForumMyPost}
           options={{ tabBarLabel: 'Postinganku' }}
-          initialParams={{ groupId: params.data.id }}
+          initialParams={{ groupId: params.groupId }}
         />
       </Navigator>
     </Scaffold>

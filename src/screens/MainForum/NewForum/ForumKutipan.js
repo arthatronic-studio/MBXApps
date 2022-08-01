@@ -189,7 +189,6 @@ const ForumKutipan = ({ navigation, route }) => {
             color: Color.text,
             image: iconTextBolder,
             onPress: () => {
-              navigation.navigate('ForumGroupScreen')
               showLoading('wait', 'Permintaan kamu sedang di tinjau oleh moderator');
               setShowSection(!showSection);
 
@@ -201,7 +200,6 @@ const ForumKutipan = ({ navigation, route }) => {
             image: iconTextItalic,
             color: Color.text,
             onPress: () => {
-              navigation.navigate('ForumGroupScreen')
               showLoading('wait', 'Permintaan kamu sedang di tinjau oleh moderator');
               setShowSection(!showSection);
 
@@ -213,7 +211,6 @@ const ForumKutipan = ({ navigation, route }) => {
             color: Color.text,
             image: iconTextUnderline,
             onPress: () => {
-              navigation.navigate('ForumGroupScreen')
               showLoading('wait', 'Permintaan kamu sedang di tinjau oleh moderator');
               setShowSection(!showSection);
 
@@ -225,7 +222,6 @@ const ForumKutipan = ({ navigation, route }) => {
             color: Color.text,
             image: iconTextStrikethrough,
             onPress: () => {
-              navigation.navigate('ForumGroupScreen')
               showLoading('wait', 'Permintaan kamu sedang di tinjau oleh moderator');
               setShowSection(!showSection);
 
@@ -237,7 +233,6 @@ const ForumKutipan = ({ navigation, route }) => {
             color: Color.text,
             image: iconTextAlignJustify,
             onPress: () => {
-              navigation.navigate('ForumGroupScreen')
               showLoading('wait', 'Permintaan kamu sedang di tinjau oleh moderator');
               setShowSection(!showSection);
 
@@ -249,7 +244,6 @@ const ForumKutipan = ({ navigation, route }) => {
             color: Color.text,
             image: iconTextAlignCenter,
             onPress: () => {
-              navigation.navigate('ForumGroupScreen')
               showLoading('wait', 'Permintaan kamu sedang di tinjau oleh moderator');
               setShowSection(!showSection);
 
@@ -261,7 +255,6 @@ const ForumKutipan = ({ navigation, route }) => {
             color: Color.text,
             image: iconListNumbers,
             onPress: () => {
-              navigation.navigate('ForumGroupScreen')
               showLoading('wait', 'Permintaan kamu sedang di tinjau oleh moderator');
               setShowSection(!showSection);
 

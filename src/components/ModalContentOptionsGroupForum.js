@@ -12,6 +12,7 @@ import Client from '@src/lib/apollo';
 import { View, Image, ScrollView, FlatList, Row } from 'react-native';
 import Text from '@src/components/Text';
 import { fetchGroupMemberManage } from 'src/api/forum/group-member-manage';
+import { useSelector } from 'react-redux';
 
 const defaultProps = {
   callback: () => {},
@@ -32,6 +33,7 @@ const ModalContentOptionsGroupForum = forwardRef((props, ref) => {
   const combinedRef = useCombinedRefs(ref, modalizeRef);
   const navigation = useNavigation();
   const { Color } = useColor();
+  const user = useSelector(state => state['user.auth'].login.user);
 
   const [modalInputText, setModalInputText] = useState(false);
   const [message, setMessage] = useState(initialMessage);
@@ -60,6 +62,8 @@ const ModalContentOptionsGroupForum = forwardRef((props, ref) => {
   let dataOptions = [];
 
   if (selectedMember) {
+    const isSelectedMe = selectedMember.userId === user.userId;
+
     if (['MEMBER', null].includes(selectedMember.type)) {
       dataOptions.push({
         name: 'Jadikan Moderator',
@@ -73,7 +77,7 @@ const ModalContentOptionsGroupForum = forwardRef((props, ref) => {
 
     if (['MODERATOR'].includes(selectedMember.type)) {
       dataOptions.push({
-        name: 'Turunkan ke Member',
+        name: isSelectedMe ? 'Turun saya ke Member' : 'Turunkan ke Member',
         color: Color.text,
         onPress: () => {
           combinedRef.current.close();
@@ -84,7 +88,7 @@ const ModalContentOptionsGroupForum = forwardRef((props, ref) => {
 
     dataOptions.push({
       id: 1,
-      name: 'Keluarkan dari Grup',
+      name: isSelectedMe ? 'Keluar dari Grup' : 'Keluarkan dari Grup',
       color: Color.error,
       show: selectedMember ? true : false,
       onPress: () => {
