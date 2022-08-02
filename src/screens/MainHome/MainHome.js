@@ -57,6 +57,7 @@ import { getSizeByRatio } from 'src/utils/get_ratio';
 import MusikAlbum from 'src/components/MusikAlbum';
 import HighlightLelang from 'src/components/Card/HighlightLelang';
 import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
+import HighlightContentProductV2 from 'src/components/Content/HighlightContentProductV2';
 import PushNotification, { Importance } from 'react-native-push-notification';
 import { initSocket } from 'src/api-socket/currentSocket';
 import { queryGetNotification } from "src/lib/query";
@@ -242,14 +243,14 @@ const MainHome = ({ navigation, route }) => {
       variables,
     })
       .then(res => {
-        console.log('res banner list', res);
+        console.log('res popup list', res);
         if (Array.isArray(res.data.bannerList)) {
           setDataPopupAds(res.data.bannerList[0]);
         }
         setShowPopupAds(true);
       })
       .catch(err => {
-        console.log(err, 'err banner list');
+        console.log(err, 'err popup list');
       });
   };
 
@@ -310,7 +311,7 @@ const MainHome = ({ navigation, route }) => {
           }}
           actions={
             <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('NotificationScreen');
                 }}
@@ -334,7 +335,7 @@ const MainHome = ({ navigation, route }) => {
                     </Text>
                   </Circle>
                 )}
-              </TouchableOpacity>
+              </TouchableOpacity> */}
 
               <TouchableOpacity
                 onPress={() => {
@@ -358,22 +359,6 @@ const MainHome = ({ navigation, route }) => {
                   </Circle>
                 )}
               </TouchableOpacity>
-
-              {accessClient.isKomoto && <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('MainProfile');
-                }}
-                style={{
-                  width: '20%',
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-end',
-                }}>
-                <Ionicons
-                  name="person"
-                  size={22}
-                  color={Color.textButtonInline}
-                />
-              </TouchableOpacity>}
             </View>
           }
         />
@@ -523,8 +508,6 @@ const MainHome = ({ navigation, route }) => {
             }}
           />}
 
-          {accessClient.MainHome.showMenuHome && <Line color={Color.border} width={width} />}
-
           <Divider height={spaceContentSize} />
 
           <HighlightContentProduct
@@ -631,12 +614,21 @@ const MainHome = ({ navigation, route }) => {
             refresh={refreshing || isFocused}
           />
 
-          <HighlightContentProduct
-            productCategory='POSTING'
+          {/* <HighlightContentProduct
+            productCategory='Artikel'
             name='Artikel'
             title='Artikel Populer'
             nav='NewsScreen'
             refresh={refreshing || isFocused}
+          /> */}
+
+          <HighlightContentProductV2
+            productCategory='ARTIKEL'
+            name='Artikel'
+            title='Artikel Populer'
+            nav='NewsScreenV2'
+            refresh={refreshing || isFocused}
+            orderBy="like"
           />
 
           <HighlightContentProduct
@@ -669,14 +661,14 @@ const MainHome = ({ navigation, route }) => {
           <MusikAlbum />
 
           {/* isFocused handle android navigate crash from home */}
-          {isFocused && <HighlightContentProduct
+          {/* {isFocused && <HighlightContentProduct
             productCategory='YOUTUBE_VIDEO'
             name='Live'
             title='Siaran Langsung'
             nav='YoutubeScreen'
             refresh={refreshing}
-            style={{ paddingHorizontal: 0 }}
-          />}
+            style={{paddingHorizontal: 0}}
+          />} */}
 
           <HighlightContentProduct
             productCategory='NEWEST_VIDEO'

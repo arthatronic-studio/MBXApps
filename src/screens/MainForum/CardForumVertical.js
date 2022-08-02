@@ -3,7 +3,6 @@ import { View, Image, useWindowDimensions, } from 'react-native';
 import Moment from 'moment';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Share from 'react-native-share';
 import { useSelector } from 'react-redux';
 import Entypo from 'react-native-vector-icons/Entypo';
 import ImagesPath from '../../components/ImagesPath';
@@ -21,6 +20,7 @@ import VideoPlayerIos from 'src/components/VideoPlayerIos';
 import { VideoPlayerAndroid } from 'src/components/VideoPlayerAndroid';
 import HtmlView from 'src/components/HtmlView';
 import { fetchContentProductViewManage } from 'src/api/content';
+import { onShare } from 'src/utils/share';
 
 const defaultProps = {
   onPress: () => { },
@@ -338,9 +338,7 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
 
           <TouchableOpacity
             onPress={async () => {
-              await Share.open({
-                url: item.share_link,
-              });
+              onShare(item.share_link, item.code);
             }}
             style={{
               flexDirection: 'row',

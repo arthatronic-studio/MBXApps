@@ -14,11 +14,18 @@ import TabForumMyPost from './TabForumMyPost';
 import Config from 'react-native-config';
 import { Container } from 'src/styled';
 import SearchBar from 'src/components/SearchBar';
+import { accessClient } from 'src/utils/access_client';
+import { useSelector } from 'react-redux';
 
 const { Navigator, Screen } = createMaterialTopTabNavigator();
 
 const ForumScreen = ({ navigation, route }) => {
   const { Color } = useColor();
+  const user = useSelector(state => state['user.auth'].login.user);
+
+  let canGeneratedContent = accessClient.UserGeneratedContent === 'ALL_USER';
+  if (accessClient.UserGeneratedContent === 'ONLY_ADMIN' && user && user.isDirector === 1) canGeneratedContent = true;
+  else if (accessClient.UserGeneratedContent === 'ONLY_MEMBER' && user && user.organizationId) canGeneratedContent = true;
 
   return (
     <Scaffold
@@ -27,7 +34,7 @@ const ForumScreen = ({ navigation, route }) => {
           title='Forum'
           centerTitle={false}
           actions={
-            <TouchableOpacity
+            canGeneratedContent && <TouchableOpacity
               onPress={() => {
                 const params = {
                   title: 'Buat Posting',

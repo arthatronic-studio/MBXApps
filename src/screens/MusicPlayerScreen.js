@@ -11,7 +11,6 @@ import TrackPlayer, {
   State,
 } from 'react-native-track-player';
 import Moment from 'moment';
-// import Share from 'react-native-share';
 
 import { useColor } from '@src/components/Color';
 import Text from '@src/components/Text';

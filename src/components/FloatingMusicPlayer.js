@@ -14,7 +14,6 @@ import TrackPlayer, {
 import { useSelector, useDispatch } from 'react-redux';
 import Moment from 'moment';
 // import Orientation from 'react-native-orientation-locker';
-// import Share from 'react-native-share';
 
 import { useColor } from '@src/components/Color';
 import Text from '@src/components/Text';

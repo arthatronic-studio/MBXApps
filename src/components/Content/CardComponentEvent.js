@@ -30,6 +30,7 @@ import { useSelector } from 'react-redux';
 import CardComponentYoutube from './CardComponentYoutube';
 import CardComponentVideo from './CardComponentVideo';
 import { FormatMoney } from 'src/utils';
+import { accessClient } from 'src/utils/access_client';
 
 const defaultProps = {
     productCategory: '',
@@ -178,7 +179,7 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                                     <Divider height={8} />
                                 </View> */}
 
-                                <Text
+                                {!accessClient.isMobility && <Text
                                     size={17}
                                     type="bold"
                                     align='left'
@@ -186,7 +187,7 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                                     color={isPayProduct ? Color.text : Color.success}
                                 >
                                     {isPayProduct ? FormatMoney.getFormattedMoney(item.price) : 'Gratis'}
-                                </Text>
+                                </Text>}
                             </View>
                         </View>
 

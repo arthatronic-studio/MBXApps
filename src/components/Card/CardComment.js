@@ -12,7 +12,7 @@ import TouchableOpacity from '@src/components/Button/TouchableDebounce';
 import Loading, { useLoading } from '@src/components/Modal/Loading';
 
 import Client from '@src/lib/apollo';
-import { queryAddComment, queryProductReport, queryReportComment } from '@src/lib/query';
+import { queryAddComment, queryProductReport, queryReportAbuse, queryReportComment } from '@src/lib/query';
 import { shadowStyle } from '@src/styles';
 import { isIphoneNotch } from 'src/utils/constants';
 import ImagesPath from 'src/components/ImagesPath';
@@ -29,9 +29,10 @@ const defaultProps = {
   onPressDots: () => { },
   onPressReply: () => { },
   onRefresh: () => { },
+  onPressLike: () => {},
 };
 
-const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots, onPressReply, onRefresh }) => {
+const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots, onPressReply, onRefresh, onPressLike }) => {
   const { Color } = useColor();
   const user = useSelector(state => state['user.auth'].login.user);
   const { width } = useWindowDimensions();
@@ -58,7 +59,7 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
     console.log('variables', variables);
 
     Client.mutate({
-      mutation: queryProductReport,
+      mutation: queryReportAbuse, 
       variables,
     })
       .then(res => {
@@ -184,11 +185,18 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
               <Row>
                 <TouchableOpacity
                   onPress={() => {
-
+                    onPressLike();
+                  }}
+                  style={{
+                    flexDirection: 'row',
                   }}
                 >
+                  <Text size={12} align="left">
+                    {item.likeCount}{' '}
+                  </Text>
+
                   <Image
-                    source={imageContentItem.heart_nonactive}
+                    source={item.im_like ? imageContentItem.heart_active : imageContentItem.heart_nonactive}
                     style={{
                       height: 16,
                       width: 16,
@@ -249,8 +257,7 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
                 {itemOwnerReply && <Image source={{ uri: itemOwnerReply.image }} style={{ height: 20, width: 20, borderRadius: 10, borderWidth: 1, borderColor: Color.primary }} />}
               </Row>
             </Container>
-            :
-            item.userId !== user.userId &&
+          : item.userId !== user.userId ?
             <Container paddingTop={8}>
               <Row>
                 <TouchableOpacity
@@ -262,6 +269,8 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
                 </TouchableOpacity>
               </Row>
             </Container>
+          :
+            <View />
           }
         </View>
       </View>

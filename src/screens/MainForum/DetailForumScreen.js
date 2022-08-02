@@ -24,6 +24,7 @@ import { imageContentItem } from 'assets/images/content-item';
 import CardComment from 'src/components/Card/CardComment';
 import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
 import { shadowStyle } from 'src/styles';
+import { fetchLikeComment } from 'src/api/likeComment';
 
 const initSelectedComment = {
     id: 0,
@@ -348,6 +349,13 @@ const DetailForumScreen = ({ route, navigation }) => {
                 onRefresh={() => {
                     setRefreshComment(true);
                 }}
+                onPressLike={async () => {
+                    setSelectedComment({ ...itemComment, index });
+                    const res = await fetchLikeComment({commentId: itemComment.id});
+                    if(res.status == true){
+                      setRefreshComment(true);
+                    }
+                  }}
             />
         );
     }

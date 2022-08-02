@@ -8,6 +8,7 @@ import SplashScreen from 'src/screens/SplashScreen';
 import BottomTabsNavigator from '@src/navigators/BottomTabsNavigator';
 import BottomTabsNavigatorKomoto from '@src/navigators/BottomTabsNavigatorKomoto';
 import BottomTabsNavigatorsabyan from '@src/navigators/BottomTabsNavigatorSabyan';
+import BottomTabsNavigatorUnitedIndo from './BottomTabsNavigatorUnitedIndo';
 import OnBoardingScreen from '@src/screens/OnBoardingScreen';
 import CreateEmergencyScreen from '@src/screens/CreateEmergencyScreen';
 import PDFReaderScreen from 'src/screens/PDFReaderScreen';
@@ -62,6 +63,7 @@ import BlockUser from 'src/screens/MainProfile/BlockUser';
 import ReferralCodeScreen from '@src/screens/MainProfile/ReferralCodeScreen';
 import UserProfileScreen from '@src/screens/MainProfile/UserProfileScreen';
 import TermsCondition from 'src/screens/MainProfile/TermCondition';
+import ContentProductSaveScreen from 'src/screens/MainProfile/ContentProductSaveScreen';
 
 // community admin
 import CommunityAdminPage from '@src/screens/MainProfile/CommunityAdmin/CommunityAdminPage';
@@ -77,7 +79,14 @@ import EmergencyDetail from 'src/screens/Posting/Emergency/Detail';
 
 // News
 import NewsScreen from 'src/screens/Posting/News/Index';
+import NewsScreenV2 from 'src/screens/Posting/News/NewsScreenV2';
 import NewsDetail from 'src/screens/Posting/News/Detail';
+import NewsDetailV2 from 'src/screens/Posting/News/DetailV2';
+import Saved from 'src/screens/Posting/News/Saved';
+import SearchArticle from 'src/screens/Posting/News/SearchArticle';
+import CreateNews from 'src/screens/Posting/News/CreateNews';
+import EditNews from 'src/screens/Posting/News/EditNews';
+import ShowAllNews from 'src/screens/Posting/News/ShowAllNews';
 
 
 // Place
@@ -223,13 +232,13 @@ import CreateGroup from 'src/screens/Chat/CreateGroup';
 import GroupDetailScreen from 'src/screens/Chat/GroupDetailScreen';
 import UserGroupDetail from 'src/screens/Chat/UserGroupDetail';
 import AddMember from 'src/screens/Chat/AddMember';
+import ReportArticle from 'src/screens/Posting/News/ReportArticle';
 import ManageGroupScreen from 'src/screens/Chat/ManageGroupScreen';
 
 const { Navigator, Screen } = createStackNavigator();
 const MainPage =
-  accessClient.BottomTabsNavigator.type === 'komoto'
-    ? BottomTabsNavigatorKomoto
-    : accessClient.BottomTabsNavigator.type === 'sabyan' ? BottomTabsNavigatorsabyan : BottomTabsNavigator;
+	// accessClient.BottomTabsNavigator.type === 'komoto' ? BottomTabsNavigatorKomoto : 
+  accessClient.BottomTabsNavigator.type === 'sabyan' ? BottomTabsNavigatorsabyan : BottomTabsNavigatorUnitedIndo;
 
 function MainStackNavigator() {
   return (
@@ -237,7 +246,7 @@ function MainStackNavigator() {
       initialRouteName="SplashScreen"
       screenOptions={{
         gestureEnabled: Platform.OS === 'ios',
-        headerShown: false,
+        headerShown: false
       }}>
       {/* uncanny */}
       <Screen name="SplashScreen" component={SplashScreen} />
@@ -334,7 +343,15 @@ function MainStackNavigator() {
       <Screen name="EmergencyDetail" component={EmergencyDetail} />
       {/* News */}
       <Screen name="NewsScreen" component={NewsScreen} />
+      <Screen name="NewsScreenV2" component={NewsScreenV2} />
       <Screen name="NewsDetail" component={NewsDetail} />
+      <Screen name="NewsDetailV2" component={NewsDetailV2} />
+      <Screen name="Saved" component={Saved} />
+      <Screen name="SearchArticle" component={SearchArticle} />
+      <Screen name="CreateNews" component={CreateNews} />
+      <Screen name="EditNews" component={EditNews} />
+      <Screen name="ReportArticle" component={ReportArticle} />
+      <Screen name="ShowAllNews" component={ShowAllNews} />
 
       {/* Place */}
       <Screen name="PlaceScreen" component={PlaceScreen} />
@@ -387,6 +404,7 @@ function MainStackNavigator() {
       <Screen name="BlockUser" component={BlockUser} />
       <Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />
       <Screen name="TermsCondition" component={TermsCondition} />
+      <Screen name="ContentProductSaveScreen" component={ContentProductSaveScreen} />
       <Screen name="UserProfileScreen" component={UserProfileScreen} />
       {/* community admin */}
       <Screen name="CommunityAdminPage" component={CommunityAdminPage} />

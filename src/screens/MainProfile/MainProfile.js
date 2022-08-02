@@ -110,8 +110,10 @@ const MainProfile = ({navigation, route}) => {
   };
 
   const onPressLogout = () => {
+    dispatch({type: 'ARTICLE.CLEAR_HISTORY'})
     dispatch({type: 'USER.LOGOUT'});
     redirectTo('LoginScreen');
+    currentSocket.disconnect();
   };
 
   const sendVerify = async () => {
@@ -185,6 +187,24 @@ const MainProfile = ({navigation, route}) => {
   }
 
   const menuList = [
+    {
+      code: 'pinned_product',
+      title: 'Konten di Pin',
+      badgeTitle: '',
+      show: true,
+      icon: (
+        <Ionicons
+          name="pricetags-outline"
+          size={20}
+          color={Color.text}
+        />
+      ),
+      onPress: () => {
+        navigation.navigate('ContentProductSaveScreen', {
+          title: 'Konten di Pin'
+        });
+      },
+    },
     {
       code: 'history',
       title: 'Riwayat',
@@ -329,7 +349,7 @@ const MainProfile = ({navigation, route}) => {
       code: 'join_community',
       title: 'Gabung Komunitas',
       badgeTitle: memberCheck.message,
-      show: accessClient.MainProfile.showMenuJoinCommunity,
+      show: !accessClient.isMobility && accessClient.MainProfile.showMenuJoinCommunity,
       icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
       onPress: () => setModalJoinCommunity(true),
     },
@@ -395,7 +415,7 @@ const MainProfile = ({navigation, route}) => {
       icon: (
         <Ionicons name="exit-outline" size={20} color={Color.info} style={{}} />
       ),
-      onPress: () => navigation.navigate('LoginScreen'),
+      onPress: () => onPressLogout(),
     },
   ];
 
@@ -537,8 +557,8 @@ const MainProfile = ({navigation, route}) => {
                     </Text>
                   )}
               </View>
-              {user && !user.isEmailVerify && <TouchableOpacity onPress={() => sendVerify()} style={{ height: 30, backgroundColor: Color.primary , borderRadius: 30, justifyContent: 'center', alignItems: 'center', width: 100 }}>
-                  <Text size={12} color='#fff'>Verify Email</Text>
+              {user && !user.isEmailVerify && <TouchableOpacity onPress={() => sendVerify()} style={{ paddingVertical: 10, backgroundColor: Color.primary , borderRadius: 120, justifyContent: 'center', alignItems: 'center', width: 100 }}>
+                  <Text size={12} color='#fff'  type="semibold">Verify Email</Text>
               </TouchableOpacity>}
              
 

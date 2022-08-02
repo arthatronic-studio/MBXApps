@@ -33,6 +33,7 @@ const useDefaultDarkThemeCode = [
 const isTribes = Config.INITIAL_CODE === 'TRIBESASIA';
 const isKomoto = listKomotoFamily.includes(Config.INITIAL_CODE);
 const isRRID = Config.INITIAL_CODE === 'TRIBESXRRID';
+const isMobility = Config.INITIAL_CODE === 'TRIBESXMOBILITY';
 const isSabyan = Config.INITIAL_CODE === 'TRIBESXSABYAN';
 const isGofish = Config.INITIAL_CODE === 'TRIBESXGOFISH';
 const isTeukuZacky = Config.INITIAL_CODE === 'TRIBESXTEUKUZACKY';
@@ -45,6 +46,7 @@ export const accessClient = {
     isTribes,
     isKomoto,
     isRRID,
+    isMobility,
     isSabyan,
     isGofish,
     isTeukuZacky,
@@ -76,7 +78,7 @@ export const accessClient = {
             isSabyan ? 'sabyan' : 'default',
     },
     MainHome: {
-        showMenuHome: isKomoto || isUnitedId ? false : true,
+        showMenuHome: isUnitedId ? false : true,
         showWidgetBalance: isKomoto || isSabyan ? false : true,
         showListAuction: isKomoto || isSabyan ? false : true,
         showListSoonAuction: isKomoto || isSabyan ? false : true,

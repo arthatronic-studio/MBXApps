@@ -79,20 +79,14 @@ const Chat = ({navigation}) => {
                         backgroundColor: Color.theme,
                         height: '100%'
                     },
-                    activeTintColor: Color.primary,
-                    activeBackgroundColor: Color.primary,
+                    activeTintColor: Color.text,
                     inactiveTintColor: Color.secondary,
                     labelStyle: {
                         fontSize: 12,
-                        fontWeight: 'bold',
-                        color: Color.secondary,
                     },
                     indicatorStyle: {
                         borderBottomColor: Color.primary,
                         borderBottomWidth: 2,
-                    },
-                    labelStyle: {
-                        fontSize: 12,
                     },
                     style: {
                         backgroundColor: Color.theme,

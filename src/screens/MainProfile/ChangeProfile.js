@@ -139,7 +139,7 @@ export default ({ navigation, route }) => {
 
   useEffect(() => {
     if (isFocused) {
-      if (prevLoading && user && loading === false) {
+      if (prevLoading && user && loading === false && error === '') {
         showPopup('Data berhasil diubah', 'success');
 
         setTimeout(() => {
@@ -150,7 +150,8 @@ export default ({ navigation, route }) => {
           }
         }, 2500);
       } else if (error) {
-        // showPopup('Terjadi Kesalaha, silahkan coba kembali', 'error');
+        showPopup('Terjadi Kesalahan, silahkan coba kembali', 'error');
+        // showPopup(error?.message, 'error');
         console.log(JSON.stringify(error), 'error');
       }
     }
@@ -206,7 +207,7 @@ export default ({ navigation, route }) => {
       if (error) valid = false;
       newErrorState[input] = error;
     }
-
+    
     setErrorData(newErrorState);
     setAllValid(valid);
   }
@@ -216,7 +217,15 @@ export default ({ navigation, route }) => {
       popupProps={popupProps}
       header={
         // handle user yg dipaksa update profile
-        <Header title='Ubah Profil' showLeftButton={navigation.canGoBack()} />
+        <Header 
+          title='Ubah Profil' 
+          showLeftButton={navigation.canGoBack()} 
+          onPressLeftButton={() => {
+            dispatch({ type: 'USER.CLEAR_ERROR' });
+            navigation.goBack();
+            }
+          }
+        />
       }
     >
       <KeyboardAwareScrollView
@@ -313,7 +322,7 @@ export default ({ navigation, route }) => {
               onBlur={() => isValueError('idCardNumber')}
               style={{color: Color.text}}
               maxLength={16}
-            />
+              />
           </EmailRoundedView>
           <ErrorView>
             <Text size={12} color={Color.error} type='medium' align='left'>{errorData.idCardNumber}</Text>

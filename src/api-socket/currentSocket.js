@@ -5,8 +5,14 @@ import { store } from 'src/state/redux';
 export let currentSocket;
 
 export const initSocket = () => {
+    const user = store.getState()['user.auth'].login.user;
+
+    if (!user) {
+        currentSocket = null;
+        return currentSocket;
+    }
+
     if (!currentSocket) {
-        const user = store.getState()['user.auth'].login.user;
         console.log('initial socket connect');
         currentSocket = io.connect(Config.SOCKET_API_URL, {
             // reconnection: true,

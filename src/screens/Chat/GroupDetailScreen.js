@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, FlatList, ScrollView,TextInput, Image, Pressable,useWindowDimensions, AppState } from 'react-native';
 import Styled from 'styled-components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 import Moment from 'moment';
+
 import { Alert, ModalListAction } from 'src/components';
 import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
 import { useSelector } from 'react-redux';
@@ -63,6 +65,7 @@ const GroupDetailScreen = ({ navigation, route }) => {
   
     // params
     const { params } = route;
+    const { is_admin_room, is_owner_room } = route.params;
     console.log(params,'ini parasm')
     // selector
     const user = useSelector(
@@ -109,9 +112,7 @@ const GroupDetailScreen = ({ navigation, route }) => {
       const result = await fetchContentChatRoomManage(variables);
       console.log('result', result);
       if (result.status) {
-        setTimeout(() => {
-          navigation.navigate('Chat');
-        }, 2500);
+        navigation.navigate('Chat');
       }
     }
 
@@ -155,12 +156,18 @@ const GroupDetailScreen = ({ navigation, route }) => {
             justifyContent: 'center',
           }}>
           <Row style={{alignItems: 'center', justifyContent: 'center'}}>
-            <AntDesign
+            <TouchableOpacity
               onPress={() => navigation.goBack()}
-              name={'arrowleft'}
-              size={20}
-              style={{marginHorizontal: 10}}
-            />
+              style={{height: '100%', justifyContent: 'center'}}
+            >
+              <Fontisto
+                name='angle-left'
+                size={18}
+                style={{marginHorizontal: 16}}
+                color={Color.text}
+              />
+            </TouchableOpacity>
+
             <Image
               source={{uri: params.imageGroup}}
               style={{
@@ -185,16 +192,19 @@ const GroupDetailScreen = ({ navigation, route }) => {
                   textAlign: 'center',
                 }}></Text>
             </Col>
-            <View style={{width: '10%'}}>
+            <TouchableOpacity
+              onPress={() => {
+                setShowSection(!showSection);
+                modalListActionRef.current.open();
+              }}
+              style={{width: '10%'}}
+            >
               <Entypo
-                onPress={() => {
-                  setShowSection(!showSection);
-                  modalListActionRef.current.open();
-                }}
                 name={'dots-three-vertical'}
-                size={20}
+                size={18}
+                color={Color.text}
               />
-            </View>
+            </TouchableOpacity>
           </Row>
         </Pressable>
       );
@@ -402,10 +412,11 @@ const GroupDetailScreen = ({ navigation, route }) => {
 
                         <Divider height={4} />
 
-                        <View style={{flexDirection: 'row'}}>
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
                           <Ionicons
                             name={'md-checkmark-done-sharp'}
                             size={12}
+                            color={Color.success}
                           />
                           <Text size={8} align="right" style={{opacity: 0.6}}>
                             {' '}
@@ -473,7 +484,7 @@ const GroupDetailScreen = ({ navigation, route }) => {
                       maxWidth: width - 70,
                       paddingHorizontal: 8,
                       paddingVertical: 8,
-                      backgroundColor: Color.secondary,
+                      backgroundColor: Color.textInput,
                       borderRadius: 8,
                       borderBottomLeftRadius: 0,
                       alignItems: 'flex-start',
@@ -603,6 +614,7 @@ const GroupDetailScreen = ({ navigation, route }) => {
             {
               id: 1,
               name: 'Tambahkan Anggota',
+              show: is_admin_room || is_owner_room ? true : false,
               onPress: () => {
                 setShowSection(!showSection);
                 modalListActionRef.current.close();

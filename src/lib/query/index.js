@@ -2,6 +2,7 @@ import { queryContentProduct } from './queryContentProduct';
 import { queryContentProductDetail } from './queryContentProductDetail';
 import { queryContentMyProduct } from './queryContentMyProduct';
 import { queryProductManage } from './queryContentProductManage';
+import { queryProductManageV2 } from './queryContentProductManageV2';
 import { queryAddLike } from './queryContentAddLike';
 import { queryAddComment } from './queryContentAddComment';
 import { queryReportComment } from './queryContentReportComment';
@@ -24,23 +25,34 @@ import { queryGetNotificationWithCount } from './queryGetNotificationWithCount';
 import { queryGetUserOrganizationRef } from './queryGetUserOrganizationRef';
 import { queryContentUserProfile } from './queryContentUserProfile';
 import { queryContentUserProduct } from './queryContentUserProduct';
+import { queryReportAbuse } from './queryReportAbuse';
 import { queryProductReport } from './queryProductReport';
 import { queryUserBlock } from './queryUserBlock';
 import { queryGetUserBlock, queryUnblockUser } from './queryBlockUser';
 import { queryMenuList } from './queryMenuList';
-import {querySyaratKetentuan} from './querySyaratKetentuan';
-import {queryproductTopicList} from './queryproductTopicList';
-import {queryproductGroupList} from './queryproductGroupList';
-import {queryGroupMemberList} from './queryGroupMemberList';
-import {queryGroupMemberManage} from './queryGroupMemberManage';
-import {queryChekMemberJoinGroup} from './queryChekMemberJoinGroup';
-import {queryContentInvite} from './queryContentInvite';
+import { querySyaratKetentuan } from './querySyaratKetentuan';
+import { queryproductTopicList } from './queryproductTopicList';
+import { queryproductGroupList } from './queryproductGroupList';
+import { queryGroupMemberList } from './queryGroupMemberList';
+import { queryGroupMemberManage } from './queryGroupMemberManage';
+import { queryChekMemberJoinGroup } from './queryChekMemberJoinGroup';
+import { queryContentInvite } from './queryContentInvite';
+import { queryGetEnumList } from './queryEnumTable';
+import { queryContentProductV2 } from './queryContentProductV2';
+import { queryLikeComment } from './queryLikeComment';
+import { queryViewProduct } from './queryViewProduct';
+import { queryGetProductSave } from './queryGetProductSave';
+import { queryReportAlasan } from './queryReportAlasan';
+import { queryReportAbuseV2 } from './queryReportAbuseV2';
+import { queryContentShare } from './queryContentShare';
+import { queryProductSave } from './queryProductSave';
 
 export {
   queryContentProduct,
   queryContentProductDetail,
   queryContentMyProduct,
   queryProductManage,
+  queryProductManageV2,
   queryAddLike,
   queryAddComment,
   queryReportComment,
@@ -64,6 +76,7 @@ export {
   queryContentUserProfile,
   queryContentUserProduct,
   queryProductReport,
+  queryReportAbuse,
   queryUserBlock,
   queryGetUserBlock,
   queryUnblockUser,
@@ -75,4 +88,13 @@ export {
   queryGroupMemberManage,
   queryChekMemberJoinGroup,
   queryContentInvite,
+  queryGetEnumList,
+  queryContentProductV2,
+  queryLikeComment,
+  queryViewProduct,
+  queryGetProductSave,
+  queryReportAlasan,
+  queryReportAbuseV2,
+  queryContentShare,
+  queryProductSave,
 };
