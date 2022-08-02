@@ -3,7 +3,7 @@ import { View, Image, useWindowDimensions, } from 'react-native';
 import Moment from 'moment';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Entypo from 'react-native-vector-icons/Entypo';
 import ImagesPath from '../../components/ImagesPath';
 import { imageContentItem } from 'assets/images/content-item';
@@ -30,7 +30,8 @@ const defaultProps = {
   showVideo: false,
 };
 
-const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText, showVideo, style }) => {
+const CardForumVertical = ({ item: itemProps, numColumns, onPress, onPressDot, showAllText, showVideo, style }) => {
+  const [item, setItem] = useState(itemProps);
   const [like, setLike] = useState(item.like);
   const [im_like, setImLike] = useState(item.im_like);
   const [view, setView] = useState(item.view);
@@ -39,7 +40,16 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
 
   const { Color } = useColor();
   const { width } = useWindowDimensions();
+  const dispatch = useDispatch();
   const user = useSelector(state => state['user.auth'].login.user);
+  const itemUpdate = useSelector(state => state['itemUpdate']);
+
+  useEffect(() => {
+    if (itemUpdate && itemUpdate.name === 'PRODUCT_FORUM' && itemUpdate.item && itemUpdate.item.id === item.id) {
+      setItem(itemUpdate.item);
+      dispatch({ type: 'ITEM_UPDATE.CLEAR' });
+    }
+  }, [itemUpdate]);
 
   useEffect(() => {
     setLike(item.like);
@@ -68,6 +78,15 @@ const CardForumVertical = ({ item, numColumns, onPress, onPressDot, showAllText,
     })
       .then((res) => {
         console.log(res, 'res add like');
+
+        if (res.data.contentAddLike.id) {
+          const data = {
+            name: 'PRODUCT_FORUM',
+            item: { ...item, like, im_like, view },
+          };
+          dispatch({ type: 'ITEM_UPDATE.ADD', data });
+        }
+
         setTrigger(false);
       })
       .catch((err) => {

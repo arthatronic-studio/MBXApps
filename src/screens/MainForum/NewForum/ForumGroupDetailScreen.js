@@ -55,7 +55,7 @@ const ForumGroupDetailScreen = ({ navigation, route }) => {
     if (result.status) {
       setMemberDataAll(result.data);
 
-      const isMeExist = result.data.filter((e) => e.userId == user.userId)[0];
+      const isMeExist = result.data.filter((e) => e.userId == user.userId && e.type === 'MODERATOR')[0];
       if (isMeExist) {
         setIsMeModerator(true);
       }

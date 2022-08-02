@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Image, TextInput, FlatList } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
     Alert,
@@ -25,6 +25,7 @@ import CardComment from 'src/components/Card/CardComment';
 import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
 import { shadowStyle } from 'src/styles';
 import { fetchLikeComment } from 'src/api/likeComment';
+import { initialItemState } from 'src/utils/constants';
 
 const initSelectedComment = {
     id: 0,
@@ -40,13 +41,7 @@ const DetailForumScreen = ({ route, navigation }) => {
     const [isOwnerComment, setIsOwnerComment] = useState(false);
     const [isPinnedComment, setIsPinnedComment] = useState(false);
     const [textComment, setTextComment] = useState('');
-    const [dataComment, setDataComment] = useState({
-        data: [],
-        loading: true,
-        page: 0,
-        loadNext: false,
-    });
-    const [refreshComment, setRefreshComment] = useState(false);
+    const [dataComment, setDataComment] = useState(initialItemState);
 
     const [thumbImage, setThumbImage] = useState('');
     const [mimeImage, setMimeImage] = useState('image/jpeg');
@@ -60,6 +55,7 @@ const DetailForumScreen = ({ route, navigation }) => {
     const [loadingProps, showLoading] = useLoading();
     const [popupProps, showPopup] = usePopup();
     const { Color } = useColor();
+    const dispatch = useDispatch();
 
     // selector
     const user = useSelector(
@@ -68,28 +64,15 @@ const DetailForumScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         fetchContentProduct();
+        fetchCommentList();
     }, []);
 
     useEffect(() => {
-        if (refreshComment) {
+        if (dataComment.refresh) {
             fetchContentProduct();
-            fetchCommentList('initial');
-            setRefreshComment(false);
+            fetchCommentList();
         }
-    }, [refreshComment]);
-
-    // useEffect(() => {
-    //     if (item && item.comment > 0) {
-    //         fetchCommentList('initial');
-    //     } else {
-    //         setDataComment({
-    //             ...dataComment,
-    //             loading: false,
-    //             page: -1,
-    //             loadNext: false,
-    //         });
-    //     }
-    // }, [item]);
+    }, [dataComment.refresh]);
 
     useEffect(() => {
         if (dataComment.page !== -1 && item) {
@@ -109,6 +92,12 @@ const DetailForumScreen = ({ route, navigation }) => {
 
                 if (res.data.contentProduct.length > 0) {
                     setItem(res.data.contentProduct[0]);
+
+                    const data = {
+                        name: 'PRODUCT_FORUM',
+                        item: res.data.contentProduct[0],
+                    };
+                    dispatch({ type: 'ITEM_UPDATE.ADD', data });
                 }
             })
             .catch((err) => {
@@ -116,11 +105,11 @@ const DetailForumScreen = ({ route, navigation }) => {
             });
     }
 
-    const fetchCommentList = (initial) => {
+    const fetchCommentList = () => {
         Client.query({
             query: queryComment,
             variables: {
-                page: dataComment.page + 1,
+                page: dataComment.refresh ? 1 : dataComment.page + 1,
                 itemPerPage: 10,
                 productId: item.id
             }
@@ -128,29 +117,23 @@ const DetailForumScreen = ({ route, navigation }) => {
             .then((res) => {
                 console.log(res, 'res list comm');
 
-                if (initial) {
-                    setDataComment({
-                        data: res.data.contentComment,
-                        loading: false,
-                        page: res.data.contentComment.length === 10 ? 1 : -1,
-                        loadNext: false,
-                    });
-                } else {
-                    setDataComment({
-                        data: dataComment.data.concat(res.data.contentComment),
-                        loading: false,
-                        page: res.data.contentComment.length === 10 ? dataComment.page + 1 : -1,
-                        loadNext: false,
-                    });
-                }
+                setDataComment({
+                    ...dataComment,
+                    data: dataComment.refresh ? res.data.contentComment : dataComment.data.concat(res.data.contentComment),
+                    page: res.data.contentComment.length === 10 ? dataComment.page + 1 : -1,
+                    loading: false,
+                    loadNext: false,
+                    refresh: false,
+                });
             })
             .catch((err) => {
                 console.log(err, 'err list comm');
                 setDataComment({
                     ...dataComment,
-                    loading: false,
                     page: -1,
+                    loading: false,
                     loadNext: false,
+                    refresh: false,
                 });
             })
     }
@@ -177,9 +160,12 @@ const DetailForumScreen = ({ route, navigation }) => {
                 console.log(res, 'res add comm');
 
                 if (res.data.contentAddComment.id) {
-                    setTextComment('');
-                    setRefreshComment(true);
+                    setTextComment('');                    
                     setThumbImage('');
+                    
+                    // let newArr = [res.data.contentAddComment].concat(dataComment.data);
+                    // setDataComment({ ...dataComment, data: newArr });
+                    setDataComment({ ...dataComment, refresh: true });
                 } else {
                     showLoading('error', 'Gagal mengirimkan komentar');
                 }
@@ -208,7 +194,10 @@ const DetailForumScreen = ({ route, navigation }) => {
                 showLoading(data.success ? 'success' : 'error', data.message);
 
                 if (data.success) {
-                    setRefreshComment(true);
+                    // let newArr = [ ...dataComment.data];
+                    // newArr.splice(selectedComment.index, 1);
+                    // setDataComment({ ...dataComment, data: newArr });
+                    setDataComment({ ...dataComment, refresh: true });
                 }
             })
             .catch((err) => {
@@ -342,20 +331,20 @@ const DetailForumScreen = ({ route, navigation }) => {
                         ...route.params,
                         parentComment: { ...itemComment, index },
                         onRefresh: () => {
-                            setRefreshComment(true);
+                            setDataComment({ ...dataComment, refresh: true });
                         }
                     });
                 }}
                 onRefresh={() => {
-                    setRefreshComment(true);
+                    setDataComment({ ...dataComment, refresh: true });
                 }}
                 onPressLike={async () => {
                     setSelectedComment({ ...itemComment, index });
                     const res = await fetchLikeComment({commentId: itemComment.id});
-                    if(res.status == true){
-                      setRefreshComment(true);
+                    if(res.status == true) {
+                        setDataComment({ ...dataComment, refresh: true });
                     }
-                  }}
+                }}
             />
         );
     }
