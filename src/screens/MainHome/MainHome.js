@@ -615,7 +615,7 @@ const MainHome = ({ navigation, route }) => {
           />
 
           {/* <HighlightContentProduct
-            productCategory='Artikel'
+            productCategory='NEWS'
             name='Artikel'
             title='Artikel Populer'
             nav='NewsScreen'
