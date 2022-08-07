@@ -5,13 +5,13 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import Moment from 'moment';
 import Header from '@src/components/Header';
-import { useLoading, usePopup, useColor, Alert, Row, Col } from '@src/components';
+import { useLoading, usePopup, useColor, Alert, Col } from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
 import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
 import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
-import { Container, Divider, Padding } from 'src/styled';
+import { Container, Divider, Row } from 'src/styled';
 import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 import ModalContentOptions from 'src/components/ModalContentOptions';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
@@ -30,6 +30,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import ListContentProductV2 from 'src/components/Content/ListContentProductV2';
 import { initialItemState, statusBarHeight } from 'src/utils/constants';
 import { async } from 'validate.js';
+import SearchBar from 'src/components/SearchBar';
 const SearchEvent = ({ navigation }) => {
 
   const { Color } = useColor();
@@ -65,9 +66,9 @@ const SearchEvent = ({ navigation }) => {
 
   console.log('ini history event', history);
 
-  useEffect(()=>{
+  useEffect(() => {
     fectRekomendasi();
-  },[]);
+  }, []);
   useEffect(() => {
     if (history.length > 0 && listData.length == 0) {
       setPencarian(true);
@@ -148,21 +149,21 @@ const SearchEvent = ({ navigation }) => {
     }
   }
 
-  const fectRekomendasi = async()=> {
+  const fectRekomendasi = async () => {
     let variables = {
       page: 0,
       itemPerPage: 5,
-      isFavorite:true,
-      
+      isFavorite: true,
+
     };
-    
+
     const result = await fetchEventList(variables);
     let newData = [];
     if (Array.isArray(result.data)) {
       newData = result.data;
     }
-    console.log('ini varaibel  fav',variables);
-   
+    console.log('ini varaibel  fav', variables);
+
 
     setListDataFavorite({
       ...listDataFavorite,
@@ -227,8 +228,6 @@ const SearchEvent = ({ navigation }) => {
         width: '100%',
         paddingHorizontal: 16,
       }}>
-
-
       <View style={{ flexDirection: 'row' }}>
         {
           item.images &&
@@ -308,82 +307,77 @@ const SearchEvent = ({ navigation }) => {
   );
 
   return (
-    <ScrollView style={{ backgroundColor: Color.theme }} keyboardShouldPersistTaps='handled'>
-      <View
-        style={{
-          width: '100%',
-          height: 60,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: Color.theme,
-          flexDirection: 'row',
-        }}>
+    <Scaffold
+      header={
         <View
           style={{
+            width: '100%',
+            height: 60,
             alignItems: 'center',
-            justifyContent: 'center',
-            width: '12%',
-            height: '100%',
+            flexDirection: 'row',
           }}>
-          <AntDesign
-            onPress={() => navigation.goBack()}
-            name={'arrowleft'}
-            size={20}
-          />
-        </View>
-        <View
-          style={{
-            paddingRight: 12,
-            width: '88%',
-            height: '80%',
-            justifyContent: 'center',
-          }}>
-          <TextInput
-            placeholder="Cari Jadwal Acara"
-            value={search}
-            onChangeText={(value) => onSearch(value)}
+          <View
             style={{
-              width: '100%',
-              height: '80%',
-              backgroundColor: Color.theme,
-              fontSize: 12,
-              borderRadius: 6,
-              borderWidth: 1,
-              borderColor: Color.border,
-              paddingHorizontal: 10,
-
-            }}
-            onSubmitEditing={() => search !== '' ? dispatch({ type: 'EVENT.ADD_HISTORY', search: { history: search } }) : {}}
-            returnKeyType="done"
-          />
-          <TouchableOpacity onPress={() => search !== '' ? dispatch({ type: 'EVENT.ADD_HISTORY', search: { history: search } }) : {}}
-          >
-
+              paddingLeft: 16,
+            }}>
             <AntDesign
-              size={14}
-              name={'search1'}
-              style={{
-                position: 'absolute',
-                color: Color.secondary,
-                alignSelf: 'flex-end',
-                top: -25,
-                right: 10,
+              onPress={() => navigation.goBack()}
+              name={'arrowleft'}
+              size={22}
+              color={Color.text}
+            />
+          </View>
+          <View
+            style={{
+              flex: 1,
+            }}>
+            <SearchBar
+              type='input'
+              value={search}
+              onChangeText={(value) => onSearch(value)}
+              textInputProps={{
+                onSubmitEditing: () => {
+                  search !== '' ? dispatch({ type: 'EVENT.ADD_HISTORY', search: { history: search } }) : {};
+                },
               }}
             />
-          </TouchableOpacity>
+          </View>
         </View>
-      </View>
-
+      }
+    >
+      <Container padding={16}>
+        <Row justify='space-between'>
+          <Text>Now Playing Fest</Text>
+          <Container color={Color.text} radius={50} padding={2}>
+            <Ionicons name='close' color={Color.theme} size={16} onPress={() => { }} />
+          </Container>
+        </Row>
+      </Container>
+      <Container padding={16}>
+        <Row justify='space-between'>
+          <Text>Kick Fest Banfug</Text>
+          <Container color={Color.text} radius={50} padding={2}>
+            <Ionicons name='close' color={Color.theme} size={16} onPress={() => { }} />
+          </Container>
+        </Row>
+      </Container>
+      <Container padding={16}>
+        <Row justify='space-between'>
+          <Text>Synchronize Festival</Text>
+          <Container color={Color.text} radius={50} padding={2}>
+            <Ionicons name='close' color={Color.theme} size={16} onPress={() => { }} />
+          </Container>
+        </Row>
+      </Container>
       {/* Recent Search */}
-
-      {
+      {/* {
         pencarian == true ?
-        <View>
+          <View>
             <Text style={{ fontSize: 11, fontWeight: 'bold', textAlign: 'left', paddingHorizontal: 10 }}>Pencarian Sebelumnya</Text>
             <FlatList
               data={history}
               renderItem={({ item }) =>
-                <Pressable  onPress={() => onSearch(item.history)}style={{ width: '95%', paddingVertical: 12, alignSelf: 'center', flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: Color.border }}>
+                <Pressable onPress={() => onSearch(item.history)} style={{ width: '95%', paddingVertical: 12, alignSelf: 'center', flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: Color.border }}>
                   <Text style={{ fontSize: 10, width: '95%', textAlign: 'left' }}>{item.history}</Text>
 
                   <TouchableOpacity
@@ -394,69 +388,60 @@ const SearchEvent = ({ navigation }) => {
                 </Pressable>}
             />
           </View>
-        :
-        <View onTouchEnd={(e) => {
-          e.stopPropagation()
-       }}>
+          :
+          <View onTouchEnd={(e) => {
+            e.stopPropagation()
+          }}>
             <Text style={{ fontSize: 11, fontWeight: 'bold', textAlign: 'left', paddingHorizontal: 10 }}>Pencarian Sebelumnya</Text>
             <FlatList
               data={history}
               renderItem={({ item }) =>
                 <Pressable onPress={() => onSearch(item.history)} style={{ width: '95%', paddingVertical: 12, alignSelf: 'center', flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: Color.border }}>
-                  
+
                   <Text style={{ fontSize: 10, width: '95%', textAlign: 'left' }}>{item.history}</Text>
 
                   <TouchableOpacity
                     onPress={() => dispatch({ type: 'EVENT.REMOVE_HISTORY', data: item.history })}
                   >
-                     <MaterialIcons name='cancel' size={14} color={Color.secondary}/>
+                    <MaterialIcons name='cancel' size={14} color={Color.secondary} />
                   </TouchableOpacity>
                 </Pressable>}
             />
           </View>
-      }
-      <View style={{ borderTopColor: Color.border, borderTopWidth: 0, borderBottomColor: Color.border, borderBottomWidth: 1, paddingVertical: 15, marginTop: 5 }}>
+      } */}
+      {/* <View style={{ borderTopColor: Color.border, borderTopWidth: 0, borderBottomColor: Color.border, borderBottomWidth: 1, paddingVertical: 15, marginTop: 5 }}>
         {history.length == 0 &&
-          
+
           <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center', height: 150 }}>
             <Image source={ImagesPath.Magnifying} />
             <Text style={{ fontSize: 8, color: Color.secondary, width: '100%', marginTop: 10 }}>Kamu belum pernah melakukan pencarian apapun</Text>
           </View>
-         }
-      </View>
-      {!pencarian &&
-       <View>
-       
-       <Text style={{ fontSize: 11, fontWeight: 'bold', textAlign: 'left', paddingHorizontal: 10 }}>Rekomendasi</Text>
-       <FlatList
-         data={listDataFavorite.data}
-         renderItem={({ item }) =>
-           <Pressable onPress={() => onSearch(item.name)} style={{ width: '95%', flexDirection: 'row', paddingVertical: 10, alignItems: 'center', alignSelf: 'center', flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: Color.border }}>
-             <View style={{ width: 35, height: 35, borderRadius: 5, backgroundColor: Color.secondary }}>
-               <Image source={{uri:item.images[0]}} style={{ width: '100%', height: '100%' }} />
-             </View>
-             <View style={{ paddingHorizontal: 10, justifyContent: 'center', width: '85%' }}>
-               <Text style={{ fontSize: 8, textAlign: 'left', color: Color.secondary, fontWeight: 'bold' }}>{item.category}</Text>
-               <Text numberOfLines={1} style={{ fontSize: 11, textAlign: 'left', fontWeight: 'bold' }}>{item.name}</Text>
-             </View>
-             <TouchableOpacity
-                    onPress={() => onSearch(item.name)}
-                  >
-                    <Feather name={'arrow-up-right'} color={Color.primary} />
-                  </TouchableOpacity>
-           </Pressable>}
-       />
-     </View>
-      }
-     
+        }
+      </View> */}
+
+      {/* {!pencarian &&
+        <FlatList
+          data={listDataFavorite.data}
+          renderItem={({ item }) =>
+            <Pressable onPress={() => onSearch(item.name)} style={{ width: '95%', flexDirection: 'row', paddingVertical: 10, alignItems: 'center', alignSelf: 'center', flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: Color.border }}>
+              <View style={{ width: 35, height: 35, borderRadius: 5, backgroundColor: Color.secondary }}>
+                <Image source={{ uri: item.images[0] }} style={{ width: '100%', height: '100%' }} />
+              </View>
+              <View style={{ paddingHorizontal: 10, justifyContent: 'center', width: '85%' }}>
+                <Text style={{ fontSize: 8, textAlign: 'left', color: Color.secondary, fontWeight: 'bold' }}>{item.category}</Text>
+                <Text numberOfLines={1} style={{ fontSize: 11, textAlign: 'left', fontWeight: 'bold' }}>{item.name}</Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => onSearch(item.name)}
+              >
+                <Feather name={'arrow-up-right'} color={Color.primary} />
+              </TouchableOpacity>
+            </Pressable>}
+        />
+      } */}
 
       {/* Hasil Pencarian */}
-
-
-      <View>
-      </View>
-
-      {
+      {/* {
         listData.data && listData.data.length != 0 ? (
           <View style={{ backgroundColor: Color.theme }}>
             <View
@@ -508,7 +493,7 @@ const SearchEvent = ({ navigation }) => {
             />
           </View>
         ) : (
-           history.length > 0 &&
+          history.length > 0 &&
           <View style={{ backgroundColor: Color.theme }}>
             <View
               style={{
@@ -579,10 +564,7 @@ const SearchEvent = ({ navigation }) => {
               </TouchableOpacity>
             </View>
           </View>
-        )}
-
-
-
+        )} */}
 
       <ModalActions
         visible={visible}
@@ -630,7 +612,7 @@ const SearchEvent = ({ navigation }) => {
         onPress={value => {setFilter(value);
           modalOptionsRef.current.close();}}
     />  */}
-    </ScrollView>
+    </Scaffold>
   )
 }
 

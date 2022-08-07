@@ -143,7 +143,10 @@ import MyShop from '@src/screens/Ecommerce/MyShop';
 import MerchScreen from 'src/screens/Ecommerce/MerchScreen';
 import DetailProduct from 'src/screens/Ecommerce/DetailProduct';
 import CartAuction from 'src/screens/Auction/CartAuction';
-import DetailPromo from 'src/screens/Promo/DetailPromo';
+
+import PromoScreen from 'src/screens/Promo/PromoScreen';
+import PromoDetailScreen from 'src/screens/Promo/PromoDetailScreen';
+
 import Ebook from 'src/screens/Posting/Ebook/Ebook';
 import MyShopHomepage from 'src/screens/Ecommerce/MyShopHomepage';
 import AddProduct from 'src/screens/Ecommerce/AddProduct';
@@ -311,7 +314,8 @@ function MainStackNavigator() {
         component={AddProductAuctionSecond}
       />
       {/* Promo Popup */}
-      <Screen name="DetailPromo" component={DetailPromo} />
+      <Screen name="PromoScreen" component={PromoScreen} />
+      <Screen name="PromoDetailScreen" component={PromoDetailScreen} />
       {/* Ecommerce */}
       <Screen name="MerchScreen" component={MerchScreen} />
       <Screen name="DetailProduct" component={DetailProduct} />

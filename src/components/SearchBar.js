@@ -10,7 +10,7 @@ import Text from '@src/components/Text';
 import TouchableOpacity from 'src/components/Button/TouchableDebounce';
 import { useColor } from '@src/components/Color';
 // import MaskedLinear from './MaskedLinear';
-import { Divider } from 'src/styled';
+import { Container, Divider } from 'src/styled';
 import { shadowStyle } from 'src/styles';
 
 const propTypes = {
@@ -28,54 +28,52 @@ const defaultProps = {
     label: 'Cari',
     type: 'component',
     style: {},
-    onPress: () => {},
+    onPress: () => { },
     value: '',
-    onChangeText: () => {},
+    onChangeText: () => { },
     textInputProps: {},
 };
 
 const SearchBar = ({ type, label, style, onPress, value, onChangeText, textInputProps }) => {
-    const [state, set] = useState();
-
     const { Color } = useColor();
-
-    useEffect(() => {
-
-    }, []);
 
     const isInputType = type === 'input';
 
     return (
         <TouchableOpacity style={{ paddingHorizontal: 16 }}>
-            <View style={{ flexDirection: 'row', paddingHorizontal: 16, minHeight: 45, alignItems: 'center', justifyContent: 'space-between', backgroundColor: Color.textInput, borderRadius: 4, ...shadowStyle, ...style }}>
+            <View style={{ flexDirection: 'row', paddingHorizontal: 16, minHeight: 45, alignItems: 'center', justifyContent: 'space-between', backgroundColor: Color.textInput, borderRadius: 8, borderColor: Color.border, borderWidth: 0.5, ...style }}>
                 {isInputType ?
-                <>
-                    <Octicons name='search' color={Color.text} size={16} />
-                    <TextInput
-                        {...textInputProps}
-                        placeholder={label}
-                        value={value}
-                        onChangeText={onChangeText}
-                        style={{
-                            flex: 1,
-                            paddingLeft: 8,
-                            color: Color.text,
-                            backgroundColor: Color.textInput,
-                        }}
-                    />
-                    {value !== '' && <Ionicons name='close' color={Color.red} size={18} onPress={() => onChangeText('')} />}
-                </>
-                :
-                <>
-                    <TouchableOpacity
-                        onPress={() => onPress()}
-                        style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}
-                    >
-                        <Octicons name='search' color={Color.text} size={16} />
-                        <Divider width={8} />
-                        <Text>{label}</Text>
-                    </TouchableOpacity>
-                </>
+                    <>
+                        <TextInput
+                            {...textInputProps}
+                            placeholder={label}
+                            placeholderTextColor={Color.placeholder}
+                            value={value}
+                            onChangeText={onChangeText}
+                            style={{
+                                flex: 1,
+                                color: Color.text,
+                                backgroundColor: Color.textInput,
+                            }}
+                        />
+                        {value !== '' ?
+                            <Container color={Color.text} radius={50} padding={2}>
+                                <Ionicons name='close' color={Color.theme} size={16} onPress={() => onChangeText('')} />
+                            </Container>
+                        :
+                            <Octicons name='search' color={Color.border} size={16} />
+                        }
+                    </>
+                    :
+                    <>
+                        <TouchableOpacity
+                            onPress={() => onPress()}
+                            style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
+                        >
+                            <Text color={Color.border}>{label}</Text>
+                            <Octicons name='search' color={Color.border} size={16} />
+                        </TouchableOpacity>
+                    </>
                 }
             </View>
         </TouchableOpacity>

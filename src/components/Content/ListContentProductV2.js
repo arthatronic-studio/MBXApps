@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { ScreenEmptyData } from '@src/components';
 import { Container, Row } from 'src/styled';
 import PostingSkeleton from '../Posting/PostingSkeleton';
-import { initialItemState } from 'src/utils/constants';
+import { initialItemState, statusBarHeight } from 'src/utils/constants';
 import { fetchContentProduct, fetchContentUserProduct, fetchContentSavedProduct } from 'src/api/content';
 import CardContentProductV2 from '@src/components/Content/CardContentProductV2';
 import { fetchEventList } from 'src/api/event/event';
@@ -35,7 +35,7 @@ const defaultProps = {
     onLoadingEnd: () => {},
 };
 
-const ListContentProductV2 = ({ userProfileId, productCategory, name, horizontal, style, orderBy, onLoadingEnd, saved, timeStart, tag}) => {
+const ListContentProductV2 = ({ userProfileId, productCategory, name, horizontal, style, orderBy, onLoadingEnd, saved, timeStart, tag, ListHeaderComponent}) => {
     const { width } = useWindowDimensions();
     const [itemData, setItemData] = useState(initialItemState);
 
@@ -115,7 +115,7 @@ const ListContentProductV2 = ({ userProfileId, productCategory, name, horizontal
                     data={itemData.data}
                     horizontal={horizontal}
                     showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{paddingVertical: 16, paddingHorizontal: 8, ...style}}
+                    contentContainerStyle={{paddingBottom: statusBarHeight, paddingHorizontal: 8, ...style}}
                     onEndReachedThreshold={0.3}
                     onEndReached={() => setItemData({ ...itemData, loadNext: true })}
                     { ...extraProps }
@@ -127,6 +127,7 @@ const ListContentProductV2 = ({ userProfileId, productCategory, name, horizontal
                             { ...extraProps }
                         />
                     }
+                    ListHeaderComponent={ListHeaderComponent}
                     ListEmptyComponent={() => {
                         return (
                             <ScreenEmptyData

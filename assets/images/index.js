@@ -21,6 +21,15 @@ const ticket = require('./ticket.png');
 const archive = require('./archive.png');
 const calendar = require('./calendar.png');
 const location = require('./location.png');
+const calendarRemove = require('./calendar-remove.png');
+const clock = require('./clock.png');
+const terms = require('./terms.png');
+const ticketRefund = require('./ticket-refund.png');
+const wallet = require('./wallet.png');
+const phoneBook = require('./phone-book.png');
+const call = require('./call.png');
+const mail = require('./mail.png');
+const discount = require('./discount.png');
 
 export {
   iconApp,
@@ -46,6 +55,15 @@ export {
   archive,
   calendar,
   location,
+  calendarRemove,
+  clock,
+  terms,
+  ticketRefund,
+  wallet,
+  phoneBook,
+  call,
+  mail,
+  discount,
 };
 
 export const imageAssets = {
@@ -72,6 +90,15 @@ export const imageAssets = {
   archive,
   calendar,
   location,
+  calendarRemove,
+  clock,
+  terms,
+  ticketRefund,
+  wallet,
+  phoneBook,
+  call,
+  mail,
+  discount,
 };
 
 export default imageAssets;

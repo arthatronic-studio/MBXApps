@@ -6,6 +6,8 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import Entypo from 'react-native-vector-icons/Entypo';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
+import Accordion from 'react-native-collapsible/Accordion';
+
 import Header from '@src/components/Header';
 import { useLoading, usePopup, useColor, Alert, Row, Col } from '@src/components';
 import Text from '@src/components/Text';
@@ -29,6 +31,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { getDetailEvent } from 'src/lib/query/event';
 import { fetchSaveEvent } from 'src/api/event/saveEvent';
 import { FormatMoney } from 'src/utils';
+import imageAssets from 'assets/images';
+import CardEventTicket from './CardEventTicket';
 
 const EventDetail = ({ navigation, route }) => {
   const { Color } = useColor();
@@ -44,6 +48,8 @@ const EventDetail = ({ navigation, route }) => {
   const [bookmark, setBookmark] = useState(false);
   const [desc, setDesc] = useState(false);
   const [data, setData] = useState(null);
+  const [activeSections, setActiveSections] = useState([]);
+
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const isFocused = useIsFocused();
@@ -77,39 +83,7 @@ const EventDetail = ({ navigation, route }) => {
   };
 
   const renderItem = ({ item }) => (
-    <View style={{paddingHorizontal: 16}}>
-      <Pressable style={{ width: '100%', height: 165, marginBottom: 10, paddingHorizontal: 15, backgroundColor: Color.theme, borderWidth: 1, borderColor: Color.border, borderRadius: 8 }}>
-        <Divider height={10} />
-        <Row>
-          <Col>
-            <Text style={{ fontSize: 11, textAlign: 'left', fontWeight: 'bold' }}>{item.name}</Text>
-            <Text style={{ fontSize: 8, textAlign: 'left', marginVertical: 3 }}>{items.date}</Text>
-          </Col>
-          {/* <View style={{flexDirection:'row', justifyContent: 'center'}}>
-              <Text style={{fontSize: 10, color: '#3C58C1', marginHorizontal: 5}}>Lihat Detail</Text>
-              <MaterialIcons name={'arrow-forward'} size={12} color={'#3C58C1'}/>
-          </View> */}
-        </Row>
-        <Divider height={25} />
-        <Row style={{ alignItems: 'center', }}>
-          <MaterialCommunityIcons name={'cash-refund'} color={Color.secondary} size={22} />
-          <Text style={{ fontSize: 10, color: Color.secondary, marginHorizontal: 5 }}>{item.refund ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
-          <Divider width={8} />
-          {/* <AntDesign name='calendar' size={18} color={Color.secondary}/>
-          <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 5}}>{item.reservation ? 'Perlu Reservasi' : 'Tidak Perlu Reservasi'}</Text> */}
-        </Row>
-        <Divider height={25} />
-        <Row>
-          <Col>
-            <Text style={{ textAlign: 'left', fontSize: 8 }}>Harga</Text>
-            <Text style={{ textAlign: 'left', fontWeight: 'bold' }}>{items.type === 'FREE' ? 'GRATIS' : FormatMoney.getFormattedMoney(item.price)}<Text style={{ fontSize: 8 }}>/Pax</Text></Text>
-          </Col>
-          <TouchableOpacity onPress={() => navigation.navigate('PemesananTiket', { item, dataEvent: data, itemRoute: items })} style={{ justifyContent: 'center', backgroundColor: Color.primary, width: '35%', borderRadius: 30 }}>
-            <Text style={{ fontSize: 10, color: Color.textInput }}>Pesan Sekarang</Text>
-          </TouchableOpacity>
-        </Row>
-      </Pressable>
-    </View>
+    <CardEventTicket />
   );
 
   const fetchAddLike = () => {
@@ -162,13 +136,84 @@ const EventDetail = ({ navigation, route }) => {
         : loc
   ) : 0 : 0;
 
+  let descriptionProps = { numberOfLines: 12 };
+  if (desc) descriptionProps = {};
+  const labelDesctiption = `Nothing about event planning is simple, but advertising and promoting can sometimes be the most daunting parts of the job. If you can’t find an effective way to get people excited when they click on your email invite or see the event promotion on social media, you might experience low turnout for the event.
+  
+  An event description is a text or copy that tells audiences all the essential details about your event. These details should come together so that it compels potential attendees to register. But more than driving up attendance, a good event description can pique the interest of non-members and even the press. In a nutshell, an event description should cover the who, what, why, where, when and how of your event to give potential attendees reasons to show up.`;
+
   const renderHeader = () => {
     return (
       <View
         onLayout={(e) => {
           setHeightHeader(e.nativeEvent.layout.height);
         }}
+        style={{
+          paddingBottom: 46,
+        }}
       >
+        <Container paddingHorizontal={16} marginTop={8} marginBottom={16}>
+          <View>
+            <Text
+              size={22}
+              align='left'
+            >
+              Pestapora 2022
+            </Text>
+          </View>
+
+          <View style={{ flexDirection: 'row', marginTop: 8 }}>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Image
+                source={imageAssets.calendar}
+                style={{
+                  width: 16,
+                  height: 16,
+                }}
+              />
+              <Divider width={4} />
+              <Text size={10} type='medium'>{moment().format('DD - DD MMM YYYY')}</Text>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Image
+                source={imageAssets.clock}
+                style={{
+                  width: 16,
+                  height: 16,
+                }}
+              />
+              <Divider width={4} />
+              <Text size={10} type='medium'>16:00 - 22:00</Text>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Image
+                source={imageAssets.location}
+                style={{
+                  width: 16,
+                  height: 16,
+                }}
+              />
+              <Divider width={4} />
+              <Text size={10} type='medium'>Jakarta Selatan</Text>
+            </View>
+          </View>
+        </Container>
+
         <TouchableOpacity
           onPress={() => {
             data ? data.images.length == 0 ? console.log() :
@@ -178,85 +223,16 @@ const EventDetail = ({ navigation, route }) => {
               })
               : console.log()
           }}
+          style={{
+            width: '100%',
+            aspectRatio: 16 / 9,
+          }}
         >
           <Image
             source={{ uri: data ? data.images.length == 0 ? '' : data.images[0] : "" }}
-            style={{ width: '100%', aspectRatio: 4 / 3, backgroundColor: Color.border }}
+            style={{ width: '100%', height: '100%', backgroundColor: Color.border }}
           />
         </TouchableOpacity>
-
-        <Divider />
-
-        <View>
-          <Text
-            style={{
-              color: Color.info,
-              fontWeight: 'bold',
-              fontSize: 8,
-              textAlign: 'left',
-              paddingHorizontal: 20,
-            }}>
-            {data && data.category} EVENT
-          </Text>
-          <Divider height={10} />
-          <Text
-            style={{
-              color: Color.text,
-              fontSize: 18,
-              fontWeight: 'bold',
-              textAlign: 'justify',
-              paddingHorizontal: 20,
-              width: '70%'
-            }}>
-            {data && data.name}
-          </Text>
-        </View>
-
-        <View style={{ flexDirection: 'row', paddingVertical: 18 }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              paddingHorizontal: 20,
-              width: '30%',
-              alignItems: 'center',
-            }}>
-            <AntDesign
-              name={'calendar'}
-              size={13}
-              color={Color.secondary}
-            />
-            <Divider width={6} />
-            <Text style={{ fontSize: 10, color: Color.secondary, fontWeight: 'bold' }}>{data && moment(data.date).format('DD MMM YYYY')}</Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              width: '25%',
-              alignItems: 'center',
-            }}>
-            <AntDesign
-              name='clockcircleo'
-              size={11}
-              color={Color.secondary}
-            />
-            <Divider width={6} />
-            {data ? <Text style={{ fontSize: 10, color: Color.secondary, fontWeight: 'bold' }}>{data.startTime} - {data.endTime}</Text> : <Text>-</Text>}
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              width: '30%',
-              alignItems: 'center',
-            }}>
-            <EvilIcons
-              name='location'
-              size={15}
-              color={Color.secondary}
-            />
-            <Divider width={4} />
-            <Text style={{ fontSize: 10, color: Color.secondary, fontWeight: 'bold' }}>{data && data.kota}</Text>
-          </View>
-        </View>
 
         {/* <Container paddingHorizontal={32} paddingVertical={16}>
             <Button
@@ -274,7 +250,7 @@ const EventDetail = ({ navigation, route }) => {
             </Container>
           } */}
 
-        {data && data.ordered && <Row style={{ backgroundColor: '#FAF3ED', marginHorizontal: 10, padding: 13, borderRadius: 8 }}>
+        {/* {data && data.ordered && <Row style={{ backgroundColor: '#FAF3ED', marginHorizontal: 10, padding: 13, borderRadius: 8 }}>
           <Col>
             <Text size={11} type='bold' align='left'>Kamu telah memiliki tiket untuk event ini</Text>
           </Col>
@@ -286,37 +262,31 @@ const EventDetail = ({ navigation, route }) => {
               </Row>
             </TouchableOpacity>
           </Col>
-        </Row>}
+        </Row>} */}
 
-        <View>
+        <Container paddingHorizontal={16} marginTop={16}>
           <Text
-            style={{
-              textAlign: 'left',
-              paddingHorizontal: 20,
-              fontWeight: 'bold',
-              fontSize: 11,
-              paddingVertical: 10,
-            }}>
+            align='left'
+            type='medium'
+            letterSpacing={0.1}
+          >
             Deskripsi
           </Text>
-          {data && data.description && <Text
-            numberOfLines={12}
-            style={{
-              textAlign: 'justify',
-              paddingHorizontal: 20,
-              color: Color.secondary,
-              marginBottom: 16,
-            }}>
-            {data && data.description.length > 40 && !desc ? data.description.substring(0, 40) : data.description}
-          </Text>}
-          {data && data.description && data.description.length > 40 && <Pressable onPress={() => setDesc(!desc)} style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: '100%', paddingHorizontal: 15 }}>
-            <Text style={{ color: Color.primary }}>{desc ? 'Lebih sedikit' : 'Selengkapnya'}</Text>
-            <MaterialIcons name={'keyboard-arrow-down'} size={20} color={Color.primary} style={{ marginHorizontal: 5 }} />
-          </Pressable>}
-        </View>
+          <Divider height={8} />
+          <Text
+            align='left'
+            {...descriptionProps}
+          >
+            {labelDesctiption}
+          </Text>
 
-        <Container padding={16}>
-          <Text style={{ fontWeight: 'bold', fontSize: 11, textAlign: 'left' }}>Jenis Tiket</Text>
+          <Pressable
+            onPress={() => setDesc(!desc)}
+            style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 8 }}
+          >
+            <Text color={Color.primary}>{desc ? 'Lebih sedikit' : 'Selengkapnya'}</Text>
+            <MaterialIcons name={'keyboard-arrow-down'} size={22} color={Color.primary} />
+          </Pressable>
         </Container>
       </View>
     )
@@ -324,36 +294,83 @@ const EventDetail = ({ navigation, route }) => {
 
   const renderFooter = () => {
     return (
-      <>
-        <View>
-          <Text style={{ fontSize: 11, textAlign: 'left', fontWeight: 'bold', paddingHorizontal: 20 }}>Detail Lokasi</Text>
-          <Divider height={8} />
-          <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, backgroundColor: '#F0F0F0', width: '90%', alignSelf: 'center', height: 70 }}>
-            <Image source={ImagesPath.LocationEvent} style={{ borderRadius: 5 }} />
-            {/* <Text style={{fontSize: 8, lineHeight: 12,textAlign: 'left', width: '65%', paddingHorizontal: 10}}>Jl. Tebet Barat I No.2, RT.1/RW.2, Tebet Bar., Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12810</Text> */}
-            <Text style={{ fontSize: 8, lineHeight: 12, textAlign: 'left', width: '65%', paddingHorizontal: 10 }}>{data?.location}, {data?.kelurahan}, Kec. {data?.kecamatan}, Kota {data?.kota}, {data?.provinsi}</Text>
-            <TouchableOpacity onPress={() => openGps(data.lat, data.lng)} style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: Color.primary, width: 35, height: 35, borderRadius: 20, marginLeft: 35 }}>
-              <Ionicons name='navigate' size={17} style={{ color: Color.theme }} />
-            </TouchableOpacity>
+      <Container paddingHorizontal={16} marginTop={8}>
+        <Text align='left'>Detail Lokasi</Text>
+        <Divider height={8} />
+        <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 18, borderRadius: 8, backgroundColor: Color.primaryDark }}>
+          <Image
+            source={ImagesPath.LocationEvent}
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: 4,
+            }}
+          />
+          <View style={{ flex: 1, paddingHorizontal: 10 }}>
+            <Text size={12} align='left' lineHeight={16} letterSpacing={0.4}>Jl. Tebet Barat I No.2, RT.1/RW.2, Tebet Bar., Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12810</Text>
           </View>
-          <Divider />
-          <View>
-            <Text style={{ fontSize: 11, textAlign: 'left', fontWeight: 'bold', paddingHorizontal: 20 }}>Informasi Lainnya</Text>
-            <Divider height={8} />
-            <View style={{ width: '90%', alignSelf: 'center', paddingHorizontal: 15, backgroundColor: Color.border, height: 1 }} />
-            {data.refundPolicy && <Pressable style={{ flexDirection: 'row', alignItems: 'center', height: 40, width: '90%', borderBottomColor: Color.border, borderBottomWidth: 1, alignSelf: 'center' }}>
-              <FontAwesome5Icon name={"ticket-alt"} style={{ width: '8%' }} />
-              <Text style={{ fontSize: 10, fontWeight: 'bold', width: '85%', textAlign: 'left' }}>Pengembalian Tiket</Text>
-              <MaterialIcons name={'keyboard-arrow-down'} size={18} />
-            </Pressable>}
-            {data.tnc && <Pressable style={{ flexDirection: 'row', alignItems: 'center', height: 40, width: '90%', borderBottomColor: Color.border, borderBottomWidth: 1, alignSelf: 'center' }}>
-              <MaterialCommunityIcons size={15} name={"equal-box"} style={{ width: '8%' }} />
-              <Text style={{ fontSize: 10, fontWeight: 'bold', width: '85%', textAlign: 'left' }}>Syarat & Ketentuan</Text>
-              <MaterialIcons name={'keyboard-arrow-down'} size={18} />
-            </Pressable>}
-          </View>
+          <TouchableOpacity
+            onPress={() => false && openGps(data.lat, data.lng)}
+            style={{ justifyContent: 'center', alignItems: 'center' }}
+          >
+            <Image
+              source={imageAssets.direction}
+              style={{
+                width: 40,
+                height: 40,
+              }}
+            />
+          </TouchableOpacity>
         </View>
-      </>
+        <Divider />
+        <View>
+          <Text size={12} style={{ textAlign: 'left', fontWeight: 'bold' }}>Informasi Lainnya</Text>
+          <Divider height={8} />
+
+          <Accordion
+            sections={[
+              {
+                title: 'Pengembalian Tiket',
+                content: labelDesctiption,
+                imageAsset: imageAssets.ticketRefund,
+              },
+              {
+                title: 'Syarat & Ketentuan',
+                content: labelDesctiption,
+                imageAsset: imageAssets.terms,
+              },
+            ]}
+            activeSections={activeSections}
+            renderHeader={(section) => (
+              <View
+                style={{ flexDirection: 'row', alignItems: 'center', height: 40, width: '100%', borderColor: Color.border, borderTopWidth: 0.5, alignSelf: 'center' }}
+              >
+                <Image
+                  source={section.imageAsset}
+                  style={{
+                    width: 14,
+                    height: 10,
+                    marginRight: 12,
+                  }}
+                />
+                <View style={{ flex: 1 }}>
+                  <Text size={12} style={{ fontWeight: '500', textAlign: 'left' }}>{section.title}</Text>
+                </View>
+                <MaterialIcons name={'keyboard-arrow-down'} size={18} color={Color.text} />
+              </View>
+            )}
+            renderContent={(section) => (
+              <Container paddingVertical={8}>
+                <Text align='left' size={12}>{section.content}</Text>
+              </Container>
+            )}
+            onChange={(val) => {
+              setActiveSections(val);
+            }}
+          />
+          <View style={{ width: '100%', paddingHorizontal: 16, backgroundColor: Color.border, height: 0.5 }} />
+        </View>
+      </Container>
     )
   }
 
@@ -366,8 +383,6 @@ const EventDetail = ({ navigation, route }) => {
       header={
         <Header
           type="bold"
-          centerTitle={false}
-          title="Detail"
           actions={
             <View style={{ flexDirection: 'row' }}>
               <TouchableOpacity
@@ -379,9 +394,9 @@ const EventDetail = ({ navigation, route }) => {
                   }
                 }}>
                 {bookmark == true ? (
-                  <FontAwesome name={'bookmark'} size={24} />
+                  <FontAwesome name={'bookmark'} size={24} color={Color.text} />
                 ) : (
-                  <FontAwesome name={'bookmark-o'} size={24} />
+                  <FontAwesome name={'bookmark-o'} size={24} color={Color.text} />
                 )}
               </TouchableOpacity>
               <MaterialIcons onPress={() => { modalOptionsRef.current.open(); }}
@@ -393,17 +408,21 @@ const EventDetail = ({ navigation, route }) => {
     >
       <FlatList
         ref={flatlistRef}
-        data={data && data.tickets}
+        data={[
+          { name: '3 Days Pass', date: moment(), refund: false },
+          { name: '2 Days Pass', date: moment(), refund: true },
+        ]}
+        keyExtractor={(item, index) => item.id + index.toString()}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
         ListHeaderComponent={renderHeader}
-        ListFooterComponent={data && renderFooter}
+        ListFooterComponent={renderFooter}
       />
 
-      <Row style={{ height: 60, paddingHorizontal: 20, paddingVertical: 15 }}>
+      <Row style={{ padding: 16, backgroundColor: Color.primaryMoreDark }}>
         <Col style={{ justifyContent: 'center' }}>
-          <Text style={{ textAlign: 'left', fontSize: 8 }}>Mulai dari</Text>
-          <Text style={{ textAlign: 'left', fontWeight: 'bold' }}>{FormatMoney.getFormattedMoney(closest ? closest.price : 0)}</Text>
+          <Text type='medium' style={{ textAlign: 'left', fontSize: 8 }}>Mulai dari</Text>
+          <Divider height={4} />
+          <Text size={18} type='semibold' style={{ textAlign: 'left' }}>{FormatMoney.getFormattedMoney(closest ? closest.price : 0)}</Text>
         </Col>
         <TouchableOpacity
           onPress={() => {
@@ -412,9 +431,9 @@ const EventDetail = ({ navigation, route }) => {
               animated: true
             })
           }}
-          style={{ justifyContent: 'center', backgroundColor: Color.primary, width: '30%', borderRadius: 30, height: 35 }}
+          style={{ justifyContent: 'center', backgroundColor: Color.primary, borderRadius: 8, height: 45, paddingHorizontal: 14 }}
         >
-          <Text style={{ fontSize: 10, color: Color.textInput }}>Ikut Event</Text>
+          <Text type='medium' color={Color.textButtonInline}>Cari Tiket</Text>
         </TouchableOpacity>
       </Row>
 

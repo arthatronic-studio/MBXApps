@@ -3,7 +3,7 @@ import { View, ScrollView, Platform, Image, SafeAreaView, TextInput, TouchableOp
 import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import DatePicker from 'react-native-date-picker';
-import {connect, useDispatch, useStore} from 'react-redux';
+import { connect, useDispatch, useStore } from 'react-redux';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import RNFetchBlob from 'react-native-blob-util';
@@ -16,16 +16,14 @@ import RNSimpleCrypto from "react-native-simple-crypto";
 import { initialLatitude, initialLongitude } from 'src/utils/constants';
 
 import {
-	Text,
-	// TouchableOpacity,
-	
-	useLoading,
-	Scaffold,
-	Row,
-	Col,
-	HeaderBig,
-	useColor,
-	Header
+    Text,
+    useLoading,
+    Scaffold,
+    Row,
+    Col,
+    HeaderBig,
+    useColor,
+    Header
 } from '@src/components';
 import ListForum from '@src/screens/MainForum/ListForum';
 
@@ -44,54 +42,44 @@ import client from '@src/lib/apollo';
 import { mutatuinEventManage, mutationOrderEvent } from 'src/lib/query/event';
 import { FormatMoney } from 'src/utils';
 import ModalPassanger from './ModalPassanger';
-var crypto = require('crypto-js')
+import { Container, Divider } from 'src/styled';
+import imageAssets from 'assets/images';
 
-function sha1(data) {
-}
-
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
-
-const Content = Styled(View)`
-    margin: 16px
-    padding: 12px
-    borderRadius: 8px
-`;
-
-const CheckoutEvent = ({navigation}) => {
+const CheckoutEvent = ({ navigation, route }) => {
     const user = useSelector((state) => state['user.auth'].login.user);
-	const loading = useSelector((state) => state['user.auth'].loading);
+    const loading = useSelector((state) => state['user.auth'].loading);
 
-  const dispatch = useDispatch();
-    const route = useRoute();
-    const {params} = route
-    console.log(params, user, 'paramsss')
+    const dispatch = useDispatch();
+    const { params } = route;
+    console.log(params, 'paramsss');
 
-	const [ loadingProps, showLoading, hideLoading ] = useLoading();
-    const [name, setName] = useState(user ? user.firstName+' '+user.lastName : '');
+    const dummyArrPengunjung = new Array(params.ticket.qty).fill({});
+    console.log('dummyArrPengunjung', dummyArrPengunjung);
+
+    const [loadingProps, showLoading, hideLoading] = useLoading();
+    const [name, setName] = useState(user ? user.firstName + ' ' + user.lastName : '');
     const [passanger, setPassanger] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const modalPassangerRef = useRef();
     const [tickets, setTickets] = useState([{
-            name: '',
-            quota: 1,
-            refund: true,
-            reservation: true,
-        }
-    ])
-	const { Color } = useColor();
+        name: '',
+        quota: 1,
+        refund: true,
+        reservation: true,
+    }]);
+    const [isSamaDgPemesan, setIsSamaDgPemesan] = useState(false);
+    const { Color } = useColor();
     const [coords, setCoords] = useState({
-      latitude: initialLatitude,
-      longitude: initialLongitude,
+        latitude: initialLatitude,
+        longitude: initialLongitude,
     });
 
 
-  const [modalSelectMap, setModalSelectMap] = useState(false);
-  const [isPinnedMap, setIsPinnedMap] = useState(false);
-  const [locationPinnedMap, setLocationPinnedMap] = useState('');
+    const [modalSelectMap, setModalSelectMap] = useState(false);
+    const [isPinnedMap, setIsPinnedMap] = useState(false);
+    const [locationPinnedMap, setLocationPinnedMap] = useState('');
 
-	useEffect( () => {
+    useEffect(() => {
         // submit()
     }, []);
 
@@ -115,54 +103,54 @@ const CheckoutEvent = ({navigation}) => {
                 userId: user.userId,
                 eventId: params.ticket.eventId,
                 ticketId: params.ticket.ticketId,
-                userOrderName:params.ticket.userOrderName,
-                userOrderPhone:params.ticket.userOrderPhone,
-                userOrderEmail:params.ticket.userOrderEmail,
+                userOrderName: params.ticket.userOrderName,
+                userOrderPhone: params.ticket.userOrderPhone,
+                userOrderEmail: params.ticket.userOrderEmail,
                 orderItems: passanger,
-              }
+            }
         }
         console.log(variables)
-        client.mutate({mutation: mutationOrderEvent, variables})
-        .then(res => {
-            hideLoading();
-            console.log(res.data);
-            if (res.data.eventTicketOrderManage.success) {
-                console.log('manage')
-                if(res.data.eventTicketOrderManage.data.status === 'PAID'){
-                    navigation.navigate('OrderEventDetail',{item: res.data.eventTicketOrderManage.data});
-                }else{
-                    dispatch({
-                        type: 'BOOKING.ADD_BOOKING',
-                        data: {
-                        ...res.data.eventTicketOrderManage.data,
-                          id: res.data.eventTicketOrderManage.data.bookingId,
-                          invoiceNumber: res.data.eventTicketOrderManage.data.orderNumber,
-                          vestaBiller: true,
-                          finalAmount: res.data.eventTicketOrderManage.data.totalAmount,
-                        },
-                      });
-                    setTimeout(() => {
-                        navigation.navigate('PaymentScreen', {back: true});
-                        // navigation.popToTop()
-                    }, 1000);
+        client.mutate({ mutation: mutationOrderEvent, variables })
+            .then(res => {
+                hideLoading();
+                console.log(res.data);
+                if (res.data.eventTicketOrderManage.success) {
+                    console.log('manage')
+                    if (res.data.eventTicketOrderManage.data.status === 'PAID') {
+                        navigation.navigate('OrderEventDetail', { item: res.data.eventTicketOrderManage.data });
+                    } else {
+                        dispatch({
+                            type: 'BOOKING.ADD_BOOKING',
+                            data: {
+                                ...res.data.eventTicketOrderManage.data,
+                                id: res.data.eventTicketOrderManage.data.bookingId,
+                                invoiceNumber: res.data.eventTicketOrderManage.data.orderNumber,
+                                vestaBiller: true,
+                                finalAmount: res.data.eventTicketOrderManage.data.totalAmount,
+                            },
+                        });
+                        setTimeout(() => {
+                            navigation.navigate('PaymentScreen', { back: true });
+                            // navigation.popToTop()
+                        }, 1000);
+                    }
                 }
-            }
-        })
-        .catch(reject => {
-            hideLoading();
-            console.log(reject.message, 'reject');
-        });
-      };
+            })
+            .catch(reject => {
+                hideLoading();
+                console.log(reject.message, 'reject');
+            });
+    };
 
-      const onChange = (value,name, id) => {
+    const onChange = (value, name, id) => {
         const tempx = tickets
         tickets[id][name] = value
         setTickets(tempx)
         setRefresh(refresh + 1);
-        
-      }
 
-      const getDocument = async(name) => {
+    }
+
+    const getDocument = async (name) => {
         const res = await DocumentPicker.pick({
             type: [DocumentPicker.types.pdf],
             allowMultiSelection: false,
@@ -174,14 +162,14 @@ const CheckoutEvent = ({navigation}) => {
         let uri;
 
         if (Array.isArray(res) && res.length > 0) {
-           
+
             RNFetchBlob.fs
-            .readFile(res[0].uri, 'base64')
-            .then((data) => {
-                if(name == 'tnc') setTnc(data)
-                else setRefundPolicy(data)
-            })
-            .catch((err) => {});
+                .readFile(res[0].uri, 'base64')
+                .then((data) => {
+                    if (name == 'tnc') setTnc(data)
+                    else setRefundPolicy(data)
+                })
+                .catch((err) => { });
         }
     }
 
@@ -195,124 +183,196 @@ const CheckoutEvent = ({navigation}) => {
         onClose()
     }
 
-  return (
-    <Scaffold
-		header={<Header customIcon title="Detail Pemesanan" type="regular" centerTitle={false} />}
-		onPressLeftButton={() => navigation.pop()}
-        loadingProps={loadingProps}
-	>
-        {console.log(user)}
-        <ScrollView>
-            <View style={{ borderColor: '#CDD1D2', margin: 16, borderWidth: 1, padding: 10, borderRadius: 10 }}>
-                <Row>
-                    <Image source={{ uri:params.ticket.image  }} style={{ height: 48, width: 48, borderRadius: 8, marginRight: 8, backgroundColor: '#ddd' }} />
-                    <Text type='semibold' align='left' color='#111'>{params.ticket.nameEvent}</Text>
-                </Row>
-                <View style={{ height: 1, backgroundColor: '#DDDDDD', marginVertical: 16 }} />
-                <Row style={{ marginBottom: 5 }}>
-                    <Text color='#111' type='bold' size={11}>{params.ticket.name}</Text>
-                    <Col>
-                        <Text size={11} color={Color.text} type='medium'>{moment(params.ticket.date).format('DD MMM YYYY')}</Text>
-                    </Col>
-                </Row>
-                <Text size={10} align='left' color='#6A7479'>1 Tiket • 1 Pax</Text>
-                <View style={{ height: 1, backgroundColor: '#DDDDDD', marginVertical: 16 }} />
-                <Row style={{ marginBottom: 10 }}>
-                    <Row style={{ marginRight: 10, alignItems: 'center' }}>
-                        <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
-                            <Image source={ImagesPath.refund} style={{ width: 15, height: 15, borderRadius: 7 }} />
-                        </View>
-                        <Text color={Color.text} size={11}>{params.ticket.refund ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
-                    </Row>
-                    <Row style={{ marginRight: 10, alignItems: 'center' }}>
-                        <View style={{  width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
-                            <Image source={ImagesPath.calendar} style={{  width: 16, height: 16, borderRadius: 7 }} />
-                        </View>
-                        <Text color={Color.text} size={11}>{params.ticket.reservation ? 'Bisa Reservasi' : 'Tidak Bisa Reservasi'}</Text>
-                    </Row>
-                </Row>
-            </View>
-            <View style={{ height: 8, backgroundColor: '#eee', marginVertical: 10 }} />
-            <Text type='bold' size={12} align='left' style={{ marginLeft: 16 }}>Detail Pemesan</Text>
-            <View style={{ borderColor: '#CDD1D2', margin: 16, borderWidth: 1, padding: 10, borderRadius: 10 }}>
-                <Row>
-                    <Col>
-                        <Text size={11} type='bold' align='left'>{user.firstName} {user.lastName}</Text>
-                        <Row style={{ marginRight: 10, alignItems: 'center' }}>
-                            <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
-                                <Image source={ImagesPath.phone} resizeMode='contain' style={{ width: 14,  borderRadius: 7 }} />
-                            </View>
-                            <Text color={Color.text} size={11}>+{user.phoneCountryCode}{user.phoneNumber}</Text>
-                        </Row>
-                        <Row style={{ marginRight: 10, alignItems: 'center' }}>
-                            <View style={{  width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
-                                <Image source={ImagesPath.mail} style={{  width: 16, height: 16, borderRadius: 7 }} />
-                            </View>
-                            <Text color={Color.text} size={11}>{user.email}</Text>
-                        </Row>
-                    </Col>
-                    <Col size={2} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
-                        <AntDesign name='right' size={18} />
-                    </Col>
-                </Row>
-            </View>
-            <View style={{ height: 8, backgroundColor: '#eee', marginVertical: 10 }} />
-            <Text type='bold' size={12} align='left' style={{ marginLeft: 16 }}>Detail Pengunjung</Text>
-            <TouchableOpacity onPress={() => modalPassangerRef.current.open()} style={{ borderColor: '#CDD1D2', margin: 16, borderWidth: 1, padding: 10, borderRadius: 10 }}>
-                <Row>
-                    <Col>
-                        <Text color={Color.text} type='bold' align='left'>{passanger.length > 0 ? passanger[0].title + ' ' + passanger[0].name : 'Tiket 1 (Pax)'}</Text>
-                    </Col>
-                    <Col size={2} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
-                        <AntDesign name='right' size={18} />
-                    </Col>
-                </Row>
-            </TouchableOpacity>
-            <View style={{ height: 8, backgroundColor: '#eee', marginVertical: 10 }} />
-            <Text type='bold' size={12} align='left' style={{ marginLeft: 16 }}>Detail Harga</Text>
-            <View style={{ backgroundColor: '#F4F5F9', margin: 16, padding: 10, borderRadius: 10 }}>
-                <Row style={{ marginBottom: 8 }}>
-                    <Col>
-                        <Text color={Color.text}  size={11} align='left'>Subtotal</Text>
-                    </Col>
-                    <Col size={4} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
-                        <Text color={Color.text}  size={11} align='left'>{FormatMoney.getFormattedMoney(params.ticket.price)}</Text>
-                    </Col>
-                </Row>
-                <Row style={{ marginBottom: 8 }}>
-                    <Col>
-                        <Text color={Color.text}  size={11} align='left'>Ppn 10%</Text>
-                    </Col>
-                    <Col size={4} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
-                        <Text color={Color.text}  size={11} align='left'>{FormatMoney.getFormattedMoney(params.ticket.price*0.1)}</Text>
-                    </Col>
-                </Row>
-                <Row style={{ marginBottom: 8 }}>
-                    <Col>
-                        <Text color={Color.text}  size={11} align='left'>Total</Text>
-                    </Col>
-                    <Col size={4} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
-                        <Text color={Color.text}  size={11} type='bold' align='left'>{params.ticket.type === 'FREE' ? 'GRATIS' : FormatMoney.getFormattedMoney(params.ticket.price+params.ticket.price*0.1)}</Text>
-                    </Col>
-                </Row>
-            </View>
-        </ScrollView>
-        <View style={{width: '100%',  height: 70, alignItems: 'center', borderRadius: 10}}>
-            <TouchableOpacity onPress={() => submit()} style={{backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center'}}>
-                <Text style={{color: Color.textInput}}>Pesan Tiket</Text>
-            </TouchableOpacity>
-        </View>
+    return (
+        <Scaffold
+            header={<Header customIcon title="Detail Pemesanan" centerTitle={false} />}
+            onPressLeftButton={() => navigation.pop()}
+            loadingProps={loadingProps}
+        >
+            <ScrollView>
+                <Container paddingHorizontal={16}>
+                    <View style={{ backgroundColor: Color.primaryMoreDark, borderWidth: 1, padding: 10, borderRadius: 8 }}>
+                        <Container align='center' style={{ flexDirection: 'row' }}>
+                            <Image source={{ uri: '' }} style={{ height: 48, width: 48, borderRadius: 8, marginRight: 8, backgroundColor: Color.border }} />
+                            <Text type='semibold' align='left'>Pestapora 2022</Text>
+                        </Container>
 
-        <ModalPassanger
-            ref={modalPassangerRef}
-            data={passanger}
-            onSave={onSave}
-            onClose={() => {
-                onClose();
-            }}
-        />
-    </Scaffold>
-  )
+                        <View style={{ height: 1, backgroundColor: Color.border, marginVertical: 16 }} />
+
+                        <Row style={{ marginBottom: 4, justifyContent: 'space-between' }}>
+                            <Text type='bold' size={11}>{params.ticket.name}</Text>
+                            <Text size={11} color={Color.disabled} type='medium'>{moment(params.ticket.date).format('DD MMM YYYY')}</Text>
+                        </Row>
+
+                        <Text size={10} align='left' color={Color.disabled}>1 Tiket • 1 Pax</Text>
+
+                        <View style={{ height: 1, backgroundColor: Color.border, marginVertical: 16 }} />
+
+                        <Row>
+                            <Row style={{ marginRight: 10, alignItems: 'center' }}>
+                                <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 4 }}>
+                                    <Image
+                                        source={ImagesPath.refund}
+                                        style={{ width: 15, height: 15, tintColor: Color.text }}
+                                    />
+                                </View>
+                                <Text color={Color.text} size={11}>{params.ticket.refund ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
+                            </Row>
+                            <Row style={{ marginRight: 10, alignItems: 'center' }}>
+                                <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 4 }}>
+                                    <Image source={imageAssets.calendar} style={{ width: 16, height: 16, borderRadius: 7 }} />
+                                </View>
+                                <Text color={Color.text} size={11}>{params.ticket.reservation ? 'Bisa Reservasi' : 'Tidak Bisa Reservasi'}</Text>
+                            </Row>
+                        </Row>
+                    </View>
+
+                    <Divider />
+                    <Text type='bold' align='left'>Detail Pemesan</Text>
+
+                    <View style={{ marginTop: 8, padding: 10, borderRadius: 8, backgroundColor: Color.primaryMoreDark }}>
+                        <Row>
+                            <Col>
+                                <Text type='bold' align='left'>{user.firstName} {user.lastName}</Text>
+                                <Divider height={8} />
+                                <Row style={{ alignItems: 'center' }}>
+                                    <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 6 }}>
+                                        <Image
+                                            source={imageAssets.call}
+                                            resizeMode='contain'
+                                            style={{ width: 14, height: 14, tintColor: Color.text }}
+                                        />
+                                    </View>
+                                    <Text color={Color.text} size={12}>+{user.phoneCountryCode}{user.phoneNumber}</Text>
+                                </Row>
+                                <Divider height={4} />
+                                <Row style={{ alignItems: 'center' }}>
+                                    <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 6 }}>
+                                        <Image
+                                            source={imageAssets.mail}
+                                            style={{ width: 14, height: 14, tintColor: Color.text }} />
+                                    </View>
+                                    <Text color={Color.text} size={12}>{user.email}</Text>
+                                </Row>
+                            </Col>
+                            <Col size={2} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
+                                <AntDesign name='right' size={18} color={Color.text} />
+                            </Col>
+                        </Row>
+                    </View>
+
+                    <Divider />
+                    <Row style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Text type='bold' align='left'>Detail Pengunjung</Text>
+                        <Row style={{ alignItems: 'center', justifyContent: 'flex-end' }}>
+                            <Text size={12} color={Color.disabled}>Sama dengan pemesan</Text>
+                            <Switch
+                                value={isSamaDgPemesan}
+                                onValueChange={(val) => setIsSamaDgPemesan(val)}
+                                thumbColor={isSamaDgPemesan ? Color.primary : Color.text}
+                                trackColor={{
+                                    true: Color.border,
+                                    false: Color.border,
+                                }}
+                                style={{
+                                    marginLeft: 8,
+                                    transform: [{ scaleX: .8 }, { scaleY: .8 }]
+                                }}
+                            />
+                        </Row>
+                    </Row>
+
+                    {dummyArrPengunjung.map((_, idx) => {
+                        return (
+                            <TouchableOpacity
+                                key={idx}
+                                onPress={() => modalPassangerRef.current.open()}
+                                style={{ marginTop: 8, paddingHorizontal: 10, paddingVertical: 12, borderRadius: 8, backgroundColor: Color.primaryMoreDark }}
+                            >
+                                <Row>
+                                    <Col>
+                                        <Text color={Color.text} type='bold' align='left'>{passanger.length > 0 ? passanger[0].title + ' ' + passanger[0].name : 'Tiket 1 (Pax)'}</Text>
+                                    </Col>
+                                    <Col size={2} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
+                                        <AntDesign name='right' size={18} color={Color.text} />
+                                    </Col>
+                                </Row>
+                            </TouchableOpacity>
+                        )
+                    })}
+
+                    <Divider />
+
+                    <Text type='bold' align='left'>Detail Harga</Text>
+                    <View style={{ backgroundColor: Color.primaryDark, marginTop: 8, padding: 10, borderRadius: 8 }}>
+                        <Row style={{ marginBottom: 8 }}>
+                            <Col>
+                                <Text color={Color.primarySoft} size={12} align='left'>Subtotal</Text>
+                            </Col>
+                            <Col size={4} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
+                                <Text color={Color.primarySoft} size={12} align='left'>{FormatMoney.getFormattedMoney(params.ticket.price)}</Text>
+                            </Col>
+                        </Row>
+                        <Row style={{ marginBottom: 8 }}>
+                            <Col>
+                                <Text color={Color.primarySoft} size={12} align='left'>Ppn 10%</Text>
+                            </Col>
+                            <Col size={4} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
+                                <Text color={Color.primarySoft} size={12} align='left'>{FormatMoney.getFormattedMoney(params.ticket.price * 0.1)}</Text>
+                            </Col>
+                        </Row>
+                        <Row style={{ marginBottom: 0 }}>
+                            <Col>
+                                <Text color={Color.primarySoft} size={12} align='left'>Total</Text>
+                            </Col>
+                            <Col size={4} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
+                                <Text color={Color.primarySoft} size={12} align='left'>{params.ticket.type === 'FREE' ? 'GRATIS' : FormatMoney.getFormattedMoney(params.ticket.price + params.ticket.price * 0.1)}</Text>
+                            </Col>
+                        </Row>
+                    </View>
+
+                    <Divider />
+                    <Text type='bold' align='left'>Kode Promo</Text>
+                    <TouchableOpacity
+                        onPress={() => { }}
+                        style={{ marginTop: 8, borderWidth: 0.5, borderColor: Color.border, paddingHorizontal: 10, paddingVertical: 12, borderRadius: 8 }}
+                    >
+                        <Row>
+                            <Image
+                                source={imageAssets.discount}
+                                style={{
+                                    width: 20,
+                                    height: 16,
+                                    marginRight: 12,
+                                }}
+                            />
+                            <Col>
+                                <Text color={Color.text} type='bold' align='left' letterSpacing={0.25}>QWERTY</Text>
+                            </Col>
+                            <Col size={2} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
+                                <Text size={12} color={Color.primary} type='medium'>Gunakan</Text>
+                            </Col>
+                        </Row>
+                    </TouchableOpacity>
+                </Container>
+            </ScrollView>
+
+            <View style={{ width: '100%', height: 70, alignItems: 'center', borderRadius: 10 }}>
+                <TouchableOpacity onPress={() => submit()} style={{ backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center' }}>
+                    <Text style={{ color: Color.textInput }}>Pesan Tiket</Text>
+                </TouchableOpacity>
+            </View>
+
+            <ModalPassanger
+                ref={modalPassangerRef}
+                data={passanger}
+                onSave={onSave}
+                onClose={() => {
+                    onClose();
+                }}
+            />
+        </Scaffold>
+    )
 }
 
 export default CheckoutEvent

@@ -187,84 +187,84 @@ const MainProfile = ({navigation, route}) => {
   }
 
   const menuList = [
-    {
-      code: 'pinned_product',
-      title: 'Konten di Pin',
-      badgeTitle: '',
-      show: true,
-      icon: (
-        <Ionicons
-          name="pricetags-outline"
-          size={20}
-          color={Color.text}
-        />
-      ),
-      onPress: () => {
-        navigation.navigate('ContentProductSaveScreen', {
-          title: 'Konten di Pin'
-        });
-      },
-    },
-    {
-      code: 'history',
-      title: 'Riwayat',
-      badgeTitle: '',
-      show: accessClient.MainProfile.showMenuHistory && user && !user.guest,
-      icon: (
-        <Ionicons
-          name="receipt-outline"
-          size={20}
-          color={Color.text}
-          style={{}}
-        />
-      ),
-      onPress: () => {},
-    },
-    {
-      code: 'coupon',
-      title: 'Kuponku',
-      badgeTitle: '',
-      show: accessClient.MainProfile.showMenuCoupon && user && !user.guest,
-      icon: (
-        <MaterialCommunityIcons
-          name="ticket-confirmation-outline"
-          size={20}
-          color={Color.text}
-          style={{}}
-        />
-      ),
-      onPress: () => {},
-    },
-    {
-      code: 'myshop',
-      title: 'Toko Saya',
-      badgeTitle: '',
-      show: accessClient.MainProfile.showMenuMyStore && user && !user.guest,
-      icon: (
-        <MaterialCommunityIcons
-          name="storefront-outline"
-          size={20}
-          color={Color.text}
-          style={{}}
-        />
-      ),
-      onPress: () => navigation.navigate('MyShopHomepage'),
-    },
-    {
-      code: 'auction',
-      title: 'Bid Auction',
-      badgeTitle: '',
-      show: accessClient.MainProfile.showMenuBidAuction && user && !user.guest,
-      icon: (
-        <MaterialCommunityIcons
-          name="ticket-confirmation-outline"
-          size={20}
-          color={Color.text}
-          style={{}}
-        />
-      ),
-      onPress: () => navigation.navigate('Lelang'),
-    },
+    // {
+    //   code: 'pinned_product',
+    //   title: 'Konten di Pin',
+    //   badgeTitle: '',
+    //   show: true,
+    //   icon: (
+    //     <Ionicons
+    //       name="pricetags-outline"
+    //       size={20}
+    //       color={Color.text}
+    //     />
+    //   ),
+    //   onPress: () => {
+    //     navigation.navigate('ContentProductSaveScreen', {
+    //       title: 'Konten di Pin'
+    //     });
+    //   },
+    // },
+    // {
+    //   code: 'history',
+    //   title: 'Riwayat',
+    //   badgeTitle: '',
+    //   show: accessClient.MainProfile.showMenuHistory && user && !user.guest,
+    //   icon: (
+    //     <Ionicons
+    //       name="receipt-outline"
+    //       size={20}
+    //       color={Color.text}
+    //       style={{}}
+    //     />
+    //   ),
+    //   onPress: () => {},
+    // },
+    // {
+    //   code: 'coupon',
+    //   title: 'Kuponku',
+    //   badgeTitle: '',
+    //   show: accessClient.MainProfile.showMenuCoupon && user && !user.guest,
+    //   icon: (
+    //     <MaterialCommunityIcons
+    //       name="ticket-confirmation-outline"
+    //       size={20}
+    //       color={Color.text}
+    //       style={{}}
+    //     />
+    //   ),
+    //   onPress: () => {},
+    // },
+    // {
+    //   code: 'myshop',
+    //   title: 'Toko Saya',
+    //   badgeTitle: '',
+    //   show: accessClient.MainProfile.showMenuMyStore && user && !user.guest,
+    //   icon: (
+    //     <MaterialCommunityIcons
+    //       name="storefront-outline"
+    //       size={20}
+    //       color={Color.text}
+    //       style={{}}
+    //     />
+    //   ),
+    //   onPress: () => navigation.navigate('MyShopHomepage'),
+    // },
+    // {
+    //   code: 'auction',
+    //   title: 'Bid Auction',
+    //   badgeTitle: '',
+    //   show: accessClient.MainProfile.showMenuBidAuction && user && !user.guest,
+    //   icon: (
+    //     <MaterialCommunityIcons
+    //       name="ticket-confirmation-outline"
+    //       size={20}
+    //       color={Color.text}
+    //       style={{}}
+    //     />
+    //   ),
+    //   onPress: () => navigation.navigate('Lelang'),
+    // },
     {
       code: 'change_profile',
       title: 'Ubah Profil',
@@ -283,53 +283,53 @@ const MainProfile = ({navigation, route}) => {
       ),
       onPress: () => navigation.navigate('SettingScreen'),
     },
-    {
-      code: 'critics_opinion',
-      title: 'Kritik & Saran',
-      badgeTitle: '',
-      show: true,
-      icon: <AntDesign name="carryout" size={20} color={Color.text} style={{}} />,
-      onPress: () =>
-      accessClient.isKomoto || accessClient.isRRID ?
-        Linking.openURL('mailto:wahyu@komoto.id?subject=Kritik dan saran&Body')
-      :
-        Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
-    },
-    {
-      code: 'survey',
-      title: 'Survei',
-      badgeTitle: '',
-      show: accessClient.MainProfile.showMenuSurvey,
-      icon: (
-        <Ionicons
-          name={'ios-receipt' || 'ios-reader'}
-          size={20}
-          color={Color.text}
-          style={{}}
-        />
-      ),
-      onPress: () => navigation.navigate('SurveyPasarScreen'),
-    },
-    {
-      code: 'help',
-      title: 'Bantuan',
-      badgeTitle: '',
-      show: true,
-      icon: (
-        <MaterialCommunityIcons
-          name="headphones"
-          size={20}
-          color={Color.text}
-          style={{}}
-        />
-      ),
-      onPress: () => {
-        navigation.navigate('ChatUserListScreen', { myRoomIds, screenType: 'help' })
-        // Linking.openURL(
-        //   'mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body',
-        // )
-      },
-    },
+    // {
+    //   code: 'critics_opinion',
+    //   title: 'Kritik & Saran',
+    //   badgeTitle: '',
+    //   show: true,
+    //   icon: <AntDesign name="carryout" size={20} color={Color.text} style={{}} />,
+    //   onPress: () =>
+    //   accessClient.isKomoto || accessClient.isRRID ?
+    //     Linking.openURL('mailto:wahyu@komoto.id?subject=Kritik dan saran&Body')
+    //   :
+    //     Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
+    // },
+    // {
+    //   code: 'survey',
+    //   title: 'Survei',
+    //   badgeTitle: '',
+    //   show: accessClient.MainProfile.showMenuSurvey,
+    //   icon: (
+    //     <Ionicons
+    //       name={'ios-receipt' || 'ios-reader'}
+    //       size={20}
+    //       color={Color.text}
+    //       style={{}}
+    //     />
+    //   ),
+    //   onPress: () => navigation.navigate('SurveyPasarScreen'),
+    // },
+    // {
+    //   code: 'help',
+    //   title: 'Bantuan',
+    //   badgeTitle: '',
+    //   show: true,
+    //   icon: (
+    //     <MaterialCommunityIcons
+    //       name="headphones"
+    //       size={20}
+    //       color={Color.text}
+    //       style={{}}
+    //     />
+    //   ),
+    //   onPress: () => {
+    //     navigation.navigate('ChatUserListScreen', { myRoomIds, screenType: 'help' })
+    //     // Linking.openURL(
+    //     //   'mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body',
+    //     // )
+    //   },
+    // },
     // {
     //   code: 'termandcondition',
     //   title: 'Ketentuan Aplikasi',
@@ -539,7 +539,7 @@ const MainProfile = ({navigation, route}) => {
                   </Text>
                 )}
 
-                {accessClient.MainProfile.showStatusMember &&
+                {/* {accessClient.MainProfile.showStatusMember &&
                   user &&
                   !user.guest && (
                     <Text size={8} letterSpacing={0.18}>
@@ -555,7 +555,7 @@ const MainProfile = ({navigation, route}) => {
                           : memberCheck.message}
                       </Text>
                     </Text>
-                  )}
+                  )} */}
               </View>
               {user && !user.isEmailVerify && <TouchableOpacity onPress={() => sendVerify()} style={{ paddingVertical: 10, backgroundColor: Color.primary , borderRadius: 120, justifyContent: 'center', alignItems: 'center', width: 100 }}>
                   <Text size={12} color='#fff'  type="semibold">Verify Email</Text>
@@ -590,7 +590,7 @@ const MainProfile = ({navigation, route}) => {
         </Container>
 
         {/* card */}
-        <Container paddingHorizontal={16} marginTop={16}>
+        {/* <Container paddingHorizontal={16} marginTop={16}>
           <View
             style={{
               width: '100%',
@@ -601,18 +601,6 @@ const MainProfile = ({navigation, route}) => {
               padding: 16,
               ...shadowStyle,
             }}>
-            {/* <Image
-              source={imageCardOrnament}
-              style={{
-                position: 'absolute',
-                top: 0,
-                right: 0,
-                borderTopRightRadius: 8,
-                height: Image.resolveAssetSource(imageCardOrnament).height,
-                width: Image.resolveAssetSource(imageCardOrnament).width,
-              }}
-            /> */}
-
             <View
               style={{
                 flexDirection: 'row',
@@ -682,7 +670,7 @@ const MainProfile = ({navigation, route}) => {
               </TouchableOpacity>
             </View>
           </View>
-        </Container>
+        </Container> */}
 
         <Container paddingHorizontal={16}>
           <View

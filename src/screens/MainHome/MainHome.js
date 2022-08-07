@@ -10,6 +10,7 @@ import {
   Platform,
   FlatList,
   Linking,
+  DeviceEventEmitter,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
