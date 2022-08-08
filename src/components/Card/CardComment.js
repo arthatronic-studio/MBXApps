@@ -22,6 +22,7 @@ import { useSelector } from 'react-redux';
 import { imageContentItem } from 'assets/images/content-item';
 import { useNavigation } from '@react-navigation/native';
 import CardKutipan from 'src/screens/MainForum/NewForum/CardKutipan';
+import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
 
 const defaultProps = {
   canReply: false,
@@ -37,6 +38,7 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
   const user = useSelector(state => state['user.auth'].login.user);
   const { width } = useWindowDimensions();
   const navigation = useNavigation();
+  const {canGeneratedContent} = useCurrentUser();
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [isModalSuccess, setModalSuccess] = useState(false);
@@ -180,7 +182,7 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
             }
           </View>
 
-          {canReply ?
+          {canReply && canGeneratedContent ?
             <Container paddingTop={8}>
               <Row>
                 <TouchableOpacity
@@ -257,7 +259,7 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
                 {itemOwnerReply && <Image source={{ uri: itemOwnerReply.image }} style={{ height: 20, width: 20, borderRadius: 10, borderWidth: 1, borderColor: Color.primary }} />}
               </Row>
             </Container>
-          : item.userId !== user.userId ?
+          : item.userId !== user.userId && canGeneratedContent ?
             <Container paddingTop={8}>
               <Row>
                 <TouchableOpacity

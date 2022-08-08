@@ -65,7 +65,7 @@ import client from "src/lib/apollo";
 import MemberRank from "src/components/MemberRank";
 import MyRank from 'src/components/MyRank';
 
-let tempShowPopupAds = false && true;
+let tempShowPopupAds = true;
 
 const events = [Event.PlaybackTrackChanged];
 
@@ -514,7 +514,7 @@ const MainHome = ({ navigation, route }) => {
             productCategory='FORUM'
             name='Forum'
             title='Thread Populer'
-            nav='ForumScreen'
+            nav='ForumTopicScreen'
             refresh={refreshing || isFocused}
           />
 

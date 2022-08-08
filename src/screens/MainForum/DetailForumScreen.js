@@ -26,6 +26,7 @@ import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
 import { shadowStyle } from 'src/styles';
 import { fetchLikeComment } from 'src/api/likeComment';
 import { initialItemState } from 'src/utils/constants';
+import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
 
 const initSelectedComment = {
     id: 0,
@@ -56,6 +57,7 @@ const DetailForumScreen = ({ route, navigation }) => {
     const [popupProps, showPopup] = usePopup();
     const { Color } = useColor();
     const dispatch = useDispatch();
+    const {canGeneratedContent} = useCurrentUser();
 
     // selector
     const user = useSelector(
@@ -217,7 +219,7 @@ const DetailForumScreen = ({ route, navigation }) => {
                         showVideo
                     />
 
-                    <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
+                    {canGeneratedContent && <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
                         <View style={{ width: '100%', paddingHorizontal: 16, paddingVertical: 12, flexDirection: 'row', borderColor: Color.border, borderWidth: 0.5, borderColor: Color.border, alignItems: 'flex-end' }}>
                             <TouchableOpacity
                                 onPress={() => setModalImagePicker(true)}
@@ -272,7 +274,7 @@ const DetailForumScreen = ({ route, navigation }) => {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                    </View>
+                    </View>}
 
                     {thumbImage !== '' &&
                         <View style={{ width: '100%', borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle, justifyContent: 'center', alignItems: 'center', paddingVertical: 16 }}>

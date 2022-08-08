@@ -16,22 +16,20 @@ import { Container } from 'src/styled';
 import SearchBar from 'src/components/SearchBar';
 import { accessClient } from 'src/utils/access_client';
 import { useSelector } from 'react-redux';
+import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
 
 const { Navigator, Screen } = createMaterialTopTabNavigator();
 
 const ForumScreen = ({ navigation, route }) => {
   const { Color } = useColor();
   const user = useSelector(state => state['user.auth'].login.user);
-
-  let canGeneratedContent = accessClient.UserGeneratedContent === 'ALL_USER';
-  if (accessClient.UserGeneratedContent === 'ONLY_ADMIN' && user && user.isDirector === 1) canGeneratedContent = true;
-  else if (accessClient.UserGeneratedContent === 'ONLY_MEMBER' && user && user.organizationId) canGeneratedContent = true;
+  const { canGeneratedContent } = useCurrentUser();
 
   return (
     <Scaffold
       header={
         <Header
-          title='Forum'
+          title={accessClient.isThisable ? 'Galeri' : 'Forum'}
           centerTitle={false}
           actions={
             canGeneratedContent && <TouchableOpacity
@@ -50,7 +48,7 @@ const ForumScreen = ({ navigation, route }) => {
                 name='plus'
                 size={24}
                 color={Color.text}
-                // onPress={() => navigation.navigate('CardDetailForum')}
+              // onPress={() => navigation.navigate('CardDetailForum')}
               />
             </TouchableOpacity>
           }
@@ -67,33 +65,36 @@ const ForumScreen = ({ navigation, route }) => {
         />
       </Container>
 
-      <Navigator
-        initialRouteName="TabNewPost"
-        tabBarOptions={{
-          activeTintColor: Color.text,
-          inactiveColor: Color.border,
-          labelStyle: { fontSize: 12, fontWeight: 'bold' },
-          style: {
-            backgroundColor: Color.textInput,
-          },
-          labelStyle: { textTransform: 'none' },
-          indicatorStyle: { backgroundColor: Color.primary },
-        }}
-        screenOptions={{
-          
-        }}
-      >
-        <Screen
-          name="TabNewPost"
-          component={TabForumNewPost}
-          options={{ tabBarLabel: 'Beranda' }}
-        />
-        <Screen
-          name="TabMyPost"
-          component={TabForumMyPost}
-          options={{ tabBarLabel: 'Postingan Saya' }}
-        />
-      </Navigator>
+      {user && user.guest ?
+        <TabForumNewPost navigation={navigation} route={route} />
+        :
+        <Navigator
+          initialRouteName="TabNewPost"
+          tabBarOptions={{
+            activeTintColor: Color.text,
+            inactiveColor: Color.border,
+            labelStyle: { fontSize: 12, fontWeight: 'bold' },
+            style: {
+              backgroundColor: Color.textInput,
+            },
+            labelStyle: { textTransform: 'none' },
+            indicatorStyle: { backgroundColor: Color.primary },
+          }}
+          screenOptions={{
+
+          }}
+        >
+          <Screen
+            name="TabNewPost"
+            component={TabForumNewPost}
+            options={{ tabBarLabel: 'Beranda' }}
+          />
+          <Screen
+            name="TabMyPost"
+            component={TabForumMyPost}
+            options={{ tabBarLabel: 'Postingan Saya' }}
+          />
+        </Navigator>}
     </Scaffold>
   );
 }

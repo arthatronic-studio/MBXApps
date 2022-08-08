@@ -16,8 +16,9 @@ import { Header, ModalListAction, Scaffold } from 'src/components';
 import ChatRoomsScreen from 'src/screens/Chat/ChatRoomsScreen';
 import ChatGroupScreen from 'src/screens/Chat/ChatGroupScreen';
 import { initSocket } from 'src/api-socket/currentSocket';
+import { accessClient } from 'src/utils/access_client';
 
-const Chat = ({navigation}) => {
+const Chat = ({navigation, route}) => {
     const currentSocket = initSocket();
     
     // state
@@ -58,7 +59,18 @@ const Chat = ({navigation}) => {
             }
             floatingActionButton={
                 <Pressable
-                    onPress={() => !loadingMyRooms && modalListActionRef.current.open()}
+                    onPress={() => {
+                        if (accessClient.isThisable) {
+                            navigation.navigate('ChatUserListScreen', { myRoomIds, screenType: 'help' });
+                            return;
+                        }
+
+                        if (!loadingMyRooms) {
+                            modalListActionRef.current.open();
+                            modalListActionRef.current.close();
+                        }
+                    }}
+
                     style={{
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -72,7 +84,10 @@ const Chat = ({navigation}) => {
                 </Pressable>
             }
         >
-            <Tab.Navigator
+            {accessClient.isThisable ?
+                <ChatRoomsScreen navigation={navigation} route={route} />
+            :   
+                <Tab.Navigator
                 initialRouteName={'Chat'}
                 tabBarOptions={{
                     indicatorStyle: {
@@ -103,7 +118,7 @@ const Chat = ({navigation}) => {
                     component={ChatGroupScreen}
                     options={{tabBarLabel: 'Grup'}}
                 />
-            </Tab.Navigator>
+            </Tab.Navigator>}
 
             <ModalListAction
                 ref={modalListActionRef}

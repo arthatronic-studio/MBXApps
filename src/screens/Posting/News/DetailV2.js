@@ -45,6 +45,7 @@ import { fetchProductSave } from 'src/api/productSave';
 import { fetchContentProduct } from 'src/api/contentV2';
 import Modal from 'react-native-modal';
 import { onShare } from 'src/utils/share';
+import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
 
 
 const NewsDetailV2 = ({navigation, route}) => {
@@ -69,6 +70,7 @@ const NewsDetailV2 = ({navigation, route}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [trigger, setTrigger] = useState(false);
   const scrollRef = useRef();
+  const {canGeneratedContent} = useCurrentUser();
 
   useEffect(() => {
     const timeout = trigger ? setTimeout(() => {
@@ -369,8 +371,9 @@ const NewsDetailV2 = ({navigation, route}) => {
                 width: '50%',
                 alignItems: 'center',
                 height: '80%',
+                justifyContent: 'flex-end',
               }}>
-              <TouchableOpacity
+              {canGeneratedContent && <TouchableOpacity
                 style={{marginRight: 15}}
                 onPress={async() => {
                   const res = await fetchProductSave({productId: item.id});
@@ -381,16 +384,16 @@ const NewsDetailV2 = ({navigation, route}) => {
                   }
                 }}>
                 {state.bookmark == true ? (
-                  <FontAwesome name={'bookmark'} size={24} />
+                  <FontAwesome name={'bookmark'} size={24} color={Color.textButtonInline} />
                 ) : (
-                  <FontAwesome name={'bookmark-o'} size={24} />
+                  <FontAwesome name={'bookmark-o'} size={24} color={Color.textButtonInline} />
                 )}
-              </TouchableOpacity>
+              </TouchableOpacity>}
               <TouchableOpacity
                 onPress={() => {
                   modalOptionsRef.current.open();
                 }}>
-                <Entypo name={'dots-three-vertical'} size={20} />
+                <Entypo name={'dots-three-vertical'} size={20} color={Color.textButtonInline} />
               </TouchableOpacity>
             </View>
           }
@@ -607,6 +610,11 @@ const NewsDetailV2 = ({navigation, route}) => {
               }}>
               <TouchableWithoutFeedback
                 onPress={() => {
+                  if (!canGeneratedContent) {
+                    alert('Silakan login terlebih dulu');
+                    return;
+                  }
+                  
                   onSubmitLike();
                   GALogEvent('Artikel', {
                     id: item.id,

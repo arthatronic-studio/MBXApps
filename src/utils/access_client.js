@@ -23,6 +23,7 @@ const listInitialCode = [
     'TRIBESXGOFISH',
     'TRIBESXTEUKUZACKY',
     'TRIBESXUNITEDID',
+    'TRIBESXTHISABLE',
 ];
 
 const useDefaultDarkThemeCode = [
@@ -39,6 +40,7 @@ const isGofish = Config.INITIAL_CODE === 'TRIBESXGOFISH';
 const isTeukuZacky = Config.INITIAL_CODE === 'TRIBESXTEUKUZACKY';
 const isSurvey = Config.INITIAL_CODE === 'TRIBESXSURVEY';
 const isUnitedId = Config.INITIAL_CODE === 'TRIBESXUNITEDID';
+const isThisable = Config.INITIAL_CODE === 'TRIBESXTHISABLE';
 
 export const accessClient = {
     // state
@@ -52,6 +54,7 @@ export const accessClient = {
     isTeukuZacky,
     isSurvey,
     isUnitedId,
+    isThisable,
     IsAutoJoinMember:
         isKomoto ? false :
         isSabyan ? true :

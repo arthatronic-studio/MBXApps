@@ -26,6 +26,7 @@ import WidgetForumGroup from './WidgetForumGroup';
 import Config from 'react-native-config';
 import TabViewCollapsible from 'src/components/TabViewCollapsible';
 import { statusBarHeight } from 'src/utils/constants';
+import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
 
 const { Navigator, Screen } = createMaterialTopTabNavigator();
 const itemPerPage = 100;
@@ -35,6 +36,7 @@ const ForumGroupScreen = ({ navigation, route }) => {
 
   const { Color } = useColor();
   const { width, height } = useWindowDimensions();
+  const { canGeneratedContent } = useCurrentUser();
 
   const [itemData, setItemData] = useState({
     data: [],
@@ -59,7 +61,7 @@ const ForumGroupScreen = ({ navigation, route }) => {
       limit: itemPerPage,
       id: params.groupId
     };
-    
+
     console.log('var', variables);
 
     Client.query({
@@ -105,7 +107,7 @@ const ForumGroupScreen = ({ navigation, route }) => {
       showHeader={false}
       useSafeArea={false}
       floatingActionButton={
-        <View
+        canGeneratedContent && <View
           style={{
             width: width / 6,
             aspectRatio: 1,
@@ -144,32 +146,35 @@ const ForumGroupScreen = ({ navigation, route }) => {
         isHighlight
       />}
 
-      <Navigator
-        initialRouteName="TabNewPost"
-        tabBarOptions={{
-          activeTintColor: Color.text,
-          inactiveColor: Color.border,
-          labelStyle: { fontSize: 14, fontWeight: 'bold' },
-          style: {
-            backgroundColor: Color.textInput,
-          },
-          labelStyle: { textTransform: 'none' },
-          indicatorStyle: { backgroundColor: Color.primary },
-        }}
-      >
-        <Screen
-          name="TabNewPost"
-          component={TabForumNewPost}
-          options={{ tabBarLabel: 'Thread' }}
-          initialParams={{ groupId: params.groupId }}
-        />
-        <Screen
-          name="TabMyPost"
-          component={TabForumMyPost}
-          options={{ tabBarLabel: 'Postinganku' }}
-          initialParams={{ groupId: params.groupId }}
-        />
-      </Navigator>
+      {user && user.guest ?
+        <TabForumNewPost navigation={navigation} route={route} />
+        :
+        <Navigator
+          initialRouteName="TabNewPost"
+          tabBarOptions={{
+            activeTintColor: Color.text,
+            inactiveColor: Color.border,
+            labelStyle: { fontSize: 14, fontWeight: 'bold' },
+            style: {
+              backgroundColor: Color.textInput,
+            },
+            labelStyle: { textTransform: 'none' },
+            indicatorStyle: { backgroundColor: Color.primary },
+          }}
+        >
+          <Screen
+            name="TabNewPost"
+            component={TabForumNewPost}
+            options={{ tabBarLabel: 'Thread' }}
+            initialParams={{ groupId: params.groupId }}
+          />
+          <Screen
+            name="TabMyPost"
+            component={TabForumMyPost}
+            options={{ tabBarLabel: 'Postinganku' }}
+            initialParams={{ groupId: params.groupId }}
+          />
+        </Navigator>}
     </Scaffold>
   );
 }

@@ -13,7 +13,7 @@ import {
 } from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
-import { TouchableOpacity } from '@src/components/Button';
+import { Button, TouchableOpacity } from '@src/components/Button';
 import { shadowStyle } from '@src/styles';
 import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
@@ -21,6 +21,7 @@ import { useSelector } from 'react-redux';
 import { Container } from 'src/styled';
 import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 import ModalContentOptions from 'src/components/ModalContentOptions';
+import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
 
 const JobDetail = ({ navigation, route }) => {
     const { item } = route.params;
@@ -38,6 +39,7 @@ const JobDetail = ({ navigation, route }) => {
     const [loadingProps, showLoading, hideLoading] = useLoading();
 
     const { Color } = useColor();
+    const {canGeneratedContent} = useCurrentUser();
 
     // useEffect(() => {
     //     const timeout = trigger ? setTimeout(() => {
@@ -199,25 +201,30 @@ const JobDetail = ({ navigation, route }) => {
                 </View>
             </ScrollView>
 
-            <Submit
-                onPress={() => {
-                    if (state.im_like) {
-                        Alert(
-                          'Konfirmasi',
-                          'Apakah Anda yakin akan membatalkan?',
-                          () => fetchAddLike()
-                        );
-                        return;
-                    }
-
-                    fetchAddLike();
-                }}
-                buttonLabel={state.im_like ? 'Batalkan' : 'Lamar Sekarang'}
-                buttonColor={state.im_like ? Color.error : Color.primary}
-                type='bottomSingleButton'
-                buttonBorderTopWidth={0}
-                style={{backgroundColor: Color.theme, paddingTop: 25, paddingBottom: 25}}
-            />
+            <Container padding={16}>
+                <Button
+                    color={state.im_like ? Color.error : Color.primary}
+                    onPress={() => {
+                        if (!canGeneratedContent) {
+                            alert('Silakan login terlebih dulu');
+                            return;
+                        }
+    
+                        if (state.im_like) {
+                            Alert(
+                              'Konfirmasi',
+                              'Apakah Anda yakin akan membatalkan?',
+                              () => fetchAddLike()
+                            );
+                            return;
+                        }
+    
+                        fetchAddLike();
+                    }}
+                >
+                    {state.im_like ? 'Batalkan' : 'Lamar Sekarang'}
+                </Button>
+            </Container>
 
             <ModalContentOptions
                 ref={modalOptionsRef}

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   onRefresh,
   RefreshControl,
+  Platform,
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import {useSelector} from 'react-redux';
@@ -22,6 +23,7 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import client from 'src/lib/apollo';
 import HighlightContentProductV2 from 'src/components/Content/HighlightContentProductV2';
 import moment from 'moment';
+import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
 
 const NewsScreenV2 = ({navigation, route}) => {
   const {title, userProfileId} = route.params;
@@ -35,19 +37,7 @@ const NewsScreenV2 = ({navigation, route}) => {
   const [refreshing, setRefreshing] = useState(false);
   
   const colorOutputRange = [Color[accessClient.ColorBgParallax], Color.theme];
-  let canGeneratedContent = accessClient.UserGeneratedContent === 'ALL_USER';
-  if (
-    accessClient.UserGeneratedContent === 'ONLY_ADMIN' &&
-    user &&
-    user.isDirector === 1
-  )
-    canGeneratedContent = true;
-  else if (
-    accessClient.UserGeneratedContent === 'ONLY_MEMBER' &&
-    user &&
-    user.organizationId
-  )
-    canGeneratedContent = true;
+  const {canGeneratedContent} = useCurrentUser();
 
   useEffect(() => {
     fetchBannerList();
@@ -148,8 +138,8 @@ const NewsScreenV2 = ({navigation, route}) => {
   return (
     <Scaffold
       header={<ArticleHeader />}
-      translucent
-      useSafeArea={false}
+      translucent={Platform.OS === 'ios' ? true : false}
+      useSafeArea={Platform.OS === 'ios' ? false : true}
       statusBarColor={Color.primarySoft}
     >
       <ScrollView

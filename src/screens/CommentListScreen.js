@@ -28,6 +28,7 @@ import { fetchLikeComment } from 'src/api/likeComment';
 import { useIsFocused } from '@react-navigation/native';
 import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
 import { imageContentItem } from 'assets/images/content-item';
+import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
 
 const itemPerPage = 10;
 const initSelectedComment = {
@@ -61,6 +62,7 @@ const CommentListScreen = ({ navigation, route }) => {
   const [popupProps, showPopup] = usePopup();
   const user = useSelector(state => state['user.auth'].login.user);
   const { height } = useWindowDimensions();
+  const {canGeneratedContent} = useCurrentUser();
 
   const isOwnerProduct = user && !user.guest && user.userId === item.ownerId;
 
@@ -291,7 +293,7 @@ const CommentListScreen = ({ navigation, route }) => {
           <Text size={12}>{title}</Text>
         </View>
 
-        <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
+        {canGeneratedContent && <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
           <View style={{ width: '100%', paddingHorizontal: 16, paddingVertical: 12, flexDirection: 'row', borderColor: Color.border, borderWidth: 0.5, borderColor: Color.border, alignItems: 'flex-end' }}>
             <TouchableOpacity
               onPress={() => setModalImagePicker(true)}
@@ -346,7 +348,7 @@ const CommentListScreen = ({ navigation, route }) => {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </View>}
 
         {thumbImage !== '' &&
           <View style={{ width: '100%', borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle, justifyContent: 'center', alignItems: 'center', paddingVertical: 16 }}>

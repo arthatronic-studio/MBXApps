@@ -382,8 +382,7 @@ function MainStackNavigator() {
       />
       <Screen name="DetailForumScreen" component={DetailForumScreen} />
       <Screen name="EditThreadScreen" component={EditThreadScreen} />
-      {/* <Screen name="ForumScreen" component={ForumScreen} /> */}
-      <Screen name="ForumScreen" component={ForumTopicScreen} />
+      <Screen name="ForumScreen" component={ForumScreen} />
       <Screen name="ForumSearch" component={ForumSearch} />
       <Screen name="ForumKutipan" component={ForumKutipan} />
       <Screen name="ForumTopicScreen" component={ForumTopicScreen} />

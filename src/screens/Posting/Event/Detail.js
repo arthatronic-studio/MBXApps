@@ -19,12 +19,14 @@ import ModalContentOptions from 'src/components/ModalContentOptions';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { FormatMoney } from 'src/utils';
 import { accessClient } from 'src/utils/access_client';
+import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
 
 const EventDetail = ({navigation, route}) => {
   const {Color} = useColor();
   const {item} = route.params;
   const modalOptionsRef = useRef();
   const user = useSelector(state => state['user.auth'].login.user);
+  const {canGeneratedContent} = useCurrentUser();
 
   const [im_like, set_im_like] = useState(item.im_like);
 
@@ -389,6 +391,11 @@ const EventDetail = ({navigation, route}) => {
         <TouchableOpacity
           disabled={isPassedEventDate}
           onPress={() => {
+            if (!canGeneratedContent) {
+              alert('Silakan login terlebih dulu');
+              return;
+            }
+
             GALogEvent('Event', {
               id: item.id,
               product_name: item.productName,

@@ -6,11 +6,11 @@ import { useCombinedRefs } from '@src/hooks';
 import ModalListAction from '@src/components/Modal/ModalListAction';
 import ModalInputText from '@src/components/ModalInputText';
 import {Alert} from '@src/components/Modal/Alert';
-import { accessClient } from 'src/utils/access_client';
 import { queryProductManage, queryProductReport, queryReportAbuse, queryUserBlock } from '@src/lib/query';
 import Client from '@src/lib/apollo';
 import { fetchProductSave } from 'src/api/productSave';
 import { onShare } from 'src/utils/share';
+import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
 
 const defaultProps = {
   isOwner: false,
@@ -34,6 +34,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
   const combinedRef = useCombinedRefs(ref, modalizeRef);
   const navigation = useNavigation();
   const { Color } = useColor();
+  const {canGeneratedContent} = useCurrentUser();
 
   const [modalInputText, setModalInputText] = useState(false);
   const [message, setMessage] = useState(initialMessage);
@@ -155,7 +156,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
   }
 
   const showForOwner = isOwner ? true : false;
-  const showForOther = isOwner ? false : true;
+  const showForOther = isOwner ? false : canGeneratedContent ? true : false;
 
   const onPinProduct = async() => {
     const result = await fetchProductSave({ productId: item.id });
@@ -174,7 +175,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
   const dataOptions = [
     {
       id: -1,
-      show: isOwner ? false : showpin ? true : false,
+      show: isOwner ? false : showpin && canGeneratedContent ? true : false,
       name: 'Pin Postingan',
       color: Color.text,
       onPress: () => {

@@ -248,7 +248,13 @@ export const register = (user) => async (dispatch, getState) => {
       // console.log(responseRegis, 'responseRegis');
       
       if (responseRegis.data.Success) {
-        dispatch({ type: 'USER.REGISTER', status: responseRegis.data.Success });
+        // dispatch({ type: 'USER.REGISTER', status: responseRegis.data.Success });
+        let id = null;
+        if (responseRegis.data.Data && responseRegis.data.Data.newUser && responseRegis.data.Data.newUser.id) {
+          id = parseInt(responseRegis.data.Data.newUser.id);
+        }
+        dispatch({ type: 'USER.REGISTER', status: responseRegis.data.Success, id });
+
         GALogSignUp();
       }
       else {

@@ -74,6 +74,18 @@ const LoginScreen = ({navigation, route}) => {
   const passwordRef = useRef();
 
   useEffect(() => {
+    if (route.params && route.params.triggerRegister) {
+      navigation.setParams({ triggerRegister: false });
+      
+      // if (accessClient.isThisable) {
+      //   setModalRegister(true);
+      //   return;
+      // }
+    }
+  }, [route.params]);
+
+
+  useEffect(() => {
     messaging()
       .getToken()
       .then(res => {
@@ -322,7 +334,7 @@ const LoginScreen = ({navigation, route}) => {
               color={Color.secondary}
               onPress={() => {
                 navigation.navigate('RegisterScreen');
-                dispatch({ type: 'USER.REGISTER', status: false });
+                dispatch({ type: 'USER.REGISTER', status: false, id: null });
               }}
             >
               Daftar

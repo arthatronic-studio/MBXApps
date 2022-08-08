@@ -14,6 +14,7 @@ import Scaffold from '@src/components/Scaffold';
 import ListContentProduct from 'src/components/Content/ListContentProduct';
 import { accessClient } from 'src/utils/access_client';
 import { useIsFocused } from '@react-navigation/native';
+import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
 
 const EmergencyScreen = ({ navigation, route }) => {
     const { title, userProfileId } = route.params;
@@ -25,10 +26,7 @@ const EmergencyScreen = ({ navigation, route }) => {
     const [loadingProps, showLoading, hideLoading] = useLoading();
     const { Color } = useColor();
     const isFocused = useIsFocused();
-
-    let canGeneratedContent = accessClient.UserGeneratedContent === 'ALL_USER';
-    if (accessClient.UserGeneratedContent === 'ONLY_ADMIN' && user && user.isDirector === 1) canGeneratedContent = true;
-    else if (accessClient.UserGeneratedContent === 'ONLY_MEMBER' && user && user.organizationId) canGeneratedContent = true;
+    const {canGeneratedContent} = useCurrentUser();
 
     return (
         <Scaffold

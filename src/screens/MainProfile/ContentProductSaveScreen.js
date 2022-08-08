@@ -16,6 +16,7 @@ import { useIsFocused } from '@react-navigation/native';
 import HighlightContentProductV2 from 'src/components/Content/HighlightContentProductV2';
 import moment from 'moment';
 import { ScrollView } from 'react-native';
+import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
 
 const ContentProductSaveScreen = ({ navigation, route }) => {
     const { title, userProfileId } = route.params;
@@ -26,10 +27,7 @@ const ContentProductSaveScreen = ({ navigation, route }) => {
     );
     const { Color } = useColor();
     const isFocused = useIsFocused();
-
-    let canGeneratedContent = accessClient.UserGeneratedContent === 'ALL_USER';
-    if (accessClient.UserGeneratedContent === 'ONLY_ADMIN' && user && user.isDirector === 1) canGeneratedContent = true;
-    else if (accessClient.UserGeneratedContent === 'ONLY_MEMBER' && user && user.organizationId) canGeneratedContent = true;
+    const {canGeneratedContent} = useCurrentUser();
     
     return (
         <Scaffold

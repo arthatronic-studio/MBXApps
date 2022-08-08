@@ -21,6 +21,7 @@ import { VideoPlayerAndroid } from 'src/components/VideoPlayerAndroid';
 import HtmlView from 'src/components/HtmlView';
 import { fetchContentProductViewManage } from 'src/api/content';
 import { onShare } from 'src/utils/share';
+import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
 
 const defaultProps = {
   onPress: () => { },
@@ -43,6 +44,7 @@ const CardForumVertical = ({ item: itemProps, numColumns, onPress, onPressDot, s
   const dispatch = useDispatch();
   const user = useSelector(state => state['user.auth'].login.user);
   const itemUpdate = useSelector(state => state['itemUpdate']);
+  const {canGeneratedContent} = useCurrentUser();
 
   useEffect(() => {
     if (itemUpdate && itemUpdate.name === 'PRODUCT_FORUM' && itemUpdate.item && itemUpdate.item.id === item.id) {
@@ -285,7 +287,10 @@ const CardForumVertical = ({ item: itemProps, numColumns, onPress, onPressDot, s
         }}>
         <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between' }}>
           <TouchableOpacity
-            onPress={() => onSubmitLike()}
+            onPress={() => {
+              if (canGeneratedContent) onSubmitLike();
+              else alert('Silakan login terlebih dahulu!');
+            }}
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
