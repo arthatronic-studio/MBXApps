@@ -1,12 +1,11 @@
 import React, {useRef, forwardRef, useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
 
 import {useColor} from '@src/components';
 import {useCombinedRefs} from '@src/hooks';
-import ModalListAction from './Modal/ModalListAction';
+import ModalListAction from '@src/components/Modal/ModalListAction';
 import ModalInputText from '@src/components/ModalInputText';
-import {useNavigation} from '@react-navigation/native';
-import {Alert} from './Modal/Alert';
-import {accessClient} from 'src/utils/access_client';
+import {Alert} from '@src/components/Modal/Alert';
 import {queryReportAbuse, queryUserBlock} from '@src/lib/query';
 import Client from '@src/lib/apollo';
 import { fetchProductSave } from 'src/api/productSave';

@@ -43,8 +43,12 @@ const MemberRank = ({ }) => {
       })
       .then(res => {
         if (res && res.data && res.data.getUserRangkingHome) {
-          setPemula(res.data.getUserRangkingHome.pemula);
-          setVeteran(res.data.getUserRangkingHome.veteran);
+          if (res.data.getUserRangkingHome.pemula) {
+            setPemula(res.data.getUserRangkingHome.pemula);
+          }
+          if (res.data.getUserRangkingHome.veteran) {
+            setVeteran(res.data.getUserRangkingHome.veteran);
+          }
         }
       })
       .catch(err => {

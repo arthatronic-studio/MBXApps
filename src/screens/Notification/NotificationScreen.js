@@ -146,9 +146,9 @@ const NotificationScreen = ({ navigation, route }) => {
       headerTitle='Notifikasi'
       fallback={loading}
       empty={history.length === 0}
-      iconRightButton={<Feather name='more-vertical' size={20} color={Color.text} />}
+      iconRightButton={modalListActionRef.current && <Feather name='more-vertical' size={20} color={Color.text} />}
       onPressRightButton={() => {
-        modalListActionRef.current.open();
+        if (modalListActionRef.current) modalListActionRef.current.open();
       }
       }
       emptyTitle="Notifikasi belum tersedia"
