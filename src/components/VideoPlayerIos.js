@@ -18,11 +18,20 @@ import WebView from 'react-native-webview';
 import FormInput from 'src/components/FormInput';
 import { Divider } from 'src/styled';
 
-const VideoPlayerIos = ({ item }) => {
+const defaultProps = {
+    autoplay: true,
+    item: {
+        videoFilename: '',
+    },
+}
+
+const VideoPlayerIos = ({ autoplay, item }) => {
     const { height, width } = useWindowDimensions();
     const { Color } = useColor();
 
     const [loading, setLoading] = useState(false);
+    const [show, setShow] = useState(true);
+    const [play, setPlay] = useState(autoplay);
 
     const onLoadStart = (e) => {
         console.log('onLoadStart', e);
@@ -36,6 +45,10 @@ const VideoPlayerIos = ({ item }) => {
     
     const onBuffer = (e) => {
         console.log('onBuffer', e);
+    }
+
+    if (!show) {
+        return <View />
     }
 
     return (
@@ -53,11 +66,16 @@ const VideoPlayerIos = ({ item }) => {
                 }}
                 controls
                 fullscreen={false}
-                paused={false}
+                paused={!play}
                 resizeMode='cover'
                 onBuffer={onBuffer}
                 onLoadStart={onLoadStart}
                 onLoad={onLoad}
+                onError={(err) => {
+                    console.log('err', err);
+                    setShow(false);
+                }}
+                
             />
 
             {loading && <View
@@ -75,4 +93,5 @@ const VideoPlayerIos = ({ item }) => {
     )
 }
 
+VideoPlayerIos.defaultProps = defaultProps;
 export default VideoPlayerIos;

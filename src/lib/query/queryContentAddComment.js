@@ -7,6 +7,7 @@ export const queryAddComment = gql`
         $parentCommentId: Int
         $stream: String
         $image: String
+        $commentQuoteId: Int
     ){
         contentAddComment(
             comment: $comment
@@ -14,6 +15,7 @@ export const queryAddComment = gql`
             parentCommentId: $parentCommentId
             stream: $stream
             image: $image
+            commentQuoteId: $commentQuoteId
         ) {
             id
             userId

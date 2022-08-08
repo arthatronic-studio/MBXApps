@@ -4,7 +4,9 @@ import Styled from 'styled-components';
 import { Portal } from 'react-native-portalize';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { ProgressBar } from '@react-native-community/progress-bar-android';
-
+import {
+  iconwait,
+} from '@assets/images/home';
 import Text from '@src/components/Text';
 import { useColor } from '@src/components';
 
@@ -134,6 +136,17 @@ const Loading = (props) => {
               <Text color={Color.info}>{message}</Text>
             </BodyText>}
           </Body>
+        : loadingType === 'wait' ?
+        <Body type={type} transparent={transparent} backgroundColor={Color.theme}>
+          <Entypo name='cross' size={24} color={Color.border} onClose={() => onClose()} style={{position: 'absolute', top: 8, right: 8}} />          
+          <Image
+            style={{ height: 50, width: 30, tintColor: Color.primary }}
+            source={iconwait}
+          />
+          {message !== '' && <BodyText>
+            <Text color={Color.info}>{message}</Text>
+          </BodyText>}
+        </Body>
         :
           <Body type={type} transparent={transparent} backgroundColor={Color.theme}>
             <ContainerIndicator borderColor={Color.primary}>

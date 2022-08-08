@@ -35,7 +35,6 @@ import {queryAddCart, queryDetailProduct, queryGetCart, queryUpdateItemCart, que
 import Client from 'src/lib/apollo';
 import {FormatMoney} from 'src/utils';
 import DetailProductHeader from './DetailProductHeader';
-import Share from 'react-native-share';
 import {Container, Divider} from 'src/styled';
 import { async } from 'validate.js';
 
@@ -294,9 +293,7 @@ const DetailProduct = ({navigation, route}) => {
                     </TouchableOpacity>
                     {/* <TouchableOpacity
                       onPress={async () => {
-                        await Share.open({
-                          url: detail.share_link || 'Belum ada Linknya',
-                        });
+                        
                       }}
                       style={{marginHorizontal: 3}}>
                       <AntDesign

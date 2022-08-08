@@ -286,6 +286,7 @@ const NewsDetail = ({navigation, route}) => {
         ref={modalOptionsRef}
         isOwner={user && user.userId === item.ownerId}
         item={item}
+        moduleType="NEWS"
       />
     </Scaffold>
   );

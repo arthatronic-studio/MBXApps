@@ -10,6 +10,7 @@ query(
     $productSubCategory: ContentProductSubCategory
     $page: Int
     $itemPerPage: Int
+    $groupId: Int
 ){
     contentUserProduct(
         productCode: $productCode
@@ -20,6 +21,7 @@ query(
         productSubCategory: $productSubCategory
         page: $page
         itemPerPage: $itemPerPage
+        groupId: $groupId
     ){
         id
         code
@@ -53,6 +55,9 @@ query(
         longitude
         mainImage
         eventDate
+        groupId
+        fullDescription
+        im_save
     }
 }
 `;
