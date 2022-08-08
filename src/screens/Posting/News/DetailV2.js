@@ -384,16 +384,16 @@ const NewsDetailV2 = ({navigation, route}) => {
                   }
                 }}>
                 {state.bookmark == true ? (
-                  <FontAwesome name={'bookmark'} size={24} color={Color.textButtonInline} />
+                  <FontAwesome name={'bookmark'} size={24} color={Color.text} />
                 ) : (
-                  <FontAwesome name={'bookmark-o'} size={24} color={Color.textButtonInline} />
+                  <FontAwesome name={'bookmark-o'} size={24} color={Color.text} />
                 )}
               </TouchableOpacity>}
               <TouchableOpacity
                 onPress={() => {
                   modalOptionsRef.current.open();
                 }}>
-                <Entypo name={'dots-three-vertical'} size={20} color={Color.textButtonInline} />
+                <Entypo name={'dots-three-vertical'} size={20} color={Color.text} />
               </TouchableOpacity>
             </View>
           }
