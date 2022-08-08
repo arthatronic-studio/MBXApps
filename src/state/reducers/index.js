@@ -7,6 +7,7 @@ import theme from './theme';
 import Article from './history/article';
 import uploadChunkState from './upload/uploadChunkState';
 import surveyPasar from './survey/pasar';
+import itemUpdate from './item-update';
 
 const config = {
   key: 'root',
@@ -20,6 +21,7 @@ const reducer = persistCombineReducers(config, {
   uploadChunkState,
   'history.article': Article,
   surveyPasar,
+  itemUpdate,
 });
 
 export default reducer;

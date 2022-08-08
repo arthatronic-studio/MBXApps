@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Image, TextInput, Dimensions, SafeAreaView, FlatList } from 'react-native';
-import Styled from 'styled-components';
-import Moment from 'moment';
+import { View, Image, TextInput, FlatList } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
     Alert,
@@ -13,39 +11,41 @@ import {
     ModalListAction,
     TouchableOpacity,
     Scaffold,
-    useColor
+    useColor,
+    ScreenEmptyData,
+    usePopup
 } from '@src/components';
-
 import Client from '@src/lib/apollo';
 import { queryContentProduct, queryComment, queryAddComment, queryDelComment } from '@src/lib/query';
-
-import {
-    imageBlank,
-} from '@assets/images';
 import CardForumVertical from './CardForumVertical';
-import { Container, Divider } from 'src/styled';
+import { Container, Divider, Row } from 'src/styled';
 import ModalContentOptions from 'src/components/ModalContentOptions';
+import { imageContentItem } from 'assets/images/content-item';
+import CardComment from 'src/components/Card/CardComment';
+import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
+import { shadowStyle } from 'src/styles';
+import { fetchLikeComment } from 'src/api/likeComment';
+import { initialItemState } from 'src/utils/constants';
 
-const windowWidth = Dimensions.get('window').width;
-
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
+const initSelectedComment = {
+    id: 0,
+    index: -1,
+};
 
 const DetailForumScreen = ({ route, navigation }) => {
     const { params } = route;
 
     // state
     const [item, setItem] = useState(params.item);
-    const [selectedCommentId, setSelectedCommentId] = useState(-1);
+    const [selectedComment, setSelectedComment] = useState(initSelectedComment);
+    const [isOwnerComment, setIsOwnerComment] = useState(false);
+    const [isPinnedComment, setIsPinnedComment] = useState(false);
     const [textComment, setTextComment] = useState('');
-    const [dataComment, setDataComment] = useState({
-        data: [],
-        loading: true,
-        page: 0,
-        loadNext: false,
-    });
-    const [refreshComment, setRefreshComment] = useState(false);
+    const [dataComment, setDataComment] = useState(initialItemState);
+
+    const [thumbImage, setThumbImage] = useState('');
+    const [mimeImage, setMimeImage] = useState('image/jpeg');
+    const [modalImagePicker, setModalImagePicker] = useState(false);
 
     // ref
     const modalListActionRef = useRef();
@@ -53,7 +53,9 @@ const DetailForumScreen = ({ route, navigation }) => {
 
     // hooks
     const [loadingProps, showLoading] = useLoading();
+    const [popupProps, showPopup] = usePopup();
     const { Color } = useColor();
+    const dispatch = useDispatch();
 
     // selector
     const user = useSelector(
@@ -62,31 +64,15 @@ const DetailForumScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         fetchContentProduct();
+        fetchCommentList();
     }, []);
 
     useEffect(() => {
-        if (refreshComment) {
+        if (dataComment.refresh) {
             fetchContentProduct();
-
-            if (item && item.comment > 0) {
-                fetchCommentList('initial');
-                setRefreshComment(false);
-            }
+            fetchCommentList();
         }
-    }, [refreshComment]);
-
-    // useEffect(() => {
-    //     if (item && item.comment > 0) {
-    //         fetchCommentList('initial');
-    //     } else {
-    //         setDataComment({
-    //             ...dataComment,
-    //             loading: false,
-    //             page: -1,
-    //             loadNext: false,
-    //         });
-    //     }
-    // }, [item]);
+    }, [dataComment.refresh]);
 
     useEffect(() => {
         if (dataComment.page !== -1 && item) {
@@ -106,6 +92,12 @@ const DetailForumScreen = ({ route, navigation }) => {
 
                 if (res.data.contentProduct.length > 0) {
                     setItem(res.data.contentProduct[0]);
+
+                    const data = {
+                        name: 'PRODUCT_FORUM',
+                        item: res.data.contentProduct[0],
+                    };
+                    dispatch({ type: 'ITEM_UPDATE.ADD', data });
                 }
             })
             .catch((err) => {
@@ -113,11 +105,11 @@ const DetailForumScreen = ({ route, navigation }) => {
             });
     }
 
-    const fetchCommentList = (initial) => {
+    const fetchCommentList = () => {
         Client.query({
             query: queryComment,
             variables: {
-                page: dataComment.page + 1,
+                page: dataComment.refresh ? 1 : dataComment.page + 1,
                 itemPerPage: 10,
                 productId: item.id
             }
@@ -125,42 +117,37 @@ const DetailForumScreen = ({ route, navigation }) => {
             .then((res) => {
                 console.log(res, 'res list comm');
 
-                if (initial) {
-                    setDataComment({
-                        data: res.data.contentComment,
-                        loading: false,
-                        page: res.data.contentComment.length === 10 ? 1 : -1,
-                        loadNext: false,
-                    });
-                } else {
-                    setDataComment({
-                        data: dataComment.data.concat(res.data.contentComment),
-                        loading: false,
-                        page: res.data.contentComment.length === 10 ? dataComment.page + 1 : -1,
-                        loadNext: false,
-                    });
-                }
+                setDataComment({
+                    ...dataComment,
+                    data: dataComment.refresh ? res.data.contentComment : dataComment.data.concat(res.data.contentComment),
+                    page: res.data.contentComment.length === 10 ? dataComment.page + 1 : -1,
+                    loading: false,
+                    loadNext: false,
+                    refresh: false,
+                });
             })
             .catch((err) => {
                 console.log(err, 'err list comm');
                 setDataComment({
                     ...dataComment,
-                    loading: false,
                     page: -1,
+                    loading: false,
                     loadNext: false,
+                    refresh: false,
                 });
             })
     }
 
-    const submitComment = () => {
+    const onSubmitComment = () => {
         if (textComment === '') {
-            alert('Isi komentar tidak boleh kosong');
+            showPopup('Isi komentar tidak boleh kosong', 'warning');
             return;
         }
 
         const variables = {
             productId: item.id,
             comment: textComment,
+            image: thumbImage,
         };
 
         console.log(variables, 'variables');
@@ -173,10 +160,12 @@ const DetailForumScreen = ({ route, navigation }) => {
                 console.log(res, 'res add comm');
 
                 if (res.data.contentAddComment.id) {
-                    const arrNew = [res.data.contentAddComment].concat([]);
-
-                    setTextComment('');
-                    setRefreshComment(true);
+                    setTextComment('');                    
+                    setThumbImage('');
+                    
+                    // let newArr = [res.data.contentAddComment].concat(dataComment.data);
+                    // setDataComment({ ...dataComment, data: newArr });
+                    setDataComment({ ...dataComment, refresh: true });
                 } else {
                     showLoading('error', 'Gagal mengirimkan komentar');
                 }
@@ -191,7 +180,7 @@ const DetailForumScreen = ({ route, navigation }) => {
         showLoading();
 
         const variables = {
-            id: selectedCommentId,
+            id: selectedComment.id,
             productId: item.id,
         };
 
@@ -205,7 +194,10 @@ const DetailForumScreen = ({ route, navigation }) => {
                 showLoading(data.success ? 'success' : 'error', data.message);
 
                 if (data.success) {
-                    setRefreshComment(true);
+                    // let newArr = [ ...dataComment.data];
+                    // newArr.splice(selectedComment.index, 1);
+                    // setDataComment({ ...dataComment, data: newArr });
+                    setDataComment({ ...dataComment, refresh: true });
                 }
             })
             .catch((err) => {
@@ -214,75 +206,147 @@ const DetailForumScreen = ({ route, navigation }) => {
             })
     }
 
-    const managedDate = (origin) => {
-        const date = Moment(origin);
-        const now = new Moment();
-        const diff = now.diff(Moment(date), 'days');
-
-        let title = '';
-
-        if (diff === 0) {
-            title = 'Hari ini - ' + date.format('HH:mm');
-        } else if (diff === 1) {
-            title = 'Kemarin - ' + date.format('HH:mm');
-        } else {
-            title = date.format('dddd, DD/MM/YYYY - HH:mm');;
-        }
-        
-        return title;
-    }
-
     const renderHeader = () => {
         return (
-            <View style={{ alignItems: 'center' }}>
-                <CardForumVertical
-                    item={item}
-                    onPressDot={() => modalOptionsRef.current.open()}
-                    showAllText
-                />
+            <>
+                <View style={{ alignItems: 'center' }}>
+                    <CardForumVertical
+                        item={item}
+                        onPressDot={() => modalOptionsRef.current.open()}
+                        showAllText
+                        showVideo
+                    />
 
-                <View style={{ width: '100%', paddingHorizontal: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12, paddingTop: 16 }}>
-                    <Text type='bold'>{item.comment} Tanggapan</Text>
+                    <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <View style={{ width: '100%', paddingHorizontal: 16, paddingVertical: 12, flexDirection: 'row', borderColor: Color.border, borderWidth: 0.5, borderColor: Color.border, alignItems: 'flex-end' }}>
+                            <TouchableOpacity
+                                onPress={() => setModalImagePicker(true)}
+                                style={{ paddingRight: 8 }}
+                            >
+                                <Image
+                                    source={imageContentItem.camera}
+                                    style={{
+                                        height: 32,
+                                        width: 32,
+                                        resizeMode: 'contain',
+                                    }}
+                                />
+                            </TouchableOpacity>
+
+                            <View style={{ flex: 1, borderRadius: 8, backgroundColor: Color.border }}>
+                                <TextInput
+                                    placeholder='Tulis pendapat kamu'
+                                    placeholderTextColor={Color.text}
+                                    style={{
+                                        fontSize: 12,
+                                        fontFamily: 'Inter-Regular',
+                                        color: Color.text,
+                                        backgroundColor: Color.border,
+                                        includeFontPadding: false,
+                                        marginTop: Platform.OS === 'android' ? 0 : 6,
+                                        marginBottom: Platform.OS === 'android' ? 0 : 10,
+                                        paddingHorizontal: 8,
+                                        maxHeight: 120,
+                                    }}
+                                    value={textComment}
+                                    multiline
+                                    onChangeText={(e) => setTextComment(e)}
+                                />
+                            </View>
+
+                            <View style={{ paddingLeft: 8 }}>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        onSubmitComment();
+                                    }}
+                                    style={{
+                                        width: 32,
+                                        height: 32,
+                                        borderRadius: 16,
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        backgroundColor: Color.primary,
+                                    }}
+                                >
+                                    <Ionicons name='arrow-forward' color={Color.theme} size={18} />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+
+                    {thumbImage !== '' &&
+                        <View style={{ width: '100%', borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle, justifyContent: 'center', alignItems: 'center', paddingVertical: 16 }}>
+                            <View
+                                style={{ width: '100%', aspectRatio: 16 / 9 }}
+                            >
+                                <Image
+                                    style={{ height: '100%', width: '100%', borderRadius: 4, alignItems: 'center', justifyContent: 'center' }}
+                                    source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
+                                    resizeMode='contain'
+                                />
+
+                                <View style={{ position: 'absolute', right: 16, top: -16 }}>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            setThumbImage('');
+                                        }}
+                                    >
+                                        <Entypo name='circle-with-cross' size={30} color={Color.error} />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    }
                 </View>
-            </View>
+
+                <Container paddingHorizontal={16} paddingTop={16} paddingBottom={10}>
+                    <Text align='left'>Komentar Orang Lain</Text>
+                </Container>
+            </>
         )
     }
 
-    const renderItem = (item, index) => {
-        const canManageComment = user && !user.guest && user.userId === item.userId;
+    const isOwnerProduct = user && !user.guest && user.userId === item.ownerId;
+
+    const renderItem = (itemComment, index) => {
+        const canManageComment = user && !user.guest && user.userId === itemComment.userId;
+        const _isOwnerComment = user && !user.guest && user.userId === itemComment.userId;
 
         return (
-            <View style={[
-                { width: '100%', flexDirection: 'row', marginBottom: 2, paddingVertical: 8, paddingRight: 16 },
-                index === 0 && { marginTop: 4 }
-            ]}>
-                <View style={{ width: '16%', alignItems: 'center', paddingTop: 4, paddingRight: 8, paddingLeft: 16 }}>
-                    <Image source={{ uri: item.image }} style={{ width: '100%', aspectRatio: 1, borderRadius: 50, backgroundColor: Color.primary }} />
-                </View>
-                <View style={{ width: '84%' }}>
-                    <View style={{flexDirection: 'row', padding: 8, borderRadius: 8, backgroundColor: Color.border}}>
-                        <View style={{flex: 1}}>
-                            <Text size={12} align='left' style={{ opacity: 0.75 }}>{item.fullname}</Text>
-                            <Divider height={8} />
-                            <Text size={12} align='left' type='medium'>{item.comment}</Text>
-                        </View>
-                        {canManageComment && <TouchableOpacity
-                            onPress={() => {
-                                modalListActionRef.current.open();
-                                setSelectedCommentId(item.id);
-                            }}
-                            style={{ height: 30, alignItems: 'center', justifyContent: 'center' }}
-                        >
-                            <Entypo name='dots-three-vertical' />
-                        </TouchableOpacity>}
-                    </View>
-
-                    <Container paddingTop={8}>
-                        <Text size={10} align='left' style={{ opacity: 0.75 }}>{managedDate(parseInt(item.commentDate))}</Text>
-                    </Container>
-                </View>
-            </View>
-        )
+            <CardComment
+                item={itemComment}
+                productOwnerId={item.ownerId}
+                canReply
+                // showOptions={_isOwnerComment || isOwnerProduct}
+                showOptions={_isOwnerComment}
+                onPressDots={() => {
+                    modalListActionRef.current.open();
+                    setSelectedComment({ ...itemComment, index });
+                    setIsOwnerComment(_isOwnerComment);
+                    setIsPinnedComment(itemComment.isPinned);
+                }}
+                onPressReply={() => {
+                    setSelectedComment({ ...itemComment, index });
+                    navigation.navigate('CommentReplyScreen', {
+                        ...route.params,
+                        parentComment: { ...itemComment, index },
+                        onRefresh: () => {
+                            setDataComment({ ...dataComment, refresh: true });
+                        }
+                    });
+                }}
+                onRefresh={() => {
+                    setDataComment({ ...dataComment, refresh: true });
+                }}
+                onPressLike={async () => {
+                    setSelectedComment({ ...itemComment, index });
+                    const res = await fetchLikeComment({commentId: itemComment.id});
+                    if(res.status == true) {
+                        setDataComment({ ...dataComment, refresh: true });
+                    }
+                }}
+            />
+        );
     }
 
     return (
@@ -290,41 +354,45 @@ const DetailForumScreen = ({ route, navigation }) => {
             headerTitle='Detail'
             fallback={!item || dataComment.loading}
             loadingProps={loadingProps}
+            popupProps={popupProps}
         >
             <FlatList
                 keyExtractor={(item, index) => item.toString() + index}
-                data={dataComment.data}
+                data={dataComment.data.length > 0 ? dataComment.data : [{ init: true }]}
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps='handled'
-                ListHeaderComponent={() => renderHeader()}
-                renderItem={({ item, index }) => renderItem(item, index)}
+                renderItem={({ item, index }) => {
+                    if (index === 0) {
+                        if (item.init) {
+                            return (
+                                <>
+                                    {renderHeader()}
+                                    {!dataComment.loading && dataComment.data.length === 0 &&
+                                        <View style={{width: '100%', aspectRatio: 16/9}}>
+                                            <ScreenEmptyData
+                                                message='Komentar belum tersedia'
+                                            />
+                                        </View>
+                                    }
+                                </>
+                            )
+                        }
+
+                        return (
+                            <>
+                                {renderHeader()}
+                                {renderItem(item, index)}
+                            </>
+                        )
+                    }
+
+                    return (
+                        renderItem(item, index)
+                    )
+                }}
                 onEndReached={() => dataComment.page !== -1 && setDataComment({ ...dataComment, loadNext: true })}
                 onEndReachedThreshold={0.3}
             />
-
-            <View style={{ width: '100%', padding: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderTopWidth: 0.5, borderColor: Color.border }}>
-                <View style={{ width: '100%', borderRadius: 4, borderColor: Color.border, borderWidth: 0.5, justifyContent: 'center' }}>
-                    <TextInput
-                        placeholder='Tulis Tanggapan'
-                        placeholderTextColor={Color.text}
-                        style={{ fontSize: 12, fontFamily: 'Inter-Regular', color: Color.text, marginTop: 8, marginBottom: 16, paddingLeft: 16, paddingRight: 40 }}
-                        value={textComment}
-                        multiline
-                        onChangeText={(e) => setTextComment(e)}
-                    />
-
-                    <TouchableOpacity
-                        onPress={() => {
-                            submitComment();
-                        }}
-                        style={{ width: 40, height: 40, position: 'absolute', bottom: -2, right: 4, alignItems: 'center', justifyContent: 'center' }}
-                    >
-                        <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: Color.primary, alignItems: 'center', justifyContent: 'center' }}>
-                            <Ionicons name='arrow-forward' color={Color.theme} size={18} />
-                        </View>
-                    </TouchableOpacity>
-                </View>
-            </View>
 
             <ModalListAction
                 ref={modalListActionRef}
@@ -345,6 +413,23 @@ const DetailForumScreen = ({ route, navigation }) => {
                 ref={modalOptionsRef}
                 isOwner={user && user.userId === item.ownerId}
                 item={item}
+                moduleType="FORUM"
+            />
+
+            <ModalImagePicker
+                visible={modalImagePicker}
+                withPreview
+                onClose={() => {
+                    setModalImagePicker(false);
+                }}
+                onSelected={(callback) => {
+                    if (callback.base64) {
+                        setThumbImage(callback.base64);
+                        setMimeImage(callback.type);
+                    }
+
+                    setModalImagePicker(false);
+                }}
             />
         </Scaffold>
     )

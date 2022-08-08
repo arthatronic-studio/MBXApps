@@ -22,6 +22,7 @@ const propTypes = {
     keyboardType: PropTypes.string,
     error: PropTypes.string,
     hideErrorHint: PropTypes.bool,
+    hideBorder: PropTypes.bool,
 
     secureTextEntry: PropTypes.bool,
     prefixIcon: PropTypes.node,
@@ -41,6 +42,7 @@ const defaultProps = {
     keyboardType: 'default',
     error: null,
     hideErrorHint: false,
+    hideBorder: false,
     
     secureTextEntry: false,
     prefixIcon: null,
@@ -55,7 +57,7 @@ const defaultProps = {
 };
 
 const FormInput = forwardRef((props, ref) => {
-    const { label, placeholder, onChangeText, value, onBlur, returnKeyType, onSubmitEditing, keyboardType, error, hideErrorHint, secureTextEntry, prefixIcon, prefixText, suffixIcon, suffixText, multiline, editable, format, style, textinputProps } = props;
+    const { label, placeholder, onChangeText, value, onBlur, returnKeyType, onSubmitEditing, keyboardType, error, hideErrorHint, hideBorder, secureTextEntry, prefixIcon, prefixText, suffixIcon, suffixText, multiline, editable, format, style, textinputProps } = props;
 
     const { Color } = useColor();
 
@@ -69,7 +71,7 @@ const FormInput = forwardRef((props, ref) => {
                     width: '100%',
                     justifyContent: 'center',
                     borderRadius: 6,
-                    borderWidth: 0.5,
+                    borderWidth: hideBorder ? 0 : 0.5,
                     borderColor: Color.disabled,
                     paddingVertical: Platform.OS === 'ios' ? 12 : 6,
                     paddingHorizontal: 12,

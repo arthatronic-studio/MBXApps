@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {View, FlatList, TextInput, Image, ActivityIndicator, useWindowDimensions} from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, FlatList, TextInput, Image, ActivityIndicator, useWindowDimensions } from 'react-native';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -17,16 +17,17 @@ import {
 } from '@src/components';
 
 import Client from '@src/lib/apollo';
-import {queryComment, queryDelComment, queryAddComment, queryContentCommentPinManage} from '@src/lib/query';
+import { queryComment, queryDelComment, queryAddComment, queryContentCommentPinManage } from '@src/lib/query';
 import { shadowStyle } from '@src/styles';
 import { Alert } from '@src/components';
-import {analyticMethods, GALogEvent} from 'src/utils/analytics';
+import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { Container, Divider, Row } from 'src/styled';
 import { isIphoneNotch, listContentCategory } from 'src/utils/constants';
 import CardComment from 'src/components/Card/CardComment';
 import { fetchLikeComment } from 'src/api/likeComment';
 import { useIsFocused } from '@react-navigation/native';
 import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
+import { imageContentItem } from 'assets/images/content-item';
 
 const itemPerPage = 10;
 const initSelectedComment = {
@@ -35,7 +36,7 @@ const initSelectedComment = {
 }
 
 const CommentListScreen = ({ navigation, route }) => {
-  const {item} = route.params;
+  const { item } = route.params;
 
   const [dataComment, setDataComment] = useState({
     data: [],
@@ -55,12 +56,12 @@ const CommentListScreen = ({ navigation, route }) => {
 
   const modalListActionRef = useRef();
 
-  const {Color} = useColor();
+  const { Color } = useColor();
   const [loadingProps, showLoading] = useLoading();
   const [popupProps, showPopup] = usePopup();
   const user = useSelector(state => state['user.auth'].login.user);
-  const {height} = useWindowDimensions();
-  
+  const { height } = useWindowDimensions();
+
   const isOwnerProduct = user && !user.guest && user.userId === item.ownerId;
 
   useEffect(() => {
@@ -142,36 +143,36 @@ const CommentListScreen = ({ navigation, route }) => {
     };
 
     console.log('vari', variables);
-    
+
     Client.query({
       query: queryDelComment,
       variables,
     })
-    .then((res) => {
-      console.log('res del comment', res);
+      .then((res) => {
+        console.log('res del comment', res);
 
-      const data = res.data.contentDelComment;
+        const data = res.data.contentDelComment;
 
-      // showLoading(data.success ? 'success' : 'error', data.message);
+        // showLoading(data.success ? 'success' : 'error', data.message);
 
-      setSelectedComment(initSelectedComment);
+        setSelectedComment(initSelectedComment);
 
-      let newData = [...dataComment.data];
-      
-      if (data.success) {
-        // setRefreshComment(true);
-        newData.splice(selectedComment.index, 1);
-      }
+        let newData = [...dataComment.data];
 
-      setDataComment({
-        ...dataComment,
-        data: newData,
-      });
-    })
-    .catch((err) => {
+        if (data.success) {
+          // setRefreshComment(true);
+          newData.splice(selectedComment.index, 1);
+        }
+
+        setDataComment({
+          ...dataComment,
+          data: newData,
+        });
+      })
+      .catch((err) => {
         console.log(err, 'err del comment');
         // showLoading('error', 'Gagal menghapus');
-    })
+      })
   }
 
   const fetchCommentPinManage = () => {
@@ -187,22 +188,22 @@ const CommentListScreen = ({ navigation, route }) => {
       query: queryContentCommentPinManage,
       variables,
     })
-    .then((res) => {
-      console.log('res pin manage', res);
+      .then((res) => {
+        console.log('res pin manage', res);
 
-      const data = res.data.contentCommentPinManage;
+        const data = res.data.contentCommentPinManage;
 
-      if (data && data.success) {
-        showPopup(data.message, 'success');
-        setRefreshComment(true);
-      } else {
-        showPopup('Gagal menyematkan komentar', 'error');
-      }
-    })
-    .catch((err) => {
-      console.log('err pin manage', err);
-      showPopup('Terjadi kesalahan jaringan', 'error');
-    });
+        if (data && data.success) {
+          showPopup(data.message, 'success');
+          setRefreshComment(true);
+        } else {
+          showPopup('Gagal menyematkan komentar', 'error');
+        }
+      })
+      .catch((err) => {
+        console.log('err pin manage', err);
+        showPopup('Terjadi kesalahan jaringan', 'error');
+      });
   }
 
   const onSubmitComment = () => {
@@ -218,17 +219,17 @@ const CommentListScreen = ({ navigation, route }) => {
     };
 
     console.log(variables, 'variables');
-    
+
     Client.query({
-        query: queryAddComment,
-        variables,
-      })
+      query: queryAddComment,
+      variables,
+    })
       .then((res) => {
         console.log(res, 'res add comm');
-        
+
         if (res.data.contentAddComment.id) {
           const arrNew = [res.data.contentAddComment].concat(dataComment.data);
-        
+
           setTextComment('');
           setDataComment({ ...dataComment, data: arrNew });
           setThumbImage('');
@@ -238,48 +239,9 @@ const CommentListScreen = ({ navigation, route }) => {
         }
       })
       .catch((err) => {
-          console.log(err, 'err add comm');
-          showLoading('error', 'Gagal mengirimkan komentar');
-      })
-  }
-
-  const onSubmitReply = (text) => {
-    if (!selectedComment) return;
-
-    if (text === '') {
-      alert('Isi komentar tidak boleh kosong');
-      return;
-    }
-
-    const variables = {
-      productId: item.id,
-      parentCommentId: selectedComment.id,
-      comment: text,
-    };
-
-    console.log(variables, 'variables');
-
-    Client.query({
-      query: queryAddComment,
-      variables,
-    })
-    .then((res) => {
-      console.log(res, 'res add comm');
-      
-      if (res.data.contentAddComment.id) {
-        // const arrNew = [res.data.contentAddComment].concat(dataComment.data);
-      
-        // setTextComment('');
-        // setDataComment({ ...dataComment, data: arrNew });
-        onSuccessComment(res.data.contentAddComment.productId);
-      } else {
-        showLoading('error', 'Gagal mengirimkan komentar');
-      }
-    })
-    .catch((err) => {
         console.log(err, 'err add comm');
         showLoading('error', 'Gagal mengirimkan komentar');
-    })
+      })
   }
 
   const onSuccessComment = (id) => {
@@ -302,7 +264,7 @@ const CommentListScreen = ({ navigation, route }) => {
             <Container padding={16}>
               <ActivityIndicator color={Color.primary} />
             </Container>
-          :
+            :
             <TouchableOpacity
               onPress={() => setDataComment({ ...dataComment, loadNext: true })}
             >
@@ -318,136 +280,151 @@ const CommentListScreen = ({ navigation, route }) => {
   }
 
   const renderContent = () => {
-    const title = 
+    const title =
       item.comment && item.comment > 0
         ? `Komentar ${item.comment}`
         : 'Belum Ada Komentar';
-    
+
     return (
-      <View style={{backgroundColor: Color.theme}}>
-          <View style={{paddingHorizontal: 16}}>
-            <View style={{width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12}}>
-              <Text size={12}>{title}</Text>
+      <View style={{ backgroundColor: Color.theme }}>
+        <View style={{ width: '100%', paddingHorizontal: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12 }}>
+          <Text size={12}>{title}</Text>
+        </View>
+
+        <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
+          <View style={{ width: '100%', paddingHorizontal: 16, paddingVertical: 12, flexDirection: 'row', borderColor: Color.border, borderWidth: 0.5, borderColor: Color.border, alignItems: 'flex-end' }}>
+            <TouchableOpacity
+              onPress={() => setModalImagePicker(true)}
+              style={{ paddingRight: 8 }}
+            >
+              <Image
+                source={imageContentItem.camera}
+                style={{
+                  height: 32,
+                  width: 32,
+                  resizeMode: 'contain',
+                }}
+              />
+            </TouchableOpacity>
+
+            <View style={{ flex: 1, borderRadius: 8, backgroundColor: Color.border }}>
+              <TextInput
+                placeholder='Tulis pendapat kamu'
+                placeholderTextColor={Color.text}
+                style={{
+                  fontSize: 12,
+                  fontFamily: 'Inter-Regular',
+                  color: Color.text,
+                  backgroundColor: Color.border,
+                  includeFontPadding: false,
+                  marginTop: Platform.OS === 'android' ? 0 : 6,
+                  marginBottom: Platform.OS === 'android' ? 0 : 10,
+                  paddingHorizontal: 8,
+                  maxHeight: 120,
+                }}
+                value={textComment}
+                multiline
+                onChangeText={(e) => setTextComment(e)}
+              />
             </View>
 
-            <View style={{width: '100%', borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle, flexDirection:'row', justifyContent: 'space-between'}}>
-                <TextInput
-                  placeholder='Tulis Komentar..'
-                  placeholderTextColor={Color.border}
-                  value={textComment}
-                  multiline
-                  onChangeText={(e) => setTextComment(e)}
-                  style={{
-                    width:'80%',
-                    fontSize: 12,
-                    fontFamily: 'Inter-Regular',
-                    color: Color.text,
-                    paddingVertical: 8,
-                    paddingLeft: 8,
-                    paddingRight: 40,
-                    minHeight: 45
-                  }}
-                />
-
-                <TouchableOpacity
-                  onPress={() => {
-                    setModalImagePicker(true);
-                  }}
-                >
-                  <View style={{width: 40, height: 40, alignItems:'center', justifyContent:'center'}}>
-                    <Entypo name="camera" size={20} />
-                  </View>
-                </TouchableOpacity> 
-                   
-                <TouchableOpacity
-                  onPress={() => {
-                    onSubmitComment();
-                  }}
-                  style={{width: 40, height: 40, alignItems: 'center', justifyContent: 'center'}}
-                >
-                  <View style={{width: 28, height: 28, borderRadius: 14, backgroundColor: Color.primary, alignItems: 'center', justifyContent: 'center'}}>
-                    <Ionicons name='arrow-forward' color={Color.theme} size={18} />
-                  </View>
-                </TouchableOpacity>
+            <View style={{ paddingLeft: 8 }}>
+              <TouchableOpacity
+                onPress={() => {
+                  onSubmitComment();
+                }}
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 16,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: Color.primary,
+                }}
+              >
+                <Ionicons name='arrow-forward' color={Color.theme} size={18} />
+              </TouchableOpacity>
             </View>
-            
-            {thumbImage !== '' && 
-              <View style={{width: '100%', borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle, justifyContent: 'center', alignItems: 'center', paddingVertical: 16}}>
-                <View
-                  style={{width: '100%', aspectRatio: 16/9}}
-                >
-                  <Image
-                    style={{height: '100%', width: '100%', borderRadius: 4, alignItems: 'center', justifyContent: 'center'}}
-                    source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
-                    resizeMode='contain'
-                  />
-
-                  <View style={{position: 'absolute', right: 16, top: -16}}>
-                    <TouchableOpacity
-                      onPress={()=> {
-                        setThumbImage('');
-                      }}
-                    >
-                      <Entypo name='circle-with-cross' size={30} color={Color.error} />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            }
-            
           </View>
+        </View>
 
-          {dataComment.loading ?
-            <ActivityIndicator size='large' color={Color.secondary} style={{marginTop: 16}} />
+        {thumbImage !== '' &&
+          <View style={{ width: '100%', borderRadius: 4, backgroundColor: Color.textInput, ...shadowStyle, justifyContent: 'center', alignItems: 'center', paddingVertical: 16 }}>
+            <View
+              style={{ width: '100%', aspectRatio: 16 / 9 }}
+            >
+              <Image
+                style={{ height: '100%', width: '100%', borderRadius: 4, alignItems: 'center', justifyContent: 'center' }}
+                source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
+                resizeMode='contain'
+              />
+
+              <View style={{ position: 'absolute', right: 16, top: -16 }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setThumbImage('');
+                  }}
+                >
+                  <Entypo name='circle-with-cross' size={30} color={Color.error} />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        }
+
+        {dataComment.loading ?
+          <ActivityIndicator size='large' color={Color.secondary} style={{ marginTop: 16 }} />
           :
-            <FlatList
-              keyExtractor={(item, index) => item.toString() + index}
-              data={dataComment.data}
-              showsVerticalScrollIndicator={false}
-              keyboardShouldPersistTaps='handled'
-              contentContainerStyle={{
-                paddingTop: 16,
-                paddingBottom: isIphoneNotch() ? height / 3.5 : height / 2.5,
-              }}
-              ListFooterComponent={() => ListFooterComponent()}
-              renderItem={({ item : itemComment, index }) => {
-                const _isOwnerComment = user && !user.guest && user.userId === itemComment.userId;
+          <FlatList
+            keyExtractor={(item, index) => item.toString() + index}
+            data={dataComment.data}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps='handled'
+            contentContainerStyle={{
+              paddingTop: 16,
+              paddingBottom: isIphoneNotch() ? height / 3.5 : height / 2.5,
+            }}
+            ListFooterComponent={() => ListFooterComponent()}
+            renderItem={({ item: itemComment, index }) => {
+              const _isOwnerComment = user && !user.guest && user.userId === itemComment.userId;
 
-                return (
-                  <CardComment
-                    item={itemComment}
-                    productOwnerId={item.ownerId}
-                    canReply
-                    showOptions={_isOwnerComment || isOwnerProduct}
-                    onPressDots={() => {
-                      modalListActionRef.current.open();
-                      setSelectedComment({ ...itemComment, index });
-                      setIsOwnerComment(_isOwnerComment);
-                      setIsPinnedComment(itemComment.isPinned);
-                    }}
-                    onPressReply={() => {
-                      setSelectedComment({ ...itemComment, index });
-                      navigation.navigate('CommentReplyScreen', {
-                        ...route.params,
-                        parentComment: { ...itemComment, index },
-                        onRefresh: () => {
-                          setRefreshComment(true);
-                        }
-                      });
-                    }}
-
-                    onPressLike={async () => {
-                      setSelectedComment({ ...itemComment, index });
-                      const res = await fetchLikeComment({commentId: itemComment.id});
-                      if(res.status == true){
+              return (
+                <CardComment
+                  item={itemComment}
+                  productOwnerId={item.ownerId}
+                  canReply
+                  showOptions={_isOwnerComment || isOwnerProduct}
+                  onPressDots={() => {
+                    modalListActionRef.current.open();
+                    setSelectedComment({ ...itemComment, index });
+                    setIsOwnerComment(_isOwnerComment);
+                    setIsPinnedComment(itemComment.isPinned);
+                  }}
+                  onPressReply={() => {
+                    setSelectedComment({ ...itemComment, index });
+                    navigation.navigate('CommentReplyScreen', {
+                      ...route.params,
+                      parentComment: { ...itemComment, index },
+                      onRefresh: () => {
                         setRefreshComment(true);
                       }
-                    }}
-                  />
-                );
-              }}
+                    });
+                  }}
+                  onRefresh={() => {
+                    setRefreshComment(true);
+                  }}
+                  onPressLike={async () => {
+                    setSelectedComment({ ...itemComment, index });
+                    const res = await fetchLikeComment({commentId: itemComment.id});
+                    if(res.status == true){
+                      setRefreshComment(true);
+                    }
+                  }}
+                />
+              );
+            }}
           />}
-        </View>
+      </View>
     )
   }
 
@@ -457,7 +434,7 @@ const CommentListScreen = ({ navigation, route }) => {
   }
 
   let dataListAction = [];
-  
+
   if (isOwnerComment) {
     dataListAction.push({
       id: 1,
@@ -499,9 +476,9 @@ const CommentListScreen = ({ navigation, route }) => {
           paddingHorizontal: 16,
           flexDirection: 'row',
         }}>
-        <View style={{width: '20%', height: '100%'}}>
+        <View style={{ width: '20%', height: '100%' }}>
           <Image
-            source={{uri: item.image}}
+            source={{ uri: item.image }}
             style={{
               height: 70,
               width: 70,
@@ -544,18 +521,19 @@ const CommentListScreen = ({ navigation, route }) => {
       />
 
       <ModalImagePicker
-          visible={modalImagePicker}
-          onClose={() => {
-              setModalImagePicker(false);
-          }}
-          onSelected={(callback) => {
-              if (callback.base64) {
-                  setThumbImage(callback.base64);
-                  setMimeImage(callback.type);
-              }
+        visible={modalImagePicker}
+        withPreview
+        onClose={() => {
+          setModalImagePicker(false);
+        }}
+        onSelected={(callback) => {
+          if (callback.base64) {
+            setThumbImage(callback.base64);
+            setMimeImage(callback.type);
+          }
 
-              setModalImagePicker(false);
-          }}
+          setModalImagePicker(false);
+        }}
       />
     </Scaffold>
   );

@@ -24,7 +24,6 @@ import { Container, Divider, Row } from 'src/styled';
 import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
 import PagerView from 'react-native-pager-view';
-// import HtmlView from 'src/components/HtmlView';
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 

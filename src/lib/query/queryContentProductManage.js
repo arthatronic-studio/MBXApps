@@ -39,6 +39,9 @@ export const queryProductManage = gql`
             longitude
             mainImage
             eventDate
+            groupId
+            fullDescription
+            im_save
         }
     }
 `;

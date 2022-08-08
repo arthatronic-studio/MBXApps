@@ -122,7 +122,7 @@ function Anggota(props) {
         data={[
           {
             id: 0,
-            name: 'Keluarkan dari grup',
+            name: 'Keluarkan Dari Grup',
             color: Color.error,
             onPress: () => {
               setModalActions(false);

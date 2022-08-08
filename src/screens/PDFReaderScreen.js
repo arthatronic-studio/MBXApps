@@ -3,7 +3,6 @@ import { View, BackHandler,Image } from 'react-native';
 import Pdf from 'react-native-pdf';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-// import Share from 'react-native-share';
 
 import { useColor } from '@src/components/Color';
 import Header from '@src/components/Header';

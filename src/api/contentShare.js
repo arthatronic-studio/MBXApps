@@ -18,7 +18,7 @@ export const fetchContentShare = async variables => {
       variables: v,
     });
     if (result && result.data && result.data.productShareCount) {
-      console.log(result);
+      console.log('fetchContentShare', result);
       response.status = result.data.productShareCount.success;
       response.message = result.data.productShareCount.message || 'OK';
     } else {

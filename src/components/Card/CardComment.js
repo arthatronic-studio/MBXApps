@@ -9,29 +9,35 @@ import Moment from 'moment';
 import Text from '@src/components/Text';
 import { useColor } from '@src/components';
 import TouchableOpacity from '@src/components/Button/TouchableDebounce';
-import Loading, { useLoading } from  '@src/components/Modal/Loading';
+import Loading, { useLoading } from '@src/components/Modal/Loading';
 
 import Client from '@src/lib/apollo';
-import { queryAddComment, queryReportAbuse, queryReportComment } from '@src/lib/query';
+import { queryAddComment, queryProductReport, queryReportAbuse, queryReportComment } from '@src/lib/query';
 import { shadowStyle } from '@src/styles';
 import { isIphoneNotch } from 'src/utils/constants';
 import ImagesPath from 'src/components/ImagesPath';
 import Modal from 'react-native-modal';
 import { Container, Divider, Row } from 'src/styled';
 import { useSelector } from 'react-redux';
+import { imageContentItem } from 'assets/images/content-item';
+import { useNavigation } from '@react-navigation/native';
+import CardKutipan from 'src/screens/MainForum/NewForum/CardKutipan';
 
 const defaultProps = {
   canReply: false,
   showOptions: false,
-  onPressDots: () => {},
-  onPressReply: () => {},
-  onPressLike: () => {}
+  onPressDots: () => { },
+  onPressReply: () => { },
+  onRefresh: () => { },
+  onPressLike: () => {},
 };
 
-const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots, onPressReply, onPressLike}) => {
-  const {Color} = useColor();
+const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots, onPressReply, onRefresh, onPressLike }) => {
+  const { Color } = useColor();
   const user = useSelector(state => state['user.auth'].login.user);
-  const {width} = useWindowDimensions();
+  const { width } = useWindowDimensions();
+  const navigation = useNavigation();
+
   const [isModalVisible, setModalVisible] = useState(false);
   const [isModalSuccess, setModalSuccess] = useState(false);
   // const canManagementProduct = user && !user.guest && user.userId === productOwnerId;
@@ -58,7 +64,7 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
     })
       .then(res => {
         console.log('res', res);
-        if(res.data.reportAbuseManage){
+        if (res.data.reportAbuseManage) {
           setModalSuccess(true);
           setTimeout(() => {
             setModalSuccess(false);
@@ -85,65 +91,136 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
   }, [item]);
 
   return (
-    <View style={{width: '100%', flexDirection: 'row', marginBottom: 8, paddingVertical: 8, paddingHorizontal: 16, borderBottomWidth: 0.5, borderColor: Color.border}}>
-      <View style={{width: '10%', aspectRatio: 1}}>
-        <Image source={{ uri: item.image }} style={{width: '100%', height: '100%', borderRadius: 50, backgroundColor: Color.border}} />
-      </View>
+    <View style={{ width: '100%', paddingVertical: 8, paddingHorizontal: 16 }}>
+      <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ width: '10%', aspectRatio: 1 }}>
+          <Image source={{ uri: item.image }} style={{ width: '100%', height: '100%', borderRadius: 50, backgroundColor: Color.border }} />
+        </View>
 
-      <View style={{width: '85%', paddingHorizontal: 8}}>
-        {isPinned && <Container marginBottom={6}>
-          <Row>
-            <MaterialCommunityIcons name='pin' color={Color.gray} size={12} />
-            <Text align='left' size={10} color={Color.gray}>Komentar disematkan</Text>
-          </Row>
-        </Container>}
+        <View style={{ width: '85%', paddingHorizontal: 8, justifyContent: 'center' }}>
+          {isPinned && <Container marginBottom={6}>
+            <Row>
+              <MaterialCommunityIcons name='pin' color={Color.gray} size={12} />
+              <Text align='left' size={10} color={Color.gray}>Komentar disematkan</Text>
+            </Row>
+          </Container>}
 
-        <View style={{marginBottom: 4, flexDirection: 'row', alignItems: 'center'}}>
-          <View style={isCommentFromOwnerProduct && { backgroundColor: Color.primary, paddingVertical: 2, paddingHorizontal: 6, borderRadius: 8 }}>
+          <View style={{ marginBottom: 4, flexDirection: 'row', alignItems: 'center' }}>
+            <View
+              style={[
+                isCommentFromOwnerProduct && { backgroundColor: Color.border, paddingVertical: 2, paddingHorizontal: 6, borderRadius: 8 },
+                { flexDirection: 'row' }
+              ]}
+            >
+              <Text
+                size={12}
+                align='left'
+                color={Color.text}
+                numberOfLines={1}
+              >
+                {typeof item.fullname === 'string' ? item.fullname.slice(0, 20).trim() : ''}{' '}
+              </Text>
+              {isAdmin && <MaterialIcons name='verified' color={Color.info} size={14} />}
+            </View>
+
             <Text
               size={12}
               align='left'
-              color={Color.text}
+              color={Color.placeholder}
               numberOfLines={1}
             >
-              {typeof item.fullname === 'string' ? item.fullname.slice(0, 20).trim() : ''}
-              {isAdmin && <MaterialIcons name='verified' color={Color.info} size={14} />}
+              {` • `}{Moment(parseInt(item.commentDate)).fromNow()}
             </Text>
           </View>
-
-          <Text
-            size={12}
-            align='left'
-            color={Color.placeholder}
-            numberOfLines={1}
-          >
-            {` • `}{Moment(parseInt(item.commentDate)).fromNow()}
-          </Text>
         </View>
 
-        {item.imageVideo &&
-          <View style={{ width: width / 3, aspectRatio: 1, paddingVertical: 4 }}>
-            <Image source={{ uri: item.imageVideo }} style={{width: '100%', height: '100%', backgroundColor: Color.border }} />
+        <View style={{ width: '5%', aspectRatio: 1, justifyContent: 'center' }}>
+          {showOptions && <TouchableOpacity
+            onPress={() => onPressDots()}
+            style={{ width: '100%', height: '100%', alignItems: 'flex-end' }}
+          >
+            <Entypo name='dots-three-vertical' color={Color.text} size={16} />
+          </TouchableOpacity>}
+        </View>
+      </View>
+
+      <View style={{ width: '100%', flexDirection: 'row' }}>
+        <View style={{ width: '10%' }}>
+
+        </View>
+
+        <View style={{ width: '90%', paddingLeft: 8 }}>
+          {item.imageVideo &&
+            <View style={{ width: width / 3, aspectRatio: 1 }}>
+              <Image
+                source={{ uri: item.imageVideo }}
+                style={{ width: '100%', height: '100%', backgroundColor: Color.border }}
+              />
+            </View>
+          }
+
+          <View
+            style={{
+              backgroundColor: item.commentQuote ? Color.border : Color.theme,
+              padding: item.commentQuote ? 8 : 0,
+              borderRadius: 8,
+            }}
+          >
+            {item.commentQuote &&
+              <CardKutipan
+                tagged
+                item={item.commentQuote}
+              />
+            }
+
+            {item.comment !== '' &&
+              <Container paddingTop={4}>
+                <Text size={12} align='left'>{item.comment}</Text>
+              </Container>
+            }
           </View>
-        }
-        
-        <Text size={12} align='left'>{item.comment}</Text>
 
-        
-
-        <Container paddingTop={8} flexDirection="row" justify={"space-between"}>
-          {canReply ? <Container>
+          {canReply ?
+            <Container paddingTop={8}>
               <Row>
                 <TouchableOpacity
                   onPress={() => {
                     onPressLike();
                   }}
+                  style={{
+                    flexDirection: 'row',
+                  }}
                 >
-                  <Text size={12} align='left' type={item.im_like ? 'bold' : ''} color={item.im_like ? Color.red : Color.text}>Suka</Text>
+                  <Text size={12} align="left">
+                    {item.likeCount}{' '}
+                  </Text>
+
+                  <Image
+                    source={item.im_like ? imageContentItem.heart_active : imageContentItem.heart_nonactive}
+                    style={{
+                      height: 16,
+                      width: 16,
+                    }}
+                  />
                 </TouchableOpacity>
-
                 <Divider />
-
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('ForumKutipan', {
+                      item,
+                      onRefresh: () => onRefresh(),
+                    });
+                  }}
+                >
+                  <Image
+                    source={imageContentItem.quotes}
+                    style={{
+                      height: 16,
+                      width: 16,
+                    }}
+                  />
+                </TouchableOpacity>
+                <Divider />
                 <TouchableOpacity
                   onPress={() => {
                     onPressReply();
@@ -153,7 +230,7 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
                 </TouchableOpacity>
 
                 <Divider />
-                { item.userId !== user.userId &&
+                {item.userId !== user.userId &&
                   <>
                     <TouchableOpacity
                       onPress={() => {
@@ -171,52 +248,31 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
                   onPress={() => {
                     onPressReply();
                   }}
-                  >
+                >
                   <Text size={12} align='left' color={Color.info} type='medium'>{item.replies.length} Balasan</Text>
                 </TouchableOpacity>}
 
                 <Divider width={8} />
 
                 {itemOwnerReply && <Image source={{ uri: itemOwnerReply.image }} style={{ height: 20, width: 20, borderRadius: 10, borderWidth: 1, borderColor: Color.primary }} />}
-            </Row>
-          </Container> 
-          :
-            <Container flexDirection="row">
+              </Row>
+            </Container>
+          : item.userId !== user.userId ?
+            <Container paddingTop={8}>
+              <Row>
                 <TouchableOpacity
                   onPress={() => {
-                    onPressLike();
+                    setModalVisible(!isModalVisible);
                   }}
                 >
-                  <Text size={12} align='left'>Suka</Text>
+                  <Text size={12} align='left'>Laporkan</Text>
                 </TouchableOpacity>
-                {item.userId !== user.userId &&
-                  <>  
-                    <Divider />
-                    <TouchableOpacity
-                      onPress={() => {
-                        setModalVisible(!isModalVisible);
-                      }}
-                    >
-                      <Text size={12} align='left'>Laporkan</Text>
-                    </TouchableOpacity>
-                  </>
-                }
-            </Container> 
+              </Row>
+            </Container>
+          :
+            <View />
           }
-
-          <Text size={12} align="left">
-              {item.likeCount} Suka
-            </Text>
-        </Container>
-      </View>
-      
-      <View style={{width: '5%', aspectRatio: 1}}>
-        {showOptions && <TouchableOpacity
-          onPress={() => onPressDots()}
-          style={{width: '100%', height: '100%', alignItems: 'flex-end'}}
-          >
-            <Entypo name='dots-three-vertical' color={Color.text} size={16} />
-        </TouchableOpacity>}
+        </View>
       </View>
 
       <Modal isVisible={isModalVisible}>
@@ -229,16 +285,16 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
           }}>
           <MaterialCommunityIcons name='alert-circle-outline' color={Color.danger} size={54} />
           <Divider height={12} />
-          <Text style={{fontWeight: 'bold', fontSize: 14}}>
+          <Text style={{ fontWeight: 'bold', fontSize: 14 }}>
             Laporkan comment?
           </Text>
-          <Divider height={8}/>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width: '80%'}}>
+          <Divider height={8} />
+          <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width: '80%' }}>
             <TouchableOpacity
               onPress={() => {
                 setModalVisible(!isModalVisible);
               }}
-              style={{paddingVertical: 8, paddingHorizontal: 16, backgroundColor: Color.disabled, borderRadius: 120}}>
+              style={{ paddingVertical: 8, paddingHorizontal: 16, backgroundColor: Color.disabled, borderRadius: 120 }}>
               <Text>
                 Batal
               </Text>
@@ -248,7 +304,7 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
                 setModalVisible(!isModalVisible);
                 onPressReport();
               }}
-              style={{paddingVertical: 8, paddingHorizontal: 16, backgroundColor: Color.primary, borderRadius: 120}}>
+              style={{ paddingVertical: 8, paddingHorizontal: 16, backgroundColor: Color.primary, borderRadius: 120 }}>
               <Text>
                 Laporkan
               </Text>
@@ -269,7 +325,7 @@ const CardComment = ({ item, productOwnerId, canReply, showOptions, onPressDots,
           }}>
           <Image source={ImagesPath.checkCircle} size={54} />
           <Divider height={25} />
-          <Text style={{fontWeight: 'bold', fontSize: 14}}>
+          <Text style={{ fontWeight: 'bold', fontSize: 14 }}>
             Comment berhasil dilaporkan
           </Text>
         </View>

@@ -73,7 +73,7 @@ const CreateGroup = ({ navigation }) => {
   const [filterData, setFilterData] = useState([]);
   const [filterLoading, setFilterLoading] = useState(false);
   const [popupProps, showPopup] = usePopup();
-
+console.log('itemData',itemData.data);
   useEffect(() => {
     fetchGetUserOrganizationRef();
   }, []);

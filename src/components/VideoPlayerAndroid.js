@@ -22,14 +22,14 @@ const defaultProps = {
     onPressRightButton: () => {},
 };
 
-export const VideoPlayerAndroid = ({ autoplay, isMinimize, colorController, item, onPressLeftButton, onPressRightButton, onChangeOrientation }) => {
+export const VideoPlayerAndroid = ({ autoplay, isMinimize, hideOnError, colorController, item, onPressLeftButton, onPressRightButton, onChangeOrientation }) => {
   const { height, width } = useWindowDimensions();
   const { Color } = useColor();
   
   const initialSize = {
     height: width * (9 / 16),
     width,
-  }
+  };
 
   const videoRef = React.createRef();
 
@@ -41,6 +41,7 @@ export const VideoPlayerAndroid = ({ autoplay, isMinimize, colorController, item
     duration: 0,
     showControls: true,
     orientation: '',
+    error: false,
     ...initialSize,
   });
 
@@ -187,10 +188,18 @@ export const VideoPlayerAndroid = ({ autoplay, isMinimize, colorController, item
     videoRef.current.seek(0);
   }
 
+  const onError = () => {
+    setState({...state, error: true, loading: false});
+  }
+
   const showControls = () => {
     state.showControls
       ? setState({...state, showControls: false})
       : setState({...state, showControls: true});
+  }
+
+  if (hideOnError && state.error) {
+    return <View />
   }
 
   return (
@@ -212,6 +221,7 @@ export const VideoPlayerAndroid = ({ autoplay, isMinimize, colorController, item
             onLoad={onLoadEnd}
             onProgress={onProgress}
             onEnd={onEnd}
+            onError={onError}
             paused={!state.play}
           />
           {state.showControls && (
@@ -259,11 +269,11 @@ export const VideoPlayerAndroid = ({ autoplay, isMinimize, colorController, item
             </View>
           )}
         </TouchableOpacity>
-      </ImageBackground>
 
-      {state.loading && <View style={{position: 'absolute', backgroundColor: Color.theme, justifyContent: 'center', alignItems: 'center', ...initialSize}}>
-        <ActivityIndicator color={Color.primary} size='large' />
-      </View>}
+        {state.loading && <View style={{position: 'absolute', backgroundColor: Color.theme, justifyContent: 'center', alignItems: 'center', ...initialSize}}>
+          <ActivityIndicator color={Color.primary} size='large' />
+        </View>}
+      </ImageBackground>
 
       {/* {state.loading && <Header
         color={Color.primary}

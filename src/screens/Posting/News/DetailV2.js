@@ -43,9 +43,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { fetchLikeComment } from 'src/api/likeComment';
 import { fetchProductSave } from 'src/api/productSave';
 import { fetchContentProduct } from 'src/api/contentV2';
-import { fetchContentShare } from 'src/api/contentShare';
-import Share from 'react-native-share';
 import Modal from 'react-native-modal';
+import { onShare } from 'src/utils/share';
 
 
 const NewsDetailV2 = ({navigation, route}) => {
@@ -234,22 +233,6 @@ const NewsDetailV2 = ({navigation, route}) => {
         console.log(err, 'errrrr');
         showLoading('error', 'Gagal membuat thread, Harap ulangi kembali');
       });
-  }
-
-  const onShare = (value) => {
-    const shareOptions = {
-      message: value
-    }
-    Share.open(shareOptions);
-    fetchContentShare({code: code});
-    // Share.open(shareOptions)
-    //   .then((res) => {
-    //     console.log(res, "res");
-    //     if(res.success) fetchContentShare({code: code});
-    //   })
-    //   .catch((err) => {
-    //   err && console.log(err, "err share");
-    // });
   }
 
   function Capitalize(str) {
@@ -713,7 +696,7 @@ const NewsDetailV2 = ({navigation, route}) => {
               </TouchableWithoutFeedback>
 
               <TouchableWithoutFeedback
-                onPress={() => onShare(item.share_link)}
+                onPress={() => onShare(item.share_link, item.code)}
                 style={{
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -954,9 +937,9 @@ const NewsDetailV2 = ({navigation, route}) => {
             ref={modalOptionsRef}
             isOwner={user && user.userId === item.ownerId}
             item={item}
+            moduleType="NEWS"
             editScreen={'EditNews'}
             onDelete={() => setModalVisible(!isModalVisible)}
-            onShare={() => onShare(item.share_link)}
           />
         </>
       )}

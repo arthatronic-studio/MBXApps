@@ -65,7 +65,7 @@ import client from "src/lib/apollo";
 import MemberRank from "src/components/MemberRank";
 import MyRank from 'src/components/MyRank';
 
-let tempShowPopupAds = true;
+let tempShowPopupAds = false && true;
 
 const events = [Event.PlaybackTrackChanged];
 
@@ -196,7 +196,7 @@ const MainHome = ({ navigation, route }) => {
           return el.status === 1 | el.status === 2;
         });
         setNotificationCount(res.length)
-        console.log('ini ', res);
+        // console.log('ini ', res);
       })
       .catch((err) => {
         console.log('ini ', err);
@@ -494,7 +494,7 @@ const MainHome = ({ navigation, route }) => {
             <MemberRank />
           </Container>
 
-          <Line color={Color.border} width={width} />
+          {accessClient.MainHome.showMenuHome && <Line color={Color.border} width={width} />}
 
           {accessClient.MainHome.showMenuHome && <WidgetMenuHome
             showMore
