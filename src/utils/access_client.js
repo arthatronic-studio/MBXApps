@@ -23,6 +23,8 @@ const listInitialCode = [
     'TRIBESXGOFISH',
     'TRIBESXTEUKUZACKY',
     'TRIBESXUNITEDID',
+    'TRIBESXINDOBARCA',
+    'TRIBESXKOMISI',
     'TRIBESXTHISABLE',
 ];
 
@@ -40,6 +42,8 @@ const isGofish = Config.INITIAL_CODE === 'TRIBESXGOFISH';
 const isTeukuZacky = Config.INITIAL_CODE === 'TRIBESXTEUKUZACKY';
 const isSurvey = Config.INITIAL_CODE === 'TRIBESXSURVEY';
 const isUnitedId = Config.INITIAL_CODE === 'TRIBESXUNITEDID';
+const isIndoBarca = Config.INITIAL_CODE === 'TRIBESXINDOBARCA';
+const isKomisi = Config.INITIAL_CODE === 'TRIBESXKOMISI';
 const isThisable = Config.INITIAL_CODE === 'TRIBESXTHISABLE';
 
 export const accessClient = {
@@ -54,6 +58,8 @@ export const accessClient = {
     isTeukuZacky,
     isSurvey,
     isUnitedId,
+    isIndoBarca,
+    isKomisi,
     isThisable,
     IsAutoJoinMember:
         isKomoto ? false :
@@ -87,49 +93,35 @@ export const accessClient = {
         showListSoonAuction: isKomoto || isSabyan ? false : true,
         showListPromo: isKomoto || isSabyan ? false : true,
         showListVideo:
-            isKomoto ? false:
-            isSabyan ? true : true,
+            isKomoto ? false : true,
         showListEbookNewer: isKomoto || isSabyan ? false : true,
     },
     CreatePosting: {
         showPrivacy:
-            isKomoto ||
-            isSabyan ? false : true,
+            isKomoto || isSabyan ? false : true,
     },
     MainProfile: {
         showButtonJoinCommunity:
-            isKomoto ? false :
-            isSabyan ? false : true,
+        isTribes ? true : false,
         showMenuHistory:
-            isKomoto ? false :
-            isSabyan ? false : true,
+        isTribes ? true : false,
         showMenuCoupon:
-            isKomoto ? false :
-            isSabyan ? false : true,
+        isTribes ? true : false,
         showMenuMyStore:
-            isKomoto ? false :
-            isSabyan ? false : true,
+        isTribes ? true : false,
         showMenuBidAuction:
-            isKomoto ? false :
-            isSabyan ? false : true,
+            isTribes ? true : false,
         showMenuJoinCommunity:
-            isKomoto ? true :
-            isSabyan ? false : false,
+            isKomoto ? true : false,
         showMenuCommunityAdmin:
-            isKomoto ? true :
-            isSabyan ? false : false,
+            isKomoto ? true : false,
         showMenuSurvey:
-            isKomoto ? false :
-            isSabyan ? false :
-            isSurvey ? true :
-            true,
+        isTribes || isSurvey ? true : false,
         showStatusMember:
-            isKomoto ? true :
             isSabyan ? false : true,
     },
     ChangeProfile: {
         showIdNumber:
-            isKomoto ? true :
-            isSabyan ? false : false,
+        isKomoto ? true : false,
     },
 };
