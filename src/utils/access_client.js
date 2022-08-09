@@ -62,8 +62,9 @@ export const accessClient = {
     isKomisi,
     isThisable,
     IsAutoJoinMember:
-        isKomoto ? false :
         isSabyan ? true :
+        isIndoBarca ? true :
+        isThisable ? true :
         false,
     Theme:
         useDefaultDarkThemeCode.includes(Config.INITIAL_CODE) ? 'dark' : 'light',

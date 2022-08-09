@@ -88,6 +88,7 @@ const NewsScreenV2 = ({navigation, route}) => {
           name={'arrowleft'}
           size={20}
           style={{marginRight: 12}}
+          color={Color.textButtonInline}
         />
         <TouchableOpacity
           onPress={() => navigation.navigate('SearchArticle')}
@@ -118,7 +119,8 @@ const NewsScreenV2 = ({navigation, route}) => {
           onPress={() => navigation.navigate('Saved')}
           name={'md-bookmarks-outline'}
           size={18}
-          style={{marginHorizontal: 12}}
+          style={{marginLeft: 12}}
+          color={Color.textButtonInline}
         />}
         {canGeneratedContent && <IonIcons
           onPress={() =>
@@ -130,6 +132,8 @@ const NewsScreenV2 = ({navigation, route}) => {
           }
           name={'add'}
           size={24}
+          style={{marginLeft: 12}}
+          color={Color.textButtonInline}
         />}
       </View>
     );
