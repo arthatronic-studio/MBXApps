@@ -12,5 +12,8 @@ export const useCurrentUser = (isRoot) => {
     else if (accessClient.UserGeneratedContent === 'ONLY_ADMIN' && user && user.isDirector === 1) canGeneratedContent = true;
     else if (accessClient.UserGeneratedContent === 'ONLY_MEMBER' && user && user.organizationId) canGeneratedContent = true;
     
-    return {canGeneratedContent};
+    const isBusinessCompany = user && user.businessCompany;
+    const isAdmin = user && user.isDirector === 1;
+
+    return {canGeneratedContent, isBusinessCompany, isAdmin};
 };
