@@ -57,7 +57,7 @@ const defaultProps = {
     buttonWidth: '100%',
     buttonBorderTopWidth: 0.5,
     onPress: () => {},
-    disabled:true,
+    disabled:false,
     twinButtonLabel: 'Cek',
     onPressTwinButton: () => {},
     onPressToggle: () => {},

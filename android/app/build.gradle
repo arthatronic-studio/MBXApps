@@ -140,8 +140,8 @@ android {
         applicationId "com.tribessocial"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4
-        versionName "1.220808.004"
+        versionCode 5
+        versionName "1.220809.005"
         multiDexEnabled true
     }
     splits {
