@@ -36,6 +36,7 @@ const ForumGroupScreen = ({ navigation, route }) => {
 
   const { Color } = useColor();
   const { width, height } = useWindowDimensions();
+  const user = useSelector(state => state['user.auth'].login.user);
   const { canGeneratedContent } = useCurrentUser();
 
   const [itemData, setItemData] = useState({
