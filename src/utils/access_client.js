@@ -26,6 +26,7 @@ const listInitialCode = [
     'TRIBESXINDOBARCA',
     'TRIBESXKOMISI',
     'TRIBESXTHISABLE',
+    'TRIBESXSANTRIPRENEUR',
 ];
 
 const useDefaultDarkThemeCode = [
@@ -45,6 +46,7 @@ const isUnitedId = Config.INITIAL_CODE === 'TRIBESXUNITEDID';
 const isIndoBarca = Config.INITIAL_CODE === 'TRIBESXINDOBARCA';
 const isKomisi = Config.INITIAL_CODE === 'TRIBESXKOMISI';
 const isThisable = Config.INITIAL_CODE === 'TRIBESXTHISABLE';
+const isSantriPreneur = Config.INITIAL_CODE === 'TRIBESXSANTRIPRENEUR';
 
 export const accessClient = {
     // state
@@ -62,10 +64,11 @@ export const accessClient = {
     isKomisi,
     isThisable,
     IsAutoJoinMember:
-        isSabyan ? true :
-        isIndoBarca ? true :
-        isThisable ? true :
-        false,
+        isSabyan ||
+        isIndoBarca ||
+        isThisable ||
+        isSantriPreneur ?
+        true : false,
     Theme:
         useDefaultDarkThemeCode.includes(Config.INITIAL_CODE) ? 'dark' : 'light',
     ColorBgParallax:
@@ -82,6 +85,9 @@ export const accessClient = {
             isKomoto ? 'theme' :
             isSabyan ? 'primary' : 'theme',
     },
+    LoginScreen: {
+        guesMode: isSantriPreneur ? false : true
+    },
     BottomTabsNavigator: {
         type:
             isKomoto ? 'komoto' :
@@ -89,6 +95,7 @@ export const accessClient = {
     },
     MainHome: {
         showMenuHome: isUnitedId ? false : true,
+        showMemberRank: isIndoBarca ? false : true,
         showWidgetBalance: isKomoto || isSabyan ? false : true,
         showListAuction: isKomoto || isSabyan ? false : true,
         showListSoonAuction: isKomoto || isSabyan ? false : true,

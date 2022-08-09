@@ -340,7 +340,7 @@ const LoginScreen = ({navigation, route}) => {
               Daftar
             </Button>
 
-            <Container paddingTop={16}>
+            {accessClient.LoginScreen.guesMode && <Container paddingTop={16}>
               <Button
                 outline
                 onPress={() => {
@@ -349,7 +349,7 @@ const LoginScreen = ({navigation, route}) => {
               >
                 Guest Mode
               </Button>
-            </Container>
+            </Container>}
           </Container>
         </View>
       </KeyboardAwareScrollView>
