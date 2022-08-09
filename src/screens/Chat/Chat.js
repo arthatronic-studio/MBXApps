@@ -58,17 +58,14 @@ const Chat = ({navigation, route}) => {
                 />
             }
             floatingActionButton={
-                <Pressable
+                !loadingMyRooms && <Pressable
                     onPress={() => {
                         if (accessClient.isThisable) {
                             navigation.navigate('ChatUserListScreen', { myRoomIds, screenType: 'help' });
                             return;
                         }
-
-                        if (!loadingMyRooms) {
-                            modalListActionRef.current.open();
-                            modalListActionRef.current.close();
-                        }
+                        
+                        modalListActionRef.current.open();
                     }}
 
                     style={{
