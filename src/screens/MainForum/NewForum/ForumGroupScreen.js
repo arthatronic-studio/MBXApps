@@ -27,6 +27,7 @@ import Config from 'react-native-config';
 import TabViewCollapsible from 'src/components/TabViewCollapsible';
 import { statusBarHeight } from 'src/utils/constants';
 import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
+import { useSelector } from 'react-redux';
 
 const { Navigator, Screen } = createMaterialTopTabNavigator();
 const itemPerPage = 100;
