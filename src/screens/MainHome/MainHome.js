@@ -488,11 +488,11 @@ const MainHome = ({ navigation, route }) => {
 
           <Divider height={spaceContentSize} />
 
-          <Line color={Color.border} width={width} />
+          {accessClient.MainHome.showMemberRank && <Line color={Color.border} width={width} />}
 
-          <Container paddingVertical={spaceContentSize}>
+          {accessClient.MainHome.showMemberRank && <Container paddingVertical={spaceContentSize}>
             <MemberRank />
-          </Container>
+          </Container>}
 
           {accessClient.MainHome.showMenuHome && <Line color={Color.border} width={width} />}
 
@@ -615,7 +615,7 @@ const MainHome = ({ navigation, route }) => {
           />
 
           {/* <HighlightContentProduct
-            productCategory='NEWS'
+            productCategory='POSTING'
             name='Artikel'
             title='Artikel Populer'
             nav='NewsScreen'
