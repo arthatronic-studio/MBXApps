@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, Component } from 'react';
-import { View, AppRegistry, FlatList, ScrollView, Platform, Image, SafeAreaView, TextInput, TouchableOpacity, Pressable, ColorPropType } from 'react-native';
+import { View, AppRegistry, FlatList, ScrollView, Platform, Image, SafeAreaView, TextInput, TouchableOpacity, Pressable } from 'react-native';
 import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import Fontisto from 'react-native-vector-icons/Fontisto';
