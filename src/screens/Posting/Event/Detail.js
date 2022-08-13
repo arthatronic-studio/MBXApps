@@ -297,7 +297,7 @@ const EventDetail = ({ navigation, route }) => {
       <Container paddingHorizontal={16} marginTop={8}>
         <Text align='left'>Detail Lokasi</Text>
         <Divider height={8} />
-        <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 18, borderRadius: 8, backgroundColor: Color.primaryDark }}>
+        <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 18, borderRadius: 8, backgroundColor: Color.theme }}>
           <Image
             source={ImagesPath.LocationEvent}
             style={{
@@ -418,7 +418,7 @@ const EventDetail = ({ navigation, route }) => {
         ListFooterComponent={renderFooter}
       />
 
-      <Row style={{ padding: 16, backgroundColor: Color.primaryMoreDark }}>
+      <Row style={{ padding: 16, backgroundColor: Color.theme }}>
         <Col style={{ justifyContent: 'center' }}>
           <Text type='medium' style={{ textAlign: 'left', fontSize: 8 }}>Mulai dari</Text>
           <Divider height={4} />

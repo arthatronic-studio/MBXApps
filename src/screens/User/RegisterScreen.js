@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   TouchableOpacity as NativeTouchable,
@@ -7,11 +7,11 @@ import {
   Keyboard,
   Image,
 } from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {useIsFocused} from '@react-navigation/native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { useIsFocused } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import {
   Text,
@@ -19,11 +19,12 @@ import {
   useColor,
   Scaffold,
   Header,
+  useLoading,
 } from '@src/components';
-import {Button, TouchableOpacity} from '@src/components/Button';
+import { Button, TouchableOpacity } from '@src/components/Button';
 import validate from '@src/lib/validate';
-import {register as onRegister} from '@src/state/actions/user/auth';
-import { Container, Divider } from 'src/styled';
+import { register as onRegister } from '@src/state/actions/user/auth';
+import { Column, Container, Divider, Row } from 'src/styled';
 import FormInput from 'src/components/FormInput';
 import WidgetBgFixIcon from './WidgetBgFixIcon';
 import { statusBarHeight } from 'src/utils/constants';
@@ -32,7 +33,7 @@ import imageAssets from 'assets/images';
 
 const inputs = ['fullName', 'email', 'username', 'password', 'password2'];
 
-const RegisterScreen = ({navigation, route}) => {
+const RegisterScreen = ({ navigation, route }) => {
   const [state, changeState] = useState({
     userData: {
       fullName: '',
@@ -42,6 +43,7 @@ const RegisterScreen = ({navigation, route}) => {
       password2: '',
       phoneCountryCode: '62',
       phoneNumber: '',
+      birthOfDate: '',
     },
     error: {
       fullName: null,
@@ -53,9 +55,10 @@ const RegisterScreen = ({navigation, route}) => {
     showPassword: false,
     allValid: false,
   });
+  const [selectedJK, setSelectedJK] = useState({ id: 1, name: 'Laki-laki' });
 
   const setState = obj => {
-    changeState({...state, ...obj});
+    changeState({ ...state, ...obj });
   };
 
   const emailRef = useRef();
@@ -65,11 +68,12 @@ const RegisterScreen = ({navigation, route}) => {
 
   const { height, width } = useWindowDimensions();
   const dispatch = useDispatch();
-  const {register, loading, error} = useSelector(state => state['user.auth']);
+  const { register, loading, error } = useSelector(state => state['user.auth']);
 
-  const {Color} = useColor();
+  const { Color } = useColor();
   const isFocused = useIsFocused();
   const [popupProps, showPopup] = usePopup();
+  const [loadingProps, showLoading, hideLoading] = useLoading();
 
   useEffect(() => {
     if (isFocused) {
@@ -77,7 +81,7 @@ const RegisterScreen = ({navigation, route}) => {
         navigation.pop();
       } else if (!register.status && error) {
         showPopup(error.trim(), 'error');
-        dispatch({type: 'USER.LOGOUT'});
+        dispatch({ type: 'USER.LOGOUT' });
       }
     }
   }, [register, error, isFocused]);
@@ -119,19 +123,21 @@ const RegisterScreen = ({navigation, route}) => {
 
   const isValueError = name => {
     const error = validate(name, state.userData[name]);
-    setState({error: {...state.error, [name]: error}});
+    setState({ error: { ...state.error, [name]: error } });
   };
 
   const onChangeUserData = (key, val) => {
-    setState({userData: {...state.userData, [key]: val}});
+    setState({ userData: { ...state.userData, [key]: val } });
   };
 
   const onSubmit = () => {
+    showLoading('success', 'Pendaftaran Berhasil');
+    return;
     Keyboard.dismiss();
 
     let valid = true;
     const newErrorState = {};
-    const {password, password2} = state.userData;
+    const { password, password2 } = state.userData;
 
     for (const input of inputs) {
       const error = validate(input, state.userData[input]);
@@ -144,25 +150,73 @@ const RegisterScreen = ({navigation, route}) => {
       newErrorState.password2 = 'Konfirmasi password tidak sama';
     }
 
-    setState({error: newErrorState, allValid: valid});
+    setState({ error: newErrorState, allValid: valid });
   };
-  
+
+  const renderRadio = ({ label, data, selected, flexDirection, onSelected }) => {
+    return (
+      <View style={{ alignItems: 'flex-start', marginBottom: 16 }}>
+        <Text
+          align='left'
+          type='medium'
+          size={12}
+          color={Color.textSoft}
+          style={{ marginBottom: 12 }}
+        >
+          {label}
+        </Text>
+
+        <View
+          style={{
+            flexDirection,
+          }}
+        >
+          {data.map((v, id) => {
+            const isSelected = selected && v.id === selected.id;
+
+            return (
+              <TouchableOpacity
+                key={id}
+                onPress={() => {
+                  onSelected(v);
+                }}
+                style={{ paddingRight: 16, marginBottom: 8 }}
+              >
+                <Row align='center'>
+                  <View
+                    style={{ height: 18, width: 18, borderRadius: 18 / 2, borderWidth: 1, borderColor: Color.text, backgroundColor: Color.textInput, justifyContent: 'center', alignItems: 'center' }}
+                  >
+                    {isSelected && <View style={{ height: 10, width: 10, borderRadius: 10 / 2, backgroundColor: Color.primary }} />}
+                  </View>
+                  <Container paddingLeft={8}>
+                    <Text size={12}>{v.name}</Text>
+                  </Container>
+                </Row>
+              </TouchableOpacity>
+            )
+          })}
+        </View>
+      </View>
+    )
+  }
+
   return (
     <Scaffold
-      showHeader={false}
+      // showHeader={false}
       popupProps={popupProps}
+      loadingProps={loadingProps}
       fallback={loading}
-      statusBarColor={Color[accessClient.ColorBgParallax]}
-      translucent={Platform.OS === 'ios' ? true : isFocused}
-      useSafeArea={Platform.OS === 'ios' ? false : true}
+    // statusBarColor={Color[accessClient.ColorBgParallax]}
+    // translucent={Platform.OS === 'ios' ? true : isFocused}
+    // useSafeArea={Platform.OS === 'ios' ? false : true}
     >
-      <WidgetBgFixIcon />
+      {/* <WidgetBgFixIcon /> */}
 
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          marginTop: 36, // height / 3,
+          // marginTop: 36, // height / 3,
           // paddingBottom: height / 3,
           backgroundColor: Color.theme
         }}
@@ -177,7 +231,7 @@ const RegisterScreen = ({navigation, route}) => {
           }}
         >
           <Container padding={16}>
-            <Container marginTop={24} marginBottom={48}>
+            <Container marginBottom={24}>
               <Text align='left' size={24} type='semibold'>Daftar</Text>
             </Container>
 
@@ -194,6 +248,36 @@ const RegisterScreen = ({navigation, route}) => {
             />
 
             <FormInput
+              label='Tanggal Lahir'
+              placeholder='dd/mm/yyyyy'
+              value={state.userData.birthOfDate}
+              onChangeText={text => onChangeUserData('birthOfDate', text)}
+              onBlur={() => isValueError('fullName')}
+              returnKeyType="next"
+              keyboardType="default"
+              onSubmitEditing={() => emailRef.current.focus()}
+              error={state.error.fullName}
+              suffixIcon={
+                <View style={{ width: '10%' }}>
+                  <Text>V</Text>
+                </View>
+              }
+            />
+
+            {renderRadio({
+              flexDirection: 'row',
+              label: 'Jenis Kelamin',
+              data: [
+                { name: 'Laki-laki', id: 1 },
+                { name: 'Perempuan', id: 2 },
+              ],
+              selected: selectedJK,
+              onSelected: (val) => {
+                setSelectedJK(val)
+              }
+            })}
+
+            <FormInput
               ref={emailRef}
               label='Email'
               placeholder='contoh@email.com'
@@ -206,7 +290,7 @@ const RegisterScreen = ({navigation, route}) => {
               error={state.error.email}
             />
 
-            <FormInput
+            {/* <FormInput
               ref={phoneRef}
               label='No. Telepon'
               placeholder='81312345678'
@@ -222,9 +306,9 @@ const RegisterScreen = ({navigation, route}) => {
                   <Text>+62</Text>
                 </Container>
               }
-            />
+            /> */}
 
-            <FormInput
+            {/* <FormInput
               ref={passwordRef}
               secureTextEntry={!state.showPassword}
               label='Kata Sandi'
@@ -252,12 +336,6 @@ const RegisterScreen = ({navigation, route}) => {
                       alignItems: 'flex-end',
                     }}
                   >
-                    {/* <Ionicons
-                      size={16}
-                      name={state.showPassword ? 'eye-off' : 'eye'}
-                      color={Color.gray}
-                    /> */}
-
                     <Image
                       source={imageAssets.eyeSlash}
                       style={{
@@ -269,9 +347,9 @@ const RegisterScreen = ({navigation, route}) => {
                   </NativeTouchable>
                 </View>
               }
-            />
+            /> */}
 
-            <FormInput
+            {/* <FormInput
               ref={passwordConfRef}
               secureTextEntry={!state.showPassword}
               label='Ulangi Kata Sandi'
@@ -299,12 +377,6 @@ const RegisterScreen = ({navigation, route}) => {
                       alignItems: 'flex-end',
                     }}
                   >
-                    {/* <Ionicons
-                      size={16}
-                      name={state.showPassword ? 'eye-off' : 'eye'}
-                      color={Color.gray}
-                    /> */}
-
                     <Image
                       source={imageAssets.eyeSlash}
                       style={{
@@ -316,14 +388,14 @@ const RegisterScreen = ({navigation, route}) => {
                   </NativeTouchable>
                 </View>
               }
-            />
+            /> */}
 
             {/* <View style={{width: '100%', paddingVertical: 2, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
               <MaterialIcons size={16} name='check-box-outline-blank' color={Color.border} style={{marginRight: 4}} />
               <Text align='left' size={12} color={Color.border}>Saya ingin menerima berita terbaru lewat email</Text>
             </View> */}
 
-            <View style={{width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+            {/* <View style={{width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
               <MaterialIcons
                 size={16}
                 name='check-box-outline-blank'
@@ -337,26 +409,28 @@ const RegisterScreen = ({navigation, route}) => {
                   Saya setuju dengan <Text color={Color.primary}>Syarat & Ketentuan</Text> yang berlaku.
                 </Text>
               </View>
-            </View>
+            </View> */}
 
-            <Divider height={24} />
-
-            <Button
-              onPress={() => onSubmit()}
-            >
-              Daftar
-            </Button>
+            {/* <Divider height={24} /> */}
           </Container>
         </View>
       </KeyboardAwareScrollView>
 
-      <Header
+      <Container padding={16}>
+        <Button
+          onPress={() => onSubmit()}
+        >
+          Daftar
+        </Button>
+      </Container>
+
+      {/* <Header
         style={{
           position: 'absolute',
           backgroundColor: 'transparent',
           top: statusBarHeight,
         }}
-      />
+      /> */}
     </Scaffold>
   );
 };

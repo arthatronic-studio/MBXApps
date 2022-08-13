@@ -8,6 +8,7 @@ const imagePaymentSuccess = require('./image-payment-success.png');
 const imageCarousel = require('./image-carousel.jpeg');
 const imageCardOrnament = require('./image_card_ornament.png');
 
+const building = require('./building.png');
 const buildings = require('./buildings.png');
 const direction = require('./direction.png');
 const eyeSlash = require('./eye-slash.png');
@@ -15,6 +16,7 @@ const homeMenuEats = require('./home-menu-eats.png');
 const homeMenuEvent = require('./home-menu-event.png');
 const homeMenuPromo = require('./home-menu-promo.png');
 const homeMenuShop = require('./home-menu-shop.png');
+const homeMenuForum = require('./home-menu-forum.png');
 const profile = require('./profile.png');
 const shake = require('./shake.png');
 const ticket = require('./ticket.png');
@@ -30,6 +32,17 @@ const phoneBook = require('./phone-book.png');
 const call = require('./call.png');
 const mail = require('./mail.png');
 const discount = require('./discount.png');
+const bgLogin = require('./bg-login.png');
+const bgSplashFooter = require('./bg-splash-footer.png');
+const bgSplashHeader = require('./bg-splash-header.png');
+const onBoarding1 = require('./on_boarding_1.png');
+const onBoarding2 = require('./on_boarding_2.png');
+const onBoarding3 = require('./on_boarding_3.png');
+const people = require('./people.png');
+const male = require('./male.png');
+const female = require('./female.png');
+const airdrop = require('./airdrop.png');
+const connecting = require('./connecting.png');
 
 export {
   iconApp,
@@ -42,6 +55,7 @@ export {
   imageCarousel,
   imageCardOrnament,
 
+  building,
   buildings,
   direction,
   eyeSlash,
@@ -49,6 +63,7 @@ export {
   homeMenuEvent,
   homeMenuPromo,
   homeMenuShop,
+  homeMenuForum,
   profile,
   shake,
   ticket,
@@ -64,6 +79,17 @@ export {
   call,
   mail,
   discount,
+  bgLogin,
+  bgSplashFooter,
+  bgSplashHeader,
+  onBoarding1,
+  onBoarding2,
+  onBoarding3,
+  people,
+  male,
+  female,
+  airdrop,
+  connecting,
 };
 
 export const imageAssets = {
@@ -77,6 +103,7 @@ export const imageAssets = {
   imageCarousel,
   imageCardOrnament,
 
+  building,
   buildings,
   direction,
   eyeSlash,
@@ -84,6 +111,7 @@ export const imageAssets = {
   homeMenuEvent,
   homeMenuPromo,
   homeMenuShop,
+  homeMenuForum,
   profile,
   shake,
   ticket,
@@ -99,6 +127,17 @@ export const imageAssets = {
   call,
   mail,
   discount,
+  bgLogin,
+  bgSplashFooter,
+  bgSplashHeader,
+  onBoarding1,
+  onBoarding2,
+  onBoarding3,
+  people,
+  male,
+  female,
+  airdrop,
+  connecting,
 };
 
 export default imageAssets;

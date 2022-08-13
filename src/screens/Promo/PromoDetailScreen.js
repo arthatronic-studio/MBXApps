@@ -19,7 +19,7 @@ import { Container, Divider, Row } from '@src/styled';
 import { shadowStyle } from '@src/styles';
 import { adsPopup } from 'assets/images/popup';
 import { FormatMoney } from 'src/utils';
-import { statusBarHeight } from 'src/utils/constants';
+import { isIphoneNotch, statusBarHeight } from 'src/utils/constants';
 
 const TabBarHeight = 48;
 const HeaderHeight = Dimensions.get('window').height / 1.9;
@@ -174,7 +174,7 @@ const PromoDetailScreen = ({ navigation, route }) => {
 
                     <Divider />
 
-                    <Container color={Color.primaryDark} radius={8} padding={10}>
+                    <Container color={Color.primary} radius={8} padding={10}>
                         <Row>
                             <Container flex={1}>
                                 <Text align='left' size={11} type='medium' color={Color.border} letterSpacing={0.5}>Periode Promo</Text>
@@ -346,7 +346,7 @@ const PromoDetailScreen = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
     header: {
-        top: statusBarHeight,
+        top: isIphoneNotch() ? statusBarHeight : 0,
         // height: HeaderHeight,
         width: '100%',
         alignItems: 'center',

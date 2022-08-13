@@ -29,7 +29,7 @@ import { Container, Row, Line, Divider } from 'src/styled';
 import PopupTermCondition from 'src/components/PopupTermCondition';
 import WidgetBgFixIcon from './WidgetBgFixIcon';
 import { accessClient } from 'src/utils/access_client';
-import imageAssets from 'assets/images';
+import imageAssets, { iconApp } from 'assets/images';
 
 const inputs = ['username', 'password'];
 const shouldChangePassword = ['tribes123'];
@@ -37,7 +37,7 @@ const shouldChangePassword = ['tribes123'];
 const LoginScreen = ({navigation, route}) => {
   const [state, changeState] = useState({
     username: '',
-    password: '',
+    password: '000000',
     fcm_token: '',
     error: {username: null, password: null},
     showPassword: false,
@@ -138,7 +138,8 @@ const LoginScreen = ({navigation, route}) => {
               } else if (shouldUpdateProfile) {
                 redirectTo('ChangeProfile');
               } else {
-                setModalTerm(true);
+                // setModalTerm(true);
+                redirectTo('MainPage');
               }
             }, 1000);
           }
@@ -182,35 +183,34 @@ const LoginScreen = ({navigation, route}) => {
 
   return (
     <Scaffold
-      header={
-        <HeaderBig
-          title='Login'
-          titleRight='Register'
-          titleRightColor={Color.primarySoft}
-          onPressRightButton={() => {
-            navigation.navigate('RegisterScreen');
-            dispatch({ type: 'USER.REGISTER', status: false });
-          }}
-          style={{ backgroundColor: 'transparent', paddingTop: 16 }}
-        />
-      }
+      showHeader={false}
+      // header={
+      //   <HeaderBig
+      //     title='Login'
+      //     titleRight='Register'
+      //     titleRightColor={Color.primarySoft}
+      //     onPressRightButton={() => {
+      //       navigation.navigate('RegisterScreen');
+      //       dispatch({ type: 'USER.REGISTER', status: false });
+      //     }}
+      //     style={{ backgroundColor: 'transparent', paddingTop: 16 }}
+      //   />
+      // }
       popupProps={popupProps}
       fallback={loading}
-      statusBarColor={Color[accessClient.ColorBgParallax]}
-      translucent={Platform.OS === 'ios' ? true : isFocused}
-      useSafeArea={Platform.OS === 'ios' ? false : true}
+      statusBarColor={Color.primary}
+      translucent={Platform.OS === 'ios' ? false : true}
+      useSafeArea={Platform.OS === 'ios' ? false : false}
     >
-      {/* <WidgetBgFixIcon /> */}
-
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          marginTop: height / 4, // height / 3,
-          // paddingBottom: height / 3,
           backgroundColor: Color.theme
         }}
       >
+        <WidgetBgFixIcon />
+
         <View
           style={{
             // borderColor: Color.border,
@@ -224,6 +224,18 @@ const LoginScreen = ({navigation, route}) => {
             {/* <Container marginTop={24} marginBottom={48}>
               <Text align='left' size={24} type='semibold'>Masuk</Text>
             </Container> */}
+
+            <View>
+              <Image
+                source={iconApp}
+                style={{
+                  width: width / 5,
+                  height: width / 5,
+                }}
+              />
+            </View>
+
+            <Divider height={24} />
 
             {state.isSucceddForgot && (
               <View
@@ -244,9 +256,20 @@ const LoginScreen = ({navigation, route}) => {
               </View>
             )}
 
+            <Container>
+              <Text align='left' size={28}>
+                Hello There!
+              </Text>
+              <Text align='left'>
+                Silakan masukan nomor telepon Anda untuk masuk ke aplikasi
+              </Text>
+            </Container>
+
+            <Divider height={32} />
+
             <FormInput
-              label='Email atau No. Telepon'
-              placeholder='contoh@email.com'
+              label='No. Telepon'
+              placeholder='851-XXXX-XXXX'
               value={state.username}
               onChangeText={text => setState({username: text})}
               onBlur={() => isValueError('username')}
@@ -254,9 +277,14 @@ const LoginScreen = ({navigation, route}) => {
               onSubmitEditing={() => passwordRef.current.focus()}
               keyboardType="default"
               error={state.error.username}
+              prefixIcon={
+                <View style={{width: '10%'}}>
+                  <Text align='left' color={Color.textSoft}>+62</Text>
+                </View>
+              }
             />
 
-            <FormInput
+            {/* <FormInput
               ref={passwordRef}
               secureTextEntry={!state.showPassword}
               label='Kata Sandi'
@@ -284,12 +312,6 @@ const LoginScreen = ({navigation, route}) => {
                       alignItems: 'flex-end',
                     }}
                   >
-                    {/* <Ionicons
-                      size={16}
-                      name={state.showPassword ? 'eye-off' : 'eye'}
-                      color={Color.gray}
-                    /> */}
-
                     <Image
                       source={imageAssets.eyeSlash}
                       style={{
@@ -301,9 +323,9 @@ const LoginScreen = ({navigation, route}) => {
                   </NativeTouchable>
                 </View>
               }
-            />
+            /> */}
 
-            <Container paddingBottom={24}>
+            {/* <Container paddingBottom={24}>
               <TouchableOpacity
                 activeOpacity={1}
                 onPress={() => {
@@ -319,13 +341,21 @@ const LoginScreen = ({navigation, route}) => {
                   Lupa Password?
                 </Text>
               </TouchableOpacity>
-            </Container>
+            </Container> */}
 
             <Button
               onPress={() => signIn()}
             >
-              Masuk
+              Login
             </Button>
+
+            <Divider />
+            <Text onPress={() => {
+              navigation.navigate('RegisterScreen');
+              dispatch({ type: 'USER.REGISTER', status: false });
+            }}>
+              Daftar
+            </Text>
 
             <Divider />
             <Text onPress={() => navigation.navigate('OtpScreen')}>

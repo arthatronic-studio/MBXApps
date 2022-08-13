@@ -8,11 +8,11 @@ import {
   Text,
   useColor
 } from '@src/components';
-import {
+import imageAssets, {
   iconSplash,
   iconApp
 } from '@assets/images';
-import { Container } from 'src/styled';
+import { Container, Divider } from 'src/styled';
 import { useSelector } from 'react-redux';
 
 const RowView = Styled(Row)`
@@ -81,24 +81,40 @@ const HeaderBig = ({
             <Container>
               <Text
                 align='left'
-                size={12}
-                letterSpacing={0.45}
-                color={Color.text}
+                size={11}
+                type='medium'
+                letterSpacing={0.5}
+                color={Color.placeholder}
               >
-                Halo,
+                Selamat Datang
               </Text>
-              <Text
-                align='left'
-                size={20}
-                type='bold'
-                numberOfLines={1}
-                color={Color.text}
-              >
-                {user && !user.guest
-                  ? user.firstName.trim() +
-                    (user.lastName ? ' ' + user.lastName.trim() : '')
-                  : 'Tamu'}
-              </Text>
+              <Divider height={2} />
+              <Row style={{
+                alignItems: 'center',
+              }}>
+                <Text
+                  align='left'
+                  size={16}
+                  type='medium'
+                  numberOfLines={1}
+                  color={Color.text}
+                >
+                  {user && !user.guest
+                    ? user.firstName.trim() +
+                      (user.lastName ? ' ' + user.lastName.trim() : '')
+                    : 'Tamu'}
+                </Text>
+
+                <Image
+                  source={imageAssets.airdrop}
+                  style={{
+                    height: 16,
+                    width: 16,
+                    tintColor: Color.success,
+                    marginLeft: 4,
+                  }}
+                />
+              </Row>
             </Container>
           :
           title === '' ?

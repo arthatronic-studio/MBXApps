@@ -34,10 +34,10 @@ const WidgetHomeMenuStatic = ({ onPress, showMore }) => {
   const {width} = useWindowDimensions();
 
   const [listMenuHome, setListMenuHome] = useState([
-    {name: 'Event', nav: 'EventScreen', param: {}, image: imageAssets.homeMenuEvent, show: true },
-    {name: 'Promo', nav: 'PromoScreen', param: {}, image: imageAssets.homeMenuPromo, show: true },
-    {name: 'Eats', nav: '', param: {}, image: imageAssets.homeMenuEats, show: true },
     {name: 'Shop', nav: '', param: {}, image: imageAssets.homeMenuShop, show: true },
+    {name: 'Event', nav: 'EventScreen', param: {}, image: imageAssets.homeMenuEvent, show: true },
+    {name: 'Forum', nav: 'ForumScreen', param: {}, image: imageAssets.homeMenuForum, show: true },
+    {name: 'Eats', nav: '', param: {}, image: imageAssets.homeMenuEats, show: true },
   ]);
   const [itemData, setItemData] = useState(initialItemState);
   const [modalMenuHome, setModalMenuHome] = useState(false);
@@ -129,15 +129,16 @@ const WidgetHomeMenuStatic = ({ onPress, showMore }) => {
   const spaceContentSize = 8;
 
   return (
-    <Container paddingTop={8}>
+    <Container paddingHorizontal={paddingInMenu}>
       <Container
         style={{
           backgroundColor: Color.theme,
           width: '100%',
-          // paddingTop: paddingInMenu,
+          paddingVertical: paddingInMenu,
           flexDirection: 'row',
           flexWrap: 'wrap',
-          // ...shadowStyle,
+          borderRadius: 8,
+          ...shadowStyle,
         }}
       >
         {currentData.map((menu, idx) => {
@@ -179,8 +180,7 @@ const WidgetHomeMenuStatic = ({ onPress, showMore }) => {
                 style={{
                   height: widthIconMenu,
                   width: widthIconMenu,
-                  backgroundColor: Color.primarySoft,
-                  marginBottom: 10,
+                  marginBottom: 4,
                   borderRadius: widthIconMenu / 2,
                   justifyContent: 'center',
                   alignItems: 'center',
@@ -189,8 +189,8 @@ const WidgetHomeMenuStatic = ({ onPress, showMore }) => {
                 <Image
                   style={[
                     {
-                      height: '55%',
-                      width: '55%'
+                      height: '100%',
+                      width: '100%'
                     },
                     menu.comingsoon ? {opacity: 0.3} : {}
                   ]}
@@ -199,7 +199,7 @@ const WidgetHomeMenuStatic = ({ onPress, showMore }) => {
                 />
               </View>
               
-              <Text size={12} style={menu.comingsoon && {opacity: 0.3}}>
+              <Text size={10} type='medium' style={menu.comingsoon && {opacity: 0.3}}>
                 {menu.name}
               </Text>
 

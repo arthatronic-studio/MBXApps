@@ -191,7 +191,7 @@ const CheckoutEvent = ({ navigation, route }) => {
         >
             <ScrollView>
                 <Container paddingHorizontal={16}>
-                    <View style={{ backgroundColor: Color.primaryMoreDark, borderWidth: 1, padding: 10, borderRadius: 8 }}>
+                    <View style={{ backgroundColor: Color.theme, borderWidth: 1, padding: 10, borderRadius: 8 }}>
                         <Container align='center' style={{ flexDirection: 'row' }}>
                             <Image source={{ uri: '' }} style={{ height: 48, width: 48, borderRadius: 8, marginRight: 8, backgroundColor: Color.border }} />
                             <Text type='semibold' align='left'>Pestapora 2022</Text>
@@ -230,7 +230,7 @@ const CheckoutEvent = ({ navigation, route }) => {
                     <Divider />
                     <Text type='bold' align='left'>Detail Pemesan</Text>
 
-                    <View style={{ marginTop: 8, padding: 10, borderRadius: 8, backgroundColor: Color.primaryMoreDark }}>
+                    <View style={{ marginTop: 8, padding: 10, borderRadius: 8, backgroundColor: Color.theme }}>
                         <Row>
                             <Col>
                                 <Text type='bold' align='left'>{user.firstName} {user.lastName}</Text>
@@ -287,7 +287,7 @@ const CheckoutEvent = ({ navigation, route }) => {
                             <TouchableOpacity
                                 key={idx}
                                 onPress={() => modalPassangerRef.current.open()}
-                                style={{ marginTop: 8, paddingHorizontal: 10, paddingVertical: 12, borderRadius: 8, backgroundColor: Color.primaryMoreDark }}
+                                style={{ marginTop: 8, paddingHorizontal: 10, paddingVertical: 12, borderRadius: 8, backgroundColor: Color.theme }}
                             >
                                 <Row>
                                     <Col>

@@ -32,6 +32,7 @@ import { getDetailEvent } from 'src/lib/query/event';
 import { fetchSaveEvent } from 'src/api/event/saveEvent';
 import { FormatMoney } from 'src/utils';
 import imageAssets from 'assets/images';
+import { shadowStyle } from 'src/styles';
 
 const defaultProps = {
   item: {
@@ -58,8 +59,8 @@ const CardEventTicket = ({ item, onSelect }) => {
   An event description is a text or copy that tells audiences all the essential details about your event. These details should come together so that it compels potential attendees to register. But more than driving up attendance, a good event description can pique the interest of non-members and even the press. In a nutshell, an event description should cover the who, what, why, where, when and how of your event to give potential attendees reasons to show up.`;
 
   return (
-    <View style={{ paddingHorizontal: 16 }}>
-      <Pressable style={{ width: '100%', marginBottom: 10, padding: 10, backgroundColor: Color.primaryMoreDark, borderRadius: 8 }}>
+    <View style={{ paddingHorizontal: 16, ...shadowStyle, backgroundColor: Color.theme }}>
+      <Pressable style={{ width: '100%', marginBottom: 10, padding: 10, backgroundColor: Color.theme, borderRadius: 8 }}>
         <Row>
           <Col>
             <Text style={{ fontSize: 11, textAlign: 'left', fontWeight: 'bold' }}>{item.name}</Text>

@@ -99,27 +99,31 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
         let eventDate = !isNaN(parseInt(item.eventDate)) ? parseInt(item.eventDate) : null;
         if (!eventDate) eventDate = !isNaN(parseInt(item.updated_date)) ? parseInt(item.updated_date) : null;
 
+        const onPress = () => {
+            navigation.navigate('EventDetail', { item });
+
+            GALogEvent('Event', {
+                id: item.id,
+                product_name: item.productName,
+                user_id: user.userId,
+                method: analyticMethods.view,
+            });
+        }
+
         return (
             <TouchableOpacity
                 onPress={() => {
-                    navigation.navigate('EventDetail', { item });
-
-                    GALogEvent('Event', {
-                        id: item.id,
-                        product_name: item.productName,
-                        user_id: user.userId,
-                        method: analyticMethods.view,
-                    });
+                    onPress();
                 }}
                 style={{
                     width: width / numColumns - (horizontal ? 32 : 16),
                     paddingHorizontal: 8,
                     marginTop: 16,
-                    borderRadius: 8,
+                    borderRadius: 16,
                     ...style,
                 }}
             >
-                <View style={{ width: '100%', backgroundColor: Color.primaryMoreDark, borderRadius: 8 }}>
+                <View style={{ width: '100%', backgroundColor: Color.theme, borderRadius: 16, ...shadowStyle }}>
                     <Image
                         source={{ uri: item.image }}
                         style={{
@@ -132,31 +136,31 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                         }}
                     />
 
-                    <View style={{ backgroundColor: Color.theme, width: 40, aspectRatio: 1, borderRadius: 20, position: 'absolute', top: 10, right: 10, alignItems: 'center', justifyContent: 'center' }}>
+                    {/* <View style={{ backgroundColor: Color.theme, width: 40, aspectRatio: 1, borderRadius: 20, position: 'absolute', top: 10, right: 10, alignItems: 'center', justifyContent: 'center' }}>
                         <Ionicons name='bookmark-outline' size={22} color={Color.primarySoft} />
-                    </View>
+                    </View> */}
 
                     <View style={{ width: '100%', padding: 10 }}>
-                        <Text type='bold' align='left' numberOfLines={1}>{item.productName}</Text>
+                        <Text type='medium' align='left' numberOfLines={1}>{item.productName}</Text>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 8 }}>
                             <View style={{ flexDirection: 'row' }}>
                                 <Image
-                                    style={{ height: 16, width: 16 }}
+                                    style={{ height: 16, width: 16, tintColor: Color.placeholder }}
                                     source={imageAssets.location}
                                 />
                                 <Divider width={4} />
-                                <Text type='bold' size={12} align='left' color={Color.grey}>Bandung</Text>
+                                <Text type='medium' size={12} align='left' color={Color.placeholder} letterSpacing={0.5}>Bandung</Text>
                             </View>
                             <Divider />
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Image
-                                    style={{ height: 16, width: 16 }}
+                                    style={{ height: 16, width: 16, tintColor: Color.placeholder }}
                                     source={imageAssets.calendar}
                                 />
                                 <Divider width={4} />
                                 {Moment(eventDate).isValid() && <>
-                                    <Text type='bold' size={12} align='left' color={Color.grey}>{Moment(eventDate).format('DD MMM YYYY')}</Text>
+                                    <Text type='medium' size={12} align='left' color={Color.placeholder} letterSpacing={0.5}>{Moment(eventDate).format('DD MMM YYYY')}</Text>
                                     <Divider height={8} />
                                 </>}
                             </View>
@@ -164,13 +168,18 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
 
                         <View style={{width: '100%', flexDirection: 'row', paddingTop: 16}}>
                             <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'center'}}>
-                                <Text size={12}>Start From</Text>
-                                <Text size={16} type='medium'>{FormatMoney.getFormattedMoney(450000)}</Text>
+                                <Text size={11} type='medium' letterSpacing={0.5}>Mulai dari</Text>
+                                <Text size={14} type='medium' letterSpacing={0.1}>{FormatMoney.getFormattedMoney(450000)}</Text>
                             </View>
-                            <View style={{flex: 1}}>
-                                <Button>
-                                    Check Now{' '}
-                                    <Ionicons name='arrow-forward' size={16} color={Color.textButtonInline} />
+                            <View style={{flex: 0.65}}>
+                                <Button
+                                    onPress={() => {
+                                        onPress();
+                                    }}
+                                    fontSize={12}
+                                >
+                                    Pesan Sekarang
+                                    {/* <Ionicons name='arrow-forward' size={16} color={Color.textButtonInline} /> */}
                                 </Button>
                             </View>
                         </View>

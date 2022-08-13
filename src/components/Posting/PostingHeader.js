@@ -81,7 +81,7 @@ const PostingHeader = (props) => {
             <Row>
                 {iconType && iconName && getIconMenu(iconType, iconName)}
 
-                {validImage && <View style={{ width: 24, aspectRatio: 1, marginRight: 8 }}>
+                {/* {validImage && <View style={{ width: 24, aspectRatio: 1, marginRight: 8 }}>
                     <Image
                         source={imageContent[productCategory].ic_header}
                         style={{
@@ -89,7 +89,7 @@ const PostingHeader = (props) => {
                             height: '100%',
                         }}
                     />
-                </View>}
+                </View>} */}
 
                 <Text type="bold" align='left' size={16}>{title}</Text>
             </Row>

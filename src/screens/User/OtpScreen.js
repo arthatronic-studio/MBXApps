@@ -22,7 +22,7 @@ import { Header } from 'src/components';
 import { statusBarHeight } from 'src/utils/constants';
 import { FormatDuration } from 'src/utils';
 
-const initialCountdown = 60;
+const initialCountdown = 60 * 5;
 
 const OtpScreen = ({ navigation, route }) => {
     const [listTextInput, setListTextInput] = useState([]);
@@ -198,7 +198,6 @@ const OtpScreen = ({ navigation, route }) => {
 
     return (
         <Scaffold
-            showHeader={false}
             popupProps={popupProps}
             isLoading={isLoading}
         >
@@ -213,13 +212,11 @@ const OtpScreen = ({ navigation, route }) => {
                     style={{
                         flex: 1,
                         paddingHorizontal: 16,
-                        paddingTop: 48,
                     }}
                 >
-                    <Container paddingHorizontal={16} marginTop={24} marginBottom={48} align='flex-start'>
-                        <Text align='left' size={28} type='semibold'>Verification</Text>
-                        <Divider />
-                        <Text align='left'>Please check your inbox. we've been sent the OTP code to your number.</Text>
+                    <Container marginTop={24} marginBottom={48} align='flex-start'>
+                        <Text align='left' size={28} type='semibold'>Verifikasi OTP</Text>
+                        <Text align='left'>Kami telah mengirimkan kode untuk melakukan verifikasi login ke nmor kamu.</Text>
                     </Container>
 
                     <Row justify='center'>
@@ -229,13 +226,18 @@ const OtpScreen = ({ navigation, route }) => {
                             return (
                                 <View
                                     key={idx}
-                                    style={{ paddingHorizontal: 12 }}
+                                    style={{
+                                        paddingHorizontal: 5,
+                                        width: '25%',
+                                        aspectRatio: 4/3,
+                                    }}
                                 >
                                     <View
                                         style={{
-                                            padding: 12,
-                                            backgroundColor: Color.primaryDark,
-                                            borderRadius: 8,
+                                            width: '100%',
+                                            height: '100%',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
                                         }}
                                     >
                                         <TextInput
@@ -256,15 +258,18 @@ const OtpScreen = ({ navigation, route }) => {
                                                 listTextInput[idx - 1] ? listTextInput[idx - 1].ref : null
                                             )}
                                             style={{
-                                                width: 24,
-                                                height: 40,
-                                                fontSize: 18,
+                                                width: '100%',
+                                                height: '100%',
+                                                fontSize: 32,
                                                 textAlign: 'center',
-                                                borderBottomWidth: 2,
-                                                color: isFocus || item.value !== '' ? Color.primary : Color.text,
-                                                borderColor: isFocus || item.value !== '' ? Color.primary : Color.text,
+                                                fontFamily: 'Inter-Regular',
+                                                // borderBottomWidth: 2,
+                                                color: Color.textInput,
+                                                // color: isFocus || item.value !== '' ? Color.tertiary : Color.text,
+                                                backgroundColor: isFocus || item.value !== '' ? Color.tertiary : Color.border,
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
+                                                borderRadius: 8,
                                             }}
                                         />
                                     </View>
@@ -273,8 +278,9 @@ const OtpScreen = ({ navigation, route }) => {
                         })}
                     </Row>
 
-                    <Padding top={24} bottom={16 * 5}>
+                    <Padding top={16} bottom={16}>
                         <Text
+                            align='right'
                             onPress={() => {
                                 if (countdown > 0) {
 
@@ -285,7 +291,7 @@ const OtpScreen = ({ navigation, route }) => {
                                 }
                             }}
                         >
-                            {'Resend Code ('}{FormatDuration.getMinutesFromSeconds(countdown)}{')'}
+                            {'Kirim Ulang ('}{FormatDuration.getMinutesFromSeconds(countdown)}{')'}
                         </Text>
                     </Padding>
 
@@ -293,18 +299,10 @@ const OtpScreen = ({ navigation, route }) => {
                         style={{ marginBottom: 20, ...shadowStyle }}
                         onPress={() => onSubmit()}
                     >
-                        Confirm
+                        Verifikasi
                     </Button>
                 </TouchableOpacity>
             </ScrollView>
-
-            <Header
-                style={{
-                    position: 'absolute',
-                    backgroundColor: 'transparent',
-                    top: statusBarHeight,
-                }}
-            />
 
             <AlertModal
                 visible={showModalPopup}

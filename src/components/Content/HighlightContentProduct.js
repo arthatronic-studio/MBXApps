@@ -24,6 +24,7 @@ const propTypes = {
     style: PropTypes.object,
     showHeader: PropTypes.bool,
     showEmpty: PropTypes.bool,
+    showSeeAllText: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -38,6 +39,7 @@ const defaultProps = {
     style: {},
     showHeader: true,
     showEmpty: false,
+    showSeeAllText: true,
 };
 
 const HighlightContentProduct = (props) => {
@@ -53,6 +55,7 @@ const HighlightContentProduct = (props) => {
         style,
         showHeader,
         showEmpty,
+        showSeeAllText,
     } = props;
 
     const { Color } = useColor();
@@ -110,6 +113,7 @@ const HighlightContentProduct = (props) => {
                     navigation.navigate(nav, { title, userProfileId });
                 }}
                 productCategory={productCategory}
+                showSeeAllText={showSeeAllText}
             />
         )
     }

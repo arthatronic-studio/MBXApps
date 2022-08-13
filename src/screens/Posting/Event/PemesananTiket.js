@@ -126,7 +126,7 @@ const PemesananTiket = ({ navigation }) => {
                 <Container paddingHorizontal={16} paddingTop={8} paddingBottom={statusBarHeight}>
                     <Text size={11} type='bold' align='left'>Tiket Dipilih</Text>
 
-                    <View style={{ marginTop: 8, padding: 10, borderRadius: 8, backgroundColor: Color.primaryMoreDark }}>
+                    <View style={{ marginTop: 8, padding: 10, borderRadius: 8, backgroundColor: Color.theme }}>
                         <Row style={{justifyContent: 'space-between'}}>
                             <Text type='bold' size={11}>{ticketSelected.name}</Text>
                             <Text size={11} color={Color.text} type='medium' align='right'>{moment(params.date).format('DD MMM YYYY')}</Text>
@@ -185,7 +185,7 @@ const PemesananTiket = ({ navigation }) => {
                             },
                         }}
                         theme={{
-                            calendarBackground: Color.primaryMoreDark,
+                            calendarBackground: Color.theme, // Color.primaryMoreDark,
                             textSectionTitleColor: '#b6c1cd',
                             textSectionTitleDisabledColor: '#d9e1e8',
                             selectedDayBackgroundColor: '#00adf5',

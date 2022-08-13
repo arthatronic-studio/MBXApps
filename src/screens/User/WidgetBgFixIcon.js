@@ -9,7 +9,7 @@ import {
 import {
     useColor,
 } from '@src/components';
-import { iconApp } from '@assets/images';
+import { bgLogin, iconApp } from '@assets/images';
 import { statusBarHeight } from 'src/utils/constants';
 import { accessClient } from 'src/utils/access_client';
 
@@ -22,32 +22,15 @@ const WidgetBgFixIcon = () => {
             <View
                 style={{
                     width: '100%',
-                    height: height / 3,
-                    top: (Platform.OS === 'ios' ? statusBarHeight : 0) + height / 3,
-                    position: 'absolute',
-                    backgroundColor: Color[accessClient.ColorBgParallax],
-                }}
-            />
-
-            <View
-                style={{
-                    width: '100%',
-                    height: height / 3,
-                    top: Platform.OS === 'ios' ? statusBarHeight : 0,
-                    position: 'absolute',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: Color[accessClient.ColorBgParallax],
+                    aspectRatio: 2/1,
+                    backgroundColor: 'green'
                 }}
             >
                 <Image
-                    source={iconApp}
+                    source={bgLogin}
                     style={{
-                        resizeMode: 'contain',
-                        height: '40%',
-                        width: '70%',
-                        marginTop: '10%',
-                        alignSelf: 'center',
+                        height: '100%',
+                        width: '100%',
                     }}
                 />
             </View>

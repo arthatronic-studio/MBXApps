@@ -3,8 +3,8 @@ import {View, Image, useWindowDimensions} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {Scaffold, useColor} from '@src/components';
-import {iconSplash} from '@assets/images';
+import {Scaffold, Text, useColor} from '@src/components';
+import {bgSplashFooter, bgSplashHeader, iconSplash} from '@assets/images';
 import { Container } from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
 
@@ -21,8 +21,7 @@ const SplashScreen = ({navigation, route}) => {
       if (user) {
         redirectTo('MainPage');
       } else {
-        // redirectTo('OnBoardingScreen');
-        redirectTo('LoginScreen');
+        redirectTo('OnBoardingScreen');
       }
     }, 3000);
   }, []);
@@ -40,25 +39,57 @@ const SplashScreen = ({navigation, route}) => {
     <Scaffold
       showHeader={false}
       style={{
-        backgroundColor: Color[accessClient.SplashScreen.backgroundColor]
+        backgroundColor: Color.primary
       }}
-      statusBarColor={Color[accessClient.SplashScreen.backgroundColor]}
+      statusBarColor={Color.primary}
     >
+      <View style={{position: 'absolute', width: '50%', aspectRatio: 7/5 }}>
+        <Image
+          source={bgSplashHeader}
+          style={{
+            width: '100%',
+            height: '100%',
+          }}
+        />
+      </View>
+
       <Container
         height={height}
         width={width}
         align='center'
         justify='center'
       >
+        <View
+          style={{
+            width: '22%',
+            aspectRatio: 1,
+            marginBottom: 12,
+          }}
+        >
         <Image
           source={iconSplash}
           style={{
-            height: '30%',
-            width: '60%',
+            height: '100%',
+            width: '100%',
           }}
           resizeMode='contain'
         />
+        </View>
+
+        <Text size={11} type='bold'>
+          M Bloc X
+        </Text>
       </Container>
+
+      <View style={{position: 'absolute', bottom: 0, width: '100%', aspectRatio: 3/1 }}>
+        <Image
+          source={bgSplashFooter}
+          style={{
+            width: '100%',
+            height: '100%',
+          }}
+        />
+      </View>
     </Scaffold>
   );
 };

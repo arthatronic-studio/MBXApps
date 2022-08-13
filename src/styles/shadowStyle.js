@@ -16,7 +16,7 @@ let shadowStyle = {
   
 if (Platform.OS === 'android') {
     // shadowStyle = { elevation: 1 };
-    shadowStyle = { elevation: 0.5 };
+    shadowStyle = { elevation: 1 };
 }
 
 export {

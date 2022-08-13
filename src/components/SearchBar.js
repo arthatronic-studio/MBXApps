@@ -19,7 +19,6 @@ const propTypes = {
     style: PropTypes.object,
     onPress: PropTypes.func,
     value: PropTypes.string,
-    searchbar: PropTypes.string,
     onChangeText: PropTypes.func,
     textInputProps: PropTypes.object,
 };
@@ -41,7 +40,7 @@ const SearchBar = ({ type, label, style, onPress, value, onChangeText, textInput
 
     return (
         <TouchableOpacity style={{ paddingHorizontal: 16 }}>
-            <View style={{ flexDirection: 'row', paddingHorizontal: 16, minHeight: 45, alignItems: 'center', justifyContent: 'space-between', backgroundColor: Color.textInput, borderRadius: 8, borderColor: Color.border, borderWidth: 0.5, ...style }}>
+            <View style={{ flexDirection: 'row', paddingHorizontal: 16, minHeight: 45, alignItems: 'center', justifyContent: 'space-between', backgroundColor: Color.textInput, borderRadius: 8, borderColor: Color.textSoft, borderWidth: 0.5, ...style }}>
                 {isInputType ?
                     <>
                         <TextInput
@@ -70,8 +69,8 @@ const SearchBar = ({ type, label, style, onPress, value, onChangeText, textInput
                             onPress={() => onPress()}
                             style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
                         >
-                            <Text color={Color.border}>{label}</Text>
-                            <Octicons name='search' color={Color.border} size={16} />
+                            <Text color={Color.placeholder} letterSpacinng={0.25}>{label}</Text>
+                            <Octicons name='search' color={Color.textSoft} size={24} />
                         </TouchableOpacity>
                     </>
                 }

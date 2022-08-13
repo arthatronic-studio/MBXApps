@@ -18,6 +18,13 @@ import Scaffold from '@src/components/Scaffold';
 import HeaderBig from 'src/components/HeaderBig';
 import client from 'src/lib/apollo';
 import { queryBannerList } from 'src/lib/query/banner';
+import { onBoarding1, onBoarding2, onBoarding3 } from 'assets/images';
+
+const listBoarding = [
+    {imageAsset: onBoarding1, title: 'SELAMAT DATANG DI APLIKASI', subTitle: 'Cari apapun yang kamu butuhkan disini dengan mudah, hanya dengan sentuhan jari di satu aplikasi.'},
+    {imageAsset: onBoarding2, title: 'SALING TERKONEKSI', subTitle: 'Makin mudah menjalin relasi dan berkomunikasi dengan sesama member/anggota bahkan yang jauh sekalipun.'},
+    {imageAsset: onBoarding3, title: 'YUK LOGIN', subTitle: 'Login Sekarang'},
+];
 
 const DOT_SIZE = 32;
 
@@ -25,6 +32,7 @@ const Item = ({
     title,
     subTitle,
     image,
+    imageAsset,
     scrollOffsetAnimatedValue,
 }) => {
     const { Color } = useColor();
@@ -47,7 +55,7 @@ const Item = ({
 
             <View style={{ flex: 4, justifyContent: 'center' }}>
                 <Animated.Image
-                    source={{ uri: image }}
+                    source={imageAsset}
                     style={[
                         styles.imageStyle,
                         {
@@ -59,25 +67,25 @@ const Item = ({
 
             <View style={{ flex: 1, paddingHorizontal: 32 }}>
                 <Animated.Text
-                    style={[
-                        styles.heading,
-                        {
-                            color: Color.text,
-                            opacity,
-                            marginBottom: 8,
-                        },
-                    ]}
+                    style={{
+                        fontSize: 16,
+                        fontFamily: 'Inter-Medium',
+                        color: Color.text,
+                        opacity,
+                        marginBottom: 8,
+                        textAlign: 'center',
+                    }}
                 >
                     {title}
                 </Animated.Text>
                 {subTitle !== '' && <Animated.Text
-                    style={[
-                        styles.description,
-                        {
-                            color: Color.text,
-                            opacity,
-                        },
-                    ]}
+                    style={{
+                        fontSize: 11,
+                        fontFamily: 'Inter-Regular',
+                        color: Color.text,
+                        opacity,
+                        textAlign: 'center',
+                    }}
                 >
                     {subTitle}
                 </Animated.Text>}
@@ -105,7 +113,7 @@ const Pagination = ({
 
     return (
         <View style={[styles.pagination]}>
-            <Animated.View
+            {/* <Animated.View
                 style={[
                     styles.paginationIndicator,
                     {
@@ -114,13 +122,13 @@ const Pagination = ({
                         transform: [{ translateX: translateX }],
                     },
                 ]}
-            />
+            /> */}
             
             {data.map((item, idx) => {
                 return (
                     <View key={idx} style={styles.paginationDotContainer}>
                         <View
-                            style={[styles.paginationDot, { backgroundColor: indexPosition === idx ? Color.primary : Color.border }]}
+                            style={[styles.paginationDot, { backgroundColor: indexPosition === idx ? Color.primaryDark : Color.border }]}
                         />
                     </View>
                 );
@@ -141,8 +149,8 @@ const OnBoardingScreen = ({ navigation }) => {
     const user = useSelector(state => state['user.auth'].login.user);
     const { loading, error } = useSelector(state => state['user.auth']);
 
-    const [listBoarding, setListBoarding] = useState([]);
-    const [loadingBoarding, setLoadingBoarding] = useState(true);
+    // const [listBoarding, setListBoarding] = useState([]);
+    // const [loadingBoarding, setLoadingBoarding] = useState(true);
 
     useEffect(() => {
         dispatch({ type: 'USER.CLEAR_LOADING' });
@@ -153,44 +161,44 @@ const OnBoardingScreen = ({ navigation }) => {
             if (user) {
                 redirectTo('MainPage');
             } else {
-                fetchOnBoarding();
+                // fetchOnBoarding();
             }
         }
     }, [user, error, isFocused]);
 
-    const fetchOnBoarding = () => {
-        const variables = {
-            categoryId: 5
-        };
+    // const fetchOnBoarding = () => {
+    //     const variables = {
+    //         categoryId: 5
+    //     };
 
-        client.query({
-            query: queryBannerList,
-            variables,
-        })
-        .then((res) => {
-            console.log('res onboarding', res);
+    //     client.query({
+    //         query: queryBannerList,
+    //         variables,
+    //     })
+    //     .then((res) => {
+    //         console.log('res onboarding', res);
 
-            const data = res.data.bannerList;
-            let newData = [];
+    //         const data = res.data.bannerList;
+    //         let newData = [];
 
-            if (Array.isArray(data)) {
-                newData = data.reverse();
-            }
+    //         if (Array.isArray(data)) {
+    //             newData = data.reverse();
+    //         }
 
-            if (newData.length === 0) {
-                redirectTo('LoginScreen');
-            }
+    //         if (newData.length === 0) {
+    //             redirectTo('LoginScreen');
+    //         }
 
-            setListBoarding(newData);
-            setLoadingBoarding(false);
-        })
-        .catch((err) => {
-            console.log('err onboarding', err);
+    //         setListBoarding(newData);
+    //         setLoadingBoarding(false);
+    //     })
+    //     .catch((err) => {
+    //         console.log('err onboarding', err);
 
-            setLoadingBoarding(false);
-            redirectTo('LoginScreen');
-        });
-    }
+    //         setLoadingBoarding(false);
+    //         redirectTo('LoginScreen');
+    //     });
+    // }
 
     const redirectTo = nav => {
         navigation.dispatch(
@@ -215,13 +223,14 @@ const OnBoardingScreen = ({ navigation }) => {
                     <View />
                     :
                     <HeaderBig
+                        title=' '
                         titleRight='Lewati'
-                        titleRightColor={Color.primary}
+                        titleRightColor={Color.text}
                         onPressRightButton={() => redirectTo('LoginScreen')}
                         style={{ backgroundColor: 'transparent', paddingTop: 16 }}
                     />
             }
-            fallback={user || loading || loadingBoarding}
+            fallback={user || loading}
             popupProps={popupProps}
         >
             <AnimatedPagerView
@@ -274,7 +283,7 @@ const OnBoardingScreen = ({ navigation }) => {
             />
 
             <Submit
-                buttonLabel={isFinish ? "Login" : "Selanjutnya"}
+                buttonLabel={isFinish ? "Login" : "Lanjut"}
                 buttonColor={Color.primary}
                 type="bottomSingleButton"
                 buttonBorderTopWidth={0}
@@ -305,14 +314,6 @@ const styles = StyleSheet.create({
         aspectRatio: 1,
         resizeMode: 'contain',
     },
-    heading: {
-        fontSize: 18,
-        fontWeight: '700',
-    },
-    description: {
-        fontWeight: '500',
-        fontSize: 10,
-    },
     pagination: {
         alignSelf: 'center',
         flexDirection: 'row',
@@ -324,7 +325,7 @@ const styles = StyleSheet.create({
         borderRadius: DOT_SIZE * 0.15,
     },
     paginationDotContainer: {
-        width: DOT_SIZE,
+        width: DOT_SIZE / 1.5,
         alignItems: 'center',
         justifyContent: 'center',
     },

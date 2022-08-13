@@ -255,6 +255,10 @@ import OrderEventDetail from 'src/screens/Posting/Event/OrderEventDetail';
 // import MyEvent from 'src/screens/Posting/Event/MyEvent';
 // import EventDocumentation from 'src/screens/Posting/Event/EventDocumentation';
 
+// security
+import VisitorScreen from 'src/screens/Security/VisitorScreen';
+import VisitorDetailScreen from 'src/screens/Security/VisitorDetailScreen';
+
 const { Navigator, Screen } = createStackNavigator();
 const MainPage = MainHome;
 	// accessClient.BottomTabsNavigator.type === 'komoto'
@@ -510,7 +514,10 @@ function MainStackNavigator() {
         name="GalleryDetailSliderScreenEvent"
         component={GalleryDetailSliderScreenEvent}
       />
-      
+
+      {/* security */}
+      <Screen name="VisitorScreen" component={VisitorScreen} />
+      <Screen name="VisitorDetailScreen" component={VisitorDetailScreen} />
     </Navigator>
   );
 }

@@ -6482,6 +6482,11 @@ react-native-date-picker@4.0.0:
   resolved "https://registry.npmjs.org/react-native-date-picker/-/react-native-date-picker-4.0.0.tgz"
   integrity sha512-KbGn6rfR6vlxKwts4n9YPAdRd8RoVTlxTRv9wKFe4amPgGN7ddv/GfyMrp3UbKDy6xWNrtnzkbBWja5neg8URg==
 
+react-native-device-info@^10.0.2:
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-10.0.2.tgz#17cd96df277cca5a22fb80409527c181a08d4ed1"
+  integrity sha512-6XY8EctYqNEX6EHDoHxz3yONOYxCHKrgEdStP7HZDYzFXb1JB5BFt7UbXDWrmihXUZDv06sBsjN26+Tp0EajXw==
+
 react-native-document-picker@^8.0.0:
   version "8.0.0"
   resolved "https://registry.npmjs.org/react-native-document-picker/-/react-native-document-picker-8.0.0.tgz"
@@ -6540,6 +6545,11 @@ react-native-keyboard-aware-scroll-view@^0.9.5:
   dependencies:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
+
+react-native-kontaktio@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-kontaktio/-/react-native-kontaktio-3.1.0.tgz#b001e239a325d599ed8647454a4e2bc9d39c149d"
+  integrity sha512-Dws97hPS6hK7Bw5d3dTCE8I4msepemVJeU6iPBbq2Z+5dCpmj0IuG4Y/Whc4+rbfYqo+jCS+bPdTIpHTng92hw==
 
 react-native-maps@^0.30.1:
   version "0.30.1"

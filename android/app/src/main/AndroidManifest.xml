@@ -66,6 +66,8 @@
               <action android:name="com.google.firebase.MESSAGING_EVENT" />
           </intent-filter>
       </service>
+
+      <service android:name="com.kontakt.sdk.android.ble.service.ProximityService" android:exported="false"/>
       
       <meta-data
                   android:name="com.google.android.geo.API_KEY"

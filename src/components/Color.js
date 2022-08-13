@@ -2,19 +2,21 @@ import {store} from '@src/state/redux';
 import {useSelector} from 'react-redux';
 
 const staticColors = {
-  primary: '#EBC300',
-  primaryDark: '#4B4639',
-  primaryMoreDark: '#33302A',
-  primarySoft: '#D6C694',
+  primary: '#FCD100',
+  primaryDark: '#B88B32',
+  primaryMoreDark: '#574800',
+  primarySoft: '#FFEB8A',
   secondary: '#6A7479',
-  tertiary: '#D4FAD9',
+  tertiary: '#645FF2',
   textButtonInline: '#4B4639',
   oldGreen: '#557D09',
   disabled: '#7B776F',
-  success: '#0BBC2E',
+  success: '#3AA413',
+  successLight: '#D1F8C4',
   info: '#0787D7',
   warning: '#F5B72C',
-  error: '#D83030',
+  warningLight: '#FFF3B8',
+  error: '#D72A19',
   green: '#59A12F',
   gray: '#666666',
   textGray: '#9CA3A5',
@@ -24,7 +26,6 @@ const staticColors = {
   black: '#000000',
   white: '#FFFFFF',
   blue: '#027BC9',
-  black: '#000000',
   blueLight: '#D5E2FD',
   timer: '#F94918',
   icon: '#667786',
@@ -32,7 +33,6 @@ const staticColors = {
   infosecond: '#DAE9F2',
   placeholder: '#979080',
   danger: '#F73347',
-  lightInfo: '#2C70F7'
 };
 
 export const lightModeColors = {
@@ -40,7 +40,8 @@ export const lightModeColors = {
   colorDominant: 'light',
   overflow: 'rgba(0, 0, 0, 0.3)',
   theme: '#FFFFFE',
-  text: '#0D0006',
+  text: '#1D1D1B',
+  textSoft: '#575651',
   textInput: '#FFFFFF',
   border: '#E0E0E0',
   semiwhite: '#E5E5E5',
@@ -52,6 +53,7 @@ export const darkModeColors = {
   overflow: 'rgba(f, f, f, 0.3)',
   theme: '#1D1B16',
   text: '#E8E2D9',
+  textSoft: '#FFFFFF',
   textInput: '#1D1B16',
   border: '#979080',
   semiwhite: '#353535',
@@ -62,7 +64,7 @@ export const useColor = isRoot => {
     ? store.getState()['theme'].theme
     : useSelector(state => state['theme'].theme);
 
-  const Color = darkModeColors; // theme === 'dark' ? darkModeColors : lightModeColors;
+  const Color = theme === 'dark' ? darkModeColors : lightModeColors;
   return {Color};
 };
 

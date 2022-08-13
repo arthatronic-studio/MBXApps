@@ -11,6 +11,8 @@ import {
   FlatList,
   Linking,
   DeviceEventEmitter,
+  NativeEventEmitter,
+
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -28,13 +30,12 @@ import {
   HeaderBig,
   useColor,
   Scaffold,
-  Row,
   Col,
   Button,
   Submit,
   useLoading,
 } from '@src/components';
-import { Divider, Circle, Container, Line } from '@src/styled';
+import { Divider, Circle, Container, Line, Row, Column } from '@src/styled';
 import { playNotificationSounds } from '@src/utils/notificationSounds';
 import CarouselView from 'src/components/CarouselView';
 import Banner from 'src/components/Banner';
@@ -69,7 +70,16 @@ import imageAssets from 'assets/images';
 import WidgetHomeMenuStatic from './WidgetHomeMenuStatic';
 import { statusBarHeight } from 'src/utils/constants';
 
+import Kontakt, { KontaktModule } from 'react-native-kontaktio';
+import ModalActions from 'src/components/Modal/ModalActions';
+import FloatingBeaconDetection from 'src/components/Modal/FloatingBeaconDetection';
+const { connect, init, startDiscovery, startScanning } = Kontakt;
+
+const kontaktEmitter = new NativeEventEmitter(KontaktModule);
+const isAndroid = Platform.OS === 'android';
+
 let tempShowPopupAds = true;
+let tempShowFloatingBeacon = true;
 
 const events = [Event.PlaybackTrackChanged];
 
@@ -94,8 +104,81 @@ const MainHome = ({ navigation, route }) => {
   const isFocused = useIsFocused();
   const modalPostingRef = useRef();
   const floatingMusicPlayerRef = useRef();
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const [loadingProps, showLoading] = useLoading();
+
+  const [listBeacon, setListBeacon] = useState([]);
+  const [showListBeacon, setShowListBeacon] = useState(false);
+
+  const isCheckout = true;
+
+  useEffect(() => {
+    beaconSetup();
+  }, []);
+
+  const beaconSetup = async () => {
+    if (isAndroid) {
+      // Android
+      // const granted = await requestLocationPermission();
+      // if (granted) {
+      await connect();
+      await startScanning();
+      // } else {
+      //   Alert.alert(
+      //     'Permission error',
+      //     'Location permission not granted. Cannot scan for beacons',
+      //     [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+      //     {cancelable: false},
+      //   );
+      // }
+    } else {
+      // iOS
+      await init();
+      await startDiscovery();
+    }
+
+    // Add beacon listener
+    if (isAndroid) {
+      DeviceEventEmitter.addListener('beaconsDidUpdate', ({ beacons, region }) => {
+        // console.log('beaconsDidUpdate', beacons, region);
+        if (Array.isArray(beacons)) {
+          let newArr = [];
+          beacons.map((e, i) => {
+            newArr.push({
+              ...e,
+              productAddress: e.address,
+              productAccuracy: e.accuracy,
+              productName: e.name,
+              productUUID: e.uuid,
+            });
+          });
+          setListBeacon(newArr);
+        }
+      });
+
+      DeviceEventEmitter.addListener('beaconDidDisappear', ({ beacons, region }) => {
+        console.log('beaconDidDisappear', beacons, region);
+        setListBeacon([]);
+        // if (Array.isArray(beacons)) {
+        //   let newArr = [];
+        //   beacons.map((e, i) => {
+        //     newArr.push({
+        //       ...e,
+        //       productAddress: e.address,
+        //       productAccuracy: e.accuracy,
+        //       productName: e.name,
+        //       productUUID: e.uuid,
+        //     });
+        //   });
+        //   setListBeacon(newArr);
+        // }
+      });
+    } else {
+      kontaktEmitter.addListener('didDiscoverDevices', ({ beacons }) => {
+        console.log('didDiscoverDevices', beacons);
+      });
+    }
+  };
 
   // handle music analytics
   //
@@ -238,24 +321,24 @@ const MainHome = ({ navigation, route }) => {
   };
 
   const fetchPopup = () => {
-    const variables = {
-      categoryId: 2,
-    };
+    // const variables = {
+    //   categoryId: 2,
+    // };
 
-    Client.query({
-      query: queryBannerList,
-      variables,
-    })
-      .then(res => {
-        console.log('res popup list', res);
-        if (Array.isArray(res.data.bannerList)) {
-          setDataPopupAds(res.data.bannerList[0]);
-        }
-        setShowPopupAds(true);
-      })
-      .catch(err => {
-        console.log(err, 'err popup list');
-      });
+    // Client.query({
+    //   query: queryBannerList,
+    //   variables,
+    // })
+    //   .then(res => {
+    //     console.log('res popup list', res);
+    //     if (Array.isArray(res.data.bannerList)) {
+    //       setDataPopupAds(res.data.bannerList[0]);
+    //     }
+    //     setShowPopupAds(true);
+    //   })
+    //   .catch(err => {
+    //     console.log(err, 'err popup list');
+    //   });
   };
 
   const fetchData = async () => {
@@ -291,6 +374,8 @@ const MainHome = ({ navigation, route }) => {
   };
 
   const spaceContentSize = 8;
+
+  console.log('listBeacon', listBeacon);
 
   return (
     <Scaffold
@@ -365,7 +450,7 @@ const MainHome = ({ navigation, route }) => {
 
               <TouchableOpacity
                 onPress={() => {
-                  
+
                 }}
                 style={{
                   width: '20%',
@@ -377,6 +462,7 @@ const MainHome = ({ navigation, route }) => {
                   style={{
                     height: 20,
                     width: 20,
+                    tintColor: Color.text,
                   }}
                 />
               </TouchableOpacity>
@@ -395,6 +481,7 @@ const MainHome = ({ navigation, route }) => {
                   style={{
                     height: 20,
                     width: 20,
+                    tintColor: Color.text,
                   }}
                 />
               </TouchableOpacity>
@@ -403,7 +490,7 @@ const MainHome = ({ navigation, route }) => {
         />
       }
       floatingActionButton={
-        accessClient.isKomoto ?
+        tempShowFloatingBeacon && listBeacon.length > 0 ?
           <View
             style={{
               bottom: -16,
@@ -412,33 +499,22 @@ const MainHome = ({ navigation, route }) => {
               borderRadius: width / 5 - 8,
               backgroundColor: Color.primary,
               alignSelf: 'center',
-              ...shadowStyle,
+              borderWidth: 2,
+              borderColor: Color.error,
             }}
           >
             <TouchableOpacity
               onPress={() => {
-                const isJoinMember = user && user.organizationId;
-
-                if (!isJoinMember) {
-                  showLoading('error', 'Fitur ini hanya untuk anggota komunitas');
-                  return;
-                }
-
-                navigation.navigate('CreateEmergencyScreen', {
-                  routeIndex: 1,
-                  title: 'Help Me',
-                  productType: Config.PRODUCT_TYPE,
-                  productCategory: '',
-                  productSubCategory: 'EMERGENCY',
-                });
+                setShowListBeacon(true);
               }}
               style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}
             >
               <MaterialIcons
                 name='vibration'
                 color={Color.textButtonInline}
-                size={32}
+                size={18}
               />
+              <Text size={11} type='medium'>{listBeacon.length} Beacon Founded!</Text>
             </TouchableOpacity>
           </View> : <View />
       }
@@ -513,9 +589,34 @@ const MainHome = ({ navigation, route }) => {
             </Container>
           )} */}
 
-          {/* <Divider /> */}
-
-          {/* <MyRank /> */}
+          <Container padding={16} paddingTop={8}>
+            <Container padding={14} color={isCheckout ? Color.successLight : Color.warningLight} radius={8}>
+              <Row>
+                <Container paddingRight={16}>
+                  <Image
+                    source={isCheckout ? imageAssets.building : imageAssets.airdrop}
+                    style={{
+                      width: 24,
+                      height: 24,
+                    }}
+                  />
+                </Container>
+                {isCheckout ?
+                  <Column>
+                    <Text size={10} color={Color.placeholder} letterSpacing={0.4}>Telah masuk di</Text>
+                    <Divider height={2} />
+                    <Text size={12} type='medium' letterSpacing={0.5}>M Bloc X</Text>
+                  </Column>
+                :
+                  <Column>
+                    <Text type='medium' size={12} letterSpacing={0.5}>Checkpoint Disekitar</Text>
+                    <Divider height={2} />
+                    <Text size={10} letterSpacing={0.15} color={Color.placeholder}>Goyangkan Handphonemu untuk masuk kedalam area</Text>
+                  </Column>
+                }
+              </Row>
+            </Container>
+          </Container>
 
           <Container paddingVertical={spaceContentSize}>
             <Banner
@@ -546,6 +647,36 @@ const MainHome = ({ navigation, route }) => {
               }
             }}
           />} */}
+
+          <Container padding={16} paddingTop={8}>
+            <Container padding={14} color={Color.border} radius={8}>
+              <Row justify='space-between'>
+                <Row>
+                  <Container paddingRight={16}>
+                    <Image
+                      source={imageAssets.people}
+                      style={{
+                        width: 32,
+                        height: 32,
+                      }}
+                    />
+                  </Container>
+                  <Column>
+                    <Text color={Color.placeholder} type='medium' size={11} letterSpacing={0.5}>Total Pengunjung</Text>
+                    <Divider height={2} />
+                    <Text type='medium' size={16} letterSpacing={0.15}>1.2rb Orang</Text>
+                  </Column>
+                </Row>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('VisitorScreen');
+                  }}
+                >
+                  <Text color={Color.primaryDark} type='medium' size={12} letterSpacing={0.5}>Lihat Detail</Text>
+                </TouchableOpacity>
+              </Row>
+            </Container>
+          </Container>
 
           <WidgetHomeMenuStatic />
 
@@ -683,13 +814,16 @@ const MainHome = ({ navigation, route }) => {
             refresh={refreshing || isFocused}
           /> */}
 
+          <Divider height={8} />
+
           <HighlightContentProduct
             productCategory='EVENT'
             name='Event'
-            title='Event Terbaru'
+            title='Event Yang Akan Datang'
             nav='EventScreen'
             refresh={refreshing || isFocused}
-            showHeader={false}
+            // showHeader={false}
+            showSeeAllText={false}
           />
 
           {/* <HighlightContentProduct
@@ -849,6 +983,73 @@ const MainHome = ({ navigation, route }) => {
           </View>
         </Modal>
       )}
+
+      <Modal
+        isVisible={tempShowFloatingBeacon && listBeacon.length > 0}
+        onBackdropPress={() => {
+          tempShowFloatingBeacon = false;
+        }}
+        animationIn="slideInDown"
+        animationOut="slideOutDown"
+        backdropColor={Color.semiwhite}>
+        <View
+          style={{ width: '100%', borderRadius: 16, backgroundColor: Color.theme, }}
+        >
+          <View
+            style={{
+              padding: 32,
+              alignItems: 'center',
+            }}
+          >
+            <View
+              style={{
+                height: height / 6,
+                aspectRatio: 4 / 3,
+                marginBottom: 24,
+              }}
+            >
+              <Image
+                source={imageAssets.connecting}
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  resizeMode: 'contain'
+                }}
+              />
+            </View>
+
+            <View
+              style={{
+                alignItems: 'center',
+              }}
+            >
+              <Text size={16} letterSpacing={0.15} type='medium'>Deket Checkpoint Nih~</Text>
+              <Divider height={4} />
+              <Text color={Color.placeholder}>Disekitar kamu ada Checkpoint. Goyangkan handphonemu untuk masuk kedalam area</Text>
+            </View>
+
+            <Container width='100%' paddingHorizontal={16} paddingTop={16}>
+              <Button
+                outline
+                color={Color.text}
+                onPress={() => {
+                  tempShowFloatingBeacon = false;
+                }}
+              >
+                Tutup
+              </Button>
+            </Container>
+          </View>
+        </View>
+      </Modal>
+
+      <FloatingBeaconDetection
+        visible={listBeacon.length > 0 && showListBeacon}
+        onClose={() => {
+          setShowListBeacon(false);
+        }}
+        data={listBeacon}
+      />
 
       <Modal
         isVisible={isModalVisible}

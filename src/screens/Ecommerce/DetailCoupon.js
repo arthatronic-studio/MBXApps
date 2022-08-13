@@ -104,7 +104,7 @@ const DetailCoupon = ({navigation, route}) => {
             style={{
               marginHorizontal: 16,
               alignSelf: 'flex-start',
-              backgroundColor: Color.lightInfo,
+              backgroundColor: Color.info,
               paddingVertical: 8,
               paddingHorizontal: 10,
               borderRadius: 4,

@@ -30,7 +30,7 @@ const OutlineButton = Styled(TouchableOpacity)`
     height: 40px;
     borderColor: ${props => props.twinButtonBorderColor};
     borderWidth: 1px;
-    borderRadius: 45px;
+    borderRadius: 8px;
     justifyContent: center;
     alignItems: center;
     marginBottom: ${props => props.marginBottom};
@@ -40,7 +40,7 @@ const PayButton = Styled(TouchableOpacity)`
     width: ${props => props.width || '100%'};
     height: 45px;
     backgroundColor: ${props => props.backgroundColor};
-    borderRadius: 45px;
+    borderRadius: 8px;
     justifyContent: center;
     alignItems: center;
 
@@ -125,7 +125,7 @@ const Submit = (props) => {
                 style={{backgroundColor: Color.theme, ...style}}
             >
                 <PayButton backgroundColor={buttonColor || Color.disabled} width='100%' buttonBorderColor={buttonBorderColor} onPress={() => onPress()}>
-                    <Text size={16} letterSpacing={0.02} color={buttonTextColor || Color.textButtonInline}>{buttonLabel}</Text>
+                    <Text letterSpacing={0.1} type='medium' color={buttonTextColor || Color.textButtonInline}>{buttonLabel}</Text>
                 </PayButton>
             </ButtonView>
         )

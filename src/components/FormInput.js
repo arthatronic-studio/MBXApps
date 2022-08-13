@@ -59,6 +59,8 @@ const FormInput = forwardRef((props, ref) => {
 
     const { Color } = useColor();
 
+    const [isFocus, setIsFocus] = useState(false);
+
     let extraStyle = {};
     if (multiline) extraStyle.height = 120;
 
@@ -70,13 +72,13 @@ const FormInput = forwardRef((props, ref) => {
                     justifyContent: 'center',
                     borderRadius: 8,
                     borderWidth: 1,
-                    borderColor: Color.border,
+                    borderColor: isFocus ? Color.tertiary : Color.textSoft,
                     paddingVertical: Platform.OS === 'ios' ? 18 : 10,
                     paddingHorizontal: 12,
                     backgroundColor: Color.textInput,
                 }}
             >
-                <Row align='flex-end'>
+                <Row align={'center'}>
                     {prefixIcon}
 
                     <View style={{flex: 1}}>
@@ -139,7 +141,13 @@ const FormInput = forwardRef((props, ref) => {
                                     onChangeText={(val) => onChangeText(val)}
                                     selectionColor={Color.placeholder}
                                     value={value}
-                                    onBlur={() => onBlur()}
+                                    onBlur={() => {
+                                        onBlur();
+                                        setIsFocus(false);
+                                    }}
+                                    onFocus={() => {
+                                        setIsFocus(true);
+                                    }}
                                     returnKeyType={returnKeyType}
                                     onSubmitEditing={() => onSubmitEditing()}
                                     blurOnSubmit={false}
@@ -189,7 +197,7 @@ const FormInput = forwardRef((props, ref) => {
                         backgroundColor: Color.theme,
                     }}
                 >
-                    <Text size={12} color={Color.border}>{label}</Text>
+                    <Text type='medium' size={12} color={isFocus ? Color.tertiary : Color.textSoft}>{label}</Text>
                 </View>}
             </View>
             {!hideErrorHint && <View style={{
