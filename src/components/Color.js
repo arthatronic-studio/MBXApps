@@ -48,7 +48,7 @@ export const darkModeColors = {
   theme: '#232323',
   text: '#FFFFFF',
   textInput: '#232323',
-  border: '#2E2E2E',
+  border: '#666666',
   semiwhite: '#353535',
 };
 

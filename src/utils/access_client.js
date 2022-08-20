@@ -23,6 +23,7 @@ const listInitialCode = [
     'TRIBESXGOFISH',
     'TRIBESXTEUKUZACKY',
     'TRIBESXUNITEDID',
+    'TRIBESXMIGARI',
     'TRIBESXINDOBARCA',
     'TRIBESXKOMISI',
     'TRIBESXTHISABLE',
@@ -43,6 +44,7 @@ const isGofish = Config.INITIAL_CODE === 'TRIBESXGOFISH';
 const isTeukuZacky = Config.INITIAL_CODE === 'TRIBESXTEUKUZACKY';
 const isSurvey = Config.INITIAL_CODE === 'TRIBESXSURVEY';
 const isUnitedId = Config.INITIAL_CODE === 'TRIBESXUNITEDID';
+const isMigari = Config.INITIAL_CODE === 'TRIBESXMIGARI';
 const isIndoBarca = Config.INITIAL_CODE === 'TRIBESXINDOBARCA';
 const isKomisi = Config.INITIAL_CODE === 'TRIBESXKOMISI';
 const isThisable = Config.INITIAL_CODE === 'TRIBESXTHISABLE';
@@ -67,7 +69,8 @@ export const accessClient = {
         isSabyan ||
         isIndoBarca ||
         isThisable ||
-        isSantriPreneur ?
+        isSantriPreneur ||
+        isMigari ?
         true : false,
     Theme:
         useDefaultDarkThemeCode.includes(Config.INITIAL_CODE) ? 'dark' : 'light',

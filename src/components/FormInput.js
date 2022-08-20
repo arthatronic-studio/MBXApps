@@ -78,7 +78,7 @@ const FormInput = forwardRef((props, ref) => {
                     backgroundColor: Color.textInput,
                 }}
             >
-                <Row align='flex-end'>
+                <Row align='center'>
                     {prefixIcon}
 
                     <View style={{flex: 1}}>

@@ -37,7 +37,7 @@ const VideoScreen = ({ navigation, route }) => {
                       onPress={() => navigation.navigate('MainSearch')}
                     />
                     <Divider /> */}
-                    <MaterialIcons
+                    {/* <MaterialIcons
                       name='add'
                       color={Color.primary}
                       size={26}
@@ -55,7 +55,7 @@ const VideoScreen = ({ navigation, route }) => {
                           productSubCategory: 'YOUTUBE_VIDEO',
                         });
                       }}
-                    />
+                    /> */}
                   </Row>
                 }
               />
