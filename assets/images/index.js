@@ -43,6 +43,7 @@ const male = require('./male.png');
 const female = require('./female.png');
 const airdrop = require('./airdrop.png');
 const connecting = require('./connecting.png');
+const connectMerchant = require('./connect_merchant.png');
 
 export {
   iconApp,
@@ -90,6 +91,7 @@ export {
   female,
   airdrop,
   connecting,
+  connectMerchant,
 };
 
 export const imageAssets = {
@@ -138,6 +140,7 @@ export const imageAssets = {
   female,
   airdrop,
   connecting,
+  connectMerchant,
 };
 
 export default imageAssets;

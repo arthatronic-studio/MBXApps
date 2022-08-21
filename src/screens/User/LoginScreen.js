@@ -30,6 +30,7 @@ import PopupTermCondition from 'src/components/PopupTermCondition';
 import WidgetBgFixIcon from './WidgetBgFixIcon';
 import { accessClient } from 'src/utils/access_client';
 import imageAssets, { iconApp } from 'assets/images';
+import { postNonAuth } from 'src/api-rest/httpService';
 
 const inputs = ['username', 'password'];
 const shouldChangePassword = ['tribes123'];
@@ -46,6 +47,7 @@ const LoginScreen = ({navigation, route}) => {
   });
 
   const [modalTerm, setModalTerm] = useState(false);
+  const [fallback, setFallback] = useState(false);
 
   const setState = obj => {
     changeState({...state, ...obj});
@@ -157,9 +159,29 @@ const LoginScreen = ({navigation, route}) => {
   useEffect(() => {
     if (state.allValid) {
       setState({allValid: false});
-      dispatch(login(state.username, state.password, state.fcm_token));
+      dispatch(login('082216981621' || state.username, state.password, state.fcm_token));
     }
   }, [state.allValid]);
+
+  const onSubmitRest = async() => {
+    const body = {
+      phone: '62' + state.username,
+    };
+
+    setFallback(true);
+
+    const result = await postNonAuth('otp', body);
+    console.log(result);
+
+    setFallback(false);
+
+    if (result.status) {
+      navigation.navigate('OtpScreen', { body, mustDelete: result.data });
+      return;
+    }
+
+    showPopup(result.message, 'error');
+  }
 
   const isValueError = name => {
     const error = validate(name, state[name]);
@@ -178,7 +200,9 @@ const LoginScreen = ({navigation, route}) => {
       newErrorState[input] = error;
     }
 
-    setState({error: newErrorState, allValid: valid});
+    onSubmitRest();
+    // setState({error: newErrorState, allValid: valid});
+    setState({allValid: valid});
   };
 
   return (
@@ -274,8 +298,8 @@ const LoginScreen = ({navigation, route}) => {
               onChangeText={text => setState({username: text})}
               onBlur={() => isValueError('username')}
               returnKeyType="next"
-              onSubmitEditing={() => passwordRef.current.focus()}
-              keyboardType="default"
+              onSubmitEditing={() => passwordRef.current ? passwordRef.current.focus() : onSubmitRest()}
+              keyboardType="numeric"
               error={state.error.username}
               prefixIcon={
                 <View style={{width: '10%'}}>
@@ -348,19 +372,6 @@ const LoginScreen = ({navigation, route}) => {
             >
               Login
             </Button>
-
-            <Divider />
-            <Text onPress={() => {
-              navigation.navigate('RegisterScreen');
-              dispatch({ type: 'USER.REGISTER', status: false });
-            }}>
-              Daftar
-            </Text>
-
-            <Divider />
-            <Text onPress={() => navigation.navigate('OtpScreen')}>
-              OTP TES
-            </Text>
           </Container>
         </View>
       </KeyboardAwareScrollView>

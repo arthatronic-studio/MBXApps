@@ -343,7 +343,7 @@ const EventDetail = ({ navigation, route }) => {
             activeSections={activeSections}
             renderHeader={(section) => (
               <View
-                style={{ flexDirection: 'row', alignItems: 'center', height: 40, width: '100%', borderColor: Color.border, borderTopWidth: 0.5, alignSelf: 'center' }}
+                style={{ flexDirection: 'row', alignItems: 'center', height: 40, width: '100%', borderColor: Color.border, backgroundColor: Color.theme, borderTopWidth: 0.5, alignSelf: 'center' }}
               >
                 <Image
                   source={section.imageAsset}
@@ -351,6 +351,7 @@ const EventDetail = ({ navigation, route }) => {
                     width: 14,
                     height: 10,
                     marginRight: 12,
+                    tintColor: Color.textSoft,
                   }}
                 />
                 <View style={{ flex: 1 }}>

@@ -14,6 +14,7 @@ import OnBoardingScreen from '@src/screens/OnBoardingScreen';
 import CreateEmergencyScreen from '@src/screens/CreateEmergencyScreen';
 import PDFReaderScreen from 'src/screens/PDFReaderScreen';
 import MusicPlayerScreen from 'src/screens/MusicPlayerScreen';
+import ScanQRScreen from 'src/screens/ScanQRScreen';
 
 // address
 import ManageAddressScreen from 'src/screens/Address/ManageAddressScreen';
@@ -291,6 +292,7 @@ function MainStackNavigator() {
       <Screen name="CreateEmergencyScreen" component={CreateEmergencyScreen} />
       <Screen name="PDFReaderScreen" component={PDFReaderScreen} />
       <Screen name="MusicPlayerScreen" component={MusicPlayerScreen} />
+      <Screen name="ScanQRScreen" component={ScanQRScreen} />
       {/* address */}
       <Screen name="ManageAddressScreen" component={ManageAddressScreen} />
       {/* Survey Pasar */}

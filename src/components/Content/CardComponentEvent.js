@@ -96,18 +96,15 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
     // const isAdminPost;
 
     const renderCardEvent = () => {
-        let eventDate = !isNaN(parseInt(item.eventDate)) ? parseInt(item.eventDate) : null;
-        if (!eventDate) eventDate = !isNaN(parseInt(item.updated_date)) ? parseInt(item.updated_date) : null;
-
         const onPress = () => {
             navigation.navigate('EventDetail', { item });
 
-            GALogEvent('Event', {
-                id: item.id,
-                product_name: item.productName,
-                user_id: user.userId,
-                method: analyticMethods.view,
-            });
+            // GALogEvent('Event', {
+            //     id: item.id,
+            //     product_name: item.title,
+            //     user_id: user.userId,
+            //     method: analyticMethods.view,
+            // });
         }
 
         return (
@@ -118,7 +115,7 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                 style={{
                     width: width / numColumns - (horizontal ? 32 : 16),
                     paddingHorizontal: 8,
-                    marginTop: 16,
+                    marginTop: 12,
                     borderRadius: 16,
                     ...style,
                 }}
@@ -131,8 +128,9 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                             aspectRatio: 2 / 1,
                             justifyContent: 'flex-end',
                             alignItems: 'center',
-                            borderTopLeftRadius: 8,
-                            borderTopRightRadius: 8,
+                            borderTopLeftRadius: 16,
+                            borderTopRightRadius: 16,
+                            backgroundColor: Color.border,
                         }}
                     />
 
@@ -141,7 +139,7 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                     </View> */}
 
                     <View style={{ width: '100%', padding: 10 }}>
-                        <Text type='medium' align='left' numberOfLines={1}>{item.productName}</Text>
+                        <Text type='medium' align='left' numberOfLines={1}>{item.title}</Text>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 8 }}>
                             <View style={{ flexDirection: 'row' }}>
@@ -150,7 +148,7 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                                     source={imageAssets.location}
                                 />
                                 <Divider width={4} />
-                                <Text type='medium' size={12} align='left' color={Color.placeholder} letterSpacing={0.5}>Bandung</Text>
+                                <Text type='medium' size={12} align='left' color={Color.placeholder} letterSpacing={0.5}>{item.location}</Text>
                             </View>
                             <Divider />
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -159,8 +157,8 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                                     source={imageAssets.calendar}
                                 />
                                 <Divider width={4} />
-                                {Moment(eventDate).isValid() && <>
-                                    <Text type='medium' size={12} align='left' color={Color.placeholder} letterSpacing={0.5}>{Moment(eventDate).format('DD MMM YYYY')}</Text>
+                                {Moment(item.date_from).isValid() && <>
+                                    <Text type='medium' size={12} align='left' color={Color.placeholder} letterSpacing={0.5}>{Moment(item.date_from).format('DD MMM YYYY')}</Text>
                                     <Divider height={8} />
                                 </>}
                             </View>
@@ -171,7 +169,7 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                                 <Text size={11} type='medium' letterSpacing={0.5}>Mulai dari</Text>
                                 <Text size={14} type='medium' letterSpacing={0.1}>{FormatMoney.getFormattedMoney(450000)}</Text>
                             </View>
-                            <View style={{flex: 0.65}}>
+                            <View style={{flex: 0.8}}>
                                 <Button
                                     onPress={() => {
                                         onPress();

@@ -156,12 +156,12 @@ const WidgetHomeMenuStatic = ({ onPress, showMore }) => {
 
                 if (!menu.nav) return;
 
-                GALogEvent(menu.name, {
-                  id: menu.code,
-                  product_name: menu.name,
-                  user_id: user.userId,
-                  method: analyticMethods.viewAll,
-                });
+                // GALogEvent(menu.name, {
+                //   id: menu.code,
+                //   product_name: menu.name,
+                //   user_id: user.userId,
+                //   method: analyticMethods.viewAll,
+                // });
 
                 if (menu.nav === 'modal') {
                   setModalMenuHome(true);

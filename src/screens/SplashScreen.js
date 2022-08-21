@@ -12,13 +12,17 @@ const SplashScreen = ({navigation, route}) => {
   const {width, height} = useWindowDimensions();
   const {Color} = useColor();
   const user = useSelector(state => state['user.auth'].login.user);
+  const auth = useSelector(state => state['auth']);
   const dispatch = useDispatch();
 
+  console.log('auth splash', auth);
+
   useEffect(() => {
+    // dispatch({type: 'USER.LOGOUT'});
     dispatch({ type: 'THEME.SET_THEME', data: accessClient.Theme });
 
     setTimeout(() => {
-      if (user) {
+      if (auth.token) {
         redirectTo('MainPage');
       } else {
         redirectTo('OnBoardingScreen');
@@ -43,7 +47,7 @@ const SplashScreen = ({navigation, route}) => {
       }}
       statusBarColor={Color.primary}
     >
-      <View style={{position: 'absolute', width: '50%', aspectRatio: 7/5 }}>
+      <View style={{position: 'absolute', width: '100%', aspectRatio: 1 }}>
         <Image
           source={bgSplashHeader}
           style={{
@@ -81,7 +85,7 @@ const SplashScreen = ({navigation, route}) => {
         </Text>
       </Container>
 
-      <View style={{position: 'absolute', bottom: 0, width: '100%', aspectRatio: 3/1 }}>
+      <View style={{position: 'absolute', bottom: 0, width: '25%', aspectRatio: 1 }}>
         <Image
           source={bgSplashFooter}
           style={{

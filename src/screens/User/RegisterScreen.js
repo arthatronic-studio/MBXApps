@@ -30,8 +30,15 @@ import WidgetBgFixIcon from './WidgetBgFixIcon';
 import { statusBarHeight } from 'src/utils/constants';
 import { accessClient } from 'src/utils/access_client';
 import imageAssets from 'assets/images';
+import { postAPI } from 'src/api-rest/httpService';
+import { redirectTo } from 'src/utils';
 
 const inputs = ['fullName', 'email', 'username', 'password', 'password2'];
+
+const listGender = [
+  { id: 'male', name: 'Laki-laki' },
+  { id: 'female', name: 'Perempuan' },
+];
 
 const RegisterScreen = ({ navigation, route }) => {
   const [state, changeState] = useState({
@@ -55,7 +62,7 @@ const RegisterScreen = ({ navigation, route }) => {
     showPassword: false,
     allValid: false,
   });
-  const [selectedJK, setSelectedJK] = useState({ id: 1, name: 'Laki-laki' });
+  const [selectedJK, setSelectedJK] = useState(listGender[0]);
 
   const setState = obj => {
     changeState({ ...state, ...obj });
@@ -69,6 +76,9 @@ const RegisterScreen = ({ navigation, route }) => {
   const { height, width } = useWindowDimensions();
   const dispatch = useDispatch();
   const { register, loading, error } = useSelector(state => state['user.auth']);
+  const auth = useSelector(state => state['auth']);
+
+  console.log('auth',auth);
 
   const { Color } = useColor();
   const isFocused = useIsFocused();
@@ -130,8 +140,32 @@ const RegisterScreen = ({ navigation, route }) => {
     setState({ userData: { ...state.userData, [key]: val } });
   };
 
-  const onSubmit = () => {
-    showLoading('success', 'Pendaftaran Berhasil');
+  const onSubmit = async() => {
+    const body = {
+      name: state.userData.fullName,
+      email: state.userData.email,
+      gender: selectedJK.id,
+      dob: null,
+    };
+
+    const result = await postAPI('update-profile', body);
+    console.log('result', result);
+    if (result.status) {
+      dispatch({
+        type: 'AUTH.SET_USER',
+        data: result.data,
+      });
+
+      showLoading('success', 'Pendaftaran Berhasil');
+
+      setTimeout(() => {
+        redirectTo('MainPage');
+      }, 2500);
+      return;
+    }
+
+    showLoading('error', 'Pendaftaran Gagal');
+    
     return;
     Keyboard.dismiss();
 
@@ -202,7 +236,19 @@ const RegisterScreen = ({ navigation, route }) => {
 
   return (
     <Scaffold
-      // showHeader={false}
+      header={
+        <Header
+          actions={
+            <TouchableOpacity
+              onPress={() => redirectTo('MainPage')}
+            >
+              <Text>
+                Skip
+              </Text>
+            </TouchableOpacity>
+          }
+        />
+      }
       popupProps={popupProps}
       loadingProps={loadingProps}
       fallback={loading}
@@ -247,7 +293,8 @@ const RegisterScreen = ({ navigation, route }) => {
               error={state.error.fullName}
             />
 
-            <FormInput
+            {/* hide */}
+            {/* <FormInput
               label='Tanggal Lahir'
               placeholder='dd/mm/yyyyy'
               value={state.userData.birthOfDate}
@@ -262,20 +309,18 @@ const RegisterScreen = ({ navigation, route }) => {
                   <Text>V</Text>
                 </View>
               }
-            />
+            /> */}
 
-            {renderRadio({
+            {/* hide */}
+            {/* {renderRadio({
               flexDirection: 'row',
               label: 'Jenis Kelamin',
-              data: [
-                { name: 'Laki-laki', id: 1 },
-                { name: 'Perempuan', id: 2 },
-              ],
+              data: listGender,
               selected: selectedJK,
               onSelected: (val) => {
                 setSelectedJK(val)
               }
-            })}
+            })} */}
 
             <FormInput
               ref={emailRef}
@@ -286,7 +331,8 @@ const RegisterScreen = ({ navigation, route }) => {
               onBlur={() => isValueError('email')}
               returnKeyType="next"
               keyboardType="email-address"
-              onSubmitEditing={() => phoneRef.current.focus()}
+              // onSubmitEditing={() => phoneRef.current.focus()}
+              onSubmitEditing={() => onSubmit()}
               error={state.error.email}
             />
 

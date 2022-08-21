@@ -58,7 +58,7 @@ const HeaderBig = ({
 }) => {
 
   const { Color } = useColor();
-  const user = useSelector(state => state['user.auth'].login.user);
+  const auth = useSelector(state => state['auth']);
 
   const MainContainer = useAnimated ? Animated.View : View;
 
@@ -99,13 +99,11 @@ const HeaderBig = ({
                   numberOfLines={1}
                   color={Color.text}
                 >
-                  {user && !user.guest
-                    ? user.firstName.trim() +
-                      (user.lastName ? ' ' + user.lastName.trim() : '')
-                    : 'Tamu'}
+                  {auth && auth.user
+                    ? auth.user.name : 'Tamu'}
                 </Text>
 
-                <Image
+                {auth && auth.user && auth.user.isCheckin && <Image
                   source={imageAssets.airdrop}
                   style={{
                     height: 16,
@@ -113,7 +111,7 @@ const HeaderBig = ({
                     tintColor: Color.success,
                     marginLeft: 4,
                   }}
-                />
+                />}
               </Row>
             </Container>
           :

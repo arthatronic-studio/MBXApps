@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Image, useWindowDimensions } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Scaffold, Text, useColor } from '@src/components';
@@ -6,11 +6,29 @@ import SearchBar from 'src/components/SearchBar';
 import { Container, Divider, Row } from 'src/styled';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import imageAssets from 'assets/images';
+import { getAPI } from 'src/api-rest/httpService';
+import ImagesPath from 'src/components/ImagesPath';
 
 const Tab = createMaterialTopTabNavigator();
 
 const Active = ({ navigation, route }) => {
   const { Color } = useColor();
+
+  const [visitorCount, setVisitorCount] = useState(0);
+  const [listActive, setListActive] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async() => {
+    const result = await getAPI('user-activity');
+    console.log(result);
+    if (result.status) {
+      setListActive(result.data.listData);
+      setVisitorCount(result.data.totalPengunjung);
+    }
+  }
 
   return (
     <Scaffold
@@ -21,6 +39,7 @@ const Active = ({ navigation, route }) => {
           <Container paddingVertical={8} paddingHorizontal={16} radius={8} marginRight={8} color={Color.primaryMoreDark} style={{ borderWidth: 0.5, borderColor: Color.primaryMoreDark }}>
             <Text color={Color.textInput}>Semua</Text>
           </Container>
+          
           <Container paddingVertical={8} paddingHorizontal={16} radius={8} marginRight={8} color={Color.theme} style={{ borderWidth: 0.5, borderColor: Color.primaryMoreDark }}>
             <Row>
               <Image
@@ -51,41 +70,36 @@ const Active = ({ navigation, route }) => {
 
         <Divider />
 
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('VisitorDetailScreen');
-          }}
-        >
-          <Container paddingVertical={12}>
-            <Row>
-              <Container height={32} width={32} radius={16} color={Color.border} marginRight={12}>
-
+        {listActive.map((item, idx) => {
+          return (
+            <TouchableOpacity
+              key={idx}
+              onPress={() => {
+                navigation.navigate('VisitorDetailScreen');
+              }}
+            >
+              <Container paddingVertical={12}>
+                <Row>
+                  <Container height={32} width={32} radius={16} color={Color.border} marginRight={12}>
+                    <Image
+                      source={ImagesPath.avatar1}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                      }}
+                    />
+                  </Container>
+                  
+                  <Container>
+                    <Text align='left' type='medium'>{item.user.name}</Text>
+                    <Text align='left' size={12} color={Color.placeholder}>{item.user.activityInfo.checkinDate}</Text>
+                    <Text align='left' size={12} color={Color.placeholder}>{item.user.activityInfo.checkinTime}</Text>
+                  </Container>
+                </Row>
               </Container>
-              <Container>
-                <Text align='left' type='medium'>Adang Susanyo</Text>
-                <Text align='left' size={12} color={Color.placeholder}>Laki-laki</Text>
-              </Container>
-            </Row>
-          </Container>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('VisitorDetailScreen');
-          }}
-        >
-          <Container paddingVertical={12}>
-            <Row>
-              <Container height={32} width={32} radius={16} color={Color.border} marginRight={12}>
-
-              </Container>
-              <Container>
-                <Text align='left' type='medium'>Adang Susanti</Text>
-                <Text align='left' size={12} color={Color.placeholder}>Perempuan</Text>
-              </Container>
-            </Row>
-          </Container>
-        </TouchableOpacity>
+            </TouchableOpacity>
+          )
+        })}
       </Container>
     </Scaffold>
   )
@@ -152,10 +166,26 @@ const CustomTabBar = (props) => {
 const VisitorScreen = ({ navigation, route }) => {
   const { Color } = useColor();
 
+  const [visitorCount, setVisitorCount] = useState(0);
+  const [listActive, setListActive] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async() => {
+    const result = await getAPI('user-activity');
+    console.log(result);
+    if (result.status) {
+      setListActive(result.data.listData);
+      setVisitorCount(result.data.totalPengunjung);
+    }
+  }
+
   return (
     <Scaffold>
       <Container paddingHorizontal={16} marginBottom={16}>
-        <Text align='left' size={24}>1.208</Text>
+        <Text align='left' size={24}>{visitorCount}</Text>
         <Text align='left' size={12} letterSpacing={0.4}>Total Pengunjung</Text>
       </Container>
 

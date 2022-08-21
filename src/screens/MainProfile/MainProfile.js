@@ -67,6 +67,7 @@ const MainProfile = ({navigation, route}) => {
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const user = useSelector(state => state['user.auth'].login.user);
   const userToken = useSelector(state => state['user.auth'].data);
+  const auth = useSelector(state => state['auth']);
 
   console.log('user', useSelector(state => state['user.auth']));
 
@@ -86,10 +87,10 @@ const MainProfile = ({navigation, route}) => {
 
     fetchData();
 
-    currentSocket.emit('list_my_room_ids');
-      currentSocket.on('list_my_room_ids', (res) => {
-        setMyRoomIds(res);
-      });
+    // currentSocket.emit('list_my_room_ids');
+    //   currentSocket.on('list_my_room_ids', (res) => {
+    //     setMyRoomIds(res);
+    //   });
   }, []);
 
   useEffect(() => {
@@ -110,10 +111,12 @@ const MainProfile = ({navigation, route}) => {
   };
 
   const onPressLogout = () => {
-    dispatch({type: 'ARTICLE.CLEAR_HISTORY'})
+    dispatch({ type: 'AUTH.CLEAR' });
     dispatch({type: 'USER.LOGOUT'});
     redirectTo('LoginScreen');
-    currentSocket.disconnect();
+
+    // dispatch({type: 'ARTICLE.CLEAR_HISTORY'});
+    // currentSocket.disconnect();
   };
 
   const sendVerify = async () => {
@@ -419,6 +422,8 @@ const MainProfile = ({navigation, route}) => {
     },
   ];
 
+  console.log('auth', auth);
+
   return (
     <Scaffold
       loadingProps={loadingProps}
@@ -529,9 +534,9 @@ const MainProfile = ({navigation, route}) => {
                   alignItems: 'flex-start',
                   justifyContent: 'space-between',
                 }}>
-                {user && !user.guest ? (
+                {auth && auth.user ? (
                   <Text type="bold" letterSpacing={0.18}>
-                    {user.firstName} {user.lastName}
+                    Halo {auth.user.name}
                   </Text>
                 ) : (
                   <Text type="bold" letterSpacing={0.18}>
@@ -562,7 +567,7 @@ const MainProfile = ({navigation, route}) => {
               </TouchableOpacity>}
              
 
-              {accessClient.MainProfile.showButtonJoinCommunity &&
+              {/* {accessClient.MainProfile.showButtonJoinCommunity &&
                 user &&
                 !user.organizationId && (
                   <View
@@ -584,7 +589,7 @@ const MainProfile = ({navigation, route}) => {
                       </Text>
                     </TouchableOpacity>
                   </View>
-                )}
+                )} */}
             </TouchableOpacity>
           </View>
         </Container>
@@ -672,7 +677,7 @@ const MainProfile = ({navigation, route}) => {
           </View>
         </Container> */}
 
-        <Container paddingHorizontal={16}>
+        {/* <Container paddingHorizontal={16}>
           <View
             style={{
               ...shadowStyle,
@@ -716,12 +721,6 @@ const MainProfile = ({navigation, route}) => {
                           }>
                           {item.title}
                         </Text>
-
-                        {/* {item.badgeTitle !== '' &&
-                          <Text size={10} color={Color.primary}>
-                            {item.badgeTitle}
-                          </Text>
-                        } */}
                       </Col>
                       <Col align="flex-end" size={2} justify="center">
                         <FontAwesome
@@ -736,6 +735,18 @@ const MainProfile = ({navigation, route}) => {
               );
             })}
           </View>
+        </Container> */}
+
+        <Container paddingHorizontal={16} paddingTop={32}>
+          <TouchableOpacity
+            onPress={() => {
+              onPressExit();
+            }}
+          >
+            <Text color={Color.error} size={12} type='medium'>
+              Logout
+            </Text>
+          </TouchableOpacity>
         </Container>
 
         <Divider />

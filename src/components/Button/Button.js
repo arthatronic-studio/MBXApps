@@ -15,7 +15,7 @@ const MainButton = Styled(View)`
 const CustomButton = Styled(TouchableOpacity)`
   backgroundColor: ${(props) => (props.color)};
   width: 100%;
-  padding: 16px;
+  padding: 16px 8px;
   borderRadius: 8px;
   alignItems: center;
   justifyContent: center;

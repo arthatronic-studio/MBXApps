@@ -47,7 +47,7 @@ import imageAssets from 'assets/images';
 
 const CheckoutEvent = ({ navigation, route }) => {
     const user = useSelector((state) => state['user.auth'].login.user);
-    const loading = useSelector((state) => state['user.auth'].loading);
+    const auth = useSelector((state) => state['auth']);
 
     const dispatch = useDispatch();
     const { params } = route;
@@ -57,7 +57,7 @@ const CheckoutEvent = ({ navigation, route }) => {
     console.log('dummyArrPengunjung', dummyArrPengunjung);
 
     const [loadingProps, showLoading, hideLoading] = useLoading();
-    const [name, setName] = useState(user ? user.firstName + ' ' + user.lastName : '');
+    const [name, setName] = useState(auth && auth.user ? auth.user.name : '');
     const [passanger, setPassanger] = useState([]);
     const [refresh, setRefresh] = useState(0);
     const modalPassangerRef = useRef();
@@ -96,6 +96,8 @@ const CheckoutEvent = ({ navigation, route }) => {
     }
 
     const submit = async () => {
+        navigation.navigate('PaymentScreen', { back: true });
+        return;
         showLoading()
         const variables = {
             type: 'BOOKING',
@@ -190,7 +192,7 @@ const CheckoutEvent = ({ navigation, route }) => {
             loadingProps={loadingProps}
         >
             <ScrollView>
-                <Container paddingHorizontal={16}>
+                <Container paddingHorizontal={16} paddingBottom={16}>
                     <View style={{ backgroundColor: Color.theme, borderWidth: 1, padding: 10, borderRadius: 8 }}>
                         <Container align='center' style={{ flexDirection: 'row' }}>
                             <Image source={{ uri: '' }} style={{ height: 48, width: 48, borderRadius: 8, marginRight: 8, backgroundColor: Color.border }} />
@@ -233,7 +235,7 @@ const CheckoutEvent = ({ navigation, route }) => {
                     <View style={{ marginTop: 8, padding: 10, borderRadius: 8, backgroundColor: Color.theme }}>
                         <Row>
                             <Col>
-                                <Text type='bold' align='left'>{user.firstName} {user.lastName}</Text>
+                                <Text type='bold' align='left'>{auth.user.name}</Text>
                                 <Divider height={8} />
                                 <Row style={{ alignItems: 'center' }}>
                                     <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 6 }}>
@@ -243,7 +245,7 @@ const CheckoutEvent = ({ navigation, route }) => {
                                             style={{ width: 14, height: 14, tintColor: Color.text }}
                                         />
                                     </View>
-                                    <Text color={Color.text} size={12}>+{user.phoneCountryCode}{user.phoneNumber}</Text>
+                                    <Text color={Color.text} size={12}>+{auth.user.phone}</Text>
                                 </Row>
                                 <Divider height={4} />
                                 <Row style={{ alignItems: 'center' }}>
@@ -252,7 +254,7 @@ const CheckoutEvent = ({ navigation, route }) => {
                                             source={imageAssets.mail}
                                             style={{ width: 14, height: 14, tintColor: Color.text }} />
                                     </View>
-                                    <Text color={Color.text} size={12}>{user.email}</Text>
+                                    <Text color={Color.text} size={12}>{auth.user.email}</Text>
                                 </Row>
                             </Col>
                             <Col size={2} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>

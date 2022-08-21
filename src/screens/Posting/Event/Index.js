@@ -20,6 +20,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import IonIcons from 'react-native-vector-icons/Ionicons'
 import SearchBar from 'src/components/SearchBar';
+import ListContenEvent from 'src/components/Event/ListContenEvent';
 
 const EventScreen = ({ navigation, route }) => {
   const { title, userProfileId } = route.params;
@@ -255,27 +256,46 @@ const EventScreen = ({ navigation, route }) => {
       }
     >
       <SearchBar
+        type='select'
         onPress={() => navigation.navigate('SearchEvent')}
       />
 
-      <Divider height={8} />
+      <Divider />
 
-      <ListContentProductV2
+      <ListContenEvent
         productCategory='EVENT'
         name='Event'
-        // ListHeaderComponent={
-        //   <>
-        //     <ListOption />
+        title='Semua Event'
+        // nav='EventScreen'
+        // refresh={refreshing || isFocused}
+        showHeader
+        // showSeeAllText={false}
+        style={{
+          paddingBottom: height / 5,
+        }}
+        ListHeaderComponent={
+          <>
+            <ListContenEvent
+              horizontal
+              productCategory='EVENT'
+              name='Event'
+              title='Featured Event'
+              showHeader
+              style={{
+                paddingHorizontal: 0,
+              }}
+            />
 
-        //     <Container paddingBottom={16}>
-        //       <Banner
-        //         data={listBanner}
-        //         showHeader={false}
-        //         loading={loadingBanner}
-        //       />
-        //     </Container>
-        //   </>
-        // }
+            {/* //     <ListOption />
+            //     <Container paddingBottom={16}>
+            //       <Banner
+            //         data={listBanner}
+            //         showHeader={false}
+            //         loading={loadingBanner}
+            //       />
+            //     </Container> */}
+          </>
+        }
       />
     </Scaffold>
   );

@@ -21,10 +21,13 @@ import { CommonActions } from '@react-navigation/native';
 import { Header } from 'src/components';
 import { statusBarHeight } from 'src/utils/constants';
 import { FormatDuration } from 'src/utils';
+import { postNonAuth } from 'src/api-rest/httpService';
 
-const initialCountdown = 60 * 5;
+const initialCountdown = 60 * 1;
 
 const OtpScreen = ({ navigation, route }) => {
+    const { params } = route;
+
     const [listTextInput, setListTextInput] = useState([]);
     const [activeIndex, setActiveIndex] = useState();
     const [countdown, setCountdown] = useState(initialCountdown);
@@ -43,7 +46,7 @@ const OtpScreen = ({ navigation, route }) => {
     }, 1000);
 
     useEffect(() => {
-        // setFcmToken(route.params.body.device_token);
+        // setFcmToken(params.body.device_token);
     }, []);
 
     const redirectTo = (name, params) => {
@@ -132,7 +135,7 @@ const OtpScreen = ({ navigation, route }) => {
     }
 
     const onResendOtp = () => {
-        // const body = route.params.body;
+        const body = params.body;
 
         // requestHttp.post('member/otp', body)
         // .then((res) => {
@@ -150,7 +153,7 @@ const OtpScreen = ({ navigation, route }) => {
         // });
     }
 
-    const onSubmit = () => {
+    const onSubmit = async() => {
         let otp = '';
 
         listTextInput.map((e) => {
@@ -166,34 +169,39 @@ const OtpScreen = ({ navigation, route }) => {
 
         const body = {
             otp,
-            device_token: fcmToken,
-            // phone: route.params.body.phone,
+            phone: params.body.phone,
+            // device_token: fcmToken,
         };
 
         console.log('body otp', body);
 
-        // requestHttp.post('member/otp-verification', body)
-        // .then((res) => {
-        //     console.log('res otp verify', res);
+        const result = await postNonAuth('validate-otp', body);
 
-        //     if (res.data && res.data.status) {
-        //         dispatch({
-        //             type: 'USER.ADD_AUTH_DATA',
-        //             data: res.data.data.token,
-        //         });
+        console.log('result', result);
 
-        //         getCurrentUser();
-        //     } else {
-        //         showPopup(res.data.message, 'error');
-        //     }
+        setIsLoading(false);
 
-        //     setIsLoading(false);
-        // })
-        // .catch((err) => {
-        //     console.log('err otp verify', err);
-        //     setIsLoading(false);
-        //     showPopup(err.message, 'error');
-        // });
+        if (result.status) {
+            showPopup(result.message, 'success');
+            dispatch({
+                type: 'AUTH.SET_TOKEN',
+                data: result.data.token,
+            });
+            dispatch({
+                type: 'AUTH.SET_USER',
+                data: result.data.user,
+            });
+            
+            if (result.data.user.isRegistered) {
+                redirectTo('MainPage');
+            } else {
+                navigation.navigate('RegisterScreen');
+            }
+
+            return;
+        }
+
+        showPopup(result.message, 'error');
     }
 
     return (
@@ -279,20 +287,32 @@ const OtpScreen = ({ navigation, route }) => {
                     </Row>
 
                     <Padding top={16} bottom={16}>
+                        <Row justify='flex-end'>
+                            <TouchableOpacity
+                                disabled={countdown > 0}
+                                onPress={() => {
+                                    if (countdown > 0) {
+    
+                                    } else {
+                                        setCountdown(initialCountdown);
+                                        resetOtp();
+                                        onResendOtp();
+                                    }
+                                }}
+                            >
+                        <Text
+                            color={countdown > 0 ? Color.disabled : Color.text}
+                            align='right'
+                        >
+                            Kirim Ulang
+                        </Text>
+                        </TouchableOpacity>
                         <Text
                             align='right'
-                            onPress={() => {
-                                if (countdown > 0) {
-
-                                } else {
-                                    setCountdown(initialCountdown);
-                                    resetOtp();
-                                    onResendOtp();
-                                }
-                            }}
                         >
-                            {'Kirim Ulang ('}{FormatDuration.getMinutesFromSeconds(countdown)}{')'}
+                            {` (${FormatDuration.getMinutesFromSeconds(countdown)})`}
                         </Text>
+                        </Row>
                     </Padding>
 
                     <Button
@@ -301,6 +321,9 @@ const OtpScreen = ({ navigation, route }) => {
                     >
                         Verifikasi
                     </Button>
+
+                    <Divider />
+                    <Text color={Color.error}>Sample: {params.mustDelete}</Text>
                 </TouchableOpacity>
             </ScrollView>
 

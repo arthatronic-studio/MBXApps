@@ -97,7 +97,7 @@ const CardEventTicket = ({ item, onSelect }) => {
             <Text size={11}>Harga</Text>
             <Text type='medium'>{FormatMoney.getFormattedMoney(450000)}<Text size={11}>/Pax</Text></Text>
           </View>
-          <View style={{ flex: 0.7 }}>
+          <View style={{ flex: 0.8 }}>
             {typeof onSelect === 'function' ?
             <Button
               onPress={() => onSelect()}
