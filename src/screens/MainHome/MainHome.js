@@ -3,13 +3,10 @@ import {
   View,
   ScrollView,
   Image,
-  ImageBackground,
   useWindowDimensions,
   Animated,
   RefreshControl,
   Platform,
-  FlatList,
-  Linking,
   DeviceEventEmitter,
   NativeEventEmitter,
 } from 'react-native';
@@ -20,8 +17,7 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useIsFocused } from '@react-navigation/native';
 import Modal from 'react-native-modal';
-import Config from 'react-native-config';
-import { io } from 'socket.io-client';
+import Kontakt, { KontaktModule } from 'react-native-kontaktio';
 import RNShake from 'react-native-shake';
 
 import ImagesPath from 'src/components/ImagesPath';
@@ -31,50 +27,17 @@ import {
   HeaderBig,
   useColor,
   Scaffold,
-  Col,
   Button,
   Submit,
   useLoading,
-  usePopup,
   Alert,
 } from '@src/components';
-import { Divider, Circle, Container, Line, Row, Column } from '@src/styled';
-import { playNotificationSounds } from '@src/utils/notificationSounds';
-import CarouselView from 'src/components/CarouselView';
+import { Divider, Circle, Container, Row, Column } from '@src/styled';
 import Banner from 'src/components/Banner';
-import Client from '@src/lib/apollo';
-import { queryBannerList } from '@src/lib/query/banner';
 import ModalPosting from './ModalPosting';
-import MusikTerbaru from 'src/components/MusikTerbaru';
-import WidgetBalance from 'src/components/WidgetBalance';
-import WidgetMenuHome from 'src/screens/MainHome/WidgetMenuHome';
-import PostingHeader from 'src/components/Posting/PostingHeader';
-import { shadowStyle } from 'src/styles';
-import Geolocation from 'react-native-geolocation-service';
-import { accessClient } from 'src/utils/access_client';
-import FloatingMusicPlayer from 'src/components/FloatingMusicPlayer';
-import TrackPlayer, {
-  Event,
-  useTrackPlayerEvents,
-} from 'react-native-track-player';
-import { analyticMethods, GALogEvent } from 'src/utils/analytics';
-import { getSizeByRatio } from 'src/utils/get_ratio';
-import MusikAlbum from 'src/components/MusikAlbum';
-import HighlightLelang from 'src/components/Card/HighlightLelang';
-import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
-import HighlightContentProductV2 from 'src/components/Content/HighlightContentProductV2';
-import PushNotification, { Importance } from 'react-native-push-notification';
-import { initSocket } from 'src/api-socket/currentSocket';
-import { queryGetNotification } from "src/lib/query";
-import client from "src/lib/apollo";
-import MemberRank from "src/components/MemberRank";
-import MyRank from 'src/components/MyRank';
 import imageAssets from 'assets/images';
 import WidgetHomeMenuStatic from './WidgetHomeMenuStatic';
 import { statusBarHeight } from 'src/utils/constants';
-
-import Kontakt, { KontaktModule } from 'react-native-kontaktio';
-import ModalActions from 'src/components/Modal/ModalActions';
 import FloatingBeaconDetection from 'src/components/Modal/FloatingBeaconDetection';
 import { getAPI, postAPI } from 'src/api-rest/httpService';
 import HighlightEvent from 'src/components/Event/HighlightEvent';
@@ -87,87 +50,102 @@ const isAndroid = Platform.OS === 'android';
 let tempShowPopupAds = true;
 let tempShowFloatingBeacon = true;
 
-const events = [Event.PlaybackTrackChanged];
-
 const MainHome = ({ navigation, route }) => {
-  const currentSocket = initSocket();
+  const auth = useSelector(state => state['auth']);
+  const localStoragBeacons = useSelector(state => state['beacons']);
 
-  // state
-  const [chatNotifCount, setChatNotifCount] = useState(0);
-  const [notificationCount, setNotificationCount] = useState(0);
-  const [dataPopupAds, setDataPopupAds] = useState();
-  const [showPopupAds, setShowPopupAds] = useState(false);
   const [loadingBanner, setLoadingBanner] = useState(true);
   const [listBanner, setListBanner] = useState([]);
   const [visitorCount, setVisitorCount] = useState(0);
-
   const [animationValue] = useState(new Animated.Value(0));
   const [refreshing, setRefreshing] = useState(false);
-  const [thisTrack, setThisTrack] = useState();
-
-  const user = useSelector(state => state['user.auth'].login.user);
-  const auth = useSelector(state => state['auth']);
 
   const dispatch = useDispatch();
   const { Color } = useColor();
   const isFocused = useIsFocused();
   const modalPostingRef = useRef();
-  const floatingMusicPlayerRef = useRef();
   const { width, height } = useWindowDimensions();
-  const [loadingProps, showLoading, hideLoading] = useLoading();
-  const [popupProps, showPopup] = usePopup();
+  const [loadingProps, showLoading] = useLoading();
 
-  const [listBeacon, setListBeacon] = useState([]);
-  const [countPrevBeacon, setCountPrevBeacon] = useState(0);
-  const [showListBeacon, setShowListBeacon] = useState(false);
+  const [stateListCheckinUID, setStateListCheckinUID] = useState([]);
+  const [stateListMerchUID, setStateListMerchUID] = useState([]);
+  const [stateListArtUID, setStateListArtUID] = useState([]);
+  const [stateListOtherUID, setStateListOtherUID] = useState([]);
+  const [stateListOtherType, setStateListOtherType] = useState([]);
+
   const [listMerchantType, setListMerchantType] = useState([]);
-  const [tempAlreadyPairing, setTempAlreadyPairing] = useState([])
+  const [tempAlreadyPairing, setTempAlreadyPairing] = useState([]);
+  const [tempCurrentArtPairing, setTempCurrentArtPairing] = useState('');
 
   const isCheckin = auth && auth.user && auth.user.isCheckin;
 
   useEffect(() => {
-    beaconSetup();
     beaconFetch();
   }, []);
 
   useEffect(() => {
-    const shakeSubs = RNShake.addListener(() => {
-      if (!isCheckin) {
-        onCheckin();
-      }
+    const cond = (
+      localStoragBeacons &&
+      Array.isArray(localStoragBeacons.listCheckinUID) && localStoragBeacons.listCheckinUID.length > 0 && 
+      Array.isArray(localStoragBeacons.listCheckinRange) && localStoragBeacons.listCheckinRange.length > 0 && 
+      Array.isArray(localStoragBeacons.listMerchUID) && localStoragBeacons.listMerchUID.length > 0 && 
+      Array.isArray(localStoragBeacons.listMerchRange) && localStoragBeacons.listMerchRange.length > 0 && 
+      Array.isArray(localStoragBeacons.listArtUID) && localStoragBeacons.listArtUID.length > 0 && 
+      Array.isArray(localStoragBeacons.listArtRange) && localStoragBeacons.listArtRange.length > 0 && 
+      Array.isArray(localStoragBeacons.listOtherUID) && localStoragBeacons.listOtherUID.length > 0 && 
+      Array.isArray(localStoragBeacons.listOtherRange) && localStoragBeacons.listOtherRange.length > 0 && 
+      Array.isArray(localStoragBeacons.listOtherType) && localStoragBeacons.listOtherType.length > 0
+    );
 
+    const timeout = cond ? setTimeout(() => {
+      beaconSetup();
+    }, 3000) : null;
+
+    return () => {
+      clearTimeout(timeout);
+    }
+  }, [isCheckin, localStoragBeacons]);
+
+  useEffect(() => {
+    const shakeSubs = RNShake.addListener(() => {
       if (isCheckin) {
-        setTempAlreadyPairing([]);
+        onPairingMerchant();
+      } else {
+        onPairingCheckin();
       }
     });
 
     return () => {
       shakeSubs.remove();
     }
-  }, [listBeacon]);
+  }, [isCheckin, stateListCheckinUID, stateListMerchUID]);
 
   useEffect(() => {
-    // const timeout = listBeacon.length > 0 && listBeacon.length !== countPrevBeacon && isCheckin ?
-    //   setTimeout(() => {
-    //     onPairingSetting();
-    //     setCountPrevBeacon(listBeacon.length);
-    //   }, 1000)
-    // : null;
-
-    // return () => {
-    //   clearTimeout(timeout);
-    // }
-
-    if (isCheckin && listBeacon.length > 0 && listBeacon.length !== countPrevBeacon) {
-      onPairingSetting();
-      setCountPrevBeacon(listBeacon.length);
+    const timeout = isCheckin && stateListArtUID.length > 0 ?
       setTimeout(() => {
-        setCountPrevBeacon(0);
-      }, 5000);
+        onPairingArt();
+      }, 3000)
+    : null;
+
+    return () => {
+      clearTimeout(timeout);
     }
-  }, [listBeacon, countPrevBeacon]);
+  }, [isCheckin, stateListArtUID, tempCurrentArtPairing]);
+
+  useEffect(() => {
+    const timeout = isCheckin && stateListOtherUID.length > 0 ?
+      setTimeout(() => {
+        onPairingOther();
+      }, 10000)
+    : null;
+
+    return () => {
+      clearTimeout(timeout);
+    }
+  }, [isCheckin, stateListOtherUID]);
 
   const beaconSetup = async () => {
+    console.log('beaconSetup');
     if (isAndroid) {
       // Android
       // const granted = await requestLocationPermission();
@@ -196,44 +174,82 @@ const MainHome = ({ navigation, route }) => {
 
         if (Array.isArray(beacons)) {
           let newArr = [];
+          let newCheckinUID = [];
+          let newMerchUID = [];
+          let newArtUID = [];
+          let newOtherUID = [];
+          let newOtherType = [];
 
           beacons.map((e, i) => {
-            newArr.push({
-              ...e,
-              productAddress: e.address,
-              productAccuracy: e.accuracy,
-              productRange: Math.round(e.accuracy),
-              productName: e.name,
-              productUUID: e.uuid,
-            });
+            // console.log('full info beacon', e);
+
+            const isCheckinType = localStoragBeacons.listCheckinUID.indexOf(e.address);
+            const isMerchType = localStoragBeacons.listMerchUID.indexOf(e.address);
+            const isArtType = localStoragBeacons.listArtUID.indexOf(e.address);
+            const isOtherType = localStoragBeacons.listOtherUID.indexOf(e.address);
+
+            // type beacon yang masuk kondisi checkin (harus checkin dulu)
+            if (isCheckin) {
+              if (isMerchType !== -1 && Math.round(e.accuracy) <= localStoragBeacons.listMerchRange[isMerchType]) {
+                newArr.push({
+                  productAddress: e.address,
+                  productRange: Math.round(e.accuracy),
+                  productName: e.name,
+                  productUUID: e.uuid,
+                });
+
+                newMerchUID.push(e.address);
+              }
+
+              if (isArtType !== -1 && Math.round(e.accuracy) <= localStoragBeacons.listArtRange[isArtType]) {
+                newArr.push({
+                  productAddress: e.address,
+                  productRange: Math.round(e.accuracy),
+                  productName: e.name,
+                  productUUID: e.uuid,
+                });
+
+                newArtUID.push(e.address);
+              }
+
+              if (isOtherType !== -1 && Math.round(e.accuracy) <= localStoragBeacons.listOtherRange[isOtherType]) {
+                newArr.push({
+                  productAddress: e.address,
+                  productRange: Math.round(e.accuracy),
+                  productName: e.name,
+                  productUUID: e.uuid,
+                });
+
+                newOtherUID.push(e.address);
+                newOtherType.push(localStoragBeacons.listOtherType[isOtherType]);
+              }
+            }
+            // type beacon yang masuk kondisi non checkin
+            else {
+              if (isCheckinType !== -1 && Math.round(e.accuracy) <= localStoragBeacons.listCheckinRange[isCheckinType]) {
+                newArr.push({
+                  productAddress: e.address,
+                  productRange: Math.round(e.accuracy),
+                  productName: e.name,
+                  productUUID: e.uuid,
+                });
+
+                newCheckinUID.push(e.address);
+              }
+            }
           });
 
-          setListBeacon(newArr);
+          setStateListCheckinUID(newCheckinUID);
+          setStateListMerchUID(newMerchUID);
+          setStateListArtUID(newArtUID);
+          setStateListOtherUID(newOtherUID);
+          setStateListOtherType(newOtherType);
         }
       });
 
       DeviceEventEmitter.addListener('beaconDidDisappear', ({ beacons, region }) => {
         console.log('beaconDidDisappear', beacons, region);
-
-        // klo beacon ilang, checkout
-        // if (region && region.uuid) {
-        //   onCheckout();
-        // }
-
-        // if (Array.isArray(beacons)) {
-        //   let newArr = [];
-        //   beacons.map((e, i) => {
-        //     newArr.push({
-        //       ...e,
-        //       productAddress: e.address,
-        //       productAccuracy: e.accuracy,
-        //       productRange: Math.round(e.accuracy),
-        //       productName: e.name,
-        //       productUUID: e.uuid,
-        //     });
-        //   });
-        //   setListBeacon(newArr);
-        // }
+        // klo beacon ilang
       });
     } else {
       kontaktEmitter.addListener('didDiscoverDevices', ({ beacons }) => {
@@ -245,78 +261,54 @@ const MainHome = ({ navigation, route }) => {
   const beaconFetch = async () => {
     const result = await getAPI('beacon');
     console.log('api beacon', result);
-    if (result.status) {
-      dispatch({ type: 'AUTH.SET_STATE_BEACONS', data: result.data });
+    if (result.status && Array.isArray(result.data)) {
+      let newListCheckinUID = [];
+      let newListCheckinRange = [];
+      let newListMerchUID = [];
+      let newListMerchRange = [];
+      let newListArtUID = [];
+      let newListArtRange = [];
+      let newListOtherUID = [];
+      let newListOtherRange = [];
+      let newListOtherType = [];
+
+      result.data.map((e) => {
+        if (e.beacon_type && e.beacon_type.name === 'checkin') {
+          newListCheckinUID.push(e.beacon_uid);
+          newListCheckinRange.push(parseInt(e.range));
+        }
+        else if (e.beacon_type && e.beacon_type.name === 'merch') {
+          newListMerchUID.push(e.beacon_uid);
+          newListMerchRange.push(parseInt(e.range));
+        }
+        else if (e.beacon_type && e.beacon_type.name === 'art') {
+          newListArtUID.push(e.beacon_uid);
+          newListArtRange.push(parseInt(e.range));
+        }
+        else if (e.beacon_type && e.beacon_type.name !== 'checkout') {
+          newListOtherUID.push(e.beacon_uid);
+          newListOtherRange.push(parseInt(e.range));
+          newListOtherType.push(e.beacon_type.name);
+        }
+      });
+
+      dispatch({ type: 'BEACONS.SET_LIST_CHECKIN', data: { listUID: newListCheckinUID, listRange: newListCheckinRange } });
+      dispatch({ type: 'BEACONS.SET_LIST_MERCH', data: { listUID: newListMerchUID, listRange: newListMerchRange } });
+      dispatch({ type: 'BEACONS.SET_LIST_ART', data: { listUID: newListArtUID, listRange: newListArtRange } });
+      dispatch({ type: 'BEACONS.SET_LIST_OTHER', data: { listUID: newListOtherUID, listRange: newListOtherRange, listType: newListOtherType } });
+    } else {
+      showLoading('error', 'Initial Beacon error' || result.message);
     }
   }
 
-  // handle music analytics
-  //
-  useTrackPlayerEvents(events, event => {
-    if (event.type === Event.PlaybackTrackChanged) {
-      // console.log('home track changed', event);
-      getCurrentPlaying();
-    }
-  });
-
-  const getCurrentPlaying = async () => {
-    const newCurrent = await TrackPlayer.getCurrentTrack();
-    if (newCurrent != null) {
-      setThisTrack(await TrackPlayer.getTrack(newCurrent));
-    } else {
-      setThisTrack();
-    }
-  };
-
-  const onCheckin = async () => {
-    // console.log('auth pas', auth);
-    // console.log('listBeacon pas', listBeacon);
-
-    if (listBeacon.length === 0) {
+  const onPairingCheckin = async () => {
+    if (stateListCheckinUID.length === 0) {
       showLoading('error', 'Tidak Ada perangkat disekitar');
       return;
     }
 
-    // get listingan tipe gate dari storage
-    let listAddressGateType = [];
-    if (auth && Array.isArray(auth.stateBeacons)) {
-      auth.stateBeacons.map((e) => {
-        if (e.beacon_type && e.beacon_type.name === 'checkin') {
-          listAddressGateType.push({
-            beacon_uid: e.beacon_uid,
-            beacon_type: e.beacon_type.name,
-            range: parseInt(e.range),
-          });
-        }
-      });
-    } else {
-      showLoading('error', 'Tidak Ada konfigurasi perangkat');
-      return;
-    }
-
-    console.log('listAddressGateType', listAddressGateType);
-
-    // cek uid di listen masuk tipe gate / checkin
-    let nearbyBeaconGateAddress = ''; // 'FF:50:53:D3:6B:60'; // mustdelete
-    for (let i = 0; i < listBeacon.length; i++) {
-      const e = listBeacon[i];
-      const isExist = listAddressGateType.filter((f) => f.beacon_uid === e.productAddress && e.productRange <= f.range)[0];
-      console.log('isExist', isExist, e.productRange <= 2);
-      if (isExist) {
-        nearbyBeaconGateAddress = e.productAddress;
-        break;
-      }
-    }
-
-    if (nearbyBeaconGateAddress === '') {
-      showLoading('error', 'Tidak Ada perangkat gerbang disekitar');
-      return;
-    }
-
-    console.log('nearbyBeaconGateAddress', nearbyBeaconGateAddress);
-
     const body = {
-      beacon_uid: nearbyBeaconGateAddress,
+      beacon_uid: stateListCheckinUID[0],
       beacon_type: 'checkin',
     };
 
@@ -334,67 +326,76 @@ const MainHome = ({ navigation, route }) => {
     showLoading(result.status ? 'success' : 'error', result.message);
   }
 
-  const onPairingSetting = async() => {
-    // console.log('auth pas', auth);
-    console.log('listBeacon pas', listBeacon);
-
-    if (listBeacon.length === 0) {
+  const onPairingMerchant = async() => {
+    if (stateListMerchUID.length === 0) {
       return;
     }
 
-    // get listingan tipe gate dari storage
-    let listAddressPostCheckin = [];
-    if (auth && Array.isArray(auth.stateBeacons)) {
-      auth.stateBeacons.map((e) => {
-        if (e.beacon_type && e.beacon_type.name !== 'checkin' && e.beacon_type.name !== 'checkout') {
-          listAddressPostCheckin.push({
-            beacon_uid: e.beacon_uid,
-            beacon_type: e.beacon_type.name,
-            range: parseInt(e.range),
-          });
-        }
-      });
-    } else {
-      return;
-    }
+    let newListMerchant = [];
 
-    console.log('listAddressPostCheckin', listAddressPostCheckin);
-
-    // cek uid di listen masuk tipe gate / checkin
-    let nearbyBeacons = [];
-    for (let i = 0; i < listBeacon.length; i++) {
-      const e = listBeacon[i];
-      const isExist = listAddressPostCheckin.filter((f) => f.beacon_uid === e.productAddress && e.productRange <= f.range)[0];
-      console.log('isExist', isExist);
-      if (isExist) {
-        nearbyBeacons.push(isExist);
-      }
-    }
-
-    if (nearbyBeacons.length === 0) {
-      return;
-    }
-
-    console.log('nearbyBeacons', nearbyBeacons);
-
-    nearbyBeacons.map(async(itemBody) => {
+    stateListMerchUID.map(async(uid, idx) => {
       const body = {
-        beacon_uid: itemBody.beacon_uid,
-        beacon_type: itemBody.beacon_type,
+        beacon_uid: uid,
+        beacon_type: 'merch',
       };
 
-      if (tempAlreadyPairing.includes(itemBody.beacon_uid)) {
+      console.log('body merch pairing', body);
+    
+      const result = await postAPI('user-activity', body);
+      console.log('result merch pairing', result);
+      if (result.status) {
+        newListMerchant.push(result.data);
+      }
+    });
+
+    setListMerchantType(newListMerchant);
+  }
+
+  const onPairingArt = async () => {
+    if (stateListArtUID.length === 0) {
+      return;
+    }
+
+    if (tempCurrentArtPairing.includes(stateListArtUID[0])) {
+      return;
+    }
+
+    const body = {
+      beacon_uid: stateListArtUID[0],
+      beacon_type: 'art',
+    };
+
+    setTempCurrentArtPairing(stateListArtUID[0]);
+
+    console.log('body art pairing', body);
+
+    const result = await postAPI('user-activity', body);
+    console.log('result art pairing', result);
+    if (result.status) {
+      // data art
+    }
+  }
+
+  const onPairingOther = async() => {
+    if (stateListOtherUID.length === 0) {
+      return;
+    }
+
+    stateListOtherUID.map(async(uid, idx) => {
+      const body = {
+        beacon_uid: uid,
+        beacon_type: stateListOtherType[idx],
+      };
+
+      if (tempAlreadyPairing.includes(uid)) {
         console.log('tempAlreadyPairing', tempAlreadyPairing);
       } else {
-        setTempAlreadyPairing(itemBody.beacon_uid);
+        setTempAlreadyPairing(uid);
   
-        console.log('body', itemBody.beacon_uid, body);
+        console.log('body other pairing', body);
     
         const result = await postAPI('user-activity', body);
-        console.log('result itemBody', result);
-        if (result.status) {
-          setListMerchantType([result.data]);
-        }
+        console.log('result other pairing', result);
       }
     });
   }
@@ -419,99 +420,20 @@ const MainHome = ({ navigation, route }) => {
     }
   }
 
-  useEffect(() => {
-    PushNotification.createChannel(
-      {
-        channelId: "helpme-id", // (required)
-        channelName: "Help Me", // (required)
-        channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
-        playSound: true, // (optional) default: true
-        soundName: "warning_alarm.mp3", // (optional) See `soundName` parameter of `localNotification` function
-        importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
-        vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
-      },
-      (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
-    );
-  }, []);
-
-  useEffect(() => {
-    const timeout = thisTrack
-      ? setTimeout(() => {
-        // console.log('thisTrack', thisTrack);
-        GALogEvent(thisTrack.artist, {
-          id: thisTrack.id,
-          product_name: thisTrack.title,
-          user_id: user.userId,
-          method: analyticMethods.view,
-        });
-      }, 1000)
-      : null;
-
-    return () => clearTimeout(timeout);
-  }, [thisTrack]);
-  //
-  // end handle music analytics
-
-  useEffect(() => {
-    fetchPopup();
-
-    // currentSocket.emit('chat_notification');
-
-    // currentSocket.on('chat_notification', res => {
-    //   console.log('res chat_notification', res);
-    //   if (res && res.status) {
-    //     if (chatNotifCount > 0) {
-    //       playNotificationSounds();
-    //     }
-
-    //     setChatNotifCount(res.data.count);
-    //   }
-    // });
-
-    // currentSocket.on('location-tracker-user', res => {
-    //   console.log('res location-tracker-user', res);
-    // });
-
-    // const successCallback = (res) => {
-    //   const ltu = { userId: user.userId, lat: res.coords.latitude, long: res.coords.longitude };
-    //   currentSocket.emit('location-tracker-user', ltu);
-    // };
-
-    // const errorCallback = err => {
-    //   console.log('ini err', err);
-    // };
-
-    // const option = {
-    //   enableHighAccuracy: true,
-    //   timeout: 5000
-    // };
-
-    // Geolocation.watchPosition(successCallback, errorCallback, option);
-  }, [refreshing]);
-
-  useEffect(() => {
-    const variables = {
-      page: 0,
-      itemPerPage: 9999
-    }
-    client.query({
-      query: queryGetNotification,
-      variables,
-    })
-      .then((respone) => {
-        var response = respone['data']['getNotification'];
-        var res = response.filter(function (el) {
-          return el.status === 1 | el.status === 2;
-        });
-        setNotificationCount(res.length)
-        console.log('ini ', res);
-      })
-      .catch((err) => {
-        console.log('ini ', err);
-        console.log(err);
-
-      })
-  }, [isFocused]);
+  // useEffect(() => {
+  //   PushNotification.createChannel(
+  //     {
+  //       channelId: "helpme-id", // (required)
+  //       channelName: "Help Me", // (required)
+  //       channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
+  //       playSound: true, // (optional) default: true
+  //       soundName: "warning_alarm.mp3", // (optional) See `soundName` parameter of `localNotification` function
+  //       importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+  //       vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
+  //     },
+  //     (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+  //   );
+  // }, []);
 
   useEffect(() => {
     if (isFocused) {
@@ -544,27 +466,6 @@ const MainHome = ({ navigation, route }) => {
     setLoadingBanner(false);
   };
 
-  const fetchPopup = () => {
-    // const variables = {
-    //   categoryId: 2,
-    // };
-
-    // Client.query({
-    //   query: queryBannerList,
-    //   variables,
-    // })
-    //   .then(res => {
-    //     console.log('res popup list', res);
-    //     if (Array.isArray(res.data.bannerList)) {
-    //       setDataPopupAds(res.data.bannerList[0]);
-    //     }
-    //     setShowPopupAds(true);
-    //   })
-    //   .catch(err => {
-    //     console.log(err, 'err popup list');
-    //   });
-  };
-
   const fetchData = async () => {
     const result = await getAPI('user-activity');
     console.log('user-activity', result);
@@ -580,7 +481,7 @@ const MainHome = ({ navigation, route }) => {
     }, 2000);
   };
 
-  const colorOutputRange = [Color[accessClient.ColorBgParallax], Color.theme];
+  const colorOutputRange = [Color.theme, Color.theme];
 
   const backgroundInterpolate = animationValue.interpolate({
     inputRange: [0, 100],
@@ -603,8 +504,7 @@ const MainHome = ({ navigation, route }) => {
 
   const spaceContentSize = 8;
 
-  // console.log('listBeacon', listBeacon);
-
+  // console.log('localStoragBeacons', localStoragBeacons);
   // console.log('auth.checkin', auth);
 
   return (
@@ -810,13 +710,6 @@ const MainHome = ({ navigation, route }) => {
             </View>
           </View> */}
 
-          {/* hide balance */}
-          {/* {accessClient.MainHome.showWidgetBalance && (
-            <Container paddingVertical={16}>
-              <WidgetBalance />
-            </Container>
-          )} */}
-
           {isCheckin &&
             <Container padding={16} paddingTop={8}>
               <Container padding={14} color={Color.successLight} radius={8}>
@@ -858,7 +751,7 @@ const MainHome = ({ navigation, route }) => {
             </Container>
           }
 
-          {!isCheckin && listBeacon.length > 0 && <Container padding={16} paddingTop={8}>
+          {!isCheckin && stateListCheckinUID.length > 0 && <Container padding={16} paddingTop={8}>
             <Container padding={14} color={Color.warningLight} radius={8}>
               <Row justify='space-between'>
                 <Row>
@@ -891,26 +784,6 @@ const MainHome = ({ navigation, route }) => {
           </Container>
 
           <Divider height={spaceContentSize} />
-
-          {/* <Line color={Color.border} width={width} /> */}
-
-          {/* <Container paddingVertical={spaceContentSize}>
-            <MemberRank />
-          </Container> */}
-
-          {/* <Line color={Color.border} width={width} /> */}
-
-          {/* {accessClient.MainHome.showMenuHome && <WidgetMenuHome
-            showMore
-            onPress={(item) => {
-              console.log(item, 'item');
-
-              if (item.code === 'CREATE_POST') {
-                modalPostingRef.current.open();
-                return;
-              }
-            }}
-          />} */}
 
           {auth && auth.user && auth.user.role && auth.user.role.value === 0 && <Container padding={16} paddingTop={8}>
             <Container padding={14} color={Color.border} radius={8}>
@@ -956,10 +829,6 @@ const MainHome = ({ navigation, route }) => {
             showSeeAllText={false}
           />
 
-          {/* {accessClient.MainHome.showMenuHome && <Line color={Color.border} width={width} />} */}
-
-          {/* <Divider height={spaceContentSize} /> */}
-
           {/* <HighlightContentProduct
             productCategory='FORUM'
             name='Forum'
@@ -967,94 +836,6 @@ const MainHome = ({ navigation, route }) => {
             nav='ForumScreen'
             refresh={refreshing || isFocused}
           /> */}
-
-          {/* {accessClient.MainHome.showListAuction && (
-            <HighlightLelang
-              title={`Sedang Berlangsung`}
-              nav='LiveLelangScreen'
-              prodStatus='ONGOING'
-            />
-          )} */}
-
-          {/* {accessClient.MainHome.showListSoonAuction && (
-            <HighlightLelang
-              title={`Akan Datang`}
-              nav='LiveLelangScreen'
-              prodStatus='WILLCOME'
-            />
-          )} */}
-
-          {/* hide banner promo */}
-          {/* {accessClient.MainHome.showListPromo && (
-            <View style={{marginBottom: 40}}>
-              <PostingHeader title="Promo Untukmu" showSeeAllText={false} />
-              <Divider height={8} />
-              <CarouselView
-                delay={5000}
-                showIndicator
-                style={{
-                  width,
-                  height: getSizeByRatio({width: width - 32, ratio: 9 / 21})
-                    .height,
-                }}>
-                {[0].map((e, idx) => {
-                  return (
-                    <View
-                      key={idx}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        paddingHorizontal: 16,
-                      }}>
-                      <Container
-                        padding={16}
-                        radius={16}
-                        color={Color.textButtonInline}
-                        style={{...shadowStyle}}>
-                        <Row>
-                          <Col size={5} align="flex-start">
-                            <Image
-                              source={ImagesPath.logolelanghome}
-                              style={{height: width / 3, width: '100%'}}
-                              resizeMode="contain"
-                            />
-                          </Col>
-                          <Col
-                            size={7}
-                            align="flex-start"
-                            justifyContent="center">
-                            <Text size={12} align="left">
-                              Sekarang di Tribes Social {'\n'} udah ada fitur{' '}
-                              <Text type="bold">lelang</Text> loh !
-                            </Text>
-                            <Button
-                              onPress={() => navigation.navigate('Lelang')}
-                              style={{
-                                backgroundColor: Color.primary,
-                                minHeight: 25,
-                                marginTop: 8,
-                                borderRadius: 20,
-                              }}>
-                              <Row>
-                                <Text color={Color.textButtonInline} size={10}>
-                                  Selengkapnya
-                                  <AntDesign
-                                    name="arrowright"
-                                    color={Color.textButtonInline}
-                                    style={{alignSelf: 'center'}}
-                                  />
-                                </Text>
-                              </Row>
-                            </Button>
-                          </Col>
-                        </Row>
-                      </Container>
-                    </View>
-                  );
-                })}
-              </CarouselView>
-            </View>
-          )} */}
 
           {/* <HighlightContentProduct
             productCategory='EMERGENCY'
@@ -1110,10 +891,6 @@ const MainHome = ({ navigation, route }) => {
             refresh={refreshing || isFocused}
           /> */}
 
-          {/* <MusikTerbaru /> */}
-
-          {/* <MusikAlbum /> */}
-
           {/* isFocused handle android navigate crash from home */}
           {/* {isFocused && <HighlightContentProduct
             productCategory='YOUTUBE_VIDEO'
@@ -1132,59 +909,8 @@ const MainHome = ({ navigation, route }) => {
             refresh={refreshing || isFocused}
             style={{ paddingHorizontal: 0 }}
           /> */}
-
-          {/* {accessClient.MainHome.showListEbookNewer && (
-            <View style={{ paddingVertical: 12 }}>
-              <PostingHeader
-                title="Rilisan Terbaru"
-                showSeeAllText
-                onSeeAllPress={() => navigation.navigate('Ebook')}
-                productCategory={'NEWEST_EBOOK'}
-              />
-
-              <FlatList
-                data={[
-                  { image: ImagesPath.ebook1 },
-                  { image: ImagesPath.ebook2 },
-                  { image: ImagesPath.ebook1 },
-                ]}
-                contentContainerStyle={{
-                  marginTop: 8,
-                  paddingHorizontal: 8,
-                }}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      toggleModal();
-                    }}
-                    style={{
-                      width: width / 2.2,
-                      aspectRatio: 14/20,
-                      paddingHorizontal: 8,
-                    }}
-                  >
-                    <Image
-                      source={item.image}
-                      style={{
-                        borderRadius: 8,
-                        width: '100%',
-                        height: '100%',
-                      }}
-                    />
-                  </TouchableOpacity>
-                )}
-                horizontal={true}
-              />
-            </View>
-          )} */}
         </Container>
       </ScrollView>
-
-      {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}
-      {/* <Box size={70} style={{position: 'absolute', bottom: -40}} /> */}
-      {/*  */}
-
-      <FloatingMusicPlayer ref={floatingMusicPlayerRef} />
 
       <ModalPosting
         ref={modalPostingRef}
@@ -1194,74 +920,70 @@ const MainHome = ({ navigation, route }) => {
           modalPostingRef.current.close();
         }}
       />
-
-      {dataPopupAds && (
-        <Modal
-          isVisible={tempShowPopupAds && showPopupAds}
-          onBackdropPress={() => {
-            tempShowPopupAds = false;
-            setShowPopupAds(false);
-          }}
-          animationIn="slideInDown"
-          animationOut="slideOutDown"
-          backdropColor={Color.semiwhite}>
+      
+      {/* <Modal
+        isVisible={tempShowPopupAds}
+        onBackdropPress={() => {
+          tempShowPopupAds = false;
+        }}
+        animationIn="slideInDown"
+        animationOut="slideOutDown"
+        backdropColor={Color.semiwhite}>
+        <View
+          style={{ width: '100%', aspectRatio: 1, borderRadius: 16, backgroundColor: Color.primarySoft, }}
+        >
           <View
-            style={{ width: '100%', aspectRatio: 1, borderRadius: 16, backgroundColor: Color.primaryDark, }}
+            style={{
+              flex: 1,
+              padding: 32,
+              alignItems: 'center',
+            }}
           >
             <View
               style={{
-                flex: 1,
-                padding: 32,
-                alignItems: 'center',
+                flex: 1
               }}
             >
               <View
                 style={{
-                  flex: 1
+                  height: '100%',
+                  aspectRatio: 1,
                 }}
               >
-                <View
+                <Image
+                  source={imageAssets.shake}
                   style={{
                     height: '100%',
-                    aspectRatio: 1,
+                    width: '100%',
                   }}
-                >
-                  <Image
-                    source={imageAssets.shake}
-                    style={{
-                      height: '100%',
-                      width: '100%',
-                    }}
-                  />
-                </View>
-              </View>
-
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: 'center',
-                  justifyContent: 'space-evenly',
-                }}
-              >
-                <Text>Shake your device to verify the tickets</Text>
-                <Container width='50%'>
-                  <Button
-                    onPress={() => {
-                      tempShowPopupAds = false;
-                      setShowPopupAds(false);
-                    }}
-                  >
-                    I Understand
-                  </Button>
-                </Container>
+                />
               </View>
             </View>
+
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'space-evenly',
+              }}
+            >
+              <Text>Shake your device to verify the tickets</Text>
+              <Container width='50%'>
+                <Button
+                  onPress={() => {
+                    tempShowPopupAds = false;
+                  }}
+                >
+                  I Understand
+                </Button>
+              </Container>
+            </View>
           </View>
-        </Modal>
-      )}
+        </View>
+      </Modal> */}
 
       <Modal
-        isVisible={!isCheckin && tempShowFloatingBeacon && listBeacon.length > 0}
+        isVisible={!isCheckin && tempShowFloatingBeacon && stateListCheckinUID.length > 0}
         onBackdropPress={() => {
           tempShowFloatingBeacon = false;
         }}
@@ -1369,6 +1091,7 @@ const MainHome = ({ navigation, route }) => {
                     <View key={idx} style={{ width: '100%', padding: 10, flexDirection: 'row', borderWidth: 1, borderColor: Color.textSoft, borderRadius: 8}}>
                       <View style={{aspectRatio: 1}}>
                         <Image
+                          source={{ uri: Array.isArray(item.images) && item.images.length > 0 ? item.images[0] : '' }}
                           style={{
                             width: '100%',
                             height: '100%',
@@ -1408,14 +1131,6 @@ const MainHome = ({ navigation, route }) => {
           </View>
         </View>
       </Modal>
-
-      <FloatingBeaconDetection
-        visible={listBeacon.length > 0 && showListBeacon}
-        onClose={() => {
-          setShowListBeacon(false);
-        }}
-        data={listBeacon}
-      />
 
       <Modal
         isVisible={isModalVisible}

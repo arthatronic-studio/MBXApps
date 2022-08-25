@@ -9,6 +9,7 @@ import uploadChunkState from './upload/uploadChunkState';
 import surveyPasar from './survey/pasar';
 import Event from './history/event';
 import Auth2 from './user/auth2';
+import Beacons from './user/beacons';
 
 const config = {
   key: 'root',
@@ -24,6 +25,7 @@ const reducer = persistCombineReducers(config, {
   surveyPasar,
   'history.event': Event,
   'auth': Auth2,
+  'beacons': Beacons,
 });
 
 export default reducer;
