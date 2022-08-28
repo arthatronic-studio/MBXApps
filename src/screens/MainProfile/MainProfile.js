@@ -30,7 +30,7 @@ import {
 import {redirectTo} from '@src/utils';
 import {shadowStyle} from '@src/styles';
 import {iconSplash, imageCardOrnament} from '@assets/images';
-import {Box, Container, Divider} from 'src/styled';
+import {Box, Circle, Container, Divider, Line} from 'src/styled';
 import Clipboard from '@react-native-community/clipboard';
 import ModalinputCode from 'src/components/ModalInputCode';
 import ModalCardMember from 'src/components/ModalCardMember';
@@ -427,7 +427,9 @@ const MainProfile = ({navigation, route}) => {
   return (
     <Scaffold
       loadingProps={loadingProps}
-      header={<HeaderBig title="Profile" style={{paddingTop: 16}} />}>
+      // header={<HeaderBig title="Profile" style={{paddingTop: 16}} />}
+      showHeader={false}
+    >
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* <View style={{alignItems: 'center'}}>
           <TouchableOpacity onPress={() => setModalVirtual(true)}>
@@ -474,124 +476,119 @@ const MainProfile = ({navigation, route}) => {
         </View> */}
 
         {/* user fast info */}
-        <Container paddingHorizontal={16} marginTop={16}>
+        <Container padding={16} marginTop={16}>
           <View
             style={{
-              backgroundColor: Color.textInput,
-              borderRadius: 8,
-              padding: 16,
-              ...shadowStyle,
+              flexDirection: 'row',
+              width: '100%',
+              justifyContent: 'space-between',
+              alignItems: 'center',
             }}>
+            {user && (
+              <Image
+                source={{uri: user.photoProfile}}
+                style={{
+                  width: width * 0.16,
+                  height: width * 0.16,
+                  backgroundColor: Color.border,
+                  borderRadius: 50,
+                }}
+              />
+            )}
+
             <View
               style={{
-                flexDirection: 'row',
-                width: '100%',
+                flex: 1,
+                paddingHorizontal: 12,
+                alignItems: 'flex-start',
                 justifyContent: 'space-between',
               }}>
-              {user && (
-                <Image
-                  source={{uri: user.photoProfile}}
-                  style={{
-                    width: width * 0.12,
-                    height: width * 0.12,
-                    backgroundColor: Color.border,
-                    borderRadius: 50,
-                  }}
-                />
+              {auth && auth.user ? (
+                <Text size={22} align='left' type="bold" letterSpacing={0.18} numberOfLines={2}>
+                  {auth.user.name}
+                </Text>
+              ) : (
+                <Text size={22} align='left' type="bold" letterSpacing={0.18} numberOfLines={2}>
+                  Tamu, Silakan Login
+                </Text>
               )}
-
-              {accessClient.isRRID && <View
-                style={{
-                  flex: 3,
-                  paddingLeft: 180,
-                }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    setModalCardMember(true);
-                  }}
-                  style={{
-                    paddingVertical: 10,
-                    borderRadius: 120,
-                    backgroundColor: Color.primary,
-                  }}>
-                  <Text size={12} type="bold" color={Color.textInput}>
-                    Card Member
-                  </Text>
-                </TouchableOpacity>
-              </View>}
             </View>
 
-            <TouchableOpacity
-              onPress={() => {}}
-              style={{
-                width: '100%',
-                marginTop: 16,
-                flexDirection: 'row',
-              }}>
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: 'flex-start',
-                  justifyContent: 'space-between',
-                }}>
-                {auth && auth.user ? (
-                  <Text type="bold" letterSpacing={0.18}>
-                    Halo {auth.user.name}
-                  </Text>
-                ) : (
-                  <Text type="bold" letterSpacing={0.18}>
-                    Halo Tamu, Silakan Login
-                  </Text>
-                )}
-
-                {/* {accessClient.MainProfile.showStatusMember &&
-                  user &&
-                  !user.guest && (
-                    <Text size={8} letterSpacing={0.18}>
-                      Status Member:&nbsp;
-                      <Text
-                        size={8}
-                        letterSpacing={0.18}
-                        color={
-                          user.organizationId ? Color.success : Color.error
-                        }>
-                        {user.organizationId
-                          ? 'Anggota ' + user.organizationName
-                          : memberCheck.message}
-                      </Text>
-                    </Text>
-                  )} */}
-              </View>
-              {user && !user.isEmailVerify && <TouchableOpacity onPress={() => sendVerify()} style={{ paddingVertical: 10, backgroundColor: Color.primary , borderRadius: 120, justifyContent: 'center', alignItems: 'center', width: 100 }}>
-                  <Text size={12} color='#fff'  type="semibold">Verify Email</Text>
-              </TouchableOpacity>}
-             
-
-              {/* {accessClient.MainProfile.showButtonJoinCommunity &&
-                user &&
-                !user.organizationId && (
-                  <View
-                    style={{
-                      flex: 1,
-                      paddingLeft: 16,
-                    }}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        setModalInputCode(true);
-                      }}
-                      style={{
-                        paddingVertical: 10,
-                        borderRadius: 120,
-                        backgroundColor: Color.primary,
-                      }}>
-                      <Text size={12} type="bold" color={Color.textInput}>
-                        Gabung Komunitas
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                )} */}
+            <TouchableOpacity onPress={() => sendVerify()} style={{flexDirection: 'row', padding: 10, backgroundColor: Color.primarySoft, borderRadius: 120, justifyContent: 'center', alignItems: 'center' }}>
+              <Circle color={Color.border} size={16} />
+              <Divider width={8} />
+              <Text size={12} type="semibold">Edit Profile</Text>
             </TouchableOpacity>
           </View>
+        </Container>
+
+        <Line height={8} width='100%' color='#F4F4F4' />
+
+        <Container padding={16}>
+          <View>
+            <Text align='left' size={12} type='medium'>Transaksi</Text>
+          </View>
+          <View style={{}}>
+            <View style={{flexDirection: 'row', paddingTop: 24}}>
+              <Circle color={Color.border} size={16} />
+              <Divider width={8} />
+              <Text align='left'>Keranjang</Text>
+            </View>
+            <View style={{flexDirection: 'row', paddingTop: 24}}>
+              <Circle color={Color.border} size={16} />
+              <Divider width={8} />
+              <Text align='left'>Riwayat</Text>
+            </View>
+          </View>
+        </Container>
+
+        <Line height={8} width='100%' color='#F4F4F4' />
+
+        <Container padding={16}>
+          <View>
+            <Text align='left' size={12} type='medium'>Seputar Aplikasi</Text>
+          </View>
+          <View style={{}}>
+            <View style={{flexDirection: 'row', paddingTop: 24}}>
+              <Circle color={Color.border} size={16} />
+              <Divider width={8} />
+              <Text align='left'>Pengaturan</Text>
+            </View>
+            <View style={{flexDirection: 'row', paddingTop: 24}}>
+              <Circle color={Color.border} size={16} />
+              <Divider width={8} />
+              <Text align='left'>Syarat & Ketentuan</Text>
+            </View>
+            <View style={{flexDirection: 'row', paddingTop: 24}}>
+              <Circle color={Color.border} size={16} />
+              <Divider width={8} />
+              <Text align='left'>Bantuan</Text>
+            </View>
+            <View style={{flexDirection: 'row', paddingTop: 24}}>
+              <Circle color={Color.border} size={16} />
+              <Divider width={8} />
+              <Text align='left'>FAQ</Text>
+            </View>
+          </View>
+        </Container>
+
+        <Line height={8} width='100%' color='#F4F4F4' />
+
+        <Container padding={16}>
+          <TouchableOpacity
+            onPress={() => {
+              onPressExit();
+            }}
+            style={{
+              flexDirection: 'row',
+            }}
+          >
+            <Circle color={Color.error} size={16} />
+            <Divider width={8} />
+            <Text color={Color.error} align='left'>
+              Logout
+            </Text>
+          </TouchableOpacity>
         </Container>
 
         {/* card */}
@@ -737,7 +734,7 @@ const MainProfile = ({navigation, route}) => {
           </View>
         </Container> */}
 
-        <Container paddingHorizontal={16} paddingTop={32}>
+        {/* <Container paddingHorizontal={16} paddingTop={32}>
           <TouchableOpacity
             onPress={() => {
               onPressExit();
@@ -747,9 +744,9 @@ const MainProfile = ({navigation, route}) => {
               Logout
             </Text>
           </TouchableOpacity>
-        </Container>
+        </Container> */}
 
-        <Divider />
+        {/* <Divider /> */}
       </ScrollView>
 
       {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}

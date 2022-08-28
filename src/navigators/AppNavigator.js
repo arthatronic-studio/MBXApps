@@ -260,6 +260,10 @@ import OrderEventDetail from 'src/screens/Posting/Event/OrderEventDetail';
 import VisitorScreen from 'src/screens/Security/VisitorScreen';
 import VisitorDetailScreen from 'src/screens/Security/VisitorDetailScreen';
 
+// beacon
+import DetailTenantScreen from 'src/screens/Beacon/DetailTenantScreen';
+import DetailArtScreen from 'src/screens/Beacon/DetailArtScreen';
+
 const { Navigator, Screen } = createStackNavigator();
 const MainPage = MainHome;
 	// accessClient.BottomTabsNavigator.type === 'komoto'
@@ -520,6 +524,9 @@ function MainStackNavigator() {
       {/* security */}
       <Screen name="VisitorScreen" component={VisitorScreen} />
       <Screen name="VisitorDetailScreen" component={VisitorDetailScreen} />
+      {/* beacon */}
+      <Screen name="DetailTenantScreen" component={DetailTenantScreen} />
+      <Screen name="DetailArtScreen" component={DetailArtScreen} />
     </Navigator>
   );
 }

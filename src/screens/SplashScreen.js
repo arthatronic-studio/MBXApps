@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {View, Image, useWindowDimensions} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {Scaffold, Text, useColor} from '@src/components';
+import {Button, Scaffold, Text, useColor, usePopup} from '@src/components';
 import {bgSplashFooter, bgSplashHeader, iconSplash} from '@assets/images';
 import { Container } from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
+import { stateBeaconSetting } from 'src/api-rest/stateBeaconSetting';
 
 const SplashScreen = ({navigation, route}) => {
   const {width, height} = useWindowDimensions();
@@ -14,6 +15,9 @@ const SplashScreen = ({navigation, route}) => {
   const user = useSelector(state => state['user.auth'].login.user);
   const auth = useSelector(state => state['auth']);
   const dispatch = useDispatch();
+  const [popupProps, showPopup] = usePopup();
+
+  const [errorSettingBeacon, setErrorSettingBeacon] = useState(false);
 
   console.log('auth splash', auth);
 
@@ -23,12 +27,28 @@ const SplashScreen = ({navigation, route}) => {
 
     setTimeout(() => {
       if (auth.token) {
-        redirectTo('MainPage');
+        handleNavigate();
       } else {
         redirectTo('OnBoardingScreen');
       }
     }, 3000);
   }, []);
+
+  const handleNavigate = async() => {
+    const beaconSetting = await stateBeaconSetting();
+
+    if (beaconSetting) {
+      redirectTo('MainPage');
+
+      setErrorSettingBeacon(false);
+
+      return;
+    }
+
+    setErrorSettingBeacon(true);
+
+    showPopup('Beacon initial error, silakan muat ulang', 'error');
+  }
 
   const redirectTo = nav => {
     navigation.dispatch(
@@ -46,6 +66,7 @@ const SplashScreen = ({navigation, route}) => {
         backgroundColor: Color.primary
       }}
       statusBarColor={Color.primary}
+      popupProps={popupProps}
     >
       <View style={{position: 'absolute', width: '100%', aspectRatio: 1 }}>
         <Image
@@ -83,6 +104,14 @@ const SplashScreen = ({navigation, route}) => {
         <Text size={11} type='bold'>
           M Bloc X
         </Text>
+
+        {errorSettingBeacon && <View style={{width: '100%', paddingTop: 16}}>
+          <Button
+            onPress={() => handleNavigate()}
+          >
+            Muat Ulang
+          </Button>
+        </View>}
       </Container>
 
       <View style={{position: 'absolute', bottom: 0, width: '25%', aspectRatio: 1 }}>

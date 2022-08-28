@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createRef } from 'react';
 import { View, TextInput, Keyboard, ScrollView, useWindowDimensions, Image } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Scaffold from '@src/components/Scaffold';
 import Text from '@src/components/Text';
@@ -22,11 +22,14 @@ import { Header } from 'src/components';
 import { statusBarHeight } from 'src/utils/constants';
 import { FormatDuration } from 'src/utils';
 import { postNonAuth } from 'src/api-rest/httpService';
+import { stateBeaconSetting } from 'src/api-rest/stateBeaconSetting';
 
 const initialCountdown = 60 * 1;
 
 const OtpScreen = ({ navigation, route }) => {
     const { params } = route;
+
+    const auth = useSelector(state => state['auth']);
 
     const [listTextInput, setListTextInput] = useState([]);
     const [activeIndex, setActiveIndex] = useState();
@@ -34,6 +37,7 @@ const OtpScreen = ({ navigation, route }) => {
     const [showModalPopup, setShowModalPopup] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [fcmToken, setFcmToken] = useState('');
+    const [errorSettingBeacon, setErrorSettingBeacon] = useState(false);
 
     const { Color } = useColor();
     const { height } = useWindowDimensions();
@@ -154,6 +158,12 @@ const OtpScreen = ({ navigation, route }) => {
     }
 
     const onSubmit = async() => {
+        if (errorSettingBeacon) {
+            handleNavigate(auth.user.isRegistered);
+
+            return;
+        }
+
         let otp = '';
 
         listTextInput.map((e) => {
@@ -191,17 +201,33 @@ const OtpScreen = ({ navigation, route }) => {
                 type: 'AUTH.SET_USER',
                 data: result.data.user,
             });
-            
-            if (result.data.user.isRegistered) {
-                redirectTo('MainPage');
-            } else {
-                navigation.navigate('RegisterScreen');
-            }
+
+            handleNavigate(result.data.user.isRegistered);
 
             return;
         }
 
         showPopup(result.message, 'error');
+    }
+
+    const handleNavigate = async(isRegistered) => {
+        const beaconSetting = await stateBeaconSetting();
+
+        if (beaconSetting) {
+            if (isRegistered) {
+                redirectTo('MainPage');
+            } else {
+                navigation.navigate('RegisterScreen');
+            }
+
+            setErrorSettingBeacon(false);
+
+            return;
+        }
+
+        setErrorSettingBeacon(true);
+
+        showPopup('Beacon initial error, silakan klik Verifikasi ulang', 'error');
     }
 
     return (

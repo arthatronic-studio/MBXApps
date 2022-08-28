@@ -9,6 +9,8 @@ import {
   Platform,
   DeviceEventEmitter,
   NativeEventEmitter,
+  PermissionsAndroid,
+  ActivityIndicator,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -19,6 +21,7 @@ import { useIsFocused } from '@react-navigation/native';
 import Modal from 'react-native-modal';
 import Kontakt, { KontaktModule } from 'react-native-kontaktio';
 import RNShake from 'react-native-shake';
+import BluetoothStateManager from 'react-native-bluetooth-state-manager';
 
 import ImagesPath from 'src/components/ImagesPath';
 import {
@@ -42,13 +45,12 @@ import FloatingBeaconDetection from 'src/components/Modal/FloatingBeaconDetectio
 import { getAPI, postAPI } from 'src/api-rest/httpService';
 import HighlightEvent from 'src/components/Event/HighlightEvent';
 import { stateUpdateProfile } from 'src/api-rest/stateUpdateProfile';
-const { connect, init, startDiscovery, startScanning } = Kontakt;
+const { connect, init, startDiscovery, startScanning, isScanning } = Kontakt;
 
 const kontaktEmitter = new NativeEventEmitter(KontaktModule);
 const isAndroid = Platform.OS === 'android';
 
 let tempShowPopupAds = true;
-let tempShowFloatingBeacon = true;
 
 const MainHome = ({ navigation, route }) => {
   const auth = useSelector(state => state['auth']);
@@ -65,8 +67,9 @@ const MainHome = ({ navigation, route }) => {
   const isFocused = useIsFocused();
   const modalPostingRef = useRef();
   const { width, height } = useWindowDimensions();
-  const [loadingProps, showLoading] = useLoading();
+  const [loadingProps, showLoading, hideLoading] = useLoading();
 
+  const [stateListAllBeacons, setStateListAllBeacons] = useState([]);
   const [stateListCheckinUID, setStateListCheckinUID] = useState([]);
   const [stateListMerchUID, setStateListMerchUID] = useState([]);
   const [stateListArtUID, setStateListArtUID] = useState([]);
@@ -75,36 +78,75 @@ const MainHome = ({ navigation, route }) => {
 
   const [listMerchantType, setListMerchantType] = useState([]);
   const [tempAlreadyPairing, setTempAlreadyPairing] = useState([]);
-  const [tempCurrentArtPairing, setTempCurrentArtPairing] = useState('');
+
+  const [listResultArtType, setListResultArtType] = useState([]);
+  const [tempCurrentArtPairing, setTempCurrentArtPairing] = useState([]);
+
+  const [hasPermissionBluetooth, setHasPermissionBluetooth] = useState(false);
+  const [isActiveBluetooth, setIsActiveBluetooth] = useState(false);
+
+  const [modalLoading, setModalLoading] = useState(false);
+  const [modalFloatingBeacon, setModalFloatingBeacon] = useState(true);
+  const [modalSuccessCheckin, setModalSuccessCheckin] = useState(false);
 
   const isCheckin = auth && auth.user && auth.user.isCheckin;
 
+  const isSecurity = auth && auth.user && auth.user.role && auth.user.role.value == 2;
+
   useEffect(() => {
-    beaconFetch();
+    BluetoothStateManager.onStateChange((bluetoothState) => {
+      console.log('bluetoothState', bluetoothState);
+      if (bluetoothState === 'PoweredOn') {
+        setIsActiveBluetooth(true);
+      } else {
+        setIsActiveBluetooth(false);
+      }
+    }, true);
   }, []);
 
   useEffect(() => {
+    initialConfig();
+    requestBluetoothPermission();
+    // beaconSetup();
+  }, []);
+
+  const initialConfig = async() => {
+    await BluetoothStateManager.requestToEnable();
+
+    const _scanning = await isScanning();
+    console.log('_scanning', _scanning);
+    if (!_scanning) {
+      beaconSetup();
+    }
+  }
+
+  useEffect(() => {
     const cond = (
-      localStoragBeacons &&
-      Array.isArray(localStoragBeacons.listCheckinUID) && localStoragBeacons.listCheckinUID.length > 0 && 
-      Array.isArray(localStoragBeacons.listCheckinRange) && localStoragBeacons.listCheckinRange.length > 0 && 
-      Array.isArray(localStoragBeacons.listMerchUID) && localStoragBeacons.listMerchUID.length > 0 && 
-      Array.isArray(localStoragBeacons.listMerchRange) && localStoragBeacons.listMerchRange.length > 0 && 
-      Array.isArray(localStoragBeacons.listArtUID) && localStoragBeacons.listArtUID.length > 0 && 
-      Array.isArray(localStoragBeacons.listArtRange) && localStoragBeacons.listArtRange.length > 0 && 
-      Array.isArray(localStoragBeacons.listOtherUID) && localStoragBeacons.listOtherUID.length > 0 && 
-      Array.isArray(localStoragBeacons.listOtherRange) && localStoragBeacons.listOtherRange.length > 0 && 
-      Array.isArray(localStoragBeacons.listOtherType) && localStoragBeacons.listOtherType.length > 0
+      localStoragBeacons
+      // &&
+      // Array.isArray(localStoragBeacons.listCheckinUID) && localStoragBeacons.listCheckinUID.length > 0 && 
+      // Array.isArray(localStoragBeacons.listCheckinRange) && localStoragBeacons.listCheckinRange.length > 0 && 
+      // Array.isArray(localStoragBeacons.listMerchUID) && localStoragBeacons.listMerchUID.length > 0 && 
+      // Array.isArray(localStoragBeacons.listMerchRange) && localStoragBeacons.listMerchRange.length > 0
+      // Array.isArray(localStoragBeacons.listArtUID) && localStoragBeacons.listArtUID.length > 0 && 
+      // Array.isArray(localStoragBeacons.listArtRange) && localStoragBeacons.listArtRange.length > 0 && 
+      // Array.isArray(localStoragBeacons.listOtherUID) && localStoragBeacons.listOtherUID.length > 0 && 
+      // Array.isArray(localStoragBeacons.listOtherRange) && localStoragBeacons.listOtherRange.length > 0 && 
+      // Array.isArray(localStoragBeacons.listOtherType) && localStoragBeacons.listOtherType.length > 0
     );
 
-    const timeout = cond ? setTimeout(() => {
+    if (cond) {
       beaconSetup();
-    }, 3000) : null;
-
-    return () => {
-      clearTimeout(timeout);
     }
-  }, [isCheckin, localStoragBeacons]);
+
+    // const timeout = cond ? setTimeout(() => {
+    //   beaconSetup();
+    // }, 1000) : null;
+
+    // return () => {
+    //   clearTimeout(timeout);
+    // }
+  }, [isCheckin, isActiveBluetooth, localStoragBeacons]);
 
   useEffect(() => {
     const shakeSubs = RNShake.addListener(() => {
@@ -120,17 +162,19 @@ const MainHome = ({ navigation, route }) => {
     }
   }, [isCheckin, stateListCheckinUID, stateListMerchUID]);
 
+  console.log('listMerchantType', listMerchantType);
+
   useEffect(() => {
-    const timeout = isCheckin && stateListArtUID.length > 0 ?
+    const timeout = isCheckin && stateListArtUID.length > 0 && isFocused && listMerchantType.length === 0 && !modalLoading ?
       setTimeout(() => {
         onPairingArt();
-      }, 3000)
+      }, 2000)
     : null;
 
     return () => {
       clearTimeout(timeout);
     }
-  }, [isCheckin, stateListArtUID, tempCurrentArtPairing]);
+  }, [isCheckin, stateListArtUID, tempCurrentArtPairing, isFocused, listMerchantType, modalLoading]);
 
   useEffect(() => {
     const timeout = isCheckin && stateListOtherUID.length > 0 ?
@@ -149,6 +193,7 @@ const MainHome = ({ navigation, route }) => {
     if (isAndroid) {
       // Android
       // const granted = await requestLocationPermission();
+      
       // if (granted) {
       await connect();
       await startScanning();
@@ -168,9 +213,16 @@ const MainHome = ({ navigation, route }) => {
 
     // Add beacon listener
     if (isAndroid) {
+      console.log('beaconHere outside');
+      DeviceEventEmitter.addListener('beaconDidAppear', ({ beacons, region }) => {
+        console.log('beaconDidAppear', beacons);
+      });
+
       DeviceEventEmitter.addListener('beaconsDidUpdate', ({ beacons, region }) => {
         // console.log('beaconsDidUpdate', beacons, region);
         // console.log('beaconsDidUpdate', beacons);
+
+        console.log('beaconHere');
 
         if (Array.isArray(beacons)) {
           let newArr = [];
@@ -183,6 +235,21 @@ const MainHome = ({ navigation, route }) => {
           beacons.map((e, i) => {
             // console.log('full info beacon', e);
 
+            const strength = 4;
+            const rumusRSSI = ((-69 - (e.rssi)) / (10*strength));
+            const productRange = Math.pow(10, rumusRSSI) * 100;
+
+            const rangeForCompare = productRange - 50;
+
+            console.log('productRange', productRange);
+
+            newArr.push({
+              productAddress: e.address,
+              productRange,
+              productName: e.name,
+              productUUID: e.uuid,
+            });
+
             const isCheckinType = localStoragBeacons.listCheckinUID.indexOf(e.address);
             const isMerchType = localStoragBeacons.listMerchUID.indexOf(e.address);
             const isArtType = localStoragBeacons.listArtUID.indexOf(e.address);
@@ -190,35 +257,35 @@ const MainHome = ({ navigation, route }) => {
 
             // type beacon yang masuk kondisi checkin (harus checkin dulu)
             if (isCheckin) {
-              if (isMerchType !== -1 && Math.round(e.accuracy) <= localStoragBeacons.listMerchRange[isMerchType]) {
-                newArr.push({
-                  productAddress: e.address,
-                  productRange: Math.round(e.accuracy),
-                  productName: e.name,
-                  productUUID: e.uuid,
-                });
+              if (isMerchType !== -1 && rangeForCompare < localStoragBeacons.listMerchRange[isMerchType]) {
+                // newArr.push({
+                //   productAddress: e.address,
+                //   productRange,
+                //   productName: e.name,
+                //   productUUID: e.uuid,
+                // });
 
                 newMerchUID.push(e.address);
               }
 
-              if (isArtType !== -1 && Math.round(e.accuracy) <= localStoragBeacons.listArtRange[isArtType]) {
-                newArr.push({
-                  productAddress: e.address,
-                  productRange: Math.round(e.accuracy),
-                  productName: e.name,
-                  productUUID: e.uuid,
-                });
+              if (isArtType !== -1 && rangeForCompare < localStoragBeacons.listArtRange[isArtType]) {
+                // newArr.push({
+                //   productAddress: e.address,
+                //   productRange,
+                //   productName: e.name,
+                //   productUUID: e.uuid,
+                // });
 
                 newArtUID.push(e.address);
               }
 
-              if (isOtherType !== -1 && Math.round(e.accuracy) <= localStoragBeacons.listOtherRange[isOtherType]) {
-                newArr.push({
-                  productAddress: e.address,
-                  productRange: Math.round(e.accuracy),
-                  productName: e.name,
-                  productUUID: e.uuid,
-                });
+              if (isOtherType !== -1 && rangeForCompare < localStoragBeacons.listOtherRange[isOtherType]) {
+                // newArr.push({
+                //   productAddress: e.address,
+                //   productRange,
+                //   productName: e.name,
+                //   productUUID: e.uuid,
+                // });
 
                 newOtherUID.push(e.address);
                 newOtherType.push(localStoragBeacons.listOtherType[isOtherType]);
@@ -226,13 +293,13 @@ const MainHome = ({ navigation, route }) => {
             }
             // type beacon yang masuk kondisi non checkin
             else {
-              if (isCheckinType !== -1 && Math.round(e.accuracy) <= localStoragBeacons.listCheckinRange[isCheckinType]) {
-                newArr.push({
-                  productAddress: e.address,
-                  productRange: Math.round(e.accuracy),
-                  productName: e.name,
-                  productUUID: e.uuid,
-                });
+              if (isCheckinType !== -1 && rangeForCompare < localStoragBeacons.listCheckinRange[isCheckinType]) {
+                // newArr.push({
+                //   productAddress: e.address,
+                //   productRange,
+                //   productName: e.name,
+                //   productUUID: e.uuid,
+                // });
 
                 newCheckinUID.push(e.address);
               }
@@ -244,6 +311,8 @@ const MainHome = ({ navigation, route }) => {
           setStateListArtUID(newArtUID);
           setStateListOtherUID(newOtherUID);
           setStateListOtherType(newOtherType);
+
+          setStateListAllBeacons(newArr);
         }
       });
 
@@ -258,54 +327,40 @@ const MainHome = ({ navigation, route }) => {
     }
   };
 
-  const beaconFetch = async () => {
-    const result = await getAPI('beacon');
-    console.log('api beacon', result);
-    if (result.status && Array.isArray(result.data)) {
-      let newListCheckinUID = [];
-      let newListCheckinRange = [];
-      let newListMerchUID = [];
-      let newListMerchRange = [];
-      let newListArtUID = [];
-      let newListArtRange = [];
-      let newListOtherUID = [];
-      let newListOtherRange = [];
-      let newListOtherType = [];
+  // console.log('PermissionsAndroid.PERMISSIONS', PermissionsAndroid.PERMISSIONS);
+  console.log('tempCurrentArtPairing', tempCurrentArtPairing);
 
-      result.data.map((e) => {
-        if (e.beacon_type && e.beacon_type.name === 'checkin') {
-          newListCheckinUID.push(e.beacon_uid);
-          newListCheckinRange.push(parseInt(e.range));
-        }
-        else if (e.beacon_type && e.beacon_type.name === 'merch') {
-          newListMerchUID.push(e.beacon_uid);
-          newListMerchRange.push(parseInt(e.range));
-        }
-        else if (e.beacon_type && e.beacon_type.name === 'art') {
-          newListArtUID.push(e.beacon_uid);
-          newListArtRange.push(parseInt(e.range));
-        }
-        else if (e.beacon_type && e.beacon_type.name !== 'checkout') {
-          newListOtherUID.push(e.beacon_uid);
-          newListOtherRange.push(parseInt(e.range));
-          newListOtherType.push(e.beacon_type.name);
-        }
-      });
-
-      dispatch({ type: 'BEACONS.SET_LIST_CHECKIN', data: { listUID: newListCheckinUID, listRange: newListCheckinRange } });
-      dispatch({ type: 'BEACONS.SET_LIST_MERCH', data: { listUID: newListMerchUID, listRange: newListMerchRange } });
-      dispatch({ type: 'BEACONS.SET_LIST_ART', data: { listUID: newListArtUID, listRange: newListArtRange } });
-      dispatch({ type: 'BEACONS.SET_LIST_OTHER', data: { listUID: newListOtherUID, listRange: newListOtherRange, listType: newListOtherType } });
-    } else {
-      showLoading('error', 'Initial Beacon error' || result.message);
-    }
-  }
+  const requestBluetoothPermission = async () => {
+    // try {
+    //   const granted = await PermissionsAndroid.request(
+    //     PermissionsAndroid.PERMISSIONS.BLUETOOTH,
+    //     {
+    //       title: "Cool Photo App Camera Permission",
+    //       message:
+    //         "Cool Photo App needs access to your camera " +
+    //         "so you can take awesome pictures.",
+    //       buttonNeutral: "Ask Me Later",
+    //       buttonNegative: "Cancel",
+    //       buttonPositive: "OK"
+    //     }
+    //   );
+    //   if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+    //     console.log("You can use the camera");
+    //   } else {
+    //     console.log("Camera permission denied");
+    //   }
+    // } catch (err) {
+    //   console.warn(err);
+    // }
+  };
 
   const onPairingCheckin = async () => {
     if (stateListCheckinUID.length === 0) {
       showLoading('error', 'Tidak Ada perangkat disekitar');
       return;
     }
+
+    setModalLoading(true);
 
     const body = {
       beacon_uid: stateListCheckinUID[0],
@@ -319,9 +374,13 @@ const MainHome = ({ navigation, route }) => {
     if (result.status) {
       dispatch({ type: 'AUTH.SET_CHECKIN', data: result.data });
 
+      setModalSuccessCheckin(true);
+
       const prof = await stateUpdateProfile();
       console.log('prof', prof);
     }
+
+    setModalLoading(false);
 
     showLoading(result.status ? 'success' : 'error', result.message);
   }
@@ -332,6 +391,8 @@ const MainHome = ({ navigation, route }) => {
     }
 
     let newListMerchant = [];
+
+    setModalLoading(true);
 
     stateListMerchUID.map(async(uid, idx) => {
       const body = {
@@ -348,32 +409,65 @@ const MainHome = ({ navigation, route }) => {
       }
     });
 
+    setModalLoading(false);
+
     setListMerchantType(newListMerchant);
   }
 
   const onPairingArt = async () => {
-    if (stateListArtUID.length === 0) {
-      return;
-    }
+    let isRefetch = false;
+    let newArr = [];
+    let newTempUID = [];
+    
+    // stateListArtUID.map((i) => {
+    //   if (tempCurrentArtPairing.includes(i)) {
+        
+    //   } else {
+    //     isRefetch = true;
+    //   }
+    // });
 
-    if (tempCurrentArtPairing.includes(stateListArtUID[0])) {
-      return;
-    }
+    // if (!isRefetch) {
+    //   return;
+    // }
 
-    const body = {
-      beacon_uid: stateListArtUID[0],
-      beacon_type: 'art',
-    };
+    setModalLoading(true);
 
-    setTempCurrentArtPairing(stateListArtUID[0]);
+    // stateListArtUID.map(async(uid, idx) => {
+    //   const body = {
+    //     beacon_uid: uid,
+    //     beacon_type: 'art',
+    //   };
 
-    console.log('body art pairing', body);
+    //   console.log('body art pairing', body);
+    //   const result = await postAPI('user-activity', body);
+    //   console.log('result art pairing', result);
 
-    const result = await postAPI('user-activity', body);
-    console.log('result art pairing', result);
-    if (result.status) {
-      // data art
-    }
+    //   if (result.status) {
+    //     newArr.push(result.data);
+    //     newTempUID.push(uid);
+    //   }
+    // })
+
+    // ini select ONE
+      const body = {
+        beacon_uid: stateListArtUID[0],
+        beacon_type: 'art',
+      };
+
+      console.log('body art pairing', body);
+      const result = await postAPI('user-activity', body);
+      console.log('result art pairing', result);
+
+      if (result.status) {
+        navigation.navigate('DetailArtScreen', { item: result.data });
+      }
+    // end
+
+    setModalLoading(false);
+
+    // setListResultArtType(newArr);
+    // setTempCurrentArtPairing(newTempUID);
   }
 
   const onPairingOther = async() => {
@@ -504,8 +598,9 @@ const MainHome = ({ navigation, route }) => {
 
   const spaceContentSize = 8;
 
-  // console.log('localStoragBeacons', localStoragBeacons);
-  // console.log('auth.checkin', auth);
+  console.log('localStoragBeacons', localStoragBeacons);
+  console.log('auth.checkin', auth);
+  // console.log('eaaaa', stateListMerchUID);
 
   return (
     <Scaffold
@@ -620,7 +715,7 @@ const MainHome = ({ navigation, route }) => {
         />
       }
       floatingActionButton={
-        <View
+        isSecurity && <View
           style={{
             bottom: -16,
             height: width / 5 - 8,
@@ -741,7 +836,6 @@ const MainHome = ({ navigation, route }) => {
                       );
                     }}
                   >
-
                     <Text color={Color.error} size={12} type='medium'>
                       Keluar
                     </Text>
@@ -774,6 +868,71 @@ const MainHome = ({ navigation, route }) => {
               </Row>
             </Container>
           </Container>}
+
+          <View>
+            <Text>Beacon All</Text>
+            {stateListAllBeacons.map((i, idx) => {
+              return (
+                <View key={idx} style={{width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft}}>
+                  <Text size={12} aling='left'>Address: {i.productAddress}</Text>
+                  <Text size={12} aling='left'>Name: {i.productName}</Text>
+                  <Text size={12} aling='left'>Range: {i.productRange} cm</Text>
+                </View>
+              )
+            })}
+          </View>
+
+          <Divider />
+
+          <View>
+            <Text>Beacon Checkin</Text>
+            {stateListCheckinUID.map((i, idx) => {
+              return (
+                <View key={idx} style={{width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft}}>
+                  <Text size={12} aling='left'>{i}</Text>
+                </View>
+              )
+            })}
+          </View>
+
+          <Divider />
+
+          <View>
+            <Text>Beacon Merch</Text>
+            {stateListMerchUID.map((i, idx) => {
+              return (
+                <View key={idx} style={{width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft}}>
+                  <Text size={12} aling='left'>{i}</Text>
+                </View>
+              )
+            })}
+          </View>
+
+          <Divider />
+
+          <View>
+            <Text>Beacon Art</Text>
+            {stateListArtUID.map((i, idx) => {
+              return (
+                <View key={idx} style={{width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft}}>
+                  <Text size={12} aling='left'>{i}</Text>
+                </View>
+              )
+            })}
+          </View>
+
+          <Divider />
+
+          <View>
+            <Text>Beacon Other</Text>
+            {stateListOtherUID.map((i, idx) => {
+              return (
+                <View key={idx} style={{width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft}}>
+                  <Text size={12} aling='left'>{i}</Text>
+                </View>
+              )
+            })}
+          </View>
 
           <Container paddingVertical={spaceContentSize}>
             <Banner
@@ -983,9 +1142,9 @@ const MainHome = ({ navigation, route }) => {
       </Modal> */}
 
       <Modal
-        isVisible={!isCheckin && tempShowFloatingBeacon && stateListCheckinUID.length > 0}
+        isVisible={!isCheckin && modalFloatingBeacon && stateListCheckinUID.length > 0}
         onBackdropPress={() => {
-          tempShowFloatingBeacon = false;
+          setModalFloatingBeacon(false);
         }}
         animationIn="slideInDown"
         animationOut="slideOutDown"
@@ -1031,7 +1190,7 @@ const MainHome = ({ navigation, route }) => {
                 outline
                 color={Color.text}
                 onPress={() => {
-                  tempShowFloatingBeacon = false;
+                  setModalFloatingBeacon(false);
                 }}
               >
                 Tutup
@@ -1041,11 +1200,9 @@ const MainHome = ({ navigation, route }) => {
         </View>
       </Modal>
 
+      {/* modal merch */}
       <Modal
-        isVisible={isCheckin && listMerchantType.length > 0}
-        onBackdropPress={() => {
-          setListMerchantType([]);
-        }}
+        isVisible={isFocused && isCheckin && listMerchantType.length > 0}
         animationIn="slideInDown"
         animationOut="slideOutDown"
         backdropColor={Color.semiwhite}>
@@ -1085,10 +1242,24 @@ const MainHome = ({ navigation, route }) => {
             </View>
 
             <Container width='100%' paddingTop={16}>
-              <View style={{ width: '100%', flexDirection: 'row' }}>
+              <View style={{ width: '100%' }}>
                 {listMerchantType.map((item, idx) => {
                   return (
-                    <View key={idx} style={{ width: '100%', padding: 10, flexDirection: 'row', borderWidth: 1, borderColor: Color.textSoft, borderRadius: 8}}>
+                    <TouchableOpacity
+                      key={idx}
+                      onPress={() => {
+                        navigation.navigate('DetailTenantScreen', { item });
+                      }}
+                      style={{
+                          width: '100%',
+                          padding: 10,
+                          flexDirection: 'row',
+                          borderWidth: 1,
+                          borderColor: Color.textSoft,
+                          borderRadius: 8,
+                          marginBottom: 8,
+                      }}
+                    >
                       <View style={{aspectRatio: 1}}>
                         <Image
                           source={{ uri: Array.isArray(item.images) && item.images.length > 0 ? item.images[0] : '' }}
@@ -1101,8 +1272,8 @@ const MainHome = ({ navigation, route }) => {
                         />
                       </View>
                       <View style={{ flex: 1, padding: 10 }}>
-                        <Text align='left' type='medium' letterSpacing={0.1}>{item.name}</Text>
-                        <Text align='left' type='medium' size={10} color={Color.disabled}>{item.type}</Text>
+                        <Text align='left' type='medium' numberOfLines={2} letterSpacing={0.1}>{item.name}</Text>
+                        <Text align='left' type='medium' numberOfLines={2} size={10} color={Color.disabled}>{item.type}</Text>
                       </View>
                       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                       <Fontisto
@@ -1111,7 +1282,7 @@ const MainHome = ({ navigation, route }) => {
                           size={15}
                         />
                       </View>
-                    </View>
+                    </TouchableOpacity>
                   )
                 })}
               </View>
@@ -1131,6 +1302,170 @@ const MainHome = ({ navigation, route }) => {
           </View>
         </View>
       </Modal>
+
+      {/* modal success checkin */}
+      <Modal
+        isVisible={isCheckin && modalSuccessCheckin}
+        onBackdropPress={() => {
+          setModalSuccessCheckin(false);
+        }}
+        animationIn="slideInDown"
+        animationOut="slideOutDown"
+        backdropColor={Color.semiwhite}>
+        <View
+          style={{ width: '100%', borderRadius: 16, backgroundColor: Color.theme, }}
+        >
+          <View
+            style={{
+              paddingHorizontal: 16,
+              paddingVertical: 16,
+              alignItems: 'center',
+            }}
+          >
+            <View
+              style={{
+                alignItems: 'center',
+              }}
+            >
+              <Text size={12}>Selamat Datang di</Text>
+              <Divider height={4} />
+              <Text size={22} letterSpacing={0.15} type='medium'>{auth.checkin && auth.checkin.location ? auth.checkin.location.name : ''}</Text>
+              <Divider />
+              <View
+                style={{
+                  width: '100%',
+                  aspectRatio: 1,
+                }}
+              >
+                <Image
+                  source={{ uri: 'https://anekatempatwisata.com/wp-content/uploads/2022/04/M-Bloc-Space.jpg' }}
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                    borderRadius: 8,
+                  }}
+                />
+              </View>
+            </View>
+
+            <Container width='100%' paddingTop={16}>
+              <Button
+                outline
+                color={Color.primaryMoreDark}
+                onPress={() => {
+                  setModalSuccessCheckin(false);
+                }}
+              >
+                Tutup
+              </Button>
+            </Container>
+          </View>
+        </View>
+      </Modal>
+
+      {/* modal art */}
+      {/* {isFocused && isCheckin && listMerchantType.length === 0 && listResultArtType.length > 0 && <Modal
+        isVisible={true}
+        animationIn="slideInDown"
+        animationOut="slideOutDown"
+        backdropColor={Color.semiwhite}>
+        <View
+          style={{ width: '100%', borderRadius: 16, backgroundColor: Color.theme, }}
+        >
+          <View
+            style={{
+              paddingHorizontal: 10,
+              paddingVertical: 16,
+              alignItems: 'center',
+            }}
+          >
+            <View
+              style={{
+                height: height / 8,
+                aspectRatio: 1,
+                marginBottom: 16,
+              }}
+            >
+              <Image
+                source={imageAssets.connectMerchant}
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  resizeMode: 'contain'
+                }}
+              />
+            </View>
+
+            <View
+              style={{
+                alignItems: 'center',
+              }}
+            >
+              <Text size={16} letterSpacing={0.15} type='medium'>Kamu sedang berada di pameran</Text>
+            </View>
+
+            <Container width='100%' paddingTop={16}>
+              <View style={{ width: '100%' }}>
+                {listResultArtType.map((item, idx) => {
+                  return (
+                    <TouchableOpacity
+                      key={idx}
+                      onPress={() => {
+                        navigation.navigate('DetailArtScreen', { item });
+                      }}
+                      style={{
+                        width: '100%',
+                        padding: 10,
+                        flexDirection: 'row',
+                        borderWidth: 1,
+                        borderColor: Color.textSoft,
+                        borderRadius: 8,
+                        marginBottom: 8,
+                      }}
+                    >
+                      <View style={{aspectRatio: 1}}>
+                        <Image
+                          source={{ uri: Array.isArray(item.img) && item.img.length > 0 ? item.img[0] : '' }}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            borderRadius: 8,
+                            backgroundColor: Color.border,
+                          }}
+                        />
+                      </View>
+                      <View style={{ flex: 1, padding: 10 }}>
+                        <Text align='left' type='medium' numberOfLines={2} letterSpacing={0.1}>{item.title}</Text>
+                        <Text align='left' type='medium' numberOfLines={2} size={10} color={Color.disabled}>{item.description}</Text>
+                      </View>
+                      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                      <Fontisto
+                          name={'angle-right'}
+                          color={Color.primaryMoreDark}
+                          size={15}
+                        />
+                      </View>
+                    </TouchableOpacity>
+                  )
+                })}
+              </View>
+            </Container>
+
+            <Container width='100%' paddingTop={16}>
+              <Button
+                outline
+                color={Color.primaryMoreDark}
+                onPress={() => {
+                  setListResultArtType([]);
+                  setTempCurrentArtPairing([]);
+                }}
+              >
+                Tutup
+              </Button>
+            </Container>
+          </View>
+        </View>
+      </Modal>} */}
 
       <Modal
         isVisible={isModalVisible}
@@ -1239,6 +1574,7 @@ const MainHome = ({ navigation, route }) => {
                   style={{ width: 22, height: 22 }}
                 />
               </View>
+
               <Submit
                 buttonLabel="Baca Sekarang"
                 buttonColor={Color.primary}
@@ -1252,6 +1588,51 @@ const MainHome = ({ navigation, route }) => {
                 }}
                 onPress={() => onClickBaca()}
               />
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* modal loading */}
+      <Modal
+        isVisible={modalLoading}
+        animationIn="slideInDown"
+        animationOut="slideOutDown"
+        backdropColor={Color.semiwhite}>
+        <View
+          style={{ width: '100%', borderRadius: 16, backgroundColor: Color.theme, }}
+        >
+          <View
+            style={{
+              paddingHorizontal: 10,
+              paddingVertical: 16,
+              alignItems: 'center',
+            }}
+          >
+            <View
+              style={{
+                height: height / 12,
+                aspectRatio: 1,
+                justifyContent: 'center',
+              }}
+            >
+              <ActivityIndicator
+                size={'large'}
+              />
+            </View>
+
+            <View
+              style={{
+                alignItems: 'center',
+              }}
+            >
+              <Text
+                size={16}
+                letterSpacing={0.15}
+                type='medium'
+              >
+                Mohon tunggu
+              </Text>
             </View>
           </View>
         </View>
