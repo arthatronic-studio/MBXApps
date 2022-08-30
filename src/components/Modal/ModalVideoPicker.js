@@ -10,11 +10,10 @@ import {
 import Button from '@src/components/Button/Button';
 import { statusBarHeight } from 'src/utils/constants';
 import { Divider, Line } from 'src/styled';
-import { RNFFmpeg, RNFFmpegConfig, RNFFprobe } from 'react-native-ffmpeg';
+import { FFmpegKit, FFmpegKitConfig, FFprobeKit } from 'ffmpeg-kit-react-native';
 import RNFS from 'react-native-fs';
 import RNFetchBlobDf from 'react-native-blob-util';
 import { useNavigation } from '@react-navigation/native';
-import { ProgressBar } from '@react-native-community/progress-bar-android';
 import { ProgressView } from '@react-native-community/progress-view';
 
 const outputVideoCache = `file://${RNFS.CachesDirectoryPath}/video.mp4`;
@@ -79,8 +78,8 @@ const ModalVideoPicker = ({ visible, onSelected, onClose }) => {
 
     useEffect(() => {
         const unsubListener = navigation.addListener('focus', (_) => {
-            RNFFmpegConfig.enableLogCallback((log) => {});
-            RNFFmpegConfig.enableStatisticsCallback(statisticsCallback);
+            FFmpegKitConfig.enableLogCallback((log) => {});
+            FFmpegKitConfig.enableStatisticsCallback(statisticsCallback);
         });
 
         return () => {
@@ -114,7 +113,7 @@ const ModalVideoPicker = ({ visible, onSelected, onClose }) => {
         
         setProcessingVideo(true);
         setCompressPercentage(0);
-        RNFFmpegConfig.resetStatistics();
+        // FFmpegKitConfig.resetStatistics(); gak ada di yg baru
 
         console.log('outputVideoCache', outputVideoCache);
 
@@ -178,7 +177,7 @@ const ModalVideoPicker = ({ visible, onSelected, onClose }) => {
             imageCodec = ['-i', input, '-ss', '00:00:01.000', '-frames', '1', '-y', outputImageCache];
         }
 
-        const info = await RNFFprobe.getMediaInformation(input);
+        const info = await FFprobeKit.getMediaInformation(input);
         const information = info.getMediaProperties();
 
         if (information) {
@@ -217,11 +216,11 @@ const ModalVideoPicker = ({ visible, onSelected, onClose }) => {
     const onCompressVideo = (result) => {
         const videoCodec = result.videoCodec;
         console.log('videoCodec', videoCodec);
-        RNFFmpeg.executeAsyncWithArguments(videoCodec, callback => {
+        FFmpegKit.executeWithArgumentsAsync(videoCodec, callback => {
             if (callback.returnCode === 0) {
                 onEndCompress();
 
-                RNFFprobe.getMediaInformation(outputVideoCache).then((info) => {
+                FFprobeKit.getMediaInformation(outputVideoCache).then((info) => {
                     const information = info.getMediaProperties();
                     onSelected({ ...result, uri: outputVideoCache, fileSize: parseInt(information.size) });
                 })
@@ -242,22 +241,11 @@ const ModalVideoPicker = ({ visible, onSelected, onClose }) => {
                 <Divider height={32} />
                 <Text>Memuat {compressPercentage}%</Text>
                 <Divider height={8} />
-                {Platform.OS === 'ios' ?
-                    <ProgressView
-                        progressTintColor={Color.primary}
-                        trackTintColor={Color.border}
-                        progress={compressPercentage / 100}
-                    />
-                :
-                    <ProgressBar
-                        animating
-                        styleAttr="Horizontal"
-                        indeterminate={false}
-                        progress={compressPercentage / 100}
-                        color={Color.primary}
-                        style={{width: '100%'}}
-                    />
-                }
+                <ProgressView
+                    progressTintColor={Color.primary}
+                    trackTintColor={Color.border}
+                    progress={compressPercentage / 100}
+                />
             </View>
         )
     }

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, ScrollView, Platform, Image, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
-import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -30,20 +29,6 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import axios from 'axios';
 import moment from 'moment';
 import Ecommerce from '../Ecommerce/Ecommerce';
-var crypto = require('crypto-js')
-
-function sha1(data) {
-}
-
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
-
-const Content = Styled(View)`
-    margin: 16px
-    padding: 12px
-    borderRadius: 8px
-`;
 
 const SurveyFirst = ({navigation}) => {
     const user = useSelector((state) => state['user.auth'].login.user);

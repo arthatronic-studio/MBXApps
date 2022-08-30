@@ -3,7 +3,7 @@ import { View, ActivityIndicator, Image, Platform } from 'react-native';
 import Styled from 'styled-components';
 import { Portal } from 'react-native-portalize';
 import Entypo from 'react-native-vector-icons/Entypo';
-import { ProgressBar } from '@react-native-community/progress-bar-android';
+import { ProgressView } from '@react-native-community/progress-view';
 import {
   iconwait,
 } from '@assets/images/home';
@@ -160,13 +160,10 @@ const Loading = (props) => {
               <Text color={Color.primary}>{message}</Text>
             </BodyText>}
             {usingPercentage &&
-              <ProgressBar
-                animating
-                styleAttr="Horizontal"
-                indeterminate={false}
+              <ProgressView
+                progressTintColor={Color.theme}
+                trackTintColor={Color.border}
                 progress={percentage / 100}
-                color={Color.theme}
-                style={{width: '90%', marginTop: 4}}
               />
             }
           </Body>

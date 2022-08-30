@@ -1,13 +1,19 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '11.0'
+platform :ios, '13'
 install! 'cocoapods', :deterministic_uuids => false
 
+production = ENV["PRODUCTION"] == "1"
+
 target 'TribesSocial' do
-  pod 'react-native-ffmpeg/full-gpl-lts', :podspec => '../node_modules/react-native-ffmpeg/react-native-ffmpeg.podspec'
+  pod 'ffmpeg-kit-react-native', :subspecs => ['full-gpl-lts'], :podspec => '../node_modules/ffmpeg-kit-react-native/ffmpeg-kit-react-native.podspec'
   rn_maps_path = '../node_modules/react-native-maps'
   pod 'react-native-google-maps', :path => rn_maps_path
+  pod 'Firebase', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'FirebaseCoreInternal', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
   
   config = use_native_modules!
 
@@ -17,8 +23,10 @@ target 'TribesSocial' do
   use_react_native!(
     :path => config[:reactNativePath],
     # to enable hermes on iOS, change `false` to `true` and then install pods
+    :production => production,
     :hermes_enabled => flags[:hermes_enabled],
     :fabric_enabled => flags[:fabric_enabled],
+    :flipper_configuration => FlipperConfiguration.enabled,
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
@@ -27,12 +35,6 @@ target 'TribesSocial' do
     inherit! :complete
     # Pods for testing
   end
-
-  # Enables Flipper.
-  #
-  # Note that if you have use_frameworks! enabled, Flipper will not work and
-  # you should disable the next line.
-  use_flipper!()
 
   post_install do |installer|
     react_native_post_install(installer)

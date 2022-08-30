@@ -6,7 +6,6 @@ import {
   useWindowDimensions,
   FlatList,
 } from 'react-native';
-import Styled from 'styled-components';
 import axios from 'axios';
 import Config from 'react-native-config';
 

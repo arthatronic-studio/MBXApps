@@ -240,7 +240,7 @@ const MainPage =
 	// accessClient.BottomTabsNavigator.type === 'komoto' ? BottomTabsNavigatorKomoto : 
   accessClient.BottomTabsNavigator.type === 'sabyan' ? BottomTabsNavigatorsabyan : BottomTabsNavigatorUnitedIndo;
 
-function MainStackNavigator() {
+function AppNavigator() {
   return (
     <Navigator
       initialRouteName="SplashScreen"
@@ -278,10 +278,7 @@ function MainStackNavigator() {
       <Screen name="AuctionHistory" component={AuctionHistory} />
       <Screen name="TestLelang" component={TestLelang} />
       <Screen name="AddProductAuction" component={AddProductAuction} />
-      <Screen
-        name="AddProductAuctionSecond"
-        component={AddProductAuctionSecond}
-      />
+      <Screen name="AddProductAuctionSecond" component={AddProductAuctionSecond} />
       {/* Promo Popup */}
       <Screen name="DetailPromo" component={DetailPromo} />
       {/* Ecommerce */}
@@ -376,10 +373,7 @@ function MainStackNavigator() {
       <Screen name="CreateThreadScreen" component={CreateThreadScreen} />
       <Screen name="ForumReport" component={ForumReport} />
       <Screen name="ForumReportDetail" component={ForumReportDetail} />
-      <Screen
-        name="CreateThreadMultipleScreen"
-        component={CreateThreadMultipleScreen}
-      />
+      <Screen name="CreateThreadMultipleScreen" component={CreateThreadMultipleScreen} />
       <Screen name="DetailForumScreen" component={DetailForumScreen} />
       <Screen name="EditThreadScreen" component={EditThreadScreen} />
       <Screen name="ForumScreen" component={ForumScreen} />
@@ -453,23 +447,14 @@ function MainStackNavigator() {
       <Screen name="SurveyFourth" component={SurveyFourth} />
       {/* Transaction */}
       <Screen name="TransactionDetail" component={TransactionDetail} />
-      <Screen
-        name="TransactionDetailSucces"
-        component={TransactionDetailSucces}
-      />
-      <Screen
-        name="TransactionDetailSeller"
-        component={TransactionDetailSeller}
-      />
+      <Screen name="TransactionDetailSucces" component={TransactionDetailSucces} />
+      <Screen name="TransactionDetailSeller" component={TransactionDetailSeller} />
       {/* gallery */}
       <Screen name="GalleryScreen" component={GalleryScreen} />
       <Screen name="GalleryDetailScreen" component={GalleryDetailScreen} />
-      <Screen
-        name="GalleryDetailSliderScreen"
-        component={GalleryDetailSliderScreen}
-      />
+      <Screen name="GalleryDetailSliderScreen" component={GalleryDetailSliderScreen} />
     </Navigator>
   );
 }
 
-export default MainStackNavigator;
+export default AppNavigator;

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, ScrollView, Platform, Image, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
-import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import RNSimpleCrypto from "react-native-simple-crypto";
 import Fontisto from 'react-native-vector-icons/Fontisto';
@@ -30,16 +29,6 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import moment from 'moment';
 import axios from 'axios';
-
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
-
-const Content = Styled(View)`
-    margin: 16px
-    padding: 12px
-    borderRadius: 8px
-`;
 
 let tepung = [{name: 'Segitiga Biru', checked: false},
 {name: 'Cakra Kembar', checked: false},

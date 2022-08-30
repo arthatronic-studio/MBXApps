@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Image, ScrollView, useWindowDimensions } from 'react-native';
-import Styled from 'styled-components';
 import ImagesPath from 'src/components/ImagesPath';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -16,9 +15,6 @@ import Scaffold from '@src/components/Scaffold';
 import { Container, Divider } from '@src/styled';
 import { shadowStyle } from '@src/styles';
 import { adsPopup } from 'assets/images/popup';
-
-const Example = Styled(View)`
-`;
 
 export default ({ navigation, route }) => {
     const { item } = route.params;

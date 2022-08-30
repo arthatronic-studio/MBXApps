@@ -19,17 +19,17 @@ buildscript {
         googlePlayServicesVersion = "17.0.0"
         firebaseMessagingVersion = "22.0.0"
         supportLibVersion = "28.0.0"
-        reactNativeFFmpegPackage = "full-gpl-lts"
+        ffmpegKitPackage = "full-gpl-lts"
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.0.4")
+        classpath("com.android.tools.build:gradle:7.1.1")
         classpath("com.facebook.react:react-native-gradle-plugin")
-        classpath("de.undercouch:gradle-download-task:4.1.2")
-        classpath 'com.google.gms:google-services:4.3.10'
+        classpath("de.undercouch:gradle-download-task:5.0.1")
+        classpath 'com.google.gms:google-services:4.3.13'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -53,19 +53,6 @@ allprojects {
             }
         }
         google()
-        jcenter() {
-            content {
-                // however, react-native-video's native packages have not been migrated yet, so we keep this config for now
-                includeModule("com.yqritc", "android-scalablevideoview")
-                includeModule("com.google.android.exoplayer", "extension-okhttp")
-                includeModule("com.google.android.exoplayer", "exoplayer")
-                includeModule("com.google.android.exoplayer", "exoplayer-core")
-                includeModule("com.google.android.exoplayer", "exoplayer-dash")
-                includeModule("com.google.android.exoplayer", "exoplayer-hls")
-                includeModule("com.google.android.exoplayer", "exoplayer-smoothstreaming")
-                includeModule("com.google.android.exoplayer", "exoplayer-ui")
-            }
-        }
         maven { url 'https://www.jitpack.io' }
     }
 }
