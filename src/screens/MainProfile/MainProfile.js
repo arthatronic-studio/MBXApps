@@ -68,6 +68,9 @@ const MainProfile = ({navigation, route}) => {
   const user = useSelector(state => state['user.auth'].login.user);
   const userToken = useSelector(state => state['user.auth'].data);
   const auth = useSelector(state => state['auth']);
+  const localStoragSetting = useSelector(state => state['setting']);
+
+  const showDebug = localStoragSetting && localStoragSetting.showDebug ? true : false;
 
   console.log('user', useSelector(state => state['user.auth']));
 
@@ -573,6 +576,23 @@ const MainProfile = ({navigation, route}) => {
         </Container>
 
         <Line height={8} width='100%' color='#F4F4F4' />
+
+        <Container padding={16}>
+          <TouchableOpacity
+            onPress={() => {
+              dispatch({ type: 'SETTING.SET_SHOW_DEBUG', data: !showDebug });
+            }}
+            style={{
+              flexDirection: 'row',
+            }}
+          >
+            <Circle color={Color.success} size={16} />
+            <Divider width={8} />
+            <Text color={Color.success} align='left'>
+              Show Debug {showDebug ? '✅' : '❌'}
+            </Text>
+          </TouchableOpacity>
+        </Container>
 
         <Container padding={16}>
           <TouchableOpacity

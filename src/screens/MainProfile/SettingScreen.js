@@ -14,7 +14,7 @@ import {
     usePopup,
 } from '@src/components';
 import { redirectTo } from 'src/utils';
-import { initSocket } from 'src/api-socket/currentSocket';
+// import { initSocket } from 'src/api-socket/currentSocket';
 
 const initialAlertModalProps = {
     visible: false,
@@ -32,12 +32,12 @@ const SettingScreen = ({ navigation, route }) => {
 
     const [alertModalProps, setAlertModalProps] = useState(initialAlertModalProps);
 
-    const currentSocket = initSocket();
+    // const currentSocket = initSocket();
 
     const onPressLogout = () => {
         dispatch({type: 'USER.LOGOUT'});
         redirectTo('LoginScreen');
-        currentSocket.disconnect();
+        // currentSocket.disconnect();
     };
 
     return (

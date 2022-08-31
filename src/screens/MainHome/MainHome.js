@@ -55,6 +55,7 @@ let tempShowPopupAds = true;
 const MainHome = ({ navigation, route }) => {
   const auth = useSelector(state => state['auth']);
   const localStoragBeacons = useSelector(state => state['beacons']);
+  const localStoragSetting = useSelector(state => state['setting']);
 
   const [loadingBanner, setLoadingBanner] = useState(true);
   const [listBanner, setListBanner] = useState([]);
@@ -90,8 +91,8 @@ const MainHome = ({ navigation, route }) => {
   const [modalSuccessCheckin, setModalSuccessCheckin] = useState(false);
 
   const isCheckin = auth && auth.user && auth.user.isCheckin;
-
-  const isSecurity = auth && auth.user && auth.user.role && auth.user.role.value == 2;
+  const isSecurity = auth && auth.user && auth.user.role && auth.user.role.value === 0;
+  const showDebug = localStoragSetting && localStoragSetting.showDebug ? true : false;
 
   useEffect(() => {
     BluetoothStateManager.onStateChange((bluetoothState) => {
@@ -110,19 +111,21 @@ const MainHome = ({ navigation, route }) => {
     // beaconSetup();
   }, []);
 
-  const initialConfig = async() => {
-    await BluetoothStateManager.requestToEnable();
-
-    const _scanning = await isScanning();
-    console.log('_scanning', _scanning);
-    if (!_scanning) {
-      beaconSetup();
+  const initialConfig = async () => {
+    if (Platform.OS === 'android' && Platform.Version < 31) {
+      await BluetoothStateManager.requestToEnable();
     }
+
+    // const _scanning = await isScanning();
+    // console.log('_scanning', _scanning);
+    // if (!_scanning) {
+    //   beaconSetup();
+    // }
   }
 
   useEffect(() => {
-    const cond = (
-      localStoragBeacons
+    // const cond = (
+    //   localStoragBeacons
       // &&
       // Array.isArray(localStoragBeacons.listCheckinUID) && localStoragBeacons.listCheckinUID.length > 0 && 
       // Array.isArray(localStoragBeacons.listCheckinRange) && localStoragBeacons.listCheckinRange.length > 0 && 
@@ -133,20 +136,10 @@ const MainHome = ({ navigation, route }) => {
       // Array.isArray(localStoragBeacons.listOtherUID) && localStoragBeacons.listOtherUID.length > 0 && 
       // Array.isArray(localStoragBeacons.listOtherRange) && localStoragBeacons.listOtherRange.length > 0 && 
       // Array.isArray(localStoragBeacons.listOtherType) && localStoragBeacons.listOtherType.length > 0
-    );
+    // );
 
-    if (cond) {
-      beaconSetup();
-    }
-
-    // const timeout = cond ? setTimeout(() => {
-    //   beaconSetup();
-    // }, 1000) : null;
-
-    // return () => {
-    //   clearTimeout(timeout);
-    // }
-  }, [isCheckin, isActiveBluetooth, localStoragBeacons]);
+    beaconSetup();
+  }, [isActiveBluetooth]);
 
   useEffect(() => {
     const shakeSubs = RNShake.addListener(() => {
@@ -162,26 +155,24 @@ const MainHome = ({ navigation, route }) => {
     }
   }, [isCheckin, stateListCheckinUID, stateListMerchUID]);
 
-  console.log('listMerchantType', listMerchantType);
-
   useEffect(() => {
     const timeout = isCheckin && stateListArtUID.length > 0 && isFocused && listMerchantType.length === 0 && !modalLoading ?
       setTimeout(() => {
         onPairingArt();
-      }, 2000)
-    : null;
+      }, 3000)
+      : null;
 
     return () => {
       clearTimeout(timeout);
     }
-  }, [isCheckin, stateListArtUID, tempCurrentArtPairing, isFocused, listMerchantType, modalLoading]);
+  }, [isCheckin, stateListArtUID, isFocused, listMerchantType, modalLoading]);
 
   useEffect(() => {
     const timeout = isCheckin && stateListOtherUID.length > 0 ?
       setTimeout(() => {
         onPairingOther();
       }, 10000)
-    : null;
+      : null;
 
     return () => {
       clearTimeout(timeout);
@@ -193,7 +184,7 @@ const MainHome = ({ navigation, route }) => {
     if (isAndroid) {
       // Android
       // const granted = await requestLocationPermission();
-      
+
       // if (granted) {
       await connect();
       await startScanning();
@@ -213,7 +204,6 @@ const MainHome = ({ navigation, route }) => {
 
     // Add beacon listener
     if (isAndroid) {
-      console.log('beaconHere outside');
       DeviceEventEmitter.addListener('beaconDidAppear', ({ beacons, region }) => {
         console.log('beaconDidAppear', beacons);
       });
@@ -221,8 +211,6 @@ const MainHome = ({ navigation, route }) => {
       DeviceEventEmitter.addListener('beaconsDidUpdate', ({ beacons, region }) => {
         // console.log('beaconsDidUpdate', beacons, region);
         // console.log('beaconsDidUpdate', beacons);
-
-        console.log('beaconHere');
 
         if (Array.isArray(beacons)) {
           let newArr = [];
@@ -236,12 +224,10 @@ const MainHome = ({ navigation, route }) => {
             // console.log('full info beacon', e);
 
             const strength = 4;
-            const rumusRSSI = ((-69 - (e.rssi)) / (10*strength));
+            const rumusRSSI = ((-69 - (e.rssi)) / (10 * strength));
             const productRange = Math.pow(10, rumusRSSI) * 100;
 
             const rangeForCompare = productRange - 50;
-
-            console.log('productRange', productRange);
 
             newArr.push({
               productAddress: e.address,
@@ -328,12 +314,11 @@ const MainHome = ({ navigation, route }) => {
   };
 
   // console.log('PermissionsAndroid.PERMISSIONS', PermissionsAndroid.PERMISSIONS);
-  console.log('tempCurrentArtPairing', tempCurrentArtPairing);
 
   const requestBluetoothPermission = async () => {
     // try {
     //   const granted = await PermissionsAndroid.request(
-    //     PermissionsAndroid.PERMISSIONS.BLUETOOTH,
+    //     PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
     //     {
     //       title: "Cool Photo App Camera Permission",
     //       message:
@@ -344,6 +329,7 @@ const MainHome = ({ navigation, route }) => {
     //       buttonPositive: "OK"
     //     }
     //   );
+    //   console.log('granted', granted);
     //   if (granted === PermissionsAndroid.RESULTS.GRANTED) {
     //     console.log("You can use the camera");
     //   } else {
@@ -385,7 +371,7 @@ const MainHome = ({ navigation, route }) => {
     showLoading(result.status ? 'success' : 'error', result.message);
   }
 
-  const onPairingMerchant = async() => {
+  const onPairingMerchant = async () => {
     if (stateListMerchUID.length === 0) {
       return;
     }
@@ -394,14 +380,14 @@ const MainHome = ({ navigation, route }) => {
 
     setModalLoading(true);
 
-    stateListMerchUID.map(async(uid, idx) => {
+    stateListMerchUID.map(async (uid, idx) => {
       const body = {
         beacon_uid: uid,
         beacon_type: 'merch',
       };
 
       console.log('body merch pairing', body);
-    
+
       const result = await postAPI('user-activity', body);
       console.log('result merch pairing', result);
       if (result.status) {
@@ -418,10 +404,10 @@ const MainHome = ({ navigation, route }) => {
     let isRefetch = false;
     let newArr = [];
     let newTempUID = [];
-    
+
     // stateListArtUID.map((i) => {
     //   if (tempCurrentArtPairing.includes(i)) {
-        
+
     //   } else {
     //     isRefetch = true;
     //   }
@@ -431,7 +417,7 @@ const MainHome = ({ navigation, route }) => {
     //   return;
     // }
 
-    setModalLoading(true);
+    // setModalLoading(true);
 
     // stateListArtUID.map(async(uid, idx) => {
     //   const body = {
@@ -450,32 +436,32 @@ const MainHome = ({ navigation, route }) => {
     // })
 
     // ini select ONE
-      const body = {
-        beacon_uid: stateListArtUID[0],
-        beacon_type: 'art',
-      };
+    const body = {
+      beacon_uid: stateListArtUID[0],
+      beacon_type: 'art',
+    };
 
-      console.log('body art pairing', body);
-      const result = await postAPI('user-activity', body);
-      console.log('result art pairing', result);
+    console.log('body art pairing', body);
+    const result = await postAPI('user-activity', body);
+    console.log('result art pairing', result);
 
-      if (result.status) {
-        navigation.navigate('DetailArtScreen', { item: result.data });
-      }
+    if (result.status) {
+      navigation.navigate('DetailArtScreen', { item: result.data });
+    }
     // end
 
-    setModalLoading(false);
+    // setModalLoading(false);
 
     // setListResultArtType(newArr);
     // setTempCurrentArtPairing(newTempUID);
   }
 
-  const onPairingOther = async() => {
+  const onPairingOther = async () => {
     if (stateListOtherUID.length === 0) {
       return;
     }
 
-    stateListOtherUID.map(async(uid, idx) => {
+    stateListOtherUID.map(async (uid, idx) => {
       const body = {
         beacon_uid: uid,
         beacon_type: stateListOtherType[idx],
@@ -485,9 +471,9 @@ const MainHome = ({ navigation, route }) => {
         console.log('tempAlreadyPairing', tempAlreadyPairing);
       } else {
         setTempAlreadyPairing(uid);
-  
+
         console.log('body other pairing', body);
-    
+
         const result = await postAPI('user-activity', body);
         console.log('result other pairing', result);
       }
@@ -598,8 +584,9 @@ const MainHome = ({ navigation, route }) => {
 
   const spaceContentSize = 8;
 
-  console.log('localStoragBeacons', localStoragBeacons);
-  console.log('auth.checkin', auth);
+  // console.log('localStoragSetting', localStoragSetting);
+  // console.log('localStoragBeacons', localStoragBeacons);
+  // console.log('auth.checkin', auth);
   // console.log('eaaaa', stateListMerchUID);
 
   return (
@@ -858,7 +845,7 @@ const MainHome = ({ navigation, route }) => {
                       }}
                     />
                   </Container>
-                  
+
                   <Column>
                     <Text type='medium' size={12} letterSpacing={0.5}>Checkpoint Disekitar</Text>
                     <Divider height={2} />
@@ -869,70 +856,72 @@ const MainHome = ({ navigation, route }) => {
             </Container>
           </Container>}
 
-          <View>
-            <Text>Beacon All</Text>
-            {stateListAllBeacons.map((i, idx) => {
-              return (
-                <View key={idx} style={{width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft}}>
-                  <Text size={12} aling='left'>Address: {i.productAddress}</Text>
-                  <Text size={12} aling='left'>Name: {i.productName}</Text>
-                  <Text size={12} aling='left'>Range: {i.productRange} cm</Text>
-                </View>
-              )
-            })}
-          </View>
+          {showDebug && <>
+            <View>
+              <Text>Beacon All</Text>
+              {stateListAllBeacons.map((i, idx) => {
+                return (
+                  <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
+                    <Text size={12} aling='left'>Address: {i.productAddress}</Text>
+                    <Text size={12} aling='left'>Name: {i.productName}</Text>
+                    <Text size={12} aling='left'>Range: {i.productRange} cm</Text>
+                  </View>
+                )
+              })}
+            </View>
 
-          <Divider />
+            <Divider />
 
-          <View>
-            <Text>Beacon Checkin</Text>
-            {stateListCheckinUID.map((i, idx) => {
-              return (
-                <View key={idx} style={{width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft}}>
-                  <Text size={12} aling='left'>{i}</Text>
-                </View>
-              )
-            })}
-          </View>
+            <View>
+              <Text>Beacon Checkin</Text>
+              {stateListCheckinUID.map((i, idx) => {
+                return (
+                  <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
+                    <Text size={12} aling='left'>{i}</Text>
+                  </View>
+                )
+              })}
+            </View>
 
-          <Divider />
+            <Divider />
 
-          <View>
-            <Text>Beacon Merch</Text>
-            {stateListMerchUID.map((i, idx) => {
-              return (
-                <View key={idx} style={{width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft}}>
-                  <Text size={12} aling='left'>{i}</Text>
-                </View>
-              )
-            })}
-          </View>
+            <View>
+              <Text>Beacon Merch</Text>
+              {stateListMerchUID.map((i, idx) => {
+                return (
+                  <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
+                    <Text size={12} aling='left'>{i}</Text>
+                  </View>
+                )
+              })}
+            </View>
 
-          <Divider />
+            <Divider />
 
-          <View>
-            <Text>Beacon Art</Text>
-            {stateListArtUID.map((i, idx) => {
-              return (
-                <View key={idx} style={{width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft}}>
-                  <Text size={12} aling='left'>{i}</Text>
-                </View>
-              )
-            })}
-          </View>
+            <View>
+              <Text>Beacon Art</Text>
+              {stateListArtUID.map((i, idx) => {
+                return (
+                  <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
+                    <Text size={12} aling='left'>{i}</Text>
+                  </View>
+                )
+              })}
+            </View>
 
-          <Divider />
+            <Divider />
 
-          <View>
-            <Text>Beacon Other</Text>
-            {stateListOtherUID.map((i, idx) => {
-              return (
-                <View key={idx} style={{width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft}}>
-                  <Text size={12} aling='left'>{i}</Text>
-                </View>
-              )
-            })}
-          </View>
+            <View>
+              <Text>Beacon Other</Text>
+              {stateListOtherUID.map((i, idx) => {
+                return (
+                  <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
+                    <Text size={12} aling='left'>{i}</Text>
+                  </View>
+                )
+              })}
+            </View>
+          </>}
 
           <Container paddingVertical={spaceContentSize}>
             <Banner
@@ -944,7 +933,7 @@ const MainHome = ({ navigation, route }) => {
 
           <Divider height={spaceContentSize} />
 
-          {auth && auth.user && auth.user.role && auth.user.role.value === 0 && <Container padding={16} paddingTop={8}>
+          {isSecurity && <Container padding={16} paddingTop={8}>
             <Container padding={14} color={Color.border} radius={8}>
               <Row justify='space-between'>
                 <Row>
@@ -1079,7 +1068,7 @@ const MainHome = ({ navigation, route }) => {
           modalPostingRef.current.close();
         }}
       />
-      
+
       {/* <Modal
         isVisible={tempShowPopupAds}
         onBackdropPress={() => {
@@ -1251,16 +1240,16 @@ const MainHome = ({ navigation, route }) => {
                         navigation.navigate('DetailTenantScreen', { item });
                       }}
                       style={{
-                          width: '100%',
-                          padding: 10,
-                          flexDirection: 'row',
-                          borderWidth: 1,
-                          borderColor: Color.textSoft,
-                          borderRadius: 8,
-                          marginBottom: 8,
+                        width: '100%',
+                        padding: 10,
+                        flexDirection: 'row',
+                        borderWidth: 1,
+                        borderColor: Color.textSoft,
+                        borderRadius: 8,
+                        marginBottom: 8,
                       }}
                     >
-                      <View style={{aspectRatio: 1}}>
+                      <View style={{ aspectRatio: 1 }}>
                         <Image
                           source={{ uri: Array.isArray(item.images) && item.images.length > 0 ? item.images[0] : '' }}
                           style={{
@@ -1276,7 +1265,7 @@ const MainHome = ({ navigation, route }) => {
                         <Text align='left' type='medium' numberOfLines={2} size={10} color={Color.disabled}>{item.type}</Text>
                       </View>
                       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                      <Fontisto
+                        <Fontisto
                           name={'angle-right'}
                           color={Color.primaryMoreDark}
                           size={15}

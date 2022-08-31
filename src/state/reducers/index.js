@@ -10,6 +10,7 @@ import surveyPasar from './survey/pasar';
 import Event from './history/event';
 import Auth2 from './user/auth2';
 import Beacons from './user/beacons';
+import Setting from './setting';
 
 const config = {
   key: 'root',
@@ -26,6 +27,7 @@ const reducer = persistCombineReducers(config, {
   'history.event': Event,
   'auth': Auth2,
   'beacons': Beacons,
+  'setting': Setting,
 });
 
 export default reducer;
