@@ -1,21 +1,22 @@
-import React, {useRef, forwardRef, useState} from 'react';
+import React, { useRef, forwardRef, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
-import {useColor} from '@src/components';
-import {useCombinedRefs} from '@src/hooks';
-import ModalListAction from './Modal/ModalListAction';
+import { useColor } from '@src/components';
+import { useCombinedRefs } from '@src/hooks';
+import ModalListAction from '@src/components/Modal/ModalListAction';
 import ModalInputText from '@src/components/ModalInputText';
-import {useNavigation} from '@react-navigation/native';
-import {Alert} from './Modal/Alert';
-import {accessClient} from 'src/utils/access_client';
-import {queryReportAbuse, queryUserBlock} from '@src/lib/query';
+import {Alert} from '@src/components/Modal/Alert';
+import { queryProductManage, queryProductReport, queryReportAbuse, queryUserBlock } from '@src/lib/query';
 import Client from '@src/lib/apollo';
 import { fetchProductSave } from 'src/api/productSave';
+import { onShare } from 'src/utils/share';
+import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
 
 const defaultProps = {
   isOwner: false,
   item: null,
   nameType: 'PRODUCT',
-  moduleType: 'CREATE',
+  moduleType: '',
   onClose: () => {},
   editScreen: "EditThreadScreen",
   onDelete: () => {},
@@ -35,7 +36,8 @@ const ModalContentOptions = forwardRef((props, ref) => {
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
   const navigation = useNavigation();
-  const {Color} = useColor();
+  const { Color } = useColor();
+  const {canGeneratedContent} = useCurrentUser();
 
   const [modalInputText, setModalInputText] = useState(false);
   const [message, setMessage] = useState(initialMessage);
@@ -114,6 +116,51 @@ const ModalContentOptions = forwardRef((props, ref) => {
       });
   }
 
+  const onUpdateContentStatus = (item, status) => {
+    // showLoading();
+
+    let objProduct = {
+      code: item.code,
+      name: item.productName,
+      status,
+      method: 'UPDATE',
+      type: item.productType,
+      category: item.productCategory,
+      description: item.productDescription,
+    };
+
+    let variables = {
+        products: [objProduct],
+    };
+
+    console.log(variables, 'variables');
+    
+    Client.query({
+        query: queryProductManage,
+        variables,
+    })
+    .then((res) => {
+        console.log(res, '=== Berhsail ===');
+        if (Array.isArray(res.data.contentProductManage) && res.data.contentProductManage.length > 0 && res.data.contentProductManage[0] && res.data.contentProductManage[0].id) {
+          alert('Berhasil');
+          setTimeout(() => {
+            navigation.popToTop();
+          }, 2500);
+        } else {
+          alert('Gagal menghapus konten');
+        }
+        // showLoading('success', 'Berhasil!');
+    })
+    .catch((err) => {
+        console.log(err, 'errrrr');
+        // showLoading('error', 'Gagal, Harap ulangi kembali');
+        alert('Gagal, Harap ulangi kembali');
+    });
+  }
+
+  const showForOwner = isOwner ? true : false;
+  const showForOther = isOwner ? false : canGeneratedContent ? true : false;
+
   const onPinProduct = async() => {
     const result = await fetchProductSave({ productId: item.id });
     console.log('result save', result);
@@ -131,7 +178,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
   const dataOptions = [
     {
       id: -1,
-      show: isOwner ? false : showpin ? true : false,
+      show: isOwner ? false : showpin && canGeneratedContent ? true : false,
       name: 'Pin Postingan',
       color: Color.text,
       onPress: () => {
@@ -141,11 +188,19 @@ const ModalContentOptions = forwardRef((props, ref) => {
     },
     {
       id: 0,
-      show: isOwner ? true : false,
+      show: showForOwner,
       name: 'Edit',
       color: Color.text,
       onPress: () => {
         combinedRef.current.close();
+        
+        if (moduleType === 'FORUM') {
+          navigation.navigate('ForumThreadManageScreen', {
+            ...item,
+          });
+          return;
+        }
+
         navigation.navigate(editScreen, {
           ...item,
           title: 'Edit',
@@ -158,44 +213,57 @@ const ModalContentOptions = forwardRef((props, ref) => {
       color: Color.text,
       onPress: () => {
         combinedRef.current.close();
-        onShare();
-      }
-    },
-    {
-      id: 2,
-      name: 'Report',
-      show: isOwner ? false : true,
-      color: Color.error,
-      onPress: () => {
-        combinedRef.current.close();
-        navigation.navigate('ReportArticle', {...item})
+        onShare(item.share_link, item.code);
       },
     },
     {
       id: 3,
-      show: isOwner ? true : false,
+      name: 'Report',
+      show: showForOther,
+      color: Color.error,
+      onPress: () => {
+        combinedRef.current.close();
+
+        if (moduleType === 'FORUM') {
+          navigation.navigate('ForumReport', { item });
+          return;
+        }
+
+        if (moduleType === 'NEWS') {
+          navigation.navigate('ReportArticle', {...item});
+          return;
+        }
+        
+        setModalInputText(true);
+      },
+    },
+  ];
+  
+  if (showForOwner) {
+    dataOptions.push({
+      id: 2,
       name: 'Hapus',
       color: Color.error,
       onPress: () => {
         combinedRef.current.close();
-        onDelete();
-      },
-    },
-    {
-      id: 2,
-      show: event ? true : false,
-      name: 'Edit',
-      color: Color.error,
-      onPress: () => {
-        combinedRef.current.close();
-        navigation.navigate('EditEventMain',{item})
-      },
-    },
-  ];
 
-  if (item && item.ownerId) {
+        if (typeof onDelete === 'function') {
+          onDelete();
+          return;
+        }
+
+        Alert(
+          'Hapus',
+          'Apakah Anda yakin akan memnghapus postingan ini?',
+          () => onUpdateContentStatus(item, 'REMOVE'),
+        );
+      },
+    });
+  }
+
+  if (showForOther) {
     dataOptions.push({
-      id: 2,
+      id: 4,
       name: 'Block User',
       show: isOwner ? false : true,
       color: Color.error,
@@ -217,7 +285,7 @@ const ModalContentOptions = forwardRef((props, ref) => {
         data={dataOptions}
         onClose={() => onClose()}
       />
-      
+
       <ModalInputText
         visible={modalInputText}
         headerLabel='Alasan Anda melaporkan konten'

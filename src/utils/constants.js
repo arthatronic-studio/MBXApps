@@ -55,7 +55,7 @@ export const listContentCategory = [
     {
         code: 'FORUM',
         name: 'Forum',
-        nav: 'ForumScreen',
+        nav: 'ForumTopicScreen',
     },
     {
         code: 'EMERGENCY',

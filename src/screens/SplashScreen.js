@@ -29,6 +29,7 @@ const SplashScreen = ({navigation, route}) => {
       if (auth.token) {
         handleNavigate();
       } else {
+        dispatch({type: 'USER.LOGOUT'});
         redirectTo('OnBoardingScreen');
       }
     }, 3000);

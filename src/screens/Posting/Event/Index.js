@@ -13,6 +13,7 @@ import Banner from 'src/components/Banner';
 import Client from 'src/lib/apollo';
 import { queryBannerList } from '@src/lib/query/banner';
 import ListContentProductV2 from 'src/components/Content/ListContentProductV2';
+import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
 
 //Fonts
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';

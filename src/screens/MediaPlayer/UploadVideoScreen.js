@@ -3,7 +3,7 @@ import { View, ScrollView, TextInput, Modal, Image, Keyboard, BackHandler, useWi
 import Styled from 'styled-components';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { useDispatch, useSelector } from 'react-redux';
-import { RNFFmpeg, RNFFprobe, RNFFmpegConfig } from 'react-native-ffmpeg';
+import { FFmpegKit, FFmpegKitConfig, FFprobeKit } from 'ffmpeg-kit-react-native';
 // import ImageCropPicker from 'react-native-image-crop-picker';
 
 import Text from '@src/components/Text';
@@ -268,8 +268,8 @@ const UploadVideoScreen = ({ navigation, route }) => {
 
     useEffect(() => {
         const unsubListener = navigation.addListener('focus', (_) => {
-            RNFFmpegConfig.enableLogCallback((log) => {});
-            RNFFmpegConfig.enableStatisticsCallback(statisticsCallback);
+            FFmpegKitConfig.enableLogCallback((log) => {});
+            FFmpegKitConfig.enableStatisticsCallback(statisticsCallback);
         });
 
         return () => {
@@ -298,7 +298,7 @@ const UploadVideoScreen = ({ navigation, route }) => {
     const onNextVideo = async(param) => {
         setProcessingVideo(true);
         setCompressPercentage(0);
-        RNFFmpegConfig.resetStatistics();
+        // FFmpegKitConfig.resetStatistics(); gak da di yg baru
 
         const result = await getRawCodec(param, totalDuration);
         
@@ -318,7 +318,7 @@ const UploadVideoScreen = ({ navigation, route }) => {
     }
 
     const onCompressVideo = (videoCodec) => {
-        RNFFmpeg.executeAsyncWithArguments(videoCodec, callback => {
+        FFmpegKit.executeWithArgumentsAsync(videoCodec, callback => {
             if (callback.returnCode === 0) {
                 onEndCompress();
                 setUriVideo(outputVideoCache);
@@ -330,7 +330,7 @@ const UploadVideoScreen = ({ navigation, route }) => {
     }
 
     const getThumbnailFromVideo = (imageCodec) => {
-        // RNFFmpeg.executeAsyncWithArguments(imageCodec, callback => {
+        // FFmpegKit.executeWithArgumentsAsync(imageCodec, callback => {
         //     if (callback.returnCode === 0) {
         //         ImageCropPicker.openCropper({
         //             path: outputImageCache,

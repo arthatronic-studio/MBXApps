@@ -1,5 +1,5 @@
 import {persistCombineReducers} from 'redux-persist';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Auth from './user/auth';
 import booking from './booking';
@@ -11,6 +11,7 @@ import Event from './history/event';
 import Auth2 from './user/auth2';
 import Beacons from './user/beacons';
 import Setting from './setting';
+import itemUpdate from './item-update';
 
 const config = {
   key: 'root',
@@ -28,6 +29,7 @@ const reducer = persistCombineReducers(config, {
   'auth': Auth2,
   'beacons': Beacons,
   'setting': Setting,
+  itemUpdate,
 });
 
 export default reducer;

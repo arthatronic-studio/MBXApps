@@ -28,6 +28,7 @@ import {
   useColor,
   Row,
   Scaffold,
+  Button,
 } from '@src/components';
 import {TouchSelect} from '@src/components/Form';
 import ModalSelectStatus from '@src/components/Modal/ModalSelectStatus';
@@ -452,15 +453,15 @@ const CreateNews = props => {
         </Container>
       </KeyboardAwareScrollView>
 
-      <Submit
-        buttonLabel="Buat"
-        buttonColor={Color.primary}
-        type="bottomSingleButton"
-        buttonBorderTopWidth={0.5}
-        onPress={() => {
-          onSubmit();
-        }}
-      />
+      <Container padding={16}>
+        <Button
+          onPress={() => {
+            onSubmit();
+          }}
+        >
+          Buat
+        </Button>
+      </Container>
 
       <ModalDropDown
         ref={modalDropDownRef}

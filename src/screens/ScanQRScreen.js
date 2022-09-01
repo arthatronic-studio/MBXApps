@@ -4,8 +4,8 @@ import { View, Modal, SafeAreaView, Dimensions, Linking, Platform } from 'react-
 import Styled from 'styled-components';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { RNCamera } from 'react-native-camera';
-import ScanQR from 'react-native-qrcode-scanner';
+import { Camera } from 'react-native-vision-camera';
+// import ScanQR from 'react-native-qrcode-scanner';
 
 import { store } from '@src/state/redux';
 
@@ -279,7 +279,7 @@ export default class ScanQRScreen extends Component {
                 onPressRightButton={() => this.onPressRightButton()}
             />
 
-            <ScanQR
+            {/* <ScanQR
                 ref={(scan) => this.scanner = scan}
                 onRead={(e) => this.barcodeReceived(e)}
                 showMarker
@@ -287,19 +287,19 @@ export default class ScanQRScreen extends Component {
                 containerStyle={{}}
                 cameraType={cameraType ? 'back' : 'front'}
                 markerStyle={{borderColor: Color.theme, borderWidth: modalVerify ? 0 : 1}}
-                flashMode={flashMode ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off}
+                flashMode={flashMode ? Camera.Constants.FlashMode.torch : Camera.Constants.FlashMode.off}
                 topViewStyle={{flex: 0}}
                 bottomViewStyle={{flex: 0}}
                 cameraProps={{
-                  autoFocus: RNCamera.Constants.AutoFocus.on,
+                  autoFocus: Camera.Constants.AutoFocus.on,
                 }}
-            />
+            /> */}
 
-            {/* <RNCamera
+            {/* <Camera
               ref={ref => this.camera = ref}
               style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}
-              type={RNCamera.Constants.Type.back}
-              flashMode={RNCamera.Constants.FlashMode.off}
+              type={Camera.Constants.Type.back}
+              flashMode={Camera.Constants.FlashMode.off}
               androidCameraPermissionOptions={{
                 title: 'Permission to use camera',
                 message: 'We need your permission to use your camera',

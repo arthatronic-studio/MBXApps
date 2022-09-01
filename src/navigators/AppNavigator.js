@@ -10,6 +10,7 @@ import MainProfile from 'src/screens/MainProfile/MainProfile';
 import BottomTabsNavigator from '@src/navigators/BottomTabsNavigator';
 import BottomTabsNavigatorKomoto from '@src/navigators/BottomTabsNavigatorKomoto';
 import BottomTabsNavigatorsabyan from '@src/navigators/BottomTabsNavigatorSabyan';
+import BottomTabsNavigatorUnitedIndo from './BottomTabsNavigatorUnitedIndo';
 import OnBoardingScreen from '@src/screens/OnBoardingScreen';
 import CreateEmergencyScreen from '@src/screens/CreateEmergencyScreen';
 import PDFReaderScreen from 'src/screens/PDFReaderScreen';
@@ -45,7 +46,16 @@ import EditThreadScreen from '@src/screens/MainForum/EditThreadScreen';
 import ForumScreen from 'src/screens/MainForum/ForumScreen';
 import ForumSearch from 'src/screens/MainForum/ForumSearch';
 import CardDetailForum from 'src/screens/MainForum/CardDetailForum';
-// import CardForumPage from 'src/screens/MainForum/CardForumPage';
+import ForumReport from 'src/screens/MainForum/NewForum/Report';
+import ForumReportDetail from 'src/screens/MainForum/NewForum/ReportDetail';
+import ForumTopicScreen from 'src/screens/MainForum/NewForum/ForumTopicScreen';
+import ForumGroupScreen from 'src/screens/MainForum/NewForum/ForumGroupScreen';
+import ForumGroupDetailScreen from 'src/screens/MainForum/NewForum/ForumGroupDetailScreen';
+import ForumGroupPermintaanScreen from 'src/screens/MainForum/NewForum/ForumGroupPermintaanScreen';
+import ForumGroupAllMemberScreen from 'src/screens/MainForum/NewForum/ForumGroupAllMemberScreen';
+import ForumThreadManageScreen from 'src/screens/MainForum/NewForum/ForumThreadManageScreen';
+import ForumThreadManageDetailScreen from 'src/screens/MainForum/NewForum/ForumThreadManageDetailScreen';
+import ForumKutipan from 'src/screens/MainForum/NewForum/ForumKutipan';
 
 // profile
 import ChangeProfile from '@src/screens/MainProfile/ChangeProfile';
@@ -81,6 +91,7 @@ import SearchArticle from 'src/screens/Posting/News/SearchArticle';
 import CreateNews from 'src/screens/Posting/News/CreateNews';
 import EditNews from 'src/screens/Posting/News/EditNews';
 import ShowAllNews from 'src/screens/Posting/News/ShowAllNews';
+
 
 // Place
 import PlaceScreen from 'src/screens/Posting/Place/Index';
@@ -270,11 +281,10 @@ const MainPage = MainHome;
 		// ? BottomTabsNavigatorKomoto
 		// : accessClient.BottomTabsNavigator.type === 'sabyan' ? BottomTabsNavigatorsabyan : BottomTabsNavigator;
 
-function MainStackNavigator() {
+function AppNavigator() {
   return (
     <Navigator
       initialRouteName="SplashScreen"
-      // SurveyPasarScreen
       screenOptions={{
         gestureEnabled: Platform.OS === 'ios',
         headerShown: false
@@ -319,10 +329,7 @@ function MainStackNavigator() {
       <Screen name="AuctionHistory" component={AuctionHistory} />
       <Screen name="TestLelang" component={TestLelang} />
       <Screen name="AddProductAuction" component={AddProductAuction} />
-      <Screen
-        name="AddProductAuctionSecond"
-        component={AddProductAuctionSecond}
-      />
+      <Screen name="AddProductAuctionSecond" component={AddProductAuctionSecond} />
       {/* Promo Popup */}
       <Screen name="PromoScreen" component={PromoScreen} />
       <Screen name="PromoDetailScreen" component={PromoDetailScreen} />
@@ -432,16 +439,23 @@ function MainStackNavigator() {
       <Screen name="ShowAllFromForum" component={ShowAllFromForum} />
       <Screen name="ForumSegmentScreen" component={ForumSegmentScreen} />
       <Screen name="CreateThreadScreen" component={CreateThreadScreen} />
-      <Screen
-        name="CreateThreadMultipleScreen"
-        component={CreateThreadMultipleScreen}
-      />
+      <Screen name="ForumReport" component={ForumReport} />
+      <Screen name="ForumReportDetail" component={ForumReportDetail} />
+      <Screen name="CreateThreadMultipleScreen" component={CreateThreadMultipleScreen} />
       <Screen name="DetailForumScreen" component={DetailForumScreen} />
       <Screen name="EditThreadScreen" component={EditThreadScreen} />
       <Screen name="ForumScreen" component={ForumScreen} />
       <Screen name="ForumSearch" component={ForumSearch} />
+      <Screen name="ForumKutipan" component={ForumKutipan} />
+      <Screen name="ForumTopicScreen" component={ForumTopicScreen} />
+      <Screen name="ForumGroupScreen" component={ForumGroupScreen} />
+      <Screen name="ForumGroupDetailScreen" component={ForumGroupDetailScreen} />
+      <Screen name="ForumGroupPermintaanScreen" component={ForumGroupPermintaanScreen} />
+      <Screen name="ForumGroupAllMemberScreen" component={ForumGroupAllMemberScreen} />
+      <Screen name="ForumThreadManageScreen" component={ForumThreadManageScreen} />
+      <Screen name="ForumThreadManageDetailScreen" component={ForumThreadManageDetailScreen} />
       <Screen name="CardDetailForum" component={CardDetailForum} />
-      {/* <Screen name="CardForumPage" component={CardForumPage}/> */}
+      
       {/* profile */}
       <Screen name="ChangeProfile" component={ChangeProfile} />
       <Screen name="ShowAllFromProfile" component={ShowAllFromProfile} />
@@ -501,25 +515,13 @@ function MainStackNavigator() {
       <Screen name="SurveyFourth" component={SurveyFourth} />
       {/* Transaction */}
       <Screen name="TransactionDetail" component={TransactionDetail} />
-      <Screen
-        name="TransactionDetailSucces"
-        component={TransactionDetailSucces}
-      />
-      <Screen
-        name="TransactionDetailSeller"
-        component={TransactionDetailSeller}
-      />
+      <Screen name="TransactionDetailSucces" component={TransactionDetailSucces} />
+      <Screen name="TransactionDetailSeller" component={TransactionDetailSeller} />
       {/* gallery */}
       <Screen name="GalleryScreen" component={GalleryScreen} />
       <Screen name="GalleryDetailScreen" component={GalleryDetailScreen} />
-      <Screen
-        name="GalleryDetailSliderScreen"
-        component={GalleryDetailSliderScreen}
-      />
-      <Screen
-        name="GalleryDetailSliderScreenEvent"
-        component={GalleryDetailSliderScreenEvent}
-      />
+      <Screen name="GalleryDetailSliderScreen" component={GalleryDetailSliderScreen} />
+      <Screen name="GalleryDetailSliderScreenEvent" component={GalleryDetailSliderScreenEvent} />
 
       {/* security */}
       <Screen name="VisitorScreen" component={VisitorScreen} />
@@ -531,4 +533,4 @@ function MainStackNavigator() {
   );
 }
 
-export default MainStackNavigator;
+export default AppNavigator;

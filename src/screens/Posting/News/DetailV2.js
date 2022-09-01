@@ -43,9 +43,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { fetchLikeComment } from 'src/api/likeComment';
 import { fetchProductSave } from 'src/api/productSave';
 import { fetchContentProduct } from 'src/api/contentV2';
-import { fetchContentShare } from 'src/api/contentShare';
-import Share from 'react-native-share';
 import Modal from 'react-native-modal';
+import { onShare } from 'src/utils/share';
+import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
 
 
 const NewsDetailV2 = ({navigation, route}) => {
@@ -70,6 +70,7 @@ const NewsDetailV2 = ({navigation, route}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [trigger, setTrigger] = useState(false);
   const scrollRef = useRef();
+  const {canGeneratedContent} = useCurrentUser();
 
   useEffect(() => {
     const timeout = trigger ? setTimeout(() => {
@@ -236,22 +237,6 @@ const NewsDetailV2 = ({navigation, route}) => {
       });
   }
 
-  const onShare = (value) => {
-    const shareOptions = {
-      message: value
-    }
-    Share.open(shareOptions);
-    fetchContentShare({code: code});
-    // Share.open(shareOptions)
-    //   .then((res) => {
-    //     console.log(res, "res");
-    //     if(res.success) fetchContentShare({code: code});
-    //   })
-    //   .catch((err) => {
-    //   err && console.log(err, "err share");
-    // });
-  }
-
   function Capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
@@ -386,8 +371,9 @@ const NewsDetailV2 = ({navigation, route}) => {
                 width: '50%',
                 alignItems: 'center',
                 height: '80%',
+                justifyContent: 'flex-end',
               }}>
-              <TouchableOpacity
+              {canGeneratedContent && <TouchableOpacity
                 style={{marginRight: 15}}
                 onPress={async() => {
                   const res = await fetchProductSave({productId: item.id});
@@ -398,16 +384,16 @@ const NewsDetailV2 = ({navigation, route}) => {
                   }
                 }}>
                 {state.bookmark == true ? (
-                  <FontAwesome name={'bookmark'} size={24} />
+                  <FontAwesome name={'bookmark'} size={24} color={Color.text} />
                 ) : (
-                  <FontAwesome name={'bookmark-o'} size={24} />
+                  <FontAwesome name={'bookmark-o'} size={24} color={Color.text} />
                 )}
-              </TouchableOpacity>
+              </TouchableOpacity>}
               <TouchableOpacity
                 onPress={() => {
                   modalOptionsRef.current.open();
                 }}>
-                <Entypo name={'dots-three-vertical'} size={20} />
+                <Entypo name={'dots-three-vertical'} size={20} color={Color.text} />
               </TouchableOpacity>
             </View>
           }
@@ -624,6 +610,11 @@ const NewsDetailV2 = ({navigation, route}) => {
               }}>
               <TouchableWithoutFeedback
                 onPress={() => {
+                  if (!canGeneratedContent) {
+                    alert('Silakan login terlebih dulu');
+                    return;
+                  }
+                  
                   onSubmitLike();
                   GALogEvent('Artikel', {
                     id: item.id,
@@ -713,7 +704,7 @@ const NewsDetailV2 = ({navigation, route}) => {
               </TouchableWithoutFeedback>
 
               <TouchableWithoutFeedback
-                onPress={() => onShare(item.share_link)}
+                onPress={() => onShare(item.share_link, item.code)}
                 style={{
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -954,9 +945,9 @@ const NewsDetailV2 = ({navigation, route}) => {
             ref={modalOptionsRef}
             isOwner={user && user.userId === item.ownerId}
             item={item}
+            moduleType="NEWS"
             editScreen={'EditNews'}
             onDelete={() => setModalVisible(!isModalVisible)}
-            onShare={() => onShare(item.share_link)}
           />
         </>
       )}

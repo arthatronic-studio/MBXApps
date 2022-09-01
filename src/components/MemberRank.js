@@ -43,8 +43,12 @@ const MemberRank = ({ }) => {
       })
       .then(res => {
         if (res && res.data && res.data.getUserRangkingHome) {
-          setPemula(res.data.getUserRangkingHome.pemula);
-          setVeteran(res.data.getUserRangkingHome.veteran);
+          if (res.data.getUserRangkingHome.pemula) {
+            setPemula(res.data.getUserRangkingHome.pemula);
+          }
+          if (res.data.getUserRangkingHome.veteran) {
+            setVeteran(res.data.getUserRangkingHome.veteran);
+          }
         }
       })
       .catch(err => {
@@ -88,7 +92,7 @@ const MemberRank = ({ }) => {
           </Text>
           <Divider height={4} />
           <TouchableOpacity
-            onPress={() => onPressMember(pemula)}
+            onPress={() => typeof pemula.userId !== 'undefined' && pemula.userId !== user.userId && onPressMember(pemula)}
             style={{ flexDirection: 'row', alignItems: 'center' }}
           >
             <Image
@@ -124,7 +128,7 @@ const MemberRank = ({ }) => {
           </Text>
           <Divider height={4} />
           <TouchableOpacity
-            onPress={() => onPressMember(veteran)}
+            onPress={() => typeof veteran.userId !== 'undefined' && veteran.userId !== user.userId && onPressMember(veteran)}
             style={{ flexDirection: 'row', alignItems: 'center' }}
           >
             <Image

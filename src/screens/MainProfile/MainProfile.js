@@ -110,7 +110,7 @@ const MainProfile = ({navigation, route}) => {
   }
 
   const onPressExit = () => {
-    Alert('Logout', 'Apakah Anda yakin akan logout?', () => onPressLogout());
+    Alert('Logout', 'Apakah Anda yakin akan logout?', () => onPressLogout(false));
   };
 
   const onPressLogout = () => {
@@ -421,7 +421,17 @@ const MainProfile = ({navigation, route}) => {
       icon: (
         <Ionicons name="exit-outline" size={20} color={Color.info} style={{}} />
       ),
-      onPress: () => navigation.navigate('LoginScreen'),
+      onPress: () => onPressLogout(false),
+    },
+    {
+      code: 'signup',
+      title: 'Daftar',
+      badgeTitle: '',
+      show: user && user.guest,
+      icon: (
+        <Ionicons name="exit-outline" size={20} color={Color.primary} style={{}} />
+      ),
+      onPress: () => onPressLogout(true),
     },
   ];
 
@@ -732,7 +742,7 @@ const MainProfile = ({navigation, route}) => {
                           color={
                             item.code === 'logout'
                               ? Color.error
-                              : item.code === 'login'
+                              : item.code === 'login' || item.code === 'signup'
                               ? Color.info
                               : Color.text
                           }>

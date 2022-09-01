@@ -22,7 +22,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Container, Divider, Row } from 'src/styled';
 import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
-// import HtmlView from 'src/components/HtmlView';
 
 const GalleryDetailScreen = ({ navigation, route }) => {
     const { params } = route;

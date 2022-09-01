@@ -7,6 +7,7 @@ const initialState = {
     },
     createEvent: false,
     register: {
+      id: null,
       status: false
     },
     forgetPassword: {
@@ -48,7 +49,7 @@ const Auth = (state = initialState, action) => {
         case 'USER.REGISTER':
           return {
             ...state,
-            register: { status: action.status },
+            register: { id: action.id, status: action.status },
             loading: false,
           };
         case 'USER.FORGET_PASSWORD':
@@ -109,7 +110,8 @@ const Auth = (state = initialState, action) => {
           return {
             ...state,
             register: {
-              status: false
+              id: null,
+              status: false,
             },
             forgetPassword: {
               status: false

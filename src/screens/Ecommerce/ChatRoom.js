@@ -7,7 +7,6 @@ import { MainView } from '@src/styled';
 import { Col, Scaffold, Text, TouchableOpacity, useColor } from '@src/components';
 import { shadowStyle } from '@src/styles';
 import { TabBar, TabView, SceneMap } from 'react-native-tab-view';
-import CardForumPage from '../MainForum/CardForumPage';
 import CardChat from './CardChat';
 import CardChatExist from './CardChatExist';
 

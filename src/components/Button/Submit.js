@@ -57,6 +57,7 @@ const defaultProps = {
     buttonWidth: '100%',
     buttonBorderTopWidth: 0.5,
     onPress: () => {},
+    disabled:false,
     twinButtonLabel: 'Cek',
     onPressTwinButton: () => {},
     onPressToggle: () => {},
@@ -64,7 +65,7 @@ const defaultProps = {
 
 const Submit = (props) => {
     const {
-        type, title, detail, withLeftToogle, onPressToggle,
+        type, title,  disabled, detail, withLeftToogle, onPressToggle,
         onPress, buttonLabel, buttonColor, buttonWidth, buttonTextColor, buttonBorderColor, buttonBorderTopWidth,
         onPressTwinButton, twinButtonLabel, twinButtonColor, twinButtonBorderColor, style,
     } = props;

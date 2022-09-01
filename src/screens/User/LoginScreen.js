@@ -22,7 +22,7 @@ import {
 import {Button, TouchableOpacity} from '@src/components/Button';
 import Text from '@src/components/Text';
 import validate from '@src/lib/validate';
-import {login} from '@src/state/actions/user/auth';
+import {guestLogin, login} from '@src/state/actions/user/auth';
 import {redirectTo} from '@src//utils';
 import FormInput from 'src/components/FormInput';
 import { Container, Row, Line, Divider } from 'src/styled';
@@ -76,6 +76,18 @@ const LoginScreen = ({navigation, route}) => {
   const [popupProps, showPopup] = usePopup();
 
   const passwordRef = useRef();
+
+  useEffect(() => {
+    if (route.params && route.params.triggerRegister) {
+      navigation.setParams({ triggerRegister: false });
+      
+      // if (accessClient.isThisable) {
+      //   setModalRegister(true);
+      //   return;
+      // }
+    }
+  }, [route.params]);
+
 
   useEffect(() => {
     messaging()
@@ -146,7 +158,12 @@ const LoginScreen = ({navigation, route}) => {
             }, 1000);
           }
         }
-      } else if (!user && error !== '') {
+      }
+      else if (user && user.guest) {
+        // Alert('Guest Login', 'Login sebagai Tamu?', () => redirectTo('MainPage'));
+        redirectTo('MainPage');
+      }
+      else if (!user && error !== '') {
         showPopup(
           'Nomor telepon / Password yang Anda masukan salah atau Terjadi Kesalahan Server',
           'error',
@@ -372,6 +389,17 @@ const LoginScreen = ({navigation, route}) => {
             >
               Login
             </Button>
+
+            {accessClient.LoginScreen.guesMode && <Container paddingTop={16}>
+              <Button
+                outline
+                onPress={() => {
+                  dispatch(guestLogin());
+                }}
+              >
+                Guest Mode
+              </Button>
+            </Container>}
           </Container>
         </View>
       </KeyboardAwareScrollView>

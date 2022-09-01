@@ -33,6 +33,7 @@ import { fetchSaveEvent } from 'src/api/event/saveEvent';
 import { FormatMoney } from 'src/utils';
 import imageAssets from 'assets/images';
 import CardEventTicket from './CardEventTicket';
+import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
 
 const EventDetail = ({ navigation, route }) => {
   const { Color } = useColor();
@@ -40,6 +41,7 @@ const EventDetail = ({ navigation, route }) => {
   const modalOptionsRef = useRef();
   const flatlistRef = useRef();
   const user = useSelector(state => state['user.auth'].login.user);
+  const {canGeneratedContent} = useCurrentUser();
 
   const [im_like, set_im_like] = useState(items.im_like);
   const [heightHeader, setHeightHeader] = useState(0);

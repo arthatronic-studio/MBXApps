@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
 import RNFS from 'react-native-fs';
-import { RNFFprobe } from 'react-native-ffmpeg';
+import { FFmpegKit, FFmpegKitConfig, FFprobeKit } from 'ffmpeg-kit-react-native';
 
 const outputVideoCache = `file://${RNFS.CachesDirectoryPath}/video.mp4`;
 const outputImageCache = `file://${RNFS.CachesDirectoryPath}/image.png`;
@@ -35,7 +35,7 @@ const getRawCodec = async(param, totalDuration) => {
         imageCodec = ['-i', input, '-ss', '00:00:01.000', '-frames', '1', '-y', outputImageCache];
     }
 
-    const info = await RNFFprobe.getMediaInformation(input);
+    const info = await FFprobeKit.getMediaInformation(input);
     const information = info.getMediaProperties();
 
     if (information) {

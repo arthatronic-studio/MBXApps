@@ -23,6 +23,11 @@ const listInitialCode = [
     'TRIBESXGOFISH',
     'TRIBESXTEUKUZACKY',
     'TRIBESXUNITEDID',
+    'TRIBESXMIGARI',
+    'TRIBESXINDOBARCA',
+    'TRIBESXKOMISI',
+    'TRIBESXTHISABLE',
+    'TRIBESXSANTRIPRENEUR',
 ];
 
 const useDefaultDarkThemeCode = [
@@ -39,6 +44,11 @@ const isGofish = Config.INITIAL_CODE === 'TRIBESXGOFISH';
 const isTeukuZacky = Config.INITIAL_CODE === 'TRIBESXTEUKUZACKY';
 const isSurvey = Config.INITIAL_CODE === 'TRIBESXSURVEY';
 const isUnitedId = Config.INITIAL_CODE === 'TRIBESXUNITEDID';
+const isMigari = Config.INITIAL_CODE === 'TRIBESXMIGARI';
+const isIndoBarca = Config.INITIAL_CODE === 'TRIBESXINDOBARCA';
+const isKomisi = Config.INITIAL_CODE === 'TRIBESXKOMISI';
+const isThisable = Config.INITIAL_CODE === 'TRIBESXTHISABLE';
+const isSantriPreneur = Config.INITIAL_CODE === 'TRIBESXSANTRIPRENEUR';
 
 export const accessClient = {
     // state
@@ -52,10 +62,16 @@ export const accessClient = {
     isTeukuZacky,
     isSurvey,
     isUnitedId,
+    isIndoBarca,
+    isKomisi,
+    isThisable,
     IsAutoJoinMember:
-        isKomoto ? false :
-        isSabyan ? true :
-        false,
+        isSabyan ||
+        isIndoBarca ||
+        isThisable ||
+        isSantriPreneur ||
+        isMigari ?
+        true : false,
     Theme:
         useDefaultDarkThemeCode.includes(Config.INITIAL_CODE) ? 'dark' : 'light',
     ColorBgParallax:
@@ -72,61 +88,51 @@ export const accessClient = {
             isKomoto ? 'theme' :
             isSabyan ? 'primary' : 'theme',
     },
+    LoginScreen: {
+        guesMode: isSantriPreneur ? false : true
+    },
     BottomTabsNavigator: {
         type:
             isKomoto ? 'komoto' :
             isSabyan ? 'sabyan' : 'default',
     },
     MainHome: {
-        showMenuHome: isKomoto || isUnitedId ? false : true,
+        showMenuHome: isUnitedId ? false : true,
+        showMemberRank: isIndoBarca ? false : true,
         showWidgetBalance: isKomoto || isSabyan ? false : true,
         showListAuction: isKomoto || isSabyan ? false : true,
         showListSoonAuction: isKomoto || isSabyan ? false : true,
         showListPromo: isKomoto || isSabyan ? false : true,
         showListVideo:
-            isKomoto ? false:
-            isSabyan ? true : true,
+            isKomoto ? false : true,
         showListEbookNewer: isKomoto || isSabyan ? false : true,
     },
     CreatePosting: {
         showPrivacy:
-            isKomoto ||
-            isSabyan ? false : true,
+            isKomoto || isSabyan ? false : true,
     },
     MainProfile: {
         showButtonJoinCommunity:
-            isKomoto ? false :
-            isSabyan ? false : true,
+        isTribes ? true : false,
         showMenuHistory:
-            isKomoto ? false :
-            isSabyan ? false : true,
+        isTribes ? true : false,
         showMenuCoupon:
-            isKomoto ? false :
-            isSabyan ? false : true,
+        isTribes ? true : false,
         showMenuMyStore:
-            isKomoto ? false :
-            isSabyan ? false : true,
+        isTribes ? true : false,
         showMenuBidAuction:
-            isKomoto ? false :
-            isSabyan ? false : true,
+            isTribes ? true : false,
         showMenuJoinCommunity:
-            isKomoto ? true :
-            isSabyan ? false : false,
+            isKomoto ? true : false,
         showMenuCommunityAdmin:
-            isKomoto ? true :
-            isSabyan ? false : false,
+            isKomoto ? true : false,
         showMenuSurvey:
-            isKomoto ? false :
-            isSabyan ? false :
-            isSurvey ? true :
-            true,
+        isTribes || isSurvey ? true : false,
         showStatusMember:
-            isKomoto ? true :
             isSabyan ? false : true,
     },
     ChangeProfile: {
         showIdNumber:
-            isKomoto ? true :
-            isSabyan ? false : false,
+        isKomoto ? true : false,
     },
 };

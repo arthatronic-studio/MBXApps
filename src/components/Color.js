@@ -43,7 +43,7 @@ export const lightModeColors = {
   text: '#1D1D1B',
   textSoft: '#575651',
   textInput: '#FFFFFF',
-  border: '#E0E0E0',
+  border: '#EEEEEE',
   semiwhite: '#E5E5E5',
 };
 

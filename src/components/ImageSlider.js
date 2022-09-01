@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import {Image} from 'react-native';
-import Swiper from 'react-native-swiper';
+import {View, Image} from 'react-native';
 
 export default class ImageSlider extends Component {
   render() {
     const {data} = this.props;
     return (
-      <Swiper showsButtons={false}>
+      <View>
         {data.map((val, idx) => (
           <Image
             key={idx}
@@ -14,7 +13,7 @@ export default class ImageSlider extends Component {
             style={{width: '100%', height: '100%', borderRadius: 5}}
           />
         ))}
-      </Swiper>
+      </View>
     );
   }
 }

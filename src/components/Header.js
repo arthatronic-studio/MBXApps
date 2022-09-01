@@ -41,14 +41,10 @@ const ColumnView = Styled(Col)`
 
 const TransparentBackView = Styled(View)`
     width: 100%;
-    maxWidth: 74;
-    minHeight: 25;
+    aspectRatio: 1;
     justifyContent: center;
-    alignItems: flex-end;
-    paddingRight: 10;
-    backgroundColor: #FFFFFF;
-    borderTopRightRadius: 30;
-    borderBottomRightRadius: 30;
+    alignItems: center;
+    borderRadius: 37px;
 `;
 
 const SearchBar = Styled(TextInput)`
@@ -124,11 +120,11 @@ const Header = (props) => {
           <ColumnView size={2}>
             {showLeftButton ? (
               <LeftButton onPress={onPressLeftButton}>
-                <TransparentBackView>
+                <TransparentBackView style={{backgroundColor: Color.primary}}>
                   {showIconLeftButton && (
                     <Fontisto
                       name={iconLeftButton}
-                      color={Color.text}
+                      color={Color.textButtonInline}
                       size={18}
                     />
                   )}

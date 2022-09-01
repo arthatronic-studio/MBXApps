@@ -6,7 +6,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import DocumentPicker from 'react-native-document-picker';
 // import ImageCropPicker from 'react-native-image-crop-picker';
 import TrackPlayer from 'react-native-track-player';
-import { RNFFmpeg, RNFFmpegConfig } from 'react-native-ffmpeg';
+import { FFmpegKit, FFmpegKitConfig, FFprobeKit } from 'ffmpeg-kit-react-native';
 
 import Text from '@src/components/Text';
 import Color from '@src/components/Color';
@@ -198,8 +198,8 @@ const UploadMusicScreen = (props) => {
 
     useEffect(() => {
         const unsubListener = navigation.addListener('focus', (_) => {
-            RNFFmpegConfig.enableLogCallback((log) => {});
-            RNFFmpegConfig.enableStatisticsCallback(() => {});
+            FFmpegKitConfig.enableLogCallback((log) => {});
+            FFmpegKitConfig.enableStatisticsCallback(() => {});
         });
 
         return () => {
@@ -268,7 +268,7 @@ const UploadMusicScreen = (props) => {
     }
 
     const onCompressMusic = (musicCodec, outputMusicCache, objOrigin) => {
-        RNFFmpeg.executeAsyncWithArguments(musicCodec, callback => {
+        FFmpegKit.executeWithArgumentsAsync(musicCodec, callback => {
             if (callback.returnCode === 0) {
                 encodeDocument(outputMusicCache);
                 setOriginDocument({ ...objOrigin, path: outputMusicCache });

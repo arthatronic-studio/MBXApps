@@ -981,7 +981,7 @@ const MainHome = ({ navigation, route }) => {
             productCategory='FORUM'
             name='Forum'
             title='Thread Populer'
-            nav='ForumScreen'
+            nav='ForumTopicScreen'
             refresh={refreshing || isFocused}
           /> */}
 
@@ -994,7 +994,7 @@ const MainHome = ({ navigation, route }) => {
           /> */}
 
           {/* <HighlightContentProduct
-            productCategory='Artikel'
+            productCategory='POSTING'
             name='Artikel'
             title='Artikel Populer'
             nav='NewsScreen'

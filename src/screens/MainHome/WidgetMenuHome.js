@@ -13,7 +13,7 @@ import {
   useColor,
 } from '@src/components';
 import {shadowStyle} from '@src/styles';
-import {Container} from '@src/styled';
+import {Container, Line} from '@src/styled';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import client from 'src/lib/apollo';
 import { queryMenuList } from 'src/lib/query';
@@ -120,8 +120,6 @@ const WidgetMenuHome = ({ onPress, showMore }) => {
 
   if (currentData.length === 0) return <View />;
 
-  const spaceContentSize = 8;
-
   return (
     <Container paddingHorizontal={0} paddingTop={paddingInMenu}>
       <Container
@@ -196,6 +194,8 @@ const WidgetMenuHome = ({ onPress, showMore }) => {
           );
         })}
       </Container>
+
+      <Line color={Color.border} width={width} />
 
       <ModalMenuHome
         visible={modalMenuHome}

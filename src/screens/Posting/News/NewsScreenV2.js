@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   onRefresh,
   RefreshControl,
+  Platform,
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import {useSelector} from 'react-redux';
@@ -22,15 +23,21 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import client from 'src/lib/apollo';
 import HighlightContentProductV2 from 'src/components/Content/HighlightContentProductV2';
 import moment from 'moment';
+import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
 
 const NewsScreenV2 = ({navigation, route}) => {
   const {title, userProfileId} = route.params;
+
   const user = useSelector(state => state['user.auth'].login.user);
   const {Color} = useColor();
+  const isFocused = useIsFocused();
+
   const [loadingBanner, setLoadingBanner] = useState(true);
   const [listBanner, setListBanner] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  
   const colorOutputRange = [Color[accessClient.ColorBgParallax], Color.theme];
-  const isFocused = useIsFocused();
+  const {canGeneratedContent} = useCurrentUser();
 
   useEffect(() => {
     fetchBannerList();
@@ -74,16 +81,18 @@ const NewsScreenV2 = ({navigation, route}) => {
           width: '100%',
           height: 60,
           flexDirection: 'row',
+          paddingHorizontal: 16,
         }}>
         <AntDesign
           onPress={() => navigation.goBack()}
           name={'arrowleft'}
           size={20}
-          style={{marginHorizontal: 12}}
+          style={{marginRight: 12}}
+          color={Color.textButtonInline}
         />
         <TouchableOpacity
           onPress={() => navigation.navigate('SearchArticle')}
-          style={{width: '70%', height: '80%', justifyContent: 'center'}}>
+          style={{flex: 1, height: '80%', justifyContent: 'center'}}>
           <TextInput
             editable={false}
             placeholder="Cari berita hari ini . . ."
@@ -106,13 +115,14 @@ const NewsScreenV2 = ({navigation, route}) => {
             }}
           />
         </TouchableOpacity>
-        <IonIcons
+        {canGeneratedContent && <IonIcons
           onPress={() => navigation.navigate('Saved')}
           name={'md-bookmarks-outline'}
           size={18}
-          style={{marginHorizontal: 12}}
-        />
-        <IonIcons
+          style={{marginLeft: 12}}
+          color={Color.textButtonInline}
+        />}
+        {canGeneratedContent && <IonIcons
           onPress={() =>
             navigation.navigate('CreateNews', {
               title,
@@ -122,27 +132,20 @@ const NewsScreenV2 = ({navigation, route}) => {
           }
           name={'add'}
           size={24}
-        />
+          style={{marginLeft: 12}}
+          color={Color.textButtonInline}
+        />}
       </View>
     );
   };
 
-  let canGeneratedContent = accessClient.UserGeneratedContent === 'ALL_USER';
-  if (
-    accessClient.UserGeneratedContent === 'ONLY_ADMIN' &&
-    user &&
-    user.isDirector === 1
-  )
-    canGeneratedContent = true;
-  else if (
-    accessClient.UserGeneratedContent === 'ONLY_MEMBER' &&
-    user &&
-    user.organizationId
-  )
-    canGeneratedContent = true;
-  const [refreshing, setRefreshing] = useState(false);
   return (
-    <Scaffold header={<ArticleHeader />}>
+    <Scaffold
+      header={<ArticleHeader />}
+      translucent={Platform.OS === 'ios' ? true : false}
+      useSafeArea={Platform.OS === 'ios' ? false : true}
+      statusBarColor={Color.primarySoft}
+    >
       <ScrollView
         refreshControl={
           <RefreshControl
