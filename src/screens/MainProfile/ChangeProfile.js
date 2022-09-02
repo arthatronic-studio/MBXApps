@@ -1,5 +1,5 @@
-import React, { useState, useEffect,useRef } from 'react';
-import { View, TextInput,Platform, TouchableOpacity as NativeTouchable, ScrollView, SafeAreaView,Image,Keyboard, BackHandler, useWindowDimensions } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, TextInput, Platform, TouchableOpacity as NativeTouchable, ScrollView, SafeAreaView, Image, Keyboard, BackHandler, useWindowDimensions } from 'react-native';
 import Styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -25,21 +25,11 @@ import {
 import validate from '@src/lib/validate';
 import { updateCurrentUserProfile } from '@src/state/actions/user/auth';
 import { usePreviousState } from '@src/hooks';
-import { Divider } from 'src/styled';
+import { Container, Divider, Row } from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { redirectTo } from 'src/utils';
 
-const Container = Styled(View)`
-  width: 100%;
-  height: 100%;
-  alignItems: center;
-  justifyContent: center;
-  padding: 30px 16px 0px;
-`;
-const CustomTouch = Styled(TouchableOpacity)`
-    backgroundColor: transparent;
-`;
 const EmailRoundedView = Styled(View)`
   width: 100%;
   height: 50px;
@@ -69,16 +59,22 @@ const LabelInput = Styled(View)`
   alignItems: flex-start;
 `;
 
-const inputs = ['fullName', 'idCardNumber', 'email', 'phoneNumber','Nomor_ID', 'Alamat','tanggalLahir'];
+const inputs = ['fullName', 'email', 'phoneNumber', 'Alamat', 'tanggalLahir'];
+
+const listGender = [
+  { id: 'male', name: 'Laki-laki' },
+  { id: 'female', name: 'Perempuan' },
+];
 
 export default ({ navigation, route }) => {
   // dispatch
   const dispatch = useDispatch();
 
   //
-   const { height } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   // selector
   const user = useSelector(state => state['user.auth'].login.user);
+  const auth = useSelector(state => state['auth']);
 
   const {
     loading,
@@ -94,24 +90,20 @@ export default ({ navigation, route }) => {
   const [popupProps, showPopup] = usePopup();
 
   // state
-  const [allValid, setAllValid] = useState(false);``
+  const [allValid, setAllValid] = useState(false); ``
   const [userData, setUserData] = useState({
-    fullName: user ? user.firstName + ' ' + user.lastName : '',
-    idCardNumber: user ? user.idCardNumber : '',
-    email: user ? user.email : '',
-    phoneNumber: user ? user.phoneNumber : '',
-    tanggalLahir: user && user.birthDate ? user.birthDate : Moment(new Date('1990')).format('DD-MM-YYYY'),
-    Nomor_ID: user ? user.idNumber :  '',
-    Alamat : user ? user.address : '',
+    fullName: auth ? auth.user.name : '',
+    email: auth ? auth.user.email : '',
+    // phoneNumber: auth ? auth.user.phone : '',
+    tanggalLahir: auth && auth.user.dob ? auth.user.dob : Moment(new Date('1990')).format('DD-MM-YYYY'),
+    Alamat: auth ? auth.user.address : '',
   });
   const [errorData, setErrorData] = useState({
     fullName: null,
-    idCardNumber: null,
     email: null,
-    phoneNumber: null,
-    Nomor_ID : null,
-    Alamat : null,
-    tanggalLahir: null
+    // phoneNumber: null,
+    tanggalLahir: null,
+    Alamat: null,
   });
 
   //Image
@@ -121,12 +113,13 @@ export default ({ navigation, route }) => {
   //Tanggal Lahir
   const [tanggalLahir, setDate] = useState(user && user.birthDate ? new Date(...user.birthDate.split("-").reverse()) : new Date('1990'));
   const [open, setOpen] = useState(false);
+  const [selectedJK, setSelectedJK] = useState(listGender[0]);
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', handleBackPress);
 
     return () => {
-        BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+      BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
     }
   }, []);
 
@@ -161,7 +154,7 @@ export default ({ navigation, route }) => {
     if (allValid) {
       setAllValid(false)
 
-      const { fullName, idCardNumber, email, phoneNumber, Nomor_ID, Alamat,tanggalLahir } = userData;
+      const { fullName, email, phoneNumber, Alamat, tanggalLahir } = userData;
 
       const nameSplit = fullName.split(' ');
       let lastName = '';
@@ -174,17 +167,15 @@ export default ({ navigation, route }) => {
       const newUserData = {
         firstName: nameSplit[0].trim(),
         lastName: lastName.trim(),
-        idCardNumber,
         email,
         phoneNumber,
-        idNumber: Nomor_ID,
         address: Alamat,
         birthDate: tanggalLahir,
-        photoProfile : user && thumbImage === '' ? '' : 'data:image/png;base64,' + thumbImage
+        photoProfile: user && thumbImage === '' ? '' : 'data:image/png;base64,' + thumbImage
       };
 
       console.log('newUserData', newUserData);
-      
+
       dispatch(updateCurrentUserProfile(newUserData));
     }
   }, [allValid]);
@@ -207,67 +198,118 @@ export default ({ navigation, route }) => {
       if (error) valid = false;
       newErrorState[input] = error;
     }
-    
+
     setErrorData(newErrorState);
     setAllValid(valid);
   }
-  
+
+  const renderRadio = ({ label, data, selected, flexDirection, onSelected }) => {
+    return (
+      <View style={{ width: '100%', alignItems: 'flex-start', marginBottom: 16 }}>
+        <Text
+          align='left'
+          type='medium'
+          size={12}
+          color={Color.textSoft}
+          style={{ marginBottom: 12 }}
+        >
+          {label}
+        </Text>
+
+        <View
+          style={{
+            width: '100%',
+            flexDirection,
+          }}
+        >
+          {data.map((v, id) => {
+            const isSelected = selected && v.id === selected.id;
+
+            return (
+              <TouchableOpacity
+                key={id}
+                onPress={() => {
+                  onSelected(v);
+                }}
+                style={{ paddingRight: 16, marginBottom: 8 }}
+              >
+                <View style={{ flexDirection: 'row' }}>
+                  <View
+                    style={{ height: 18, width: 18, borderRadius: 18 / 2, borderWidth: 1, borderColor: Color.text, backgroundColor: Color.textInput, justifyContent: 'center', alignItems: 'center' }}
+                  >
+                    {isSelected && <View style={{ height: 10, width: 10, borderRadius: 10 / 2, backgroundColor: Color.primary }} />}
+                  </View>
+                  <Container paddingLeft={8}>
+                    <Text size={12}>{v.name}</Text>
+                  </Container>
+                </View>
+              </TouchableOpacity>
+            )
+          })}
+        </View>
+      </View>
+    )
+  }
+
   return (
     <Scaffold
       popupProps={popupProps}
       header={
         // handle user yg dipaksa update profile
-        <Header 
-          title='Ubah Profil' 
-          showLeftButton={navigation.canGoBack()} 
+        <Header
+          title='Edit Profil'
+          showLeftButton={navigation.canGoBack()}
           onPressLeftButton={() => {
             dispatch({ type: 'USER.CLEAR_ERROR' });
             navigation.goBack();
-            }
-          }
+          }}
         />
       }
     >
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps='handled'
-        contentContainerStyle={{paddingBottom: 16}}
+        contentContainerStyle={{ paddingBottom: 16 }}
       >
-        <Container>
+        <Container paddingHorizontal={16} paddingBottom={16}>
           {thumbImage !== '' && <TouchableOpacity
-              onPress={() => {}}
-              style={{width: '100%', height: height / 3, borderRadius: 4, alignItems: 'center'}}
+            onPress={() => { }}
+            style={{ width: '100%', height: height / 3, borderRadius: 4, alignItems: 'center' }}
           >
-              <Image
-                  style={{height: '100%', aspectRatio: 1, borderRadius: 40, alignItems: 'center', justifyContent: 'center'}}
-                  source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
-              />
+            <Image
+              style={{ height: '100%', aspectRatio: 1, borderRadius: 40, alignItems: 'center', justifyContent: 'center' }}
+              source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
+            />
           </TouchableOpacity>}
 
-            <TouchableOpacity
-              onPress={() => {
-                const options = {
-                    mediaType: 'photo',
-                    maxWidth: 640,
-                    maxHeight: 640,
-                    quality: 1,
-                    includeBase64: true,
+          <TouchableOpacity
+            onPress={() => {
+              const options = {
+                mediaType: 'photo',
+                maxWidth: 640,
+                maxHeight: 640,
+                quality: 1,
+                includeBase64: true,
+              }
+
+              launchImageLibrary(options, (callback) => {
+                if (callback.didCancel || callback.errorCode || callback.errorMessage) {
+                  return;
                 }
 
-                launchImageLibrary(options, (callback) => {
-                    setThumbImage(callback.base64);
-                    setMimeImage(callback.type);
-                })
-              }}
-              style={{width: '100%', height: 70, borderRadius: 4, marginTop: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center'}}
-            >
-              <Entypo name='folder-images' size={22} style={{marginBottom: 4}} />
-              <Text size={10}>Pilih gambar</Text>
-            </TouchableOpacity>
+                setThumbImage(callback.base64);
+                setMimeImage(callback.type);
+              })
+            }}
+            style={{ width: width / 3, aspectRatio: 1, borderRadius: width / 3, marginVertical: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center', alignSelf: 'center' }}
+          >
+            <Entypo name='folder-images' size={22} style={{ marginBottom: 4 }} />
+            <Text size={10}>Pilih gambar</Text>
+          </TouchableOpacity>
 
           <Divider />
-               
+
           <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Nama Lengkap</Text>
+            <Text size={12} letterSpacing={0.08} style={{ opacity: 0.6 }}>Nama Lengkap</Text>
           </LabelInput>
           <EmailRoundedView>
             <CustomTextInput
@@ -280,7 +322,7 @@ export default ({ navigation, route }) => {
               selectionColor={Color.text}
               value={userData.fullName}
               onBlur={() => isValueError('fullName')}
-              style={{color: Color.text}}
+              style={{ color: Color.text }}
             />
           </EmailRoundedView>
           <ErrorView>
@@ -288,84 +330,50 @@ export default ({ navigation, route }) => {
           </ErrorView>
 
           <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Tanggal Lahir</Text>
+            <Text size={12} letterSpacing={0.08} style={{ opacity: 0.6 }}>Tanggal Lahir</Text>
           </LabelInput>
           <EmailRoundedView>
-           
-            <CustomTouch onPress={() => setOpen(true)}>
-                  <EmailRoundedView>
-                          <View style={{height: 34, paddingRight: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
-                          <Text size={14} style={{marginTop: 2}}></Text>
-                          <Text>{userData.tanggalLahir ? userData.tanggalLahir : 'Pilih Tanggal '} </Text>
-                          <Ionicons name='chevron-down-outline' color={Color.text} />
-                      </View>
-                  </EmailRoundedView>
-              </CustomTouch> 
+            <TouchableOpacity
+              onPress={() => setOpen(true)}
+              style={{ width: width - 32, height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', borderBottomWidth: 0.5 }}
+            >
+              <View style={{ flex: 1 }}>
+                <Text align='left'>{userData.tanggalLahir ? userData.tanggalLahir : 'Pilih Tanggal '} </Text>
+              </View>
+              <View style={{ flex: 1, paddingRight: 16, alignItems: 'flex-end' }}>
+                <Ionicons name='chevron-down-outline' color={Color.text} />
+              </View>
+            </TouchableOpacity>
           </EmailRoundedView>
           <ErrorView>
             <Text size={12} color={Color.error} type='medium' align='left'>{errorData.tanggalLahir}</Text>
           </ErrorView>
-         
+
+          {renderRadio({
+            flexDirection: 'row',
+            label: 'Jenis Kelamin',
+            data: listGender,
+            selected: selectedJK,
+            onSelected: (val) => {
+              setSelectedJK(val)
+            }
+          })}
+
           <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>NIK</Text>
+            <Text size={12} letterSpacing={0.08} style={{ opacity: 0.6 }}>Email</Text>
           </LabelInput>
           <EmailRoundedView>
             <CustomTextInput
-              placeholder='Masukan NIK'
-              keyboardType='number-pad'
+              placeholder='Masukan email'
+              keyboardType='email-address'
               placeholderTextColor={Color.gray}
               underlineColorAndroid='transparent'
               autoCorrect={false}
-              onChangeText={(text) => onChangeUserData('idCardNumber', text)}
+              onChangeText={(text) => onChangeUserData('email', text)}
               selectionColor={Color.text}
-              value={userData.idCardNumber}
-              onBlur={() => isValueError('idCardNumber')}
-              style={{color: Color.text}}
-              maxLength={16}
-              />
-          </EmailRoundedView>
-          <ErrorView>
-            <Text size={12} color={Color.error} type='medium' align='left'>{errorData.idCardNumber}</Text>
-          </ErrorView>
-
-          {accessClient.ChangeProfile.showIdNumber && <>
-            <LabelInput>
-              <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Nomor Punggung</Text>
-            </LabelInput>
-            <EmailRoundedView>
-              <CustomTextInput
-                placeholder=' Masukan nomor punggung '
-                keyboardType='default'
-                placeholderTextColor={Color.gray}
-                underlineColorAndroid='transparent'
-                autoCorrect={false}
-                onChangeText={(text) => onChangeUserData('Nomor_ID', text)}
-                selectionColor={Color.text}
-                value={userData.Nomor_ID}
-                onBlur={() => isValueError('Nomor_ID')}
-                style={{color: Color.text}}
-                />
-            </EmailRoundedView>
-            <ErrorView>
-              <Text size={12} color={Color.error} type='medium' align='left'>{errorData.Nomor_ID}</Text>
-            </ErrorView>
-          </>}
-
-          <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Email</Text>
-          </LabelInput>
-          <EmailRoundedView>
-            <CustomTextInput
-                placeholder='Masukan email'
-                keyboardType='email-address'
-                placeholderTextColor={Color.gray}
-                underlineColorAndroid='transparent'
-                autoCorrect={false}
-                onChangeText={(text) => onChangeUserData('email', text)}
-                selectionColor={Color.text}
-                value={userData.email}
-                onBlur={() => isValueError('email')}
-                style={{color: Color.text}}
+              value={userData.email}
+              onBlur={() => isValueError('email')}
+              style={{ color: Color.text }}
             />
           </EmailRoundedView>
           <ErrorView>
@@ -373,7 +381,7 @@ export default ({ navigation, route }) => {
           </ErrorView>
 
           <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Alamat</Text>
+            <Text size={12} letterSpacing={0.08} style={{ opacity: 0.6 }}>Alamat</Text>
           </LabelInput>
           <EmailRoundedView>
             <CustomTextInput
@@ -386,15 +394,15 @@ export default ({ navigation, route }) => {
               selectionColor={Color.text}
               value={userData.Alamat}
               onBlur={() => isValueError('Alamat')}
-              style={{color: Color.text}}
+              style={{ color: Color.text }}
             />
           </EmailRoundedView>
           <ErrorView>
             <Text size={12} color={Color.error} type='medium' align='left'>{errorData.Alamat}</Text>
           </ErrorView>
 
-          <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{opacity: 0.6}}>Nomor Telepon</Text>
+          {/* <LabelInput>
+            <Text size={12} letterSpacing={0.08} style={{ opacity: 0.6 }}>Nomor Telepon</Text>
           </LabelInput>
           <EmailRoundedView>
             <CustomTextInput
@@ -407,12 +415,12 @@ export default ({ navigation, route }) => {
               selectionColor={Color.text}
               value={userData.phoneNumber}
               onBlur={() => isValueError('phoneNumber')}
-              style={{color: Color.text}}
+              style={{ color: Color.text }}
             />
           </EmailRoundedView>
           <ErrorView>
             <Text size={12} color={Color.error} type='medium' align='left'>{errorData.phoneNumber}</Text>
-          </ErrorView>
+          </ErrorView> */}
 
           {/* <View style={{width: '100%', paddingVertical: 2, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
             <MaterialIcons size={16} name='check-box-outline-blank' color={Color.theme} style={{marginRight: 4}} />
@@ -426,7 +434,7 @@ export default ({ navigation, route }) => {
         </Container>
       </KeyboardAwareScrollView>
 
-      <View style={{padding: 16}}>
+      <View style={{ padding: 16 }}>
         <Button onPress={() => onSubmit()}>
           Simpan
         </Button>
@@ -436,7 +444,7 @@ export default ({ navigation, route }) => {
 
       {open && <DatePicker
         modal
-        open={open}   
+        open={open}
         date={tanggalLahir}
         mode="date"
         onConfirm={(date) => {

@@ -1,40 +1,40 @@
 {
   "project_info": {
-    "project_number": "945872571263",
-    "project_id": "mbloc-27b6a",
-    "storage_bucket": "mbloc-27b6a.appspot.com"
+    "project_number": "282449093607",
+    "project_id": "m-bloc-x",
+    "storage_bucket": "m-bloc-x.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:945872571263:android:7a04145162745a128a684a",
+        "mobilesdk_app_id": "1:282449093607:android:e19cf452c20e1ad293d342",
         "android_client_info": {
-          "package_name": "com.mblockspacesapp"
+          "package_name": "com.mblocxperienceapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "945872571263-pcheo2j37102fk5g50nvb6a4e4e6aqq7.apps.googleusercontent.com",
+          "client_id": "282449093607-88k0ngnhid8g418s25asvb54n1pijmbp.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBi16piy-J_OWyYJOuMKFtoKNP8lrRRwqM"
+          "current_key": "AIzaSyD0hMajDCcyH80qgqStm_zf1pzHif3MeyQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "945872571263-pcheo2j37102fk5g50nvb6a4e4e6aqq7.apps.googleusercontent.com",
+              "client_id": "282449093607-88k0ngnhid8g418s25asvb54n1pijmbp.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "945872571263-06gj2b5jurvco84bi14ho2ld9pbktpac.apps.googleusercontent.com",
+              "client_id": "282449093607-kv4jcukbt21t3rbeuki0r0ct91eb0br3.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.mblockspacesapp"
+                "bundle_id": "com.mblocxperienceapp"
               }
             }
           ]

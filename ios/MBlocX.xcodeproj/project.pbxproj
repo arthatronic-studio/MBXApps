@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* MBlocSpacesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MBlocSpacesTests.m */; };
+		00E356F31AD99517003FC87E /* MBlocXTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MBlocXTests.m */; };
 		110C7A441F294853AA20D058 /* Inter-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F1F24434BDAE4DBAB42D05A5 /* Inter-Light.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -18,12 +18,12 @@
 		70CCBF76C2C042F49941C4D2 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C828D64C153D42F3ADA9898F /* Inter-Bold.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		84E1E11D2855B26C008F1636 /* warning_alarm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 84E1E11C2855B26C008F1636 /* warning_alarm.mp3 */; };
-		8A37822ECEC1E6E906D7AD69 /* libPods-MBlocSpaces.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB9FC021A0351B8F61C598C0 /* libPods-MBlocSpaces.a */; };
+		8A37822ECEC1E6E906D7AD69 /* libPods-MBlocX.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB9FC021A0351B8F61C598C0 /* libPods-MBlocX.a */; };
 		9718E86562DC4024912F8D5F /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 30CEF8FB6A3C407B9B15BA8A /* Inter-SemiBold.ttf */; };
 		B44E571E971145CDA881BFBD /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEB4FC05E7514D65A84EFC23 /* Inter-Regular.ttf */; };
 		CDFDEDC6B5274EE49E986B06 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FBC4305C7845413D9906F5DE /* Inter-ExtraBold.ttf */; };
 		D90B4B937AA5467DB5233EBB /* Inter-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45A77801D85547988330594A /* Inter-ExtraLight.ttf */; };
-		DB53454EDC9A887E0A1367D0 /* libPods-MBlocSpaces-MBlocSpacesTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 20E0CE272AD49DE26FC03234 /* libPods-MBlocSpaces-MBlocSpacesTests.a */; };
+		DB53454EDC9A887E0A1367D0 /* libPods-MBlocX-MBlocXTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 20E0CE272AD49DE26FC03234 /* libPods-MBlocX-MBlocXTests.a */; };
 		F14F1698D22148FEAEAE966C /* Inter-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6175D5CDB5434D008E7E5ACB /* Inter-Black.ttf */; };
 		F917EE6E746A48CE959E6FE5 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5D7374F496349F99512AF35 /* Inter-Medium.ttf */; };
 /* End PBXBuildFile section */
@@ -34,41 +34,41 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = MBlocSpaces;
+			remoteInfo = MBlocX;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0003B46F6D9C695626467A3A /* Pods-MBlocSpaces-MBlocSpacesTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MBlocSpaces-MBlocSpacesTests.release.xcconfig"; path = "Target Support Files/Pods-MBlocSpaces-MBlocSpacesTests/Pods-MBlocSpaces-MBlocSpacesTests.release.xcconfig"; sourceTree = "<group>"; };
-		00E356EE1AD99517003FC87E /* MBlocSpacesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MBlocSpacesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0003B46F6D9C695626467A3A /* Pods-MBlocX-MBlocXTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MBlocX-MBlocXTests.release.xcconfig"; path = "Target Support Files/Pods-MBlocX-MBlocXTests/Pods-MBlocX-MBlocXTests.release.xcconfig"; sourceTree = "<group>"; };
+		00E356EE1AD99517003FC87E /* MBlocXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MBlocXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* MBlocSpacesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MBlocSpacesTests.m; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* MBlocSpaces.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MBlocSpaces.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = MBlocSpaces/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.mm; path = MBlocSpaces/AppDelegate.mm; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = MBlocSpaces/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = MBlocSpaces/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MBlocSpaces/main.m; sourceTree = "<group>"; };
-		20E0CE272AD49DE26FC03234 /* libPods-MBlocSpaces-MBlocSpacesTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MBlocSpaces-MBlocSpacesTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D5CCE5B27CD2BE900F986C6 /* MBlocSpaces.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MBlocSpaces.entitlements; path = MBlocSpaces/MBlocSpaces.entitlements; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* MBlocXTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MBlocXTests.m; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* MBlocX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MBlocX.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = MBlocX/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.mm; path = MBlocX/AppDelegate.mm; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = MBlocX/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = MBlocX/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MBlocX/main.m; sourceTree = "<group>"; };
+		20E0CE272AD49DE26FC03234 /* libPods-MBlocX-MBlocXTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MBlocX-MBlocXTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D5CCE5B27CD2BE900F986C6 /* MBlocX.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MBlocX.entitlements; path = MBlocX/MBlocX.entitlements; sourceTree = "<group>"; };
 		2DB01DA9274BBEC800890BD8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		2DF6D71027BB394C0029A539 /* MBlocSpaces-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MBlocSpaces-Bridging-Header.h"; sourceTree = "<group>"; };
+		2DF6D71027BB394C0029A539 /* MBlocX-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MBlocX-Bridging-Header.h"; sourceTree = "<group>"; };
 		2DF6D71127BB394C0029A539 /* dummy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dummy.swift; sourceTree = "<group>"; };
 		30CEF8FB6A3C407B9B15BA8A /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-SemiBold.ttf"; path = "../assets/fonts/Inter/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		45A77801D85547988330594A /* Inter-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-ExtraLight.ttf"; path = "../assets/fonts/Inter/Inter-ExtraLight.ttf"; sourceTree = "<group>"; };
 		5B32806D66FA4E4AA85BD975 /* Inter-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Thin.ttf"; path = "../assets/fonts/Inter/Inter-Thin.ttf"; sourceTree = "<group>"; };
 		6175D5CDB5434D008E7E5ACB /* Inter-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Black.ttf"; path = "../assets/fonts/Inter/Inter-Black.ttf"; sourceTree = "<group>"; };
-		6AF0F0EA6F069B8A318A85D2 /* Pods-MBlocSpaces.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MBlocSpaces.debug.xcconfig"; path = "Target Support Files/Pods-MBlocSpaces/Pods-MBlocSpaces.debug.xcconfig"; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MBlocSpaces/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		6AF0F0EA6F069B8A318A85D2 /* Pods-MBlocX.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MBlocX.debug.xcconfig"; path = "Target Support Files/Pods-MBlocX/Pods-MBlocX.debug.xcconfig"; sourceTree = "<group>"; };
+		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MBlocX/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84E1E11C2855B26C008F1636 /* warning_alarm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = warning_alarm.mp3; sourceTree = "<group>"; };
 		A5D7374F496349F99512AF35 /* Inter-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Medium.ttf"; path = "../assets/fonts/Inter/Inter-Medium.ttf"; sourceTree = "<group>"; };
 		AEB4FC05E7514D65A84EFC23 /* Inter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Regular.ttf"; path = "../assets/fonts/Inter/Inter-Regular.ttf"; sourceTree = "<group>"; };
-		BB9FC021A0351B8F61C598C0 /* libPods-MBlocSpaces.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MBlocSpaces.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C28471C8DED54847F6D7D3F3 /* Pods-MBlocSpaces.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MBlocSpaces.release.xcconfig"; path = "Target Support Files/Pods-MBlocSpaces/Pods-MBlocSpaces.release.xcconfig"; sourceTree = "<group>"; };
+		BB9FC021A0351B8F61C598C0 /* libPods-MBlocX.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MBlocX.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C28471C8DED54847F6D7D3F3 /* Pods-MBlocX.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MBlocX.release.xcconfig"; path = "Target Support Files/Pods-MBlocX/Pods-MBlocX.release.xcconfig"; sourceTree = "<group>"; };
 		C828D64C153D42F3ADA9898F /* Inter-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Bold.ttf"; path = "../assets/fonts/Inter/Inter-Bold.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F1F24434BDAE4DBAB42D05A5 /* Inter-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Light.ttf"; path = "../assets/fonts/Inter/Inter-Light.ttf"; sourceTree = "<group>"; };
-		F78B7A41B56AC6897FE3F1D6 /* Pods-MBlocSpaces-MBlocSpacesTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MBlocSpaces-MBlocSpacesTests.debug.xcconfig"; path = "Target Support Files/Pods-MBlocSpaces-MBlocSpacesTests/Pods-MBlocSpaces-MBlocSpacesTests.debug.xcconfig"; sourceTree = "<group>"; };
+		F78B7A41B56AC6897FE3F1D6 /* Pods-MBlocX-MBlocXTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MBlocX-MBlocXTests.debug.xcconfig"; path = "Target Support Files/Pods-MBlocX-MBlocXTests/Pods-MBlocX-MBlocXTests.debug.xcconfig"; sourceTree = "<group>"; };
 		FBC4305C7845413D9906F5DE /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-ExtraBold.ttf"; path = "../assets/fonts/Inter/Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -77,7 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DB53454EDC9A887E0A1367D0 /* libPods-MBlocSpaces-MBlocSpacesTests.a in Frameworks */,
+				DB53454EDC9A887E0A1367D0 /* libPods-MBlocX-MBlocXTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,20 +85,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A37822ECEC1E6E906D7AD69 /* libPods-MBlocSpaces.a in Frameworks */,
+				8A37822ECEC1E6E906D7AD69 /* libPods-MBlocX.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* MBlocSpacesTests */ = {
+		00E356EF1AD99517003FC87E /* MBlocXTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* MBlocSpacesTests.m */,
+				00E356F21AD99517003FC87E /* MBlocXTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = MBlocSpacesTests;
+			path = MBlocXTests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -109,10 +109,10 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* MBlocSpaces */ = {
+		13B07FAE1A68108700A75B9A /* MBlocX */ = {
 			isa = PBXGroup;
 			children = (
-				2D5CCE5B27CD2BE900F986C6 /* MBlocSpaces.entitlements */,
+				2D5CCE5B27CD2BE900F986C6 /* MBlocX.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -120,17 +120,17 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				2DF6D71127BB394C0029A539 /* dummy.swift */,
-				2DF6D71027BB394C0029A539 /* MBlocSpaces-Bridging-Header.h */,
+				2DF6D71027BB394C0029A539 /* MBlocX-Bridging-Header.h */,
 			);
-			name = MBlocSpaces;
+			name = MBlocX;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				BB9FC021A0351B8F61C598C0 /* libPods-MBlocSpaces.a */,
-				20E0CE272AD49DE26FC03234 /* libPods-MBlocSpaces-MBlocSpacesTests.a */,
+				BB9FC021A0351B8F61C598C0 /* libPods-MBlocX.a */,
+				20E0CE272AD49DE26FC03234 /* libPods-MBlocX-MBlocXTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -138,10 +138,10 @@
 		49A439070C785A64B1160DC0 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				6AF0F0EA6F069B8A318A85D2 /* Pods-MBlocSpaces.debug.xcconfig */,
-				C28471C8DED54847F6D7D3F3 /* Pods-MBlocSpaces.release.xcconfig */,
-				F78B7A41B56AC6897FE3F1D6 /* Pods-MBlocSpaces-MBlocSpacesTests.debug.xcconfig */,
-				0003B46F6D9C695626467A3A /* Pods-MBlocSpaces-MBlocSpacesTests.release.xcconfig */,
+				6AF0F0EA6F069B8A318A85D2 /* Pods-MBlocX.debug.xcconfig */,
+				C28471C8DED54847F6D7D3F3 /* Pods-MBlocX.release.xcconfig */,
+				F78B7A41B56AC6897FE3F1D6 /* Pods-MBlocX-MBlocXTests.debug.xcconfig */,
+				0003B46F6D9C695626467A3A /* Pods-MBlocX-MBlocXTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -174,9 +174,9 @@
 			isa = PBXGroup;
 			children = (
 				2DB01DA9274BBEC800890BD8 /* GoogleService-Info.plist */,
-				13B07FAE1A68108700A75B9A /* MBlocSpaces */,
+				13B07FAE1A68108700A75B9A /* MBlocX */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* MBlocSpacesTests */,
+				00E356EF1AD99517003FC87E /* MBlocXTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				49A439070C785A64B1160DC0 /* Pods */,
@@ -190,8 +190,8 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* MBlocSpaces.app */,
-				00E356EE1AD99517003FC87E /* MBlocSpacesTests.xctest */,
+				13B07F961A680F5B00A75B9A /* MBlocX.app */,
+				00E356EE1AD99517003FC87E /* MBlocXTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -199,9 +199,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* MBlocSpacesTests */ = {
+		00E356ED1AD99517003FC87E /* MBlocXTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "MBlocSpacesTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "MBlocXTests" */;
 			buildPhases = (
 				1B3901A9C9D11938BAB08E9B /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
@@ -215,14 +215,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = MBlocSpacesTests;
-			productName = MBlocSpacesTests;
-			productReference = 00E356EE1AD99517003FC87E /* MBlocSpacesTests.xctest */;
+			name = MBlocXTests;
+			productName = MBlocXTests;
+			productReference = 00E356EE1AD99517003FC87E /* MBlocXTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* MBlocSpaces */ = {
+		13B07F861A680F5B00A75B9A /* MBlocX */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "MBlocSpaces" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "MBlocX" */;
 			buildPhases = (
 				69290B496695FF9483774C6B /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -238,9 +238,9 @@
 			);
 			dependencies = (
 			);
-			name = MBlocSpaces;
-			productName = MBlocSpaces;
-			productReference = 13B07F961A680F5B00A75B9A /* MBlocSpaces.app */;
+			name = MBlocX;
+			productName = MBlocX;
+			productReference = 13B07F961A680F5B00A75B9A /* MBlocX.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -260,7 +260,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "MBlocSpaces" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "MBlocX" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -273,8 +273,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* MBlocSpaces */,
-				00E356ED1AD99517003FC87E /* MBlocSpacesTests */,
+				13B07F861A680F5B00A75B9A /* MBlocX */,
+				00E356ED1AD99517003FC87E /* MBlocXTests */,
 			);
 		};
 /* End PBXProject section */
@@ -339,7 +339,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MBlocSpaces-MBlocSpacesTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-MBlocX-MBlocXTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -352,15 +352,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MBlocSpaces/Pods-MBlocSpaces-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MBlocX/Pods-MBlocX-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MBlocSpaces/Pods-MBlocSpaces-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MBlocX/Pods-MBlocX-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MBlocSpaces/Pods-MBlocSpaces-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MBlocX/Pods-MBlocX-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		53462E483E557BC7BD8B7EFB /* [CP] Copy Pods Resources */ = {
@@ -369,15 +369,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MBlocSpaces-MBlocSpacesTests/Pods-MBlocSpaces-MBlocSpacesTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MBlocX-MBlocXTests/Pods-MBlocX-MBlocXTests-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MBlocSpaces-MBlocSpacesTests/Pods-MBlocSpaces-MBlocSpacesTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MBlocX-MBlocXTests/Pods-MBlocX-MBlocXTests-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MBlocSpaces-MBlocSpacesTests/Pods-MBlocSpaces-MBlocSpacesTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MBlocX-MBlocXTests/Pods-MBlocX-MBlocXTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		69290B496695FF9483774C6B /* [CP] Check Pods Manifest.lock */ = {
@@ -395,7 +395,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MBlocSpaces-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-MBlocX-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -421,15 +421,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MBlocSpaces/Pods-MBlocSpaces-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MBlocX/Pods-MBlocX-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MBlocSpaces/Pods-MBlocSpaces-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MBlocX/Pods-MBlocX-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MBlocSpaces/Pods-MBlocSpaces-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MBlocX/Pods-MBlocX-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		86F97479ADCA8D6CDBE25F42 /* [CP] Embed Pods Frameworks */ = {
@@ -438,15 +438,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MBlocSpaces-MBlocSpacesTests/Pods-MBlocSpaces-MBlocSpacesTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MBlocX-MBlocXTests/Pods-MBlocX-MBlocXTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MBlocSpaces-MBlocSpacesTests/Pods-MBlocSpaces-MBlocSpacesTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-MBlocX-MBlocXTests/Pods-MBlocX-MBlocXTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MBlocSpaces-MBlocSpacesTests/Pods-MBlocSpaces-MBlocSpacesTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MBlocX-MBlocXTests/Pods-MBlocX-MBlocXTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -475,7 +475,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* MBlocSpacesTests.m in Sources */,
+				00E356F31AD99517003FC87E /* MBlocXTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -494,7 +494,7 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* MBlocSpaces */;
+			target = 13B07F861A680F5B00A75B9A /* MBlocX */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -502,7 +502,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F78B7A41B56AC6897FE3F1D6 /* Pods-MBlocSpaces-MBlocSpacesTests.debug.xcconfig */;
+			baseConfigurationReference = F78B7A41B56AC6897FE3F1D6 /* Pods-MBlocX-MBlocXTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -510,7 +510,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = MBlocSpacesTests/Info.plist;
+				INFOPLIST_FILE = MBlocXTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -524,18 +524,18 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MBlocSpaces.app/MBlocSpaces";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MBlocX.app/MBlocX";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0003B46F6D9C695626467A3A /* Pods-MBlocSpaces-MBlocSpacesTests.release.xcconfig */;
+			baseConfigurationReference = 0003B46F6D9C695626467A3A /* Pods-MBlocX-MBlocXTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = MBlocSpacesTests/Info.plist;
+				INFOPLIST_FILE = MBlocXTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -549,21 +549,21 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MBlocSpaces.app/MBlocSpaces";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MBlocX.app/MBlocX";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6AF0F0EA6F069B8A318A85D2 /* Pods-MBlocSpaces.debug.xcconfig */;
+			baseConfigurationReference = 6AF0F0EA6F069B8A318A85D2 /* Pods-MBlocX.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = MBlocSpaces/MBlocSpaces.entitlements;
+				CODE_SIGN_ENTITLEMENTS = MBlocX/MBlocX.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Q8T7C6XX23;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = MBlocSpaces/Info.plist;
+				INFOPLIST_FILE = MBlocX/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -574,9 +574,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mblockspacesapp;
-				PRODUCT_NAME = MBlocSpaces;
-				SWIFT_OBJC_BRIDGING_HEADER = "MBlocSpaces-Bridging-Header.h";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mblocxperienceapp;
+				PRODUCT_NAME = MBlocX;
+				SWIFT_OBJC_BRIDGING_HEADER = "MBlocX-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -585,14 +585,14 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C28471C8DED54847F6D7D3F3 /* Pods-MBlocSpaces.release.xcconfig */;
+			baseConfigurationReference = C28471C8DED54847F6D7D3F3 /* Pods-MBlocX.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = MBlocSpaces/MBlocSpaces.entitlements;
+				CODE_SIGN_ENTITLEMENTS = MBlocX/MBlocX.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Q8T7C6XX23;
-				INFOPLIST_FILE = MBlocSpaces/Info.plist;
+				INFOPLIST_FILE = MBlocX/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -603,9 +603,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mblockspacesapp;
-				PRODUCT_NAME = MBlocSpaces;
-				SWIFT_OBJC_BRIDGING_HEADER = "MBlocSpaces-Bridging-Header.h";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mblocxperienceapp;
+				PRODUCT_NAME = MBlocX;
+				SWIFT_OBJC_BRIDGING_HEADER = "MBlocX-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -739,7 +739,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "MBlocSpacesTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "MBlocXTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -748,7 +748,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "MBlocSpaces" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "MBlocX" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -757,7 +757,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "MBlocSpaces" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "MBlocX" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,

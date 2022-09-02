@@ -78,11 +78,13 @@ const HighlightEvent = (props) => {
 
     const fetchData = async() => {
         const result = await getAPI('event');
+        console.log('result event', result);
         let newData = [];
 
         if (result.status) {
             newData = result.data;
         }
+
         setItemData({
             ...itemData,
             data: newData,

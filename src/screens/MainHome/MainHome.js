@@ -89,6 +89,7 @@ const MainHome = ({ navigation, route }) => {
   const [modalLoading, setModalLoading] = useState(false);
   const [modalFloatingBeacon, setModalFloatingBeacon] = useState(true);
   const [modalSuccessCheckin, setModalSuccessCheckin] = useState(false);
+  const [modalNeedUpdateProfile, setModalNeedUpdateProfile] = useState(false);
 
   const isCheckin = auth && auth.user && auth.user.isCheckin;
   const isSecurity = auth && auth.user && auth.user.role && auth.user.role.value === 0;
@@ -341,6 +342,10 @@ const MainHome = ({ navigation, route }) => {
   };
 
   const onPairingCheckin = async () => {
+    if (auth && auth.user && !auth.user.dob) {
+      setModalNeedUpdateProfile(true);
+    }
+    
     if (stateListCheckinUID.length === 0) {
       showLoading('error', 'Tidak Ada perangkat disekitar');
       return;
@@ -1578,6 +1583,70 @@ const MainHome = ({ navigation, route }) => {
                 onPress={() => onClickBaca()}
               />
             </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* modal need update profile */}
+      <Modal
+        isVisible={modalNeedUpdateProfile}
+        onBackdropPress={() => {
+          setModalNeedUpdateProfile(false);
+        }}
+        animationIn="slideInDown"
+        animationOut="slideOutDown"
+        backdropColor={Color.semiwhite}>
+        <View
+          style={{ width: '100%', borderRadius: 16, backgroundColor: Color.theme, }}
+        >
+          <View
+            style={{
+              paddingHorizontal: 16,
+              paddingVertical: 16,
+              alignItems: 'center',
+            }}
+          >
+            <View
+              style={{
+                alignItems: 'center',
+              }}
+            >
+              <Text size={22} letterSpacing={0.15} type='medium'>Profile kamu belum lengkap</Text>
+              <Divider height={4} />
+              <Text size={12}>Untuk menggunakan layanan ini silakan lengkapi data diri di menu profile</Text>
+              <Divider />
+              <View
+                style={{
+                  width: '70%',
+                  aspectRatio: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Image
+                  source={imageAssets.shake}
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                    borderRadius: 8,
+                  }}
+                  resizeMode='contain'
+                />
+              </View>
+            </View>
+
+            <Container width='100%' paddingTop={16}>
+              <Button
+                outline
+                color={Color.primaryMoreDark}
+                onPress={() => {
+                  setModalNeedUpdateProfile(false);
+                  navigation.navigate('MainProfile');
+                }}
+              >
+                Profile
+              </Button>
+            </Container>
           </View>
         </View>
       </Modal>

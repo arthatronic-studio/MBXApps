@@ -1,4 +1,4 @@
-package com.mblockspacesapp.newarchitecture;
+package com.mblocxperienceapp.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.mblockspacesapp.BuildConfig;
-import com.mblockspacesapp.newarchitecture.components.MainComponentsRegistry;
-import com.mblockspacesapp.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.mblocxperienceapp.BuildConfig;
+import com.mblocxperienceapp.newarchitecture.components.MainComponentsRegistry;
+import com.mblocxperienceapp.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

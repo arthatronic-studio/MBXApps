@@ -122,33 +122,6 @@ const MainProfile = ({navigation, route}) => {
     // currentSocket.disconnect();
   };
 
-  const sendVerify = async () => {
-
-    try {
-        showLoading()
-        const response = await Axios({
-          baseURL: 'http://dev.api.tribesocial.id:7171/api/resendVerifyEmail/Bearer%20'+userToken.access_token+'/'+user.email,
-          method: 'post',
-          headers: {
-              Accept: 'application/json',
-              Authorization: `${userToken.token_type} ${userToken.access_token}`
-          },
-          timeout: 5000,
-          
-        });
-
-        console.log(response)
-        hideLoading()
-        alert('Send email verify success');
-        setRefreshing(true);
-      } catch (error) {
-        hideLoading()
-        alert('Failed send verify')
-        // alert(error.response.data.message)
-        console.log(error, 'error apicall')
-      }
-  };
-
   const fetchOrganizationMemberManage = () => {
     // const variables = {
     //   "userId": user.userId,
@@ -527,7 +500,12 @@ const MainProfile = ({navigation, route}) => {
               )}
             </View>
 
-            <TouchableOpacity onPress={() => sendVerify()} style={{flexDirection: 'row', padding: 10, backgroundColor: Color.primarySoft, borderRadius: 120, justifyContent: 'center', alignItems: 'center' }}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('ChangeProfile');
+              }}
+              style={{flexDirection: 'row', padding: 10, backgroundColor: Color.primarySoft, borderRadius: 120, justifyContent: 'center', alignItems: 'center' }}
+            >
               <Circle color={Color.border} size={16} />
               <Divider width={8} />
               <Text size={12} type="semibold">Edit Profile</Text>

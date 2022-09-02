@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>945872571263-06gj2b5jurvco84bi14ho2ld9pbktpac.apps.googleusercontent.com</string>
+	<string>282449093607-kv4jcukbt21t3rbeuki0r0ct91eb0br3.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.945872571263-06gj2b5jurvco84bi14ho2ld9pbktpac</string>
+	<string>com.googleusercontent.apps.282449093607-kv4jcukbt21t3rbeuki0r0ct91eb0br3</string>
 	<key>API_KEY</key>
-	<string>AIzaSyADK4-ZhUjEGGag4knL9cN2nOQxtdIUT64</string>
+	<string>AIzaSyDYnyNMs9NFtphMJWHY1EnFcjw_l_ln-aw</string>
 	<key>GCM_SENDER_ID</key>
-	<string>945872571263</string>
+	<string>282449093607</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.mblockspacesapp</string>
+	<string>com.mblocxperienceapp</string>
 	<key>PROJECT_ID</key>
-	<string>mbloc-27b6a</string>
+	<string>m-bloc-x</string>
 	<key>STORAGE_BUCKET</key>
-	<string>mbloc-27b6a.appspot.com</string>
+	<string>m-bloc-x.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:945872571263:ios:d0d7df2741920f1d8a684a</string>
+	<string>1:282449093607:ios:f7cc67a59396cff693d342</string>
 </dict>
 </plist>

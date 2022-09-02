@@ -23,7 +23,6 @@ const WidgetBgFixIcon = () => {
                 style={{
                     width: '100%',
                     aspectRatio: 2/1,
-                    backgroundColor: 'green'
                 }}
             >
                 <Image

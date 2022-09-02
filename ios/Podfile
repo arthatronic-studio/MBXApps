@@ -6,7 +6,7 @@ install! 'cocoapods', :deterministic_uuids => false
 
 production = ENV["PRODUCTION"] == "1"
 
-target 'MBlocSpaces' do
+target 'MBlocX' do
   pod 'ffmpeg-kit-react-native', :subspecs => ['full-gpl-lts'], :podspec => '../node_modules/ffmpeg-kit-react-native/ffmpeg-kit-react-native.podspec'
   rn_maps_path = '../node_modules/react-native-maps'
   pod 'react-native-google-maps', :path => rn_maps_path
@@ -31,7 +31,7 @@ target 'MBlocSpaces' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'MBlocSpacesTests' do
+  target 'MBlocXTests' do
     inherit! :complete
     # Pods for testing
   end
