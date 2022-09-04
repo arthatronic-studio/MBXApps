@@ -36,8 +36,8 @@ import { shadowStyle } from 'src/styles';
 
 const defaultProps = {
   item: {
-    name: 'PRESALE- Regular (A',
-    refund: false,
+    name: '',
+    isRefundable: false,
     reservation: false,
   },
 };
@@ -79,7 +79,7 @@ const CardEventTicket = ({ item, onSelect }) => {
             }}
           />
           <Divider width={6} />
-          <Text size={11}>{item.refund ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
+          <Text size={11}>{item.isRefundable ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
           <Divider width={10} />
           <Image
             source={imageAssets.calendarRemove}
@@ -95,7 +95,7 @@ const CardEventTicket = ({ item, onSelect }) => {
         <View style={{ width: '100%', flexDirection: 'row', paddingTop: 16 }}>
           <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center' }}>
             <Text size={11}>Harga</Text>
-            <Text type='medium'>{FormatMoney.getFormattedMoney(450000)}<Text size={11}>/Pax</Text></Text>
+            <Text type='medium'>{FormatMoney.getFormattedMoney(item.price)}<Text size={11}>/Pax</Text></Text>
           </View>
           <View style={{ flex: 0.8 }}>
             {typeof onSelect === 'function' ?

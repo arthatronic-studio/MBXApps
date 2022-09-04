@@ -169,7 +169,7 @@ const Loading = (props) => {
         :
           <Body type={type} transparent={transparent} backgroundColor={Color.theme}>
             <ContainerIndicator
-              backgroundColor={Color.primary}
+              backgroundColor={Color.theme}
               style={{
                 width: sizePerIcon,
                 height: sizePerIcon,
@@ -177,7 +177,7 @@ const Loading = (props) => {
             >
               <ActivityIndicator
                 size={Platform.OS === 'android' ? 60 : type}
-                color={Platform.OS === 'android' ? Color.theme : Color.primary}
+                color={Color.primary}
                 style={{position: 'absolute'}}
               />
             </ContainerIndicator>

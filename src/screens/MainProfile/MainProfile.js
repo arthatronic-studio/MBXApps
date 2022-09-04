@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -12,7 +12,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import QRCode from 'react-native-qrcode-svg';
 import messaging from '@react-native-firebase/messaging';
 
@@ -26,11 +26,12 @@ import {
   Scaffold,
   useLoading,
   Button,
+  Header,
 } from '@src/components';
-import {redirectTo} from '@src/utils';
-import {shadowStyle} from '@src/styles';
-import {iconSplash, imageCardOrnament} from '@assets/images';
-import {Box, Circle, Container, Divider, Line} from 'src/styled';
+import { redirectTo } from '@src/utils';
+import { shadowStyle } from '@src/styles';
+import { iconSplash, imageCardOrnament } from '@assets/images';
+import { Box, Circle, Container, Divider, Line } from 'src/styled';
 import Clipboard from '@react-native-community/clipboard';
 import ModalinputCode from 'src/components/ModalInputCode';
 import ModalCardMember from 'src/components/ModalCardMember';
@@ -42,8 +43,9 @@ import { fetchCommunityMemberCheck } from 'src/api/community';
 import ModalActions from 'src/components/Modal/ModalActions';
 import Axios from 'axios';
 import { initSocket } from 'src/api-socket/currentSocket';
+import { assetImageProfile } from 'assets/images/profile';
 
-const MainProfile = ({navigation, route}) => {
+const MainProfile = ({ navigation, route }) => {
   const currentSocket = initSocket();
 
   const [modalVirtual, setModalVirtual] = useState(false);
@@ -51,7 +53,7 @@ const MainProfile = ({navigation, route}) => {
   const [modalCardMember, setModalCardMember] = useState(false);
   const [modalJoinCommunity, setModalJoinCommunity] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  
+
   const [responseMemberManage, setResponseMemberManage] = useState({
     data: null,
     success: false,
@@ -74,8 +76,8 @@ const MainProfile = ({navigation, route}) => {
 
   console.log('user', useSelector(state => state['user.auth']));
 
-  const {Color} = useColor();
-  const {width} = useWindowDimensions();
+  const { Color } = useColor();
+  const { width } = useWindowDimensions();
 
   useEffect(() => {
     if (refreshing) {
@@ -98,11 +100,11 @@ const MainProfile = ({navigation, route}) => {
 
   useEffect(() => {
     if (route.params && route.params.refresh) {
-      navigation.setParams({refresh: false});
+      navigation.setParams({ refresh: false });
     }
   }, [route]);
 
-  const fetchData = async() => {
+  const fetchData = async () => {
     const result = await fetchCommunityMemberCheck();
     if (result.status) {
       setMemberCheck({ ...memberCheck, ...result.data });
@@ -115,7 +117,7 @@ const MainProfile = ({navigation, route}) => {
 
   const onPressLogout = () => {
     dispatch({ type: 'AUTH.CLEAR' });
-    dispatch({type: 'USER.LOGOUT'});
+    dispatch({ type: 'USER.LOGOUT' });
     redirectTo('LoginScreen');
 
     // dispatch({type: 'ARTICLE.CLEAR_HISTORY'});
@@ -413,8 +415,6 @@ const MainProfile = ({navigation, route}) => {
   return (
     <Scaffold
       loadingProps={loadingProps}
-      // header={<HeaderBig title="Profile" style={{paddingTop: 16}} />}
-      showHeader={false}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* <View style={{alignItems: 'center'}}>
@@ -462,7 +462,7 @@ const MainProfile = ({navigation, route}) => {
         </View> */}
 
         {/* user fast info */}
-        <Container padding={16} marginTop={16}>
+        <Container padding={16}>
           <View
             style={{
               flexDirection: 'row',
@@ -472,7 +472,7 @@ const MainProfile = ({navigation, route}) => {
             }}>
             {user && (
               <Image
-                source={{uri: user.photoProfile}}
+                source={{ uri: user.photoProfile }}
                 style={{
                   width: width * 0.16,
                   height: width * 0.16,
@@ -504,7 +504,7 @@ const MainProfile = ({navigation, route}) => {
               onPress={() => {
                 navigation.navigate('ChangeProfile');
               }}
-              style={{flexDirection: 'row', padding: 10, backgroundColor: Color.primarySoft, borderRadius: 120, justifyContent: 'center', alignItems: 'center' }}
+              style={{ flexDirection: 'row', padding: 10, backgroundColor: Color.primarySoft, borderRadius: 120, justifyContent: 'center', alignItems: 'center' }}
             >
               <Circle color={Color.border} size={16} />
               <Divider width={8} />
@@ -520,13 +520,27 @@ const MainProfile = ({navigation, route}) => {
             <Text align='left' size={12} type='medium'>Transaksi</Text>
           </View>
           <View style={{}}>
-            <View style={{flexDirection: 'row', paddingTop: 24}}>
-              <Circle color={Color.border} size={16} />
+            <View style={{ flexDirection: 'row', paddingTop: 24 }}>
+              <Image
+                source={assetImageProfile.cart}
+                style={{
+                  height: 16,
+                  width: 16,
+                  resizeMode: 'contain',
+                }}
+              />
               <Divider width={8} />
               <Text align='left'>Keranjang</Text>
             </View>
-            <View style={{flexDirection: 'row', paddingTop: 24}}>
-              <Circle color={Color.border} size={16} />
+            <View style={{ flexDirection: 'row', paddingTop: 24 }}>
+              <Image
+                source={assetImageProfile.history}
+                style={{
+                  height: 16,
+                  width: 16,
+                  resizeMode: 'contain',
+                }}
+              />
               <Divider width={8} />
               <Text align='left'>Riwayat</Text>
             </View>
@@ -540,23 +554,51 @@ const MainProfile = ({navigation, route}) => {
             <Text align='left' size={12} type='medium'>Seputar Aplikasi</Text>
           </View>
           <View style={{}}>
-            <View style={{flexDirection: 'row', paddingTop: 24}}>
-              <Circle color={Color.border} size={16} />
+            <View style={{ flexDirection: 'row', paddingTop: 24 }}>
+              <Image
+                source={assetImageProfile.setting}
+                style={{
+                  height: 16,
+                  width: 16,
+                  resizeMode: 'contain',
+                }}
+              />
               <Divider width={8} />
               <Text align='left'>Pengaturan</Text>
             </View>
-            <View style={{flexDirection: 'row', paddingTop: 24}}>
-              <Circle color={Color.border} size={16} />
+            <View style={{ flexDirection: 'row', paddingTop: 24 }}>
+              <Image
+                source={assetImageProfile.term}
+                style={{
+                  height: 16,
+                  width: 16,
+                  resizeMode: 'contain',
+                }}
+              />
               <Divider width={8} />
               <Text align='left'>Syarat & Ketentuan</Text>
             </View>
-            <View style={{flexDirection: 'row', paddingTop: 24}}>
-              <Circle color={Color.border} size={16} />
+            <View style={{ flexDirection: 'row', paddingTop: 24 }}>
+              <Image
+                source={assetImageProfile.help}
+                style={{
+                  height: 16,
+                  width: 16,
+                  resizeMode: 'contain',
+                }}
+              />
               <Divider width={8} />
               <Text align='left'>Bantuan</Text>
             </View>
-            <View style={{flexDirection: 'row', paddingTop: 24}}>
-              <Circle color={Color.border} size={16} />
+            <View style={{ flexDirection: 'row', paddingTop: 24 }}>
+              <Image
+                source={assetImageProfile.faq}
+                style={{
+                  height: 16,
+                  width: 16,
+                  resizeMode: 'contain',
+                }}
+              />
               <Divider width={8} />
               <Text align='left'>FAQ</Text>
             </View>
@@ -591,7 +633,14 @@ const MainProfile = ({navigation, route}) => {
               flexDirection: 'row',
             }}
           >
-            <Circle color={Color.error} size={16} />
+            <Image
+              source={assetImageProfile.logout}
+              style={{
+                height: 16,
+                width: 16,
+                resizeMode: 'contain',
+              }}
+            />
             <Divider width={8} />
             <Text color={Color.error} align='left'>
               Logout
@@ -758,7 +807,7 @@ const MainProfile = ({navigation, route}) => {
       </ScrollView>
 
       {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}
-      <Box size={70} style={{position: 'absolute', bottom: -40}} />
+      <Box size={70} style={{ position: 'absolute', bottom: -40 }} />
 
       <ModalinputCode
         visible={modalInputCode}
@@ -768,7 +817,7 @@ const MainProfile = ({navigation, route}) => {
         }}
         errorMessage={responseMemberManage.message}
       />
-       <ModalCardMember
+      <ModalCardMember
         visible={modalCardMember}
         onClose={() => setModalCardMember(false)}
         onSubmit={text => {

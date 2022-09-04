@@ -39,22 +39,6 @@ import axios from 'axios';
 import moment from 'moment';
 import FormSelect from 'src/components/FormSelect';
 import { getDetailEvent, mutationAddEvent } from 'src/lib/query/event';
-import { FormatMoney } from 'src/utils';
-import ModalPassanger from './ModalPassanger';
-var crypto = require('crypto-js')
-
-function sha1(data) {
-}
-
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
-
-const Content = Styled(View)`
-    margin: 16px
-    padding: 12px
-    borderRadius: 8px
-`;
 
 const EditEvent = ({navigation, route}) => {
     const user = useSelector((state) => state['user.auth'].login.user);

@@ -34,6 +34,7 @@ import { FormatMoney } from 'src/utils';
 import imageAssets from 'assets/images';
 import CardEventTicket from './CardEventTicket';
 import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
+import { postAPI } from 'src/api-rest/httpService';
 
 const EventDetail = ({ navigation, route }) => {
   const { Color } = useColor();
@@ -85,7 +86,7 @@ const EventDetail = ({ navigation, route }) => {
   };
 
   const renderItem = ({ item }) => (
-    <CardEventTicket />
+    <CardEventTicket item={item} />
   );
 
   const fetchAddLike = () => {
@@ -131,18 +132,11 @@ const EventDetail = ({ navigation, route }) => {
     Linking.openURL(`google.navigation:q=${latLng}`);
   }
 
-  const closest = data ? data.tickets ? data.tickets.reduce(
-    (acc, loc) =>
-      acc.price < loc.price
-        ? acc
-        : loc
-  ) : 0 : 0;
+  console.log('items', items);
 
   let descriptionProps = { numberOfLines: 12 };
   if (desc) descriptionProps = {};
-  const labelDesctiption = `Nothing about event planning is simple, but advertising and promoting can sometimes be the most daunting parts of the job. If you can’t find an effective way to get people excited when they click on your email invite or see the event promotion on social media, you might experience low turnout for the event.
-  
-  An event description is a text or copy that tells audiences all the essential details about your event. These details should come together so that it compels potential attendees to register. But more than driving up attendance, a good event description can pique the interest of non-members and even the press. In a nutshell, an event description should cover the who, what, why, where, when and how of your event to give potential attendees reasons to show up.`;
+  const labelDesctiption = items.description;
 
   const renderHeader = () => {
     return (
@@ -160,11 +154,11 @@ const EventDetail = ({ navigation, route }) => {
               size={22}
               align='left'
             >
-              Pestapora 2022
+              {items.title}
             </Text>
           </View>
 
-          <View style={{ flexDirection: 'row', marginTop: 8 }}>
+          <View style={{ flex: 1, flexDirection: 'row', marginTop: 8 }}>
             <View
               style={{
                 flex: 1,
@@ -177,9 +171,11 @@ const EventDetail = ({ navigation, route }) => {
                   width: 16,
                   height: 16,
                 }}
+                resizeMode='contain'
               />
-              <Divider width={4} />
-              <Text size={10} type='medium'>{moment().format('DD - DD MMM YYYY')}</Text>
+              <View style={{flex: 1, paddingLeft: 4, alignItems: 'flex-start'}}>
+                <Text size={10} type='medium' numberOfLines={1}>{items.formatted_date}</Text>
+              </View>
             </View>
             <View
               style={{
@@ -193,9 +189,11 @@ const EventDetail = ({ navigation, route }) => {
                   width: 16,
                   height: 16,
                 }}
+                resizeMode='contain'
               />
-              <Divider width={4} />
-              <Text size={10} type='medium'>16:00 - 22:00</Text>
+              <View style={{flex: 1, paddingLeft: 4, alignItems: 'flex-start'}}>
+                <Text size={10} type='medium' numberOfLines={1}>{items.time}</Text>
+              </View>
             </View>
             <View
               style={{
@@ -209,9 +207,11 @@ const EventDetail = ({ navigation, route }) => {
                   width: 16,
                   height: 16,
                 }}
+                resizeMode='contain'
               />
-              <Divider width={4} />
-              <Text size={10} type='medium'>Jakarta Selatan</Text>
+              <View style={{flex: 1, paddingLeft: 4, alignItems: 'flex-start'}}>
+                <Text size={10} type='medium' numberOfLines={1}>{items.location}</Text>
+              </View>
             </View>
           </View>
         </Container>
@@ -231,7 +231,7 @@ const EventDetail = ({ navigation, route }) => {
           }}
         >
           <Image
-            source={{ uri: data ? data.images.length == 0 ? '' : data.images[0] : "" }}
+            source={{ uri: items.image }}
             style={{ width: '100%', height: '100%', backgroundColor: Color.border }}
           />
         </TouchableOpacity>
@@ -309,7 +309,7 @@ const EventDetail = ({ navigation, route }) => {
             }}
           />
           <View style={{ flex: 1, paddingHorizontal: 10 }}>
-            <Text size={12} align='left' lineHeight={16} letterSpacing={0.4}>Jl. Tebet Barat I No.2, RT.1/RW.2, Tebet Bar., Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12810</Text>
+            <Text size={12} align='left' lineHeight={16} letterSpacing={0.4}>{items.location_detail}</Text>
           </View>
           <TouchableOpacity
             onPress={() => false && openGps(data.lat, data.lng)}
@@ -333,12 +333,12 @@ const EventDetail = ({ navigation, route }) => {
             sections={[
               {
                 title: 'Pengembalian Tiket',
-                content: labelDesctiption,
+                content: items.return_terms,
                 imageAsset: imageAssets.ticketRefund,
               },
               {
                 title: 'Syarat & Ketentuan',
-                content: labelDesctiption,
+                content: items.term_and_condition,
                 imageAsset: imageAssets.terms,
               },
             ]}
@@ -391,10 +391,21 @@ const EventDetail = ({ navigation, route }) => {
               <TouchableOpacity
                 style={{ marginRight: 15 }}
                 onPress={async () => {
-                  const res = await fetchSaveEvent({ eventId: data.id, type: bookmark ? 'UNBOOKMARK' : 'BOOKMARK' });
-                  if (res.status == true) {
-                    setBookmark(!bookmark);
+                  showLoading();
+
+                  const body = {
+                    event_id: items.id,
                   }
+                  const res = await postAPI('wishlist', body);
+                  console.log(body, res);
+
+                  if (res.status) {
+                    setBookmark(!bookmark);
+                    showLoading('success', res.message);
+                    return;
+                  }
+                  
+                  showLoading('error', res.message);
                 }}>
                 {bookmark == true ? (
                   <FontAwesome name={'bookmark'} size={24} color={Color.text} />
@@ -411,10 +422,7 @@ const EventDetail = ({ navigation, route }) => {
     >
       <FlatList
         ref={flatlistRef}
-        data={[
-          { name: '3 Days Pass', date: moment(), refund: false },
-          { name: '2 Days Pass', date: moment(), refund: true },
-        ]}
+        data={Array.isArray(items.tickets) && items.tickets.length > 0 ? items.tickets : [{}]}
         keyExtractor={(item, index) => item.id + index.toString()}
         renderItem={renderItem}
         ListHeaderComponent={renderHeader}
@@ -425,7 +433,7 @@ const EventDetail = ({ navigation, route }) => {
         <Col style={{ justifyContent: 'center' }}>
           <Text type='medium' style={{ textAlign: 'left', fontSize: 8 }}>Mulai dari</Text>
           <Divider height={4} />
-          <Text size={18} type='semibold' style={{ textAlign: 'left' }}>{FormatMoney.getFormattedMoney(closest ? closest.price : 0)}</Text>
+          <Text size={18} type='semibold' style={{ textAlign: 'left' }}>{FormatMoney.getFormattedMoney(items.lowest_price ? items.lowest_price.price : 0)}</Text>
         </Col>
         <TouchableOpacity
           onPress={() => {
@@ -434,7 +442,7 @@ const EventDetail = ({ navigation, route }) => {
               animated: true
             })
           }}
-          style={{ justifyContent: 'center', backgroundColor: Color.primary, borderRadius: 8, height: 45, paddingHorizontal: 14 }}
+          style={{ justifyContent: 'center', backgroundColor: Color.primary, borderRadius: 8, height: 45, paddingHorizontal: 24 }}
         >
           <Text type='medium' color={Color.textButtonInline}>Cari Tiket</Text>
         </TouchableOpacity>

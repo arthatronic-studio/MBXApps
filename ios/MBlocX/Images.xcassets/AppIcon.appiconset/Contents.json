@@ -1,55 +1,55 @@
 {
   "images" : [
     {
-      "filename" : "ios_launcher-20@2x.png",
+      "filename" : "icon_mblocx-20@2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
-      "filename" : "ios_launcher-20@3x.png",
+      "filename" : "icon_mblocx-20@3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "20x20"
     },
     {
-      "filename" : "ios_launcher-29@2x.png",
+      "filename" : "icon_mblocx-29@2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "filename" : "ios_launcher-29@3x.png",
+      "filename" : "icon_mblocx-29@3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "29x29"
     },
     {
-      "filename" : "ios_launcher-40@2x.png",
+      "filename" : "icon_mblocx-40@2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
-      "filename" : "ios_launcher-40@3x.png",
+      "filename" : "icon_mblocx-40@3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "40x40"
     },
     {
-      "filename" : "ios_launcher-60@2x.png",
+      "filename" : "icon_mblocx-60@2x.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
-      "filename" : "ios_launcher-60@3x.png",
+      "filename" : "icon_mblocx-60@3x.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
-      "filename" : "ios_launcher-1024.png",
+      "filename" : "icon_mblocx-1024.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"

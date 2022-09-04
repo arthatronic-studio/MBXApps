@@ -13,18 +13,16 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import RNSimpleCrypto from "react-native-simple-crypto";
 import { initialLatitude, initialLongitude, statusBarHeight } from 'src/utils/constants';
-
 import {
     Text,
-    // TouchableOpacity,
-
     useLoading,
     Scaffold,
     Row,
     Col,
     HeaderBig,
     useColor,
-    Header
+    Header,
+    Button
 } from '@src/components';
 import ListForum from '@src/screens/MainForum/ListForum';
 
@@ -42,24 +40,22 @@ import FormSelect from 'src/components/FormSelect';
 import client from '@src/lib/apollo';
 import { mutatuinEventManage } from 'src/lib/query/event';
 import { FormatMoney } from 'src/utils';
-import ModalPassanger from './ModalPassanger';
 import ModalChangeTicket from './ModalChangeTicket';
 import { Container, Divider } from 'src/styled';
 import imageAssets from 'assets/images';
-var crypto = require('crypto-js')
 
-function sha1(data) {
-}
+const getDaysBetweenDates = (startDate, endDate) => {
+    var dates = [];
 
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
+    var currDate = moment(startDate).startOf('day');
+    var lastDate = moment(endDate).startOf('day');
 
-const Content = Styled(View)`
-    margin: 16px
-    padding: 12px
-    borderRadius: 8px
-`;
+    while(currDate.add(1, 'days').diff(lastDate) < 0) {
+        dates.push(moment(currDate.clone().toDate()));
+    }
+
+    return dates;
+};
 
 const PemesananTiket = ({ navigation }) => {
     const user = useSelector((state) => state['user.auth'].login.user);
@@ -89,11 +85,56 @@ const PemesananTiket = ({ navigation }) => {
         latitude: initialLatitude,
         longitude: initialLongitude,
     });
+    const [listDates, setListDates] = useState(
+        getDaysBetweenDates(
+            moment(ticketSelected.event.date_from).subtract(1, 'days'),
+            moment(ticketSelected.event.date_to).add(1, 'days'),
+        )
+    )
+    const [selectedDate, setSelectedDate] = useState(moment(ticketSelected.event.date_from));
 
+    console.log('listDates', listDates);
 
-    const [modalSelectMap, setModalSelectMap] = useState(false);
-    const [isPinnedMap, setIsPinnedMap] = useState(false);
-    const [locationPinnedMap, setLocationPinnedMap] = useState('');
+    const initialMarkedDatesSelected = {
+        selected: true,
+        customStyles: {
+            container: {
+                backgroundColor: Color.primary,
+            },
+            text: {
+                color: Color.textButtonInline,
+                fontWeight: 'bold',
+            },
+        }
+    }
+    
+    const initialMarkedDatesEnabled = {
+        selected: false,
+        disabled: false,
+        disableTouchEvent: false,
+        customStyles: {
+            container: {
+                backgroundColor: 'transparent',
+            },
+            text: {
+                color: Color.text,
+                fontWeight: '400',
+            },
+        }
+    }
+
+    let markedDates = {};
+    listDates.map((e) => {
+        const key = e.format('YYYY-MM-DD');
+        const isSelected = moment(selectedDate).isSame(moment(e));
+        if (isSelected) {
+            markedDates[key] = initialMarkedDatesSelected;
+        } else {
+            markedDates[key] = initialMarkedDatesEnabled;
+        }
+    })
+
+    console.log('markedDates', markedDates);
 
     useEffect(() => {
         // submit()
@@ -119,7 +160,7 @@ const PemesananTiket = ({ navigation }) => {
     
     return (
         <Scaffold
-            header={<Header customIcon title="Pemesanan Tiket" type="regular" centerTitle={false} />}
+            header={<Header customIcon title="Pemesanan Tiket" centerTitle={false} />}
             onPressLeftButton={() => navigation.pop()}
         >
             <ScrollView>
@@ -129,14 +170,14 @@ const PemesananTiket = ({ navigation }) => {
                     <View style={{ marginTop: 8, padding: 10, borderRadius: 8, backgroundColor: Color.theme }}>
                         <Row style={{justifyContent: 'space-between'}}>
                             <Text type='bold' size={11}>{ticketSelected.name}</Text>
-                            <Text size={11} color={Color.text} type='medium' align='right'>{moment(params.date).format('DD MMM YYYY')}</Text>
+                            <Text size={11} color={Color.text} type='medium' align='right'>{moment(selectedDate).format('DD MMM YYYY')}</Text>
                         </Row>
                         <Row style={{ paddingVertical: 16 }}>
                             <Row style={{ marginRight: 10, alignItems: 'center' }}>
                                 <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 3, borderRadius: 14 }}>
                                     <Image source={ImagesPath.refund} style={{ width: 15, height: 15, borderRadius: 7, tintColor: Color.text }} />
                                 </View>
-                                <Text color={Color.text} size={11}>{ticketSelected.refund ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
+                                <Text color={Color.text} size={11}>{ticketSelected.isRefundable ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
                             </Row>
                             <Row style={{ marginRight: 10, alignItems: 'center' }}>
                                 <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 3, borderRadius: 14 }}>
@@ -161,38 +202,34 @@ const PemesananTiket = ({ navigation }) => {
 
                     <Divider />
 
-                    <Text size={11} type='bold' align='left'>Pilih Tanggal</Text>
+                    <Text type='bold' align='left'>Pilih Tanggal</Text>
 
                     <Divider height={8} />
 
                     <Calendar
+                        key={selectedDate.format('YYYY-MM-DD')}
+                        current={selectedDate.format('YYYY-MM-DD')}
                         markingType={'custom'}
-                        onDayPress={day => {
+                        onDayPress={(day) => {
                             console.log('selected day', day);
+                            const newSelectedDate = moment(day.dateString);
+                            const isExistInList = listDates.filter((e) => e.isSame(newSelectedDate))[0];
+                            if (isExistInList) {
+                                setSelectedDate(newSelectedDate);
+                            }
                         }}
+                        disabledByDefault
                         enableSwipeMonths={true}
-                        markedDates={{
-                            '2022-06-28': {
-                                customStyles: {
-                                    container: {
-                                        backgroundColor: Color.tertiary,
-                                    },
-                                    text: {
-                                        color: Color.textButtonInline,
-                                        fontWeight: 'bold'
-                                    }
-                                }
-                            },
-                        }}
+                        markedDates={markedDates}
                         theme={{
-                            calendarBackground: Color.theme, // Color.primaryMoreDark,
+                            calendarBackground: Color.theme,
                             textSectionTitleColor: '#b6c1cd',
-                            textSectionTitleDisabledColor: '#d9e1e8',
+                            textSectionTitleDisabledColor: Color.disabled,
                             selectedDayBackgroundColor: '#00adf5',
                             selectedDayTextColor: '#ffffff',
-                            todayTextColor: '#00adf5',
+                            todayTextColor: Color.blue,
                             dayTextColor: '#2d4150',
-                            textDisabledColor: '#d9e1e8',
+                            textDisabledColor: Color.disabled,
                             dotColor: '#00adf5',
                             selectedDotColor: '#ffffff',
                             arrowColor: Color.primary,
@@ -211,12 +248,14 @@ const PemesananTiket = ({ navigation }) => {
                         }}
                         style={{
                             borderRadius: 8,
+                            borderWidth: 0.5,
+                            borderColor: Color.placeholder,
                         }}
                     />
 
                     <Row style={{ alignItems: 'center', marginTop: 16}}>
-                        <View style={{ backgroundColor: Color.tertiary, marginRight: 4, height: 9, width: 9, borderRadius: 5 }} />
-                        <Text type='bold' color={Color.tertiary} size={9} style={{ marginRight: 10 }}>Dipilih</Text>
+                        <View style={{ backgroundColor: Color.primary, marginRight: 4, height: 9, width: 9, borderRadius: 5 }} />
+                        <Text type='bold' color={Color.primary} size={9} style={{ marginRight: 10 }}>Dipilih</Text>
                         <View style={{ backgroundColor: Color.text, marginRight: 4, height: 9, width: 9, borderRadius: 5 }} />
                         <Text type='bold' size={9} style={{ marginRight: 10 }}>Tersedia</Text>
                         <View style={{ backgroundColor: Color.disabled, marginRight: 4, height: 9, width: 9, borderRadius: 5 }} />
@@ -231,7 +270,7 @@ const PemesananTiket = ({ navigation }) => {
                     <Row style={{ marginTop: 16 }}>
                         <Col>
                             <Text color={Color.disabled} align='left' size={10}>PAX</Text>
-                            <Text type='semibold' align='left' size={14}>{ticketSelected.type === 'FREE' ? 'GRATIS' : FormatMoney.getFormattedMoney(ticketSelected.price)}</Text>
+                            <Text type='semibold' align='left' size={14}>{ticketSelected.type === 'FREE' ? 'GRATIS' : FormatMoney.getFormattedMoney(ticketSelected.price * qty)}</Text>
                         </Col>
                         <Col style={{ justifyContent: 'center' }}>
                             <Row style={{ justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -275,29 +314,19 @@ const PemesananTiket = ({ navigation }) => {
                 </Container>
             </ScrollView>
 
-            <View style={{ width: '100%', height: 70, alignItems: 'center', borderRadius: 10 }}>
-                <TouchableOpacity
+            <Container padding={16}>
+                <Button
                     onPress={() => {
                         navigation.navigate('CheckoutEvent', {
-                            ticket: {
-                                ...ticketSelected,
-                                nameEvent: params.name,
-                                date: params.date,
-                                image: '',
-                                eventId: params.id,
-                                ticketId: ticketSelected.id,
-                                userOrderEmail: 'muhlis@gmail.com',
-                                userOrderName: 'Muhlis',
-                                userOrderPhone: '0888888888',
-                                qty,
-                            }
+                            item: ticketSelected,
+                            selectedDate,
+                            qty,
                         });
                     }}
-                    style={{ backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center' }}
                 >
-                    <Text type='semibold' style={{ color: Color.textButtonInline }}>Pesan Tiket</Text>
-                </TouchableOpacity>
-            </View>
+                    Pesan Tiket
+                </Button>
+            </Container>
 
             <ModalChangeTicket
                 ref={modalChangeTicketRef}

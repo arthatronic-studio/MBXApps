@@ -65,8 +65,8 @@ const ModalChangeTicket = forwardRef((props, ref) => {
       </Container>
       <View style={{width, maxHeight: height / 2}}>
         <ScrollView>
-          {[1, 2, 3].map((val, id) => (
-            <CardEventTicket onSelect={() => onClose()} />
+          {[1, 2, 3].map((val, idx) => (
+            <CardEventTicket key={idx} onSelect={() => onClose()} />
           ))}
         </ScrollView>
       </View>

@@ -36,30 +36,7 @@ import { queryContentProduct,queyGetDokumentasiEnventList } from '@src/lib/query
 import ImagesPath from 'src/components/ImagesPath';
 import Entypo from 'react-native-vector-icons/Entypo'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import axios from 'axios';
-import moment from 'moment';
-import FormSelect from 'src/components/FormSelect';
-import client from '@src/lib/apollo';
-import { mutatuinEventManage } from 'src/lib/query/event';
-import { FormatMoney } from 'src/utils';
-import ModalPassanger from './ModalPassanger';
-var crypto = require('crypto-js')
-
-function sha1(data) {
-}
-
-const MainView = Styled(SafeAreaView)`
-    flex: 1;
-`;
-
-const Content = Styled(View)`
-    margin: 16px
-    padding: 12px
-    borderRadius: 8px
-`;
-
-
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const DocumentasiEvent = ({navigation}) => {
     const user = useSelector((state) => state['user.auth'].login.user);

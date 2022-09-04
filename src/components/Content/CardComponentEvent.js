@@ -157,17 +157,17 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                                     source={imageAssets.calendar}
                                 />
                                 <Divider width={4} />
-                                {Moment(item.date_from).isValid() && <>
-                                    <Text type='medium' size={12} align='left' color={Color.placeholder} letterSpacing={0.5}>{Moment(item.date_from).format('DD MMM YYYY')}</Text>
+                                <>
+                                    <Text type='medium' size={12} align='left' color={Color.placeholder} letterSpacing={0.5}>{item.formatted_date}</Text>
                                     <Divider height={8} />
-                                </>}
+                                </>
                             </View>
                         </View>
 
                         <View style={{width: '100%', flexDirection: 'row', paddingTop: 16}}>
                             <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'center'}}>
                                 <Text size={11} type='medium' letterSpacing={0.5}>Mulai dari</Text>
-                                <Text size={14} type='medium' letterSpacing={0.1}>{FormatMoney.getFormattedMoney(450000)}</Text>
+                                <Text size={14} type='medium' letterSpacing={0.1}>{FormatMoney.getFormattedMoney(item.lowest_price ? item.lowest_price.price : 0)}</Text>
                             </View>
                             <View style={{flex: 0.8}}>
                                 <Button

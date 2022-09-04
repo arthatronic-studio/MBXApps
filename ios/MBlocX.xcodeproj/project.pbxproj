@@ -561,14 +561,14 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MBlocX/MBlocX.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Q8T7C6XX23;
+				DEVELOPMENT_TEAM = 26CGMUBKW7;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MBlocX/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.220822.002;
+				MARKETING_VERSION = 1.220822.001;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -591,13 +591,13 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MBlocX/MBlocX.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = Q8T7C6XX23;
+				DEVELOPMENT_TEAM = 26CGMUBKW7;
 				INFOPLIST_FILE = MBlocX/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.220822.002;
+				MARKETING_VERSION = 1.220822.001;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
