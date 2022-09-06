@@ -14,7 +14,7 @@ const direction = require('./direction.png');
 const eyeSlash = require('./eye-slash.png');
 const homeMenuEats = require('./home-menu-eats.png');
 const homeMenuEvent = require('./home-menu-event.png');
-const homeMenuPromo = require('./home-menu-promo.png');
+const homeMenuFest = require('./home-menu-fest.png');
 const homeMenuShop = require('./home-menu-shop.png');
 const homeMenuForum = require('./home-menu-forum.png');
 const profile = require('./profile.png');
@@ -30,6 +30,7 @@ const ticketRefund = require('./ticket-refund.png');
 const wallet = require('./wallet.png');
 const phoneBook = require('./phone-book.png');
 const call = require('./call.png');
+const dollar = require('./dollar.png');
 const mail = require('./mail.png');
 const discount = require('./discount.png');
 const bgLogin = require('./bg-login.png');
@@ -44,6 +45,10 @@ const female = require('./female.png');
 const airdrop = require('./airdrop.png');
 const connecting = require('./connecting.png');
 const connectMerchant = require('./connect_merchant.png');
+const receipt = require('./receipt.png');
+const menu = require('./menu.png');
+const addNote = require('./add-note.png');
+const moreOutline = require('./more-outline.png');
 
 export {
   iconApp,
@@ -62,7 +67,7 @@ export {
   eyeSlash,
   homeMenuEats,
   homeMenuEvent,
-  homeMenuPromo,
+  homeMenuFest,
   homeMenuShop,
   homeMenuForum,
   profile,
@@ -78,6 +83,7 @@ export {
   wallet,
   phoneBook,
   call,
+  dollar,
   mail,
   discount,
   bgLogin,
@@ -111,7 +117,7 @@ export const imageAssets = {
   eyeSlash,
   homeMenuEats,
   homeMenuEvent,
-  homeMenuPromo,
+  homeMenuFest,
   homeMenuShop,
   homeMenuForum,
   profile,
@@ -127,6 +133,7 @@ export const imageAssets = {
   wallet,
   phoneBook,
   call,
+  dollar,
   mail,
   discount,
   bgLogin,
@@ -141,6 +148,10 @@ export const imageAssets = {
   airdrop,
   connecting,
   connectMerchant,
+  receipt,
+  menu,
+  addNote,
+  moreOutline,
 };
 
 export default imageAssets;

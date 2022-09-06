@@ -32,6 +32,7 @@ import { accessClient } from 'src/utils/access_client';
 import imageAssets from 'assets/images';
 import { postAPI } from 'src/api-rest/httpService';
 import { redirectTo } from 'src/utils';
+import { stateUpdateProfile } from 'src/api-rest/stateUpdateProfile';
 
 const inputs = ['fullName', 'email', 'username', 'password', 'password2'];
 
@@ -148,14 +149,9 @@ const RegisterScreen = ({ navigation, route }) => {
       dob: null,
     };
 
-    const result = await postAPI('update-profile', body);
+    const result = await stateUpdateProfile(body);
     console.log('result', result);
-    if (result.status) {
-      dispatch({
-        type: 'AUTH.SET_USER',
-        data: result.data,
-      });
-
+    if (result) {
       showLoading('success', 'Pendaftaran Berhasil');
 
       setTimeout(() => {

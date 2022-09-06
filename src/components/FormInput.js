@@ -30,6 +30,8 @@ const propTypes = {
     suffixIcon: PropTypes.node,
     suffixText: PropTypes.string,
     textinputProps: PropTypes.object,
+    placeholderTextColor: PropTypes.string,
+    borderColor: PropTypes.string,
 };
 
 const defaultProps = {
@@ -57,7 +59,7 @@ const defaultProps = {
 };
 
 const FormInput = forwardRef((props, ref) => {
-    const { label, placeholder, onChangeText, value, onBlur, returnKeyType, onSubmitEditing, keyboardType, error, hideErrorHint, hideBorder, secureTextEntry, prefixIcon, prefixText, suffixIcon, suffixText, multiline, editable, format, style, textinputProps } = props;
+    const { label, placeholder, onChangeText, value, onBlur, returnKeyType, onSubmitEditing, keyboardType, error, hideErrorHint, hideBorder, secureTextEntry, prefixIcon, prefixText, suffixIcon, suffixText, multiline, editable, format, style, textinputProps, placeholderTextColor, borderColor } = props;
 
     const { Color } = useColor();
 
@@ -74,7 +76,7 @@ const FormInput = forwardRef((props, ref) => {
                     justifyContent: 'center',
                     borderRadius: 8,
                     borderWidth: hideBorder ? 0 : 1,
-                    borderColor: isFocus ? Color.tertiary : Color.textSoft,
+                    borderColor: isFocus ? Color.tertiary : borderColor || Color.textSoft,
                     paddingVertical: Platform.OS === 'ios' ? 18 : 10,
                     paddingHorizontal: 12,
                     backgroundColor: Color.textInput,
@@ -103,7 +105,7 @@ const FormInput = forwardRef((props, ref) => {
 
                             //     ref={ref}
                             //     placeholder={placeholder}
-                            //     placeholderTextColor={Color.gray}
+                            //     placeholderTextColor={placeholderTextColor || Color.gray}
                             //     underlineColorAndroid='transparent'
                             //     autoCorrect={false}
                             //     selectionColor={Color.text}
@@ -137,7 +139,7 @@ const FormInput = forwardRef((props, ref) => {
                                 <TextInput
                                     ref={ref}
                                     placeholder={placeholder}
-                                    placeholderTextColor={Color.placeholder}
+                                    placeholderTextColor={placeholderTextColor || Color.placeholder}
                                     underlineColorAndroid='transparent'
                                     autoCorrect={false}
                                     onChangeText={(val) => onChangeText(val)}
@@ -199,7 +201,7 @@ const FormInput = forwardRef((props, ref) => {
                         backgroundColor: Color.theme,
                     }}
                 >
-                    <Text type='medium' size={12} color={isFocus ? Color.tertiary : Color.textSoft}>{label}</Text>
+                    <Text type='medium' size={12} color={isFocus ? Color.tertiary : borderColor || Color.textSoft}>{label}</Text>
                 </View>}
             </View>
             {!hideErrorHint && <View style={{

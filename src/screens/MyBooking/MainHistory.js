@@ -282,7 +282,6 @@ const MainHistory = ({ navigation, route }) => {
         adjustToContentHeight
         handleStyle={{height: 0}}
         overlayStyle={{backgroundColor: 'rgba(0, 0, 0, 0.3)'}}
-        modalStyle={{backgroundColor: 'transparent'}}
         modalStyle={{
           backgroundColor: Color.theme
         }}

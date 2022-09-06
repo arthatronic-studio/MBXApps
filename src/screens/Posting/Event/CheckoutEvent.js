@@ -77,7 +77,8 @@ const CheckoutEvent = ({ navigation, route }) => {
         console.log('result', result);
         if (result.status) {
             showLoading('success', result.message);
-            navigation.navigate('PaymentScreen', { back: true });
+            // navigation.navigate('PaymentScreen', { back: true });
+            navigation.navigate('EventScreen');
         } else {
             showLoading('error', result.message);
         }

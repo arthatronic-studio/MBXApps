@@ -2,7 +2,7 @@ import * as React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 
 import {useColor} from '@src/components';
-import EventHistory from './EventHistory';
+import EventHistory from './History';
 import OwnEvent from './OwnEvent';
 import { useNavigation, useRoute } from '@react-navigation/native';
 

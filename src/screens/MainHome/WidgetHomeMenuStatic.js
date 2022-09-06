@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   Image,
+  Linking,
   useWindowDimensions,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
@@ -23,21 +24,21 @@ import ModalMenuHome from 'src/components/Modal/ModalMenuHome';
 import imageAssets from 'assets/images';
 
 const defaultProps = {
-  onPress: () => {},
   showMore: true,
 };
 
-const WidgetHomeMenuStatic = ({ onPress, showMore }) => {
+const WidgetHomeMenuStatic = ({ showMore }) => {
   const {Color} = useColor();
   const navigation = useNavigation();
   const user = useSelector(state => state['user.auth'].login.user);
   const {width} = useWindowDimensions();
 
   const [listMenuHome, setListMenuHome] = useState([
-    {name: 'Shop', nav: '', param: {}, image: imageAssets.homeMenuShop, show: true },
+    {name: 'Shop', nav: 'Ecommerce', param: {}, image: imageAssets.homeMenuShop, show: true },
     {name: 'Event', nav: 'EventScreen', param: {}, image: imageAssets.homeMenuEvent, show: true },
-    {name: 'Forum', nav: 'ForumScreen', param: {}, image: imageAssets.homeMenuForum, show: true },
-    {name: 'Eats', nav: '', param: {}, image: imageAssets.homeMenuEats, show: true },
+    // {name: 'Forum', nav: 'ForumScreen', param: {}, image: imageAssets.homeMenuForum, show: true },
+    {name: 'Eats', nav: 'EatScreen', param: {}, image: imageAssets.homeMenuEats, show: true },
+    {name: 'Fest', nav: 'https://tribesocial.asia', param: {}, image: imageAssets.homeMenuFest, show: true },
   ]);
   const [itemData, setItemData] = useState(initialItemState);
   const [modalMenuHome, setModalMenuHome] = useState(false);
@@ -152,8 +153,6 @@ const WidgetHomeMenuStatic = ({ onPress, showMore }) => {
               activeOpacity={0.75}
               disabled={menu.comingsoon}
               onPress={() => {
-                onPress(menu);
-
                 if (!menu.nav) return;
 
                 // GALogEvent(menu.name, {
@@ -163,7 +162,11 @@ const WidgetHomeMenuStatic = ({ onPress, showMore }) => {
                 //   method: analyticMethods.viewAll,
                 // });
 
-                if (menu.nav === 'modal') {
+                if (menu.nav.includes('http://') || menu.nav.includes('https://')) {
+                  navigation.navigate('WebviewGeneralScreen', { url: menu.nav });
+                  return;
+                }
+                else if (menu.nav === 'modal') {
                   setModalMenuHome(true);
                   return;
                 }

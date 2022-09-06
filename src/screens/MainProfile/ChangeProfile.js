@@ -29,6 +29,7 @@ import { Container, Divider, Row } from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { redirectTo } from 'src/utils';
+import { stateUpdateProfile } from 'src/api-rest/stateUpdateProfile';
 
 const EmailRoundedView = Styled(View)`
   width: 100%;
@@ -59,7 +60,7 @@ const LabelInput = Styled(View)`
   alignItems: flex-start;
 `;
 
-const inputs = ['fullName', 'email', 'phoneNumber', 'Alamat', 'tanggalLahir'];
+const inputs = ['fullName', 'email', 'tanggalLahir'];
 
 const listGender = [
   { id: 'male', name: 'Laki-laki' },
@@ -94,16 +95,12 @@ export default ({ navigation, route }) => {
   const [userData, setUserData] = useState({
     fullName: auth ? auth.user.name : '',
     email: auth ? auth.user.email : '',
-    // phoneNumber: auth ? auth.user.phone : '',
     tanggalLahir: auth && auth.user.dob ? auth.user.dob : Moment(new Date('1990')).format('DD-MM-YYYY'),
-    Alamat: auth ? auth.user.address : '',
   });
   const [errorData, setErrorData] = useState({
     fullName: null,
     email: null,
-    // phoneNumber: null,
     tanggalLahir: null,
-    Alamat: null,
   });
 
   //Image
@@ -130,56 +127,6 @@ export default ({ navigation, route }) => {
     return true;
   }
 
-  useEffect(() => {
-    if (isFocused) {
-      if (prevLoading && user && loading === false && error === '') {
-        showPopup('Data berhasil diubah', 'success');
-
-        setTimeout(() => {
-          if (navigation.canGoBack()) {
-            navigation.pop();
-          } else {
-            redirectTo('MainPage');
-          }
-        }, 2500);
-      } else if (error) {
-        showPopup('Terjadi Kesalahan, silahkan coba kembali', 'error');
-        // showPopup(error?.message, 'error');
-        console.log(JSON.stringify(error), 'error');
-      }
-    }
-  }, [user, loading, error, isFocused]);
-
-  useEffect(() => {
-    if (allValid) {
-      setAllValid(false)
-
-      const { fullName, email, phoneNumber, Alamat, tanggalLahir } = userData;
-
-      const nameSplit = fullName.split(' ');
-      let lastName = '';
-      if (nameSplit[1]) {
-        nameSplit.map((e, i) => {
-          if (i !== 0) lastName += e + ' ';
-        })
-      }
-
-      const newUserData = {
-        firstName: nameSplit[0].trim(),
-        lastName: lastName.trim(),
-        email,
-        phoneNumber,
-        address: Alamat,
-        birthDate: tanggalLahir,
-        photoProfile: user && thumbImage === '' ? '' : 'data:image/png;base64,' + thumbImage
-      };
-
-      console.log('newUserData', newUserData);
-
-      dispatch(updateCurrentUserProfile(newUserData));
-    }
-  }, [allValid]);
-
   const isValueError = (name) => {
     const error = validate(name, userData[name]);
     setErrorData({ ...error, [name]: error });
@@ -189,7 +136,7 @@ export default ({ navigation, route }) => {
     setUserData({ ...userData, [key]: val });
   }
 
-  const onSubmit = () => {
+  const onSubmit = async() => {
     let valid = true;
     const newErrorState = {};
 
@@ -200,7 +147,35 @@ export default ({ navigation, route }) => {
     }
 
     setErrorData(newErrorState);
-    setAllValid(valid);
+    
+    if (valid) {
+      const body = {
+        name: userData.fullName,
+        email: userData.email,
+        gender: selectedJK.id,
+        dob: Moment(userData.tanggalLahir).format('YYYY-MM-DD'),
+      };
+
+      console.log('body', body);
+  
+      const result = await stateUpdateProfile(body);
+      console.log('result', result);
+      if (result) {
+        showPopup('Data berhasil diubah', 'success');
+
+        setTimeout(() => {
+          if (navigation.canGoBack()) {
+            navigation.pop();
+          } else {
+            redirectTo('MainPage');
+          }
+        }, 2500);
+
+        return;
+      }
+  
+      showPopup('Update Gagal', 'error');
+    }
   }
 
   const renderRadio = ({ label, data, selected, flexDirection, onSelected }) => {
@@ -378,27 +353,6 @@ export default ({ navigation, route }) => {
           </EmailRoundedView>
           <ErrorView>
             <Text size={12} color={Color.error} type='medium' align='left'>{errorData.email}</Text>
-          </ErrorView>
-
-          <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{ opacity: 0.6 }}>Alamat</Text>
-          </LabelInput>
-          <EmailRoundedView>
-            <CustomTextInput
-              placeholder='Masukan Alamat'
-              keyboardType='default'
-              placeholderTextColor={Color.gray}
-              underlineColorAndroid='transparent'
-              autoCorrect={false}
-              onChangeText={(text) => onChangeUserData('Alamat', text)}
-              selectionColor={Color.text}
-              value={userData.Alamat}
-              onBlur={() => isValueError('Alamat')}
-              style={{ color: Color.text }}
-            />
-          </EmailRoundedView>
-          <ErrorView>
-            <Text size={12} color={Color.error} type='medium' align='left'>{errorData.Alamat}</Text>
           </ErrorView>
 
           {/* <LabelInput>

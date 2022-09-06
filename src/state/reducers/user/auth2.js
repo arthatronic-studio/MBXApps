@@ -2,7 +2,6 @@ const initialState = {
     token: null,
     user: null,
     checkin: null,
-    stateBeacons: [],
 };
 
 const Auth2 = (state = initialState, action) => {
@@ -21,11 +20,6 @@ const Auth2 = (state = initialState, action) => {
           return {
             ...state,
             checkin: action.data,
-          };
-        case 'AUTH.SET_STATE_BEACONS':
-          return {
-            ...state,
-            stateBeacons: action.data,
           };
         case 'AUTH.CLEAR':
           return initialState;

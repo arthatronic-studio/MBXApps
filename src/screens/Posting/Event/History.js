@@ -69,7 +69,7 @@ const isFocused = useIsFocused();
 
   return (
     <Scaffold
-        style={{backgroundColor: Color.border}}
+      style={{backgroundColor: '#F4F4F4'}}
       fallback={false}
       empty={false}
       popupProps={popupProps}
@@ -78,7 +78,7 @@ const isFocused = useIsFocused();
         <Header
           type="bold"
           centerTitle={false}
-          title="Riwayat"
+          title="Riwayat Pesanan"
         />
       }
     >
@@ -90,11 +90,12 @@ const isFocused = useIsFocused();
           style={{borderRadius: 5, marginBottom: 10,backgroundColor: Color.theme, width:'95%', alignSelf: 'center'}}>
             <View style={{flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 10,}}>
                 <Col style={{width: '60%'}}>
-                    <Text align={'left'} style={{fontSize: 8}}>No. Receipt</Text>
-                    <Text align={'left'} style={{fontSize: 10, fontWeight: 'bold'}}>{item.orderNumber}</Text>
+                    <Text align={'left'} style={{fontSize: 9}} type='medium' color={Color.textSoft}>No. Receipt</Text>
+                    <Divider height={2} />
+                    <Text align={'left'} style={{fontSize: 11}} type='medium'>{item.orderNumber}</Text>
                 </Col>
                 {item.status == "Lunas"?
-                <View style={{backgroundColor: '#E7F5D0', borderRadius: 8,paddingHorizontal: 10, justifyContent: 'center', alignItems:'center'}}>
+                <View style={{backgroundColor: '#E7F5D0', borderRadius: 8, paddingHorizontal: 10, justifyContent: 'center', alignItems:'center'}}>
                     <Text size={10} color={'#558617'}>{item.status}</Text>
                 </View>:
                 <View style={{backgroundColor: '#FDD6DA', borderRadius: 8,paddingHorizontal: 10, justifyContent: 'center', alignItems:'center'}}>

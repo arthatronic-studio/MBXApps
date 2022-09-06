@@ -36,6 +36,7 @@ import CardComponentJobs from './CardComponentJobs';
 import CardComponentPlace from './CardComponentPlace';
 import CardForumVertical from '@src/screens/MainForum/CardForumVertical';
 import { fetchContentProductDetail } from 'src/api/content';
+import CardComponentEat from './CardComponentEat';
 
 const defaultProps = {
     productCategory: '',
@@ -524,6 +525,7 @@ const CardContentProduct = ({ productCategory, category,item, numColumns, onPres
     if (productCategory === 'EMERGENCY') return <CardComponentEmergency onPress={() => onPressCard()} { ...props } />;
     else if (productCategory === 'POSTING') return <CardComponentArticle onPress={() => onPressCard()} { ...props } />;
     else if (productCategory === 'EVENT') return <CardComponentEvent onPress={() => onPressCard()} { ...props } />;
+    else if (productCategory === 'EAT') return <CardComponentEat horizontal={horizontal} onPress={() => onPressCard()} { ...props } />;
     else if (productCategory === 'JOBS') return <CardComponentJobs onPress={() => onPressCard()} { ...props } />;
     else if (productCategory === 'NEARBY_PLACE') return <CardComponentPlace onPress={() => onPressCard()} { ...props } />;
     else if (productCategory === 'YOUTUBE_VIDEO') return <CardComponentYoutube item={item} />;

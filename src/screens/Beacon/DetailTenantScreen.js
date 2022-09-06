@@ -36,11 +36,12 @@ import imageAssets from 'assets/images';
 import { isIphoneNotch, statusBarHeight } from 'src/utils/constants';
 
 const DetailTenantScreen = ({ navigation, route }) => {
+  const { params } = route;
+  const items = params.item;
+
   const { Color } = useColor();
-  const items = route.params.item;
   const modalOptionsRef = useRef();
   const flatlistRef = useRef();
-  const user = useSelector(state => state['user.auth'].login.user);
 
   const [im_like, set_im_like] = useState(items.im_like);
   const [heightHeader, setHeightHeader] = useState(0);
@@ -87,8 +88,11 @@ const DetailTenantScreen = ({ navigation, route }) => {
       });
   };
 
-  const renderItem = ({ item }) => (
-    <View
+  const renderItem = ({ item }) => {
+    if (item.show === false) return null;
+
+    return (
+      <View
       style={{
         width,
         marginBottom: 12,
@@ -143,7 +147,8 @@ const DetailTenantScreen = ({ navigation, route }) => {
         </View>
       </TouchableOpacity>
     </View>
-  );
+    )
+  };
 
   const fetchAddLike = () => {
     showLoading();
@@ -187,13 +192,6 @@ const DetailTenantScreen = ({ navigation, route }) => {
     // return `google.navigation:q=${latLng}`;
     Linking.openURL(`google.navigation:q=${latLng}`);
   }
-
-  const closest = data ? data.tickets ? data.tickets.reduce(
-    (acc, loc) =>
-      acc.price < loc.price
-        ? acc
-        : loc
-  ) : 0 : 0;
 
   let descriptionProps = { numberOfLines: 12 };
   if (desc) descriptionProps = {};
@@ -294,22 +292,22 @@ const DetailTenantScreen = ({ navigation, route }) => {
                     flexDirection: 'row',
                     alignItems: 'center',
                   }}>
-                  <Image
+                  {/* <Image
                     source={imageAssets.location}
                     style={{
                       width: 16,
                       height: 16,
                     }}
                   />
-                  <Divider width={4} />
-                  <Text size={10} type='medium'>{items.type}</Text>
+                  <Divider width={4} /> */}
+                  <Text size={12} type='medium'>{items.type}</Text>
                 </View>
               </View>
             </View>
 
-            <View style={{ paddingHorizontal: 10, marginVertical: 4, justifyContent: 'center', backgroundColor: Color.primarySoft, borderRadius: 120 }}>
+            {/* <View style={{ paddingHorizontal: 10, marginVertical: 4, justifyContent: 'center', backgroundColor: Color.primarySoft, borderRadius: 120 }}>
               <Text size={12} type='medium' color={Color.textButtonInline}>Menuju Lokasi</Text>
-            </View>
+            </View> */}
           </View>
         </Container>
 
@@ -323,14 +321,14 @@ const DetailTenantScreen = ({ navigation, route }) => {
               alignItems: 'center',
             }}>
             <Image
-              source={imageAssets.calendar}
+              source={imageAssets.call}
               style={{
                 width: 16,
                 height: 16,
               }}
             />
             <Divider width={4} />
-            <Text size={10} type='medium'>{moment().format('DD - DD MMM YYYY')}</Text>
+            <Text size={10} type='medium'>{items.phone}</Text>
           </View>
 
           <Divider />
@@ -361,7 +359,7 @@ const DetailTenantScreen = ({ navigation, route }) => {
               alignItems: 'center',
             }}>
             <Image
-              source={imageAssets.location}
+              source={imageAssets.dollar}
               style={{
                 width: 16,
                 height: 16,
@@ -376,8 +374,16 @@ const DetailTenantScreen = ({ navigation, route }) => {
 
         <Container padding={16}>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Text align='left' size={16}>Menu</Text>
-            <View style={{ padding: 8, backgroundColor: Color.error, borderRadius: 120 }}>
+            <Text align='left' size={16} type='medium'>Menu</Text>
+            <View style={{ flexDirection: 'row', padding: 8, backgroundColor: Color.error, borderRadius: 120 }}>
+              <Image
+                source={imageAssets.menu}
+                style={{
+                  width: 12,
+                  height: 12,
+                  marginRight: 6,
+                }}
+              />
               <Text size={12} type='medium' color={Color.textInput}>Daftar Menu</Text>
             </View>
           </View>
@@ -524,7 +530,10 @@ const DetailTenantScreen = ({ navigation, route }) => {
     )
   }
 
-  console.log('route', route);
+  console.log('params', params);
+
+  const disabledDecrease = qty < 2;
+  const disabledIncrease = qty > 9;
 
   return (
     <Scaffold
@@ -551,11 +560,14 @@ const DetailTenantScreen = ({ navigation, route }) => {
                   <FontAwesome name={'bookmark-o'} size={24} color={Color.text} />
                 )}
               </TouchableOpacity> */}
-              <MaterialIcons
-                onPress={() => {
-                  // modalOptionsRef.current.open();
+              <Image
+                source={imageAssets.moreOutline}
+                style={{
+                  height: 24,
+                  width: 24,
                 }}
-                name='more-vert' size={22} color={Color.text} />
+                resizeMode='contain'
+              />
             </View>
           }
         />
@@ -563,31 +575,45 @@ const DetailTenantScreen = ({ navigation, route }) => {
     >
       <FlatList
         ref={flatlistRef}
-        data={Array.isArray(items.products) && items.products.length > 0 ? items.products : ['init']}
+        data={
+          Array.isArray(items.products) && items.products.length > 0 ?
+            items.products :
+            [{ show: false }]
+        }
         keyExtractor={(item, index) => item.id + index.toString()}
         renderItem={renderItem}
         ListHeaderComponent={renderHeader}
       // ListFooterComponent={renderFooter}
       />
 
-      {/* <Row style={{ padding: 16, backgroundColor: Color.theme }}>
+    <Container padding={16}>
+      <Row style={{ paddingVertical: 12, paddingHorizontal: 24, backgroundColor: Color.primary, borderRadius: 120 }}>
         <Col style={{ justifyContent: 'center' }}>
-          <Text type='medium' style={{ textAlign: 'left', fontSize: 8 }}>Mulai dari</Text>
+          <Text type='medium' size={11} align='left'>123 Produk</Text>
           <Divider height={4} />
-          <Text size={18} type='semibold' style={{ textAlign: 'left' }}>{FormatMoney.getFormattedMoney(closest ? closest.price : 0)}</Text>
+          <Text type='medium' size={14} align='left'>{FormatMoney.getFormattedMoney(1230)}</Text>
         </Col>
         <TouchableOpacity
           onPress={() => {
-            flatlistRef.current.scrollToOffset({
-              offset: heightHeader,
-              animated: true
-            })
+            navigation.navigate('EatDetailPesananScreen', { ...params,  })
           }}
-          style={{ justifyContent: 'center', backgroundColor: Color.primary, borderRadius: 8, height: 45, paddingHorizontal: 14 }}
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
         >
-          <Text type='medium' color={Color.textButtonInline}>Cari Tiket</Text>
+          <Text type='medium' size={12}>Checkout</Text>
+          <AntDesign
+            name={'arrowright'}
+            color={Color.text}
+            size={14}
+            style={{
+              marginLeft: 4
+            }}
+          />
         </TouchableOpacity>
-      </Row> */}
+      </Row>
+      </Container>
 
       {/* modal menu */}
       {currentSelected && <Modal
@@ -653,10 +679,10 @@ const DetailTenantScreen = ({ navigation, route }) => {
 
               <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <TouchableOpacity
-                    // onPress={() => {
-                    //     if (disabledDecrease) return;
-                    //     setQty(qty - 1);
-                    // }}
+                    onPress={() => {
+                        if (disabledDecrease) return;
+                        setQty(qty - 1);
+                    }}
                     style={{ marginLeft: 24 }}
                 >
                     <AntDesign
@@ -664,7 +690,7 @@ const DetailTenantScreen = ({ navigation, route }) => {
                         color={Color.primary}
                         size={20}
                         style={{
-                          // opacity: disabledDecrease ? 0.5 : 1,
+                          opacity: disabledDecrease ? 0.5 : 1,
                         }}
                     />
                 </TouchableOpacity>
@@ -672,17 +698,17 @@ const DetailTenantScreen = ({ navigation, route }) => {
                     <Text color={Color.text} type='bold' size={18} style={{ marginHorizontal: 8 }}>{qty}</Text>
                 </View>
                 <TouchableOpacity
-                    // onPress={() => {
-                    //     if (disabledIncrease) return;
-                    //     setQty(qty + 1);
-                    // }}
+                    onPress={() => {
+                        if (disabledIncrease) return;
+                        setQty(qty + 1);
+                    }}
                 >
                     <AntDesign
                         name="pluscircleo"
                         color={Color.primary}
                         size={20}
                         style={{
-                            // opacity: disabledIncrease ? 0.5 : 1,
+                            opacity: disabledIncrease ? 0.5 : 1,
                         }}
                     />
                 </TouchableOpacity>
@@ -697,13 +723,6 @@ const DetailTenantScreen = ({ navigation, route }) => {
           </Container>
         </View>
       </Modal>}
-
-      <ModalContentOptions
-        ref={modalOptionsRef}
-        event={true}
-        isOwner={user && user.userId === items.ownerId}
-        item={data}
-      />
     </Scaffold>
   );
 };

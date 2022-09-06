@@ -67,14 +67,10 @@ const MainProfile = ({ navigation, route }) => {
 
   const dispatch = useDispatch();
   const [loadingProps, showLoading, hideLoading] = useLoading();
-  const user = useSelector(state => state['user.auth'].login.user);
-  const userToken = useSelector(state => state['user.auth'].data);
   const auth = useSelector(state => state['auth']);
   const localStoragSetting = useSelector(state => state['setting']);
 
   const showDebug = localStoragSetting && localStoragSetting.showDebug ? true : false;
-
-  console.log('user', useSelector(state => state['user.auth']));
 
   const { Color } = useColor();
   const { width } = useWindowDimensions();
@@ -124,292 +120,6 @@ const MainProfile = ({ navigation, route }) => {
     // currentSocket.disconnect();
   };
 
-  const fetchOrganizationMemberManage = () => {
-    // const variables = {
-    //   "userId": user.userId,
-    //   "organizationInitialCode": accessClient.InitialCode,
-    //   "type": "INSERT"
-    // };
-
-    // console.log(variables);
-
-    Client.mutate({
-      mutation: queryOrganizationMemberManage,
-      // variables,
-    }).then((res) => {
-      console.log('test', res);
-
-      setModalInputCode(false);
-
-      const data = res.data.organizationMemberManage;
-
-      setResponseMemberManage({
-        data: data,
-        success: data ? true : false,
-        message: '',
-      });
-
-      showLoading(
-        data ? 'success' : 'error',
-        data ? 'Berhasil bergaung ke komunitas ' + data.organization.name : 'Gagal untuk bergabung'
-      );
-
-      // hit cuurent user profile
-      dispatch(getCurrentUserProfile());
-    }).catch((err) => {
-      console.log('err', err);
-
-      setResponseMemberManage({
-        data: null,
-        success: false,
-        message: Array.isArray(err.graphQLErrors) && err.graphQLErrors[0].message ? err.graphQLErrors[0].message : 'Terjadi kesalahan'
-      });
-    });
-  }
-
-  const menuList = [
-    // {
-    //   code: 'pinned_product',
-    //   title: 'Konten di Pin',
-    //   badgeTitle: '',
-    //   show: true,
-    //   icon: (
-    //     <Ionicons
-    //       name="pricetags-outline"
-    //       size={20}
-    //       color={Color.text}
-    //     />
-    //   ),
-    //   onPress: () => {
-    //     navigation.navigate('ContentProductSaveScreen', {
-    //       title: 'Konten di Pin'
-    //     });
-    //   },
-    // },
-    // {
-    //   code: 'history',
-    //   title: 'Riwayat',
-    //   badgeTitle: '',
-    //   show: accessClient.MainProfile.showMenuHistory && user && !user.guest,
-    //   icon: (
-    //     <Ionicons
-    //       name="receipt-outline"
-    //       size={20}
-    //       color={Color.text}
-    //       style={{}}
-    //     />
-    //   ),
-    //   onPress: () => {},
-    // },
-    // {
-    //   code: 'coupon',
-    //   title: 'Kuponku',
-    //   badgeTitle: '',
-    //   show: accessClient.MainProfile.showMenuCoupon && user && !user.guest,
-    //   icon: (
-    //     <MaterialCommunityIcons
-    //       name="ticket-confirmation-outline"
-    //       size={20}
-    //       color={Color.text}
-    //       style={{}}
-    //     />
-    //   ),
-    //   onPress: () => {},
-    // },
-    // {
-    //   code: 'myshop',
-    //   title: 'Toko Saya',
-    //   badgeTitle: '',
-    //   show: accessClient.MainProfile.showMenuMyStore && user && !user.guest,
-    //   icon: (
-    //     <MaterialCommunityIcons
-    //       name="storefront-outline"
-    //       size={20}
-    //       color={Color.text}
-    //       style={{}}
-    //     />
-    //   ),
-    //   onPress: () => navigation.navigate('MyShopHomepage'),
-    // },
-    // {
-    //   code: 'auction',
-    //   title: 'Bid Auction',
-    //   badgeTitle: '',
-    //   show: accessClient.MainProfile.showMenuBidAuction && user && !user.guest,
-    //   icon: (
-    //     <MaterialCommunityIcons
-    //       name="ticket-confirmation-outline"
-    //       size={20}
-    //       color={Color.text}
-    //       style={{}}
-    //     />
-    //   ),
-    //   onPress: () => navigation.navigate('Lelang'),
-    // },
-    {
-      code: 'change_profile',
-      title: 'Ubah Profil',
-      badgeTitle: '',
-      show: user && !user.guest,
-      icon: <FontAwesome name="edit" size={20} color={Color.text} style={{}} />,
-      onPress: () => navigation.navigate('ChangeProfile'),
-    },
-    {
-      code: 'setting',
-      title: 'Pengaturan',
-      badgeTitle: '',
-      show: user && !user.guest,
-      icon: (
-        <AntDesign name="setting" size={20} color={Color.text} style={{}} />
-      ),
-      onPress: () => navigation.navigate('SettingScreen'),
-    },
-    // {
-    //   code: 'critics_opinion',
-    //   title: 'Kritik & Saran',
-    //   badgeTitle: '',
-    //   show: true,
-    //   icon: <AntDesign name="carryout" size={20} color={Color.text} style={{}} />,
-    //   onPress: () =>
-    //   accessClient.isKomoto || accessClient.isRRID ?
-    //     Linking.openURL('mailto:wahyu@komoto.id?subject=Kritik dan saran&Body')
-    //   :
-    //     Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
-    // },
-    // {
-    //   code: 'survey',
-    //   title: 'Survei',
-    //   badgeTitle: '',
-    //   show: accessClient.MainProfile.showMenuSurvey,
-    //   icon: (
-    //     <Ionicons
-    //       name={'ios-receipt' || 'ios-reader'}
-    //       size={20}
-    //       color={Color.text}
-    //       style={{}}
-    //     />
-    //   ),
-    //   onPress: () => navigation.navigate('SurveyPasarScreen'),
-    // },
-    // {
-    //   code: 'help',
-    //   title: 'Bantuan',
-    //   badgeTitle: '',
-    //   show: true,
-    //   icon: (
-    //     <MaterialCommunityIcons
-    //       name="headphones"
-    //       size={20}
-    //       color={Color.text}
-    //       style={{}}
-    //     />
-    //   ),
-    //   onPress: () => {
-    //     navigation.navigate('ChatUserListScreen', { myRoomIds, screenType: 'help' })
-    //     // Linking.openURL(
-    //     //   'mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body',
-    //     // )
-    //   },
-    // },
-    // {
-    //   code: 'termandcondition',
-    //   title: 'Ketentuan Aplikasi',
-    //   badgeTitle: '',
-    //   show: true,
-    //   icon: <Ionicons name="md-information-circle-outline" size={20} color={Color.text} style={{}} />,
-    //   onPress: () => Linking.openURL('mailto:bummitbs@gmail.com?subject=Kritik dan saran&Body'),
-    // },
-    // {
-    //   code: 'terms_condition',
-    //   title: 'Syarat & Ketentuan',
-    //   show: true,
-    //   icon: <Ionicons name="newspaper-outline" size={20} color={Color.text} style={{}} />,
-    //   onPress: () => navigation.navigate('TermsCondition'),
-    // },
-    {
-      code: 'join_community',
-      title: 'Gabung Komunitas',
-      badgeTitle: memberCheck.message,
-      show: !accessClient.isMobility && accessClient.MainProfile.showMenuJoinCommunity,
-      icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
-      onPress: () => setModalJoinCommunity(true),
-    },
-    {
-      code: 'community_admin',
-      title: 'Community Admin',
-      badgeTitle: '',
-      show:
-        accessClient.MainProfile.showMenuCommunityAdmin &&
-        user &&
-        user.isDirector === 1,
-      icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
-      onPress: () => navigation.navigate('CommunityAdminPage'),
-    },
-    {
-      code: 'ref_code',
-      title: 'Kode Referal',
-      badgeTitle: '',
-      show: false,
-      icon: <AntDesign name="user" size={20} color={Color.text} style={{}} />,
-      onPress: () => navigation.navigate('ReferralCodeScreen'),
-    },
-    {
-      code: 'device_token',
-      title: 'Device Token',
-      badgeTitle: '',
-      show: user && user.isDirector === 1,
-      icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
-      onPress: async () => {
-        const token = await messaging().getToken();
-        Clipboard.setString(token);
-        Alert('Berhasil disalin', token);
-      },
-    },
-    {
-      code: 'Syarat',
-      title: 'Syarat & Ketentuan',
-      badgeTitle: '',
-      show: user && user.isDirector === 1,
-      icon: <AntDesign name="form" size={20} color={Color.text} style={{}} />,
-      onPress: () => navigation.navigate('SyaratdanKetentuan'),
-    },
-    {
-      code: 'logout',
-      title: 'Keluar',
-      badgeTitle: '',
-      show: user && !user.guest,
-      icon: (
-        <Ionicons
-          name="exit-outline"
-          size={20}
-          color={Color.error}
-          style={{}}
-        />
-      ),
-      onPress: () => onPressExit(),
-    },
-    {
-      code: 'login',
-      title: 'Masuk',
-      badgeTitle: '',
-      show: user && user.guest,
-      icon: (
-        <Ionicons name="exit-outline" size={20} color={Color.info} style={{}} />
-      ),
-      onPress: () => onPressLogout(false),
-    },
-    {
-      code: 'signup',
-      title: 'Daftar',
-      badgeTitle: '',
-      show: user && user.guest,
-      icon: (
-        <Ionicons name="exit-outline" size={20} color={Color.primary} style={{}} />
-      ),
-      onPress: () => onPressLogout(true),
-    },
-  ];
-
   console.log('auth', auth);
 
   return (
@@ -417,50 +127,6 @@ const MainProfile = ({ navigation, route }) => {
       loadingProps={loadingProps}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* <View style={{alignItems: 'center'}}>
-          <TouchableOpacity onPress={() => setModalVirtual(true)}>
-            <View
-              style={{
-                padding: 8,
-                marginBottom: 8,
-                borderRadius: 8,
-                backgroundColor: Color.textInput,
-                justifyContent: 'center',
-                alignItems: 'center',
-                ...shadowStyle,
-              }}>
-              {user && <QRCode value={user.code} />}
-              <View
-                style={{
-                  position: 'absolute',
-                  height: 50,
-                  width: 50,
-                  borderRadius: 25,
-                  backgroundColor: Color.textInput,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Ionicons name="person" color={Color.primary} size={35} />
-              </View>
-            </View>
-
-            {user && !user.guest ? (
-              <>
-                <Text type="bold" letterSpacing={0.18}>
-                  {user.firstName} {user.lastName}
-                </Text>
-                <Text size={12} letterSpacing={0.18}>
-                  {user.userName || '082216981621'}
-                </Text>
-              </>
-            ) : (
-              <Text type="bold" letterSpacing={0.18}>
-                Halo Tamu, Silakan Login
-              </Text>
-            )}
-          </TouchableOpacity>
-        </View> */}
-
         {/* user fast info */}
         <Container padding={16}>
           <View
@@ -470,9 +136,9 @@ const MainProfile = ({ navigation, route }) => {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            {user && (
+            {auth && auth.user && (
               <Image
-                source={{ uri: user.photoProfile }}
+                source={{ uri: auth.user.image }}
                 style={{
                   width: width * 0.16,
                   height: width * 0.16,
@@ -482,23 +148,20 @@ const MainProfile = ({ navigation, route }) => {
               />
             )}
 
-            <View
-              style={{
-                flex: 1,
-                paddingHorizontal: 12,
-                alignItems: 'flex-start',
-                justifyContent: 'space-between',
-              }}>
-              {auth && auth.user ? (
+            {auth && auth.user &&
+              <View
+                style={{
+                  flex: 1,
+                  paddingHorizontal: 12,
+                  alignItems: 'flex-start',
+                  justifyContent: 'space-between',
+                }}
+              >
                 <Text size={22} align='left' type="bold" letterSpacing={0.18} numberOfLines={2}>
                   {auth.user.name}
                 </Text>
-              ) : (
-                <Text size={22} align='left' type="bold" letterSpacing={0.18} numberOfLines={2}>
-                  Tamu, Silakan Login
-                </Text>
-              )}
-            </View>
+              </View>
+            }
 
             <TouchableOpacity
               onPress={() => {
@@ -647,163 +310,6 @@ const MainProfile = ({ navigation, route }) => {
             </Text>
           </TouchableOpacity>
         </Container>
-
-        {/* card */}
-        {/* <Container paddingHorizontal={16} marginTop={16}>
-          <View
-            style={{
-              width: '100%',
-              aspectRatio: 16 / 9,
-              justifyContent: 'space-between',
-              backgroundColor: Color.textInput,
-              borderRadius: 8,
-              padding: 16,
-              ...shadowStyle,
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                width: '100%',
-                justifyContent: 'flex-start',
-              }}>
-              <Image
-                source={iconSplash}
-                resizeMode="contain"
-                style={{
-                  width: width / 6,
-                  height: width / 6,
-                }}
-              />
-            </View>
-
-            <View
-              style={{
-                width: '100%',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
-              <View
-                style={{
-                  alignItems: 'flex-start',
-                  justifyContent: 'flex-end',
-                }}>
-                {user && !user.guest ? (
-                  <>
-                    <Text size={12} letterSpacing={0.18}>
-                      {user.firstName} {user.lastName}
-                    </Text>
-                    {user.idCardNumber !== '' && user.idCardNumber !== null && (
-                      <Text
-                        type="bold"
-                        letterSpacing={0.9}
-                        style={{marginTop: 2}}>
-                        {user.idCardNumber}
-                      </Text>
-                    )}
-                  </>
-                ) : (
-                  <Text type="bold" letterSpacing={0.18}>
-                    Halo Tamu, Silakan Login
-                  </Text>
-                )}
-              </View>
-              <TouchableOpacity
-                activeOpacity={1}
-                onPress={() => {
-                  setModalVirtual(true);
-                }}>
-                <View
-                  style={{
-                    backgroundColor: Color.textInput,
-                    borderWidth: 1,
-                    borderColor: Color.text,
-                    width: width / 6 + 16,
-                    height: width / 6 + 16,
-                    borderRadius: 4,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    ...shadowStyle,
-                  }}>
-                  {user && <QRCode value={user.userCode} size={width / 6} />}
-                </View>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Container> */}
-
-        {/* <Container paddingHorizontal={16}>
-          <View
-            style={{
-              ...shadowStyle,
-              backgroundColor: Color.textInput,
-              marginHorizontal: 1,
-              borderRadius: 8,
-              marginBottom: 16,
-              marginTop: 16,
-              paddingTop: 16,
-            }}>
-            {menuList.map((item, idx) => {
-              if (!item.show) return <View key={idx} />;
-
-              return (
-                <Container
-                  key={idx}
-                  paddingHorizontal={16}
-                  marginTop={8}
-                  marginBottom={16}>
-                  <TouchableOpacity onPress={() => item.onPress()}>
-                    <Row
-                      style={{
-                        borderBottomWidth: 0.5,
-                        borderColor: Color.placeholder,
-                        paddingBottom: 16,
-                      }}>
-                      <Col justify="center" size={0.75}>
-                        {item.icon}
-                      </Col>
-                      <Col size={0.25}>
-                        <View />
-                      </Col>
-                      <Col align="flex-start" size={9} justify="center">
-                        <Text
-                          color={
-                            item.code === 'logout'
-                              ? Color.error
-                              : item.code === 'login' || item.code === 'signup'
-                              ? Color.info
-                              : Color.text
-                          }>
-                          {item.title}
-                        </Text>
-                      </Col>
-                      <Col align="flex-end" size={2} justify="center">
-                        <FontAwesome
-                          name="angle-right"
-                          color={Color.text}
-                          size={20}
-                        />
-                      </Col>
-                    </Row>
-                  </TouchableOpacity>
-                </Container>
-              );
-            })}
-          </View>
-        </Container> */}
-
-        {/* <Container paddingHorizontal={16} paddingTop={32}>
-          <TouchableOpacity
-            onPress={() => {
-              onPressExit();
-            }}
-          >
-            <Text color={Color.error} size={12} type='medium'>
-              Logout
-            </Text>
-          </TouchableOpacity>
-        </Container> */}
-
-        {/* <Divider /> */}
       </ScrollView>
 
       {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}
@@ -813,7 +319,7 @@ const MainProfile = ({ navigation, route }) => {
         visible={modalInputCode}
         onClose={() => setModalInputCode(false)}
         onSubmit={text => {
-          fetchOrganizationMemberManage(text);
+          
         }}
         errorMessage={responseMemberManage.message}
       />
@@ -821,7 +327,7 @@ const MainProfile = ({ navigation, route }) => {
         visible={modalCardMember}
         onClose={() => setModalCardMember(false)}
         onSubmit={text => {
-          fetchOrganizationMemberManage(text);
+          
         }}
         errorMessage={responseMemberManage.message}
       />
@@ -862,7 +368,7 @@ const MainProfile = ({ navigation, route }) => {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            <QRCode value={user ? user.userCode : ''} size={width - 70} />
+            <QRCode value={'dummy'} size={width - 70} />
           </View>
 
           <Divider height={32} />

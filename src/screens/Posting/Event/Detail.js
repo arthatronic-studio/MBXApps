@@ -413,8 +413,21 @@ const EventDetail = ({ navigation, route }) => {
                   <FontAwesome name={'bookmark-o'} size={24} color={Color.text} />
                 )}
               </TouchableOpacity>
-              <MaterialIcons onPress={() => { modalOptionsRef.current.open(); }}
-                name='more-vert' size={22} color={Color.text} />
+
+              <Pressable
+                onPress={() => {
+                  modalOptionsRef.current.open();
+                }}
+              >
+                <Image
+                  source={imageAssets.moreOutline}
+                  style={{
+                    height: 24,
+                    width: 24,
+                  }}
+                  resizeMode='contain'
+                />
+              </Pressable>
             </View>
           }
         />

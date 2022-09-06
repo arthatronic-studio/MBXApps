@@ -479,11 +479,14 @@ const DetailArtScreen = ({ navigation, route }) => {
                   <FontAwesome name={'bookmark-o'} size={24} color={Color.text} />
                 )}
               </TouchableOpacity> */}
-              <MaterialIcons
-                onPress={() => {
-                  // modalOptionsRef.current.open();
+              <Image
+                source={imageAssets.moreOutline}
+                style={{
+                  height: 24,
+                  width: 24,
                 }}
-                name='more-vert' size={22} color={Color.text} />
+                resizeMode='contain'
+              />
             </View>
           }
         />

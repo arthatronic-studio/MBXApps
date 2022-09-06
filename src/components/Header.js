@@ -192,7 +192,7 @@ const Header = (props) => {
           </ColumnView>
 
           <ColumnView
-            size={centerTitle ? 4 : 7}
+            size={centerTitle ? 4 : 6}
             style={{alignItems: centerTitle ? 'center' : 'flex-start'}}>
             {children || (
               <Text
@@ -208,7 +208,7 @@ const Header = (props) => {
           </ColumnView>
 
           <ColumnView
-            size={centerTitle ? 4 : 3}
+            size={centerTitle ? 4 : 4}
             style={{alignItems: 'flex-end', paddingRight: 16}}>
             {actions}
           </ColumnView>

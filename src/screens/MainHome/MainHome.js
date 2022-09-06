@@ -342,7 +342,7 @@ const MainHome = ({ navigation, route }) => {
   };
 
   const onPairingCheckin = async () => {
-    if (auth && auth.user && !auth.user.dob) {
+    if (auth && auth.user && !auth.user.isRegistered) {
       setModalNeedUpdateProfile(true);
     }
     
@@ -529,7 +529,8 @@ const MainHome = ({ navigation, route }) => {
   }, [isFocused]);
 
   const testApi = async () => {
-    const test = await getAPI('user-activity');
+    // const test = await getAPI('location?bloc_location_id=1');
+    const test = await getAPI('ticket-order');
     console.log('test', test);
   }
 
@@ -591,7 +592,7 @@ const MainHome = ({ navigation, route }) => {
 
   // console.log('localStoragSetting', localStoragSetting);
   // console.log('localStoragBeacons', localStoragBeacons);
-  // console.log('auth.checkin', auth);
+  // console.log('auth', auth);
   // console.log('eaaaa', stateListMerchUID);
 
   return (
@@ -815,7 +816,7 @@ const MainHome = ({ navigation, route }) => {
                     <Column>
                       <Text size={10} color={Color.placeholder} letterSpacing={0.4}>Telah masuk di</Text>
                       <Divider height={2} />
-                      <Text size={12} type='medium' letterSpacing={0.5}>{auth.checkin && auth.checkin.location ? auth.checkin.location.name : ''}</Text>
+                      <Text size={12} type='medium' letterSpacing={0.5}>{auth.user && auth.user.activityInfo && auth.user.activityInfo.location ? auth.user.activityInfo.location.name : ''}</Text>
                     </Column>
                   </Row>
 
@@ -1323,7 +1324,7 @@ const MainHome = ({ navigation, route }) => {
             >
               <Text size={12}>Selamat Datang di</Text>
               <Divider height={4} />
-              <Text size={22} letterSpacing={0.15} type='medium'>{auth.checkin && auth.checkin.location ? auth.checkin.location.name : ''}</Text>
+              <Text size={22} letterSpacing={0.15} type='medium'>{auth.user && auth.user.activityInfo && auth.user.activityInfo.location ? auth.user.activityInfo.location.name : ''}</Text>
               <Divider />
               <View
                 style={{

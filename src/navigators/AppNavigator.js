@@ -16,6 +16,7 @@ import CreateEmergencyScreen from '@src/screens/CreateEmergencyScreen';
 import PDFReaderScreen from 'src/screens/PDFReaderScreen';
 import MusicPlayerScreen from 'src/screens/MusicPlayerScreen';
 import ScanQRScreen from 'src/screens/ScanQRScreen';
+import WebviewGeneralScreen from 'src/screens/WebviewGeneralScreen';
 
 // address
 import ManageAddressScreen from 'src/screens/Address/ManageAddressScreen';
@@ -257,7 +258,6 @@ import History from 'src/screens/Posting/Event/History';
 import MyTicket from 'src/screens/Posting/Event/MyTicket';
 import DocumentasiEvent from 'src/screens/Posting/Event/DocumentasiEvent';
 import DocumentasiEventDetail from 'src/screens/Posting/Event/DocumentasiEventDetail';
-import EventHistory from 'src/screens/Posting/Event/EventHistory';
 import OnBoardEvent from 'src/screens/Posting/Event/OnBoardEvent';
 import EditEvent from 'src/screens/Posting/Event/EditEvent';
 import EditEventSecond from 'src/screens/Posting/Event/EditEventSecond';
@@ -270,6 +270,11 @@ import OrderEventDetail from 'src/screens/Posting/Event/OrderEventDetail';
 // security
 import VisitorScreen from 'src/screens/Security/VisitorScreen';
 import VisitorDetailScreen from 'src/screens/Security/VisitorDetailScreen';
+
+// eat
+import EatScreen from 'src/screens/Eat/EatScreen';
+import EatDetailPesananScreen from 'src/screens/Eat/EatDetailPesananScreen';
+import EatHistory from 'src/screens/Eat/EatHistory';
 
 // beacon
 import DetailTenantScreen from 'src/screens/Beacon/DetailTenantScreen';
@@ -307,6 +312,7 @@ function AppNavigator() {
       <Screen name="PDFReaderScreen" component={PDFReaderScreen} />
       <Screen name="MusicPlayerScreen" component={MusicPlayerScreen} />
       <Screen name="ScanQRScreen" component={ScanQRScreen} />
+      <Screen name="WebviewGeneralScreen" component={WebviewGeneralScreen} />
       {/* address */}
       <Screen name="ManageAddressScreen" component={ManageAddressScreen} />
       {/* Survey Pasar */}
@@ -421,7 +427,7 @@ function AppNavigator() {
       <Screen name="SavedEvent" component={SavedEvent} />
       <Screen name="SearchEvent" component={SearchEvent} />
       <Screen name="DocumentasiSearchEvent" component={DocumentasiSearchEvent} />
-      <Screen name="History" component={History} />
+      <Screen name="EventHistory" component={History} />
       <Screen name="MyTicket" component={MyTicket} />
 
       {/* Job */}
@@ -517,6 +523,7 @@ function AppNavigator() {
       <Screen name="TransactionDetail" component={TransactionDetail} />
       <Screen name="TransactionDetailSucces" component={TransactionDetailSucces} />
       <Screen name="TransactionDetailSeller" component={TransactionDetailSeller} />
+
       {/* gallery */}
       <Screen name="GalleryScreen" component={GalleryScreen} />
       <Screen name="GalleryDetailScreen" component={GalleryDetailScreen} />
@@ -526,6 +533,12 @@ function AppNavigator() {
       {/* security */}
       <Screen name="VisitorScreen" component={VisitorScreen} />
       <Screen name="VisitorDetailScreen" component={VisitorDetailScreen} />
+
+      {/* eat */}
+      <Screen name="EatScreen" component={EatScreen} />
+      <Screen name="EatDetailPesananScreen" component={EatDetailPesananScreen} />
+      <Screen name="EatHistory" component={EatHistory} />
+
       {/* beacon */}
       <Screen name="DetailTenantScreen" component={DetailTenantScreen} />
       <Screen name="DetailArtScreen" component={DetailArtScreen} />

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Pressable, Image, TextInput, StyleSheet, Text, TouchableOpacity, useWindowDimensions } from 'react-native'
+import { View, ScrollView, Pressable, Image, TextInput, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native'
 import { useSelector } from 'react-redux';
 import Config from 'react-native-config';
 import { useColor, Header, Col } from '@src/components';
 import Scaffold from '@src/components/Scaffold';
+import Text from '@src/components';
 import { Divider, Row, Container } from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
 import ListContentProduct from 'src/components/Content/ListContentProduct';
@@ -22,6 +23,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import IonIcons from 'react-native-vector-icons/Ionicons'
 import SearchBar from 'src/components/SearchBar';
 import ListContenEvent from 'src/components/Event/ListContenEvent';
+import imageAssets from 'assets/images';
 
 const EventScreen = ({ navigation, route }) => {
   const { title, userProfileId } = route.params;
@@ -74,7 +76,7 @@ const EventScreen = ({ navigation, route }) => {
               {/* <View style={{bottom: 15,backgroundColor: Color.error, width: 6, height: 6, borderRadius: 30, position: 'absolute', alignSelf: 'flex-end'}}/> */}
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigation.navigate('History')}>
+              onPress={() => navigation.navigate('EventHistory')}>
               <MaterialCommunityIcons
                 name="history"
                 color={Color.text}
@@ -214,8 +216,8 @@ const EventScreen = ({ navigation, route }) => {
           title='Event'
           centerTitle={false}
           actions={
-            <View style={{ width: '100%', alignItems: 'center', flexDirection: 'row' }}>
-              <TouchableOpacity
+            <View style={{ width: '100%', alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row' }}>
+              {/* <TouchableOpacity
                 style={{ marginRight: 10 }}
                 onPress={() => navigation.navigate('SavedEvent')}>
                 <MaterialCommunityIcons
@@ -223,19 +225,22 @@ const EventScreen = ({ navigation, route }) => {
                   color={Color.text}
                   size={18}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
 
               <TouchableOpacity
-                onPress={() => navigation.navigate('History')}>
-                <MaterialCommunityIcons
-                  name="history"
-                  color={Color.text}
-                  size={22}
-                  style={{ marginRight: 10 }}
+                onPress={() => navigation.navigate('EventHistory')}
+              >
+                <Image
+                    source={imageAssets.receipt}
+                    style={{
+                      height: 24,
+                      width: 24,
+                      resizeMode: 'contain',
+                    }}
                 />
               </TouchableOpacity>
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() =>
                   navigation.navigate('OnBoardEvent', {
                     title,
@@ -250,7 +255,7 @@ const EventScreen = ({ navigation, route }) => {
                   color={Color.text}
                   size={22}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           }
         />

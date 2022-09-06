@@ -53,6 +53,7 @@ const SearchBar = ({ type, label, style, onPress, value, onChangeText, textInput
                                 flex: 1,
                                 color: Color.text,
                                 backgroundColor: Color.textInput,
+                                fontFamily: 'Inter-Regular',
                             }}
                         />
                         {value !== '' ?
