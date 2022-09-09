@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>464499324065-3lcnp0jke9d57fd4lmbditffj3l0vr7n.apps.googleusercontent.com</string>
+	<string>282449093607-kv4jcukbt21t3rbeuki0r0ct91eb0br3.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.464499324065-3lcnp0jke9d57fd4lmbditffj3l0vr7n</string>
+	<string>com.googleusercontent.apps.282449093607-kv4jcukbt21t3rbeuki0r0ct91eb0br3</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDsepJ2tQ8MpC-fAiDulmr9kNVIZgSE6Ck</string>
+	<string>AIzaSyDYnyNMs9NFtphMJWHY1EnFcjw_l_ln-aw</string>
 	<key>GCM_SENDER_ID</key>
-	<string>464499324065</string>
+	<string>282449093607</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.bethsaidacommunity</string>
+	<string>com.mblocxperienceapp</string>
 	<key>PROJECT_ID</key>
-	<string>bethsaida-community</string>
+	<string>m-bloc-x</string>
 	<key>STORAGE_BUCKET</key>
-	<string>bethsaida-community.appspot.com</string>
+	<string>m-bloc-x.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:464499324065:ios:f7256bb58a78629864ece0</string>
+	<string>1:282449093607:ios:f7cc67a59396cff693d342</string>
 </dict>
 </plist>
