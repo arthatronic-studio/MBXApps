@@ -7,7 +7,7 @@ import { Container, Divider, Row } from 'src/styled';
 import PostingSkeleton from '../Posting/PostingSkeleton';
 import { initialItemState } from 'src/utils/constants';
 import { fetchContentProduct, fetchContentUserProduct } from 'src/api/content';
-import CardContentProduct from '@src/components/Content/CardContentProduct';
+import CardFeaturedEat from './CardFeaturedEat';
 import { getAPI } from 'src/api-rest/httpService';
 import PostingHeader from '../Posting/PostingHeader';
 import { useSelector } from 'react-redux';
@@ -35,7 +35,7 @@ const defaultProps = {
     showHeader: false,
 };
 
-const ListContentEat = ({ userProfileId, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, }) => {
+const ListFeaturedEat = ({ userProfileId, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, }) => {
     const { width } = useWindowDimensions();
     const [itemData, setItemData] = useState(initialItemState);
     const auth = useSelector(state => state['auth']);
@@ -53,7 +53,7 @@ const ListContentEat = ({ userProfileId, productCategory, name, horizontal, styl
     const fetchData = async () => {
         let baseEndpoint = 'location';
         if (auth.user.activityInfo.location) {
-            baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.user.activityInfo.location.id}&type=eat`;
+            baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.user.activityInfo.location.id}&type=eat&isRecommended=1`;
         }
         console.log('baseEndpoint', baseEndpoint);
         const result = await getAPI(baseEndpoint);
@@ -147,11 +147,12 @@ const ListContentEat = ({ userProfileId, productCategory, name, horizontal, styl
                     onEndReachedThreshold={0.3}
                     onEndReached={() => setItemData({ ...itemData, loadNext: true })}
                     {...extraProps}
+                    pagingEnabled
                     renderItem={({ item, index }) => {
                         if (index === 0) {
                             return (
                                 <>
-                                    <CardContentProduct
+                                    <CardFeaturedEat
                                         productCategory={productCategory}
                                         item={item}
                                         horizontal={horizontal}
@@ -162,7 +163,7 @@ const ListContentEat = ({ userProfileId, productCategory, name, horizontal, styl
                         }
 
                         return (
-                            <CardContentProduct
+                            <CardFeaturedEat
                                 productCategory={productCategory}
                                 item={item}
                                 horizontal={horizontal}
@@ -194,6 +195,6 @@ const ListContentEat = ({ userProfileId, productCategory, name, horizontal, styl
     )
 }
 
-ListContentEat.propTypes = propTypes;
-ListContentEat.defaultProps = defaultProps;
-export default ListContentEat;
+ListFeaturedEat.propTypes = propTypes;
+ListFeaturedEat.defaultProps = defaultProps;
+export default ListFeaturedEat;

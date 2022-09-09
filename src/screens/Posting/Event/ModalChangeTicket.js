@@ -1,4 +1,4 @@
-import React, { useRef, forwardRef } from 'react';
+import React, { useState, useEffect, useRef, forwardRef } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -16,25 +16,38 @@ import ImagesPath from 'src/components/ImagesPath';
 import { FormatMoney } from 'src/utils';
 import CardEventTicket from './CardEventTicket';
 import { Container } from 'src/styled';
+import { getAPI } from 'src/api-rest/httpService';
 
 const defaultProps = {
-  data: [],
   adjust: true,
   selected: null,
-  name: '',
-  onPress: () => { },
+  onSelected: () => { },
   onClose: () => { },
   style: {},
 };
 
 const ModalChangeTicket = forwardRef((props, ref) => {
-  const { data, selected, adjust, onPress, onClose, children, style, name } = props;
+  const { reffId, selected, adjust, onSelected, onClose, style } = props;
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
 
   const { Color } = useColor();
   const { width, height } = useWindowDimensions();
+
+  const [itemData, setItemData] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async() => {
+    const result = await getAPI(`event/ticket/${reffId}`);
+    console.log('result', result);
+    if (result.status) {
+      setItemData(result.data);
+    }
+  }
 
   return (
     <Modalize
@@ -61,12 +74,19 @@ const ModalChangeTicket = forwardRef((props, ref) => {
       }}
     >
       <Container padding={16} paddingTop={32}>
-        <Text type='bold' align='left'>Ganti Tiket</Text>
+        <Text type='medium' size={16} align='left'>Ganti Tiket</Text>
       </Container>
       <View style={{width, maxHeight: height / 2}}>
         <ScrollView>
-          {[1, 2, 3].map((val, idx) => (
-            <CardEventTicket key={idx} onSelect={() => onClose()} />
+          {itemData.map((item, idx) => (
+            <CardEventTicket
+              key={idx}
+              item={item}
+              onSelect={() => {
+                onClose();
+                onSelected(item);
+              }}
+            />
           ))}
         </ScrollView>
       </View>

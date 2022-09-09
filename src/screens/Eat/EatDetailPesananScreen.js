@@ -210,10 +210,10 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
                 >
                   <AntDesign
                     name="minuscircleo"
-                    color={Color.primary}
+                    color={Color.primaryDark}
                     size={20}
                     style={{
-                      opacity: disabledDecrease ? 0.5 : 1,
+                      opacity: disabledDecrease ? 0.3 : 1,
                     }}
                   />
                 </TouchableOpacity>
@@ -228,10 +228,10 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
                 >
                   <AntDesign
                     name="pluscircleo"
-                    color={Color.primary}
+                    color={Color.primaryDark}
                     size={20}
                     style={{
-                      opacity: disabledIncrease ? 0.5 : 1,
+                      opacity: disabledIncrease ? 0.3 : 1,
                     }}
                   />
                 </TouchableOpacity>

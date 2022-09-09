@@ -41,7 +41,7 @@ import client from '@src/lib/apollo';
 import { mutatuinEventManage } from 'src/lib/query/event';
 import { FormatMoney } from 'src/utils';
 import ModalChangeTicket from './ModalChangeTicket';
-import { Container, Divider } from 'src/styled';
+import { Container, Divider, Line } from 'src/styled';
 import imageAssets from 'assets/images';
 
 const getDaysBetweenDates = (startDate, endDate) => {
@@ -165,14 +165,13 @@ const PemesananTiket = ({ navigation }) => {
         >
             <ScrollView>
                 <Container paddingHorizontal={16} paddingTop={8} paddingBottom={statusBarHeight}>
-                    <Text size={11} type='bold' align='left'>Tiket Dipilih</Text>
+                    <Text size={14} type='bold' align='left'>Tiket Dipilih</Text>
 
-                    <View style={{ marginTop: 8, padding: 10, borderRadius: 8, backgroundColor: Color.theme }}>
+                    <View style={{ marginTop: 8, padding: 10, borderRadius: 8, borderWidth: 0.5, borderColor: Color.border, backgroundColor: Color.theme }}>
                         <Row style={{justifyContent: 'space-between'}}>
-                            <Text type='bold' size={11}>{ticketSelected.name}</Text>
-                            <Text size={11} color={Color.text} type='medium' align='right'>{moment(selectedDate).format('DD MMM YYYY')}</Text>
+                            <Text type='bold' size={16}>{ticketSelected.name}</Text>
                         </Row>
-                        <Row style={{ paddingVertical: 16 }}>
+                        <Row style={{ paddingTop: 16, paddingBottom: 8 }}>
                             <Row style={{ marginRight: 10, alignItems: 'center' }}>
                                 <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 3, borderRadius: 14 }}>
                                     <Image source={ImagesPath.refund} style={{ width: 15, height: 15, borderRadius: 7, tintColor: Color.text }} />
@@ -186,15 +185,20 @@ const PemesananTiket = ({ navigation }) => {
                                 <Text color={Color.text} size={11}>{ticketSelected.reservation ? 'Bisa Reservasi' : 'Tidak Bisa Reservasi'}</Text>
                             </Row>
                         </Row>
+
+                        <Line height={1} width='100%' color='#F4F4F4' />
                         
-                        <Row style={{ alignItems: 'center' }}>
+                        <Row style={{ alignItems: 'center', marginTop: 8 }}>
                             <Col size={8} style={{ alignItems: 'flex-start', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
                                 <Text color={Color.text} size={9}>Harga</Text>
                                 <Text color={Color.text} size={14} type='semibold'>{ticketSelected.type === 'FREE' ? 'GRATIS' : FormatMoney.getFormattedMoney(ticketSelected.price)}/pax</Text>
                             </Col>
                             <Col style={{ alignItems: 'flex-end' }}>
-                                <TouchableOpacity onPress={() => modalChangeTicketRef.current.open()} style={{ borderColor: Color.primary, borderWidth: 1, borderRadius: 30, paddingVertical: 8, paddingHorizontal: 10 }}>
-                                    <Text color={Color.primary} type='medium' size={11}>Ganti Tiket</Text>
+                                <TouchableOpacity
+                                    onPress={() => modalChangeTicketRef.current.open()}
+                                    style={{ borderColor: Color.textSoft, borderWidth: 1, borderRadius: 8, padding: 12 }}
+                                >
+                                    <Text color={Color.primaryDark} type='medium' size={11}>Ganti Tiket</Text>
                                 </TouchableOpacity>
                             </Col>
                         </Row>
@@ -249,7 +253,7 @@ const PemesananTiket = ({ navigation }) => {
                         style={{
                             borderRadius: 8,
                             borderWidth: 0.5,
-                            borderColor: Color.placeholder,
+                            borderColor: Color.border,
                         }}
                     />
 
@@ -283,10 +287,10 @@ const PemesananTiket = ({ navigation }) => {
                                 >
                                     <AntDesign
                                         name="minuscircleo"
-                                        color={Color.primary}
+                                        color={Color.primaryDark}
                                         size={20}
                                         style={{
-                                            opacity: disabledDecrease ? 0.5 : 1,
+                                            opacity: disabledDecrease ? 0.3 : 1,
                                         }}
                                     />
                                 </TouchableOpacity>
@@ -301,10 +305,10 @@ const PemesananTiket = ({ navigation }) => {
                                 >
                                     <AntDesign
                                         name="pluscircleo"
-                                        color={Color.primary}
+                                        color={Color.primaryDark}
                                         size={20}
                                         style={{
-                                            opacity: disabledIncrease ? 0.5 : 1,
+                                            opacity: disabledIncrease ? 0.3 : 1,
                                         }}
                                     />
                                 </TouchableOpacity>
@@ -330,9 +334,12 @@ const PemesananTiket = ({ navigation }) => {
 
             <ModalChangeTicket
                 ref={modalChangeTicketRef}
-                data={{ name: 'riyan' }}
+                reffId={ticketSelected.id}
                 adjust={true}
                 onClose={onClose}
+                onSelected={(item) => {
+                    setSelected(item);
+                }}
             />
         </Scaffold>
     )

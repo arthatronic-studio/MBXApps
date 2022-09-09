@@ -85,9 +85,11 @@ const EventDetail = ({ navigation, route }) => {
       });
   };
 
-  const renderItem = ({ item }) => (
-    <CardEventTicket item={item} />
-  );
+  const renderItem = ({ item }) => {
+    return (
+      <CardEventTicket item={item} />
+    )
+  }
 
   const fetchAddLike = () => {
     showLoading();
@@ -145,7 +147,7 @@ const EventDetail = ({ navigation, route }) => {
           setHeightHeader(e.nativeEvent.layout.height);
         }}
         style={{
-          paddingBottom: 46,
+          paddingBottom: 24,
         }}
       >
         <Container paddingHorizontal={16} marginTop={8} marginBottom={16}>
@@ -286,8 +288,8 @@ const EventDetail = ({ navigation, route }) => {
             onPress={() => setDesc(!desc)}
             style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 8 }}
           >
-            <Text color={Color.primary}>{desc ? 'Lebih sedikit' : 'Selengkapnya'}</Text>
-            <MaterialIcons name={'keyboard-arrow-down'} size={22} color={Color.primary} />
+            <Text color={Color.primaryDark}>{desc ? 'Lebih sedikit' : 'Selengkapnya'}</Text>
+            <MaterialIcons name={'keyboard-arrow-down'} size={22} color={Color.primaryDark} />
           </Pressable>
         </Container>
       </View>
@@ -299,7 +301,7 @@ const EventDetail = ({ navigation, route }) => {
       <Container paddingHorizontal={16} marginTop={8}>
         <Text align='left'>Detail Lokasi</Text>
         <Divider height={8} />
-        <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 18, borderRadius: 8, backgroundColor: Color.theme }}>
+        <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', paddingVertical: 8, borderRadius: 8, backgroundColor: Color.theme }}>
           <Image
             source={ImagesPath.LocationEvent}
             style={{
@@ -435,7 +437,12 @@ const EventDetail = ({ navigation, route }) => {
     >
       <FlatList
         ref={flatlistRef}
-        data={Array.isArray(items.tickets) && items.tickets.length > 0 ? items.tickets : [{}]}
+        data={
+          Array.isArray(items.tickets) && items.tickets.length > 0 ?
+          items.tickets
+          :
+          []
+        }
         keyExtractor={(item, index) => item.id + index.toString()}
         renderItem={renderItem}
         ListHeaderComponent={renderHeader}

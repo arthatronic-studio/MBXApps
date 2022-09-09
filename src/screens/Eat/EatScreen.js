@@ -24,6 +24,7 @@ import SearchBar from 'src/components/SearchBar';
 import ListContenEvent from 'src/components/Event/ListContenEvent';
 import imageAssets from 'assets/images';
 import ListContentEat from 'src/components/Eat/ListContentEat';
+import ListFeaturedEat from 'src/components/Eat/ListFeaturedEat';
 
 const EatScreen = ({ navigation, route }) => {
   const { title, userProfileId } = route.params;
@@ -152,7 +153,7 @@ const EatScreen = ({ navigation, route }) => {
         }}
         ListHeaderComponent={
           <>
-            <ListContentEat
+            <ListFeaturedEat
               horizontal
               productCategory='EAT'
               name='Eat'

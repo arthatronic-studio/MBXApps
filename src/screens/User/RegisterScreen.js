@@ -149,18 +149,26 @@ const RegisterScreen = ({ navigation, route }) => {
       dob: null,
     };
 
+    let msg = 'Pendaftaran Gagal';
+    let success = false;
+
     const result = await stateUpdateProfile(body);
     console.log('result', result);
+    
     if (result) {
-      showLoading('success', 'Pendaftaran Berhasil');
+      msg = result.message;
+      success = result.status;
 
-      setTimeout(() => {
-        redirectTo('MainPage');
-      }, 2500);
-      return;
+      if (success) {
+        setTimeout(() => {
+          redirectTo('MainPage');
+        }, 2500);
+
+        return;
+      }
     }
 
-    showLoading('error', 'Pendaftaran Gagal');
+    showLoading(success ? 'success' : 'error', msg);
     
     return;
     Keyboard.dismiss();

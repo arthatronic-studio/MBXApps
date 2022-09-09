@@ -7,10 +7,9 @@ import { Container, Divider, Row } from 'src/styled';
 import PostingSkeleton from '../Posting/PostingSkeleton';
 import { initialItemState } from 'src/utils/constants';
 import { fetchContentProduct, fetchContentUserProduct } from 'src/api/content';
-import CardContentProduct from '@src/components/Content/CardContentProduct';
+import CardFeaturedEvent from './CardFeaturedEvent';
 import { getAPI } from 'src/api-rest/httpService';
 import PostingHeader from '../Posting/PostingHeader';
-import { useSelector } from 'react-redux';
 
 const propTypes = {
     userProfileId: PropTypes.number,
@@ -35,10 +34,9 @@ const defaultProps = {
     showHeader: false,
 };
 
-const ListContentEat = ({ userProfileId, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, }) => {
+const ListFeaturedEvent = ({ userProfileId, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, }) => {
     const { width } = useWindowDimensions();
     const [itemData, setItemData] = useState(initialItemState);
-    const auth = useSelector(state => state['auth']);
 
     useEffect(() => {
         fetchData();
@@ -51,12 +49,7 @@ const ListContentEat = ({ userProfileId, productCategory, name, horizontal, styl
     }, [itemData.loadNext]);
 
     const fetchData = async () => {
-        let baseEndpoint = 'location';
-        if (auth.user.activityInfo.location) {
-            baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.user.activityInfo.location.id}&type=eat`;
-        }
-        console.log('baseEndpoint', baseEndpoint);
-        const result = await getAPI(baseEndpoint);
+        const result = await getAPI('event?isFeatured=1');
 
         console.log('result', result);
 
@@ -112,6 +105,7 @@ const ListContentEat = ({ userProfileId, productCategory, name, horizontal, styl
                 }}
                 productCategory={productCategory}
                 showSeeAllText={showSeeAllText}
+                style={{paddingHorizontal: 8}}
             />
         )
     }
@@ -127,7 +121,7 @@ const ListContentEat = ({ userProfileId, productCategory, name, horizontal, styl
         )
     }
 
-    let extraProps = { numColumns: 2 };
+    let extraProps = { numColumns: 1 };
     if (productCategory === 'NEARBY_PLACE') extraProps.numColumns = 2;
     if (horizontal) extraProps = {};
 
@@ -143,7 +137,7 @@ const ListContentEat = ({ userProfileId, productCategory, name, horizontal, styl
                     data={itemData.data}
                     horizontal={horizontal}
                     showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ paddingBottom: 16, ...style }}
+                    contentContainerStyle={{ paddingBottom: 16, paddingHorizontal: 8, ...style }}
                     onEndReachedThreshold={0.3}
                     onEndReached={() => setItemData({ ...itemData, loadNext: true })}
                     {...extraProps}
@@ -151,7 +145,9 @@ const ListContentEat = ({ userProfileId, productCategory, name, horizontal, styl
                         if (index === 0) {
                             return (
                                 <>
-                                    <CardContentProduct
+                                    {showHeader && !horizontal && renderHeader()}
+
+                                    <CardFeaturedEvent
                                         productCategory={productCategory}
                                         item={item}
                                         horizontal={horizontal}
@@ -162,7 +158,7 @@ const ListContentEat = ({ userProfileId, productCategory, name, horizontal, styl
                         }
 
                         return (
-                            <CardContentProduct
+                            <CardFeaturedEvent
                                 productCategory={productCategory}
                                 item={item}
                                 horizontal={horizontal}
@@ -171,16 +167,12 @@ const ListContentEat = ({ userProfileId, productCategory, name, horizontal, styl
                         )
                     }
                     }
-                    ListHeaderComponent={
-                        <>
-                            {ListHeaderComponent}
-
-                            {showHeader && !horizontal && renderHeader()}
-                        </>
-                    }
+                    ListHeaderComponent={ListHeaderComponent}
                     ListEmptyComponent={() => {
                         return (
                             <>
+                                {showHeader && !horizontal && !itemData.loading && itemData.data.length === 0 && renderHeader()}
+                                
                                 <ScreenEmptyData
                                     message={`${name} belum tersedia`}
                                     style={{ width: width - 16 }}
@@ -194,6 +186,6 @@ const ListContentEat = ({ userProfileId, productCategory, name, horizontal, styl
     )
 }
 
-ListContentEat.propTypes = propTypes;
-ListContentEat.defaultProps = defaultProps;
-export default ListContentEat;
+ListFeaturedEvent.propTypes = propTypes;
+ListFeaturedEvent.defaultProps = defaultProps;
+export default ListFeaturedEvent;

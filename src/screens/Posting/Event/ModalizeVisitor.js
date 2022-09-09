@@ -1,4 +1,4 @@
-import React, { useRef, useState, forwardRef } from 'react';
+import React, { useRef, useState, useEffect, forwardRef } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -39,6 +39,14 @@ const ModalizeVisitor = forwardRef((props, ref) => {
 
   const { Color } = useColor();
   const { width, height } = useWindowDimensions();
+
+  useEffect(() => {
+    setTitle(selected ? selected.title : titleList[0].value);
+    setName(selected ? selected.name : '');
+    setPhone(selected ? selected.phone : '');
+    setEmail(selected ? selected.email : '');
+    setIdCardNumber(selected ? selected.ktp : '');
+  }, [selected]);
 
   const onSubmit = () => {
     const data = {

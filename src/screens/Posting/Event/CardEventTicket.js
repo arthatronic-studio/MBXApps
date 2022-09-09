@@ -16,7 +16,7 @@ import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
 import { TouchableOpacity, Button } from '@src/components/Button';
 import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
-import { Container, Divider, Padding } from 'src/styled';
+import { Container, Divider, Line, Padding } from 'src/styled';
 import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 import ModalContentOptions from 'src/components/ModalContentOptions';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
@@ -59,15 +59,15 @@ const CardEventTicket = ({ item, onSelect }) => {
   An event description is a text or copy that tells audiences all the essential details about your event. These details should come together so that it compels potential attendees to register. But more than driving up attendance, a good event description can pique the interest of non-members and even the press. In a nutshell, an event description should cover the who, what, why, where, when and how of your event to give potential attendees reasons to show up.`;
 
   return (
-    <View style={{ paddingHorizontal: 16, ...shadowStyle, backgroundColor: Color.theme }}>
-      <Pressable style={{ width: '100%', marginBottom: 10, padding: 10, backgroundColor: Color.theme, borderRadius: 8 }}>
+    <View style={{ paddingHorizontal: 16 }}>
+      <Pressable style={{ width: '100%', marginBottom: 10, padding: 10, backgroundColor: Color.theme, borderWidth: 0.5, borderColor: Color.border, borderRadius: 8 }}>
         <Row>
           <Col>
-            <Text style={{ fontSize: 11, textAlign: 'left', fontWeight: 'bold' }}>{item.name}</Text>
+            <Text size={16} align='left' type='medium'>{item.name}</Text>
           </Col>
         </Row>
 
-        <Divider />
+        <Divider height={8} />
 
         <Row style={{ alignItems: 'center' }}>
           <Image
@@ -92,7 +92,11 @@ const CardEventTicket = ({ item, onSelect }) => {
           <Text size={11}>{item.reservation ? 'Perlu Reservasi' : 'Tidak Perlu Reservasi'}</Text>
         </Row>
 
-        <View style={{ width: '100%', flexDirection: 'row', paddingTop: 16 }}>
+        <Divider height={8} />
+
+        <Line height={1} width='100%' color='#F4F4F4' />
+
+        <View style={{ width: '100%', flexDirection: 'row', paddingTop: 8 }}>
           <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center' }}>
             <Text size={11}>Harga</Text>
             <Text type='medium'>{FormatMoney.getFormattedMoney(item.price)}<Text size={11}>/Pax</Text></Text>

@@ -312,7 +312,13 @@ const LoginScreen = ({navigation, route}) => {
               label='No. Telepon'
               placeholder='851-XXXX-XXXX'
               value={state.username}
-              onChangeText={text => setState({username: text})}
+              onChangeText={(text) => {
+                console.log('state.username', state.username.length, typeof text);
+                if ((state.username.length <= 0 && text == 0) || isNaN(parseInt(text))) {
+                  return;
+                }
+                setState({username: text});
+              }}
               onBlur={() => isValueError('username')}
               returnKeyType="next"
               onSubmitEditing={() => passwordRef.current ? passwordRef.current.focus() : onSubmitRest()}

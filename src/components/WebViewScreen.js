@@ -48,6 +48,7 @@ const WebViewScreen = (props) => {
   } = props;
 
   function isPaid(url, host) {
+    console.log('url: ', url, ' |  host: ', host);
     // const hostnamePaymentRouter = host.indexOf(`${Config.BASE_DOMAIN}/payment-router/callback`);
     const hostnamePaymentRouter = host.indexOf(`${Config.BASE_DOMAIN}/static-pages/payment-finish`);
     const paymentPaid = url.query.indexOf('status-payment=PAID');
@@ -78,7 +79,7 @@ const WebViewScreen = (props) => {
   return (
     <SafeAreaView style={{ backgroundColor: Color.theme, flex: 1 }}>
       <MainView>
-        <CustomHeader title="App Content" showLeftButton onPressLeftButton={onClose} iconLeftButton='close' />
+        <CustomHeader title="Payment Method" showLeftButton onPressLeftButton={onClose} iconLeftButton='close' />
         <WebView
           source={{ uri: url }}
           onNavigationStateChange={checkURL}

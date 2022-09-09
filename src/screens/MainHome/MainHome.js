@@ -142,31 +142,36 @@ const MainHome = ({ navigation, route }) => {
     beaconSetup();
   }, [isActiveBluetooth]);
 
-  useEffect(() => {
-    const shakeSubs = RNShake.addListener(() => {
-      if (isCheckin) {
-        onPairingMerchant();
-      } else {
-        onPairingCheckin();
-      }
-    });
+  // useEffect(() => {
+  //   const shakeSubs = RNShake.addListener(() => {
+  //     if (isCheckin) {
+  //       onPairingMerchant();
+  //     } else {
+  //       onPairingCheckin();
+  //     }
+  //   });
 
-    return () => {
-      shakeSubs.remove();
-    }
-  }, [isCheckin, stateListCheckinUID, stateListMerchUID]);
+  //   return () => {
+  //     shakeSubs.remove();
+  //   }
+  // }, [isCheckin, stateListCheckinUID, stateListMerchUID]);
 
   useEffect(() => {
     const timeout = isCheckin && stateListArtUID.length > 0 && isFocused && listMerchantType.length === 0 && !modalLoading ?
       setTimeout(() => {
-        onPairingArt();
+        if (isCheckin) {
+          onPairingMerchant();
+          onPairingArt();
+        } else {
+          onPairingCheckin();
+        }
       }, 3000)
       : null;
 
     return () => {
       clearTimeout(timeout);
     }
-  }, [isCheckin, stateListArtUID, isFocused, listMerchantType, modalLoading]);
+  }, [isCheckin, stateListArtUID, stateListCheckinUID, stateListMerchUID, isFocused, listMerchantType, modalLoading]);
 
   useEffect(() => {
     const timeout = isCheckin && stateListOtherUID.length > 0 ?
@@ -530,7 +535,8 @@ const MainHome = ({ navigation, route }) => {
 
   const testApi = async () => {
     // const test = await getAPI('location?bloc_location_id=1');
-    const test = await getAPI('ticket-order');
+    // const test = await getAPI('ticket-order');
+    const test = await getAPI('menu');
     console.log('test', test);
   }
 

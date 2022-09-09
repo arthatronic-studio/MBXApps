@@ -34,7 +34,7 @@ const WidgetHomeMenuStatic = ({ showMore }) => {
   const {width} = useWindowDimensions();
 
   const [listMenuHome, setListMenuHome] = useState([
-    {name: 'Shop', nav: 'Ecommerce', param: {}, image: imageAssets.homeMenuShop, show: true },
+    // {name: 'Shop', nav: 'Ecommerce', param: {}, image: imageAssets.homeMenuShop, show: true },
     {name: 'Event', nav: 'EventScreen', param: {}, image: imageAssets.homeMenuEvent, show: true },
     // {name: 'Forum', nav: 'ForumScreen', param: {}, image: imageAssets.homeMenuForum, show: true },
     {name: 'Eats', nav: 'EatScreen', param: {}, image: imageAssets.homeMenuEats, show: true },

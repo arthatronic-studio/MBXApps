@@ -17,6 +17,7 @@ import PDFReaderScreen from 'src/screens/PDFReaderScreen';
 import MusicPlayerScreen from 'src/screens/MusicPlayerScreen';
 import ScanQRScreen from 'src/screens/ScanQRScreen';
 import WebviewGeneralScreen from 'src/screens/WebviewGeneralScreen';
+import WebviewPaymentScreen from 'src/screens/WebviewPaymentScreen';
 
 // address
 import ManageAddressScreen from 'src/screens/Address/ManageAddressScreen';
@@ -313,6 +314,7 @@ function AppNavigator() {
       <Screen name="MusicPlayerScreen" component={MusicPlayerScreen} />
       <Screen name="ScanQRScreen" component={ScanQRScreen} />
       <Screen name="WebviewGeneralScreen" component={WebviewGeneralScreen} />
+      <Screen name="WebviewPaymentScreen" component={WebviewPaymentScreen} />
       {/* address */}
       <Screen name="ManageAddressScreen" component={ManageAddressScreen} />
       {/* Survey Pasar */}

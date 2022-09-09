@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, ScrollView, Platform, Image, SafeAreaView, TextInput, TouchableOpacity, Switch } from 'react-native';
+import { View, ScrollView, Platform, Image, Modal, SafeAreaView, TextInput, TouchableOpacity, Switch } from 'react-native';
 import Styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import DatePicker from 'react-native-date-picker';
@@ -36,6 +36,7 @@ import ModalizeVisitor from './ModalizeVisitor';
 import { Container, Divider } from 'src/styled';
 import imageAssets from 'assets/images';
 import { postAPI } from 'src/api-rest/httpService';
+import WebViewScreen from 'src/components/WebViewScreen';
 
 const CheckoutEvent = ({ navigation, route }) => {
     const auth = useSelector((state) => state['auth']);
@@ -44,7 +45,7 @@ const CheckoutEvent = ({ navigation, route }) => {
     const { params } = route;
     console.log(params, 'paramsss');
 
-    const [listVisitors, setListVisitors] = useState(new Array(params.qty).fill({
+    const [listVisitors, setListVisitors] = useState(new Array(1).fill({
         phone: null,
         email: null,
         name: null,
@@ -53,6 +54,7 @@ const CheckoutEvent = ({ navigation, route }) => {
     }));
     const [currentIndexVisitor, setCurrentIndexVisitor] = useState(0);
     const [isSamaDgPemesan, setIsSamaDgPemesan] = useState(false);
+    const [sourceURL, setSourceURL] = useState('');
 
     const [loadingProps, showLoading, hideLoading] = useLoading();
     const modalVisitorRef = useRef();
@@ -60,6 +62,10 @@ const CheckoutEvent = ({ navigation, route }) => {
     const { Color } = useColor();
 
     console.log(auth);
+
+    useEffect(() => {
+        
+    }, []);
 
     const submit = async () => {
         showLoading();
@@ -77,12 +83,24 @@ const CheckoutEvent = ({ navigation, route }) => {
         console.log('result', result);
         if (result.status) {
             showLoading('success', result.message);
-            // navigation.navigate('PaymentScreen', { back: true });
-            navigation.navigate('EventScreen');
+            // // navigation.navigate('PaymentScreen', { back: true });
+            // navigation.navigate('EventScreen');
+
+            if (result.paymentResponse && result.paymentResponse.data && result.paymentResponse.data.redirect_url) {
+                setSourceURL(result.paymentResponse.data.redirect_url);
+            } else {
+                navigation.navigate('PaymentSucceed');
+            }
         } else {
             showLoading('error', result.message);
         }
     };
+
+    const onCloseWebview = (status) => {
+        setSourceURL('');
+        if (status === 'paymentPaid') navigation.navigate('PaymentSucceed');
+        else navigation.navigate('EventScreen');
+    }
 
     return (
         <Scaffold
@@ -92,7 +110,7 @@ const CheckoutEvent = ({ navigation, route }) => {
         >
             <ScrollView>
                 <Container paddingHorizontal={16} paddingBottom={16}>
-                    <View style={{ backgroundColor: Color.theme, borderWidth: 1, padding: 10, borderRadius: 8 }}>
+                    <View style={{ backgroundColor: Color.theme, borderWidth: 0.5, borderColor: Color.border, padding: 10, borderRadius: 8 }}>
                         <Container align='center' style={{ flexDirection: 'row' }}>
                             <Image source={{ uri: '' }} style={{ height: 48, width: 48, borderRadius: 8, marginRight: 8, backgroundColor: Color.border }} />
                             <Text type='semibold' align='left'>{params.item.event.title}</Text>
@@ -132,7 +150,7 @@ const CheckoutEvent = ({ navigation, route }) => {
 
                     <Text type='bold' align='left'>Detail Pemesan</Text>
 
-                    <View style={{ marginTop: 8, padding: 10, borderRadius: 8, backgroundColor: Color.theme }}>
+                    <View style={{ marginTop: 8, padding: 10, borderWidth: 0.5, borderColor: Color.border, borderRadius: 8, backgroundColor: Color.theme }}>
                         <Row>
                             <Col>
                                 <Text type='bold' align='left'>{auth.user.name}</Text>
@@ -147,7 +165,7 @@ const CheckoutEvent = ({ navigation, route }) => {
                                     </View>
                                     <Text color={Color.text} size={12}>+{auth.user.phone}</Text>
                                 </Row>
-                                <Divider height={4} />
+                                <Divider height={6} />
                                 <Row style={{ alignItems: 'center' }}>
                                     <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 6 }}>
                                         <Image
@@ -164,6 +182,7 @@ const CheckoutEvent = ({ navigation, route }) => {
                     </View>
 
                     <Divider />
+
                     <Row style={{ justifyContent: 'space-between', alignItems: 'center' }}>
                         <Text type='bold' align='left'>Detail Pengunjung</Text>
                         <Row style={{ alignItems: 'center', justifyContent: 'flex-end' }}>
@@ -208,16 +227,20 @@ const CheckoutEvent = ({ navigation, route }) => {
                                     modalVisitorRef.current.open();
                                     setCurrentIndexVisitor(idx);
                                 }}
-                                style={{ marginTop: 8, paddingHorizontal: 10, paddingVertical: 12, borderRadius: 8, backgroundColor: Color.theme }}
+                                style={{
+                                    marginTop: 8,
+                                    paddingHorizontal: 10,
+                                    paddingVertical: 12,
+                                    borderRadius: 8,
+                                    borderWidth: 0.5,
+                                    borderColor: Color.border,
+                                    backgroundColor: Color.theme,
+                                }}
                             >
-                                <Row>
-                                    <Col>
-                                        <Text color={Color.text} type='bold' align='left'>{itemVisitor.name ? `${idx + 1}. ${hisTitle} ${itemVisitor.name}` : `Tiket ${idx + 1} (Pax)`}</Text>
-                                    </Col>
-                                    <Col size={2} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
-                                        <AntDesign name='right' size={18} color={Color.text} />
-                                    </Col>
-                                </Row>
+                                <Container align='center' justify='space-between' style={{ flexDirection: 'row' }}>
+                                    <Text color={Color.text} type='bold' align='left'>{itemVisitor.name ? `${idx + 1}. ${hisTitle} ${itemVisitor.name}` : `Tiket ${idx + 1} (Pax)`}</Text>
+                                    <AntDesign name='right' size={18} color={Color.text} />
+                                </Container>
                             </TouchableOpacity>
                         )
                     })}
@@ -225,41 +248,41 @@ const CheckoutEvent = ({ navigation, route }) => {
                     <Divider />
 
                     <Text type='bold' align='left'>Detail Harga</Text>
-                    <View style={{ backgroundColor: Color.primaryDark, marginTop: 8, padding: 10, borderRadius: 8 }}>
+                    <View style={{ backgroundColor: Color.border, marginTop: 8, padding: 10, borderRadius: 8 }}>
                         <Row style={{ marginBottom: 8 }}>
                             <Col>
-                                <Text color={Color.primarySoft} size={12} align='left'>Subtotal</Text>
+                                <Text size={12} align='left'>Subtotal</Text>
                             </Col>
                             <Col size={4} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
-                                <Text color={Color.primarySoft} size={12} align='left'>{FormatMoney.getFormattedMoney(params.item.price * params.qty)}</Text>
+                                <Text size={12} align='left'>{FormatMoney.getFormattedMoney(params.item.price * params.qty)}</Text>
                             </Col>
                         </Row>
                         <Row style={{ marginBottom: 8 }}>
                             <Col>
-                                <Text color={Color.primarySoft} size={12} align='left'>Ppn 10%</Text>
+                                <Text size={12} align='left'>Ppn 10%</Text>
                             </Col>
                             <Col size={4} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
-                                <Text color={Color.primarySoft} size={12} align='left'>{FormatMoney.getFormattedMoney(0)}</Text>
+                                <Text size={12} align='left'>{FormatMoney.getFormattedMoney(0)}</Text>
                             </Col>
                         </Row>
                         <Row style={{ marginBottom: 0 }}>
                             <Col>
-                                <Text color={Color.primarySoft} size={12} align='left'>Total</Text>
+                                <Text size={12} align='left'>Total</Text>
                             </Col>
                             <Col size={4} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
-                                <Text color={Color.primarySoft} size={12} align='left'>{params.item.price <= 0 ? 'GRATIS' : FormatMoney.getFormattedMoney(params.item.price * params.qty)}</Text>
+                                <Text size={12} align='left'>{params.item.price <= 0 ? 'GRATIS' : FormatMoney.getFormattedMoney(params.item.price * params.qty)}</Text>
                             </Col>
                         </Row>
                     </View>
 
                     <Divider />
 
-                    <Text type='bold' align='left'>Kode Promo</Text>
+                    {/* <Text type='bold' align='left'>Kode Promo</Text>
                     <TouchableOpacity
                         onPress={() => { }}
                         style={{ marginTop: 8, borderWidth: 0.5, borderColor: Color.border, paddingHorizontal: 10, paddingVertical: 12, borderRadius: 8 }}
                     >
-                        <Row>
+                        <Container align='center' style={{flexDirection: 'row'}}>
                             <Image
                                 source={imageAssets.discount}
                                 style={{
@@ -272,10 +295,10 @@ const CheckoutEvent = ({ navigation, route }) => {
                                 <Text color={Color.text} type='bold' align='left' letterSpacing={0.25}>QWERTY</Text>
                             </Col>
                             <Col size={2} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
-                                <Text size={12} color={Color.primary} type='medium'>Gunakan</Text>
+                                <Text size={12} color={Color.primaryDark} type='medium'>Gunakan</Text>
                             </Col>
-                        </Row>
-                    </TouchableOpacity>
+                        </Container>
+                    </TouchableOpacity> */}
                 </Container>
             </ScrollView>
 
@@ -300,6 +323,18 @@ const CheckoutEvent = ({ navigation, route }) => {
                     modalVisitorRef.current.close();
                 }}
             />
+
+            <Modal
+                transparent
+                animationType="fade"
+                onRequestClose={onCloseWebview}
+                visible={sourceURL !== ''}
+            >
+                <WebViewScreen
+                    url={sourceURL}
+                    onClose={onCloseWebview}
+                />
+            </Modal>
         </Scaffold>
     )
 }

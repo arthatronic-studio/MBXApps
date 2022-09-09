@@ -24,6 +24,7 @@ import IonIcons from 'react-native-vector-icons/Ionicons'
 import SearchBar from 'src/components/SearchBar';
 import ListContenEvent from 'src/components/Event/ListContenEvent';
 import imageAssets from 'assets/images';
+import ListFeaturedEvent from 'src/components/Event/ListFeaturedEvent';
 
 const EventScreen = ({ navigation, route }) => {
   const { title, userProfileId } = route.params;
@@ -238,6 +239,18 @@ const EventScreen = ({ navigation, route }) => {
                       resizeMode: 'contain',
                     }}
                 />
+
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: -3,
+                    right: -1,
+                    width: 8,
+                    aspectRatio: 1,
+                    borderRadius: 4,
+                    backgroundColor: Color.error,
+                  }}
+                />
               </TouchableOpacity>
 
               {/* <TouchableOpacity
@@ -281,7 +294,7 @@ const EventScreen = ({ navigation, route }) => {
         }}
         ListHeaderComponent={
           <>
-            <ListContenEvent
+            <ListFeaturedEvent
               horizontal
               productCategory='EVENT'
               name='Event'

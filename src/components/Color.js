@@ -44,6 +44,8 @@ export const lightModeColors = {
   textSoft: '#575651',
   textInput: '#FFFFFF',
   border: '#EEEEEE',
+  borderLight: '#F4F4F4',
+  borderDark: '#CCCCCC',
   semiwhite: '#E5E5E5',
 };
 
@@ -56,6 +58,8 @@ export const darkModeColors = {
   textSoft: '#FFFFFF',
   textInput: '#1D1B16',
   border: '#979080',
+  borderLight: '#454545',
+  borderDark: '#A1A1A1',
   semiwhite: '#353535',
 };
 

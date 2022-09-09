@@ -160,7 +160,7 @@ export default ({ navigation, route }) => {
   
       const result = await stateUpdateProfile(body);
       console.log('result', result);
-      if (result) {
+      if (result && result.status) {
         showPopup('Data berhasil diubah', 'success');
 
         setTimeout(() => {
