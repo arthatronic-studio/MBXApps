@@ -240,7 +240,7 @@ const EventScreen = ({ navigation, route }) => {
                     }}
                 />
 
-                <View
+                {/* <View
                   style={{
                     position: 'absolute',
                     top: -3,
@@ -250,7 +250,7 @@ const EventScreen = ({ navigation, route }) => {
                     borderRadius: 4,
                     backgroundColor: Color.error,
                   }}
-                />
+                /> */}
               </TouchableOpacity>
 
               {/* <TouchableOpacity

@@ -282,7 +282,7 @@ import DetailTenantScreen from 'src/screens/Beacon/DetailTenantScreen';
 import DetailArtScreen from 'src/screens/Beacon/DetailArtScreen';
 
 const { Navigator, Screen } = createStackNavigator();
-const MainPage = MainHome;
+const MainPage = BottomTabsNavigator;
 	// accessClient.BottomTabsNavigator.type === 'komoto'
 		// ? BottomTabsNavigatorKomoto
 		// : accessClient.BottomTabsNavigator.type === 'sabyan' ? BottomTabsNavigatorsabyan : BottomTabsNavigator;

@@ -50,6 +50,9 @@ const menu = require('./menu.png');
 const addNote = require('./add-note.png');
 const moreOutline = require('./more-outline.png');
 const eventVerification = require('./event-verification.png');
+const bottomMenuHome = require('./bottom-menu-home.png');
+const bottomMenuNotification = require('./bottom-menu-notification.png');
+const bottomMenuProfile = require('./bottom-menu-profile.png');
 
 export {
   iconApp,
@@ -154,6 +157,9 @@ export const imageAssets = {
   addNote,
   moreOutline,
   eventVerification,
+  bottomMenuHome,
+  bottomMenuNotification,
+  bottomMenuProfile,
 };
 
 export default imageAssets;

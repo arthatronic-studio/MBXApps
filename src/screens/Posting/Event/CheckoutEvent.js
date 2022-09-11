@@ -137,12 +137,12 @@ const CheckoutEvent = ({ navigation, route }) => {
                                 </View>
                                 <Text color={Color.text} size={11}>{params.item.isRefundable ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
                             </Row>
-                            <Row style={{ marginRight: 10, alignItems: 'center' }}>
+                            {/* <Row style={{ marginRight: 10, alignItems: 'center' }}>
                                 <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 4 }}>
                                     <Image source={imageAssets.calendar} style={{ width: 16, height: 16, borderRadius: 7 }} />
                                 </View>
                                 <Text color={Color.text} size={11}>{params.item.reservation ? 'Bisa Reservasi' : 'Tidak Bisa Reservasi'}</Text>
-                            </Row>
+                            </Row> */}
                         </Row>
                     </View>
 
@@ -262,7 +262,7 @@ const CheckoutEvent = ({ navigation, route }) => {
                                 <Text size={12} align='left'>Ppn 10%</Text>
                             </Col>
                             <Col size={4} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
-                                <Text size={12} align='left'>{FormatMoney.getFormattedMoney(0)}</Text>
+                                <Text size={12} align='left'>{FormatMoney.getFormattedMoney(params.item.ppn)}</Text>
                             </Col>
                         </Row>
                         <Row style={{ marginBottom: 0 }}>
@@ -270,7 +270,7 @@ const CheckoutEvent = ({ navigation, route }) => {
                                 <Text size={12} align='left'>Total</Text>
                             </Col>
                             <Col size={4} style={{ justifyContent: 'center', alignItems: 'flex-end' }}>
-                                <Text size={12} align='left'>{params.item.price <= 0 ? 'GRATIS' : FormatMoney.getFormattedMoney(params.item.price * params.qty)}</Text>
+                                <Text size={12} align='left'>{params.item.price <= 0 ? 'GRATIS' : FormatMoney.getFormattedMoney((params.item.price * params.qty) + params.item.ppn)}</Text>
                             </Col>
                         </Row>
                     </View>

@@ -142,23 +142,23 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                         <Text type='medium' align='left' numberOfLines={1}>{item.title}</Text>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 8 }}>
-                            <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-start' }}>
                                 <Image
                                     style={{ height: 16, width: 16, tintColor: Color.placeholder }}
                                     source={imageAssets.location}
                                 />
                                 <Divider width={4} />
-                                <Text type='medium' size={12} align='left' color={Color.placeholder} letterSpacing={0.5}>{item.location}</Text>
+                                <Text type='medium' numberOfLines={2} size={12} align='left' color={Color.placeholder} letterSpacing={0.5}>{item.location}</Text>
                             </View>
                             <Divider />
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-start' }}>
                                 <Image
                                     style={{ height: 16, width: 16, tintColor: Color.placeholder }}
                                     source={imageAssets.calendar}
                                 />
                                 <Divider width={4} />
                                 <>
-                                    <Text type='medium' size={12} align='left' color={Color.placeholder} letterSpacing={0.5}>{item.formatted_date}</Text>
+                                    <Text type='medium' numberOfLines={2} size={12} align='left' color={Color.placeholder} letterSpacing={0.5}>{item.formatted_date}{item.formatted_date}</Text>
                                     <Divider height={8} />
                                 </>
                             </View>

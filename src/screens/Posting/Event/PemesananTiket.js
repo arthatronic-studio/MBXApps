@@ -178,12 +178,12 @@ const PemesananTiket = ({ navigation }) => {
                                 </View>
                                 <Text color={Color.text} size={11}>{ticketSelected.isRefundable ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
                             </Row>
-                            <Row style={{ marginRight: 10, alignItems: 'center' }}>
+                            {/* <Row style={{ marginRight: 10, alignItems: 'center' }}>
                                 <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 3, borderRadius: 14 }}>
                                     <Image source={imageAssets.calendarRemove} style={{ width: 16, height: 16, borderRadius: 7 }} />
                                 </View>
                                 <Text color={Color.text} size={11}>{ticketSelected.reservation ? 'Bisa Reservasi' : 'Tidak Bisa Reservasi'}</Text>
-                            </Row>
+                            </Row> */}
                         </Row>
 
                         <Line height={1} width='100%' color='#F4F4F4' />
