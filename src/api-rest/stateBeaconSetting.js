@@ -14,6 +14,8 @@ export const stateBeaconSetting = async () => {
         let newListMerchRange = [];
         let newListArtUID = [];
         let newListArtRange = [];
+        let newListEventUID = [];
+        let newListEventRange = [];
         let newListOtherUID = [];
         let newListOtherRange = [];
         let newListOtherType = [];
@@ -34,6 +36,11 @@ export const stateBeaconSetting = async () => {
                 newListArtUID.push(e.beacon_uid);
                 newListArtRange.push(parseInt(e.range));
             }
+            // event
+            else if (e.beacon_type && e.beacon_type.id === 6) {
+                newListEventUID.push(e.beacon_uid);
+                newListEventRange.push(parseInt(e.range));
+            }
             // else if (e.beacon_type && e.beacon_type.name !== 'checkout') {
             else if (e.beacon_type && e.beacon_type.id !== 3) {
                 newListOtherUID.push(e.beacon_uid);
@@ -45,6 +52,7 @@ export const stateBeaconSetting = async () => {
         await store.dispatch({ type: 'BEACONS.SET_LIST_CHECKIN', data: { listUID: newListCheckinUID, listRange: newListCheckinRange } });
         await store.dispatch({ type: 'BEACONS.SET_LIST_MERCH', data: { listUID: newListMerchUID, listRange: newListMerchRange } });
         await store.dispatch({ type: 'BEACONS.SET_LIST_ART', data: { listUID: newListArtUID, listRange: newListArtRange } });
+        await store.dispatch({ type: 'BEACONS.SET_LIST_EVENT', data: { listUID: newListEventUID, listRange: newListEventRange } });
         await store.dispatch({ type: 'BEACONS.SET_LIST_OTHER', data: { listUID: newListOtherUID, listRange: newListOtherRange, listType: newListOtherType } });
 
         return true;

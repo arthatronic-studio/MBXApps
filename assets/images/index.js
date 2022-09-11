@@ -49,6 +49,7 @@ const receipt = require('./receipt.png');
 const menu = require('./menu.png');
 const addNote = require('./add-note.png');
 const moreOutline = require('./more-outline.png');
+const eventVerification = require('./event-verification.png');
 
 export {
   iconApp,
@@ -152,6 +153,7 @@ export const imageAssets = {
   menu,
   addNote,
   moreOutline,
+  eventVerification,
 };
 
 export default imageAssets;

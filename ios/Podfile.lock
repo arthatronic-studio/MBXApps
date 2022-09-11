@@ -439,6 +439,14 @@ PODS:
     - glog
   - react-native-blob-util (0.14.1):
     - React-Core
+  - react-native-camera (4.2.1):
+    - React-Core
+    - react-native-camera/RCT (= 4.2.1)
+    - react-native-camera/RN (= 4.2.1)
+  - react-native-camera/RCT (4.2.1):
+    - React-Core
+  - react-native-camera/RN (4.2.1):
+    - React-Core
   - react-native-config (1.4.6):
     - react-native-config/App (= 1.4.6)
   - react-native-config/App (1.4.6):
@@ -566,7 +574,7 @@ PODS:
     - React-Core
   - RNDateTimePicker (6.3.2):
     - React-Core
-  - RNDeviceInfo (10.0.2):
+  - RNDeviceInfo (10.1.1):
     - React-Core
   - RNFBAnalytics (15.4.0):
     - Firebase/Analytics (= 9.5.0)
@@ -595,10 +603,6 @@ PODS:
     - React-Core
   - SocketRocket (0.6.0)
   - SwiftAudioEx (0.15.2)
-  - VisionCamera (2.14.1):
-    - React
-    - React-callinvoker
-    - React-Core
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -654,6 +658,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-blob-util (from `../node_modules/react-native-blob-util`)
+  - react-native-camera (from `../node_modules/react-native-camera`)
   - react-native-config (from `../node_modules/react-native-config`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
@@ -702,7 +707,6 @@ DEPENDENCIES:
   - RNShare (from `../node_modules/react-native-share`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
-  - VisionCamera (from `../node_modules/react-native-vision-camera`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -786,6 +790,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-blob-util:
     :path: "../node_modules/react-native-blob-util"
+  react-native-camera:
+    :path: "../node_modules/react-native-camera"
   react-native-config:
     :path: "../node_modules/react-native-config"
   react-native-date-picker:
@@ -882,8 +888,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-svg"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
-  VisionCamera:
-    :path: "../node_modules/react-native-vision-camera"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -940,6 +944,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 8a3d3f5dcd23a91e8c80b1bf0e96902cd1dca999
   React-logger: 1088859f145b8f6dd0d3ed051a647ef0e3e80fad
   react-native-blob-util: 7ac01cd4a4ba81016864727a756ce2c1af995e35
+  react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
   react-native-config: 7cd105e71d903104e8919261480858940a6b9c0e
   react-native-date-picker: 55193347d8d0f40948f441ffd4e5db6f0a8fbe13
   react-native-document-picker: f68191637788994baed5f57d12994aa32cf8bf88
@@ -978,7 +983,7 @@ SPEC CHECKSUMS:
   RNCMaskedView: cb9670ea9239998340eaab21df13fa12a1f9de15
   RNCPushNotificationIOS: 87b8d16d3ede4532745e05b03c42cff33a36cc45
   RNDateTimePicker: 4f1fc917f5af9d9ae4c5fc0c63a4474d61338693
-  RNDeviceInfo: 0a7c1d2532aa7691f9b9925a27e43af006db4dae
+  RNDeviceInfo: 89bc4fe36cf4c8955965609b140d29a335d5350d
   RNFBAnalytics: a38c9ae20b61b7b3dbbad40b4fe3c7dc984799c3
   RNFBApp: 1b3411b5134a4e27e92fbf9df7f97603f6c7029a
   RNFBMessaging: 3df81ace965865da6ce0be05b70726aeb84465f5
@@ -990,7 +995,6 @@ SPEC CHECKSUMS:
   RNVectorIcons: 7923e585eaeb139b9f4531d25a125a1500162a0b
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   SwiftAudioEx: 1974c2eb942c9b54f58c3d3f5d704da527e2c5ba
-  VisionCamera: cc788935bcfd2f7031d3295adedbc9786835f402
   Yoga: ff994563b2fd98c982ca58e8cd9db2cdaf4dda74
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 

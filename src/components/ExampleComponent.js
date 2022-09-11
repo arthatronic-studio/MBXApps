@@ -21,10 +21,11 @@ import {
 const defaultProps = {
 };
 
-const Component = (props) => {
+const ExampleComponent = (props) => {
     const [state, setState] = useState();
 
     const ref = useRef();
+    const { Color } = useColor();
 
     useEffect(() => {
 
@@ -37,5 +38,5 @@ const Component = (props) => {
     )
 }
 
-Component.defaultProps = defaultProps;
-export default Component;
+ExampleComponent.defaultProps = defaultProps;
+export default ExampleComponent;

@@ -5,6 +5,8 @@ const initialState = {
   listMerchRange: [],
   listArtUID: [],
   listArtRange: [],
+  listEventUID: [],
+  listEventRange: [],
   listOtherUID: [],
   listOtherRange: [],
   listOtherType: [],
@@ -29,6 +31,12 @@ const Beacons = (state = initialState, action) => {
         ...state,
         listArtUID: action.data.listUID,
         listArtRange: action.data.listRange,
+      };
+    case 'BEACONS.SET_LIST_EVENT':
+      return {
+        ...state,
+        listEventUID: action.data.listUID,
+        listEventRange: action.data.listRange,
       };
     case 'BEACONS.SET_LIST_OTHER':
       return {

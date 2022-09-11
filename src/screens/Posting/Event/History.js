@@ -27,7 +27,7 @@ import { useIsFocused, useRoute } from '@react-navigation/native';
 import { getHistory } from 'src/lib/query/event';
 import { FormatMoney } from 'src/utils';
 import { getAPI } from 'src/api-rest/httpService';
-
+import { initialItemState } from 'src/utils/constants';
 
 const History = ({ navigation, route }) => {
 
@@ -35,30 +35,44 @@ const History = ({ navigation, route }) => {
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
 
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  const [itemData, setItemData] = useState(initialItemState);
   const isFocused = useIsFocused();
 
   useEffect(() => {
     getList();
   }, []);
 
+  useEffect(() => {
+    if (itemData.loadNext) {
+      getList();
+    }
+  }, [itemData.loadNext]);
+
   const getList = async () => {
-    const result = await getAPI('ticket-order');
+    const result = await getAPI(`ticket-order?page=${itemData.page + 1}`);
 
     console.log('result ticket-order', result);
 
+    let newData = [];
+
     if (result.status) {
-      setData(result.data);
+      newData = result.data;
     }
 
-    setLoading(false);
+    setItemData({
+      ...itemData,
+      data: itemData.data.concat(newData),
+      page: newData.length > 0 ? itemData.page + 1 : -1,
+      loading: false,
+      loadNext: false,
+      refresh: false,
+    });
   };
 
   return (
     <Scaffold
       style={{ backgroundColor: '#F4F4F4' }}
-      fallback={false}
+      fallback={itemData.loading}
       empty={false}
       popupProps={popupProps}
       loadingProps={loadingProps}
@@ -71,16 +85,32 @@ const History = ({ navigation, route }) => {
       }
     >
       <Divider />
+
       <FlatList
-        data={data}
+        data={itemData.data}
+        onEndReachedThreshold={0.3}
+        onEndReached={() => {
+          if (itemData.page !== -1) setItemData({ ...itemData, loadNext: true });
+        }}
+        ListFooterComponent={
+          itemData.loadNext &&
+          <Text size={12} type='medium'>Loading...</Text>
+        }
         renderItem={({ item }) =>
           <View style={{ paddingHorizontal: 16 }}>
             <Pressable
               style={{ borderRadius: 8, marginBottom: 10, backgroundColor: Color.theme, width: '100%' }}
             >
               <View style={{ paddingVertical: 10, flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center' }}>
-                <View style={{ width: '10%', aspectRatio: 1, backgroundColor: Color.secondary, borderRadius: 5 }}>
-                  <Image source={{ uri: '' }} style={{ width: '100%', height: '100%' }} />
+                <View style={{ width: '12%', aspectRatio: 1, backgroundColor: Color.secondary, borderRadius: 4 }}>
+                  <Image
+                    source={{ uri: item.ticket.event.image }}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      borderRadius: 4
+                    }}
+                  />
                 </View>
                 <View style={{ paddingHorizontal: 10, width: '60%' }}>
                   <Text numberOfLines={2} align={'left'} style={{ fontWeight: 'bold' }}>{item.ticket.name}</Text>
@@ -90,7 +120,7 @@ const History = ({ navigation, route }) => {
                     <Text style={{ fontSize: 10, color: Color.secondary }}>1 Pax</Text>
                   </View>
                 </View>
-                <View style={{width: '30%'}}>
+                <View style={{width: '28%'}}>
                   {item.status === 0 ?
                     <View style={{ backgroundColor: Color.info, borderRadius: 120, paddingHorizontal: 12, paddingVertical: 8, justifyContent: 'center', alignItems: 'center' }}>
                       <Text size={10} color={Color.textInput} type='medium'>{item.status_name}</Text>

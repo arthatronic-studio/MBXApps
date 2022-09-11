@@ -103,8 +103,8 @@ const OrderEventDetail = ({ navigation, route }) => {
       >
         <Container padding={16} color={Color.theme}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <View style={{ width: 40, height: 40, backgroundColor: Color.secondary, borderRadius: 5 }}>
-              <Image source={{ uri: '' }} style={{ width: '100%', height: '100%' }} />
+            <View style={{ width: 40, height: 40, backgroundColor: Color.secondary, borderRadius: 4 }}>
+              <Image source={{ uri: data.ticket.event.image }} style={{ width: '100%', height: '100%', borderRadius: 4 }} />
             </View>
             <View style={{ paddingHorizontal: 10, width: '70%' }}>
               <Text numberOfLines={2} align={'left'} style={{ fontWeight: 'bold' }}>{data.ticket.name}</Text>
