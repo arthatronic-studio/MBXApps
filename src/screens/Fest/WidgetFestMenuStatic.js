@@ -27,18 +27,17 @@ const defaultProps = {
   showMore: true,
 };
 
-const WidgetHomeMenuStatic = ({ showMore }) => {
+const WidgetFestMenuStatic = ({ showMore }) => {
   const {Color} = useColor();
   const navigation = useNavigation();
   const user = useSelector(state => state['user.auth'].login.user);
   const {width} = useWindowDimensions();
 
   const [listMenuHome, setListMenuHome] = useState([
-    // {name: 'Shop', nav: 'Ecommerce', param: {}, image: imageAssets.homeMenuShop, show: true },
-    {name: 'Event', nav: 'EventScreen', param: {}, image: imageAssets.homeMenuEvent, show: true },
-    // {name: 'Forum', nav: 'ForumScreen', param: {}, image: imageAssets.homeMenuForum, show: true },
-    {name: 'Eats', nav: 'EatScreen', param: {}, image: imageAssets.homeMenuEats, show: true },
-    {name: 'Fest', nav: 'FestScreen', param: {}, image: imageAssets.homeMenuFest, show: true },
+    {name: 'Art & Design', nav: 'ArtsScreen', param: {}, image: imageAssets.festMenuArts, show: true },
+    {name: 'Musik', nav: 'MusicScreen', param: {}, image: imageAssets.festMenuMusic, show: true },
+    {name: 'Literatur', nav: 'EventScreen', param: {}, image: imageAssets.festMenuLiteratur, show: true },
+    {name: 'My Creation', nav: 'EventScreen', param: {}, image: imageAssets.festMenuCreation, show: true },
   ]);
   const [itemData, setItemData] = useState(initialItemState);
   const [modalMenuHome, setModalMenuHome] = useState(false);
@@ -222,5 +221,5 @@ const WidgetHomeMenuStatic = ({ showMore }) => {
   );
 };
 
-WidgetHomeMenuStatic.defaultProps = defaultProps;
-export default WidgetHomeMenuStatic;
+WidgetFestMenuStatic.defaultProps = defaultProps;
+export default WidgetFestMenuStatic;

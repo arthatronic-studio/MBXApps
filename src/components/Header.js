@@ -164,13 +164,14 @@ const Header = (props) => {
       centerTitle,
       actions,
       type,
-      style
+      style,
+      backgroundColor
     } = props;
 
     return (
       <MainView
         style={{
-          backgroundColor: Color.textInput,
+          backgroundColor: backgroundColor || Color.textInput,
           borderColor: Color.theme,
           ...style,
         }}>

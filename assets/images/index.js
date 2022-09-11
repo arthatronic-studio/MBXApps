@@ -50,6 +50,14 @@ const menu = require('./menu.png');
 const addNote = require('./add-note.png');
 const moreOutline = require('./more-outline.png');
 const eventVerification = require('./event-verification.png');
+const festMenuArts = require('./fest-menu-arts.png');
+const festMenuCreation = require('./fest-menu-creation.png');
+const festMenuLiteratur = require('./fest-menu-literatur.png');
+const festMenuMusic = require('./fest-menu-music.png');
+const bannerMfest = require('./banner-mfest.png');
+const aboutFest1 = require('./about-fest1.png');
+const aboutFest2 = require('./about-fest2.png');
+const tempArts = require('./temp-arts.png');
 
 export {
   iconApp,
@@ -99,6 +107,13 @@ export {
   airdrop,
   connecting,
   connectMerchant,
+  festMenuArts,
+  festMenuCreation,
+  festMenuMusic,
+  festMenuLiteratur,
+  bannerMfest,
+  aboutFest1,
+  aboutFest2,
 };
 
 export const imageAssets = {
@@ -154,6 +169,14 @@ export const imageAssets = {
   addNote,
   moreOutline,
   eventVerification,
+  festMenuArts,
+  festMenuCreation,
+  festMenuMusic,
+  festMenuLiteratur,
+  bannerMfest,
+  aboutFest1,
+  aboutFest2,
+  tempArts,
 };
 
 export default imageAssets;

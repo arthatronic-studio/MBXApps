@@ -259,4 +259,5 @@ export default {
   rrid2: require('../components/Images/rrid/rrid2.png'),
   articleEmpty: require('../components/Images/ArticleEmpty.png'),
   ranking: require('../components/Images/ranking.png'),
+  FestIcon: require('../components/Images/FestIcon.png'),
 };
