@@ -281,6 +281,14 @@ import EatHistory from 'src/screens/Eat/EatHistory';
 import DetailTenantScreen from 'src/screens/Beacon/DetailTenantScreen';
 import DetailArtScreen from 'src/screens/Beacon/DetailArtScreen';
 
+// Fest
+import FestScreen from 'src/screens/Fest/FestScreen';
+import AboutFest from 'src/screens/Fest/AboutFest';
+import ArtsScreen from 'src/screens/Fest/ArtsScreen';
+import DetailArts from 'src/screens/Fest/DetailArts';
+import MusicScreen from 'src/screens/Fest/MusicScreen';
+import FestMusicPlayer from 'src/screens/Fest/FestMusicPlayer';
+
 const { Navigator, Screen } = createStackNavigator();
 const MainPage = BottomTabsNavigator;
 	// accessClient.BottomTabsNavigator.type === 'komoto'
@@ -544,6 +552,15 @@ function AppNavigator() {
       {/* beacon */}
       <Screen name="DetailTenantScreen" component={DetailTenantScreen} />
       <Screen name="DetailArtScreen" component={DetailArtScreen} />
+
+      {/* Fest */}
+      <Screen name="FestScreen" component={FestScreen} />
+      <Screen name="AboutFest" component={AboutFest} />
+      <Screen name="ArtsScreen" component={ArtsScreen} />
+      <Screen name="DetailArts" component={DetailArts} />
+      <Screen name="MusicScreen" component={MusicScreen} />
+      <Screen name="FestMusicPlayer" component={FestMusicPlayer} />
+
     </Navigator>
   );
 }

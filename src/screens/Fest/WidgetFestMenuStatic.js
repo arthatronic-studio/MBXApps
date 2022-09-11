@@ -22,39 +22,74 @@ import { accessClient } from 'src/utils/access_client';
 import { initialItemState } from 'src/utils/constants';
 import ModalMenuHome from 'src/components/Modal/ModalMenuHome';
 import imageAssets from 'assets/images';
-import { getAPI } from 'src/api-rest/httpService';
 
 const defaultProps = {
   showMore: true,
 };
 
-const WidgetHomeMenuStatic = ({ showMore }) => {
+const WidgetFestMenuStatic = ({ showMore }) => {
   const {Color} = useColor();
   const navigation = useNavigation();
   const user = useSelector(state => state['user.auth'].login.user);
   const {width} = useWindowDimensions();
 
   const [listMenuHome, setListMenuHome] = useState([
-    // {name: 'Shop', nav: 'Ecommerce', param: {}, image: imageAssets.homeMenuShop, show: true },
-    {name: 'Event', nav: 'EventScreen', param: {}, image: imageAssets.homeMenuEvent, show: true },
-    // {name: 'Forum', nav: 'ForumScreen', param: {}, image: imageAssets.homeMenuForum, show: true },
-    {name: 'Eats', nav: 'EatScreen', param: {}, image: imageAssets.homeMenuEats, show: true },
-    {name: 'Fest', nav: 'FestScreen', param: {}, image: imageAssets.homeMenuFest, show: true },
+    {name: 'Art & Design', nav: 'ArtsScreen', param: {}, image: imageAssets.festMenuArts, show: true },
+    {name: 'Musik', nav: 'MusicScreen', param: {}, image: imageAssets.festMenuMusic, show: true },
+    {name: 'Literatur', nav: 'EventScreen', param: {}, image: imageAssets.festMenuLiteratur, show: true },
+    {name: 'My Creation', nav: 'EventScreen', param: {}, image: imageAssets.festMenuCreation, show: true },
   ]);
   const [itemData, setItemData] = useState(initialItemState);
   const [modalMenuHome, setModalMenuHome] = useState(false);
 
   useEffect(() => {
-    fetchMenuList();
+    // fetchMenuList();
   }, []);
 
-  const fetchMenuList = async() => {
-    const result = await getAPI('menu');
-    console.log('result menu', result);
-    if (result.status) {
-      
-    }
-  }
+  // const fetchMenuList = () => {
+  //   const variables = {
+  //     page: showMore ? 1 : itemData.page + 1,
+  //     itemPerPage: showMore ? 8 : 80,
+  //     orderDir: 'ASC',
+  //     type: accessClient.InitialCode,
+  //     category: 'HOME',
+  //   };
+
+  //   client.query({
+  //     query: queryMenuList,
+  //     variables,
+  //   })
+  //   .then((res) => {
+  //     console.log('res menu list', res);
+
+  //     const data = res.data.menuList;
+  //     let newData = [];
+
+  //     if (Array.isArray(data)) {
+  //       data.map((e) => {
+  //         if (e.code === 'SHOW_ALL') {
+  //           if (showMore) newData.push(e);
+  //         } else {
+  //           newData.push(e);
+  //         }
+  //       });
+  //     }
+
+  //     setListMenuHome(newData);
+
+  //     setItemData({
+  //       ...itemData,
+  //       data: itemData.data.concat(newData),
+  //       page: newData.length > 0 ? itemData.page + 1 : -1,
+  //       loading: false,
+  //       loadNext: false,
+  //       refresh: false,
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     console.log('err menu list', err);
+  //   });
+  // }
 
   const renderMenuBadge = () => {
     return (
@@ -186,5 +221,5 @@ const WidgetHomeMenuStatic = ({ showMore }) => {
   );
 };
 
-WidgetHomeMenuStatic.defaultProps = defaultProps;
-export default WidgetHomeMenuStatic;
+WidgetFestMenuStatic.defaultProps = defaultProps;
+export default WidgetFestMenuStatic;

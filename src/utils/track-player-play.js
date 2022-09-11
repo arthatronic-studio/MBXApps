@@ -19,6 +19,8 @@ export const trackPlayerPlay = async (data, index) => {
   const thisTrack = currentTrack != null ? await TrackPlayer.getTrack(currentTrack) : null;
   
   const isExist = await result.filter((e) => thisTrack !== null && e.id === thisTrack.id)[0];
+  console.log(currentTrack, "current");
+  console.log(thisTrack, "this current");
 
   if (isExist && currentTrack === index) {
     console.log('exist yes');

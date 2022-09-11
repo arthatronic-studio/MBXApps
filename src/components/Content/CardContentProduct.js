@@ -37,6 +37,10 @@ import CardComponentPlace from './CardComponentPlace';
 import CardForumVertical from '@src/screens/MainForum/CardForumVertical';
 import { fetchContentProductDetail } from 'src/api/content';
 import CardComponentEat from './CardComponentEat';
+import CardFestMusic from '../Fest/CardFestMusic';
+import CardFestLiterature from '../Fest/CardFestLiterature';
+import CardFestArts from '../Fest/CardFestArts';
+import CardFestMusicHorizontal from '../Fest/CardFestMusicHorizontal';
 
 const defaultProps = {
     productCategory: '',
@@ -530,6 +534,10 @@ const CardContentProduct = ({ productCategory, category,item, numColumns, onPres
     else if (productCategory === 'NEARBY_PLACE') return <CardComponentPlace onPress={() => onPressCard()} { ...props } />;
     else if (productCategory === 'YOUTUBE_VIDEO') return <CardComponentYoutube item={item} />;
     else if (productCategory === 'NEWEST_VIDEO') return <CardComponentVideo item={item} />;
+    else if (productCategory === 'FEST_MUSIC') return <CardFestMusic item={item} { ...props }/>;
+    else if (productCategory === 'FEST_LITERATURE') return <CardFestLiterature item={item} { ...props }/>;
+    else if (productCategory === 'FEST_ARTS') return <CardFestArts item={item} { ...props }/>;
+    else if (productCategory === 'FEST_MUSIC_HORIZONTAL') return <CardFestMusicHorizontal item={item} { ...props }/>;
     else if (productCategory === 'FORUM') return (
         <Container paddingHorizontal={8}>
             <CardForumVertical
