@@ -14,6 +14,7 @@ import WidgetFestMenuStatic from './WidgetFestMenuStatic';
 import HighlightFestMusic from 'src/components/Fest/HighlightFestMusic';
 import HighlightFestArts from 'src/components/Fest/HighlightFestArts';
 import HighlightFestLiterature from 'src/components/Fest/HighlightFestLiterature';
+import {getAPI, postAPI} from 'src/api-rest/httpService';
 
 const FestScreen = ({navigation, route}) => {
   const {Color} = useColor();
@@ -26,6 +27,20 @@ const FestScreen = ({navigation, route}) => {
   const [selectedCompany, setSelectedCompany] = useState({});
   const [loading, setLoading] = useState(false);
 
+  const fetchData = async () => {
+    // const result = await postAPI('festival/home');
+    // console.log('result festival', result);
+    const body = {
+      menu_id: 1,
+    };
+    const result = await postAPI('festival/find', body);
+    console.log('result festival find', result);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <Scaffold
       loadingProps={loadingProps}
@@ -36,7 +51,10 @@ const FestScreen = ({navigation, route}) => {
           color={Color.theme}
           iconLeftButton="arrow-left"
           actions={
-            <TouchableOpacity onPress={() => {navigation.navigate('AboutFest')}}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('AboutFest');
+              }}>
               <AntDesign name="questioncircleo" size={16} color={Color.theme} />
             </TouchableOpacity>
           }
@@ -71,38 +89,38 @@ const FestScreen = ({navigation, route}) => {
               paddingBottom={68}>
               <Image source={ImagesPath.FestIcon} resizeMode="contain" />
             </Container>
-            <Container style={{ bottom: 50, flex: 1 }}>
+            <Container style={{bottom: 50, flex: 1}}>
               <WidgetFestMenuStatic />
             </Container>
             <HighlightFestMusic
-              productCategory='FEST_MUSIC'
-              name='Musik'
-              title='Musik Terbaru'
-              nav='EventScreen'
+              productCategory="FEST_MUSIC"
+              name="Musik"
+              title="Musik Terbaru"
+              nav="EventScreen"
               refresh={refreshing || isFocused}
               showSeeAllText={true}
             />
             <Container paddingHorizontal={16}>
               <Image
-                style={{ width: '100%' }}
+                style={{width: '100%'}}
                 source={imageAssets.bannerMfest}
                 resizeMode="contain"
               />
             </Container>
             <HighlightFestLiterature
-              productCategory='FEST_LITERATURE'
-              name='Literatur'
-              title='Literatur Terbaru'
-              nav='EventScreen'
+              productCategory="FEST_LITERATURE"
+              name="Literatur"
+              title="Literatur Terbaru"
+              nav="EventScreen"
               horizontal
               refresh={refreshing || isFocused}
               showSeeAllText={true}
             />
             <HighlightFestArts
-              productCategory='FEST_ARTS'
-              name='Seni & Desain'
-              title='Seni & Desain Terbaru'
-              nav='EventScreen'
+              productCategory="FEST_ARTS"
+              name="Seni & Desain"
+              title="Seni & Desain Terbaru"
+              nav="EventScreen"
               horizontal
               refresh={refreshing || isFocused}
               showSeeAllText={true}
