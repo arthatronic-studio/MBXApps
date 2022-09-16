@@ -35,6 +35,7 @@ import imageAssets from 'assets/images';
 import CardEventTicket from './CardEventTicket';
 import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
 import { postAPI } from 'src/api-rest/httpService';
+import HtmlView from 'src/components/HtmlView';
 
 const EventDetail = ({ navigation, route }) => {
   const { Color } = useColor();
@@ -366,7 +367,10 @@ const EventDetail = ({ navigation, route }) => {
             )}
             renderContent={(section) => (
               <Container paddingVertical={8}>
-                <Text align='left' size={12}>{section.content}</Text>
+                {/* <Text align='left' size={12}>{section.content}</Text> */}
+                <HtmlView
+                  html={section.content}
+                />
               </Container>
             )}
             onChange={(val) => {
@@ -388,50 +392,50 @@ const EventDetail = ({ navigation, route }) => {
       header={
         <Header
           type="bold"
-          actions={
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
-                style={{ marginRight: 15 }}
-                onPress={async () => {
-                  showLoading();
+          // actions={
+          //   <View style={{ flexDirection: 'row' }}>
+          //     <TouchableOpacity
+          //       style={{ marginRight: 15 }}
+          //       onPress={async () => {
+          //         showLoading();
 
-                  const body = {
-                    event_id: items.id,
-                  }
-                  const res = await postAPI('wishlist', body);
-                  console.log(body, res);
+          //         const body = {
+          //           event_id: items.id,
+          //         }
+          //         const res = await postAPI('wishlist', body);
+          //         console.log(body, res);
 
-                  if (res.status) {
-                    setBookmark(!bookmark);
-                    showLoading('success', res.message);
-                    return;
-                  }
+          //         if (res.status) {
+          //           setBookmark(!bookmark);
+          //           showLoading('success', res.message);
+          //           return;
+          //         }
                   
-                  showLoading('error', res.message);
-                }}>
-                {bookmark == true ? (
-                  <FontAwesome name={'bookmark'} size={24} color={Color.text} />
-                ) : (
-                  <FontAwesome name={'bookmark-o'} size={24} color={Color.text} />
-                )}
-              </TouchableOpacity>
+          //         showLoading('error', res.message);
+          //       }}>
+          //       {bookmark == true ? (
+          //         <FontAwesome name={'bookmark'} size={24} color={Color.text} />
+          //       ) : (
+          //         <FontAwesome name={'bookmark-o'} size={24} color={Color.text} />
+          //       )}
+          //     </TouchableOpacity>
 
-              <Pressable
-                onPress={() => {
-                  modalOptionsRef.current.open();
-                }}
-              >
-                <Image
-                  source={imageAssets.moreOutline}
-                  style={{
-                    height: 24,
-                    width: 24,
-                  }}
-                  resizeMode='contain'
-                />
-              </Pressable>
-            </View>
-          }
+          //     <Pressable
+          //       onPress={() => {
+          //         modalOptionsRef.current.open();
+          //       }}
+          //     >
+          //       <Image
+          //         source={imageAssets.moreOutline}
+          //         style={{
+          //           height: 24,
+          //           width: 24,
+          //         }}
+          //         resizeMode='contain'
+          //       />
+          //     </Pressable>
+          //   </View>
+          // }
         />
       }
     >

@@ -290,7 +290,7 @@ import MusicScreen from 'src/screens/Fest/MusicScreen';
 import FestMusicPlayer from 'src/screens/Fest/FestMusicPlayer';
 
 const { Navigator, Screen } = createStackNavigator();
-const MainPage = MainHome;
+const MainPage = BottomTabsNavigator;
 	// accessClient.BottomTabsNavigator.type === 'komoto'
 		// ? BottomTabsNavigatorKomoto
 		// : accessClient.BottomTabsNavigator.type === 'sabyan' ? BottomTabsNavigatorsabyan : BottomTabsNavigator;

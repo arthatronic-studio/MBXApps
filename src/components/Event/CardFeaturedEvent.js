@@ -137,8 +137,7 @@ const CardFeaturedEvent = ({ productCategory, item, numColumns, onPress, horizon
                                 width: '100%',
                                 padding: 10,
                                 height: '35%',
-                                borderBottomLeftRadius: 8,
-                                borderBottomRightRadius: 8,
+                                borderRadius: 8,
                                 backgroundColor: Color.overflow,
                             }}
                         >

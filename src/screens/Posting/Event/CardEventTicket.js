@@ -80,7 +80,7 @@ const CardEventTicket = ({ item, onSelect }) => {
           />
           <Divider width={6} />
           <Text size={11}>{item.isRefundable ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
-          <Divider width={10} />
+          {/* <Divider width={10} />
           <Image
             source={imageAssets.calendarRemove}
             style={{
@@ -89,7 +89,7 @@ const CardEventTicket = ({ item, onSelect }) => {
             }}
           />
           <Divider width={6} />
-          <Text size={11}>{item.reservation ? 'Perlu Reservasi' : 'Tidak Perlu Reservasi'}</Text>
+          <Text size={11}>{item.reservation ? 'Perlu Reservasi' : 'Tidak Perlu Reservasi'}</Text> */}
         </Row>
 
         <Divider height={8} />

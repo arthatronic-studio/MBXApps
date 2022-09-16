@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { View, SafeAreaView, Image, Animated, useWindowDimensions, LayoutAnimation, UIManager, Platform, } from 'react-native';
+import { View, SafeAreaView, Image, Animated, useWindowDimensions, LayoutAnimation, UIManager, } from 'react-native';
 import { TouchableOpacity as TouchableOpacityAbs } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -13,25 +13,31 @@ import { useColor } from '@src/components/Color';
 import { shadowStyle } from 'src/styles';
 import { CommonActions } from '@react-navigation/routers';
 import { startAnimation } from '@src/utils/animations';
-import { Divider, Line } from 'src/styled';
+import { Divider, Line, Circle } from 'src/styled';
 import { isIphoneNotch, statusBarHeight } from 'src/utils/constants';
+import { queryGetNotification } from "src/lib/query";
+import { useIsFocused } from '@react-navigation/native';
+import client from '@src/lib/apollo';
+import imageAssets, { iconQris } from 'assets/images';
 
 const sizePerMenu = 24;
 
 const TabBarComponent = (props) => {
     const { state } = props;
+    const [notificationCount, setNotificationCount] = useState(0);
+    const isFocused = useIsFocused();
 
     const { index: activeRouteIndex } = state;
-        
+
     const [menus] = useState([
-        {id: 'ber', name: 'Beranda', iconName: 'home', iconType: 'Entypo', nav: 'MainHome', ref: useRef(new Animated.Value(1)).current, viewRef: useRef(new Animated.Value(0)).current },
-        {id: 'mer', name: 'Ecommerce', iconName: 'store', iconType: 'MaterialIcons', nav: 'Ecommerce', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
-        {id: 'pro', name: 'Profil', iconName: 'person', iconType: 'Ionicons', nav: 'MainProfile', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
+        { id: 'ber', name: 'Home', imageAsset: imageAssets.bottomMenuHome, iconName: 'home', iconType: 'Entypo', nav: 'MainHome', ref: useRef(new Animated.Value(1)).current, viewRef: useRef(new Animated.Value(0)).current },
+        { id: 'not', name: 'Notification', imageAsset: imageAssets.bottomMenuNotification, nav: 'MainNotif', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
+        { id: 'pro', name: 'Profile', imageAsset: imageAssets.bottomMenuProfile, iconName: 'person', iconType: 'Ionicons', nav: 'MainProfile', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
     ]);
-    
+
     const { Color } = useColor();
     const { width } = useWindowDimensions();
-    
+
     const bgAnimatedRef = useRef(new Animated.Value(width / menus.length)).current;
 
     useEffect(() => {
@@ -47,6 +53,30 @@ const TabBarComponent = (props) => {
         });
     }, [activeRouteIndex, width]);
 
+    useEffect(() => {
+        const variables = {
+            page: 0,
+            itemPerPage: 9999
+        }
+        client.query({
+            query: queryGetNotification,
+            variables,
+        })
+            .then((respone) => {
+                var response = respone['data']['getNotification'];
+                var res = response.filter(function (el) {
+                    return el.status === 1 | el.status === 2;
+                });
+                setNotificationCount(res.length)
+                console.log('ini ', res);
+            })
+            .catch((err) => {
+                console.log('ini ', err);
+                console.log(err);
+
+            })
+    }, [isFocused]);
+
     const redirectTo = (name, params) => {
         props.navigation.dispatch(
             CommonActions.reset({
@@ -59,15 +89,15 @@ const TabBarComponent = (props) => {
     }
 
     const getIconMenu = (iconType, iconName, isRouteActive) => {
-        switch(iconType) {
+        switch (iconType) {
             case 'MaterialIcons':
-                return <MaterialIcons name={iconName} size={32} color={isRouteActive ? Color.textButtonInline : Color.text} />
+                return <MaterialIcons name={iconName} size={32} color={isRouteActive ? Color.primaryDark : Color.secondary} />
             case 'AntDesign':
-                return <AntDesign name={iconName} size={28} color={isRouteActive ? Color.textButtonInline : Color.text} />
-            case 'Ionicons': 
-                return <Ionicons name={iconName} size={28} color={isRouteActive ? Color.textButtonInline : Color.text} />
+                return <AntDesign name={iconName} size={28} color={isRouteActive ? Color.primaryDark : Color.secondary} />
+            case 'Ionicons':
+                return <Ionicons name={iconName} size={28} color={isRouteActive ? Color.primaryDark : Color.secondary} />
             case 'Entypo':
-                return <Entypo name={iconName} size={30} color={isRouteActive ? Color.textButtonInline : Color.text} />
+                return <Entypo name={iconName} size={30} color={isRouteActive ? Color.primaryDark : Color.secondary} />
         }
     }
 
@@ -83,7 +113,7 @@ const TabBarComponent = (props) => {
                 width={width}
                 height={0.5}
                 color={Color.border}
-                style={{position: 'absolute', top: 0}}
+                style={{ position: 'absolute', top: 0 }}
             />
 
             <View
@@ -103,7 +133,7 @@ const TabBarComponent = (props) => {
                             key={routeIndex}
                             activeOpacity={1}
                             style={{
-                                flex: isRouteActive ? 3 : 1,
+                                flex: 1,
                                 alignItems: 'center',
                                 flexDirection: 'row',
                                 justifyContent: 'center',
@@ -120,7 +150,7 @@ const TabBarComponent = (props) => {
 
                                 if (route.nav === 'MainHome') {
                                     redirectTo(route.nav);
-                                    return;                                    
+                                    return;
                                 }
 
                                 props.navigation.navigate(route.nav, { routeIndex });
@@ -132,26 +162,59 @@ const TabBarComponent = (props) => {
                                     width: '100%',
                                     borderRadius: 120,
                                     alignItems: 'center',
-                                    paddingLeft: isRouteActive ? 16 : 0,
-                                    justifyContent: isRouteActive ? 'flex-start' : 'center',
+                                    justifyContent: 'center',
                                     flexDirection: 'row',
-                                    backgroundColor: isRouteActive ? Color.primary : 'transparent',
                                     // opacity: route.viewRef,
-                                    opacity: route.ref,
+                                    // opacity: route.ref,
                                 }}
                             >
-                                {getIconMenu(route.iconType, route.iconName, isRouteActive)}
-                                {isRouteActive && <Divider width={15} />}
-                                {isRouteActive && <Animated.Text
-                                    style={{
-                                        fontSize: 14,
-                                        fontWeight: '500',
-                                        color: isRouteActive ? Color.textButtonInline : Color.text,
-                                        opacity: route.ref,
-                                    }}
+                                <Animated.View
+                                    style={{alignItems: 'center'}}
                                 >
-                                    {route.name}
-                                </Animated.Text>}
+                                    <View
+                                        style={{
+                                            backgroundColor: isRouteActive ? Color.primary : 'transparent',
+                                            padding: 6,
+                                            borderRadius: 120,
+                                            marginBottom: 4,
+                                        }}
+                                    >
+                                        {route.imageAsset ?
+                                            <Image
+                                                source={route.imageAsset}
+                                                style={{
+                                                    height: 30,
+                                                    width: 30,
+                                                    tintColor: isRouteActive ? Color.text : Color.secondary
+                                                }}
+                                            />
+                                            :
+                                            getIconMenu(route.iconType, route.iconName, isRouteActive)
+                                        }
+                                    </View>
+
+                                    <Animated.Text
+                                        style={{
+                                            fontSize: 12,
+                                            fontFamily: 'Inter-Medium',
+                                            color: isRouteActive ? Color.text : Color.secondary,
+                                            // opacity: route.ref,
+                                        }}
+                                    >
+                                        {route.name}
+                                    </Animated.Text>
+
+                                    {/* {notificationCount > 0 && route.id === 'not' && (
+                                        <Circle
+                                            size={12}
+                                            color={Color.error}
+                                            style={{ position: 'absolute', top: -4, right: -4 }}>
+                                            <Text size={8} color={Color.textButtonInline}>
+                                                {notificationCount > 99 ? '99' : notificationCount}
+                                            </Text>
+                                        </Circle>
+                                    )} */}
+                                </Animated.View>
                             </Animated.View>
                         </TouchableOpacity>
                     )

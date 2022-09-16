@@ -50,6 +50,9 @@ const menu = require('./menu.png');
 const addNote = require('./add-note.png');
 const moreOutline = require('./more-outline.png');
 const eventVerification = require('./event-verification.png');
+const bottomMenuHome = require('./bottom-menu-home.png');
+const bottomMenuNotification = require('./bottom-menu-notification.png');
+const bottomMenuProfile = require('./bottom-menu-profile.png');
 const festMenuArts = require('./fest-menu-arts.png');
 const festMenuCreation = require('./fest-menu-creation.png');
 const festMenuLiteratur = require('./fest-menu-literatur.png');
@@ -169,6 +172,9 @@ export const imageAssets = {
   addNote,
   moreOutline,
   eventVerification,
+  bottomMenuHome,
+  bottomMenuNotification,
+  bottomMenuProfile,
   festMenuArts,
   festMenuCreation,
   festMenuMusic,

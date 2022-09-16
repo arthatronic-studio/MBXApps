@@ -149,14 +149,14 @@ const MyTicket = ({navigation, route}) => {
                     <QRCode value={data.items[0]['uniqueCode']} size={width / 6} />
                     <Text style={{fontWeight: 'bold', padding: 15}}>{data.items[0]['uniqueCode']}</Text>
             </View>
-            <Divider/>
+            {/* <Divider/>
             <Row style={{alignItems: 'center', }}>
                 <MaterialCommunityIcons name={'cash-refund'} color={Color.secondary} size={22}/>
                 <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 5}}>{data.ticket.refund ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
                 <Divider width={8}/>
                 <AntDesign name='calendar' size={18} color={Color.secondary}/>
                 <Text style={{fontSize: 10, color: Color.secondary, marginHorizontal: 5}}>{data.ticket.reservation ? 'Perlu Reservasi' : 'Tidak Perlu Reservasi'}</Text>
-            </Row>
+            </Row> */}
         </View>
         <Divider height={50}/>
         </ScrollView>

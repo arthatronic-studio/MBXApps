@@ -190,7 +190,8 @@ const OrderEventDetail = ({ navigation, route }) => {
             </Row>
           </View>
         </Content> */}
-        <Container padding={16}>
+        
+        {data.visitor && <Container padding={16}>
           <Container padding={16} color={Color.theme} radius={8}>
             {[data.visitor].map((val, id) => (
               <TouchableOpacity
@@ -234,7 +235,7 @@ const OrderEventDetail = ({ navigation, route }) => {
               </TouchableOpacity>
             ))}
           </Container>
-        </Container>
+        </Container>}
 
         {/* <Content>
           <Text align='left' type='bold' style={{ paddingBottom: 13 }}>Rincian Pembayaran</Text>

@@ -7,10 +7,11 @@ import {
   TextInput,
 } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { Col, Row, Text, useColor } from '@src/components';
+import { Col, Row, Scaffold, Text, useColor, usePopup } from '@src/components';
 
 import { useCombinedRefs } from '@src/hooks';
 import { statusBarHeight } from 'src/utils/constants';
+import { Container } from 'src/styled';
 
 const defaultProps = {
   adjust: true,
@@ -39,6 +40,7 @@ const ModalizeVisitor = forwardRef((props, ref) => {
 
   const { Color } = useColor();
   const { width, height } = useWindowDimensions();
+  const [popupProps, showPopup] = usePopup();
 
   useEffect(() => {
     setTitle(selected ? selected.title : titleList[0].value);
@@ -56,6 +58,17 @@ const ModalizeVisitor = forwardRef((props, ref) => {
       email,
       ktp: idCardNumber
     };
+
+    for (const key in data) {
+      if (Object.hasOwnProperty.call(data, key)) {
+        const e = data[key];
+        console.log('eeee', key, e);
+        if (!e) {
+          showPopup(`${key} Wajib diisi`, 'error');
+          return;
+        }
+      }
+    }
 
     onSave(data);
   }
@@ -83,11 +96,18 @@ const ModalizeVisitor = forwardRef((props, ref) => {
       modalStyle={{
         backgroundColor: Color.theme,
       }} >
-      <View style={{ width, padding: 16 }}>
-        <ScrollView>
+      <Scaffold
+        showHeader={false}
+        popupProps={popupProps}
+        style={{ width, paddingHorizontal: 16, paddingTop: 16 }}
+      >
+        <Container marginTop={16}>
           <Text type='bold' align='left' style={{ marginTop: 15, marginBottom: 10 }}>Detail Pengunjung</Text>
-          <View style={{ borderColor: Color.text, alignItems: 'flex-start', borderWidth: 1, borderRadius: 8, padding: 10 }}>
-            <Text size={12} style={{ marginBottom: 16 }} type='bold'>Tiket 1</Text>
+        </Container>
+
+        <ScrollView>
+          <View style={{ borderColor: Color.text, alignItems: 'flex-start', borderWidth: 1, borderColor: Color.border, borderRadius: 8, padding: 10 }}>
+            <Text size={12} style={{ marginBottom: 16 }} type='bold'>Tiket</Text>
             <Text size={10}>Sapaan</Text>
             <Row style={{ marginTop: 4, marginBottom: 16 }}>
               {titleList.map((item, idx) => {
@@ -153,6 +173,7 @@ const ModalizeVisitor = forwardRef((props, ref) => {
                 <TextInput
                   placeholder='contoh@email.com'
                   placeholderTextColor={Color.placeholder}
+                  keyboardType='email-address'
                   style={{
                     borderWidth: 1, borderColor: Color.border, color: Color.text,
                     width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47
@@ -168,6 +189,7 @@ const ModalizeVisitor = forwardRef((props, ref) => {
                 <TextInput
                   placeholder='36711XXXXXXXXXXX'
                   placeholderTextColor={Color.placeholder}
+                  keyboardType='numeric'
                   style={{
                     borderWidth: 1, borderColor: Color.border, color: Color.text,
                     width: '100%', borderRadius: 5, paddingHorizontal: 10, paddingTop: 20, height: 47
@@ -179,13 +201,17 @@ const ModalizeVisitor = forwardRef((props, ref) => {
               </View>
             </View>
           </View>
-          <View style={{ marginTop: 20, height: 70, alignItems: 'center' }}>
-            <TouchableOpacity onPress={() => onSubmit()} style={{ backgroundColor: Color.primary, width: width - 40, height: 45, borderRadius: 20, justifyContent: 'center' }}>
-              <Text style={{ color: Color.textInput }}>Simpan</Text>
+
+          <View style={{ marginTop: 20, height: 45, alignItems: 'center' }}>
+            <TouchableOpacity
+              onPress={() => onSubmit()}
+              style={{ backgroundColor: Color.primary, width: '100%', height: '100%', borderRadius: 120, justifyContent: 'center' }}
+            >
+              <Text>Simpan</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
-      </View>
+      </Scaffold>
     </Modalize>
   );
 });

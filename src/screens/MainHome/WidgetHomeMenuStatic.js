@@ -22,6 +22,7 @@ import { accessClient } from 'src/utils/access_client';
 import { initialItemState } from 'src/utils/constants';
 import ModalMenuHome from 'src/components/Modal/ModalMenuHome';
 import imageAssets from 'assets/images';
+import { getAPI } from 'src/api-rest/httpService';
 
 const defaultProps = {
   showMore: true,
@@ -44,53 +45,16 @@ const WidgetHomeMenuStatic = ({ showMore }) => {
   const [modalMenuHome, setModalMenuHome] = useState(false);
 
   useEffect(() => {
-    // fetchMenuList();
+    fetchMenuList();
   }, []);
 
-  // const fetchMenuList = () => {
-  //   const variables = {
-  //     page: showMore ? 1 : itemData.page + 1,
-  //     itemPerPage: showMore ? 8 : 80,
-  //     orderDir: 'ASC',
-  //     type: accessClient.InitialCode,
-  //     category: 'HOME',
-  //   };
-
-  //   client.query({
-  //     query: queryMenuList,
-  //     variables,
-  //   })
-  //   .then((res) => {
-  //     console.log('res menu list', res);
-
-  //     const data = res.data.menuList;
-  //     let newData = [];
-
-  //     if (Array.isArray(data)) {
-  //       data.map((e) => {
-  //         if (e.code === 'SHOW_ALL') {
-  //           if (showMore) newData.push(e);
-  //         } else {
-  //           newData.push(e);
-  //         }
-  //       });
-  //     }
-
-  //     setListMenuHome(newData);
-
-  //     setItemData({
-  //       ...itemData,
-  //       data: itemData.data.concat(newData),
-  //       page: newData.length > 0 ? itemData.page + 1 : -1,
-  //       loading: false,
-  //       loadNext: false,
-  //       refresh: false,
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.log('err menu list', err);
-  //   });
-  // }
+  const fetchMenuList = async() => {
+    const result = await getAPI('menu');
+    console.log('result menu', result);
+    if (result.status) {
+      
+    }
+  }
 
   const renderMenuBadge = () => {
     return (

@@ -16,6 +16,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Fontisto from 'react-native-vector-icons/Fontisto';
+import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useIsFocused } from '@react-navigation/native';
 import Modal from 'react-native-modal';
@@ -45,6 +46,7 @@ import FloatingBeaconDetection from 'src/components/Modal/FloatingBeaconDetectio
 import { getAPI, postAPI } from 'src/api-rest/httpService';
 import HighlightEvent from 'src/components/Event/HighlightEvent';
 import { stateUpdateProfile } from 'src/api-rest/stateUpdateProfile';
+import HighlightTenant from 'src/components/Tenant/HighlightTenant';
 const { connect, init, startDiscovery, startScanning, isScanning } = Kontakt;
 
 const kontaktEmitter = new NativeEventEmitter(KontaktModule);
@@ -74,6 +76,7 @@ const MainHome = ({ navigation, route }) => {
   const [stateListCheckinUID, setStateListCheckinUID] = useState([]);
   const [stateListMerchUID, setStateListMerchUID] = useState([]);
   const [stateListArtUID, setStateListArtUID] = useState([]);
+  const [stateListEventUID, setStateListEventUID] = useState([]);
   const [stateListOtherUID, setStateListOtherUID] = useState([]);
   const [stateListOtherType, setStateListOtherType] = useState([]);
 
@@ -90,6 +93,11 @@ const MainHome = ({ navigation, route }) => {
   const [modalFloatingBeacon, setModalFloatingBeacon] = useState(true);
   const [modalSuccessCheckin, setModalSuccessCheckin] = useState(false);
   const [modalNeedUpdateProfile, setModalNeedUpdateProfile] = useState(false);
+  const [modalEventVerification, setModalEventVerification] = useState({
+    show: false,
+    error: true,
+    item: null,
+  });
 
   const isCheckin = auth && auth.user && auth.user.isCheckin;
   const isSecurity = auth && auth.user && auth.user.role && auth.user.role.value === 0;
@@ -157,11 +165,16 @@ const MainHome = ({ navigation, route }) => {
   // }, [isCheckin, stateListCheckinUID, stateListMerchUID]);
 
   useEffect(() => {
-    const timeout = isCheckin && stateListArtUID.length > 0 && isFocused && listMerchantType.length === 0 && !modalLoading ?
+    const timeout = isFocused ?
       setTimeout(() => {
         if (isCheckin) {
           onPairingMerchant();
-          onPairingArt();
+
+          onPairingEvent();
+
+          if (stateListArtUID.length > 0 && listMerchantType.length === 0 && !modalLoading) {
+            onPairingArt();
+          }
         } else {
           onPairingCheckin();
         }
@@ -223,6 +236,7 @@ const MainHome = ({ navigation, route }) => {
           let newCheckinUID = [];
           let newMerchUID = [];
           let newArtUID = [];
+          let newEventUID = [];
           let newOtherUID = [];
           let newOtherType = [];
 
@@ -245,6 +259,7 @@ const MainHome = ({ navigation, route }) => {
             const isCheckinType = localStoragBeacons.listCheckinUID.indexOf(e.address);
             const isMerchType = localStoragBeacons.listMerchUID.indexOf(e.address);
             const isArtType = localStoragBeacons.listArtUID.indexOf(e.address);
+            const isEventType = localStoragBeacons.listEventUID.indexOf(e.address);
             const isOtherType = localStoragBeacons.listOtherUID.indexOf(e.address);
 
             // type beacon yang masuk kondisi checkin (harus checkin dulu)
@@ -269,6 +284,10 @@ const MainHome = ({ navigation, route }) => {
                 // });
 
                 newArtUID.push(e.address);
+              }
+
+              if (isEventType !== -1 && rangeForCompare < localStoragBeacons.listEventRange[isEventType]) {
+                newEventUID.push(e.address);
               }
 
               if (isOtherType !== -1 && rangeForCompare < localStoragBeacons.listOtherRange[isOtherType]) {
@@ -301,6 +320,7 @@ const MainHome = ({ navigation, route }) => {
           setStateListCheckinUID(newCheckinUID);
           setStateListMerchUID(newMerchUID);
           setStateListArtUID(newArtUID);
+          setStateListEventUID(newEventUID);
           setStateListOtherUID(newOtherUID);
           setStateListOtherType(newOtherType);
 
@@ -352,7 +372,7 @@ const MainHome = ({ navigation, route }) => {
     }
     
     if (stateListCheckinUID.length === 0) {
-      showLoading('error', 'Tidak Ada perangkat disekitar');
+      // showLoading('error', 'Tidak Ada perangkat disekitar');
       return;
     }
 
@@ -466,6 +486,32 @@ const MainHome = ({ navigation, route }) => {
     // setTempCurrentArtPairing(newTempUID);
   }
 
+  const onPairingEvent = async () => {
+    if (stateListEventUID.length === 0 || modalEventVerification.show) {
+      return;
+    }
+
+    setModalEventVerification({ ...modalEventVerification, show: true });
+
+    const body = {
+      beacon_uid: stateListEventUID[0],
+      beacon_type: 'event',
+    };
+
+    console.log('body event pairing', body);
+    const result = await postAPI('user-activity', body);
+    console.log('result event pairing', result);
+
+    let newItem = null;
+
+    if (result.status) {
+      newItem = result.status;
+      // console.log('event', result);
+    }
+
+    setModalEventVerification({ ...modalEventVerification, item: newItem, error: !result.status });
+  }
+
   const onPairingOther = async () => {
     if (stateListOtherUID.length === 0) {
       return;
@@ -532,13 +578,6 @@ const MainHome = ({ navigation, route }) => {
       fetchData();
     }
   }, [isFocused]);
-
-  const testApi = async () => {
-    // const test = await getAPI('location?bloc_location_id=1');
-    // const test = await getAPI('ticket-order');
-    const test = await getAPI('menu');
-    console.log('test', test);
-  }
 
   const fetchBannerList = async () => {
     const result = await getAPI('banner');
@@ -674,7 +713,7 @@ const MainHome = ({ navigation, route }) => {
 
               <TouchableOpacity
                 onPress={() => {
-                  testApi();
+                  navigation.navigate('EventHistory');
                 }}
                 style={{
                   width: '20%',
@@ -924,6 +963,19 @@ const MainHome = ({ navigation, route }) => {
             <Divider />
 
             <View>
+              <Text>Beacon Event</Text>
+              {stateListEventUID.map((i, idx) => {
+                return (
+                  <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
+                    <Text size={12} aling='left'>{i}</Text>
+                  </View>
+                )
+              })}
+            </View>
+
+            <Divider />
+
+            <View>
               <Text>Beacon Other</Text>
               {stateListOtherUID.map((i, idx) => {
                 return (
@@ -944,6 +996,30 @@ const MainHome = ({ navigation, route }) => {
           </Container>
 
           <Divider height={spaceContentSize} />
+
+          {(modalEventVerification.item) && <Container paddingHorizontal={16} paddingBottom={16}>
+            <Container padding={10} radius={8}>
+              <Row justify='space-between'>
+                <Row>
+                  <Container paddingRight={12}>
+                    <Image
+                      source={imageAssets.building}
+                      style={{
+                        width: 24,
+                        height: 24,
+                      }}
+                    />
+                  </Container>
+
+                  <Column>
+                    <Text size={10} color={Color.placeholder} letterSpacing={0.4}>Kamu sedang berada di event</Text>
+                    <Divider height={2} />
+                    <Text size={12} type='medium' letterSpacing={0.5}>{auth.user && auth.user.activityInfo && auth.user.activityInfo.location ? auth.user.activityInfo.location.name : ''}</Text>
+                  </Column>
+                </Row>
+              </Row>
+            </Container>
+          </Container>}
 
           {isSecurity && <Container padding={16} paddingTop={8}>
             <Container padding={14} color={Color.border} radius={8}>
@@ -978,6 +1054,10 @@ const MainHome = ({ navigation, route }) => {
           <WidgetHomeMenuStatic />
 
           <Divider />
+
+          <HighlightTenant
+
+          />
 
           <HighlightEvent
             productCategory='EVENT'
@@ -1361,6 +1441,156 @@ const MainHome = ({ navigation, route }) => {
               </Button>
             </Container>
           </View>
+        </View>
+      </Modal>
+
+      {/* modal event */}
+      <Modal
+        isVisible={isCheckin && modalEventVerification.show}
+        onBackdropPress={() => {
+          
+        }}
+        animationIn="slideInDown"
+        animationOut="slideOutDown"
+        backdropColor={Color.semiwhite}>
+        <View
+          style={{ width: '100%', borderRadius: 16, backgroundColor: Color.theme, }}
+        >
+          {/* loading */}
+          {modalEventVerification.item ?
+          <View
+            style={{
+              paddingHorizontal: 16,
+              paddingVertical: 16,
+              alignItems: 'center',
+            }}
+          >
+            <View
+              style={{
+                alignItems: 'center',
+              }}
+            >
+              <View style={{ flexDirection: 'row', backgroundColor: Color.successLight, paddingVertical: 12, paddingHorizontal: 20, borderRadius: 120, alignItems: 'center' }}>
+                <Container width={14} height={14} radius={14} align='center' justify='center' color={Color.success}>
+                  <Entypo name='check' size={8} color={Color.textInput} />
+                </Container>
+                <Divider width={8} />
+                <Text size={12} color={Color.success}>Verifikasi Berhasil</Text>
+              </View>
+              <Divider />
+              <View
+                style={{
+                  width: '100%',
+                  aspectRatio: 16/9,
+                }}
+              >
+                <Image
+                  source={{ uri: 'https://anekatempatwisata.com/wp-content/uploads/2022/04/M-Bloc-Space.jpg' }}
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                    borderRadius: 8,
+                  }}
+                />
+              </View>
+            </View>
+
+            <Container paddingTop={16}>
+              <Text>Selamat datang di</Text>
+              <Text size={16} type='medium'>EVENT</Text>
+            </Container>
+
+            <Container width='100%' paddingTop={16}>
+              <Button
+                outline
+                color={Color.primaryMoreDark}
+                onPress={() => {
+                  setModalEventVerification({
+                    ...modalEventVerification,
+                    show: false,
+                  });
+                }}
+              >
+                Tutup
+              </Button>
+            </Container>
+          </View>
+          : modalEventVerification.error ?
+            <View
+              style={{
+                paddingHorizontal: 16,
+                paddingVertical: 16,
+                alignItems: 'center',
+              }}
+            >
+              <View
+                style={{
+                  width: width / 7,
+                  height: width / 7,
+                  backgroundColor: Color.error,
+                  borderRadius: 16,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Entypo name={'cross'} size={36} color={Color.textInput} />
+              </View>
+
+              <Container paddingTop={16}>
+                <Text size={16} type='medium'>Verifikasi Gagal</Text>
+                <Text size={11}>Nampaknya terjadi kesalahan. Lakukan verifikasi beberapa saat lagi</Text>
+              </Container>
+
+              <Container width='100%' paddingTop={16}>
+                <Button
+                  outline
+                  color={Color.primaryMoreDark}
+                  onPress={() => {
+                    setModalEventVerification({
+                      ...modalEventVerification,
+                      show: false,
+                    });
+                  }}
+                >
+                  Tutup
+                </Button>
+              </Container>
+            </View>
+          :
+          <View
+            style={{
+              padding: 32,
+              alignItems: 'center',
+            }}
+          >
+            <View
+              style={{
+                height: height / 6,
+                aspectRatio: 4 / 3,
+                marginBottom: 24,
+              }}
+            >
+              <Image
+                source={imageAssets.eventVerification}
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  resizeMode: 'contain'
+                }}
+              />
+            </View>
+
+            <View
+              style={{
+                alignItems: 'center',
+              }}
+            >
+              <Text size={16} letterSpacing={0.15} type='medium'>Kamu ada di area event</Text>
+              <Divider height={4} />
+              <Text color={Color.placeholder}>Tunggu sebentar kami sedang melakukan verifikasi . . . </Text>
+            </View>
+          </View>
+          }
         </View>
       </Modal>
 
