@@ -38,7 +38,9 @@ const CardFestLiterature = ({
         paddingVertical: 8,
         width: width / numColumns - (horizontal ? 16 : 8),
       }}
-      onPress={() => onPress()}>
+      onPress={() => {
+        navigation.navigate('PDFReaderScreen', { file: 'https://www.copyright.gov/docs/certificate_sample.pdf' });
+      }}>
       <Image
         source={{uri: item.image}}
         style={{
