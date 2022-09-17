@@ -105,7 +105,7 @@ const TabBarComponent = (props) => {
         <SafeAreaView
             style={{
                 width: '100%',
-                height: 45 + 16 + (isIphoneNotch() ? 32 : 16),
+                height: 55 + 16 + (isIphoneNotch() ? 32 : 16),
                 backgroundColor: Color.theme,
             }}
         >

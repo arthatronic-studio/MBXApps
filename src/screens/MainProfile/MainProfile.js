@@ -30,7 +30,7 @@ import {
 } from '@src/components';
 import { redirectTo } from '@src/utils';
 import { shadowStyle } from '@src/styles';
-import { iconSplash, imageCardOrnament } from '@assets/images';
+import imageAssets, { iconSplash, imageCardOrnament } from '@assets/images';
 import { Box, Circle, Container, Divider, Line } from 'src/styled';
 import Clipboard from '@react-native-community/clipboard';
 import ModalinputCode from 'src/components/ModalInputCode';
@@ -157,7 +157,7 @@ const MainProfile = ({ navigation, route }) => {
                   justifyContent: 'space-between',
                 }}
               >
-                <Text size={22} align='left' type="bold" letterSpacing={0.18} numberOfLines={2}>
+                <Text size={22} align='left' lineHeight={28} numberOfLines={2}>
                   {auth.user.name}
                 </Text>
               </View>
@@ -167,11 +167,25 @@ const MainProfile = ({ navigation, route }) => {
               onPress={() => {
                 navigation.navigate('ChangeProfile');
               }}
-              style={{ flexDirection: 'row', padding: 10, backgroundColor: Color.primarySoft, borderRadius: 120, justifyContent: 'center', alignItems: 'center' }}
+              style={{ flexDirection: 'row', padding: 10, borderColor: Color.text, borderWidth: 0.5, borderRadius: 120, justifyContent: 'center', alignItems: 'center' }}
             >
-              <Circle color={Color.border} size={16} />
+              <View
+                style={{
+                  width: 16,
+                  height: 16,
+                }}
+              >
+                <Image
+                  source={imageAssets.edit}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    resizeMode: 'contain',
+                  }}
+                />
+              </View>
               <Divider width={8} />
-              <Text size={12} type="semibold">Edit Profile</Text>
+              <Text size={12} type="medium" color={Color.primaryDark}>Edit Profile</Text>
             </TouchableOpacity>
           </View>
         </Container>
@@ -183,7 +197,7 @@ const MainProfile = ({ navigation, route }) => {
             <Text align='left' size={12} type='medium'>Transaksi</Text>
           </View>
           <View style={{}}>
-            <View style={{ flexDirection: 'row', paddingTop: 24 }}>
+            {/* <View style={{ flexDirection: 'row', paddingTop: 24 }}>
               <Image
                 source={assetImageProfile.cart}
                 style={{
@@ -194,8 +208,13 @@ const MainProfile = ({ navigation, route }) => {
               />
               <Divider width={8} />
               <Text align='left'>Keranjang</Text>
-            </View>
-            <View style={{ flexDirection: 'row', paddingTop: 24 }}>
+            </View> */}
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('EventHistory')
+              }}
+              style={{ flexDirection: 'row', paddingTop: 24 }}
+            >
               <Image
                 source={assetImageProfile.history}
                 style={{
@@ -206,7 +225,7 @@ const MainProfile = ({ navigation, route }) => {
               />
               <Divider width={8} />
               <Text align='left'>Riwayat</Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </Container>
 
@@ -217,7 +236,7 @@ const MainProfile = ({ navigation, route }) => {
             <Text align='left' size={12} type='medium'>Seputar Aplikasi</Text>
           </View>
           <View style={{}}>
-            <View style={{ flexDirection: 'row', paddingTop: 24 }}>
+            {/* <View style={{ flexDirection: 'row', paddingTop: 24 }}>
               <Image
                 source={assetImageProfile.setting}
                 style={{
@@ -228,8 +247,13 @@ const MainProfile = ({ navigation, route }) => {
               />
               <Divider width={8} />
               <Text align='left'>Pengaturan</Text>
-            </View>
-            <View style={{ flexDirection: 'row', paddingTop: 24 }}>
+            </View> */}
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('SyaratdanKetentuan');
+              }}
+              style={{ flexDirection: 'row', paddingTop: 24 }}
+            >
               <Image
                 source={assetImageProfile.term}
                 style={{
@@ -240,8 +264,15 @@ const MainProfile = ({ navigation, route }) => {
               />
               <Divider width={8} />
               <Text align='left'>Syarat & Ketentuan</Text>
-            </View>
-            <View style={{ flexDirection: 'row', paddingTop: 24 }}>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                const phoneNumber = '02123456789';
+                Linking.openURL(`tel:${phoneNumber}`)
+              }}
+              style={{ flexDirection: 'row', paddingTop: 24 }}
+            >
               <Image
                 source={assetImageProfile.help}
                 style={{
@@ -252,8 +283,14 @@ const MainProfile = ({ navigation, route }) => {
               />
               <Divider width={8} />
               <Text align='left'>Bantuan</Text>
-            </View>
-            <View style={{ flexDirection: 'row', paddingTop: 24 }}>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('FAQScreen');
+              }}
+              style={{ flexDirection: 'row', paddingTop: 24 }}
+            >
               <Image
                 source={assetImageProfile.faq}
                 style={{
@@ -264,7 +301,7 @@ const MainProfile = ({ navigation, route }) => {
               />
               <Divider width={8} />
               <Text align='left'>FAQ</Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </Container>
 

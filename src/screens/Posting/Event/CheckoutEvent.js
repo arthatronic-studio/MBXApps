@@ -192,7 +192,7 @@ const CheckoutEvent = ({ navigation, route }) => {
                                 onValueChange={(val) => {
                                     let newArr = [...listVisitors];
                                     const itemVisitor = {
-                                        title: val ? (auth.user.gender === 'male' ? 1 : 2) : null,
+                                        title: val ? (auth.user.gender === 'male' ? 0 : 1) : null,
                                         name: val ? auth.user.name : null,
                                         phone: val ? auth.user.phone : null,
                                         email: val ? auth.user.email : null,
@@ -217,8 +217,8 @@ const CheckoutEvent = ({ navigation, route }) => {
 
                     {listVisitors.map((itemVisitor, idx) => {
                         let hisTitle = 'Mr';
-                        if (itemVisitor.title === 2) hisTitle = 'Mrs';
-                        if (itemVisitor.title === 3) hisTitle = 'Ms';
+                        if (itemVisitor.title === 1) hisTitle = 'Mrs';
+                        if (itemVisitor.title === 2) hisTitle = 'Ms';
 
                         return (
                             <TouchableOpacity

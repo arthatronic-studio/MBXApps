@@ -22,9 +22,9 @@ const defaultProps = {
 };
 
 const titleList = [
-  { label: 'Tuan', value: 1 },
-  { label: 'Nyonya', value: 2 },
-  { label: 'Nona', value: 3 },
+  { label: 'Tuan', value: 0 },
+  { label: 'Nyonya', value: 1 },
+  { label: 'Nona', value: 2 },
 ];
 
 const ModalizeVisitor = forwardRef((props, ref) => {
@@ -63,7 +63,7 @@ const ModalizeVisitor = forwardRef((props, ref) => {
       if (Object.hasOwnProperty.call(data, key)) {
         const e = data[key];
         console.log('eeee', key, e);
-        if (!e) {
+        if (e === null || e === '' || e === undefined) {
           showPopup(`${key} Wajib diisi`, 'error');
           return;
         }

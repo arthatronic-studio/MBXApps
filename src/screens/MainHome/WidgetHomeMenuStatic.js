@@ -25,23 +25,17 @@ import imageAssets from 'assets/images';
 import { getAPI } from 'src/api-rest/httpService';
 
 const defaultProps = {
-  showMore: true,
+  
 };
 
-const WidgetHomeMenuStatic = ({ showMore }) => {
+const WidgetHomeMenuStatic = () => {
   const {Color} = useColor();
   const navigation = useNavigation();
   const user = useSelector(state => state['user.auth'].login.user);
   const {width} = useWindowDimensions();
 
-  const [listMenuHome, setListMenuHome] = useState([
-    // {name: 'Shop', nav: 'Ecommerce', param: {}, image: imageAssets.homeMenuShop, show: true },
-    {name: 'Event', nav: 'EventScreen', param: {}, image: imageAssets.homeMenuEvent, show: true },
-    // {name: 'Forum', nav: 'ForumScreen', param: {}, image: imageAssets.homeMenuForum, show: true },
-    {name: 'Eats', nav: 'EatScreen', param: {}, image: imageAssets.homeMenuEats, show: true },
-    {name: 'Fest', nav: 'FestScreen', param: {}, image: imageAssets.homeMenuFest, show: true },
-  ]);
-  const [itemData, setItemData] = useState(initialItemState);
+  const [listMenuHome, setListMenuHome] = useState([]);
+  const [numOfColumn, setNumOfColumn] = useState(3);
   const [modalMenuHome, setModalMenuHome] = useState(false);
 
   useEffect(() => {
@@ -51,9 +45,81 @@ const WidgetHomeMenuStatic = ({ showMore }) => {
   const fetchMenuList = async() => {
     const result = await getAPI('menu');
     console.log('result menu', result);
+
+    let newData = [];
+    let newNumOfColumn = 3;
+
     if (result.status) {
+      newNumOfColumn = result.num_of_column;
+
+      result.data.map((e, idx) => {
+        let obj;
       
+        switch (e.code) {
+          case 'shop':
+            obj = {
+              name: e.name,
+              navigate: e.navigate || 'Ecomerce',
+              imageAsset: imageAssets.homeMenuShop,
+              imageUrl: e.file,
+            };
+            break;
+          case 'event':
+            obj = {
+              name: e.name,
+              navigate: e.navigate || 'EventScreen',
+              imageAsset: imageAssets.homeMenuEvent,
+              imageUrl: e.file,
+            };
+            break;
+          case 'forum':
+            obj = {
+              name: e.name,
+              navigate: e.navigate || 'ForumScreen',
+              imageAsset: imageAssets.homeMenuForum,
+              imageUrl: e.file,
+            };
+            break;
+          case 'eats':
+            obj = {
+              name: e.name,
+              navigate: e.navigate || 'EatScreen',
+              imageAsset: imageAssets.homeMenuEats,
+              imageUrl: e.file,
+            };
+            break;
+          case 'artikel':
+            obj = {
+              name: e.name,
+              navigate: e.navigate || 'NewsScreen',
+              imageAsset: imageAssets.homeMenuFest,
+              imageUrl: e.file,
+            };
+            break;
+          case 'fest':
+            obj = {
+              name: e.name,
+              navigate: e.navigate || 'FestScreen',
+              imageAsset: imageAssets.homeMenuFest,
+              imageUrl: e.file,
+            };
+            break;
+          default:
+            obj = {
+              name: e.name,
+              navigate: e.navigate,
+              imageAsset: imageAssets.homeMenuFest,
+              imageUrl: e.file,
+            };
+            break;
+        }
+
+        if (obj) newData.push(obj);
+      });
     }
+
+    setListMenuHome(newData);
+    setNumOfColumn(newNumOfColumn);
   }
 
   const renderMenuBadge = () => {
@@ -82,16 +148,12 @@ const WidgetHomeMenuStatic = ({ showMore }) => {
     );
   };
 
-  let menuRealLength = 0;
-  const currentData = showMore ? listMenuHome : itemData.data;
-  currentData.map((e) => e.show ? menuRealLength +=1 : null);
-  const widthPerMenu = menuRealLength < 4 ? 100 / menuRealLength : 25;
-  const widthIconMenu = (width / (menuRealLength < 4 ? menuRealLength : 4) - 16) / 1.8;
+  const menuPerColumn = listMenuHome.length < numOfColumn ? listMenuHome.length : numOfColumn;
+  const widthPerMenu = 100 / menuPerColumn;
+  const widthIconMenu = (width / menuPerColumn - 16) / 2.4;
   const paddingInMenu = 16;
 
-  if (currentData.length === 0) return <View />;
-
-  const spaceContentSize = 8;
+  if (listMenuHome.length === 0) return <View />;
 
   return (
     <Container paddingHorizontal={paddingInMenu}>
@@ -99,15 +161,15 @@ const WidgetHomeMenuStatic = ({ showMore }) => {
         style={{
           backgroundColor: Color.theme,
           width: '100%',
-          paddingVertical: paddingInMenu,
+          paddingTop: paddingInMenu,
           flexDirection: 'row',
           flexWrap: 'wrap',
           borderRadius: 8,
           ...shadowStyle,
         }}
       >
-        {currentData.map((menu, idx) => {
-          if (!menu.show || (Platform.OS === 'ios' && menu.comingsoon)) {
+        {listMenuHome.map((menu, idx) => {
+          if (Platform.OS === 'ios' && menu.comingsoon) {
             return null;
           }
 
@@ -117,7 +179,7 @@ const WidgetHomeMenuStatic = ({ showMore }) => {
               activeOpacity={0.75}
               disabled={menu.comingsoon}
               onPress={() => {
-                if (!menu.nav) return;
+                if (!menu.navigate) return;
 
                 // GALogEvent(menu.name, {
                 //   id: menu.code,
@@ -126,21 +188,21 @@ const WidgetHomeMenuStatic = ({ showMore }) => {
                 //   method: analyticMethods.viewAll,
                 // });
 
-                if (menu.nav.includes('http://') || menu.nav.includes('https://')) {
-                  navigation.navigate('WebviewGeneralScreen', { url: menu.nav });
+                if (menu.navigate.includes('http://') || menu.navigate.includes('https://')) {
+                  navigation.navigate('WebviewGeneralScreen', { url: menu.navigate });
                   return;
                 }
-                else if (menu.nav === 'modal') {
+                else if (menu.navigate === 'modal') {
                   setModalMenuHome(true);
                   return;
                 }
 
-                navigation.navigate(menu.nav, { title: menu.name, ...menu.params });
+                navigation.navigate(menu.navigate, { title: menu.name, ...menu.params });
               }}
               style={{
                 width: `${widthPerMenu}%`,
                 alignItems: 'center',
-                // marginBottom: paddingInMenu,
+                marginBottom: paddingInMenu,
               }}
             >
               <View
@@ -154,6 +216,7 @@ const WidgetHomeMenuStatic = ({ showMore }) => {
                 }}
               >
                 <Image
+                  source={menu.imageUrl ? { uri: menu.imageUrl } : menu.imageAsset}
                   style={[
                     {
                       height: '100%',
@@ -162,7 +225,6 @@ const WidgetHomeMenuStatic = ({ showMore }) => {
                     menu.comingsoon ? {opacity: 0.3} : {}
                   ]}
                   resizeMode="contain"
-                  source={menu.image}
                 />
               </View>
               

@@ -89,10 +89,13 @@ const HighlightTenant = (props) => {
         )
     }
 
+    if (itemData.length === 0) return <View />
+
     return (
         <View>
             <PostingHeader
-                title='Teanant Terpopuler'
+                title='Tenant Terpopuler'
+                showSeeAllText={false}
             />
 
             <View style={{ marginTop: 4, flexDirection: 'row', flexWrap: 'wrap', width: '100%', paddingHorizontal: 8 }}>

@@ -128,7 +128,7 @@ const Footer = (props) => {
           <Text
             size={16}
             letterSpacing={0.02}
-            color={buttonTextColor || Color.textInput}>
+            color={buttonTextColor || Color.text}>
             {buttonLabel}
           </Text>
         </PayButton>
@@ -157,7 +157,7 @@ const Footer = (props) => {
         <Text
           size={16}
           letterSpacing={0.02}
-          color={buttonTextColor || Color.textInput}>
+          color={buttonTextColor || Color.text}>
           {buttonLabel}
         </Text>
       </PayButton>
@@ -166,5 +166,4 @@ const Footer = (props) => {
 };
 
 Footer.defaultProps = defaultProps;
-
 export default Footer;

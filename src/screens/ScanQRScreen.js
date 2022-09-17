@@ -173,27 +173,27 @@ export default class ScanQRScreen extends Component {
     }
 }
 
-  async onCheckin(beacon_uid, beacon_type) {
+  async onSecurityScan(code) {
     const body = {
-      beacon_uid,
-      beacon_type,
+      code
     };
 
     console.log('body', body);
 
-    const result = await postAPI('user-activity', body);
+    const result = await postAPI('user-activity/petugas-scan', body);
+
     console.log('result', result);
 
-    if (result.status) {
-      store.dispatch({ type: 'AUTH.SET_CHECKIN', data: result.data });
+    // if (result.status) {
+    //   store.dispatch({ type: 'AUTH.SET_CHECKIN', data: result.data });
 
-      setTimeout(() => {
-        this.props.navigation.goBack();
-      }, 3000);
+    //   setTimeout(() => {
+    //     this.props.navigation.goBack();
+    //   }, 3000);
 
-      const prof = await stateUpdateProfile();
-      console.log('prof', prof);
-    }
+    //   const prof = await stateUpdateProfile();
+    //   console.log('prof', prof);
+    // }
     
     this.setState({
       loadingProps: {
@@ -221,8 +221,8 @@ export default class ScanQRScreen extends Component {
     const parseData = this.isJsonString(e.data);
     console.log(parseData);
 
-    if (parseData && parseData.beacon_uid && parseData.beacon_type) {
-      this.onCheckin(parseData.beacon_uid, parseData.beacon_type);
+    if (parseData) {
+      this.onSecurityScan(parseData);
     }
     else {
       this.setState({

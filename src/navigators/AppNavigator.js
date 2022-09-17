@@ -68,7 +68,7 @@ import JoinCommunity from 'src/screens/MainProfile/JoinCommunity';
 import BlockUser from 'src/screens/MainProfile/BlockUser';
 import ReferralCodeScreen from '@src/screens/MainProfile/ReferralCodeScreen';
 import UserProfileScreen from '@src/screens/MainProfile/UserProfileScreen';
-import TermsCondition from 'src/screens/MainProfile/TermCondition';
+import FAQScreen from 'src/screens/MainProfile/FAQScreen';
 import ContentProductSaveScreen from 'src/screens/MainProfile/ContentProductSaveScreen';
 
 // community admin
@@ -480,7 +480,7 @@ function AppNavigator() {
       <Screen name="JoinCommunity" component={JoinCommunity} />
       <Screen name="BlockUser" component={BlockUser} />
       <Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />
-      <Screen name="TermsCondition" component={TermsCondition} />
+      <Screen name="FAQScreen" component={FAQScreen} />
       <Screen name="ContentProductSaveScreen" component={ContentProductSaveScreen} />
       <Screen name="UserProfileScreen" component={UserProfileScreen} />
       {/* community admin */}

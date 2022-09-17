@@ -47,10 +47,9 @@ import { getAPI, postAPI } from 'src/api-rest/httpService';
 import HighlightEvent from 'src/components/Event/HighlightEvent';
 import { stateUpdateProfile } from 'src/api-rest/stateUpdateProfile';
 import HighlightTenant from 'src/components/Tenant/HighlightTenant';
-const { connect, init, startDiscovery, startScanning, isScanning } = Kontakt;
 
+const { connect, init, startDiscovery, startScanning, isScanning } = Kontakt;
 const kontaktEmitter = new NativeEventEmitter(KontaktModule);
-const isAndroid = Platform.OS === 'android';
 
 let tempShowPopupAds = true;
 
@@ -170,7 +169,7 @@ const MainHome = ({ navigation, route }) => {
         if (isCheckin) {
           onPairingMerchant();
 
-          onPairingEvent();
+          // onPairingEvent();
 
           if (stateListArtUID.length > 0 && listMerchantType.length === 0 && !modalLoading) {
             onPairingArt();
@@ -184,7 +183,7 @@ const MainHome = ({ navigation, route }) => {
     return () => {
       clearTimeout(timeout);
     }
-  }, [isCheckin, stateListArtUID, stateListCheckinUID, stateListMerchUID, isFocused, listMerchantType, modalLoading]);
+  }, [isCheckin, stateListArtUID, stateListCheckinUID, stateListMerchUID, stateListEventUID, isFocused, listMerchantType, modalLoading]);
 
   useEffect(() => {
     const timeout = isCheckin && stateListOtherUID.length > 0 ?
@@ -200,7 +199,7 @@ const MainHome = ({ navigation, route }) => {
 
   const beaconSetup = async () => {
     console.log('beaconSetup');
-    if (isAndroid) {
+    if (Platform.OS === 'android') {
       // Android
       // const granted = await requestLocationPermission();
 
@@ -222,7 +221,7 @@ const MainHome = ({ navigation, route }) => {
     }
 
     // Add beacon listener
-    if (isAndroid) {
+    if (Platform.OS === 'android') {
       DeviceEventEmitter.addListener('beaconDidAppear', ({ beacons, region }) => {
         console.log('beaconDidAppear', beacons);
       });
@@ -633,12 +632,96 @@ const MainHome = ({ navigation, route }) => {
     });
   };
 
+  const renderDebug = () => {
+    return (
+      <>
+        <View>
+          <Text>Beacon All</Text>
+          {stateListAllBeacons.map((i, idx) => {
+            return (
+              <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
+                <Text size={12} aling='left'>Address: {i.productAddress}</Text>
+                <Text size={12} aling='left'>Name: {i.productName}</Text>
+                <Text size={12} aling='left'>Range: {i.productRange} cm</Text>
+              </View>
+            )
+          })}
+        </View>
+
+        <Divider />
+
+        <View>
+          <Text>Beacon Checkin</Text>
+          {stateListCheckinUID.map((i, idx) => {
+            return (
+              <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
+                <Text size={12} aling='left'>{i}</Text>
+              </View>
+            )
+          })}
+        </View>
+
+        <Divider />
+
+        <View>
+          <Text>Beacon Merch</Text>
+          {stateListMerchUID.map((i, idx) => {
+            return (
+              <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
+                <Text size={12} aling='left'>{i}</Text>
+              </View>
+            )
+          })}
+        </View>
+
+        <Divider />
+
+        <View>
+          <Text>Beacon Art</Text>
+          {stateListArtUID.map((i, idx) => {
+            return (
+              <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
+                <Text size={12} aling='left'>{i}</Text>
+              </View>
+            )
+          })}
+        </View>
+
+        <Divider />
+
+        <View>
+          <Text>Beacon Event</Text>
+          {stateListEventUID.map((i, idx) => {
+            return (
+              <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
+                <Text size={12} aling='left'>{i}</Text>
+              </View>
+            )
+          })}
+        </View>
+
+        <Divider />
+
+        <View>
+          <Text>Beacon Other</Text>
+          {stateListOtherUID.map((i, idx) => {
+            return (
+              <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
+                <Text size={12} aling='left'>{i}</Text>
+              </View>
+            )
+          })}
+        </View>
+      </>
+    )
+  }
+
   const spaceContentSize = 8;
 
   // console.log('localStoragSetting', localStoragSetting);
   // console.log('localStoragBeacons', localStoragBeacons);
   // console.log('auth', auth);
-  // console.log('eaaaa', stateListMerchUID);
+  // console.log('stateListAllBeacons', stateListAllBeacons);
 
   return (
     <Scaffold
@@ -730,7 +813,7 @@ const MainHome = ({ navigation, route }) => {
                 />
               </TouchableOpacity>
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('MainProfile');
                 }}
@@ -747,7 +830,7 @@ const MainHome = ({ navigation, route }) => {
                     tintColor: Color.text,
                   }}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           }
         />
@@ -804,7 +887,7 @@ const MainHome = ({ navigation, route }) => {
       //   backgroundColor: colorOutputRange[0]
       // }}
       >
-        <Container color={Color.theme} paddingTop={8} paddingBottom={statusBarHeight * 3}>
+        <Container color={Color.theme} paddingTop={8} paddingBottom={8}>
           <Animated.View
             style={{
               width,
@@ -907,87 +990,9 @@ const MainHome = ({ navigation, route }) => {
             </Container>
           </Container>}
 
-          {showDebug && <>
-            <View>
-              <Text>Beacon All</Text>
-              {stateListAllBeacons.map((i, idx) => {
-                return (
-                  <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
-                    <Text size={12} aling='left'>Address: {i.productAddress}</Text>
-                    <Text size={12} aling='left'>Name: {i.productName}</Text>
-                    <Text size={12} aling='left'>Range: {i.productRange} cm</Text>
-                  </View>
-                )
-              })}
-            </View>
+          {showDebug && renderDebug()}
 
-            <Divider />
-
-            <View>
-              <Text>Beacon Checkin</Text>
-              {stateListCheckinUID.map((i, idx) => {
-                return (
-                  <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
-                    <Text size={12} aling='left'>{i}</Text>
-                  </View>
-                )
-              })}
-            </View>
-
-            <Divider />
-
-            <View>
-              <Text>Beacon Merch</Text>
-              {stateListMerchUID.map((i, idx) => {
-                return (
-                  <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
-                    <Text size={12} aling='left'>{i}</Text>
-                  </View>
-                )
-              })}
-            </View>
-
-            <Divider />
-
-            <View>
-              <Text>Beacon Art</Text>
-              {stateListArtUID.map((i, idx) => {
-                return (
-                  <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
-                    <Text size={12} aling='left'>{i}</Text>
-                  </View>
-                )
-              })}
-            </View>
-
-            <Divider />
-
-            <View>
-              <Text>Beacon Event</Text>
-              {stateListEventUID.map((i, idx) => {
-                return (
-                  <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
-                    <Text size={12} aling='left'>{i}</Text>
-                  </View>
-                )
-              })}
-            </View>
-
-            <Divider />
-
-            <View>
-              <Text>Beacon Other</Text>
-              {stateListOtherUID.map((i, idx) => {
-                return (
-                  <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
-                    <Text size={12} aling='left'>{i}</Text>
-                  </View>
-                )
-              })}
-            </View>
-          </>}
-
-          <Container paddingVertical={spaceContentSize}>
+          <Container>
             <Banner
               showHeader={false}
               data={listBanner}
@@ -995,27 +1000,28 @@ const MainHome = ({ navigation, route }) => {
             />
           </Container>
 
-          <Divider height={spaceContentSize} />
+          <Divider height={spaceContentSize * 2} />
 
-          {(modalEventVerification.item) && <Container paddingHorizontal={16} paddingBottom={16}>
-            <Container padding={10} radius={8}>
+          {auth.user && auth.user.activeEvent && <Container paddingHorizontal={16} paddingBottom={16}>
+            <Container padding={10} radius={8} color='#F0FBFF'>
               <Row justify='space-between'>
                 <Row>
-                  <Container paddingRight={12}>
+                  <Container width='14%' style={{ aspectRatio: 1 }}>
                     <Image
-                      source={imageAssets.building}
+                      source={{ uri: auth.user.activeEvent.imageUrl }}
                       style={{
-                        width: 24,
-                        height: 24,
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: 8,
                       }}
                     />
                   </Container>
 
-                  <Column>
-                    <Text size={10} color={Color.placeholder} letterSpacing={0.4}>Kamu sedang berada di event</Text>
+                  <Container paddingHorizontal={12} width='86%'>
+                    <Text align='left' size={10} color={Color.placeholder} letterSpacing={0.4}>Tiket Aktif</Text>
                     <Divider height={2} />
-                    <Text size={12} type='medium' letterSpacing={0.5}>{auth.user && auth.user.activityInfo && auth.user.activityInfo.location ? auth.user.activityInfo.location.name : ''}</Text>
-                  </Column>
+                    <Text align='left' size={12} type='medium' numberOfLines={2} letterSpacing={0.5}>{auth.user.activeEvent.title}</Text>
+                  </Container>
                 </Row>
               </Row>
             </Container>
@@ -1053,7 +1059,7 @@ const MainHome = ({ navigation, route }) => {
 
           <WidgetHomeMenuStatic />
 
-          <Divider />
+          <Divider height={24} />
 
           <HighlightTenant
 

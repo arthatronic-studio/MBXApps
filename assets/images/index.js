@@ -61,6 +61,9 @@ const bannerMfest = require('./banner-mfest.png');
 const aboutFest1 = require('./about-fest1.png');
 const aboutFest2 = require('./about-fest2.png');
 const tempArts = require('./temp-arts.png');
+const edit = require('./edit.png');
+const qr = require('./qr.png');
+const voucherSubtract = require('./voucher-subtract.png');
 
 export {
   iconApp,
@@ -183,6 +186,9 @@ export const imageAssets = {
   aboutFest1,
   aboutFest2,
   tempArts,
+  edit,
+  qr,
+  voucherSubtract,
 };
 
 export default imageAssets;

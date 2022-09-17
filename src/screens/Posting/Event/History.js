@@ -115,6 +115,8 @@ const History = ({ navigation, route }) => {
         />
       }
     >
+      <Divider />
+      
       <Tab.Navigator
         initialRouteName={'HistoryTiketku'}
         tabBarOptions={{

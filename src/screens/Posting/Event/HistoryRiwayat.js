@@ -95,21 +95,19 @@ const HistoryRiwayat = ({ navigation, route }) => {
           <View style={{ paddingHorizontal: 16 }}>
             <Pressable
               onPress={() => navigation.navigate('OrderEventDetail', { item })}
-              style={{ borderRadius: 8, marginBottom: 10, backgroundColor: Color.theme, width: '100%' }}
+              style={{ paddingHorizontal: 10, paddingVertical: 12, borderRadius: 8, marginBottom: 10, backgroundColor: Color.theme, width: '100%' }}
             >
-              <View style={{ paddingVertical: 16, flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ flex: 1 }}>
                   <Text numberOfLines={2} align={'left'} type='medium' size={11} letterSpacing={0.5} color={Color.secondary}>No. Receipt</Text>
                   <Divider height={2} />
                   <Text numberOfLines={2} align={'left'} size={12} letterSpacing={0.4}>{item.invoice_id}</Text>
                 </View>
 
-                <Divider />
-
                 <View>
                   {item.status === 0 ?
-                    <View style={{ backgroundColor: Color.info, borderRadius: 120, paddingHorizontal: 8, paddingVertical: 8, justifyContent: 'center', alignItems: 'center' }}>
-                      <Text size={10} color={Color.textInput} type='medium'>{item.status_name}</Text>
+                    <View style={{ backgroundColor: Color.primarySoft, borderRadius: 120, paddingHorizontal: 8, paddingVertical: 8, justifyContent: 'center', alignItems: 'center' }}>
+                      <Text size={10} color={Color.text} type='medium'>{item.status_name}</Text>
                     </View>
                     :
                     item.status === 1 ?
@@ -124,7 +122,11 @@ const HistoryRiwayat = ({ navigation, route }) => {
                 </View>
               </View>
 
-              <View style={{ paddingVertical: 16, flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center' }}>
+              <Container paddingVertical={12}>
+                <View style={{ height: 0.5, width: '100%', backgroundColor: Color.border }} />
+              </Container>
+
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ width: '14%', aspectRatio: 1, backgroundColor: Color.secondary, borderRadius: 4 }}>
                   <Image
                     source={{ uri: item.ticket.event.image }}
@@ -145,16 +147,18 @@ const HistoryRiwayat = ({ navigation, route }) => {
                 </View>
               </View>
 
-              <View style={{ borderWidth: 0.5, borderColor: Color.border, width: '95%', alignSelf: 'center' }} />
+              <Container paddingVertical={12}>
+                <View style={{ height: 0.5, width: '100%', backgroundColor: Color.border }} />
+              </Container>
 
-              <View style={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ flex: 1, paddingRight: 10 }}>
                   <Text align={'left'} style={{ fontSize: 8, color: Color.secondary }}>Total</Text>
                   <Text align={'left'} style={{ fontWeight: 'bold' }}>{FormatMoney.getFormattedMoney(item.total_price)}</Text>
                 </View>
                 <Pressable
                   onPress={() => navigation.navigate('OrderEventDetail', { item })}
-                  style={{ flexDirection: 'row', backgroundColor: Color.theme, borderRadius: 8, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 12, paddingVertical: 10 }}
+                  style={{ flexDirection: 'row', backgroundColor: Color.theme, borderRadius: 8, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 12 }}
                 >
                   <Text style={{ fontSize: 12, marginRight: 4, }} type='medium' color={Color.primaryDark} letterSpacing={0.5}>Lihat Detail</Text>
                   <Fontisto name={'arrow-right'} size={10} color={Color.primaryDark} />
