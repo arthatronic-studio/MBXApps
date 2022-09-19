@@ -11,6 +11,7 @@ import {
   NativeEventEmitter,
   PermissionsAndroid,
   ActivityIndicator,
+  NativeModules,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -23,6 +24,7 @@ import Modal from 'react-native-modal';
 import Kontakt, { KontaktModule } from 'react-native-kontaktio';
 import RNShake from 'react-native-shake';
 import BluetoothStateManager from 'react-native-bluetooth-state-manager';
+import BleManager from 'react-native-ble-manager';
 
 import ImagesPath from 'src/components/ImagesPath';
 import {
@@ -48,8 +50,45 @@ import HighlightEvent from 'src/components/Event/HighlightEvent';
 import { stateUpdateProfile } from 'src/api-rest/stateUpdateProfile';
 import HighlightTenant from 'src/components/Tenant/HighlightTenant';
 
-const { connect, init, startDiscovery, startScanning, isScanning } = Kontakt;
 const kontaktEmitter = new NativeEventEmitter(KontaktModule);
+const BleManagerModule = NativeModules.BleManager;
+const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
+
+const {
+  // android
+  connect,
+  startScanning,
+  isScanning,
+  // ios
+  init,
+  configure,
+  // authorization
+  getAuthorizationStatus,
+  requestWhenInUseAuthorization,
+  requestAlwaysAuthorization,
+  // discovery
+  startDiscovery,
+  stopDiscovery,
+  restartDiscovery,
+  // ranging
+  startRangingBeaconsInRegion,
+  stopRangingBeaconsInRegion,
+  stopRangingBeaconsInAllRegions,
+  getRangedRegions,
+  // monitoring
+  startMonitoringForRegion,
+  stopMonitoringForRegion,
+  stopMonitoringForAllRegions,
+  getMonitoredRegions,
+} = Kontakt;
+
+const region1 = {
+  identifier: 'RDL51822',
+  uuid: 'fda50693-a4e2-4fb1-afcf-c6eb07647825',
+  major: 1,
+  minor: 2,
+  d: 'D8:7F:6F:2B:41:EC',
+};
 
 let tempShowPopupAds = true;
 
@@ -71,6 +110,7 @@ const MainHome = ({ navigation, route }) => {
   const { width, height } = useWindowDimensions();
   const [loadingProps, showLoading, hideLoading] = useLoading();
 
+  const peripherals = new Map();
   const [stateListAllBeacons, setStateListAllBeacons] = useState([]);
   const [stateListCheckinUID, setStateListCheckinUID] = useState([]);
   const [stateListMerchUID, setStateListMerchUID] = useState([]);
@@ -113,6 +153,17 @@ const MainHome = ({ navigation, route }) => {
     }, true);
   }, []);
 
+  // setup beacon iOS
+  useEffect(() => {
+    
+  }, []);
+
+  const _requestAlwaysAuthorization = () => {
+    requestAlwaysAuthorization()
+      .then(() => console.log('requested always authorization'))
+      .catch((error) => console.log('[requestAlwaysAuthorization]', error));
+  };
+
   useEffect(() => {
     initialConfig();
     requestBluetoothPermission();
@@ -123,6 +174,9 @@ const MainHome = ({ navigation, route }) => {
     if (Platform.OS === 'android' && Platform.Version < 31) {
       await BluetoothStateManager.requestToEnable();
     }
+
+    const prof = await stateUpdateProfile();
+    console.log('prof', prof);
 
     // const _scanning = await isScanning();
     // console.log('_scanning', _scanning);
@@ -215,17 +269,19 @@ const MainHome = ({ navigation, route }) => {
       //   );
       // }
     } else {
-      // iOS
-      await init();
-      await startDiscovery();
+      BleManager.start({ showAlert: false, }).then(() => {
+        // Success code
+        console.log("Ble manager initialized");
+
+        BleManager.scan([], 10, true).then(() => {
+          // Success code
+          console.log("Scan started");
+        });
+      });
     }
 
     // Add beacon listener
     if (Platform.OS === 'android') {
-      DeviceEventEmitter.addListener('beaconDidAppear', ({ beacons, region }) => {
-        console.log('beaconDidAppear', beacons);
-      });
-
       DeviceEventEmitter.addListener('beaconsDidUpdate', ({ beacons, region }) => {
         // console.log('beaconsDidUpdate', beacons, region);
         // console.log('beaconsDidUpdate', beacons);
@@ -326,19 +382,15 @@ const MainHome = ({ navigation, route }) => {
           setStateListAllBeacons(newArr);
         }
       });
-
-      DeviceEventEmitter.addListener('beaconDidDisappear', ({ beacons, region }) => {
-        console.log('beaconDidDisappear', beacons, region);
-        // klo beacon ilang
-      });
     } else {
-      kontaktEmitter.addListener('didDiscoverDevices', ({ beacons }) => {
-        console.log('didDiscoverDevices', beacons);
+      bleManagerEmitter.addListener("BleManagerDiscoverPeripheral", (args) => {
+        // console.log('BleManagerDiscoverPeripheral args', args);
+        peripherals.set(args.id, args);
+        console.log('ini ', Array.from(peripherals.values()));
+        // setList(Array.from(args.values()));
       });
     }
   };
-
-  // console.log('PermissionsAndroid.PERMISSIONS', PermissionsAndroid.PERMISSIONS);
 
   const requestBluetoothPermission = async () => {
     // try {
@@ -983,7 +1035,7 @@ const MainHome = ({ navigation, route }) => {
                   <Column>
                     <Text type='medium' size={12} letterSpacing={0.5}>Checkpoint Disekitar</Text>
                     <Divider height={2} />
-                    <Text size={10} letterSpacing={0.15} color={Color.placeholder}>Goyangkan Handphonemu untuk masuk kedalam area</Text>
+                    <Text size={10} letterSpacing={0.15} color={Color.placeholder}>Sedang memverifikasi perangkatmu untuk masuk kedalam area</Text>
                   </Column>
                 </Row>
               </Row>
@@ -1228,7 +1280,8 @@ const MainHome = ({ navigation, route }) => {
         </View>
       </Modal> */}
 
-      <Modal
+      {/* modal checkin */}
+      {/* <Modal
         isVisible={!isCheckin && modalFloatingBeacon && stateListCheckinUID.length > 0}
         onBackdropPress={() => {
           setModalFloatingBeacon(false);
@@ -1285,7 +1338,7 @@ const MainHome = ({ navigation, route }) => {
             </Container>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
 
       {/* modal merch */}
       <Modal
