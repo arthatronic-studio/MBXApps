@@ -1,5 +1,8 @@
+import { Platform } from 'react-native';
 import { store } from '../state/redux';
 import { getAPI } from './httpService';
+
+const isAndroid = Platform.OS === 'android';
 
 export const stateBeaconSetting = async () => {
     const endpoint = 'beacon';
@@ -21,31 +24,77 @@ export const stateBeaconSetting = async () => {
         let newListOtherType = [];
 
         result.data.map((e) => {
-            // if (e.beacon_type && e.beacon_type.name === 'checkin') {
+            // checkin
             if (e.beacon_type && e.beacon_type.id === 2) {
-                newListCheckinUID.push(e.beacon_uid);
-                newListCheckinRange.push(parseInt(e.range));
+                if (isAndroid) {
+                    if (e.beacon_uid) {
+                        newListCheckinUID.push(e.beacon_uid);
+                        newListCheckinRange.push(parseInt(e.range));
+                    }
+                } else {
+                    if (e.beacon_ios_uid) {
+                        newListCheckinUID.push(e.beacon_ios_uid);
+                        newListCheckinRange.push(parseInt(e.range));
+                    }
+                }
             }
-            // else if (e.beacon_type && e.beacon_type.name === 'merch') {
+            // merch
             else if (e.beacon_type && e.beacon_type.id === 5) {
-                newListMerchUID.push(e.beacon_uid);
-                newListMerchRange.push(parseInt(e.range));
+                if (isAndroid) {
+                    if (e.beacon_uid) {
+                        newListMerchUID.push(e.beacon_uid);
+                        newListMerchRange.push(parseInt(e.range));
+                    }
+                } else {
+                    if (e.beacon_ios_uid) {
+                        newListMerchUID.push(e.beacon_ios_uid);
+                        newListMerchRange.push(parseInt(e.range));
+                    }
+                }
             }
-            // else if (e.beacon_type && e.beacon_type.name === 'art') {
+            // art
             else if (e.beacon_type && e.beacon_type.id === 1) {
-                newListArtUID.push(e.beacon_uid);
-                newListArtRange.push(parseInt(e.range));
+                if (isAndroid) {
+                    if (e.beacon_uid) {
+                        newListArtUID.push(e.beacon_uid);
+                        newListArtRange.push(parseInt(e.range));
+                    }
+                } else {
+                    if (e.beacon_ios_uid) {
+                        newListArtUID.push(e.beacon_ios_uid);
+                        newListArtRange.push(parseInt(e.range));
+                    }
+                }
             }
             // event
             else if (e.beacon_type && e.beacon_type.id === 6) {
-                newListEventUID.push(e.beacon_uid);
-                newListEventRange.push(parseInt(e.range));
+                if (isAndroid) {
+                    if (e.beacon_uid) {
+                        newListEventUID.push(e.beacon_uid);
+                        newListEventRange.push(parseInt(e.range));
+                    }
+                } else {
+                    if (e.beacon_ios_uid) {
+                        newListEventUID.push(e.beacon_ios_uid);
+                        newListEventRange.push(parseInt(e.range));
+                    }
+                }
             }
-            // else if (e.beacon_type && e.beacon_type.name !== 'checkout') {
+            // checkout
             else if (e.beacon_type && e.beacon_type.id !== 3) {
-                newListOtherUID.push(e.beacon_uid);
-                newListOtherRange.push(parseInt(e.range));
-                newListOtherType.push(e.beacon_type.name);
+                if (isAndroid) {
+                    if (e.beacon_uid) {
+                        newListOtherUID.push(e.beacon_uid);
+                        newListOtherRange.push(parseInt(e.range));
+                        newListOtherType.push(e.beacon_type.name);
+                    }
+                } else {
+                    if (e.beacon_ios_uid) {
+                        newListOtherUID.push(e.beacon_ios_uid);
+                        newListOtherRange.push(parseInt(e.range));
+                        newListOtherType.push(e.beacon_type.name);
+                    }
+                }
             }
         });
 
