@@ -35,6 +35,7 @@ const SettingScreen = ({ navigation, route }) => {
     // const currentSocket = initSocket();
 
     const onPressLogout = () => {
+        dispatch({ type: 'AUTH.CLEAR' });
         dispatch({type: 'USER.LOGOUT'});
         redirectTo('LoginScreen');
         // currentSocket.disconnect();
@@ -44,7 +45,6 @@ const SettingScreen = ({ navigation, route }) => {
         <Scaffold
             headerTitle='Pengaturan'
             popupProps={popupProps}
-            onPressLeftButton={() => navigation.navigate('MainProfile', { refresh: true })}
         >
             {/* dark mode */}
             {/* <Grid style={{backgroundColor: Color.theme, borderTopWidth: 0.5, borderColor: Color.border}}>
@@ -100,7 +100,7 @@ const SettingScreen = ({ navigation, route }) => {
                 </Row>
             </Grid> */}
             {/* change password */}
-            <Grid style={{backgroundColor: Color.theme, borderColor: Color.border}}>
+            {/* <Grid style={{backgroundColor: Color.theme, borderColor: Color.border}}>
                 <TouchableOpacity
                     onPress={() => {
                         navigation.navigate('UserChangePassword', { canGoBack: true });
@@ -117,9 +117,9 @@ const SettingScreen = ({ navigation, route }) => {
                         </Col>
                     </Row>
                 </TouchableOpacity>
-            </Grid>
+            </Grid> */}
             {/* block list */}
-            <Grid style={{backgroundColor: Color.theme, borderColor: Color.border}}>
+            {/* <Grid style={{backgroundColor: Color.theme, borderColor: Color.border}}>
                 <TouchableOpacity
                     onPress={() => {
                         navigation.navigate('BlockUser', { canGoBack: true });
@@ -135,7 +135,7 @@ const SettingScreen = ({ navigation, route }) => {
                         </Col>
                     </Row>
                 </TouchableOpacity>
-            </Grid>
+            </Grid> */}
             {/* deactivate */}
             <Grid style={{backgroundColor: Color.theme, borderColor: Color.border}}>
                 <TouchableOpacity

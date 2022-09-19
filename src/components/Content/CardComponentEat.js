@@ -153,11 +153,11 @@ const CardComponentEat = ({ productCategory, item, numColumns, onPress, horizont
                     width: width / numColumns - (horizontal ? 32 : 0),
                     paddingHorizontal: 16,
                     marginTop: 12,
-                    borderRadius: 16,
+                    borderRadius: 8,
                     ...style,
                 }}
             >
-                <View style={{ width: '100%', backgroundColor: Color.theme, borderRadius: 16, ...shadowStyle }}>
+                <View style={{ width: '100%', backgroundColor: Color.theme, borderRadius: 8, ...shadowStyle }}>
                     <Image
                         source={{ uri: Array.isArray(item.images) && item.images.length > 0 ? item.images[0] : '' }}
                         style={{
@@ -165,7 +165,8 @@ const CardComponentEat = ({ productCategory, item, numColumns, onPress, horizont
                             aspectRatio: 1,
                             justifyContent: 'flex-end',
                             alignItems: 'center',
-                            borderRadius: 8,
+                            borderTopLeftRadius: 8,
+                            borderTopRightRadius: 8,
                             backgroundColor: Color.border,
                         }}
                     />
@@ -174,7 +175,7 @@ const CardComponentEat = ({ productCategory, item, numColumns, onPress, horizont
                         <Ionicons name='bookmark-outline' size={22} color={Color.primarySoft} />
                     </View> */}
 
-                    <View style={{ width: '100%', paddingTop: 10 }}>
+                    <View style={{ width: '100%', padding: 10 }}>
                         <Text type='medium' align='left' numberOfLines={1}>{item.name}</Text>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 5 }}>

@@ -91,13 +91,13 @@ const AlertModal = ({
                                 backgroundColor: Color.textInput,
                                 borderRadius: 8,
                                 borderWidth: 1,
-                                borderColor: Color.primary,
+                                borderColor: Color.primaryDark,
                             }}
                             onPress={() => {
                                 onDiscard();
                             }}
                         >
-                            <Text color={Color.primary}>Tidak</Text>
+                            <Text color={Color.primaryDark}>Tidak</Text>
                         </TouchableOpacity>}
 
                         {showDiscardButton && <Divider />}
@@ -106,7 +106,7 @@ const AlertModal = ({
                             style={{
                                 flex: 1,
                                 justifyContent: 'center',
-                                backgroundColor: Color.primary,
+                                backgroundColor: Color.primaryDark,
                                 borderRadius: 8,
                             }}
                             onPress={() => {

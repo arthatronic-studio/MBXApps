@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { accessClient } from 'src/utils/access_client';
 
 // uncanny
+import TestScreen from 'src/screens/TestScreen';
 import SplashScreen from 'src/screens/SplashScreen';
 import MainHome from 'src/screens/MainHome/MainHome';
 import MainProfile from 'src/screens/MainProfile/MainProfile';
@@ -298,13 +299,14 @@ const MainPage = BottomTabsNavigator;
 function AppNavigator() {
   return (
     <Navigator
-      initialRouteName="SplashScreen"
+      initialRouteName={"SplashScreen"}
       screenOptions={{
         gestureEnabled: Platform.OS === 'ios',
         headerShown: false
       }}>
         
       {/* uncanny */}
+      <Screen name="TestScreen" component={TestScreen} />
       <Screen name="SplashScreen" component={SplashScreen} />
 
       <Screen name="DocumentasiEvent" component={DocumentasiEvent} />

@@ -17,18 +17,19 @@ const SplashScreen = ({navigation, route}) => {
   const dispatch = useDispatch();
   const [popupProps, showPopup] = usePopup();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [errorSettingBeacon, setErrorSettingBeacon] = useState(false);
 
   console.log('auth splash', auth);
 
   useEffect(() => {
-    // dispatch({type: 'USER.LOGOUT'});
     dispatch({ type: 'THEME.SET_THEME', data: accessClient.Theme });
 
     setTimeout(() => {
       if (auth.token) {
         handleNavigate();
       } else {
+        dispatch({ type: 'AUTH.CLEAR' });
         dispatch({type: 'USER.LOGOUT'});
         redirectTo('OnBoardingScreen');
       }
@@ -36,7 +37,11 @@ const SplashScreen = ({navigation, route}) => {
   }, []);
 
   const handleNavigate = async() => {
+    setIsLoading(true);
+    
     const beaconSetting = await stateBeaconSetting();
+
+    setIsLoading(false);
 
     if (beaconSetting) {
       redirectTo('MainPage');
@@ -48,7 +53,7 @@ const SplashScreen = ({navigation, route}) => {
 
     setErrorSettingBeacon(true);
 
-    showPopup('Beacon initial error, silakan muat ulang', 'error');
+    showPopup('Initial error, silakan muat ulang', 'error');
   }
 
   const redirectTo = nav => {
@@ -68,6 +73,7 @@ const SplashScreen = ({navigation, route}) => {
       }}
       statusBarColor={Color.primary}
       popupProps={popupProps}
+      fallback={isLoading}
     >
       <View style={{position: 'absolute', width: '100%', aspectRatio: 1 }}>
         <Image

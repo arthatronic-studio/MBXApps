@@ -73,7 +73,7 @@ const HistoryRiwayat = ({ navigation, route }) => {
     <Scaffold
       style={{ backgroundColor: '#F4F4F4' }}
       fallback={itemData.loading}
-      empty={false}
+      empty={!itemData.loading && itemData.data.length === 0}
       popupProps={popupProps}
       loadingProps={loadingProps}
       showHeader={false}

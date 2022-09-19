@@ -15,10 +15,7 @@ export const requestHttp = axios.create({
 
 const redirect = async() => {
     // clear session token
-    await store.dispatch({
-        type: 'AUTH.CLEAR'
-    });
-
+    await store.dispatch({ type: 'AUTH.CLEAR' });
     await store.dispatch({type: 'USER.LOGOUT'});
 
     // handle multiple redirect

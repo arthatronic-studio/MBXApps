@@ -37,7 +37,6 @@ import ModalinputCode from 'src/components/ModalInputCode';
 import ModalCardMember from 'src/components/ModalCardMember';
 import Client from '@src/lib/apollo';
 import { queryOrganizationMemberManage } from '@src/lib/query/organization';
-import { getCurrentUserProfile } from 'src/state/actions/user/auth';
 import { accessClient } from 'src/utils/access_client';
 import { fetchCommunityMemberCheck } from 'src/api/community';
 import ModalActions from 'src/components/Modal/ModalActions';
