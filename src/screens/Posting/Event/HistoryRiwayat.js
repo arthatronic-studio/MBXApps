@@ -129,7 +129,7 @@ const HistoryRiwayat = ({ navigation, route }) => {
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ width: '14%', aspectRatio: 1, backgroundColor: Color.secondary, borderRadius: 4 }}>
                   <Image
-                    source={{ uri: item.ticket.event.image }}
+                    source={{ uri: item.ticket && item.ticket.event ? item.ticket.event.image : '' }}
                     style={{
                       width: '100%',
                       height: '100%',
