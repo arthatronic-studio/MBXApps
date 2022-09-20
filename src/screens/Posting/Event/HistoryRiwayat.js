@@ -138,7 +138,7 @@ const HistoryRiwayat = ({ navigation, route }) => {
                   />
                 </View>
                 <View style={{ paddingHorizontal: 10, width: '76%' }}>
-                  <Text numberOfLines={2} align={'left'} style={{ fontWeight: 'bold' }}>{item.ticket.name}</Text>
+                  <Text numberOfLines={2} align={'left'} style={{ fontWeight: 'bold' }}>{item.ticket ? item.ticket.name : ''}</Text>
                   <View style={{ flexDirection: 'row', marginTop: 4, alignItems: 'center' }}>
                     <Text style={{ fontSize: 10, color: Color.secondary }}>{item.amount} Tiket</Text>
                     <View style={{ width: 3, height: 3, backgroundColor: Color.secondary, borderRadius: 20, marginHorizontal: 5 }} />

@@ -128,11 +128,12 @@ const EventDetail = ({ navigation, route }) => {
   }
 
   const openGps = (lat, lng) => {
-    // var scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
-    // var url = scheme + `${lat},${lng}`;
-    const latLng = `${lat},${lng}`;
-    // return `google.navigation:q=${latLng}`;
-    Linking.openURL(`google.navigation:q=${latLng}`);
+    // // var scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
+    // // var url = scheme + `${lat},${lng}`;
+    // const latLng = `${lat},${lng}`;
+    // // return `google.navigation:q=${latLng}`;
+    // Linking.openURL(`google.navigation:q=${latLng}`);
+    Linking.openURL(items.coordinate);
   }
 
   console.log('items', items);
@@ -315,7 +316,7 @@ const EventDetail = ({ navigation, route }) => {
             <Text size={12} align='left' lineHeight={16} letterSpacing={0.4}>{items.location_detail}</Text>
           </View>
           <TouchableOpacity
-            onPress={() => false && openGps(data.lat, data.lng)}
+            onPress={() => openGps()}
             style={{ justifyContent: 'center', alignItems: 'center' }}
           >
             <Image
@@ -327,7 +328,9 @@ const EventDetail = ({ navigation, route }) => {
             />
           </TouchableOpacity>
         </View>
+
         <Divider />
+
         <View>
           <Text size={12} style={{ textAlign: 'left', fontWeight: 'bold' }}>Informasi Lainnya</Text>
           <Divider height={8} />

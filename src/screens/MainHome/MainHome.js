@@ -49,6 +49,7 @@ import { getAPI, postAPI } from 'src/api-rest/httpService';
 import HighlightEvent from 'src/components/Event/HighlightEvent';
 import { stateUpdateProfile } from 'src/api-rest/stateUpdateProfile';
 import HighlightTenant from 'src/components/Tenant/HighlightTenant';
+import { stateBeaconSetting } from 'src/api-rest/stateBeaconSetting';
 
 const kontaktEmitter = new NativeEventEmitter(KontaktModule);
 const BleManagerModule = NativeModules.BleManager;
@@ -111,6 +112,7 @@ const MainHome = ({ navigation, route }) => {
   const [loadingProps, showLoading, hideLoading] = useLoading();
 
   const peripherals = new Map();
+
   const [stateListAllBeacons, setStateListAllBeacons] = useState([]);
   const [stateListCheckinUID, setStateListCheckinUID] = useState([]);
   const [stateListMerchUID, setStateListMerchUID] = useState([]);
@@ -137,6 +139,7 @@ const MainHome = ({ navigation, route }) => {
     error: true,
     item: null,
   });
+  const [beaconScanning, setBeaconScanning] = useState(true);
 
   const isCheckin = auth && auth.user && auth.user.isCheckin;
   const isSecurity = auth && auth.user && auth.user.role && auth.user.role.value === 0;
@@ -155,20 +158,42 @@ const MainHome = ({ navigation, route }) => {
 
   // setup beacon iOS
   useEffect(() => {
-    
-  }, []);
+    const timeout = !beaconScanning ?
+      setTimeout(() => {
+        console.log('berapa kali');
+        BleManager.scan([], 3, true).then(() => {
+          setBeaconScanning(true);
+        });
+      }, 3000) : null;
 
-  const _requestAlwaysAuthorization = () => {
-    requestAlwaysAuthorization()
-      .then(() => console.log('requested always authorization'))
-      .catch((error) => console.log('[requestAlwaysAuthorization]', error));
-  };
+    return () => {
+      clearTimeout(timeout);
+    }
+  }, [beaconScanning]);
 
   useEffect(() => {
     initialConfig();
-    requestBluetoothPermission();
-    // beaconSetup();
+    beaconIosSetup();
   }, []);
+
+  const beaconIosSetup = async() => {
+    if (Platform.OS === 'ios') {
+      await BleManager.start({ showAlert: false, });
+
+      BleManager.scan([], 3, true);
+
+      bleManagerEmitter.addListener("BleManagerDiscoverPeripheral", (args) => {
+        // console.log('BleManagerDiscoverPeripheral args', args);
+        peripherals.set(args.id, args);
+        const beacons = Array.from(peripherals.values());
+        remapBeacon(beacons);
+      });
+
+      bleManagerEmitter.addListener('BleManagerStopScan', () => {
+        setBeaconScanning(false);
+      });
+    }
+  }
 
   const initialConfig = async () => {
     if (Platform.OS === 'android' && Platform.Version < 31) {
@@ -177,67 +202,48 @@ const MainHome = ({ navigation, route }) => {
 
     const prof = await stateUpdateProfile();
     console.log('prof', prof);
-
-    // const _scanning = await isScanning();
-    // console.log('_scanning', _scanning);
-    // if (!_scanning) {
-    //   beaconSetup();
-    // }
   }
 
   useEffect(() => {
-    // const cond = (
-    //   localStoragBeacons
-      // &&
-      // Array.isArray(localStoragBeacons.listCheckinUID) && localStoragBeacons.listCheckinUID.length > 0 && 
-      // Array.isArray(localStoragBeacons.listCheckinRange) && localStoragBeacons.listCheckinRange.length > 0 && 
-      // Array.isArray(localStoragBeacons.listMerchUID) && localStoragBeacons.listMerchUID.length > 0 && 
-      // Array.isArray(localStoragBeacons.listMerchRange) && localStoragBeacons.listMerchRange.length > 0
-      // Array.isArray(localStoragBeacons.listArtUID) && localStoragBeacons.listArtUID.length > 0 && 
-      // Array.isArray(localStoragBeacons.listArtRange) && localStoragBeacons.listArtRange.length > 0 && 
-      // Array.isArray(localStoragBeacons.listOtherUID) && localStoragBeacons.listOtherUID.length > 0 && 
-      // Array.isArray(localStoragBeacons.listOtherRange) && localStoragBeacons.listOtherRange.length > 0 && 
-      // Array.isArray(localStoragBeacons.listOtherType) && localStoragBeacons.listOtherType.length > 0
-    // );
-
-    beaconSetup();
+    beaconAndroidSetup();
   }, [isActiveBluetooth]);
 
-  // useEffect(() => {
-  //   const shakeSubs = RNShake.addListener(() => {
-  //     if (isCheckin) {
-  //       onPairingMerchant();
-  //     } else {
-  //       onPairingCheckin();
-  //     }
-  //   });
-
-  //   return () => {
-  //     shakeSubs.remove();
-  //   }
-  // }, [isCheckin, stateListCheckinUID, stateListMerchUID]);
-
   useEffect(() => {
-    const timeout = isFocused ?
-      setTimeout(() => {
-        if (isCheckin) {
-          onPairingMerchant();
+    const timeout =
+      isFocused && Platform.OS === 'android' ?
+        setTimeout(() => {
+          console.log('isCheckin', isCheckin);
+          if (isCheckin) {
+            onPairingMerchant();
 
-          // onPairingEvent();
-
-          if (stateListArtUID.length > 0 && listMerchantType.length === 0 && !modalLoading) {
-            onPairingArt();
+            if (stateListArtUID.length > 0 && listMerchantType.length === 0 && !modalLoading) {
+              onPairingArt();
+            }
+          } else {
+            onPairingCheckin();
           }
-        } else {
-          onPairingCheckin();
-        }
-      }, 3000)
-      : null;
+        }, 2000)
+      :
+      isFocused && Platform.OS === 'ios' ?
+        setTimeout(() => {
+          console.log('isCheckin', isCheckin);
+          if (isCheckin) {
+            onPairingMerchant();
+
+            if (stateListArtUID.length > 0 && listMerchantType.length === 0 && !modalLoading) {
+              onPairingArt();
+            }
+          } else {
+            onPairingCheckin();
+          }
+        }, 300)
+      :
+      null;
 
     return () => {
       clearTimeout(timeout);
     }
-  }, [isCheckin, stateListArtUID, stateListCheckinUID, stateListMerchUID, stateListEventUID, isFocused, listMerchantType, modalLoading]);
+  }, [isCheckin, stateListArtUID, stateListCheckinUID, stateListMerchUID, isFocused, listMerchantType, modalLoading]);
 
   useEffect(() => {
     const timeout = isCheckin && stateListOtherUID.length > 0 ?
@@ -251,8 +257,7 @@ const MainHome = ({ navigation, route }) => {
     }
   }, [isCheckin, stateListOtherUID]);
 
-  const beaconSetup = async () => {
-    console.log('beaconSetup');
+  const beaconAndroidSetup = async () => {
     if (Platform.OS === 'android') {
       // Android
       // const granted = await requestLocationPermission();
@@ -268,154 +273,85 @@ const MainHome = ({ navigation, route }) => {
       //     {cancelable: false},
       //   );
       // }
-    } else {
-      BleManager.start({ showAlert: false, }).then(() => {
-        // Success code
-        console.log("Ble manager initialized");
 
-        BleManager.scan([], 10, true).then(() => {
-          // Success code
-          console.log("Scan started");
-        });
-      });
-    }
-
-    // Add beacon listener
-    if (Platform.OS === 'android') {
       DeviceEventEmitter.addListener('beaconsDidUpdate', ({ beacons, region }) => {
         // console.log('beaconsDidUpdate', beacons, region);
         // console.log('beaconsDidUpdate', beacons);
-
-        if (Array.isArray(beacons)) {
-          let newArr = [];
-          let newCheckinUID = [];
-          let newMerchUID = [];
-          let newArtUID = [];
-          let newEventUID = [];
-          let newOtherUID = [];
-          let newOtherType = [];
-
-          beacons.map((e, i) => {
-            // console.log('full info beacon', e);
-
-            const strength = 4;
-            const rumusRSSI = ((-69 - (e.rssi)) / (10 * strength));
-            const productRange = Math.pow(10, rumusRSSI) * 100;
-
-            const rangeForCompare = productRange - 50;
-
-            newArr.push({
-              productAddress: e.address,
-              productRange,
-              productName: e.name,
-              productUUID: e.uuid,
-            });
-
-            const isCheckinType = localStoragBeacons.listCheckinUID.indexOf(e.address);
-            const isMerchType = localStoragBeacons.listMerchUID.indexOf(e.address);
-            const isArtType = localStoragBeacons.listArtUID.indexOf(e.address);
-            const isEventType = localStoragBeacons.listEventUID.indexOf(e.address);
-            const isOtherType = localStoragBeacons.listOtherUID.indexOf(e.address);
-
-            // type beacon yang masuk kondisi checkin (harus checkin dulu)
-            if (isCheckin) {
-              if (isMerchType !== -1 && rangeForCompare < localStoragBeacons.listMerchRange[isMerchType]) {
-                // newArr.push({
-                //   productAddress: e.address,
-                //   productRange,
-                //   productName: e.name,
-                //   productUUID: e.uuid,
-                // });
-
-                newMerchUID.push(e.address);
-              }
-
-              if (isArtType !== -1 && rangeForCompare < localStoragBeacons.listArtRange[isArtType]) {
-                // newArr.push({
-                //   productAddress: e.address,
-                //   productRange,
-                //   productName: e.name,
-                //   productUUID: e.uuid,
-                // });
-
-                newArtUID.push(e.address);
-              }
-
-              if (isEventType !== -1 && rangeForCompare < localStoragBeacons.listEventRange[isEventType]) {
-                newEventUID.push(e.address);
-              }
-
-              if (isOtherType !== -1 && rangeForCompare < localStoragBeacons.listOtherRange[isOtherType]) {
-                // newArr.push({
-                //   productAddress: e.address,
-                //   productRange,
-                //   productName: e.name,
-                //   productUUID: e.uuid,
-                // });
-
-                newOtherUID.push(e.address);
-                newOtherType.push(localStoragBeacons.listOtherType[isOtherType]);
-              }
-            }
-            // type beacon yang masuk kondisi non checkin
-            else {
-              if (isCheckinType !== -1 && rangeForCompare < localStoragBeacons.listCheckinRange[isCheckinType]) {
-                // newArr.push({
-                //   productAddress: e.address,
-                //   productRange,
-                //   productName: e.name,
-                //   productUUID: e.uuid,
-                // });
-
-                newCheckinUID.push(e.address);
-              }
-            }
-          });
-
-          setStateListCheckinUID(newCheckinUID);
-          setStateListMerchUID(newMerchUID);
-          setStateListArtUID(newArtUID);
-          setStateListEventUID(newEventUID);
-          setStateListOtherUID(newOtherUID);
-          setStateListOtherType(newOtherType);
-
-          setStateListAllBeacons(newArr);
-        }
-      });
-    } else {
-      bleManagerEmitter.addListener("BleManagerDiscoverPeripheral", (args) => {
-        // console.log('BleManagerDiscoverPeripheral args', args);
-        peripherals.set(args.id, args);
-        console.log('ini ', Array.from(peripherals.values()));
-        // setList(Array.from(args.values()));
+        remapBeacon(beacons);
       });
     }
   };
 
-  const requestBluetoothPermission = async () => {
-    // try {
-    //   const granted = await PermissionsAndroid.request(
-    //     PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT,
-    //     {
-    //       title: "Cool Photo App Camera Permission",
-    //       message:
-    //         "Cool Photo App needs access to your camera " +
-    //         "so you can take awesome pictures.",
-    //       buttonNeutral: "Ask Me Later",
-    //       buttonNegative: "Cancel",
-    //       buttonPositive: "OK"
-    //     }
-    //   );
-    //   console.log('granted', granted);
-    //   if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-    //     console.log("You can use the camera");
-    //   } else {
-    //     console.log("Camera permission denied");
-    //   }
-    // } catch (err) {
-    //   console.warn(err);
-    // }
-  };
+  const remapBeacon = (beacons) => {
+    if (Array.isArray(beacons)) {
+      let newArr = [];
+      let newCheckinUID = [];
+      let newMerchUID = [];
+      let newArtUID = [];
+      let newEventUID = [];
+      let newOtherUID = [];
+      let newOtherType = [];
+
+      beacons.map((e, i) => {
+        // console.log('full info beacon', e);
+
+        const productId = Platform.OS === 'ios' ? e.id : e.address;
+
+        const strength = 4;
+        const rumusRSSI = ((-69 - (e.rssi)) / (10 * strength));
+        const productRange = Math.pow(10, rumusRSSI) * 100;
+
+        const rangeForCompare = productRange - 50;
+
+        newArr.push({
+          productId,
+          productRange,
+          productName: e.name,
+        });
+
+        const isCheckinType = localStoragBeacons.listCheckinUID.indexOf(productId);
+        const isMerchType = localStoragBeacons.listMerchUID.indexOf(productId);
+        const isArtType = localStoragBeacons.listArtUID.indexOf(productId);
+        const isEventType = localStoragBeacons.listEventUID.indexOf(productId);
+        const isOtherType = localStoragBeacons.listOtherUID.indexOf(productId);
+
+        // type beacon yang masuk kondisi checkin (harus checkin dulu)
+        // if (isCheckin) {
+          if (isMerchType !== -1 && rangeForCompare < localStoragBeacons.listMerchRange[isMerchType]) {
+            newMerchUID.push(productId);
+          }
+
+          if (isArtType !== -1 && rangeForCompare < localStoragBeacons.listArtRange[isArtType]) {
+            newArtUID.push(productId);
+          }
+
+          if (isEventType !== -1 && rangeForCompare < localStoragBeacons.listEventRange[isEventType]) {
+            newEventUID.push(productId);
+          }
+
+          if (isOtherType !== -1 && rangeForCompare < localStoragBeacons.listOtherRange[isOtherType]) {
+            newOtherUID.push(productId);
+            newOtherType.push(localStoragBeacons.listOtherType[isOtherType]);
+          }
+        // }
+        // type beacon yang masuk kondisi non checkin
+        // else {
+          if (isCheckinType !== -1 && rangeForCompare < localStoragBeacons.listCheckinRange[isCheckinType]) {
+            newCheckinUID.push(productId);
+          }
+        // }
+      });
+
+      setStateListCheckinUID(newCheckinUID);
+      setStateListMerchUID(newMerchUID);
+      setStateListArtUID(newArtUID);
+      setStateListEventUID(newEventUID);
+      setStateListOtherUID(newOtherUID);
+      setStateListOtherType(newOtherType);
+
+      setStateListAllBeacons(newArr);
+    }
+  }
 
   const onPairingCheckin = async () => {
     if (auth && auth.user && !auth.user.isRegistered) {
@@ -449,7 +385,8 @@ const MainHome = ({ navigation, route }) => {
 
     setModalLoading(false);
 
-    showLoading(result.status ? 'success' : 'error', result.message);
+    // ios freeze
+    // showLoading(result.status ? 'success' : 'error', result.message);
   }
 
   const onPairingMerchant = async () => {
@@ -516,6 +453,8 @@ const MainHome = ({ navigation, route }) => {
     //   }
     // })
 
+    console.log('ios', 'onPairing Art');
+
     // ini select ONE
     const body = {
       beacon_uid: stateListArtUID[0],
@@ -535,32 +474,6 @@ const MainHome = ({ navigation, route }) => {
 
     // setListResultArtType(newArr);
     // setTempCurrentArtPairing(newTempUID);
-  }
-
-  const onPairingEvent = async () => {
-    if (stateListEventUID.length === 0 || modalEventVerification.show) {
-      return;
-    }
-
-    setModalEventVerification({ ...modalEventVerification, show: true });
-
-    const body = {
-      beacon_uid: stateListEventUID[0],
-      beacon_type: 'event',
-    };
-
-    console.log('body event pairing', body);
-    const result = await postAPI('user-activity', body);
-    console.log('result event pairing', result);
-
-    let newItem = null;
-
-    if (result.status) {
-      newItem = result.status;
-      // console.log('event', result);
-    }
-
-    setModalEventVerification({ ...modalEventVerification, item: newItem, error: !result.status });
   }
 
   const onPairingOther = async () => {
@@ -607,21 +520,6 @@ const MainHome = ({ navigation, route }) => {
     }
   }
 
-  // useEffect(() => {
-  //   PushNotification.createChannel(
-  //     {
-  //       channelId: "helpme-id", // (required)
-  //       channelName: "Help Me", // (required)
-  //       channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
-  //       playSound: true, // (optional) default: true
-  //       soundName: "warning_alarm.mp3", // (optional) See `soundName` parameter of `localNotification` function
-  //       importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
-  //       vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
-  //     },
-  //     (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
-  //   );
-  // }, []);
-
   useEffect(() => {
     if (isFocused) {
       dispatch({ type: 'BOOKING.CLEAR_BOOKING' });
@@ -656,20 +554,16 @@ const MainHome = ({ navigation, route }) => {
     }
   };
 
-  const onRefresh = () => {
+  const onRefresh = async() => {
     setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
+    if (Platform.OS === 'ios') {
+      await BleManager.scan([], 3, true);
+    } else {
+      await startScanning();
+    }
+    await stateBeaconSetting();
+    setRefreshing(false);
   };
-
-  const colorOutputRange = [Color.theme, Color.theme];
-
-  const backgroundInterpolate = animationValue.interpolate({
-    inputRange: [0, 100],
-    outputRange: colorOutputRange,
-    extrapolate: 'clamp',
-  });
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -692,7 +586,7 @@ const MainHome = ({ navigation, route }) => {
           {stateListAllBeacons.map((i, idx) => {
             return (
               <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
-                <Text size={12} aling='left'>Address: {i.productAddress}</Text>
+                <Text size={12} aling='left'>Address: {i.productId}</Text>
                 <Text size={12} aling='left'>Name: {i.productName}</Text>
                 <Text size={12} aling='left'>Range: {i.productRange} cm</Text>
               </View>
@@ -770,31 +664,27 @@ const MainHome = ({ navigation, route }) => {
 
   const spaceContentSize = 8;
 
-  // console.log('localStoragSetting', localStoragSetting);
+  // console.log('beaconScanning', beaconScanning);
   // console.log('localStoragBeacons', localStoragBeacons);
   // console.log('auth', auth);
   // console.log('stateListAllBeacons', stateListAllBeacons);
+  // console.log('stateListMerchUID', stateListMerchUID);
+  // console.log('stateListEventUID', stateListEventUID);
+  // console.log('stateListArtUID', stateListArtUID);
+  // console.log('stateListCheckinUID', stateListCheckinUID);
+  // console.log('stateListOtherUID', stateListOtherUID);
 
   return (
     <Scaffold
       translucent={Platform.OS === 'ios' ? true : false}
       useSafeArea={Platform.OS === 'ios' ? false : true}
-      // statusBarAnimatedStyle={
-      //   Platform.OS === 'ios'
-      //     ? {backgroundColor: backgroundInterpolate}
-      //     : isFocused
-      //     ? {backgroundColor: backgroundInterpolate}
-      //     : {}
-      // }
       statusBarColor={Color.theme}
       loadingProps={loadingProps}
       header={
         <HeaderBig
           type='MAIN_HOME'
-          // useAnimated
           style={{
             paddingTop: 8,
-            // backgroundColor: backgroundInterpolate,
           }}
           actions={
             <View style={{ flexDirection: 'row' }}>
@@ -932,12 +822,8 @@ const MainHome = ({ navigation, route }) => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-          // style={{backgroundColor: colorOutputRange[0]}}
           />
         }
-      // style={{
-      //   backgroundColor: colorOutputRange[0]
-      // }}
       >
         <Container color={Color.theme} paddingTop={8} paddingBottom={8}>
           <Animated.View
@@ -947,7 +833,6 @@ const MainHome = ({ navigation, route }) => {
               position: 'absolute',
               borderBottomLeftRadius: 24,
               borderBottomRightRadius: 24,
-              // backgroundColor: backgroundInterpolate,
             }}
           />
 
@@ -1035,7 +920,7 @@ const MainHome = ({ navigation, route }) => {
                   <Column>
                     <Text type='medium' size={12} letterSpacing={0.5}>Checkpoint Disekitar</Text>
                     <Divider height={2} />
-                    <Text size={10} letterSpacing={0.15} color={Color.placeholder}>Sedang memverifikasi perangkatmu untuk masuk kedalam area</Text>
+                    <Text size={10} letterSpacing={0.15} color={Color.placeholder} numberOfLines={1}>Sedang memverifikasi untuk masuk kedalam area</Text>
                   </Column>
                 </Row>
               </Row>
@@ -1948,8 +1833,8 @@ const MainHome = ({ navigation, route }) => {
       </Modal>
 
       {/* modal loading */}
-      <Modal
-        isVisible={modalLoading}
+      {modalLoading && <Modal
+        isVisible
         animationIn="slideInDown"
         animationOut="slideOutDown"
         backdropColor={Color.semiwhite}>
@@ -1990,7 +1875,7 @@ const MainHome = ({ navigation, route }) => {
             </View>
           </View>
         </View>
-      </Modal>
+      </Modal>}
     </Scaffold>
   );
 };

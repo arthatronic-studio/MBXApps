@@ -52,9 +52,10 @@ const ListFeaturedEat = ({ userProfileId, productCategory, name, horizontal, sty
 
     const fetchData = async () => {
         let baseEndpoint = 'location';
-        if (auth.user.activityInfo.location) {
-            baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.user.activityInfo.location.id}&type=eat&isRecommended=1`;
-        }
+        baseEndpoint = baseEndpoint + `?type=eat&isRecommended=1`;
+        // if (auth.user.activityInfo.location) {
+            // baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.user.activityInfo.location.id}&type=eat&isRecommended=1`;
+        // }
         console.log('baseEndpoint', baseEndpoint);
         const result = await getAPI(baseEndpoint);
 
