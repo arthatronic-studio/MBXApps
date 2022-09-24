@@ -53,7 +53,7 @@ const EatHistory = ({ navigation, route }) => {
       .then(res => {
         // hideLoading()
         if (res.data.eventTicketOrderList) {
-          setData(res.data.eventTicketOrderList)
+          // setData(res.data.eventTicketOrderList)
         }
         console.log(res);
 
@@ -70,7 +70,7 @@ const EatHistory = ({ navigation, route }) => {
     <Scaffold
       style={{ backgroundColor: '#F4F4F4' }}
       fallback={false}
-      empty={false}
+      empty={true}
       popupProps={popupProps}
       loadingProps={loadingProps}
       header={
