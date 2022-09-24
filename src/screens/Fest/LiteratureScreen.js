@@ -16,7 +16,7 @@ import HighlightFestMusic from 'src/components/Fest/HighlightFestMusic';
 import HighlightFestArts from 'src/components/Fest/HighlightFestArts';
 import HighlightFestLiterature from 'src/components/Fest/HighlightFestLiterature';
 
-const ArtsScreen = ({navigation, route}) => {
+const LiteratureScreen = ({navigation, route}) => {
   const {title, userProfileId} = route.params;
   const isMainScreen = route.params && route.params.routeIndex;
 
@@ -46,39 +46,37 @@ const ArtsScreen = ({navigation, route}) => {
       <ScrollView>
         <Container paddingHorizontal={16}>
           <Text align="left" size={24} color={Color.black}>
-            Seni & Desain
+            Literatur
           </Text>
         </Container>
         <Divider height={16} />
         <SearchBar
-          label="Cari jadwal acara ..."
+          label="Cari literatur ..."
           type="select"
           onPress={() => navigation.navigate('SearchEvent')}
         />
         <Divider />
-        <HighlightFestArts
-          productCategory="FEST_ARTS_GRAFIC"
-          name="Desain Grafis"
-          title="Desain Grafis"
+        <HighlightFestLiterature
+          productCategory="FEST_LITERATURE"
+          name="Literatur"
+          title="Literatur Populer"
           nav="EventScreen"
           horizontal
           refresh={refreshing || isFocused}
           showSeeAllText={true}
-          showEmpty
         />
-          <HighlightFestArts
-            productCategory="FEST_ARTS_ARCHITECTURE"
-            name="Desain Arsitektur"
-            title="Desain Arsitektur"
-            nav="EventScreen"
-            horizontal
-            refresh={refreshing || isFocused}
-            showSeeAllText={true}
-            showEmpty
-          />
+        <HighlightFestLiterature
+          productCategory="FEST_LITERATURE"
+          name="Literatur"
+          title="Literatur Terbaru"
+          nav="EventScreen"
+          horizontal
+          refresh={refreshing || isFocused}
+          showSeeAllText={true}
+        />
       </ScrollView>
     </Scaffold>
   );
 };
 
-export default ArtsScreen;
+export default LiteratureScreen;

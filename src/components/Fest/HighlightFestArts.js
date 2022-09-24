@@ -12,6 +12,9 @@ import { initialItemState } from 'src/utils/constants';
 import { fetchContentProduct, fetchContentUserProduct } from 'src/api/content';
 import CardContentProduct from 'src/components/Content/CardContentProduct';
 import { getAPI } from 'src/api-rest/httpService';
+import imageAssets from 'assets/images';
+import MasonryList from '@react-native-seoul/masonry-list';
+import { FlatList } from 'react-native-gesture-handler';
 
 const propTypes = {
     userProfileId: PropTypes.number,
@@ -80,10 +83,56 @@ const HighlightFestArts = (props) => {
         const result = await getAPI('event');
         console.log('result event', result);
         let newData = [];
-
+ 
         if (result.status) {
-            newData = result.data;
+            if(productCategory === 'FEST_ARTS_GRAFIC'){
+                newData = [
+                    {
+                        id: 1,
+                        image: imageAssets.arts1,
+                        width: 716,
+                        height: 960,
+                    },
+                    {
+                        id: 2,
+                        image: imageAssets.arts3,
+                        width: 1024,
+                        height: 1536,
+                    },
+                    {
+                        id: 3,
+                        image: imageAssets.arts2,
+                        width: 600,
+                        height: 450,
+                    },
+                ];
+            }else if(productCategory === 'FEST_ARTS_ARCHITECTURE'){
+                newData = [
+                    {
+                        id: 1,
+                        image: imageAssets.arsitektur1,
+                        width: 600,
+                        height: 364,
+                    },
+                    {
+                        id: 2,
+                        image: imageAssets.arsitektur2,
+                        width: 564,
+                        height: 399,
+                    },
+                    {
+                        id: 3,
+                        image: imageAssets.arsitektur3,
+                        width: 800,
+                        height: 418,
+                    }
+                ];
+            }else{
+                newData = result.data;
+            }
         }
+
+        console.log(newData, "dataa", productCategory);
 
         setItemData({
             ...itemData,
@@ -150,7 +199,8 @@ const HighlightFestArts = (props) => {
     let extraProps = { numColumns: 1 };
     if (horizontal) extraProps = {};
     if (productCategory === 'FEST_LITERATURE') extraProps.numColumns = 2;
-    if (productCategory === 'FEST_ARTS') extraProps.numColumns = 2;
+    if (productCategory === 'FEST_ARTS_GRAFIC') extraProps.numColumns = 2;
+    if (productCategory === 'FEST_ARTS_ARCHITECTURE') extraProps.numColumns = 2;
     if (productCategory === 'FEST_MUSIC_HORIZONTAL') extraProps.numColumns = 2;
 
     const renderCardContent = (item, index, isHorizontal) => (
@@ -168,13 +218,18 @@ const HighlightFestArts = (props) => {
         if (horizontal) {
             if (typeof extraProps.numColumns !== 'undefined' && extraProps.numColumns === 2) {
                 return (
-                    <View
-                        style={{flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 8, ...style}}
-                    >
-                        {itemData.data.map((item, index) =>
+                    <FlatList
+                        data={itemData.data}
+                        keyExtractor={(item, index) => item.id + index.toString()}
+                        numColumns={2}
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{
+                            paddingHorizontal: 8,
+                        }}
+                        renderItem={({ item, index }) =>
                             renderCardContent(item, index, false)
-                        )}
-                    </View>
+                        }
+                    />
                 )
             }
 

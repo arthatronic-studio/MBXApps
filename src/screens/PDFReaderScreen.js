@@ -127,6 +127,9 @@ const PDFReaderScreen = props => {
   };
 
   if (!item) return <View />;
+  console.log(totalPage, "total");
+  console.log(currentPage, "current");
+  console.log(totalPage != currentPage)
 
   return (
     <Scaffold
@@ -250,10 +253,10 @@ const PDFReaderScreen = props => {
           </TouchableOpacity>
         )}
         <View>
-          <LeftButton onPress={() => props.navigation.pop()}>
+          <LeftButton onPress={() => setCurrentPage(currentPage - 1)} disabled={totalPage != currentPage}>
             <AntDesign
               name={'leftcircleo'}
-              color={Color.text}
+              color={totalPage != currentPage ? Color.disabled : Color.text}
               size={24}
               style={{paddingLeft: 40}}
             />
@@ -263,10 +266,10 @@ const PDFReaderScreen = props => {
         <Text style={{opacity: 0.6, marginTop: 2}}>Hal. {currentPage}</Text>
 
         <View>
-          <RightButton onPress={() => props.navigation.pop()}>
+          <RightButton onPress={() => setCurrentPage(currentPage + 1)} disabled={totalPage == currentPage}>
             <AntDesign
               name={'rightcircleo'}
-              color={Color.text}
+              color={totalPage == currentPage ? Color.disabled : Color.text}
               size={24}
               style={{paddingRight: 50}}
             />

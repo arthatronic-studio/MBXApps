@@ -39,10 +39,11 @@ const CardFestLiterature = ({
         width: width / numColumns - (horizontal ? 16 : 8),
       }}
       onPress={() => {
-        navigation.navigate('PDFReaderScreen', { file: 'https://www.copyright.gov/docs/certificate_sample.pdf' });
+        navigation.navigate('PDFReaderScreen', { file: 'https://www.africau.edu/images/default/sample.pdf' });
       }}>
       <Image
-        source={{uri: item.image}}
+        source={item.image}
+        // source={{uri: item.image}}
         style={{
           width: '100%',
           aspectRatio: 0.7,

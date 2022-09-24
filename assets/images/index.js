@@ -64,6 +64,16 @@ const tempArts = require('./temp-arts.png');
 const edit = require('./edit.png');
 const qr = require('./qr.png');
 const voucherSubtract = require('./voucher-subtract.png');
+const arts1 = require('./arts1.jpg');
+const arts2 = require('./arts2.jpg');
+const arts3 = require('./arts3.jpg');
+const arsitektur1 = require('./arsitektur1.jpg')
+const arsitektur2 = require('./arsitektur2.jpg')
+const arsitektur3 = require('./arsitektur3.jpg')
+const literatur1 = require('./literatur1.png')
+const literatur2 = require('./literatur2.png')
+const literatur3 = require('./literatur3.png')
+const literatur4 = require('./literatur4.png')
 
 export {
   iconApp,
@@ -189,6 +199,16 @@ export const imageAssets = {
   edit,
   qr,
   voucherSubtract,
+  arts1,
+  arts2,
+  arts3,
+  arsitektur1,
+  arsitektur2,
+  arsitektur3,
+  literatur1,
+  literatur2,
+  literatur3,
+  literatur4,
 };
 
 export default imageAssets;
