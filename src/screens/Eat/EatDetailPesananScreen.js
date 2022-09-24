@@ -35,6 +35,9 @@ import { FormatMoney } from 'src/utils';
 import imageAssets from 'assets/images';
 import { isIphoneNotch, statusBarHeight } from 'src/utils/constants';
 import FormInput from 'src/components/FormInput';
+import { fetchEatCartAdd } from 'src/api-rest/fetchEatCartAdd';
+import { fetchEatCartRemove } from 'src/api-rest/fetchEatCartRemove';
+import { fetchEatCartOrder } from 'src/api-rest/fetchEatCartOrder';
 
 const EatDetailPesananScreen = ({ navigation, route }) => {
   const { params } = route;
@@ -45,16 +48,12 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
   const flatlistRef = useRef();
   const auth = useSelector(state => state['auth']);
 
-  const [im_like, set_im_like] = useState(items.im_like);
-  const [heightHeader, setHeightHeader] = useState(0);
-
-  const [loading, setLoading] = useState(true);
-  const [bookmark, setBookmark] = useState(false);
-  const [desc, setDesc] = useState(false);
-  const [data, setData] = useState(null);
-  const [activeSections, setActiveSections] = useState([]);
-  const [currentSelected, setCurrentSelected] = useState();
-  const [qty, setQty] = useState(1);
+  const [currentSelected, setCurrentSelected] = useState(-1);
+  const [listProducts, setListProducts] = useState(Array.isArray(items.products) ? items.products : []);
+  const [cartId, setCartId] = useState(params.cartId);
+  const [namaPemesan, setNamaPemesan] = useState(params.namaPemesan);
+  const [ringkasanPembayaran, setRingkasanPembayaran] = useState(params.ringkasanPembayaran);
+  const [updateIndex, setUpdateIndex] = useState(-1);
 
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
@@ -65,33 +64,70 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
   useEffect(() => {
     getDetail();
   }, [isFocused]);
+  
+  useEffect(() => {
+    const timeout = updateIndex !== -1 ?
+      setTimeout(() => {
+        onUpdateQty(listProducts[updateIndex], updateIndex);
+      }, 1000) : null;
+
+    return () => {
+      clearTimeout(timeout);
+    }
+  }, [updateIndex, listProducts]);
+
+  useEffect(() => {
+    const timeout = namaPemesan !== '' ?
+      setTimeout(() => {
+        onUpdateQty();
+      }, 1000) : null;
+
+    return () => {
+      clearTimeout(timeout);
+    }
+  }, [namaPemesan]);
 
   const getDetail = () => {
-    // showLoading();
-    let variables = {
-      id: items.id,
-    };
-    console.log(variables);
-    Client.query({ query: getDetailEvent, variables })
-      .then(res => {
-        // hideLoading()
-        if (res.data.eventDetail) {
-          console.log(res.data)
-          setData(res.data.eventDetail)
-          setBookmark(res.data.eventDetail.bookmarked);
-        }
-        setLoading(false);
-      })
-      .catch(reject => {
-        // hideLoading()
-        // alert(reject.message)
-        console.log(reject.message, 'reject');
-        setLoading(false);
-      });
+    
   };
 
-  const renderItem = ({ item }) => {
-    if (item.show === false) return null;
+  const onUpdateQty = async(item, index) => {
+    let body = {
+      nama_pelanggan: namaPemesan,
+    }
+
+    if (item) {
+      body = {
+        product_id: item.id,
+        quantity: item.qty,
+        catatan: item.note,
+      };
+    }
+
+    setUpdateIndex(-1);
+    setCurrentSelected(-1);
+
+    const result = await fetchEatCartAdd(body);
+    if (result.status) {
+      if (Array.isArray(result.data) && result.data.length > 0) {
+        setCartId(result.data[0].id);
+        if (result.data[0].nama_pelanggan) {
+          setNamaPemesan(result.data[0].nama_pelanggan);
+        }
+      }
+
+      if (result.ringkasan_pembayaran && Array.isArray(result.ringkasan_pembayaran)) {
+        setRingkasanPembayaran(result.ringkasan_pembayaran);
+      }
+    }
+  }
+
+  const renderItem = ({ item, index }) => {
+    if (item.show === false || !item.selected) return null;
+
+    let qty = item.qty || 1;
+    const disabledDecrease = qty < 2;
+    const disabledIncrease = qty > 9;
 
     return (
       <View
@@ -139,7 +175,27 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
               <Text align='left' size={12} letterSpacing={0.4}>{FormatMoney.getFormattedMoney(item.price)}</Text>
             </View>
 
-            <View
+            <TouchableOpacity
+              onPress={() => {
+                Alert(
+                  'Konfirmasi',
+                  'Kamu yakin mau menghapus pesanan?',
+                  async() => {
+                    const body = {
+                      cart_detail_id: item.id,
+                    }
+                    const result = await fetchEatCartRemove(body);
+                    if (result.status) {
+                      let newArr = [...listProducts];
+                      newArr[index].selected = false;
+                      newArr[index].qty = 1;
+                      setListProducts(newArr);
+                    } else {
+                      showLoading('error', result.message);
+                    }
+                  }
+                );
+              }}
               style={{
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -148,7 +204,7 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
               <Container padding={12} radius={120} borderWidth={0.5} borderColor={Color.error}>
                 <Text align='right' size={11} color={Color.error} type='medium'>Hapus</Text>
               </Container>
-            </View>
+            </TouchableOpacity>
           </View>
 
           <View
@@ -160,7 +216,7 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
             }}
           >
             <Text size={11} letterSpacing={0.4}>Catatan</Text>
-            <Text size={11} letterSpacing={0.4}>-</Text>
+            <Text size={11} letterSpacing={0.4}>{item.note}</Text>
           </View>
 
           <View
@@ -173,7 +229,7 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
           >
             <TouchableOpacity
               onPress={() => {
-                setCurrentSelected({});
+                setCurrentSelected(index);
               }}
               style={{
                 width: '50%',
@@ -204,7 +260,10 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
                 <TouchableOpacity
                   onPress={() => {
                     if (disabledDecrease) return;
-                    setQty(qty - 1);
+                    let newArr = [...listProducts];
+                    newArr[index].qty = qty - 1;
+                    setListProducts(newArr);
+                    setUpdateIndex(index);
                   }}
                   style={{ marginLeft: 24 }}
                 >
@@ -223,7 +282,10 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
                 <TouchableOpacity
                   onPress={() => {
                     if (disabledIncrease) return;
-                    setQty(qty + 1);
+                    let newArr = [...listProducts];
+                    newArr[index].qty = qty + 1;
+                    setListProducts(newArr);
+                    setUpdateIndex(index);
                   }}
                 >
                   <AntDesign
@@ -243,81 +305,6 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
     )
   };
 
-  const renderHeader = () => {
-    return (
-      <View
-        onLayout={(e) => {
-          setHeightHeader(e.nativeEvent.layout.height);
-        }}
-        style={{
-          paddingBottom: 0,
-        }}
-      >
-        <Line height={8} width='100%' color='#F4F4F4' />
-
-        <Container padding={16}>
-          <View
-            style={{
-              width: '100%',
-              flexDirection: 'row',
-            }}
-          >
-            <View
-              style={{
-                width: '15%',
-                aspectRatio: 1,
-              }}
-            >
-              <Image
-                source={Array.isArray(items.images) && items.images.length > 0 ? { uri: items.images[0] } : ''}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: 8,
-                  backgroundColor: Color.border,
-                }}
-              />
-            </View>
-
-            <View
-              style={{
-                width: '85%',
-                paddingHorizontal: 10,
-                alignItems: 'flex-start',
-                justifyContent: 'center',
-              }}
-            >
-              <Text size={14} numberOfLines={1} letterSpacing={0.1} type='medium'>{items.name}</Text>
-              <Divider height={2} />
-              <Text size={12} numberOfLines={1} color={Color.textSoft}>{items.category.name}</Text>
-            </View>
-          </View>
-        </Container>
-
-        <Line height={8} width='100%' color='#F4F4F4' />
-
-        <Container padding={16}>
-          <Container paddingBottom={12}>
-            <Text type='medium' align='left'>Nama Pemesan</Text>
-          </Container>
-          <FormInput
-            value={auth.user.name}
-            borderColor={Color.placeholder}
-            hideErrorHint
-          />
-        </Container>
-
-        <Line height={8} width='100%' color='#F4F4F4' />
-
-        <Container padding={16}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Text align='left' size={16} type='medium'>Pesanan</Text>
-          </View>
-        </Container>
-      </View>
-    )
-  }
-
   const renderFooter = () => {
     return (
       <>
@@ -330,132 +317,44 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
             </Text>
           </Container>
 
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-            <Text size={12} letterSpacing={0.4}>Harga</Text>
-            <Text size={12} letterSpacing={0.4}>{FormatMoney.getFormattedMoney(0)}</Text>
-          </View>
+          {ringkasanPembayaran.map((item, index) => {
+            const isLast = (ringkasanPembayaran.length - 1) == index;
+            return (
+              <>
+                {isLast &&
+                  <Container paddingBottom={12}>
+                    <Line height={0.5} width='100%' color={Color.text} />
+                  </Container>
+                }
 
-          <Divider height={11} />
-
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-            <Text size={12} letterSpacing={0.4}>PPN 11%</Text>
-            <Text size={12} letterSpacing={0.4}>{FormatMoney.getFormattedMoney(0)}</Text>
-          </View>
-
-          <Divider height={11} />
-
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-            <Text size={12} letterSpacing={0.4}>Diskon</Text>
-            <Text size={12} letterSpacing={0.4}>{FormatMoney.getFormattedMoney(0)}</Text>
-          </View>
-
-          <Divider />
-
-          <Line height={0.5} width='100%' color={Color.text} />
-
-          <Divider />
-
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-            <Text size={12} letterSpacing={0.4}>Total Pembayaran</Text>
-            <Text size={12} letterSpacing={0.4} type='medium'>{FormatMoney.getFormattedMoney(0)}</Text>
-          </View>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    paddingBottom: 12,
+                  }}>
+                  <Text size={12} letterSpacing={0.4}>{item.name}</Text>
+                  <Text size={12} letterSpacing={0.4}>{item.amount}</Text>
+                </View>
+              </>
+            )
+          })}
         </Container>
       </>
     )
   }
 
-  console.log('params', params);
+  const renderModalNote = (item, index) => {
+    let note = item.note || '';
 
-  const disabledDecrease = qty < 2;
-  const disabledIncrease = qty > 9;
-
-  return (
-    <Scaffold
-      fallback={false}
-      empty={false}
-      popupProps={popupProps}
-      loadingProps={loadingProps}
-      header={
-        <Header
-          title='Detail Pesanan'
-          centerTitle={false}
-          actions={
-            <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'flex-end' }}>
-              <Text color={Color.error} size={12} type='medium'>Hapus Pesanan</Text>
-            </View>
-          }
-        />
-      }
-    >
-      <FlatList
-        ref={flatlistRef}
-        data={
-          Array.isArray(items.products) && items.products.length > 0 ?
-            items.products :
-            [{ show: false }]
-        }
-        keyExtractor={(item, index) => item.id + index.toString()}
-        renderItem={renderItem}
-        ListHeaderComponent={renderHeader}
-        ListFooterComponent={renderFooter}
-      />
-
-      <Container padding={16}>
-          <TouchableOpacity
-            onPress={() => {
-              showLoading('success', 'Pesanan Berhasil Dibuat', () => navigation.navigate('EatScreen'));
-            }}
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: Color.primary,
-              paddingVertical: 16,
-              borderRadius: 120,
-            }}
-          >
-            <Text type='medium' size={12}>Pesan Sekarang</Text>
-            <AntDesign
-              name={'arrowright'}
-              color={Color.text}
-              size={14}
-              style={{
-                marginLeft: 4
-              }}
-            />
-          </TouchableOpacity>
-      </Container>
-
-      {/* modal menu */}
-      {currentSelected && <Modal
+    return (
+      <Modal
         isVisible={true}
         swipeDirection={['down']}
-        onBackdropPress={() => { setCurrentSelected(); }}
-        onSwipeComplete={() => { setCurrentSelected(); }}
+        onBackdropPress={() => { setCurrentSelected(-1); }}
+        onSwipeComplete={() => { setCurrentSelected(-1); }}
         style={{
           justifyContent: 'flex-end', // the keys of bottom half
           margin: 0,
@@ -482,18 +381,197 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
 
             <FormInput
               label='Catatan'
+              value={note}
+              onChangeText={(val) => {
+                let newArr = [...listProducts];
+                newArr[index].note = val;
+                setListProducts(newArr);
+              }}
               placeholder='Tuliskan sesuatu'
               multiline
             />
 
             <Container>
-              <Button>
+              <Button
+                onPress={() => {
+                  onUpdateQty(item, index);
+                }}
+              >
                 Simpan
               </Button>
             </Container>
           </Container>
         </View>
-      </Modal>}
+      </Modal>
+    )
+  }
+
+  console.log('params', params);
+
+  return (
+    <Scaffold
+      fallback={false}
+      empty={false}
+      popupProps={popupProps}
+      loadingProps={loadingProps}
+      header={
+        <Header
+          title='Detail Pesanan'
+          centerTitle={false}
+          actions={
+            <TouchableOpacity
+              onPress={() => {
+                Alert(
+                  'Konfirmasi',
+                  'Kamu yakin mau hapus semua pesanan?',
+                  async() => {
+                    const body = {
+                      cart_id: cartId,
+                    }
+                    const result = await fetchEatCartRemove(body);
+                    if (result.status) {
+                      let newArr = [...listProducts];
+                      listProducts.map((e, index) => {
+                        if (e.selected) {
+                          newArr[index].selected = false;
+                          newArr[index].qty = 1;
+                        }
+                      });
+                      setListProducts(newArr);
+
+                      setTimeout(() => {
+                        navigation.pop();
+                      }, 2500);
+                    } else {
+                      showLoading('error', result.message);
+                    }
+                  }
+                );
+              }}
+              style={{ flexDirection: 'row', width: '100%', justifyContent: 'flex-end' }}
+            >
+              <Text color={Color.error} size={12} type='medium'>Hapus Pesanan</Text>
+            </TouchableOpacity>
+          }
+        />
+      }
+    >
+      <FlatList
+        ref={flatlistRef}
+        data={listProducts || [{ show: false }]}
+        keyExtractor={(item, index) => item.id + index.toString()}
+        renderItem={renderItem}
+        ListFooterComponent={renderFooter}
+        ListHeaderComponent={
+          <View
+            style={{
+              paddingBottom: 0,
+            }}
+          >
+            <Line height={8} width='100%' color='#F4F4F4' />
+
+            <Container padding={16}>
+              <View
+                style={{
+                  width: '100%',
+                  flexDirection: 'row',
+                }}
+              >
+                <View
+                  style={{
+                    width: '15%',
+                    aspectRatio: 1,
+                  }}
+                >
+                  <Image
+                    source={Array.isArray(items.images) && items.images.length > 0 ? { uri: items.images[0] } : ''}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      borderRadius: 8,
+                      backgroundColor: Color.border,
+                    }}
+                  />
+                </View>
+
+                <View
+                  style={{
+                    width: '85%',
+                    paddingHorizontal: 10,
+                    alignItems: 'flex-start',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Text size={14} numberOfLines={1} letterSpacing={0.1} type='medium'>{items.name}</Text>
+                  <Divider height={2} />
+                  <Text size={12} numberOfLines={1} color={Color.textSoft}>{items.category.name}</Text>
+                </View>
+              </View>
+            </Container>
+
+            <Line height={8} width='100%' color='#F4F4F4' />
+
+            <Container padding={16}>
+              <Container paddingBottom={12}>
+                <Text type='medium' align='left'>Nama Pemesan</Text>
+              </Container>
+              <FormInput
+                value={namaPemesan}
+                onChangeText={(val) => setNamaPemesan(val)}
+                borderColor={Color.placeholder}
+                hideErrorHint
+              />
+            </Container>
+
+            <Line height={8} width='100%' color='#F4F4F4' />
+
+            <Container padding={16}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Text align='left' size={16} type='medium'>Pesanan</Text>
+              </View>
+            </Container>
+          </View>
+        }
+      />
+
+      <Container padding={16}>
+          <TouchableOpacity
+            onPress={() => {
+              Alert(
+                'Konfirmasi',
+                'Pesan sekarang?',
+                async() => {
+                  const result = await fetchEatCartOrder({ cartId });
+                  showLoading(
+                    result.status ? 'success' : 'error',
+                    result.message,
+                    () => result.status ? navigation.navigate('EatScreen') : {}
+                  );
+                })
+            }}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: Color.primary,
+              paddingVertical: 16,
+              borderRadius: 120,
+            }}
+          >
+            <Text type='medium' size={12}>Pesan Sekarang</Text>
+            <AntDesign
+              name={'arrowright'}
+              color={Color.text}
+              size={14}
+              style={{
+                marginLeft: 4
+              }}
+            />
+          </TouchableOpacity>
+      </Container>
+
+      {/* modal menu */}
+      {currentSelected !== -1 && renderModalNote(listProducts[currentSelected], currentSelected)}
     </Scaffold>
   );
 };

@@ -142,7 +142,7 @@ const TabBarComponent = (props) => {
                             }}
                             onPress={() => {
                                 if (Platform.OS === 'ios') {
-                                    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+                                    // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
                                 } else {
                                     // UIManager.setLayoutAnimationEnabledExperimental &&
                                     //     UIManager.setLayoutAnimationEnabledExperimental(true);

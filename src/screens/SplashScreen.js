@@ -109,7 +109,7 @@ const SplashScreen = ({navigation, route}) => {
         </View>
 
         <Text size={11} type='bold'>
-          M Bloc X
+          blocX
         </Text>
 
         {errorSettingBeacon && <View style={{width: '100%', paddingTop: 16}}>
