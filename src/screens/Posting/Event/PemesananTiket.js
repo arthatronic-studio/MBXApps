@@ -156,7 +156,7 @@ const PemesananTiket = ({ navigation }) => {
     }
 
     const disabledDecrease = qty < 2;
-    const disabledIncrease = qty > 9;
+    const disabledIncrease = qty > 0; // qty > 9;
     
     return (
         <Scaffold

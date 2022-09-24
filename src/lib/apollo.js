@@ -35,16 +35,16 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     for (let err of graphQLErrors) {
       if (err.message === `Cannot read property 'user' of null` || err.message === 'User not logged in') {
-        store.dispatch({ type: 'USER.LOGOUT' });
-        forceRedirect('LoginScreen', { logout: true });
+        // store.dispatch({ type: 'USER.LOGOUT' });
+        // forceRedirect('LoginScreen', { logout: true });
       }
 
       switch (err.extensions.code) {
         case 'CLIENT_AUTH_ERROR':
           const user = store.getState()['user.auth'].login.user;
           if (user !== null) {
-            store.dispatch({ type: 'USER.LOGOUT' });
-            forceRedirect('LoginScreen', { logout: true });
+            // store.dispatch({ type: 'USER.LOGOUT' });
+            // forceRedirect('LoginScreen', { logout: true });
           }
 
           // store.dispatch({

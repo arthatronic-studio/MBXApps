@@ -53,29 +53,29 @@ const TabBarComponent = (props) => {
         });
     }, [activeRouteIndex, width]);
 
-    useEffect(() => {
-        const variables = {
-            page: 0,
-            itemPerPage: 9999
-        }
-        client.query({
-            query: queryGetNotification,
-            variables,
-        })
-            .then((respone) => {
-                var response = respone['data']['getNotification'];
-                var res = response.filter(function (el) {
-                    return el.status === 1 | el.status === 2;
-                });
-                setNotificationCount(res.length)
-                console.log('ini ', res);
-            })
-            .catch((err) => {
-                console.log('ini ', err);
-                console.log(err);
+    // useEffect(() => {
+    //     const variables = {
+    //         page: 0,
+    //         itemPerPage: 9999
+    //     }
+    //     client.query({
+    //         query: queryGetNotification,
+    //         variables,
+    //     })
+    //         .then((respone) => {
+    //             var response = respone['data']['getNotification'];
+    //             var res = response.filter(function (el) {
+    //                 return el.status === 1 | el.status === 2;
+    //             });
+    //             setNotificationCount(res.length)
+    //             console.log('ini ', res);
+    //         })
+    //         .catch((err) => {
+    //             console.log('ini ', err);
+    //             console.log(err);
 
-            })
-    }, [isFocused]);
+    //         })
+    // }, [isFocused]);
 
     const redirectTo = (name, params) => {
         props.navigation.dispatch(

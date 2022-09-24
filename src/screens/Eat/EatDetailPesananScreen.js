@@ -190,6 +190,7 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
                       newArr[index].selected = false;
                       newArr[index].qty = 1;
                       setListProducts(newArr);
+                      showLoading('success', result.message);
                     } else {
                       showLoading('error', result.message);
                     }
@@ -320,7 +321,7 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
           {ringkasanPembayaran.map((item, index) => {
             const isLast = (ringkasanPembayaran.length - 1) == index;
             return (
-              <>
+              <View key={index}>
                 {isLast &&
                   <Container paddingBottom={12}>
                     <Line height={0.5} width='100%' color={Color.text} />
@@ -338,7 +339,7 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
                   <Text size={12} letterSpacing={0.4}>{item.name}</Text>
                   <Text size={12} letterSpacing={0.4}>{item.amount}</Text>
                 </View>
-              </>
+              </View>
             )
           })}
         </Container>

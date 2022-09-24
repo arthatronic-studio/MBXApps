@@ -517,14 +517,15 @@ const MainHome = ({ navigation, route }) => {
 
     setTempAlreadyPairing([]);
     await stateBeaconSetting();
-    androidBluetoothPermission().then((status) => {
-      console.log('status bluetooth', status);
-      if (status) {
-        BleManager.scan(scanUUIDs, scanTimeout, true).then(() => {
-          setBeaconScanning(true);
-        });
-      }
-    });
+    onScan();
+    // androidBluetoothPermission().then((status) => {
+    //   console.log('status bluetooth', status);
+    //   if (status) {
+    //     BleManager.scan(scanUUIDs, scanTimeout, true).then(() => {
+    //       setBeaconScanning(true);
+    //     });
+    //   }
+    // });
 
     setRefreshing(false);
   };
@@ -878,7 +879,7 @@ const MainHome = ({ navigation, route }) => {
             </Container>
           </Container>}
 
-          {beaconScanning ?
+          {/* {beaconScanning ?
             <View style={{ width: '100%', paddingHorizontal: 16, paddingBottom: 16 }}>
               <View
                 style={{
@@ -905,7 +906,7 @@ const MainHome = ({ navigation, route }) => {
                 Scan Now
               </Button>
             </View>
-          }
+          } */}
 
           {showDebug && renderDebug()}
 
