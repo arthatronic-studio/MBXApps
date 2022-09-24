@@ -7,6 +7,8 @@ import {
   Platform,
   Linking,
   Pressable,
+  TouchableOpacity,
+  useWindowDimensions,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -17,7 +19,7 @@ import {useSelector} from 'react-redux';
 import Header from '@src/components/Header';
 import {useLoading, usePopup, useColor, Alert, Row, Col, Text} from '@src/components';
 import Scaffold from '@src/components/Scaffold';
-import {TouchableOpacity, Button} from '@src/components/Button';
+import { Button} from '@src/components/Button';
 import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
 import Client from '@src/lib/apollo';
 import {queryAddLike} from '@src/lib/query';
@@ -38,11 +40,13 @@ import {initialItemState} from 'src/utils/constants';
 import CardFestArts from 'src/components/Fest/CardFestArts';
 import client from '@src/lib/apollo';
 import {queryContentProduct} from '@src/lib/query';
+import imageAssets from 'assets/images';
 
 const CreationMusic = ({navigation, route}) => {
   const {Color} = useColor();
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
+  const {width} = useWindowDimensions();
 
   const [itemData, setItemData] = useState(initialItemState);
   const isFocused = useIsFocused();
@@ -119,42 +123,46 @@ const CreationMusic = ({navigation, route}) => {
     // });
   };
 
-  const cardFestMusic = (item, index) => {
+  const cardFestMusicHorizontal = (item, index, numColumns) => {
     return (
       <TouchableOpacity
+        key={index}
+        style={{
+          paddingHorizontal: 8,
+          paddingVertical: 8,
+          width: (width / numColumns) - 8,
+        }}
         onPress={() => {
           trackPlayerPlay(itemData.data, index);
           navigation.navigate('FestMusicPlayer', {item});
-        }}
-        style={{
-          padding: 10,
-          flex: 1,
-          flexDirection: 'row',
-          alignItems: 'center',
         }}>
         <Image
-          // source={{uri: item.image}}
-          source={imageAssets.aboutFest1}
+          source={{uri: item.image}}
           style={{
-            width: '14%',
+            width: '100%',
             aspectRatio: 1,
+            resizeMode: 'cover',
             borderRadius: 8,
           }}
-          resizeMode="cover"
+          resizeMethod={'auto'}
         />
-
-        <Divider width={10} />
-        <Container flexDirection="column" flex={1}>
-          <Text
-            size={14}
-            align="left"
-            color={Color.text}
-            type="medium"
-            numberOfLines={1}>
-            Aroma Roket Senja
-          </Text>
-          <Text size={10} align="left" numberOfLines={1}>
-            Besok Ngoding Band
+        <Divider height={8} />
+        <Text
+          align="left"
+          numberOfLines={1}
+          size={14}
+          type="medium"
+          color={Color.black}>
+          {item.productName}
+        </Text>
+        <Text align="left" numberOfLines={1} size={10} color={Color.textSoft}>
+          Besok Ngoding Band
+        </Text>
+        <Container flex={1} flexDirection="row" align="center">
+          <Ionicons name={'heart'} color={'#ACAAA5'} />
+          <Divider width={5} />
+          <Text size={10} color={'#ACAAA5'}>
+            10.5rb Suka
           </Text>
         </Container>
       </TouchableOpacity>
@@ -174,10 +182,12 @@ const CreationMusic = ({navigation, route}) => {
       <FlatList
         keyExtractor={(_, index) => index.toString()}
         data={itemData.data}
+        numColumns={2}
         // onEndReachedThreshold={0.3}
         // onEndReached={() => {
         //   if (itemData.page !== -1) setItemData({...itemData, loadNext: true});
         // }}
+        contentContainerStyle={{ paddingHorizontal: 8 }}
         ListFooterComponent={
           itemData.loadNext && (
             <Text size={12} type="medium">
@@ -186,10 +196,7 @@ const CreationMusic = ({navigation, route}) => {
           )
         }
         renderItem={({item, index}) => (
-          <View style={{paddingHorizontal: 16}}>
-            {/* <cardFestMusic item={item} index={index}/> */}
-            {/* {cardFestMusic(item, index)} */}
-          </View>
+          cardFestMusicHorizontal(item, index, 2)
         )}
       />
     </Scaffold>
