@@ -319,7 +319,7 @@ const MainProfile = ({ navigation, route }) => {
             <Circle color={Color.success} size={16} />
             <Divider width={8} />
             <Text color={Color.success} align='left'>
-              Show Debug
+              Show Menu
             </Text>
             <Divider width={8} />
             <Text color={Color.success} align='left' size={10}>
@@ -340,7 +340,7 @@ const MainProfile = ({ navigation, route }) => {
             <Circle color='orange' size={16} />
             <Divider width={8} />
             <Text color='orange' align='left'>
-              Dragonball Radar
+              Radar
             </Text>
           </TouchableOpacity>
         </Container>}

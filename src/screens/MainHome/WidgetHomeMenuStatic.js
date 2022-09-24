@@ -107,7 +107,7 @@ const WidgetHomeMenuStatic = () => {
           default:
             obj = {
               name: e.name,
-              navigate: e.navigate,
+              navigate: e.navigate || 'GroupScreen',
               imageAsset: imageAssets.homeMenuFest,
               imageUrl: e.file,
             };
@@ -150,7 +150,7 @@ const WidgetHomeMenuStatic = () => {
 
   const menuPerColumn = listMenuHome.length < numOfColumn ? listMenuHome.length : numOfColumn;
   const widthPerMenu = 100 / menuPerColumn;
-  const widthIconMenu = (width / menuPerColumn - 16) / 2.4;
+  const widthIconMenu = (width / menuPerColumn - 16) / 2;
   const paddingInMenu = 16;
 
   if (listMenuHome.length === 0) return <View />;

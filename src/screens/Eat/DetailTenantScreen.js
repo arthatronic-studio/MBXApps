@@ -54,6 +54,7 @@ const DetailTenantScreen = ({ navigation, route }) => {
   const [listProducts, setListProducts] = useState(Array.isArray(items.products) ? items.products : []);
   const [cartId, setCartId] = useState();
   const [namaPemesan, setNamaPemesan] = useState(auth.user.name);
+  const [cartAmount, setCartAmount] = useState(0);
   const [ringkasanPembayaran, setRingkasanPembayaran] = useState([
     {name: 'Harga', amount: 'Rp -'},
     {name: 'PPN 11%', amount: 'Rp -'},
@@ -625,6 +626,10 @@ const DetailTenantScreen = ({ navigation, route }) => {
                       if (result.ringkasan_pembayaran && Array.isArray(result.ringkasan_pembayaran)) {
                         setRingkasanPembayaran(result.ringkasan_pembayaran);
                       }
+
+                      if (result.amount) {
+                        setCartAmount(result.amount);
+                      }
                     }
                   }}
                 >
@@ -656,12 +661,8 @@ const DetailTenantScreen = ({ navigation, route }) => {
   console.log('params', params);
 
   let selectedProductCount = 0;
-  let selectedProductPrice = 0;
   listProducts.map((e) => {
     if (e.selected) {
-      if (e.qty) {
-        selectedProductPrice += (e.qty * e.price);
-      }
       selectedProductCount += 1;
     }
   });
@@ -709,7 +710,7 @@ const DetailTenantScreen = ({ navigation, route }) => {
             <Col style={{ justifyContent: 'center' }}>
               <Text type='medium' size={11} align='left'>{selectedProductCount} Produk</Text>
               <Divider height={4} />
-              <Text type='medium' size={14} align='left'>{FormatMoney.getFormattedMoney(selectedProductPrice)}</Text>
+              <Text type='medium' size={14} align='left'>{cartAmount}</Text>
             </Col>
             <TouchableOpacity
               onPress={() => {

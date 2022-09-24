@@ -163,7 +163,7 @@ const GroupScreen = ({navigation, route}) => {
             <Container paddingHorizontal={16}>
               {data.map((item, index) => {
                 return (
-                  <Container marginVertical={8} key={index} style={{ ...shadowStyle }}>
+                  <Container marginVertical={8} radius={8} key={index} style={{ backgroundColor: Color.theme, ...shadowStyle }}>
                     <Image
                       style={{
                         width: '100%',
@@ -176,7 +176,7 @@ const GroupScreen = ({navigation, route}) => {
                     />
                     <Container
                       // borderWidth={1}
-                      style={{ ...shadowStyle }}
+                      // style={{ ...shadowStyle }}
                       flex={1}
                       flexDirection="row"
                       paddingHorizontal={10}

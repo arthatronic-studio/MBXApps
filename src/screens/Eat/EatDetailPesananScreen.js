@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Image, FlatList, ScrollView, Platform, Linking, Pressable, useWindowDimensions } from 'react-native';
+import { View, Image, FlatList, Modal as ReactModal, ScrollView, Platform, Linking, Pressable, useWindowDimensions } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
@@ -38,6 +38,7 @@ import FormInput from 'src/components/FormInput';
 import { fetchEatCartAdd } from 'src/api-rest/fetchEatCartAdd';
 import { fetchEatCartRemove } from 'src/api-rest/fetchEatCartRemove';
 import { fetchEatCartOrder } from 'src/api-rest/fetchEatCartOrder';
+import WebViewScreen from 'src/components/WebViewScreen';
 
 const EatDetailPesananScreen = ({ navigation, route }) => {
   const { params } = route;
@@ -54,6 +55,7 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
   const [namaPemesan, setNamaPemesan] = useState(params.namaPemesan);
   const [ringkasanPembayaran, setRingkasanPembayaran] = useState(params.ringkasanPembayaran);
   const [updateIndex, setUpdateIndex] = useState(-1);
+  const [sourceURL, setSourceURL] = useState('');
 
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
@@ -407,6 +409,12 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
     )
   }
 
+  const onCloseWebview = (status) => {
+    setSourceURL('');
+    if (status === 'paymentPaid') navigation.navigate('PaymentSucceed');
+    else navigation.navigate('EatScreen');
+}
+
   console.log('params', params);
 
   return (
@@ -546,7 +554,15 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
                   showLoading(
                     result.status ? 'success' : 'error',
                     result.message,
-                    () => result.status ? navigation.navigate('EatScreen') : {}
+                    () => {
+                      if (result.status) {
+                        if (result.paymentResponse && result.paymentResponse.data && result.paymentResponse.data.redirect_url) {
+                            setSourceURL(result.paymentResponse.data.redirect_url);
+                        } else {
+                            navigation.navigate('PaymentSucceed');
+                        }
+                      }
+                    }
                   );
                 })
             }}
@@ -573,6 +589,18 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
 
       {/* modal menu */}
       {currentSelected !== -1 && renderModalNote(listProducts[currentSelected], currentSelected)}
+
+      <ReactModal
+          transparent
+          animationType="fade"
+          onRequestClose={onCloseWebview}
+          visible={sourceURL !== ''}
+      >
+          <WebViewScreen
+              url={sourceURL}
+              onClose={onCloseWebview}
+          />
+      </ReactModal>
     </Scaffold>
   );
 };
