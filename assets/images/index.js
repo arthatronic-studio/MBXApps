@@ -74,6 +74,21 @@ const literatur1 = require('./literatur1.png')
 const literatur2 = require('./literatur2.png')
 const literatur3 = require('./literatur3.png')
 const literatur4 = require('./literatur4.png')
+const foya = require('./foya.png')
+const twalenWarong = require('./twalen-warong.png')
+const twalenSpirit = require('./twalen-spirit.png')
+const coldheart = require('./coldheart.png')
+const blocBar = require('./bloc-bar.png');
+const cangguBakehouse = require('./canggu-bakehouse.png');
+const mBlocMarketPadang = require('./m-bloc-market-padang.png')
+const mBlocMarketJambi = require('./m-bloc-market-jambi.png')
+const mBlocMarketJakarta = require('./m-bloc-market-jakarta.png')
+const posBlocMedan = require('./pos-bloc-medan.png');
+const posBlocJakarta = require('./pos-bloc-jakarta.png');
+const jnmBloc = require('./jnm-bloc.png');
+const fabriekBloc = require('./fabriek-bloc.png');
+const mBlocSpace = require('./m-bloc-space.png');
+const groupBanner = require('./group-banner.png');
 
 export {
   iconApp,
@@ -209,6 +224,21 @@ export const imageAssets = {
   literatur2,
   literatur3,
   literatur4,
+  foya,
+  twalenWarong,
+  twalenSpirit,
+  coldheart,
+  blocBar,
+  cangguBakehouse,
+  mBlocMarketPadang,
+  mBlocMarketJambi,
+  mBlocMarketJakarta,
+  posBlocMedan,
+  posBlocJakarta,
+  jnmBloc,
+  fabriekBloc,
+  mBlocSpace,
+  groupBanner
 };
 
 export default imageAssets;

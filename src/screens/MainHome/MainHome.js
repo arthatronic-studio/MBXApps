@@ -996,6 +996,14 @@ const MainHome = ({ navigation, route }) => {
 
           <WidgetHomeMenuStatic />
 
+          <TouchableOpacity
+            onPress={() => navigation.navigate('GroupScreen')}
+          >
+            <Text>
+              Group
+            </Text>
+          </TouchableOpacity>
+
           <Divider height={24} />
 
           <HighlightTenant

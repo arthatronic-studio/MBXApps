@@ -2,7 +2,7 @@ import { Platform } from 'react-native';
 
 let shadowStyle = {
     shadowOpacity: 0.2,
-    shadowRadius: 2,
+    shadowRadius: 1,
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
@@ -11,7 +11,7 @@ let shadowStyle = {
 };
   
 if (Platform.OS === 'android') {
-    shadowStyle = { elevation: 2 };
+    shadowStyle = { elevation: 1 };
 }
 
 export {
