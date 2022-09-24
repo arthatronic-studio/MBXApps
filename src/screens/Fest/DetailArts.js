@@ -207,7 +207,7 @@ const DetailArts = ({navigation, route}) => {
           />
           <Divider height={16} />
           <Text size={17} color={Color.text} align="center">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Seni adalah ledakan
           </Text>
         </Container>
         <Divider height={16} />

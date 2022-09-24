@@ -1691,7 +1691,7 @@ const MainHome = ({ navigation, route }) => {
                     align="left"
                     size={14}
                     style={{ fontWeight: 'bold' }}>
-                    Seni Berlorem Ipsum Dulur Sit Amet
+                    Seni adalah ledakan
                   </Text>
                 </View>
                 <Text align="left" size={10}>

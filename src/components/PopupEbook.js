@@ -25,7 +25,7 @@ const PopupEbook = ({navigation}) => {
                 </View>
                 <View>  
                     <View style={{width: '86%'}}>
-                        <Text align='left' size={14} style={{fontWeight: 'bold'}}>Seni Berlorem Ipsum Dulur Sit Amet</Text>
+                        <Text align='left' size={14} style={{fontWeight: 'bold'}}>Seni adalah ledakan</Text>
 
                     </View>
                     <Text align='left' size={10}>Karya Esa Riski Hari Utama</Text>
