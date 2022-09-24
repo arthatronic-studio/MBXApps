@@ -247,6 +247,7 @@ const HighlightFestMusic = props => {
   };
 
   const cardFestMusic = (item, index) => {
+    console.log(item, "iteem")
     return (
       <TouchableOpacity
         onPress={() => {
@@ -261,7 +262,7 @@ const HighlightFestMusic = props => {
         }}>
         <Image
           // source={{uri: item.image}}
-          source={imageAssets.aboutFest1}
+          source={{ uri: item.image }}
           style={{
             width: '14%',
             aspectRatio: 1,
@@ -278,7 +279,7 @@ const HighlightFestMusic = props => {
             color={Color.text}
             type="medium"
             numberOfLines={1}>
-            Aroma Roket Senja
+            {item.productName}
           </Text>
           <Text size={10} align="left" numberOfLines={1}>
             Besok Ngoding Band

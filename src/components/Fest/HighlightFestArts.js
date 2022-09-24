@@ -90,18 +90,21 @@ const HighlightFestArts = (props) => {
                     {
                         id: 1,
                         image: imageAssets.arts1,
+                        name: "Insinyur Joko Widodo",
                         width: 716,
                         height: 960,
                     },
                     {
                         id: 2,
                         image: imageAssets.arts3,
+                        name: "Bob Marley",
                         width: 1024,
                         height: 1536,
                     },
                     {
                         id: 3,
                         image: imageAssets.arts2,
+                        name: "Barong",
                         width: 600,
                         height: 450,
                     },
@@ -111,18 +114,21 @@ const HighlightFestArts = (props) => {
                     {
                         id: 1,
                         image: imageAssets.arsitektur1,
+                        name: 'Dupli Casa',
                         width: 600,
                         height: 364,
                     },
                     {
                         id: 2,
                         image: imageAssets.arsitektur2,
+                        name: 'NIKO | Architect',
                         width: 564,
                         height: 399,
                     },
                     {
                         id: 3,
                         image: imageAssets.arsitektur3,
+                        name: 'National Museum of Qatar',
                         width: 800,
                         height: 418,
                     }
