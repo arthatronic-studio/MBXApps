@@ -3,6 +3,7 @@ import {
     StyleSheet,
     View,
     Animated,
+    useWindowDimensions,
 } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import { CommonActions, useIsFocused } from '@react-navigation/native';
@@ -21,9 +22,9 @@ import { queryBannerList } from 'src/lib/query/banner';
 import { onBoarding1, onBoarding2, onBoarding3 } from 'assets/images';
 
 const listBoarding = [
-    {imageAsset: onBoarding1, title: 'SELAMAT DATANG DI APLIKASI', subTitle: 'Cari apapun yang kamu butuhkan disini dengan mudah, hanya dengan sentuhan jari di satu aplikasi.'},
-    {imageAsset: onBoarding2, title: 'SALING TERKONEKSI', subTitle: 'Makin mudah menjalin relasi dan berkomunikasi dengan sesama member/anggota bahkan yang jauh sekalipun.'},
-    {imageAsset: onBoarding3, title: 'YUK LOGIN', subTitle: 'Login Sekarang'},
+    {imageAsset: onBoarding1, title: 'SELAMAT DATANG DI BLOCX', subTitle: 'Cari apapun yang kamu butuhkan disini dengan mudah, hanya dengan sentuhan jari di satu aplikasi.'},
+    {imageAsset: onBoarding2, title: 'BELANJA DI M BLOC MARKET', subTitle: 'Cari apapun yang kamu butuhkan disini di Mbloc Market'},
+    {imageAsset: onBoarding3, title: 'FABRIEK BLOC', subTitle: 'Login Sekarang'},
 ];
 
 const DOT_SIZE = 32;
@@ -36,6 +37,7 @@ const Item = ({
     scrollOffsetAnimatedValue,
 }) => {
     const { Color } = useColor();
+    const { width, height } = useWindowDimensions();
 
     const inputRange = [0, 0.5, 0.99];
     const inputRangeOpacity = [0, 0.5, 0.99];
@@ -54,41 +56,53 @@ const Item = ({
             <View style={{ flex: 1 }} />
 
             <View style={{ flex: 4, justifyContent: 'center' }}>
+                {/* <Animated.Image
+                    source={imageAsset}
+                    style={{
+                        width,
+                        height,
+                        transform: [{ scale }],
+                    }}
+                /> */}
+            </View>
+
+            <View style={{ flex: 1, position: 'absolute', justifyContent: 'center' }}>
                 <Animated.Image
                     source={imageAsset}
-                    style={[
-                        styles.imageStyle,
-                        {
-                            transform: [{ scale }],
-                        },
-                    ]}
+                    style={{
+                        width,
+                        height,
+                        transform: [{ scale }],
+                    }}
                 />
             </View>
 
-            <View style={{ flex: 1, paddingHorizontal: 32 }}>
-                <Animated.Text
-                    style={{
-                        fontSize: 16,
-                        fontFamily: 'Inter-Medium',
-                        color: Color.text,
-                        opacity,
-                        marginBottom: 8,
-                        textAlign: 'center',
-                    }}
-                >
-                    {title}
-                </Animated.Text>
-                {subTitle !== '' && <Animated.Text
-                    style={{
-                        fontSize: 11,
-                        fontFamily: 'Inter-Regular',
-                        color: Color.text,
-                        opacity,
-                        textAlign: 'center',
-                    }}
-                >
-                    {subTitle}
-                </Animated.Text>}
+            <View style={{ flex: 1, paddingHorizontal: 16, width: '100%' }}>
+                <View style={{ width: '100%', padding: 16, backgroundColor: Color.overflow, borderRadius: 16, }}>
+                    <Animated.Text
+                        style={{
+                            fontSize: 16,
+                            fontFamily: 'Inter-Medium',
+                            color: Color.theme,
+                            opacity,
+                            marginBottom: 8,
+                            textAlign: 'center',
+                        }}
+                    >
+                        {title}
+                    </Animated.Text>
+                    {subTitle !== '' && <Animated.Text
+                        style={{
+                            fontSize: 11,
+                            fontFamily: 'Inter-Regular',
+                            color: Color.theme,
+                            opacity,
+                            textAlign: 'center',
+                        }}
+                    >
+                        {subTitle}
+                    </Animated.Text>}
+                </View>
             </View>
         </View>
     );
@@ -308,11 +322,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 16,
-    },
-    imageStyle: {
-        flex: 0.8,
-        aspectRatio: 1,
-        resizeMode: 'contain',
     },
     pagination: {
         alignSelf: 'center',

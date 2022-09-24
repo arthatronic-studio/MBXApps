@@ -150,19 +150,6 @@ const ListFeaturedEat = ({ userProfileId, productCategory, name, horizontal, sty
                     {...extraProps}
                     pagingEnabled
                     renderItem={({ item, index }) => {
-                        if (index === 0) {
-                            return (
-                                <>
-                                    <CardFeaturedEat
-                                        productCategory={productCategory}
-                                        item={item}
-                                        horizontal={horizontal}
-                                        {...extraProps}
-                                    />
-                                </>
-                            )
-                        }
-
                         return (
                             <CardFeaturedEat
                                 productCategory={productCategory}
@@ -171,8 +158,7 @@ const ListFeaturedEat = ({ userProfileId, productCategory, name, horizontal, sty
                                 {...extraProps}
                             />
                         )
-                    }
-                    }
+                    }}
                     ListHeaderComponent={
                         <>
                             {ListHeaderComponent}

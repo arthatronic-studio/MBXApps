@@ -8,10 +8,7 @@ import TestScreen from 'src/screens/TestScreen';
 import SplashScreen from 'src/screens/SplashScreen';
 import MainHome from 'src/screens/MainHome/MainHome';
 import MainProfile from 'src/screens/MainProfile/MainProfile';
-import BottomTabsNavigator from '@src/navigators/BottomTabsNavigator';
-import BottomTabsNavigatorKomoto from '@src/navigators/BottomTabsNavigatorKomoto';
-import BottomTabsNavigatorsabyan from '@src/navigators/BottomTabsNavigatorSabyan';
-import BottomTabsNavigatorUnitedIndo from './BottomTabsNavigatorUnitedIndo';
+import MainPage from '@src/navigators/BottomTabsNavigator';
 import OnBoardingScreen from '@src/screens/OnBoardingScreen';
 import CreateEmergencyScreen from '@src/screens/CreateEmergencyScreen';
 import PDFReaderScreen from 'src/screens/PDFReaderScreen';
@@ -296,10 +293,6 @@ import CreationScreen from 'src/screens/Fest/CreationScreen';
 import GroupScreen from 'src/screens/Group/GroupScreen';
 
 const { Navigator, Screen } = createStackNavigator();
-const MainPage = BottomTabsNavigator;
-	// accessClient.BottomTabsNavigator.type === 'komoto'
-		// ? BottomTabsNavigatorKomoto
-		// : accessClient.BottomTabsNavigator.type === 'sabyan' ? BottomTabsNavigatorsabyan : BottomTabsNavigator;
 
 function AppNavigator() {
   return (

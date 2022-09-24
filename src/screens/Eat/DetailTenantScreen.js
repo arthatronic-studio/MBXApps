@@ -611,7 +611,7 @@ const DetailTenantScreen = ({ navigation, route }) => {
                     const result = await fetchEatCartAdd(body);
                     if (result.status) {
                       if (Array.isArray(result.data) && result.data.length > 0) {
-                        setCartId(result.data[0].id);
+                        setCartId(result.data[0].cart_id);
                         if (result.data[0].nama_pelanggan) {
                           setNamaPemesan(result.data[0].nama_pelanggan);
                         }

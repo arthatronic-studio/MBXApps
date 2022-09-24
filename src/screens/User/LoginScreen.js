@@ -125,53 +125,53 @@ const LoginScreen = ({navigation, route}) => {
     }
   }, [isFocused]);
 
-  useEffect(() => {
-    if (isFocused) {
-      if (user && !user.guest) {
-        if (route.params && route.params.loginFrom) {
-          navigation.pop();
-          route.params.afterLogin();
-        } else {
-          if (state.isSucceddForgot) {
-            navigation.navigate('UserChangePassword', {
-              password: state.password,
-            });
-            dispatch({ type: 'USER.CHANGE_PASSWORD', status: false });
-          } else {
-            showPopup(
-              'Berhasil masuk',
-              'success',
-            );
-            setTimeout(() => {
-              if (shouldChangePassword.includes(state.password)) {
-                navigation.navigate('UserChangePassword', {
-                  password: state.password,
-                  canGoBack: false,
-                });
-                dispatch({ type: 'USER.CHANGE_PASSWORD', status: false });
-              } else if (shouldUpdateProfile) {
-                redirectTo('ChangeProfile');
-              } else {
-                // setModalTerm(true);
-                redirectTo('MainPage');
-              }
-            }, 1000);
-          }
-        }
-      }
-      else if (user && user.guest) {
-        // Alert('Guest Login', 'Login sebagai Tamu?', () => redirectTo('MainPage'));
-        redirectTo('MainPage');
-      }
-      else if (!user && error !== '') {
-        showPopup(
-          'Nomor telepon / Password yang Anda masukan salah atau Terjadi Kesalahan Server',
-          'error',
-        );
-        dispatch({type: 'USER.LOGOUT'});
-      }
-    }
-  }, [user, error, route.params, state.isSucceddForgot, isFocused]);
+  // useEffect(() => {
+  //   if (isFocused) {
+  //     if (user && !user.guest) {
+  //       if (route.params && route.params.loginFrom) {
+  //         navigation.pop();
+  //         route.params.afterLogin();
+  //       } else {
+  //         if (state.isSucceddForgot) {
+  //           navigation.navigate('UserChangePassword', {
+  //             password: state.password,
+  //           });
+  //           dispatch({ type: 'USER.CHANGE_PASSWORD', status: false });
+  //         } else {
+  //           showPopup(
+  //             'Berhasil masuk',
+  //             'success',
+  //           );
+  //           setTimeout(() => {
+  //             if (shouldChangePassword.includes(state.password)) {
+  //               navigation.navigate('UserChangePassword', {
+  //                 password: state.password,
+  //                 canGoBack: false,
+  //               });
+  //               dispatch({ type: 'USER.CHANGE_PASSWORD', status: false });
+  //             } else if (shouldUpdateProfile) {
+  //               redirectTo('ChangeProfile');
+  //             } else {
+  //               // setModalTerm(true);
+  //               redirectTo('MainPage');
+  //             }
+  //           }, 1000);
+  //         }
+  //       }
+  //     }
+  //     else if (user && user.guest) {
+  //       // Alert('Guest Login', 'Login sebagai Tamu?', () => redirectTo('MainPage'));
+  //       redirectTo('MainPage');
+  //     }
+  //     else if (!user && error !== '') {
+  //       showPopup(
+  //         'Nomor telepon / Password yang Anda masukan salah atau Terjadi Kesalahan Server',
+  //         'error',
+  //       );
+  //       dispatch({type: 'USER.LOGOUT'});
+  //     }
+  //   }
+  // }, [user, error, route.params, state.isSucceddForgot, isFocused]);
 
   useEffect(() => {
     if (state.allValid) {
@@ -188,7 +188,7 @@ const LoginScreen = ({navigation, route}) => {
     setFallback(true);
 
     const result = await postNonAuth('otp', body);
-    console.log(result);
+    console.log('result otp', result);
 
     setFallback(false);
 

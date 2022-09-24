@@ -129,6 +129,7 @@ const CardFeaturedEat = ({ productCategory, item, numColumns, onPress, horizonta
                             }}
                             imageStyle={{
                                 borderRadius: 8,
+                                resizeMode: 'contain'
                             }}
                         >
                             <Container width='100%' height='35%' paddingHorizontal={12} paddingVertical={16} color={Color.overflow} style={{ borderBottomLeftRadius: 16, borderBottomRightRadius: 16 }}>
