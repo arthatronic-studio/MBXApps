@@ -123,8 +123,8 @@ const DetailArts = ({navigation, route}) => {
           source={typeof item.image === 'string' ? {uri: item.image} : item.image}
           style={{
             width: width,
-            height: width,
-            resizeMode: 'contain',
+            height: width*0.8,
+            resizeMode: 'cover',
           }}
         />
         <Divider height={16} />
@@ -140,8 +140,8 @@ const DetailArts = ({navigation, route}) => {
               size={16}
               color={Color.black}
               type="medium"
-              numberOfLines={1}>
-              Melting Memo
+              numberOfLines={2}>
+              {item.name}
             </Text>
             <Text
               align="left"
@@ -268,23 +268,6 @@ const DetailArts = ({navigation, route}) => {
                   32 Karya
                 </Text>
               </Container>
-            </Container>
-            <Container
-              padding={10}
-              flexDirection="row"
-              align="center"
-              borderWidth={1}
-              borderRadius={8}
-              borderColor={Color.textSoft}>
-              <Text size={12} color={Color.primaryDark} type="medium">
-                Lihat
-              </Text>
-              <Divider width={4} />
-              <AntDesign
-                name={'arrowright'}
-                color={Color.primaryDark}
-                size={16}
-              />
             </Container>
           </Container>
         </Container>

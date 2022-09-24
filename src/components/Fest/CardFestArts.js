@@ -66,7 +66,7 @@ const CardFestArts = ({
         size={14}
         type="medium"
         color={Color.black}>
-        Gedung Perpus Spiral
+          {item.name}
       </Text>
       <Text align="left" numberOfLines={1} size={10} color={Color.textSoft}>
         Herman Hutabarat
