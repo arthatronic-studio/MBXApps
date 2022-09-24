@@ -230,7 +230,7 @@ const HighlightFestMusic = props => {
           size={14}
           type="medium"
           color={Color.black}>
-          Aroma Roket Senja
+          {item.productName}
         </Text>
         <Text align="left" numberOfLines={1} size={10} color={Color.textSoft}>
           Besok Ngoding Band

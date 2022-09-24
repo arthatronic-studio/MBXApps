@@ -116,7 +116,6 @@ const CreationScreen = ({ navigation, route }) => {
         <Header
           type="bold"
           centerTitle={false}
-          title="Tiket"
         />
       }
     >
@@ -131,25 +130,12 @@ const CreationScreen = ({ navigation, route }) => {
             Adang Susanyo {'\u2B24'} 20 Karya
           </Text>
         </Container>
-        <TouchableOpacity>
-          <Container flexDirection="row" align='center' justify='center' padding={10} backgroundColor={Color.primary} borderRadius={120}>
-            <Entypo
-              name={'plus'}
-              size={14}
-              style={{
-                color: Color.black,
-              }}
-            />
-            <Divider width={8}/>
-            <Text size={10} type="medium" color={"#332A00"}>Upload Karya</Text>
-          </Container>
-        </TouchableOpacity>
       </Container>
 
       <Divider height={16}/>
       
       <Tab.Navigator
-        initialRouteName={'HistoryTiketku'}
+        initialRouteName={'Desain'}
         tabBarOptions={{
             indicatorStyle: {
                 backgroundColor: Color.theme,
@@ -182,7 +168,7 @@ const CreationScreen = ({ navigation, route }) => {
         />
         <Tab.Screen
             name="Musik"
-            component={CreationArts}
+            component={CreationMusic}
             options={{tabBarLabel: 'Musik'}}
         />
     </Tab.Navigator>
