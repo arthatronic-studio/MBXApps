@@ -50,8 +50,7 @@ import { shadowStyle } from 'src/styles';
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
-const scanUUIDs = []; // ['fda50693-a4e2-4fb1-afcf-c6eb07647825'];
-const scanTimeout = 70;
+const scanTimeout = 7;
 
 let tempShowPopupAds = true;
 
@@ -97,7 +96,7 @@ const MainHome = ({ navigation, route }) => {
     error: true,
     item: null,
   });
-  const [beaconScanning, setBeaconScanning] = useState(false);
+  const [beaconScanning, setBeaconScanning] = useState(true);
 
   const isCheckin = auth && auth.user && auth.user.isCheckin;
   const isSecurity = auth && auth.user && auth.user.role && auth.user.role.value === 0;
@@ -125,32 +124,37 @@ const MainHome = ({ navigation, route }) => {
     }
   }, [listPeripheral]);
 
-  // useEffect(() => {
-  //   const timeout = !beaconScanning ?
-  //     setTimeout(() => {
-  //       console.log('scannn kale');
-  //       // BleManager.scan(scanUUIDs, scanTimeout, true).then(() => {
-  //       //   setBeaconScanning(true);
-  //       // });
-  //     }, 6000) : null;
+  useEffect(() => {
+    const timeout = !beaconScanning ?
+      setTimeout(() => {
+        console.log('scannn kale');
+        // BleManager.scan([], scanTimeout, true).then(() => {
+        //   setBeaconScanning(true);
+        // });
+      }, 6000) : null;
 
-  //   return () => {
-  //     clearTimeout(timeout);
-  //   }
-  // }, [beaconScanning]);
+    return () => {
+      clearTimeout(timeout);
+    }
+  }, [beaconScanning]);
 
   useEffect(() => {
     initialConfig();
-    
-    androidBluetoothPermission().then((status) => {
-      console.log('status bluetooth', status);
-      if (status) {
-        BleManager.start({ showAlert: false });
-        // BleManager.scan(scanUUIDs, scanTimeout, true).then(() => {
-        //   setBeaconScanning(true);
-        // });
-      }
-    });
+    beaconSetup();
+  }, []);
+
+  console.log('listPeripheral', listPeripheral);
+
+  const beaconSetup = async() => {
+    const permissionAndroidStatus = await androidBluetoothPermission();
+
+    console.log('status aaa', permissionAndroidStatus);
+
+    if (permissionAndroidStatus) {
+      await BleManager.start({ showAlert: false });
+      await BleManager.scan([], scanTimeout, true);
+      setBeaconScanning(true);
+    }
 
     bleManagerEmitter.addListener("BleManagerDiscoverPeripheral", (args) => {
       peripherals.set(args.id, args);
@@ -162,14 +166,7 @@ const MainHome = ({ navigation, route }) => {
     bleManagerEmitter.addListener('BleManagerStopScan', () => {
       setBeaconScanning(false);
     });
-
-    return () => {
-      if (typeof bleManagerEmitter.removeAllListeners === 'function') {
-        bleManagerEmitter.removeAllListeners('BleManagerDiscoverPeripheral');
-        bleManagerEmitter.removeAllListeners('BleManagerStopScan');
-      }
-    }
-  }, []);
+  }
 
   const initialConfig = async () => {
     if (Platform.OS === 'android' && Platform.Version < 31) {
@@ -501,17 +498,6 @@ const MainHome = ({ navigation, route }) => {
     }
   };
 
-  const onScan = () => {
-    androidBluetoothPermission().then((status) => {
-      console.log('status bluetooth', status);
-      if (status) {
-        BleManager.scan(scanUUIDs, scanTimeout, true).then(() => {
-          setBeaconScanning(true);
-        });
-      }
-    });
-  };
-
   const onRefresh = async() => {
     setRefreshing(true);
 
@@ -520,11 +506,11 @@ const MainHome = ({ navigation, route }) => {
     androidBluetoothPermission().then((status) => {
       console.log('status bluetooth', status);
       if (status) {
-        BleManager.scan(scanUUIDs, scanTimeout, true).then(() => {
+        BleManager.scan([], scanTimeout, true).then(() => {
           setBeaconScanning(true);
         });
       }
-    });
+    })
 
     setRefreshing(false);
   };
@@ -841,9 +827,6 @@ const MainHome = ({ navigation, route }) => {
                         () => onCheckout(),
                       );
                     }}
-                    style={{
-                      
-                    }}
                   >
                     <Text color={Color.error} size={12} type='medium'>
                       Keluar
@@ -878,32 +861,22 @@ const MainHome = ({ navigation, route }) => {
             </Container>
           </Container>}
 
-          {beaconScanning ?
-            <View style={{ width: '100%', paddingHorizontal: 16, paddingBottom: 16 }}>
+          {(beaconScanning) &&
+            <View style={{ width: '100%', padding: 16 }}>
               <View
                 style={{
-                  paddingHorizontal: 8,
-                  borderRadius: 8,
-                  flexDirection: 'row',
+                  padding: 8,
+                  borderRadius: 16,
+                  backgroundColor: Color.textInput,
                   alignItems: 'center',
                   justifyContent: 'center',
-                  height: 50,
+                  ...shadowStyle,
                 }}
               >
-                <ActivityIndicator size='small' />
-                <Divider width={6} />
-                <Text type='medium'>Scanning</Text>
+                <ActivityIndicator size='large' />
+                <Divider height={8} />
+                <Text>Scanning</Text>
               </View>
-            </View>
-          :
-            <View style={{ width: '100%', paddingHorizontal: 16, paddingBottom: 16 }}>
-              <Button
-                onPress={() => {
-                  onScan();
-                }}
-              >
-                Scan Now
-              </Button>
             </View>
           }
 
@@ -975,14 +948,6 @@ const MainHome = ({ navigation, route }) => {
           </Container>}
 
           <WidgetHomeMenuStatic />
-
-          <TouchableOpacity
-            onPress={() => navigation.navigate('GroupScreen')}
-          >
-            <Text>
-              Group
-            </Text>
-          </TouchableOpacity>
 
           <Divider height={24} />
 

@@ -7,7 +7,9 @@ import {
   Animated,
   RefreshControl,
   Platform,
+  DeviceEventEmitter,
   NativeEventEmitter,
+  PermissionsAndroid,
   ActivityIndicator,
   NativeModules,
 } from 'react-native';
@@ -19,6 +21,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useIsFocused } from '@react-navigation/native';
 import Modal from 'react-native-modal';
+import Kontakt, { KontaktModule } from 'react-native-kontaktio';
+import RNShake from 'react-native-shake';
 import BluetoothStateManager from 'react-native-bluetooth-state-manager';
 import BleManager from 'react-native-ble-manager';
 
@@ -39,19 +43,53 @@ import Banner from 'src/components/Banner';
 import ModalPosting from './ModalPosting';
 import imageAssets from 'assets/images';
 import WidgetHomeMenuStatic from './WidgetHomeMenuStatic';
+import { statusBarHeight } from 'src/utils/constants';
+import FloatingBeaconDetection from 'src/components/Modal/FloatingBeaconDetection';
 import { getAPI, postAPI } from 'src/api-rest/httpService';
 import HighlightEvent from 'src/components/Event/HighlightEvent';
 import { stateUpdateProfile } from 'src/api-rest/stateUpdateProfile';
 import HighlightTenant from 'src/components/Tenant/HighlightTenant';
 import { stateBeaconSetting } from 'src/api-rest/stateBeaconSetting';
-import { androidBluetoothPermission } from 'src/lib/androidPermissions';
-import { shadowStyle } from 'src/styles';
 
+const kontaktEmitter = new NativeEventEmitter(KontaktModule);
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
-const scanUUIDs = []; // ['fda50693-a4e2-4fb1-afcf-c6eb07647825'];
-const scanTimeout = 70;
+const {
+  // android
+  connect,
+  startScanning,
+  isScanning,
+  // ios
+  init,
+  configure,
+  // authorization
+  getAuthorizationStatus,
+  requestWhenInUseAuthorization,
+  requestAlwaysAuthorization,
+  // discovery
+  startDiscovery,
+  stopDiscovery,
+  restartDiscovery,
+  // ranging
+  startRangingBeaconsInRegion,
+  stopRangingBeaconsInRegion,
+  stopRangingBeaconsInAllRegions,
+  getRangedRegions,
+  // monitoring
+  startMonitoringForRegion,
+  stopMonitoringForRegion,
+  stopMonitoringForAllRegions,
+  getMonitoredRegions,
+} = Kontakt;
+
+const region1 = {
+  identifier: 'RDL51822',
+  uuid: 'fda50693-a4e2-4fb1-afcf-c6eb07647825',
+  major: 1,
+  minor: 2,
+  d: 'D8:7F:6F:2B:41:EC',
+};
 
 let tempShowPopupAds = true;
 
@@ -76,6 +114,7 @@ const MainHome = ({ navigation, route }) => {
   const peripherals = new Map();
   const [listPeripheral, setListPeripheral] = useState([]);
 
+  const [stateListAllBeacons, setStateListAllBeacons] = useState([]);
   const [stateListCheckinUID, setStateListCheckinUID] = useState([]);
   const [stateListMerchUID, setStateListMerchUID] = useState([]);
   const [stateListArtUID, setStateListArtUID] = useState([]);
@@ -84,10 +123,14 @@ const MainHome = ({ navigation, route }) => {
   const [stateListOtherType, setStateListOtherType] = useState([]);
 
   const [listMerchantType, setListMerchantType] = useState([]);
-
   const [tempAlreadyPairing, setTempAlreadyPairing] = useState([]);
 
+  const [listResultArtType, setListResultArtType] = useState([]);
+  const [tempCurrentArtPairing, setTempCurrentArtPairing] = useState([]);
+
+  const [hasPermissionBluetooth, setHasPermissionBluetooth] = useState(false);
   const [isActiveBluetooth, setIsActiveBluetooth] = useState(false);
+
   const [modalLoading, setModalLoading] = useState(false);
   const [modalFloatingBeacon, setModalFloatingBeacon] = useState(true);
   const [modalSuccessCheckin, setModalSuccessCheckin] = useState(false);
@@ -97,7 +140,7 @@ const MainHome = ({ navigation, route }) => {
     error: true,
     item: null,
   });
-  const [beaconScanning, setBeaconScanning] = useState(false);
+  const [beaconScanning, setBeaconScanning] = useState(true);
 
   const isCheckin = auth && auth.user && auth.user.isCheckin;
   const isSecurity = auth && auth.user && auth.user.role && auth.user.role.value === 0;
@@ -125,51 +168,43 @@ const MainHome = ({ navigation, route }) => {
     }
   }, [listPeripheral]);
 
-  // useEffect(() => {
-  //   const timeout = !beaconScanning ?
-  //     setTimeout(() => {
-  //       console.log('scannn kale');
-  //       // BleManager.scan(scanUUIDs, scanTimeout, true).then(() => {
-  //       //   setBeaconScanning(true);
-  //       // });
-  //     }, 6000) : null;
+  // setup beacon iOS
+  useEffect(() => {
+    const timeout = !beaconScanning ?
+      setTimeout(() => {
+        console.log('berapa kali');
+        BleManager.scan([], 3, true).then(() => {
+          setBeaconScanning(true);
+        });
+      }, 6000) : null;
 
-  //   return () => {
-  //     clearTimeout(timeout);
-  //   }
-  // }, [beaconScanning]);
+    return () => {
+      clearTimeout(timeout);
+    }
+  }, [beaconScanning]);
 
   useEffect(() => {
     initialConfig();
-    
-    androidBluetoothPermission().then((status) => {
-      console.log('status bluetooth', status);
-      if (status) {
-        BleManager.start({ showAlert: false });
-        // BleManager.scan(scanUUIDs, scanTimeout, true).then(() => {
-        //   setBeaconScanning(true);
-        // });
-      }
-    });
-
-    bleManagerEmitter.addListener("BleManagerDiscoverPeripheral", (args) => {
-      peripherals.set(args.id, args);
-      const beacons = Array.from(peripherals.values());
-      // console.log('beacons per', beacons);
-      setListPeripheral(beacons);
-    });
-
-    bleManagerEmitter.addListener('BleManagerStopScan', () => {
-      setBeaconScanning(false);
-    });
-
-    return () => {
-      if (typeof bleManagerEmitter.removeAllListeners === 'function') {
-        bleManagerEmitter.removeAllListeners('BleManagerDiscoverPeripheral');
-        bleManagerEmitter.removeAllListeners('BleManagerStopScan');
-      }
-    }
+    beaconIosSetup();
   }, []);
+
+  const beaconIosSetup = async() => {
+    if (Platform.OS === 'ios') {
+      await BleManager.start({ showAlert: false, });
+
+      BleManager.scan([], 3, true);
+
+      bleManagerEmitter.addListener("BleManagerDiscoverPeripheral", (args) => {
+        peripherals.set(args.id, args);
+        const beacons = Array.from(peripherals.values());
+        setListPeripheral(beacons);
+      });
+
+      bleManagerEmitter.addListener('BleManagerStopScan', () => {
+        setBeaconScanning(false);
+      });
+    }
+  }
 
   const initialConfig = async () => {
     if (Platform.OS === 'android' && Platform.Version < 31) {
@@ -180,53 +215,87 @@ const MainHome = ({ navigation, route }) => {
     console.log('prof', prof);
   }
 
-  // effect pairing art
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      onPairingCheckin();
-    }, 3000)
+    beaconAndroidSetup();
+  }, [isActiveBluetooth]);
+
+  useEffect(() => {
+    const timeout =
+      isFocused && Platform.OS === 'android' ?
+        setTimeout(() => {
+          console.log('isCheckin', isCheckin);
+          if (isCheckin) {
+            onPairingMerchant();
+
+            if (stateListArtUID.length > 0 && listMerchantType.length === 0 && !modalLoading) {
+              onPairingArt();
+            }
+          } else {
+            onPairingCheckin();
+          }
+        }, 2000)
+      :
+      isFocused && Platform.OS === 'ios' ?
+        setTimeout(() => {
+          console.log('isCheckin', isCheckin);
+          if (isCheckin) {
+            onPairingMerchant();
+
+            if (stateListArtUID.length > 0 && listMerchantType.length === 0 && !modalLoading) {
+              onPairingArt();
+            }
+          } else {
+            onPairingCheckin();
+          }
+        }, 300)
+      :
+      null;
 
     return () => {
       clearTimeout(timeout);
     }
-  }, [isFocused, isCheckin, stateListCheckinUID]);
+  }, [isCheckin, stateListArtUID, stateListCheckinUID, stateListMerchUID, isFocused, listMerchantType, modalLoading]);
 
-  // effect pairing art
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      onPairingArt();
-    }, 3000);
+    const timeout = isCheckin && stateListOtherUID.length > 0 ?
+      setTimeout(() => {
+        onPairingOther();
+      }, 10000)
+      : null;
 
     return () => {
       clearTimeout(timeout);
     }
-  }, [isFocused, isCheckin, stateListArtUID]);
+  }, [isCheckin, stateListOtherUID]);
 
-  // pairing pairing merchant
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      onPairingMerchant();
-    }, 3000);
+  const beaconAndroidSetup = async () => {
+    if (Platform.OS === 'android') {
+      // Android
+      // const granted = await requestLocationPermission();
 
-    return () => {
-      clearTimeout(timeout);
+      // if (granted) {
+      await connect();
+      await startScanning();
+      // } else {
+      //   Alert.alert(
+      //     'Permission error',
+      //     'Location permission not granted. Cannot scan for beacons',
+      //     [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+      //     {cancelable: false},
+      //   );
+      // }
+
+      DeviceEventEmitter.addListener('beaconsDidUpdate', ({ beacons, region }) => {
+        // console.log('beaconsDidUpdate', beacons, region);
+        // console.log('beaconsDidUpdate', beacons);
+        remapBeacon(beacons);
+      });
     }
-  }, [isFocused, isCheckin, stateListMerchUID]);
-
-  // effect pairing other
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      onPairingOther();
-    }, 10000);
-
-    return () => {
-      clearTimeout(timeout);
-    }
-  }, [isFocused, isCheckin, stateListOtherUID]);
+  };
 
   const remapBeacon = (beacons) => {
-    console.log('xxx beacons', beacons);
     if (Array.isArray(beacons)) {
+      let newArr = [];
       let newCheckinUID = [];
       let newMerchUID = [];
       let newArtUID = [];
@@ -237,11 +306,19 @@ const MainHome = ({ navigation, route }) => {
       beacons.map((e, i) => {
         // console.log('full info beacon', e);
 
-        const productId = e.id;
+        const productId = Platform.OS === 'ios' ? e.id : e.address;
+
         const strength = 4;
         const rumusRSSI = ((-69 - (e.rssi)) / (10 * strength));
         const productRange = Math.pow(10, rumusRSSI) * 100;
+
         const rangeForCompare = productRange - 50;
+
+        newArr.push({
+          productId,
+          productRange,
+          productName: e.name,
+        });
 
         const isCheckinType = localStoragBeacons.listCheckinUID.indexOf(productId);
         const isMerchType = localStoragBeacons.listMerchUID.indexOf(productId);
@@ -282,25 +359,22 @@ const MainHome = ({ navigation, route }) => {
       setStateListEventUID(newEventUID);
       setStateListOtherUID(newOtherUID);
       setStateListOtherType(newOtherType);
+
+      setStateListAllBeacons(newArr);
     }
   }
 
   const onPairingCheckin = async () => {
-    if (!isFocused) {
-      return;
-    }
-
-    if (isCheckin) {
-      return;
-    }
-    
-    if (stateListCheckinUID.length === 0) {
-      return;
-    }
-
     if (auth && auth.user && !auth.user.isRegistered) {
       setModalNeedUpdateProfile(true);
     }
+    
+    if (stateListCheckinUID.length === 0) {
+      // showLoading('error', 'Tidak Ada perangkat disekitar');
+      return;
+    }
+
+    setModalLoading(true);
 
     const body = {
       beacon_uid: stateListCheckinUID[0],
@@ -310,85 +384,89 @@ const MainHome = ({ navigation, route }) => {
     console.log('body', body);
 
     const result = await postAPI('user-activity', body);
-
     console.log('result checkin', result);
-
     if (result.status) {
       dispatch({ type: 'AUTH.SET_CHECKIN', data: result.data });
 
       setModalSuccessCheckin(true);
 
       const prof = await stateUpdateProfile();
+      console.log('prof', prof);
     }
+
+    setModalLoading(false);
+
     // ios freeze
     // showLoading(result.status ? 'success' : 'error', result.message);
   }
 
   const onPairingMerchant = async () => {
-    if (!isFocused) {
-      return;
-    }
-
-    if (!isCheckin) {
-      return;
-    }
-
     if (stateListMerchUID.length === 0) {
       return;
     }
 
-    let newTemp = [...tempAlreadyPairing];
     let newListMerchant = [];
 
-    await Promise.all(
-      stateListMerchUID.map(async (uid, idx) => {
-        if (tempAlreadyPairing.includes(uid)) {
+    setModalLoading(true);
 
-        } else {
-          const body = {
-            beacon_uid: uid,
-            beacon_type: 'merch',
-          };
-    
-          console.log('body merch pairing', body);
+    stateListMerchUID.map(async (uid, idx) => {
+      const body = {
+        beacon_uid: uid,
+        beacon_type: 'merch',
+      };
 
-          const result = await postAPI('user-activity', body);
+      console.log('body merch pairing', body);
 
-          console.log('result merch pairing', result);
+      const result = await postAPI('user-activity', body);
+      console.log('result merch pairing', result);
+      if (result.status) {
+        newListMerchant.push(result.data);
+      }
+    });
 
-          if (result.status) {
-            newListMerchant.push(result.data);
-            newTemp.push(uid);
-          }
-        }
-      })
-    );
+    setModalLoading(false);
 
     setListMerchantType(newListMerchant);
-    setTempAlreadyPairing(newTemp);
   }
 
   const onPairingArt = async () => {
-    if (!isFocused) {
-      return;
-    }
+    let isRefetch = false;
+    let newArr = [];
+    let newTempUID = [];
 
-    if (!isCheckin) {
-      return;
-    }
+    // stateListArtUID.map((i) => {
+    //   if (tempCurrentArtPairing.includes(i)) {
 
-    if (listMerchantType.length > 0) {
-      return;
-    }
+    //   } else {
+    //     isRefetch = true;
+    //   }
+    // });
 
-    if (stateListArtUID.length === 0) {
-      return;
-    }
-    
-    if (tempAlreadyPairing.includes(stateListArtUID[0])) {
-      return;
-    }
+    // if (!isRefetch) {
+    //   return;
+    // }
 
+    // setModalLoading(true);
+
+    // stateListArtUID.map(async(uid, idx) => {
+    //   const body = {
+    //     beacon_uid: uid,
+    //     beacon_type: 'art',
+    //   };
+
+    //   console.log('body art pairing', body);
+    //   const result = await postAPI('user-activity', body);
+    //   console.log('result art pairing', result);
+
+    //   if (result.status) {
+    //     newArr.push(result.data);
+    //     newTempUID.push(uid);
+    //   }
+    // })
+
+    console.log('ios', 'onPairing Art');
+
+    // ini select ONE
     const body = {
       beacon_uid: stateListArtUID[0],
       beacon_type: 'art',
@@ -401,48 +479,36 @@ const MainHome = ({ navigation, route }) => {
     if (result.status) {
       navigation.navigate('DetailArtScreen', { item: result.data });
     }
+    // end
 
-    let newTemp = [...tempAlreadyPairing];
-    newTemp.push(stateListArtUID[0]);
-    setTempAlreadyPairing(newTemp);
+    // setModalLoading(false);
+
+    // setListResultArtType(newArr);
+    // setTempCurrentArtPairing(newTempUID);
   }
 
   const onPairingOther = async () => {
-    if (!isFocused) {
-      return;
-    }
-
-    if (!isCheckin) {
-      return;
-    }
-
     if (stateListOtherUID.length === 0) {
       return;
     }
 
-    let newArr = [...tempAlreadyPairing];
+    stateListOtherUID.map(async (uid, idx) => {
+      const body = {
+        beacon_uid: uid,
+        beacon_type: stateListOtherType[idx],
+      };
 
-    await Promise.all(
-      stateListOtherUID.map(async (uid, idx) => {  
-        if (tempAlreadyPairing.includes(uid)) {
-          console.log('tempAlreadyPairing', tempAlreadyPairing);
-        } else {
-          const body = {
-            beacon_uid: uid,
-            beacon_type: stateListOtherType[idx],
-          };
+      if (tempAlreadyPairing.includes(uid)) {
+        console.log('tempAlreadyPairing', tempAlreadyPairing);
+      } else {
+        setTempAlreadyPairing(uid);
 
-          newArr.push(uid);
-  
-          console.log('body other pairing', body);
-  
-          const result = await postAPI('user-activity', body);
-          console.log('result other pairing', body, result);
-        }
-      })
-    )
+        console.log('body other pairing', body);
 
-    setTempAlreadyPairing(newArr);
+        const result = await postAPI('user-activity', body);
+        console.log('result other pairing', result);
+      }
+    });
   }
 
   const onCheckout = async (uuid) => {
@@ -452,9 +518,7 @@ const MainHome = ({ navigation, route }) => {
     };
 
     const result = await postAPI('user-activity', body);
-
     console.log('result checkout', result);
-
     if (result.status) {
       dispatch({ type: 'AUTH.SET_CHECKIN', data: null });
 
@@ -501,31 +565,14 @@ const MainHome = ({ navigation, route }) => {
     }
   };
 
-  const onScan = () => {
-    androidBluetoothPermission().then((status) => {
-      console.log('status bluetooth', status);
-      if (status) {
-        BleManager.scan(scanUUIDs, scanTimeout, true).then(() => {
-          setBeaconScanning(true);
-        });
-      }
-    });
-  };
-
   const onRefresh = async() => {
     setRefreshing(true);
-
-    setTempAlreadyPairing([]);
+    if (Platform.OS === 'ios') {
+      await BleManager.scan([], 3, true);
+    } else {
+      await startScanning();
+    }
     await stateBeaconSetting();
-    androidBluetoothPermission().then((status) => {
-      console.log('status bluetooth', status);
-      if (status) {
-        BleManager.scan(scanUUIDs, scanTimeout, true).then(() => {
-          setBeaconScanning(true);
-        });
-      }
-    });
-
     setRefreshing(false);
   };
 
@@ -545,6 +592,21 @@ const MainHome = ({ navigation, route }) => {
   const renderDebug = () => {
     return (
       <>
+        <View>
+          <Text>Beacon All</Text>
+          {stateListAllBeacons.map((i, idx) => {
+            return (
+              <View key={idx} style={{ width: '100%', marginBottom: 4, backgroundColor: Color.primarySoft }}>
+                <Text size={12} aling='left'>Address: {i.productId}</Text>
+                <Text size={12} aling='left'>Name: {i.productName}</Text>
+                <Text size={12} aling='left'>Range: {i.productRange} cm</Text>
+              </View>
+            )
+          })}
+        </View>
+
+        <Divider />
+
         <View>
           <Text>Beacon Checkin</Text>
           {stateListCheckinUID.map((i, idx) => {
@@ -615,7 +677,8 @@ const MainHome = ({ navigation, route }) => {
 
   // console.log('beaconScanning', beaconScanning);
   // console.log('localStoragBeacons', localStoragBeacons);
-  // console.log('listMerchantType', listMerchantType);
+  // console.log('auth', auth);
+  // console.log('stateListAllBeacons', stateListAllBeacons);
   // console.log('stateListMerchUID', stateListMerchUID);
   // console.log('stateListEventUID', stateListEventUID);
   // console.log('stateListArtUID', stateListArtUID);
@@ -841,9 +904,6 @@ const MainHome = ({ navigation, route }) => {
                         () => onCheckout(),
                       );
                     }}
-                    style={{
-                      
-                    }}
                   >
                     <Text color={Color.error} size={12} type='medium'>
                       Keluar
@@ -877,35 +937,6 @@ const MainHome = ({ navigation, route }) => {
               </Row>
             </Container>
           </Container>}
-
-          {beaconScanning ?
-            <View style={{ width: '100%', paddingHorizontal: 16, paddingBottom: 16 }}>
-              <View
-                style={{
-                  paddingHorizontal: 8,
-                  borderRadius: 8,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: 50,
-                }}
-              >
-                <ActivityIndicator size='small' />
-                <Divider width={6} />
-                <Text type='medium'>Scanning</Text>
-              </View>
-            </View>
-          :
-            <View style={{ width: '100%', paddingHorizontal: 16, paddingBottom: 16 }}>
-              <Button
-                onPress={() => {
-                  onScan();
-                }}
-              >
-                Scan Now
-              </Button>
-            </View>
-          }
 
           {showDebug && renderDebug()}
 
@@ -975,14 +1006,6 @@ const MainHome = ({ navigation, route }) => {
           </Container>}
 
           <WidgetHomeMenuStatic />
-
-          <TouchableOpacity
-            onPress={() => navigation.navigate('GroupScreen')}
-          >
-            <Text>
-              Group
-            </Text>
-          </TouchableOpacity>
 
           <Divider height={24} />
 
@@ -1214,8 +1237,8 @@ const MainHome = ({ navigation, route }) => {
       </Modal> */}
 
       {/* modal merch */}
-      {isFocused && isCheckin && listMerchantType.length > 0 && <Modal
-        isVisible
+      <Modal
+        isVisible={isFocused && isCheckin && listMerchantType.length > 0}
         animationIn="slideInDown"
         animationOut="slideOutDown"
         backdropColor={Color.semiwhite}>
@@ -1314,11 +1337,11 @@ const MainHome = ({ navigation, route }) => {
             </Container>
           </View>
         </View>
-      </Modal>}
+      </Modal>
 
       {/* modal success checkin */}
-      {isFocused && isCheckin && modalSuccessCheckin && <Modal
-        isVisible
+      {isFocused && isCheckin && listMerchantType.length > 0 && <Modal
+        isVisible={isCheckin && modalSuccessCheckin}
         onBackdropPress={() => {
           setModalSuccessCheckin(false);
         }}
@@ -1366,7 +1389,6 @@ const MainHome = ({ navigation, route }) => {
                 outline
                 color={Color.primaryMoreDark}
                 onPress={() => {
-                  console.log('tutup');
                   setModalSuccessCheckin(false);
                 }}
               >
@@ -1526,6 +1548,110 @@ const MainHome = ({ navigation, route }) => {
           }
         </View>
       </Modal>}
+
+      {/* modal art */}
+      {/* {isFocused && isCheckin && listMerchantType.length === 0 && listResultArtType.length > 0 && <Modal
+        isVisible={true}
+        animationIn="slideInDown"
+        animationOut="slideOutDown"
+        backdropColor={Color.semiwhite}>
+        <View
+          style={{ width: '100%', borderRadius: 16, backgroundColor: Color.theme, }}
+        >
+          <View
+            style={{
+              paddingHorizontal: 10,
+              paddingVertical: 16,
+              alignItems: 'center',
+            }}
+          >
+            <View
+              style={{
+                height: height / 8,
+                aspectRatio: 1,
+                marginBottom: 16,
+              }}
+            >
+              <Image
+                source={imageAssets.connectMerchant}
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  resizeMode: 'contain'
+                }}
+              />
+            </View>
+
+            <View
+              style={{
+                alignItems: 'center',
+              }}
+            >
+              <Text size={16} letterSpacing={0.15} type='medium'>Kamu sedang berada di pameran</Text>
+            </View>
+
+            <Container width='100%' paddingTop={16}>
+              <View style={{ width: '100%' }}>
+                {listResultArtType.map((item, idx) => {
+                  return (
+                    <TouchableOpacity
+                      key={idx}
+                      onPress={() => {
+                        navigation.navigate('DetailArtScreen', { item });
+                      }}
+                      style={{
+                        width: '100%',
+                        padding: 10,
+                        flexDirection: 'row',
+                        borderWidth: 1,
+                        borderColor: Color.textSoft,
+                        borderRadius: 8,
+                        marginBottom: 8,
+                      }}
+                    >
+                      <View style={{aspectRatio: 1}}>
+                        <Image
+                          source={{ uri: Array.isArray(item.img) && item.img.length > 0 ? item.img[0] : '' }}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            borderRadius: 8,
+                            backgroundColor: Color.border,
+                          }}
+                        />
+                      </View>
+                      <View style={{ flex: 1, padding: 10 }}>
+                        <Text align='left' type='medium' numberOfLines={2} letterSpacing={0.1}>{item.title}</Text>
+                        <Text align='left' type='medium' numberOfLines={2} size={10} color={Color.disabled}>{item.description}</Text>
+                      </View>
+                      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                      <Fontisto
+                          name={'angle-right'}
+                          color={Color.primaryMoreDark}
+                          size={15}
+                        />
+                      </View>
+                    </TouchableOpacity>
+                  )
+                })}
+              </View>
+            </Container>
+
+            <Container width='100%' paddingTop={16}>
+              <Button
+                outline
+                color={Color.primaryMoreDark}
+                onPress={() => {
+                  setListResultArtType([]);
+                  setTempCurrentArtPairing([]);
+                }}
+              >
+                Tutup
+              </Button>
+            </Container>
+          </View>
+        </View>
+      </Modal>} */}
 
       {isModalVisible && <Modal
         isVisible={isModalVisible}

@@ -27,7 +27,6 @@ import ListContentEat from 'src/components/Eat/ListContentEat';
 import ListFeaturedEat from 'src/components/Eat/ListFeaturedEat';
 
 const EatScreen = ({ navigation, route }) => {
-  const { title, userProfileId } = route.params;
   const isMainScreen = route.params && route.params.routeIndex;
 
   const auth = useSelector(state => state['auth']);

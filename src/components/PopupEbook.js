@@ -25,7 +25,7 @@ const PopupEbook = ({navigation}) => {
                 </View>
                 <View>  
                     <View style={{width: '86%'}}>
-                        <Text align='left' size={14} style={{fontWeight: 'bold'}}>Seni Berlorem Ipsum Dulur Sit Amet</Text>
+                        <Text align='left' size={14} style={{fontWeight: 'bold'}}>Seni adalah ledakan</Text>
 
                     </View>
                     <Text align='left' size={10}>Karya Esa Riski Hari Utama</Text>
@@ -44,7 +44,7 @@ const PopupEbook = ({navigation}) => {
                     </View>
                     <View style={{width: '80%'}}>
                         <Text align='left' size={10} numberOfLines={4}>
-                            Cookie toffee pie cupcake sesame snaps. Cupcake cupcake soufflé gummies croissant jelly beans candy canes fruitcake. Dessert cotton candy tart donut tiramisu cookie dragée wafer marzipan.
+                        Seni adalah sebuah ledakan merupakan ungkapan asli dari seniman abstrak terkenal Jepang Taro Okamoto. Ungkapan tersebut diucapkan oleh Deidara Akatsuki (tokoh dari novel manga terkenal asal jepang “Naruto).
                         </Text>
                     </View>
                 </View>

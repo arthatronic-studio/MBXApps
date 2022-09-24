@@ -103,7 +103,7 @@ const CardForum = (props) => {
                         <View>
                             <Text size={14} type='semibold' align='left'>Pustakawan Podium</Text>
                             <Text size={10} type='medium' align='left' color={Color.gray} style={{marginTop: 4, marginBottom:10}}>2.708 Anggota</Text>
-                            <Text size={12} align='left'>Carrot cake sweet gummi bears cake powder bonbon lemon drops cheesecake gummi bears. Gingerbread caramels cupcake gummies powder . . .</Text>
+                            <Text size={12} align='left'>Seni adalah sebuah ledakan merupakan ungkapan asli dari seniman abstrak terkenal Jepang Taro Okamoto. Ungkapan tersebut diucapkan oleh Deidara Akatsuki (tokoh dari novel manga terkenal asal jepang “Naruto).</Text>
                         </View>
 
                     </View>

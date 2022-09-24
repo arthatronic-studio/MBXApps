@@ -279,7 +279,7 @@ import EatDetailPesananScreen from 'src/screens/Eat/EatDetailPesananScreen';
 import EatHistory from 'src/screens/Eat/EatHistory';
 
 // beacon
-import DetailTenantScreen from 'src/screens/Beacon/DetailTenantScreen';
+import DetailTenantScreen from 'src/screens/Eat/DetailTenantScreen';
 import DetailArtScreen from 'src/screens/Beacon/DetailArtScreen';
 
 // Fest
@@ -553,11 +553,11 @@ function AppNavigator() {
 
       {/* eat */}
       <Screen name="EatScreen" component={EatScreen} />
+      <Screen name="DetailTenantScreen" component={DetailTenantScreen} />
       <Screen name="EatDetailPesananScreen" component={EatDetailPesananScreen} />
       <Screen name="EatHistory" component={EatHistory} />
 
       {/* beacon */}
-      <Screen name="DetailTenantScreen" component={DetailTenantScreen} />
       <Screen name="DetailArtScreen" component={DetailArtScreen} />
 
       {/* Fest */}

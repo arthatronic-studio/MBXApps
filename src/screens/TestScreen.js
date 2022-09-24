@@ -587,6 +587,9 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import BleManager from 'react-native-ble-manager';
+import { postAPI } from 'src/api-rest/httpService';
+import { androidBluetoothPermission } from 'src/lib/androidPermissions';
+import { Header } from 'src/components';
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
@@ -597,7 +600,7 @@ const App = () => {
 
   const startScan = () => {
     if (!isScanning) {
-      BleManager.scan([], 3, true).then((results) => {
+      BleManager.scan([], 3000, true).then((results) => {
         console.log('Scanning...');
         setIsScanning(true);
       }).catch(err => {
@@ -641,7 +644,7 @@ const App = () => {
   }
 
   const handleDiscoverPeripheral = (peripheral) => {
-    console.log('Got ble peripheral', peripheral);
+    // console.log('Got ble peripheral', peripheral);
     if (!peripheral.name) {
       peripheral.name = 'NO NAME';
     }
@@ -717,32 +720,56 @@ const App = () => {
         });
       }
     }
-
   }
 
   useEffect(() => {
-    BleManager.start({ showAlert: false });
+    const timeout = list.length > 0 ?
+      setTimeout(() => {
+        findX();
+      }, 1000) : null;
+
+    return () => {
+      clearTimeout(timeout);
+    }
+  }, [list]);
+
+  const findX = async() => {
+    list.map(async(item) => {
+      let serviceDataString = '';
+      if (item.advertising && item.advertising.serviceData && typeof item.advertising.serviceData['1803'] !== 'undefined') {
+        serviceDataString = item.advertising.serviceData['1803'].data;
+        // console.log('serviceDataString', serviceDataString);
+
+        let body = {
+          beacon_manu: serviceDataString
+        };
+        if (Platform.OS === 'ios') {
+          body['beacon_uuid_ios'] = item.id;
+        } else {
+          body['beacon_uuid'] = item.id
+        }
+        console.log('body', body);
+        const aww =await postAPI('beacon/find-x', body);
+        console.log('aww', aww);
+      }
+    });
+  }
+
+  useEffect(() => {
+    const init = async() => {
+      const status = await androidBluetoothPermission();
+      console.log('status', status);
+      if (status) {
+        await BleManager.start({ showAlert: false, restoreIdentifierKey: 'fda50693-a4e2-4fb1-afcf-c6eb07647825' });
+      }
+    }
+
+    init();
 
     bleManagerEmitter.addListener('BleManagerDiscoverPeripheral', handleDiscoverPeripheral);
     bleManagerEmitter.addListener('BleManagerStopScan', handleStopScan);
     bleManagerEmitter.addListener('BleManagerDisconnectPeripheral', handleDisconnectedPeripheral);
     bleManagerEmitter.addListener('BleManagerDidUpdateValueForCharacteristic', handleUpdateValueForCharacteristic);
-
-    if (Platform.OS === 'android' && Platform.Version >= 23) {
-      PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION).then((result) => {
-        if (result) {
-          console.log("Permission is OK");
-        } else {
-          PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION).then((result) => {
-            if (result) {
-              console.log("User accept");
-            } else {
-              console.log("User refuse");
-            }
-          });
-        }
-      });
-    }
 
     return (() => {
       console.log('unmount');
@@ -756,30 +783,47 @@ const App = () => {
   const renderItem = (item) => {
     const color = item.connected ? 'green' : '#fff';
     let serviceDataString = '';
+    let manuData = '';
+
     if (item.advertising && item.advertising.serviceData && typeof item.advertising.serviceData['1803'] !== 'undefined') {
       serviceDataString = item.advertising.serviceData['1803'].data;
     }
+
+    if (item.advertising && item.advertising.manufacturerData && item.advertising.manufacturerData.data) {
+      manuData = item.advertising.manufacturerData.data;
+    }
+
+    // console.log('serviceDataString', serviceDataString !== '');
+
+    // 'E8:D8:B3:14:DB:EC' : '6NizFNvsAAEAAgcD6GQ=' : 'AgEGGv9MAAIV/aUGk6TiT7Gvz8brB2R4JQABAALYCQlSREw1MTgyMhEWAxjo2LMU2+wAAQACBwPoZAAAAAA='
+    // 'FD:7E:9C:3B:27:04' : '/X6cOycEAAEAAgcD6FU=' : 'AgEGGv9MAAIV/aUGk6TiT7Gvz8brB2R4JQABAALYCQlSREw1MTgyMhEWAxj9fpw7JwQAAQACBwPoVQAAAAA='
+    // 'F0:DE:A3:CE:DD:C2' : '8N6jzt3CAAEAAgcD6FI=' : 'AgEGGv9MAAIV/aUGk6TiT7Gvz8brB2R4JQABAALYCQlSREw1MTgyMhEWAxjw3qPO3cIAAQACBwPoUgAAAAA='
+    // 'F4:B0:59:5F:AD:74' : '9LBZX610AAEAAgcD6GI=' : 'AgEGGv9MAAIV/aUGk6TiT7Gvz8brB2R4JQABAALYCQlSREw1MTgyMhEWAxj0sFlfrXQAAQACBwPoYgAAAAA='
+    // 'F4:42:F1:58:48:62' : '9ELxWEhiAAEAAgcD6FE=' : 'AgEGGv9MAAIV/aUGk6TiT7Gvz8brB2R4JQABAALYCQlSREw1MTgyMhEWAxj0QvFYSGIAAQACBwPoUQAAAAA='
+    
     return (
-      <TouchableHighlight
-        activeOpacity={1}
-      // onPress={() => testPeripheral(item)}
-      >
-        <View style={[styles.row, { backgroundColor: color, padding: 8, marginBottom: 4 }]}>
-          <Text style={{ fontSize: 12, textAlign: 'center', color: '#333333', fontWeight: '600' }}>{item.name}</Text>
-          <TouchableHighlight
-            onPress={() => {
-              Clipboard.setString(item.id);
-              alert('copied');
-            }}
-          >
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: 4 }}>
-              <Text style={{ fontSize: 16, textAlign: 'center', color: '#333333', padding: 4 }}>{item.id}</Text>
-              <Text style={{ fontSize: 16, textAlign: 'center', color: '#333333', fontWeight: '600', marginLeft: 8 }}>copy</Text>
-            </View>
-          </TouchableHighlight>
-          <Text style={{ fontSize: 14, textAlign: 'center', color: 'blue' }}>{serviceDataString}</Text>
-        </View>
-      </TouchableHighlight>
+      <View>
+        {serviceDataString !== '' ?
+          <View style={[styles.row, { backgroundColor: color, padding: 8, marginBottom: 4, paddingHorizontal: 16 }]}>
+            <Text style={{ fontSize: 12, textAlign: 'center', color: '#333333', fontWeight: '600' }}>{item.name}</Text>
+            <TouchableHighlight
+              onPress={() => {
+                Clipboard.setString(item.id);
+                alert('copied');
+              }}
+            >
+              <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingVertical: 4 }}>
+                <Text style={{ fontSize: 16, textAlign: 'center', color: '#333333', padding: 4 }}>{item.id}</Text>
+                <Text style={{ fontSize: 16, textAlign: 'center', color: '#333333', fontWeight: '600', marginLeft: 8 }}>copy</Text>
+              </View>
+            </TouchableHighlight>
+            <Text style={{ fontSize: 14, textAlign: 'center', color: 'blue' }}>{serviceDataString}</Text>
+            <Text style={{ fontSize: 14, textAlign: 'center', color: 'green' }}>{manuData}</Text>
+          </View>
+        :
+          <View />
+        }
+      </View>
     );
   }
 
@@ -788,6 +832,7 @@ const App = () => {
   return (
     <>
       <SafeAreaView>
+        <Header />
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>

@@ -86,16 +86,7 @@ const AboutFest = ({navigation, route}) => {
               />
               <Divider height={8} />
               <Text size={11} align="left" color={Color.textSoft}>
-                Cupcake ipsum dolor sit amet gingerbread. Sugar plum biscuit
-                chocolate bar dessert gummies halvah chocolate bar bonbon
-                powder. Jujubes tiramisu sweet roll jelly-o tiramisu. Gummies
-                powder carrot cake dessert lollipop. Oat cake marshmallow chupa
-                chups cookie pastry pastry croissant. Sugar plum fruitcake
-                halvah dragée pastry icing sesame snaps chocolate bar. Pie
-                chocolate bar pastry bonbon donut bonbon ice cream topping
-                cotton candy. Croissant lollipop gingerbread biscuit carrot cake
-                jujubes. Tiramisu soufflé gingerbread powder caramels icing
-                danish.
+              Seni adalah sebuah ledakan merupakan ungkapan asli dari seniman abstrak terkenal Jepang Taro Okamoto. Ungkapan tersebut diucapkan oleh Deidara Akatsuki (tokoh dari novel manga terkenal asal jepang “Naruto).
               </Text>
             </Container>
           </Container>

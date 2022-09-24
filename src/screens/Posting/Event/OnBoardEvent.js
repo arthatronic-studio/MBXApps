@@ -47,7 +47,7 @@ const OnBoardEvent = () => {
             <Image source={ImagesPath.createEvent}/>
             <Divider height={60}/>
             <Text style={{fontSize: 18, fontSize: 18, fontWeight: 'bold'}}>Ayo Buat Acara Untuk Komunitas</Text>
-            <Text style={{marginVertical: 20, fontSize: 13, width: '85%', lineHeight: 18}}>Cupcake ipsum dolor sit amet marzipan cupcake donut toffee. Gingerbread icing I love biscuit candy canes dessert. </Text>
+            <Text style={{marginVertical: 20, fontSize: 13, width: '85%', lineHeight: 18}}>Seni adalah sebuah ledakan merupakan ungkapan asli dari seniman abstrak terkenal Jepang Taro Okamoto. Ungkapan tersebut diucapkan oleh Deidara Akatsuki (tokoh dari novel manga terkenal asal jepang “Naruto).</Text>
             <Divider/>
             <TouchableOpacity onPress={() => { dispatch({ type: 'USER.CREATE_EVENT' }); navigation.replace('CreateEvent')}} style={{justifyContent: 'center',width: '90%', height: 40, marginBottom: 20, backgroundColor: Color.primary, borderRadius: 20}}>
                 <Text style={{color: Color.textInput, fontWeight: 'bold'}}>Ayo Buat Event</Text>

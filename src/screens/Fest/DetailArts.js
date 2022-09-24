@@ -66,7 +66,7 @@ const DetailArts = ({navigation, route}) => {
       id: 3,
       title: 'Jibo Yumaera',
       date: '1 jam lalu',
-      isi: 'Cupcake ipsum dolor sit amet jelly beans tiramisu croissant pudding. Icing jelly chocolate cupcake oat cake bear claw cake fruitcake.',
+      isi: 'Seni adalah sebuah ledakan merupakan ungkapan asli dari seniman abstrak terkenal Jepang Taro Okamoto. Ungkapan tersebut diucapkan oleh Deidara Akatsuki (tokoh dari novel manga terkenal asal jepang “Naruto).',
     },
   ]);
 
@@ -207,7 +207,7 @@ const DetailArts = ({navigation, route}) => {
           />
           <Divider height={16} />
           <Text size={17} color={Color.text} align="center">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Seni adalah ledakan
           </Text>
         </Container>
         <Divider height={16} />
@@ -217,10 +217,7 @@ const DetailArts = ({navigation, route}) => {
           </Text>
           <Divider height={10} />
           <Text size={14} align="left" color={Color.textSoft}>
-            Cupcake ipsum dolor sit amet candy canes. Brownie powder candy
-            bonbon cotton candy bonbon apple pie chupa chups. Chocolate cake
-            cheesecake pudding gingerbread gingerbread chocolate bar carrot cake
-            donut cookie.
+          Seni adalah sebuah ledakan merupakan ungkapan asli dari seniman abstrak terkenal Jepang Taro Okamoto. Ungkapan tersebut diucapkan oleh Deidara Akatsuki (tokoh dari novel manga terkenal asal jepang “Naruto).
           </Text>
           <Divider height={10} />
           <Text size={14} align="left" color={Color.textSoft}>

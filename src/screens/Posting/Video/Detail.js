@@ -226,7 +226,7 @@ const Detail = ({ navigation, route }) => {
                         <View style={{ width: '85%' }}>
                             <Text align='left' size={14} color={Color.text}>Adang Susyano</Text>
                             <Text align='left' size={12} color={Color.gray}>2 Jam yang lalu</Text>
-                            <Text align='left' size={12} color={Color.text} style={{ marginTop: 8 }}>Cupcake ipsum dolor sit amet donut. Toffee pie icing jelly beans biscuit bear claw. Icing jelly beans jelly-o ice cream topping marshmallow powder carrot cake.</Text>
+                            <Text align='left' size={12} color={Color.text} style={{ marginTop: 8 }}>Seni adalah sebuah ledakan merupakan ungkapan asli dari seniman abstrak terkenal Jepang Taro Okamoto. Ungkapan tersebut diucapkan oleh Deidara Akatsuki (tokoh dari novel manga terkenal asal jepang “Naruto).</Text>
                         </View>
                     </View>
                     <View style={{ flexDirection: 'row', marginBottom: 16 }}>
@@ -239,7 +239,7 @@ const Detail = ({ navigation, route }) => {
                         <View style={{ width: '85%' }}>
                             <Text align='left' size={14} color={Color.text}>Hermansyah</Text>
                             <Text align='left' size={12} color={Color.gray}>2 Jam yang lalu</Text>
-                            <Text align='left' size={12} color={Color.text} style={{ marginTop: 8 }}>Cupcake ipsum dolor sit amet donut. Toffee pie icing jelly beans biscuit bear claw. Icing jelly beans jelly-o ice cream topping marshmallow powder carrot cake.</Text>
+                            <Text align='left' size={12} color={Color.text} style={{ marginTop: 8 }}>Seni adalah sebuah ledakan merupakan ungkapan asli dari seniman abstrak terkenal Jepang Taro Okamoto. Ungkapan tersebut diucapkan oleh Deidara Akatsuki (tokoh dari novel manga terkenal asal jepang “Naruto).</Text>
                         </View>
                     </View>
                     <View style={{ flexDirection: 'row', marginBottom: 16 }}>
@@ -252,7 +252,7 @@ const Detail = ({ navigation, route }) => {
                         <View style={{ width: '85%' }}>
                             <Text align='left' size={14} color={Color.text}>Anna Christine</Text>
                             <Text align='left' size={12} color={Color.gray}>2 Jam yang lalu</Text>
-                            <Text align='left' size={12} color={Color.text} style={{ marginTop: 8 }}>Cupcake ipsum dolor sit amet donut. Toffee pie icing jelly beans biscuit bear claw. Icing jelly beans jelly-o ice cream topping marshmallow powder carrot cake.</Text>
+                            <Text align='left' size={12} color={Color.text} style={{ marginTop: 8 }}>Seni adalah sebuah ledakan merupakan ungkapan asli dari seniman abstrak terkenal Jepang Taro Okamoto. Ungkapan tersebut diucapkan oleh Deidara Akatsuki (tokoh dari novel manga terkenal asal jepang “Naruto).</Text>
                         </View>
                     </View>
                 </View> */}

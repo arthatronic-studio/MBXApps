@@ -98,23 +98,7 @@ const DirectOrder = () => {
               Deskripsi
             </Text>
             <Text style={{textAlign: 'justify'}}>
-              Cupcake ipsum dolor sit amet biscuit caramels cupcake tootsie
-              roll. Cake bonbon sweet dragée candy canes. Fruitcake powder
-              tiramisu cake cupcake gummies donut. Jelly-o chocolate bar pastry
-              pastry danish dragée chupa chups icing fruitcake. Bonbon sesame
-              snaps carrot cake jelly jujubes topping liquorice ice cream sweet
-              roll. Powder chupa chups toffee ice cream cotton candy sweet roll
-              chocolate bar lemon drops. Muffin carrot cake sesame snaps soufflé
-              fruitcake fruitcake. Gingerbread tart shortbread cake tart.
-              {'\n'}{'\n'}
-              Cupcake ipsum dolor sit amet biscuit caramels cupcake tootsie
-              roll. Cake bonbon sweet dragée candy canes. Fruitcake powder
-              tiramisu cake cupcake gummies donut. Jelly-o chocolate bar pastry
-              pastry danish dragée chupa chups icing fruitcake. Bonbon sesame
-              snaps carrot cake jelly jujubes topping liquorice ice cream sweet
-              roll. Powder chupa chups toffee ice cream cotton candy sweet roll
-              chocolate bar lemon drops. Muffin carrot cake sesame snaps soufflé
-              fruitcake fruitcake. Gingerbread tart shortbread cake tart.
+            Seni adalah sebuah ledakan merupakan ungkapan asli dari seniman abstrak terkenal Jepang Taro Okamoto. Ungkapan tersebut diucapkan oleh Deidara Akatsuki (tokoh dari novel manga terkenal asal jepang “Naruto).
             </Text>
           </View>
           <Text style={{marginVertical: 16}} type="semibold">

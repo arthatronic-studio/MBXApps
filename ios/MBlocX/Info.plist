@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>M Bloc X</string>
+	<string>blocX</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -49,9 +49,9 @@
 		</dict>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>$(PRODUCT_NAME) need permission to access your bluetooth, This will be used for you to add photos when posting for Nearby Place (Tempat), Event, HelpMe, Comment features</string>
+	<string>$(PRODUCT_NAME) need permission to access your bluetooth, This will be used for enter to the store area</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>$(PRODUCT_NAME) need permission to access your bluetooth, This will be used for you to add photos when posting for Nearby Place (Tempat), Event, HelpMe, Comment features</string>
+	<string>$(PRODUCT_NAME) need permission to access your bluetooth, This will be used for enter to the store area</string>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) need permission to access your camera, This will be used for you to add photos when posting for Nearby Place (Tempat), Event, HelpMe, Comment features</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
@@ -99,9 +99,7 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>bluetooth-central</string>
 		<string>fetch</string>
-		<string>location</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
