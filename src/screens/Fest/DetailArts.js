@@ -120,11 +120,11 @@ const DetailArts = ({navigation, route}) => {
       }>
       <ScrollView>
         <Image
-          source={{uri: typeof item.image === 'string' ? item.image : ''}}
+          source={typeof item.image === 'string' ? {uri: item.image} : item.image}
           style={{
-            width: '100%',
-            aspectRatio: 1,
-            resizeMode: 'cover',
+            width: width,
+            height: width,
+            resizeMode: 'contain',
           }}
         />
         <Divider height={16} />
