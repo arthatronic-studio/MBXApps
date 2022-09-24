@@ -292,6 +292,9 @@ import FestMusicPlayer from 'src/screens/Fest/FestMusicPlayer';
 import LiteratureScreen from 'src/screens/Fest/LiteratureScreen';
 import CreationScreen from 'src/screens/Fest/CreationScreen';
 
+// GROUP
+import GroupScreen from 'src/screens/Group/GroupScreen';
+
 const { Navigator, Screen } = createStackNavigator();
 const MainPage = BottomTabsNavigator;
 	// accessClient.BottomTabsNavigator.type === 'komoto'
@@ -566,6 +569,9 @@ function AppNavigator() {
       <Screen name="FestMusicPlayer" component={FestMusicPlayer} />
       <Screen name="LiteratureScreen" component={LiteratureScreen} />
       <Screen name="CreationScreen" component={CreationScreen} />
+
+      {/* Group */}
+      <Screen name="GroupScreen" component={GroupScreen} />
 
     </Navigator>
   );

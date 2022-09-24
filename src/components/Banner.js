@@ -16,6 +16,7 @@ const propTypes = {
   showHeader: PropTypes.bool,
   forArticle: PropTypes.bool,
   leftIndicator: PropTypes.bool,
+  imageUrl: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -25,9 +26,10 @@ const defaultProps = {
   categoryId: null,
   forArticle: false,
   leftIndicator: false,
+  imageUrl: true
 };
 
-const Banner = ({ data, loading, showHeader, forArticle, leftIndicator }) => {
+const Banner = ({ data, loading, showHeader, forArticle, leftIndicator, imageUrl }) => {
   const {width} = useWindowDimensions();
   const {Color} = useColor();
   const navigation = useNavigation();
@@ -112,7 +114,7 @@ const Banner = ({ data, loading, showHeader, forArticle, leftIndicator }) => {
                     onPress={() => onPress(e)}
                   >
                     <Image
-                      source={{uri: e.image}}
+                      source={imageUrl ? {uri: e.image}: e.image}
                       style={{
                         width: '100%',
                         height: '100%',
