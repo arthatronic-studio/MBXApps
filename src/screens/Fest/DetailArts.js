@@ -79,7 +79,7 @@ const DetailArts = ({navigation, route}) => {
         justify="flex-start"
         paddingVertical={10}>
         <Image
-          source={ImagesPath.avatar1}
+          source={ImagesPath.avatar2}
           style={{height: 32, aspectRatio: 1, borderRadius: 16}}
         />
         <Divider width={10} />
@@ -98,6 +98,8 @@ const DetailArts = ({navigation, route}) => {
       </Container>
     );
   };
+
+  console.log('item', item);
 
   return (
     <Scaffold
@@ -118,7 +120,7 @@ const DetailArts = ({navigation, route}) => {
       }>
       <ScrollView>
         <Image
-          source={{uri: item.image}}
+          source={{uri: typeof item.image === 'string' ? item.image : ''}}
           style={{
             width: '100%',
             aspectRatio: 1,
