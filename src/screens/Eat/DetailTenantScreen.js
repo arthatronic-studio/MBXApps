@@ -484,6 +484,8 @@ const DetailTenantScreen = ({ navigation, route }) => {
     const disabledDecrease = qty < 2;
     const disabledIncrease = qty > 9;
 
+    console.log('qty', qty);
+
     return (
       <Modal
         isVisible={true}
@@ -598,12 +600,13 @@ const DetailTenantScreen = ({ navigation, route }) => {
                   onPress={async() => {
                     let newArr = [...listProducts];
                     newArr[index].selected = true;
+                    newArr[index].qty = qty;
                     setListProducts(newArr);
                     setCurrentIndexProduct(-1);
 
                     const body = {
                       product_id: item.id,
-                      quantity: item.qty,
+                      quantity: qty,
                       catatan: null,
                       nama_pelanggan: null,
                     }
@@ -616,6 +619,8 @@ const DetailTenantScreen = ({ navigation, route }) => {
                           setNamaPemesan(result.data[0].nama_pelanggan);
                         }
                       }
+
+                      console.log('result add', result, Array.isArray(result.ringkasan_pembayaran));
 
                       if (result.ringkasan_pembayaran && Array.isArray(result.ringkasan_pembayaran)) {
                         setRingkasanPembayaran(result.ringkasan_pembayaran);
