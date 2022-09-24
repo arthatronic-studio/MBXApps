@@ -36,7 +36,6 @@ import ModalinputCode from 'src/components/ModalInputCode';
 import ModalCardMember from 'src/components/ModalCardMember';
 import Client from '@src/lib/apollo';
 import { queryOrganizationMemberManage } from '@src/lib/query/organization';
-import { getCurrentUserProfile } from 'src/state/actions/user/auth';
 import { accessClient } from 'src/utils/access_client';
 import { fetchCommunityMemberCheck } from 'src/api/community';
 import ModalActions from 'src/components/Modal/ModalActions';
@@ -77,14 +76,10 @@ const MainProfile = ({ navigation, route }) => {
   useEffect(() => {
     if (refreshing) {
       setRefreshing(false);
-      dispatch(getCurrentUserProfile());
     }
   }, [refreshing]);
 
   useEffect(() => {
-    // hit cuurent user profile
-    dispatch(getCurrentUserProfile());
-
     fetchData();
 
     // currentSocket.emit('list_my_room_ids');
@@ -124,6 +119,7 @@ const MainProfile = ({ navigation, route }) => {
   return (
     <Scaffold
       loadingProps={loadingProps}
+      showHeader={false}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* user fast info */}
@@ -235,7 +231,12 @@ const MainProfile = ({ navigation, route }) => {
             <Text align='left' size={12} type='medium'>Seputar Aplikasi</Text>
           </View>
           <View style={{}}>
-            {/* <View style={{ flexDirection: 'row', paddingTop: 24 }}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('SettingScreen');
+              }}
+              style={{ flexDirection: 'row', paddingTop: 24 }}
+            >
               <Image
                 source={assetImageProfile.setting}
                 style={{
@@ -246,7 +247,7 @@ const MainProfile = ({ navigation, route }) => {
               />
               <Divider width={8} />
               <Text align='left'>Pengaturan</Text>
-            </View> */}
+            </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('SyaratdanKetentuan');
@@ -306,7 +307,7 @@ const MainProfile = ({ navigation, route }) => {
 
         <Line height={8} width='100%' color='#F4F4F4' />
 
-        <Container padding={16}>
+        {auth.user && auth.user.id !== 6 && <Container padding={16}>
           <TouchableOpacity
             onPress={() => {
               dispatch({ type: 'SETTING.SET_SHOW_DEBUG', data: !showDebug });
@@ -318,10 +319,31 @@ const MainProfile = ({ navigation, route }) => {
             <Circle color={Color.success} size={16} />
             <Divider width={8} />
             <Text color={Color.success} align='left'>
-              Show Debug {showDebug ? '✅' : '❌'}
+              Show Debug
+            </Text>
+            <Divider width={8} />
+            <Text color={Color.success} align='left' size={10}>
+              {showDebug ? '✅' : '❌'}
             </Text>
           </TouchableOpacity>
-        </Container>
+        </Container>}
+
+        {auth.user && auth.user.id !== 6 && <Container padding={16}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('TestScreen');
+            }}
+            style={{
+              flexDirection: 'row',
+            }}
+          >
+            <Circle color='orange' size={16} />
+            <Divider width={8} />
+            <Text color='orange' align='left'>
+              Dragonball Radar
+            </Text>
+          </TouchableOpacity>
+        </Container>}
 
         <Container padding={16}>
           <TouchableOpacity

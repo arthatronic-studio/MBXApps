@@ -73,7 +73,7 @@ const HistoryRiwayat = ({ navigation, route }) => {
     <Scaffold
       style={{ backgroundColor: '#F4F4F4' }}
       fallback={itemData.loading}
-      empty={false}
+      empty={!itemData.loading && itemData.data.length === 0}
       popupProps={popupProps}
       loadingProps={loadingProps}
       showHeader={false}
@@ -129,7 +129,7 @@ const HistoryRiwayat = ({ navigation, route }) => {
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ width: '14%', aspectRatio: 1, backgroundColor: Color.secondary, borderRadius: 4 }}>
                   <Image
-                    source={{ uri: item.ticket.event.image }}
+                    source={{ uri: item.ticket && item.ticket.event ? item.ticket.event.image : '' }}
                     style={{
                       width: '100%',
                       height: '100%',
@@ -138,7 +138,7 @@ const HistoryRiwayat = ({ navigation, route }) => {
                   />
                 </View>
                 <View style={{ paddingHorizontal: 10, width: '76%' }}>
-                  <Text numberOfLines={2} align={'left'} style={{ fontWeight: 'bold' }}>{item.ticket.name}</Text>
+                  <Text numberOfLines={2} align={'left'} style={{ fontWeight: 'bold' }}>{item.ticket ? item.ticket.name : ''}</Text>
                   <View style={{ flexDirection: 'row', marginTop: 4, alignItems: 'center' }}>
                     <Text style={{ fontSize: 10, color: Color.secondary }}>{item.amount} Tiket</Text>
                     <View style={{ width: 3, height: 3, backgroundColor: Color.secondary, borderRadius: 20, marginHorizontal: 5 }} />

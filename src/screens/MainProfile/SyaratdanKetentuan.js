@@ -114,9 +114,7 @@ const SyaratdanKetentuan = ({
   return (
     <Scaffold
       headerTitle="Syarat & Ketentuan"
-      onPressLeftButton={() =>
-        navigation.navigate('MainProfile', {refresh: true})
-      }>
+    >
       <View
         style={{
           flex: 1,

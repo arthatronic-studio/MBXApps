@@ -89,7 +89,7 @@ const EatScreen = ({ navigation, route }) => {
                 />
               </TouchableOpacity>
 
-              <View
+              {/* <View
                 style={{
                   position: 'absolute',
                   top: -3,
@@ -99,7 +99,7 @@ const EatScreen = ({ navigation, route }) => {
                   borderRadius: 4,
                   backgroundColor: Color.error,
                 }}
-              />
+              /> */}
             </View>
           }
         />

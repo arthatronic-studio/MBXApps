@@ -158,7 +158,7 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                                 />
                                 <Divider width={4} />
                                 <>
-                                    <Text type='medium' numberOfLines={2} size={12} align='left' color={Color.placeholder} letterSpacing={0.5}>{item.formatted_date}{item.formatted_date}</Text>
+                                    <Text type='medium' numberOfLines={2} size={12} align='left' color={Color.placeholder} letterSpacing={0.5}>{item.formatted_date}</Text>
                                     <Divider height={8} />
                                 </>
                             </View>

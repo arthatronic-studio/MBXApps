@@ -52,9 +52,10 @@ const ListContentEat = ({ userProfileId, productCategory, name, horizontal, styl
 
     const fetchData = async () => {
         let baseEndpoint = 'location';
-        if (auth.user.activityInfo.location) {
-            baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.user.activityInfo.location.id}&type=eat`;
-        }
+        baseEndpoint = baseEndpoint + `?type=eat`;
+        // if (auth.user.activityInfo.location) {
+            // baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.user.activityInfo.location.id}&type=eat`;
+        // }
         console.log('baseEndpoint', baseEndpoint);
         const result = await getAPI(baseEndpoint);
 

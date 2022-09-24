@@ -5,6 +5,7 @@ import Config from 'react-native-config';
 
 import { navigationRef } from 'App';
 import { store } from '../state/redux';
+import { Platform } from 'react-native';
 
 const statusCodeDanger = [401];
 const statusCodeReject = [500];
@@ -15,10 +16,7 @@ export const requestHttp = axios.create({
 
 const redirect = async() => {
     // clear session token
-    await store.dispatch({
-        type: 'AUTH.CLEAR'
-    });
-
+    await store.dispatch({ type: 'AUTH.CLEAR' });
     await store.dispatch({type: 'USER.LOGOUT'});
 
     // handle multiple redirect
@@ -69,6 +67,7 @@ export const postAPI = async(endtpoint, body, headers) => {
         headers: {
             'Authorization': 'Bearer ' + auth.token,
             'Content-Type': 'application/json',
+            'device_type': Platform.OS,
             ...headers,
         }
     }
@@ -124,6 +123,7 @@ export const getAPI = async(endtpoint, body, headers) => {
         data: body,
         headers: {
             'Authorization': 'Bearer ' + auth.token,
+            'device_type': Platform.OS,
             ...headers,
         }
     }
