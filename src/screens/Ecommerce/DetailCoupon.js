@@ -49,27 +49,27 @@ const DATA = [
   {
     id: 1,
     no: 1,
-    text: ' Gummies toffee croissant marzipan candy bear claw cupcake.Pie sesame snaps wafer topping cake pastry marzipan',
+    text: 'Seni adalah sebuah ledakan merupakan ungkapan asli dari seniman abstrak terkenal Jepang Taro Okamoto. Ungkapan tersebut diucapkan oleh Deidara Akatsuki (tokoh dari novel manga terkenal asal jepang “Naruto).',
   },
   {
     id: 2,
     no: 2,
-    text: ' Gummies toffee croissant marzipan candy bear claw cupcake.Pie sesame snaps wafer topping cake pastry marzipan',
+    text: 'Seni adalah sebuah ledakan merupakan ungkapan asli dari seniman abstrak terkenal Jepang Taro Okamoto. Ungkapan tersebut diucapkan oleh Deidara Akatsuki (tokoh dari novel manga terkenal asal jepang “Naruto).',
   },
   {
     id: 3,
     no: 3,
-    text: ' Gummies toffee croissant marzipan candy bear claw cupcake.Pie sesame snaps wafer topping cake pastry marzipan',
+    text: 'Seni adalah sebuah ledakan merupakan ungkapan asli dari seniman abstrak terkenal Jepang Taro Okamoto. Ungkapan tersebut diucapkan oleh Deidara Akatsuki (tokoh dari novel manga terkenal asal jepang “Naruto).',
   },
   {
     id: 4,
     no: 4,
-    text: ' Gummies toffee croissant marzipan candy bear claw cupcake.Pie sesame snaps wafer topping cake pastry marzipan',
+    text: 'Seni adalah sebuah ledakan merupakan ungkapan asli dari seniman abstrak terkenal Jepang Taro Okamoto. Ungkapan tersebut diucapkan oleh Deidara Akatsuki (tokoh dari novel manga terkenal asal jepang “Naruto).',
   },
   {
     id: 5,
     no: 5,
-    text: ' Gummies toffee croissant marzipan candy bear claw cupcake.Pie sesame snaps wafer topping cake pastry marzipan',
+    text: 'Seni adalah sebuah ledakan merupakan ungkapan asli dari seniman abstrak terkenal Jepang Taro Okamoto. Ungkapan tersebut diucapkan oleh Deidara Akatsuki (tokoh dari novel manga terkenal asal jepang “Naruto).',
   },
 ];
 const DetailCoupon = ({navigation, route}) => {
