@@ -117,7 +117,7 @@ const FestScreen = ({navigation, route}) => {
               showSeeAllText={true}
             />
             <HighlightFestArts
-              productCategory="FEST_ARTS"
+              productCategory="FEST_ARTS_GRAFIC"
               name="Seni & Desain"
               title="Seni & Desain Terbaru"
               nav="EventScreen"

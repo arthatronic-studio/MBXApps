@@ -40,25 +40,25 @@ const CardFestArts = ({
   //   }).then((res) => console.log(res, "haha"));
   // }, []);
 
+  const heightImage = item.height / (item.width / (width / numColumns - 24));
+
   return (
     <TouchableOpacity
       style={{
         paddingHorizontal: 8,
         paddingVertical: 8,
-        width: width / numColumns - (horizontal ? 16 : 8),
+        width: width / numColumns - 8,
       }}
       onPress={() => navigation.navigate('DetailArts', {item})}>
-      <Image
-        source={{uri: item.image}}
-        style={{
-          width: '100%',
-          aspectRatio: 1.5,
-          // height: size.height * ((width / numColumns - (horizontal ? 16 : 8)) / size.width),
-          resizeMode: 'cover',
-          borderRadius: 8,
-        }}
-        resizeMethod={'auto'}
-      />
+        <Image
+          source={item.image}
+          style={{
+            width: '100%',
+            height: heightImage,
+            resizeMode: 'contain',
+            borderRadius: 8,
+          }}
+        />
       <Divider height={8} />
       <Text
         align="left"
@@ -74,7 +74,7 @@ const CardFestArts = ({
       <Container flex={1} flexDirection="row" align="center">
         <Ionicons
           name={'heart'}
-          color={"#ACAAA5"}
+          color={"#ACAAA5"} 
         />
         <Divider width={5}/>
         <Text size={10} color={"#ACAAA5"}>

@@ -12,6 +12,7 @@ import { initialItemState } from 'src/utils/constants';
 import { fetchContentProduct, fetchContentUserProduct } from 'src/api/content';
 import CardContentProduct from 'src/components/Content/CardContentProduct';
 import { getAPI } from 'src/api-rest/httpService';
+import imageAssets from 'assets/images';
 
 const propTypes = {
     userProfileId: PropTypes.number,
@@ -79,11 +80,30 @@ const HighlightFestLiterature = (props) => {
     const fetchData = async() => {
         const result = await getAPI('event');
         console.log('result event', result);
-        let newData = [];
+        let newData = [
+            {
+                id: 1,
+                image: imageAssets.literatur1, 
+            },
+            {
+                id: 2,
+                image: imageAssets.literatur2, 
+            },
+            {
+                id: 3,
+                image: imageAssets.literatur3, 
+            },
+            {
+                id: 4,
+                image: imageAssets.literatur4, 
+            }
+        ];
 
-        if (result.status) {
-            newData = result.data;
-        }
+        // if (result.status) {
+        //     newData = result.data;
+        // }
+
+        
 
         setItemData({
             ...itemData,

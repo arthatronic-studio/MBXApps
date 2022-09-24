@@ -288,6 +288,8 @@ import ArtsScreen from 'src/screens/Fest/ArtsScreen';
 import DetailArts from 'src/screens/Fest/DetailArts';
 import MusicScreen from 'src/screens/Fest/MusicScreen';
 import FestMusicPlayer from 'src/screens/Fest/FestMusicPlayer';
+import LiteratureScreen from 'src/screens/Fest/LiteratureScreen';
+import CreationScreen from 'src/screens/Fest/CreationScreen';
 
 const { Navigator, Screen } = createStackNavigator();
 const MainPage = BottomTabsNavigator;
@@ -560,6 +562,8 @@ function AppNavigator() {
       <Screen name="DetailArts" component={DetailArts} />
       <Screen name="MusicScreen" component={MusicScreen} />
       <Screen name="FestMusicPlayer" component={FestMusicPlayer} />
+      <Screen name="LiteratureScreen" component={LiteratureScreen} />
+      <Screen name="CreationScreen" component={CreationScreen} />
 
     </Navigator>
   );

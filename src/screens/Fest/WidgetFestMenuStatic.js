@@ -36,8 +36,8 @@ const WidgetFestMenuStatic = ({ showMore }) => {
   const [listMenuHome, setListMenuHome] = useState([
     {name: 'Art & Design', nav: 'ArtsScreen', param: {}, image: imageAssets.festMenuArts, show: true },
     {name: 'Musik', nav: 'MusicScreen', param: {}, image: imageAssets.festMenuMusic, show: true },
-    {name: 'Literatur', nav: 'EventScreen', param: {}, image: imageAssets.festMenuLiteratur, show: true },
-    {name: 'My Creation', nav: 'EventScreen', param: {}, image: imageAssets.festMenuCreation, show: true },
+    {name: 'Literatur', nav: 'LiteratureScreen', param: {}, image: imageAssets.festMenuLiteratur, show: true },
+    {name: 'My Creation', nav: 'CreationScreen', param: {}, image: imageAssets.festMenuCreation, show: true },
   ]);
   const [itemData, setItemData] = useState(initialItemState);
   const [modalMenuHome, setModalMenuHome] = useState(false);

@@ -536,7 +536,8 @@ const CardContentProduct = ({ productCategory, category,item, numColumns, onPres
     else if (productCategory === 'NEWEST_VIDEO') return <CardComponentVideo item={item} />;
     else if (productCategory === 'FEST_MUSIC') return <CardFestMusic item={item} { ...props }/>;
     else if (productCategory === 'FEST_LITERATURE') return <CardFestLiterature item={item} { ...props }/>;
-    else if (productCategory === 'FEST_ARTS') return <CardFestArts item={item} { ...props }/>;
+    else if (productCategory === 'FEST_ARTS_GRAFIC') return <CardFestArts item={item} { ...props }/>;
+    else if (productCategory === 'FEST_ARTS_ARCHITECTURE') return <CardFestArts item={item} { ...props }/>;
     else if (productCategory === 'FEST_MUSIC_HORIZONTAL') return <CardFestMusicHorizontal item={item} { ...props }/>;
     else if (productCategory === 'FORUM') return (
         <Container paddingHorizontal={8}>
