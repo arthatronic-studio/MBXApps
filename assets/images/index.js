@@ -89,6 +89,7 @@ const jnmBloc = require('./jnm-bloc.png');
 const fabriekBloc = require('./fabriek-bloc.png');
 const mBlocSpace = require('./m-bloc-space.png');
 const groupBanner = require('./group-banner.png');
+const instagram = require('./instagram.png');
 
 export {
   iconApp,
@@ -238,7 +239,8 @@ export const imageAssets = {
   jnmBloc,
   fabriekBloc,
   mBlocSpace,
-  groupBanner
+  groupBanner,
+  instagram,
 };
 
 export default imageAssets;
