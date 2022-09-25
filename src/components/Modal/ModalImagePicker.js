@@ -9,7 +9,8 @@ import {
 } from '@src/components';
 import Button from '@src/components/Button/Button';
 import { statusBarHeight } from 'src/utils/constants';
-import { Line } from 'src/styled';
+import { Divider, Line } from 'src/styled';
+import imageAssets from 'assets/images';
 
 const options = {
     mediaType: 'photo',
@@ -47,6 +48,7 @@ const ModalImagePicker = ({ visible, onSelected, onClose, withPreview }) => {
                     if (!withPreview) onClose();
                 });
             },
+            image: imageAssets.camera,
         },
         {
             id: 2,
@@ -62,6 +64,7 @@ const ModalImagePicker = ({ visible, onSelected, onClose, withPreview }) => {
                     if (!withPreview) onClose();
                 });
             },
+            image: imageAssets.gallery,
         }
     ];
 
@@ -119,11 +122,14 @@ const ModalImagePicker = ({ visible, onSelected, onClose, withPreview }) => {
                         width: width - 32,
                         paddingVertical: 8,
                         flexDirection: 'row',
-                        alignItems: 'flex-start',
+                        alignItems: 'center',
                         marginTop: 16,
+
                     }}>
+                    <Image source={item.image ? item.image : imageAssets.camera}/>
+                    <Divider width={14}/>
                     <Text
-                        size={12}
+                        size={14}
                         align="left"
                         color={
                             item.color || Color.text
@@ -153,6 +159,8 @@ const ModalImagePicker = ({ visible, onSelected, onClose, withPreview }) => {
                     paddingTop: 16,
                     paddingHorizontal: 16,
                     paddingBottom: statusBarHeight,
+                    borderTopLeftRadius: 16,
+                    borderTopRightRadius: 16
                 }}
             >
                 {/* handle */}

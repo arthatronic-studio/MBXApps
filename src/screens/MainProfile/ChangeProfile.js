@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, TextInput, Platform, TouchableOpacity as NativeTouchable, ScrollView, SafeAreaView, Image, Keyboard, BackHandler, useWindowDimensions } from 'react-native';
+import { View, TextInput, Platform, TouchableOpacity as NativeTouchable, ScrollView, SafeAreaView, Image, Keyboard, BackHandler, useWindowDimensions, ImageBackground } from 'react-native';
 import Styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -30,6 +30,11 @@ import { accessClient } from 'src/utils/access_client';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { redirectTo } from 'src/utils';
 import { stateUpdateProfile } from 'src/api-rest/stateUpdateProfile';
+import imageAssets from 'assets/images';
+import ModalImagePicker from 'src/components/Modal/ModalImagePicker';
+import ImagesPath from 'src/components/ImagesPath';
+import FormInput from 'src/components/FormInput';
+import FormSelect from 'src/components/FormSelect';
 
 const EmailRoundedView = Styled(View)`
   width: 100%;
@@ -95,7 +100,7 @@ export default ({ navigation, route }) => {
   const [userData, setUserData] = useState({
     fullName: auth ? auth.user.name : '',
     email: auth ? auth.user.email : '',
-    tanggalLahir: auth && auth.user.dob ? auth.user.dob : Moment(new Date('1990')).format('DD-MM-YYYY'),
+    tanggalLahir: auth && auth.user.dob ? auth.user.dob : '',
   });
   const [errorData, setErrorData] = useState({
     fullName: null,
@@ -104,6 +109,7 @@ export default ({ navigation, route }) => {
   });
 
   //Image
+  const [modalImagePicker, setModalImagePicker] = useState(false);
   const [thumbImage, setThumbImage] = useState('');
   const [mimeImage, setMimeImage] = useState('image/jpeg');
 
@@ -111,6 +117,11 @@ export default ({ navigation, route }) => {
   const [tanggalLahir, setDate] = useState(user && user.birthDate ? new Date(...user.birthDate.split("-").reverse()) : new Date('1990'));
   const [open, setOpen] = useState(false);
   const [selectedJK, setSelectedJK] = useState(listGender[0]);
+
+  // sampul
+  const [modalSampulPicker, setModalSampulPicker] = useState(false);
+  const [sampulImage, setSampulImage] = useState('');
+  const [sampulMimeImage, setSampulMimeImage] = useState('image/jpeg');
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', handleBackPress);
@@ -154,6 +165,8 @@ export default ({ navigation, route }) => {
         email: userData.email,
         gender: selectedJK.id,
         dob: Moment(userData.tanggalLahir).format('YYYY-MM-DD'),
+        foto: `data:${mimeImage};base64,${thumbImage}`,
+        foto_sampul: `data:${sampulMimeImage};base64,${sampulImage}`
       };
 
       console.log('body', body);
@@ -174,7 +187,7 @@ export default ({ navigation, route }) => {
         return;
       }
   
-      showPopup('Update Gagal', 'error');
+      showPopup(result.message, 'error');
     }
   }
 
@@ -232,12 +245,28 @@ export default ({ navigation, route }) => {
       header={
         // handle user yg dipaksa update profile
         <Header
+          centerTitle={false}
           title='Edit Profil'
           showLeftButton={navigation.canGoBack()}
           onPressLeftButton={() => {
             dispatch({ type: 'USER.CLEAR_ERROR' });
             navigation.goBack();
           }}
+          actions={
+            <TouchableOpacity
+              onPress={() => {
+                if(userData.email !== '' && userData.tanggalLahir !== '' && userData.tanggalLahir !== '' && sampulImage !== '' && thumbImage !== ''){
+                  onSubmit()
+                }else{
+                  showPopup('Lengkapi data', 'error');
+                }
+              }}
+            >
+              <Text size={12} color={userData.email !== '' && userData.tanggalLahir !== '' && userData.tanggalLahir !== '' && sampulImage !== '' && thumbImage !== '' ? Color.primaryDark : "#ACAAA5"} type="medium">
+                Simpan
+              </Text>
+            </TouchableOpacity>
+          }
         />
       }
     >
@@ -246,83 +275,164 @@ export default ({ navigation, route }) => {
         contentContainerStyle={{ paddingBottom: 16 }}
       >
         <Container paddingHorizontal={16} paddingBottom={16}>
-          {thumbImage !== '' && <TouchableOpacity
-            onPress={() => { }}
-            style={{ width: '100%', height: height / 3, borderRadius: 4, alignItems: 'center' }}
+          <Text align="left" color={Color.black} type="medium" size={12}>
+            Foto Sampul
+          </Text>
+          <Divider height={8}/>
+          {sampulImage === '' ? 
+            <TouchableOpacity
+              onPress={() => setModalSampulPicker(true)}
+              style={{ 
+                flex: 1,
+                backgroundColor: Color.border,
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: 40,
+                borderRadius: 16
+               }}
+            >
+              <Image
+                source={imageAssets.galleryAdd}
+              />
+              <Divider height={10}/>
+              <Text size={14} type="medium" color={Color.primaryDark}>
+                Unggah Gambar
+              </Text>
+              <Divider height={4}/>
+              <Text size={10} color={Color.textSoft}>
+                Gambar berbentuk JPG, JPEG, atau PNG. {'\n'}
+                Gambar berukuran maskimal 5mb
+              </Text>
+            </TouchableOpacity>
+            :
+            <ImageBackground
+              style={{ 
+                flex: 1,
+              }}
+              imageStyle={{ 
+                borderRadius: 16, 
+                resizeMode: 'cover',
+               }}
+              source={{ uri: `data:${sampulMimeImage};base64,${sampulImage}` }}
+            >
+              <Container
+                align='center'
+                justify='center'
+                borderRadius={16}
+                width="100%"
+                paddingVertical={54}
+                backgroundColor={"rgba(0, 0, 0, 0.4)"}
+              >
+                <Text size={10} color={Color.white}>
+                  Gambar berbentuk JPG, JPEG, atau PNG. {'\n'}
+                  Gambar berukuran maskimal 5mb
+                </Text>
+                <Divider height={8}/>
+                <TouchableOpacity
+                  onPress={() => setModalSampulPicker(true)}
+                  style={{ 
+                    borderWidth: 1,
+                    padding: 10,
+                    borderColor: Color.white,
+                    borderRadius: 8
+                  }}>
+                  <Text size={12} type="medium" color={Color.white}>
+                    Ganti Gambar
+                  </Text>
+                </TouchableOpacity>
+              </Container>
+            </ImageBackground>
+          }
+
+          <Divider height={8}/>
+
+          <Text align="left" color={Color.black} type="medium" size={12}>
+            Foto Profile
+          </Text>
+
+          <Divider height={8}/>
+
+          <Container
+            flex={1}
+            flexDirection="row"
           >
             <Image
-              style={{ height: '100%', aspectRatio: 1, borderRadius: 40, alignItems: 'center', justifyContent: 'center' }}
-              source={{ uri: `data:${mimeImage};base64,${thumbImage}` }}
+              source={
+                thumbImage !== '' 
+                  ? {uri: `data:${mimeImage};base64,${thumbImage}`}
+                  : ImagesPath.userChat
+              }
+              style={{
+                width: width * 0.16,
+                height: width * 0.16,
+                backgroundColor: Color.border,
+                borderRadius: 50,
+              }}
             />
-          </TouchableOpacity>}
+            <Divider width={8}/>
+            <Container
+              flex={1}
+              justify="space-between"
+              align='flex-start'
+            >
+              <Text size={10} color={Color.textSoft} align="left">
+                Gambar berbentuk JPG, JPEG, atau PNG. {'\n'}
+                Gambar berukuran maskimal 5mb
+              </Text>
+              <TouchableOpacity
+                  onPress={() => setModalImagePicker(true)}
+                  style={{ 
+                    borderWidth: 1,
+                    padding: 8,
+                    borderColor: Color.textSoft,
+                    borderRadius: 8
+                  }}>
+                  <Text size={10} type="medium" color={Color.primaryDark}>
+                    Ganti Gambar
+                  </Text>
+                </TouchableOpacity>
+            </Container>
+          </Container>
+
+          <Divider height={8}/>
+
+          <Text align="left" color={Color.black} type="medium" size={12}>
+            Informasi Dasar
+          </Text>
+
+          <Divider height={12}/>
+
+          <FormInput
+            label="Nama Lengkap"
+            placeholder='Masukan nama lengkap'
+            hideErrorHint
+            keyboardType="default"
+            value={userData.fullName}
+            onChangeText={(text) => onChangeUserData('fullName', text)}
+            onBlur={() => isValueError('fullName')}
+            returnKeyType="next"
+            onSubmitEditing={() => setOpen(true)}
+          />
+
+          <Divider height={24}/>
 
           <TouchableOpacity
-            onPress={() => {
-              const options = {
-                mediaType: 'photo',
-                maxWidth: 640,
-                maxHeight: 640,
-                quality: 1,
-                includeBase64: true,
-              }
-
-              launchImageLibrary(options, (callback) => {
-                if (callback.didCancel || callback.errorCode || callback.errorMessage) {
-                  return;
-                }
-
-                setThumbImage(callback.base64);
-                setMimeImage(callback.type);
-              })
-            }}
-            style={{ width: width / 3, aspectRatio: 1, borderRadius: width / 3, marginVertical: 16, backgroundColor: Color.border, alignItems: 'center', justifyContent: 'center', alignSelf: 'center' }}
+            onPress={() => setOpen(true)}
           >
-            <Entypo name='folder-images' size={22} style={{ marginBottom: 4 }} />
-            <Text size={10}>Pilih gambar</Text>
+            <FormInput
+              editable={false}
+              label="Tanggal Lahir"
+              placeholder='yyyy-mm-dd'
+              hideErrorHint
+              keyboardType="default"
+              value={userData.tanggalLahir}
+              // onChangeText={(text) => onChangeUserData('tanggalLahir', text)}
+              onBlur={() => isValueError('tanggalLahir')}
+              returnKeyType="next"
+            />
           </TouchableOpacity>
 
-          <Divider />
-
-          <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{ opacity: 0.6 }}>Nama Lengkap</Text>
-          </LabelInput>
-          <EmailRoundedView>
-            <CustomTextInput
-              placeholder='Masukan nama lengkap'
-              keyboardType='default'
-              placeholderTextColor={Color.gray}
-              underlineColorAndroid='transparent'
-              autoCorrect={false}
-              onChangeText={(text) => onChangeUserData('fullName', text)}
-              selectionColor={Color.text}
-              value={userData.fullName}
-              onBlur={() => isValueError('fullName')}
-              style={{ color: Color.text }}
-            />
-          </EmailRoundedView>
-          <ErrorView>
-            <Text size={12} color={Color.error} type='medium' align='left'>{errorData.fullName}</Text>
-          </ErrorView>
-
-          <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{ opacity: 0.6 }}>Tanggal Lahir</Text>
-          </LabelInput>
-          <EmailRoundedView>
-            <TouchableOpacity
-              onPress={() => setOpen(true)}
-              style={{ width: width - 32, height: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', borderBottomWidth: 0.5 }}
-            >
-              <View style={{ flex: 1 }}>
-                <Text align='left'>{userData.tanggalLahir ? userData.tanggalLahir : 'Pilih Tanggal '} </Text>
-              </View>
-              <View style={{ flex: 1, paddingRight: 16, alignItems: 'flex-end' }}>
-                <Ionicons name='chevron-down-outline' color={Color.text} />
-              </View>
-            </TouchableOpacity>
-          </EmailRoundedView>
-          <ErrorView>
-            <Text size={12} color={Color.error} type='medium' align='left'>{errorData.tanggalLahir}</Text>
-          </ErrorView>
+          <Divider height={24}/>
 
           {renderRadio({
             flexDirection: 'row',
@@ -334,26 +444,16 @@ export default ({ navigation, route }) => {
             }
           })}
 
-          <LabelInput>
-            <Text size={12} letterSpacing={0.08} style={{ opacity: 0.6 }}>Email</Text>
-          </LabelInput>
-          <EmailRoundedView>
-            <CustomTextInput
-              placeholder='Masukan email'
-              keyboardType='email-address'
-              placeholderTextColor={Color.gray}
-              underlineColorAndroid='transparent'
-              autoCorrect={false}
-              onChangeText={(text) => onChangeUserData('email', text)}
-              selectionColor={Color.text}
-              value={userData.email}
-              onBlur={() => isValueError('email')}
-              style={{ color: Color.text }}
-            />
-          </EmailRoundedView>
-          <ErrorView>
-            <Text size={12} color={Color.error} type='medium' align='left'>{errorData.email}</Text>
-          </ErrorView>
+          <FormInput
+            label="Email"
+            placeholder='contoh@email.com'
+            hideErrorHint
+            keyboardType="email-address"
+            value={userData.email}
+            onChangeText={(text) => onChangeUserData('email', text)}
+            onBlur={() => isValueError('email')}
+            returnKeyType="next"
+          />
 
           {/* <LabelInput>
             <Text size={12} letterSpacing={0.08} style={{ opacity: 0.6 }}>Nomor Telepon</Text>
@@ -388,12 +488,6 @@ export default ({ navigation, route }) => {
         </Container>
       </KeyboardAwareScrollView>
 
-      <View style={{ padding: 16 }}>
-        <Button onPress={() => onSubmit()}>
-          Simpan
-        </Button>
-      </View>
-
       <Loading visible={loading} />
 
       {open && <DatePicker
@@ -404,12 +498,42 @@ export default ({ navigation, route }) => {
         onConfirm={(date) => {
           setOpen(false);
           setDate(date);
-          onChangeUserData('tanggalLahir', Moment(date).format('DD-MM-YYYY'));
+          onChangeUserData('tanggalLahir', Moment(date).format('YYYY-MM-DD'));
         }}
         onCancel={() => {
           setOpen(false)
         }}
       />}
+
+      <ModalImagePicker
+        visible={modalSampulPicker}
+        onClose={() => {
+          setModalSampulPicker(false);
+        }}
+        onSelected={(callback) => {
+          if (callback.base64) {
+            setSampulImage(callback.base64);
+            setSampulMimeImage(callback.type);
+          }
+
+          setModalSampulPicker(false);
+        }}
+      />
+
+      <ModalImagePicker
+        visible={modalImagePicker}
+        onClose={() => {
+          setModalImagePicker(false);
+        }}
+        onSelected={(callback) => {
+          if (callback.base64) {
+            setThumbImage(callback.base64);
+            setMimeImage(callback.type);
+          }
+
+          setModalImagePicker(false);
+        }}
+      />
     </Scaffold>
   );
 };

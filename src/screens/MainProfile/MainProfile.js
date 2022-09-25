@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -11,8 +11,8 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { useDispatch, useSelector } from 'react-redux';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useDispatch, useSelector} from 'react-redux';
 import QRCode from 'react-native-qrcode-svg';
 
 import {
@@ -27,23 +27,24 @@ import {
   Button,
   Header,
 } from '@src/components';
-import { redirectTo } from '@src/utils';
-import { shadowStyle } from '@src/styles';
-import imageAssets, { iconSplash, imageCardOrnament } from '@assets/images';
-import { Box, Circle, Container, Divider, Line } from 'src/styled';
+import {redirectTo} from '@src/utils';
+import {shadowStyle} from '@src/styles';
+import imageAssets, {iconSplash, imageCardOrnament} from '@assets/images';
+import ImagesPath from 'src/components/ImagesPath';
+import {Box, Circle, Container, Divider, Line} from 'src/styled';
 import Clipboard from '@react-native-community/clipboard';
 import ModalinputCode from 'src/components/ModalInputCode';
 import ModalCardMember from 'src/components/ModalCardMember';
 import Client from '@src/lib/apollo';
-import { queryOrganizationMemberManage } from '@src/lib/query/organization';
-import { accessClient } from 'src/utils/access_client';
-import { fetchCommunityMemberCheck } from 'src/api/community';
+import {queryOrganizationMemberManage} from '@src/lib/query/organization';
+import {accessClient} from 'src/utils/access_client';
+import {fetchCommunityMemberCheck} from 'src/api/community';
 import ModalActions from 'src/components/Modal/ModalActions';
 import Axios from 'axios';
-import { initSocket } from 'src/api-socket/currentSocket';
-import { assetImageProfile } from 'assets/images/profile';
+import {initSocket} from 'src/api-socket/currentSocket';
+import {assetImageProfile} from 'assets/images/profile';
 
-const MainProfile = ({ navigation, route }) => {
+const MainProfile = ({navigation, route}) => {
   const currentSocket = initSocket();
 
   const [modalVirtual, setModalVirtual] = useState(false);
@@ -60,7 +61,7 @@ const MainProfile = ({ navigation, route }) => {
   const [memberCheck, setMemberCheck] = useState({
     status: true,
     message: '',
-  })
+  });
   const [myRoomIds, setMyRoomIds] = useState([]);
 
   const dispatch = useDispatch();
@@ -68,10 +69,11 @@ const MainProfile = ({ navigation, route }) => {
   const auth = useSelector(state => state['auth']);
   const localStoragSetting = useSelector(state => state['setting']);
 
-  const showDebug = localStoragSetting && localStoragSetting.showDebug ? true : false;
+  const showDebug =
+    localStoragSetting && localStoragSetting.showDebug ? true : false;
 
-  const { Color } = useColor();
-  const { width } = useWindowDimensions();
+  const {Color} = useColor();
+  const {width} = useWindowDimensions();
 
   useEffect(() => {
     if (refreshing) {
@@ -90,24 +92,26 @@ const MainProfile = ({ navigation, route }) => {
 
   useEffect(() => {
     if (route.params && route.params.refresh) {
-      navigation.setParams({ refresh: false });
+      navigation.setParams({refresh: false});
     }
   }, [route]);
 
   const fetchData = async () => {
     const result = await fetchCommunityMemberCheck();
     if (result.status) {
-      setMemberCheck({ ...memberCheck, ...result.data });
+      setMemberCheck({...memberCheck, ...result.data});
     }
-  }
+  };
 
   const onPressExit = () => {
-    Alert('Logout', 'Apakah Anda yakin akan logout?', () => onPressLogout(false));
+    Alert('Logout', 'Apakah Anda yakin akan logout?', () =>
+      onPressLogout(false),
+    );
   };
 
   const onPressLogout = () => {
-    dispatch({ type: 'AUTH.CLEAR' });
-    dispatch({ type: 'USER.LOGOUT' });
+    dispatch({type: 'AUTH.CLEAR'});
+    dispatch({type: 'USER.LOGOUT'});
     redirectTo('LoginScreen');
 
     // dispatch({type: 'ARTICLE.CLEAR_HISTORY'});
@@ -117,13 +121,65 @@ const MainProfile = ({ navigation, route }) => {
   console.log('auth', auth);
 
   return (
-    <Scaffold
-      loadingProps={loadingProps}
-      showHeader={false}
-    >
+    <Scaffold loadingProps={loadingProps} showHeader={false}>
       <ScrollView showsVerticalScrollIndicator={false}>
+        {/* not register */}
+        <Divider />
+        <Container
+          paddingVertical={10}
+          paddingHorizontal={12}
+          marginHorizontal={16}
+          backgroundColor="#FDF2F1"
+          borderRadius={16}
+          justify="space-between"
+          flex={1}
+          align="flex-end"
+          flexDirection="row">
+          <Container flex={1} flexDirection="row" align="center">
+            <View
+              style={{
+                width: 24,
+                height: 24,
+              }}>
+              <Image
+                source={imageAssets.infoCircle}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  resizeMode: 'contain',
+                }}
+              />
+            </View>
+            <Divider width={10} />
+            <Container flex={1} flexDirection="column">
+              <Text align="left" size={12} color={Color.black} type="medium">
+                Profil belum lengkap
+              </Text>
+              <Text size={10} align="left" color={Color.textSoft}>
+                Kamu tidak akan bisa masuk kedalam area jika profile kamu belum
+                lengkap
+              </Text>
+            </Container>
+          </Container>
+          <TouchableOpacity
+            style={{
+              marginLeft: 10,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Text size={12} color={'#D72A19'}>
+              Lengkapi
+            </Text>
+            <Divider width={5} />
+            <AntDesign name="arrowright" color={Color.error} size={12} />
+          </TouchableOpacity>
+        </Container>
+
         {/* user fast info */}
-        <Container padding={16}>
+        <TouchableOpacity
+          style={{ padding: 16 }}
+          onPress={() => navigation.navigate('ProfileDetail')}
+        >
           <View
             style={{
               flexDirection: 'row',
@@ -133,7 +189,7 @@ const MainProfile = ({ navigation, route }) => {
             }}>
             {auth && auth.user && (
               <Image
-                source={{ uri: auth.user.image }}
+                source={auth.user.foto ? {uri: auth.user.foto} : ImagesPath.userChat}
                 style={{
                   width: width * 0.16,
                   height: width * 0.16,
@@ -143,33 +199,38 @@ const MainProfile = ({ navigation, route }) => {
               />
             )}
 
-            {auth && auth.user &&
+            {auth && auth.user && (
               <View
                 style={{
                   flex: 1,
                   paddingHorizontal: 12,
                   alignItems: 'flex-start',
                   justifyContent: 'space-between',
-                }}
-              >
-                <Text size={22} align='left' lineHeight={28} numberOfLines={2}>
+                }}>
+                <Text size={22} align="left" lineHeight={28} numberOfLines={2}>
                   {auth.user.name}
                 </Text>
               </View>
-            }
+            )}
 
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('ChangeProfile');
               }}
-              style={{ flexDirection: 'row', padding: 10, borderColor: Color.text, borderWidth: 0.5, borderRadius: 120, justifyContent: 'center', alignItems: 'center' }}
-            >
+              style={{
+                flexDirection: 'row',
+                padding: 10,
+                borderColor: Color.text,
+                borderWidth: 0.5,
+                borderRadius: 120,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <View
                 style={{
                   width: 16,
                   height: 16,
-                }}
-              >
+                }}>
                 <Image
                   source={imageAssets.edit}
                   style={{
@@ -180,16 +241,20 @@ const MainProfile = ({ navigation, route }) => {
                 />
               </View>
               <Divider width={8} />
-              <Text size={12} type="medium" color={Color.primaryDark}>Edit Profile</Text>
+              <Text size={12} type="medium" color={Color.primaryDark}>
+                Edit Profil
+              </Text>
             </TouchableOpacity>
           </View>
-        </Container>
+        </TouchableOpacity>
 
-        <Line height={8} width='100%' color='#F4F4F4' />
+        <Line height={8} width="100%" color="#F4F4F4" />
 
         <Container padding={16}>
           <View>
-            <Text align='left' size={12} type='medium'>Transaksi</Text>
+            <Text align="left" size={12} type="medium">
+              Transaksi
+            </Text>
           </View>
           <View style={{}}>
             {/* <View style={{ flexDirection: 'row', paddingTop: 24 }}>
@@ -206,10 +271,9 @@ const MainProfile = ({ navigation, route }) => {
             </View> */}
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('EventHistory')
+                navigation.navigate('EventHistory');
               }}
-              style={{ flexDirection: 'row', paddingTop: 24 }}
-            >
+              style={{flexDirection: 'row', paddingTop: 24}}>
               <Image
                 source={assetImageProfile.history}
                 style={{
@@ -219,24 +283,25 @@ const MainProfile = ({ navigation, route }) => {
                 }}
               />
               <Divider width={8} />
-              <Text align='left'>Riwayat</Text>
+              <Text align="left">Riwayat</Text>
             </TouchableOpacity>
           </View>
         </Container>
 
-        <Line height={8} width='100%' color='#F4F4F4' />
+        <Line height={8} width="100%" color="#F4F4F4" />
 
         <Container padding={16}>
           <View>
-            <Text align='left' size={12} type='medium'>Seputar Aplikasi</Text>
+            <Text align="left" size={12} type="medium">
+              Seputar Aplikasi
+            </Text>
           </View>
           <View style={{}}>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('SettingScreen');
               }}
-              style={{ flexDirection: 'row', paddingTop: 24 }}
-            >
+              style={{flexDirection: 'row', paddingTop: 24}}>
               <Image
                 source={assetImageProfile.setting}
                 style={{
@@ -246,14 +311,13 @@ const MainProfile = ({ navigation, route }) => {
                 }}
               />
               <Divider width={8} />
-              <Text align='left'>Pengaturan</Text>
+              <Text align="left">Pengaturan</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('SyaratdanKetentuan');
               }}
-              style={{ flexDirection: 'row', paddingTop: 24 }}
-            >
+              style={{flexDirection: 'row', paddingTop: 24}}>
               <Image
                 source={assetImageProfile.term}
                 style={{
@@ -263,16 +327,15 @@ const MainProfile = ({ navigation, route }) => {
                 }}
               />
               <Divider width={8} />
-              <Text align='left'>Syarat & Ketentuan</Text>
+              <Text align="left">Syarat & Ketentuan</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => {
                 const phoneNumber = '02123456789';
-                Linking.openURL(`tel:${phoneNumber}`)
+                Linking.openURL(`tel:${phoneNumber}`);
               }}
-              style={{ flexDirection: 'row', paddingTop: 24 }}
-            >
+              style={{flexDirection: 'row', paddingTop: 24}}>
               <Image
                 source={assetImageProfile.help}
                 style={{
@@ -282,15 +345,14 @@ const MainProfile = ({ navigation, route }) => {
                 }}
               />
               <Divider width={8} />
-              <Text align='left'>Bantuan</Text>
+              <Text align="left">Bantuan</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('FAQScreen');
               }}
-              style={{ flexDirection: 'row', paddingTop: 24 }}
-            >
+              style={{flexDirection: 'row', paddingTop: 24}}>
               <Image
                 source={assetImageProfile.faq}
                 style={{
@@ -300,50 +362,52 @@ const MainProfile = ({ navigation, route }) => {
                 }}
               />
               <Divider width={8} />
-              <Text align='left'>FAQ</Text>
+              <Text align="left">FAQ</Text>
             </TouchableOpacity>
           </View>
         </Container>
 
-        <Line height={8} width='100%' color='#F4F4F4' />
+        <Line height={8} width="100%" color="#F4F4F4" />
 
-        {auth.user && auth.user.id !== 6 && <Container padding={16}>
-          <TouchableOpacity
-            onPress={() => {
-              dispatch({ type: 'SETTING.SET_SHOW_DEBUG', data: !showDebug });
-            }}
-            style={{
-              flexDirection: 'row',
-            }}
-          >
-            <Circle color={Color.success} size={16} />
-            <Divider width={8} />
-            <Text color={Color.success} align='left'>
-              Show Menu
-            </Text>
-            <Divider width={8} />
-            <Text color={Color.success} align='left' size={10}>
-              {showDebug ? '✅' : '❌'}
-            </Text>
-          </TouchableOpacity>
-        </Container>}
+        {auth.user && auth.user.id !== 6 && (
+          <Container padding={16}>
+            <TouchableOpacity
+              onPress={() => {
+                dispatch({type: 'SETTING.SET_SHOW_DEBUG', data: !showDebug});
+              }}
+              style={{
+                flexDirection: 'row',
+              }}>
+              <Circle color={Color.success} size={16} />
+              <Divider width={8} />
+              <Text color={Color.success} align="left">
+                Show Menu
+              </Text>
+              <Divider width={8} />
+              <Text color={Color.success} align="left" size={10}>
+                {showDebug ? '✅' : '❌'}
+              </Text>
+            </TouchableOpacity>
+          </Container>
+        )}
 
-        {auth.user && auth.user.id !== 6 && <Container padding={16}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('TestScreen');
-            }}
-            style={{
-              flexDirection: 'row',
-            }}
-          >
-            <Circle color='orange' size={16} />
-            <Divider width={8} />
-            <Text color='orange' align='left'>
-              Radar
-            </Text>
-          </TouchableOpacity>
-        </Container>}
+        {auth.user && auth.user.id !== 6 && (
+          <Container padding={16}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('TestScreen');
+              }}
+              style={{
+                flexDirection: 'row',
+              }}>
+              <Circle color="orange" size={16} />
+              <Divider width={8} />
+              <Text color="orange" align="left">
+                Radar
+              </Text>
+            </TouchableOpacity>
+          </Container>
+        )}
 
         <Container padding={16}>
           <TouchableOpacity
@@ -352,8 +416,7 @@ const MainProfile = ({ navigation, route }) => {
             }}
             style={{
               flexDirection: 'row',
-            }}
-          >
+            }}>
             <Image
               source={assetImageProfile.logout}
               style={{
@@ -363,7 +426,7 @@ const MainProfile = ({ navigation, route }) => {
               }}
             />
             <Divider width={8} />
-            <Text color={Color.error} align='left'>
+            <Text color={Color.error} align="left">
               Logout
             </Text>
           </TouchableOpacity>
@@ -371,30 +434,42 @@ const MainProfile = ({ navigation, route }) => {
       </ScrollView>
 
       {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}
-      <Box size={70} style={{ position: 'absolute', bottom: -40 }} />
+      <Box size={70} style={{position: 'absolute', bottom: -40}} />
 
       <ModalinputCode
         visible={modalInputCode}
         onClose={() => setModalInputCode(false)}
-        onSubmit={text => {
-          
-        }}
+        onSubmit={text => {}}
         errorMessage={responseMemberManage.message}
       />
       <ModalCardMember
         visible={modalCardMember}
         onClose={() => setModalCardMember(false)}
-        onSubmit={text => {
-          
-        }}
+        onSubmit={text => {}}
         errorMessage={responseMemberManage.message}
       />
 
       <ModalActions
         visible={modalJoinCommunity}
         data={[
-          { id: 1, name: 'Buat Formulir', show: !memberCheck.status, onPress: () => { setModalJoinCommunity(false); navigation.navigate('JoinCommunity'); } },
-          { id: 2, name: 'Lihat Formulir', show: memberCheck.status, onPress: () => { setModalJoinCommunity(false); navigation.navigate('CardDetail') } },
+          {
+            id: 1,
+            name: 'Buat Formulir',
+            show: !memberCheck.status,
+            onPress: () => {
+              setModalJoinCommunity(false);
+              navigation.navigate('JoinCommunity');
+            },
+          },
+          {
+            id: 2,
+            name: 'Lihat Formulir',
+            show: memberCheck.status,
+            onPress: () => {
+              setModalJoinCommunity(false);
+              navigation.navigate('CardDetail');
+            },
+          },
         ]}
         onClose={() => {
           setModalJoinCommunity(false);

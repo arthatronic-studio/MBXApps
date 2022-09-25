@@ -53,6 +53,15 @@ const constraints = {
   dateOfBirth: {
     presence: { allowEmpty: false, message: '^Mohon isi data Anda dengan benar' },
   },
+  dob: {
+    presence: { allowEmpty: false, message: '^Mohon isi data Anda dengan benar' },
+  },
+  gender: {
+    presence: { allowEmpty: false, message: '^Mohon isi data Anda dengan benar' },
+  },
+  image: {
+    presence: { allowEmpty: false, message: '^Mohon isi data Anda dengan benar' },
+  },
 };
 
 export default function validate(fieldName, value) {

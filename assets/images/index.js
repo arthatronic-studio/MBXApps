@@ -90,6 +90,11 @@ const fabriekBloc = require('./fabriek-bloc.png');
 const mBlocSpace = require('./m-bloc-space.png');
 const groupBanner = require('./group-banner.png');
 const instagram = require('./instagram.png');
+const infoCircle = require('./info-circle.png');
+const galleryAdd = require('./gallery-add.png');
+const camera = require('./camera.png');
+const gallery = require('./gallery.png');
+const defaultSampul = require('./default-sampul.png')
 
 export {
   iconApp,
@@ -241,6 +246,11 @@ export const imageAssets = {
   mBlocSpace,
   groupBanner,
   instagram,
+  infoCircle,
+  galleryAdd,
+  camera,
+  gallery,
+  defaultSampul,
 };
 
 export default imageAssets;

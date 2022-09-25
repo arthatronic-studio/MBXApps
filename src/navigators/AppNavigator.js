@@ -68,6 +68,7 @@ import ReferralCodeScreen from '@src/screens/MainProfile/ReferralCodeScreen';
 import UserProfileScreen from '@src/screens/MainProfile/UserProfileScreen';
 import FAQScreen from 'src/screens/MainProfile/FAQScreen';
 import ContentProductSaveScreen from 'src/screens/MainProfile/ContentProductSaveScreen';
+import ProfileDetail from 'src/screens/MainProfile/ProfileDetail';
 
 // community admin
 import CommunityAdminPage from '@src/screens/MainProfile/CommunityAdmin/CommunityAdminPage';
@@ -483,6 +484,7 @@ function AppNavigator() {
       <Screen name="FAQScreen" component={FAQScreen} />
       <Screen name="ContentProductSaveScreen" component={ContentProductSaveScreen} />
       <Screen name="UserProfileScreen" component={UserProfileScreen} />
+      <Screen name="ProfileDetail" component={ProfileDetail} />
       {/* community admin */}
       <Screen name="CommunityAdminPage" component={CommunityAdminPage} />
       <Screen name="CardDetail" component={CardDetail} />

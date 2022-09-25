@@ -326,7 +326,7 @@ const DetailTenantScreen = ({ navigation, route }) => {
       <Container padding={16}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
           <Text align='left' size={16} type='medium'>Menu</Text>
-          <View style={{ flexDirection: 'row', padding: 8, backgroundColor: Color.error, borderRadius: 120 }}>
+          {/* <View style={{ flexDirection: 'row', padding: 8, backgroundColor: Color.error, borderRadius: 120 }}>
             <Image
               source={imageAssets.menu}
               style={{
@@ -336,7 +336,7 @@ const DetailTenantScreen = ({ navigation, route }) => {
               }}
             />
             <Text size={12} type='medium' color={Color.textInput}>Daftar Menu</Text>
-          </View>
+          </View> */}
         </View>
       </Container>
 
