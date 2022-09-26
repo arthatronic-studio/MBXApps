@@ -95,6 +95,11 @@ const galleryAdd = require('./gallery-add.png');
 const camera = require('./camera.png');
 const gallery = require('./gallery.png');
 const defaultSampul = require('./default-sampul.png')
+const festIcon2 = require('./fest-icon-2.png');
+const festArtsMenu = require('./fest-arts-menu.png');
+const festMusicMenu = require('./fest-music-menu.png');
+const festLiteratureMenu = require('./fest-literature-menu.png');
+const lineupContent = require('./lineup-content.png')
 
 export {
   iconApp,
@@ -251,6 +256,11 @@ export const imageAssets = {
   camera,
   gallery,
   defaultSampul,
+  festIcon2,
+  festArtsMenu,
+  festMusicMenu,
+  festLiteratureMenu,
+  lineupContent,
 };
 
 export default imageAssets;

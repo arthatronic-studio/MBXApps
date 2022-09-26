@@ -977,6 +977,14 @@ const MainHome = ({ navigation, route }) => {
 
           <WidgetHomeMenuStatic />
 
+          <TouchableOpacity
+            onPress={() => navigation.navigate('FestScreenV2')}
+          >
+            <Text>
+              fest revamp
+            </Text>
+          </TouchableOpacity>
+
           <Divider height={24} />
 
           <HighlightTenant
