@@ -9,6 +9,7 @@ import {
   Image,
   ActivityIndicator,
   useWindowDimensions,
+  FlatList,
 } from 'react-native';
 import ImagesPath from 'src/components/ImagesPath';
 import imageAssets from 'assets/images';
@@ -18,8 +19,9 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {getAPI, postAPI} from 'src/api-rest/httpService';
 import {Modalize} from 'react-native-modalize';
 import HighlightFest from 'src/components/Fest/HighlightFest';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const FestScreenV2 = ({navigation, route}) => {
+const MusicScheduleScreen = ({navigation, route}) => {
   const {Color} = useColor();
   const isFocused = useIsFocused();
   const [loadingProps, showLoading, hideLoading] = useLoading();
@@ -27,30 +29,44 @@ const FestScreenV2 = ({navigation, route}) => {
   const [selected, setSelected] = useState({});
   const modalRef = useRef();
   const {width} = useWindowDimensions();
-
-  const [menu, setMenu] = useState([
+  const [date, setDate] = useState([
     {
       id: 1,
-      nav: 'FestMusicScreen',
-      param: {},
-      image: imageAssets.festMusicMenu,
-      show: true,
+      name: 'Semua jadwal',
     },
     {
       id: 2,
-      nav: 'MusicScreen',
-      param: {},
-      image: imageAssets.festArtsMenu,
-      show: true,
+      name: 'Hari ini',
+      title: '25 September 2022',
     },
     {
       id: 3,
-      nav: 'LiteratureScreen',
-      param: {},
-      image: imageAssets.festLiteratureMenu,
-      show: true,
+      name: '26 Sep',
+      title: '26 September 2022',
+    },
+    {
+      id: 4,
+      name: '27 Sep',
+      title: '27 September 2022',
+    },
+    {
+      id: 5,
+      name: '28 Sep',
+      title: '28 September 2022',
+    },
+    {
+      id: 6,
+      name: '29 Sep',
+      title: '29 September 2022',
+    },
+    {
+      id: 7,
+      name: '30 Sep',
+      title: '30 September 2022',
     },
   ]);
+  const [dateIndex, setDateIndex] = useState(0);
+
   const [selectedCompany, setSelectedCompany] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -73,18 +89,9 @@ const FestScreenV2 = ({navigation, route}) => {
       loadingProps={loadingProps}
       header={
         <Header
-          backgroundColor={'#00925F'}
           centerTitle={false}
-          color={Color.theme}
           iconLeftButton="arrow-left"
-          actions={
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('AboutFest');
-              }}>
-              <AntDesign name="questioncircleo" size={16} color={Color.theme} />
-            </TouchableOpacity>
-          }
+          title="Jadwal"
         />
       }>
       <ScrollView>
@@ -107,54 +114,101 @@ const FestScreenV2 = ({navigation, route}) => {
         ) : (
           <Container>
             <Container
-              backgroundColor={'#00925F'}
-              flex={1}
-              paddingTop={32}
-              paddingBottom={16}
-              align="center">
-              <Image source={imageAssets.festIcon2} resizeMode="contain" />
-            </Container>
-
-            <Divider height={10} />
-
-            <Container
-              paddingHorizontal={16}
               flex={1}
               flexDirection="row"
-              justify="space-between">
-              {menu.map((item, index) => {
-                return (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => navigation.navigate(item.nav)}>
-                    <Image source={item.image} />
-                  </TouchableOpacity>
-                );
-              })}
+              borderWidth={1}
+              marginHorizontal={16}
+              padding={10}
+              borderRadius={8}
+              align="center">
+              <Image
+                source={imageAssets.musicWeek}
+                resizeMode="cover"
+                style={{width: '16%', aspectRatio: 1}}
+              />
+              <Divider width={16} />
+              <Container flex={1} flexDirection="column" align="flex-start">
+                <Text
+                  size={16}
+                  lineHeight={20}
+                  type="medium"
+                  color={Color.black}>
+                  Mbloc Music Week
+                </Text>
+                <Divider height={4} />
+                <Text size={10} lineHeight={12} color={'#3A3936'}>
+                  25 Sep - 02 Okt 2022 {'\u2022'} Live House
+                </Text>
+              </Container>
             </Container>
 
-            <Divider />
+            <Divider height={16} />
 
-            <HighlightFest
-              productCategory="LINEUP"
-              nav="ShowAllLineup"
-              name="Todays Line-up"
-              title="Todays Line-up"
-              wrap={false}
+            <FlatList
+              keyExtractor={(item, index) => item.toString() + index}
+              data={date}
               horizontal={true}
-              onPress={(value) => {
-                setSelected(value);
-                modalRef.current.open()
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingHorizontal: 16,
+                alignItems: 'center',
               }}
+              ItemSeparatorComponent={() => <Divider width={10} />}
+              renderItem={({item, index}) => (
+                <TouchableOpacity onPress={() => setDateIndex(index)}>
+                  <Container
+                    style={{
+                      padding: 8,
+                      borderWidth: 1,
+                      borderRadius: 8,
+                      borderColor: '#3A3936',
+                      backgroundColor:
+                        index === dateIndex ? '#121212' : 'transparent',
+                    }}>
+                    <Text
+                      size={12}
+                      type="medium"
+                      color={index === dateIndex ? Color.white : Color.text}
+                      lineHeight={16}>
+                      {item.name}
+                    </Text>
+                  </Container>
+                </TouchableOpacity>
+              )}
             />
 
-            <Container paddingHorizontal={16}>
-              <Image
-                style={{width: '100%'}}
-                source={imageAssets.bannerMfest}
-                resizeMode="contain"
+            {dateIndex === 0 ? (
+              date.map((item, index) => {
+                if (index === 0) return <></>;
+                return (
+                  <HighlightFest
+                    key={index}
+                    productCategory="LINEUP"
+                    showSeeAllText={false}
+                    name={item.title}
+                    title={item.title}
+                    horizontal={true}
+                    maxData={2}
+                    onPress={value => {
+                      setSelected(value);
+                      modalRef.current.open();
+                    }}
+                  />
+                );
+              })
+            ) : (
+              <HighlightFest
+                productCategory="LINEUP"
+                showSeeAllText={false}
+                name={date[dateIndex].title}
+                title={date[dateIndex].title}
+                horizontal={true}
+                onPress={value => {
+                  setSelected(value);
+                  modalRef.current.open();
+                }}
               />
-            </Container>
+            )}
           </Container>
         )}
       </ScrollView>
@@ -246,4 +300,4 @@ const FestScreenV2 = ({navigation, route}) => {
   );
 };
 
-export default FestScreenV2;
+export default MusicScheduleScreen;

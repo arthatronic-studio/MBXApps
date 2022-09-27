@@ -96,9 +96,10 @@ const PostingHeader = (props) => {
             {showSeeAllText && <Text
                 onPress={() => onSeeAllPress()}
                 size={12}
+                color={Color.primaryDark}
             >
-                Lihat Semua{' '}
-                <Ionicons name="arrow-forward" size={12} color={Color.text} />
+                Selengkapnya{' '}
+                <Ionicons name="arrow-forward" size={12} color={Color.primaryDark} />
             </Text>}
         </Container>
     )

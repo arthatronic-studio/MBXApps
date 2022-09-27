@@ -99,7 +99,10 @@ const festIcon2 = require('./fest-icon-2.png');
 const festArtsMenu = require('./fest-arts-menu.png');
 const festMusicMenu = require('./fest-music-menu.png');
 const festLiteratureMenu = require('./fest-literature-menu.png');
-const lineupContent = require('./lineup-content.png')
+const lineupContent = require('./lineup-content.png');
+const bannerFestMusic = require('./banner-fest-music.png');
+const bannerMusicDetail = require('./banner-music-detail.png');
+const musicWeek = require('./musik-week.png');
 
 export {
   iconApp,
@@ -261,6 +264,9 @@ export const imageAssets = {
   festMusicMenu,
   festLiteratureMenu,
   lineupContent,
+  bannerFestMusic,
+  bannerMusicDetail,
+  musicWeek,
 };
 
 export default imageAssets;

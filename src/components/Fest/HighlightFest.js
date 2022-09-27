@@ -27,6 +27,7 @@ const propTypes = {
   showEmpty: PropTypes.bool,
   showSeeAllText: PropTypes.bool,
   wrap: PropTypes.bool,
+  maxData: PropTypes.number,
 };
 
 const defaultProps = {
@@ -44,6 +45,7 @@ const defaultProps = {
   showSeeAllText: true,
   wrap: true,
   onPress: () => {},
+  maxData: 0,
 };
 
 const HighlightFest = props => {
@@ -61,7 +63,8 @@ const HighlightFest = props => {
     showEmpty,
     showSeeAllText,
     wrap,
-    onPress
+    onPress,
+    maxData
   } = props;
 
   const {Color} = useColor();
@@ -85,6 +88,9 @@ const HighlightFest = props => {
     // const result = await getAPI('event');
     // console.log('result event', result);
     let newData = [{id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}];
+    if(maxData != 0) {
+      newData = [{id: 1}, {id: 2}];
+    }
 
     // if (result.status) {
     // newData = result.data;

@@ -18,8 +18,9 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {getAPI, postAPI} from 'src/api-rest/httpService';
 import {Modalize} from 'react-native-modalize';
 import HighlightFest from 'src/components/Fest/HighlightFest';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const FestScreenV2 = ({navigation, route}) => {
+const FestMusicDetail = ({navigation, route}) => {
   const {Color} = useColor();
   const isFocused = useIsFocused();
   const [loadingProps, showLoading, hideLoading] = useLoading();
@@ -31,7 +32,7 @@ const FestScreenV2 = ({navigation, route}) => {
   const [menu, setMenu] = useState([
     {
       id: 1,
-      nav: 'FestMusicScreen',
+      nav: 'ArtsScreen',
       param: {},
       image: imageAssets.festMusicMenu,
       show: true,
@@ -71,22 +72,7 @@ const FestScreenV2 = ({navigation, route}) => {
   return (
     <Scaffold
       loadingProps={loadingProps}
-      header={
-        <Header
-          backgroundColor={'#00925F'}
-          centerTitle={false}
-          color={Color.theme}
-          iconLeftButton="arrow-left"
-          actions={
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('AboutFest');
-              }}>
-              <AntDesign name="questioncircleo" size={16} color={Color.theme} />
-            </TouchableOpacity>
-          }
-        />
-      }>
+      header={<Header centerTitle={false} iconLeftButton="arrow-left" />}>
       <ScrollView>
         {loading ? (
           <Container
@@ -106,55 +92,57 @@ const FestScreenV2 = ({navigation, route}) => {
           </Container>
         ) : (
           <Container>
-            <Container
-              backgroundColor={'#00925F'}
-              flex={1}
-              paddingTop={32}
-              paddingBottom={16}
-              align="center">
-              <Image source={imageAssets.festIcon2} resizeMode="contain" />
+            <Container width={width} flex={1}>
+              <Image
+                source={imageAssets.bannerMusicDetail}
+                resizeMode="cover"
+                style={{width: '100%'}}
+              />
             </Container>
 
-            <Divider height={10} />
+            <Divider height={16} />
 
-            <Container
-              paddingHorizontal={16}
-              flex={1}
-              flexDirection="row"
-              justify="space-between">
-              {menu.map((item, index) => {
-                return (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => navigation.navigate(item.nav)}>
-                    <Image source={item.image} />
-                  </TouchableOpacity>
-                );
-              })}
+            <Container paddingHorizontal={16}>
+              <Text
+                size={16}
+                lineHeight={20}
+                type="medium"
+                color={Color.black}
+                align="left">
+                Mbloc Music Week Festival
+              </Text>
+              <Divider height={8} />
+              <Text size={10} lineHeight={12} color={'#3A3936'} align="left">
+                25 Sep - 02 Okt 2022 {'\u2022'} Live House
+              </Text>
+              <Divider height={16} />
+
+              <Text align="left" size={14} lineHeight={22} color={Color.black}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et
+                massa mi. Aliquam in hendrerit urna. Pellentesque sit amet
+                sapien fringilla, mattis ligula consectetur, ultrices mauris.
+                Maecenas vitae mattis tellus. Nullam quis imperdiet augue.
+                Vestibulum auctor ornare leo, non suscipit magna interdum eu.
+                Curabitur pellentesque nibh nibh, at maximus ante fermentum sit
+                amet. Pellentesque commodo lacus at sodales sodales. Quisque
+                sagittis orci ut diam condimentum, vel euismod erat placerat. In
+                iaculis arcu eros, eget tempus orci facilisis id.
+              </Text>
+              <Divider height={10} />
             </Container>
-
-            <Divider />
 
             <HighlightFest
               productCategory="LINEUP"
-              nav="ShowAllLineup"
-              name="Todays Line-up"
-              title="Todays Line-up"
-              wrap={false}
+              nav="MusicScheduleScreen"
+              name="Jadwal"
+              title="Jadwal"
+              // wrap={false}
               horizontal={true}
-              onPress={(value) => {
+              onPress={value => {
                 setSelected(value);
-                modalRef.current.open()
+                modalRef.current.open();
               }}
             />
-
-            <Container paddingHorizontal={16}>
-              <Image
-                style={{width: '100%'}}
-                source={imageAssets.bannerMfest}
-                resizeMode="contain"
-              />
-            </Container>
           </Container>
         )}
       </ScrollView>
@@ -246,4 +234,4 @@ const FestScreenV2 = ({navigation, route}) => {
   );
 };
 
-export default FestScreenV2;
+export default FestMusicDetail;
