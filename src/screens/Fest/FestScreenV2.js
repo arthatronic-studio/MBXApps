@@ -18,6 +18,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {getAPI, postAPI} from 'src/api-rest/httpService';
 import {Modalize} from 'react-native-modalize';
 import HighlightFest from 'src/components/Fest/HighlightFest';
+import CardFestVenues from 'src/components/Fest/CardFestVenues';
 
 const FestScreenV2 = ({navigation, route}) => {
   const {Color} = useColor();
@@ -65,7 +66,7 @@ const FestScreenV2 = ({navigation, route}) => {
   };
 
   useEffect(() => {
-    fetchData();
+    // fetchData();
   }, []);
 
   return (
@@ -146,6 +147,14 @@ const FestScreenV2 = ({navigation, route}) => {
                 setSelected(value);
                 modalRef.current.open()
               }}
+            />
+
+            <HighlightFest
+              productCategory="VENUES"
+              nav="VenuesScreen"
+              name="Venues"
+              title="Venues"
+              maxData={2}
             />
 
             <Container paddingHorizontal={16}>

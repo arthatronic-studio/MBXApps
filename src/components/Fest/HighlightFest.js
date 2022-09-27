@@ -12,6 +12,7 @@ import {initialItemState} from 'src/utils/constants';
 import CardContentProduct from '@src/components/Content/CardContentProduct';
 import {getAPI} from 'src/api-rest/httpService';
 import CardContentFest from 'src/components/Fest/CardContentFest';
+import imageAssets from 'assets/images';
 
 const propTypes = {
   userProfileId: PropTypes.number,
@@ -96,6 +97,22 @@ const HighlightFest = props => {
     }
     if(productCategory == 'CardSchedule'){
       newData = initialData;
+    }
+    if(productCategory == 'VENUES'){
+      newData = [
+        {
+          id: 1,
+          image: imageAssets.blocBar,
+          name: 'bloc Bar',
+          group: 'Tiket',
+        },
+        {
+          id: 2,
+          image: imageAssets.twalenWarong,
+          name: 'Twalen Warong',
+          group: 'Gratis',
+        },
+      ];
     }
 
     // if (result.status) {
