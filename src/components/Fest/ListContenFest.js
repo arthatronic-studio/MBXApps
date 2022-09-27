@@ -11,6 +11,7 @@ import CardContentProduct from '@src/components/Content/CardContentProduct';
 import {getAPI} from 'src/api-rest/httpService';
 import PostingHeader from '../Posting/PostingHeader';
 import CardContentFest from './CardContentFest';
+import imageAssets from 'assets/images';
 
 const propTypes = {
   userProfileId: PropTypes.number,
@@ -33,7 +34,7 @@ const defaultProps = {
   title: '',
   showSeeAllText: false,
   showHeader: false,
-  onPress: () => {}
+  onPress: () => {},
 };
 
 const ListContenFest = ({
@@ -67,6 +68,104 @@ const ListContenFest = ({
 
     // console.log('result', result);
     let newData = [{id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}];
+    if (productCategory === 'ARTS') {
+      newData = [
+        {
+          id: 1,
+          imageBanner: imageAssets.festArts1,
+          title: 'Pasar Wastra',
+          date: '26 - 28 Sep 2022',
+          location: 'Creative Hall',
+          desc: 'Ada banyak keseruan #BerkainDiFestival yang menanti! \nSelain berbelanja kain, dipastikan teman-teman Remaja Nusantara akan banyak memberikan edukasi, memandu dan jadi kawan baru bagi kita untuk menjelajah kekayaan wastra Indonesia.\nAda panggung gembira dengan bermacam disjoki yang akan memainkan musik Indonesia terbaik.\nKabarnya, beberapa penampil di M Bloc Fest juga akan berbusana dengan kain-kain Indonesia, loh! Siapa saja ya? 🤔🙌🏻 \n Mari rayakan bersama di M Bloc Fest dan jadi bagian dari keseruan ini!',
+          gallery: [
+            imageAssets.festArts1,
+            imageAssets.festArts2,
+            imageAssets.festArts3,
+          ],
+          schedule: [
+            {
+              id: 1,
+              title: 'Pasar Wastra',
+              date: '28 Sep 2022'
+            },
+            {
+              id: 2,
+              title: 'Panggung Gembira',
+              date: '28 Sep 2022'
+            },
+            {
+              id: 3,
+              title: 'Lokakarya Berkain',
+              date: '28 Sep 2022'
+            },
+          ]
+        },
+        {
+          id: 2,
+          imageBanner: imageAssets.designWeek1,
+          title: 'mbloc Design Week',
+          date: '04 - 16 Okt 2022',
+          location: 'Creative Hall',
+          desc: 'M Bloc Design Week #MBDW22 akan menjadi ruang bagi para komunitas, pelaku dan pecinta desain di Indonesia untuk bertukar pikiran, pamer karya hingga berjejaring demi memantik ide karya selanjutnya! ✨\nMelalui karya-karya yang dipamerkan, bincang kreatif hingga workshop, semuanya akan berlangsung selama dua pekan dan bisa diikuti secara gratis.',
+          gallery: [
+            imageAssets.designWeek1,
+            imageAssets.designWeek2,
+            imageAssets.designWeek3,
+            imageAssets.designWeek4,
+            imageAssets.designWeek5,
+            imageAssets.designWeek6,
+            imageAssets.designWeek7,
+          ],
+          schedule: [
+            {
+              id: 1,
+              title: 'Creative Talks',
+              date: '04 - 16 Okt 2022'
+            },
+            {
+              id: 2,
+              title: 'Design Talks',
+              date: '04 - 16 Okt 2022'
+            },
+            {
+              id: 3,
+              title: 'Workshop',
+              date: '04 - 16 Okt 2022'
+            },
+            {
+              id: 4,
+              title: 'Music Performances',
+              date: '04 - 16 Okt 2022'
+            },
+          ]
+        },
+      ];
+    }
+    if(productCategory === 'CardSchedule'){
+      newData = [
+        {
+          id: 1,
+          title: 'Creative Talks',
+          date: '04 - 16 Okt 2022'
+        },
+        {
+          id: 2,
+          title: 'Design Talks',
+          date: '04 - 16 Okt 2022'
+        },
+        {
+          id: 3,
+          title: 'Workshop',
+          date: '04 - 16 Okt 2022'
+        },
+        {
+          id: 4,
+          title: 'Music Performances',
+          date: '04 - 16 Okt 2022'
+        },
+      ]
+    }
+
 
     setItemData({
       ...itemData,
@@ -109,8 +208,8 @@ const ListContenFest = ({
     );
   };
 
-  let extraProps = {numColumns: 2};
-  if (productCategory === 'NEARBY_PLACE') extraProps.numColumns = 2;
+  let extraProps = {numColumns: 1};
+  if (productCategory === 'LINEUP') extraProps.numColumns = 2;
   if (horizontal) extraProps = {};
 
   return (

@@ -38,7 +38,7 @@ const FestScreenV2 = ({navigation, route}) => {
     },
     {
       id: 2,
-      nav: 'MusicScreen',
+      nav: 'FestArtsScreen',
       param: {},
       image: imageAssets.festArtsMenu,
       show: true,

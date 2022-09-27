@@ -28,6 +28,7 @@ const propTypes = {
   showSeeAllText: PropTypes.bool,
   wrap: PropTypes.bool,
   maxData: PropTypes.number,
+  initialData: PropTypes.array,
 };
 
 const defaultProps = {
@@ -46,6 +47,7 @@ const defaultProps = {
   wrap: true,
   onPress: () => {},
   maxData: 0,
+  initialData: [],
 };
 
 const HighlightFest = props => {
@@ -64,7 +66,8 @@ const HighlightFest = props => {
     showSeeAllText,
     wrap,
     onPress,
-    maxData
+    maxData,
+    initialData,
   } = props;
 
   const {Color} = useColor();
@@ -91,6 +94,9 @@ const HighlightFest = props => {
     if(maxData != 0) {
       newData = [{id: 1}, {id: 2}];
     }
+    if(productCategory == 'CardSchedule'){
+      newData = initialData;
+    }
 
     // if (result.status) {
     // newData = result.data;
@@ -112,7 +118,7 @@ const HighlightFest = props => {
       <PostingHeader
         title={title}
         onSeeAllPress={() => {
-          navigation.navigate(nav, {title, userProfileId});
+          navigation.navigate(nav, {title, userProfileId, productCategory});
         }}
         productCategory={productCategory}
         showSeeAllText={showSeeAllText}

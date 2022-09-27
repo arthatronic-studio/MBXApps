@@ -10,6 +10,8 @@ import { queryAddLike } from '@src/lib/query';
 import { useSelector } from 'react-redux';
 import { fetchContentProductDetail } from 'src/api/content';
 import CardFestLineup from './CardFestLineup';
+import CardFestArtsV2 from './CardFestArtsV2';
+import CardSchedule from './CardSchedule';
 
 const defaultProps = {
     productCategory: '',
@@ -79,7 +81,8 @@ const CardContentFest = ({ productCategory, category,item, numColumns, onPress, 
 
     if (productCategory === 'MUSIK') return <CardFestLineup { ...props } />;
     else if (productCategory === 'LINEUP') return <CardFestLineup { ...props } />;
-    else if (productCategory === 'ARTS') return <CardFestLineup { ...props } />;
+    else if (productCategory === 'ARTS') return <CardFestArtsV2 { ...props } />;
+    else if (productCategory === 'CardSchedule') return <CardSchedule { ...props } />;
     else if (productCategory === 'EVENT') return <CardFestLineup { ...props } />;
     else if (productCategory === 'LITERATUR') return <CardFestLineup { ...props } />;
     else if (productCategory === 'VENUES') return <CardFestLineup { ...props } />;
