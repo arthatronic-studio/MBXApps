@@ -165,6 +165,153 @@ const ListContenFest = ({
         },
       ]
     }
+    if(productCategory === 'LITERATUR'){
+      newData = [
+        {
+          id: 1,
+          imageBanner: imageAssets.bookFestival1,
+          title: 'The Writers Book Festival',
+          date: '24 - 25 Sep 2022',
+          location: 'Lobby Area',
+          desc: 'Bekerja sama dengan komunitas “The Writers”, The Writers Book Festival akan menjadi salah satu program komunitas yang tergabung dalam M Bloc Fest. Festival ini akan fokus untuk memasyarakatkan literasi ke banyak orang.\n\nAcara ini akan meliputi pameran buku dari penulis-penulis lokal, Pameran kutipan-kutipan, kelas penulisan buku, dan juga musikalisasi puisi.',
+          gallery: [
+            imageAssets.bookFestival1,
+            imageAssets.bookFestival2,
+            imageAssets.bookFestival3,
+            imageAssets.bookFestival1,
+            imageAssets.bookFestival2,
+            imageAssets.bookFestival3,
+          ],
+          schedule: [
+            {
+              id: 1,
+              title: 'Bedah Buku',
+              date: '24 Sep - 25 Sep 2022',
+              desc: [
+                {
+                  title: 'ME 7 THE POWER OF MUSIC',
+                  desc: 'Fairuz'
+                },
+                {
+                  title: 'SOSIALIJAH',
+                  desc: 'Citra'
+                },
+                {
+                  title: 'PANGERAN DARI TIMUR',
+                  desc: 'Iksaka Banu & Kurnia'
+                },
+                {
+                  title: 'TANGGU DI TENGAH PANDEMI BELAJAR DARI BAKTERI',
+                  desc: 'Yanki Hartijasti'
+                },
+              ]
+            },
+            {
+              id: 2,
+              title: 'Peluncuran Buku',
+              date: '24 Sep - 25 Sep 2022',
+              desc: [
+                {
+                  title: 'Nusantara Pelabuhan Hati',
+                  desc: 'Sony Tan'
+                },
+                {
+                  title: 'Orang-Orang Dari Tepi Kali',
+                  desc: 'Dedi Vansophi'
+                },
+                {
+                  title: 'Rempah Kita Nusantara',
+                  desc: 'Lily Setiadinata dkk'
+                },
+              ]
+            },
+            {
+              id: 3,
+              title: 'Pameran Buku & Quotes',
+              date: '24 Sep - 25 Sep 2022',
+              desc: [
+                {
+                  title: 'Quotes',
+                  desc: 'The Writes Book Community'
+                },
+              ]
+            },
+            {
+              id: 4,
+              title: 'Penampilan Musik',
+              date: '24 Sep - 25 Sep 2022',
+              desc: [
+                {
+                  title: 'Aura Diva',
+                },
+                {
+                  title: 'Tya Subiakto',
+                },
+              ]
+            },
+          ]
+        },
+        {
+          id: 2,
+          imageBanner: imageAssets.bookFair1,
+          title: 'Jakarta Art Book Fair 2022',
+          date: '30 Sep - 02 Okt 2022',
+          location: 'Creative Hall & Bloc Bar',
+          desc: 'Kolaborasi bersama penyelenggara Jakarta Art Book Fair. Acara ini adalah sebuah pameran terkurasi dengan tujuan untuk memamerkan, menjual, dan menghubungkan para artis, kreator art book, illustrator, penulis, pencetak, dan sejenisnya.\n\nJKTABF akan menjadi pekan raya buku seni pertama di Jakarta dan di Indonesia yang akan menghadirkan 50 exhibitor lokal dan nternasional.',
+          gallery: [
+            imageAssets.bookFair1,
+            imageAssets.bookFair2,
+            imageAssets.bookFair3,
+          ],
+          schedule: [
+            {
+              id: 1,
+              title: 'Talks (30 Sep)',
+              date: '30 Sep 2022',
+              desc: [
+                {
+                  title: 'Creative Solutions for Independent Publishers',
+                  time: '13:30 - 14:30',
+                  desc: 'oleh Fadhil (Qualita), Fandy (JKTABF), Kervin, Adhi (Fedrigoni Indonesia)'
+                },
+                {
+                  title: 'Ragam Penyelenggaraan Alternatif Buku Foto: Dari Penerbitan Hingga Distribusi',
+                  time: '14:45 - 15:45',
+                  desc: 'oleh Aditya Pratama (Unobtainimum), Daud Sihombing (Kamboja Press), Prasety Yudha (Sokong)'
+                },
+                {
+                  title: 'The Making of Award-Winning Books',
+                  time: '16:15 - 17:15',
+                  desc: 'oleh Lans Brahmantyo'
+                },
+                {
+                  title: 'Art Publishing in The Southeast Asia',
+                  time: '18:30 - 19:30',
+                  desc: 'Oleh Yipei (SUAVEART, Taiwan), Nadya (Art Market, Singapore), Unlyy n Pep (Thailand)',
+                },
+              ]
+            },
+            {
+              id: 2,
+              title: 'Performance (30 Sep)',
+              date: '30 Sep 2022',
+              desc: [
+                {
+                  title: 'Budayakan Membaca Yang Tidak Benar by Dika+Lija',
+                  time: '14:00 - 17:00',
+                  desc: 'Budaya membaca yang tidak benar is a performance-based installation situated in the heart of the Jakarta Art Book Fair.\n\nIn the spirit of going against the classist academic systems, the project takes form in a public service announccement: disseminating a subversive manifesto on ways to read a book incorrectly'
+                },
+                {
+                  title: 'Zine Launch: “Karaat Theater Show”',
+                  time: '17:00 - 18:00',
+                  desc: 'Puppetry performance/zine launch by Godmatter Published by Further reading press',
+                }
+              ]
+            },
+          ]
+        },
+      ];
+    }
 
 
     setItemData({

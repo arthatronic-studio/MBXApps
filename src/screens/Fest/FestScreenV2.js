@@ -45,7 +45,7 @@ const FestScreenV2 = ({navigation, route}) => {
     },
     {
       id: 3,
-      nav: 'LiteratureScreen',
+      nav: 'FestLiteratureScreen',
       param: {},
       image: imageAssets.festLiteratureMenu,
       show: true,

@@ -113,6 +113,12 @@ const designWeek4 = require('./design-week-4.png');
 const designWeek5 = require('./design-week-5.png');
 const designWeek6 = require('./design-week-6.png');
 const designWeek7 = require('./design-week-7.png');
+const bookFair1 = require('./book-fair-1.png');
+const bookFair2 = require('./book-fair-2.png');
+const bookFair3 = require('./book-fair-3.png');
+const bookFestival1 = require('./book-festival-1.png');
+const bookFestival2 = require('./book-festival-2.png');
+const bookFestival3 = require('./book-festival-3.png');
 
 export {
   iconApp,
@@ -287,6 +293,12 @@ export const imageAssets = {
   designWeek5,
   designWeek6,
   designWeek7,
+  bookFair1,
+  bookFair2,
+  bookFair3,
+  bookFestival1,
+  bookFestival2,
+  bookFestival3,
 };
 
 export default imageAssets;

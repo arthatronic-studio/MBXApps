@@ -13,7 +13,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {getAPI, postAPI} from 'src/api-rest/httpService';
 import ListContenFest from 'src/components/Fest/ListContenFest';
 
-const FestArtsScreen = ({navigation, route}) => {
+const FestLiteratureScreen = ({navigation, route}) => {
   const {Color} = useColor();
   const isFocused = useIsFocused();
   const [loadingProps, showLoading, hideLoading] = useLoading();
@@ -42,7 +42,7 @@ const FestArtsScreen = ({navigation, route}) => {
       header={
         <Header
           centerTitle={false}
-          title="Art & Design"
+          title="Literatur"
           iconLeftButton="arrow-left"
         />
       }>
@@ -50,13 +50,12 @@ const FestArtsScreen = ({navigation, route}) => {
           marginBottom={48}
         >
           <ListContenFest
-            productCategory="ARTS"
+            productCategory="LITERATUR"
             // name={title}
-            
           />
         </Container>
     </Scaffold>
   );
 };
 
-export default FestArtsScreen;
+export default FestLiteratureScreen;

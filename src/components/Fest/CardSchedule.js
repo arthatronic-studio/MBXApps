@@ -33,7 +33,7 @@ const CardSchedule = ({
   const user = useSelector(state => state['user.auth'].login.user);
   const variable = {image: imageAssets.lineupContent};
 
-  console.log(item, "item")
+  console.log(item, 'item');
 
   return (
     <Container
@@ -55,6 +55,51 @@ const CardSchedule = ({
           <Text size={10} lineHeight={12} color={'#3A3936'} align="left">
             {item.date}
           </Text>
+          {item.desc &&
+            item.desc.map((data, index) => {
+              return (
+                <Container
+                  flex={1}
+                  flexDirection="row"
+                  key={index}
+                  marginVertical={4}>
+                  <Text align="left" size={8} color={Color.text}>
+                    {'\u2B24'}
+                  </Text>
+                  <Divider width={8} />
+                  <Container flex={1} flexDirection="column">
+                    {data.title && (
+                      <Text
+                        align="left"
+                        size={12}
+                        type="medium"
+                        lineHeight={16}
+                        color={Color.black}>
+                        {data.title}
+                      </Text>
+                    )}
+                    {data.time && (
+                      <Text
+                        align="left"
+                        size={10}
+                        lineHeight={12}
+                        color={'#ACAAA5'}>
+                        {data.time}
+                      </Text>
+                    )}
+                    {data.desc && (
+                      <Text
+                        align="left"
+                        size={10}
+                        lineHeight={12}
+                        color={'#3A3936'}>
+                        {data.desc}
+                      </Text>
+                    )}
+                  </Container>
+                </Container>
+              );
+            })}
         </>
       </AccordianItem>
     </Container>

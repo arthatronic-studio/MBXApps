@@ -298,6 +298,8 @@ import FestArtsScreen from 'src/screens/Fest/FestArtsScreen';
 import FestArtsDetail from 'src/screens/Fest/FestArtsDetail';
 import FestGallery from 'src/screens/Fest/FestGallery';
 import ShowAllSchedule from 'src/screens/Fest/ShowAllSchedule';
+import FestLiteratureScreen from 'src/screens/Fest/FestLiteratureScreen';
+import FestLiteratureDetail from 'src/screens/Fest/FestLiteratureDetail';
 
 // GROUP
 import GroupScreen from 'src/screens/Group/GroupScreen';
@@ -582,6 +584,8 @@ function AppNavigator() {
       <Screen name="FestArtsDetail" component={FestArtsDetail} />
       <Screen name="FestGallery" component={FestGallery} />
       <Screen name="ShowAllSchedule" component={ShowAllSchedule} />
+      <Screen name="FestLiteratureScreen" component={FestLiteratureScreen} />
+      <Screen name="FestLiteratureDetail" component={FestLiteratureDetail} />
 
       {/* Group */}
       <Screen name="GroupScreen" component={GroupScreen} />
