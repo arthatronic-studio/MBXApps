@@ -47,8 +47,6 @@ const CardFestVenues = ({
           resizeMode: 'cover',
           borderTopLeftRadius: 8,
           borderTopRightRadius: 8,
-          borderBottomLeftRadius: 0,
-          borderBottomRightRadius: 0,
         }}
         source={item.image}
       />

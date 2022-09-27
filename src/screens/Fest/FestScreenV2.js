@@ -160,10 +160,18 @@ const FestScreenV2 = ({navigation, route}) => {
             <Container paddingHorizontal={16}>
               <Image
                 style={{width: '100%'}}
-                source={imageAssets.bannerMfest}
+                source={imageAssets.bannerMfest2}
                 resizeMode="contain"
               />
             </Container>
+
+            <HighlightFest
+              productCategory="AREA"
+              nav="ShowAllArea"
+              name="Experience Area"
+              title="Experience Area"
+              horizontal={true}
+            />
           </Container>
         )}
       </ScrollView>

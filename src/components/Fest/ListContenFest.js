@@ -357,6 +357,7 @@ const ListContenFest = ({
 
   let extraProps = {numColumns: 1};
   if (productCategory === 'LINEUP') extraProps.numColumns = 2;
+  if (productCategory === 'AREA') extraProps.numColumns = 2;
   if (horizontal) extraProps = {};
 
   return (
