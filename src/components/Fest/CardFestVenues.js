@@ -39,6 +39,7 @@ const CardFestVenues = ({
         borderWidth: 1,
         marginVertical: 8,
         borderRadius: 8,
+        marginHorizontal: 8,
       }}>
       <Image
         style={{

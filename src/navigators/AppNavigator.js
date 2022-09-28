@@ -305,6 +305,7 @@ import VenuesScreen from 'src/screens/Fest/VenuesScreen';
 import VenuesDetail from 'src/screens/Fest/VenuesDetail';
 import ShowAllArea from 'src/screens/Fest/ShowAllArea';
 import AreaDetail from 'src/screens/Fest/AreaDetail';
+import AboutFestV2 from 'src/screens/Fest/AboutFestV2';
 
 // GROUP
 import GroupScreen from 'src/screens/Group/GroupScreen';
@@ -596,6 +597,7 @@ function AppNavigator() {
       <Screen name="VenuesDetail" component={VenuesDetail} />
       <Screen name="ShowAllArea" component={ShowAllArea} />
       <Screen name="AreaDetail" component={AreaDetail} />
+      <Screen name="AboutFestV2" component={AboutFestV2} />
 
       {/* Group */}
       <Screen name="GroupScreen" component={GroupScreen} />

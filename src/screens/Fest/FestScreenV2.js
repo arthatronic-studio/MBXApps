@@ -85,7 +85,7 @@ const FestScreenV2 = ({navigation, route}) => {
           actions={
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('AboutFest');
+                navigation.navigate('AboutFestV2');
               }}>
               <AntDesign name="questioncircleo" size={16} color={Color.theme} />
             </TouchableOpacity>
