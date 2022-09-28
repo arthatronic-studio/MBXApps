@@ -306,6 +306,7 @@ import VenuesDetail from 'src/screens/Fest/VenuesDetail';
 import ShowAllArea from 'src/screens/Fest/ShowAllArea';
 import AreaDetail from 'src/screens/Fest/AreaDetail';
 import AboutFestV2 from 'src/screens/Fest/AboutFestV2';
+import FestEventScreen from 'src/screens/Fest/FestEventScreen';
 
 // GROUP
 import GroupScreen from 'src/screens/Group/GroupScreen';
@@ -598,6 +599,7 @@ function AppNavigator() {
       <Screen name="ShowAllArea" component={ShowAllArea} />
       <Screen name="AreaDetail" component={AreaDetail} />
       <Screen name="AboutFestV2" component={AboutFestV2} />
+      <Screen name="FestEventScreen" component={FestEventScreen} />
 
       {/* Group */}
       <Screen name="GroupScreen" component={GroupScreen} />

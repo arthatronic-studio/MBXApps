@@ -154,6 +154,15 @@ const FestScreenV2 = ({navigation, route}) => {
             />
 
             <HighlightFest
+              productCategory="EVENT"
+              nav="FestEventScreen"
+              name="Event Berlansung"
+              title="Event Berlansung"
+              maxData={2}
+              onPress={() => navigation.navigate('FestMusicScreen')}
+            />
+
+            <HighlightFest
               productCategory="VENUES"
               nav="VenuesScreen"
               name="Venues"

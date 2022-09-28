@@ -16,6 +16,7 @@ import CardFestLiteratureV2 from './CardFestLiteratureV2';
 import CardFestVenues from './CardFestVenues';
 import CardFestArea from './CardFestArea';
 import CardFestAbout from './CardFestAbout';
+import CardFestEvent from './CardFestEvent';
 
 const defaultProps = {
     productCategory: '',
@@ -91,7 +92,7 @@ const CardContentFest = ({ productCategory, category,item, numColumns, onPress, 
     else if (productCategory === 'VENUES') return <CardFestVenues { ...props } />;
     else if (productCategory === 'AREA') return <CardFestArea { ...props } />;
     else if (productCategory === 'ABOUT') return <CardFestAbout { ...props } />;
-    else if (productCategory === 'EVENT') return <CardFestLineup { ...props } />;
+    else if (productCategory === 'EVENT') return <CardFestEvent { ...props } />;
     
     return <Text>Not Set</Text>;
 }

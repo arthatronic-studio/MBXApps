@@ -155,21 +155,21 @@ const AboutFestV2 = ({navigation, route}) => {
             />
             <HighlightFest
               productCategory="ABOUT"
-              nav="FestArtsScreen"
+              nav="FestLiteratureScreen"
               name="Literatur"
               title="Literatur"
               maxData={2}
               horizontal={true}
-              onPress={() => navigation.navigate('FestArtsScreen')}
+              onPress={() => navigation.navigate('FestLiteratureScreen')}
             />
             <HighlightFest
               productCategory="ABOUT"
-              nav="FestLiteratureScreen"
+              nav="FestArtsScreen"
               name="Arts & Design"
               title="Arts & Design"
               maxData={2}
               horizontal={true}
-              onPress={() => navigation.navigate('FestLiteratureScreen')}
+              onPress={() => navigation.navigate('FestArtsScreen')}
             />
             <Divider height={16} />
             <Container paddingHorizontal={16}>
