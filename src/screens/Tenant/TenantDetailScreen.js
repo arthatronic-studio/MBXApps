@@ -37,7 +37,7 @@ import { isIphoneNotch, statusBarHeight } from 'src/utils/constants';
 import { fetchEatCartAdd } from 'src/api-rest/fetchEatCartAdd';
 import { fetchEatCartDetail } from 'src/api-rest/fetchEatCartDetail';
 
-const DetailTenantScreen = ({ navigation, route }) => {
+const TenantDetailScreen = ({ navigation, route }) => {
   const { params } = route;
   const items = params.item;
 
@@ -726,7 +726,7 @@ const DetailTenantScreen = ({ navigation, route }) => {
                   return;
                 }
 
-                navigation.navigate('EatDetailPesananScreen', {
+                navigation.navigate('TenantCheckoutScreen', {
                   ...params,
                   cartId,
                   namaPemesan,
@@ -770,4 +770,4 @@ const DetailTenantScreen = ({ navigation, route }) => {
   );
 };
 
-export default DetailTenantScreen;
+export default TenantDetailScreen;

@@ -40,7 +40,7 @@ const defaultProps = {
     style: {},
 };
 
-const CardFeaturedEat = ({ productCategory, item, numColumns, onPress, horizontal, style }) => {
+const CardTenantFeatured = ({ productCategory, item, numColumns, onPress, horizontal, style }) => {
     const [like, setLike] = useState(false);
     const [im_like, setImLike] = useState(false);
     const [trigger, setTrigger] = useState(false);
@@ -92,7 +92,7 @@ const CardFeaturedEat = ({ productCategory, item, numColumns, onPress, horizonta
 
     const renderCardEvent = () => {
         const onPress = () => {
-            navigation.navigate('DetailTenantScreen', { item });
+            navigation.navigate('TenantDetailScreen', { item });
 
             // GALogEvent('Event', {
             //     id: item.id,
@@ -195,6 +195,6 @@ const CardFeaturedEat = ({ productCategory, item, numColumns, onPress, horizonta
     return renderCardEvent();
 }
 
-CardFeaturedEat.defaultProps = defaultProps
-export default CardFeaturedEat;
+CardTenantFeatured.defaultProps = defaultProps
+export default CardTenantFeatured;
 

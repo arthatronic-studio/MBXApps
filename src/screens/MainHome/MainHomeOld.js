@@ -1284,7 +1284,7 @@ const MainHome = ({ navigation, route }) => {
                     <TouchableOpacity
                       key={idx}
                       onPress={() => {
-                        navigation.navigate('DetailTenantScreen', { item });
+                        navigation.navigate('TenantDetailScreen', { item });
                       }}
                       style={{
                         width: '100%',

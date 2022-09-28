@@ -40,7 +40,7 @@ import { fetchEatCartRemove } from 'src/api-rest/fetchEatCartRemove';
 import { fetchEatCartOrder } from 'src/api-rest/fetchEatCartOrder';
 import WebViewScreen from 'src/components/WebViewScreen';
 
-const EatDetailPesananScreen = ({ navigation, route }) => {
+const TenantCheckoutScreen = ({ navigation, route }) => {
   const { params } = route;
   const items = params.item;
 
@@ -605,4 +605,4 @@ const EatDetailPesananScreen = ({ navigation, route }) => {
   );
 };
 
-export default EatDetailPesananScreen;
+export default TenantCheckoutScreen;

@@ -28,7 +28,7 @@ import { getHistory } from 'src/lib/query/event';
 import { FormatMoney } from 'src/utils';
 import { postAPI } from 'src/api-rest/httpService';
 
-const EatHistory = ({ navigation, route }) => {
+const TenantHistoryScreen = ({ navigation, route }) => {
 
   const { Color } = useColor();
   const [popupProps, showPopup] = usePopup();
@@ -132,4 +132,4 @@ const EatHistory = ({ navigation, route }) => {
   )
 }
 
-export default EatHistory;
+export default TenantHistoryScreen;

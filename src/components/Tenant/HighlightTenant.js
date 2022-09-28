@@ -65,7 +65,7 @@ const HighlightTenant = (props) => {
             >
                 <TouchableOpacity
                     onPress={() => {
-                        navigation.navigate('DetailTenantScreen', { item })
+                        navigation.navigate('TenantDetailScreen', { item })
                     }}
                     style={{ width: '100%', aspectRatio: 1 }}
                 >

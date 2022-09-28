@@ -271,13 +271,14 @@ import OrderEventDetail from 'src/screens/Posting/Event/OrderEventDetail';
 import VisitorScreen from 'src/screens/Security/VisitorScreen';
 import VisitorDetailScreen from 'src/screens/Security/VisitorDetailScreen';
 
-// eat
-import EatScreen from 'src/screens/Eat/EatScreen';
-import EatDetailPesananScreen from 'src/screens/Eat/EatDetailPesananScreen';
-import EatHistory from 'src/screens/Eat/EatHistory';
+// tenant
+import EatScreen from 'src/screens/Tenant/EatScreen';
+import ShopScreen from 'src/screens/Tenant/ShopScreen';
+import TenantDetailScreen from 'src/screens/Tenant/TenantDetailScreen';
+import TenantCheckoutScreen from 'src/screens/Tenant/TenantCheckoutScreen';
+import TenantHistoryScreen from 'src/screens/Tenant/TenantHistoryScreen';
 
 // beacon
-import DetailTenantScreen from 'src/screens/Eat/DetailTenantScreen';
 import DetailArtScreen from 'src/screens/Beacon/DetailArtScreen';
 
 // Fest
@@ -561,11 +562,12 @@ function AppNavigator() {
       <Screen name="VisitorScreen" component={VisitorScreen} />
       <Screen name="VisitorDetailScreen" component={VisitorDetailScreen} />
 
-      {/* eat */}
+      {/* tenant */}
       <Screen name="EatScreen" component={EatScreen} />
-      <Screen name="DetailTenantScreen" component={DetailTenantScreen} />
-      <Screen name="EatDetailPesananScreen" component={EatDetailPesananScreen} />
-      <Screen name="EatHistory" component={EatHistory} />
+      <Screen name="ShopScreen" component={ShopScreen} />
+      <Screen name="TenantDetailScreen" component={TenantDetailScreen} />
+      <Screen name="TenantCheckoutScreen" component={TenantCheckoutScreen} />
+      <Screen name="TenantHistoryScreen" component={TenantHistoryScreen} />
 
       {/* beacon */}
       <Screen name="DetailArtScreen" component={DetailArtScreen} />

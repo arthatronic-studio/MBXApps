@@ -21,19 +21,17 @@ import AntDesign from 'react-native-vector-icons/AntDesign'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import IonIcons from 'react-native-vector-icons/Ionicons'
 import SearchBar from 'src/components/SearchBar';
-import ListContenEvent from 'src/components/Event/ListContenEvent';
 import imageAssets from 'assets/images';
-import ListContentEat from 'src/components/Eat/ListContentEat';
-import ListFeaturedEat from 'src/components/Eat/ListFeaturedEat';
+import ListTenantItem from 'src/screens/Tenant/ListTenantItem';
+import ListTenantFeatured from 'src/screens/Tenant/ListTenantFeatured';
 
-const EatScreen = ({ navigation, route }) => {
+const ShopScreen = ({ navigation, route }) => {
   const isMainScreen = route.params && route.params.routeIndex;
 
   const auth = useSelector(state => state['auth']);
   const { Color } = useColor();
   const isFocused = useIsFocused();
 
-  let canGeneratedContent = true;
   const { width, height } = useWindowDimensions();
 
   const [loadingBanner, setLoadingBanner] = useState(true);
@@ -69,13 +67,13 @@ const EatScreen = ({ navigation, route }) => {
     <Scaffold
       header={
         <Header
-          title='Eats'
+          title='Toko'
           centerTitle={false}
           actions={
             <View style={{ width: '100%', alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row' }}>
               <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate('EatHistory');
+                  navigation.navigate('TenantHistoryScreen');
                 }}
               >
                 <Image
@@ -139,7 +137,8 @@ const EatScreen = ({ navigation, route }) => {
 
       <Divider />
 
-      <ListContentEat
+      <ListTenantItem
+        tenantType='shop'
         productCategory='EAT'
         name='Eat'
         title='Semua Tempat'
@@ -152,7 +151,8 @@ const EatScreen = ({ navigation, route }) => {
         }}
         ListHeaderComponent={
           <>
-            <ListFeaturedEat
+            <ListTenantFeatured
+              tenantType='shop'
               horizontal
               productCategory='EAT'
               name='Eat'
@@ -169,8 +169,4 @@ const EatScreen = ({ navigation, route }) => {
   );
 };
 
-const styles = StyleSheet.create({
-
-})
-
-export default EatScreen;
+export default ShopScreen;

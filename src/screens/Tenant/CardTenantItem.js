@@ -28,8 +28,8 @@ import {
 import { Container, Divider, Row } from 'src/styled';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { useSelector } from 'react-redux';
-import CardComponentYoutube from './CardComponentYoutube';
-import CardComponentVideo from './CardComponentVideo';
+import CardComponentYoutube from '../../components/Content/CardComponentYoutube';
+import CardComponentVideo from '../../components/Content/CardComponentVideo';
 import { FormatMoney } from 'src/utils';
 import { accessClient } from 'src/utils/access_client';
 import imageAssets from 'assets/images';
@@ -42,7 +42,7 @@ const defaultProps = {
     style: {},
 };
 
-const CardComponentEat = ({ productCategory, item, numColumns, onPress, horizontal, style }) => {
+const CardTenantItem = ({ productCategory, item, numColumns, onPress, horizontal, style }) => {
     const [like, setLike] = useState(false);
     const [im_like, setImLike] = useState(false);
     const [trigger, setTrigger] = useState(false);
@@ -94,7 +94,7 @@ const CardComponentEat = ({ productCategory, item, numColumns, onPress, horizont
 
     const renderCardEvent = () => {
         const onPress = () => {
-            navigation.navigate('DetailTenantScreen', { item });
+            navigation.navigate('TenantDetailScreen', { item });
 
             // GALogEvent('Event', {
             //     id: item.id,
@@ -197,6 +197,6 @@ const CardComponentEat = ({ productCategory, item, numColumns, onPress, horizont
     return renderCardEvent();
 }
 
-CardComponentEat.defaultProps = defaultProps
-export default CardComponentEat;
+CardTenantItem.defaultProps = defaultProps
+export default CardTenantItem;
 

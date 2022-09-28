@@ -9,6 +9,7 @@ import {
   Image,
   ActivityIndicator,
   useWindowDimensions,
+  Platform,
 } from 'react-native';
 import ImagesPath from 'src/components/ImagesPath';
 import imageAssets from 'assets/images';
@@ -72,6 +73,9 @@ const FestScreenV2 = ({navigation, route}) => {
   return (
     <Scaffold
       loadingProps={loadingProps}
+      translucent={Platform.OS === 'ios'}
+      useSafeArea={Platform.OS === 'android'}
+      statusBarColor='#00925F'
       header={
         <Header
           backgroundColor={'#00925F'}

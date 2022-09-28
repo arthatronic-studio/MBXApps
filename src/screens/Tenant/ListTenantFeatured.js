@@ -4,16 +4,15 @@ import PropTypes from 'prop-types';
 
 import { ScreenEmptyData } from '@src/components';
 import { Container, Divider, Row } from 'src/styled';
-import PostingSkeleton from '../Posting/PostingSkeleton';
+import PostingSkeleton from 'src/components/Posting/PostingSkeleton';
 import { initialItemState } from 'src/utils/constants';
 import { fetchContentProduct, fetchContentUserProduct } from 'src/api/content';
-import CardFeaturedEat from './CardFeaturedEat';
+import CardTenantFeatured from 'src/screens/Tenant/CardTenantFeatured';
 import { getAPI } from 'src/api-rest/httpService';
-import PostingHeader from '../Posting/PostingHeader';
+import PostingHeader from 'src/components/Posting/PostingHeader';
 import { useSelector } from 'react-redux';
 
 const propTypes = {
-    userProfileId: PropTypes.number,
     productCategory: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     horizontal: PropTypes.bool,
@@ -23,7 +22,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-    userProfileId: null,
+    tenantType: 'eat',
     productCategory: '',
     name: '',
     horizontal: false,
@@ -35,7 +34,7 @@ const defaultProps = {
     showHeader: false,
 };
 
-const ListFeaturedEat = ({ userProfileId, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, }) => {
+const ListTenantFeatured = ({ tenantType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, }) => {
     const { width } = useWindowDimensions();
     const [itemData, setItemData] = useState(initialItemState);
     const auth = useSelector(state => state['auth']);
@@ -52,7 +51,7 @@ const ListFeaturedEat = ({ userProfileId, productCategory, name, horizontal, sty
 
     const fetchData = async () => {
         let baseEndpoint = 'location';
-        baseEndpoint = baseEndpoint + `?type=eat&isRecommended=1`;
+        baseEndpoint = baseEndpoint + `?type=${tenantType}&isRecommended=1`;
         // if (auth.user.activityInfo.location) {
             // baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.user.activityInfo.location.id}&type=eat&isRecommended=1`;
         // }
@@ -74,34 +73,6 @@ const ListFeaturedEat = ({ userProfileId, productCategory, name, horizontal, sty
         });
 
         onLoadingEnd(false);
-
-        return;
-
-        // let variables = {
-        //     page: itemData.page + 1,
-        // };
-        // if (productCategory) {
-        //     variables.productCategory = productCategory;
-        // };
-        // if (userProfileId !== null) {
-        //     variables.userProfileId = userProfileId;
-        // }
-
-        // const result = userProfileId !== null ?
-        //     await fetchContentUserProduct(variables) :
-        //     await fetchContentProduct(variables);
-
-        // setItemData({
-        //     ...itemData,
-        //     data: itemData.data.concat(result.data),
-        //     page: result.status === false ? itemData.page : result.data.length > 0 ? itemData.page + 1 : -1,
-        //     loading: false,
-        //     loadNext: false,
-        //     message: result.message,
-        //     refresh: false,
-        // });
-
-        // onLoadingEnd(false);
     }
 
     const renderHeader = () => {
@@ -109,7 +80,7 @@ const ListFeaturedEat = ({ userProfileId, productCategory, name, horizontal, sty
             <PostingHeader
                 title={title}
                 onSeeAllPress={() => {
-                    // navigation.navigate(nav, { title, userProfileId });
+                    // navigation.navigate(nav, { title });
                 }}
                 productCategory={productCategory}
                 showSeeAllText={showSeeAllText}
@@ -151,7 +122,7 @@ const ListFeaturedEat = ({ userProfileId, productCategory, name, horizontal, sty
                     pagingEnabled
                     renderItem={({ item, index }) => {
                         return (
-                            <CardFeaturedEat
+                            <CardTenantFeatured
                                 productCategory={productCategory}
                                 item={item}
                                 horizontal={horizontal}
@@ -182,6 +153,6 @@ const ListFeaturedEat = ({ userProfileId, productCategory, name, horizontal, sty
     )
 }
 
-ListFeaturedEat.propTypes = propTypes;
-ListFeaturedEat.defaultProps = defaultProps;
-export default ListFeaturedEat;
+ListTenantFeatured.propTypes = propTypes;
+ListTenantFeatured.defaultProps = defaultProps;
+export default ListTenantFeatured;

@@ -59,7 +59,7 @@ const WidgetHomeMenuStatic = () => {
           case 'shop':
             obj = {
               name: e.name,
-              navigate: e.navigate || 'Ecomerce',
+              navigate: e.navigate || 'ShopScreen',
               imageAsset: imageAssets.homeMenuShop,
               imageUrl: e.file,
             };
@@ -104,10 +104,18 @@ const WidgetHomeMenuStatic = () => {
               imageUrl: e.file,
             };
             break;
-          default:
+          case 'group':
             obj = {
               name: e.name,
               navigate: e.navigate || 'GroupScreen',
+              imageAsset: imageAssets.homeMenuFest,
+              imageUrl: e.file,
+            };
+            break;
+          default:
+            obj = {
+              name: e.name,
+              navigate: e.navigate,
               imageAsset: imageAssets.homeMenuFest,
               imageUrl: e.file,
             };

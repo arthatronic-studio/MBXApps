@@ -4,16 +4,14 @@ import PropTypes from 'prop-types';
 
 import { ScreenEmptyData } from '@src/components';
 import { Container, Divider, Row } from 'src/styled';
-import PostingSkeleton from '../Posting/PostingSkeleton';
+import PostingSkeleton from 'src/components/Posting/PostingSkeleton';
 import { initialItemState } from 'src/utils/constants';
-import { fetchContentProduct, fetchContentUserProduct } from 'src/api/content';
-import CardContentProduct from '@src/components/Content/CardContentProduct';
 import { getAPI } from 'src/api-rest/httpService';
-import PostingHeader from '../Posting/PostingHeader';
+import PostingHeader from 'src/components/Posting/PostingHeader';
 import { useSelector } from 'react-redux';
+import CardTenantItem from './CardTenantItem';
 
 const propTypes = {
-    userProfileId: PropTypes.number,
     productCategory: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     horizontal: PropTypes.bool,
@@ -23,7 +21,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-    userProfileId: null,
+    tenantType: 'eat',
     productCategory: '',
     name: '',
     horizontal: false,
@@ -35,7 +33,7 @@ const defaultProps = {
     showHeader: false,
 };
 
-const ListContentEat = ({ userProfileId, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, }) => {
+const ListTenantItem = ({ tenantType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, }) => {
     const { width } = useWindowDimensions();
     const [itemData, setItemData] = useState(initialItemState);
     const auth = useSelector(state => state['auth']);
@@ -52,7 +50,7 @@ const ListContentEat = ({ userProfileId, productCategory, name, horizontal, styl
 
     const fetchData = async () => {
         let baseEndpoint = 'location';
-        baseEndpoint = baseEndpoint + `?type=eat`;
+        baseEndpoint = baseEndpoint + `?type=${tenantType}`;
         // if (auth.user.activityInfo.location) {
             // baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.user.activityInfo.location.id}&type=eat`;
         // }
@@ -74,34 +72,6 @@ const ListContentEat = ({ userProfileId, productCategory, name, horizontal, styl
         });
 
         onLoadingEnd(false);
-
-        return;
-
-        // let variables = {
-        //     page: itemData.page + 1,
-        // };
-        // if (productCategory) {
-        //     variables.productCategory = productCategory;
-        // };
-        // if (userProfileId !== null) {
-        //     variables.userProfileId = userProfileId;
-        // }
-
-        // const result = userProfileId !== null ?
-        //     await fetchContentUserProduct(variables) :
-        //     await fetchContentProduct(variables);
-
-        // setItemData({
-        //     ...itemData,
-        //     data: itemData.data.concat(result.data),
-        //     page: result.status === false ? itemData.page : result.data.length > 0 ? itemData.page + 1 : -1,
-        //     loading: false,
-        //     loadNext: false,
-        //     message: result.message,
-        //     refresh: false,
-        // });
-
-        // onLoadingEnd(false);
     }
 
     const renderHeader = () => {
@@ -109,7 +79,7 @@ const ListContentEat = ({ userProfileId, productCategory, name, horizontal, styl
             <PostingHeader
                 title={title}
                 onSeeAllPress={() => {
-                    // navigation.navigate(nav, { title, userProfileId });
+                    // navigation.navigate(nav, { title });
                 }}
                 productCategory={productCategory}
                 showSeeAllText={showSeeAllText}
@@ -149,21 +119,8 @@ const ListContentEat = ({ userProfileId, productCategory, name, horizontal, styl
                     onEndReached={() => setItemData({ ...itemData, loadNext: true })}
                     {...extraProps}
                     renderItem={({ item, index }) => {
-                        if (index === 0) {
-                            return (
-                                <>
-                                    <CardContentProduct
-                                        productCategory={productCategory}
-                                        item={item}
-                                        horizontal={horizontal}
-                                        {...extraProps}
-                                    />
-                                </>
-                            )
-                        }
-
                         return (
-                            <CardContentProduct
+                            <CardTenantItem
                                 productCategory={productCategory}
                                 item={item}
                                 horizontal={horizontal}
@@ -195,6 +152,6 @@ const ListContentEat = ({ userProfileId, productCategory, name, horizontal, styl
     )
 }
 
-ListContentEat.propTypes = propTypes;
-ListContentEat.defaultProps = defaultProps;
-export default ListContentEat;
+ListTenantItem.propTypes = propTypes;
+ListTenantItem.defaultProps = defaultProps;
+export default ListTenantItem;
