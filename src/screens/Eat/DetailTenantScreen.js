@@ -35,6 +35,7 @@ import { FormatMoney } from 'src/utils';
 import imageAssets from 'assets/images';
 import { isIphoneNotch, statusBarHeight } from 'src/utils/constants';
 import { fetchEatCartAdd } from 'src/api-rest/fetchEatCartAdd';
+import { fetchEatCartDetail } from 'src/api-rest/fetchEatCartDetail';
 
 const DetailTenantScreen = ({ navigation, route }) => {
   const { params } = route;
@@ -72,8 +73,11 @@ const DetailTenantScreen = ({ navigation, route }) => {
     getDetail();
   }, [isFocused]);
 
-  const getDetail = () => {
+  console.log('params', params);
 
+  const getDetail = async() => {
+    const result = await fetchEatCartDetail({ location_id: items.id });
+    console.log('result cart detail', result);
   };
 
   const renderItem = ({ item, index }) => {
