@@ -133,7 +133,7 @@ const MusicScheduleScreen = ({navigation, route}) => {
                   lineHeight={20}
                   type="medium"
                   color={Color.black}>
-                  Mbloc Music Week
+                  m bloc Music Week
                 </Text>
                 <Divider height={4} />
                 <Text size={10} lineHeight={12} color={'#3A3936'}>

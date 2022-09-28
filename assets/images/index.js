@@ -103,6 +103,23 @@ const lineupContent = require('./lineup-content.png');
 const bannerFestMusic = require('./banner-fest-music.png');
 const bannerMusicDetail = require('./banner-music-detail.png');
 const musicWeek = require('./musik-week.png');
+const festArts1 = require('./fest-arts-1.png');
+const festArts2 = require('./fest-arts-2.png');
+const festArts3 = require('./fest-arts-3.png');
+const designWeek1 = require('./design-week-1.png');
+const designWeek2 = require('./design-week-2.png');
+const designWeek3 = require('./design-week-3.png');
+const designWeek4 = require('./design-week-4.png');
+const designWeek5 = require('./design-week-5.png');
+const designWeek6 = require('./design-week-6.png');
+const designWeek7 = require('./design-week-7.png');
+const bookFair1 = require('./book-fair-1.png');
+const bookFair2 = require('./book-fair-2.png');
+const bookFair3 = require('./book-fair-3.png');
+const bookFestival1 = require('./book-festival-1.png');
+const bookFestival2 = require('./book-festival-2.png');
+const bookFestival3 = require('./book-festival-3.png');
+const bannerMfest2 = require('./banner-mfest-2.png');
 
 export {
   iconApp,
@@ -267,6 +284,23 @@ export const imageAssets = {
   bannerFestMusic,
   bannerMusicDetail,
   musicWeek,
+  festArts1,
+  festArts2,
+  festArts3,
+  designWeek1,
+  designWeek2,
+  designWeek3,
+  designWeek4,
+  designWeek5,
+  designWeek6,
+  designWeek7,
+  bookFair1,
+  bookFair2,
+  bookFair3,
+  bookFestival1,
+  bookFestival2,
+  bookFestival3,
+  bannerMfest2,
 };
 
 export default imageAssets;

@@ -294,6 +294,16 @@ import ShowAllLineup from 'src/screens/Fest/ShowAllLineup';
 import FestMusicScreen from 'src/screens/Fest/FestMusicScreen';
 import FestMusicDetail from 'src/screens/Fest/FestMusicDetail';
 import MusicScheduleScreen from 'src/screens/Fest/MusicScheduleScreen';
+import FestArtsScreen from 'src/screens/Fest/FestArtsScreen';
+import FestArtsDetail from 'src/screens/Fest/FestArtsDetail';
+import FestGallery from 'src/screens/Fest/FestGallery';
+import ShowAllSchedule from 'src/screens/Fest/ShowAllSchedule';
+import FestLiteratureScreen from 'src/screens/Fest/FestLiteratureScreen';
+import FestLiteratureDetail from 'src/screens/Fest/FestLiteratureDetail';
+import VenuesScreen from 'src/screens/Fest/VenuesScreen';
+import VenuesDetail from 'src/screens/Fest/VenuesDetail';
+import ShowAllArea from 'src/screens/Fest/ShowAllArea';
+import AreaDetail from 'src/screens/Fest/AreaDetail';
 
 // GROUP
 import GroupScreen from 'src/screens/Group/GroupScreen';
@@ -574,6 +584,16 @@ function AppNavigator() {
       <Screen name="FestMusicScreen" component={FestMusicScreen} />
       <Screen name="FestMusicDetail" component={FestMusicDetail} />
       <Screen name="MusicScheduleScreen" component={MusicScheduleScreen} />
+      <Screen name="FestArtsScreen" component={FestArtsScreen} />
+      <Screen name="FestArtsDetail" component={FestArtsDetail} />
+      <Screen name="FestGallery" component={FestGallery} />
+      <Screen name="ShowAllSchedule" component={ShowAllSchedule} />
+      <Screen name="FestLiteratureScreen" component={FestLiteratureScreen} />
+      <Screen name="FestLiteratureDetail" component={FestLiteratureDetail} />
+      <Screen name="VenuesScreen" component={VenuesScreen} />
+      <Screen name="VenuesDetail" component={VenuesDetail} />
+      <Screen name="ShowAllArea" component={ShowAllArea} />
+      <Screen name="AreaDetail" component={AreaDetail} />
 
       {/* Group */}
       <Screen name="GroupScreen" component={GroupScreen} />
