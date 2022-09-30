@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, FlatList, Animated, Image } from 'react-native';
+import { View, FlatList, Animated, Image, useWindowDimensions } from 'react-native';
 import Moment from 'moment';
 
 import { Scaffold, TouchableOpacity, Text, useColor, AlertModal } from "src/components";
@@ -10,7 +10,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import { useIsFocused } from '@react-navigation/native';
 import { ModalListAction } from 'src/components';
 import imageAssets from "assets/images";
-const NotificationScreen = ({ navigation, route }) => {
+const NotificationPromo = ({ navigation, route }) => {
   const { Color } = useColor();
   const isFocused = useIsFocused();
   const initialDataRooms = {
@@ -20,12 +20,13 @@ const NotificationScreen = ({ navigation, route }) => {
     loadNext: false,
     refresh: false,
   };
-  const [history, setHistory] = useState([{id: 1},{id: 2},{id: 3},{id: 4}]);
+  const [history, setHistory] = useState([{id: 1, image: imageAssets.arsitektur1},{id: 2, image: imageAssets.arsitektur2},{id: 3, image: imageAssets.aboutFest3}]);
   const [loading, setLoading] = useState(false);
   const modalListActionRef = useRef();
   const [showSection, setShowSection] = useState(true);
   const [modalBackConfirm, setModalBackConfirm] = useState(false);
   const [refreshing, setRefreshing] = useState(true);
+  const {width} = useWindowDimensions();
 
   useEffect(() => {
     if (refreshing) {
@@ -149,7 +150,7 @@ const NotificationScreen = ({ navigation, route }) => {
       // empty={history.length === 0}
       // iconRightButton={modalListActionRef.current && <Feather name='more-vertical' size={20} color={Color.text} />}
       // onPressRightButton={() => {
-        // if (modalListActionRef.current) modalListActionRef.current.open();
+      //   if (modalListActionRef.current) modalListActionRef.current.open();
       // }
       // }
       // emptyTitle="Notifikasi belum tersedia"
@@ -166,34 +167,34 @@ const NotificationScreen = ({ navigation, route }) => {
           return (
             <TouchableOpacity 
               style={{
-                flexDirection: 'row', 
                 padding: 16, 
                 borderColor: Color.border,
                 backgroundColor: isNotReaded ? '#FFFCEB' : Color.white,
-                justifyContent: 'space-between',
-                alignItems: 'center'
             }}>
-              <Container flex={1} flexDirection="row" align="center">
-                <Container
-                  padding={14}
-                  backgroundColor="#FFFCEB"
-                  borderRadius={24}
-                >
-                  <Image source={imageAssets.inbox} />
-                </Container>
-                <Divider width={10}/>
-                <Container>
-                  <Text color={Color.black} align="left" size={14} lineHeight={18}>
-                    Kamu telah masuk ke area
-                  </Text>
-                  <Text color={Color.black} align="left" size={14} lineHeight={18} type="medium">
-                    Mbloc Space
-                  </Text>
-                </Container>
-              </Container>
-              <Text size={10} lineHeight={12} color={"#ACAAA5"}>
+              <Container
+                flex={1}
+                flexDirection='row'
+                justify="space-between"
+              >
+                <Text size={10} lineHeight={12} color={Color.primaryDark} type="medium">
+                  Promo
+                </Text>
+                <Text size={10} lineHeight={12} color="#ACAAA5">
                   2 menit lalu
+                </Text>
+              </Container>
+              <Divider height={8}/>
+              <Text size={14} lineHeight={18} type="medium" color={Color.black} align="left">
+                Special promo dari Temu Coffee untuk nemenin weekend kamu
               </Text>
+              <Divider height={8}/>
+              <Text size={12} lineHeight={15} color="#3A3936" align="left" numberOfLines={2}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa mi. Aliquam in hendrerit urna...
+              </Text>
+              <Divider height={8}/>
+              <Container width={width-32} height={(width-32) * 0.56}>
+                <Image source={item.image} style={{width: '100%', height: '100%', resizeMode: 'cover', borderRadius: 8 }}/>
+              </Container>
             </TouchableOpacity>
           )
         }}
@@ -256,4 +257,4 @@ const NotificationScreen = ({ navigation, route }) => {
   );
 }
 
-export default NotificationScreen;
+export default NotificationPromo;

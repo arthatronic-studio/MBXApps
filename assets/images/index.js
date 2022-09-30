@@ -121,6 +121,7 @@ const bookFestival2 = require('./book-festival-2.png');
 const bookFestival3 = require('./book-festival-3.png');
 const bannerMfest2 = require('./banner-mfest-2.png');
 const aboutFest3 = require('./about-fest-3.png');
+const inbox = require('./inbox.png');
 
 export {
   iconApp,
@@ -303,6 +304,7 @@ export const imageAssets = {
   bookFestival3,
   bannerMfest2,
   aboutFest3,
+  inbox,
 };
 
 export default imageAssets;
