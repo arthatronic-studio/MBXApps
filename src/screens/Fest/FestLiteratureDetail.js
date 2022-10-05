@@ -24,6 +24,9 @@ import {Modalize} from 'react-native-modalize';
 import HighlightFest from 'src/components/Fest/HighlightFest';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CardSchedule from 'src/components/Fest/CardSchedule';
+import {fetchFestDetail} from 'src/api-rest/fest/fetchFestDetail';
+import {fetchFestGalleries} from 'src/api-rest/fest/fetchFestGalleries';
+import {fetchFestEventSchedule} from 'src/api-rest/fest/fetchFestEventSchedule';
 
 const FestLiteratureDetail = ({navigation, route}) => {
   const {item} = route.params;
@@ -34,17 +37,48 @@ const FestLiteratureDetail = ({navigation, route}) => {
   const [selected, setSelected] = useState({});
   const modalRef = useRef();
   const {width} = useWindowDimensions();
+  const [data, setData] = useState({});
+  const [gallery, setGallery] = useState([]);
+  const [schedule, setSchedule] = useState([]);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const fetchGallery = async () => {
+    const body = {
+      event_id: item.event_id,
+    };
+    const result = await fetchFestGalleries(body);
+    if (result.status) {
+      const data = result.data;
+      setGallery(data);
+    }
+  };
+
+  const fetchSchedule = async () => {
+    const body = {
+      event_id: item.event_id,
+    };
+    const result = await fetchFestEventSchedule(body);
+    if (result.status) {
+      setSchedule(result.data);
+    }
+  };
+
+  const fetchItem = async () => {
+    const body = {
+      event_id: item.event_id,
+    };
+    const result = await fetchFestDetail(body);
+    if (result.status) {
+      setData(result.data);
+    }
+  };
 
   const fetchData = async () => {
-    // const result = await postAPI('festival/home');
-    // console.log('result festival', result);
-    const body = {
-      menu_id: 1,
-    };
-    const result = await postAPI('festival/find', body);
-    console.log('result festival find', result);
+    await fetchItem();
+    await fetchGallery();
+    await fetchSchedule();
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -84,7 +118,7 @@ const FestLiteratureDetail = ({navigation, route}) => {
           <Container>
             <Container width={width} height={width}>
               <Image
-                source={item.imageBanner}
+                source={{uri: data.file}}
                 resizeMode="cover"
                 style={{width: '100%', height: '100%'}}
               />
@@ -97,59 +131,86 @@ const FestLiteratureDetail = ({navigation, route}) => {
                   type="medium"
                   color={Color.black}
                   align="left">
-                  {item.title}
+                  {data.nama}
                 </Text>
                 <Divider height={8} />
                 <Text size={10} lineHeight={12} color={'#3A3936'} align="left">
-                  {item.date} {'\u2022'} {item.location}
+                  {/* {data.time} {'\u2022'} {item.location} */}
+                  {data.time}
                 </Text>
                 <Divider height={16} />
-                <Text size={14} lineHeight={22} color={Color.black} align="left">
-                  {item.desc}
+                <Text
+                  size={14}
+                  lineHeight={22}
+                  color={Color.black}
+                  align="left">
+                  {data.description}
                 </Text>
               </Container>
               <Divider height={16} />
-              <Container flex={1} flexDirection="row" justify="space-between" paddingHorizontal={16}>
-                {item.gallery.map((data, index) => {
-                  if (index > 2) return <></>;
-                  if (index < 2 || item.gallery.length <= 3) {
-                    return (
-                      <Image
-                        key={index}
-                        source={data}
-                        style={{width: '32%', aspectRatio: 1}}
-                      />
-                    );
-                  } else {
-                    return (
-                      <TouchableOpacity
-                        onPress={() => navigation.navigate('FestGallery', {item: item.gallery})}
-                        style={{ width: '32%'}}
-                      >
-                        <ImageBackground
+              {gallery.length > 0 && (
+                <Container
+                  flex={1}
+                  flexDirection="row"
+                  // justify="space-between"
+                  paddingHorizontal={16}>
+                  {gallery.map((gal, index) => {
+                    if (index > 2) return <></>;
+                    if (index < 2 || gallery.length <= 3) {
+                      return (
+                        <Image
                           key={index}
-                          source={data}
-                          imageStyle={{width: '100%', aspectRatio: 1, opacity: 0.4}}
-                          style={{width: '100%', height: '100%', justifyContent: 'center', backgroundColor: 'rgba(0, 0, 0, 0.4)'}}>
+                          source={{uri: gal.image}}
+                          style={{
+                            width: '32%',
+                            aspectRatio: 1,
+                            marginRight: '2%',
+                          }}
+                        />
+                      );
+                    } else {
+                      return (
+                        <TouchableOpacity
+                          onPress={() =>
+                            navigation.navigate('FestGallery', {
+                              item: data,
+                            })
+                          }
+                          style={{width: '32%'}}>
+                          <ImageBackground
+                            key={index}
+                            source={{uri: gal.image}}
+                            imageStyle={{
+                              width: '100%',
+                              aspectRatio: 1,
+                              opacity: 0.4,
+                            }}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              justifyContent: 'center',
+                              backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                            }}>
                             <Text size={36} lineHeight={45} color={Color.white}>
-                              +{item.gallery.length - 2}
+                              +{gallery.length - 2}
                             </Text>
-                        </ImageBackground>
-                      </TouchableOpacity>
-                    );
-                  }
+                          </ImageBackground>
+                        </TouchableOpacity>
+                      );
+                    }
+                  })}
+                </Container>
+              )}
+              <Divider height={16} />
+              {schedule.length > 0 &&
+                schedule.map((item, index) => {
+                  return (
+                    <Container key={index} style={{paddingHorizontal: 16}}>
+                      <CardSchedule item={item} index={index} />
+                    </Container>
+                  );
                 })}
-              </Container>
-              <Divider height={16}/>
-              <HighlightFest
-                productCategory='CardSchedule'
-                nav="ShowAllSchedule"
-                name="Jadwal"
-                title="Jadwal"
-                initialData={item.schedule}
-                style={{ paddingHorizontal: 16 }}
-              />
-              <Divider height={16}/>
+              <Divider height={16} />
             </Container>
           </Container>
         )}

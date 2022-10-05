@@ -13,6 +13,7 @@ import {
   ImageBackground,
   Platform,
   UIManager,
+  View,
 } from 'react-native';
 import ImagesPath from 'src/components/ImagesPath';
 import imageAssets from 'assets/images';
@@ -24,34 +25,33 @@ import {Modalize} from 'react-native-modalize';
 import HighlightFest from 'src/components/Fest/HighlightFest';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CardSchedule from 'src/components/Fest/CardSchedule';
+import {fetchFestGalleries} from 'src/api-rest/fest/fetchFestGalleries';
 
 const FestGallery = ({navigation, route}) => {
   const {item} = route.params;
   const {Color} = useColor();
   const isFocused = useIsFocused();
   const [loadingProps, showLoading, hideLoading] = useLoading();
-  const [refreshing, setRefreshing] = useState(false);
-  const [selected, setSelected] = useState({});
   const modalRef = useRef();
   const {width} = useWindowDimensions();
-
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [gallery, setGallery] = useState([]);
 
   const fetchData = async () => {
-    // const result = await postAPI('festival/home');
-    // console.log('result festival', result);
     const body = {
-      menu_id: 1,
+      event_id: item.event_id,
     };
-    const result = await postAPI('festival/find', body);
-    console.log('result festival find', result);
+    const result = await fetchFestGalleries(body);
+    if (result.status) {
+      const data = result.data;
+      setGallery(data);
+    }
+    setLoading(false);
   };
 
   useEffect(() => {
-    // fetchData();
+    fetchData();
   }, []);
-
-  console.log(item, 'item');
 
   return (
     <Scaffold
@@ -75,23 +75,26 @@ const FestGallery = ({navigation, route}) => {
             <Text>Memuat</Text>
           </Container>
         ) : (
-          <Container>
-            <Container
-              flex={1}
-              flexDirection="row"
-              justify="space-between"
-              flexWrap="wrap"
-              paddingHorizontal={16}>
-              {item.map((data, index) => {
-                return (
+          <Container
+            flexDirection="row"
+            flexWrap="wrap"
+            marginHorizontal={16}>
+            {gallery.map((data, index) => {
+              return (
+                <View
+                  style={{
+                    width: '32%',
+                    marginVertical: 5,
+                    marginRight: (index + 1) % 3 == 0 ? '0%' : '2%',
+                  }}>
                   <Image
                     key={index}
-                    source={data}
-                    style={{width: '32%', aspectRatio: 1, marginVertical: 5}}
+                    source={{uri: data.image}}
+                    style={{width: '100%', aspectRatio: 1}}
                   />
-                );
-              })}
-            </Container>
+                </View>
+              );
+            })}
           </Container>
         )}
       </ScrollView>

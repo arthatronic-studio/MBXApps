@@ -13,6 +13,8 @@ import CardContentProduct from '@src/components/Content/CardContentProduct';
 import {getAPI} from 'src/api-rest/httpService';
 import CardContentFest from 'src/components/Fest/CardContentFest';
 import imageAssets from 'assets/images';
+import { fetchFestLineup } from 'src/api-rest/fest/fetchFestLineup';
+import { fetchFestLocation } from 'src/api-rest/fest/fetchFestLocation';
 
 const propTypes = {
   userProfileId: PropTypes.number,
@@ -30,6 +32,7 @@ const propTypes = {
   wrap: PropTypes.bool,
   maxData: PropTypes.number,
   initialData: PropTypes.array,
+  eventId: PropTypes.number
 };
 
 const defaultProps = {
@@ -49,6 +52,7 @@ const defaultProps = {
   onPress: () => {},
   maxData: 0,
   initialData: [],
+  eventId: 0,
 };
 
 const HighlightFest = props => {
@@ -69,6 +73,7 @@ const HighlightFest = props => {
     onPress,
     maxData,
     initialData,
+    eventId,
   } = props;
 
   const {Color} = useColor();
@@ -99,20 +104,18 @@ const HighlightFest = props => {
       newData = initialData;
     }
     if(productCategory == 'VENUES'){
-      newData = [
-        {
-          id: 1,
-          image: imageAssets.blocBar,
-          name: 'bloc Bar',
-          group: 'Tiket',
-        },
-        {
-          id: 2,
-          image: imageAssets.twalenWarong,
-          name: 'Twalen Warong',
-          group: 'Gratis',
-        },
-      ];
+      const body = {
+        type: "venues"
+      };
+      const result = await fetchFestLocation(body);
+      newData = result.data;
+    }
+    if(productCategory === 'LINEUP'){
+      const body = {
+        event_id: eventId
+      };
+      const result = await fetchFestLineup(body);
+      newData = result.data;
     }
 
     // if (result.status) {

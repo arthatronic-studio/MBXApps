@@ -17,6 +17,7 @@ const defaultProps = {
   numColumns: 2,
   horizontal: true,
   style: {},
+  index: 0,
 };
 
 const CardSchedule = ({
@@ -26,6 +27,7 @@ const CardSchedule = ({
   onPress,
   horizontal,
   style,
+  index,
 }) => {
   const {Color} = useColor();
   const navigation = useNavigation();
@@ -43,7 +45,7 @@ const CardSchedule = ({
       borderColor={Color.black}
       borderRadius={8}>
       <AccordianItem
-        title={item.id + '. ' + item.title}
+        title={index + 1 + '. ' + item.name}
         titleStyle={{
           textAlign: 'left',
           size: 14,
@@ -55,7 +57,11 @@ const CardSchedule = ({
           <Text size={10} lineHeight={12} color={'#3A3936'} align="left">
             {item.date}
           </Text>
-          {item.desc &&
+          {item.description && <Text align="left">
+            {/* {item.description} */}
+            {'Descripton Scaller\r\n\tjreng jreng'}
+            </Text>}
+          {/* {item.desc &&
             item.desc.map((data, index) => {
               return (
                 <Container
@@ -99,7 +105,7 @@ const CardSchedule = ({
                   </Container>
                 </Container>
               );
-            })}
+            })} */}
         </>
       </AccordianItem>
     </Container>

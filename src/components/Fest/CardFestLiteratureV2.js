@@ -42,7 +42,7 @@ const CardFestLiteratureV2 = ({
         borderWidth: 1,
       }}>
       <Image
-        source={item.imageBanner}
+        source={{uri: item.file}}
         style={{
           width: width - 32,
           height: (width - 32) * 0.7,
@@ -56,7 +56,7 @@ const CardFestLiteratureV2 = ({
           size={14}
           lineHeight={22}
           color={Color.black}>
-          {item.desc}
+          {item.description}
         </Text>
         <Divider height={10}/>
         <TouchableOpacity

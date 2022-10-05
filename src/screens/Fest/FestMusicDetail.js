@@ -19,50 +19,28 @@ import {getAPI, postAPI} from 'src/api-rest/httpService';
 import {Modalize} from 'react-native-modalize';
 import HighlightFest from 'src/components/Fest/HighlightFest';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { fetchFestDetail } from 'src/api-rest/fest/fetchFestDetail';
 
 const FestMusicDetail = ({navigation, route}) => {
+  const {item} = route.params;
   const {Color} = useColor();
   const isFocused = useIsFocused();
   const [loadingProps, showLoading, hideLoading] = useLoading();
-  const [refreshing, setRefreshing] = useState(false);
   const [selected, setSelected] = useState({});
   const modalRef = useRef();
   const {width} = useWindowDimensions();
-
-  const [menu, setMenu] = useState([
-    {
-      id: 1,
-      nav: 'ArtsScreen',
-      param: {},
-      image: imageAssets.festMusicMenu,
-      show: true,
-    },
-    {
-      id: 2,
-      nav: 'MusicScreen',
-      param: {},
-      image: imageAssets.festArtsMenu,
-      show: true,
-    },
-    {
-      id: 3,
-      nav: 'LiteratureScreen',
-      param: {},
-      image: imageAssets.festLiteratureMenu,
-      show: true,
-    },
-  ]);
-  const [selectedCompany, setSelectedCompany] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState({});
+  const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
-    // const result = await postAPI('festival/home');
-    // console.log('result festival', result);
     const body = {
-      menu_id: 1,
-    };
-    const result = await postAPI('festival/find', body);
-    console.log('result festival find', result);
+      event_id: item.event_id
+    }
+    const result = await fetchFestDetail(body);
+    if (result.status) {
+      setData(result.data);
+    }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -92,11 +70,11 @@ const FestMusicDetail = ({navigation, route}) => {
           </Container>
         ) : (
           <Container>
-            <Container width={width} flex={1}>
+            <Container width={width} height={width}>
               <Image
-                source={imageAssets.bannerMusicDetail}
+                source={{ uri: data.file }}
                 resizeMode="cover"
-                style={{width: '100%'}}
+                style={{width: '100%', height: '100%'}}
               />
             </Container>
 
@@ -109,24 +87,16 @@ const FestMusicDetail = ({navigation, route}) => {
                 type="medium"
                 color={Color.black}
                 align="left">
-                Mbloc Music Week Festival
+                {data.nama}
               </Text>
               <Divider height={8} />
               <Text size={10} lineHeight={12} color={'#3A3936'} align="left">
-                25 Sep - 02 Okt 2022 {'\u2022'} Live House
+                {data.time} {'\u2022'} Live House
               </Text>
               <Divider height={16} />
 
               <Text align="left" size={14} lineHeight={22} color={Color.black}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et
-                massa mi. Aliquam in hendrerit urna. Pellentesque sit amet
-                sapien fringilla, mattis ligula consectetur, ultrices mauris.
-                Maecenas vitae mattis tellus. Nullam quis imperdiet augue.
-                Vestibulum auctor ornare leo, non suscipit magna interdum eu.
-                Curabitur pellentesque nibh nibh, at maximus ante fermentum sit
-                amet. Pellentesque commodo lacus at sodales sodales. Quisque
-                sagittis orci ut diam condimentum, vel euismod erat placerat. In
-                iaculis arcu eros, eget tempus orci facilisis id.
+                {data.description}
               </Text>
               <Divider height={10} />
             </Container>
@@ -136,6 +106,7 @@ const FestMusicDetail = ({navigation, route}) => {
               nav="MusicScheduleScreen"
               name="Jadwal"
               title="Jadwal"
+              eventId={data.event_id}
               // wrap={false}
               horizontal={true}
               onPress={value => {
@@ -178,11 +149,11 @@ const FestMusicDetail = ({navigation, route}) => {
               resizeMode: 'cover',
               borderRadius: 8,
             }}
-            source={selected.image}
+            source={{uri: selected.file}}
           />
           <Divider height={10} />
           <Text size={22} color={Color.black} lineHeight={27} align="left">
-            DJ Raggil Suliza
+            {selected.name}
           </Text>
           <Divider height={10} />
           <Container flex={1} flexDirection="row" align="center">
@@ -192,13 +163,13 @@ const FestMusicDetail = ({navigation, route}) => {
             />
             <Divider width={8} />
             <Text size={10} lineHeight={12} color={Color.black}>
-              25 Sep 2022
+              {selected.date ? selected.date : '-'}
             </Text>
             <Divider width={10} />
             <Image source={imageAssets.clock} style={{width: 16, height: 16}} />
             <Divider width={8} />
             <Text size={10} lineHeight={12} color={Color.black}>
-              14:00 - 14:45
+              {selected.time}
             </Text>
             <Divider width={10} />
             <Image
