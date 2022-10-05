@@ -29,12 +29,14 @@ const CardFestEvent = ({
   const {Color} = useColor();
   const navigation = useNavigation();
   const {width} = useWindowDimensions();
-  const user = useSelector(state => state['user.auth'].login.user);
-  const variable = {image: imageAssets.lineupContent};
+
+  console.log(item, "item");
 
   return (
     <TouchableOpacity
-      onPress={() => onPress()}
+      onPress={() => {
+        navigation.navigate(item.nav, {item: item})
+      }}
       style={{
         borderWidth: 1,
         marginVertical: 8,
@@ -50,19 +52,19 @@ const CardFestEvent = ({
             resizeMode: 'cover',
             aspectRatio: 1,
           }}
-          source={imageAssets.bookFestival1}
+          source={{ uri: item.file }}
         />
         <Divider width={10}/>
         <Container flex={1}>
           <Text align="left" size={16} lineHeight={20} color={Color.black} type="medium">
-            Mbloc Music Week Festival
+            {item.name}
           </Text>
           <Divider height={8}/>
           <Text align="left" color="#3A3936" size={10} lineHeight={12}>
-            25 Sep - 02 Okt 2022
+            {item.date}
           </Text>
           <Text align="left" color="#3A3936" size={10} lineHeight={12}>
-            10:00 - 22:10
+            {item.time}
           </Text>
         </Container>
     </TouchableOpacity>

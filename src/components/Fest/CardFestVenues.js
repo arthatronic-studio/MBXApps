@@ -43,16 +43,21 @@ const CardFestVenues = ({
         borderRadius: 8,
         marginHorizontal: 8,
       }}>
-      <Image
-        style={{
-          width: '100%',
-          height: (width - 32) * 0.55,
-          resizeMode: 'cover',
-          borderTopLeftRadius: 8,
-          borderTopRightRadius: 8,
-        }}
-        source={item.image}
-      />
+      <Container
+        width={'100%'}
+        height={(width - 32) * 0.55}
+      >
+        <Image
+          style={{
+            width: '100%',
+            height: '100%',
+            resizeMode: 'cover',
+            borderTopLeftRadius: 8,
+            borderTopRightRadius: 8,
+          }}
+          source={{uri: item.venues_image[0]}}
+        />
+      </Container>
       <Container
         flex={1}
         flexDirection="row"

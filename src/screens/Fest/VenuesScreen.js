@@ -19,6 +19,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {shadowStyle} from 'src/styles';
 import {Modalize} from 'react-native-modalize';
 import CardFestVenues from 'src/components/Fest/CardFestVenues';
+import { fetchFestLocation } from 'src/api-rest/fest/fetchFestLocation';
 
 const VenuesScreen = ({navigation, route}) => {
   const {Color} = useColor();
@@ -33,27 +34,27 @@ const VenuesScreen = ({navigation, route}) => {
   const [categoryIndex, setCategoryIndex] = useState(0);
   const category = ['Semua', 'Gratis', 'Tiket'];
   const [selected, setSelected] = useState({});
+  const [data, setData] = useState([]);
 
-  const data = [
-    {
-      id: 1,
-      image: imageAssets.blocBar,
-      name: 'bloc Bar',
-      group: 'Tiket',
-    },
-    {
-      id: 2,
-      image: imageAssets.twalenWarong,
-      name: 'Twalen Warong',
-      group: 'Gratis',
-    },
-    {
-      id: 3,
-      image: imageAssets.foya,
-      name: 'Foya',
-      group: 'Gratis',
-    },
-  ];
+  const fetchData = async () => {
+    const body = {
+      type: "venues"
+    };
+    if(category[categoryIndex] ===  'Gratis'){
+      body.category = 1
+    }
+    if(category[categoryIndex] ===  'Tiket'){
+      body.category = 2
+    }
+    const result = await fetchFestLocation(body);
+    if(result.success){
+      setData(result.data);
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [categoryIndex]);
 
   return (
     <Scaffold
@@ -111,11 +112,6 @@ const VenuesScreen = ({navigation, route}) => {
             <Divider />
             <Container paddingHorizontal={16}>
               {data.map((item, index) => {
-                if (categoryIndex > 0) {
-                  if (item.group !== category[categoryIndex]) {
-                    return <></>;
-                  }
-                }
                 return (
                   <CardFestVenues item={item}/>
                 );

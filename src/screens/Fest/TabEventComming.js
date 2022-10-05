@@ -109,12 +109,12 @@ const TabEventComming = ({ navigation, route }) => {
                     {item.group}
                   </Text>
                 </Container>
-                <CardFestEvent onPress={() => navigation.navigate(item.nav)}/>
+                <CardFestEvent item={item} onPress={() => navigation.navigate(item.nav)}/>
               </>
             )
           }else{
             return(
-              <CardFestEvent />
+              <CardFestEvent item={item}/>
             )
           }
          }

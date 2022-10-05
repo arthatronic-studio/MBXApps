@@ -145,7 +145,6 @@ const FestScreenV2 = ({navigation, route}) => {
               name="Event Berlansung"
               title="Event Berlansung"
               maxData={2}
-              onPress={() => navigation.navigate('FestMusicScreen')}
             />
 
             <HighlightFest

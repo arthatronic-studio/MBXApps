@@ -33,19 +33,17 @@ const VenuesDetail = ({navigation, route}) => {
 
   const [loading, setLoading] = useState(false);
 
-  const fetchData = async () => {
-    // const result = await postAPI('festival/home');
-    // console.log('result festival', result);
-    const body = {
-      menu_id: 1,
-    };
-    const result = await postAPI('festival/find', body);
-    console.log('result festival find', result);
-  };
+  // const fetchData = async () => {
+  //   const body = {
+  //     menu_id: 1,
+  //   };
+  //   const result = await postAPI('festival/find', body);
+  //   console.log('result festival find', result);
+  // };
 
-  useEffect(() => {
-    // fetchData();
-  }, []);
+  // useEffect(() => {
+  //   // fetchData();
+  // }, []);
 
   console.log(item, 'item');
 
@@ -96,7 +94,7 @@ const VenuesDetail = ({navigation, route}) => {
           <Container>
             <Container width={width} height={width / 1.7}>
               <Image
-                source={item.image}
+                source={{uri: item.venues_image[0]}}
                 resizeMode="cover"
                 style={{width: '100%', height: '100%'}}
               />

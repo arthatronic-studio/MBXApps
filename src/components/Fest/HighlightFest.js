@@ -15,6 +15,7 @@ import CardContentFest from 'src/components/Fest/CardContentFest';
 import imageAssets from 'assets/images';
 import { fetchFestLineup } from 'src/api-rest/fest/fetchFestLineup';
 import { fetchFestLocation } from 'src/api-rest/fest/fetchFestLocation';
+import { fetchFestEventBerlangsung } from 'src/api-rest/fest/fetchFestEventBerlangsung';
 
 const propTypes = {
   userProfileId: PropTypes.number,
@@ -110,6 +111,13 @@ const HighlightFest = props => {
       const result = await fetchFestLocation(body);
       newData = result.data;
     }
+    if(productCategory == 'AREA'){
+      const body = {
+        type: "experience"
+      };
+      const result = await fetchFestLocation(body);
+      newData = result.data;
+    }
     if(productCategory === 'LINEUP'){
       const body = {
         event_id: eventId
@@ -117,10 +125,22 @@ const HighlightFest = props => {
       const result = await fetchFestLineup(body);
       newData = result.data;
     }
-
-    // if (result.status) {
-    // newData = result.data;
-    // }
+    if(productCategory === 'EVENT'){
+      const result = await fetchFestEventBerlangsung();
+      newData = result.data.FestMusicScreen;
+      if(newData.length < 2){
+        newData = newData.map((item) => {
+          return {...item, nav: 'FestMusicDetail'}
+        })
+        let tempData = result.data.FestLiteratureScreen.slice(0, 2-newData.length);
+        tempData = tempData.map((item) => {
+          return {...item, nav: 'FestLiteratureDetail'}
+        })
+        newData = newData.concat(tempData);
+      }else{
+        newData = newData.slice(0, 2);
+      }
+    }
 
     setItemData({
       ...itemData,
