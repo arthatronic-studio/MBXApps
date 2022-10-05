@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   ScrollView,
@@ -40,7 +40,6 @@ import {
 } from '@src/components';
 import { Divider, Circle, Container, Row, Column } from '@src/styled';
 import Banner from 'src/components/Banner';
-import ModalPosting from './ModalPosting';
 import imageAssets from 'assets/images';
 import WidgetHomeMenuStatic from './WidgetHomeMenuStatic';
 import { statusBarHeight } from 'src/utils/constants';
@@ -107,7 +106,6 @@ const MainHome = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const { Color } = useColor();
   const isFocused = useIsFocused();
-  const modalPostingRef = useRef();
   const { width, height } = useWindowDimensions();
   const [loadingProps, showLoading, hideLoading] = useLoading();
 
@@ -1010,7 +1008,7 @@ const MainHome = ({ navigation, route }) => {
           <Divider height={24} />
 
           <HighlightTenant
-
+            tenantType='shop'
           />
 
           <HighlightEvent
@@ -1105,15 +1103,6 @@ const MainHome = ({ navigation, route }) => {
           /> */}
         </Container>
       </ScrollView>
-
-      <ModalPosting
-        ref={modalPostingRef}
-        selected={null}
-        onPress={e => {
-          navigation.navigate(e.nav, e.params);
-          modalPostingRef.current.close();
-        }}
-      />
 
       {/* <Modal
         isVisible={tempShowPopupAds}

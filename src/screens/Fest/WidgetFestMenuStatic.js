@@ -20,7 +20,7 @@ import client from 'src/lib/apollo';
 import { queryMenuList } from 'src/lib/query';
 import { accessClient } from 'src/utils/access_client';
 import { initialItemState } from 'src/utils/constants';
-import ModalMenuHome from 'src/components/Modal/ModalMenuHome';
+import ModalMenuHome from 'src/screens/MainHome/ModalMenuHome';
 import imageAssets from 'assets/images';
 
 const defaultProps = {

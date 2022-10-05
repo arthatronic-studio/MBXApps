@@ -24,9 +24,11 @@ import { Container, Divider } from 'src/styled';
 import { useNavigation } from '@react-navigation/native';
 
 const defaultProps = {
+    title: '',
+    tenantType: 'eat',
 };
 
-const HighlightTenant = (props) => {
+const HighlightTenant = ({ title, tenantType }) => {
 
     const auth = useSelector(state => state['auth']);
     const { Color } = useColor();
@@ -42,9 +44,10 @@ const HighlightTenant = (props) => {
 
     const fetchData = async () => {
         let baseEndpoint = 'location';
-        if (auth.user.activityInfo.location) {
-            baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.user.activityInfo.location.id}&isRecommended=1`;
-        }
+        baseEndpoint = baseEndpoint + `?type=${tenantType}&isRecommended=1`;
+        // if (auth.user.activityInfo.location) {
+        //     baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.user.activityInfo.location.id}&isRecommended=1`;
+        // }
         const result = await getAPI(baseEndpoint);
 
         console.log('result baseEndpoint', result);
@@ -94,7 +97,7 @@ const HighlightTenant = (props) => {
     return (
         <View>
             <PostingHeader
-                title='Tenant Terpopuler'
+                title={title}
                 showSeeAllText={false}
             />
 

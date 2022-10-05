@@ -11,7 +11,7 @@ import Accordion from 'react-native-collapsible/Accordion';
 import Modal from 'react-native-modal';
 
 import Header from '@src/components/Header';
-import { useLoading, usePopup, useColor, Col } from '@src/components';
+import { useLoading, usePopup, useColor, Col, Alert } from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
 import { useIsFocused, useRoute } from '@react-navigation/native';
@@ -36,6 +36,7 @@ import imageAssets from 'assets/images';
 import { isIphoneNotch, statusBarHeight } from 'src/utils/constants';
 import { fetchEatCartAdd } from 'src/api-rest/fetchEatCartAdd';
 import { fetchEatCartDetail } from 'src/api-rest/fetchEatCartDetail';
+import { fetchEatCartGet } from 'src/api-rest/fetchEatCartGet';
 
 const TenantDetailScreen = ({ navigation, route }) => {
   const { params } = route;
@@ -54,6 +55,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
   const [currentIndexProduct, setCurrentIndexProduct] = useState(-1);
   const [listProducts, setListProducts] = useState(Array.isArray(items.products) ? items.products : []);
   const [cartId, setCartId] = useState();
+  const [cartLocationId, setCartLocationId] = useState();
   const [namaPemesan, setNamaPemesan] = useState(auth.user.name);
   const [cartAmount, setCartAmount] = useState(0);
   const [ringkasanPembayaran, setRingkasanPembayaran] = useState([
@@ -70,13 +72,25 @@ const TenantDetailScreen = ({ navigation, route }) => {
   const { height, width } = useWindowDimensions();
 
   useEffect(() => {
-    getDetail();
+    getCart();
   }, [isFocused]);
 
   console.log('params', params);
 
-  const getDetail = async() => {
-    const result = await fetchEatCartDetail({ location_id: items.id });
+  const getCart = async() => {
+    const cart = await fetchEatCartGet();
+    if (cart.status) {
+      setCartId(cart.data.id);
+      setCartLocationId(cart.data.location_id);
+
+      getDetail(cart.data.id, cart.data.location_id);
+    }
+
+    console.log('cart', cart);
+  }
+
+  const getDetail = async(cart_id, location_id) => {
+    const result = await fetchEatCartDetail({ cart_id, location_id });
     console.log('result cart detail', result);
   };
 
@@ -154,6 +168,49 @@ const TenantDetailScreen = ({ navigation, route }) => {
     const latLng = `${lat},${lng}`;
     // return `google.navigation:q=${latLng}`;
     Linking.openURL(`google.navigation:q=${latLng}`);
+  }
+
+  const onAddToCart = async(item, index) => {
+    const qty = item.qty || 1;
+
+    let newArr = [...listProducts];
+    newArr[index].selected = true;
+    newArr[index].qty = qty;
+    setListProducts(newArr);
+    setCurrentIndexProduct(-1);
+
+    const body = {
+      product_id: item.id,
+      quantity: qty,
+      catatan: null,
+      nama_pelanggan: null,
+    }
+
+    const result = await fetchEatCartAdd(body);
+    console.log('result', result);
+    if (result.status) {
+      if (Array.isArray(result.data) && result.data.length > 0) {
+        if (result.data[0].nama_pelanggan) {
+          setNamaPemesan(result.data[0].nama_pelanggan);
+        }
+        if (result.data[0].cart_id) {
+          setCartId(result.data[0].cart_id);
+        }
+        if (result.data[0].location && result.data[0].location.id) {
+          setCartLocationId(result.data[0].location.id);
+        }
+      }
+
+      console.log('result add', result, Array.isArray(result.ringkasan_pembayaran));
+
+      if (result.ringkasan_pembayaran && Array.isArray(result.ringkasan_pembayaran)) {
+        setRingkasanPembayaran(result.ringkasan_pembayaran);
+      }
+
+      if (result.amount) {
+        setCartAmount(result.amount);
+      }
+    }
   }
 
   let descriptionProps = { numberOfLines: 12 };
@@ -602,39 +659,21 @@ const TenantDetailScreen = ({ navigation, route }) => {
             <Row>
               <Container style={{ flex: 1 }}>
                 <Button
-                  onPress={async() => {
-                    let newArr = [...listProducts];
-                    newArr[index].selected = true;
-                    newArr[index].qty = qty;
-                    setListProducts(newArr);
-                    setCurrentIndexProduct(-1);
-
-                    const body = {
-                      product_id: item.id,
-                      quantity: qty,
-                      catatan: null,
-                      nama_pelanggan: null,
-                    }
-
-                    const result = await fetchEatCartAdd(body);
-                    if (result.status) {
-                      if (Array.isArray(result.data) && result.data.length > 0) {
-                        setCartId(result.data[0].cart_id);
-                        if (result.data[0].nama_pelanggan) {
-                          setNamaPemesan(result.data[0].nama_pelanggan);
+                  onPress={() => {
+                    console.log(cartLocationId, items.id);
+                    if (cartLocationId && cartLocationId !== items.id) {
+                      Alert(
+                        'Konfirmasi',
+                        'Apakah kanu yakin mau mengganti toko/makanan?',
+                        () => {
+                          onAddToCart(item, index);
                         }
-                      }
+                      );
 
-                      console.log('result add', result, Array.isArray(result.ringkasan_pembayaran));
-
-                      if (result.ringkasan_pembayaran && Array.isArray(result.ringkasan_pembayaran)) {
-                        setRingkasanPembayaran(result.ringkasan_pembayaran);
-                      }
-
-                      if (result.amount) {
-                        setCartAmount(result.amount);
-                      }
+                      return;
                     }
+
+                    onAddToCart(item, index);
                   }}
                 >
                   Tambah Keranjang
@@ -729,6 +768,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
                 navigation.navigate('TenantCheckoutScreen', {
                   ...params,
                   cartId,
+                  cartLocationId,
                   namaPemesan,
                   ringkasanPembayaran,
                 });

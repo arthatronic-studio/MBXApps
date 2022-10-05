@@ -49,7 +49,7 @@ const ModalActions = ({ visible, data, selected, adjust, onPress, onClose, child
               item.color
                 ? item.color
                 : selected && selected.id === item.id
-                ? Color.secondary
+                ? Color.primaryMoreDark
                 : Color.text
             }>
             {item.name}

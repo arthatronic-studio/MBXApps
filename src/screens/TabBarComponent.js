@@ -30,9 +30,9 @@ const TabBarComponent = (props) => {
     const { index: activeRouteIndex } = state;
 
     const [menus] = useState([
-        { id: 'ber', name: 'Home', imageAsset: imageAssets.bottomMenuHome, iconName: 'home', iconType: 'Entypo', nav: 'MainHome', ref: useRef(new Animated.Value(1)).current, viewRef: useRef(new Animated.Value(0)).current },
-        { id: 'not', name: 'Notification', imageAsset: imageAssets.bottomMenuNotification, nav: 'MainNotif', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
-        { id: 'pro', name: 'Profile', imageAsset: imageAssets.bottomMenuProfile, iconName: 'person', iconType: 'Ionicons', nav: 'MainProfile', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
+        { id: 'ber', name: 'Beranda', imageAsset: imageAssets.bottomMenuHome, iconName: 'home', iconType: 'Entypo', nav: 'MainHome', ref: useRef(new Animated.Value(1)).current, viewRef: useRef(new Animated.Value(0)).current },
+        { id: 'not', name: 'Notifikasi', imageAsset: imageAssets.bottomMenuNotification, nav: 'MainNotif', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
+        { id: 'pro', name: 'Profil', imageAsset: imageAssets.bottomMenuProfile, iconName: 'person', iconType: 'Ionicons', nav: 'MainProfile', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
     ]);
 
     const { Color } = useColor();

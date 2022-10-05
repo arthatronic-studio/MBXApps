@@ -7,7 +7,7 @@ import Modal from 'react-native-modal';
 
 import { Text, useColor } from '@src/components';
 import { useCombinedRefs } from '@src/hooks';
-import WidgetMenuHome from 'src/screens/MainHome/WidgetMenuHome';
+import WidgetHomeMenuStatic from 'src/screens/MainHome/WidgetHomeMenuStatic';
 
 const defaultProps = {
   visible: false,
@@ -37,7 +37,7 @@ const ModalMenuHome = ({ visible, onClose, style }) => {
           <Text type='bold'>Semua Fitur</Text>
         </View>
 
-        <WidgetMenuHome
+        <WidgetHomeMenuStatic
           showMore={false}
           onPress={() => {
             

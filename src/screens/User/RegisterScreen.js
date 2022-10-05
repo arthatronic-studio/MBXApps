@@ -247,7 +247,7 @@ const RegisterScreen = ({ navigation, route }) => {
               onPress={() => redirectTo('MainPage')}
             >
               <Text>
-                Skip
+                Lewati
               </Text>
             </TouchableOpacity>
           }

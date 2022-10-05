@@ -123,9 +123,8 @@ const MainProfile = ({navigation, route}) => {
   return (
     <Scaffold loadingProps={loadingProps} showHeader={false}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* not register */}
-        <Divider />
-        <Container
+        {auth.user && !auth.user.isRegistered && <Container
+          marginTop={16}
           paddingVertical={10}
           paddingHorizontal={12}
           marginHorizontal={16}
@@ -133,9 +132,9 @@ const MainProfile = ({navigation, route}) => {
           borderRadius={16}
           justify="space-between"
           flex={1}
-          align="flex-end"
-          flexDirection="row">
-          <Container flex={1} flexDirection="row" align="center">
+          flexDirection="row"
+        >
+          <Container flex={1} flexDirection="row" align="center" justify='center'>
             <View
               style={{
                 width: 24,
@@ -161,19 +160,23 @@ const MainProfile = ({navigation, route}) => {
               </Text>
             </Container>
           </Container>
+
           <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('ChangeProfile');
+            }}
             style={{
               marginLeft: 10,
               flexDirection: 'row',
               alignItems: 'center',
             }}>
-            <Text size={12} color={'#D72A19'}>
+            <Text size={12} color={Color.error}>
               Lengkapi
             </Text>
             <Divider width={5} />
             <AntDesign name="arrowright" color={Color.error} size={12} />
           </TouchableOpacity>
-        </Container>
+        </Container>}
 
         {/* user fast info */}
         <TouchableOpacity
