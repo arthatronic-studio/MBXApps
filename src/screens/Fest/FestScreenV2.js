@@ -20,6 +20,7 @@ import {getAPI, postAPI} from 'src/api-rest/httpService';
 import {Modalize} from 'react-native-modalize';
 import HighlightFest from 'src/components/Fest/HighlightFest';
 import CardFestVenues from 'src/components/Fest/CardFestVenues';
+import {fetchFestMenu} from 'src/api-rest/fest/fetchFestMenu';
 
 const FestScreenV2 = ({navigation, route}) => {
   const {Color} = useColor();
@@ -30,52 +31,27 @@ const FestScreenV2 = ({navigation, route}) => {
   const modalRef = useRef();
   const {width} = useWindowDimensions();
 
-  const [menu, setMenu] = useState([
-    {
-      id: 1,
-      nav: 'FestMusicScreen',
-      param: {},
-      image: imageAssets.festMusicMenu,
-      show: true,
-    },
-    {
-      id: 2,
-      nav: 'FestArtsScreen',
-      param: {},
-      image: imageAssets.festArtsMenu,
-      show: true,
-    },
-    {
-      id: 3,
-      nav: 'FestLiteratureScreen',
-      param: {},
-      image: imageAssets.festLiteratureMenu,
-      show: true,
-    },
-  ]);
-  const [selectedCompany, setSelectedCompany] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [menu, setMenu] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
-    // const result = await postAPI('festival/home');
-    // console.log('result festival', result);
-    const body = {
-      menu_id: 1,
-    };
-    const result = await postAPI('festival/find', body);
-    console.log('result festival find', result);
+    const result = await fetchFestMenu();
+    if (result.status) {
+      setMenu(result.data);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    // fetchData();
-  }, []);
+    fetchData();
+  }, [isFocused]);
 
   return (
     <Scaffold
       loadingProps={loadingProps}
       translucent={Platform.OS === 'ios'}
       useSafeArea={Platform.OS === 'android'}
-      statusBarColor='#00925F'
+      statusBarColor="#00925F"
       header={
         <Header
           backgroundColor={'#00925F'}
@@ -131,8 +107,18 @@ const FestScreenV2 = ({navigation, route}) => {
                 return (
                   <TouchableOpacity
                     key={index}
-                    onPress={() => navigation.navigate(item.nav)}>
-                    <Image source={item.image} />
+                    style={{width: width * 0.28, height: width * 0.28 * 1.28}}
+                    onPress={() =>
+                      navigation.navigate(item.name, {item: item})
+                    }>
+                    <Image
+                      source={{uri: item.file}}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        resizeMode: 'contain',
+                      }}
+                    />
                   </TouchableOpacity>
                 );
               })}
@@ -147,9 +133,9 @@ const FestScreenV2 = ({navigation, route}) => {
               title="Todays Line-up"
               wrap={false}
               horizontal={true}
-              onPress={(value) => {
+              onPress={value => {
                 setSelected(value);
-                modalRef.current.open()
+                modalRef.current.open();
               }}
             />
 
@@ -220,11 +206,11 @@ const FestScreenV2 = ({navigation, route}) => {
               resizeMode: 'cover',
               borderRadius: 8,
             }}
-            source={selected.image}
+            source={{uri: selected.file}}
           />
           <Divider height={10} />
           <Text size={22} color={Color.black} lineHeight={27} align="left">
-            DJ Raggil Suliza
+            {selected.name}
           </Text>
           <Divider height={10} />
           <Container flex={1} flexDirection="row" align="center">
@@ -234,13 +220,13 @@ const FestScreenV2 = ({navigation, route}) => {
             />
             <Divider width={8} />
             <Text size={10} lineHeight={12} color={Color.black}>
-              25 Sep 2022
+              {selected.date ? selected.date : '-'}
             </Text>
             <Divider width={10} />
             <Image source={imageAssets.clock} style={{width: 16, height: 16}} />
             <Divider width={8} />
             <Text size={10} lineHeight={12} color={Color.black}>
-              14:00 - 14:45
+              {selected.time}
             </Text>
             <Divider width={10} />
             <Image

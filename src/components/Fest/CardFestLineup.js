@@ -28,12 +28,10 @@ const CardFestLineup = ({
   const {Color} = useColor();
   const navigation = useNavigation();
   const {width} = useWindowDimensions();
-  const user = useSelector(state => state['user.auth'].login.user);
-  const variable = {image: imageAssets.lineupContent}
 
   return (
     <TouchableOpacity
-      onPress={() => onPress(variable)}
+      onPress={() => onPress(item)}
       style={{
         marginVertical: 10,
         marginHorizontal: 8,
@@ -41,15 +39,21 @@ const CardFestLineup = ({
         borderWidth: 1,
         borderRadius: 8,
       }}>
-      <Image
-        source={imageAssets.lineupContent}
-        style={{
-          width: '100%',
-          // borderTopLeftRadius: 8,
-          // borderTopRightRadius: 8,
-          resizeMode: 'cover',
-        }}
-      />
+      <Container
+        width={width / numColumns - (horizontal ? 32 : 24)}
+        height={width / numColumns - (horizontal ? 32 : 24)}
+      >
+        <Image
+          source={{ uri: item.file }}
+          style={{
+            width: '100%',
+            height: '100%',
+            borderTopLeftRadius: 8,
+            borderTopRightRadius: 8,
+            resizeMode: 'cover',
+          }}
+        />
+      </Container>
       <Divider height={16} />
       <Container 
         flex={1}
@@ -57,13 +61,13 @@ const CardFestLineup = ({
         paddingHorizontal={10}
         >
           <Text align="left" size={14} type="medium" color={Color.black} lineHeight={18}>
-            DJ Raggil Suliza
+            {item.name}
           </Text>
           <Text align="left" size={10} color={"#3A3936"} lineHeight={12}>
-            Sun, 25 Sep 2022
+            {item.date ? item.date : '-'}
           </Text>
           <Text align="left" size={10} color={"#3A3936"} lineHeight={12}>
-            14:00 - 14:45
+            {item.time}
           </Text>
           <Text align="left" size={10} color={"#3A3936"} lineHeight={12}>
             Live House

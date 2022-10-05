@@ -14,6 +14,7 @@ import {getAPI, postAPI} from 'src/api-rest/httpService';
 import ListContenFest from 'src/components/Fest/ListContenFest';
 
 const FestLiteratureScreen = ({navigation, route}) => {
+  const {item} = route.params;
   const {Color} = useColor();
   const isFocused = useIsFocused();
   const [loadingProps, showLoading, hideLoading] = useLoading();
@@ -50,6 +51,7 @@ const FestLiteratureScreen = ({navigation, route}) => {
           marginBottom={48}
         >
           <ListContenFest
+            id={item.id}
             productCategory="LITERATUR"
             // name={title}
           />

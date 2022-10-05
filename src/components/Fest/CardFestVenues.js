@@ -32,6 +32,8 @@ const CardFestVenues = ({
   const user = useSelector(state => state['user.auth'].login.user);
   const variable = {image: imageAssets.lineupContent};
 
+  console.log(item, "iteeem");
+
   return (
     <TouchableOpacity
       onPress={() => {navigation.navigate('VenuesDetail', {item: item})}}
@@ -66,14 +68,14 @@ const CardFestVenues = ({
           </Text>
         </Container>
         <Container
-          backgroundColor={item.group == 'Tiket' ? "#E6CFA3" : '#FCD100'}
+          backgroundColor={item.entrance == 2 ? "#E6CFA3" : '#FCD100'}
           borderWidth={1}
-          borderColor={item.group == 'Tiket' ? "#644B1B" : '#1D1D1B'}
+          borderColor={item.entrance == 2 ? "#644B1B" : '#1D1D1B'}
           padding={9}
           borderRadius={8}
         >
-          <Text color={item.group == 'Tiket' ? "#644B1B" : '#1D1D1B'} size={11} lineHeight={14} type="medium">
-            {item.group}
+          <Text color={item.entrance == 2 ? "#644B1B" : '#1D1D1B'} size={11} lineHeight={14} type="medium">
+            {item.entrance === 1 ? 'Gratis' : 'Tiket'}
           </Text>
         </Container>
       </Container>

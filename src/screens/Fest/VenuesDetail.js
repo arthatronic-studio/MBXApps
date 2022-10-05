@@ -19,6 +19,7 @@ import {getAPI, postAPI} from 'src/api-rest/httpService';
 import {Modalize} from 'react-native-modalize';
 import HighlightFest from 'src/components/Fest/HighlightFest';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import HtmlView from 'src/components/HtmlView';
 
 const VenuesDetail = ({navigation, route}) => {
   const {item} = route.params;
@@ -46,6 +47,8 @@ const VenuesDetail = ({navigation, route}) => {
     // fetchData();
   }, []);
 
+  console.log(item, 'item');
+
   return (
     <Scaffold
       loadingProps={loadingProps}
@@ -56,17 +59,17 @@ const VenuesDetail = ({navigation, route}) => {
           title={item.name}
           actions={
             <Container
-              backgroundColor={item.group == 'Tiket' ? '#E6CFA3' : '#FCD100'}
+              backgroundColor={item.entrance == 2 ? '#E6CFA3' : '#FCD100'}
               borderWidth={1}
-              borderColor={item.group == 'Tiket' ? '#644B1B' : '#1D1D1B'}
+              borderColor={item.entrance == 2 ? '#644B1B' : '#1D1D1B'}
               padding={8}
               borderRadius={8}>
               <Text
-                color={item.group == 'Tiket' ? '#644B1B' : '#1D1D1B'}
+                color={item.entrance == 2 ? '#644B1B' : '#1D1D1B'}
                 size={10}
                 lineHeight={12}
                 type="medium">
-                {item.group}
+                {item.entrance === 1 ? 'Gratis' : 'Tiket'}
               </Text>
             </Container>
           }
@@ -100,6 +103,9 @@ const VenuesDetail = ({navigation, route}) => {
             </Container>
 
             <Container padding={16} align="flex-start">
+              <HtmlView html={item.description} />
+            </Container>
+            {/* <Container padding={16} align="flex-start">
               <Container
                 paddingHorizontal={11}
                 paddingVertical={7}
@@ -166,7 +172,7 @@ const VenuesDetail = ({navigation, route}) => {
                 “Underground Stage” dan mengajak para pendatang untuk berdansa
                 ria didepan panggung.
               </Text>
-            </Container>
+            </Container> */}
           </Container>
         )}
       </ScrollView>
