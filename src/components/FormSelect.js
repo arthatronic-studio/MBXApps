@@ -57,8 +57,8 @@ const FormSelect = forwardRef(({ label, labelInside, labelContainerStyle, placeh
     }, []);
 
     return (
-        <Container width='100%'>
-            {label !== '' && <View style={{
+        <Container width='100%' paddingTop={24} style={labelContainerStyle}>
+            {/* {label !== '' && <View style={{
                 width: '100%',
                 justifyContent: 'flex-start',
                 alignItems: 'flex-start',
@@ -68,18 +68,17 @@ const FormSelect = forwardRef(({ label, labelInside, labelContainerStyle, placeh
                 ...labelContainerStyle,
             }}>
                 <Text type='medium' size={12} color={Color.textSoft}>{label}</Text>
-            </View>}
+            </View>} */}
             <View
                 style={{
                     width: '100%',
-                    paddingHorizontal: 16,
                 }}
             >
                 <View style={{
                     borderRadius: 8,
                     backgroundColor: Color.textInput,
-                    borderWidth: 0.5,
-                    borderColor: Color.disabled,
+                    borderWidth: 1,
+                    borderColor: Color.textSoft,
                     paddingVertical: 18,
                 }}>
                     <Text size={10} align='left' letterSpacing={0.08} style={{ opacity: 0.6, position: 'absolute', top: 0, marginLeft: 10 }}>{labelInside}</Text>
@@ -90,7 +89,7 @@ const FormSelect = forwardRef(({ label, labelInside, labelContainerStyle, placeh
                         {prefixIcon}
 
                         <Container flex={1} align='flex-start' justify='center' paddingHorizontal={12}>
-                            <Text color={Color.gray} numberOfLines={1} align='left' style={{ marginTop: labelInside == '' ? 0 : 5 }}>
+                            <Text color={value ? Color.text : Color.placeholder} numberOfLines={1} align='left' style={{ marginTop: labelInside == '' ? 0 : 5 }}>
                                 {value || placeholder}
                             </Text>
                         </Container>
@@ -124,6 +123,21 @@ const FormSelect = forwardRef(({ label, labelInside, labelContainerStyle, placeh
                         </View>}
                     </TouchableOpacity>
                 </View>
+
+                {label !== '' && <View
+                    style={{
+                        position: 'absolute',
+                        top: -8,
+                        left: 8,
+                        paddingHorizontal: 4,
+                        justifyContent: 'flex-start',
+                        alignItems: 'flex-start',
+                        marginBottom: Platform.OS === 'ios' ? 4 : 2,
+                        backgroundColor: Color.theme,
+                    }}
+                >
+                    <Text type='medium' size={12} color={Color.textSoft}>{label}</Text>
+                </View>}
             </View>
 
             {!hideErrorHint && <View style={{

@@ -394,13 +394,13 @@ export default ({ navigation, route }) => {
             </Container>
           </Container>
 
-          <Divider height={8}/>
+          <Divider />
 
           <Text align="left" color={Color.black} type="medium" size={12}>
             Informasi Dasar
           </Text>
 
-          <Divider height={12}/>
+          <Divider />
 
           <FormInput
             label="Nama Lengkap"
@@ -414,25 +414,33 @@ export default ({ navigation, route }) => {
             onSubmitEditing={() => setOpen(true)}
           />
 
-          <Divider height={24}/>
-
-          <TouchableOpacity
+          {/* <FormInput
+            editable={false}
+            label="Tanggal Lahir"
+            placeholder='yyyy-mm-dd'
+            hideErrorHint
+            keyboardType="default"
+            value={userData.tanggalLahir}
+            // onChangeText={(text) => onChangeUserData('tanggalLahir', text)}
+            onBlur={() => isValueError('tanggalLahir')}
+            returnKeyType="next"
+          /> */}
+          <FormSelect
+            label='Tanggal Lahir'
+            placeholder='Pilih Tanggal'
+            hideErrorHint
+            // value={Moment(userData.eventDate).format('DD MMM YYYY')}
+            value={userData.tanggalLahir}
             onPress={() => setOpen(true)}
-          >
-            <FormInput
-              editable={false}
-              label="Tanggal Lahir"
-              placeholder='yyyy-mm-dd'
-              hideErrorHint
-              keyboardType="default"
-              value={userData.tanggalLahir}
-              // onChangeText={(text) => onChangeUserData('tanggalLahir', text)}
-              onBlur={() => isValueError('tanggalLahir')}
-              returnKeyType="next"
-            />
-          </TouchableOpacity>
+            // error={errorUserData.usageType}
+            // suffixIcon={
+            //     <View style={{width: '10%', paddingRight: 16, justifyContent: 'center', alignItems: 'flex-end'}}>
+            //         <Ionicons name='calendar' />
+            //     </View>
+            // }
+          />
 
-          <Divider height={24}/>
+          <Divider />
 
           {renderRadio({
             flexDirection: 'row',
