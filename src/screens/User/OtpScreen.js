@@ -250,7 +250,7 @@ const OtpScreen = ({ navigation, route }) => {
                 >
                     <Container marginTop={24} marginBottom={48} align='flex-start'>
                         <Text align='left' size={28} type='semibold'>Verifikasi OTP</Text>
-                        <Text align='left'>Kami telah mengirimkan kode untuk melakukan verifikasi login ke nmor kamu.</Text>
+                        <Text align='left'>Kami telah mengirimkan kode untuk melakukan verifikasi ke nomor kamu.</Text>
                     </Container>
 
                     <Row justify='center'>

@@ -39,6 +39,9 @@ import { fetchEatCartAdd } from 'src/api-rest/fetchEatCartAdd';
 import { fetchEatCartRemove } from 'src/api-rest/fetchEatCartRemove';
 import { fetchEatCartOrder } from 'src/api-rest/fetchEatCartOrder';
 import WebViewScreen from 'src/components/WebViewScreen';
+import { fetchEatCartSeatsAvailable } from 'src/api-rest/fetchEatCartSeatsAvailable';
+import FormSelect from 'src/components/FormSelect';
+import ModalActions from 'src/components/Modal/ModalActions';
 
 const TenantCheckoutScreen = ({ navigation, route }) => {
   const { params } = route;
@@ -56,6 +59,9 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
   const [ringkasanPembayaran, setRingkasanPembayaran] = useState(params.ringkasanPembayaran);
   const [updateIndex, setUpdateIndex] = useState(-1);
   const [sourceURL, setSourceURL] = useState('');
+  const [modalSeatsAvailable, setModalSeatsAvailable] = useState(false);
+  const [selectedSeatsAvailable, setSelectedSeatsAvailable] = useState();
+  const [listSeatsAvailable, setListSeatsAvailable] = useState([]);
 
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
@@ -89,21 +95,52 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
     }
   }, [namaPemesan]);
 
-  const getDetail = () => {
-    
+  useEffect(() => {
+    const timeout = selectedSeatsAvailable ?
+      setTimeout(() => {
+        onUpdateQty();
+      }, 1000) : null;
+
+    return () => {
+      clearTimeout(timeout);
+    }
+  }, [selectedSeatsAvailable]);
+
+  const getDetail = async() => {
+    const body = {
+      location_id: params.cartLocationId,
+    };
+    const result = await fetchEatCartSeatsAvailable(body);
+    console.log('result', result);
+    if (result.status) {
+      let newArr = [];
+      result.data.map((e) => {
+        newArr.push({
+          id: e.number,
+          name: e.number,
+          show: true,
+        });
+      });
+
+      setListSeatsAvailable(newArr);
+    }
   };
 
   const onUpdateQty = async(item, index) => {
-    let body = {
-      nama_pelanggan: namaPemesan,
+    let body = {};
+
+    if (namaPemesan) {
+      body.nama_pelanggan = namaPemesan;
+    }
+
+    if (selectedSeatsAvailable) {
+      body.number = selectedSeatsAvailable.id;
     }
 
     if (item) {
-      body = {
-        product_id: item.id,
-        quantity: item.qty,
-        catatan: item.note,
-      };
+      body.product_id = item.id;
+      body.quantity = item.qty;
+      body.nama_pelanggan = item.note;
     }
 
     setUpdateIndex(-1);
@@ -308,9 +345,23 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
     )
   };
 
+  console.log('selectedSeatsAvailable', selectedSeatsAvailable);
+
   const renderFooter = () => {
     return (
       <>
+        <Line height={8} width='100%' color='#F4F4F4' />
+
+        <Container paddingBottom={16}>
+          <FormSelect
+            label='No. Meja'
+            placeholder='Pilih'
+            value={selectedSeatsAvailable ? selectedSeatsAvailable.name : ''}
+            onPress={() => setModalSeatsAvailable(true)}
+            hideErrorHint
+          />
+        </Container>
+
         <Line height={8} width='100%' color='#F4F4F4' />
         <Container paddingHorizontal={16}>
 
@@ -413,7 +464,7 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
     setSourceURL('');
     if (status === 'paymentPaid') navigation.navigate('PaymentSucceed');
     else navigation.navigate('EatScreen');
-}
+  }
 
   console.log('params', params);
 
@@ -522,7 +573,7 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
 
             <Container padding={16}>
               <Container paddingBottom={12}>
-                <Text type='medium' align='left'>Nama Pemesan</Text>
+                <Text type='medium' size={12} color={Color.textSoft} align='left'>Nama Pemesan</Text>
               </Container>
               <FormInput
                 value={namaPemesan}
@@ -601,6 +652,19 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
               onClose={onCloseWebview}
           />
       </ReactModal>
+
+      <ModalActions
+        visible={modalSeatsAvailable}
+        data={listSeatsAvailable}
+        selected={selectedSeatsAvailable}
+        onPress={(item) => {
+          setModalSeatsAvailable(false);
+          setSelectedSeatsAvailable(item);
+        }}
+        onClose={() => {
+          setModalSeatsAvailable(false);
+        }}
+      />
     </Scaffold>
   );
 };

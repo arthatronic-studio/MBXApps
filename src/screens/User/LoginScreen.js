@@ -299,10 +299,10 @@ const LoginScreen = ({navigation, route}) => {
 
             <Container>
               <Text align='left' size={28}>
-                Hello There!
+                Hai yang disana!
               </Text>
               <Text align='left'>
-                Silakan masukan nomor telepon Anda untuk masuk ke aplikasi
+                Masukan nomor teleponmu untuk masuk ke aplikasi
               </Text>
             </Container>
 
@@ -393,7 +393,7 @@ const LoginScreen = ({navigation, route}) => {
             <Button
               onPress={() => signIn()}
             >
-              Login
+              Masuk
             </Button>
 
             {/* {accessClient.LoginScreen.guesMode && <Container paddingTop={16}>

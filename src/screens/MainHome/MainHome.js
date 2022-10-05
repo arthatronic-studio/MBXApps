@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   ScrollView,
@@ -36,7 +36,6 @@ import {
 } from '@src/components';
 import { Divider, Circle, Container, Row, Column } from '@src/styled';
 import Banner from 'src/components/Banner';
-import ModalPosting from './ModalPosting';
 import imageAssets from 'assets/images';
 import WidgetHomeMenuStatic from './WidgetHomeMenuStatic';
 import { getAPI, postAPI } from 'src/api-rest/httpService';
@@ -46,14 +45,17 @@ import HighlightTenant from 'src/components/Tenant/HighlightTenant';
 import { stateBeaconSetting } from 'src/api-rest/stateBeaconSetting';
 import { androidBluetoothPermission } from 'src/lib/androidPermissions';
 import { shadowStyle } from 'src/styles';
+import ModalBeaconPromo from './ModalBeaconPromo';
+import ModalLoading from './ModalLoading';
+import ModalNeedUpdateProfile from './ModalNeedUpdateProfile';
+import ModalBeaconCheckin from './ModalBeaconCheckin';
+import DraggableButton from './DraggableButton';
 
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 const scanUUIDs = []; // ['fda50693-a4e2-4fb1-afcf-c6eb07647825'];
 const scanTimeout = 70;
-
-let tempShowPopupAds = true;
 
 const MainHome = ({ navigation, route }) => {
   const auth = useSelector(state => state['auth']);
@@ -69,7 +71,6 @@ const MainHome = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const { Color } = useColor();
   const isFocused = useIsFocused();
-  const modalPostingRef = useRef();
   const { width, height } = useWindowDimensions();
   const [loadingProps, showLoading, hideLoading] = useLoading();
 
@@ -92,11 +93,6 @@ const MainHome = ({ navigation, route }) => {
   const [modalFloatingBeacon, setModalFloatingBeacon] = useState(true);
   const [modalSuccessCheckin, setModalSuccessCheckin] = useState(false);
   const [modalNeedUpdateProfile, setModalNeedUpdateProfile] = useState(false);
-  const [modalEventVerification, setModalEventVerification] = useState({
-    show: false,
-    error: true,
-    item: null,
-  });
   const [beaconScanning, setBeaconScanning] = useState(false);
 
   const isCheckin = auth && auth.user && auth.user.isCheckin;
@@ -141,7 +137,7 @@ const MainHome = ({ navigation, route }) => {
 
   useEffect(() => {
     initialConfig();
-    
+
     androidBluetoothPermission().then((status) => {
       console.log('status bluetooth', status);
       if (status) {
@@ -251,28 +247,28 @@ const MainHome = ({ navigation, route }) => {
 
         // type beacon yang masuk kondisi checkin (harus checkin dulu)
         // if (isCheckin) {
-          if (isMerchType !== -1 && rangeForCompare < localStoragBeacons.listMerchRange[isMerchType]) {
-            newMerchUID.push(productId);
-          }
+        if (isMerchType !== -1 && rangeForCompare < localStoragBeacons.listMerchRange[isMerchType]) {
+          newMerchUID.push(productId);
+        }
 
-          if (isArtType !== -1 && rangeForCompare < localStoragBeacons.listArtRange[isArtType]) {
-            newArtUID.push(productId);
-          }
+        if (isArtType !== -1 && rangeForCompare < localStoragBeacons.listArtRange[isArtType]) {
+          newArtUID.push(productId);
+        }
 
-          if (isEventType !== -1 && rangeForCompare < localStoragBeacons.listEventRange[isEventType]) {
-            newEventUID.push(productId);
-          }
+        if (isEventType !== -1 && rangeForCompare < localStoragBeacons.listEventRange[isEventType]) {
+          newEventUID.push(productId);
+        }
 
-          if (isOtherType !== -1 && rangeForCompare < localStoragBeacons.listOtherRange[isOtherType]) {
-            newOtherUID.push(productId);
-            newOtherType.push(localStoragBeacons.listOtherType[isOtherType]);
-          }
+        if (isOtherType !== -1 && rangeForCompare < localStoragBeacons.listOtherRange[isOtherType]) {
+          newOtherUID.push(productId);
+          newOtherType.push(localStoragBeacons.listOtherType[isOtherType]);
+        }
         // }
         // type beacon yang masuk kondisi non checkin
         // else {
-          if (isCheckinType !== -1 && rangeForCompare < localStoragBeacons.listCheckinRange[isCheckinType]) {
-            newCheckinUID.push(productId);
-          }
+        if (isCheckinType !== -1 && rangeForCompare < localStoragBeacons.listCheckinRange[isCheckinType]) {
+          newCheckinUID.push(productId);
+        }
         // }
       });
 
@@ -293,7 +289,7 @@ const MainHome = ({ navigation, route }) => {
     if (isCheckin) {
       return;
     }
-    
+
     if (stateListCheckinUID.length === 0) {
       return;
     }
@@ -349,7 +345,7 @@ const MainHome = ({ navigation, route }) => {
             beacon_uid: uid,
             beacon_type: 'merch',
           };
-    
+
           console.log('body merch pairing', body);
 
           const result = await postAPI('user-activity', body);
@@ -384,7 +380,7 @@ const MainHome = ({ navigation, route }) => {
     if (stateListArtUID.length === 0) {
       return;
     }
-    
+
     if (tempAlreadyPairing.includes(stateListArtUID[0])) {
       return;
     }
@@ -423,7 +419,7 @@ const MainHome = ({ navigation, route }) => {
     let newArr = [...tempAlreadyPairing];
 
     await Promise.all(
-      stateListOtherUID.map(async (uid, idx) => {  
+      stateListOtherUID.map(async (uid, idx) => {
         if (tempAlreadyPairing.includes(uid)) {
           console.log('tempAlreadyPairing', tempAlreadyPairing);
         } else {
@@ -433,9 +429,9 @@ const MainHome = ({ navigation, route }) => {
           };
 
           newArr.push(uid);
-  
+
           console.log('body other pairing', body);
-  
+
           const result = await postAPI('user-activity', body);
           console.log('result other pairing', body, result);
         }
@@ -512,7 +508,7 @@ const MainHome = ({ navigation, route }) => {
     });
   };
 
-  const onRefresh = async() => {
+  const onRefresh = async () => {
     setRefreshing(true);
 
     setTempAlreadyPairing([]);
@@ -528,19 +524,6 @@ const MainHome = ({ navigation, route }) => {
     // });
 
     setRefreshing(false);
-  };
-
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const toggleModal = () => {
-    setIsModalVisible(!isModalVisible);
-  };
-
-  const onClickBaca = () => {
-    setIsModalVisible(!isModalVisible);
-    navigation.navigate('PDFReaderScreen', {
-      file: 'http://samples.leanpub.com/thereactnativebook-sample.pdf',
-    });
   };
 
   const renderDebug = () => {
@@ -754,39 +737,40 @@ const MainHome = ({ navigation, route }) => {
         </View>
       }
     >
-      <ScrollView
-        scrollEventThrottle={16}
-        onScroll={Animated.event(
-          [
-            {
-              nativeEvent: {
-                contentOffset: { y: animationValue },
+      <DraggableButton>
+        <ScrollView
+          scrollEventThrottle={16}
+          onScroll={Animated.event(
+            [
+              {
+                nativeEvent: {
+                  contentOffset: { y: animationValue },
+                },
               },
-            },
-          ],
-          { useNativeDriver: false },
-        )}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }
-      >
-        <Container color={Color.theme} paddingTop={8} paddingBottom={8}>
-          <Animated.View
-            style={{
-              width,
-              height: width / 3,
-              position: 'absolute',
-              borderBottomLeftRadius: 24,
-              borderBottomRightRadius: 24,
-            }}
-          />
+            ],
+            { useNativeDriver: false },
+          )}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }
+        >
+          <Container color={Color.theme} paddingTop={8} paddingBottom={8}>
+            <Animated.View
+              style={{
+                width,
+                height: width / 3,
+                position: 'absolute',
+                borderBottomLeftRadius: 24,
+                borderBottomRightRadius: 24,
+              }}
+            />
 
-          {/* hide user greetings */}
-          {/* <View
+            {/* hide user greetings */}
+            {/* <View
             style={{
               flexDirection: 'row',
               width: '100%',
@@ -812,14 +796,56 @@ const MainHome = ({ navigation, route }) => {
             </View>
           </View> */}
 
-          {isCheckin &&
-            <Container padding={16} paddingTop={8}>
-              <Container padding={14} color={Color.successLight} radius={8}>
+            {isCheckin &&
+              <Container padding={16} paddingTop={8}>
+                <Container padding={14} color={Color.successLight} radius={8}>
+                  <Row justify='space-between'>
+                    <Row>
+                      <Container paddingRight={16}>
+                        <Image
+                          source={imageAssets.building}
+                          style={{
+                            width: 24,
+                            height: 24,
+                          }}
+                        />
+                      </Container>
+
+                      <Column>
+                        <Text size={10} color={Color.placeholder} letterSpacing={0.4}>Telah masuk di</Text>
+                        <Divider height={2} />
+                        <Text size={12} type='medium' letterSpacing={0.5}>{auth.user && auth.user.activityInfo && auth.user.activityInfo.location ? auth.user.activityInfo.location.name : ''}</Text>
+                      </Column>
+                    </Row>
+
+                    <TouchableOpacity
+                      onPress={() => {
+                        Alert(
+                          'Konfirmasi',
+                          'Keluar dari Area?',
+                          () => onCheckout(),
+                        );
+                      }}
+                      style={{
+
+                      }}
+                    >
+                      <Text color={Color.error} size={12} type='medium'>
+                        Keluar
+                      </Text>
+                    </TouchableOpacity>
+                  </Row>
+                </Container>
+              </Container>
+            }
+
+            {!isCheckin && stateListCheckinUID.length > 0 && <Container padding={16} paddingTop={8}>
+              <Container padding={14} color={Color.warningLight} radius={8}>
                 <Row justify='space-between'>
                   <Row>
                     <Container paddingRight={16}>
                       <Image
-                        source={imageAssets.building}
+                        source={imageAssets.airdrop}
                         style={{
                           width: 24,
                           height: 24,
@@ -828,58 +854,16 @@ const MainHome = ({ navigation, route }) => {
                     </Container>
 
                     <Column>
-                      <Text size={10} color={Color.placeholder} letterSpacing={0.4}>Telah masuk di</Text>
+                      <Text type='medium' size={12} letterSpacing={0.5}>Checkpoint Disekitar</Text>
                       <Divider height={2} />
-                      <Text size={12} type='medium' letterSpacing={0.5}>{auth.user && auth.user.activityInfo && auth.user.activityInfo.location ? auth.user.activityInfo.location.name : ''}</Text>
+                      <Text size={10} letterSpacing={0.15} color={Color.placeholder} numberOfLines={1}>Sedang memverifikasi untuk masuk kedalam area</Text>
                     </Column>
                   </Row>
-
-                  <TouchableOpacity
-                    onPress={() => {
-                      Alert(
-                        'Konfirmasi',
-                        'Keluar dari Area?',
-                        () => onCheckout(),
-                      );
-                    }}
-                    style={{
-                      
-                    }}
-                  >
-                    <Text color={Color.error} size={12} type='medium'>
-                      Keluar
-                    </Text>
-                  </TouchableOpacity>
                 </Row>
               </Container>
-            </Container>
-          }
+            </Container>}
 
-          {!isCheckin && stateListCheckinUID.length > 0 && <Container padding={16} paddingTop={8}>
-            <Container padding={14} color={Color.warningLight} radius={8}>
-              <Row justify='space-between'>
-                <Row>
-                  <Container paddingRight={16}>
-                    <Image
-                      source={imageAssets.airdrop}
-                      style={{
-                        width: 24,
-                        height: 24,
-                      }}
-                    />
-                  </Container>
-
-                  <Column>
-                    <Text type='medium' size={12} letterSpacing={0.5}>Checkpoint Disekitar</Text>
-                    <Divider height={2} />
-                    <Text size={10} letterSpacing={0.15} color={Color.placeholder} numberOfLines={1}>Sedang memverifikasi untuk masuk kedalam area</Text>
-                  </Column>
-                </Row>
-              </Row>
-            </Container>
-          </Container>}
-
-          {/* {beaconScanning ?
+            {/* {beaconScanning ?
             <View style={{ width: '100%', paddingHorizontal: 16, paddingBottom: 16 }}>
               <View
                 style={{
@@ -908,92 +892,98 @@ const MainHome = ({ navigation, route }) => {
             </View>
           } */}
 
-          {showDebug && renderDebug()}
+            {showDebug && renderDebug()}
 
-          <Container>
-            <Banner
-              showHeader={false}
-              data={listBanner}
-              loading={loadingBanner}
+            <Container>
+              <Banner
+                showHeader={false}
+                data={listBanner}
+                loading={loadingBanner}
+              />
+            </Container>
+
+            <Divider height={spaceContentSize * 2} />
+
+            {auth.user && auth.user.activeEvent && <Container paddingHorizontal={16} paddingBottom={16}>
+              <Container padding={10} radius={8} color='#F0FBFF'>
+                <Row justify='space-between'>
+                  <Row>
+                    <Container width='14%' style={{ aspectRatio: 1 }}>
+                      <Image
+                        source={{ uri: auth.user.activeEvent.imageUrl }}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          borderRadius: 8,
+                        }}
+                      />
+                    </Container>
+
+                    <Container paddingHorizontal={12} width='86%'>
+                      <Text align='left' size={10} color={Color.placeholder} letterSpacing={0.4}>Tiket Aktif</Text>
+                      <Divider height={2} />
+                      <Text align='left' size={12} type='medium' numberOfLines={2} letterSpacing={0.5}>{auth.user.activeEvent.title}</Text>
+                    </Container>
+                  </Row>
+                </Row>
+              </Container>
+            </Container>}
+
+            {isSecurity && <Container padding={16} paddingTop={8}>
+              <Container padding={14} color={Color.border} radius={8}>
+                <Row justify='space-between'>
+                  <Row>
+                    <Container paddingRight={16}>
+                      <Image
+                        source={imageAssets.people}
+                        style={{
+                          width: 32,
+                          height: 32,
+                        }}
+                      />
+                    </Container>
+                    <Column>
+                      <Text color={Color.placeholder} type='medium' size={11} letterSpacing={0.5}>Total Pengunjung</Text>
+                      <Divider height={2} />
+                      <Text type='medium' size={16} letterSpacing={0.15}>{visitorCount} Orang</Text>
+                    </Column>
+                  </Row>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('VisitorScreen');
+                    }}
+                  >
+                    <Text color={Color.primaryDark} type='medium' size={12} letterSpacing={0.5}>Lihat Detail</Text>
+                  </TouchableOpacity>
+                </Row>
+              </Container>
+            </Container>}
+
+            <WidgetHomeMenuStatic />
+
+            <Divider height={24} />
+
+            <HighlightTenant
+              title='Toko populer'
+              tenantType='shop'
             />
-          </Container>
 
-          <Divider height={spaceContentSize * 2} />
+            <HighlightTenant
+              title='Makanan favorit'
+              tenantType='eat'
+            />
 
-          {auth.user && auth.user.activeEvent && <Container paddingHorizontal={16} paddingBottom={16}>
-            <Container padding={10} radius={8} color='#F0FBFF'>
-              <Row justify='space-between'>
-                <Row>
-                  <Container width='14%' style={{ aspectRatio: 1 }}>
-                    <Image
-                      source={{ uri: auth.user.activeEvent.imageUrl }}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        borderRadius: 8,
-                      }}
-                    />
-                  </Container>
+            <HighlightEvent
+              productCategory='EVENT'
+              name='Event'
+              title='Event Yang Akan Datang'
+              nav='EventScreen'
+              refresh={refreshing || isFocused}
+              // showHeader={false}
+              showSeeAllText={false}
+            />
 
-                  <Container paddingHorizontal={12} width='86%'>
-                    <Text align='left' size={10} color={Color.placeholder} letterSpacing={0.4}>Tiket Aktif</Text>
-                    <Divider height={2} />
-                    <Text align='left' size={12} type='medium' numberOfLines={2} letterSpacing={0.5}>{auth.user.activeEvent.title}</Text>
-                  </Container>
-                </Row>
-              </Row>
-            </Container>
-          </Container>}
-
-          {isSecurity && <Container padding={16} paddingTop={8}>
-            <Container padding={14} color={Color.border} radius={8}>
-              <Row justify='space-between'>
-                <Row>
-                  <Container paddingRight={16}>
-                    <Image
-                      source={imageAssets.people}
-                      style={{
-                        width: 32,
-                        height: 32,
-                      }}
-                    />
-                  </Container>
-                  <Column>
-                    <Text color={Color.placeholder} type='medium' size={11} letterSpacing={0.5}>Total Pengunjung</Text>
-                    <Divider height={2} />
-                    <Text type='medium' size={16} letterSpacing={0.15}>{visitorCount} Orang</Text>
-                  </Column>
-                </Row>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('VisitorScreen');
-                  }}
-                >
-                  <Text color={Color.primaryDark} type='medium' size={12} letterSpacing={0.5}>Lihat Detail</Text>
-                </TouchableOpacity>
-              </Row>
-            </Container>
-          </Container>}
-
-          <WidgetHomeMenuStatic />
-
-          <Divider height={24} />
-
-          <HighlightTenant
-
-          />
-
-          <HighlightEvent
-            productCategory='EVENT'
-            name='Event'
-            title='Event Yang Akan Datang'
-            nav='EventScreen'
-            refresh={refreshing || isFocused}
-            // showHeader={false}
-            showSeeAllText={false}
-          />
-
-          {/* <HighlightContentProduct
+            {/* <HighlightContentProduct
             productCategory='FORUM'
             name='Forum'
             title='Thread Populer'
@@ -1001,7 +991,7 @@ const MainHome = ({ navigation, route }) => {
             refresh={refreshing || isFocused}
           /> */}
 
-          {/* <HighlightContentProduct
+            {/* <HighlightContentProduct
             productCategory='EMERGENCY'
             name='Help Me'
             title='Kondisi Darurat'
@@ -1009,7 +999,7 @@ const MainHome = ({ navigation, route }) => {
             refresh={refreshing || isFocused}
           /> */}
 
-          {/* <HighlightContentProduct
+            {/* <HighlightContentProduct
             productCategory='POSTING'
             name='Artikel'
             title='Artikel Populer'
@@ -1017,7 +1007,7 @@ const MainHome = ({ navigation, route }) => {
             refresh={refreshing || isFocused}
           /> */}
 
-          {/* <HighlightContentProductV2
+            {/* <HighlightContentProductV2
             productCategory='ARTIKEL'
             name='Artikel'
             title='Artikel Populer'
@@ -1026,7 +1016,7 @@ const MainHome = ({ navigation, route }) => {
             orderBy="like"
           /> */}
 
-          {/* <HighlightContentProduct
+            {/* <HighlightContentProduct
             productCategory='NEARBY_PLACE'
             name='Tempat'
             title='Tempat Terdekat'
@@ -1035,9 +1025,9 @@ const MainHome = ({ navigation, route }) => {
             refresh={refreshing || isFocused}
           /> */}
 
-          {/* <Divider height={8} /> */}
+            {/* <Divider height={8} /> */}
 
-          {/* <HighlightContentProduct
+            {/* <HighlightContentProduct
             productCategory='EVENT'
             name='Event'
             title='Event Yang Akan Datang'
@@ -1047,7 +1037,7 @@ const MainHome = ({ navigation, route }) => {
             showSeeAllText={false}
           /> */}
 
-          {/* <HighlightContentProduct
+            {/* <HighlightContentProduct
             productCategory='JOBS'
             name='Loker'
             title='Lowongan Pekerjaan'
@@ -1055,8 +1045,8 @@ const MainHome = ({ navigation, route }) => {
             refresh={refreshing || isFocused}
           /> */}
 
-          {/* isFocused handle android navigate crash from home */}
-          {/* {isFocused && <HighlightContentProduct
+            {/* isFocused handle android navigate crash from home */}
+            {/* {isFocused && <HighlightContentProduct
             productCategory='YOUTUBE_VIDEO'
             name='Live'
             title='Siaran Langsung'
@@ -1065,7 +1055,7 @@ const MainHome = ({ navigation, route }) => {
             style={{paddingHorizontal: 0}}
           />} */}
 
-          {/* <HighlightContentProduct
+            {/* <HighlightContentProduct
             productCategory='NEWEST_VIDEO'
             name='Video'
             title='Video Terbaru'
@@ -1073,78 +1063,9 @@ const MainHome = ({ navigation, route }) => {
             refresh={refreshing || isFocused}
             style={{ paddingHorizontal: 0 }}
           /> */}
-        </Container>
-      </ScrollView>
-
-      <ModalPosting
-        ref={modalPostingRef}
-        selected={null}
-        onPress={e => {
-          navigation.navigate(e.nav, e.params);
-          modalPostingRef.current.close();
-        }}
-      />
-
-      {/* <Modal
-        isVisible={tempShowPopupAds}
-        onBackdropPress={() => {
-          tempShowPopupAds = false;
-        }}
-        animationIn="slideInDown"
-        animationOut="slideOutDown"
-        backdropColor={Color.semiwhite}>
-        <View
-          style={{ width: '100%', aspectRatio: 1, borderRadius: 16, backgroundColor: Color.primarySoft, }}
-        >
-          <View
-            style={{
-              flex: 1,
-              padding: 32,
-              alignItems: 'center',
-            }}
-          >
-            <View
-              style={{
-                flex: 1
-              }}
-            >
-              <View
-                style={{
-                  height: '100%',
-                  aspectRatio: 1,
-                }}
-              >
-                <Image
-                  source={imageAssets.shake}
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                  }}
-                />
-              </View>
-            </View>
-
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'space-evenly',
-              }}
-            >
-              <Text>Shake your device to verify the tickets</Text>
-              <Container width='50%'>
-                <Button
-                  onPress={() => {
-                    tempShowPopupAds = false;
-                  }}
-                >
-                  I Understand
-                </Button>
-              </Container>
-            </View>
-          </View>
-        </View>
-      </Modal> */}
+          </Container>
+        </ScrollView>
+      </DraggableButton>
 
       {/* modal checkin */}
       {/* <Modal
@@ -1309,448 +1230,44 @@ const MainHome = ({ navigation, route }) => {
         </View>
       </Modal>}
 
-      {/* modal success checkin */}
-      {isFocused && isCheckin && modalSuccessCheckin && <Modal
-        isVisible
-        onBackdropPress={() => {
-          setModalSuccessCheckin(false);
-        }}
-        animationIn="slideInDown"
-        animationOut="slideOutDown"
-        backdropColor={Color.semiwhite}>
-        <View
-          style={{ width: '100%', borderRadius: 16, backgroundColor: Color.theme, }}
-        >
-          <View
-            style={{
-              paddingHorizontal: 16,
-              paddingVertical: 16,
-              alignItems: 'center',
-            }}
-          >
-            <View
-              style={{
-                alignItems: 'center',
-              }}
-            >
-              <Text size={12}>Selamat Datang di</Text>
-              <Divider height={4} />
-              <Text size={22} letterSpacing={0.15} type='medium'>{auth.user && auth.user.activityInfo && auth.user.activityInfo.location ? auth.user.activityInfo.location.name : ''}</Text>
-              <Divider />
-              <View
-                style={{
-                  width: '100%',
-                  aspectRatio: 1,
-                }}
-              >
-                <Image
-                  source={{ uri: 'https://anekatempatwisata.com/wp-content/uploads/2022/04/M-Bloc-Space.jpg' }}
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                    borderRadius: 8,
-                  }}
-                />
-              </View>
-            </View>
+      {/* modal beacon checkin */}
+      {isFocused && isCheckin && modalSuccessCheckin && (
+        <ModalBeaconCheckin
+          visible
+          onClose={() => {
+            setModalSuccessCheckin(false);
+          }}
+        />
+      )}
 
-            <Container width='100%' paddingTop={16}>
-              <Button
-                outline
-                color={Color.primaryMoreDark}
-                onPress={() => {
-                  console.log('tutup');
-                  setModalSuccessCheckin(false);
-                }}
-              >
-                Tutup
-              </Button>
-            </Container>
-          </View>
-        </View>
-      </Modal>}
+      {/* modal beacon promo */}
+      {false && isFocused && (
+        <ModalBeaconPromo
+          item={null}
+          visible
+          onClose={() => {
 
-      {/* modal event */}
-      {isCheckin && modalEventVerification.show && <Modal
-        isVisible={isCheckin && modalEventVerification.show}
-        onBackdropPress={() => {
-          
-        }}
-        animationIn="slideInDown"
-        animationOut="slideOutDown"
-        backdropColor={Color.semiwhite}>
-        <View
-          style={{ width: '100%', borderRadius: 16, backgroundColor: Color.theme, }}
-        >
-          {/* loading */}
-          {modalEventVerification.item ?
-          <View
-            style={{
-              paddingHorizontal: 16,
-              paddingVertical: 16,
-              alignItems: 'center',
-            }}
-          >
-            <View
-              style={{
-                alignItems: 'center',
-              }}
-            >
-              <View style={{ flexDirection: 'row', backgroundColor: Color.successLight, paddingVertical: 12, paddingHorizontal: 20, borderRadius: 120, alignItems: 'center' }}>
-                <Container width={14} height={14} radius={14} align='center' justify='center' color={Color.success}>
-                  <Entypo name='check' size={8} color={Color.textInput} />
-                </Container>
-                <Divider width={8} />
-                <Text size={12} color={Color.success}>Verifikasi Berhasil</Text>
-              </View>
-              <Divider />
-              <View
-                style={{
-                  width: '100%',
-                  aspectRatio: 16/9,
-                }}
-              >
-                <Image
-                  source={{ uri: 'https://anekatempatwisata.com/wp-content/uploads/2022/04/M-Bloc-Space.jpg' }}
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                    borderRadius: 8,
-                  }}
-                />
-              </View>
-            </View>
-
-            <Container paddingTop={16}>
-              <Text>Selamat datang di</Text>
-              <Text size={16} type='medium'>EVENT</Text>
-            </Container>
-
-            <Container width='100%' paddingTop={16}>
-              <Button
-                outline
-                color={Color.primaryMoreDark}
-                onPress={() => {
-                  setModalEventVerification({
-                    ...modalEventVerification,
-                    show: false,
-                  });
-                }}
-              >
-                Tutup
-              </Button>
-            </Container>
-          </View>
-          : modalEventVerification.error ?
-            <View
-              style={{
-                paddingHorizontal: 16,
-                paddingVertical: 16,
-                alignItems: 'center',
-              }}
-            >
-              <View
-                style={{
-                  width: width / 7,
-                  height: width / 7,
-                  backgroundColor: Color.error,
-                  borderRadius: 16,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <Entypo name={'cross'} size={36} color={Color.textInput} />
-              </View>
-
-              <Container paddingTop={16}>
-                <Text size={16} type='medium'>Verifikasi Gagal</Text>
-                <Text size={11}>Nampaknya terjadi kesalahan. Lakukan verifikasi beberapa saat lagi</Text>
-              </Container>
-
-              <Container width='100%' paddingTop={16}>
-                <Button
-                  outline
-                  color={Color.primaryMoreDark}
-                  onPress={() => {
-                    setModalEventVerification({
-                      ...modalEventVerification,
-                      show: false,
-                    });
-                  }}
-                >
-                  Tutup
-                </Button>
-              </Container>
-            </View>
-          :
-          <View
-            style={{
-              padding: 32,
-              alignItems: 'center',
-            }}
-          >
-            <View
-              style={{
-                height: height / 6,
-                aspectRatio: 4 / 3,
-                marginBottom: 24,
-              }}
-            >
-              <Image
-                source={imageAssets.eventVerification}
-                style={{
-                  height: '100%',
-                  width: '100%',
-                  resizeMode: 'contain'
-                }}
-              />
-            </View>
-
-            <View
-              style={{
-                alignItems: 'center',
-              }}
-            >
-              <Text size={16} letterSpacing={0.15} type='medium'>Kamu ada di area event</Text>
-              <Divider height={4} />
-              <Text color={Color.placeholder}>Tunggu sebentar kami sedang melakukan verifikasi . . . </Text>
-            </View>
-          </View>
-          }
-        </View>
-      </Modal>}
-
-      {isModalVisible && <Modal
-        isVisible={isModalVisible}
-        onBackdropPress={() => setIsModalVisible(false)}
-        animationIn="slideInDown"
-        animationOut="slideOutDown"
-        style={{ borderRadius: 16 }}>
-        <View style={{ backgroundColor: Color.theme }}>
-          <View
-            style={{
-              width: '100%',
-              paddingHorizontal: 16,
-              paddingVertical: 24,
-            }}>
-            <TouchableOpacity
-              onPress={() => {
-                toggleModal();
-              }}
-              style={{
-                alignSelf: 'flex-end',
-                backgroundColor: Color.error,
-                borderRadius: 50,
-                marginBottom: 12,
-              }}>
-              <Image
-                source={ImagesPath.icClose}
-                style={{ width: 16, height: 16 }}
-              />
-            </TouchableOpacity>
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ marginRight: 16 }}>
-                <Image source={ImagesPath.eBook} />
-              </View>
-              <View>
-                <View style={{ width: '86%' }}>
-                  <Text
-                    align="left"
-                    size={14}
-                    style={{ fontWeight: 'bold' }}>
-                    Seni adalah ledakan
-                  </Text>
-                </View>
-                <Text align="left" size={10}>
-                  Karya Esa Riski Hari Utama
-                </Text>
-                <View style={{ flexDirection: 'row' }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      marginTop: 12,
-                      marginRight: 20,
-                    }}>
-                    <Image
-                      source={ImagesPath.eye}
-                      style={{ width: 16, height: 16, marginRight: 9 }}
-                    />
-                    <Text align="left" size={10}>
-                      1.7K
-                    </Text>
-                  </View>
-                  <View style={{ flexDirection: 'row', marginTop: 12 }}>
-                    <Image
-                      source={ImagesPath.thumbsUp}
-                      style={{ width: 16, height: 16, marginRight: 9 }}
-                    />
-                    <Text align="left" size={10}>
-                      240
-                    </Text>
-                  </View>
-                </View>
-                <View style={{ marginTop: 16 }}>
-                  <Text
-                    align="left"
-                    size={11}
-                    style={{ fontWeight: 'bold' }}>
-                    Sinopsis
-                  </Text>
-                </View>
-                <View style={{ width: '80%' }}>
-                  <Text align="left" size={10} numberOfLines={4}>
-                  Seni adalah sebuah ledakan merupakan ungkapan asli dari seniman abstrak terkenal Jepang Taro Okamoto. Ungkapan tersebut diucapkan oleh Deidara Akatsuki (tokoh dari novel manga terkenal asal jepang “Naruto).
-                  </Text>
-                </View>
-              </View>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-around',
-              }}>
-              <View
-                style={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: 21,
-                  borderWidth: 0.3,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Image
-                  source={ImagesPath.thumbsUp}
-                  style={{ width: 22, height: 22 }}
-                />
-              </View>
-
-              <Submit
-                buttonLabel="Baca Sekarang"
-                buttonColor={Color.primary}
-                type="bottomSingleButton"
-                buttonBorderTopWidth={0}
-                style={{
-                  backgroundColor: Color.theme,
-                  paddingTop: 25,
-                  paddingBottom: 25,
-                  width: 250,
-                }}
-                onPress={() => onClickBaca()}
-              />
-            </View>
-          </View>
-        </View>
-      </Modal>}
+          }}
+        />
+      )}
 
       {/* modal need update profile */}
-      {modalNeedUpdateProfile && <Modal
-        isVisible={modalNeedUpdateProfile}
-        onBackdropPress={() => {
-          setModalNeedUpdateProfile(false);
-        }}
-        animationIn="slideInDown"
-        animationOut="slideOutDown"
-        backdropColor={Color.semiwhite}>
-        <View
-          style={{ width: '100%', borderRadius: 16, backgroundColor: Color.theme, }}
-        >
-          <View
-            style={{
-              paddingHorizontal: 16,
-              paddingVertical: 16,
-              alignItems: 'center',
-            }}
-          >
-            <View
-              style={{
-                alignItems: 'center',
-              }}
-            >
-              <Text size={22} letterSpacing={0.15} type='medium'>Profile kamu belum lengkap</Text>
-              <Divider height={4} />
-              <Text size={12}>Untuk menggunakan layanan ini silakan lengkapi data diri di menu profile</Text>
-              <Divider />
-              <View
-                style={{
-                  width: '70%',
-                  aspectRatio: 1,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Image
-                  source={imageAssets.shake}
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                    borderRadius: 8,
-                  }}
-                  resizeMode='contain'
-                />
-              </View>
-            </View>
-
-            <Container width='100%' paddingTop={16}>
-              <Button
-                outline
-                color={Color.primaryMoreDark}
-                onPress={() => {
-                  setModalNeedUpdateProfile(false);
-                  navigation.navigate('MainProfile');
-                }}
-              >
-                Profile
-              </Button>
-            </Container>
-          </View>
-        </View>
-      </Modal>}
+      {modalNeedUpdateProfile && isFocused && (
+        <ModalNeedUpdateProfile
+          visible
+          onSubmit={() => {
+            setModalNeedUpdateProfile(false);
+            navigation.navigate('MainProfile');
+          }}
+        />
+      )}
 
       {/* modal loading */}
-      {modalLoading && <Modal
-        isVisible
-        animationIn="slideInDown"
-        animationOut="slideOutDown"
-        backdropColor={Color.semiwhite}>
-        <View
-          style={{ width: '100%', borderRadius: 16, backgroundColor: Color.theme, }}
-        >
-          <View
-            style={{
-              paddingHorizontal: 10,
-              paddingVertical: 16,
-              alignItems: 'center',
-            }}
-          >
-            <View
-              style={{
-                height: height / 12,
-                aspectRatio: 1,
-                justifyContent: 'center',
-              }}
-            >
-              <ActivityIndicator
-                size={'large'}
-              />
-            </View>
-
-            <View
-              style={{
-                alignItems: 'center',
-              }}
-            >
-              <Text
-                size={16}
-                letterSpacing={0.15}
-                type='medium'
-              >
-                Mohon tunggu
-              </Text>
-            </View>
-          </View>
-        </View>
-      </Modal>}
+      {modalLoading && isFocused && (
+        <ModalLoading
+          visible
+        />
+      )}
     </Scaffold>
   );
 };

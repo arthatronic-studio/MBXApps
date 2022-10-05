@@ -49,9 +49,9 @@
 		</dict>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>$(PRODUCT_NAME) need permission to access your bluetooth, This will be used for enter to the store area</string>
+	<string>$(PRODUCT_NAME) need permission to access your bluetooth, This will be used to enter to the store area by scanning the devices in the store making it easier for you to get menus and promos</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>$(PRODUCT_NAME) need permission to access your bluetooth, This will be used for enter to the store area</string>
+	<string>$(PRODUCT_NAME) need permission to access your bluetooth, This will be used to enter to the store area by scanning the devices in the store making it easier for you to get menus and promos</string>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) need permission to access your camera, This will be used for you to add photos when posting for Nearby Place (Tempat), Event, HelpMe, Comment features</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
