@@ -19,6 +19,7 @@ import {getAPI, postAPI} from 'src/api-rest/httpService';
 import {Modalize} from 'react-native-modalize';
 import HighlightFest from 'src/components/Fest/HighlightFest';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import HtmlView from 'src/components/HtmlView';
 
 const AreaDetail = ({navigation, route}) => {
   const {item} = route.params;
@@ -32,19 +33,19 @@ const AreaDetail = ({navigation, route}) => {
 
   const [loading, setLoading] = useState(false);
 
-  const fetchData = async () => {
-    // const result = await postAPI('festival/home');
-    // console.log('result festival', result);
-    const body = {
-      menu_id: 1,
-    };
-    const result = await postAPI('festival/find', body);
-    console.log('result festival find', result);
-  };
+  // const fetchData = async () => {
+  //   // const result = await postAPI('festival/home');
+  //   // console.log('result festival', result);
+  //   const body = {
+  //     menu_id: 1,
+  //   };
+  //   const result = await postAPI('festival/find', body);
+  //   console.log('result festival find', result);
+  // };
 
-  useEffect(() => {
-    // fetchData();
-  }, []);
+  // useEffect(() => {
+  //   // fetchData();
+  // }, []);
 
   return (
     <Scaffold
@@ -54,7 +55,7 @@ const AreaDetail = ({navigation, route}) => {
           centerTitle={false}
           iconLeftButton="arrow-left"
           // title={item.name}
-          title={'mbloc market'}
+          title={item.name}
         />
       }>
       <ScrollView>
@@ -78,14 +79,15 @@ const AreaDetail = ({navigation, route}) => {
           <Container>
             <Container width={width} height={width / 1.7}>
               <Image
-                source={imageAssets.mBlocMarketPadang}
+                source={{uri: item.experience_image[0]}}
                 resizeMode="cover"
                 style={{width: '100%', height: '100%'}}
               />
             </Container>
 
             <Container padding={16} align="flex-start">
-              <Container
+              <HtmlView html={item.description} />
+              {/* <Container
                 paddingHorizontal={11}
                 paddingVertical={7}
                 backgroundColor={Color.text}>
@@ -105,7 +107,7 @@ const AreaDetail = ({navigation, route}) => {
                 kudapan siap angkut untuk para pengunjung. Selain itu, M Bloc
                 Market juga akan menjadi tempat beristirahat teman-teman
                 pengunjung ditengah hingar-binger M Bloc Fest.
-              </Text>
+              </Text> */}
             </Container>
           </Container>
         )}

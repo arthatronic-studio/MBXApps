@@ -40,8 +40,8 @@ const CardFestLineup = ({
         borderRadius: 8,
       }}>
       <Container
-        width={width / numColumns - (horizontal ? 32 : 24)}
-        height={width / numColumns - (horizontal ? 32 : 24)}
+        width={width / numColumns - (horizontal ? 34 : 26)}
+        height={width / numColumns - (horizontal ? 34 : 26)}
       >
         <Image
           source={{ uri: item.file }}

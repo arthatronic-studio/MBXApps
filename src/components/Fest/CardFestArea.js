@@ -42,10 +42,10 @@ const CardFestArea = ({
         borderRadius: 8,
       }}>
       <Container
-        width={width / numColumns - (horizontal ? 32 : 24)}
-        height={width / numColumns - (horizontal ? 32 : 24)}>
+        width={width / numColumns - (horizontal ? 34 : 26)}
+        height={width / numColumns - (horizontal ? 34 : 26)}>
         <Image
-          source={imageAssets.mBlocMarketJambi}
+          source={{uri: item.experience_image[0]}}
           style={{
             width: '100%',
             height: '100%',
@@ -63,7 +63,7 @@ const CardFestArea = ({
           type="medium"
           color={Color.black}
           lineHeight={20}>
-          mbloc Market
+          {item.name}
         </Text>
         <Text align="left" size={10} color={'#ACAAA5'} lineHeight={12}>
           Experience Area

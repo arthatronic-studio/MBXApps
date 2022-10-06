@@ -13,6 +13,7 @@ import PostingHeader from '../Posting/PostingHeader';
 import CardContentFest from './CardContentFest';
 import imageAssets from 'assets/images';
 import { fetchFestFind } from 'src/api-rest/fest/fetchFestFind';
+import { fetchFestLocation } from 'src/api-rest/fest/fetchFestLocation';
 
 const propTypes = {
   userProfileId: PropTypes.number,
@@ -69,13 +70,21 @@ const ListContenFest = ({
 
   const fetchData = async () => {
     let newData = [{id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}];
-    const body = {
-      id: id
-    }
-
-    const result = await fetchFestFind(body);
-    if (result.status) {
+    
+    if(productCategory === 'AREA'){
+      const body = {
+        type: "experience"
+      };
+      const result = await fetchFestLocation(body);
       newData = result.data;
+    }else{
+      const body = {
+        id: id
+      }
+      const result = await fetchFestFind(body);
+      if (result.status) {
+        newData = result.data;
+      }
     }
     if(productCategory === 'CardSchedule'){
       newData = [
