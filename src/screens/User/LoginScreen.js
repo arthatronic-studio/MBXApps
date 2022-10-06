@@ -67,6 +67,7 @@ const LoginScreen = ({navigation, route}) => {
   const isFocused = useIsFocused();
   const {height, width} = useWindowDimensions();
 
+  const auth = useSelector(state => state['auth']);
   const user = useSelector(state => state['user.auth'].login.user);
   const {register, forgetPassword, loading, error} = useSelector(
     state => state['user.auth'],
@@ -193,7 +194,7 @@ const LoginScreen = ({navigation, route}) => {
     setFallback(false);
 
     if (result.status) {
-      navigation.navigate('OtpScreen', { body, mustDelete: result.data });
+      navigation.navigate('OtpScreen', { body, mustDelete: result.data, ...route.params });
       return;
     }
 
@@ -395,6 +396,20 @@ const LoginScreen = ({navigation, route}) => {
             >
               Masuk
             </Button>
+
+            <Divider />
+
+            {route.params && !route.params.loginFrom && <Button
+              outline
+              onPress={() => {
+                const body = {
+                  phone: '6283891122802',
+                };
+                navigation.navigate('OtpScreen', { body, isGuest: true, ...route.params });
+              }}
+            >
+              Mode Tamu
+            </Button>}
 
             {/* {accessClient.LoginScreen.guesMode && <Container paddingTop={16}>
               <Button

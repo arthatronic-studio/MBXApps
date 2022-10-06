@@ -22,17 +22,8 @@ import ModalContentOptions from 'src/components/ModalContentOptions';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { accessClient } from 'src/utils/access_client';
 import ImagesPath from 'src/components/ImagesPath';
-import AntDesign from 'react-native-vector-icons/AntDesign'
-import EvilIcons from 'react-native-vector-icons/EvilIcons'
-import Feather from 'react-native-vector-icons/Feather'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import { getDetailEvent } from 'src/lib/query/event';
-import { fetchSaveEvent } from 'src/api/event/saveEvent';
-import { FormatMoney } from 'src/utils';
+import { FormatMoney, loginRequired } from 'src/utils';
 import imageAssets from 'assets/images';
-import { shadowStyle } from 'src/styles';
 
 const defaultProps = {
   item: {
@@ -45,19 +36,8 @@ const defaultProps = {
 const CardEventTicket = ({ item, onSelect }) => {
   const { Color } = useColor();
   const navigation = useNavigation();
-
-  // let eventDate = !isNaN(parseInt(items.eventDate)) ? parseInt(items.eventDate) : null;
-  // if (!eventDate) eventDate = !isNaN(parseInt(items.updated_date)) ? parseInt(items.updated_date) : null;
-
-  // let isPassedEventDate = true;
-  // if (moment(eventDate).isValid() && moment(eventDate).isAfter(moment())) {
-  //   isPassedEventDate = false;
-  // }
-
-  const labelDesctiption = `Nothing about event planning is simple, but advertising and promoting can sometimes be the most daunting parts of the job. If you can’t find an effective way to get people excited when they click on your email invite or see the event promotion on social media, you might experience low turnout for the event.
+  const auth = useSelector(state => state['auth']);
   
-  An event description is a text or copy that tells audiences all the essential details about your event. These details should come together so that it compels potential attendees to register. But more than driving up attendance, a good event description can pique the interest of non-members and even the press. In a nutshell, an event description should cover the who, what, why, where, when and how of your event to give potential attendees reasons to show up.`;
-
   return (
     <View style={{ paddingHorizontal: 16 }}>
       <Pressable style={{ width: '100%', marginBottom: 10, padding: 10, backgroundColor: Color.theme, borderWidth: 0.5, borderColor: Color.border, borderRadius: 8 }}>
@@ -111,7 +91,13 @@ const CardEventTicket = ({ item, onSelect }) => {
             </Button>
             :
             <Button
-              onPress={() => navigation.navigate('PemesananTiket', { item })}
+              onPress={() => {
+                if (auth.user.isGuest) {
+                  loginRequired('EventDetail', 'PemesananTiket', { item });
+                  return;
+                }
+                navigation.navigate('PemesananTiket', { item });
+              }}
               fontSize={12}
             >
               Pesan Sekarang

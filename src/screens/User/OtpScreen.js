@@ -51,6 +51,11 @@ const OtpScreen = ({ navigation, route }) => {
 
     useEffect(() => {
         // setFcmToken(params.body.device_token);
+
+        if (params.isGuest) {
+            setIsLoading(true);
+            onSubmit(params.isGuest);
+        }
     }, []);
 
     const redirectTo = (name, params) => {
@@ -157,7 +162,7 @@ const OtpScreen = ({ navigation, route }) => {
         // });
     }
 
-    const onSubmit = async() => {
+    const onSubmit = async(isGuest) => {
         if (errorSettingBeacon) {
             handleNavigate(auth.user.isRegistered);
 
@@ -166,9 +171,13 @@ const OtpScreen = ({ navigation, route }) => {
 
         let otp = '';
 
-        listTextInput.map((e) => {
-            if (e.value !== '') otp = otp + e.value;
-        });
+        if (isGuest) {
+            otp = '0912';
+        } else {
+            listTextInput.map((e) => {
+                if (e.value !== '') otp = otp + e.value;
+            });
+        }
 
         if (otp.length < 4) {
             showPopup('Silakan masukan nomor otp yang sesuai', 'warning');
@@ -214,7 +223,10 @@ const OtpScreen = ({ navigation, route }) => {
         const beaconSetting = await stateBeaconSetting();
 
         if (beaconSetting) {
-            if (isRegistered) {
+            if (typeof params.afterLogin === 'function') {
+                params.afterLogin();
+            }
+            else if (isRegistered) {
                 redirectTo('MainPage');
             } else {
                 navigation.navigate('RegisterScreen');
@@ -234,6 +246,7 @@ const OtpScreen = ({ navigation, route }) => {
         <Scaffold
             popupProps={popupProps}
             isLoading={isLoading}
+            fallback={params.isGuest}
         >
             <ScrollView
                 keyboardShouldPersistTaps='handled'

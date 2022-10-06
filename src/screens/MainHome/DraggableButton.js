@@ -144,7 +144,7 @@ export default class DraggableButton extends Component {
         {this.props.children}
 
         <Animated.View style={[imageStyle, { position: 'absolute', }]} {...this._panResponder.panHandlers}>
-          <View style={{ height: 40, width: 40, backgroundColor: 'red' }} />
+          {/* <View style={{ height: 40, width: 40, backgroundColor: 'red' }} /> */}
         </Animated.View>
       </View>
     );

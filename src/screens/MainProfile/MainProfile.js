@@ -372,7 +372,7 @@ const MainProfile = ({navigation, route}) => {
 
         <Line height={8} width="100%" color="#F4F4F4" />
 
-        {auth.user && auth.user.id !== 6 && (
+        {auth.user && auth.user.member_right === 1 && (
           <Container padding={16}>
             <TouchableOpacity
               onPress={() => {
@@ -394,7 +394,7 @@ const MainProfile = ({navigation, route}) => {
           </Container>
         )}
 
-        {auth.user && auth.user.id !== 6 && (
+        {auth.user && auth.user.member_right === 1 && (
           <Container padding={16}>
             <TouchableOpacity
               onPress={() => {

@@ -56,7 +56,7 @@ const Button = (props) => {
 
   if (outline) {
     buttonColor = disabled ? Color.border : fontColor || Color.textInput;
-    textColor = color || Color.primary;
+    textColor = color || Color.primaryDark;
     borderColor = textColor;
   }
 

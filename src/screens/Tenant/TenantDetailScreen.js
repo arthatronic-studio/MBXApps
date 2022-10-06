@@ -31,7 +31,7 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { getDetailEvent } from 'src/lib/query/event';
 import { fetchSaveEvent } from 'src/api/event/saveEvent';
-import { FormatMoney } from 'src/utils';
+import { FormatMoney, loginRequired } from 'src/utils';
 import imageAssets from 'assets/images';
 import { isIphoneNotch, statusBarHeight } from 'src/utils/constants';
 import { fetchEatCartAdd } from 'src/api-rest/fetchEatCartAdd';
@@ -603,7 +603,11 @@ const TenantDetailScreen = ({ navigation, route }) => {
             <Text align='left' size={11}>Harga</Text>
             <Divider height={2} />
             <Text align='left' size={16} type='medium'>{FormatMoney.getFormattedMoney(item.price || 0)}</Text>
-            <Divider />
+          </Container>
+
+          <Divider />
+
+          <Container>
             <View
               style={{
                 flexDirection: 'row',
@@ -660,7 +664,12 @@ const TenantDetailScreen = ({ navigation, route }) => {
               <Container style={{ flex: 1 }}>
                 <Button
                   onPress={() => {
-                    console.log(cartLocationId, items.id);
+                    if (auth.user.isGuest) {
+                      setCurrentIndexProduct(-1);
+                      loginRequired('TenantDetailScreen', 'TenantDetailScreen', params);
+                      return;
+                    }
+
                     if (cartLocationId && cartLocationId !== items.id) {
                       Alert(
                         'Konfirmasi',
@@ -679,21 +688,6 @@ const TenantDetailScreen = ({ navigation, route }) => {
                   Tambah Keranjang
                 </Button>
               </Container>
-              {/* <Container paddingLeft={16}>
-                <TouchableOpacity
-                  onPress={() => {
-                    let newArr = [...listProducts];
-                    newArr[currentIndexProduct].selected = false;
-                    setListProducts(newArr);
-                  }}
-                >
-                  <FontAwesome
-                    name="trash-o"
-                    size={28}
-                    color={Color.error}
-                  />
-                </TouchableOpacity>
-              </Container> */}
             </Row>
           </Container>
         </View>
@@ -735,14 +729,15 @@ const TenantDetailScreen = ({ navigation, route }) => {
                   <FontAwesome name={'bookmark-o'} size={24} color={Color.text} />
                 )}
               </TouchableOpacity> */}
-              <Image
+
+              {/* <Image
                 source={imageAssets.moreOutline}
                 style={{
                   height: 24,
                   width: 24,
                 }}
                 resizeMode='contain'
-              />
+              /> */}
             </View>
           }
         />
