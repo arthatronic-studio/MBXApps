@@ -230,7 +230,7 @@ const EventDetail = ({ navigation, route }) => {
         }}
         style={{
           width: '100%',
-          aspectRatio: 16 / 9,
+          aspectRatio: 1,
         }}
       >
         <Image

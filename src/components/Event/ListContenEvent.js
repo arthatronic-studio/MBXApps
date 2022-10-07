@@ -105,7 +105,7 @@ const ListContenEvent = ({ userProfileId, productCategory, name, horizontal, sty
                 }}
                 productCategory={productCategory}
                 showSeeAllText={showSeeAllText}
-                style={{paddingHorizontal: 8}}
+                style={{paddingHorizontal: horizontal ? 16 : 8}}
             />
         )
     }
@@ -135,7 +135,7 @@ const ListContenEvent = ({ userProfileId, productCategory, name, horizontal, sty
                 renderSkeleton()
                 :
                 <FlatList
-                    keyExtractor={(item, index) => item.toString() + index}
+                    keyExtractor={(_, index) => index.toString()}
                     data={itemData.data}
                     horizontal={horizontal}
                     showsHorizontalScrollIndicator={false}
