@@ -1,5 +1,7 @@
 const iconApp = require('./icon-app.png');
 const iconSplash = require('./icon-splash.png');
+const iconOnboarding = require('./icon-onboarding.png');
+const iconOnboarding2 = require('./icon-onboarding-2.png');
 const imageBlank = require('./image-blank.png');
 const imageEmptyAuction = require('./image-empty-auction.png');
 const imageEmpty = require('./image-empty.png');
@@ -122,10 +124,16 @@ const bookFestival3 = require('./book-festival-3.png');
 const bannerMfest2 = require('./banner-mfest-2.png');
 const aboutFest3 = require('./about-fest-3.png');
 const inbox = require('./inbox.png');
+const iconMenuHome = require('./icon-menu-home.png');
+const iconMenuSecond = require('./icon-menu-second.png');
+const iconMenuNotif = require('./icon-menu-notif.png');
+const iconMenuProfile = require('./icon-menu-profile.png');
 
 export {
   iconApp,
   iconSplash,
+  iconOnboarding,
+  iconOnboarding2,
   imageBlank,
   imageEmptyAuction,
   imageEmpty,
@@ -183,6 +191,12 @@ export {
 export const imageAssets = {
   iconApp,
   iconSplash,
+  iconOnboarding,
+  iconOnboarding2,
+  iconMenuHome,
+  iconMenuNotif,
+  iconMenuSecond,
+  iconMenuProfile,
   imageBlank,
   imageEmptyAuction,
   imageEmpty,

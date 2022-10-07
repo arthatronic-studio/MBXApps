@@ -112,7 +112,7 @@ const MainProfile = ({navigation, route}) => {
   const onPressLogout = () => {
     dispatch({type: 'AUTH.CLEAR'});
     dispatch({type: 'USER.LOGOUT'});
-    redirectTo('LoginScreen');
+    redirectTo('LoginScreenV2');
 
     // dispatch({type: 'ARTICLE.CLEAR_HISTORY'});
     // currentSocket.disconnect();

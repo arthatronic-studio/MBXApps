@@ -31,7 +31,7 @@ const SplashScreen = ({navigation, route}) => {
       } else {
         dispatch({ type: 'AUTH.CLEAR' });
         dispatch({type: 'USER.LOGOUT'});
-        redirectTo('OnBoardingScreen');
+        redirectTo('OnBoardingScreenV2');
       }
     }, 3000);
   }, []);
@@ -69,13 +69,13 @@ const SplashScreen = ({navigation, route}) => {
     <Scaffold
       showHeader={false}
       style={{
-        backgroundColor: Color.primary
+        backgroundColor: '#141414',
       }}
-      statusBarColor={Color.primary}
+      statusBarColor={'#141414'}
       popupProps={popupProps}
       fallback={isLoading}
     >
-      <View style={{position: 'absolute', width: '100%', aspectRatio: 1 }}>
+      {/* <View style={{position: 'absolute', width: '100%', aspectRatio: 1 }}>
         <Image
           source={bgSplashHeader}
           style={{
@@ -83,7 +83,7 @@ const SplashScreen = ({navigation, route}) => {
             height: '100%',
           }}
         />
-      </View>
+      </View> */}
 
       <Container
         height={height}
@@ -93,7 +93,7 @@ const SplashScreen = ({navigation, route}) => {
       >
         <View
           style={{
-            width: '22%',
+            width: '44%',
             aspectRatio: 1,
             marginBottom: 12,
           }}
@@ -108,9 +108,9 @@ const SplashScreen = ({navigation, route}) => {
         />
         </View>
 
-        <Text size={11} type='bold'>
+        {/* <Text size={11} type='bold'>
           blocX
-        </Text>
+        </Text> */}
 
         {errorSettingBeacon && <View style={{width: '100%', paddingTop: 16}}>
           <Button
@@ -121,14 +121,26 @@ const SplashScreen = ({navigation, route}) => {
         </View>}
       </Container>
 
-      <View style={{position: 'absolute', bottom: 0, width: '25%', aspectRatio: 1 }}>
+      <View style={{position: 'absolute', bottom: 50, width: '100%', alignItems: 'center'}}>
         <Image
           source={bgSplashFooter}
           style={{
-            width: '100%',
-            height: '100%',
+            width: '22%',
+            resizeMode:"contain"
           }}
         />
+      </View>
+      <View style={{position: 'absolute', bottom: 0, width: '100%' }}>
+        <View
+          style={{ 
+            backgroundColor: '#EEFF00',
+            paddingVertical: 15
+           }}
+        >
+          <Text numberOfLines={1} size={14} color="#141414" type="medium" lineHeight={17}>
+          locx.id  •  blocX  •  The Experience Agitator  •  blocx.com            
+          </Text>
+        </View>
       </View>
     </Scaffold>
   );

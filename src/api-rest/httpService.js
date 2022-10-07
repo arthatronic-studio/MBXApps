@@ -33,7 +33,7 @@ const redirect = async() => {
         CommonActions.reset({
           index: 0,
           routes: [
-            { name: 'LoginScreen', params: { logout: true } },
+            { name: 'LoginScreenV2', params: { logout: true } },
           ],
         })
     );

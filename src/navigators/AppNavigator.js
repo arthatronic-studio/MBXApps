@@ -10,6 +10,7 @@ import MainHome from 'src/screens/MainHome/MainHome';
 import MainProfile from 'src/screens/MainProfile/MainProfile';
 import MainPage from '@src/navigators/BottomTabsNavigator';
 import OnBoardingScreen from '@src/screens/OnBoardingScreen';
+import OnBoardingScreenV2 from '@src/screens/OnBoardingScreenV2';
 import CreateEmergencyScreen from '@src/screens/CreateEmergencyScreen';
 import PDFReaderScreen from 'src/screens/PDFReaderScreen';
 import MusicPlayerScreen from 'src/screens/MusicPlayerScreen';
@@ -22,10 +23,12 @@ import ManageAddressScreen from 'src/screens/Address/ManageAddressScreen';
 
 // user
 import LoginScreen from '@src/screens/User/LoginScreen';
+import LoginScreenV2 from '@src/screens/User/LoginScreenV2';
 import RegisterScreen from '@src/screens/User/RegisterScreen';
 import ForgotPasswordScreen from '@src/screens/User/ForgotPasswordScreen';
 import UserChangePassword from '@src/screens/User/UserChangePassword';
 import OtpScreen from 'src/screens/User/OtpScreen';
+import OtpScreenV2 from 'src/screens/User/OtpScreenV2';
 
 // topup
 import TopUpScreen from '@src/screens/Topup/TopUpScreen';
@@ -335,6 +338,7 @@ function AppNavigator() {
       <Screen name="MainPage" component={MainPage} />
       <Screen name="MainProfile" component={MainProfile} />
       <Screen name="OnBoardingScreen" component={OnBoardingScreen} />
+      <Screen name="OnBoardingScreenV2" component={OnBoardingScreenV2} />
       <Screen name="TrackingOrder" component={TrackingOrder} />
       <Screen name="CreateEmergencyScreen" component={CreateEmergencyScreen} />
       <Screen name="PDFReaderScreen" component={PDFReaderScreen} />
@@ -414,10 +418,12 @@ function AppNavigator() {
       <Screen name="IncomingOrder" component={IncomingOrder} />
       {/* user */}
       <Screen name="LoginScreen" component={LoginScreen} />
+      <Screen name="LoginScreenV2" component={LoginScreenV2} />
       <Screen name="RegisterScreen" component={RegisterScreen} />
       <Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} />
       <Screen name="UserChangePassword" component={UserChangePassword} />
       <Screen name="OtpScreen" component={OtpScreen} />
+      <Screen name="OtpScreenV2" component={OtpScreenV2} />
       {/* topup */}
       <Screen name="TopUpScreen" component={TopUpScreen} />
       {/* content */}

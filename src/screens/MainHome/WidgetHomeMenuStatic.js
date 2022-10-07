@@ -157,7 +157,7 @@ const WidgetHomeMenuStatic = () => {
   };
 
   const menuPerColumn = listMenuHome.length < numOfColumn ? listMenuHome.length : numOfColumn;
-  const widthPerMenu = 100 / menuPerColumn;
+  const widthPerMenu = (100 - menuPerColumn) / menuPerColumn;
   const paddingInMenu = 16;
 
   if (listMenuHome.length === 0) return <View />;
@@ -210,6 +210,10 @@ const WidgetHomeMenuStatic = () => {
                 width: `${widthPerMenu}%`,
                 alignItems: 'center',
                 marginBottom: paddingInMenu,
+                marginHorizontal: '0.5%',
+                borderWidth: 1,
+                backgroundColor: '#141414',
+                paddingVertical: 20,
               }}
             >
               <View
@@ -234,7 +238,7 @@ const WidgetHomeMenuStatic = () => {
                 />
               </View>
               
-              <Text size={10} type='medium' style={menu.comingsoon && {opacity: 0.3}}>
+              <Text size={10} type='medium' style={menu.comingsoon && {opacity: 0.3}} color="#EEEEEE">
                 {menu.name}
               </Text>
 
