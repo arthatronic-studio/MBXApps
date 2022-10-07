@@ -51,6 +51,7 @@ import ModalNeedUpdateProfile from './ModalNeedUpdateProfile';
 import ModalBeaconCheckin from './ModalBeaconCheckin';
 import DraggableButton from './DraggableButton';
 import ListContenEvent from 'src/components/Event/ListContenEvent';
+import PostingHeader from 'src/components/Posting/PostingHeader';
 
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
@@ -738,40 +739,40 @@ const MainHome = ({ navigation, route }) => {
         </View>
       }
     >
-      <DraggableButton>
-        <ScrollView
-          scrollEventThrottle={16}
-          onScroll={Animated.event(
-            [
-              {
-                nativeEvent: {
-                  contentOffset: { y: animationValue },
-                },
+      {/* <DraggableButton> */}
+      <ScrollView
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: {
+                contentOffset: { y: animationValue },
               },
-            ],
-            { useNativeDriver: false },
-          )}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          }
-        >
-          <Container color={Color.theme} paddingTop={8} paddingBottom={8}>
-            <Animated.View
-              style={{
-                width,
-                height: width / 3,
-                position: 'absolute',
-                borderBottomLeftRadius: 24,
-                borderBottomRightRadius: 24,
-              }}
-            />
+            },
+          ],
+          { useNativeDriver: false },
+        )}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+      >
+        <Container color={Color.theme} paddingTop={8} paddingBottom={8}>
+          <Animated.View
+            style={{
+              width,
+              height: width / 3,
+              position: 'absolute',
+              borderBottomLeftRadius: 24,
+              borderBottomRightRadius: 24,
+            }}
+          />
 
-            {/* hide user greetings */}
-            {/* <View
+          {/* hide user greetings */}
+          {/* <View
             style={{
               flexDirection: 'row',
               width: '100%',
@@ -797,56 +798,14 @@ const MainHome = ({ navigation, route }) => {
             </View>
           </View> */}
 
-            {isCheckin &&
-              <Container padding={16} paddingTop={8}>
-                <Container padding={14} color={Color.successLight} radius={8}>
-                  <Row justify='space-between'>
-                    <Row>
-                      <Container paddingRight={16}>
-                        <Image
-                          source={imageAssets.building}
-                          style={{
-                            width: 24,
-                            height: 24,
-                          }}
-                        />
-                      </Container>
-
-                      <Column>
-                        <Text size={10} color={Color.placeholder} letterSpacing={0.4}>Telah masuk di</Text>
-                        <Divider height={2} />
-                        <Text size={12} type='medium' letterSpacing={0.5}>{auth.user && auth.user.activityInfo && auth.user.activityInfo.location ? auth.user.activityInfo.location.name : ''}</Text>
-                      </Column>
-                    </Row>
-
-                    <TouchableOpacity
-                      onPress={() => {
-                        Alert(
-                          'Konfirmasi',
-                          'Keluar dari Area?',
-                          () => onCheckout(),
-                        );
-                      }}
-                      style={{
-
-                      }}
-                    >
-                      <Text color={Color.error} size={12} type='medium'>
-                        Keluar
-                      </Text>
-                    </TouchableOpacity>
-                  </Row>
-                </Container>
-              </Container>
-            }
-
-            {!isCheckin && stateListCheckinUID.length > 0 && <Container padding={16} paddingTop={8}>
-              <Container padding={14} color={Color.warningLight} radius={8}>
+          {isCheckin &&
+            <Container padding={16} paddingTop={8}>
+              <Container padding={14} color={Color.successLight} radius={8}>
                 <Row justify='space-between'>
                   <Row>
                     <Container paddingRight={16}>
                       <Image
-                        source={imageAssets.airdrop}
+                        source={imageAssets.building}
                         style={{
                           width: 24,
                           height: 24,
@@ -855,16 +814,58 @@ const MainHome = ({ navigation, route }) => {
                     </Container>
 
                     <Column>
-                      <Text type='medium' size={12} letterSpacing={0.5}>Checkpoint Disekitar</Text>
+                      <Text size={10} color={Color.placeholder} letterSpacing={0.4}>Telah masuk di</Text>
                       <Divider height={2} />
-                      <Text size={10} letterSpacing={0.15} color={Color.placeholder} numberOfLines={1}>Sedang memverifikasi untuk masuk kedalam area</Text>
+                      <Text size={12} type='medium' letterSpacing={0.5}>{auth.user && auth.user.activityInfo && auth.user.activityInfo.location ? auth.user.activityInfo.location.name : ''}</Text>
                     </Column>
                   </Row>
+
+                  <TouchableOpacity
+                    onPress={() => {
+                      Alert(
+                        'Konfirmasi',
+                        'Keluar dari Area?',
+                        () => onCheckout(),
+                      );
+                    }}
+                    style={{
+
+                    }}
+                  >
+                    <Text color={Color.error} size={12} type='medium'>
+                      Keluar
+                    </Text>
+                  </TouchableOpacity>
                 </Row>
               </Container>
-            </Container>}
+            </Container>
+          }
 
-            {/* {beaconScanning ?
+          {!isCheckin && stateListCheckinUID.length > 0 && <Container padding={16} paddingTop={8}>
+            <Container padding={14} color={Color.warningLight} radius={8}>
+              <Row justify='space-between'>
+                <Row>
+                  <Container paddingRight={16}>
+                    <Image
+                      source={imageAssets.airdrop}
+                      style={{
+                        width: 24,
+                        height: 24,
+                      }}
+                    />
+                  </Container>
+
+                  <Column>
+                    <Text type='medium' size={12} letterSpacing={0.5}>Checkpoint Disekitar</Text>
+                    <Divider height={2} />
+                    <Text size={10} letterSpacing={0.15} color={Color.placeholder} numberOfLines={1}>Sedang memverifikasi untuk masuk kedalam area</Text>
+                  </Column>
+                </Row>
+              </Row>
+            </Container>
+          </Container>}
+
+          {/* {beaconScanning ?
             <View style={{ width: '100%', paddingHorizontal: 16, paddingBottom: 16 }}>
               <View
                 style={{
@@ -893,90 +894,126 @@ const MainHome = ({ navigation, route }) => {
             </View>
           } */}
 
-            {showDebug && renderDebug()}
+          {showDebug && renderDebug()}
 
-            <Divider height={spaceContentSize * 2} />
+          <Divider height={spaceContentSize * 2} />
 
-            <ListContenEvent
-              productCategory='EVENT'
-              name='Event'
-              title='● SECURE YOUR TICKET NOW'
-              showHeader
-              horizontal
+          <ListContenEvent
+            productCategory='EVENT'
+            name='Event'
+            title='● SECURE YOUR TICKET NOW'
+            showHeader
+            horizontal
+            showSeeAllText={false}
+          />
+
+          {auth.user && auth.user.activeEvent && <Container paddingHorizontal={16} paddingBottom={16}>
+            <Container padding={10} radius={8} color='#F0FBFF'>
+              <Row justify='space-between'>
+                <Row>
+                  <Container width='14%' style={{ aspectRatio: 1 }}>
+                    <Image
+                      source={{ uri: auth.user.activeEvent.imageUrl }}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: 8,
+                      }}
+                    />
+                  </Container>
+
+                  <Container paddingHorizontal={12} width='86%'>
+                    <Text align='left' size={10} color={Color.placeholder} letterSpacing={0.4}>Tiket Aktif</Text>
+                    <Divider height={2} />
+                    <Text align='left' size={12} type='medium' numberOfLines={2} letterSpacing={0.5}>{auth.user.activeEvent.title}</Text>
+                  </Container>
+                </Row>
+              </Row>
+            </Container>
+          </Container>}
+
+          {isSecurity && <Container padding={16} paddingTop={8}>
+            <Container padding={14} color={Color.border} radius={8}>
+              <Row justify='space-between'>
+                <Row>
+                  <Container paddingRight={16}>
+                    <Image
+                      source={imageAssets.people}
+                      style={{
+                        width: 32,
+                        height: 32,
+                      }}
+                    />
+                  </Container>
+                  <Column>
+                    <Text color={Color.placeholder} type='medium' size={11} letterSpacing={0.5}>Total Pengunjung</Text>
+                    <Divider height={2} />
+                    <Text type='medium' size={16} letterSpacing={0.15}>{visitorCount} Orang</Text>
+                  </Column>
+                </Row>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('VisitorScreen');
+                  }}
+                >
+                  <Text color={Color.primaryDark} type='medium' size={12} letterSpacing={0.5}>Lihat Detail</Text>
+                </TouchableOpacity>
+              </Row>
+            </Container>
+          </Container>}
+
+          <WidgetHomeMenuStatic />
+
+          <Divider />
+
+          <HighlightTenant
+            title='Toko Populer'
+            tenantType='shop'
+          />
+
+          <HighlightTenant
+            title='Makanan Favorit'
+            tenantType='eat'
+          />
+
+          <View>
+            <Divider />
+
+            <PostingHeader
+              title='● ABOUT'
               showSeeAllText={false}
             />
 
-            {auth.user && auth.user.activeEvent && <Container paddingHorizontal={16} paddingBottom={16}>
-              <Container padding={10} radius={8} color='#F0FBFF'>
-                <Row justify='space-between'>
-                  <Row>
-                    <Container width='14%' style={{ aspectRatio: 1 }}>
-                      <Image
-                        source={{ uri: auth.user.activeEvent.imageUrl }}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          borderRadius: 8,
-                        }}
-                      />
-                    </Container>
+            <Container paddingHorizontal={16} paddingTop={11}>
+              <Text size={29} align='left'>
+                Customers as Industrial Age
+                phenomenon will be
+                replaced by <Text size={29} type='semibold'>Creative Prosumers</Text>,
+                people who produce many of their own
+                goods and services.{' '}
+                <View>
+                  <Text size={11} type='medium' align='left'>Philip Kotler</Text>
+                  <Text size={11} type='medium' align='left'>-1986</Text>
+                </View>
+              </Text>
 
-                    <Container paddingHorizontal={12} width='86%'>
-                      <Text align='left' size={10} color={Color.placeholder} letterSpacing={0.4}>Tiket Aktif</Text>
-                      <Divider height={2} />
-                      <Text align='left' size={12} type='medium' numberOfLines={2} letterSpacing={0.5}>{auth.user.activeEvent.title}</Text>
-                    </Container>
-                  </Row>
-                </Row>
-              </Container>
-            </Container>}
+              <Divider height={11} />
 
-            {isSecurity && <Container padding={16} paddingTop={8}>
-              <Container padding={14} color={Color.border} radius={8}>
-                <Row justify='space-between'>
-                  <Row>
-                    <Container paddingRight={16}>
-                      <Image
-                        source={imageAssets.people}
-                        style={{
-                          width: 32,
-                          height: 32,
-                        }}
-                      />
-                    </Container>
-                    <Column>
-                      <Text color={Color.placeholder} type='medium' size={11} letterSpacing={0.5}>Total Pengunjung</Text>
-                      <Divider height={2} />
-                      <Text type='medium' size={16} letterSpacing={0.15}>{visitorCount} Orang</Text>
-                    </Column>
-                  </Row>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate('VisitorScreen');
-                    }}
-                  >
-                    <Text color={Color.primaryDark} type='medium' size={12} letterSpacing={0.5}>Lihat Detail</Text>
-                  </TouchableOpacity>
-                </Row>
-              </Container>
-            </Container>}
+              <Text size={16} type='medium' align='left'>
+                We believe colaboration make us stronger,
+                join and be part of our movement!
+              </Text>
 
-            <WidgetHomeMenuStatic />
-
-            <Divider />
-
-            <HighlightTenant
-              title='Toko Populer'
-              tenantType='shop'
-            />
-
-            <HighlightTenant
-              title='Makanan Favorit'
-              tenantType='eat'
-            />
-          </Container>
-        </ScrollView>
-      </DraggableButton>
+                <TouchableOpacity
+                  style={{width: '50%', marginTop: 24, alignSelf: 'flex-end', paddingVertical: 12, borderWidth: 1, borderColor: Color.text}}
+                >
+                  <Text>Spark Ideas</Text>
+                </TouchableOpacity>
+            </Container>
+          </View>
+        </Container>
+      </ScrollView>
+      {/* </DraggableButton> */}
 
       {/* modal checkin */}
       {/* <Modal

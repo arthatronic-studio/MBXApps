@@ -2,10 +2,10 @@ import {store} from '@src/state/redux';
 import {useSelector} from 'react-redux';
 
 const staticColors = {
-  primary: '#FCD100',
-  primaryDark: '#B88B32',
-  primaryMoreDark: '#574800',
-  primarySoft: '#FFEB8A',
+  primary: '#141414',
+  primaryDark: '#141414',
+  primaryMoreDark: '#141414',
+  primarySoft: '#121212',
   secondary: '#6A7479',
   tertiary: '#645FF2',
   textButtonInline: '#4B4639',
@@ -40,7 +40,7 @@ export const lightModeColors = {
   colorDominant: 'light',
   overflow: 'rgba(0, 0, 0, 0.3)',
   theme: '#FFFFFE',
-  text: '#1D1D1B',
+  text: '#141414',
   textSoft: '#575651',
   textInput: '#FFFFFF',
   border: '#EEEEEE',

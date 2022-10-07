@@ -112,7 +112,7 @@ const TabBarComponentV2 = (props) => {
         >
             <Line
                 width={width}
-                height={2}
+                height={1}
                 color={Color.black}
                 style={{ position: 'absolute', top: 0 }}
             />
@@ -174,10 +174,12 @@ const TabBarComponentV2 = (props) => {
                                 >
                                     <View
                                         style={{
-                                            backgroundColor: isRouteActive ? '#121212' : 'transparent',
+                                            backgroundColor: isRouteActive ? Color.primary : 'transparent',
                                             padding: 12,
                                             borderRadius: 120,
-                                            marginBottom: 4,
+                                            marginBottom: 0,
+                                            borderWidth: 1,
+                                            borderColor: isRouteActive ? 'transparent' : Color.primary,
                                         }}
                                     >
                                         {route.imageAsset ?
@@ -186,7 +188,7 @@ const TabBarComponentV2 = (props) => {
                                                 style={{
                                                     height: 16,
                                                     width: 16,
-                                                    tintColor: isRouteActive ? '#EEEEEE' : '#231F20'
+                                                    tintColor: isRouteActive ? Color.textInput : Color.primary
                                                 }}
                                             />
                                             :

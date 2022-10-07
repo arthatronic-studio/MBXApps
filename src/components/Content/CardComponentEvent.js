@@ -114,34 +114,33 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                 }}
                 style={{
                     width: width / numColumns - (horizontal ? (width * 0.3) : 16),
-                    // aspectRatio: 4/5,
                     paddingHorizontal: 8,
                     marginTop: 12,
                     borderRadius: 16,
                     ...style,
                 }}
             >
-                <View style={{ width: '100%', backgroundColor: Color.theme, borderWidth: 1, borderColor: Color.text }}>
-                    <View style={{ width: '100%', padding: 8, paddingVertical: 6, flexDirection: 'row', borderBottomWidth: 1, borderColor: Color.text }}>
+                <View style={{ width: '100%', backgroundColor: Color.theme, borderWidth: 1, borderColor: Color.primary }}>
+                    <View style={{ width: '100%', padding: 8, paddingVertical: 6, flexDirection: 'row', borderBottomWidth: 1, borderColor: Color.primary }}>
                         <View style={{ flex: 1, alignItems: 'flex-start' }}>
-                            <Text size={11} type='medium' letterSpacing={0.04}>TICKET</Text>
+                            <Text size={11} type='medium' letterSpacing={0.04}>(H) TICKET</Text>
                         </View>
                         <View style={{ flex: 1, alignItems: 'flex-end' }}>
                             <Text size={11} type='medium' letterSpacing={0.04}>{FormatMoney.getFormattedMoney(item.lowest_price ? item.lowest_price.price : 0)}</Text>
                         </View>
                     </View>
 
-                    <View style={{ width: '100%', aspectRatio: 9/4, padding: 8, borderBottomWidth: 1, borderColor: Color.text }}>
+                    <View style={{ width: '100%', aspectRatio: 9/4, padding: 8, borderBottomWidth: 1, borderColor: Color.primary }}>
                         <Text size={27} type='medium' align='left' numberOfLines={3}>{item.title}</Text>
                     </View>
 
-                    <View style={{ width: '100%', padding: 8, paddingVertical: 4, borderBottomWidth: 1, borderColor: Color.text }}>
-                        <Text type='medium' align='left' numberOfLines={1}>100+ Local Bands</Text>
-                        <Text size={9} type='medium' align='left' numberOfLines={2}>ZIP, SORE, MOCCA, EFEK RUMAH KACA, FINAL ATTACK & Many More</Text>
+                    <View style={{ width: '100%', padding: 8, paddingVertical: 4, borderBottomWidth: 1, borderColor: Color.primary }}>
+                        <Text type='medium' align='left' numberOfLines={1}>(H) 100+ Local Bands</Text>
+                        <Text size={9} type='medium' align='left' numberOfLines={2}>(H) ZIP, SORE, MOCCA, EFEK RUMAH KACA, FINAL ATTACK & Many More</Text>
                     </View>
 
                     <View style={{ width: '100%', flexDirection: 'row' }}>
-                        <View style={{ width: '50%', aspectRatio: 1, borderRightWidth: 1, borderColor: Color.text, }}>
+                        <View style={{ width: '50%', aspectRatio: 1, borderRightWidth: 1, borderColor: Color.primary }}>
                             <Image
                                 source={{ uri: item.image }}
                                 style={{
@@ -152,11 +151,11 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                         </View>
 
                         <View style={{ width: '50%', aspectRatio: 1 }}>
-                            <View style={{ width: '100%', height: '50%', padding: 12, justifyContent: 'center', backgroundColor: Color.text }}>
+                            <View style={{ width: '100%', height: '50%', paddingHorizontal: 12, justifyContent: 'center', backgroundColor: Color.primary }}>
                                 <Text type='medium' numberOfLines={3} size={11} align='left' color={Color.textInput}>{item.formatted_date}</Text>
                             </View>
-                            <View style={{ width: '100%', height: '50%', padding: 12, justifyContent: 'center' }}>
-                                <Text type='medium' numberOfLines={2} size={11} align='left' color={Color.placeholder} letterSpacing={0.5}>{item.location}</Text>
+                            <View style={{ width: '100%', height: '50%', paddingHorizontal: 12, justifyContent: 'center' }}>
+                                <Text type='medium' numberOfLines={3} size={11} align='left' color={Color.placeholder} letterSpacing={0.5}>{item.location}</Text>
                             </View>
                         </View>
                     </View>
