@@ -113,72 +113,50 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                     onPress();
                 }}
                 style={{
-                    width: width / numColumns - (horizontal ? 32 : 16),
+                    width: width / numColumns - (horizontal ? (width * 0.3) : 16),
+                    // aspectRatio: 4/5,
                     paddingHorizontal: 8,
                     marginTop: 12,
                     borderRadius: 16,
                     ...style,
                 }}
             >
-                <View style={{ width: '100%', backgroundColor: Color.theme, borderRadius: 16, ...shadowStyle }}>
-                    <Image
-                        source={{ uri: item.image }}
-                        style={{
-                            width: '100%',
-                            aspectRatio: 2 / 1,
-                            justifyContent: 'flex-end',
-                            alignItems: 'center',
-                            borderTopLeftRadius: 16,
-                            borderTopRightRadius: 16,
-                            backgroundColor: Color.border,
-                        }}
-                    />
+                <View style={{ width: '100%', backgroundColor: Color.theme, borderWidth: 1, borderColor: Color.text }}>
+                    <View style={{ width: '100%', padding: 8, paddingVertical: 6, flexDirection: 'row', borderBottomWidth: 1, borderColor: Color.text }}>
+                        <View style={{ flex: 1, alignItems: 'flex-start' }}>
+                            <Text size={11} type='medium' letterSpacing={0.04}>TICKET</Text>
+                        </View>
+                        <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                            <Text size={11} type='medium' letterSpacing={0.04}>{FormatMoney.getFormattedMoney(item.lowest_price ? item.lowest_price.price : 0)}</Text>
+                        </View>
+                    </View>
 
-                    {/* <View style={{ backgroundColor: Color.theme, width: 40, aspectRatio: 1, borderRadius: 20, position: 'absolute', top: 10, right: 10, alignItems: 'center', justifyContent: 'center' }}>
-                        <Ionicons name='bookmark-outline' size={22} color={Color.primarySoft} />
-                    </View> */}
+                    <View style={{ width: '100%', aspectRatio: 9/4, padding: 8, borderBottomWidth: 1, borderColor: Color.text }}>
+                        <Text size={27} type='medium' align='left' numberOfLines={3}>{item.title}</Text>
+                    </View>
 
-                    <View style={{ width: '100%', padding: 10 }}>
-                        <Text type='medium' align='left' numberOfLines={1}>{item.title}</Text>
+                    <View style={{ width: '100%', padding: 8, paddingVertical: 4, borderBottomWidth: 1, borderColor: Color.text }}>
+                        <Text type='medium' align='left' numberOfLines={1}>100+ Local Bands</Text>
+                        <Text size={9} type='medium' align='left' numberOfLines={2}>ZIP, SORE, MOCCA, EFEK RUMAH KACA, FINAL ATTACK & Many More</Text>
+                    </View>
 
-                        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 8 }}>
-                            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-start' }}>
-                                <Image
-                                    style={{ height: 16, width: 16, tintColor: Color.placeholder }}
-                                    source={imageAssets.location}
-                                />
-                                <Divider width={4} />
-                                <Text type='medium' numberOfLines={2} size={12} align='left' color={Color.placeholder} letterSpacing={0.5}>{item.location}</Text>
-                            </View>
-                            <Divider />
-                            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-start' }}>
-                                <Image
-                                    style={{ height: 16, width: 16, tintColor: Color.placeholder }}
-                                    source={imageAssets.calendar}
-                                />
-                                <Divider width={4} />
-                                <>
-                                    <Text type='medium' numberOfLines={2} size={12} align='left' color={Color.placeholder} letterSpacing={0.5}>{item.formatted_date}</Text>
-                                    <Divider height={8} />
-                                </>
-                            </View>
+                    <View style={{ width: '100%', flexDirection: 'row' }}>
+                        <View style={{ width: '50%', aspectRatio: 1, borderRightWidth: 1, borderColor: Color.text, }}>
+                            <Image
+                                source={{ uri: item.image }}
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                }}
+                            />
                         </View>
 
-                        <View style={{width: '100%', flexDirection: 'row', paddingTop: 16}}>
-                            <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'center'}}>
-                                <Text size={11} type='medium' letterSpacing={0.5}>Mulai dari</Text>
-                                <Text size={14} type='medium' letterSpacing={0.1}>{FormatMoney.getFormattedMoney(item.lowest_price ? item.lowest_price.price : 0)}</Text>
+                        <View style={{ width: '50%', aspectRatio: 1 }}>
+                            <View style={{ width: '100%', height: '50%', padding: 12, justifyContent: 'center', backgroundColor: Color.text }}>
+                                <Text type='medium' numberOfLines={3} size={11} align='left' color={Color.textInput}>{item.formatted_date}</Text>
                             </View>
-                            <View style={{flex: 0.8}}>
-                                <Button
-                                    onPress={() => {
-                                        onPress();
-                                    }}
-                                    fontSize={12}
-                                >
-                                    Pesan Sekarang
-                                    {/* <Ionicons name='arrow-forward' size={16} color={Color.textButtonInline} /> */}
-                                </Button>
+                            <View style={{ width: '100%', height: '50%', padding: 12, justifyContent: 'center' }}>
+                                <Text type='medium' numberOfLines={2} size={11} align='left' color={Color.placeholder} letterSpacing={0.5}>{item.location}</Text>
                             </View>
                         </View>
                     </View>

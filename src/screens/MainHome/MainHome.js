@@ -50,6 +50,7 @@ import ModalLoading from './ModalLoading';
 import ModalNeedUpdateProfile from './ModalNeedUpdateProfile';
 import ModalBeaconCheckin from './ModalBeaconCheckin';
 import DraggableButton from './DraggableButton';
+import ListContenEvent from 'src/components/Event/ListContenEvent';
 
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
@@ -894,15 +895,16 @@ const MainHome = ({ navigation, route }) => {
 
             {showDebug && renderDebug()}
 
-            <Container>
-              <Banner
-                showHeader={false}
-                data={listBanner}
-                loading={loadingBanner}
-              />
-            </Container>
-
             <Divider height={spaceContentSize * 2} />
+
+            <ListContenEvent
+              productCategory='EVENT'
+              name='Event'
+              title='● SECURE YOUR TICKET NOW'
+              showHeader
+              horizontal
+              showSeeAllText={false}
+            />
 
             {auth.user && auth.user.activeEvent && <Container paddingHorizontal={16} paddingBottom={16}>
               <Container padding={10} radius={8} color='#F0FBFF'>
@@ -972,97 +974,6 @@ const MainHome = ({ navigation, route }) => {
               title='Makanan Favorit'
               tenantType='eat'
             />
-
-            <HighlightEvent
-              productCategory='EVENT'
-              name='Event'
-              title='Event Yang Akan Datang'
-              nav='EventScreen'
-              refresh={refreshing || isFocused}
-              // showHeader={false}
-              showSeeAllText={false}
-            />
-
-            {/* <HighlightContentProduct
-            productCategory='FORUM'
-            name='Forum'
-            title='Thread Populer'
-            nav='ForumTopicScreen'
-            refresh={refreshing || isFocused}
-          /> */}
-
-            {/* <HighlightContentProduct
-            productCategory='EMERGENCY'
-            name='Help Me'
-            title='Kondisi Darurat'
-            nav='EmergencyScreen'
-            refresh={refreshing || isFocused}
-          /> */}
-
-            {/* <HighlightContentProduct
-            productCategory='POSTING'
-            name='Artikel'
-            title='Artikel Populer'
-            nav='NewsScreen'
-            refresh={refreshing || isFocused}
-          /> */}
-
-            {/* <HighlightContentProductV2
-            productCategory='ARTIKEL'
-            name='Artikel'
-            title='Artikel Populer'
-            nav='NewsScreenV2'
-            refresh={refreshing || isFocused}
-            orderBy="like"
-          /> */}
-
-            {/* <HighlightContentProduct
-            productCategory='NEARBY_PLACE'
-            name='Tempat'
-            title='Tempat Terdekat'
-            nav='PlaceScreen'
-            horizontal
-            refresh={refreshing || isFocused}
-          /> */}
-
-            {/* <Divider height={8} /> */}
-
-            {/* <HighlightContentProduct
-            productCategory='EVENT'
-            name='Event'
-            title='Event Yang Akan Datang'
-            nav='EventScreen'
-            refresh={refreshing || isFocused}
-            // showHeader={false}
-            showSeeAllText={false}
-          /> */}
-
-            {/* <HighlightContentProduct
-            productCategory='JOBS'
-            name='Loker'
-            title='Lowongan Pekerjaan'
-            nav='JobScreen'
-            refresh={refreshing || isFocused}
-          /> */}
-
-            {/* isFocused handle android navigate crash from home */}
-            {/* {isFocused && <HighlightContentProduct
-            productCategory='YOUTUBE_VIDEO'
-            name='Live'
-            title='Siaran Langsung'
-            nav='YoutubeScreen'
-            refresh={refreshing}
-            style={{paddingHorizontal: 0}}
-          />} */}
-
-            {/* <HighlightContentProduct
-            productCategory='NEWEST_VIDEO'
-            name='Video'
-            title='Video Terbaru'
-            nav='VideoScreen'
-            refresh={refreshing || isFocused}
-            style={{ paddingHorizontal: 0 }}
-          /> */}
           </Container>
         </ScrollView>
       </DraggableButton>
