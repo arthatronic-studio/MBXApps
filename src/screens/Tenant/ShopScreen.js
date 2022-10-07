@@ -139,8 +139,8 @@ const ShopScreen = ({ navigation, route }) => {
 
       <ListTenantItem
         tenantType='shop'
-        productCategory='EAT'
-        name='Eat'
+        productCategory='SHOP'
+        name='Toko'
         title='Semua Tempat'
         // nav='EatScreen'
         // refresh={refreshing || isFocused}
@@ -154,8 +154,8 @@ const ShopScreen = ({ navigation, route }) => {
             <ListTenantFeatured
               tenantType='shop'
               horizontal
-              productCategory='EAT'
-              name='Eat'
+              productCategory='SHOP'
+              name='Toko'
               title='Rekomendasi Kami'
               showHeader
               style={{

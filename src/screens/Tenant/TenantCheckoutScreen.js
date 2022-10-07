@@ -5,19 +5,15 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import Entypo from 'react-native-vector-icons/Entypo';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import moment from 'moment';
 import { useSelector } from 'react-redux';
-import Accordion from 'react-native-collapsible/Accordion';
 import Modal from 'react-native-modal';
 
 import Header from '@src/components/Header';
-import { useLoading, usePopup, useColor, Alert, Row, Col } from '@src/components';
+import { useLoading, usePopup, useColor, Alert } from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
-import { useIsFocused, useRoute } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import { TouchableOpacity, Button } from '@src/components/Button';
-import Client from '@src/lib/apollo';
-import { queryAddLike } from '@src/lib/query';
 import { Container, Divider, Line, Padding } from 'src/styled';
 import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
 import ModalContentOptions from 'src/components/ModalContentOptions';
@@ -42,21 +38,22 @@ import WebViewScreen from 'src/components/WebViewScreen';
 import { fetchEatCartSeatsAvailable } from 'src/api-rest/fetchEatCartSeatsAvailable';
 import FormSelect from 'src/components/FormSelect';
 import ModalActions from 'src/components/Modal/ModalActions';
+import { fetchEatCartDetail } from 'src/api-rest/fetchEatCartDetail';
 
 const TenantCheckoutScreen = ({ navigation, route }) => {
   const { params } = route;
-  const items = params.item;
 
   const { Color } = useColor();
-  const modalOptionsRef = useRef();
   const flatlistRef = useRef();
   const auth = useSelector(state => state['auth']);
 
+  const [items, setItems] = useState();
+  const [loading, setLoading] = useState(true);
   const [currentSelected, setCurrentSelected] = useState(-1);
-  const [listProducts, setListProducts] = useState(Array.isArray(items.products) ? items.products : []);
+  const [listProducts, setListProducts] = useState([]);
   const [cartId, setCartId] = useState(params.cartId);
   const [namaPemesan, setNamaPemesan] = useState(params.namaPemesan);
-  const [ringkasanPembayaran, setRingkasanPembayaran] = useState(params.ringkasanPembayaran);
+  const [ringkasanPembayaran, setRingkasanPembayaran] = useState([]);
   const [updateIndex, setUpdateIndex] = useState(-1);
   const [sourceURL, setSourceURL] = useState('');
   const [modalSeatsAvailable, setModalSeatsAvailable] = useState(false);
@@ -71,6 +68,7 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     getDetail();
+    getAvailableSeat();
   }, [isFocused]);
   
   useEffect(() => {
@@ -85,7 +83,7 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
   }, [updateIndex, listProducts]);
 
   useEffect(() => {
-    const timeout = namaPemesan !== '' ?
+    const timeout = namaPemesan !== '' && namaPemesan !== params.namaPemesan ?
       setTimeout(() => {
         onUpdateQty();
       }, 1000) : null;
@@ -107,6 +105,21 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
   }, [selectedSeatsAvailable]);
 
   const getDetail = async() => {
+    const result = await fetchEatCartDetail({ cart_id: params.cartId, location_id: params.cartLocationId });
+    console.log('result cart detail', result);
+    if (result.status) {
+      // setSelectedProductCount(result.jumlah_product);
+      // setCartAmount(result.amount);
+      if (Array.isArray(result.data) && result.data.length > 0) {
+        setListProducts(result.data[0].cart_detail || []);
+        setItems(result.data[0].location);
+      }
+      setRingkasanPembayaran(result.ringkasan_pembayaran);
+    }
+    setLoading(false);
+  };
+
+  const getAvailableSeat = async() => {
     const body = {
       location_id: params.cartLocationId,
     };
@@ -124,7 +137,7 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
 
       setListSeatsAvailable(newArr);
     }
-  };
+  }
 
   const onUpdateQty = async(item, index) => {
     let body = {};
@@ -138,9 +151,9 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
     }
 
     if (item) {
-      body.product_id = item.id;
-      body.quantity = item.qty;
-      body.nama_pelanggan = item.note;
+      body.product_id = item.product_id;
+      body.quantity = item.quantity;
+      body.catatan = item.catatan;
     }
 
     setUpdateIndex(-1);
@@ -162,11 +175,8 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
   }
 
   const renderItem = ({ item, index }) => {
-    if (item.show === false || !item.selected) return null;
-
-    let qty = item.qty || 1;
-    const disabledDecrease = qty < 2;
-    const disabledIncrease = qty > 9;
+    const disabledDecrease = item.quantity < 2;
+    const disabledIncrease = item.quantity > 9;
 
     return (
       <View
@@ -191,7 +201,7 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
               }}
             >
               <Image
-                source={Array.isArray(item.images) && item.images.length > 0 ? { uri: item.images[0] } : ''}
+                source={{ uri: item.images }}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -209,9 +219,9 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
                 justifyContent: 'center',
               }}
             >
-              <Text align='left' size={14} letterSpacing={0.1} numberOfLines={1} type='medium'>{item.name}</Text>
+              <Text align='left' size={14} letterSpacing={0.1} numberOfLines={1} type='medium'>{item.product_name}</Text>
               <Divider height={2} />
-              <Text align='left' size={12} letterSpacing={0.4}>{FormatMoney.getFormattedMoney(item.price)}</Text>
+              <Text align='left' size={12} letterSpacing={0.4}>{item.amount}</Text>
             </View>
 
             <TouchableOpacity
@@ -226,8 +236,7 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
                     const result = await fetchEatCartRemove(body);
                     if (result.status) {
                       let newArr = [...listProducts];
-                      newArr[index].selected = false;
-                      newArr[index].qty = 1;
+                      newArr.splice(index, 1);
                       setListProducts(newArr);
                       showLoading('success', result.message);
                     } else {
@@ -256,7 +265,7 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
             }}
           >
             <Text size={11} letterSpacing={0.4}>Catatan</Text>
-            <Text size={11} letterSpacing={0.4}>{item.note}</Text>
+            <Text size={11} letterSpacing={0.4}>{item.catatan}</Text>
           </View>
 
           <View
@@ -301,7 +310,7 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
                   onPress={() => {
                     if (disabledDecrease) return;
                     let newArr = [...listProducts];
-                    newArr[index].qty = qty - 1;
+                    newArr[index].quantity = item.quantity - 1;
                     setListProducts(newArr);
                     setUpdateIndex(index);
                   }}
@@ -317,13 +326,13 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
                   />
                 </TouchableOpacity>
                 <View style={{ minWidth: 40 }}>
-                  <Text color={Color.text} type='bold' size={18} style={{ marginHorizontal: 8 }}>{qty}</Text>
+                  <Text color={Color.text} type='bold' size={18} style={{ marginHorizontal: 8 }}>{item.quantity}</Text>
                 </View>
                 <TouchableOpacity
                   onPress={() => {
                     if (disabledIncrease) return;
                     let newArr = [...listProducts];
-                    newArr[index].qty = qty + 1;
+                    newArr[index].quantity = item.quantity + 1;
                     setListProducts(newArr);
                     setUpdateIndex(index);
                   }}
@@ -345,14 +354,12 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
     )
   };
 
-  console.log('selectedSeatsAvailable', selectedSeatsAvailable);
-
   const renderFooter = () => {
     return (
       <>
         <Line height={8} width='100%' color='#F4F4F4' />
 
-        <Container paddingBottom={16}>
+        <Container paddingBottom={16} paddingHorizontal={16}>
           <FormSelect
             label='No. Meja'
             placeholder='Pilih'
@@ -401,8 +408,6 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
   }
 
   const renderModalNote = (item, index) => {
-    let note = item.note || '';
-
     return (
       <Modal
         isVisible={true}
@@ -435,10 +440,10 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
 
             <FormInput
               label='Catatan'
-              value={note}
+              value={item.catatan}
               onChangeText={(val) => {
                 let newArr = [...listProducts];
-                newArr[index].note = val;
+                newArr[index].catatan = val;
                 setListProducts(newArr);
               }}
               placeholder='Tuliskan sesuatu'
@@ -467,10 +472,11 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
   }
 
   console.log('params', params);
+  // console.log('listporduc', listProducts);
 
   return (
     <Scaffold
-      fallback={false}
+      fallback={loading}
       empty={false}
       popupProps={popupProps}
       loadingProps={loadingProps}
@@ -490,13 +496,7 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
                     }
                     const result = await fetchEatCartRemove(body);
                     if (result.status) {
-                      let newArr = [...listProducts];
-                      listProducts.map((e, index) => {
-                        if (e.selected) {
-                          newArr[index].selected = false;
-                          newArr[index].qty = 1;
-                        }
-                      });
+                      let newArr = [];
                       setListProducts(newArr);
 
                       setTimeout(() => {
@@ -544,7 +544,7 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
                   }}
                 >
                   <Image
-                    source={Array.isArray(items.images) && items.images.length > 0 ? { uri: items.images[0] } : ''}
+                    source={items && Array.isArray(items.images) && items.images.length > 0 ? { uri: items.images[0] } : ''}
                     style={{
                       width: '100%',
                       height: '100%',
@@ -562,9 +562,9 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
                     justifyContent: 'center',
                   }}
                 >
-                  <Text size={14} numberOfLines={1} letterSpacing={0.1} type='medium'>{items.name}</Text>
+                  <Text size={14} numberOfLines={1} letterSpacing={0.1} type='medium'>{items ? items.name : ''}</Text>
                   <Divider height={2} />
-                  <Text size={12} numberOfLines={1} color={Color.textSoft}>{items.category.name}</Text>
+                  <Text size={12} numberOfLines={1} color={Color.textSoft}>{items ? items.category.name : ''}</Text>
                 </View>
               </View>
             </Container>

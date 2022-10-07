@@ -961,15 +961,15 @@ const MainHome = ({ navigation, route }) => {
 
             <WidgetHomeMenuStatic />
 
-            <Divider height={24} />
+            <Divider />
 
             <HighlightTenant
-              title='Toko populer'
+              title='Toko Populer'
               tenantType='shop'
             />
 
             <HighlightTenant
-              title='Makanan favorit'
+              title='Makanan Favorit'
               tenantType='eat'
             />
 

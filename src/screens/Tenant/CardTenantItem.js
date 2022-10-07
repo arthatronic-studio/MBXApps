@@ -9,29 +9,13 @@ import {
     Text,
     TouchableOpacity,
     useColor,
-    Button,
 } from '@src/components';
 import { shadowStyle } from '@src/styles';
-
 import Client from '@src/lib/apollo';
 import { queryAddLike } from '@src/lib/query';
-
-import {
-    iconLocation,
-    iconCategory,
-    iconComment,
-    iconLiked,
-    iconLike,
-    iconverify,
-    iconTempat
-} from '@assets/images/home';
-import { Container, Divider, Row } from 'src/styled';
+import { Container, Divider } from 'src/styled';
 import { analyticMethods, GALogEvent } from 'src/utils/analytics';
 import { useSelector } from 'react-redux';
-import CardComponentYoutube from '../../components/Content/CardComponentYoutube';
-import CardComponentVideo from '../../components/Content/CardComponentVideo';
-import { FormatMoney } from 'src/utils';
-import { accessClient } from 'src/utils/access_client';
 import imageAssets from 'assets/images';
 
 const defaultProps = {
@@ -42,7 +26,7 @@ const defaultProps = {
     style: {},
 };
 
-const CardTenantItem = ({ productCategory, item, numColumns, onPress, horizontal, style }) => {
+const CardTenantItem = ({ productCategory, item, index, numColumns, onPress, horizontal, style }) => {
     const [like, setLike] = useState(false);
     const [im_like, setImLike] = useState(false);
     const [trigger, setTrigger] = useState(false);
@@ -104,8 +88,6 @@ const CardTenantItem = ({ productCategory, item, numColumns, onPress, horizontal
             // });
         }
 
-        console.log('horizontal', horizontal);
-
         if (horizontal) {
             return (
                 <View style={{paddingHorizontal: 16}}>
@@ -144,6 +126,9 @@ const CardTenantItem = ({ productCategory, item, numColumns, onPress, horizontal
             )
         }
 
+
+        const isLeft = (index+1) % 2 === 0;
+
         return (
             <TouchableOpacity
                 onPress={() => {
@@ -151,8 +136,10 @@ const CardTenantItem = ({ productCategory, item, numColumns, onPress, horizontal
                 }}
                 style={{
                     width: width / numColumns - (horizontal ? 32 : 0),
-                    paddingHorizontal: 16,
+                    paddingLeft: isLeft ? 8 : 16,
+                    paddingRight: isLeft ? 16 : 8,
                     marginTop: 12,
+                    marginBottom: 4,
                     borderRadius: 8,
                     ...style,
                 }}

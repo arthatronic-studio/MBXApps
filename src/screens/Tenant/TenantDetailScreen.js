@@ -43,33 +43,29 @@ const TenantDetailScreen = ({ navigation, route }) => {
   const items = params.item;
 
   const { Color } = useColor();
-  const modalOptionsRef = useRef();
   const flatlistRef = useRef();
   const auth = useSelector(state => state['auth']);
 
   const [loading, setLoading] = useState(true);
   const [bookmark, setBookmark] = useState(false);
   const [desc, setDesc] = useState(false);
-  const [data, setData] = useState(null);
+  const [listCartProduct, setListCartProduct] = useState([]);
   const [activeSections, setActiveSections] = useState([]);
   const [currentIndexProduct, setCurrentIndexProduct] = useState(-1);
   const [listProducts, setListProducts] = useState(Array.isArray(items.products) ? items.products : []);
   const [cartId, setCartId] = useState();
   const [cartLocationId, setCartLocationId] = useState();
   const [namaPemesan, setNamaPemesan] = useState(auth.user.name);
-  const [cartAmount, setCartAmount] = useState(0);
-  const [ringkasanPembayaran, setRingkasanPembayaran] = useState([
-    {name: 'Harga', amount: 'Rp -'},
-    {name: 'PPN 11%', amount: 'Rp -'},
-    {name: 'Diskon', amount: 'Rp -'},
-    {name: 'Total Pembayaran', amount: 'Rp -'},
-  ]);
+  const [cartAmount, setCartAmount] = useState(FormatMoney.getFormattedMoney(0));
+  const [selectedProductCount, setSelectedProductCount] = useState(0);
 
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const isFocused = useIsFocused();
 
   const { height, width } = useWindowDimensions();
+
+  const isCartDiffTenant = cartLocationId && cartLocationId !== items.id;
 
   useEffect(() => {
     getCart();
@@ -92,6 +88,13 @@ const TenantDetailScreen = ({ navigation, route }) => {
   const getDetail = async(cart_id, location_id) => {
     const result = await fetchEatCartDetail({ cart_id, location_id });
     console.log('result cart detail', result);
+    if (result.status) {
+      setSelectedProductCount(result.jumlah_product);
+      setCartAmount(result.amount);
+      if (Array.isArray(result.data) && result.data.length > 0) {
+        setListCartProduct(result.data[0].cart_detail || []);
+      }
+    }
   };
 
   const renderItem = ({ item, index }) => {
@@ -154,14 +157,6 @@ const TenantDetailScreen = ({ navigation, route }) => {
     )
   };
 
-  let eventDate = !isNaN(parseInt(items.eventDate)) ? parseInt(items.eventDate) : null;
-  if (!eventDate) eventDate = !isNaN(parseInt(items.updated_date)) ? parseInt(items.updated_date) : null;
-
-  let isPassedEventDate = true;
-  if (moment(eventDate).isValid() && moment(eventDate).isAfter(moment())) {
-    isPassedEventDate = false;
-  }
-
   const openGps = (lat, lng) => {
     // var scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
     // var url = scheme + `${lat},${lng}`;
@@ -171,17 +166,17 @@ const TenantDetailScreen = ({ navigation, route }) => {
   }
 
   const onAddToCart = async(item, index) => {
-    const qty = item.qty || 1;
+    console.log('item', item);
+    const quantity = item.quantity || 1;
 
     let newArr = [...listProducts];
-    newArr[index].selected = true;
-    newArr[index].qty = qty;
+    newArr[index].quantity = quantity;
     setListProducts(newArr);
     setCurrentIndexProduct(-1);
 
     const body = {
       product_id: item.id,
-      quantity: qty,
+      quantity: quantity,
       catatan: null,
       nama_pelanggan: null,
     }
@@ -199,12 +194,6 @@ const TenantDetailScreen = ({ navigation, route }) => {
         if (result.data[0].location && result.data[0].location.id) {
           setCartLocationId(result.data[0].location.id);
         }
-      }
-
-      console.log('result add', result, Array.isArray(result.ringkasan_pembayaran));
-
-      if (result.ringkasan_pembayaran && Array.isArray(result.ringkasan_pembayaran)) {
-        setRingkasanPembayaran(result.ringkasan_pembayaran);
       }
 
       if (result.amount) {
@@ -476,7 +465,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
             <Text size={12} align='left' lineHeight={16} letterSpacing={0.4}>Jl. Tebet Barat I No.2, RT.1/RW.2, Tebet Bar., Kec. Tebet, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12810</Text>
           </View>
           <TouchableOpacity
-            onPress={() => false && openGps(data.lat, data.lng)}
+            onPress={() => openGps('', '')}
             style={{ justifyContent: 'center', alignItems: 'center' }}
           >
             <Image
@@ -542,11 +531,10 @@ const TenantDetailScreen = ({ navigation, route }) => {
   }
 
   const renderModalProduct = (item, index) => {
-    const qty = item.qty || 1;
-    const disabledDecrease = qty < 2;
-    const disabledIncrease = qty > 9;
-
-    console.log('qty', qty);
+    const existInCart = listCartProduct.filter((e) => e.product_id === item.id)[0];
+    const quantity = item.quantity ? item.quantity : existInCart ? existInCart.quantity : 1;
+    const disabledDecrease = quantity < 2;
+    const disabledIncrease = quantity > 9;
 
     return (
       <Modal
@@ -621,7 +609,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
                   onPress={() => {
                     if (disabledDecrease) return;
                     let newArr = [...listProducts];
-                    newArr[index].qty = qty - 1;
+                    newArr[index].quantity = quantity - 1;
                     setListProducts(newArr);
                   }}
                   style={{ marginLeft: 24 }}
@@ -636,13 +624,13 @@ const TenantDetailScreen = ({ navigation, route }) => {
                   />
                 </TouchableOpacity>
                 <View style={{ minWidth: 40 }}>
-                  <Text color={Color.text} type='bold' size={18} style={{ marginHorizontal: 8 }}>{qty}</Text>
+                  <Text color={Color.text} type='bold' size={18} style={{ marginHorizontal: 8 }}>{quantity}</Text>
                 </View>
                 <TouchableOpacity
                   onPress={() => {
                     if (disabledIncrease) return;
                     let newArr = [...listProducts];
-                    newArr[index].qty = qty + 1;
+                    newArr[index].quantity = quantity + 1;
                     setListProducts(newArr);
                   }}
                 >
@@ -670,10 +658,10 @@ const TenantDetailScreen = ({ navigation, route }) => {
                       return;
                     }
 
-                    if (cartLocationId && cartLocationId !== items.id) {
+                    if (isCartDiffTenant) {
                       Alert(
                         'Konfirmasi',
-                        'Apakah kanu yakin mau mengganti toko/makanan?',
+                        'Apakah kanu mau mengganti toko/makanan?',
                         () => {
                           onAddToCart(item, index);
                         }
@@ -696,13 +684,6 @@ const TenantDetailScreen = ({ navigation, route }) => {
   }
 
   console.log('params', params);
-
-  let selectedProductCount = 0;
-  listProducts.map((e) => {
-    if (e.selected) {
-      selectedProductCount += 1;
-    }
-  });
 
   return (
     <Scaffold
@@ -752,20 +733,10 @@ const TenantDetailScreen = ({ navigation, route }) => {
             </Col>
             <TouchableOpacity
               onPress={() => {
-                if (selectedProductCount <= 0) {
-                  showLoading(
-                    'error',
-                    'Silakan tambah pesanan terlebih dulu',
-                  );
-                  return;
-                }
-
                 navigation.navigate('TenantCheckoutScreen', {
-                  ...params,
                   cartId,
                   cartLocationId,
                   namaPemesan,
-                  ringkasanPembayaran,
                 });
               }}
               style={{

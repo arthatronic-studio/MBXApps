@@ -158,7 +158,6 @@ const WidgetHomeMenuStatic = () => {
 
   const menuPerColumn = listMenuHome.length < numOfColumn ? listMenuHome.length : numOfColumn;
   const widthPerMenu = 100 / menuPerColumn;
-  const widthIconMenu = (width / menuPerColumn - 16) / 2;
   const paddingInMenu = 16;
 
   if (listMenuHome.length === 0) return <View />;
@@ -215,10 +214,9 @@ const WidgetHomeMenuStatic = () => {
             >
               <View
                 style={{
-                  height: widthIconMenu,
-                  width: widthIconMenu,
+                  width: `${100 / numOfColumn}%`,
+                  aspectRatio: 1,
                   marginBottom: 4,
-                  borderRadius: widthIconMenu / 2,
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}

@@ -32,9 +32,10 @@ const defaultProps = {
     title: '',
     showSeeAllText: false,
     showHeader: false,
+    showEmpty: false,
 };
 
-const ListTenantFeatured = ({ tenantType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, }) => {
+const ListTenantFeatured = ({ tenantType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, showEmpty, title, showSeeAllText, }) => {
     const { width } = useWindowDimensions();
     const [itemData, setItemData] = useState(initialItemState);
     const auth = useSelector(state => state['auth']);
@@ -103,9 +104,11 @@ const ListTenantFeatured = ({ tenantType, productCategory, name, horizontal, sty
     if (productCategory === 'NEARBY_PLACE') extraProps.numColumns = 2;
     if (horizontal) extraProps = {};
 
+    const doesntShowEmpty = !showEmpty && !itemData.loading && itemData.data.length === 0;
+
     return (
         <View style={{ }}>
-            {showHeader && horizontal && renderHeader()}
+            {!doesntShowEmpty && showHeader && horizontal && renderHeader()}
 
             {itemData.loading ?
                 renderSkeleton()
@@ -115,7 +118,7 @@ const ListTenantFeatured = ({ tenantType, productCategory, name, horizontal, sty
                     data={itemData.data}
                     horizontal={horizontal}
                     showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ paddingBottom: 16, ...style }}
+                    contentContainerStyle={{ paddingBottom: doesntShowEmpty ? 0 : 16, ...style }}
                     onEndReachedThreshold={0.3}
                     onEndReached={() => setItemData({ ...itemData, loadNext: true })}
                     {...extraProps}
@@ -134,11 +137,11 @@ const ListTenantFeatured = ({ tenantType, productCategory, name, horizontal, sty
                         <>
                             {ListHeaderComponent}
 
-                            {showHeader && !horizontal && renderHeader()}
+                            {!doesntShowEmpty && showHeader && !horizontal && renderHeader()}
                         </>
                     }
-                    ListEmptyComponent={() => {
-                        return (
+                    ListEmptyComponent={
+                        showEmpty && (
                             <>
                                 <ScreenEmptyData
                                     message={`${name} belum tersedia`}
@@ -146,7 +149,7 @@ const ListTenantFeatured = ({ tenantType, productCategory, name, horizontal, sty
                                 />
                             </>
                         )
-                    }}
+                    }
                 />
             }
         </View>

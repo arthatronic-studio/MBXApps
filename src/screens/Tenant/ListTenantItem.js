@@ -121,6 +121,7 @@ const ListTenantItem = ({ tenantType, productCategory, name, horizontal, style, 
                     renderItem={({ item, index }) => {
                         return (
                             <CardTenantItem
+                                index={index}
                                 productCategory={productCategory}
                                 item={item}
                                 horizontal={horizontal}

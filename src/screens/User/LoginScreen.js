@@ -399,7 +399,7 @@ const LoginScreen = ({navigation, route}) => {
 
             <Divider />
 
-            {route.params && !route.params.loginFrom && <Button
+            <Button
               outline
               onPress={() => {
                 const body = {
@@ -409,7 +409,7 @@ const LoginScreen = ({navigation, route}) => {
               }}
             >
               Mode Tamu
-            </Button>}
+            </Button>
 
             {/* {accessClient.LoginScreen.guesMode && <Container paddingTop={16}>
               <Button
