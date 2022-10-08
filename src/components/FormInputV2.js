@@ -56,6 +56,7 @@ const defaultProps = {
   format: '', // currency
   style: {},
   textinputProps: {},
+  onPress: null
 };
 
 const FormInputV2 = forwardRef((props, ref) => {
@@ -83,6 +84,7 @@ const FormInputV2 = forwardRef((props, ref) => {
     textinputProps,
     placeholderTextColor,
     borderColor,
+    onPress
   } = props;
 
   const {Color} = useColor();
@@ -103,94 +105,98 @@ const FormInputV2 = forwardRef((props, ref) => {
           //   paddingHorizontal: 12,
           flex: 1,
         }}>
-        <Row align="center" justify="space-between">
-          {label !== '' && (
-            <View
-              style={{
-                justifyContent: 'flex-start',
-                alignItems: 'flex-start',
-                marginBottom: Platform.OS === 'ios' ? 4 : 2,
-              }}>
-              <Text type="medium" size={14} lineHeight={16} color={'#797979'}>
-                {label}
-              </Text>
-            </View>
-          )}
-
-          <Divider width={40} />
-
-          <View style={{flex: 1, flexDirection: 'column'}}>
-            <Row>
-              {prefixText !== '' && (
-                <Container paddingRight={8}>
-                  <Text type="medium" size={22} lineHeight={26} color="#141414">
-                    {prefixText}
-                  </Text>
-                </Container>
-              )}
-              <TextInput
-                ref={ref}
-                placeholder={placeholder}
-                placeholderTextColor={placeholderTextColor || Color.placeholder}
-                underlineColorAndroid="transparent"
-                autoCorrect={false}
-                onChangeText={val => onChangeText(val)}
-                selectionColor={Color.placeholder}
-                value={value}
-                onBlur={() => {
-                  onBlur();
-                  setIsFocus(false);
-                }}
-                onFocus={() => {
-                  setIsFocus(true);
-                }}
-                returnKeyType={returnKeyType}
-                onSubmitEditing={() => onSubmitEditing()}
-                blurOnSubmit={false}
-                keyboardType={keyboardType}
-                autoCapitalize={secureTextEntry ? 'none' : undefined}
-                keyboardAppearance={Color.colorDominant}
+        <TouchableOpacity 
+          onPress={() => onPress()} 
+          disabled={editable}
+        >
+          <Row align="center" justify="space-between">
+            {label !== '' && (
+              <View
                 style={{
-                  // width: '100%',
-                  // height: '100%',
-                  textAlignVertical: multiline ? 'top' : 'center',
                   flex: 1,
-                  fontSize: 22,
-                  lineHeight: 26,
-                  fontFamily: 'Inter-Regular',
-                  marginTop: multiline
-                    ? Platform.OS === 'android'
-                      ? 8
-                      : 0
-                    : 0,
-                  marginBottom: multiline
-                    ? Platform.OS === 'android'
-                      ? 0
-                      : 4
-                    : 0,
-                  color: Color.text,
-                  includeFontPadding: false,
-                  padding: 0,
-                  ...extraStyle,
-                  ...style,
-                }}
-                secureTextEntry={secureTextEntry}
-                multiline={multiline}
-                editable={editable}
-                {...textinputProps}
-              />
-              {suffixText !== '' && (
-                <Container paddingRight={8}>
-                  <Text type="medium">{suffixText}</Text>
-                </Container>
-              )}
-            </Row>
-            <Divider height={10}/>
-            <View style={{ borderWidth: 1, height: 1, borderColor: '#141414' }}/>
-          </View>
+                  justifyContent: 'flex-start',
+                  alignItems: 'flex-start',
+                  marginBottom: Platform.OS === 'ios' ? 4 : 2,
+                }}>
+                <Text type="medium" size={14} lineHeight={16} color={'#797979'}>
+                  {label}
+                </Text>
+              </View>
+            )}
 
-          {suffixIcon}
-        </Row>
+            <View style={{flex: 2, flexDirection: 'column'}}>
+              <Row>
+                {prefixText !== '' && (
+                  <Container paddingRight={8}>
+                    <Text type="medium" size={22} lineHeight={26} color="#141414">
+                      {prefixText}
+                    </Text>
+                  </Container>
+                )}
+                <TextInput
+                  ref={ref}
+                  placeholder={placeholder}
+                  placeholderTextColor={placeholderTextColor || Color.placeholder}
+                  underlineColorAndroid="transparent"
+                  autoCorrect={false}
+                  onChangeText={val => onChangeText(val)}
+                  selectionColor={Color.placeholder}
+                  value={value}
+                  onBlur={() => {
+                    onBlur();
+                    setIsFocus(false);
+                  }}
+                  onFocus={() => {
+                    setIsFocus(true);
+                  }}
+                  returnKeyType={returnKeyType}
+                  onSubmitEditing={() => onSubmitEditing()}
+                  blurOnSubmit={false}
+                  keyboardType={keyboardType}
+                  autoCapitalize={secureTextEntry ? 'none' : undefined}
+                  keyboardAppearance={Color.colorDominant}
+                  style={{
+                    // width: '100%',
+                    // height: '100%',
+                    textAlignVertical: multiline ? 'top' : 'center',
+                    flex: 1,
+                    fontSize: 22,
+                    lineHeight: 26,
+                    fontFamily: 'Inter-Regular',
+                    marginTop: multiline
+                      ? Platform.OS === 'android'
+                        ? 8
+                        : 0
+                      : 0,
+                    marginBottom: multiline
+                      ? Platform.OS === 'android'
+                        ? 0
+                        : 4
+                      : 0,
+                    color: Color.text,
+                    includeFontPadding: false,
+                    padding: 0,
+                    ...extraStyle,
+                    ...style,
+                  }}
+                  secureTextEntry={secureTextEntry}
+                  multiline={multiline}
+                  editable={editable}
+                  {...textinputProps}
+                />
+                {suffixText !== '' && (
+                  <Container paddingRight={8}>
+                    <Text type="medium">{suffixText}</Text>
+                  </Container>
+                )}
+              </Row>
+              <Divider height={10}/>
+              <View style={{ borderWidth: 1, height: 1, borderColor: '#141414' }}/>
+            </View>
+
+            {suffixIcon}
+          </Row>
+        </TouchableOpacity>
       </View>
       {!hideErrorHint && (
         <View

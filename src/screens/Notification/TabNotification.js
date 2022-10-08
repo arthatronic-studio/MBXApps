@@ -45,24 +45,22 @@ const CustomTabBar = (props) => {
             >
               <Container
                 width={(width / navigationState.routes.length) - 16.5}
-                color={isActive ? Color.primarySoft : 'transparent'}
+                color={isActive ? Color.primary : 'transparent'}
                 paddingVertical={12}
                 style={
                   isFirst ? {
-                    borderTopLeftRadius: 120,
-                    borderBottomLeftRadius: 120,
-                    borderWidth: 0.5,
-                    borderRightWidth: 0.25,
+                    // borderTopLeftRadius: 120,
+                    // borderBottomLeftRadius: 120,
+                    borderWidth: 1,
                   } :
                     isLast ? {
-                      borderTopRightRadius: 120,
-                      borderBottomRightRadius: 120,
-                      borderWidth: 0.5,
-                      borderLeftWidth: 0.25,
+                      // borderTopRightRadius: 120,
+                      // borderBottomRightRadius: 120,
+                      borderWidth: 1
                     } : {}
                 }
               >
-                <Text size={12} type='medium' letterSpacing={0.5}>{label}</Text>
+                <Text size={12} type='medium' letterSpacing={0.5} color={isActive ? '#E7FF00' : Color.black}>{label}</Text>
               </Container>
             </TouchableOpacity>
           )
@@ -102,8 +100,8 @@ const TabNotification = ({ navigation, route }) => {
                 backgroundColor: Color.theme,
                 height: '100%'
             },
-            activeTintColor: Color.text,
-            inactiveTintColor: Color.secondary,
+            activeTintColor: '#E7FF00',
+            inactiveTintColor: Color.white,
             labelStyle: {
                 fontSize: 12,
             },
