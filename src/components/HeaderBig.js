@@ -77,47 +77,9 @@ const HeaderBig = ({
     >
       <RowView>
         <Col size={6} justify='center' align='flex-start' style={{height: '100%'}}>
-          {type === 'MAIN_HOME' ?
-            <Container>
-              <Text
-                align='left'
-                size={11}
-                type='medium'
-                letterSpacing={0.5}
-                color={Color.placeholder}
-              >
-                Selamat Datang
-              </Text>
-              <Divider height={2} />
-              <Row style={{
-                alignItems: 'center',
-              }}>
-                <Text
-                  align='left'
-                  size={16}
-                  type='medium'
-                  numberOfLines={1}
-                  color={Color.text}
-                >
-                  {auth && auth.user
-                    ? auth.user.name : 'Tamu'}
-                </Text>
-
-                {auth && auth.user && auth.user.isCheckin && <Image
-                  source={imageAssets.airdrop}
-                  style={{
-                    height: 16,
-                    width: 16,
-                    tintColor: Color.success,
-                    marginLeft: 4,
-                  }}
-                />}
-              </Row>
-            </Container>
-          :
-          title === '' ?
+          {title === '' ?
             <View style={{flexDirection: 'row'}}>
-              <Image source={iconSplash} style={{width: 90, height: 40}} resizeMode='contain' />
+              <Image source={iconApp} style={{width: 90, height: 40}} resizeMode='contain' />
             </View>
           :
             <Text size={28} type='bold'>{title}</Text>
