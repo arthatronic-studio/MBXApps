@@ -35,6 +35,8 @@ const Text = props => {
     lineHeight,
     letterSpacing,
     color,
+    italic,
+    underline,
     ...style
   } = props;
 
@@ -42,7 +44,11 @@ const Text = props => {
 
   return (
     <BaseText
-      style={[letterSpacing && {letterSpacing}]}
+      style={[
+        letterSpacing && {letterSpacing},
+        italic && {fontStyle: 'italic'},
+        underline && {textDecorationLine: 'underline'}
+      ]}
       {...style}
       align={align}
       type={type}

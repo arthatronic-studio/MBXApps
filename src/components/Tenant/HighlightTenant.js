@@ -25,10 +25,11 @@ import { useNavigation } from '@react-navigation/native';
 
 const defaultProps = {
     title: '',
-    tenantType: 'eat',
+    tenantType: null,
+    numColumns: 2,
 };
 
-const HighlightTenant = ({ title, tenantType }) => {
+const HighlightTenant = ({ title, tenantType, numColumns }) => {
 
     const auth = useSelector(state => state['auth']);
     const { Color } = useColor();
@@ -43,8 +44,11 @@ const HighlightTenant = ({ title, tenantType }) => {
     }, []);
 
     const fetchData = async () => {
-        let baseEndpoint = 'location';
-        baseEndpoint = baseEndpoint + `?type=${tenantType}&isRecommended=1`;
+        let baseEndpoint = 'location?';
+        if (tenantType) {
+            baseEndpoint = baseEndpoint + `type=${tenantType}&`;
+        }
+        baseEndpoint = baseEndpoint + `isRecommended=1`;
         // if (auth.user.activityInfo.location) {
         //     baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.user.activityInfo.location.id}&isRecommended=1`;
         // }
@@ -61,33 +65,31 @@ const HighlightTenant = ({ title, tenantType }) => {
     }
 
     const renderCard = (item, idx) => {
+        let orderNumber = (idx + 1).toString();
+        if (orderNumber.length <= 1) orderNumber = '0'+orderNumber;
+        
         return (
             <View
                 key={idx}
-                style={{ width: '50%', padding: 8 }}
+                style={{ width: `${100/numColumns}%`, padding: 8 }}
             >
                 <TouchableOpacity
                     onPress={() => {
                         navigation.navigate('TenantDetailScreen', { item })
                     }}
-                    style={{ width: '100%', aspectRatio: 1 }}
+                    style={{ width: '100%', flexDirection: 'row', borderBottomWidth: 1, paddingBottom: 12, paddingHorizontal: 16, borderColor: Color.primary }}
                 >
-                    <Image
-                        source={{uri: Array.isArray(item.images) && item.images.length > 0 ? item.images[0] : ''}}
-                        style={{
-                            width: '100%',
-                            height: '100%',
-                            borderRadius: 8,
-                            backgroundColor: Color.border,
-                        }}
-                    />
+                    <View style={{justifyContent: 'center'}}>
+                        <Text size={11} type='medium' color={Color.textSoft}>{orderNumber}</Text>
+                    </View>
+                    <View style={{flex: 1, alignItems: 'flex-start', paddingHorizontal: 32}}>
+                        <Text size={18} type='medium'>{item.name}</Text>
+                    </View>
+                    <View style={{justifyContent: 'center'}}>
+                        <Text size={11} type='medium' color={Color.textSoft}>View</Text>
+                        <View style={{ borderBottomWidth: 1, borderColor: Color.textSoft }} />
+                    </View>
                 </TouchableOpacity>
-                
-                <Container align='flex-start' marginTop={8}>
-                    <Text type='medium'>{item.name}</Text>
-                    <Divider height={4} />
-                    <Text size={12}>{item.category.name}</Text>
-                </Container>
             </View>
         )
     }
@@ -101,7 +103,7 @@ const HighlightTenant = ({ title, tenantType }) => {
                 showSeeAllText={false}
             />
 
-            <View style={{ marginTop: 4, flexDirection: 'row', flexWrap: 'wrap', width: '100%', paddingHorizontal: 8 }}>
+            <View style={{ marginTop: 12, flexDirection: 'row', flexWrap: 'wrap', width: '100%', paddingHorizontal: 8 }}>
                 {itemData.map((item, idx) => {
                     return renderCard(item, idx);
                 })}

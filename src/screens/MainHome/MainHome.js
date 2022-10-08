@@ -964,17 +964,18 @@ const MainHome = ({ navigation, route }) => {
 
           <WidgetHomeMenuStatic />
 
-          <Divider />
+          {/* <Divider /> */}
 
           <HighlightTenant
-            title='Toko Populer'
-            tenantType='shop'
+            title='● TENANTS'
+            numColumns={1}
+            // tenantType='shop'
           />
 
-          <HighlightTenant
+          {/* <HighlightTenant
             title='Makanan Favorit'
             tenantType='eat'
-          />
+          /> */}
 
           <View>
             <Divider />

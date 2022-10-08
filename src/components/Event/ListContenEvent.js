@@ -128,7 +128,7 @@ const ListContenEvent = ({ userProfileId, productCategory, name, horizontal, sty
     console.log('showSeeAllText', showSeeAllText);
 
     return (
-        <View style={{ }}>
+        <View>
             {showHeader && horizontal && renderHeader()}
 
             {itemData.loading ?
@@ -139,7 +139,7 @@ const ListContenEvent = ({ userProfileId, productCategory, name, horizontal, sty
                     data={itemData.data}
                     horizontal={horizontal}
                     showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ paddingBottom: 16, paddingHorizontal: 8, ...style }}
+                    contentContainerStyle={{ paddingHorizontal: 8, ...style }}
                     onEndReachedThreshold={0.3}
                     onEndReached={() => setItemData({ ...itemData, loadNext: true })}
                     {...extraProps}

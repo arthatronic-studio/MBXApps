@@ -41,7 +41,7 @@ export const lightModeColors = {
   overflow: 'rgba(0, 0, 0, 0.3)',
   theme: '#FFFFFE',
   text: '#141414',
-  textSoft: '#575651',
+  textSoft: '#797979',
   textInput: '#FFFFFF',
   border: '#EEEEEE',
   borderLight: '#F4F4F4',

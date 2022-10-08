@@ -157,22 +157,19 @@ const WidgetHomeMenuStatic = () => {
   };
 
   const menuPerColumn = listMenuHome.length < numOfColumn ? listMenuHome.length : numOfColumn;
-  const widthPerMenu = (100 - menuPerColumn) / menuPerColumn;
+  const widthPerMenu = (100 / menuPerColumn);
   const paddingInMenu = 16;
 
   if (listMenuHome.length === 0) return <View />;
 
   return (
-    <Container paddingHorizontal={paddingInMenu}>
+    <Container padding={paddingInMenu}>
       <Container
         style={{
-          backgroundColor: Color.theme,
           width: '100%',
-          paddingTop: paddingInMenu,
           flexDirection: 'row',
           flexWrap: 'wrap',
           borderRadius: 8,
-          ...shadowStyle,
         }}
       >
         {listMenuHome.map((menu, idx) => {
@@ -208,41 +205,47 @@ const WidgetHomeMenuStatic = () => {
               }}
               style={{
                 width: `${widthPerMenu}%`,
-                alignItems: 'center',
-                marginBottom: paddingInMenu,
-                marginHorizontal: '0.5%',
-                borderWidth: 1,
-                backgroundColor: '#141414',
-                paddingVertical: 20,
+                aspectRatio: 1,
+                padding: 2,
               }}
             >
               <View
                 style={{
-                  width: `${100 / numOfColumn}%`,
-                  aspectRatio: 1,
-                  marginBottom: 4,
-                  justifyContent: 'center',
+                  width: '100%',
+                  height: '100%',
                   alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: Color.primary,
                 }}
               >
-                <Image
-                  source={menu.imageUrl ? { uri: menu.imageUrl } : menu.imageAsset}
-                  style={[
-                    {
-                      height: '100%',
-                      width: '100%'
-                    },
-                    menu.comingsoon ? {opacity: 0.3} : {}
-                  ]}
-                  resizeMode="contain"
-                />
-              </View>
-              
-              <Text size={10} type='medium' style={menu.comingsoon && {opacity: 0.3}} color="#EEEEEE">
-                {menu.name}
-              </Text>
+                <View
+                  style={{
+                    width: `${100 / numOfColumn}%`,
+                    aspectRatio: 1,
+                    marginBottom: 4,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Image
+                    source={menu.imageUrl ? { uri: menu.imageUrl } : menu.imageAsset}
+                    style={[
+                      {
+                        height: '100%',
+                        width: '100%'
+                      },
+                      menu.comingsoon ? {opacity: 0.3} : {}
+                    ]}
+                    resizeMode="contain"
+                  />
+                </View>
+                
+                <Text size={10} type='medium' style={menu.comingsoon && {opacity: 0.3}} color="#EEEEEE">
+                  {menu.name}
+                </Text>
 
-              {menu.badge && renderMenuBadge()}
+                {menu.badge && renderMenuBadge()}
+              </View>
             </TouchableOpacity>
           );
         })}
