@@ -287,7 +287,7 @@ export default ({navigation, route}) => {
     <Scaffold
       popupProps={popupProps}
       header={
-        <HeaderBig style={{backgroundColor: 'transparent', paddingTop: 16}} />
+        <HeaderBig style={{backgroundColor: 'transparent'}} />
       }>
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps="handled"

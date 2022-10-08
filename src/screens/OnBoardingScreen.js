@@ -241,7 +241,7 @@ const OnBoardingScreen = ({ navigation }) => {
                         titleRight='Lewati'
                         titleRightColor={Color.text}
                         onPressRightButton={() => redirectTo('LoginScreen')}
-                        style={{ backgroundColor: 'transparent', paddingTop: 16 }}
+                        style={{ backgroundColor: 'transparent' }}
                     />
             }
             fallback={user || loading}

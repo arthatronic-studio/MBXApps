@@ -15,15 +15,8 @@ import imageAssets, {
 import { Container, Divider } from 'src/styled';
 import { useSelector } from 'react-redux';
 
-const RowView = Styled(Row)`
-    height: 100%;
-    alignItems: center;
-    justifyContent: center;
-`;
-
 const SideButton = Styled(TouchableOpacity)`
     height: 100%;
-    width: 100%;
     alignItems: flex-end;
     justifyContent: center;
 `;
@@ -66,17 +59,13 @@ const HeaderBig = ({
     <MainContainer
       style={{
         width: '100%',
-        height: 60,
-        elevation: 0,
-        borderBottomWidth: 0,
-        paddingHorizontal: 16,
+        padding: 20,
         backgroundColor: Color.theme,
-        borderColor: Color.border,
         ...style,
       }}
     >
-      <RowView>
-        <Col size={6} justify='center' align='flex-start' style={{height: '100%'}}>
+      <View style={{width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+        <View style={{flex: 1}}>
           {title === '' ?
             <View style={{flexDirection: 'row'}}>
               <Image source={iconApp} style={{width: 40, height: 40}} resizeMode='contain' />
@@ -84,9 +73,9 @@ const HeaderBig = ({
           :
             <Text size={28} type='bold'>{title}</Text>
           }
-        </Col>
+        </View>
 
-        <Col size={6} justify='center' align='flex-end' style={{height: '100%'}}>
+        <View style={{}}>
           {iconRightButton && <SideButton
             onPress={() => onPressRightButton && onPressRightButton()}
           >
@@ -105,8 +94,8 @@ const HeaderBig = ({
           </Text>}
 
           {actions && actions}
-        </Col>
-      </RowView>
+        </View>
+      </View>
     </MainContainer>
   );
 }

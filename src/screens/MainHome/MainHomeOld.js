@@ -692,9 +692,6 @@ const MainHome = ({ navigation, route }) => {
       header={
         <HeaderBig
           type='MAIN_HOME'
-          style={{
-            paddingTop: 8,
-          }}
           actions={
             <View style={{ flexDirection: 'row' }}>
               {/* <TouchableOpacity

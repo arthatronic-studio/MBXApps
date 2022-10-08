@@ -20,7 +20,6 @@ import {
   Text,
   Row,
   Col,
-  HeaderBig,
   useColor,
   Scaffold,
   useLoading,

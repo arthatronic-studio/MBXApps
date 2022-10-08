@@ -177,7 +177,7 @@ const KnowMeScreen = ({navigation, route}) => {
             titleRight='Lewati'
             titleRightColor={Color.primary}
             onPressRightButton={() => redirectTo('LoginScreen')}
-            style={{backgroundColor: 'transparent', paddingTop: 16}}
+            style={{backgroundColor: 'transparent'}}
           />
       }
       fallback={user || loading}

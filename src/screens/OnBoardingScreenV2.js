@@ -20,6 +20,7 @@ import {queryBannerList} from 'src/lib/query/banner';
 import {onBoarding1, onBoarding2, onBoarding3} from 'assets/images';
 import imageAssets from 'assets/images';
 import {Divider} from 'src/styled';
+import { statusBarHeight } from 'src/utils/constants';
 
 const listBoarding = [
   {
@@ -128,7 +129,7 @@ const OnBoardingScreenV2 = ({navigation}) => {
   return (
     <Scaffold
       style={{
-        backgroundColor: '#141414',
+        backgroundColor: Color.primary
       }}
       header={
         user ? (
@@ -188,7 +189,7 @@ const OnBoardingScreenV2 = ({navigation}) => {
       popupProps={popupProps}>
       <Animated.View
         paddingHorizontal={16}
-        style={{justifyContent: 'space-between', height: height - 120}}>
+        style={{flex: 1, justifyContent: 'space-between'}}>
         <Animated.View>
           <Animated.Text
             style={{
@@ -242,6 +243,7 @@ const OnBoardingScreenV2 = ({navigation}) => {
             AROUND OUR HUMBLE SPACE AND FAILITIES
           </Animated.Text>
         </Animated.View>
+
         <AnimatedTouchableOpacity
           onPress={() => redirectTo('MainPage')}
           style={{

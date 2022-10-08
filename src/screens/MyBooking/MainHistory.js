@@ -261,7 +261,7 @@ const MainHistory = ({ navigation, route }) => {
   return (
     <Scaffold
       fallback={loading}
-      header={<HeaderBig title='Riwayat Pesanan' style={{paddingTop: 16}} color={Color.textInput} />}
+      header={<HeaderBig title='Riwayat Pesanan' color={Color.textInput} />}
     >
       {!loading && <TabScreenPerProduct
         bookings={dataUserBookings.currentUserBookings}

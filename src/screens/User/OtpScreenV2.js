@@ -26,7 +26,7 @@ import AlertModal from 'src/components/Modal/AlertModal';
 // import { requestHttp } from 'src/api/httpService';
 // import { requestGetCurrentUser } from 'src/api/user';
 import {CommonActions} from '@react-navigation/native';
-import {Header} from 'src/components';
+import {Header, HeaderBig} from 'src/components';
 import {statusBarHeight} from 'src/utils/constants';
 import {FormatDuration} from 'src/utils';
 import {postNonAuth} from 'src/api-rest/httpService';
@@ -255,7 +255,10 @@ const OtpScreenV2 = ({navigation, route}) => {
       style={{
         backgroundColor: '#EEEEEE',
       }}
-      showHeader={false}>
+      header={
+        <HeaderBig style={{ backgroundColor: 'transparent' }} />
+      }
+    >
       <ScrollView
         keyboardShouldPersistTaps="handled"
         bounces={false}
@@ -268,15 +271,6 @@ const OtpScreenV2 = ({navigation, route}) => {
             paddingHorizontal: 16,
             marginTop: 16,
           }}>
-          <View>
-            <Image
-              source={imageAssets.iconApp}
-              style={{
-                width: width * 0.1,
-                height: width * 0.1,
-              }}
-            />
-          </View>
           <Container marginTop={34} marginBottom={48} align="flex-start">
             <Text align="left" size={28} type="medium">
               OTP verification

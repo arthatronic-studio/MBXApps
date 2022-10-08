@@ -51,12 +51,12 @@ const Button = (props) => {
   const {Color} = useColor();
 
   let buttonColor = color || Color.primary;
-  let textColor = disabled ? Color.border : fontColor || Color.text;
+  let textColor = disabled ? Color.border : fontColor || Color.textInput;
   let borderColor = buttonColor;
 
   if (outline) {
     buttonColor = disabled ? Color.border : fontColor || Color.textInput;
-    textColor = color || Color.primaryDark;
+    textColor = color || Color.primary;
     borderColor = textColor;
   }
 

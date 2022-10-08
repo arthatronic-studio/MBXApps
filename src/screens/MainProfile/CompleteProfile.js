@@ -55,7 +55,7 @@ const CompleteProfile = ({navigation, route}) => {
           titleRight="Skip"
           titleRightColor={Color.black}
           onPressRightButton={() => redirectTo('MainPage')}
-          style={{backgroundColor: 'transparent', paddingTop: 16}}
+          style={{backgroundColor: 'transparent'}}
         />
       }>
       <View

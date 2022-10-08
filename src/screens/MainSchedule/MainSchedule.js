@@ -81,7 +81,7 @@ export default ({ navigation, route }) => {
   return (
     <Scaffold
       header={
-        <HeaderBig title='Jadwal' style={{paddingTop: 16}} />
+        <HeaderBig title='Jadwal' />
       }
       fallback={fallback}
       empty={false}

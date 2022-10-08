@@ -617,9 +617,6 @@ const MainHome = ({ navigation, route }) => {
       header={
         <HeaderBig
           type='MAIN_HOME'
-          style={{
-            paddingTop: 8,
-          }}
           actions={
             <View style={{ flexDirection: 'row' }}>
               {/* <TouchableOpacity
@@ -675,7 +672,6 @@ const MainHome = ({ navigation, route }) => {
                   navigation.navigate('EventHistory');
                 }}
                 style={{
-                  width: '20%',
                   justifyContent: 'flex-start',
                   alignItems: 'flex-end',
                 }}>

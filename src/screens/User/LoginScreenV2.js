@@ -231,27 +231,25 @@ const LoginScreenV2 = ({navigation, route}) => {
 
   return (
     <Scaffold
-      showHeader={false}
-      // header={
-      //   <HeaderBig
-      //     title='Login'
-      //     titleRight='Register'
-      //     titleRightColor={Color.primarySoft}
-      //     onPressRightButton={() => {
-      //       navigation.navigate('RegisterScreen');
-      //       dispatch({ type: 'USER.REGISTER', status: false });
-      //     }}
-      //     style={{ backgroundColor: 'transparent', paddingTop: 16 }}
-      //   />
-      // }
+      header={
+        <HeaderBig
+          title=''
+          // titleRight=''
+          // titleRightColor={Color.primarySoft}
+          // onPressRightButton={() => {
+          //   navigation.navigate('RegisterScreen');
+          //   dispatch({ type: 'USER.REGISTER', status: false });
+          // }}
+          style={{ backgroundColor: 'transparent' }}
+        />
+      }
       style={{
         backgroundColor: '#EEEEEE',
       }}
       popupProps={popupProps}
       fallback={loading}
       statusBarColor={'#EEEEEE'}
-      translucent={Platform.OS === 'ios' ? false : true}
-      useSafeArea={Platform.OS === 'ios' ? false : false}>
+    >
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
@@ -260,18 +258,6 @@ const LoginScreenV2 = ({navigation, route}) => {
         }}>
         <View style={{marginTop: 16}}>
           <Container padding={16}>
-            <View>
-              <Image
-                source={iconApp}
-                style={{
-                  width: width * 0.1,
-                  height: width * 0.1,
-                }}
-              />
-            </View>
-
-            <Divider height={38} />
-
             {state.isSucceddForgot && (
               <View
                 style={{

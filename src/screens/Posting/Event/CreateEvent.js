@@ -12,13 +12,10 @@ import { initialLatitude, initialLongitude } from 'src/utils/constants';
 
 import {
 	Text,
-	// TouchableOpacity,
-	
 	useLoading,
 	Scaffold,
 	Row,
 	Col,
-	HeaderBig,
 	useColor,
 	Header
 } from '@src/components';

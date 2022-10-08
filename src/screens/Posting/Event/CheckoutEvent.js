@@ -20,7 +20,6 @@ import {
     Scaffold,
     Row,
     Col,
-    HeaderBig,
     useColor,
     Header,
     Button

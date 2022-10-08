@@ -235,7 +235,7 @@ const LoginScreen = ({navigation, route}) => {
       //       navigation.navigate('RegisterScreen');
       //       dispatch({ type: 'USER.REGISTER', status: false });
       //     }}
-      //     style={{ backgroundColor: 'transparent', paddingTop: 16 }}
+      //     style={{ backgroundColor: 'transparent' }}
       //   />
       // }
       popupProps={popupProps}
