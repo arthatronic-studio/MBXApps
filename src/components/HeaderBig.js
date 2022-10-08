@@ -82,16 +82,19 @@ const HeaderBig = ({
             {iconRightButton}
           </SideButton>}
 
-          {titleRight !== '' && <Text
-            size={17}
-            type='medium'
-            align='left'
-            color={titleRightColor || Color.primary}
-            onPress={() => onPressRightButton &&  onPressRightButton()}
-            underline
-          >
-              {titleRight}
-          </Text>}
+          {titleRight !== '' && (
+            <View style={{ borderBottomWidth: 1, borderColor: Color.text }}>
+              <Text
+                size={17}
+                type='medium'
+                align='left'
+                color={titleRightColor || Color.primary}
+                onPress={() => onPressRightButton &&  onPressRightButton()}
+              >
+                  {titleRight}
+              </Text>
+            </View>
+          )}
 
           {actions && actions}
         </View>

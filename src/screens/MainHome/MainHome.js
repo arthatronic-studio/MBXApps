@@ -52,6 +52,7 @@ import ModalBeaconCheckin from './ModalBeaconCheckin';
 import DraggableButton from './DraggableButton';
 import ListContenEvent from 'src/components/Event/ListContenEvent';
 import PostingHeader from 'src/components/Posting/PostingHeader';
+import { redirectTo } from 'src/utils';
 
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
@@ -617,94 +618,106 @@ const MainHome = ({ navigation, route }) => {
       header={
         <HeaderBig
           type='MAIN_HOME'
+          titleRight={auth.user && auth.user.isGuest ? 'LOGIN' : ''}
+          onPressRightButton={() => {
+            if (auth.user && auth.user.isGuest) {
+              redirectTo('LoginScreenV2');
+            }
+          }}
           actions={
-            <View style={{ flexDirection: 'row' }}>
-              {/* <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('NotificationScreen');
-                }}
-                style={{
-                  width: '20%',
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-end',
-                }}>
-                <Ionicons
-                  name="notifications-outline"
-                  size={22}
-                  color={Color.textButtonInline}
-                />
-                {notificationCount > 0 && (
-                  <Circle
-                    size={12}
-                    color={Color.error}
-                    style={{ position: 'absolute', top: -4, right: -4 }}>
-                    <Text size={8} color={Color.textButtonInline}>
-                      {notificationCount > 99 ? '99' : notificationCount}
-                    </Text>
-                  </Circle>
-                )}
-              </TouchableOpacity> */}
-
-              {/* <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('Chat');
-                }}
-                style={{
-                  width: '20%',
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-end',
-                }}>
-                <Ionicons name="chatbox-outline" size={22} color={Color.textButtonInline} />
-                {chatNotifCount > 0 && (
-                  <Circle
-                    size={12}
-                    color={Color.error}
-                    style={{ position: 'absolute', top: -4, right: -4 }}>
-                    <Text size={8} color={Color.textButtonInline}>
-                      {chatNotifCount > 99 ? '99' : chatNotifCount}
-                    </Text>
-                  </Circle>
-                )}
-              </TouchableOpacity> */}
-
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('EventHistory');
-                }}
-                style={{
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-end',
-                }}>
-                <Image
-                  source={imageAssets.ticket}
-                  style={{
-                    height: 20,
-                    width: 20,
-                    tintColor: Color.text,
-                  }}
-                />
-              </TouchableOpacity>
-
-              {/* <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('MainProfile');
-                }}
-                style={{
-                  width: '20%',
-                  justifyContent: 'flex-start',
-                  alignItems: 'flex-end',
-                }}>
-                <Image
-                  source={imageAssets.profile}
-                  style={{
-                    height: 20,
-                    width: 20,
-                    tintColor: Color.text,
-                  }}
-                />
-              </TouchableOpacity> */}
+            auth.user && !auth.user.isGuest && <View>
+              <Text size={11} type='medium' align='right'>Hi,</Text>
+              <Text size={17} type='medium' align='right'>{auth.user.name.toUpperCase()}</Text>
             </View>
           }
+          // actions={
+          //   <View style={{ flexDirection: 'row' }}>
+          //     {/* <TouchableOpacity
+          //       onPress={() => {
+          //         navigation.navigate('NotificationScreen');
+          //       }}
+          //       style={{
+          //         width: '20%',
+          //         justifyContent: 'flex-start',
+          //         alignItems: 'flex-end',
+          //       }}>
+          //       <Ionicons
+          //         name="notifications-outline"
+          //         size={22}
+          //         color={Color.textButtonInline}
+          //       />
+          //       {notificationCount > 0 && (
+          //         <Circle
+          //           size={12}
+          //           color={Color.error}
+          //           style={{ position: 'absolute', top: -4, right: -4 }}>
+          //           <Text size={8} color={Color.textButtonInline}>
+          //             {notificationCount > 99 ? '99' : notificationCount}
+          //           </Text>
+          //         </Circle>
+          //       )}
+          //     </TouchableOpacity> */}
+
+          //     {/* <TouchableOpacity
+          //       onPress={() => {
+          //         navigation.navigate('Chat');
+          //       }}
+          //       style={{
+          //         width: '20%',
+          //         justifyContent: 'flex-start',
+          //         alignItems: 'flex-end',
+          //       }}>
+          //       <Ionicons name="chatbox-outline" size={22} color={Color.textButtonInline} />
+          //       {chatNotifCount > 0 && (
+          //         <Circle
+          //           size={12}
+          //           color={Color.error}
+          //           style={{ position: 'absolute', top: -4, right: -4 }}>
+          //           <Text size={8} color={Color.textButtonInline}>
+          //             {chatNotifCount > 99 ? '99' : chatNotifCount}
+          //           </Text>
+          //         </Circle>
+          //       )}
+          //     </TouchableOpacity> */}
+
+          //     {/* <TouchableOpacity
+          //       onPress={() => {
+          //         navigation.navigate('EventHistory');
+          //       }}
+          //       style={{
+          //         justifyContent: 'flex-start',
+          //         alignItems: 'flex-end',
+          //       }}>
+          //       <Image
+          //         source={imageAssets.ticket}
+          //         style={{
+          //           height: 20,
+          //           width: 20,
+          //           tintColor: Color.text,
+          //         }}
+          //       />
+          //     </TouchableOpacity> */}
+
+          //     {/* <TouchableOpacity
+          //       onPress={() => {
+          //         navigation.navigate('MainProfile');
+          //       }}
+          //       style={{
+          //         width: '20%',
+          //         justifyContent: 'flex-start',
+          //         alignItems: 'flex-end',
+          //       }}>
+          //       <Image
+          //         source={imageAssets.profile}
+          //         style={{
+          //           height: 20,
+          //           width: 20,
+          //           tintColor: Color.text,
+          //         }}
+          //       />
+          //     </TouchableOpacity> */}
+          //   </View>
+          // }
         />
       }
       floatingActionButton={
@@ -892,7 +905,7 @@ const MainHome = ({ navigation, route }) => {
 
           {showDebug && renderDebug()}
 
-          <TouchableOpacity
+          {auth.user && auth.user.isRegister && <TouchableOpacity
             onPress={() => navigation.navigate('CompleteProfile')}
             style={{ 
               marginHorizontal: 16,
@@ -920,7 +933,7 @@ const MainHome = ({ navigation, route }) => {
               Complete Now{' '}
               <Ionicons name="arrow-forward" size={12} color={Color.primaryDark} />
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity>}
 
           <Divider height={spaceContentSize * 2} />
 

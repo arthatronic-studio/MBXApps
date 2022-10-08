@@ -217,7 +217,7 @@ const MainProfile = ({navigation, route}) => {
 
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('ChangeProfile');
+                navigation.navigate('CompleteProfileInput', { canGoBack: true });
               }}
               style={{
                 flexDirection: 'row',
@@ -411,7 +411,7 @@ const MainProfile = ({navigation, route}) => {
           </Container>
         )}
 
-        <Container padding={16}>
+        {auth.user && !auth.user.isGuest && <Container padding={16}>
           <TouchableOpacity
             onPress={() => {
               onPressExit();
@@ -432,7 +432,31 @@ const MainProfile = ({navigation, route}) => {
               Logout
             </Text>
           </TouchableOpacity>
-        </Container>
+        </Container>}
+
+        {auth.user && auth.user.isGuest && <Container padding={16}>
+          <TouchableOpacity
+            onPress={() => {
+              redirectTo('LoginScreenV2');
+            }}
+            style={{
+              flexDirection: 'row',
+            }}>
+            <Image
+              source={assetImageProfile.logout}
+              style={{
+                height: 16,
+                width: 16,
+                resizeMode: 'contain',
+                tintColor: Color.blue,
+              }}
+            />
+            <Divider width={8} />
+            <Text color={Color.blue} align="left">
+              Login
+            </Text>
+          </TouchableOpacity>
+        </Container>}
       </ScrollView>
 
       {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}

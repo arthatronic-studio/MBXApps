@@ -89,7 +89,7 @@ const CompleteProfile = ({navigation, route}) => {
             paddingHorizontal: 16,
           }}>
           <TouchableOpacity
-            onPress={() => redirectTo('CompleteProfileInput')}
+            onPress={() => redirectTo('CompleteProfileInput', { canGoBack: false })}
             style={{
               borderWidth: 1,
               paddingVertical: 12,

@@ -107,18 +107,22 @@ const OnBoardingScreenV2 = ({navigation}) => {
   useEffect(() => {
     if (isFocused) {
       if (user) {
-        redirectTo('MainPage');
+        // redirectTo('MainPage');
+        const body = {
+          phone: '6283891122802',
+        };
+        redirectTo('OtpScreen', { body, isGuest: true });
       } else {
         // fetchOnBoarding();
       }
     }
   }, [user, error, isFocused]);
 
-  const redirectTo = nav => {
+  const redirectTo = (nav, params) => {
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
-        routes: [{name: nav}],
+        routes: [{name: nav, params}],
       }),
     );
   };
@@ -177,7 +181,13 @@ const OnBoardingScreenV2 = ({navigation}) => {
                   style={{
                     textDecorationLine: 'underline',
                   }}
-                  onPress={() => redirectTo('MainPage')}>
+                  onPress={() => {
+                    // redirectTo('MainPage');
+                    const body = {
+                      phone: '6283891122802',
+                    };
+                    redirectTo('OtpScreen', { body, isGuest: true });
+                  }}>
                   Skip
                 </Text>
               </Col>
@@ -245,7 +255,13 @@ const OnBoardingScreenV2 = ({navigation}) => {
         </Animated.View>
 
         <AnimatedTouchableOpacity
-          onPress={() => redirectTo('MainPage')}
+          onPress={() => {
+            // redirectTo('MainPage');
+            const body = {
+              phone: '6283891122802',
+            };
+            redirectTo('OtpScreen', { body, isGuest: true });
+          }}
           style={{
             transform: [{translateY: leftValue3}],
             marginVertical: 16,

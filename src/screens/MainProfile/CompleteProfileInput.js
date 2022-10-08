@@ -84,6 +84,8 @@ const listGender = [
 ];
 
 export default ({navigation, route}) => {
+  const { params } = route;
+
   // dispatch
   const dispatch = useDispatch();
 
@@ -199,11 +201,11 @@ export default ({navigation, route}) => {
         showPopup('Data berhasil diubah', 'success');
 
         setTimeout(() => {
-          // if (navigation.canGoBack()) {
-          //   navigation.pop();
-          // } else {
+          if (params && params.canGoBack) {
+            navigation.pop();
+          } else {
             redirectTo('MainPage');
-          // }
+          }
         }, 2500);
 
         return;
