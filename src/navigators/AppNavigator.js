@@ -72,6 +72,8 @@ import UserProfileScreen from '@src/screens/MainProfile/UserProfileScreen';
 import FAQScreen from 'src/screens/MainProfile/FAQScreen';
 import ContentProductSaveScreen from 'src/screens/MainProfile/ContentProductSaveScreen';
 import ProfileDetail from 'src/screens/MainProfile/ProfileDetail';
+import CompleteProfile from 'src/screens/MainProfile/CompleteProfile';
+import CompleteProfileInput from 'src/screens/MainProfile/CompleteProfileInput';
 
 // community admin
 import CommunityAdminPage from '@src/screens/MainProfile/CommunityAdmin/CommunityAdminPage';
@@ -509,6 +511,8 @@ function AppNavigator() {
       <Screen name="ContentProductSaveScreen" component={ContentProductSaveScreen} />
       <Screen name="UserProfileScreen" component={UserProfileScreen} />
       <Screen name="ProfileDetail" component={ProfileDetail} />
+      <Screen name="CompleteProfile" component={CompleteProfile} />
+      <Screen name="CompleteProfileInput" component={CompleteProfileInput} />
       {/* community admin */}
       <Screen name="CommunityAdminPage" component={CommunityAdminPage} />
       <Screen name="CardDetail" component={CardDetail} />

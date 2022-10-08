@@ -896,6 +896,36 @@ const MainHome = ({ navigation, route }) => {
 
           {showDebug && renderDebug()}
 
+          <TouchableOpacity
+            onPress={() => navigation.navigate('CompleteProfile')}
+            style={{ 
+              marginHorizontal: 16,
+              borderWidth: 1,
+              padding: 10
+             }}
+          >
+            <AntDesign name="exclamationcircleo" size={20} color={"#1C1B1F"} />
+            <Divider height={10}/>
+            <Text type="semibold" size={12} lineHeight={22} align='left'>
+              Looks like you didn't complete your profile
+            </Text>
+            <Text align='left' size={12} type="medium" lineHeight={14}>
+              Complete your profile to get the full experience inside the app
+            </Text>
+            <Divider height={18}/>
+            <Text
+              type="medium"
+              lineHeight={14}
+              align='left'
+              onPress={() => {}}
+              size={12}
+              color={Color.primaryDark}
+            >
+              Complete Now{' '}
+              <Ionicons name="arrow-forward" size={12} color={Color.primaryDark} />
+            </Text>
+          </TouchableOpacity>
+
           <Divider height={spaceContentSize * 2} />
 
           <ListContenEvent

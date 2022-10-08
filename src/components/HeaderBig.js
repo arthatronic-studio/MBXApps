@@ -79,7 +79,7 @@ const HeaderBig = ({
         <Col size={6} justify='center' align='flex-start' style={{height: '100%'}}>
           {title === '' ?
             <View style={{flexDirection: 'row'}}>
-              <Image source={iconApp} style={{width: 90, height: 40}} resizeMode='contain' />
+              <Image source={iconApp} style={{width: 40, height: 40}} resizeMode='contain' />
             </View>
           :
             <Text size={28} type='bold'>{title}</Text>
@@ -94,10 +94,12 @@ const HeaderBig = ({
           </SideButton>}
 
           {titleRight !== '' && <Text
+            size={17}
             type='medium'
             align='left'
             color={titleRightColor || Color.primary}
             onPress={() => onPressRightButton &&  onPressRightButton()}
+            underline
           >
               {titleRight}
           </Text>}
