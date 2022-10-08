@@ -163,7 +163,7 @@ const WidgetHomeMenuStatic = () => {
   if (listMenuHome.length === 0) return <View />;
 
   return (
-    <Container padding={paddingInMenu}>
+    <Container padding={paddingInMenu - 2}>
       <Container
         style={{
           width: '100%',
