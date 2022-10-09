@@ -17,11 +17,12 @@ import {
     TouchableOpacity,
     useColor
 } from '@src/components';
-import PostingHeader from '../Posting/PostingHeader';
+import PostingHeader from '../../components/Posting/PostingHeader';
 import { getAPI } from 'src/api-rest/httpService';
 import { useSelector } from 'react-redux';
 import { Container, Divider } from 'src/styled';
 import { useNavigation } from '@react-navigation/native';
+import CardTenantList from './CardTenantList';
 
 const defaultProps = {
     title: '',
@@ -64,36 +65,6 @@ const HighlightTenant = ({ title, tenantType, numColumns }) => {
         setItemData(newArr);
     }
 
-    const renderCard = (item, idx) => {
-        let orderNumber = (idx + 1).toString();
-        if (orderNumber.length <= 1) orderNumber = '0'+orderNumber;
-        
-        return (
-            <View
-                key={idx}
-                style={{ width: `${100/numColumns}%`, padding: 8 }}
-            >
-                <TouchableOpacity
-                    onPress={() => {
-                        navigation.navigate('TenantDetailScreen', { item })
-                    }}
-                    style={{ width: '100%', flexDirection: 'row', borderBottomWidth: 1, paddingBottom: 12, paddingHorizontal: 16, borderColor: Color.primary }}
-                >
-                    <View style={{justifyContent: 'center'}}>
-                        <Text size={11} type='medium' color={Color.textSoft}>{orderNumber}</Text>
-                    </View>
-                    <View style={{flex: 1, alignItems: 'flex-start', paddingHorizontal: 32}}>
-                        <Text size={18} type='medium'>{item.name}</Text>
-                    </View>
-                    <View style={{justifyContent: 'center'}}>
-                        <Text size={11} type='medium' color={Color.textSoft}>View</Text>
-                        <View style={{ borderBottomWidth: 1, borderColor: Color.textSoft }} />
-                    </View>
-                </TouchableOpacity>
-            </View>
-        )
-    }
-
     if (itemData.length === 0) return <View />
 
     return (
@@ -105,7 +76,14 @@ const HighlightTenant = ({ title, tenantType, numColumns }) => {
 
             <View style={{ marginTop: 12, flexDirection: 'row', flexWrap: 'wrap', width: '100%', paddingHorizontal: 8 }}>
                 {itemData.map((item, idx) => {
-                    return renderCard(item, idx);
+                    return (
+                        <CardTenantList
+                            key={idx}
+                            index={idx}
+                            item={item}
+                            numColumns={numColumns}
+                        />
+                    )
                 })}
             </View>
         </View>

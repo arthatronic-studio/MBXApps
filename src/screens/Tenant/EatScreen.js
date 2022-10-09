@@ -68,7 +68,7 @@ const EatScreen = ({ navigation, route }) => {
     <Scaffold
       header={
         <Header
-          title='Makanan'
+          title='EATS'
           centerTitle={false}
           actions={
             <View style={{ width: '100%', alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row' }}>
@@ -76,34 +76,42 @@ const EatScreen = ({ navigation, route }) => {
                 onPress={() => {
                   navigation.navigate('TenantHistoryScreen');
                 }}
+                style={{
+                  flexDirection: 'row',
+                }}
               >
-                <Image
+                <View style={{borderBottomWidth: 1, borderColor: Color.primary}}>
+                  <Text size={17} type='medium'>My Order</Text>
+                </View>
+                {/* <Image
                   source={imageAssets.receipt}
                   style={{
                     height: 24,
                     width: 24,
                     resizeMode: 'contain',
                   }}
-                />
+                /> */}
+                <View
+                  style={{
+                    height: 20,
+                    aspectRatio: 1,
+                    marginLeft: 8,
+                    borderRadius: 50,
+                    borderWidth: 1,
+                    borderColor: Color.secondary,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Text size={12} Color={Color.secondary}>0</Text>
+                </View>
               </TouchableOpacity>
-
-              {/* <View
-                style={{
-                  position: 'absolute',
-                  top: -3,
-                  right: -1,
-                  width: 8,
-                  aspectRatio: 1,
-                  borderRadius: 4,
-                  backgroundColor: Color.error,
-                }}
-              /> */}
             </View>
           }
         />
       }
     >
-      {isCheckin &&
+      {/* {isCheckin &&
         <Container padding={16} paddingTop={8}>
           <Container padding={14} radius={16} borderWidth={0.5} borderColor={Color.textSoft}>
             <Row justify='space-between'>
@@ -128,15 +136,15 @@ const EatScreen = ({ navigation, route }) => {
             </Row>
           </Container>
         </Container>
-      }
+      } */}
 
-      <SearchBar
+      {/* <SearchBar
         type='select'
         label='Cari tempat apa hari ini'
         onPress={() => navigation.navigate('SearchEvent')}
-      />
+      /> */}
 
-      <Divider />
+      {/* <Divider /> */}
 
       <ListTenantItem
         tenantType='eat'
@@ -145,14 +153,18 @@ const EatScreen = ({ navigation, route }) => {
         title='Semua Tempat'
         // nav='EatScreen'
         // refresh={refreshing || isFocused}
-        showHeader
+        showHeader={false}
         // showSeeAllText={false}
         style={{
           paddingBottom: height / 5,
+          paddingHorizontal: 12,
         }}
         ListHeaderComponent={
           <>
-            <ListTenantFeatured
+            <Container paddingHorizontal={8}>
+              <View style={{width: '100%', height: 1, backgroundColor: Color.primary}} />
+            </Container>
+            {/* <ListTenantFeatured
               tenantType='eat'
               horizontal
               productCategory='EAT'
@@ -162,7 +174,7 @@ const EatScreen = ({ navigation, route }) => {
               style={{
                 paddingHorizontal: 0,
               }}
-            />
+            /> */}
           </>
         }
       />

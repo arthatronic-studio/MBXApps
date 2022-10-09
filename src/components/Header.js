@@ -197,8 +197,8 @@ const Header = (props) => {
             style={{alignItems: centerTitle ? 'center' : 'flex-start'}}>
             {children || (
               <Text
-                size={16}
-                type={type ? type : 'bold'}
+                size={17}
+                type={type ? type : 'medium'}
                 align="left"
                 letterSpacing={0.23}
                 color={color || Color.text}
@@ -353,8 +353,8 @@ const Header = (props) => {
             style={{alignItems: centerTitle ? 'center' : 'flex-start'}}>
             {children || (
               <Text
-                size={16}
-                type={type ? type : 'bold'}
+                size={17}
+                type={type ? type : 'medium'}
                 align="left"
                 letterSpacing={0.23}
                 color={color || Color.text}
@@ -374,8 +374,8 @@ const Header = (props) => {
             )}
             {titleRight && (
               <Text
-                size={16}
-                type="bold"
+                size={17}
+                type="medium"
                 align="left"
                 letterSpacing={0.23}
                 style={{marginRight: 12}}

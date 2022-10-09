@@ -128,6 +128,7 @@ const iconMenuHome = require('./icon-menu-home.png');
 const iconMenuSecond = require('./icon-menu-second.png');
 const iconMenuNotif = require('./icon-menu-notif.png');
 const iconMenuProfile = require('./icon-menu-profile.png');
+const addBox = require('./add_box.png');
 
 export {
   iconApp,
@@ -319,6 +320,7 @@ export const imageAssets = {
   bannerMfest2,
   aboutFest3,
   inbox,
+  addBox,
 };
 
 export default imageAssets;

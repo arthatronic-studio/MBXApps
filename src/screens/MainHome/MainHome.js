@@ -41,7 +41,7 @@ import WidgetHomeMenuStatic from './WidgetHomeMenuStatic';
 import { getAPI, postAPI } from 'src/api-rest/httpService';
 import HighlightEvent from 'src/components/Event/HighlightEvent';
 import { stateUpdateProfile } from 'src/api-rest/stateUpdateProfile';
-import HighlightTenant from 'src/components/Tenant/HighlightTenant';
+import HighlightTenant from 'src/screens/Tenant/HighlightTenant';
 import { stateBeaconSetting } from 'src/api-rest/stateBeaconSetting';
 import { androidBluetoothPermission } from 'src/lib/androidPermissions';
 import { shadowStyle } from 'src/styles';
@@ -982,12 +982,12 @@ const MainHome = ({ navigation, route }) => {
           <HighlightTenant
             title='● TENANTS'
             numColumns={1}
-            // tenantType='shop'
+            tenantType='eat'
           />
 
           {/* <HighlightTenant
-            title='Makanan Favorit'
-            tenantType='eat'
+            title=''
+            tenantType='shop'
           /> */}
 
           <View>

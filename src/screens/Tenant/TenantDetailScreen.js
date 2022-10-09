@@ -37,6 +37,7 @@ import { isIphoneNotch, statusBarHeight } from 'src/utils/constants';
 import { fetchEatCartAdd } from 'src/api-rest/fetchEatCartAdd';
 import { fetchEatCartDetail } from 'src/api-rest/fetchEatCartDetail';
 import { fetchEatCartGet } from 'src/api-rest/fetchEatCartGet';
+import CardTenantMenu from './CardTenantMenu';
 
 const TenantDetailScreen = ({ navigation, route }) => {
   const { params } = route;
@@ -73,7 +74,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
 
   console.log('params', params);
 
-  const getCart = async() => {
+  const getCart = async () => {
     const cart = await fetchEatCartGet();
     if (cart.status) {
       setCartId(cart.data.id);
@@ -85,7 +86,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
     console.log('cart', cart);
   }
 
-  const getDetail = async(cart_id, location_id) => {
+  const getDetail = async (cart_id, location_id) => {
     const result = await fetchEatCartDetail({ cart_id, location_id });
     console.log('result cart detail', result);
     if (result.status) {
@@ -97,66 +98,6 @@ const TenantDetailScreen = ({ navigation, route }) => {
     }
   };
 
-  const renderItem = ({ item, index }) => {
-    return (
-      <View
-        style={{
-          width,
-          marginBottom: 12,
-        }}
-      >
-        <TouchableOpacity
-          onPress={() => {
-            setCurrentIndexProduct(index);
-          }}
-          style={{
-            width: '100%',
-            paddingHorizontal: 16,
-            flexDirection: 'row',
-          }}
-        >
-          <View
-            style={{
-              width: '15%',
-              aspectRatio: 1,
-            }}
-          >
-            <Image
-              source={Array.isArray(item.images) && item.images.length > 0 ? { uri: item.images[0] } : ''}
-              style={{
-                width: '100%',
-                height: '100%',
-                borderRadius: 8,
-                backgroundColor: Color.border,
-              }}
-            />
-          </View>
-
-          <View
-            style={{
-              width: '55%',
-              paddingHorizontal: 8,
-              alignItems: 'flex-start',
-              justifyContent: 'center',
-            }}
-          >
-            <Text size={14} numberOfLines={1}>{item.name}</Text>
-            <Text size={12} numberOfLines={1}>{item.category}</Text>
-          </View>
-
-          <View
-            style={{
-              width: '30%',
-              justifyContent: 'center',
-            }}
-          >
-            <Text align='right' size={16} type='medium'>{FormatMoney.getFormattedMoney(item.price)}</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    )
-  };
-
   const openGps = (lat, lng) => {
     // var scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
     // var url = scheme + `${lat},${lng}`;
@@ -165,8 +106,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
     Linking.openURL(`google.navigation:q=${latLng}`);
   }
 
-  const onAddToCart = async(item, index) => {
-    console.log('item', item);
+  const onAddToCart = async (item, index) => {
     const quantity = item.quantity || 1;
 
     let newArr = [...listProducts];
@@ -193,6 +133,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
         }
         if (result.data[0].location && result.data[0].location.id) {
           setCartLocationId(result.data[0].location.id);
+          setListCartProduct(result.data[0].cart_detail || []);
         }
       }
 
@@ -207,11 +148,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
   const labelDesctiption = items.description;
 
   const renderHeader = (
-    <View
-      style={{
-        paddingBottom: 0,
-      }}
-    >
+    <View>
       <ScrollView
         horizontal
         pagingEnabled
@@ -231,17 +168,18 @@ const TenantDetailScreen = ({ navigation, route }) => {
               // }}
               style={{
                 width,
-                aspectRatio: 1,
               }}
             >
-              <Image
-                source={{ uri: i }}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  backgroundColor: Color.border,
-                }}
-              />
+              <View style={{ width: '100%', aspectRatio: 16 / 9, }}>
+                <Image
+                  source={{ uri: i }}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: Color.border,
+                  }}
+                />
+              </View>
             </TouchableOpacity>
           )
         })
@@ -257,64 +195,103 @@ const TenantDetailScreen = ({ navigation, route }) => {
             // }}
             style={{
               width,
-              aspectRatio: 1,
             }}
           >
-            <Image
-              // source={{ uri: '' }}
-              style={{
-                width: '100%',
-                height: '100%',
-                backgroundColor: Color.border,
-              }}
-            />
+            <View style={{ width: '100%', aspectRatio: 16 / 9, }}>
+              <Image
+                source={{ uri: '' }}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: Color.border,
+                }}
+              />
+            </View>
           </TouchableOpacity>
         }
       </ScrollView>
 
-      <Container paddingHorizontal={16} marginTop={8} marginBottom={16}>
-        <View
-          style={{ flexDirection: 'row', justifyContent: 'space-between' }}
-        >
-          <View>
-            <View>
-              <Text
-                size={20}
-                align='left'
-              >
-                {items.name}
-              </Text>
-            </View>
-
-            <View style={{ flexDirection: 'row', marginTop: 4 }}>
-              <View
-                style={{
-                  flex: 1,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}>
-                {/* <Image
-                  source={imageAssets.location}
-                  style={{
-                    width: 16,
-                    height: 16,
-                  }}
-                />
-                <Divider width={4} /> */}
-                <Text size={12} type='medium'>{items.type}</Text>
-              </View>
-            </View>
+      <Container marginTop={24} marginBottom={16}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View style={{ flex: 1 }}>
+            <Text
+              size={9}
+              type='semibold'
+              align='left'
+            >
+              {'● Tenants'.toUpperCase()}
+            </Text>
           </View>
 
-          {/* <View style={{ paddingHorizontal: 10, marginVertical: 4, justifyContent: 'center', backgroundColor: Color.primarySoft, borderRadius: 120 }}>
-            <Text size={12} type='medium' color={Color.textButtonInline}>Menuju Lokasi</Text>
-          </View> */}
+          <View style={{ flex: 3 }}>
+            <Text
+              size={24}
+              type='semibold'
+              align='left'
+            >
+              {items.name}
+            </Text>
+          </View>
+        </View>
+
+        <Divider height={12} />
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View style={{ flex: 1 }}>
+            
+          </View>
+
+          <View style={{ flex: 3 }}>
+            <Text
+              size={12}
+              type='semibold'
+              align='left'
+            >
+              {items.type}
+            </Text>
+          </View>
+        </View>
+
+        <Divider height={12} />
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View style={{ flex: 1 }}>
+            
+          </View>
+
+          <View style={{ flex: 3 }}>
+            <Text
+              size={9}
+              type='medium'
+              align='left'
+              {...descriptionProps}
+            >
+              {labelDesctiption}
+            </Text>
+          </View>
+        </View>
+
+        <Divider height={12} />
+
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View style={{ flex: 1 }}>
+            
+          </View>
+
+          <View style={{ flex: 3 }}>
+            <Pressable
+              onPress={() => setDesc(!desc)}
+              style={{ alignItems: 'flex-start', justifyContent: 'flex-start' }}
+            >
+              <View style={{borderBottomWidth: 0.5, borderColor: Color.primary}}>
+              <Text size={10}>{desc ? 'Read less' : 'Read More'}</Text>
+              </View>
+            </Pressable>
+          </View>
         </View>
       </Container>
 
-      <Line height={8} width='100%' color='#F4F4F4' />
-
-      <Container paddingHorizontal={16} marginTop={16} marginBottom={16}>
+      {/* <Container paddingHorizontal={16} marginTop={16} marginBottom={16}>
         <View
           style={{
             flex: 1,
@@ -369,13 +346,11 @@ const TenantDetailScreen = ({ navigation, route }) => {
           <Divider width={4} />
           <Text size={10} type='medium'>{FormatMoney.getFormattedMoney(10000)} - {FormatMoney.getFormattedMoney(60000)}</Text>
         </View>
-      </Container>
+      </Container> */}
 
-      <Line height={8} width='100%' color='#F4F4F4' />
-
-      <Container padding={16}>
+      <Container paddingBottom={14}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Text align='left' size={16} type='medium'>Menu</Text>
+          <Text align='left'>● Menu</Text>
           {/* <View style={{ flexDirection: 'row', padding: 8, backgroundColor: Color.error, borderRadius: 120 }}>
             <Image
               source={imageAssets.menu}
@@ -555,13 +530,6 @@ const TenantDetailScreen = ({ navigation, route }) => {
             paddingBottom: isIphoneNotch() ? statusBarHeight : 16,
           }}
         >
-          {/* handle */}
-          <View>
-            <Line color={Color.primary} height={4} width={width / 6} radius={2} />
-          </View>
-
-          <Divider />
-
           <View
             style={{
               width: '100%',
@@ -584,13 +552,11 @@ const TenantDetailScreen = ({ navigation, route }) => {
           <Divider />
 
           <Container>
-            <Text align='left' size={22} numberOfLines={2}>{item.name}</Text>
+            <Text align='left' size={24} numberOfLines={2} type='medium'>{item.name}</Text>
             <Divider height={2} />
-            <Text align='left' size={11} numberOfLines={4} type='medium'>{item.description}</Text>
+            <Text align='left' size={11} numberOfLines={2} type='medium' color={Color.secondary}>{item.category}</Text>
             <Divider />
-            <Text align='left' size={11}>Harga</Text>
-            <Divider height={2} />
-            <Text align='left' size={16} type='medium'>{FormatMoney.getFormattedMoney(item.price || 0)}</Text>
+            <Text align='left' size={14} numberOfLines={2} type='medium'>{item.description}</Text>
           </Container>
 
           <Divider />
@@ -602,47 +568,55 @@ const TenantDetailScreen = ({ navigation, route }) => {
                 justifyContent: 'space-between',
               }}
             >
-              <Text align='left' type='medium'>Jumlah Pesanan</Text>
 
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    if (disabledDecrease) return;
-                    let newArr = [...listProducts];
-                    newArr[index].quantity = quantity - 1;
-                    setListProducts(newArr);
-                  }}
-                  style={{ marginLeft: 24 }}
-                >
-                  <AntDesign
-                    name="minuscircleo"
-                    color={Color.primaryDark}
-                    size={20}
-                    style={{
-                      opacity: disabledDecrease ? 0.3 : 1,
+              <View>
+                <Text align='left' size={11} type='medium' color={Color.secondary}>Total</Text>
+                <Divider height={4} />
+                <Text align='left' size={16} type='medium'>{FormatMoney.getFormattedMoney(item.price || 0)}</Text>
+              </View>
+
+              <View style={{ alignItems: 'center'}}>
+                <Text align='left' size={11} type='medium' color={Color.secondary}>Total</Text>
+                <Divider height={4} />
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (disabledDecrease) return;
+                      let newArr = [...listProducts];
+                      newArr[index].quantity = quantity - 1;
+                      setListProducts(newArr);
                     }}
-                  />
-                </TouchableOpacity>
-                <View style={{ minWidth: 40 }}>
-                  <Text color={Color.text} type='bold' size={18} style={{ marginHorizontal: 8 }}>{quantity}</Text>
+                  >
+                    <AntDesign
+                      name="minuscircleo"
+                      color={Color.primaryDark}
+                      size={30}
+                      style={{
+                        opacity: disabledDecrease ? 0.3 : 1,
+                      }}
+                    />
+                  </TouchableOpacity>
+                  <View style={{ paddingHorizontal: 16 }}>
+                    <Text type='medium' size={24}>{quantity}</Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (disabledIncrease) return;
+                      let newArr = [...listProducts];
+                      newArr[index].quantity = quantity + 1;
+                      setListProducts(newArr);
+                    }}
+                  >
+                    <AntDesign
+                      name="pluscircleo"
+                      color={Color.primaryDark}
+                      size={30}
+                      style={{
+                        opacity: disabledIncrease ? 0.3 : 1,
+                      }}
+                    />
+                  </TouchableOpacity>
                 </View>
-                <TouchableOpacity
-                  onPress={() => {
-                    if (disabledIncrease) return;
-                    let newArr = [...listProducts];
-                    newArr[index].quantity = quantity + 1;
-                    setListProducts(newArr);
-                  }}
-                >
-                  <AntDesign
-                    name="pluscircleo"
-                    color={Color.primaryDark}
-                    size={20}
-                    style={{
-                      opacity: disabledIncrease ? 0.3 : 1,
-                    }}
-                  />
-                </TouchableOpacity>
               </View>
             </View>
 
@@ -651,6 +625,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
             <Row>
               <Container style={{ flex: 1 }}>
                 <Button
+                  fontColor='#E7FF00'
                   onPress={() => {
                     if (auth.user.isGuest) {
                       setCurrentIndexProduct(-1);
@@ -673,7 +648,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
                     onAddToCart(item, index);
                   }}
                 >
-                  Tambah Keranjang
+                  Order
                 </Button>
               </Container>
             </Row>
@@ -682,8 +657,6 @@ const TenantDetailScreen = ({ navigation, route }) => {
       </Modal>
     )
   }
-
-  console.log('params', params);
 
   return (
     <Scaffold
@@ -723,52 +696,73 @@ const TenantDetailScreen = ({ navigation, route }) => {
           }
         />
       }
-      floatingActionButton={
-        selectedProductCount > 0 && <Container width={width - 32} paddingBottom={16}>
-          <Row style={{ paddingVertical: 12, paddingHorizontal: 24, backgroundColor: Color.primary, borderRadius: 120 }}>
-            <Col style={{ justifyContent: 'center' }}>
-              <Text type='medium' size={11} align='left'>{selectedProductCount} Produk</Text>
-              <Divider height={4} />
-              <Text type='medium' size={14} align='left'>{cartAmount}</Text>
-            </Col>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('TenantCheckoutScreen', {
-                  cartId,
-                  cartLocationId,
-                  namaPemesan,
-                });
-              }}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-            >
-              <Text type='medium' size={12}>Checkout</Text>
-              <AntDesign
-                name={'arrowright'}
-                color={Color.text}
-                size={14}
-                style={{
-                  marginLeft: 4
-                }}
-              />
-            </TouchableOpacity>
-          </Row>
-        </Container>
-      }
     >
       <FlatList
         ref={flatlistRef}
         data={listProducts}
         keyExtractor={(item, index) => item.id + index.toString()}
-        renderItem={renderItem}
+        renderItem={({ item, index }) => {
+          const existInCart = listCartProduct.filter((e) => e.product_id === item.id)[0];
+          let quantity = existInCart ? existInCart.quantity : 0;
+          
+          return (
+            <CardTenantMenu
+              index={index}
+              item={item}
+              numColumns={1}
+              cartProductQuantity={quantity}
+              onPress={() => {
+                setCurrentIndexProduct(index);
+              }}
+            />
+          )
+        }}
         ListHeaderComponent={renderHeader}
-      // ListFooterComponent={renderFooter}
+        // ListFooterComponent={renderFooter}
         contentContainerStyle={{
-          paddingBottom: 76,
+          paddingBottom: 16,
+          paddingHorizontal: 16,
         }}
       />
+
+      {selectedProductCount > 0 && <Container width={width}>
+        <Row style={{ padding: 16, backgroundColor: Color.theme }}>
+          <Col style={{ flex: 1, justifyContent: 'center' }}>
+            <Text type='medium' size={11} align='left'>{selectedProductCount} Items</Text>
+            <Divider height={4} />
+            <Text type='medium' size={14} align='left'>{cartAmount}</Text>
+          </Col>
+
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('TenantCheckoutScreen', {
+                cartId,
+                cartLocationId,
+                namaPemesan,
+              });
+            }}
+            style={{
+              flex: 1,
+              paddingVertical: 12,
+              height: '100%',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: Color.primary,
+            }}
+          >
+            <Text type='medium' color={'#E7FF00'}>Checkout Order</Text>
+            {/* <AntDesign
+              name={'arrowright'}
+              color={'#E7FF00'}
+              size={14}
+              style={{
+                marginLeft: 4
+              }}
+            /> */}
+          </TouchableOpacity>
+        </Row>
+      </Container>}
 
       {/* modal menu */}
       {currentIndexProduct !== -1 && renderModalProduct(listProducts[currentIndexProduct], currentIndexProduct)}

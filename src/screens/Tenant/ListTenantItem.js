@@ -10,6 +10,7 @@ import { getAPI } from 'src/api-rest/httpService';
 import PostingHeader from 'src/components/Posting/PostingHeader';
 import { useSelector } from 'react-redux';
 import CardTenantItem from './CardTenantItem';
+import CardTenantList from 'src/screens/Tenant/CardTenantList';
 
 const propTypes = {
     productCategory: PropTypes.string.isRequired,
@@ -120,12 +121,17 @@ const ListTenantItem = ({ tenantType, productCategory, name, horizontal, style, 
                     {...extraProps}
                     renderItem={({ item, index }) => {
                         return (
-                            <CardTenantItem
+                            // <CardTenantItem
+                            //     index={index}
+                            //     productCategory={productCategory}
+                            //     item={item}
+                            //     horizontal={horizontal}
+                            //     {...extraProps}
+                            // />
+                            <CardTenantList
                                 index={index}
-                                productCategory={productCategory}
                                 item={item}
-                                horizontal={horizontal}
-                                {...extraProps}
+                                numColumns={1}
                             />
                         )
                     }
