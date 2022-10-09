@@ -609,7 +609,7 @@ const MainHome = ({ navigation, route }) => {
   // console.log('stateListCheckinUID', stateListCheckinUID);
   // console.log('stateListOtherUID', stateListOtherUID);
 
-  const isPromo = true;
+  const isPromo = false;
 
   return (
     <Scaffold
@@ -1050,11 +1050,11 @@ const MainHome = ({ navigation, route }) => {
                 join and be part of our movement!
               </Text>
 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   style={{width: '50%', marginTop: 24, alignSelf: 'flex-end', paddingVertical: 12, borderWidth: 1, borderColor: Color.text}}
                 >
                   <Text>Spark Ideas</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </Container>
           </View>
         </Container>

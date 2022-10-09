@@ -401,8 +401,8 @@ const OtpScreenV2 = ({navigation, route}) => {
             Verifikasi
           </Button> */}
 
-          <Divider />
-          <Text color={Color.error}>Sample: {params.mustDelete}</Text>
+          {/* <Divider />
+          <Text color={Color.error}>Sample: {params.mustDelete}</Text> */}
         </TouchableOpacity>
       </ScrollView>
 
