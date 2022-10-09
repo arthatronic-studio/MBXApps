@@ -31,8 +31,8 @@ const TabBarComponentV2 = (props) => {
 
     const [menus] = useState([
         { id: 'ber', name: 'Beranda', imageAsset: imageAssets.iconMenuHome, iconName: 'home', iconType: 'Entypo', nav: 'MainHome', ref: useRef(new Animated.Value(1)).current, viewRef: useRef(new Animated.Value(0)).current },
-        { id: 'not', name: 'Notifikasi', imageAsset: imageAssets.iconMenuSecond, nav: 'MainNotif', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
-        { id: 'not', name: 'Notifikasi', imageAsset: imageAssets.iconMenuNotif, nav: 'MainNotif2', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
+        { id: 'not', name: 'Notifikasi', imageAsset: imageAssets.iconMenuNotif, nav: 'MainNotif', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
+        // { id: 'not', name: 'Notifikasi', imageAsset: imageAssets.iconMenuSecond, nav: 'MainNotif', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
         { id: 'pro', name: 'Profil', imageAsset: imageAssets.iconMenuProfile, iconName: 'person', iconType: 'Ionicons', nav: 'MainProfile', ref: useRef(new Animated.Value(0.4)).current, viewRef: useRef(new Animated.Value(1)).current },
     ]);
 

@@ -609,6 +609,8 @@ const MainHome = ({ navigation, route }) => {
   // console.log('stateListCheckinUID', stateListCheckinUID);
   // console.log('stateListOtherUID', stateListOtherUID);
 
+  const isPromo = true;
+
   return (
     <Scaffold
       translucent={Platform.OS === 'ios' ? true : false}
@@ -721,7 +723,7 @@ const MainHome = ({ navigation, route }) => {
         />
       }
       floatingActionButton={
-        isSecurity && <View
+        isSecurity ? <View
           style={{
             bottom: -16,
             height: width / 5 - 8,
@@ -746,6 +748,36 @@ const MainHome = ({ navigation, route }) => {
             />
           </TouchableOpacity>
         </View>
+        : isPromo ? 
+        <View>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('SpecialOfferScreen')}
+            style={{ 
+              padding: 12,
+              backgroundColor: Color.black
+             }}
+          >
+            <Text type="bold" size={14} lineHeight={17} color={Color.white}>
+              SPECIAL OFFER
+            </Text>
+          </TouchableOpacity>
+          <View
+              style={{ 
+                position: 'absolute',
+                backgroundColor: '#E00F00',
+                right: -10,
+                top: -10,
+                paddingVertical: 5,
+                paddingHorizontal: 8,
+                borderRadius: 24 
+               }}
+            >
+              <Text size={12} type="mdium" color={Color.white} lineHeight={14}>
+                2
+              </Text>
+            </View> 
+        </View>
+        : <></>
       }
     >
       {/* <DraggableButton> */}

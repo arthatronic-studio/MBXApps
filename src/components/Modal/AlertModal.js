@@ -20,8 +20,7 @@ const ContainerModal = Styled(TouchableOpacity)`
 const CardModal = Styled(TouchableOpacity)`
   width: 90%;
   alignItems: center;
-  padding: 32px 16px 16px;
-  borderRadius: 16px;
+  padding: 24px 16px;
 `;
 
 const defaultProps = {
@@ -33,10 +32,11 @@ const defaultProps = {
     title: '',
     message: '',
     showDiscardButton: false,
+    AccepetText: 'Ya',
 };
 
 const AlertModal = ({
-    visible, type, onSubmit, onDiscard, onClose, title, message, showDiscardButton,
+    visible, type, onSubmit, onDiscard, onClose, title, message, showDiscardButton, AccepetText,
 }) => {
     const { Color } = useColor();
 
@@ -74,30 +74,25 @@ const AlertModal = ({
         >
             <ContainerModal onPress={() => onClose()}>
                 <CardModal activeOpacity={1} style={{backgroundColor: Color.theme}}>
-                    <View style={{width: 40, height: 40, borderRadius: 20, borderWidth: 3, borderColor: rawIcon().color, alignItems: 'center', justifyContent: 'center', marginBottom: 8}}>
+                    {/* <View style={{width: 40, height: 40, borderRadius: 20, borderWidth: 3, borderColor: rawIcon().color, alignItems: 'center', justifyContent: 'center', marginBottom: 8}}>
                         <Ionicons name={rawIcon().name} size={30} color={rawIcon().color} />
-                    </View>
+                    </View> */}
                     
                     {title !== '' && <View style={{marginBottom: 16}}>
-                        <Text type='bold' size={16} color={rawIcon().color}>{title}</Text>
+                        <Text type='bold' size={20} color={'#242424'}>{title}</Text>
                     </View>}
-                    <Text>{message}</Text>
+                    <Text size={12} type="medium" color="#3D3D3D">{message}</Text>
 
-                    <View style={{height: 45, width: '100%', flexDirection: 'row', marginTop: 32}}>
+                    <View style={{width: '100%', flexDirection: 'row', marginTop: 16, alignItems: 'center'}}>
                         {showDiscardButton && <TouchableOpacity
                             style={{
                                 flex: 1,
-                                justifyContent: 'center',
-                                backgroundColor: Color.textInput,
-                                borderRadius: 8,
-                                borderWidth: 1,
-                                borderColor: Color.primaryDark,
                             }}
                             onPress={() => {
                                 onDiscard();
                             }}
                         >
-                            <Text color={Color.primaryDark}>Tidak</Text>
+                            <Text color={Color.primaryDark} underline>Cancel</Text>
                         </TouchableOpacity>}
 
                         {showDiscardButton && <Divider />}
@@ -106,14 +101,15 @@ const AlertModal = ({
                             style={{
                                 flex: 1,
                                 justifyContent: 'center',
-                                backgroundColor: Color.primaryDark,
-                                borderRadius: 8,
+                                borderColor: '#E50000',
+                                paddingVertical: 12,
+                                borderWidth: 1,
                             }}
                             onPress={() => {
                                 onSubmit();
                             }}
                         >
-                            <Text color={Color.textInput}>Ya</Text>
+                            <Text color={'#E50000'} size={14} type="medium">{AccepetText}</Text>
                         </TouchableOpacity>
                     </View>
                 </CardModal>

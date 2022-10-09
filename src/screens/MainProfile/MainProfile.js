@@ -14,6 +14,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import QRCode from 'react-native-qrcode-svg';
+import Feather from 'react-native-vector-icons/Feather';
 
 import {
   Alert,
@@ -42,6 +43,7 @@ import ModalActions from 'src/components/Modal/ModalActions';
 import Axios from 'axios';
 import {initSocket} from 'src/api-socket/currentSocket';
 import {assetImageProfile} from 'assets/images/profile';
+import { FlatList } from 'react-native-gesture-handler';
 
 const MainProfile = ({navigation, route}) => {
   const currentSocket = initSocket();
@@ -112,6 +114,30 @@ const MainProfile = ({navigation, route}) => {
     // currentSocket.disconnect();
   };
 
+  const cardMenu = (item) => (
+    <TouchableOpacity
+      onPress={item.onPress ? item.onPress : () => {
+        navigation.navigate(item.nav);
+      }}
+      style={{ 
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: 14,
+        alignItems: 'center',
+        }}
+    >
+      <Text size={17} type="medium" lineHeight={20} color={Color.black}>
+        {item.name}
+      </Text>
+      <Feather
+        size={24}
+        name={'chevron-right'}
+        color='#1C1B1F'
+      />
+    </TouchableOpacity>
+  )
+
   console.log('auth', auth);
 
   return (
@@ -174,6 +200,7 @@ const MainProfile = ({navigation, route}) => {
 
         {/* user fast info */}
         <TouchableOpacity
+          disabled
           style={{ padding: 16 }}
           onPress={() => navigation.navigate('ProfileDetail')}
         >
@@ -202,58 +229,68 @@ const MainProfile = ({navigation, route}) => {
                   flex: 1,
                   paddingHorizontal: 12,
                   alignItems: 'flex-start',
-                  justifyContent: 'space-between',
+                  flexDirection: 'column',
                 }}>
-                <Text size={22} align="left" lineHeight={28} numberOfLines={2}>
+                <Text size={22} align="left" lineHeight={28} numberOfLines={1} type="bold">
                   {auth.user.name}
                 </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('ChangeProfileV2', { canGoBack: true });
+                  }}>
+                  <Text size={12} type="medium" color={Color.black} underline>
+                    EDIT PROFILE
+                  </Text>
+                </TouchableOpacity>
               </View>
             )}
-
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('CompleteProfileInput', { canGoBack: true });
-              }}
-              style={{
-                flexDirection: 'row',
-                padding: 10,
-                borderColor: Color.text,
-                borderWidth: 0.5,
-                borderRadius: 120,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <View
-                style={{
-                  width: 16,
-                  height: 16,
-                }}>
-                <Image
-                  source={imageAssets.edit}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    resizeMode: 'contain',
-                  }}
-                />
-              </View>
-              <Divider width={8} />
-              <Text size={12} type="medium" color={Color.primaryDark}>
-                Edit Profil
-              </Text>
-            </TouchableOpacity>
           </View>
         </TouchableOpacity>
+        
+        {/* qr code */}
+        <TouchableOpacity
+          onPress={() => setModalVirtual(true)}
+          style={{ 
+            borderWidth: 1.5,
+            borderColor:'#242424',
+            paddingVertical: 12,
+            marginHorizontal: 16
+           }}
+        >
+          <Text size={14} type="medium" lineHeight={17}>
+            Show QR Code
+          </Text>
+        </TouchableOpacity>
 
-        <Line height={8} width="100%" color="#F4F4F4" />
+        {/* <Line height={8} width="100%" color="#F4F4F4" /> */}
+        <Divider height={16}/>
 
         <Container padding={16}>
           <View>
-            <Text align="left" size={12} type="medium">
-              Transaksi
+            <Text align="left" size={12} type="bold" color={Color.black}>
+              Transaction
             </Text>
           </View>
-          <View style={{}}>
+          <Divider height={12}/>
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            data={[
+              {name: 'History', nav: 'EventHistory'},
+            ]}
+            renderItem={({item, index}) => cardMenu(item, index)}
+            keyExtractor={(item, index) => item.id + index.toString()}
+            ItemSeparatorComponent={() => (
+                <Line width={width - 32} color={'#BDBDBD'} height={1} />
+            )}
+            ListHeaderComponent={() => (
+              <Line width={width - 32} color={'#BDBDBD'} height={1} />
+            )}
+            ListFooterComponent={() => (
+              <Line width={width - 32} color={'#BDBDBD'} height={1} />
+            )}
+          />
+
+          {/* <View style={{}}> */}
             {/* <View style={{ flexDirection: 'row', paddingTop: 24 }}>
               <Image
                 source={assetImageProfile.cart}
@@ -266,34 +303,54 @@ const MainProfile = ({navigation, route}) => {
               <Divider width={8} />
               <Text align='left'>Keranjang</Text>
             </View> */}
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => {
                 navigation.navigate('EventHistory');
               }}
               style={{flexDirection: 'row', paddingTop: 24}}>
-              <Image
-                source={assetImageProfile.history}
-                style={{
-                  height: 16,
-                  width: 16,
-                  resizeMode: 'contain',
-                }}
-              />
-              <Divider width={8} />
-              <Text align="left">Riwayat</Text>
-            </TouchableOpacity>
-          </View>
+              <Text align="left">History</Text>
+            </TouchableOpacity> */}
+          {/* </View> */}
         </Container>
 
-        <Line height={8} width="100%" color="#F4F4F4" />
+        {/* <Line height={8} width="100%" color="#F4F4F4" /> */}
+
+        <Divider height={16}/>
 
         <Container padding={16}>
           <View>
-            <Text align="left" size={12} type="medium" onPress={() => setDevMode(devMode + 1)}>
-              Seputar Aplikasi
+            <Text align="left" size={12} type="bold" color={Color.black}>
+              About The Apps
             </Text>
           </View>
-          <View style={{}}>
+          <Divider height={12}/>
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            data={[
+              {name: 'Setting', nav: 'SettingScreen'},
+              {name: 'Terms & Condition', nav: 'SyaratdanKetentuan'},
+              {
+                name: 'Support', 
+                onPress: () => {
+                  const phoneNumber = '02123456789';
+                  Linking.openURL(`tel:${phoneNumber}`);
+                }
+              },
+              {name: 'FAQ', nav: 'FAQScreen'},
+            ]}
+            renderItem={({item, index}) => cardMenu(item, index)}
+            keyExtractor={(item, index) => item.id + index.toString()}
+            ItemSeparatorComponent={() => (
+                <Line width={width - 32} color={'#BDBDBD'} height={1} />
+            )}
+            ListHeaderComponent={() => (
+              <Line width={width - 32} color={'#BDBDBD'} height={1} />
+            )}
+            ListFooterComponent={() => (
+              <Line width={width - 32} color={'#BDBDBD'} height={1} />
+            )}
+          />
+          {/* <View style={{}}>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate('SettingScreen');
@@ -361,10 +418,11 @@ const MainProfile = ({navigation, route}) => {
               <Divider width={8} />
               <Text align="left">FAQ</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </Container>
 
-        <Line height={8} width="100%" color="#F4F4F4" />
+        {/* <Line height={8} width="100%" color="#F4F4F4" /> */}
+
 
         {(devMode >= 5 || (auth.user && auth.user.member_right === 1)) && (
           <Container padding={16}>
@@ -407,7 +465,15 @@ const MainProfile = ({navigation, route}) => {
         )}
 
         {auth.user && !auth.user.isGuest && <Container padding={16}>
-          <TouchableOpacity
+          {cardMenu(
+            {
+              name: 'Logout',
+              onPress: () => {
+                onPressExit();
+              }
+            }
+          )}
+          {/* <TouchableOpacity
             onPress={() => {
               onPressExit();
             }}
@@ -426,7 +492,7 @@ const MainProfile = ({navigation, route}) => {
             <Text color={Color.error} align="left">
               Logout
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </Container>}
 
         {auth.user && auth.user.isGuest && <Container padding={16}>
@@ -511,31 +577,52 @@ const MainProfile = ({navigation, route}) => {
             backgroundColor: Color.overflow,
           }}>
           <View
-            style={{
-              width: '100%',
-              aspectRatio: 1,
-              padding: 16,
-              backgroundColor: Color.theme,
-              borderWidth: 4,
-              borderColor: Color.text,
-              borderRadius: 8,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <QRCode value={'dummy'} size={width - 70} />
+            style={{ 
+              width: width*0.8,
+              backgroundColor: Color.white,
+              paddingVertical: 24,
+              paddingHorizontal: 32
+             }}
+          >
+            <View
+              style={{
+                borderWidth: 1,
+                aspectRatio: 1,
+                padding: 20,
+                borderWidth: 4,
+                borderColor: Color.black,
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderWidth: 1,
+              }}>
+              <QRCode value={'dummy'} size={(width*0.8) - 84} />
+            </View>
+
+            <Divider height={16} />
+
+            <Text size={29} type="medium" lineHeight={34} color={Color.text}>
+              {auth && auth.user && auth.user.name}
+            </Text>
+
+            {/* <Text size={12} lineHeight={14} type="medium">
+              1234-5678-9876-543-21
+            </Text> */}
+
+            <Divider height={16}/>
+
+            <TouchableOpacity
+              onPress={() => setModalVirtual(false)}
+              style={{ 
+                borderWidth: 1.5,
+                borderColor:'#242424',
+                paddingVertical: 12,
+              }}
+            >
+              <Text size={14} type="medium" lineHeight={17}>
+                Close
+              </Text>
+            </TouchableOpacity>
           </View>
-
-          <Divider height={32} />
-
-          <TouchableOpacity
-            onPress={() => setModalVirtual(false)}
-            style={{
-              padding: 12,
-              backgroundColor: Color.error,
-              borderRadius: 50,
-            }}>
-            <AntDesign name="close" color={Color.textInput} size={24} />
-          </TouchableOpacity>
         </View>
       </Modal>
     </Scaffold>

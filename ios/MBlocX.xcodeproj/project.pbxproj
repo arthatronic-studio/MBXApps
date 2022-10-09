@@ -26,6 +26,13 @@
 		DB53454EDC9A887E0A1367D0 /* libPods-MBlocX-MBlocXTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 20E0CE272AD49DE26FC03234 /* libPods-MBlocX-MBlocXTests.a */; };
 		F14F1698D22148FEAEAE966C /* Inter-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6175D5CDB5434D008E7E5ACB /* Inter-Black.ttf */; };
 		F917EE6E746A48CE959E6FE5 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5D7374F496349F99512AF35 /* Inter-Medium.ttf */; };
+		958DC8C7F2EC4B10B7E0C690 /* NeueHaasDisplayBlack.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0D67D360793456CA4A8D8AA /* NeueHaasDisplayBlack.ttf */; };
+		F1B7C23800BB46FA973E4DF2 /* NeueHaasDisplayBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CD22FAAAB57D4C10B47C9C94 /* NeueHaasDisplayBold.ttf */; };
+		AC200E7C66994A9683125805 /* NeueHaasDisplayLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8889D1DC03834F9891CFC67E /* NeueHaasDisplayLight.ttf */; };
+		70A5929976FB42048050B418 /* NeueHaasDisplayMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BA98B2D3FFE14C47A8C0A5FB /* NeueHaasDisplayMedium.ttf */; };
+		FD2DF5D1F43C4065A5F1C709 /* NeueHaasDisplayRoman.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3F2F99759ACA495D9E9C6ED9 /* NeueHaasDisplayRoman.ttf */; };
+		E763705246034418A927BFFF /* NeueHaasDisplayThin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5F27F11D62B647EFA15421EF /* NeueHaasDisplayThin.ttf */; };
+		8411DBFA9340444BB61A9A26 /* NeueHaasDisplayXThin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0579078FD4664E48B08019DD /* NeueHaasDisplayXThin.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +77,13 @@
 		F1F24434BDAE4DBAB42D05A5 /* Inter-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Light.ttf"; path = "../assets/fonts/Inter/Inter-Light.ttf"; sourceTree = "<group>"; };
 		F78B7A41B56AC6897FE3F1D6 /* Pods-MBlocX-MBlocXTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MBlocX-MBlocXTests.debug.xcconfig"; path = "Target Support Files/Pods-MBlocX-MBlocXTests/Pods-MBlocX-MBlocXTests.debug.xcconfig"; sourceTree = "<group>"; };
 		FBC4305C7845413D9906F5DE /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-ExtraBold.ttf"; path = "../assets/fonts/Inter/Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
+		E0D67D360793456CA4A8D8AA /* NeueHaasDisplayBlack.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplayBlack.ttf"; path = "../assets/fonts/Inter/NeueHaasDisplayBlack.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		CD22FAAAB57D4C10B47C9C94 /* NeueHaasDisplayBold.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplayBold.ttf"; path = "../assets/fonts/Inter/NeueHaasDisplayBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8889D1DC03834F9891CFC67E /* NeueHaasDisplayLight.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplayLight.ttf"; path = "../assets/fonts/Inter/NeueHaasDisplayLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		BA98B2D3FFE14C47A8C0A5FB /* NeueHaasDisplayMedium.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplayMedium.ttf"; path = "../assets/fonts/Inter/NeueHaasDisplayMedium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3F2F99759ACA495D9E9C6ED9 /* NeueHaasDisplayRoman.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplayRoman.ttf"; path = "../assets/fonts/Inter/NeueHaasDisplayRoman.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		5F27F11D62B647EFA15421EF /* NeueHaasDisplayThin.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplayThin.ttf"; path = "../assets/fonts/Inter/NeueHaasDisplayThin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0579078FD4664E48B08019DD /* NeueHaasDisplayXThin.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplayXThin.ttf"; path = "../assets/fonts/Inter/NeueHaasDisplayXThin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +173,13 @@
 				AEB4FC05E7514D65A84EFC23 /* Inter-Regular.ttf */,
 				30CEF8FB6A3C407B9B15BA8A /* Inter-SemiBold.ttf */,
 				5B32806D66FA4E4AA85BD975 /* Inter-Thin.ttf */,
+				E0D67D360793456CA4A8D8AA /* NeueHaasDisplayBlack.ttf */,
+				CD22FAAAB57D4C10B47C9C94 /* NeueHaasDisplayBold.ttf */,
+				8889D1DC03834F9891CFC67E /* NeueHaasDisplayLight.ttf */,
+				BA98B2D3FFE14C47A8C0A5FB /* NeueHaasDisplayMedium.ttf */,
+				3F2F99759ACA495D9E9C6ED9 /* NeueHaasDisplayRoman.ttf */,
+				5F27F11D62B647EFA15421EF /* NeueHaasDisplayThin.ttf */,
+				0579078FD4664E48B08019DD /* NeueHaasDisplayXThin.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -304,6 +325,13 @@
 				B44E571E971145CDA881BFBD /* Inter-Regular.ttf in Resources */,
 				9718E86562DC4024912F8D5F /* Inter-SemiBold.ttf in Resources */,
 				65931133C65B4BB49FF03639 /* Inter-Thin.ttf in Resources */,
+				958DC8C7F2EC4B10B7E0C690 /* NeueHaasDisplayBlack.ttf in Resources */,
+				F1B7C23800BB46FA973E4DF2 /* NeueHaasDisplayBold.ttf in Resources */,
+				AC200E7C66994A9683125805 /* NeueHaasDisplayLight.ttf in Resources */,
+				70A5929976FB42048050B418 /* NeueHaasDisplayMedium.ttf in Resources */,
+				FD2DF5D1F43C4065A5F1C709 /* NeueHaasDisplayRoman.ttf in Resources */,
+				E763705246034418A927BFFF /* NeueHaasDisplayThin.ttf in Resources */,
+				8411DBFA9340444BB61A9A26 /* NeueHaasDisplayXThin.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

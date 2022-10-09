@@ -1,0 +1,69 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Inter/Inter-Black.ttf",
+      "sha1": "ff2d9fdf17ab9adfd7cd41a75ef0495f11d27b56"
+    },
+    {
+      "path": "assets/fonts/Inter/Inter-Bold.ttf",
+      "sha1": "114827cbea95681eee9d877b0b1ab0515d5f3b69"
+    },
+    {
+      "path": "assets/fonts/Inter/Inter-ExtraBold.ttf",
+      "sha1": "0a6cf7f44c9be40bd1179af91ed3589b534e2642"
+    },
+    {
+      "path": "assets/fonts/Inter/Inter-ExtraLight.ttf",
+      "sha1": "9b79bf395137be66b2c17acec56c4915e10a12f1"
+    },
+    {
+      "path": "assets/fonts/Inter/Inter-Light.ttf",
+      "sha1": "791a657bf537ff4272bae72f43c1c9981ab4d623"
+    },
+    {
+      "path": "assets/fonts/Inter/Inter-Medium.ttf",
+      "sha1": "17ec5016a5f2b2ea4f27f7bce1df4192d3590161"
+    },
+    {
+      "path": "assets/fonts/Inter/Inter-Regular.ttf",
+      "sha1": "077f819e60120b1ded3d5c5d8a23b8b53e12ec17"
+    },
+    {
+      "path": "assets/fonts/Inter/Inter-SemiBold.ttf",
+      "sha1": "29d9db84af04e729a01e0bb076c0afdf723e8bc5"
+    },
+    {
+      "path": "assets/fonts/Inter/Inter-Thin.ttf",
+      "sha1": "2534deaee8e837f29f2e6533f1792efe62fd27d6"
+    },
+    {
+      "path": "assets/fonts/Inter/NeueHaasDisplayBlack.ttf",
+      "sha1": "ce1c33901f1aedc28fc1907e0cfb3da4939d54d6"
+    },
+    {
+      "path": "assets/fonts/Inter/NeueHaasDisplayBold.ttf",
+      "sha1": "dfc55dea096dd7603444a1bde9fd57726b3bc7e4"
+    },
+    {
+      "path": "assets/fonts/Inter/NeueHaasDisplayLight.ttf",
+      "sha1": "d7e7959bf8400eb010e6f6ec20b64ceb4f4a0606"
+    },
+    {
+      "path": "assets/fonts/Inter/NeueHaasDisplayMedium.ttf",
+      "sha1": "008646aff87cde793e72f5cc5ebe626a9ec6bd01"
+    },
+    {
+      "path": "assets/fonts/Inter/NeueHaasDisplayRoman.ttf",
+      "sha1": "92baa30548df304b049ea65225470f94277b9ffa"
+    },
+    {
+      "path": "assets/fonts/Inter/NeueHaasDisplayThin.ttf",
+      "sha1": "af09fbd8d70d7fa57c14e437457083c0a2adabd4"
+    },
+    {
+      "path": "assets/fonts/Inter/NeueHaasDisplayXThin.ttf",
+      "sha1": "fa26bd61459f2414baf2e0a19a8984a48aedf71e"
+    }
+  ]
+}

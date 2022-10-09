@@ -20,7 +20,7 @@ const BottomTabsNavigator = () => {
         >
             <Screen name='MainHome' component={MainHome} />
             <Screen name='MainNotif' component={TabNotification} />
-            <Screen name='MainNotif2' component={TabNotification} />
+            {/* <Screen name='MainNotif2' component={TabNotification} /> */}
             <Screen name='MainProfile' component={MainProfile} />
         </Navigator>
     )

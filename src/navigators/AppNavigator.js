@@ -62,6 +62,7 @@ import ForumKutipan from 'src/screens/MainForum/NewForum/ForumKutipan';
 
 // profile
 import ChangeProfile from '@src/screens/MainProfile/ChangeProfile';
+import ChangeProfileV2 from 'src/screens/MainProfile/ChangeProfileV2';
 import SettingScreen from '@src/screens/MainProfile/SettingScreen';
 import SyaratdanKetentuan from '@src/screens/MainProfile/SyaratdanKetentuan';
 import ShowAllFromProfile from '@src/screens/MainProfile/ShowAllFromProfile';
@@ -164,6 +165,8 @@ import CartAuction from 'src/screens/Auction/CartAuction';
 
 import PromoScreen from 'src/screens/Promo/PromoScreen';
 import PromoDetailScreen from 'src/screens/Promo/PromoDetailScreen';
+import SpecialOfferScreen from 'src/screens/Promo/SpecialOfferScreen';
+import SpecialOfferDetail from 'src/screens/Promo/SpecialOfferDetail';
 
 import Ebook from 'src/screens/Posting/Ebook/Ebook';
 import MyShopHomepage from 'src/screens/Ecommerce/MyShopHomepage';
@@ -282,6 +285,7 @@ import ShopScreen from 'src/screens/Tenant/ShopScreen';
 import TenantDetailScreen from 'src/screens/Tenant/TenantDetailScreen';
 import TenantCheckoutScreen from 'src/screens/Tenant/TenantCheckoutScreen';
 import TenantHistoryScreen from 'src/screens/Tenant/TenantHistoryScreen';
+import TenantHistoryDetail from 'src/screens/Tenant/TenantHistoryDetail';
 
 // beacon
 import DetailArtScreen from 'src/screens/Beacon/DetailArtScreen';
@@ -374,6 +378,8 @@ function AppNavigator() {
       {/* Promo Popup */}
       <Screen name="PromoScreen" component={PromoScreen} />
       <Screen name="PromoDetailScreen" component={PromoDetailScreen} />
+      <Screen name="SpecialOfferScreen" component={SpecialOfferScreen} />
+      <Screen name="SpecialOfferDetail" component={SpecialOfferDetail} />
       {/* Ecommerce */}
       <Screen name="MerchScreen" component={MerchScreen} />
       <Screen name="DetailProduct" component={DetailProduct} />
@@ -501,6 +507,7 @@ function AppNavigator() {
       
       {/* profile */}
       <Screen name="ChangeProfile" component={ChangeProfile} />
+      <Screen name="ChangeProfileV2" component={ChangeProfileV2} />
       <Screen name="ShowAllFromProfile" component={ShowAllFromProfile} />
       <Screen name="SettingScreen" component={SettingScreen} />
       <Screen name="SyaratdanKetentuan" component={SyaratdanKetentuan} />
@@ -580,6 +587,7 @@ function AppNavigator() {
       <Screen name="TenantDetailScreen" component={TenantDetailScreen} />
       <Screen name="TenantCheckoutScreen" component={TenantCheckoutScreen} />
       <Screen name="TenantHistoryScreen" component={TenantHistoryScreen} />
+      <Screen name="TenantHistoryDetail" component={TenantHistoryDetail} />
 
       {/* beacon */}
       <Screen name="DetailArtScreen" component={DetailArtScreen} />
