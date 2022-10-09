@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Image, FlatList, Modal as ReactModal, ScrollView, Platform, Linking, Pressable, useWindowDimensions } from 'react-native';
+import { View, Image, TextInput, FlatList, Modal as ReactModal, ScrollView, Platform, Linking, Pressable, useWindowDimensions } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Foundation from 'react-native-vector-icons/Foundation';
@@ -39,6 +39,7 @@ import { fetchEatCartSeatsAvailable } from 'src/api-rest/fetchEatCartSeatsAvaila
 import FormSelect from 'src/components/FormSelect';
 import ModalActions from 'src/components/Modal/ModalActions';
 import { fetchEatCartDetail } from 'src/api-rest/fetchEatCartDetail';
+import FormInputV2 from 'src/components/FormInputV2';
 
 const TenantCheckoutScreen = ({ navigation, route }) => {
   const { params } = route;
@@ -56,9 +57,25 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
   const [ringkasanPembayaran, setRingkasanPembayaran] = useState([]);
   const [updateIndex, setUpdateIndex] = useState(-1);
   const [sourceURL, setSourceURL] = useState('');
+  const [modalChangePemesan, setModalChangePemesan] = useState(false);
   const [modalSeatsAvailable, setModalSeatsAvailable] = useState(false);
   const [selectedSeatsAvailable, setSelectedSeatsAvailable] = useState();
   const [listSeatsAvailable, setListSeatsAvailable] = useState([]);
+  const [modalOrderType, setModalOrderType] = useState(false);
+  const [selectedOrderType, setSelectedOrderType] = useState({
+    name: 'Take Away',
+    value: 0,
+  });
+  const [listOrderType, setListOrderType] = useState([
+    {
+      name: 'Take Away',
+      value: 0,
+    },
+    {
+      name: 'Dine-in',
+      value: 1,
+    },
+  ]);
 
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
@@ -150,6 +167,10 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
       body.number = selectedSeatsAvailable.id;
     }
 
+    if (selectedOrderType) {
+      body.order_type = selectedOrderType.value;
+    }
+
     if (item) {
       body.product_id = item.product_id;
       body.quantity = item.quantity;
@@ -186,44 +207,38 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
           paddingHorizontal: 16,
         }}
       >
-        <Container borderWidth={0.5} borderColor={Color.placeholder} radius={8}>
+        <Container>
           <View
             style={{
               width: '100%',
-              padding: 16,
               flexDirection: 'row',
             }}
           >
             <View
               style={{
-                width: '15%',
-                aspectRatio: 1,
-              }}
-            >
-              <Image
-                source={{ uri: item.images }}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: 8,
-                  backgroundColor: Color.border,
-                }}
-              />
-            </View>
-
-            <View
-              style={{
                 flex: 1,
-                paddingHorizontal: 8,
                 alignItems: 'flex-start',
                 justifyContent: 'center',
               }}
             >
-              <Text align='left' size={14} letterSpacing={0.1} numberOfLines={1} type='medium'>{item.product_name}</Text>
+              <Text align='left' size={18} numberOfLines={2} type='medium'>{item.product_name}</Text>
               <Divider height={2} />
-              <Text align='left' size={12} letterSpacing={0.4}>{item.amount}</Text>
+              <Text align='left' size={11} color={Color.secondary}>Amount: {item.quantity}</Text>
             </View>
 
+            <Container justify='center'>
+              <Text align='left' size={14} type='medium'>{item.amount}</Text>
+            </Container>
+          </View>
+
+          <Divider height={12} />
+
+          <View
+            style={{
+              width: '100%',
+              flexDirection: 'row',
+            }}
+          >
             <TouchableOpacity
               onPress={() => {
                 Alert(
@@ -245,18 +260,14 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
                   }
                 );
               }}
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
             >
-              <Container padding={12} radius={120} borderWidth={0.5} borderColor={Color.error}>
-                <Text align='right' size={11} color={Color.error} type='medium'>Hapus</Text>
-              </Container>
+              <View style={{borderBottomWidth: 1, borderColor: Color.error}}>
+                <Text align='right' size={11} color={Color.error} type='medium'>Remove</Text>
+              </View>
             </TouchableOpacity>
           </View>
 
-          <View
+          {/* <View
             style={{
               width: '100%',
               paddingHorizontal: 16,
@@ -266,9 +277,9 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
           >
             <Text size={11} letterSpacing={0.4}>Catatan</Text>
             <Text size={11} letterSpacing={0.4}>{item.catatan}</Text>
-          </View>
+          </View> */}
 
-          <View
+          {/* <View
             style={{
               width: '100%',
               paddingHorizontal: 16,
@@ -348,64 +359,115 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
+          </View> */}
         </Container>
       </View>
     )
   };
 
-  const renderFooter = () => {
-    return (
-      <>
-        <Line height={8} width='100%' color='#F4F4F4' />
+  const renderFooter = (
+    <>
+      <Container paddingHorizontal={16}>
+        <Line height={1} width='100%' color={Color.primary} />
+      </Container>
 
-        <Container paddingBottom={16} paddingHorizontal={16}>
-          <FormSelect
-            label='No. Meja'
-            placeholder='Pilih'
-            value={selectedSeatsAvailable ? selectedSeatsAvailable.name : ''}
-            onPress={() => setModalSeatsAvailable(true)}
-            hideErrorHint
-          />
+      <Container padding={16}>
+        <Container paddingBottom={12}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Text align='left' size={9}>{'● Orderer Name'.toUpperCase()}</Text>
+          </View>
+        </Container>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+          <Text size={18} type='medium'>{namaPemesan !== '' ? namaPemesan : '-'}</Text>
+          <TouchableOpacity onPress={() => setModalChangePemesan(true)} style={{borderBottomWidth: 1, borderColor: Color.primary}}>
+            <Text size={11} type='medium'>Change</Text>
+          </TouchableOpacity>
+        </View>
+        {/* <FormInput
+          value={namaPemesan}
+          onChangeText={(val) => setNamaPemesan(val)}
+          borderColor={Color.placeholder}
+          hideErrorHint
+        /> */}
+      </Container>
+
+      <Container paddingHorizontal={16}>
+        <Line height={1} width='100%' color={Color.primary} />
+      </Container>
+
+      <Container paddingBottom={16} paddingHorizontal={16}>
+        <Container paddingTop={16} paddingBottom={12}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Text align='left' size={9}>{'● Orderer Type'.toUpperCase()}</Text>
+          </View>
+        </Container>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+          <Text size={18} type='medium'>{selectedOrderType ? selectedOrderType.name : '-'}</Text>
+          <TouchableOpacity onPress={() => setModalOrderType(true)} style={{borderBottomWidth: 1, borderColor: Color.primary}}>
+            <Text size={11} type='medium'>Change</Text>
+          </TouchableOpacity>
+        </View>
+        {/* <FormSelect
+          label=''
+          placeholder='Pilih'
+          value={selectedOrderType.name}
+          onPress={() => setModalOrderType(true)}
+          hideErrorHint
+        /> */}
+
+        {selectedOrderType.value === 1 && <View style={{flexDirection: 'row', paddingTop: 16, justifyContent: 'space-between', alignItems: 'center'}}>
+          <Text size={18} type='medium'>{selectedSeatsAvailable ? selectedSeatsAvailable.name : '-'}</Text>
+          <TouchableOpacity onPress={() => setModalSeatsAvailable(true)} style={{borderBottomWidth: 1, borderColor: Color.primary}}>
+            <Text size={11} type='medium'>Change</Text>
+          </TouchableOpacity>
+        </View>}
+        {/* <FormSelect
+          label=''
+          placeholder='Pilih'
+          value={selectedSeatsAvailable ? selectedSeatsAvailable.name : ''}
+          onPress={() => setModalSeatsAvailable(true)}
+          hideErrorHint
+        /> */}
+      </Container>
+
+      <Container paddingHorizontal={16}>
+        <Line height={1} width='100%' color={Color.primary} />
+      </Container>
+      
+      <Container paddingHorizontal={16}>
+        <Container paddingTop={16} paddingBottom={12}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Text align='left' size={9}>{'● Pricing Detail'.toUpperCase()}</Text>
+          </View>
         </Container>
 
-        <Line height={8} width='100%' color='#F4F4F4' />
-        <Container paddingHorizontal={16}>
+        {ringkasanPembayaran.map((item, index) => {
+          const isLast = (ringkasanPembayaran.length - 1) == index;
+          return (
+            <View key={index}>
+              {isLast &&
+                <Container paddingBottom={12}>
+                  <Line height={0.5} width='100%' color={Color.text} />
+                </Container>
+              }
 
-          <Container paddingVertical={16}>
-            <Text align='left' type='medium'>
-              Ringkasan Pembayaran
-            </Text>
-          </Container>
-
-          {ringkasanPembayaran.map((item, index) => {
-            const isLast = (ringkasanPembayaran.length - 1) == index;
-            return (
-              <View key={index}>
-                {isLast &&
-                  <Container paddingBottom={12}>
-                    <Line height={0.5} width='100%' color={Color.text} />
-                  </Container>
-                }
-
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    paddingBottom: 12,
-                  }}>
-                  <Text size={12} letterSpacing={0.4}>{item.name}</Text>
-                  <Text size={12} letterSpacing={0.4}>{item.amount}</Text>
-                </View>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  paddingBottom: 12,
+                }}>
+                <Text size={12} letterSpacing={0.4}>{item.name}</Text>
+                <Text size={12} letterSpacing={0.4}>{item.amount}</Text>
               </View>
-            )
-          })}
-        </Container>
-      </>
-    )
-  }
+            </View>
+          )
+        })}
+      </Container>
+    </>
+  )
 
   const renderModalNote = (item, index) => {
     return (
@@ -528,9 +590,7 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
               paddingBottom: 0,
             }}
           >
-            <Line height={8} width='100%' color='#F4F4F4' />
-
-            <Container padding={16}>
+            <Container paddingHorizontal={16} paddingTop={16}>
               <View
                 style={{
                   width: '100%',
@@ -548,7 +608,6 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
                     style={{
                       width: '100%',
                       height: '100%',
-                      borderRadius: 8,
                       backgroundColor: Color.border,
                     }}
                   />
@@ -563,31 +622,17 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
                   }}
                 >
                   <Text size={14} numberOfLines={1} letterSpacing={0.1} type='medium'>{items ? items.name : ''}</Text>
-                  <Divider height={2} />
-                  <Text size={12} numberOfLines={1} color={Color.textSoft}>{items ? items.category.name : ''}</Text>
                 </View>
               </View>
             </Container>
 
-            <Line height={8} width='100%' color='#F4F4F4' />
-
-            <Container padding={16}>
-              <Container paddingBottom={12}>
-                <Text type='medium' size={12} color={Color.textSoft} align='left'>Nama Pemesan</Text>
-              </Container>
-              <FormInput
-                value={namaPemesan}
-                onChangeText={(val) => setNamaPemesan(val)}
-                borderColor={Color.placeholder}
-                hideErrorHint
-              />
-            </Container>
-
-            <Line height={8} width='100%' color='#F4F4F4' />
+            <View style={{marginTop: 16, paddingVertical: 12, paddingHorizontal: 16, alignItems: 'flex-start', backgroundColor: Color.primary}}>
+              <Text size={11} type='medium' color={Color.textInput}>Order Recap</Text>
+            </View>
 
             <Container padding={16}>
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Text align='left' size={16} type='medium'>Pesanan</Text>
+                <Text align='left' size={9}>{'● Your Order'.toUpperCase()}</Text>
               </View>
             </Container>
           </View>
@@ -626,10 +671,10 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
               borderRadius: 120,
             }}
           >
-            <Text type='medium' size={12}>Pesan Sekarang</Text>
+            <Text type='medium' size={12} color={'#E7FF00'}>Countinue Pay</Text>
             <AntDesign
               name={'arrowright'}
-              color={Color.text}
+              color={'#E7FF00'}
               size={14}
               style={{
                 marginLeft: 4
@@ -637,6 +682,45 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
             />
           </TouchableOpacity>
       </Container>
+
+      {/* <Container width={width}>
+        <Row style={{ padding: 16, backgroundColor: Color.theme }}>
+          <Col style={{ flex: 1, justifyContent: 'center' }}>
+            <Text type='medium' size={11} align='left'>Total Payment</Text>
+            <Divider height={4} />
+            <Text type='medium' size={14} align='left'>{cartAmount}</Text>
+          </Col>
+
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('TenantCheckoutScreen', {
+                cartId,
+                cartLocationId,
+                namaPemesan,
+              });
+            }}
+            style={{
+              flex: 1,
+              paddingVertical: 12,
+              height: '100%',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: Color.primary,
+            }}
+          >
+            <Text type='medium' color={'#E7FF00'}>Checkout Order</Text>
+            <AntDesign
+              name={'arrowright'}
+              color={'#E7FF00'}
+              size={14}
+              style={{
+                marginLeft: 4
+              }}
+            />
+          </TouchableOpacity>
+        </Row>
+      </Container> */}
 
       {/* modal menu */}
       {currentSelected !== -1 && renderModalNote(listProducts[currentSelected], currentSelected)}
@@ -652,6 +736,105 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
               onClose={onCloseWebview}
           />
       </ReactModal>
+
+      {/* modal change order type */}
+      <Modal
+        testID={'modal'}
+        isVisible={modalOrderType}
+        swipeDirection={['down']}
+        onBackdropPress={() => { setModalOrderType(false); }}
+        onSwipeComplete={() => { setModalOrderType(false); }}
+        style={{
+          justifyContent: 'flex-end', // the keys of bottom half
+          margin: 0,
+        }}
+      >
+        <View style={{backgroundColor: Color.theme, paddingTop: 16, paddingBottom: statusBarHeight}}>
+          <Text size={18} type='medium'>Order Type</Text>
+
+          <View style={{flexDirection: 'row', paddingTop: 16, width: '100%', paddingHorizontal: 8}}>
+            {listOrderType.map((e, idx) => {
+              const isSelected = selectedOrderType.value === e.value;
+              return (
+                <View key={idx} style={{flex: 1, paddingHorizontal: 8}}>
+                  <TouchableOpacity onPress={() => setSelectedOrderType(e)} style={{paddingVertical: 16, backgroundColor: isSelected ? Color.primary : 'transparent' }}>
+                    <Text size={18} type='medium' color={isSelected ? Color.textInput : Color.text}>{e.name}</Text>
+                  </TouchableOpacity>
+                </View>
+              )
+            })}
+          </View>
+        </View>
+      </Modal>
+
+      {/* modal change orderer name */}
+      <Modal
+        testID={'modal'}
+        isVisible={modalChangePemesan}
+        swipeDirection={['down']}
+        onBackdropPress={() => { setModalChangePemesan(false); }}
+        onSwipeComplete={() => { setModalChangePemesan(false); }}
+        style={{
+          justifyContent: 'flex-end', // the keys of bottom half
+          margin: 0,
+        }}
+      >
+        <View style={{backgroundColor: Color.theme, paddingTop: 48, paddingBottom: statusBarHeight}}>
+          <View style={{flexDirection: 'row', width: '100%', alignItems: 'center', paddingHorizontal: 16}}>
+            <View style={{flex: 1.2, justifyContent: 'center', }}>
+              <Text size={11} type='medium' align='left'>Orderer Name</Text>
+            </View>
+
+            <View style={{flex: 3, justifyContent: 'center', paddingBottom: 8, borderBottomWidth: 1, borderColor: Color.primary }}>
+              <TextInput
+                placeholder='Masukan Nama Pemesan'
+                placeholderTextColor={Color.placeholder}
+                underlineColorAndroid='transparent'
+                autoCorrect={false}
+                onChangeText={(val) => setNamaPemesan(val)}
+                selectionColor={Color.placeholder}
+                value={namaPemesan}
+                returnKeyType='done'
+                blurOnSubmit={false}
+                keyboardType='default'
+                keyboardAppearance={Color.colorDominant}
+                style={{
+                    // width: '100%',
+                    // height: '100%',
+                    textAlignVertical: 'center',
+                    fontSize: 17,
+                    fontFamily: 'Inter-Regular',
+                    color: Color.text,
+                    includeFontPadding: false,
+                    padding: 0,
+                    backgroundColor: Color.textInput,
+                }}
+              />
+              {/* <FormInput
+                value={namaPemesan}
+                onChangeText={(val) => setNamaPemesan(val)}
+                borderColor={Color.placeholder}
+                hideErrorHint
+                hideBorder
+                style={{
+                  borderBottomWidth: 1, borderColor: Color.primary
+                }}
+              /> */}
+            </View>
+          </View>
+
+          <Container paddingHorizontal={16} paddingTop={16}>
+            <Button
+              fontColor={'#E7FF00'}
+              onPress={() => {
+                setModalChangePemesan(false);
+              }}
+            >
+              Change
+            </Button>
+          </Container>
+        </View>
+      </Modal>
 
       <ModalActions
         visible={modalSeatsAvailable}

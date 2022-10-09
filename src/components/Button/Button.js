@@ -16,7 +16,7 @@ const CustomButton = Styled(TouchableOpacity)`
   backgroundColor: ${(props) => (props.color)};
   width: 100%;
   padding: 16px 8px;
-  borderRadius: 8px;
+  borderRadius: 0px;
   alignItems: center;
   justifyContent: center;
   flexDirection: row;
