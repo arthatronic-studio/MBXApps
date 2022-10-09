@@ -130,7 +130,7 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                         </View>
                     </View>
 
-                    <View style={{ width: '100%', aspectRatio: 9/4, padding: 8, borderBottomWidth: 1, borderColor: Color.primary }}>
+                    <View style={{ width: '100%', minHeight: (27 * 3) + (8 * 2) + 24, padding: 8, borderBottomWidth: 1, borderColor: Color.primary }}>
                         <Text size={27} type='medium' align='left' numberOfLines={3}>{item.title}</Text>
                     </View>
 

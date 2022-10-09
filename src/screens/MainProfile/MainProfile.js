@@ -61,7 +61,7 @@ const MainProfile = ({navigation, route}) => {
     status: true,
     message: '',
   });
-  const [myRoomIds, setMyRoomIds] = useState([]);
+  const [devMode, setDevMode] = useState(0);
 
   const dispatch = useDispatch();
   const [loadingProps, showLoading, hideLoading] = useLoading();
@@ -82,11 +82,6 @@ const MainProfile = ({navigation, route}) => {
 
   useEffect(() => {
     fetchData();
-
-    // currentSocket.emit('list_my_room_ids');
-    //   currentSocket.on('list_my_room_ids', (res) => {
-    //     setMyRoomIds(res);
-    //   });
   }, []);
 
   useEffect(() => {
@@ -294,7 +289,7 @@ const MainProfile = ({navigation, route}) => {
 
         <Container padding={16}>
           <View>
-            <Text align="left" size={12} type="medium">
+            <Text align="left" size={12} type="medium" onPress={() => setDevMode(devMode + 1)}>
               Seputar Aplikasi
             </Text>
           </View>
@@ -371,7 +366,7 @@ const MainProfile = ({navigation, route}) => {
 
         <Line height={8} width="100%" color="#F4F4F4" />
 
-        {auth.user && auth.user.member_right === 1 && (
+        {(devMode >= 5 || (auth.user && auth.user.member_right === 1)) && (
           <Container padding={16}>
             <TouchableOpacity
               onPress={() => {
@@ -393,7 +388,7 @@ const MainProfile = ({navigation, route}) => {
           </Container>
         )}
 
-        {auth.user && auth.user.member_right === 1 && (
+        {(devMode >= 5 || (auth.user && auth.user.member_right === 1)) && (
           <Container padding={16}>
             <TouchableOpacity
               onPress={() => {

@@ -780,39 +780,12 @@ const MainHome = ({ navigation, route }) => {
             }}
           />
 
-          {/* hide user greetings */}
-          {/* <View
-            style={{
-              flexDirection: 'row',
-              width: '100%',
-              alignItems: 'center',
-              paddingTop: 16,
-              paddingBottom: 24,
-            }}>
-            <View style={{paddingLeft: 16, alignItems: 'flex-start'}}>
-              <Text
-                size={10}
-                type="medium"
-                lineHeight={18}
-                letterSpacing={0.45}>
-                Halo
-              </Text>
-              <Text size={18} type="bold" letterSpacing={0.45}>
-                {user && !user.guest
-                  ? user.firstName.trim() +
-                    (user.lastName ? ' ' + user.lastName.trim() : '')
-                  : 'Tamu'}
-                !
-              </Text>
-            </View>
-          </View> */}
-
           {isCheckin &&
             <Container padding={16} paddingTop={8}>
-              <Container padding={14} color={Color.successLight} radius={8}>
-                <Row justify='space-between'>
+              <Container paddingVertical={16} style={{borderTopWidth: 1, borderBottomWidth: 1, bordeerColor: Color.text}}>
+                <Row justify='space-between' align='flex-end'>
                   <Row>
-                    <Container paddingRight={16}>
+                    <Container padding={10} radius={50} color={Color.primary}>
                       <Image
                         source={imageAssets.building}
                         style={{
@@ -822,11 +795,13 @@ const MainHome = ({ navigation, route }) => {
                       />
                     </Container>
 
-                    <Column>
-                      <Text size={10} color={Color.placeholder} letterSpacing={0.4}>Telah masuk di</Text>
-                      <Divider height={2} />
-                      <Text size={12} type='medium' letterSpacing={0.5}>{auth.user && auth.user.activityInfo && auth.user.activityInfo.location ? auth.user.activityInfo.location.name : ''}</Text>
-                    </Column>
+                    <Container paddingHorizontal={8}>
+                      <Column>
+                        <Text size={11} type='medium' color={Color.placeholder}>YOU'RE CONNECT TO</Text>
+                        <Divider height={2} />
+                        <Text size={22} type='medium'>{auth.user && auth.user.activityInfo && auth.user.activityInfo.location ? auth.user.activityInfo.location.name : ''}</Text>
+                      </Column>
+                    </Container>
                   </Row>
 
                   <TouchableOpacity
@@ -837,12 +812,9 @@ const MainHome = ({ navigation, route }) => {
                         () => onCheckout(),
                       );
                     }}
-                    style={{
-
-                    }}
                   >
-                    <Text color={Color.error} size={12} type='medium'>
-                      Keluar
+                    <Text color={Color.error} size={9} type='semibold'>
+                      {'Disconnect'.toUpperCase()}
                     </Text>
                   </TouchableOpacity>
                 </Row>
@@ -851,10 +823,10 @@ const MainHome = ({ navigation, route }) => {
           }
 
           {!isCheckin && stateListCheckinUID.length > 0 && <Container padding={16} paddingTop={8}>
-            <Container padding={14} color={Color.warningLight} radius={8}>
+            <Container paddingVertical={16} style={{borderTopWidth: 1, borderBottomWidth: 1, bordeerColor: Color.text}}>
               <Row justify='space-between'>
                 <Row>
-                  <Container paddingRight={16}>
+                  <Container padding={10} radius={50} color={Color.primary}>
                     <Image
                       source={imageAssets.airdrop}
                       style={{
@@ -864,11 +836,13 @@ const MainHome = ({ navigation, route }) => {
                     />
                   </Container>
 
-                  <Column>
-                    <Text type='medium' size={12} letterSpacing={0.5}>Checkpoint Disekitar</Text>
-                    <Divider height={2} />
-                    <Text size={10} letterSpacing={0.15} color={Color.placeholder} numberOfLines={1}>Sedang memverifikasi untuk masuk kedalam area</Text>
-                  </Column>
+                  <Container paddingHorizontal={8}>
+                    <Column>
+                      <Text type='medium' size={11} color={Color.placeholder}>{'Checkpoint'.toUpperCase()}</Text>
+                      <Divider height={2} />
+                      <Text type='medium' size={22} numberOfLines={1}>Verifying, Please wait . . .</Text>
+                    </Column>
+                  </Container>
                 </Row>
               </Row>
             </Container>
