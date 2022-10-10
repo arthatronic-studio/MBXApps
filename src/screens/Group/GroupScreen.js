@@ -203,7 +203,7 @@ const GroupScreen = ({navigation, route}) => {
                       backgroundColor:
                         index === categoryIndex ? Color.primary : 'transparent',
                     }}>
-                    <Text size={12} type="medium" color={Color.text}>
+                    <Text size={12} type="medium" color={index === categoryIndex ? Color.textInput : Color.text}>
                       {item}
                     </Text>
                   </Container>

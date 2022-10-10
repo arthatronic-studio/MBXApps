@@ -20,7 +20,7 @@ const NotificationScreen = ({ navigation, route }) => {
     loadNext: false,
     refresh: false,
   };
-  const [history, setHistory] = useState([{id: 1},{id: 2},{id: 3},{id: 4}]);
+  const [history, setHistory] = useState([{id: 1}]);
   const [loading, setLoading] = useState(false);
   const modalListActionRef = useRef();
   const [showSection, setShowSection] = useState(true);
@@ -187,13 +187,13 @@ const NotificationScreen = ({ navigation, route }) => {
                     Kamu telah masuk ke area
                   </Text>
                   <Text color={Color.black} align="left" size={14} lineHeight={18} type="medium">
-                    Mbloc Space
+                    M Bloc Space
                   </Text>
                 </Container>
               </Container>
-              <Text size={10} lineHeight={12} color={"#ACAAA5"}>
+              {/* <Text size={10} lineHeight={12} color={"#ACAAA5"}>
                   2 menit lalu
-              </Text>
+              </Text> */}
             </TouchableOpacity>
           )
         }}

@@ -249,11 +249,24 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
                       cart_detail_id: item.id,
                     }
                     const result = await fetchEatCartRemove(body);
+                    console.log('result remove', result);
                     if (result.status) {
                       let newArr = [...listProducts];
                       newArr.splice(index, 1);
                       setListProducts(newArr);
                       showLoading('success', result.message);
+
+                      if (Array.isArray(result.data) && result.data.length > 0) {
+                        setListProducts(result.data[0].cart_detail || []);
+                        setItems(result.data[0].location);
+                      }
+                      setRingkasanPembayaran(result.ringkasan_pembayaran);
+
+                      if (result.jumlah_product <= 0) {
+                        setTimeout(() => {
+                          navigation.pop();
+                        }, 2500);
+                      }
                     } else {
                       showLoading('error', result.message);
                     }

@@ -43,7 +43,8 @@ const EventDetail = ({ navigation, route }) => {
   const modalOptionsRef = useRef();
   const flatlistRef = useRef();
   const user = useSelector(state => state['user.auth'].login.user);
-  const {canGeneratedContent} = useCurrentUser();
+  
+  const isPassedEventDate = items.is_past_event === 1 ? true : false;
 
   const [im_like, set_im_like] = useState(items.im_like);
   const [heightHeader, setHeightHeader] = useState(0);
@@ -59,72 +60,15 @@ const EventDetail = ({ navigation, route }) => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    getDetail();
-  }, [isFocused]);
-
-  const getDetail = () => {
-    // showLoading();
-    let variables = {
-      id: items.id,
-    };
-    console.log(variables);
-    Client.query({ query: getDetailEvent, variables })
-      .then(res => {
-        // hideLoading()
-        if (res.data.eventDetail) {
-          console.log(res.data)
-          setData(res.data.eventDetail)
-          setBookmark(res.data.eventDetail.bookmarked);
-        }
-        setLoading(false);
-      })
-      .catch(reject => {
-        // hideLoading()
-        // alert(reject.message)
-        console.log(reject.message, 'reject');
-        setLoading(false);
-      });
-  };
+    if (isPassedEventDate) {
+      showLoading('error', 'Event telah berakhir');
+    }
+  }, []);
 
   const renderItem = ({ item }) => {
     return (
-      <CardEventTicket item={item} />
+      <CardEventTicket item={item} isPassedEventDate={isPassedEventDate} />
     )
-  }
-
-  const fetchAddLike = () => {
-    showLoading();
-
-    Client.query({
-      query: queryAddLike,
-      variables: {
-        productId: items.id,
-      },
-    })
-      .then(res => {
-        console.log(res, 'res add like');
-        if (res.data.contentAddLike.id) {
-          if (res.data.contentAddLike.status === 1) {
-            showLoading('success', 'Akan Hadir');
-            set_im_like(true);
-          } else {
-            showLoading('info', 'Batal menghadiri');
-            set_im_like(false);
-          }
-        }
-      })
-      .catch(err => {
-        console.log(err, 'err add like');
-        hideLoading();
-      });
-  };
-
-  let eventDate = !isNaN(parseInt(items.eventDate)) ? parseInt(items.eventDate) : null;
-  if (!eventDate) eventDate = !isNaN(parseInt(items.updated_date)) ? parseInt(items.updated_date) : null;
-
-  let isPassedEventDate = true;
-  if (moment(eventDate).isValid() && moment(eventDate).isAfter(moment())) {
-    isPassedEventDate = false;
   }
 
   const openGps = (lat, lng) => {
@@ -220,17 +164,18 @@ const EventDetail = ({ navigation, route }) => {
       </Container>
 
       <TouchableOpacity
-        onPress={() => {
-          data ? data.images.length == 0 ? console.log() :
-            navigation.navigate('GalleryDetailScreen', {
-              id: data.id,
-              image: data.images[0],
-            })
-            : console.log()
-        }}
+        activeOpacity={1}
+        // onPress={() => {
+        //   data ? data.images.length == 0 ? console.log() :
+        //     navigation.navigate('GalleryDetailScreen', {
+        //       id: data.id,
+        //       image: data.images[0],
+        //     })
+        //     : console.log()
+        // }}
         style={{
           width: '100%',
-          aspectRatio: 16 / 9,
+          aspectRatio: 1,
         }}
       >
         <Image
@@ -452,7 +397,7 @@ const EventDetail = ({ navigation, route }) => {
         ListFooterComponent={renderFooter}
       />
 
-      <Row style={{ padding: 16, backgroundColor: Color.theme }}>
+      {!isPassedEventDate && <Row style={{ padding: 16, backgroundColor: Color.theme }}>
         <Col style={{ justifyContent: 'center' }}>
           <Text type='medium' style={{ textAlign: 'left', fontSize: 8 }}>Mulai dari</Text>
           <Divider height={4} />
@@ -469,7 +414,7 @@ const EventDetail = ({ navigation, route }) => {
         >
           <Text type='medium' color={Color.textButtonInline}>Cari Tiket</Text>
         </TouchableOpacity>
-      </Row>
+      </Row>}
 
       <ModalContentOptions
         ref={modalOptionsRef}

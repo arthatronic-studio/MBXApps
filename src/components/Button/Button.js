@@ -67,7 +67,12 @@ const Button = (props) => {
       <CustomButton
         color={buttonColor}
         borderColor={borderColor}
-        onPress={!disabled && onPress}
+        activeOpacity={disabled ? 1 : 0.65}
+        onPress={() => {
+          if (!disabled) {
+            onPress();
+          }
+        }}
         {...style}
       >
         {source && <CustomImage source={source} />}

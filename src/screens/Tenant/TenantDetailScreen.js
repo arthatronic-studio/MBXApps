@@ -140,6 +140,8 @@ const TenantDetailScreen = ({ navigation, route }) => {
       if (result.amount) {
         setCartAmount(result.amount);
       }
+
+      setSelectedProductCount(result.jumlah_product);
     }
   }
 

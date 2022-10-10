@@ -281,11 +281,11 @@ const LoginScreenV2 = ({navigation, route}) => {
                 HELLO THERE
               </Text>
               <Divider height={24} />
-              <Text align="left" size={14} type="medium" color="#141414" lineHeight={22}>
+              {/* <Text align="left" size={14} type="medium" color="#141414" lineHeight={22}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
                 vulputate libero et velit interdum, ac aliquet odio mattis.
                 Class aptent taciti sociosqu ad litora.
-              </Text>
+              </Text> */}
             </Container>
 
             <Divider height={32} />

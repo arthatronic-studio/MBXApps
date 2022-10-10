@@ -75,7 +75,7 @@ const SpecialOfferScreen = ({navigation, route}) => {
           align="left">
           Weekend Time! Discount All Coffee Variant up to 40%
         </Text>
-        <Divider height={8} />
+        {/* <Divider height={8} />
         <Text
           size={12}
           lineHeight={19.2}
@@ -87,7 +87,7 @@ const SpecialOfferScreen = ({navigation, route}) => {
           aptent taciti sociosqu ad litora torquent per conubia nostra, per
           inceptos himenaeos. Curabitur tempus urna at turpis condimentum
           lobortis. Ut commodo efficitur neque.
-        </Text>
+        </Text> */}
         <Divider height={10} />
         <TouchableOpacity
           onPress={() => navigation.navigate('SpecialOfferDetail')}
