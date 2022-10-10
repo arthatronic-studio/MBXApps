@@ -31,16 +31,17 @@ const defaultProps = {
     isRefundable: false,
     reservation: false,
   },
+  isPassedEventDate: false,
 };
 
-const CardEventTicket = ({ item, onSelect }) => {
+const CardEventTicket = ({ item, isPassedEventDate, onSelect }) => {
   const { Color } = useColor();
   const navigation = useNavigation();
   const auth = useSelector(state => state['auth']);
   
   return (
     <View style={{ paddingHorizontal: 16 }}>
-      <Pressable style={{ width: '100%', marginBottom: 10, padding: 10, backgroundColor: Color.theme, borderWidth: 0.5, borderColor: Color.border, borderRadius: 8 }}>
+      <View style={{ width: '100%', marginBottom: 10, padding: 10, backgroundColor: Color.theme, borderWidth: 0.5, borderColor: Color.border, borderRadius: 8 }}>
         <Row>
           <Col>
             <Text size={16} align='left' type='medium'>{item.name}</Text>
@@ -86,6 +87,7 @@ const CardEventTicket = ({ item, onSelect }) => {
             <Button
               onPress={() => onSelect()}
               fontSize={12}
+              disabled={isPassedEventDate}
             >
               Pilih Tiket
             </Button>
@@ -99,13 +101,14 @@ const CardEventTicket = ({ item, onSelect }) => {
                 navigation.navigate('PemesananTiket', { item });
               }}
               fontSize={12}
+              disabled={isPassedEventDate}
             >
               Pesan Sekarang
             </Button>
             }
           </View>
         </View>
-      </Pressable>
+      </View>
     </View>
   );
 };
