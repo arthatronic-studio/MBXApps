@@ -230,7 +230,7 @@ const EventDetail = ({ navigation, route }) => {
         }}
         style={{
           width: '100%',
-          aspectRatio: 1,
+          aspectRatio: 16 / 9,
         }}
       >
         <Image
@@ -465,7 +465,7 @@ const EventDetail = ({ navigation, route }) => {
               animated: true
             })
           }}
-          style={{ justifyContent: 'center', backgroundColor: Color.primary, borderRadius: 8, height: 45, paddingHorizontal: 24 }}
+          style={{ justifyContent: 'center', backgroundColor: Color.primary, height: 45, paddingHorizontal: 24 }}
         >
           <Text type='medium' color={Color.textButtonInline}>Cari Tiket</Text>
         </TouchableOpacity>

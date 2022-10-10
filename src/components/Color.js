@@ -8,7 +8,7 @@ const staticColors = {
   primarySoft: '#121212',
   secondary: '#6A7479',
   tertiary: '#645FF2',
-  textButtonInline: '#4B4639',
+  textButtonInline: '#E7FF00',
   oldGreen: '#557D09',
   disabled: '#7B776F',
   success: '#3AA413',

@@ -124,7 +124,7 @@ const Header = (props) => {
                   {showIconLeftButton && (
                     <Fontisto
                       name={iconLeftButton}
-                      color={Color.textButtonInline}
+                      color={Color.text}
                       size={18}
                     />
                   )}
