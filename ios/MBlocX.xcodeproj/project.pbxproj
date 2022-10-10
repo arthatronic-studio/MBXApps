@@ -26,13 +26,13 @@
 		DB53454EDC9A887E0A1367D0 /* libPods-MBlocX-MBlocXTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 20E0CE272AD49DE26FC03234 /* libPods-MBlocX-MBlocXTests.a */; };
 		F14F1698D22148FEAEAE966C /* Inter-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6175D5CDB5434D008E7E5ACB /* Inter-Black.ttf */; };
 		F917EE6E746A48CE959E6FE5 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A5D7374F496349F99512AF35 /* Inter-Medium.ttf */; };
-		BD494085A14749AC959170B2 /* NeueHaasDisplayBlack.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 822250CD1A6A4AA2AB1BFE6D /* NeueHaasDisplayBlack.ttf */; };
-		A066D5B00E3F49E1B1E88D84 /* NeueHaasDisplayBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CFF26D04C112490F8F4B52CE /* NeueHaasDisplayBold.ttf */; };
-		228EE304BBC843778A3D0C61 /* NeueHaasDisplayLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7E3A4372ECFD4F4C96E1C13E /* NeueHaasDisplayLight.ttf */; };
-		85A206B66F5C4BC6A2FEF4D7 /* NeueHaasDisplayMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9A5B77D833C54BA58CD4C747 /* NeueHaasDisplayMedium.ttf */; };
-		A0F5C21F56654AF4A6136E15 /* NeueHaasDisplayRoman.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 91105D45DF964E6E8EDDF333 /* NeueHaasDisplayRoman.ttf */; };
-		549337D0647F4CB4A0010193 /* NeueHaasDisplayThin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 322591C5A07741E781C9AA08 /* NeueHaasDisplayThin.ttf */; };
-		14A52C8BC29A4A46AB839176 /* NeueHaasDisplayXThin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7C5E534A30AF4FAD9729F297 /* NeueHaasDisplayXThin.ttf */; };
+		0A26FE25C77044C88A3CC07B /* NeueHaasDisplay-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 411BC934863C4A47B6C9082E /* NeueHaasDisplay-Black.ttf */; };
+		C5D0675D146E4A78BACBA703 /* NeueHaasDisplay-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 016B39895237481F8CAE4489 /* NeueHaasDisplay-Bold.ttf */; };
+		5A3862E90AD1444C88F91A8D /* NeueHaasDisplay-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 767357C715D745008614F166 /* NeueHaasDisplay-Light.ttf */; };
+		9FAA8D1541EE4BD290777D23 /* NeueHaasDisplay-Mediu.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E08DBE974DED49A6B094F21A /* NeueHaasDisplay-Mediu.ttf */; };
+		B07897B67A3B46D0B81B76AD /* NeueHaasDisplay-Roman.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CEEB7C7FF0D64004B57C871A /* NeueHaasDisplay-Roman.ttf */; };
+		B29ECE59CE4643EB943EE797 /* NeueHaasDisplay-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EB0E3332AE84424990DDA3A /* NeueHaasDisplay-Thin.ttf */; };
+		2C212CCFA8BB4B3C85CED07C /* NeueHaasDisplay-XThin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C4A72C186793429DABD64638 /* NeueHaasDisplay-XThin.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,13 +77,13 @@
 		F1F24434BDAE4DBAB42D05A5 /* Inter-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Light.ttf"; path = "../assets/fonts/Inter/Inter-Light.ttf"; sourceTree = "<group>"; };
 		F78B7A41B56AC6897FE3F1D6 /* Pods-MBlocX-MBlocXTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MBlocX-MBlocXTests.debug.xcconfig"; path = "Target Support Files/Pods-MBlocX-MBlocXTests/Pods-MBlocX-MBlocXTests.debug.xcconfig"; sourceTree = "<group>"; };
 		FBC4305C7845413D9906F5DE /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-ExtraBold.ttf"; path = "../assets/fonts/Inter/Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
-		822250CD1A6A4AA2AB1BFE6D /* NeueHaasDisplayBlack.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplayBlack.ttf"; path = "../assets/fonts/Neue-Haas-Grotesk-Display-Pro/NeueHaasDisplayBlack.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		CFF26D04C112490F8F4B52CE /* NeueHaasDisplayBold.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplayBold.ttf"; path = "../assets/fonts/Neue-Haas-Grotesk-Display-Pro/NeueHaasDisplayBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		7E3A4372ECFD4F4C96E1C13E /* NeueHaasDisplayLight.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplayLight.ttf"; path = "../assets/fonts/Neue-Haas-Grotesk-Display-Pro/NeueHaasDisplayLight.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		9A5B77D833C54BA58CD4C747 /* NeueHaasDisplayMedium.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplayMedium.ttf"; path = "../assets/fonts/Neue-Haas-Grotesk-Display-Pro/NeueHaasDisplayMedium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		91105D45DF964E6E8EDDF333 /* NeueHaasDisplayRoman.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplayRoman.ttf"; path = "../assets/fonts/Neue-Haas-Grotesk-Display-Pro/NeueHaasDisplayRoman.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		322591C5A07741E781C9AA08 /* NeueHaasDisplayThin.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplayThin.ttf"; path = "../assets/fonts/Neue-Haas-Grotesk-Display-Pro/NeueHaasDisplayThin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		7C5E534A30AF4FAD9729F297 /* NeueHaasDisplayXThin.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplayXThin.ttf"; path = "../assets/fonts/Neue-Haas-Grotesk-Display-Pro/NeueHaasDisplayXThin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		411BC934863C4A47B6C9082E /* NeueHaasDisplay-Black.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplay-Black.ttf"; path = "../assets/fonts/Neue-Haas-Grotesk-Display-Pro/NeueHaasDisplay-Black.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		016B39895237481F8CAE4489 /* NeueHaasDisplay-Bold.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplay-Bold.ttf"; path = "../assets/fonts/Neue-Haas-Grotesk-Display-Pro/NeueHaasDisplay-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		767357C715D745008614F166 /* NeueHaasDisplay-Light.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplay-Light.ttf"; path = "../assets/fonts/Neue-Haas-Grotesk-Display-Pro/NeueHaasDisplay-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E08DBE974DED49A6B094F21A /* NeueHaasDisplay-Mediu.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplay-Mediu.ttf"; path = "../assets/fonts/Neue-Haas-Grotesk-Display-Pro/NeueHaasDisplay-Mediu.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		CEEB7C7FF0D64004B57C871A /* NeueHaasDisplay-Roman.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplay-Roman.ttf"; path = "../assets/fonts/Neue-Haas-Grotesk-Display-Pro/NeueHaasDisplay-Roman.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4EB0E3332AE84424990DDA3A /* NeueHaasDisplay-Thin.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplay-Thin.ttf"; path = "../assets/fonts/Neue-Haas-Grotesk-Display-Pro/NeueHaasDisplay-Thin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		C4A72C186793429DABD64638 /* NeueHaasDisplay-XThin.ttf */ = {isa = PBXFileReference; name = "NeueHaasDisplay-XThin.ttf"; path = "../assets/fonts/Neue-Haas-Grotesk-Display-Pro/NeueHaasDisplay-XThin.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,13 +173,13 @@
 				AEB4FC05E7514D65A84EFC23 /* Inter-Regular.ttf */,
 				30CEF8FB6A3C407B9B15BA8A /* Inter-SemiBold.ttf */,
 				5B32806D66FA4E4AA85BD975 /* Inter-Thin.ttf */,
-				822250CD1A6A4AA2AB1BFE6D /* NeueHaasDisplayBlack.ttf */,
-				CFF26D04C112490F8F4B52CE /* NeueHaasDisplayBold.ttf */,
-				7E3A4372ECFD4F4C96E1C13E /* NeueHaasDisplayLight.ttf */,
-				9A5B77D833C54BA58CD4C747 /* NeueHaasDisplayMedium.ttf */,
-				91105D45DF964E6E8EDDF333 /* NeueHaasDisplayRoman.ttf */,
-				322591C5A07741E781C9AA08 /* NeueHaasDisplayThin.ttf */,
-				7C5E534A30AF4FAD9729F297 /* NeueHaasDisplayXThin.ttf */,
+				411BC934863C4A47B6C9082E /* NeueHaasDisplay-Black.ttf */,
+				016B39895237481F8CAE4489 /* NeueHaasDisplay-Bold.ttf */,
+				767357C715D745008614F166 /* NeueHaasDisplay-Light.ttf */,
+				E08DBE974DED49A6B094F21A /* NeueHaasDisplay-Mediu.ttf */,
+				CEEB7C7FF0D64004B57C871A /* NeueHaasDisplay-Roman.ttf */,
+				4EB0E3332AE84424990DDA3A /* NeueHaasDisplay-Thin.ttf */,
+				C4A72C186793429DABD64638 /* NeueHaasDisplay-XThin.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -325,13 +325,13 @@
 				B44E571E971145CDA881BFBD /* Inter-Regular.ttf in Resources */,
 				9718E86562DC4024912F8D5F /* Inter-SemiBold.ttf in Resources */,
 				65931133C65B4BB49FF03639 /* Inter-Thin.ttf in Resources */,
-				BD494085A14749AC959170B2 /* NeueHaasDisplayBlack.ttf in Resources */,
-				A066D5B00E3F49E1B1E88D84 /* NeueHaasDisplayBold.ttf in Resources */,
-				228EE304BBC843778A3D0C61 /* NeueHaasDisplayLight.ttf in Resources */,
-				85A206B66F5C4BC6A2FEF4D7 /* NeueHaasDisplayMedium.ttf in Resources */,
-				A0F5C21F56654AF4A6136E15 /* NeueHaasDisplayRoman.ttf in Resources */,
-				549337D0647F4CB4A0010193 /* NeueHaasDisplayThin.ttf in Resources */,
-				14A52C8BC29A4A46AB839176 /* NeueHaasDisplayXThin.ttf in Resources */,
+				0A26FE25C77044C88A3CC07B /* NeueHaasDisplay-Black.ttf in Resources */,
+				C5D0675D146E4A78BACBA703 /* NeueHaasDisplay-Bold.ttf in Resources */,
+				5A3862E90AD1444C88F91A8D /* NeueHaasDisplay-Light.ttf in Resources */,
+				9FAA8D1541EE4BD290777D23 /* NeueHaasDisplay-Mediu.ttf in Resources */,
+				B07897B67A3B46D0B81B76AD /* NeueHaasDisplay-Roman.ttf in Resources */,
+				B29ECE59CE4643EB943EE797 /* NeueHaasDisplay-Thin.ttf in Resources */,
+				2C212CCFA8BB4B3C85CED07C /* NeueHaasDisplay-XThin.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

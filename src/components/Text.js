@@ -4,12 +4,12 @@ import Styled from 'styled-components';
 import {useColor} from '@src/components';
 
 export const fontFamily = {
-  regular: 'NeueHaasDisplayRoman',
-  medium: 'NeueHaasDisplayMedium',
-  semibold: 'Inter-SemiBold',
-  bold: 'NeueHaasDisplayBold',
-  light: 'NeueHaasDisplayThin',
-  italic: 'Inter-Regular',
+  regular: 'NeueHaasDisplay-Thin',
+  medium: 'NeueHaasDisplay-Light',
+  semibold: 'NeueHaasDisplay-Roman',
+  bold: 'NeueHaasDisplay-Mediu',
+  light: 'NeueHaasDisplay-XThin',
+  italic: 'NeueHaasDisplay-XThin',
 };
 
 const BaseText = Styled(ReactText)`

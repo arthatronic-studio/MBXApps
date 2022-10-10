@@ -96,13 +96,13 @@
 		<string>rubicon-icon-font.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
-		<string>NeueHaasDisplayBlack.ttf</string>
-		<string>NeueHaasDisplayBold.ttf</string>
-		<string>NeueHaasDisplayLight.ttf</string>
-		<string>NeueHaasDisplayMedium.ttf</string>
-		<string>NeueHaasDisplayRoman.ttf</string>
-		<string>NeueHaasDisplayThin.ttf</string>
-		<string>NeueHaasDisplayXThin.ttf</string>
+		<string>NeueHaasDisplay-Black.ttf</string>
+		<string>NeueHaasDisplay-Bold.ttf</string>
+		<string>NeueHaasDisplay-Light.ttf</string>
+		<string>NeueHaasDisplay-Mediu.ttf</string>
+		<string>NeueHaasDisplay-Roman.ttf</string>
+		<string>NeueHaasDisplay-Thin.ttf</string>
+		<string>NeueHaasDisplay-XThin.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
