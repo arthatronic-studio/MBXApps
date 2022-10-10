@@ -4,11 +4,11 @@ import Styled from 'styled-components';
 import {useColor} from '@src/components';
 
 export const fontFamily = {
-  regular: 'Inter-Regular',
-  medium: 'Inter-Medium',
+  regular: 'NeueHaasDisplayRoman',
+  medium: 'NeueHaasDisplayMedium',
   semibold: 'Inter-SemiBold',
-  bold: 'Inter-Bold',
-  light: 'Inter-Light',
+  bold: 'NeueHaasDisplayBold',
+  light: 'NeueHaasDisplayThin',
   italic: 'Inter-Regular',
 };
 
