@@ -129,11 +129,11 @@ const ShopScreen = ({ navigation, route }) => {
         </Container>
       }
 
-      <SearchBar
+      {/* <SearchBar
         type='select'
         label='Cari tempat apa hari ini'
         onPress={() => navigation.navigate('SearchEvent')}
-      />
+      /> */}
 
       <Divider />
 

@@ -123,7 +123,7 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                 <View style={{ width: '100%', backgroundColor: Color.theme, borderWidth: 1, borderColor: Color.primary }}>
                     <View style={{ width: '100%', padding: 8, paddingVertical: 6, flexDirection: 'row', borderBottomWidth: 1, borderColor: Color.primary }}>
                         <View style={{ flex: 1, alignItems: 'flex-start' }}>
-                            <Text size={11} type='medium' letterSpacing={0.04}>(H) TICKET</Text>
+                            <Text size={11} type='medium' letterSpacing={0.04}>TICKET</Text>
                         </View>
                         <View style={{ flex: 1, alignItems: 'flex-end' }}>
                             <Text size={11} type='medium' letterSpacing={0.04}>{FormatMoney.getFormattedMoney(item.lowest_price ? item.lowest_price.price : 0)}</Text>
@@ -134,9 +134,9 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                         <Text size={27} type='medium' align='left' numberOfLines={3}>{item.title}</Text>
                     </View>
 
-                    <View style={{ width: '100%', padding: 8, paddingVertical: 4, borderBottomWidth: 1, borderColor: Color.primary }}>
-                        <Text type='medium' align='left' numberOfLines={1}>(H) 100+ Local Bands</Text>
-                        <Text size={9} type='medium' align='left' numberOfLines={2}>(H) ZIP, SORE, MOCCA, EFEK RUMAH KACA, FINAL ATTACK & Many More</Text>
+                    <View style={{ width: '100%', minHeight: (9 * 3) + (8 * 1) + 8, padding: 8, paddingVertical: 4, borderBottomWidth: 1, borderColor: Color.primary }}>
+                        {/* <Text type='medium' align='left' numberOfLines={1}>{item.description}</Text> */}
+                        <Text size={9} type='medium' align='left' numberOfLines={3}>{item.description}</Text>
                     </View>
 
                     <View style={{ width: '100%', flexDirection: 'row' }}>

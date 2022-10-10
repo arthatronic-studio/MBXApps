@@ -51,24 +51,24 @@ const SpecialOfferDetail = ({navigation, route}) => {
           <Text align="left" size={10} lineHeight={12} color={Color.textSoft}>
             Description
           </Text>
-          <Text align="left" size={12} lineHeight={19.2} color={Color.black}>
+          {/* <Text align="left" size={12} lineHeight={19.2} color={Color.black}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
             vulputate libero et velit interdum, ac aliquet odio mattis. Class
             aptent taciti sociosqu ad litora torquent per conubia nostra, per
             inceptos himenaeos. Curabitur tempus urna at turpis condimentum
             lobortis. Ut commodo efficitur neque.
-          </Text>
+          </Text> */}
           <Divider height={16} />
           <Text align="left" size={10} lineHeight={12} color={Color.textSoft}>
             Term & Conditions
           </Text>
-          <Text align="left" size={12} lineHeight={19.2} color={Color.black}>
+          {/* <Text align="left" size={12} lineHeight={19.2} color={Color.black}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
             vulputate libero et velit interdum, ac aliquet odio mattis. Class
             aptent taciti sociosqu ad litora torquent per conubia nostra, per
             inceptos himenaeos. Curabitur tempus urna at turpis condimentum
             lobortis. Ut commodo efficitur neque.
-          </Text>
+          </Text> */}
         </Container>
 
         <Divider height={16}/>

@@ -44,6 +44,7 @@ import Axios from 'axios';
 import {initSocket} from 'src/api-socket/currentSocket';
 import {assetImageProfile} from 'assets/images/profile';
 import { FlatList } from 'react-native-gesture-handler';
+import { stateUpdateProfile } from 'src/api-rest/stateUpdateProfile';
 
 const MainProfile = ({navigation, route}) => {
   const currentSocket = initSocket();
@@ -93,6 +94,8 @@ const MainProfile = ({navigation, route}) => {
   }, [route]);
 
   const fetchData = async () => {
+    await stateUpdateProfile();
+
     const result = await fetchCommunityMemberCheck();
     if (result.status) {
       setMemberCheck({...memberCheck, ...result.data});
@@ -223,7 +226,7 @@ const MainProfile = ({navigation, route}) => {
               />
             )}
 
-            {auth && auth.user && (
+            {auth.user && (
               <View
                 style={{
                   flex: 1,
@@ -234,14 +237,14 @@ const MainProfile = ({navigation, route}) => {
                 <Text size={22} align="left" lineHeight={28} numberOfLines={1} type="bold">
                   {auth.user.name}
                 </Text>
-                <TouchableOpacity
+                {!auth.user.isGuest && <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('ChangeProfileV2', { canGoBack: true });
                   }}>
                   <Text size={12} type="medium" color={Color.black} underline>
                     EDIT PROFILE
                   </Text>
-                </TouchableOpacity>
+                </TouchableOpacity>}
               </View>
             )}
           </View>
@@ -495,25 +498,26 @@ const MainProfile = ({navigation, route}) => {
           </TouchableOpacity> */}
         </Container>}
 
-        {auth.user && auth.user.isGuest && <Container padding={16}>
+        {auth.user && auth.user.isGuest && <Container paddingHorizontal={16}>
           <TouchableOpacity
             onPress={() => {
               redirectTo('LoginScreenV2');
             }}
             style={{
               flexDirection: 'row',
+              alignItems: 'center',
             }}>
-            <Image
+            {/* <Image
               source={assetImageProfile.logout}
               style={{
-                height: 16,
-                width: 16,
+                height: 19,
+                width: 19,
                 resizeMode: 'contain',
-                tintColor: Color.blue,
+                tintColor: Color.text,
               }}
             />
-            <Divider width={8} />
-            <Text color={Color.blue} align="left">
+            <Divider width={8} /> */}
+            <Text size={17} type='medium' align="left">
               Login
             </Text>
           </TouchableOpacity>
@@ -595,7 +599,7 @@ const MainProfile = ({navigation, route}) => {
                 justifyContent: 'center',
                 borderWidth: 1,
               }}>
-              <QRCode value={'dummy'} size={(width*0.8) - 84} />
+              <QRCode value={auth.user && auth.user.user_uuid ? auth.user.user_uuid : 'blocX'} size={(width*0.8) - 84} />
             </View>
 
             <Divider height={16} />

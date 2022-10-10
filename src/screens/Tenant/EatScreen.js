@@ -91,7 +91,7 @@ const EatScreen = ({ navigation, route }) => {
                     resizeMode: 'contain',
                   }}
                 /> */}
-                <View
+                {/* <View
                   style={{
                     height: 20,
                     aspectRatio: 1,
@@ -104,7 +104,7 @@ const EatScreen = ({ navigation, route }) => {
                   }}
                 >
                   <Text size={12} Color={Color.secondary}>0</Text>
-                </View>
+                </View> */}
               </TouchableOpacity>
             </View>
           }

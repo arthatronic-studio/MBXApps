@@ -294,7 +294,7 @@ const EventScreen = ({ navigation, route }) => {
         }}
         ListHeaderComponent={
           <>
-            <ListFeaturedEvent
+            {/* <ListFeaturedEvent
               horizontal
               productCategory='EVENT'
               name='Event'
@@ -303,7 +303,7 @@ const EventScreen = ({ navigation, route }) => {
               style={{
                 paddingHorizontal: 0,
               }}
-            />
+            /> */}
 
             {/* //     <ListOption />
             //     <Container paddingBottom={16}>
