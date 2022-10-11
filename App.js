@@ -53,7 +53,8 @@ const App = () => {
   }
 
   const initRequestTracking = async () => {
-    await requestTrackingPermission();
+    const tracking = await requestTrackingPermission();
+    console.log('tracking status', tracking);
   }
 
   // ===========================================

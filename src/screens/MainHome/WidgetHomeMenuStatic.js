@@ -222,7 +222,7 @@ const WidgetHomeMenuStatic = () => {
                   style={{
                     width: `${100 / numOfColumn}%`,
                     aspectRatio: 1,
-                    marginBottom: 4,
+                    marginBottom: 8,
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}
