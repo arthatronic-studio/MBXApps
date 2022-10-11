@@ -26,7 +26,8 @@ import ListTenantItem from 'src/screens/Tenant/ListTenantItem';
 import ListTenantFeatured from 'src/screens/Tenant/ListTenantFeatured';
 
 const EatScreen = ({ navigation, route }) => {
-  const isMainScreen = route.params && route.params.routeIndex;
+  const { params } = route;
+  const isMainScreen = params && params.routeIndex;
 
   const auth = useSelector(state => state['auth']);
   const { Color } = useColor();
@@ -68,7 +69,7 @@ const EatScreen = ({ navigation, route }) => {
     <Scaffold
       header={
         <Header
-          title='EATS'
+          title={params.title || 'EATS'}
           centerTitle={false}
           actions={
             <View style={{ width: '100%', alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row' }}>

@@ -488,7 +488,7 @@ PODS:
   - react-native-track-player (3.1.0):
     - React-Core
     - SwiftAudioEx (= 0.15.2)
-  - react-native-tracking-transparency (0.1.1):
+  - react-native-tracking-transparency (0.1.2):
     - React
   - react-native-video (6.0.0-alpha.1):
     - React-Core
@@ -968,7 +968,7 @@ SPEC CHECKSUMS:
   react-native-simple-crypto: 499ddd9f317932677e50393e58e7a72bca2a86e1
   react-native-slider: d3ae4270cf8a8cc45a69912db0cc42b151560d5a
   react-native-track-player: 12c7bdc776f11c382c11fecdade3743ebe0af78c
-  react-native-tracking-transparency: b2029ff756f1128b1f2c7c7c7f3003bc3c950f9f
+  react-native-tracking-transparency: 25ff1ff866e338c137c818bdec20526bb05ffcc1
   react-native-video: bb6f12a7198db53b261fefb5d609dc77417acc8b
   react-native-webview: e771bc375f789ebfa02a26939a57dbc6fa897336
   React-perflogger: cb386fd44c97ec7f8199c04c12b22066b0f2e1e0
