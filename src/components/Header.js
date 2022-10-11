@@ -18,6 +18,7 @@ import {
 } from '@src/components';
 import ImagesPath from './ImagesPath';
 import { shadowStyle } from 'src/styles';
+import { arrowLeft } from 'assets/images';
 
 const MainView = Styled(View)`
     width: 100%;
@@ -122,10 +123,18 @@ const Header = (props) => {
               <LeftButton onPress={onPressLeftButton}>
                 <TransparentBackView style={{backgroundColor: Color.primary}}>
                   {showIconLeftButton && (
-                    <Fontisto
-                      name={iconLeftButton}
-                      color={Color.text}
-                      size={18}
+                    // <Fontisto
+                    //   name={iconLeftButton}
+                    //   color={Color.text}
+                    //   size={18}
+                    // />
+                    <Image
+                      source={arrowLeft}
+                      style={{
+                        height: 24,
+                        width: 24,
+                        resizeMode: 'contain',
+                      }}
                     />
                   )}
                 </TransparentBackView>
@@ -180,11 +189,19 @@ const Header = (props) => {
             {showLeftButton ? (
               <LeftButton onPress={onPressLeftButton}>
                 {showIconLeftButton && (
-                  <Fontisto
-                    name={iconLeftButton}
-                    color={color || Color.text}
-                    size={18}
-                  />
+                  // <Fontisto
+                  //   name={iconLeftButton}
+                  //   color={color || Color.text}
+                  //   size={18}
+                  // />
+                  <Image
+                      source={arrowLeft}
+                      style={{
+                        height: 24,
+                        width: 24,
+                        resizeMode: 'contain',
+                      }}
+                    />
                 )}
               </LeftButton>
             ) : (
@@ -297,10 +314,18 @@ const Header = (props) => {
                           size={18}
                         />
                       ) : (
-                        <Fontisto
-                          name={iconLeftButton}
-                          color={color || Color.text}
-                          size={18}
+                        // <Fontisto
+                        //   name={iconLeftButton}
+                        //   color={color || Color.text}
+                        //   size={18}
+                        // />
+                        <Image
+                          source={arrowLeft}
+                          style={{
+                            height: 24,
+                            width: 24,
+                            resizeMode: 'contain',
+                          }}
                         />
                       )}
                     </>

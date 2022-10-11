@@ -103,7 +103,7 @@ const CardEventTicket = ({ item, isPassedEventDate, onSelect }) => {
               fontSize={12}
               disabled={isPassedEventDate}
             >
-              Pesan Sekarang
+              {isPassedEventDate ? 'Tidak Tersedia' : 'Pesan Sekarang'}
             </Button>
             }
           </View>

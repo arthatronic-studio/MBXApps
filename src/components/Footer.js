@@ -30,7 +30,6 @@ const OutlineButton = Styled(TouchableOpacity)`
     height: 40px;
     borderColor: ${(props) => props.twinButtonBorderColor};
     borderWidth: 1px;
-    borderRadius: 4px;
     justifyContent: center;
     alignItems: center;
     marginBottom: ${(props) => props.marginBottom};
@@ -40,7 +39,6 @@ const PayButton = Styled(TouchableOpacity)`
     width: ${(props) => props.width || '100%'};
     height: 40px;
     backgroundColor: ${(props) => props.backgroundColor};
-    borderRadius: 4px;
     justifyContent: center;
     alignItems: center;
 
@@ -128,7 +126,7 @@ const Footer = (props) => {
           <Text
             size={16}
             letterSpacing={0.02}
-            color={buttonTextColor || Color.text}>
+            color={buttonTextColor || Color.textInput}>
             {buttonLabel}
           </Text>
         </PayButton>
@@ -157,7 +155,7 @@ const Footer = (props) => {
         <Text
           size={16}
           letterSpacing={0.02}
-          color={buttonTextColor || Color.text}>
+          color={buttonTextColor || Color.textInput}>
           {buttonLabel}
         </Text>
       </PayButton>

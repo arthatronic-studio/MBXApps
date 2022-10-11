@@ -99,9 +99,10 @@ const ListTenantItem = ({ tenantType, productCategory, name, horizontal, style, 
         )
     }
 
-    let extraProps = { numColumns: 2 };
-    if (productCategory === 'NEARBY_PLACE') extraProps.numColumns = 2;
-    if (horizontal) extraProps = {};
+    let extraProps = {};
+    // let extraProps = { numColumns: 2 };
+    // if (productCategory === 'NEARBY_PLACE') extraProps.numColumns = 2;
+    // if (horizontal) extraProps = {};
 
     return (
         <View style={{ }}>
@@ -120,6 +121,7 @@ const ListTenantItem = ({ tenantType, productCategory, name, horizontal, style, 
                     onEndReached={() => setItemData({ ...itemData, loadNext: true })}
                     {...extraProps}
                     renderItem={({ item, index }) => {
+                        console.log('itemitem', item);
                         return (
                             // <CardTenantItem
                             //     index={index}

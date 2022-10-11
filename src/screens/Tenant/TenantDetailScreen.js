@@ -149,17 +149,68 @@ const TenantDetailScreen = ({ navigation, route }) => {
   if (desc) descriptionProps = {};
   const labelDesctiption = items.description;
 
+  let imagesCount = 0;
+  let imagesMiniGallery = [];
+  if (Array.isArray(items.images) && items.images.length > 0) {
+    imagesCount = items.images.length;
+
+    if (imagesCount > 1) {
+      imagesMiniGallery.push(items.images[1]);
+    }
+    if (imagesCount > 2) {
+      imagesMiniGallery.push(items.images[2]);
+    }
+  }
+
   const renderHeader = (
     <View>
-      <ScrollView
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-      >
-        {Array.isArray(items.images) && items.images.length > 0 ? items.images.map((i, idx) => {
-          return (
+      <View>
+        <ScrollView
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+        >
+          {imagesCount > 0 ?
+            items.images.map((i, idx) => {
+              return (
+                <TouchableOpacity
+                  key={idx}
+                  onPress={() => {
+                    // navigation.navigate('GalleryDetailScreen', {
+                    //   id: idx,
+                    //   image: i,
+                    // });
+
+                    let listing = [];
+                    items.images.map((e) => {
+                      listing.push({
+                        image: e
+                      });
+                    });
+                    navigation.navigate('GalleryDetailSliderScreen', {
+                      data: listing,
+                      selectedIndex: idx,
+                    });
+                  }}
+                  style={{
+                    width: width - 32,
+                  }}
+                >
+                  <View style={{ width: '100%', aspectRatio: 16 / 9, }}>
+                    <Image
+                      source={{ uri: i }}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: Color.border,
+                      }}
+                    />
+                  </View>
+                </TouchableOpacity>
+              )
+            })
+          :
             <TouchableOpacity
-              key={idx}
               // onPress={() => {
               //   data ? data.images.length == 0 ? console.log() :
               //     navigation.navigate('GalleryDetailScreen', {
@@ -169,12 +220,12 @@ const TenantDetailScreen = ({ navigation, route }) => {
               //     : console.log()
               // }}
               style={{
-                width,
+                width: width - 32,
               }}
             >
               <View style={{ width: '100%', aspectRatio: 16 / 9, }}>
                 <Image
-                  source={{ uri: i }}
+                  source={{ uri: '' }}
                   style={{
                     width: '100%',
                     height: '100%',
@@ -183,37 +234,65 @@ const TenantDetailScreen = ({ navigation, route }) => {
                 />
               </View>
             </TouchableOpacity>
-          )
-        })
-          :
-          <TouchableOpacity
-            // onPress={() => {
-            //   data ? data.images.length == 0 ? console.log() :
-            //     navigation.navigate('GalleryDetailScreen', {
-            //       id: data.id,
-            //       image: data.images[0],
-            //     })
-            //     : console.log()
-            // }}
-            style={{
-              width,
-            }}
-          >
-            <View style={{ width: '100%', aspectRatio: 16 / 9, }}>
-              <Image
-                source={{ uri: '' }}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  backgroundColor: Color.border,
-                }}
-              />
-            </View>
-          </TouchableOpacity>
-        }
-      </ScrollView>
+          }
+        </ScrollView>
 
-      <Container marginTop={24} marginBottom={16}>
+        <View style={{height: 40, alignSelf: 'flex-end', position: 'absolute', bottom: 10, right: 10}}>
+          <View style={{flexDirection: 'row'}}>
+
+            {imagesMiniGallery.map((e, idx) => {
+              return (
+                <TouchableOpacity
+                  key={idx}
+                  onPress={() => {
+                    let listing = [];
+                    items.images.map((e) => {
+                      listing.push({
+                        image: e
+                      });
+                    });
+                    navigation.navigate('GalleryDetailSliderScreen', {
+                      data: listing,
+                      selectedIndex: idx + 1,
+                    });
+                  }}
+                  style={{width: 40, aspectRatio: 1, backgroundColor: Color.overflow, justifyContent: 'center', marginRight: 4,}}
+                >
+                  <Image
+                    source={{ uri: e }}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  />
+                </TouchableOpacity>
+              )
+            })}
+
+            {imagesCount > 1 &&
+              <TouchableOpacity
+                onPress={() => {
+                  let listing = [];
+                  items.images.map((e) => {
+                    listing.push({
+                      image: e
+                    });
+                  });
+                  navigation.navigate('GalleryDetailSliderScreen', {
+                    data: listing,
+                    selectedIndex: 1,
+                  });
+                }}
+                style={{width: 40, aspectRatio: 1, backgroundColor: Color.overflow, justifyContent: 'center'}}
+              >
+                <Text type='medium' color={Color.textInput}>+{imagesCount - 1}</Text>
+              </TouchableOpacity>
+            }
+          </View>
+        </View>
+      </View>
+
+      <Container marginTop={16} marginBottom={16}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <View style={{ flex: 1 }}>
             <Text
@@ -240,16 +319,18 @@ const TenantDetailScreen = ({ navigation, route }) => {
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <View style={{ flex: 1 }}>
-            
+
           </View>
 
           <View style={{ flex: 3 }}>
             <Text
               size={12}
-              type='semibold'
+              type='bold'
               align='left'
+              lineHeight={16}
+              letterSpacing={0.4}
             >
-              {items.type}
+              {items.title || '-'}
             </Text>
           </View>
         </View>
@@ -258,7 +339,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <View style={{ flex: 1 }}>
-            
+
           </View>
 
           <View style={{ flex: 3 }}>
@@ -266,6 +347,8 @@ const TenantDetailScreen = ({ navigation, route }) => {
               size={9}
               type='medium'
               align='left'
+              lineHeight={15}
+              letterSpacing={0.4}
               {...descriptionProps}
             >
               {labelDesctiption}
@@ -277,7 +360,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <View style={{ flex: 1 }}>
-            
+
           </View>
 
           <View style={{ flex: 3 }}>
@@ -285,8 +368,8 @@ const TenantDetailScreen = ({ navigation, route }) => {
               onPress={() => setDesc(!desc)}
               style={{ alignItems: 'flex-start', justifyContent: 'flex-start' }}
             >
-              <View style={{borderBottomWidth: 0.5, borderColor: Color.primary}}>
-              <Text size={10}>{desc ? 'Read less' : 'Read More'}</Text>
+              <View style={{ borderBottomWidth: 0.5, borderColor: Color.primary }}>
+                <Text size={10}>{desc ? 'View less' : 'Read More'}</Text>
               </View>
             </Pressable>
           </View>
@@ -352,7 +435,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
 
       <Container paddingBottom={14}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Text align='left'>● Menu</Text>
+          <Text align='left' type='medium'>● Menu</Text>
           {/* <View style={{ flexDirection: 'row', padding: 8, backgroundColor: Color.error, borderRadius: 120 }}>
             <Image
               source={imageAssets.menu}
@@ -577,7 +660,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
                 <Text align='left' size={16} type='medium'>{FormatMoney.getFormattedMoney(item.price || 0)}</Text>
               </View>
 
-              <View style={{ alignItems: 'center'}}>
+              <View style={{ alignItems: 'center' }}>
                 <Text align='left' size={11} type='medium' color={Color.secondary}>Total</Text>
                 <Divider height={4} />
                 <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -706,7 +789,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
         renderItem={({ item, index }) => {
           const existInCart = listCartProduct.filter((e) => e.product_id === item.id)[0];
           let quantity = existInCart ? existInCart.quantity : 0;
-          
+
           return (
             <CardTenantMenu
               index={index}

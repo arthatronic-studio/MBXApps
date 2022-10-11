@@ -111,7 +111,7 @@ export default ({ navigation, route }) => {
                         buttonWidth='50%'
                         buttonBorderTopWidth={0}
                         onPress={() => navigation.popToTop()}
-                        />
+                    />
                 </Container>
             </ScrollView>
         </MainView>

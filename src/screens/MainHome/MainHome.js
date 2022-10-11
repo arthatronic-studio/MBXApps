@@ -947,6 +947,7 @@ const MainHome = ({ navigation, route }) => {
             productCategory='EVENT'
             name='Event'
             title='● SECURE YOUR TICKET NOW'
+            productType='highlight'
             showHeader
             horizontal
             showSeeAllText={false}
@@ -1030,7 +1031,7 @@ const MainHome = ({ navigation, route }) => {
               showSeeAllText={false}
             />
 
-            <Container paddingHorizontal={16} paddingTop={11}>
+            <Container paddingHorizontal={16} paddingTop={11} paddingBottom={11}>
               <Text size={29} align='left'>
                 Customers as Industrial Age
                 phenomenon will be

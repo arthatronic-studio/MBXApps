@@ -6,13 +6,12 @@ import { ScreenEmptyData } from '@src/components';
 import { Container, Divider, Row } from 'src/styled';
 import PostingSkeleton from '../Posting/PostingSkeleton';
 import { initialItemState } from 'src/utils/constants';
-import { fetchContentProduct, fetchContentUserProduct } from 'src/api/content';
 import CardContentProduct from '@src/components/Content/CardContentProduct';
 import { getAPI } from 'src/api-rest/httpService';
 import PostingHeader from '../Posting/PostingHeader';
 
 const propTypes = {
-    userProfileId: PropTypes.number,
+    productType: PropTypes.string,
     productCategory: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     horizontal: PropTypes.bool,
@@ -22,7 +21,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-    userProfileId: null,
+    productType: '',
     productCategory: '',
     name: '',
     horizontal: false,
@@ -34,7 +33,7 @@ const defaultProps = {
     showHeader: false,
 };
 
-const ListContenEvent = ({ userProfileId, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, }) => {
+const ListContenEvent = ({ productType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, }) => {
     const { width } = useWindowDimensions();
     const [itemData, setItemData] = useState(initialItemState);
 
@@ -49,9 +48,13 @@ const ListContenEvent = ({ userProfileId, productCategory, name, horizontal, sty
     }, [itemData.loadNext]);
 
     const fetchData = async () => {
-        const result = await getAPI('event');
+        let baseEndpoint = 'event';
+        if (productType) {
+            baseEndpoint = baseEndpoint + `?type=${productType}`
+        }
+        const result = await getAPI(baseEndpoint);
 
-        console.log('result', result);
+        console.log('result', baseEndpoint, result);
 
         setItemData({
             ...itemData,
@@ -66,34 +69,6 @@ const ListContenEvent = ({ userProfileId, productCategory, name, horizontal, sty
         });
 
         onLoadingEnd(false);
-
-        return;
-
-        // let variables = {
-        //     page: itemData.page + 1,
-        // };
-        // if (productCategory) {
-        //     variables.productCategory = productCategory;
-        // };
-        // if (userProfileId !== null) {
-        //     variables.userProfileId = userProfileId;
-        // }
-
-        // const result = userProfileId !== null ?
-        //     await fetchContentUserProduct(variables) :
-        //     await fetchContentProduct(variables);
-
-        // setItemData({
-        //     ...itemData,
-        //     data: itemData.data.concat(result.data),
-        //     page: result.status === false ? itemData.page : result.data.length > 0 ? itemData.page + 1 : -1,
-        //     loading: false,
-        //     loadNext: false,
-        //     message: result.message,
-        //     refresh: false,
-        // });
-
-        // onLoadingEnd(false);
     }
 
     const renderHeader = () => {
@@ -101,7 +76,7 @@ const ListContenEvent = ({ userProfileId, productCategory, name, horizontal, sty
             <PostingHeader
                 title={title}
                 onSeeAllPress={() => {
-                    // navigation.navigate(nav, { title, userProfileId });
+                    
                 }}
                 productCategory={productCategory}
                 showSeeAllText={showSeeAllText}
@@ -124,8 +99,6 @@ const ListContenEvent = ({ userProfileId, productCategory, name, horizontal, sty
     let extraProps = { numColumns: 1 };
     if (productCategory === 'NEARBY_PLACE') extraProps.numColumns = 2;
     if (horizontal) extraProps = {};
-
-    console.log('showSeeAllText', showSeeAllText);
 
     return (
         <View>

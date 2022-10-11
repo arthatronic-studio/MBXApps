@@ -4,12 +4,12 @@ import Styled from 'styled-components';
 import {useColor} from '@src/components';
 
 export const fontFamily = {
-  regular: 'NeueHaasDisplay-Thin',
-  medium: 'NeueHaasDisplay-Light',
-  semibold: 'NeueHaasDisplay-Roman',
-  bold: 'NeueHaasDisplay-Mediu',
-  light: 'NeueHaasDisplay-XThin',
-  italic: 'NeueHaasDisplay-XThin',
+  regular: 'NeueHaasDisplay-Light',
+  medium: 'NeueHaasDisplay-Roman',
+  semibold: 'NeueHaasDisplay-Mediu',
+  bold: 'NeueHaasDisplay-Bold',
+  light: 'NeueHaasDisplay-Thin',
+  italic: 'NeueHaasDisplay-Thin',
 };
 
 const BaseText = Styled(ReactText)`
@@ -45,7 +45,8 @@ const Text = props => {
   return (
     <BaseText
       style={[
-        letterSpacing && {letterSpacing},
+        // letterSpacing && {letterSpacing},
+        { letterSpacing: letterSpacing ? letterSpacing : 0.4 },
         italic && {fontStyle: 'italic'},
         underline && {textDecorationLine: 'underline'}
       ]}

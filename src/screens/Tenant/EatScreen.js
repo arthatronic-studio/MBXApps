@@ -69,7 +69,7 @@ const EatScreen = ({ navigation, route }) => {
     <Scaffold
       header={
         <Header
-          title={params.title || 'EATS'}
+          title={params && params.title ? params.title : 'EATS'}
           centerTitle={false}
           actions={
             <View style={{ width: '100%', alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row' }}>

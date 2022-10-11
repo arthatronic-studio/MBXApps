@@ -106,8 +106,8 @@ const HistoryTiketku = ({ navigation, route }) => {
 
                 <View>
                   {item.status === 0 ?
-                    <View style={{ backgroundColor: Color.primarySoft, borderRadius: 120, paddingHorizontal: 8, paddingVertical: 8, justifyContent: 'center', alignItems: 'center' }}>
-                      <Text size={10} color={Color.text} type='medium'>{item.status_name}</Text>
+                    <View style={{ backgroundColor: Color.text, borderRadius: 120, paddingHorizontal: 8, paddingVertical: 8, justifyContent: 'center', alignItems: 'center' }}>
+                      <Text size={10} color={Color.textInput} type='medium'>{item.status_name}</Text>
                     </View>
                     :
                     item.status === 1 ?

@@ -10,6 +10,7 @@ const imagePaymentSuccess = require('./image-payment-success.png');
 const imageCarousel = require('./image-carousel.jpeg');
 const imageCardOrnament = require('./image_card_ornament.png');
 
+const arrowLeft = require('./arrow-left.png');
 const building = require('./building.png');
 const buildings = require('./buildings.png');
 const direction = require('./direction.png');
@@ -143,6 +144,7 @@ export {
   imageCarousel,
   imageCardOrnament,
 
+  arrowLeft,
   building,
   buildings,
   direction,

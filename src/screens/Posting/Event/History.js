@@ -64,7 +64,7 @@ const CustomTabBar = (props) => {
             >
               <Container
                 width={(width / navigationState.routes.length) - 16.5}
-                color={isActive ? Color.primarySoft : 'transparent'}
+                color={isActive ? Color.primary : 'transparent'}
                 paddingVertical={12}
                 style={
                   isFirst ? {
@@ -81,7 +81,7 @@ const CustomTabBar = (props) => {
                     } : {}
                 }
               >
-                <Text size={12} type='medium' letterSpacing={0.5}>{label}</Text>
+                <Text size={12} type='medium' color={isActive ? Color.textInput : Color.text} letterSpacing={0.5}>{label}</Text>
               </Container>
             </TouchableOpacity>
           )

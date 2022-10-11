@@ -414,7 +414,7 @@ const OrderEventDetail = ({ navigation, route }) => {
                         onPress={() => {
                           setModalQRIndex(id);
                         }}
-                        style={{flexDirection: 'row', padding: 8, borderRadius: 120, borderWidth: 0.5, borderColor: Color.text}}
+                        style={{flexDirection: 'row', alignItems: 'center', padding: 8, borderRadius: 120, borderWidth: 0.5, borderColor: Color.text}}
                       >
                         <Image
                           source={imageAssets.qr}
@@ -481,16 +481,15 @@ const OrderEventDetail = ({ navigation, route }) => {
         </Content> */}
       </ScrollView>}
 
-      {data && data.status === 0 && <View style={{ width: '100%', height: 70, alignItems: 'center', borderRadius: 10 }}>
-        <TouchableOpacity
+      {data && data.status === 0 && <Container paddingHorizontal={16}>
+        <Button
           onPress={() => {
             onPayment();
           }}
-          style={{ backgroundColor: Color.primary, width: '90%', height: 45, borderRadius: 50, justifyContent: 'center' }}
         >
-          <Text>Lanjut</Text>
-        </TouchableOpacity>
-      </View>}
+          Lanjut
+        </Button>
+      </Container>}
       
       {/* modal event */}
       <Modal

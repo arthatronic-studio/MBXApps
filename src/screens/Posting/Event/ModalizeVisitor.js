@@ -7,7 +7,7 @@ import {
   TextInput,
 } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import { Col, Row, Scaffold, Text, useColor, usePopup } from '@src/components';
+import { Button, Col, Row, Scaffold, Text, useColor, usePopup } from '@src/components';
 
 import { useCombinedRefs } from '@src/hooks';
 import { statusBarHeight } from 'src/utils/constants';
@@ -202,13 +202,12 @@ const ModalizeVisitor = forwardRef((props, ref) => {
             </View>
           </View>
 
-          <View style={{ marginTop: 20, height: 45, alignItems: 'center' }}>
-            <TouchableOpacity
+          <View style={{ marginTop: 20 }}>
+            <Button
               onPress={() => onSubmit()}
-              style={{ backgroundColor: Color.primary, width: '100%', height: '100%', borderRadius: 120, justifyContent: 'center' }}
             >
-              <Text>Simpan</Text>
-            </TouchableOpacity>
+              Simpan
+            </Button>
           </View>
         </ScrollView>
       </Scaffold>

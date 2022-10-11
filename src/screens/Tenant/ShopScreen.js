@@ -64,13 +64,11 @@ const ShopScreen = ({ navigation, route }) => {
       });
   };
 
-  console.log(route);
-
   return (
     <Scaffold
       header={
         <Header
-          title={params.title || 'SHOP'}
+          title={params && params.title ? params.title : 'SHOP'}
           centerTitle={false}
           actions={
             <View style={{ width: '100%', alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row' }}>

@@ -321,11 +321,14 @@ const MainProfile = ({navigation, route}) => {
         <Divider height={16}/>
 
         <Container padding={16}>
-          <View>
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => setDevMode(devMode+1)}
+          >
             <Text align="left" size={12} type="bold" color={Color.black}>
               About The Apps
             </Text>
-          </View>
+          </TouchableOpacity>
           <Divider height={12}/>
           <FlatList
             showsHorizontalScrollIndicator={false}
@@ -499,28 +502,14 @@ const MainProfile = ({navigation, route}) => {
         </Container>}
 
         {auth.user && auth.user.isGuest && <Container paddingHorizontal={16}>
-          <TouchableOpacity
-            onPress={() => {
-              redirectTo('LoginScreenV2');
-            }}
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            {/* <Image
-              source={assetImageProfile.logout}
-              style={{
-                height: 19,
-                width: 19,
-                resizeMode: 'contain',
-                tintColor: Color.text,
-              }}
-            />
-            <Divider width={8} /> */}
-            <Text size={17} type='medium' align="left">
-              Login
-            </Text>
-          </TouchableOpacity>
+          {cardMenu(
+            {
+              name: 'Login',
+              onPress: () => {
+                redirectTo('LoginScreenV2');
+              }
+            }
+          )}
         </Container>}
       </ScrollView>
 
