@@ -21,11 +21,7 @@ const NotificationPromo = ({ navigation, route }) => {
     loadNext: false,
     refresh: false,
   };
-  const [history, setHistory] = useState([
-    {id: 1, image: imageAssets.arsitektur1},
-    // {id: 2, image: imageAssets.arsitektur2},
-    // {id: 3, image: imageAssets.aboutFest3}
-  ]);
+  const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
   const modalListActionRef = useRef();
   const [showSection, setShowSection] = useState(true);
@@ -36,6 +32,7 @@ const NotificationPromo = ({ navigation, route }) => {
   const fetchData = async () => {
     const result = await getAPI('notification?type=promo');
     console.log('result notif', result);
+    setHistory(result.data)
   }
 
   useEffect(() => {
@@ -174,7 +171,8 @@ const NotificationPromo = ({ navigation, route }) => {
           paddingBottom: 16
         }}
         renderItem={({ item }) => {
-          const isNotReaded = item.status !== 3;
+          // const isNotReaded = item.status !== 3;
+          const isNotReaded = false;
           return (
             <TouchableOpacity 
               style={{
@@ -190,21 +188,21 @@ const NotificationPromo = ({ navigation, route }) => {
                 <Text size={10} lineHeight={12} color={Color.primaryDark} type="medium">
                   Promo
                 </Text>
-                <Text size={10} lineHeight={12} color="#ACAAA5">
+                {/* <Text size={10} lineHeight={12} color="#ACAAA5">
                   2 menit lalu
-                </Text>
+                </Text> */}
               </Container>
               <Divider height={8}/>
               <Text size={14} lineHeight={18} type="medium" color={Color.black} align="left">
-                Special promo dari Temu Coffee untuk nemenin weekend kamu
+                {item.title}
               </Text>
-              {/* <Divider height={8}/>
+              <Divider height={8}/>
               <Text size={12} lineHeight={15} color="#3A3936" align="left" numberOfLines={2}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et massa mi. Aliquam in hendrerit urna...
-              </Text> */}
+                {item.description}
+              </Text>
               <Divider height={8}/>
               <Container width={width-32} height={(width-32) * 0.56}>
-                <Image source={item.image} style={{width: '100%', height: '100%', resizeMode: 'cover', borderRadius: 8 }}/>
+                <Image source={{ uri: item.images }} style={{width: '100%', height: '100%', resizeMode: 'cover'}}/>
               </Container>
             </TouchableOpacity>
           )

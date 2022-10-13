@@ -134,7 +134,7 @@ const AboutFestV2 = ({navigation, route}) => {
               </Text>
               <Divider height={24} />
             </Container>
-            <Container paddingHorizontal={16}>
+            {/* <Container paddingHorizontal={16}>
               <Text
                 size={16}
                 type="medium"
@@ -170,8 +170,8 @@ const AboutFestV2 = ({navigation, route}) => {
               maxData={2}
               horizontal={true}
               onPress={() => navigation.navigate('FestArtsScreen')}
-            />
-            <Divider height={16} />
+            /> */}
+            {/* <Divider height={16} /> */}
             <Container paddingHorizontal={16}>
               <Text
                 size={16}

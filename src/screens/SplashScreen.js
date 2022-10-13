@@ -22,19 +22,19 @@ const SplashScreen = ({navigation, route}) => {
 
   console.log('auth splash', auth);
 
-  useEffect(() => {
-    dispatch({ type: 'THEME.SET_THEME', data: accessClient.Theme });
+  // useEffect(() => {
+  //   dispatch({ type: 'THEME.SET_THEME', data: accessClient.Theme });
 
-    setTimeout(() => {
-      if (auth.token) {
-        handleNavigate();
-      } else {
-        dispatch({ type: 'AUTH.CLEAR' });
-        dispatch({type: 'USER.LOGOUT'});
-        redirectTo('OnBoardingScreenV2');
-      }
-    }, 3000);
-  }, []);
+  //   setTimeout(() => {
+  //     if (auth.token) {
+  //       handleNavigate();
+  //     } else {
+  //       dispatch({ type: 'AUTH.CLEAR' });
+  //       dispatch({type: 'USER.LOGOUT'});
+  //       redirectTo('OnBoardingScreenV2');
+  //     }
+  //   }, 3000);
+  // }, []);
 
   const handleNavigate = async() => {
     setIsLoading(true);
@@ -130,15 +130,17 @@ const SplashScreen = ({navigation, route}) => {
           }}
         />
       </View>
-      <View style={{position: 'absolute', bottom: 0, width: '100%' }}>
+      <View style={{position: 'absolute', bottom: 0, width: '200%', alignSelf: 'center' }}>
         <View
           style={{ 
             backgroundColor: '#EEFF00',
-            paddingVertical: 15
+            paddingVertical: 15,
+            width: '100%',
+            alignSelf: 'center'
            }}
         >
-          <Text numberOfLines={1} size={14} color="#141414" type="medium" lineHeight={17}>
-          locx.id  •  blocX  •  The Experience Agitator  •  blocx.com            
+          <Text numberOfLines={1} size={14} color="#141414" type="medium" lineHeight={17} align='center'>
+          The Experience Agregator   •    blocx.id   •   blocX   •   The Experience Agitator   •   blocx.com            
           </Text>
         </View>
       </View>

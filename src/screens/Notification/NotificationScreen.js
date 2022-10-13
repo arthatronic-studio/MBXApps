@@ -21,7 +21,7 @@ const NotificationScreen = ({ navigation, route }) => {
     loadNext: false,
     refresh: false,
   };
-  const [history, setHistory] = useState([{id: 1}]);
+  const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
   const modalListActionRef = useRef();
   const [showSection, setShowSection] = useState(true);
@@ -29,8 +29,9 @@ const NotificationScreen = ({ navigation, route }) => {
   const [refreshing, setRefreshing] = useState(true);
 
   const fetchData = async () => {
-    const result = await getAPI('notification?type=general');
+    const result = await getAPI('notification?type=promo');
     console.log('result notif', result);
+    setHistory(result.data);
   }
 
   useEffect(() => {
@@ -169,7 +170,8 @@ const NotificationScreen = ({ navigation, route }) => {
           paddingBottom: 16
         }}
         renderItem={({ item }) => {
-          const isNotReaded = item.status !== 3;
+          // const isNotReaded = item.status !== 3;
+          const isNotReaded = false;
           return (
             <TouchableOpacity 
               style={{
@@ -183,7 +185,7 @@ const NotificationScreen = ({ navigation, route }) => {
               <Container flex={1} flexDirection="row" align="center">
                 <Container
                   padding={14}
-                  backgroundColor="#FFFCEB"
+                  backgroundColor={isNotReaded ? "#FFFCEB" : Color.white}
                   borderRadius={24}
                 >
                   <Image source={imageAssets.inbox} />
@@ -191,10 +193,12 @@ const NotificationScreen = ({ navigation, route }) => {
                 <Divider width={10}/>
                 <Container>
                   <Text color={Color.black} align="left" size={14} lineHeight={18}>
-                    Kamu telah masuk ke area
+                    {/* Kamu telah masuk ke area */}
+                    {item.title}
                   </Text>
-                  <Text color={Color.black} align="left" size={14} lineHeight={18} type="medium">
-                    M Bloc Space
+                  <Text color={Color.black} align="left" size={14} lineHeight={18} type="medium" numberOfLines={2}>
+                    {/* M Bloc Space */}
+                    {item.description}
                   </Text>
                 </Container>
               </Container>
