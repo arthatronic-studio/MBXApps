@@ -10,6 +10,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import { useIsFocused } from '@react-navigation/native';
 import { ModalListAction } from 'src/components';
 import imageAssets from "assets/images";
+import { getAPI } from "src/api-rest/httpService";
 const NotificationScreen = ({ navigation, route }) => {
   const { Color } = useColor();
   const isFocused = useIsFocused();
@@ -27,9 +28,15 @@ const NotificationScreen = ({ navigation, route }) => {
   const [modalBackConfirm, setModalBackConfirm] = useState(false);
   const [refreshing, setRefreshing] = useState(true);
 
+  const fetchData = async () => {
+    const result = await getAPI('notification?type=general');
+    console.log('result notif', result);
+  }
+
   useEffect(() => {
-    if (refreshing) {
-      setRefreshing(false);
+    // if (refreshing) {
+    //   setRefreshing(false);
+      fetchData();
 
       // const variables = {
       //   page: 0,
@@ -56,8 +63,8 @@ const NotificationScreen = ({ navigation, route }) => {
       //     console.log('ini err', err);
       //     setLoading(false);
       //   })
-    }
-  }, [refreshing]);
+    // }
+  }, []);
 
   const readNotfif = (id) => {
 
