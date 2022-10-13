@@ -22,19 +22,19 @@ const SplashScreen = ({navigation, route}) => {
 
   console.log('auth splash', auth);
 
-  // useEffect(() => {
-  //   dispatch({ type: 'THEME.SET_THEME', data: accessClient.Theme });
+  useEffect(() => {
+    dispatch({ type: 'THEME.SET_THEME', data: accessClient.Theme });
 
-  //   setTimeout(() => {
-  //     if (auth.token) {
-  //       handleNavigate();
-  //     } else {
-  //       dispatch({ type: 'AUTH.CLEAR' });
-  //       dispatch({type: 'USER.LOGOUT'});
-  //       redirectTo('OnBoardingScreenV2');
-  //     }
-  //   }, 3000);
-  // }, []);
+    setTimeout(() => {
+      if (auth.token) {
+        handleNavigate();
+      } else {
+        dispatch({ type: 'AUTH.CLEAR' });
+        dispatch({type: 'USER.LOGOUT'});
+        redirectTo('OnBoardingScreenV2');
+      }
+    }, 3000);
+  }, []);
 
   const handleNavigate = async() => {
     setIsLoading(true);
