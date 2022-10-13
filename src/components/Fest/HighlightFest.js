@@ -128,18 +128,19 @@ const HighlightFest = props => {
     if(productCategory === 'EVENT'){
       const result = await fetchFestEventBerlangsung();
       newData = result.data.FestMusicScreen;
-      if(newData.length < 2){
-        newData = newData.map((item) => {
-          return {...item, nav: 'FestMusicDetail'}
-        })
-        let tempData = result.data.FestLiteratureScreen.slice(0, 2-newData.length);
-        tempData = tempData.map((item) => {
-          return {...item, nav: 'FestLiteratureDetail'}
-        })
-        newData = newData.concat(tempData);
-      }else{
-        newData = newData.slice(0, 2);
-      }
+      // console.log("siniii", newData);
+      // if(newData.length < 2){
+      //   newData = newData.map((item) => {
+      //     return {...item, nav: 'FestMusicDetail'}
+      //   })
+      //   let tempData = result.data.FestLiteratureScreen.slice(0, 2-newData.length);
+      //   tempData = tempData.map((item) => {
+      //     return {...item, nav: 'FestLiteratureDetail'}
+      //   })
+      //   newData = newData.concat(tempData);
+      // }else{
+      //   newData = newData.slice(0, 2);
+      // }
     }
 
     setItemData({
@@ -152,6 +153,8 @@ const HighlightFest = props => {
       refresh: false,
     });
   };
+
+  console.log(itemData, productCategory, "hahaha");
 
   const renderHeader = () => {
     return (

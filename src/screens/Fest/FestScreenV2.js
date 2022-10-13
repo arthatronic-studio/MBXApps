@@ -142,8 +142,8 @@ const FestScreenV2 = ({navigation, route}) => {
             <HighlightFest
               productCategory="EVENT"
               nav="FestEventScreen"
-              name="Event Berlansung"
-              title="Event Berlansung"
+              name="Event Berlangsung"
+              title="Event Berlangsung"
               maxData={2}
             />
 
