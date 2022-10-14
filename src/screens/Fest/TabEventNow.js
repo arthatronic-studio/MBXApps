@@ -9,6 +9,7 @@ import { useIsFocused, useRoute } from '@react-navigation/native';
 import { getAPI } from 'src/api-rest/httpService';
 import { initialItemState } from 'src/utils/constants';
 import CardFestEvent from 'src/components/Fest/CardFestEvent';
+import { fetchFestEventBerlangsung } from 'src/api-rest/fest/fetchFestEventBerlangsung';
 
 const TabEventNow = ({ navigation, route }) => {
 
@@ -33,21 +34,24 @@ const TabEventNow = ({ navigation, route }) => {
     // const result = await getAPI(`ticket-order?isUsed=0&page=${itemData.page + 1}`);
 
     // console.log('result ticket-order', result);
-
-    let newData = [
-      {
-        id: 1,
-        group: 'Musik',
-        nav: 'FestMusicScreen',
-        head: true,
-      },
-      {
-        id: 2,
-        group: 'Literatur',
-        nav: 'FestLiteratureScreen',
-        head: true,
-      },
-    ];
+    
+    const result = await fetchFestEventBerlangsung();
+    let newData = result.data.FestMusicScreen;
+    console.log(newData, "dataaa")
+    // newData = [
+    //   {
+    //     id: 1,
+    //     group: 'Musik',
+    //     nav: 'FestMusicScreen',
+    //     head: true,
+    //   },
+    //   {
+    //     id: 2,
+    //     group: 'Literatur',
+    //     nav: 'FestLiteratureScreen',
+    //     head: true,
+    //   },
+    // ];
 
     // if (result.status) {
     //   newData = result.data;
@@ -89,22 +93,22 @@ const TabEventNow = ({ navigation, route }) => {
           <Text size={12} type='medium'>Loading...</Text>
         }
         renderItem={({ item, index }) => {
-          if(item.head){
-            return (
-              <>
-                <Container paddingHorizontal={8}>
-                  <Text size={14} lineHeight={18} type="medium" color={Color.black} align="left">
-                    {item.group}
-                  </Text>
-                </Container>
-                <CardFestEvent item={item} onPress={() => navigation.navigate(item.nav)}/>
-              </>
-            )
-          }else{
+          // if(item.head){
+          //   return (
+          //     <>
+          //       <Container paddingHorizontal={8}>
+          //         <Text size={14} lineHeight={18} type="medium" color={Color.black} align="left">
+          //           {item.group}
+          //         </Text>
+          //       </Container>
+          //       <CardFestEvent item={item} onPress={() => navigation.navigate(item.nav)}/>
+          //     </>
+          //   )
+          // }else{
             return(
               <CardFestEvent item={item}/>
             )
-          }
+          // }
          }
         }
       />

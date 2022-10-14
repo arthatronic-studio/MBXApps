@@ -30,7 +30,6 @@ import {fetchFestEventSchedule} from 'src/api-rest/fest/fetchFestEventSchedule';
 
 const FestArtsDetail = ({navigation, route}) => {
   const {item} = route.params;
-  console.log(item, 'eeem');
   const {Color} = useColor();
   const isFocused = useIsFocused();
   const [loadingProps, showLoading, hideLoading] = useLoading();
@@ -86,7 +85,6 @@ const FestArtsDetail = ({navigation, route}) => {
     fetchData();
   }, []);
 
-  console.log(schedule, 'lery');
 
   useEffect(() => {
     if (Platform.OS === 'android') {

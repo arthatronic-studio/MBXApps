@@ -20,6 +20,7 @@ import {Modalize} from 'react-native-modalize';
 import HighlightFest from 'src/components/Fest/HighlightFest';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { fetchFestFind } from 'src/api-rest/fest/fetchFestFind';
+import { fetchFestDetail } from 'src/api-rest/fest/fetchFestDetail';
 
 const FestMusicScreen = ({navigation, route}) => {
   const {item} = route.params;
@@ -32,15 +33,14 @@ const FestMusicScreen = ({navigation, route}) => {
   const {width, height} = useWindowDimensions();
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
-  
 
   const fetchData = async () => {
     const body = {
-      id: item.id
-    }
-    const result = await fetchFestFind(body);
+      event_id: item.event_id,
+    };
+    const result = await fetchFestDetail(body);
     if (result.status) {
-      setData(result.data[0]);
+      setData(result.data);
     }
     setLoading(false);
   };
@@ -180,7 +180,7 @@ const FestMusicScreen = ({navigation, route}) => {
             />
             <Divider width={8} />
             <Text size={10} lineHeight={12} color={Color.black}>
-              Live House
+              {selected.location_name}
             </Text>
           </Container>
           <Divider height={10} />

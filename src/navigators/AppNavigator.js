@@ -316,6 +316,7 @@ import ShowAllArea from 'src/screens/Fest/ShowAllArea';
 import AreaDetail from 'src/screens/Fest/AreaDetail';
 import AboutFestV2 from 'src/screens/Fest/AboutFestV2';
 import FestEventScreen from 'src/screens/Fest/FestEventScreen';
+import FestListingMusic from 'src/screens/Fest/FestListingMusic';
 
 // Article
 import ArticleScreen from 'src/screens/Article/ArticleScreen';
@@ -622,6 +623,7 @@ function AppNavigator() {
       <Screen name="AreaDetail" component={AreaDetail} />
       <Screen name="AboutFestV2" component={AboutFestV2} />
       <Screen name="FestEventScreen" component={FestEventScreen} />
+      <Screen name="FestListingMusic" component={FestListingMusic} />
 
       {/* Article */}
       <Screen name="ArticleScreen" component={ArticleScreen} />

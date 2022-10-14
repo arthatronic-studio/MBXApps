@@ -14,6 +14,7 @@ import CardContentFest from './CardContentFest';
 import imageAssets from 'assets/images';
 import { fetchFestFind } from 'src/api-rest/fest/fetchFestFind';
 import { fetchFestLocation } from 'src/api-rest/fest/fetchFestLocation';
+import { fetchFestLineup } from 'src/api-rest/fest/fetchFestLineup';
 
 const propTypes = {
   userProfileId: PropTypes.number,
@@ -85,6 +86,12 @@ const ListContenFest = ({
       if (result.status) {
         newData = result.data;
       }
+    }
+    if(productCategory === 'LINEUP'){
+      const body = {
+      };
+      const result = await fetchFestLineup(body);
+      newData = result.data;
     }
     if(productCategory === 'CardSchedule'){
       newData = [

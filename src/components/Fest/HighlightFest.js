@@ -97,7 +97,7 @@ const HighlightFest = props => {
   const fetchData = async () => {
     // const result = await getAPI('event');
     // console.log('result event', result);
-    let newData = [{id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}];
+    let newData = [];
     if(maxData != 0) {
       newData = [{id: 1}, {id: 2}];
     }
@@ -120,14 +120,25 @@ const HighlightFest = props => {
     }
     if(productCategory === 'LINEUP'){
       const body = {
-        event_id: eventId
       };
+      if(eventId != 0){
+        body.event_id = eventId;
+      }
       const result = await fetchFestLineup(body);
       newData = result.data;
     }
     if(productCategory === 'EVENT'){
       const result = await fetchFestEventBerlangsung();
-      newData = result.data.FestMusicScreen;
+      newData = [];
+      if(result.data.FestListingMusic){
+        newData = newData.concat(result.data.FestListingMusic);
+      }
+      if(result.data.FestArtsScreen){
+        newData = newData.concat(result.data.FestArtsScreen);
+      }
+      if(result.data.FestLiteratureDetail){
+        newData = newData.concat(result.data.FestLiteratureDetail);
+      }
       // console.log("siniii", newData);
       // if(newData.length < 2){
       //   newData = newData.map((item) => {
@@ -161,7 +172,7 @@ const HighlightFest = props => {
       <PostingHeader
         title={title}
         onSeeAllPress={() => {
-          navigation.navigate(nav, {title, userProfileId, productCategory});
+          navigation.navigate(nav, {title, userProfileId, productCategory, eventId});
         }}
         productCategory={productCategory}
         showSeeAllText={showSeeAllText}

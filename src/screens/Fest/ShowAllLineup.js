@@ -21,7 +21,7 @@ const ShowAllLineup = ({navigation, route}) => {
   const user = useSelector(state => state['user.auth'].login.user);
   const {Color} = useColor();
   const modalRef = useRef();
-  const [selected, setSelected] = useState(false);
+  const [selected, setSelected] = useState({});
   const {width} = useWindowDimensions();
 
   return (
@@ -70,11 +70,11 @@ const ShowAllLineup = ({navigation, route}) => {
               resizeMode: 'cover',
               borderRadius: 8,
             }}
-            source={selected.image}
+            source={{uri: selected.file}}
           />
           <Divider height={10} />
           <Text size={22} color={Color.black} lineHeight={27} align="left">
-            DJ Raggil Suliza
+            {selected.name}
           </Text>
           <Divider height={10} />
           <Container flex={1} flexDirection="row" align="center">
@@ -84,13 +84,13 @@ const ShowAllLineup = ({navigation, route}) => {
             />
             <Divider width={8} />
             <Text size={10} lineHeight={12} color={Color.black}>
-              25 Sep 2022
+              {selected.date ? selected.date : '-'}
             </Text>
             <Divider width={10} />
             <Image source={imageAssets.clock} style={{width: 16, height: 16}} />
             <Divider width={8} />
             <Text size={10} lineHeight={12} color={Color.black}>
-              14:00 - 14:45
+              {selected.time}
             </Text>
             <Divider width={10} />
             <Image
@@ -99,7 +99,7 @@ const ShowAllLineup = ({navigation, route}) => {
             />
             <Divider width={8} />
             <Text size={10} lineHeight={12} color={Color.black}>
-              Live House
+              {selected.location_name}
             </Text>
           </Container>
           <Divider height={10} />

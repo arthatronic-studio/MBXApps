@@ -234,7 +234,7 @@ const FestScreenV2 = ({navigation, route}) => {
             />
             <Divider width={8} />
             <Text size={10} lineHeight={12} color={Color.black}>
-              Live House
+              {selected.location_name}
             </Text>
           </Container>
           <Divider height={10} />

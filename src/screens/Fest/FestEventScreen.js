@@ -94,7 +94,7 @@ const FestEventScreen = ({ navigation, route }) => {
           backgroundColor="borderLight"
           type="bold"
           centerTitle={false}
-          title="Tiket"
+          title="Event Berlangsung"
         />
       }
     >

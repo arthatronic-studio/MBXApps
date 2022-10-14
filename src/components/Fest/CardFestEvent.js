@@ -30,12 +30,12 @@ const CardFestEvent = ({
   const navigation = useNavigation();
   const {width} = useWindowDimensions();
 
-  console.log(item, "item");
+  const nav = item.navigation === 'FestListingMusic' ? 'FestMusicDetail' : item.navigation === 'FestArtsScreen' ? 'FestArtsDetail' : 'FestLiteratureDetail';
 
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate(item.nav, {item: item})
+        navigation.navigate(nav, {item: item})
       }}
       style={{
         borderWidth: 1,

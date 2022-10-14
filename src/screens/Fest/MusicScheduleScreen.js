@@ -20,8 +20,12 @@ import {getAPI, postAPI} from 'src/api-rest/httpService';
 import {Modalize} from 'react-native-modalize';
 import HighlightFest from 'src/components/Fest/HighlightFest';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {fetchFestEventSchedule} from 'src/api-rest/fest/fetchFestEventSchedule';
+import ListMusicSchedule from 'src/components/Fest/ListMusicSchedule';
+import {fetchFestDetail} from 'src/api-rest/fest/fetchFestDetail';
 
 const MusicScheduleScreen = ({navigation, route}) => {
+  const {eventId, item} = route.params;
   const {Color} = useColor();
   const isFocused = useIsFocused();
   const [loadingProps, showLoading, hideLoading] = useLoading();
@@ -29,60 +33,41 @@ const MusicScheduleScreen = ({navigation, route}) => {
   const [selected, setSelected] = useState({});
   const modalRef = useRef();
   const {width} = useWindowDimensions();
+  const [data, setData] = useState({});
   const [date, setDate] = useState([
     {
-      id: 1,
       name: 'Semua jadwal',
-    },
-    {
-      id: 2,
-      name: 'Hari ini',
-      title: '25 September 2022',
-    },
-    {
-      id: 3,
-      name: '26 Sep',
-      title: '26 September 2022',
-    },
-    {
-      id: 4,
-      name: '27 Sep',
-      title: '27 September 2022',
-    },
-    {
-      id: 5,
-      name: '28 Sep',
-      title: '28 September 2022',
-    },
-    {
-      id: 6,
-      name: '29 Sep',
-      title: '29 September 2022',
-    },
-    {
-      id: 7,
-      name: '30 Sep',
-      title: '30 September 2022',
+      values: 'all',
     },
   ]);
   const [dateIndex, setDateIndex] = useState(0);
 
-  const [selectedCompany, setSelectedCompany] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
-    // const result = await postAPI('festival/home');
-    // console.log('result festival', result);
     const body = {
-      menu_id: 1,
+      event_id: eventId,
     };
-    const result = await postAPI('festival/find', body);
-    console.log('result festival find', result);
+    const result = await fetchFestEventSchedule(body);
+    setDate([...date, ...result.date]);
+  };
+  const fetchEvent = async () => {
+    const body = {
+      event_id: eventId,
+    };
+    const result = await fetchFestDetail(body);
+    if (result.status) {
+      setData(result.data);
+    }
   };
 
   useEffect(() => {
     fetchData();
+    fetchEvent();
+    setLoading(false);
   }, []);
+
+  console.log(data, 'dataaa');
 
   return (
     <Scaffold
@@ -122,7 +107,7 @@ const MusicScheduleScreen = ({navigation, route}) => {
               borderRadius={8}
               align="center">
               <Image
-                source={imageAssets.musicWeek}
+                source={{uri: data.file}}
                 resizeMode="cover"
                 style={{width: '16%', aspectRatio: 1}}
               />
@@ -133,11 +118,11 @@ const MusicScheduleScreen = ({navigation, route}) => {
                   lineHeight={20}
                   type="medium"
                   color={Color.black}>
-                  m bloc Music Week
+                  {data.nama}
                 </Text>
                 <Divider height={4} />
                 <Text size={10} lineHeight={12} color={'#3A3936'}>
-                  25 Sep - 02 Okt 2022 {'\u2022'} Live House
+                  {data.date} {'\u2022'} {data.location_name}
                 </Text>
               </Container>
             </Container>
@@ -177,33 +162,21 @@ const MusicScheduleScreen = ({navigation, route}) => {
               )}
             />
 
-            {dateIndex === 0 ? (
-              date.map((item, index) => {
-                if (index === 0) return <></>;
-                return (
-                  <HighlightFest
-                    key={index}
-                    productCategory="LINEUP"
-                    showSeeAllText={false}
-                    name={item.title}
-                    title={item.title}
-                    horizontal={true}
-                    maxData={2}
-                    onPress={value => {
-                      setSelected(value);
-                      modalRef.current.open();
-                    }}
-                  />
-                );
-              })
+            {date[dateIndex].values == 'all' ? (
+              <ListMusicSchedule
+                eventId={eventId}
+                numColumns={2}
+                onPress={(value) => {
+                  setSelected(value);
+                  modalRef.current.open();
+                }}
+              />
             ) : (
-              <HighlightFest
-                productCategory="LINEUP"
-                showSeeAllText={false}
-                name={date[dateIndex].title}
-                title={date[dateIndex].title}
-                horizontal={true}
-                onPress={value => {
+              <ListMusicSchedule
+                eventId={eventId}
+                numColumns={2}
+                date={date[dateIndex].values}
+                onPress={(value) => {
                   setSelected(value);
                   modalRef.current.open();
                 }}
@@ -244,11 +217,11 @@ const MusicScheduleScreen = ({navigation, route}) => {
               resizeMode: 'cover',
               borderRadius: 8,
             }}
-            source={selected.image}
+            source={{uri: selected.file}}
           />
           <Divider height={10} />
           <Text size={22} color={Color.black} lineHeight={27} align="left">
-            DJ Raggil Suliza
+            {selected.name}
           </Text>
           <Divider height={10} />
           <Container flex={1} flexDirection="row" align="center">
@@ -258,13 +231,13 @@ const MusicScheduleScreen = ({navigation, route}) => {
             />
             <Divider width={8} />
             <Text size={10} lineHeight={12} color={Color.black}>
-              25 Sep 2022
+              {selected.date ? selected.date : '-'}
             </Text>
             <Divider width={10} />
             <Image source={imageAssets.clock} style={{width: 16, height: 16}} />
             <Divider width={8} />
             <Text size={10} lineHeight={12} color={Color.black}>
-              14:00 - 14:45
+              {selected.time}
             </Text>
             <Divider width={10} />
             <Image
@@ -273,7 +246,7 @@ const MusicScheduleScreen = ({navigation, route}) => {
             />
             <Divider width={8} />
             <Text size={10} lineHeight={12} color={Color.black}>
-              Live House
+              {selected.location_name}
             </Text>
           </Container>
           <Divider height={10} />

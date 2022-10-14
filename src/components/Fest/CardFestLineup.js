@@ -37,7 +37,7 @@ const CardFestLineup = ({
         marginHorizontal: 8,
         width: width / numColumns - (horizontal ? 32 : 24),
         borderWidth: 1,
-        borderRadius: 8,
+        // borderRadius: 8,
       }}>
       <Container
         width={width / numColumns - (horizontal ? 34 : 26)}
@@ -48,8 +48,8 @@ const CardFestLineup = ({
           style={{
             width: '100%',
             height: '100%',
-            borderTopLeftRadius: 8,
-            borderTopRightRadius: 8,
+            // borderTopLeftRadius: 8,
+            // borderTopRightRadius: 8,
             resizeMode: 'cover',
           }}
         />
@@ -70,7 +70,7 @@ const CardFestLineup = ({
             {item.time}
           </Text>
           <Text align="left" size={10} color={"#3A3936"} lineHeight={12}>
-            Live House
+            {item.location_name}
           </Text>
           <Divider height={16}/>
       </Container>

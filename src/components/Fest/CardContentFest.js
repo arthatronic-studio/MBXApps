@@ -17,6 +17,7 @@ import CardFestVenues from './CardFestVenues';
 import CardFestArea from './CardFestArea';
 import CardFestAbout from './CardFestAbout';
 import CardFestEvent from './CardFestEvent';
+import CardListingMusic from './CardListingMusic';
 
 const defaultProps = {
     productCategory: '',
@@ -93,6 +94,7 @@ const CardContentFest = ({ productCategory, category,item, numColumns, onPress, 
     else if (productCategory === 'AREA') return <CardFestArea { ...props } />;
     else if (productCategory === 'ABOUT') return <CardFestAbout { ...props } />;
     else if (productCategory === 'EVENT') return <CardFestEvent { ...props } />;
+    else if (productCategory === 'MUSIKLIST') return <CardListingMusic { ...props } />;
     
     return <Text>Not Set</Text>;
 }
