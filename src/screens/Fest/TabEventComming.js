@@ -9,6 +9,7 @@ import { useIsFocused, useRoute } from '@react-navigation/native';
 import { getAPI } from 'src/api-rest/httpService';
 import { initialItemState } from 'src/utils/constants';
 import CardFestEvent from 'src/components/Fest/CardFestEvent';
+import { fetchFestEventBerlangsung } from 'src/api-rest/fest/fetchFestEventBerlangsung';
 
 const TabEventComming = ({ navigation, route }) => {
 
@@ -30,36 +31,48 @@ const TabEventComming = ({ navigation, route }) => {
   }, [itemData.loadNext]);
 
   const getList = async () => {
-    // const result = await getAPI(`ticket-order?isUsed=0&page=${itemData.page + 1}`);
+    const body = {
+      up_comming: 1
+  }
+    const result = await fetchFestEventBerlangsung(body);
+    let newData = [];
+    if(result.data.FestListingMusic){
+      newData = newData.concat(result.data.FestListingMusic);
+    }
+    if(result.data.FestArtsScreen){
+      newData = newData.concat(result.data.FestArtsScreen);
+    }
+    if(result.data.FestLiteratureDetail){
+      newData = newData.concat(result.data.FestLiteratureDetail);
+    }
+    console.log(newData, "dataaa")
 
-    // console.log('result ticket-order', result);
-
-    let newData = [
-      {
-        id: 1,
-        group: 'Musik',
-        nav: 'FestMusicScreen',
-        head: true,
-      },
-      {
-        id: 2,
-        group: 'Literatur',
-        nav: 'FestLiteratureScreen',
-        head: true,
-      },
-      {
-        id: 3,
-        group: 'Art & Design',
-        nav: 'FestArtsScreen',
-        head: true,
-      },
-      {
-        id: 4,
-        group: 'Art & Design',
-        nav: 'FestArtsScreen',
-        head: false,
-      },
-    ];
+    // let newData = [
+    //   {
+    //     id: 1,
+    //     group: 'Musik',
+    //     nav: 'FestMusicScreen',
+    //     head: true,
+    //   },
+    //   {
+    //     id: 2,
+    //     group: 'Literatur',
+    //     nav: 'FestLiteratureScreen',
+    //     head: true,
+    //   },
+    //   {
+    //     id: 3,
+    //     group: 'Art & Design',
+    //     nav: 'FestArtsScreen',
+    //     head: true,
+    //   },
+    //   {
+    //     id: 4,
+    //     group: 'Art & Design',
+    //     nav: 'FestArtsScreen',
+    //     head: false,
+    //   },
+    // ];
 
     // if (result.status) {
     //   newData = result.data;
