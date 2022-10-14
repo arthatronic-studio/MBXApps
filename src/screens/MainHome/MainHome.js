@@ -53,6 +53,7 @@ import DraggableButton from './DraggableButton';
 import ListContenEvent from 'src/components/Event/ListContenEvent';
 import PostingHeader from 'src/components/Posting/PostingHeader';
 import { redirectTo } from 'src/utils';
+import HighlightArticle from '../Article/HighlightArticle';
 
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
@@ -1014,6 +1015,14 @@ const MainHome = ({ navigation, route }) => {
 
           <HighlightTenant
             title='● TENANTS'
+            numColumns={1}
+            tenantType='eat'
+          />
+
+          <Divider />
+
+          <HighlightArticle
+            title='● ARTICLES'
             numColumns={1}
             tenantType='eat'
           />

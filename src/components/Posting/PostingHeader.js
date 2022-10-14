@@ -16,6 +16,7 @@ import {
 import { useNavigation } from '@react-navigation/core';
 import { Container, Row } from 'src/styled';
 import { imageContent } from '@assets/images/content';
+import { arrowRight } from 'assets/images';
 
 const propTypes = {
     productCategory: PropTypes.string.isRequired,
@@ -93,14 +94,26 @@ const PostingHeader = (props) => {
 
                 <Text type="bold" align='left' size={16}>{title}</Text>
             </Row>
-            {showSeeAllText && <Text
+            {showSeeAllText && <TouchableOpacity
+                onPress={() => onSeeAllPress()}
+            >
+                <Image
+                    source={arrowRight}
+                    style={{
+                    height: 16,
+                    width: 16,
+                    resizeMode: 'contain',
+                    }}
+                />
+            </TouchableOpacity>}
+            {/* {showSeeAllText && <Text
                 onPress={() => onSeeAllPress()}
                 size={12}
                 color={Color.primaryDark}
             >
                 Selengkapnya{' '}
                 <Ionicons name="arrow-forward" size={12} color={Color.primaryDark} />
-            </Text>}
+            </Text>} */}
         </Container>
     )
 }

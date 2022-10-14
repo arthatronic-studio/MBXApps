@@ -11,6 +11,7 @@ const imageCarousel = require('./image-carousel.jpeg');
 const imageCardOrnament = require('./image_card_ornament.png');
 
 const arrowLeft = require('./arrow-left.png');
+const arrowRight = require('./arrow-right.png');
 const building = require('./building.png');
 const buildings = require('./buildings.png');
 const direction = require('./direction.png');
@@ -130,6 +131,9 @@ const iconMenuSecond = require('./icon-menu-second.png');
 const iconMenuNotif = require('./icon-menu-notif.png');
 const iconMenuProfile = require('./icon-menu-profile.png');
 const addBox = require('./add_box.png');
+const article1 = require('./article1.png');
+const article2 = require('./article2.png');
+const article3 = require('./article3.png');
 
 export {
   iconApp,
@@ -145,6 +149,10 @@ export {
   imageCardOrnament,
 
   arrowLeft,
+  arrowRight,
+  article1,
+  article2,
+  article3,
   building,
   buildings,
   direction,
@@ -323,6 +331,9 @@ export const imageAssets = {
   aboutFest3,
   inbox,
   addBox,
+  article1,
+  article2,
+  article3,
 };
 
 export default imageAssets;
