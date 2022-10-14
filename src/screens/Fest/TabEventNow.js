@@ -36,7 +36,17 @@ const TabEventNow = ({ navigation, route }) => {
     // console.log('result ticket-order', result);
     
     const result = await fetchFestEventBerlangsung();
-    let newData = result.data.FestMusicScreen;
+    console.log(result, "res cok")
+    let newData = [];
+    if(result.data.FestListingMusic){
+      newData = newData.concat(result.data.FestListingMusic);
+    }
+    if(result.data.FestArtsScreen){
+      newData = newData.concat(result.data.FestArtsScreen);
+    }
+    if(result.data.FestLiteratureDetail){
+      newData = newData.concat(result.data.FestLiteratureDetail);
+    }
     console.log(newData, "dataaa")
     // newData = [
     //   {
