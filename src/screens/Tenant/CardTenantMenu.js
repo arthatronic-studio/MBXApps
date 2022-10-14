@@ -40,11 +40,11 @@ const CardTenantMenu = ({ item, index, numColumns, onPress, cartProductQuantity 
                 }}
                 style={{ width: '100%', flexDirection: 'row', borderBottomWidth: 1, paddingBottom: 12, borderColor: Color.primary }}
             >
-                <View style={{justifyContent: 'center'}}>
+                <View style={{flex: 1, alignItems: 'flex-start', justifyContent: 'center'}}>
                     <Text size={11} type='medium' color={Color.textSoft}>{orderNumber}</Text>
                 </View>
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start', paddingHorizontal: 32}}>
-                    <Text size={14} type='medium' align='left'>{item.name}</Text>
+                <View style={{flex: 7, alignItems: 'flex-start', justifyContent: 'center', paddingRight: 8}}>
+                    <Text size={14} type='medium' align='left' numberOfLines={2}>{item.name}</Text>
                 </View>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     {quantity > 0 && (

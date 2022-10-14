@@ -130,13 +130,13 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                         </View>
                     </View>
 
-                    <View style={{ width: '100%', minHeight: (27 * 3) + (8 * 2) + 32, padding: 8, borderBottomWidth: 1, borderColor: Color.primary }}>
-                        <Text size={27} type='medium' align='left' numberOfLines={3} lineHeight={32}>{item.title}</Text>
+                    <View style={{ width: '100%', minHeight: (32 * 2) + (8 * 1) + 11, padding: 8, borderBottomWidth: 1, borderColor: Color.primary }}>
+                        <Text size={27} type='medium' align='left' numberOfLines={2} lineHeight={32}>{item.title}</Text>
                     </View>
 
-                    <View style={{ width: '100%', minHeight: (11 * 3) + (8 * 1), padding: 8, paddingVertical: 4, borderBottomWidth: 1, borderColor: Color.primary }}>
+                    <View style={{ width: '100%', minHeight: (12 * 3) + (8 * 1) + 4, padding: 8, paddingVertical: 4, borderBottomWidth: 1, borderColor: Color.primary }}>
                         {/* <Text type='medium' align='left' numberOfLines={1}>{item.description}</Text> */}
-                        <Text size={11} type='medium' align='left' numberOfLines={3}>{item.description}</Text>
+                        <Text size={12} type='medium' align='left' numberOfLines={3} lineHeight={12 * 1.6}>{item.description}</Text>
                     </View>
 
                     <View style={{ width: '100%', flexDirection: 'row' }}>

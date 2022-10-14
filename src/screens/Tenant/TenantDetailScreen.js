@@ -344,10 +344,10 @@ const TenantDetailScreen = ({ navigation, route }) => {
 
           <View style={{ flex: 3 }}>
             <Text
-              size={9}
+              size={12}
               type='medium'
               align='left'
-              lineHeight={15}
+              lineHeight={12 * 1.6}
               letterSpacing={0.4}
               {...descriptionProps}
             >

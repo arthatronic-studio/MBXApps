@@ -1036,12 +1036,12 @@ const MainHome = ({ navigation, route }) => {
             <Divider />
 
             <PostingHeader
-              title='● ABOUT'
+              title='● SPARK YOUR IDEAS'
               showSeeAllText={false}
             />
 
             <Container paddingHorizontal={16} paddingTop={11} paddingBottom={11}>
-              <Text size={29} align='left'>
+              <Text size={29} align='left' lineHeight={38}>
                 Customers as Industrial Age
                 phenomenon will be
                 replaced by <Text size={29} type='semibold'>Creative Prosumers</Text>,
