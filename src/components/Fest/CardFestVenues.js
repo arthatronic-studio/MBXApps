@@ -40,7 +40,7 @@ const CardFestVenues = ({
       style={{
         borderWidth: 1,
         marginVertical: 8,
-        borderRadius: 8,
+        // borderRadius: 8,
         marginHorizontal: 8,
       }}>
       <Container
@@ -52,8 +52,8 @@ const CardFestVenues = ({
             width: '100%',
             height: '100%',
             resizeMode: 'cover',
-            borderTopLeftRadius: 8,
-            borderTopRightRadius: 8,
+            // borderTopLeftRadius: 8,
+            // borderTopRightRadius: 8,
           }}
           source={{uri: item.venues_image[0]}}
         />
@@ -77,7 +77,7 @@ const CardFestVenues = ({
           borderWidth={1}
           borderColor={item.entrance == 2 ? "#644B1B" : '#1D1D1B'}
           padding={9}
-          borderRadius={8}
+          // borderRadius={8}
         >
           <Text color={item.entrance == 2 ? "#644B1B" : '#1D1D1B'} size={11} lineHeight={14} type="medium">
             {item.entrance === 1 ? 'Gratis' : 'Tiket'}

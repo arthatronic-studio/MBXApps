@@ -107,18 +107,21 @@ const FestScreenV2 = ({navigation, route}) => {
                 return (
                   <TouchableOpacity
                     key={index}
-                    style={{width: width * 0.28, height: width * 0.28 * 1.28}}
+                    style={{width: width * 0.28, paddingVertical: 16, borderWidth: 1}}
                     onPress={() =>
                       navigation.navigate(item.name, {item: item})
                     }>
-                    <Image
+                      <Text size={16} type="semibold">
+                        {item.menu_name}
+                      </Text>
+                    {/* <Image
                       source={{uri: item.file}}
                       style={{
                         width: '100%',
                         height: '100%',
                         resizeMode: 'contain',
                       }}
-                    />
+                    /> */}
                   </TouchableOpacity>
                 );
               })}
@@ -129,8 +132,8 @@ const FestScreenV2 = ({navigation, route}) => {
             <HighlightFest
               productCategory="LINEUP"
               nav="ShowAllLineup"
-              name="Todays Line-up"
-              title="Todays Line-up"
+              name="Lineup"
+              title="Lineup"
               wrap={false}
               horizontal={true}
               onPress={value => {
@@ -142,8 +145,8 @@ const FestScreenV2 = ({navigation, route}) => {
             <HighlightFest
               productCategory="EVENT"
               nav="FestEventScreen"
-              name="Event Berlangsung"
-              title="Event Berlangsung"
+              name="Events"
+              title="Events"
               maxData={2}
             />
 
@@ -163,13 +166,13 @@ const FestScreenV2 = ({navigation, route}) => {
               />
             </Container>
 
-            <HighlightFest
+            {/* <HighlightFest
               productCategory="AREA"
               nav="ShowAllArea"
               name="Experience Area"
               title="Experience Area"
               horizontal={true}
-            />
+            /> */}
           </Container>
         )}
       </ScrollView>

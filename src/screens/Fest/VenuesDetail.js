@@ -60,8 +60,7 @@ const VenuesDetail = ({navigation, route}) => {
               backgroundColor={item.entrance == 2 ? '#E6CFA3' : '#FCD100'}
               borderWidth={1}
               borderColor={item.entrance == 2 ? '#644B1B' : '#1D1D1B'}
-              padding={8}
-              borderRadius={8}>
+              padding={8}>
               <Text
                 color={item.entrance == 2 ? '#644B1B' : '#1D1D1B'}
                 size={10}

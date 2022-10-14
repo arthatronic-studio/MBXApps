@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import CardTenantList from 'src/screens/Tenant/CardTenantList';
 import CardArticle from './CardArticle';
 import imageAssets from 'assets/images';
+import { fetchGetArticle } from 'src/api-rest/fetchGetArticle';
 
 const propTypes = {
     productCategory: PropTypes.string.isRequired,
@@ -37,44 +38,37 @@ const defaultProps = {
 
 const ListArticle = ({ tenantType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, }) => {
     const { width } = useWindowDimensions();
-    const [itemData, setItemData] = useState(initialItemState);
+    const [itemData, setItemData] = useState({
+        data: [],
+        loading: true,
+        message: '',
+        nextUrl: null,
+        loadNext: false,
+        refresh: false,
+    });
     const auth = useSelector(state => state['auth']);
 
     useEffect(() => {
-        fetchData();
+        fetchData(true);
     }, []);
 
     useEffect(() => {
-        if (itemData.loadNext && itemData.page !== -1) {
-            fetchData();
+        if (itemData.loadNext && itemData.nextUrl != null) {
+            fetchData(false);
         }
     }, [itemData.loadNext]);
 
-    const fetchData = async () => {
-        let baseEndpoint = 'location';
-        baseEndpoint = baseEndpoint + `?type=${tenantType}`;
-        // if (auth.user.activityInfo.location) {
-            // baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.user.activityInfo.location.id}&type=eat`;
-        // }
-        console.log('baseEndpoint', baseEndpoint);
-        const result = await getAPI(baseEndpoint);
+    const fetchData = async (first) => {
+        const param = itemData.nextUrl ? itemData.nextUrl : `?highlight=1&perPage=10`;
+        const result = await fetchGetArticle(param);
+        const newArr = result.data;
+        console.log(newArr, 'list artilce');
 
-        console.log('result', result);
-
-        const newArr = [
-            {
-              id: 1,
-              image: imageAssets.article1,
-            }
-          ]
 
         setItemData({
             ...itemData,
-            data: newArr,
-            // data: itemData.data.concat(result.data),
-            // data: [],
-            // page: result.status === false ? itemData.page : result.data.length > 0 ? itemData.page + 1 : -1,
-            page: -1,
+            data: first ? newArr : itemData.data.concat(newArr),
+            nextUrl: result.nextUrl ? `?${result.nextUrl.split("?")[1]}`: null,
             loading: false,
             loadNext: false,
             message: result.message,
@@ -122,9 +116,9 @@ const ListArticle = ({ tenantType, productCategory, name, horizontal, style, onL
                     horizontal={horizontal}
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{ paddingBottom: 16, ...style, paddingHorizontal: 8 }}
-                    // onEndReachedThreshold={0.3}
+                    onEndReachedThreshold={0.3}
                     numColumns={2}
-                    // onEndReached={() => setItemData({ ...itemData, loadNext: true })}
+                    onEndReached={() => setItemData({ ...itemData, loadNext: true })}
                     renderItem={({ item, index }) => {
                         console.log('itemitem', item);
                         return (

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
   TextInput,
@@ -33,6 +33,7 @@ import imageAssets from 'assets/images';
 const DetailArticleScreen = ({navigation, route}) => {
   const {Color} = useColor();
   const {height, width} = useWindowDimensions();
+  const scrollRef = useRef();
 
   const cardImage = (image) => {
     return (
@@ -47,7 +48,7 @@ const DetailArticleScreen = ({navigation, route}) => {
         />
         <Divider height={8} />
         <Container width="80%">
-          <Text size={7} lineHeight={10} color={'#AEAEAE'} type="medium">
+          <Text size={9} lineHeight={15} color={'#AEAEAE'} type="medium">
             Sekte Komik IKJ tahun 1996. Yang mana Pepeng Naif, Adi Cumi dan
             Andri Lemes? [Foto: dok. Andri lemes]
           </Text>
@@ -89,7 +90,7 @@ const DetailArticleScreen = ({navigation, route}) => {
     <Scaffold
       translucent={Platform.OS === 'ios' ? true : false}
       useSafeArea={Platform.OS === 'ios' ? false : true}>
-      <ScrollView>
+      <ScrollView ref={scrollRef}>
           <View
             style={{
               width: '100%',
@@ -145,8 +146,8 @@ const DetailArticleScreen = ({navigation, route}) => {
               {/* desc */}
               <Text
                 align="left"
-                size={9}
-                lineHeight={15}
+                size={12}
+                lineHeight={18}
                 color={Color.black}
                 type="medium">
                 “Tahun ini udah tiga kali kami reuni. Mudah-mudahan ini
@@ -181,8 +182,8 @@ const DetailArticleScreen = ({navigation, route}) => {
 
               <Text
                 align="left"
-                size={9}
-                lineHeight={15}
+                size={12}
+                lineHeight={18}
                 color={Color.black}
                 type="medium">
                 Andri Ashari adalah figur sentral Rumahsakit, sebuah band pop
@@ -205,8 +206,8 @@ const DetailArticleScreen = ({navigation, route}) => {
 
               <Text
                 align="left"
-                size={9}
-                lineHeight={15}
+                size={12}
+                lineHeight={18}
                 color={Color.black}
                 type="medium">
                 Awal masuk kuliah Andri masih berambut gondrong dan menggemari

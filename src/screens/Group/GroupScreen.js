@@ -198,7 +198,7 @@ const GroupScreen = ({navigation, route}) => {
                     style={{
                       padding: 12,
                       borderWidth: 1,
-                      borderRadius: 120,
+                      // borderRadius: 120,
                       borderColor: Color.textSoft,
                       backgroundColor:
                         index === categoryIndex ? Color.primary : 'transparent',
@@ -230,15 +230,15 @@ const GroupScreen = ({navigation, route}) => {
                       backgroundColor: Color.theme,
                       ...shadowStyle,
                       marginVertical: 8,
-                      borderRadius: 8,
+                      // borderRadius: 8,
                     }}>
                     <Image
                       style={{
                         width: '100%',
                         height: (width - 32) * 0.55,
                         resizeMode: 'cover',
-                        borderTopLeftRadius: 8,
-                        borderTopRightRadius: 8,
+                        // borderTopLeftRadius: 8,
+                        // borderTopRightRadius: 8,
                       }}
                       source={item.image}
                     />

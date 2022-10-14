@@ -11,6 +11,7 @@ import {Container, Divider} from 'src/styled';
 import {useNavigation} from '@react-navigation/native';
 import CardArticle from './CardArticle';
 import imageAssets from 'assets/images';
+import { fetchGetArticle } from 'src/api-rest/fetchGetArticle';
 
 const defaultProps = {
   title: '',
@@ -34,30 +35,9 @@ const HighlightArticle = ({title, tenantType, numColumns, showSeeAllText, style}
   }, []);
 
   const fetchData = async () => {
-    // let baseEndpoint = 'location?';
-    // if (tenantType) {
-    //   baseEndpoint = baseEndpoint + `type=${tenantType}&`;
-    // }
-    // baseEndpoint = baseEndpoint + `isRecommended=1`;
-    // // if (auth.user.activityInfo.location) {
-    // //     baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.user.activityInfo.location.id}&isRecommended=1`;
-    // // }
-    // const result = await getAPI(baseEndpoint);
-
-    // console.log('result baseEndpoint', result);
-
-    // let newArr = [];
-    // if (result.status) {
-    //   newArr = result.data;
-    // }
-
-    const newArr = [
-      {
-        id: 1,
-        image: imageAssets.article1,
-      }
-    ]
-
+    const param = `?highlight=1&perPage=4`;
+    const result = await fetchGetArticle(param);
+    const newArr = result.data;
     setItemData(newArr);
   };
 

@@ -40,7 +40,7 @@ const CardFestEvent = ({
       style={{
         borderWidth: 1,
         marginVertical: 8,
-        borderRadius: 8,
+        // borderRadius: 8,
         marginHorizontal: 8,
         flexDirection: 'row',
         flex: 1,

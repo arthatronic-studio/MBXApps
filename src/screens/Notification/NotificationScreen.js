@@ -29,7 +29,7 @@ const NotificationScreen = ({ navigation, route }) => {
   const [refreshing, setRefreshing] = useState(true);
 
   const fetchData = async () => {
-    const result = await getAPI('notification?type=promo');
+    const result = await getAPI('notification?type=general');
     console.log('result notif', result);
     setHistory(result.data);
   }

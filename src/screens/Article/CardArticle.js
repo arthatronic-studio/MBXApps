@@ -21,6 +21,8 @@ const CardArticle = ({item, onPress, numColumns, horizontal}) => {
   const navigation = useNavigation();
   const {width} = useWindowDimensions();
 
+  console.log(item, "item");
+
   return (
     <TouchableOpacity
       onPress={() => {
@@ -43,7 +45,7 @@ const CardArticle = ({item, onPress, numColumns, horizontal}) => {
             height: width * 0.65,
           }}>
           <Image
-            source={item.image}
+            source={{ uri: item.images[0] }}
             style={{
               width: '100%',
               height: '100%',
@@ -53,17 +55,17 @@ const CardArticle = ({item, onPress, numColumns, horizontal}) => {
         </View>
         <Divider height={8} />
         <Text align="left" size={18} type="medium" lineHeight={20.4}>
-          Institut Kesenian Jakarta: SCHOOL OF ROCK [Editor's Cut]
+          {item.title}
         </Text>
         <Divider height={8} />
         <Text align="left" size={10} lineHeight={12} type="semibold">
           Article
         </Text>
         <Text align="left" size={10} lineHeight={12} type="medium">
-          11 Sept 2022
+          {item.created_at}
         </Text>
         <Text align="left" size={10} lineHeight={12} type="medium">
-          by John Doe
+          by {item.publisher}
         </Text>
       </View>
     </TouchableOpacity>

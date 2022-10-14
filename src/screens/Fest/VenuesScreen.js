@@ -97,7 +97,7 @@ const VenuesScreen = ({navigation, route}) => {
                     style={{
                       padding: 8,
                       borderWidth: 1,
-                      borderRadius: 8,
+                      // borderRadius: 8,
                       borderColor: Color.textSoft,
                       backgroundColor:
                         index === categoryIndex ? '#121212' : 'transparent',
