@@ -45,7 +45,7 @@ const CardArticle = ({item, onPress, numColumns, horizontal}) => {
             height: width * 0.65,
           }}>
           <Image
-            source={{ uri: item.images[0] }}
+            source={item.images[0] ? { uri: item.images[0] } : imageAssets.imageBlank}
             style={{
               width: '100%',
               height: '100%',
