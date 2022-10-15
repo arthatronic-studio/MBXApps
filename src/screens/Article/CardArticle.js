@@ -26,7 +26,7 @@ const CardArticle = ({item, onPress, numColumns, horizontal}) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate('DetailArticleScreen');
+        navigation.navigate('DetailArticleScreen', {item: item});
       }}
       style={{
         // width: width * 0.65,

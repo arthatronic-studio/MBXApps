@@ -52,7 +52,7 @@ const ArticleScreen = ({navigation, route}) => {
             <HighlightArticle
               title="● HIGHLIGHT ARTICLE"
               numColumns={1}
-              tenantType="eat"
+              type="HIGHLIGHT"
               showSeeAllText={false}
               style={{ paddingHorizontal: 0 }}
             />

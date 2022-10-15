@@ -1,9 +1,7 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {Image, View, ScrollView} from 'react-native';
 
-import {
-  useColor,
-} from '@src/components';
+import {useColor} from '@src/components';
 import PostingHeader from '../../components/Posting/PostingHeader';
 import {getAPI} from 'src/api-rest/httpService';
 import {useSelector} from 'react-redux';
@@ -11,31 +9,51 @@ import {Container, Divider} from 'src/styled';
 import {useNavigation} from '@react-navigation/native';
 import CardArticle from './CardArticle';
 import imageAssets from 'assets/images';
-import { fetchGetArticle } from 'src/api-rest/fetchGetArticle';
+import {fetchGetArticle} from 'src/api-rest/fetchGetArticle';
 
 const defaultProps = {
   title: '',
-  tenantType: null,
+  type: null,
   numColumns: 2,
   showSeeAllText: true,
   style: {},
+  id: null,
+  categoryId: null,
+  refresh: false,
 };
 
-const HighlightArticle = ({title, tenantType, numColumns, showSeeAllText, style}) => {
-  const auth = useSelector(state => state['auth']);
+const HighlightArticle = ({
+  title,
+  type,
+  numColumns,
+  showSeeAllText,
+  style,
+  id,
+  categoryId,
+  refresh,
+}) => {
   const {Color} = useColor();
   const navigation = useNavigation();
 
   const [itemData, setItemData] = useState([]);
 
-  const ref = useRef();
+  useEffect(() => {
+    if (refresh) {
+      fetchData();
+    }
+  }, [refresh]);
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
-    const param = `?highlight=1&perPage=4`;
+    let param = '';
+    if (type == 'HIGHLIGHT') {
+      param = `?highlight=1&perPage=4`;
+    } else if (type == 'OTHER') {
+      param = `?other=1&id=${id}&category_id=${categoryId}&perPage=10`;
+    }
     const result = await fetchGetArticle(param);
     const newArr = result.data;
     setItemData(newArr);
@@ -43,7 +61,7 @@ const HighlightArticle = ({title, tenantType, numColumns, showSeeAllText, style}
 
   if (itemData.length === 0) return <View />;
 
-  console.log(itemData, "itemData");
+  console.log(itemData, 'itemData');
 
   return (
     <View

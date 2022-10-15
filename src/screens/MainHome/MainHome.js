@@ -1024,7 +1024,7 @@ const MainHome = ({ navigation, route }) => {
           <HighlightArticle
             title='● ARTICLES'
             numColumns={1}
-            tenantType='eat'
+            type="HIGHLIGHT"
           />
 
           {/* <HighlightTenant
