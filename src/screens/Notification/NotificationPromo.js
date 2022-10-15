@@ -22,7 +22,7 @@ const NotificationPromo = ({ navigation, route }) => {
     refresh: false,
   };
   const [history, setHistory] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const modalListActionRef = useRef();
   const [showSection, setShowSection] = useState(true);
   const [modalBackConfirm, setModalBackConfirm] = useState(false);
@@ -32,7 +32,8 @@ const NotificationPromo = ({ navigation, route }) => {
   const fetchData = async () => {
     const result = await getAPI('notification?type=promo');
     console.log('result notif', result);
-    setHistory(result.data)
+    setHistory(result.data);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -163,6 +164,8 @@ const NotificationPromo = ({ navigation, route }) => {
       // }
       // emptyTitle="Notifikasi belum tersedia"
       showHeader={false}
+      fallback={loading}
+      empty={!loading && history.length === 0}
     >
       <FlatList
         keyExtractor={(item, index) => item.id + index.toString()}

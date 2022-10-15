@@ -9,6 +9,7 @@ import {
   TouchableOpacity as NativeTouchable,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import messaging from '@react-native-firebase/messaging';
 
 import Scaffold from '@src/components/Scaffold';
 import Text from '@src/components/Text';
@@ -32,6 +33,7 @@ import {FormatDuration} from 'src/utils';
 import {postNonAuth} from 'src/api-rest/httpService';
 import {stateBeaconSetting} from 'src/api-rest/stateBeaconSetting';
 import imageAssets from 'assets/images';
+import { stateUpdateProfile } from 'src/api-rest/stateUpdateProfile';
 
 const initialCountdown = 60 * 1;
 
@@ -226,6 +228,11 @@ const OtpScreenV2 = ({navigation, route}) => {
 
   const handleNavigate = async isRegistered => {
     const beaconSetting = await stateBeaconSetting();
+
+    const fcm_token = await messaging().getToken();
+    const body = { fcm_token };
+    const updateProfile = await stateUpdateProfile(body);
+    console.log('updateProfile', updateProfile);
 
     if (beaconSetting) {
       if (typeof params.afterLogin === 'function') {

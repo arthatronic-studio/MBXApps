@@ -73,7 +73,9 @@ const Button = (props) => {
             onPress();
           }
         }}
-        {...style}
+        style={{
+          ...style,
+        }}
       >
         {source && <CustomImage source={source} />}
         

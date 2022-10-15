@@ -732,8 +732,8 @@ const MainHome = ({ navigation, route }) => {
             borderRadius: width / 5 - 8,
             backgroundColor: Color.primary,
             alignSelf: 'center',
-            borderWidth: 1,
-            borderColor: Color.textButtonInline,
+            // borderWidth: 1,
+            // borderColor: Color.textButtonInline,
           }}
         >
           <TouchableOpacity
@@ -743,7 +743,7 @@ const MainHome = ({ navigation, route }) => {
             style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}
           >
             <MaterialIcons
-              name='qr-code-2'
+              name='qr-code-scanner'
               color={Color.textButtonInline}
               size={38}
             />
@@ -942,6 +942,36 @@ const MainHome = ({ navigation, route }) => {
             </Text>
           </TouchableOpacity>}
 
+          {(isSecurity) && <Container paddingHorizontal={16}>
+            <Container padding={14} borderWidth={1}>
+              <Row justify='space-between'>
+                <Row>
+                  <Container paddingRight={16}>
+                    <Image
+                      source={imageAssets.people}
+                      style={{
+                        width: 32,
+                        height: 32,
+                      }}
+                    />
+                  </Container>
+                  <Column>
+                    <Text color={Color.textSoft} type='medium' size={11} letterSpacing={0.5}>Total Pengunjung</Text>
+                    <Divider height={2} />
+                    <Text type='medium' size={16} letterSpacing={0.15}>{visitorCount} Orang</Text>
+                  </Column>
+                </Row>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('VisitorScreen');
+                  }}
+                >
+                  <Text color={Color.primaryDark} type='medium' size={12} letterSpacing={0.5}>Lihat Detail</Text>
+                </TouchableOpacity>
+              </Row>
+            </Container>
+          </Container>}
+
           <Divider height={spaceContentSize * 2} />
 
           <ListContenEvent
@@ -975,36 +1005,6 @@ const MainHome = ({ navigation, route }) => {
                     <Text align='left' size={12} type='medium' numberOfLines={2} letterSpacing={0.5}>{auth.user.activeEvent.title}</Text>
                   </Container>
                 </Row>
-              </Row>
-            </Container>
-          </Container>}
-
-          {isSecurity && <Container padding={16} paddingTop={8}>
-            <Container padding={14} color={Color.border} radius={8}>
-              <Row justify='space-between'>
-                <Row>
-                  <Container paddingRight={16}>
-                    <Image
-                      source={imageAssets.people}
-                      style={{
-                        width: 32,
-                        height: 32,
-                      }}
-                    />
-                  </Container>
-                  <Column>
-                    <Text color={Color.placeholder} type='medium' size={11} letterSpacing={0.5}>Total Pengunjung</Text>
-                    <Divider height={2} />
-                    <Text type='medium' size={16} letterSpacing={0.15}>{visitorCount} Orang</Text>
-                  </Column>
-                </Row>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('VisitorScreen');
-                  }}
-                >
-                  <Text color={Color.primaryDark} type='medium' size={12} letterSpacing={0.5}>Lihat Detail</Text>
-                </TouchableOpacity>
               </Row>
             </Container>
           </Container>}

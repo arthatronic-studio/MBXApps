@@ -40,7 +40,7 @@ const Active = ({ navigation, route }) => {
             <Text color={Color.textInput}>Semua</Text>
           </Container>
           
-          <Container paddingVertical={8} paddingHorizontal={16} radius={8} marginRight={8} color={Color.theme} style={{ borderWidth: 0.5, borderColor: Color.primaryMoreDark }}>
+          {/* <Container paddingVertical={8} paddingHorizontal={16} radius={8} marginRight={8} color={Color.theme} style={{ borderWidth: 0.5, borderColor: Color.primaryMoreDark }}>
             <Row>
               <Image
                 source={imageAssets.male}
@@ -65,7 +65,7 @@ const Active = ({ navigation, route }) => {
               />
               <Text>Perempuan</Text>
             </Row>
-          </Container>
+          </Container> */}
         </Row>
 
         <Divider />
@@ -153,7 +153,7 @@ const CustomTabBar = (props) => {
                     } : {}
                 }
               >
-                <Text size={12} type='medium' letterSpacing={0.5}>{label}</Text>
+                <Text size={12} color={isActive ? Color.textButtonInline : Color.text} type='medium' letterSpacing={0.5}>{label}</Text>
               </Container>
             </TouchableOpacity>
           )

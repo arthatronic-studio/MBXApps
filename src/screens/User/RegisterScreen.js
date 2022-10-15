@@ -91,7 +91,7 @@ const RegisterScreen = ({ navigation, route }) => {
       if (register.status) {
         navigation.pop();
       } else if (!register.status && error) {
-        showPopup(error.trim(), 'error');
+        showPopup(typeof error === 'string' ? error.trim() : 'error ' + error, 'error');
         dispatch({ type: 'USER.LOGOUT' });
       }
     }

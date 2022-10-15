@@ -115,7 +115,7 @@ const EventScreen = ({ navigation, route }) => {
       <ListContenEvent
         productCategory='EVENT'
         name='Event'
-        title='Semua Event'
+        title='● ALL EVENT'
         // nav='EventScreen'
         // refresh={refreshing || isFocused}
         showHeader

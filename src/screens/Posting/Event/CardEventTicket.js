@@ -85,6 +85,7 @@ const CardEventTicket = ({ item, isPassedEventDate, onSelect }) => {
           <View style={{ flex: 0.8 }}>
             {typeof onSelect === 'function' ?
             <Button
+              outline
               onPress={() => onSelect()}
               fontSize={12}
               disabled={isPassedEventDate}
@@ -93,6 +94,7 @@ const CardEventTicket = ({ item, isPassedEventDate, onSelect }) => {
             </Button>
             :
             <Button
+              outline
               onPress={() => {
                 if (auth.user.isGuest) {
                   loginRequired('EventDetail', 'PemesananTiket', { item });

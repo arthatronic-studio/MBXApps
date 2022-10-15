@@ -240,7 +240,7 @@ const WidgetHomeMenuStatic = () => {
                   />
                 </View>
                 
-                <Text size={10} type='medium' style={menu.comingsoon && {opacity: 0.3}} color="#EEEEEE">
+                <Text size={10} type='medium' style={menu.comingsoon && {opacity: 0.3}} color={Color.textButtonInline}>
                   {menu.name}
                 </Text>
 

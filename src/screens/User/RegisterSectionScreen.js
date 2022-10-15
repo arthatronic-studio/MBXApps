@@ -202,7 +202,7 @@ const RegisterSectionScreen = ({navigation, route}) => {
           onCreateCompanionAndSkill();
         }
       } else if (!register.status && error) {
-        showPopup(error.trim(), 'error');
+        showPopup(typeof error === 'string' ? error.trim() : 'error ' + error, 'error');
         dispatch({type: 'USER.LOGOUT'});
       }
     }
