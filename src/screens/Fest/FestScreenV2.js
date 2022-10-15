@@ -166,13 +166,13 @@ const FestScreenV2 = ({navigation, route}) => {
               />
             </Container>
 
-            {/* <HighlightFest
+            <HighlightFest
               productCategory="AREA"
               nav="ShowAllArea"
               name="Experience Area"
               title="Experience Area"
               horizontal={true}
-            /> */}
+            />
           </Container>
         )}
       </ScrollView>
