@@ -177,7 +177,7 @@ const OnBoardingScreenV2 = ({navigation}) => {
                   size={17}
                   type="medium"
                   align="left"
-                  color={Color.primary}
+                  color={Color.white}
                   style={{
                     textDecorationLine: 'underline',
                   }}
@@ -200,7 +200,11 @@ const OnBoardingScreenV2 = ({navigation}) => {
       <Animated.View
         paddingHorizontal={16}
         style={{flex: 1, justifyContent: 'space-between'}}>
-        <Animated.View>
+        <Animated.View
+          style={{ 
+            flex: 8
+           }}
+        >
           <Animated.Text
             style={{
               transform: [{translateX: leftValue1}],
@@ -268,6 +272,8 @@ const OnBoardingScreenV2 = ({navigation}) => {
             borderWidth: 1,
             padding: 12,
             borderColor: '#E7FF00',
+            flex: 1,
+            maxHeight: 53,
           }}>
           <Animated.Text
             style={{
