@@ -135,6 +135,19 @@ const EventScreen = ({ navigation, route }) => {
                 paddingHorizontal: 0,
               }}
             /> */}
+            <ListContenEvent
+              productCategory='EVENT'
+              name='Event'
+              title='● SECURE YOUR TICKET NOW'
+              productType='highlight'
+              showHeader
+              horizontal
+              showSeeAllText={false}
+              style={{paddingHorizontal: 0}}
+              headerLabelstyle={{paddingHorizontal: 8}}
+            />
+
+            <Divider />
           </>
         }
       />

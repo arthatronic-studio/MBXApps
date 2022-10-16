@@ -31,9 +31,10 @@ const defaultProps = {
     title: '',
     showSeeAllText: false,
     showHeader: false,
+    headerLabelstyle: {},
 };
 
-const ListContenEvent = ({ productType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, }) => {
+const ListContenEvent = ({ productType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, headerLabelstyle, }) => {
     const { width } = useWindowDimensions();
     const [itemData, setItemData] = useState(initialItemState);
 
@@ -80,7 +81,7 @@ const ListContenEvent = ({ productType, productCategory, name, horizontal, style
                 }}
                 productCategory={productCategory}
                 showSeeAllText={showSeeAllText}
-                style={{paddingHorizontal: horizontal ? 16 : 8}}
+                style={{paddingHorizontal: horizontal ? 16 : 8, ...headerLabelstyle}}
             />
         )
     }

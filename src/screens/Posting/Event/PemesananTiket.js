@@ -49,7 +49,7 @@ const getDaysBetweenDates = (startDate, endDate) => {
     var currDate = moment(startDate).startOf('day');
     var lastDate = moment(endDate).startOf('day');
 
-    while(currDate.add(1, 'days').diff(lastDate) < 0) {
+    while (currDate.add(1, 'days').diff(lastDate) < 0) {
         dates.push(moment(currDate.clone().toDate()));
     }
 
@@ -106,7 +106,7 @@ const PemesananTiket = ({ navigation }) => {
             },
         }
     }
-    
+
     const initialMarkedDatesEnabled = {
         selected: false,
         disabled: false,
@@ -156,51 +156,53 @@ const PemesananTiket = ({ navigation }) => {
 
     const disabledDecrease = qty < 2;
     const disabledIncrease = qty > 0; // qty > 9;
-    
+
     return (
         <Scaffold
-            header={<Header customIcon title="Pemesanan Tiket" centerTitle={false} />}
-            onPressLeftButton={() => navigation.pop()}
+            header={<Header title="Pemesanan Tiket" centerTitle={false} />}
         >
             <ScrollView>
                 <Container paddingHorizontal={16} paddingTop={8} paddingBottom={statusBarHeight}>
                     <Text size={14} type='bold' align='left'>Tiket Dipilih</Text>
 
-                    <View style={{ marginTop: 8, padding: 10, borderRadius: 8, borderWidth: 0.5, borderColor: Color.border, backgroundColor: Color.theme }}>
-                        <Row style={{justifyContent: 'space-between'}}>
-                            <Text type='bold' size={16}>{ticketSelected.name}</Text>
-                        </Row>
-                        <Row style={{ paddingTop: 16, paddingBottom: 8 }}>
-                            <Row style={{ marginRight: 10, alignItems: 'center' }}>
-                                <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 3, borderRadius: 14 }}>
-                                    <Image source={ImagesPath.refund} style={{ width: 15, height: 15, borderRadius: 7, tintColor: Color.text }} />
-                                </View>
-                                <Text color={Color.text} size={11}>{ticketSelected.isRefundable ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
+                    <View style={{ marginTop: 8, paddingVertical: 10, borderWidth: 1, borderColor: Color.primary, backgroundColor: Color.theme }}>
+                        <View style={{ paddingHorizontal: 10 }}>
+                            <Row style={{ justifyContent: 'space-between' }}>
+                                <Text type='bold' size={16}>{ticketSelected.name}</Text>
                             </Row>
-                            {/* <Row style={{ marginRight: 10, alignItems: 'center' }}>
-                                <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 3, borderRadius: 14 }}>
+                            <Row style={{ paddingTop: 16, paddingBottom: 8 }}>
+                                <Row style={{ marginRight: 10, alignItems: 'center' }}>
+                                    <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 3 }}>
+                                        <Image source={ImagesPath.refund} style={{ width: 15, height: 15, borderRadius: 7, tintColor: Color.text }} />
+                                    </View>
+                                    <Text color={Color.text} size={11}>{ticketSelected.isRefundable ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
+                                </Row>
+                                {/* <Row style={{ marginRight: 10, alignItems: 'center' }}>
+                                <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 3, }}>
                                     <Image source={imageAssets.calendarRemove} style={{ width: 16, height: 16, borderRadius: 7 }} />
                                 </View>
                                 <Text color={Color.text} size={11}>{ticketSelected.reservation ? 'Bisa Reservasi' : 'Tidak Bisa Reservasi'}</Text>
                             </Row> */}
-                        </Row>
+                            </Row>
+                        </View>
 
-                        <Line height={1} width='100%' color='#F4F4F4' />
-                        
-                        <Row style={{ alignItems: 'center', marginTop: 8 }}>
-                            <Col size={8} style={{ alignItems: 'flex-start', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
-                                <Text color={Color.text} size={9}>Harga</Text>
-                                <Text color={Color.text} size={14} type='semibold'>{ticketSelected.type === 'FREE' ? 'GRATIS' : FormatMoney.getFormattedMoney(ticketSelected.price)}/pax</Text>
-                            </Col>
-                            <Col style={{ alignItems: 'flex-end' }}>
-                                <TouchableOpacity
-                                    onPress={() => modalChangeTicketRef.current.open()}
-                                    style={{ borderColor: Color.textSoft, borderWidth: 1, borderRadius: 8, padding: 12 }}
-                                >
-                                    <Text color={Color.primaryDark} type='medium' size={11}>Ganti Tiket</Text>
-                                </TouchableOpacity>
-                            </Col>
-                        </Row>
+                        <Line height={1} width='100%' color={Color.primary} />
+
+                        <View style={{ paddingHorizontal: 10 }}>
+                            <Row style={{ alignItems: 'center', marginTop: 8 }}>
+                                <Col size={8} style={{ alignItems: 'flex-start', justifyContent: 'center', marginRight: 6, borderRadius: 14 }}>
+                                    <Text color={Color.text} size={14} type='semibold'>{ticketSelected.type === 'FREE' ? 'GRATIS' : FormatMoney.getFormattedMoney(ticketSelected.price)}/pax</Text>
+                                </Col>
+                                <Col style={{ alignItems: 'flex-end' }}>
+                                    <TouchableOpacity
+                                        onPress={() => modalChangeTicketRef.current.open()}
+                                        style={{ borderColor: Color.primary, borderWidth: 1, padding: 12 }}
+                                    >
+                                        <Text color={Color.primaryDark} type='medium' size={11}>Ganti Tiket</Text>
+                                    </TouchableOpacity>
+                                </Col>
+                            </Row>
+                        </View>
                     </View>
 
                     <Divider />
@@ -256,7 +258,7 @@ const PemesananTiket = ({ navigation }) => {
                         }}
                     />
 
-                    <Row style={{ alignItems: 'center', marginTop: 16}}>
+                    <Row style={{ alignItems: 'center', marginTop: 16 }}>
                         <View style={{ backgroundColor: Color.primary, marginRight: 4, height: 9, width: 9, borderRadius: 5 }} />
                         <Text type='bold' color={Color.primary} size={9} style={{ marginRight: 10 }}>Dipilih</Text>
                         <View style={{ backgroundColor: Color.text, marginRight: 4, height: 9, width: 9, borderRadius: 5 }} />
@@ -266,7 +268,7 @@ const PemesananTiket = ({ navigation }) => {
                     </Row>
 
                     <View style={{ marginTop: 48 }}>
-                        <Text type='bold' align='left' size={11}>Jumlah Tiket</Text>
+                        <Text type='bold' align='left' size={11} lineHeight={18}>Jumlah Tiket</Text>
                         <Text align='left' size={10}>Min. Pembelian 1 dan maks. pembelian 10 tiket dalam 1 kali order</Text>
                     </View>
 
@@ -293,7 +295,7 @@ const PemesananTiket = ({ navigation }) => {
                                         }}
                                     />
                                 </TouchableOpacity>
-                                <View style={{minWidth: 40}}>
+                                <View style={{ minWidth: 40 }}>
                                     <Text color={Color.text} type='bold' size={18} style={{ marginHorizontal: 8 }}>{qty}</Text>
                                 </View>
                                 <TouchableOpacity

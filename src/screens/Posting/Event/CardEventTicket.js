@@ -41,75 +41,57 @@ const CardEventTicket = ({ item, isPassedEventDate, onSelect }) => {
   
   return (
     <View style={{ paddingHorizontal: 16 }}>
-      <View style={{ width: '100%', marginBottom: 10, padding: 10, backgroundColor: Color.theme, borderWidth: 0.5, borderColor: Color.border, borderRadius: 8 }}>
-        <Row>
-          <Col>
-            <Text size={16} align='left' type='medium'>{item.name}</Text>
-          </Col>
-        </Row>
+      <View style={{ width: '100%', marginBottom: 10, paddingVertical: 10, backgroundColor: Color.theme, borderWidth: 1, borderColor: Color.primary }}>
+        <Container paddingHorizontal={10}>
+          <Row>
+            <Col>
+              <Text size={16} align='left' type='medium'>{item.name}</Text>
+            </Col>
+          </Row>
+
+          <Divider height={8} />
+
+          <Row style={{ alignItems: 'center' }}>
+            <Text size={11}>{item.isRefundable ? 'Refundable' : 'Non-Refundable'}</Text>
+          </Row>
+        </Container>
 
         <Divider height={8} />
 
-        <Row style={{ alignItems: 'center' }}>
-          <Image
-            source={ImagesPath.refund}
-            style={{
-              width: 16,
-              height: 16,
-              tintColor: Color.text,
-            }}
-          />
-          <Divider width={6} />
-          <Text size={11}>{item.isRefundable ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
-          {/* <Divider width={10} />
-          <Image
-            source={imageAssets.calendarRemove}
-            style={{
-              width: 16,
-              height: 16,
-            }}
-          />
-          <Divider width={6} />
-          <Text size={11}>{item.reservation ? 'Perlu Reservasi' : 'Tidak Perlu Reservasi'}</Text> */}
-        </Row>
+        <Line height={1} width='100%' color={Color.primary} />
 
-        <Divider height={8} />
-
-        <Line height={1} width='100%' color='#F4F4F4' />
-
-        <View style={{ width: '100%', flexDirection: 'row', paddingTop: 8 }}>
-          <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center' }}>
-            <Text size={11}>Harga</Text>
-            <Text type='medium'>{FormatMoney.getFormattedMoney(item.price)}<Text size={11}>/Pax</Text></Text>
+        <Container paddingHorizontal={10}>
+          <View style={{ width: '100%', flexDirection: 'row', paddingTop: 10 }}>
+            <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center' }}>
+              <Text type='medium'>{FormatMoney.getFormattedMoney(item.price)}<Text size={11}>/Pax</Text></Text>
+            </View>
+            <View style={{ flex: 0.4 }}>
+              {typeof onSelect === 'function' ?
+              <TouchableOpacity
+                onPress={() => onSelect()}
+                disabled={isPassedEventDate}
+                style={{ justifyContent: 'center', borderWidth: 1, borderColor: Color.primary, paddingVertical: 8 }}
+              >
+                <Text type='medium'>Pilih Tiket</Text>
+              </TouchableOpacity>
+              :
+              <TouchableOpacity
+                onPress={() => {
+                  if (auth.user.isGuest) {
+                    loginRequired('EventDetail', 'PemesananTiket', { item });
+                    return;
+                  }
+                  navigation.navigate('PemesananTiket', { item });
+                }}
+                disabled={isPassedEventDate}
+                style={{ justifyContent: 'center', borderWidth: 1, borderColor: Color.primary, paddingVertical: 8 }}
+              >
+                <Text type='medium'>{isPassedEventDate ? 'Unavailable' : 'Get Ticket'}</Text>
+              </TouchableOpacity>
+              }
+            </View>
           </View>
-          <View style={{ flex: 0.8 }}>
-            {typeof onSelect === 'function' ?
-            <Button
-              outline
-              onPress={() => onSelect()}
-              fontSize={12}
-              disabled={isPassedEventDate}
-            >
-              Pilih Tiket
-            </Button>
-            :
-            <Button
-              outline
-              onPress={() => {
-                if (auth.user.isGuest) {
-                  loginRequired('EventDetail', 'PemesananTiket', { item });
-                  return;
-                }
-                navigation.navigate('PemesananTiket', { item });
-              }}
-              fontSize={12}
-              disabled={isPassedEventDate}
-            >
-              {isPassedEventDate ? 'Tidak Tersedia' : 'Pesan Sekarang'}
-            </Button>
-            }
-          </View>
-        </View>
+        </Container>
       </View>
     </View>
   );

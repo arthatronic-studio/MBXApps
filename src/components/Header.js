@@ -80,7 +80,6 @@ const defaultProps = {
   centerTitle: true,
   showLeftButton: true,
   showIconLeftButton: true,
-  iconLeftButton: 'angle-left',
   actions: null,
 };
 
@@ -123,11 +122,13 @@ const Header = (props) => {
               <LeftButton onPress={onPressLeftButton}>
                 <TransparentBackView style={{backgroundColor: Color.primary}}>
                   {showIconLeftButton && (
-                    // <Fontisto
-                    //   name={iconLeftButton}
-                    //   color={Color.text}
-                    //   size={18}
-                    // />
+                    iconLeftButton ?
+                    <Fontisto
+                      name={iconLeftButton}
+                      color={Color.text}
+                      size={24}
+                    />
+                    :
                     <Image
                       source={arrowLeft}
                       style={{
@@ -189,19 +190,21 @@ const Header = (props) => {
             {showLeftButton ? (
               <LeftButton onPress={onPressLeftButton}>
                 {showIconLeftButton && (
-                  // <Fontisto
-                  //   name={iconLeftButton}
-                  //   color={color || Color.text}
-                  //   size={18}
-                  // />
+                  iconLeftButton ?
+                  <Fontisto
+                    name={iconLeftButton}
+                    color={Color.text}
+                    size={24}
+                  />
+                  :
                   <Image
-                      source={arrowLeft}
-                      style={{
-                        height: 24,
-                        width: 24,
-                        resizeMode: 'contain',
-                      }}
-                    />
+                    source={arrowLeft}
+                    style={{
+                      height: 24,
+                      width: 24,
+                      resizeMode: 'contain',
+                    }}
+                  />
                 )}
               </LeftButton>
             ) : (
@@ -314,19 +317,21 @@ const Header = (props) => {
                           size={18}
                         />
                       ) : (
-                        // <Fontisto
-                        //   name={iconLeftButton}
-                        //   color={color || Color.text}
-                        //   size={18}
-                        // />
-                        <Image
-                          source={arrowLeft}
-                          style={{
-                            height: 24,
-                            width: 24,
-                            resizeMode: 'contain',
-                          }}
-                        />
+                        iconLeftButton ?
+                          <Fontisto
+                            name={iconLeftButton}
+                            color={Color.text}
+                            size={24}
+                          />
+                          :
+                          <Image
+                            source={arrowLeft}
+                            style={{
+                              height: 24,
+                              width: 24,
+                              resizeMode: 'contain',
+                            }}
+                          />
                       )}
                     </>
                   )}

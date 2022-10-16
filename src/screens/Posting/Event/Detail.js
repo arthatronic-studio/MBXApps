@@ -43,7 +43,7 @@ const EventDetail = ({ navigation, route }) => {
   const modalOptionsRef = useRef();
   const flatlistRef = useRef();
   const user = useSelector(state => state['user.auth'].login.user);
-  
+
   const isPassedEventDate = items.is_past_event === 1 ? true : false;
 
   const [im_like, set_im_like] = useState(items.im_like);
@@ -87,205 +87,178 @@ const EventDetail = ({ navigation, route }) => {
   const labelDesctiption = items.description;
 
   const renderHeader = (
-    <View
-      onLayout={(e) => {
-        setHeightHeader(e.nativeEvent.layout.height);
-      }}
-      style={{
-        paddingBottom: 24,
-      }}
-    >
-      <Container paddingHorizontal={16} marginTop={8} marginBottom={16}>
-        <View>
-          <Text
-            size={22}
-            align='left'
-          >
-            {items.title}
-          </Text>
-        </View>
-
-        <View style={{ flex: 1, flexDirection: 'row', marginTop: 8 }}>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Image
-              source={imageAssets.calendar}
-              style={{
-                width: 16,
-                height: 16,
-              }}
-              resizeMode='contain'
-            />
-            <View style={{flex: 1, paddingLeft: 4, alignItems: 'flex-start'}}>
-              <Text size={10} type='medium' numberOfLines={1}>{items.formatted_date}</Text>
-            </View>
-          </View>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Image
-              source={imageAssets.clock}
-              style={{
-                width: 16,
-                height: 16,
-              }}
-              resizeMode='contain'
-            />
-            <View style={{flex: 1, paddingLeft: 4, alignItems: 'flex-start'}}>
-              <Text size={10} type='medium' numberOfLines={1}>{items.time}</Text>
-            </View>
-          </View>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Image
-              source={imageAssets.location}
-              style={{
-                width: 16,
-                height: 16,
-              }}
-              resizeMode='contain'
-            />
-            <View style={{flex: 1, paddingLeft: 4, alignItems: 'flex-start'}}>
-              <Text size={10} type='medium' numberOfLines={1}>{items.location}</Text>
-            </View>
-          </View>
-        </View>
-      </Container>
-
-      <TouchableOpacity
-        activeOpacity={1}
-        // onPress={() => {
-        //   data ? data.images.length == 0 ? console.log() :
-        //     navigation.navigate('GalleryDetailScreen', {
-        //       id: data.id,
-        //       image: data.images[0],
-        //     })
-        //     : console.log()
-        // }}
+    <>
+      <View
+        onLayout={(e) => {
+          setHeightHeader(e.nativeEvent.layout.height);
+        }}
         style={{
-          width: '100%',
-          aspectRatio: 1,
+          paddingBottom: 24,
         }}
       >
-        <Image
-          source={{ uri: items.image }}
-          style={{ width: '100%', height: '100%', backgroundColor: Color.border }}
-        />
-      </TouchableOpacity>
+        <Container paddingHorizontal={16} marginTop={8}>
+          <View style={{ borderWidth: 1, borderColor: Color.primary }}>
+            <View style={{ padding: 10, borderBottomWidth: 1, borderColor: Color.primary }}>
+              <Text
+                size={27}
+                type='medium'
+                align='left'
+              >
+                {items.title}
+              </Text>
+            </View>
 
-      {/* <Container paddingHorizontal={32} paddingVertical={16}>
-          <Button
-            onPress={() => {
-              navigation.navigate('GalleryScreen', {  });
-            }}
-          >
-            Lihat Event Galeri
-          </Button>
-        </Container> */}
+            <TouchableOpacity
+              activeOpacity={1}
+              style={{
+                width: '100%',
+                aspectRatio: 1,
+              }}
+            >
+              <Image
+                source={{ uri: items.image }}
+                style={{ width: '100%', height: '100%', backgroundColor: Color.border }}
+              />
+            </TouchableOpacity>
+          
+            <View style={{ flexDirection: 'row', minHeight: (12 * 3) + 20, borderTopWidth: 1, borderColor: Color.primary }}>
+              <View style={{ flex: 1, padding: 10, justifyContent: 'center', backgroundColor: Color.primary }}>
+                <Text size={12} type='medium' numberOfLines={3} color={Color.textInput}>{items.formatted_date}</Text>
+              </View>
+              <View style={{ flex: 1, padding: 10, justifyContent: 'center', }}>
+                <Text size={12} type='medium' numberOfLines={3}>{items.location}</Text>
+              </View>
+            </View>
+          </View>
 
-      {/* {items.like > 0 &&
-          <Container paddingHorizontal={16}>
-              <WidgetUserLikes id={items.id} title='Akan Hadir' />
-          </Container>
-        } */}
+          {/* <View style={{ flex: 1, flexDirection: 'row', marginTop: 8 }}>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Image
+                source={imageAssets.calendar}
+                style={{
+                  width: 16,
+                  height: 16,
+                }}
+                resizeMode='contain'
+              />
+              <View style={{ flex: 1, paddingLeft: 4, alignItems: 'flex-start' }}>
+                <Text size={10} type='medium' numberOfLines={1}>{items.formatted_date}</Text>
+              </View>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Image
+                source={imageAssets.clock}
+                style={{
+                  width: 16,
+                  height: 16,
+                }}
+                resizeMode='contain'
+              />
+              <View style={{ flex: 1, paddingLeft: 4, alignItems: 'flex-start' }}>
+                <Text size={10} type='medium' numberOfLines={1}>{items.time}</Text>
+              </View>
+            </View>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Image
+                source={imageAssets.location}
+                style={{
+                  width: 16,
+                  height: 16,
+                }}
+                resizeMode='contain'
+              />
+              <View style={{ flex: 1, paddingLeft: 4, alignItems: 'flex-start' }}>
+                <Text size={10} type='medium' numberOfLines={1}>{items.location}</Text>
+              </View>
+            </View>
+          </View> */}
+        </Container>
 
-      {/* {data && data.ordered && <Row style={{ backgroundColor: '#FAF3ED', marginHorizontal: 10, padding: 13, borderRadius: 8 }}>
-        <Col>
-          <Text size={11} type='bold' align='left'>Kamu telah memiliki tiket untuk event ini</Text>
-        </Col>
-        <Col style={{ alignItems: 'flex-end' }}>
-          <TouchableOpacity onPress={() => navigation.navigate('MyTicket', { item: data })} style={{ backgroundColor: '#F3771D', paddingHorizontal: 10, paddingVertical: 8, borderRadius: 20 }}>
-            <Row style={{ alignItems: 'center' }}>
-              <Text size={10} color='#fff' style={{ marginRight: 8 }}>Lihat Tiket</Text>
-              <AntDesign name='arrowright' color='#fff' />
-            </Row>
-          </TouchableOpacity>
-        </Col>
-      </Row>} */}
+        <Container paddingHorizontal={16} marginTop={24}>
+          <View style={{ flex: 1, flexDirection: 'row' }}>
+            <View style={{ flex: 1 }}>
+              <Text align='left' size={10} type='semibold'>● ABOUT</Text>
+            </View>
 
-      <Container paddingHorizontal={16} marginTop={16}>
-        <Text
-          align='left'
-          type='medium'
-          letterSpacing={0.1}
-        >
-          Deskripsi
-        </Text>
-        <Divider height={8} />
-        <Text
-          align='left'
-          {...descriptionProps}
-        >
-          {labelDesctiption}
-        </Text>
+            <View style={{ flex: 3 }}>
+              <Text
+                align='left'
+                lineHeight={18}
+                size={12}
+                type='medium'
+                {...descriptionProps}
+              >
+                {labelDesctiption}
+              </Text>
 
-        <Pressable
-          onPress={() => setDesc(!desc)}
-          style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 8 }}
-        >
-          <Text color={Color.primaryDark}>{desc ? 'Lebih sedikit' : 'Selengkapnya'}</Text>
-          <MaterialIcons name={'keyboard-arrow-down'} size={22} color={Color.primaryDark} />
-        </Pressable>
+              <Pressable
+                onPress={() => setDesc(!desc)}
+                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 8 }}
+              >
+                <Text color={Color.primaryDark} size={12}>{desc ? 'View Less' : 'Read More'}</Text>
+                <MaterialIcons name={'keyboard-arrow-down'} size={18} color={Color.primaryDark} />
+              </Pressable>
+            </View>
+          </View>
+        </Container>
+      </View>
+
+      <Container paddingBottom={12} paddingHorizontal={16}>
+        <Text align='left' size={10} type='semibold'>● TICKET</Text>
       </Container>
-    </View>
+    </>
   )
 
   const renderFooter = (
     <Container paddingHorizontal={16} marginTop={8}>
-      <Text align='left'>Detail Lokasi</Text>
-      <Divider height={8} />
-      <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', paddingVertical: 8, borderRadius: 8, backgroundColor: Color.theme }}>
-        <Image
-          source={ImagesPath.LocationEvent}
-          style={{
-            width: 48,
-            height: 48,
-            borderRadius: 4,
-          }}
-        />
-        <View style={{ flex: 1, paddingHorizontal: 10 }}>
-          <Text size={12} align='left' lineHeight={16} letterSpacing={0.4}>{items.location_detail}</Text>
-        </View>
-        <TouchableOpacity
-          onPress={() => openGps()}
-          style={{ justifyContent: 'center', alignItems: 'center' }}
-        >
-          <Image
-            source={imageAssets.direction}
-            style={{
-              width: 40,
-              height: 40,
-            }}
-          />
-        </TouchableOpacity>
-      </View>
+      <Text align='left' size={10} type='semibold'>● LOCATION</Text>
+
+      <Divider height={12} />
+
+      <Text size={12} align='left' lineHeight={16} letterSpacing={0.4}>{items.location_detail}</Text>
+
+      <Divider height={12} />
+
+      <Button
+        outline
+        onPress={() => openGps()}
+      >
+        Get Directions
+      </Button>
 
       <Divider />
 
       <View>
-        <Text size={12} style={{ textAlign: 'left', fontWeight: 'bold' }}>Informasi Lainnya</Text>
+        <Text align='left' size={10} type='semibold'>● ADDITIONAL INFORMATION</Text>
+
         <Divider height={8} />
 
         <Accordion
           sections={[
             {
-              title: 'Pengembalian Tiket',
+              number: '01',
+              title: 'Refund Ticket',
               content: items.return_terms,
               imageAsset: imageAssets.ticketRefund,
             },
             {
-              title: 'Syarat & Ketentuan',
+              number: '02',
+              title: 'Term & Conditions',
               content: items.term_and_condition,
               imageAsset: imageAssets.terms,
             },
@@ -293,21 +266,20 @@ const EventDetail = ({ navigation, route }) => {
           activeSections={activeSections}
           renderHeader={(section) => (
             <View
-              style={{ flexDirection: 'row', alignItems: 'center', height: 40, width: '100%', borderColor: Color.border, backgroundColor: Color.theme, borderTopWidth: 0.5, alignSelf: 'center' }}
+              style={{ flexDirection: 'row', alignItems: 'center', height: 40, width: '100%', borderColor: Color.border, backgroundColor: Color.theme, alignSelf: 'center', borderBottomWidth: 1, borderColor: Color.primary }}
             >
-              <Image
-                source={section.imageAsset}
-                style={{
-                  width: 14,
-                  height: 10,
-                  marginRight: 12,
-                  tintColor: Color.textSoft,
-                }}
-              />
-              <View style={{ flex: 1 }}>
-                <Text size={12} style={{ fontWeight: '500', textAlign: 'left' }}>{section.title}</Text>
+              <View style={{ flex: 1, alignItems: 'flex-start' }}>
+                <Text size={11} type='medium'>{section.number}</Text>
               </View>
-              <MaterialIcons name={'keyboard-arrow-down'} size={18} color={Color.text} />
+              <View style={{ flex: 8 }}>
+                <Text size={14} style={{ fontWeight: '500', textAlign: 'left' }}>{section.title}</Text>
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ borderBottomWidth: 1, borderColor: Color.primary }}>
+                  <Text size={11} type='medium'>'Read More</Text>
+                </View>
+                <MaterialIcons name={'keyboard-arrow-down'} size={18} color={Color.text} />
+              </View>
             </View>
           )}
           renderContent={(section) => (
@@ -336,50 +308,50 @@ const EventDetail = ({ navigation, route }) => {
       header={
         <Header
           type="bold"
-          // actions={
-          //   <View style={{ flexDirection: 'row' }}>
-          //     <TouchableOpacity
-          //       style={{ marginRight: 15 }}
-          //       onPress={async () => {
-          //         showLoading();
+        // actions={
+        //   <View style={{ flexDirection: 'row' }}>
+        //     <TouchableOpacity
+        //       style={{ marginRight: 15 }}
+        //       onPress={async () => {
+        //         showLoading();
 
-          //         const body = {
-          //           event_id: items.id,
-          //         }
-          //         const res = await postAPI('wishlist', body);
-          //         console.log(body, res);
+        //         const body = {
+        //           event_id: items.id,
+        //         }
+        //         const res = await postAPI('wishlist', body);
+        //         console.log(body, res);
 
-          //         if (res.status) {
-          //           setBookmark(!bookmark);
-          //           showLoading('success', res.message);
-          //           return;
-          //         }
-                  
-          //         showLoading('error', res.message);
-          //       }}>
-          //       {bookmark == true ? (
-          //         <FontAwesome name={'bookmark'} size={24} color={Color.text} />
-          //       ) : (
-          //         <FontAwesome name={'bookmark-o'} size={24} color={Color.text} />
-          //       )}
-          //     </TouchableOpacity>
+        //         if (res.status) {
+        //           setBookmark(!bookmark);
+        //           showLoading('success', res.message);
+        //           return;
+        //         }
 
-          //     <Pressable
-          //       onPress={() => {
-          //         modalOptionsRef.current.open();
-          //       }}
-          //     >
-          //       <Image
-          //         source={imageAssets.moreOutline}
-          //         style={{
-          //           height: 24,
-          //           width: 24,
-          //         }}
-          //         resizeMode='contain'
-          //       />
-          //     </Pressable>
-          //   </View>
-          // }
+        //         showLoading('error', res.message);
+        //       }}>
+        //       {bookmark == true ? (
+        //         <FontAwesome name={'bookmark'} size={24} color={Color.text} />
+        //       ) : (
+        //         <FontAwesome name={'bookmark-o'} size={24} color={Color.text} />
+        //       )}
+        //     </TouchableOpacity>
+
+        //     <Pressable
+        //       onPress={() => {
+        //         modalOptionsRef.current.open();
+        //       }}
+        //     >
+        //       <Image
+        //         source={imageAssets.moreOutline}
+        //         style={{
+        //           height: 24,
+        //           width: 24,
+        //         }}
+        //         resizeMode='contain'
+        //       />
+        //     </Pressable>
+        //   </View>
+        // }
         />
       }
     >
@@ -387,9 +359,9 @@ const EventDetail = ({ navigation, route }) => {
         ref={flatlistRef}
         data={
           Array.isArray(items.tickets) && items.tickets.length > 0 ?
-          items.tickets
-          :
-          []
+            items.tickets
+            :
+            []
         }
         keyExtractor={(item, index) => item.id + index.toString()}
         renderItem={renderItem}
@@ -398,11 +370,11 @@ const EventDetail = ({ navigation, route }) => {
       />
 
       {!isPassedEventDate && <Row style={{ padding: 16, backgroundColor: Color.theme }}>
-        <Col style={{ justifyContent: 'center' }}>
-          <Text type='medium' style={{ textAlign: 'left', fontSize: 8 }}>Mulai dari</Text>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <Text type='medium' style={{ textAlign: 'left', fontSize: 11 }}>Start from</Text>
           <Divider height={4} />
           <Text size={18} type='semibold' style={{ textAlign: 'left' }}>{FormatMoney.getFormattedMoney(items.lowest_price ? items.lowest_price.price : 0)}</Text>
-        </Col>
+        </View>
         <TouchableOpacity
           onPress={() => {
             flatlistRef.current.scrollToOffset({
@@ -410,9 +382,9 @@ const EventDetail = ({ navigation, route }) => {
               animated: true
             })
           }}
-          style={{ justifyContent: 'center', backgroundColor: Color.primary, height: 45, paddingHorizontal: 24 }}
+          style={{ justifyContent: 'center', backgroundColor: Color.primary, flex: 0.42, paddingVertical: 8 }}
         >
-          <Text type='medium' color={Color.textButtonInline}>Cari Tiket</Text>
+          <Text type='medium' color={Color.textButtonInline}>Get Ticket</Text>
         </TouchableOpacity>
       </Row>}
 

@@ -63,7 +63,7 @@ const CheckoutEvent = ({ navigation, route }) => {
     console.log(auth);
 
     useEffect(() => {
-        
+
     }, []);
 
     const submit = async () => {
@@ -103,42 +103,45 @@ const CheckoutEvent = ({ navigation, route }) => {
 
     return (
         <Scaffold
-            header={<Header customIcon title="Detail Pemesanan" centerTitle={false} />}
-            onPressLeftButton={() => navigation.pop()}
+            header={<Header title="Detail Pemesanan" centerTitle={false} />}
             loadingProps={loadingProps}
         >
             <ScrollView>
                 <Container paddingHorizontal={16} paddingBottom={16}>
-                    <View style={{ backgroundColor: Color.theme, borderWidth: 0.5, borderColor: Color.border, padding: 10, borderRadius: 8 }}>
-                        <Container align='center' style={{ flexDirection: 'row' }}>
-                            <Image source={{ uri: '' }} style={{ height: 48, width: 48, borderRadius: 8, marginRight: 8, backgroundColor: Color.border }} />
-                            <Text type='semibold' align='left'>{params.item.event.title}</Text>
-                        </Container>
+                    <View style={{ backgroundColor: Color.theme, borderWidth: 1, borderColor: Color.primary, paddingVertical: 10 }}>
+                        <View style={{ paddingHorizontal: 10 }}>
+                            <Container align='center' style={{ flexDirection: 'row' }}>
+                                <Image source={{ uri: '' }} style={{ height: 48, width: 48, marginRight: 8, backgroundColor: Color.border }} />
+                                <Text type='semibold' align='left'>{params.item.event.title}</Text>
+                            </Container>
+                        </View>
 
-                        <View style={{ height: 1, backgroundColor: Color.border, marginVertical: 16 }} />
+                        <View style={{ height: 1, backgroundColor: Color.primary, marginVertical: 10 }} />
 
-                        <Row style={{ marginBottom: 4, justifyContent: 'space-between' }}>
-                            <Text type='bold' size={11}>{params.item.name}</Text>
-                            <Text size={11} color={Color.disabled} type='medium'>{moment(params.selectedDate).format('DD MMM YYYY')}</Text>
-                        </Row>
+                        <View style={{ paddingHorizontal: 10 }}>
+                            <Row style={{ marginBottom: 4, justifyContent: 'space-between' }}>
+                                <Text type='bold' size={11}>{params.item.name}</Text>
+                                <Text size={11} color={Color.disabled} type='medium'>{moment(params.selectedDate).format('DD MMM YYYY')}</Text>
+                            </Row>
 
-                        <Text size={10} align='left' color={Color.disabled}>{params.qty} Tiket • {params.qty} Pax</Text>
+                            <Text size={10} align='left' color={Color.disabled}>{params.qty} Tiket • {params.qty} Pax</Text>
+                        </View>
 
-                        <View style={{ height: 1, backgroundColor: Color.border, marginVertical: 16 }} />
+                        <View style={{ height: 1, backgroundColor: Color.primary, marginVertical: 10 }} />
 
-                        <Row>
+                        <Row style={{ paddingHorizontal: 10 }}>
                             <Row style={{ marginRight: 10, alignItems: 'center' }}>
-                                <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 4 }}>
+                                {/* <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 4 }}>
                                     <Image
                                         source={ImagesPath.refund}
                                         style={{ width: 15, height: 15, tintColor: Color.text }}
                                     />
-                                </View>
-                                <Text color={Color.text} size={11}>{params.item.isRefundable ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
+                                </View> */}
+                                <Text size={11}>{params.item.isRefundable ? 'Refundable' : 'Not Refundable'}</Text>
                             </Row>
                             {/* <Row style={{ marginRight: 10, alignItems: 'center' }}>
                                 <View style={{ width: 20, height: 20, alignItems: 'center', justifyContent: 'center', marginRight: 4 }}>
-                                    <Image source={imageAssets.calendar} style={{ width: 16, height: 16, borderRadius: 7 }} />
+                                    <Image source={imageAssets.calendar} style={{ width: 16, height: 16 }} />
                                 </View>
                                 <Text color={Color.text} size={11}>{params.item.reservation ? 'Bisa Reservasi' : 'Tidak Bisa Reservasi'}</Text>
                             </Row> */}
@@ -149,7 +152,7 @@ const CheckoutEvent = ({ navigation, route }) => {
 
                     <Text type='bold' align='left'>Detail Pemesan</Text>
 
-                    <View style={{ marginTop: 8, padding: 10, borderWidth: 0.5, borderColor: Color.border, borderRadius: 8, backgroundColor: Color.theme }}>
+                    <View style={{ marginTop: 8, padding: 10, borderWidth: 1, borderColor: Color.primary, backgroundColor: Color.theme }}>
                         <Row>
                             <Col>
                                 <Text type='bold' align='left'>{auth.user.name}</Text>
@@ -230,9 +233,8 @@ const CheckoutEvent = ({ navigation, route }) => {
                                     marginTop: 8,
                                     paddingHorizontal: 10,
                                     paddingVertical: 12,
-                                    borderRadius: 8,
-                                    borderWidth: 0.5,
-                                    borderColor: Color.border,
+                                    borderWidth: 1,
+                                    borderColor: Color.primary,
                                     backgroundColor: Color.theme,
                                 }}
                             >
@@ -247,7 +249,7 @@ const CheckoutEvent = ({ navigation, route }) => {
                     <Divider />
 
                     <Text type='bold' align='left'>Detail Harga</Text>
-                    <View style={{ backgroundColor: Color.border, marginTop: 8, padding: 10, borderRadius: 8 }}>
+                    <View style={{ backgroundColor: Color.border, marginTop: 12, padding: 10 }}>
                         <Row style={{ marginBottom: 8 }}>
                             <Col>
                                 <Text size={12} align='left'>Subtotal</Text>
@@ -279,7 +281,7 @@ const CheckoutEvent = ({ navigation, route }) => {
                     {/* <Text type='bold' align='left'>Kode Promo</Text>
                     <TouchableOpacity
                         onPress={() => { }}
-                        style={{ marginTop: 8, borderWidth: 0.5, borderColor: Color.border, paddingHorizontal: 10, paddingVertical: 12, borderRadius: 8 }}
+                        style={{ marginTop: 8, borderWidth: 1, borderColor: Color.primary, paddingHorizontal: 10, paddingVertical: 12 }}
                     >
                         <Container align='center' style={{flexDirection: 'row'}}>
                             <Image

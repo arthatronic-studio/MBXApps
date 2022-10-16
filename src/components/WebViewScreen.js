@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { View, ActivityIndicator, SafeAreaView } from 'react-native';
 import PropTypes from 'prop-types';
 import Styled from 'styled-components';
@@ -15,10 +15,6 @@ const MainView = Styled(View)`
   width: 100%;
   backgroundColor: ${Color.textInput};
   flex: 1
-`;
-
-const CustomHeader = Styled(Header)`
-  height: 60;
 `;
 
 const CustomActivityIndicator = Styled(ActivityIndicator)`
@@ -46,6 +42,8 @@ const WebViewScreen = (props) => {
     url,
     onClose,
   } = props;
+
+  const webviewRef = useRef();
 
   function isPaid(url, host) {
     console.log('url: ', url, ' |  host: ', host);
@@ -79,8 +77,23 @@ const WebViewScreen = (props) => {
   return (
     <SafeAreaView style={{ backgroundColor: Color.theme, flex: 1 }}>
       <MainView>
-        <CustomHeader title="Payment Method" showLeftButton onPressLeftButton={onClose} iconLeftButton='close' />
+        <Header
+          title=""
+          showLeftButton
+          onPressLeftButton={onClose}
+          iconLeftButton='close-a'
+        />
+        <Header
+          title="Payment Method"
+          showLeftButton
+          onPressLeftButton={() => {
+            if (webviewRef.current) {
+              webviewRef.current.goBack();
+            }
+          }}
+        />
         <WebView
+          ref={webviewRef}
           source={{ uri: url }}
           onNavigationStateChange={checkURL}
           renderLoading={renderActivityIndicatorLoadingView}
