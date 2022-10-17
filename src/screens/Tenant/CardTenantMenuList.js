@@ -16,7 +16,7 @@ const defaultProps = {
     cartProductQuantity: 0,
 };
 
-const CardTenantMenu = ({ item, index, numColumns, onPress, cartProductQuantity }) => {
+const CardTenantMenuList = ({ item, index, numColumns, onPress, cartProductQuantity }) => {
     const { Color } = useColor();
     const navigation = useNavigation();
 
@@ -67,5 +67,5 @@ const CardTenantMenu = ({ item, index, numColumns, onPress, cartProductQuantity 
     )
 }
 
-CardTenantMenu.defaultProps = defaultProps;
-export default CardTenantMenu;
+CardTenantMenuList.defaultProps = defaultProps;
+export default CardTenantMenuList;

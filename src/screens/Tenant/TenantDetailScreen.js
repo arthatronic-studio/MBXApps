@@ -37,7 +37,8 @@ import { isIphoneNotch, statusBarHeight } from 'src/utils/constants';
 import { fetchEatCartAdd } from 'src/api-rest/fetchEatCartAdd';
 import { fetchEatCartDetail } from 'src/api-rest/fetchEatCartDetail';
 import { fetchEatCartGet } from 'src/api-rest/fetchEatCartGet';
-import CardTenantMenu from './CardTenantMenu';
+import CardTenantMenuList from './CardTenantMenuList';
+import CardTenantMenuGrid from './CardTenantMenuGrid';
 
 const TenantDetailScreen = ({ navigation, route }) => {
   const { params } = route;
@@ -145,7 +146,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
     }
   }
 
-  let descriptionProps = { numberOfLines: 12 };
+  let descriptionProps = { numberOfLines: 3 };
   if (desc) descriptionProps = {};
   const labelDesctiption = items.description;
 
@@ -433,9 +434,9 @@ const TenantDetailScreen = ({ navigation, route }) => {
         </View>
       </Container> */}
 
-      <Container paddingBottom={14}>
+      <Container paddingBottom={4}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Text align='left' type='medium'>● Menu</Text>
+          <Text align='left' type='medium'>● MENU</Text>
           {/* <View style={{ flexDirection: 'row', padding: 8, backgroundColor: Color.error, borderRadius: 120 }}>
             <Image
               source={imageAssets.menu}
@@ -786,15 +787,16 @@ const TenantDetailScreen = ({ navigation, route }) => {
         ref={flatlistRef}
         data={listProducts}
         keyExtractor={(item, index) => item.id + index.toString()}
+        numColumns={2}
         renderItem={({ item, index }) => {
           const existInCart = listCartProduct.filter((e) => e.product_id === item.id)[0];
           let quantity = existInCart ? existInCart.quantity : 0;
 
           return (
-            <CardTenantMenu
+            <CardTenantMenuGrid
               index={index}
               item={item}
-              numColumns={1}
+              numColumns={2}
               cartProductQuantity={quantity}
               onPress={() => {
                 setCurrentIndexProduct(index);

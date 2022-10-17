@@ -99,7 +99,7 @@ const LoginScreenV2 = ({navigation, route}) => {
     if (register.status) {
       dispatch({type: 'USER.CLEAR_REGISTER'});
       showPopup(
-        'Pendaftaran berhasil, silahkan login menggunakan nomor telepon dan password kamu',
+        'Pendaftaran berhasil, silakan login menggunakan nomor telepon dan password kamu',
         'success',
       );
       resetState({});
@@ -113,7 +113,7 @@ const LoginScreenV2 = ({navigation, route}) => {
       });
       navigation.setParams({forgotPasswordStatus: false, username: ''});
     } else if (route.params && route.params.loginFrom) {
-      showPopup('Silahkan Login terlebih dahulu', 'warning');
+      // showPopup('Silakan Login terlebih dahulu', 'warning');
       resetState({});
     } else if (route.params && route.params.logout) {
       navigation.setParams({logout: false});
