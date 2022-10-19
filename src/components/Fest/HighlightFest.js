@@ -98,9 +98,9 @@ const HighlightFest = props => {
     // const result = await getAPI('event');
     // console.log('result event', result);
     let newData = [];
-    if(maxData != 0) {
-      newData = [{id: 1}, {id: 2}];
-    }
+    // if(maxData != 0) {
+    //   newData = [{id: 1}, {id: 2}];
+    // }
     if(productCategory == 'CardSchedule'){
       newData = initialData;
     }

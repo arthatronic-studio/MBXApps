@@ -3,7 +3,7 @@ import {useColor, Text, Header, Row, useLoading, Col} from '@src/components';
 import Scaffold from '@src/components/Scaffold';
 import {ScrollView} from 'react-native-gesture-handler';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {Divider, Container} from 'src/styled';
+import {Divider, Container, Line} from 'src/styled';
 import {
   TouchableOpacity,
   Image,
@@ -37,15 +37,15 @@ const GroupScreen = ({navigation, route}) => {
     {
       id: 1,
       image: imageAssets.mBlocSpace,
-      name: 'm bloc Space',
+      name: 'm bloc space',
       location: 'Jakarta Selatan',
       group: 'bloc group',
-      link: "https://instagram.com/mblocspace?igshid=YmMyMTA2M2Y="
+      link: 'https://instagram.com/mblocspace?igshid=YmMyMTA2M2Y=',
     },
     {
       id: 2,
       image: imageAssets.fabriekBloc,
-      name: 'Fabriek bloc',
+      name: 'fabriek bloc',
       location: 'Padang',
       group: 'bloc group',
       link: 'https://instagram.com/fabriekbloc?igshid=YmMyMTA2M2Y=',
@@ -61,7 +61,7 @@ const GroupScreen = ({navigation, route}) => {
     {
       id: 4,
       image: imageAssets.posBlocJakarta,
-      name: 'Pos bLoc Jakarta',
+      name: 'pos bLoc Jakarta',
       location: 'Jakarta Pusat',
       group: 'bloc group',
       link: 'https://instagram.com/posblocjkt?igshid=YmMyMTA2M2Y=',
@@ -69,7 +69,7 @@ const GroupScreen = ({navigation, route}) => {
     {
       id: 5,
       image: imageAssets.posBlocMedan,
-      name: 'Pos bloc Medan',
+      name: 'pos bloc Medan',
       location: 'Medan',
       group: 'bloc group',
       link: 'https://instagram.com/posblocmedan?igshid=YmMyMTA2M2Y=',
@@ -77,7 +77,7 @@ const GroupScreen = ({navigation, route}) => {
     {
       id: 6,
       image: imageAssets.mBlocMarketJakarta,
-      name: 'M bloc Market',
+      name: 'm bloc market',
       location: 'Jakarta Selatan',
       group: 'm bloc Market',
       link: 'https://instagram.com/mblocmarket?igshid=YmMyMTA2M2Y=',
@@ -85,7 +85,7 @@ const GroupScreen = ({navigation, route}) => {
     {
       id: 7,
       image: imageAssets.mBlocMarketJambi,
-      name: 'M bloc Market Jambi',
+      name: 'm bloc market Jambi',
       location: 'Jambi',
       group: 'm bloc Market',
       link: 'https://instagram.com/mblocmarket?igshid=YmMyMTA2M2Y=',
@@ -93,7 +93,7 @@ const GroupScreen = ({navigation, route}) => {
     {
       id: 8,
       image: imageAssets.mBlocMarketPadang,
-      name: 'M bloc Market Padang',
+      name: 'm bloc market Padang',
       location: 'Padang',
       group: 'm bloc Market',
       link: 'https://instagram.com/mblocmarketpadang?igshid=YmMyMTA2M2Y=',
@@ -154,35 +154,38 @@ const GroupScreen = ({navigation, route}) => {
       header={
         <Header centerTitle={false} title="Group" iconLeftButton="arrow-left" />
       }>
-      <ScrollView>
-        {loading ? (
-          <Container
-            style={{
-              width: '100%',
-              aspectRatio: 21 / 9,
-              marginBottom: 16,
-              marginRight: 16,
-              backgroundColor: Color.textInput,
-              borderRadius: 8,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <ActivityIndicator size="large" color={Color.primary} />
-            <Divider />
-            <Text>Memuat</Text>
-          </Container>
-        ) : (
-          <Container>
-            <Container>
+      {/* <ScrollView> */}
+      {loading ? (
+        <Container
+          style={{
+            width: '100%',
+            aspectRatio: 21 / 9,
+            marginBottom: 16,
+            marginRight: 16,
+            backgroundColor: Color.textInput,
+            borderRadius: 8,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <ActivityIndicator size="large" color={Color.primary} />
+          <Divider />
+          <Text>Memuat</Text>
+        </Container>
+      ) : (
+        <Container
+          flexDirection="row"
+          justify="space-between"
+          paddingHorizontal={16}>
+          {/* <Container>
               <Banner
                 imageUrl={false}
                 showHeader={false}
                 data={[{id: 1, image: imageAssets.groupBanner}]}
                 // loading={loadingBanner}
               />
-            </Container>
-            <Divider />
-            <FlatList
+            </Container> */}
+          {/* <Divider /> */}
+          {/* <FlatList
               keyExtractor={(item, index) => item.toString() + index}
               data={category}
               horizontal={true}
@@ -209,80 +212,107 @@ const GroupScreen = ({navigation, route}) => {
                   </Container>
                 </TouchableOpacity>
               )}
-            />
-            <Divider />
-            <Container paddingHorizontal={16}>
-              {data.map((item, index) => {
-                if (categoryIndex > 0) {
-                  if (item.group !== category[categoryIndex]) {
-                    return <></>;
-                  }
-                }
+            /> */}
+          {/* <Divider /> */}
+          <Container flex={1}>
+            <Text size={9} type="semibold" align="left">
+              {'● ECOSYSTEM'.toUpperCase()}
+            </Text>
+          </Container>
+          <Container flex={3}>
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              data={data}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item, index}) => {
+                let orderNumber = (index + 1).toString();
+                if (orderNumber.length <= 1) orderNumber = '0'+orderNumber;
                 return (
                   <TouchableOpacity
                     onPress={() => {
                       setSelected(item);
                       modalRef.current.open();
-                    }
-                    }
-                    key={index}
+                    }}
                     style={{
-                      backgroundColor: Color.theme,
-                      ...shadowStyle,
-                      marginVertical: 8,
-                      // borderRadius: 8,
+                      width: '100%',
+                      flexDirection: 'row',
+                      paddingEnd: 16,
+                      borderColor: Color.primary,
                     }}>
-                    <Image
-                      style={{
-                        width: '100%',
-                        height: (width - 32) * 0.55,
-                        resizeMode: 'cover',
-                        // borderTopLeftRadius: 8,
-                        // borderTopRightRadius: 8,
-                      }}
-                      source={item.image}
-                    />
                     <Container
-                      flex={1}
-                      flexDirection="row"
-                      paddingHorizontal={10}
-                      paddingVertical={16}>
-                      <Container flex={1} flexDirection="column">
-                        <Text align="left" size={16} type="medium">
-                          {item.name}
-                        </Text>
-                        <Container flexDirection="row" align="center">
-                          <Ionicons
-                            name="ios-location-outline"
-                            size={10}
-                            color={Color.black}
-                          />
-                          <Divider width={8} />
-                          <Text align="left" size={10} color={Color.black}>
-                            {item.location}
-                          </Text>
-                        </Container>
-                      </Container>
+                      style={{
+                        flex: 1,
+                        alignItems: 'flex-start',
+                        justifyContent: 'center',
+                      }}>
+                      <Text size={11} type="medium" color={Color.primary}>
+                        {orderNumber}
+                      </Text>
+                    </Container>
+                    <Container
+                      style={{
+                        flex: 7,
+                        alignItems: 'flex-start',
+                        paddingRight: 8,
+                      }}>
+                      <Text
+                        size={18}
+                        type="medium"
+                        align="left"
+                        numberOfLines={2}>
+                        {item.name}
+                      </Text>
+                    </Container>
+                    <Container style={{justifyContent: 'center'}}>
+                      <Text size={11} type="medium" color={Color.primary} underline>
+                        View
+                      </Text>
+                      <Container
+                        style={{
+                          borderBottomWidth: 1,
+                          borderColor: Color.primary,
+                        }}
+                      />
                     </Container>
                   </TouchableOpacity>
                 );
-              })}
-            </Container>
-            <Divider />
+              }}
+              keyExtractor={(item, index) => item.id + index.toString()}
+              ItemSeparatorComponent={() => (
+                <Container paddingVertical={10}>
+                  <Line width={width - 32} color={'#141414'} height={1} />
+                </Container>
+              )}
+              ListHeaderComponent={() => (
+                <Container paddingBottom={10}>
+                  <Line width={width - 32} color={'#141414'} height={1} />
+                </Container>
+              )}
+              ListFooterComponent={() => (
+                <Container paddingTop={10}>
+                  <Line width={width - 32} color={'#141414'} height={1} />
+                </Container>
+              )}
+              contentContainerStyle={{
+                // paddingVertical: 16,
+                // borderWidth: 1,
+              }}
+            />
           </Container>
-        )}
-      </ScrollView>
+        </Container>
+      )}
+      {/* </ScrollView> */}
       <Modalize
         scrollViewProps={{
           keyboardShouldPersistTaps: 'handled',
         }}
         ref={modalRef}
         // withHandle={false}
-        handleStyle={{ 
+        handleStyle={{
           marginTop: 18,
-          backgroundColor: "#E2E1DF",
-          width: "50%"
-         }}
+          backgroundColor: '#E2E1DF',
+          width: '50%',
+        }}
         adjustToContentHeight
         disableScrollIfPossible={false}
         childrenStyle={{
@@ -307,7 +337,7 @@ const GroupScreen = ({navigation, route}) => {
               width: width - 32,
               height: (width - 32) * 0.55,
               resizeMode: 'cover',
-              borderRadius: 8,
+              // borderRadius: 8,
             }}
             source={selected.image}
           />
@@ -322,7 +352,7 @@ const GroupScreen = ({navigation, route}) => {
           </Text>
           <Divider height={10} />
           <Container flex={1}>
-            <Text align="left" color={Color.black}>
+            {/* <Text align="left" color={Color.black}>
               Cupcake ipsum dolor sit amet marshmallow ice cream muffin
               liquorice. Wafer candy jujubes lollipop cake apple pie oat cake
               chocolate bar pudding. Powder dragée cheesecake danish apple pie
@@ -334,7 +364,7 @@ const GroupScreen = ({navigation, route}) => {
               gummies. Pie sweet wafer candy canes sugar plum. Candy canes
               marshmallow biscuit sweet donut.
             </Text>
-            <Divider height={10} />
+            <Divider height={10} /> */}
 
             <TouchableOpacity
               onPress={() => {
@@ -344,7 +374,7 @@ const GroupScreen = ({navigation, route}) => {
                 flex: 1,
                 borderWidth: 1,
                 padding: 10,
-                borderRadius: 8,
+                // borderRadius: 8,
                 borderColor: '#ACAAA5',
                 flexDirection: 'row',
                 justifyContent: 'center',
