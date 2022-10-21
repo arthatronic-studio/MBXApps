@@ -38,51 +38,38 @@ const CardFestVenues = ({
     <TouchableOpacity
       onPress={() => {navigation.navigate('VenuesDetail', {item: item})}}
       style={{
-        borderWidth: 1,
+        backgroundColor: Color.white,
         marginVertical: 8,
-        // borderRadius: 8,
         marginHorizontal: 8,
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center'
       }}>
       <Container
-        width={'100%'}
-        height={(width - 32) * 0.55}
+        width={width * 0.32}
+        height={width * 0.32}
       >
         <Image
           style={{
             width: '100%',
             height: '100%',
             resizeMode: 'cover',
-            // borderTopLeftRadius: 8,
-            // borderTopRightRadius: 8,
           }}
           source={{uri: item.venues_image[0]}}
         />
       </Container>
-      <Container
-        flex={1}
-        flexDirection="row"
-        paddingHorizontal={10}
-        paddingVertical={16}
-        align="center">
-        <Container flex={1} flexDirection="column">
-          <Text align="left" size={16} type="medium" lineHeight={20} color={Color.black}>
-            {item.name}
-          </Text>
-          <Text align="left" size={10} color={"#ACAAA5"} lineHeight={12}>
-            Venues
-          </Text>
-        </Container>
-        <Container
-          backgroundColor={item.entrance == 2 ? "#E6CFA3" : '#FCD100'}
-          borderWidth={1}
-          borderColor={item.entrance == 2 ? "#644B1B" : '#1D1D1B'}
-          padding={9}
-          // borderRadius={8}
-        >
-          <Text color={item.entrance == 2 ? "#644B1B" : '#1D1D1B'} size={11} lineHeight={14} type="medium">
-            {item.entrance === 1 ? 'Gratis' : 'Tiket'}
-          </Text>
-        </Container>
+      <Divider height={12}/>
+      <Container flex={1} flexDirection="column">
+        <Text align="left" size={11} color={Color.black} type="medium" lineHeight={15}>
+          Venue
+        </Text>
+        <Text align="left" size={18} type="medium" lineHeight={21.6} color={Color.primary}>
+          {item.name}
+        </Text>
+        <Text align="left" size={11} color={"#797979"} type="medium" lineHeight={15}>
+          {item.time_from} - {item.time_to}
+        </Text>
+
       </Container>
     </TouchableOpacity>
   );

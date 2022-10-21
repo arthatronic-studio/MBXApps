@@ -79,6 +79,7 @@ const Scaffold = ({
   useSafeArea,
   translucent,
   statusBarColor,
+  barStyleColor,
   showHeader,
   iconRightButton,
   onPressLeftButton,
@@ -133,6 +134,7 @@ const Scaffold = ({
           translucent={translucent}
           backgroundColor={statusBarColor || Color.theme}
           barStyle={
+            barStyleColor ? barStyleColor :
             Color.colorDominant === 'dark' ? 'light-content' : 'dark-content'
           }
         />

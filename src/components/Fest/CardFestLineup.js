@@ -36,12 +36,12 @@ const CardFestLineup = ({
         marginVertical: 10,
         marginHorizontal: 8,
         width: width / numColumns - (horizontal ? 32 : 24),
-        borderWidth: 1,
+        backgroundColor: Color.white,
         // borderRadius: 8,
       }}>
       <Container
-        width={width / numColumns - (horizontal ? 34 : 26)}
-        height={width / numColumns - (horizontal ? 34 : 26)}
+        width={width / numColumns - (horizontal ? 32 : 24)}
+        height={width / numColumns - (horizontal ? 32 : 24)}
       >
         <Image
           source={{ uri: item.file }}
@@ -54,22 +54,22 @@ const CardFestLineup = ({
           }}
         />
       </Container>
-      <Divider height={16} />
+      <Divider height={8} />
       <Container 
         flex={1}
         flexDirection="column"
         paddingHorizontal={10}
         >
-          <Text align="left" size={14} type="medium" color={Color.black} lineHeight={18}>
+          <Text align="left" size={14} type="medium" color={Color.primary} lineHeight={18}>
             {item.name}
           </Text>
-          <Text align="left" size={10} color={"#3A3936"} lineHeight={12}>
+          <Text align="left" size={10} color={"#797979"} lineHeight={12}>
             {item.date ? item.date : '-'}
           </Text>
-          <Text align="left" size={10} color={"#3A3936"} lineHeight={12}>
+          <Text align="left" size={10} color={"#797979"} lineHeight={12}>
             {item.time}
           </Text>
-          <Text align="left" size={10} color={"#3A3936"} lineHeight={12}>
+          <Text align="left" size={10} color={"#797979"} lineHeight={12}>
             {item.location_name}
           </Text>
           <Divider height={16}/>

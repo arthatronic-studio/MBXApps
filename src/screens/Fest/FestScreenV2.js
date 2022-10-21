@@ -107,11 +107,11 @@ const FestScreenV2 = ({navigation, route}) => {
                 return (
                   <TouchableOpacity
                     key={index}
-                    style={{width: width * 0.28, paddingVertical: 16, borderWidth: 1}}
+                    style={{width: width * 0.29, paddingVertical: 10, borderWidth: 1}}
                     onPress={() =>
                       navigation.navigate(item.name, {item: item})
                     }>
-                      <Text size={16} type="semibold">
+                      <Text size={12} type="medium">
                         {item.menu_name}
                       </Text>
                     {/* <Image
@@ -158,13 +158,13 @@ const FestScreenV2 = ({navigation, route}) => {
               maxData={2}
             />
 
-            <Container paddingHorizontal={16}>
+            {/* <Container paddingHorizontal={16}>
               <Image
                 style={{width: '100%'}}
                 source={imageAssets.bannerMfest2}
                 resizeMode="contain"
               />
-            </Container>
+            </Container> */}
 
             <HighlightFest
               productCategory="AREA"

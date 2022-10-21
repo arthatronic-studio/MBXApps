@@ -7,6 +7,7 @@ import {
   useWindowDimensions,
   Linking,
   ScrollView,
+  ImageBackground,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -126,17 +127,20 @@ const MainProfile = ({navigation, route}) => {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingVertical: 14,
+        paddingBottom: 10,
         alignItems: 'center',
         }}
     >
       <Text size={17} type="medium" lineHeight={20} color={Color.black}>
         {item.name}
       </Text>
-      <Feather
-        size={24}
-        name={'chevron-right'}
-        color='#1C1B1F'
+      <Image
+        source={imageAssets.arrowRight}
+        style={{
+        height: 16,
+        width: 16,
+        resizeMode: 'contain',
+        }}
       />
     </TouchableOpacity>
   )
@@ -144,7 +148,7 @@ const MainProfile = ({navigation, route}) => {
   console.log('auth', auth);
 
   return (
-    <Scaffold loadingProps={loadingProps} showHeader={false}>
+    <Scaffold loadingProps={loadingProps} showHeader={false} statusBarColor="#141414" barStyleColor="light-content">
       <ScrollView showsVerticalScrollIndicator={false}>
         {auth.user && !auth.user.isRegistered && <Container
           marginTop={16}
@@ -202,7 +206,7 @@ const MainProfile = ({navigation, route}) => {
         </Container>}
 
         {/* user fast info */}
-        <TouchableOpacity
+        {/* <TouchableOpacity
           disabled
           style={{ padding: 16 }}
           onPress={() => navigation.navigate('ProfileDetail')}
@@ -248,10 +252,94 @@ const MainProfile = ({navigation, route}) => {
               </View>
             )}
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+
+        <Container
+          style={{ 
+            backgroundColor: Color.primary,
+            width: width,
+            paddingVertical: 42,
+            flex: 1,
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center'
+           }}
+        >
+          <Container
+            style={{ 
+              width: width*0.427,
+              height: width*0.427,
+             }}
+          >
+            <ImageBackground 
+              source={imageAssets.profileBackground} 
+              style={{
+                width: '100%', 
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+              imageStyle={{ resizeMode: 'contain' }}>
+                {auth && auth.user && (
+                  <Image
+                    source={auth.user.foto ? {uri: auth.user.foto} : ImagesPath.userChat}
+                    style={{
+                      width: '50%',
+                      height: '50%',
+                      backgroundColor: Color.border,
+                      borderRadius: 50,
+                    }}
+                  />
+                )}
+            </ImageBackground>
+          </Container>
+          {auth.user && (
+            <>
+            <Divider height={32}/>
+            <Text size={22} align="center" lineHeight={28} type="bold" numberOfLines={2} color="#EEEEEE">
+              {auth.user.name}
+            </Text>
+            </>)
+          }
+          <Divider height={16}/>
+          <Container
+            flexDirection="row"
+            // borderWidth={1}
+            borderColor="#ffffff"
+          >
+            <TouchableOpacity 
+              style={{
+                flexDirection:"row", 
+                flex: 3, 
+                justifyContent: 'flex-end'
+              }}
+              onPress={() => setModalVirtual(true)}
+              >
+              <AntDesign name="scan1" color={"#EEFF00"} size={16} />
+              <Divider width={8}/>
+              <Text type="medium" size={12} lineHeight={13.2} color="#EEFF00" underline>
+                My QR
+              </Text>
+            </TouchableOpacity>
+            <Container flex={1}/>
+            <TouchableOpacity 
+              style={{
+                flexDirection:"row", 
+                flex: 3
+              }}
+              onPress={() => {
+                navigation.navigate('ChangeProfileV2', { canGoBack: true });
+              }}
+            >
+              <Text type="medium" size={12} lineHeight={13.2} color="#EEFF00" underline>
+                Edit Profil
+              </Text>
+            </TouchableOpacity>
+          </Container>
+        </Container>
         
         {/* qr code */}
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => setModalVirtual(true)}
           style={{ 
             borderWidth: 1.5,
@@ -263,35 +351,38 @@ const MainProfile = ({navigation, route}) => {
           <Text size={14} type="medium" lineHeight={17}>
             Show QR Code
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         {/* <Line height={8} width="100%" color="#F4F4F4" /> */}
         <Divider height={16}/>
 
-        <Container padding={16}>
-          <View>
-            <Text align="left" size={12} type="bold" color={Color.black}>
-              Transaction
+        <Container 
+          padding={16}
+          flexDirection="row"
+          justify="space-between"
+        >
+          <View style={{ flex: 2 }}>
+            <Text align="left" size={10} type="semibold" color={Color.primary}>
+              ● TRANSACTION
             </Text>
           </View>
-          <Divider height={12}/>
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            data={[
-              {name: 'History', nav: 'EventHistory'},
-            ]}
-            renderItem={({item, index}) => cardMenu(item, index)}
-            keyExtractor={(item, index) => item.id + index.toString()}
-            ItemSeparatorComponent={() => (
-                <Line width={width - 32} color={'#BDBDBD'} height={1} />
-            )}
-            ListHeaderComponent={() => (
-              <Line width={width - 32} color={'#BDBDBD'} height={1} />
-            )}
-            ListFooterComponent={() => (
-              <Line width={width - 32} color={'#BDBDBD'} height={1} />
-            )}
-          />
+          {/* <Divider height={12}/> */}
+          <View style={{ flex: 5 }}>
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              data={[
+                {name: 'History', nav: 'EventHistory'},
+              ]}
+              renderItem={({item, index}) => cardMenu(item, index)}
+              keyExtractor={(item, index) => item.id + index.toString()}
+              ItemSeparatorComponent={() => (
+                  <Line width={width - 32} color={Color.primary} height={1} marginBottom={10} />
+              )}
+              ListFooterComponent={() => (
+                <Line width={width - 32} color={Color.primary} height={1} />
+              )}
+            />
+          </View>
 
           {/* <View style={{}}> */}
             {/* <View style={{ flexDirection: 'row', paddingTop: 24 }}>
@@ -320,42 +411,46 @@ const MainProfile = ({navigation, route}) => {
 
         <Divider height={16}/>
 
-        <Container padding={16}>
-          <TouchableOpacity
-            activeOpacity={1}
-            onPress={() => setDevMode(devMode+1)}
-          >
-            <Text align="left" size={12} type="bold" color={Color.black}>
-              About The Apps
-            </Text>
-          </TouchableOpacity>
-          <Divider height={12}/>
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            data={[
-              {name: 'Setting', nav: 'SettingScreen'},
-              {name: 'Terms & Condition', nav: 'SyaratdanKetentuan'},
-              {
-                name: 'Support', 
-                onPress: () => {
-                  const phoneNumber = '02123456789';
-                  Linking.openURL(`tel:${phoneNumber}`);
-                }
-              },
-              {name: 'FAQ', nav: 'FAQScreen'},
-            ]}
-            renderItem={({item, index}) => cardMenu(item, index)}
-            keyExtractor={(item, index) => item.id + index.toString()}
-            ItemSeparatorComponent={() => (
-                <Line width={width - 32} color={'#BDBDBD'} height={1} />
-            )}
-            ListHeaderComponent={() => (
-              <Line width={width - 32} color={'#BDBDBD'} height={1} />
-            )}
-            ListFooterComponent={() => (
-              <Line width={width - 32} color={'#BDBDBD'} height={1} />
-            )}
-          />
+        <Container 
+          padding={16}
+          flexDirection="row"
+          justify="space-between"
+        >
+          <View style={{ flex: 2 }}>
+            <TouchableOpacity
+              activeOpacity={1}
+              onPress={() => setDevMode(devMode+1)}
+            >
+              <Text align="left" size={10} type="semibold" color={Color.primary}>
+                ● About
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={{ flex: 5 }}>
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              data={[
+                {name: 'Setting', nav: 'SettingScreen'},
+                {name: 'Terms & Condition', nav: 'SyaratdanKetentuan'},
+                {
+                  name: 'Support', 
+                  onPress: () => {
+                    const phoneNumber = '02123456789';
+                    Linking.openURL(`tel:${phoneNumber}`);
+                  }
+                },
+                {name: 'FAQ', nav: 'FAQScreen'},
+              ]}
+              renderItem={({item, index}) => cardMenu(item, index)}
+              keyExtractor={(item, index) => item.id + index.toString()}
+              ItemSeparatorComponent={() => (
+                  <Line width={width - 32} color={Color.primary} height={1} marginBottom={10}/>
+              )}
+              ListFooterComponent={() => (
+                <Line width={width - 32} color={Color.primary} height={1} />
+              )}
+            />
+          </View>
           {/* <View style={{}}>
             <TouchableOpacity
               onPress={() => {
@@ -429,6 +524,48 @@ const MainProfile = ({navigation, route}) => {
 
         {/* <Line height={8} width="100%" color="#F4F4F4" /> */}
 
+        <Divider height={16}/>
+        <Container 
+          flexDirection="row"
+          justify="space-between"
+        >
+          <View style={{ flex: 2 }}/>
+          <View style={{ flex: 5, alignItems:'flex-start' }}>
+            {auth.user && !auth.user.isGuest && (
+              <TouchableOpacity
+                onPress={() => {
+                  onPressExit();
+                }}
+                style={{ 
+                  paddingHorizontal: 56,
+                  paddingVertical: 10,
+                  backgroundColor: Color.black
+                }}
+              >
+                <Text color={Color.theme} size={12} lineHeight={14.8}>
+                  Logout
+                </Text>
+              </TouchableOpacity>
+            )}
+            {auth.user && auth.user.isGuest && (
+              <TouchableOpacity
+                onPress={() => {
+                  redirectTo('LoginScreenV2');
+                }}
+                style={{ 
+                  paddingHorizontal: 56,
+                  paddingVertical: 10,
+                  backgroundColor: Color.black
+                }}
+              >
+              <Text color={Color.theme} size={12} lineHeight={14.8}>
+                Login
+              </Text>
+            </TouchableOpacity>
+            )}
+          </View>
+        </Container>
+        <Divider height={16}/>
 
         {(devMode >= 5 || (auth.user && auth.user.member_right === 1)) && (
           <Container padding={16}>
@@ -470,15 +607,7 @@ const MainProfile = ({navigation, route}) => {
           </Container>
         )}
 
-        {auth.user && !auth.user.isGuest && <Container padding={16}>
-          {cardMenu(
-            {
-              name: 'Logout',
-              onPress: () => {
-                onPressExit();
-              }
-            }
-          )}
+        {/* {auth.user && !auth.user.isGuest && <Container padding={16}> */}
           {/* <TouchableOpacity
             onPress={() => {
               onPressExit();
@@ -499,9 +628,9 @@ const MainProfile = ({navigation, route}) => {
               Logout
             </Text>
           </TouchableOpacity> */}
-        </Container>}
+        {/* </Container>} */}
 
-        {auth.user && auth.user.isGuest && <Container paddingHorizontal={16}>
+        {/* {auth.user && auth.user.isGuest && <Container paddingHorizontal={16}>
           {cardMenu(
             {
               name: 'Login',
@@ -510,7 +639,7 @@ const MainProfile = ({navigation, route}) => {
               }
             }
           )}
-        </Container>}
+        </Container>} */}
       </ScrollView>
 
       {/* android - untuk mencegah klik laundry bag yang belakang ikut ter klik */}
@@ -567,52 +696,37 @@ const MainProfile = ({navigation, route}) => {
             alignItems: 'center',
             justifyContent: 'center',
             padding: 16,
-            backgroundColor: Color.overflow,
+            backgroundColor: 'rgba(20, 20, 20, 0.7)',
           }}>
           <View
             style={{ 
-              width: width*0.8,
-              backgroundColor: Color.white,
+              borderRadius: 24,
+              width: width*0.587,
+              backgroundColor: "rgba(238, 238, 238, 0.47)",
               paddingVertical: 24,
-              paddingHorizontal: 32
+              paddingHorizontal: 30,
              }}
           >
-            <View
-              style={{
-                borderWidth: 1,
-                aspectRatio: 1,
-                padding: 20,
-                borderWidth: 4,
-                borderColor: Color.black,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderWidth: 1,
-              }}>
-              <QRCode value={auth.user && auth.user.user_uuid ? auth.user.user_uuid : 'blocX'} size={(width*0.8) - 84} />
-            </View>
+            <QRCode value={auth.user && auth.user.user_uuid ? auth.user.user_uuid : 'blocX'} size={(width*0.587)-60} />
 
             <Divider height={16} />
 
-            <Text size={29} type="medium" lineHeight={34} color={Color.text}>
+            <Text size={18} type="medium" lineHeight={21.6} color={Color.theme}>
               {auth && auth.user && auth.user.name}
             </Text>
 
-            {/* <Text size={12} lineHeight={14} type="medium">
-              1234-5678-9876-543-21
-            </Text> */}
-
-            <Divider height={16}/>
+            <Divider height={12}/>
 
             <TouchableOpacity
               onPress={() => setModalVirtual(false)}
               style={{ 
-                borderWidth: 1.5,
-                borderColor:'#242424',
-                paddingVertical: 12,
+                borderWidth: 1,
+                borderColor:'#EEEEEE',
+                paddingVertical: 8,
               }}
             >
-              <Text size={14} type="medium" lineHeight={17}>
-                Close
+              <Text size={10} type="medium" lineHeight={10.8} color={Color.theme}>
+                CLOSE
               </Text>
             </TouchableOpacity>
           </View>

@@ -181,7 +181,7 @@ const Header = (props) => {
     return (
       <MainView
         style={{
-          backgroundColor: backgroundColor || Color.textInput,
+          backgroundColor: backgroundColor || Color.theme,
           borderColor: Color.theme,
           ...style,
         }}>
@@ -193,7 +193,7 @@ const Header = (props) => {
                   iconLeftButton ?
                   <Fontisto
                     name={iconLeftButton}
-                    color={Color.text}
+                    color={color || Color.text}
                     size={24}
                   />
                   :
@@ -266,7 +266,7 @@ const Header = (props) => {
         style={{
           backgroundColor: backgroundColor
             ? Color[backgroundColor]
-            : Color.textInput,
+            : Color.theme,
           borderColor: Color.theme,
           ...style,
         }}>

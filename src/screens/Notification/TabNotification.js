@@ -60,7 +60,7 @@ const CustomTabBar = (props) => {
                     } : {}
                 }
               >
-                <Text size={12} type='medium' letterSpacing={0.5} color={isActive ? '#E7FF00' : Color.black}>{label}</Text>
+                <Text size={12} type='medium' letterSpacing={0.5} color={isActive ? Color.theme : Color.primary}>{label}</Text>
               </Container>
             </TouchableOpacity>
           )
@@ -116,12 +116,12 @@ const TabNotification = ({ navigation, route }) => {
         tabBar={(props) => <CustomTabBar {...props} />}
     >
         <Tab.Screen
-            name="Umum"
+            name="● NOTIFICATION"
             component={NotificationScreen}
             options={{tabBarLabel: 'Tiketku'}}
         />
         <Tab.Screen
-            name="Promo"
+            name="● PROMOS"
             component={NotificationPromo}
             options={{tabBarLabel: 'Riwayat'}}
         />

@@ -38,19 +38,16 @@ const CardFestArea = ({
         marginVertical: 10,
         marginHorizontal: 8,
         width: width / numColumns - (horizontal ? 32 : 24),
-        borderWidth: 1,
-        borderRadius: 8,
+        backgroundColor: Color.white
       }}>
       <Container
-        width={width / numColumns - (horizontal ? 34 : 26)}
-        height={width / numColumns - (horizontal ? 34 : 26)}>
+        width={width / numColumns - (horizontal ? 32 : 24)}
+        height={width / numColumns - (horizontal ? 32 : 24)}>
         <Image
           source={{uri: item.experience_image[0]}}
           style={{
             width: '100%',
             height: '100%',
-            // borderTopLeftRadius: 8,
-            // borderTopRightRadius: 8,
             resizeMode: 'cover',
           }}
         />
@@ -65,7 +62,7 @@ const CardFestArea = ({
           lineHeight={20}>
           {item.name}
         </Text>
-        <Text align="left" size={10} color={'#ACAAA5'} lineHeight={12}>
+        <Text align="left" size={10} color={'#797979'} lineHeight={12}>
           Experience Area
         </Text>
         <Divider height={16} />

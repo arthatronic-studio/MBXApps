@@ -173,39 +173,43 @@ const NotificationPromo = ({ navigation, route }) => {
         contentContainerStyle={{
           paddingBottom: 16
         }}
+        ItemSeparatorComponent={() => <Divider height={10}/>}
         renderItem={({ item }) => {
           // const isNotReaded = item.status !== 3;
           const isNotReaded = false;
           return (
             <TouchableOpacity 
               style={{
-                padding: 16, 
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginHorizontal: 16,
                 borderColor: Color.border,
                 backgroundColor: isNotReaded ? '#FFFCEB' : Color.white,
             }}>
+              <Container width={width*0.32} height={width*0.32}>
+                <Image source={{ uri: item.images }} style={{width: '100%', height: '100%', resizeMode: 'cover'}}/>
+              </Container>
+              <Divider width={12}/>
               <Container
                 flex={1}
-                flexDirection='row'
-                justify="space-between"
+                flexDirection="column"
               >
-                <Text size={10} lineHeight={12} color={Color.primaryDark} type="medium">
+                <Text size={11} lineHeight={15} color={Color.black} type="medium" align="left">
                   Promo
                 </Text>
-                {/* <Text size={10} lineHeight={12} color="#ACAAA5">
-                  2 menit lalu
-                </Text> */}
-              </Container>
-              <Divider height={8}/>
-              <Text size={14} lineHeight={18} type="medium" color={Color.black} align="left">
-                {item.title}
-              </Text>
-              <Divider height={8}/>
-              <Text size={12} lineHeight={15} color="#3A3936" align="left" numberOfLines={2}>
-                {item.description}
-              </Text>
-              <Divider height={8}/>
-              <Container width={width-32} height={(width-32) * 0.56}>
-                <Image source={{ uri: item.images }} style={{width: '100%', height: '100%', resizeMode: 'cover'}}/>
+                <Divider height={4}/>
+                <Text size={18} lineHeight={21.6} type="medium" color={Color.primary} align="left">
+                  {item.title}
+                </Text>
+                <Divider height={4}/>
+                <Text size={11} lineHeight={15} color="#797979" align="left" numberOfLines={2}>
+                  {item.description}
+                </Text>
+                <Divider height={6}/>
+                <Text size={10} lineHeight={12} color="#797979" align='left'>
+                  2 Hours Ago
+                </Text>
               </Container>
             </TouchableOpacity>
           )

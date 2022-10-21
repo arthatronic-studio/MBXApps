@@ -134,6 +134,8 @@ const addBox = require('./add_box.png');
 const article1 = require('./article1.png');
 const article2 = require('./article2.png');
 const article3 = require('./article3.png');
+const profileBackground = require('./profile-background.png');
+const backgroundQr = require('./background-qr.png');
 
 export {
   iconApp,
@@ -334,6 +336,9 @@ export const imageAssets = {
   article1,
   article2,
   article3,
+  profileBackground,
+  arrowRight,
+  backgroundQr,
 };
 
 export default imageAssets;

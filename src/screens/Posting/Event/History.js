@@ -68,20 +68,18 @@ const CustomTabBar = (props) => {
                 paddingVertical={12}
                 style={
                   isFirst ? {
-                    borderTopLeftRadius: 120,
-                    borderBottomLeftRadius: 120,
-                    borderWidth: 0.5,
-                    borderRightWidth: 0.25,
+                    // borderTopLeftRadius: 120,
+                    // borderBottomLeftRadius: 120,
+                    borderWidth: 1,
                   } :
                     isLast ? {
-                      borderTopRightRadius: 120,
-                      borderBottomRightRadius: 120,
-                      borderWidth: 0.5,
-                      borderLeftWidth: 0.25,
+                      // borderTopRightRadius: 120,
+                      // borderBottomRightRadius: 120,
+                      borderWidth: 1
                     } : {}
                 }
               >
-                <Text size={12} type='medium' color={isActive ? Color.textInput : Color.text} letterSpacing={0.5}>{label}</Text>
+                <Text size={12} type='medium' letterSpacing={0.5} color={isActive ? Color.theme : Color.primary}>{label}</Text>
               </Container>
             </TouchableOpacity>
           )
@@ -108,8 +106,7 @@ const History = ({ navigation, route }) => {
       header={
         <Header
           type="bold"
-          centerTitle={false}
-          title="Tiket"
+          title="MY TICKET"
         />
       }
     >
@@ -138,12 +135,12 @@ const History = ({ navigation, route }) => {
         tabBar={(props) => <CustomTabBar {...props} />}
     >
         <Tab.Screen
-            name="Tiketku"
+            name="● MY TICKET"
             component={HistoryTiketku}
             options={{tabBarLabel: 'Tiketku'}}
         />
         <Tab.Screen
-            name="Riwayat"
+            name="● HISTORY"
             component={HistoryRiwayat}
             options={{tabBarLabel: 'Riwayat'}}
         />

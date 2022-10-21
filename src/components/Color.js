@@ -39,7 +39,7 @@ export const lightModeColors = {
   ...staticColors,
   colorDominant: 'light',
   overflow: 'rgba(0, 0, 0, 0.3)',
-  theme: '#FFFFFE',
+  theme: '#EEEEEE',
   text: '#141414',
   textSoft: '#797979',
   textInput: '#FFFFFF',

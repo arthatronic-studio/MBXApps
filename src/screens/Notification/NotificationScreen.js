@@ -1,18 +1,34 @@
-import React, { useState, useEffect, useRef } from "react";
-import { View, FlatList, Animated, Image } from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {
+  View,
+  FlatList,
+  Animated,
+  Image,
+  useWindowDimensions,
+} from 'react-native';
 import Moment from 'moment';
 
-import { Scaffold, TouchableOpacity, Text, useColor, AlertModal } from "src/components";
-import { Container, Divider } from "src/styled";
-import client from "src/lib/apollo";
-import { queryGetNotification, queryNotificationManage, queryNotificationManageAll } from "src/lib/query";
+import {
+  Scaffold,
+  TouchableOpacity,
+  Text,
+  useColor,
+  AlertModal,
+} from 'src/components';
+import {Container, Divider} from 'src/styled';
+import client from 'src/lib/apollo';
+import {
+  queryGetNotification,
+  queryNotificationManage,
+  queryNotificationManageAll,
+} from 'src/lib/query';
 import Feather from 'react-native-vector-icons/Feather';
-import { useIsFocused } from '@react-navigation/native';
-import { ModalListAction } from 'src/components';
-import imageAssets from "assets/images";
-import { getAPI } from "src/api-rest/httpService";
-const NotificationScreen = ({ navigation, route }) => {
-  const { Color } = useColor();
+import {useIsFocused} from '@react-navigation/native';
+import {ModalListAction} from 'src/components';
+import imageAssets from 'assets/images';
+import {getAPI} from 'src/api-rest/httpService';
+const NotificationScreen = ({navigation, route}) => {
+  const {Color} = useColor();
   const isFocused = useIsFocused();
   const initialDataRooms = {
     data: [],
@@ -27,129 +43,145 @@ const NotificationScreen = ({ navigation, route }) => {
   const [showSection, setShowSection] = useState(true);
   const [modalBackConfirm, setModalBackConfirm] = useState(false);
   const [refreshing, setRefreshing] = useState(true);
+  const {width} = useWindowDimensions();
 
   const fetchData = async () => {
     const result = await getAPI('notification?type=general');
     console.log('result notif', result);
     setHistory(result.data);
     setLoading(false);
-  }
+  };
 
   useEffect(() => {
     // if (refreshing) {
     //   setRefreshing(false);
-      fetchData();
+    fetchData();
 
-      // const variables = {
-      //   page: 0,
-      //   itemPerPage: 10
-      // }
+    // const variables = {
+    //   page: 0,
+    //   itemPerPage: 10
+    // }
 
-      // client.query({
-      //   query: queryGetNotification,
-      //   variables,
-      // })
-      //   .then((res) => {
-      //     const data = res.data.getNotification;
-      //     console.log('ini scc', data);
-      //     let newArr = [];
+    // client.query({
+    //   query: queryGetNotification,
+    //   variables,
+    // })
+    //   .then((res) => {
+    //     const data = res.data.getNotification;
+    //     console.log('ini scc', data);
+    //     let newArr = [];
 
-      //     if (data) {
-      //       newArr = data;
-      //     }
+    //     if (data) {
+    //       newArr = data;
+    //     }
 
-      //     setHistory(newArr);
-      //     setLoading(false);
-      //   })
-      //   .catch((err) => {
-      //     console.log('ini err', err);
-      //     setLoading(false);
-      //   })
+    //     setHistory(newArr);
+    //     setLoading(false);
+    //   })
+    //   .catch((err) => {
+    //     console.log('ini err', err);
+    //     setLoading(false);
+    //   })
     // }
   }, []);
 
-  const readNotfif = (id) => {
-
+  const readNotfif = id => {
     console.log('ini id', id);
 
     const variables = {
       notificationId: id,
       status: 3,
-
     };
     console.log('ini id', variables);
     // return;
 
-    client.mutate({
-      mutation: queryNotificationManage,
-      variables,
-    })
-      .then((res) => {
+    client
+      .mutate({
+        mutation: queryNotificationManage,
+        variables,
+      })
+      .then(res => {
         console.log('res ecomm ulasan', res);
 
         setRefreshing(true);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('err ecomm ulasan', err);
-
       });
-
-  }
-  const ManageNotfifAll = (status) => {
+  };
+  const ManageNotfifAll = status => {
     const variables = {
       status: status,
     };
     console.log('ini id', variables);
     // return;
 
-    client.mutate({
-      mutation: queryNotificationManageAll,
-      variables,
-    })
-      .then((res) => {
+    client
+      .mutate({
+        mutation: queryNotificationManageAll,
+        variables,
+      })
+      .then(res => {
         console.log('res Baca semua', res);
 
         setRefreshing(true);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('res Baca semua', err);
-
       });
-
-  }
+  };
 
   const renderPopUpNavigation = () => {
     return (
       <Animated.View
         style={[
-          { position: 'absolute', bottom: 20, height: 36, width: '100%', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16 },
-        ]}
-      >
-        <View style={{
-          width: '100%', height: 36, backgroundColor: Color.primary, borderRadius: 18, alignItems: 'center', justifyContent: 'center',
-          shadowColor: "#00000029",
-          shadowOffset: { width: 0, height: 2, },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: 5,
-        }}
-        >
+          {
+            position: 'absolute',
+            bottom: 20,
+            height: 36,
+            width: '100%',
+            alignSelf: 'center',
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingHorizontal: 16,
+          },
+        ]}>
+        <View
+          style={{
+            width: '100%',
+            height: 36,
+            backgroundColor: Color.primary,
+            borderRadius: 18,
+            alignItems: 'center',
+            justifyContent: 'center',
+            shadowColor: '#00000029',
+            shadowOffset: {width: 0, height: 2},
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          }}>
           <TouchableOpacity
-            onPress={() => { navigation.navigate('NotificationAll') }}
-            style={{ alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}
-            activeOpacity={0.75}
-          >
+            onPress={() => {
+              navigation.navigate('NotificationAll');
+            }}
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '100%',
+              width: '100%',
+            }}
+            activeOpacity={0.75}>
             <Text color={Color.textInput}>Lihat Semua</Text>
           </TouchableOpacity>
         </View>
       </Animated.View>
-    )
-  }
+    );
+  };
 
-  const onSelectNotif = (item) => {
+  const onSelectNotif = item => {
     readNotfif(item.id);
-    navigation.navigate('NotificationDetail', { item });
-  }
+    navigation.navigate('NotificationDetail', {item});
+  };
 
   return (
     <Scaffold
@@ -158,58 +190,64 @@ const NotificationScreen = ({ navigation, route }) => {
       // empty={history.length === 0}
       // iconRightButton={modalListActionRef.current && <Feather name='more-vertical' size={20} color={Color.text} />}
       // onPressRightButton={() => {
-        // if (modalListActionRef.current) modalListActionRef.current.open();
+      // if (modalListActionRef.current) modalListActionRef.current.open();
       // }
       // }
       // emptyTitle="Notifikasi belum tersedia"
       showHeader={false}
       fallback={loading}
-      empty={!loading && history.length === 0}
-    >
+      empty={!loading && history.length === 0}>
       <FlatList
         keyExtractor={(item, index) => item.id + index.toString()}
         data={history}
         contentContainerStyle={{
-          paddingBottom: 16
+          paddingBottom: 16,
         }}
-        renderItem={({ item }) => {
+        renderItem={({item}) => {
           // const isNotReaded = item.status !== 3;
           const isNotReaded = false;
           return (
-            <TouchableOpacity 
+            <TouchableOpacity
               style={{
-                flexDirection: 'row', 
-                padding: 16, 
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginHorizontal: 16,
                 borderColor: Color.border,
                 backgroundColor: isNotReaded ? '#FFFCEB' : Color.white,
-                justifyContent: 'space-between',
-                alignItems: 'center'
-            }}>
-              <Container flex={1} flexDirection="row" align="center">
-                <Container
-                  padding={14}
-                  backgroundColor={isNotReaded ? "#FFFCEB" : Color.white}
-                  borderRadius={24}
-                >
-                  <Image source={imageAssets.inbox} />
-                </Container>
-                <Divider width={10}/>
-                <Container>
-                  <Text color={Color.black} align="left" size={14} lineHeight={18}>
-                    {/* Kamu telah masuk ke area */}
-                    {item.title}
-                  </Text>
-                  <Text color={Color.black} align="left" size={14} lineHeight={18} type="medium" numberOfLines={2}>
-                    {/* M Bloc Space */}
-                    {item.description}
-                  </Text>
-                </Container>
+              }}>
+              <Container width={width * 0.214} height={width * 0.214}>
+                <Image
+                  source={{uri: item.images}}
+                  style={{width: '100%', height: '100%', resizeMode: 'cover'}}
+                />
               </Container>
-              {/* <Text size={10} lineHeight={12} color={"#ACAAA5"}>
-                  2 menit lalu
-              </Text> */}
+              <Divider width={12} />
+              <Container flex={1} flexDirection="column">
+                <Text
+                  size={14}
+                  lineHeight={16.8}
+                  type="medium"
+                  color={Color.primary}
+                  align="left">
+                  {item.title}
+                </Text>
+                <Divider height={3} />
+                <Text
+                  size={11}
+                  lineHeight={15}
+                  color="#797979"
+                  align="left"
+                  numberOfLines={2}>
+                  {item.description}
+                </Text>
+                <Divider height={2} />
+                <Text size={10} lineHeight={12} color="#797979" align="left">
+                  2 Hours Ago
+                </Text>
+              </Container>
             </TouchableOpacity>
-          )
+          );
         }}
       />
 
@@ -253,8 +291,8 @@ const NotificationScreen = ({ navigation, route }) => {
       <AlertModal
         visible={modalBackConfirm}
         showDiscardButton
-        title='Konfirmasi'
-        message='Anda ingin menghapus semua notifikasi?'
+        title="Konfirmasi"
+        message="Anda ingin menghapus semua notifikasi?"
         onSubmit={() => {
           setModalBackConfirm(false);
           ManageNotfifAll('DELETE');
@@ -268,6 +306,6 @@ const NotificationScreen = ({ navigation, route }) => {
       />
     </Scaffold>
   );
-}
+};
 
 export default NotificationScreen;
