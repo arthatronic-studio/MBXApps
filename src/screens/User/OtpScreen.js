@@ -88,10 +88,10 @@ const OtpScreen = ({ navigation, route }) => {
 
         resetOtp();
 
-        Keyboard.addListener('keyboardDidHide', () => setActiveIndex());
+        const unsub = Keyboard.addListener('keyboardDidHide', () => setActiveIndex());
 
         return () => {
-            Keyboard.removeListener('keyboardDidHide');
+            unsub.remove();
         }
     }, []);
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StatusBar, BackHandler, ImageBackground, ActivityIndicator, useWindowDimensions } from 'react-native';
-import Video from 'react-native-video';
+// import Video from 'react-native-video';
 // import Orientation from 'react-native-orientation-locker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -206,7 +206,7 @@ export const VideoPlayerAndroid = ({ autoplay, isMinimize, hideOnError, colorCon
     <>
       <ImageBackground source={{ uri: state.currentTime === 0 ? item.image : '' }} style={{width: '100%', aspectRatio: 3/2}}>
         <TouchableOpacity onPress={showControls}>
-          <Video
+          {/* <Video
             ref={videoRef}
             source={{ uri: item.videoFilename }}
             style={
@@ -223,7 +223,7 @@ export const VideoPlayerAndroid = ({ autoplay, isMinimize, hideOnError, colorCon
             onEnd={onEnd}
             onError={onError}
             paused={!state.play}
-          />
+          /> */}
           {state.showControls && (
             <View style={{
               position: 'absolute',

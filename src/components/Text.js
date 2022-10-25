@@ -13,17 +13,11 @@ export const fontFamily = {
 };
 
 const BaseText = Styled(ReactText)`
-  fontSize: ${props => props.size || '14px'};
+  fontSize: ${props => typeof props.size === 'number' ? `${props.size}px` : '14px'};
   fontFamily: ${props => fontFamily[props.type] || fontFamily.regular};
   textAlign: ${props => props.align || 'center'};
   color: ${props => props.color};
   textShadowRadius: 0;
-
-  ${props =>
-    props.lineHeight &&
-    `
-    lineHeight: ${props.lineHeight}
-  `}
 `;
 
 const Text = props => {
@@ -48,13 +42,13 @@ const Text = props => {
         // letterSpacing && {letterSpacing},
         { letterSpacing: letterSpacing ? letterSpacing : 0.4 },
         italic && {fontStyle: 'italic'},
-        underline && {textDecorationLine: 'underline'}
+        underline && {textDecorationLine: 'underline'},
+        lineHeight && { lineHeight },
       ]}
       {...style}
       align={align}
       type={type}
       size={size}
-      lineHeight={lineHeight}
       allowFontScaling={false}
       color={color || Color.text}>
       {children}

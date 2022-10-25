@@ -55,7 +55,7 @@ const ListContenEvent = ({ productType, productCategory, name, horizontal, style
         }
         const result = await getAPI(baseEndpoint);
 
-        console.log('result', baseEndpoint, result);
+        // console.log('result', baseEndpoint, result);
 
         setItemData({
             ...itemData,

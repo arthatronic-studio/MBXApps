@@ -34,7 +34,7 @@ const App = () => {
     initRequestTracking();
 
     const unsubscribe = NetInfo.addEventListener((state) => {
-      console.log("Connection Info", state);
+      // console.log("Connection Info", state);
 
       if (!state.isConnected && state.type !== 'none') {
         setModalNetInfo(true);
@@ -54,7 +54,7 @@ const App = () => {
 
   const initRequestTracking = async () => {
     const tracking = await requestTrackingPermission();
-    console.log('tracking status', tracking);
+    // console.log('tracking status', tracking);
   }
 
   // ===========================================
@@ -117,14 +117,14 @@ const App = () => {
 
     console.log('isGranted',isGranted);
 
-    geoCurrentPosition(
-      (res) => {
-        console.log(res, 'res location');
-      },
-      (err) => {
-        console.log(err, 'err location');
-      }
-    );
+    // geoCurrentPosition(
+    //   (res) => {
+    //     console.log(res, 'res location');
+    //   },
+    //   (err) => {
+    //     console.log(err, 'err location');
+    //   }
+    // );
   }
 
   const requestUserPermission = async (onRegister) => {
@@ -178,7 +178,7 @@ const App = () => {
     messaging()
       .getInitialNotification()
       .then(remoteMessage => {
-        console.log('=== get initial ===', remoteMessage)
+        // console.log('=== get initial ===', remoteMessage);
         if (remoteMessage) {
           onOpenNotification(remoteMessage.notification);
         }

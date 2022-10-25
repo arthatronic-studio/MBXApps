@@ -10,7 +10,7 @@ import {
     useColor,
 } from '@src/components';
 import Client from '@src/lib/apollo';
-import Video from 'react-native-video';
+// import Video from 'react-native-video';
 
 import ImagesPath from 'src/components/ImagesPath';
 import { VideoPlayerAndroid } from 'src/components/VideoPlayerAndroid';
@@ -58,7 +58,7 @@ const VideoPlayerIos = ({ autoplay, item }) => {
                 aspectRatio: 16 / 9,
             }}
         >
-            <Video
+            {/* <Video
                 source={{ uri: item.videoFilename }}
                 style={{
                     width: '100%',
@@ -76,7 +76,7 @@ const VideoPlayerIos = ({ autoplay, item }) => {
                     setShow(false);
                 }}
                 
-            />
+            /> */}
 
             {loading && <View
                 style={{

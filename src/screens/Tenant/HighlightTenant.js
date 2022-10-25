@@ -55,7 +55,7 @@ const HighlightTenant = ({ title, tenantType, numColumns }) => {
         // }
         const result = await getAPI(baseEndpoint);
 
-        console.log('result baseEndpoint', result);
+        // console.log('result baseEndpoint', result);
 
         let newArr = [];
         if (result.status) {

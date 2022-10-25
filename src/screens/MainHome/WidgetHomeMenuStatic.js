@@ -44,7 +44,7 @@ const WidgetHomeMenuStatic = () => {
 
   const fetchMenuList = async() => {
     const result = await getAPI('menu');
-    console.log('result menu', result);
+    // console.log('result menu', result);
 
     let newData = [];
     let newNumOfColumn = 3;

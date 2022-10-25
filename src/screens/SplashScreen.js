@@ -37,23 +37,23 @@ const SplashScreen = ({navigation, route}) => {
   }, []);
 
   const handleNavigate = async() => {
-    setIsLoading(true);
+    // setIsLoading(true);
     
-    const beaconSetting = await stateBeaconSetting();
+    // const beaconSetting = await stateBeaconSetting();
 
-    setIsLoading(false);
+    // setIsLoading(false);
 
-    if (beaconSetting) {
+    // if (beaconSetting) {
       redirectTo('MainPage');
 
-      setErrorSettingBeacon(false);
+      // setErrorSettingBeacon(false);
 
-      return;
-    }
+    //   return;
+    // }
 
-    setErrorSettingBeacon(true);
+    // setErrorSettingBeacon(true);
 
-    showPopup('Initial error, silakan muat ulang', 'error');
+    // showPopup('Initial error, silakan muat ulang', 'error');
   }
 
   const redirectTo = nav => {

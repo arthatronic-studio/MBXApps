@@ -98,10 +98,10 @@ const OtpScreenV2 = ({navigation, route}) => {
 
     resetOtp();
 
-    Keyboard.addListener('keyboardDidHide', () => setActiveIndex());
+    const unsub = Keyboard.addListener('keyboardDidHide', () => setActiveIndex());
 
     return () => {
-      Keyboard.removeListener('keyboardDidHide');
+      unsub.remove();
     };
   }, []);
 
@@ -339,7 +339,7 @@ const OtpScreenV2 = ({navigation, route}) => {
                         style={{
                           width: '100%',
                           height: '100%',
-                          fontSize: 32,
+                          fontSize: 28,
                           textAlign: 'center',
                           fontFamily: 'Inter-Regular',
                           // borderBottomWidth: 2,

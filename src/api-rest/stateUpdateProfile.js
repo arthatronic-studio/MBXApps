@@ -5,7 +5,7 @@ export const stateUpdateProfile = async(body) => {
     const endpoint = 'update-profile';
     const result = await postAPI(endpoint, body);
     
-    console.log(`result ${endpoint} ${body}`, result);
+    // console.log(`result ${endpoint} ${body}`, result);
     
     if (result.status) {
         await store.dispatch({

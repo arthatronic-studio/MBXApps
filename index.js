@@ -10,7 +10,7 @@ const momentDurationFormatSetup = require('moment-duration-format');
 import indonesia from 'moment/locale/id';
 
 momentDurationFormatSetup(moment);
-moment.locale('id', indonesia);
+moment.updateLocale('id', indonesia);
 typeof moment.duration.fn.format === "function";
 typeof moment.duration.format === "function";
 

@@ -17,7 +17,6 @@ import TouchableOpacity from 'src/components/Button/TouchableDebounce';
 import {useColor} from '@src/components/Color';
 import {usePopup} from 'src/components/Modal/Popup';
 import {shadowStyle} from '@src/styles';
-import {useInterval} from '@src/hooks/useInterval';
 import {Container, Divider, Padding, Row} from 'src/styled';
 import AlertModal from 'src/components/Modal/AlertModal';
 import {CommonActions} from '@react-navigation/native';

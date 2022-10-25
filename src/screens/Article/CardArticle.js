@@ -21,7 +21,7 @@ const CardArticle = ({item, onPress, numColumns, horizontal}) => {
   const navigation = useNavigation();
   const {width} = useWindowDimensions();
 
-  console.log(item, "item");
+  // console.log(item, "item");
 
   return (
     <TouchableOpacity

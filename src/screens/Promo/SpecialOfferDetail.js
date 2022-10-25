@@ -15,6 +15,8 @@ import imageAssets from 'assets/images';
 import {ScrollView} from 'react-native-gesture-handler';
 
 const SpecialOfferDetail = ({navigation, route}) => {
+  const { params } = route;
+
   const user = useSelector(state => state['user.auth'].login.user);
   const {Color} = useColor();
   const [itemData, setItemData] = useState(initialItemState);
@@ -32,7 +34,7 @@ const SpecialOfferDetail = ({navigation, route}) => {
             color={Color.black}
             lineHeight={20.4}
             align="left">
-            Weekend Time! Discount All Coffee Variant up to 40%
+            {params.item.title}
           </Text>
         </Container>
         <Divider height={12} />
@@ -43,7 +45,7 @@ const SpecialOfferDetail = ({navigation, route}) => {
           }}>
           <Image
             style={{width: '100%', height: '100%', resizeMode: 'cover'}}
-            source={imageAssets.arsitektur1}
+            source={{ uri: params.item.image }}
           />
         </View>
         <Divider height={16} />
@@ -51,24 +53,16 @@ const SpecialOfferDetail = ({navigation, route}) => {
           <Text align="left" size={10} lineHeight={12} color={Color.textSoft}>
             Description
           </Text>
-          {/* <Text align="left" size={12} lineHeight={19.2} color={Color.black}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-            vulputate libero et velit interdum, ac aliquet odio mattis. Class
-            aptent taciti sociosqu ad litora torquent per conubia nostra, per
-            inceptos himenaeos. Curabitur tempus urna at turpis condimentum
-            lobortis. Ut commodo efficitur neque.
-          </Text> */}
+          <Text align="left" size={12} lineHeight={19.2} color={Color.black}>
+            {params.item.description}
+          </Text>
           <Divider height={16} />
           <Text align="left" size={10} lineHeight={12} color={Color.textSoft}>
             Term & Conditions
           </Text>
-          {/* <Text align="left" size={12} lineHeight={19.2} color={Color.black}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-            vulputate libero et velit interdum, ac aliquet odio mattis. Class
-            aptent taciti sociosqu ad litora torquent per conubia nostra, per
-            inceptos himenaeos. Curabitur tempus urna at turpis condimentum
-            lobortis. Ut commodo efficitur neque.
-          </Text> */}
+          <Text align="left" size={12} lineHeight={19.2} color={Color.black}>
+            {params.item.term_and_condition}
+          </Text>
         </Container>
 
         <Divider height={16}/>
@@ -91,19 +85,24 @@ const SpecialOfferDetail = ({navigation, route}) => {
             />
           </View>
           <Divider width={10} />
-          <Text size={14} lineHeight={16.8} color={Color.black} type="medium">
-            Titik Temu Coffee
-          </Text>
+          <View style={{flex: 1}}>
+            <Text size={14} align="left" lineHeight={16.8} color={Color.black} type="medium">
+              {params.item.title}
+            </Text>
+          </View>
         </Container>
         <Divider height={12} />
         <Line width={width} height={1} color={Color.black} />
         <Divider height={16} />
         <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('TenantDetailScreen', { item: { location_id: params.item.location_id } });
+          }}
           style={{ 
             borderWidth: 1,
             padding: 12,
             marginHorizontal: 16,
-           }}
+          }}
         >
           <Text size={14} lineHeight={16.8} type="medium" color={Color.primary}>
             Visit Tenant

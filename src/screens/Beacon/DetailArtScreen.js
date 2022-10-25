@@ -452,8 +452,6 @@ const DetailArtScreen = ({ navigation, route }) => {
     )
   }
 
-  console.log('route', route);
-
   return (
     <Scaffold
       fallback={false}

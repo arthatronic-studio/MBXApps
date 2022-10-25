@@ -61,7 +61,7 @@ const HighlightArticle = ({
 
   if (itemData.length === 0) return <View />;
 
-  console.log(itemData, 'itemData');
+  // console.log(itemData, 'itemData');
 
   return (
     <View

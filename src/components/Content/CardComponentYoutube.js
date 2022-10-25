@@ -10,7 +10,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 
 import {Text, useColor} from '@src/components';
-import YoutubePlayer from 'react-native-youtube-iframe';
+// import YoutubePlayer from 'react-native-youtube-iframe';
 import { getSizeByRatio } from 'src/utils/get_ratio';
 import { useSelector } from 'react-redux';
 import { analyticMethods } from 'src/utils/analytics';
@@ -66,7 +66,7 @@ const CardComponentYoutube = ({ item, name }) => {
           overflow: 'hidden'
         }}
       >
-        <YoutubePlayer
+        {/* <YoutubePlayer
           ref={youtubeRef}
           width={'100%'}
           height={getSizeByRatio({ width: width-32, ratio: 9/16 }).height}
@@ -75,7 +75,7 @@ const CardComponentYoutube = ({ item, name }) => {
           onChangeState={onStateChange}
           borderRadius={true}
           webViewStyle={ {opacity:0.99} }
-        />
+        /> */}
 
       </View>
 

@@ -39,10 +39,10 @@ import { fetchEatCartDetail } from 'src/api-rest/fetchEatCartDetail';
 import { fetchEatCartGet } from 'src/api-rest/fetchEatCartGet';
 import CardTenantMenuList from './CardTenantMenuList';
 import CardTenantMenuGrid from './CardTenantMenuGrid';
+import { getAPI } from 'src/api-rest/httpService';
 
 const TenantDetailScreen = ({ navigation, route }) => {
   const { params } = route;
-  const items = params.item;
 
   const { Color } = useColor();
   const flatlistRef = useRef();
@@ -54,12 +54,13 @@ const TenantDetailScreen = ({ navigation, route }) => {
   const [listCartProduct, setListCartProduct] = useState([]);
   const [activeSections, setActiveSections] = useState([]);
   const [currentIndexProduct, setCurrentIndexProduct] = useState(-1);
-  const [listProducts, setListProducts] = useState(Array.isArray(items.products) ? items.products : []);
   const [cartId, setCartId] = useState();
   const [cartLocationId, setCartLocationId] = useState();
   const [namaPemesan, setNamaPemesan] = useState(auth.user.name);
   const [cartAmount, setCartAmount] = useState(FormatMoney.getFormattedMoney(0));
   const [selectedProductCount, setSelectedProductCount] = useState(0);
+  const [items, setItems] = useState(params.item);
+  const [listProducts, setListProducts] = useState(Array.isArray(items.products) ? items.products : []);
 
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
@@ -70,8 +71,28 @@ const TenantDetailScreen = ({ navigation, route }) => {
   const isCartDiffTenant = cartLocationId && cartLocationId !== items.id;
 
   useEffect(() => {
+    fetchData();
     getCart();
   }, [isFocused]);
+
+  const fetchData = async () => {
+    if (items && items.location_id) {
+      let baseEndpoint = 'location';
+      baseEndpoint = baseEndpoint + `?location_id=${items.location_id}`;
+      const result = await getAPI(baseEndpoint);
+
+      console.log('result ', baseEndpoint, result);
+      
+      if (result.status && Array.isArray(result.data) && result.data.length > 0) {
+        setItems(result.data[0]);
+        setListProducts(result.data[0].products);
+      }
+
+      setLoading(false);
+    } else {
+      setLoading(false);
+    }
+  }
 
   console.log('params', params);
 
@@ -746,7 +767,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
 
   return (
     <Scaffold
-      fallback={false}
+      fallback={loading}
       empty={false}
       popupProps={popupProps}
       loadingProps={loadingProps}

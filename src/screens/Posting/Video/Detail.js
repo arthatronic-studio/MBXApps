@@ -9,7 +9,6 @@ import {
     TouchableOpacity,
 } from '@src/components';
 import Client from '@src/lib/apollo';
-import Video from 'react-native-video';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import ImagesPath from 'src/components/ImagesPath';

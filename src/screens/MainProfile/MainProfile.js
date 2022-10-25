@@ -44,7 +44,6 @@ import ModalActions from 'src/components/Modal/ModalActions';
 import Axios from 'axios';
 import {initSocket} from 'src/api-socket/currentSocket';
 import {assetImageProfile} from 'assets/images/profile';
-import { FlatList } from 'react-native-gesture-handler';
 import { stateUpdateProfile } from 'src/api-rest/stateUpdateProfile';
 
 const MainProfile = ({navigation, route}) => {
@@ -118,18 +117,19 @@ const MainProfile = ({navigation, route}) => {
     // currentSocket.disconnect();
   };
 
-  const cardMenu = (item) => (
+  const cardMenu = (item, index) => (
     <TouchableOpacity
+      key={index}
       onPress={item.onPress ? item.onPress : () => {
         navigation.navigate(item.nav);
       }}
-      style={{ 
-        flex: 1,
+      style={{
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingBottom: 10,
+        paddingVertical: 10,
         alignItems: 'center',
-        }}
+        borderBottomWidth: 1,
+      }}
     >
       <Text size={17} type="medium" lineHeight={20} color={Color.black}>
         {item.name}
@@ -282,7 +282,10 @@ const MainProfile = ({navigation, route}) => {
               imageStyle={{ resizeMode: 'contain' }}>
                 {auth && auth.user && (
                   <Image
-                    source={auth.user.foto ? {uri: auth.user.foto} : ImagesPath.userChat}
+                    source={
+                      typeof auth.user.foto === 'string'
+                      && (auth.user.foto.startsWith('http://') || auth.user.foto.startsWith('https://')) ?
+                      {uri: auth.user.foto} : ImagesPath.userChat}
                     style={{
                       width: '50%',
                       height: '50%',
@@ -368,20 +371,12 @@ const MainProfile = ({navigation, route}) => {
           </View>
           {/* <Divider height={12}/> */}
           <View style={{ flex: 5 }}>
-            <FlatList
-              showsHorizontalScrollIndicator={false}
-              data={[
+            {[
                 {name: 'History', nav: 'EventHistory'},
-              ]}
-              renderItem={({item, index}) => cardMenu(item, index)}
-              keyExtractor={(item, index) => item.id + index.toString()}
-              ItemSeparatorComponent={() => (
-                  <Line width={width - 32} color={Color.primary} height={1} marginBottom={10} />
-              )}
-              ListFooterComponent={() => (
-                <Line width={width - 32} color={Color.primary} height={1} />
-              )}
-            />
+            ].map((item, index) => {
+                return cardMenu(item, index);
+              })
+            }
           </View>
 
           {/* <View style={{}}> */}
@@ -427,9 +422,7 @@ const MainProfile = ({navigation, route}) => {
             </TouchableOpacity>
           </View>
           <View style={{ flex: 5 }}>
-            <FlatList
-              showsHorizontalScrollIndicator={false}
-              data={[
+            {[
                 {name: 'Setting', nav: 'SettingScreen'},
                 {name: 'Terms & Condition', nav: 'SyaratdanKetentuan'},
                 {
@@ -440,16 +433,9 @@ const MainProfile = ({navigation, route}) => {
                   }
                 },
                 {name: 'FAQ', nav: 'FAQScreen'},
-              ]}
-              renderItem={({item, index}) => cardMenu(item, index)}
-              keyExtractor={(item, index) => item.id + index.toString()}
-              ItemSeparatorComponent={() => (
-                  <Line width={width - 32} color={Color.primary} height={1} marginBottom={10}/>
-              )}
-              ListFooterComponent={() => (
-                <Line width={width - 32} color={Color.primary} height={1} />
-              )}
-            />
+              ].map((item, index) => {
+                return cardMenu(item, index);
+              })}
           </View>
           {/* <View style={{}}>
             <TouchableOpacity
