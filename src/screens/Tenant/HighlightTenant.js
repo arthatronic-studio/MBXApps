@@ -45,11 +45,11 @@ const HighlightTenant = ({ title, tenantType, numColumns }) => {
     }, []);
 
     const fetchData = async () => {
-        let baseEndpoint = 'location?';
-        if (tenantType) {
-            baseEndpoint = baseEndpoint + `type=${tenantType}&`;
-        }
-        baseEndpoint = baseEndpoint + `isRecommended=1`;
+        let baseEndpoint = 'favorite-tenant/';
+        // if (tenantType) {
+        //     baseEndpoint = baseEndpoint + `type=${tenantType}&`;
+        // }
+        // baseEndpoint = baseEndpoint + `isRecommended=1`;
         // if (auth.user.activityInfo.location) {
         //     baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.user.activityInfo.location.id}&isRecommended=1`;
         // }
