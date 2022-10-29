@@ -55,7 +55,11 @@ const HighlightArticle = ({
       param = `?other=1&id=${id}&category_id=${categoryId}&perPage=10`;
     }
     const result = await fetchGetArticle(param);
-    const newArr = result.data;
+    let newArr = [];
+    if (result.status) {
+      if (Array.isArray(result.data)) newArr = result.data;
+    }
+    
     setItemData(newArr);
   };
 
