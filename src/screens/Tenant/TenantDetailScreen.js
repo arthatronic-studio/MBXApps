@@ -781,7 +781,9 @@ const TenantDetailScreen = ({ navigation, route }) => {
               <TouchableOpacity
                 style={{ marginRight: 15 }}
                 onPress={async () => {
-                  const res = await fetchFovoriteTenant();
+                  const res = await fetchFovoriteTenant({
+                    location_id: items.location_id
+                  });
                   console.log(res, "resssss")
                   if(res.status){
                     setLike(!like);
