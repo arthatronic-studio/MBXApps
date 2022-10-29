@@ -40,6 +40,7 @@ import { fetchEatCartGet } from 'src/api-rest/fetchEatCartGet';
 import CardTenantMenuList from './CardTenantMenuList';
 import CardTenantMenuGrid from './CardTenantMenuGrid';
 import { getAPI } from 'src/api-rest/httpService';
+import { fetchFovoriteTenant } from 'src/api-rest/fetchFovoriteTenant';
 
 const TenantDetailScreen = ({ navigation, route }) => {
   const { params } = route;
@@ -50,6 +51,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
 
   const [loading, setLoading] = useState(true);
   const [bookmark, setBookmark] = useState(false);
+  const [like, setLike] = useState(false);
   const [desc, setDesc] = useState(false);
   const [listCartProduct, setListCartProduct] = useState([]);
   const [activeSections, setActiveSections] = useState([]);
@@ -776,20 +778,26 @@ const TenantDetailScreen = ({ navigation, route }) => {
           type="bold"
           actions={
             <View style={{ flexDirection: 'row' }}>
-              {/* <TouchableOpacity
+              <TouchableOpacity
                 style={{ marginRight: 15 }}
                 onPress={async () => {
-                  const res = await fetchSaveEvent({ eventId: data.id, type: bookmark ? 'UNBOOKMARK' : 'BOOKMARK' });
-                  if (res.status == true) {
-                    setBookmark(!bookmark);
+                  const res = await fetchFovoriteTenant();
+                  console.log(res, "resssss")
+                  if(res.status){
+                    setLike(!like);
                   }
+                  
+                  // const res = await fetchSaveEvent({ eventId: data.id, type: bookmark ? 'UNBOOKMARK' : 'BOOKMARK' });
+                  // if (res.status == true) {
+                    // setBookmark(!bookmark);
+                  // }
                 }}>
-                {bookmark == true ? (
-                  <FontAwesome name={'bookmark'} size={24} color={Color.text} />
+                {like == true ? (
+                  <AntDesign name={'like1'} size={24} color={Color.text} />
                 ) : (
-                  <FontAwesome name={'bookmark-o'} size={24} color={Color.text} />
+                  <AntDesign name={'like2'} size={24} color={Color.text} />
                 )}
-              </TouchableOpacity> */}
+              </TouchableOpacity>
 
               {/* <Image
                 source={imageAssets.moreOutline}
