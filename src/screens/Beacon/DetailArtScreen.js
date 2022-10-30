@@ -165,7 +165,7 @@ const DetailArtScreen = ({ navigation, route }) => {
         : loc
   ) : 0 : 0;
 
-  let descriptionProps = { numberOfLines: 12 };
+  let descriptionProps = { numberOfLines: 3 };
   if (desc) descriptionProps = {};
   const labelDesctiption = items.description;
 

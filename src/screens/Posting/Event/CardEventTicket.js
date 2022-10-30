@@ -38,6 +38,11 @@ const CardEventTicket = ({ item, isPassedEventDate, onSelect }) => {
   const { Color } = useColor();
   const navigation = useNavigation();
   const auth = useSelector(state => state['auth']);
+
+  let eventType = '';
+  if (item.type && item.type.text) {
+    eventType = item.type.text;
+  }
   
   return (
     <View style={{ paddingHorizontal: 16 }}>
@@ -53,6 +58,7 @@ const CardEventTicket = ({ item, isPassedEventDate, onSelect }) => {
 
           <Row style={{ alignItems: 'center' }}>
             <Text size={11}>{item.isRefundable ? 'Refundable' : 'Non-Refundable'}</Text>
+            {eventType !== '' && <Text size={11}> ● {eventType}</Text>}
           </Row>
         </Container>
 

@@ -135,7 +135,6 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                     </View>
 
                     <View style={{ width: '100%', minHeight: (12 * 3) + (8 * 1) + 4, padding: 8, paddingVertical: 4, borderBottomWidth: 1, borderColor: Color.primary }}>
-                        {/* <Text type='medium' align='left' numberOfLines={1}>{item.description}</Text> */}
                         <Text size={12} type='medium' align='left' numberOfLines={3} lineHeight={12 * 1.6}>{item.description}</Text>
                     </View>
 
@@ -154,8 +153,9 @@ const CardComponentEvent = ({ productCategory, item, numColumns, onPress, horizo
                             <View style={{ width: '100%', height: '50%', paddingHorizontal: 12, justifyContent: 'center', backgroundColor: Color.primary }}>
                                 <Text type='medium' numberOfLines={3} size={11} align='left' color={Color.textInput}>{item.formatted_date}</Text>
                             </View>
-                            <View style={{ width: '100%', height: '50%', paddingHorizontal: 12, justifyContent: 'center' }}>
-                                <Text type='medium' numberOfLines={3} size={11} align='left' color={Color.placeholder} letterSpacing={0.5}>{item.location}</Text>
+                            <View style={{ width: '100%', height: '50%', paddingHorizontal: 12, paddingVertical: 8, justifyContent: 'space-evenly' }}>
+                                <Text type='medium' numberOfLines={3} size={11} align='left' color={Color.textSoft} letterSpacing={0.5}>{item.location}</Text>
+                                {/* <Text type='medium' numberOfLines={3} size={11} align='left' color={Color.placeholder} letterSpacing={0.5}>{item.location_detail}</Text> */}
                             </View>
                         </View>
                     </View>

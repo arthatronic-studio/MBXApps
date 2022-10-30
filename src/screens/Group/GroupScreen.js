@@ -207,7 +207,11 @@ const GroupScreen = ({navigation, route}) => {
               longitude: parseFloat('116.2305105'),
               latitudeDelta: 20,
               longitudeDelta: 20,
-            }}>
+            }}
+            customMapStyle={[
+              { "elementType": "geometry", "stylers": [ { "color": "#D9D9D9" } ] }
+            ]}
+          >
             <Geojson
               geojson={IndonesiaMapJson} 
               strokeColor="#EEEEEE"
@@ -219,6 +223,7 @@ const GroupScreen = ({navigation, route}) => {
               if(item.latitude){
                 return (
                   <Marker
+                    key={index}
                     coordinate={{ 
                       latitude: parseFloat(item.latitude),
                       longitude: parseFloat(item.longitude),

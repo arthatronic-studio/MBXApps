@@ -82,7 +82,7 @@ const EventDetail = ({ navigation, route }) => {
 
   console.log('items', items);
 
-  let descriptionProps = { numberOfLines: 12 };
+  let descriptionProps = { numberOfLines: 3 };
   if (desc) descriptionProps = {};
   const labelDesctiption = items.description;
 
@@ -276,7 +276,7 @@ const EventDetail = ({ navigation, route }) => {
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ borderBottomWidth: 1, borderColor: Color.primary }}>
-                  <Text size={11} type='medium'>'Read More</Text>
+                  <Text size={11} type='medium'>Read More</Text>
                 </View>
                 <MaterialIcons name={'keyboard-arrow-down'} size={18} color={Color.text} />
               </View>
@@ -292,10 +292,21 @@ const EventDetail = ({ navigation, route }) => {
           )}
           onChange={(val) => {
             setActiveSections(val);
+            
+            if (flatlistRef.current) {
+              setTimeout(() => {
+                flatlistRef.current.scrollToEnd({
+                  animated: true
+                });
+              }, 1000);
+            }
           }}
         />
         <View style={{ width: '100%', paddingHorizontal: 16, backgroundColor: Color.border, height: 0.5 }} />
       </View>
+
+      <Divider />
+
     </Container>
   )
 
@@ -377,10 +388,12 @@ const EventDetail = ({ navigation, route }) => {
         </View>
         <TouchableOpacity
           onPress={() => {
-            flatlistRef.current.scrollToOffset({
-              offset: heightHeader,
-              animated: true
-            })
+            if (flatlistRef.current) {
+              flatlistRef.current.scrollToOffset({
+                offset: heightHeader,
+                animated: true
+              });
+            }
           }}
           style={{ justifyContent: 'center', backgroundColor: Color.primary, flex: 0.42, paddingVertical: 8 }}
         >
