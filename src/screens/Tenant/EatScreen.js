@@ -40,10 +40,19 @@ const EatScreen = ({ navigation, route }) => {
   const [listBanner, setListBanner] = useState([]);
 
   const isCheckin = auth && auth.user && auth.user.isCheckin;
+  const [refresh, setRefresh] = useState(false);
+
+  const onRefresh = () => {
+    setRefresh(true);
+    setTimeout(() => {
+      setRefresh(false);
+    }, 2000);
+  };
 
   useEffect(() => {
     fetchBannerList();
-  }, []);
+    onRefresh();
+  }, [isFocused]);
 
   const fetchBannerList = () => {
     const variables = {
@@ -154,6 +163,7 @@ const EatScreen = ({ navigation, route }) => {
         title='Semua Tempat'
         // nav='EatScreen'
         // refresh={refreshing || isFocused}
+        refresh={refresh}
         showHeader={false}
         // showSeeAllText={false}
         style={{

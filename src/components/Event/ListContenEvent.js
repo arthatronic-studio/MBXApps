@@ -9,6 +9,7 @@ import { initialItemState } from 'src/utils/constants';
 import CardContentProduct from '@src/components/Content/CardContentProduct';
 import { getAPI } from 'src/api-rest/httpService';
 import PostingHeader from '../Posting/PostingHeader';
+import ScreenEmptyEvent from '../Modal/ScreenEmptyEvent';
 
 const propTypes = {
     productType: PropTypes.string,
@@ -149,8 +150,8 @@ const ListContenEvent = ({ productType, productCategory, name, horizontal, style
                             <>
                                 {showHeader && !horizontal && !itemData.loading && itemData.data.length === 0 && renderHeader()}
                                 
-                                <ScreenEmptyData
-                                    message={`${name} belum tersedia`}
+                                <ScreenEmptyEvent
+                                    message="Belum ada event yang tersedia"
                                     style={{ width: width - 16 }}
                                 />
                             </>

@@ -19,6 +19,7 @@ const propTypes = {
     style: PropTypes.object,
     onLoadingEnd: PropTypes.func,
     showSeeAllText: PropTypes.bool,
+    refresh: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -32,24 +33,31 @@ const defaultProps = {
     title: '',
     showSeeAllText: false,
     showHeader: false,
+    refresh: false,
 };
 
-const ListTenantItem = ({ tenantType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, }) => {
+const ListTenantItem = ({ tenantType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, refresh}) => {
     const { width } = useWindowDimensions();
     const [itemData, setItemData] = useState(initialItemState);
     const auth = useSelector(state => state['auth']);
 
     useEffect(() => {
-        fetchData();
+        fetchData(true);
     }, []);
+    
+    useEffect(() => {
+        if(refresh){
+            fetchData(true);
+        }
+    }, [refresh]);
 
     useEffect(() => {
         if (itemData.loadNext && itemData.page !== -1) {
-            fetchData();
+            fetchData(false);
         }
     }, [itemData.loadNext]);
 
-    const fetchData = async () => {
+    const fetchData = async (first) => {
         let baseEndpoint = 'location';
         baseEndpoint = baseEndpoint + `?type=${tenantType}`;
         // if (auth.user.activityInfo.location) {
@@ -62,7 +70,7 @@ const ListTenantItem = ({ tenantType, productCategory, name, horizontal, style, 
 
         setItemData({
             ...itemData,
-            data: itemData.data.concat(result.data),
+            data: first ? result.data : itemData.data.concat(result.data),
             // data: [],
             // page: result.status === false ? itemData.page : result.data.length > 0 ? itemData.page + 1 : -1,
             page: -1,

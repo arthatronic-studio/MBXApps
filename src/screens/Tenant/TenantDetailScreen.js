@@ -40,7 +40,9 @@ import { fetchEatCartGet } from 'src/api-rest/fetchEatCartGet';
 import CardTenantMenuList from './CardTenantMenuList';
 import CardTenantMenuGrid from './CardTenantMenuGrid';
 import { getAPI } from 'src/api-rest/httpService';
-import { fetchFovoriteTenant } from 'src/api-rest/fetchFovoriteTenant';
+import { fetchFavoriteTenant } from 'src/api-rest/fetchFavoriteTenant';
+import { imageContentItem } from 'assets/images/content-item';
+import { fetchFavoriteProduct } from 'src/api-rest/fetchFavoriteProduct';
 
 const TenantDetailScreen = ({ navigation, route }) => {
   const { params } = route;
@@ -51,7 +53,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
 
   const [loading, setLoading] = useState(true);
   const [bookmark, setBookmark] = useState(false);
-  const [like, setLike] = useState(false);
+  const [like, setLike] = useState(params.item.isLike);
   const [desc, setDesc] = useState(false);
   const [listCartProduct, setListCartProduct] = useState([]);
   const [activeSections, setActiveSections] = useState([]);
@@ -67,6 +69,8 @@ const TenantDetailScreen = ({ navigation, route }) => {
   const [popupProps, showPopup] = usePopup();
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const isFocused = useIsFocused();
+  const [productLike, setProductLike] = useState(0);
+  const [isProductLike, setIsProductLike] = useState(false);
 
   const { height, width } = useWindowDimensions();
 
@@ -77,10 +81,16 @@ const TenantDetailScreen = ({ navigation, route }) => {
     getCart();
   }, [isFocused]);
 
+  useEffect(() => {
+    if(currentIndexProduct != -1){
+      fetchData();
+    }
+  }, [currentIndexProduct])
+
   const fetchData = async () => {
-    if (items && items.location_id) {
+    if (items && (items.location_id || items.id)) {
       let baseEndpoint = 'location';
-      baseEndpoint = baseEndpoint + `?location_id=${items.location_id}`;
+      baseEndpoint = baseEndpoint + `?location_id=${items.location_id ? items.location_id : items.id}`;
       const result = await getAPI(baseEndpoint);
 
       console.log('result ', baseEndpoint, result);
@@ -620,6 +630,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
     const disabledDecrease = quantity < 2;
     const disabledIncrease = quantity > 9;
 
+
     return (
       <Modal
         isVisible={true}
@@ -653,9 +664,48 @@ const TenantDetailScreen = ({ navigation, route }) => {
                 width: '100%',
                 height: '100%',
                 backgroundColor: Color.border,
-                borderRadius: 8,
               }}
             />
+            <TouchableOpacity
+              onPress={async () => {
+                const body = {
+                  product_id: item.id
+                }
+                const res = await fetchFavoriteProduct(body);
+                console.log(res, "resssss")
+                if(res.status){
+                  if(isProductLike){
+                    setProductLike(productLike - 1);
+                  }else{
+                    setProductLike(productLike + 1);
+                  }
+                  setIsProductLike(!isProductLike)
+                }
+              }}
+              style={{ 
+                position: 'absolute',
+                bottom: 10,
+                right: 10,
+                backgroundColor: Color.theme,
+                borderColor: Color.black,
+                padding: 8,
+                borderWidth: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+               }}
+            >
+              <Image
+                source={isProductLike ? imageContentItem.heart_active : imageContentItem.heart_nonactive}
+                style={{
+                  height: 24,
+                  width: 24,
+                }}
+              />
+              <Divider width={5}/>
+              <Text size={20} lineHeight={24} type="medium" color="#E00F00">
+                {productLike}
+              </Text>
+            </TouchableOpacity>
           </View>
 
           <Divider />
@@ -779,11 +829,12 @@ const TenantDetailScreen = ({ navigation, route }) => {
           actions={
             <View style={{ flexDirection: 'row' }}>
               <TouchableOpacity
-                style={{ marginRight: 15 }}
+                // style={{ marginRight: 15 }}
                 onPress={async () => {
-                  const res = await fetchFovoriteTenant({
-                    location_id: items.location_id
-                  });
+                  const body = {
+                    location_id: items.id
+                  }
+                  const res = await fetchFavoriteTenant(body);
                   console.log(res, "resssss")
                   if(res.status){
                     setLike(!like);
@@ -794,11 +845,18 @@ const TenantDetailScreen = ({ navigation, route }) => {
                     // setBookmark(!bookmark);
                   // }
                 }}>
-                {like == true ? (
+                <Image
+                  source={like ? imageContentItem.heart_active : imageContentItem.heart_nonactive}
+                  style={{
+                    height: 24,
+                    width: 24,
+                  }}
+                />
+                {/* {like == true ? (
                   <AntDesign name={'like1'} size={24} color={Color.text} />
                 ) : (
                   <AntDesign name={'like2'} size={24} color={Color.text} />
-                )}
+                )} */}
               </TouchableOpacity>
 
               {/* <Image
@@ -831,6 +889,8 @@ const TenantDetailScreen = ({ navigation, route }) => {
               cartProductQuantity={quantity}
               onPress={() => {
                 setCurrentIndexProduct(index);
+                setProductLike(listProducts[index].like_count ? listProducts[index].like_count : 0);
+                setIsProductLike(listProducts[index].is_like ? listProducts[index].is_like : false);
               }}
             />
           )
