@@ -655,7 +655,7 @@ const MainHome = ({ navigation, route }) => {
           {/* <Divider /> */}
 
           <HighlightTenant
-            title='● TENANTS'
+            title='● 7 WONDER TENANTS'
             numColumns={1}
             tenantType='eat'
           />

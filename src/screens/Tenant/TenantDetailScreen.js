@@ -82,7 +82,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
   }, [isFocused]);
 
   useEffect(() => {
-    if(currentIndexProduct != -1){
+    if(currentIndexProduct == -1){
       fetchData();
     }
   }, [currentIndexProduct])
@@ -731,7 +731,10 @@ const TenantDetailScreen = ({ navigation, route }) => {
               <View>
                 <Text align='left' size={11} type='medium' color={Color.secondary}>Total</Text>
                 <Divider height={4} />
-                <Text align='left' size={16} type='medium'>{FormatMoney.getFormattedMoney(item.price || 0)}</Text>
+                <Text align='left' size={16} type='medium'>{FormatMoney.getFormattedMoney(item.total_price || 0)}</Text>
+                {item.total_price != item.price &&
+                  <Text align='left' size={12} type='medium' style={{textDecorationLine: 'line-through'}}>{FormatMoney.getFormattedMoney(item.price || 0)}</Text>
+                }
               </View>
 
               <View style={{ alignItems: 'center' }}>
@@ -826,49 +829,49 @@ const TenantDetailScreen = ({ navigation, route }) => {
       header={
         <Header
           type="bold"
-          actions={
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity
-                // style={{ marginRight: 15 }}
-                onPress={async () => {
-                  const body = {
-                    location_id: items.id
-                  }
-                  const res = await fetchFavoriteTenant(body);
-                  console.log(res, "resssss")
-                  if(res.status){
-                    setLike(!like);
-                  }
+          // actions={
+          //   <View style={{ flexDirection: 'row' }}>
+          //     <TouchableOpacity
+          //       // style={{ marginRight: 15 }}
+          //       onPress={async () => {
+          //         const body = {
+          //           location_id: items.id
+          //         }
+          //         const res = await fetchFavoriteTenant(body);
+          //         console.log(res, "resssss")
+          //         if(res.status){
+          //           setLike(!like);
+          //         }
                   
-                  // const res = await fetchSaveEvent({ eventId: data.id, type: bookmark ? 'UNBOOKMARK' : 'BOOKMARK' });
-                  // if (res.status == true) {
-                    // setBookmark(!bookmark);
-                  // }
-                }}>
-                <Image
-                  source={like ? imageContentItem.heart_active : imageContentItem.heart_nonactive}
-                  style={{
-                    height: 24,
-                    width: 24,
-                  }}
-                />
-                {/* {like == true ? (
-                  <AntDesign name={'like1'} size={24} color={Color.text} />
-                ) : (
-                  <AntDesign name={'like2'} size={24} color={Color.text} />
-                )} */}
-              </TouchableOpacity>
+          //         // const res = await fetchSaveEvent({ eventId: data.id, type: bookmark ? 'UNBOOKMARK' : 'BOOKMARK' });
+          //         // if (res.status == true) {
+          //           // setBookmark(!bookmark);
+          //         // }
+          //       }}>
+          //       <Image
+          //         source={like ? imageContentItem.heart_active : imageContentItem.heart_nonactive}
+          //         style={{
+          //           height: 24,
+          //           width: 24,
+          //         }}
+          //       />
+          //       {/* {like == true ? (
+          //         <AntDesign name={'like1'} size={24} color={Color.text} />
+          //       ) : (
+          //         <AntDesign name={'like2'} size={24} color={Color.text} />
+          //       )} */}
+          //     </TouchableOpacity>
 
-              {/* <Image
-                source={imageAssets.moreOutline}
-                style={{
-                  height: 24,
-                  width: 24,
-                }}
-                resizeMode='contain'
-              /> */}
-            </View>
-          }
+          //     {/* <Image
+          //       source={imageAssets.moreOutline}
+          //       style={{
+          //         height: 24,
+          //         width: 24,
+          //       }}
+          //       resizeMode='contain'
+          //     /> */}
+          //   </View>
+          // }
         />
       }
     >
@@ -889,7 +892,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
               cartProductQuantity={quantity}
               onPress={() => {
                 setCurrentIndexProduct(index);
-                setProductLike(listProducts[index].like_count ? listProducts[index].like_count : 0);
+                setProductLike(listProducts[index].total_like ? listProducts[index].total_like : 0);
                 setIsProductLike(listProducts[index].is_like ? listProducts[index].is_like : false);
               }}
             />

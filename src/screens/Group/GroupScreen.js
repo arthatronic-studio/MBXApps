@@ -25,7 +25,8 @@ import MapView, {
   Callout,
   Geojson,
 } from 'react-native-maps';
-import { IndonesiaMapJson } from 'src/utils/constants';
+import {IndonesiaMapJson} from 'src/utils/constants';
+import {fetchGetGroups} from 'src/api-rest/fetchGetGroups';
 
 const GroupScreen = ({navigation, route}) => {
   const {Color} = useColor();
@@ -42,6 +43,47 @@ const GroupScreen = ({navigation, route}) => {
   const category = ['Semua', 'bloc group', 'm bloc Market', 'RRK'];
   const [selected, setSelected] = useState({});
 
+  const [itemData, setItemData] = useState({
+    data: [],
+    loading: true,
+    message: '',
+    nextUrl: null,
+    loadNext: false,
+    refresh: false,
+  });
+
+  useEffect(() => {
+    fetchData(true);
+  }, []);
+
+  useEffect(() => {
+    if (itemData.loadNext && itemData.nextUrl != null) {
+      fetchData(false);
+    }
+  }, [itemData.loadNext]);
+
+  const fetchData = async first => {
+    const param = itemData.nextUrl && !first ? itemData.nextUrl : `?perPage=10`;
+    const result = await fetchGetGroups(param);
+    console.log(result, 'sult');
+    const newArr = result.data.data;
+    console.log(newArr, 'list group');
+
+    setItemData({
+      ...itemData,
+      data: first ? newArr : itemData.data.concat(newArr),
+      nextUrl: result.nextUrl ? `?${result.nextUrl.split('?')[1]}` : null,
+      loading: false,
+      loadNext: false,
+      message: result.message,
+      refresh: false,
+    });
+
+    onLoadingEnd(false);
+  };
+
+  console.log(itemData, 'dataaaaa');
+
   const data = [
     {
       id: 1,
@@ -50,8 +92,8 @@ const GroupScreen = ({navigation, route}) => {
       location: 'Jakarta Selatan',
       group: 'bloc group',
       link: 'https://instagram.com/mblocspace?igshid=YmMyMTA2M2Y=',
-      latitude: "-6.2415137",
-      longitude: "106.7965838",
+      latitude: '-6.2415137',
+      longitude: '106.7965838',
     },
     {
       id: 2,
@@ -60,8 +102,8 @@ const GroupScreen = ({navigation, route}) => {
       location: 'Padang',
       group: 'bloc group',
       link: 'https://instagram.com/fabriekbloc?igshid=YmMyMTA2M2Y=',
-      latitude: "-0.8798399",
-      longitude: "100.3466491",
+      latitude: '-0.8798399',
+      longitude: '100.3466491',
     },
     {
       id: 3,
@@ -195,199 +237,167 @@ const GroupScreen = ({navigation, route}) => {
           <Text>Memuat</Text>
         </Container>
       ) : (
-        <ScrollView>
-          <MapView
-            ref={mapRef}
-            onMapReady={() => mapRef.current.fitToElements(true)}
-            provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-            style={{height: width * 0.49, width: width}}
-            zoomEnabled
-            region={{
-              latitude: parseFloat('-2.3923927'),
-              longitude: parseFloat('116.2305105'),
-              latitudeDelta: 20,
-              longitudeDelta: 20,
-            }}
-            customMapStyle={[
-              { "elementType": "geometry", "stylers": [ { "color": "#D9D9D9" } ] }
-            ]}
-          >
-            <Geojson
-              geojson={IndonesiaMapJson} 
-              strokeColor="#EEEEEE"
-              fillColor="#EEEEEE"
-              strokeWidth={2}
-            />
-
-            {data.map((item, index) => {
-              if(item.latitude){
-                return (
-                  <Marker
-                    key={index}
-                    coordinate={{ 
-                      latitude: parseFloat(item.latitude),
-                      longitude: parseFloat(item.longitude),
+        <FlatList
+          showsHorizontalScrollIndicator={false}
+          data={itemData.data}
+          showsVerticalScrollIndicator={false}
+          renderItem={({item, index}) => {
+            let orderNumber = (index + 1).toString();
+            if (orderNumber.length <= 1) orderNumber = '0' + orderNumber;
+            return (
+              <Container flex={1} flexDirection="row" paddingHorizontal={16}>
+                <Container flex={1}>
+                  {index == 0 && (
+                    <Text size={9} type="semibold" align="left">
+                      {'● ECOSYSTEM'.toUpperCase()}
+                    </Text>
+                  )}
+                </Container>
+                <Container flex={3}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setSelected(item);
+                      modalRef.current.open();
                     }}
-                  >
-                    <Container
-                      backgroundColor="#FCD100"
-                      height={12}
-                      width={12}
-                      borderRadius={6}
-                      borderWidth={1}
-                      borderColor="#141414"
-                    />
-                    <Callout>
-                      <View style={{ width: 75 }}>
-                        <Text>{item.name}</Text>
-                      </View>
-                    </Callout>
-                  </Marker>
-                )
-              }else{
-                return <></>
-              }
-            })}
-          </MapView>
-          <Divider height={32} />
-          <Container
-            flexDirection="row"
-            justify="space-between"
-            paddingHorizontal={16}>
-            {/* <Container>
-                <Banner
-                  imageUrl={false}
-                  showHeader={false}
-                  data={[{id: 1, image: imageAssets.groupBanner}]}
-                  // loading={loadingBanner}
-                />
-              </Container> */}
-            {/* <Divider /> */}
-            {/* <FlatList
-                keyExtractor={(item, index) => item.toString() + index}
-                data={category}
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{
-                  paddingHorizontal: 16,
-                  alignItems: 'center',
-                }}
-                ItemSeparatorComponent={() => <Divider width={10} />}
-                renderItem={({item, index}) => (
-                  <TouchableOpacity onPress={() => setCategoryIndex(index)}>
+                    style={{
+                      width: '100%',
+                      flexDirection: 'row',
+                      paddingEnd: 16,
+                      borderColor: Color.primary,
+                    }}>
                     <Container
                       style={{
-                        padding: 12,
-                        borderWidth: 1,
-                        // borderRadius: 120,
-                        borderColor: Color.textSoft,
-                        backgroundColor:
-                          index === categoryIndex ? Color.primary : 'transparent',
+                        flex: 1,
+                        alignItems: 'flex-start',
+                        justifyContent: 'center',
                       }}>
-                      <Text size={12} type="medium" color={index === categoryIndex ? Color.textInput : Color.text}>
-                        {item}
+                      <Text size={11} type="medium" color={Color.primary}>
+                        {orderNumber}
                       </Text>
                     </Container>
-                  </TouchableOpacity>
-                )}
-              /> */}
-            {/* <Divider /> */}
-            <Container flex={1}>
-              <Text size={9} type="semibold" align="left">
-                {'● ECOSYSTEM'.toUpperCase()}
-              </Text>
-            </Container>
-            <Container flex={3}>
-              <FlatList
-                showsHorizontalScrollIndicator={false}
-                data={data}
-                showsVerticalScrollIndicator={false}
-                renderItem={({item, index}) => {
-                  let orderNumber = (index + 1).toString();
-                  if (orderNumber.length <= 1) orderNumber = '0' + orderNumber;
-                  return (
-                    <TouchableOpacity
-                      onPress={() => {
-                        setSelected(item);
-                        modalRef.current.open();
-                      }}
+                    <Container
                       style={{
-                        width: '100%',
-                        flexDirection: 'row',
-                        paddingEnd: 16,
-                        borderColor: Color.primary,
+                        flex: 7,
+                        alignItems: 'flex-start',
+                        paddingRight: 8,
                       }}>
+                      <Text
+                        size={18}
+                        type="medium"
+                        align="left"
+                        numberOfLines={2}>
+                        {item.name}
+                      </Text>
+                    </Container>
+                    <Container style={{justifyContent: 'center'}}>
+                      <Text
+                        size={11}
+                        type="medium"
+                        color={Color.primary}
+                        underline>
+                        View
+                      </Text>
                       <Container
                         style={{
-                          flex: 1,
-                          alignItems: 'flex-start',
-                          justifyContent: 'center',
-                        }}>
-                        <Text size={11} type="medium" color={Color.primary}>
-                          {orderNumber}
-                        </Text>
-                      </Container>
-                      <Container
-                        style={{
-                          flex: 7,
-                          alignItems: 'flex-start',
-                          paddingRight: 8,
-                        }}>
-                        <Text
-                          size={18}
-                          type="medium"
-                          align="left"
-                          numberOfLines={2}>
-                          {item.name}
-                        </Text>
-                      </Container>
-                      <Container style={{justifyContent: 'center'}}>
-                        <Text
-                          size={11}
-                          type="medium"
-                          color={Color.primary}
-                          underline>
-                          View
-                        </Text>
-                        <Container
-                          style={{
-                            borderBottomWidth: 1,
-                            borderColor: Color.primary,
-                          }}
-                        />
-                      </Container>
-                    </TouchableOpacity>
-                  );
-                }}
-                keyExtractor={(item, index) => item.id + index.toString()}
-                ItemSeparatorComponent={() => (
-                  <Container paddingVertical={10}>
-                    <Line width={width - 32} color={'#141414'} height={1} />
-                  </Container>
-                )}
-                ListHeaderComponent={() => (
-                  <Container paddingBottom={10}>
-                    <Line width={width - 32} color={'#141414'} height={1} />
-                  </Container>
-                )}
-                ListFooterComponent={() => (
-                  <Container paddingTop={10}>
-                    <Line width={width - 32} color={'#141414'} height={1} />
-                  </Container>
-                )}
-                contentContainerStyle={
-                  {
-                    height: height
-                    // paddingVertical: 16,
-                    // borderWidth: 1,
-                  }
-                }
+                          borderBottomWidth: 1,
+                          borderColor: Color.primary,
+                        }}
+                      />
+                    </Container>
+                  </TouchableOpacity>
+                </Container>
+              </Container>
+            );
+          }}
+          keyExtractor={(item, index) => item.id + index.toString()}
+          onEndReachedThreshold={0.3}
+          onEndReached={() => setItemData({...itemData, loadNext: true})}
+          ItemSeparatorComponent={() => (
+            <Container flexDirection="row" paddingHorizontal={16}>
+              <Container flex={1} />
+              <Container
+                marginVertical={10}
+                flex={3}
+                borderWidth={0.25}
+                color={'#141414'}
               />
             </Container>
-          </Container>
-        </ScrollView>
+          )}
+          ListHeaderComponent={() => (
+            <Container>
+              <MapView
+                ref={mapRef}
+                onMapReady={() => mapRef.current.fitToElements(true)}
+                provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+                style={{height: width * 0.49, width: width}}
+                zoomEnabled
+                region={{
+                  latitude: parseFloat('-2.3923927'),
+                  longitude: parseFloat('116.2305105'),
+                  latitudeDelta: 20,
+                  longitudeDelta: 20,
+                }}
+                customMapStyle={[
+                  {elementType: 'geometry', stylers: [{color: '#D9D9D9'}]},
+                ]}>
+                <Geojson
+                  geojson={IndonesiaMapJson}
+                  strokeColor="#EEEEEE"
+                  fillColor="#EEEEEE"
+                  strokeWidth={2}
+                />
+
+                {itemData.data.map((item, index) => {
+                  if (item.axis) {
+                    return (
+                      <Marker
+                        key={index}
+                        coordinate={{
+                          latitude: parseFloat(item.axis),
+                          longitude: parseFloat(item.yaxis),
+                        }}>
+                        <Container
+                          backgroundColor="#FCD100"
+                          height={12}
+                          width={12}
+                          borderRadius={6}
+                          borderWidth={1}
+                          borderColor="#141414"
+                        />
+                        <Callout>
+                          <View style={{width: 75}}>
+                            <Text>{item.name}</Text>
+                          </View>
+                        </Callout>
+                      </Marker>
+                    );
+                  } else {
+                    return <></>;
+                  }
+                })}
+              </MapView>
+              <Divider height={32} />
+              <Container
+                flex={1}
+                flexDirection="row"
+                paddingBottom={10}
+                paddingHorizontal={16}>
+                <Container flex={1} />
+                <Container flex={3} borderWidth={0.25} color={'#141414'} />
+              </Container>
+            </Container>
+          )}
+          ListFooterComponent={() => (
+            <Container
+              paddingTop={10}
+              flexDirection="row"
+              paddingHorizontal={16}>
+              <Container flex={1} />
+              <Container flex={3} borderWidth={0.25} color={'#141414'} />
+            </Container>
+          )}
+        />
       )}
-      {/* </ScrollView> */}
       <Modalize
         scrollViewProps={{
           keyboardShouldPersistTaps: 'handled',
@@ -418,15 +428,17 @@ const GroupScreen = ({navigation, route}) => {
           setSelected({});
         }}>
         <Container>
-          <Image
-            style={{
-              width: width - 32,
-              height: (width - 32) * 0.55,
-              resizeMode: 'cover',
-              // borderRadius: 8,
-            }}
-            source={selected.image}
-          />
+          {Array.isArray(selected?.galleries_all) &&  selected?.galleries_all[0]?.image && 
+            <Image
+              style={{
+                width: width - 32,
+                height: (width - 32) * 0.55,
+                resizeMode: 'cover',
+                // borderRadius: 8,
+              }}
+              source={{ uri: selected?.galleries_all[0]?.image}}
+            />
+          }
           <Divider height={10} />
           <Text size={16} type="medium" color={Color.black} align="left">
             {selected.name}

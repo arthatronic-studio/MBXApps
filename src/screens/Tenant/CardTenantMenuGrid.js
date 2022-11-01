@@ -78,7 +78,12 @@ const CardTenantMenuGrid = ({ item, index, numColumns, onPress, cartProductQuant
             </View>
 
             <View style={{ marginTop: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
-              <Text size={12} type='medium'>{FormatMoney.getFormattedMoney(item.price)}</Text>
+              <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+                <Text size={12} type='medium'>{FormatMoney.getFormattedMoney(item.total_price)}</Text>
+                {item.total_price != item.price &&
+                  <Text size={10} type='medium' style={{textDecorationLine: 'line-through'}}>{FormatMoney.getFormattedMoney(item.price)}</Text>
+                }
+              </View>
               <Image
                 source={imageAssets.addBox}
                 style={{
