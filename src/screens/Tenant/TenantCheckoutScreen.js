@@ -40,6 +40,7 @@ import FormSelect from 'src/components/FormSelect';
 import ModalActions from 'src/components/Modal/ModalActions';
 import { fetchEatCartDetail } from 'src/api-rest/fetchEatCartDetail';
 import FormInputV2 from 'src/components/FormInputV2';
+import ModalActionsGrid from 'src/components/Modal/ModalActionsGrid';
 
 const TenantCheckoutScreen = ({ navigation, route }) => {
   const { params } = route;
@@ -429,7 +430,11 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
         /> */}
 
         {selectedOrderType.value === 1 && <View style={{flexDirection: 'row', paddingTop: 16, justifyContent: 'space-between', alignItems: 'center'}}>
-          <Text size={18} type='medium'>{selectedSeatsAvailable ? selectedSeatsAvailable.name : '-'}</Text>
+          {selectedSeatsAvailable ?
+            <Text size={18} type='medium'>{selectedSeatsAvailable.name}</Text>
+          :
+            <Text size={14} type='medium'>-Select Table-</Text>
+          }
           <TouchableOpacity onPress={() => setModalSeatsAvailable(true)} style={{borderBottomWidth: 1, borderColor: Color.primary}}>
             <Text size={11} type='medium'>Change</Text>
           </TouchableOpacity>
@@ -770,7 +775,13 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
               const isSelected = selectedOrderType.value === e.value;
               return (
                 <View key={idx} style={{flex: 1, paddingHorizontal: 8}}>
-                  <TouchableOpacity onPress={() => setSelectedOrderType(e)} style={{paddingVertical: 16, backgroundColor: isSelected ? Color.primary : 'transparent' }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setSelectedOrderType(e);
+                      setModalOrderType(false);
+                    }}
+                    style={{paddingVertical: 16, backgroundColor: isSelected ? Color.primary : 'transparent' }}
+                  >
                     <Text size={18} type='medium' color={isSelected ? Color.textInput : Color.text}>{e.name}</Text>
                   </TouchableOpacity>
                 </View>
@@ -849,7 +860,7 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
         </View>
       </Modal>
 
-      <ModalActions
+      <ModalActionsGrid
         visible={modalSeatsAvailable}
         data={listSeatsAvailable}
         selected={selectedSeatsAvailable}

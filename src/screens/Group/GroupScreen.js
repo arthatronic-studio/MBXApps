@@ -65,9 +65,14 @@ const GroupScreen = ({navigation, route}) => {
   const fetchData = async first => {
     const param = itemData.nextUrl && !first ? itemData.nextUrl : `?perPage=10`;
     const result = await fetchGetGroups(param);
+
     console.log(result, 'sult');
-    const newArr = result.data.data;
-    console.log(newArr, 'list group');
+
+    let newArr = [];
+
+    if (result.status) {
+      if (Array.isArray(result.data)) newArr = result.data;
+    }
 
     setItemData({
       ...itemData,
@@ -323,7 +328,7 @@ const GroupScreen = ({navigation, route}) => {
               />
             </Container>
           )}
-          ListHeaderComponent={() => (
+          ListHeaderComponent={
             <Container>
               <MapView
                 ref={mapRef}
@@ -348,7 +353,7 @@ const GroupScreen = ({navigation, route}) => {
                 />
 
                 {itemData.data.map((item, index) => {
-                  if (item.axis) {
+                  if (typeof item.axis === 'number' && typeof item.yaxis === 'number') {
                     return (
                       <Marker
                         key={index}
@@ -371,9 +376,9 @@ const GroupScreen = ({navigation, route}) => {
                         </Callout>
                       </Marker>
                     );
-                  } else {
-                    return <></>;
                   }
+                  
+                  return <View />
                 })}
               </MapView>
               <Divider height={32} />
@@ -386,8 +391,8 @@ const GroupScreen = ({navigation, route}) => {
                 <Container flex={3} borderWidth={0.25} color={'#141414'} />
               </Container>
             </Container>
-          )}
-          ListFooterComponent={() => (
+          }
+          ListFooterComponent={
             <Container
               paddingTop={10}
               flexDirection="row"
@@ -395,7 +400,7 @@ const GroupScreen = ({navigation, route}) => {
               <Container flex={1} />
               <Container flex={3} borderWidth={0.25} color={'#141414'} />
             </Container>
-          )}
+          }
         />
       )}
       <Modalize

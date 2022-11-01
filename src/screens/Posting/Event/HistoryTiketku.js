@@ -91,81 +91,77 @@ const HistoryTiketku = ({ navigation, route }) => {
           itemData.loadNext &&
           <Text size={12} type='medium'>Loading...</Text>
         }
-        renderItem={({ item }) =>
-          <View style={{ paddingHorizontal: 16 }}>
-            <Pressable
-              onPress={() => navigation.navigate('OrderEventDetail', { item })}
-              style={{ paddingHorizontal: 10, paddingVertical: 12, borderRadius: 8, marginBottom: 10, backgroundColor: Color.theme, width: '100%' }}
-            >
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <View style={{ flex: 1 }}>
-                  <Text numberOfLines={2} align={'left'} type='medium' size={11} letterSpacing={0.5} color={Color.secondary}>No. Receipt</Text>
-                  <Divider height={2} />
-                  <Text numberOfLines={2} align={'left'} size={12} letterSpacing={0.4}>{item.invoice_id}</Text>
-                </View>
+        renderItem={({ item }) => {
+          // 0 waiting
+          // 1 success
+          // 2 canceled
+          // 3 expired
+          // 4 finish
 
-                <View>
-                  {item.status === 0 ?
-                    <View style={{ backgroundColor: Color.text, borderRadius: 120, paddingHorizontal: 8, paddingVertical: 8, justifyContent: 'center', alignItems: 'center' }}>
-                      <Text size={10} color={Color.textInput} type='medium'>{item.status_name}</Text>
-                    </View>
-                    :
-                    item.status === 1 ?
-                      <View style={{ backgroundColor: '#E7F5D0', borderRadius: 120, paddingHorizontal: 12, paddingVertical: 8, justifyContent: 'center', alignItems: 'center' }}>
-                        <Text size={11} color={'#558617'} type='medium'>{item.status_name}</Text>
-                      </View>
-                      :
-                      <View style={{ backgroundColor: '#FDD6DA', borderRadius: 120, paddingHorizontal: 12, paddingVertical: 8, justifyContent: 'center', alignItems: 'center' }}>
-                        <Text size={11} color={'#F73347'} type='medium'>{item.status_name}</Text>
-                      </View>
-                  }
-                </View>
-              </View>
+          let textColorStatus = Color.textInput;
+          let bgColorStatus = Color.text;
+          let borderColorStatus = Color.text;
+          if (item.status === 0) {
+            textColorStatus = Color.text;
+            bgColorStatus = '#CCCCCC';
+            borderColorStatus = '#CCCCCC';
+          }
 
-              <Container paddingVertical={12}>
-                <View style={{ height: 0.5, width: '100%', backgroundColor: Color.border }} />
-              </Container>
+          return (
+            <View style={{ paddingHorizontal: 16 }}>
+              <Pressable
+                onPress={() => navigation.navigate('OrderEventDetail', { item })}
+                style={{ borderWidth: 1, borderColor: Color.text, marginBottom: 10, backgroundColor: Color.theme, width: '100%' }}
+              >
+                <View style={{ borderBottomWidth: 1, borderColor: Color.text, paddingHorizontal: 8, paddingVertical: 12, flexDirection: 'row', alignItems: 'center' }}>
+                  <View style={{ flex: 1 }}>
+                    <Text numberOfLines={2} align={'left'} type='medium' size={11} letterSpacing={0.5} color={Color.secondary}>No. Receipt</Text>
+                    <Divider height={2} />
+                    <Text numberOfLines={2} align={'left'} type='bold' size={12} letterSpacing={0.4}>{item.invoice_id || '-'}</Text>
+                  </View>
 
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <View style={{ width: '14%', aspectRatio: 1, backgroundColor: Color.secondary, borderRadius: 4 }}>
-                  <Image
-                    source={{ uri: item.ticket && item.ticket.event ? item.ticket.event.image : '' }}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      borderRadius: 4
-                    }}
-                  />
-                </View>
-                <View style={{ paddingHorizontal: 10, width: '76%' }}>
-                  <Text numberOfLines={2} align={'left'} style={{ fontWeight: 'bold' }}>{item.ticket ? item.ticket.name : ''}</Text>
-                  <View style={{ flexDirection: 'row', marginTop: 4, alignItems: 'center' }}>
-                    <Text style={{ fontSize: 10, color: Color.secondary }}>{item.amount} Tiket</Text>
-                    <View style={{ width: 3, height: 3, backgroundColor: Color.secondary, borderRadius: 20, marginHorizontal: 5 }} />
-                    <Text style={{ fontSize: 10, color: Color.secondary }}>1 Pax</Text>
+                  <View style={{ borderWidth: 1, borderColor: borderColorStatus, backgroundColor: bgColorStatus, paddingHorizontal: 10, paddingVertical: 6, justifyContent: 'center', alignItems: 'center' }}>
+                    <Text size={10} color={textColorStatus} type='medium'>{item.status_name}</Text>
                   </View>
                 </View>
-              </View>
 
-              <Container paddingVertical={12}>
-                <View style={{ height: 0.5, width: '100%', backgroundColor: Color.border }} />
-              </Container>
-
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <View style={{ flex: 1, paddingRight: 10 }}>
-                  <Text align={'left'} style={{ fontWeight: 'bold' }}>{item.amount} Tiket • {item.amount} Pax</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 12 }}>
+                  <View style={{ width: '14%', aspectRatio: 1, backgroundColor: Color.secondary, borderRadius: 4 }}>
+                    <Image
+                      source={{ uri: item.ticket && item.ticket.event ? item.ticket.event.image : '' }}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: 4
+                      }}
+                    />
+                  </View>
+                  <View style={{ paddingHorizontal: 10, width: '76%' }}>
+                    <Text numberOfLines={2} align={'left'} style={{ fontWeight: 'bold' }}>{item.ticket ? item.ticket.name : ''}</Text>
+                    <View style={{ flexDirection: 'row', marginTop: 4, alignItems: 'center' }}>
+                      <Text style={{ fontSize: 10, color: Color.secondary }}>{item.amount} Tiket</Text>
+                      <View style={{ width: 3, height: 3, backgroundColor: Color.secondary, borderRadius: 20, marginHorizontal: 5 }} />
+                      <Text style={{ fontSize: 10, color: Color.secondary }}>1 Pax</Text>
+                    </View>
+                  </View>
                 </View>
-                <Pressable
-                  onPress={() => navigation.navigate('OrderEventDetail', { item })}
-                  style={{ flexDirection: 'row', backgroundColor: Color.theme, borderRadius: 8, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 12 }}
-                >
-                  <Text style={{ fontSize: 12, marginRight: 4, }} type='medium' color={Color.primaryDark} letterSpacing={0.5}>Lihat Detail</Text>
-                  <Fontisto name={'arrow-right'} size={10} color={Color.primaryDark} />
-                </Pressable>
-              </View>
-            </Pressable>
-          </View>
-        }
+
+                <View style={{ borderTopWidth: 1, borderColor: Color.text, paddingVertical: 12, paddingHorizontal: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <View>
+                    <Text>{item.total_price > 0 ? FormatMoney.getFormattedMoney(item.total_price) : 'Free'}</Text>
+                  </View>
+
+                  <Pressable
+                    onPress={() => navigation.navigate('OrderEventDetail', { item })}
+                    style={{ flexDirection: 'row', backgroundColor: Color.text, alignItems: 'center', justifyContent: 'center', padding: 8 }}
+                  >
+                    <Text size={12} type='bold' color={Color.textInput}>Check Ticket</Text>
+                  </Pressable>
+                </View>
+              </Pressable>
+            </View>
+          )
+        }}
       />
     </Scaffold>
   )

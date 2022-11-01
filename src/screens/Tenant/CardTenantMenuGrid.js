@@ -9,8 +9,10 @@ import {
 } from '@src/components';
 import imageAssets from 'assets/images';
 import { FormatMoney } from 'src/utils';
-import { Container } from 'src/styled';
+import { Container, Divider } from 'src/styled';
 import { shadowStyle } from 'src/styles';
+import { imageContentItem } from 'assets/images/content-item';
+import { fetchFavoriteProduct } from 'src/api-rest/fetchFavoriteProduct';
 
 const defaultProps = {
   numColumns: 2,
@@ -23,6 +25,8 @@ const CardTenantMenuGrid = ({ item, index, numColumns, onPress, cartProductQuant
   const navigation = useNavigation();
 
   const [quantity, setQuantity] = useState(cartProductQuantity);
+  const [productLike, setProductLike] = useState(0);
+  const [isProductLike, setIsProductLike] = useState(false);
 
   useEffect(() => {
     setQuantity(cartProductQuantity);
@@ -81,17 +85,58 @@ const CardTenantMenuGrid = ({ item, index, numColumns, onPress, cartProductQuant
               <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
                 <Text size={12} type='medium'>{FormatMoney.getFormattedMoney(item.total_price)}</Text>
                 {item.total_price != item.price &&
-                  <Text size={10} type='medium' style={{textDecorationLine: 'line-through'}}>{FormatMoney.getFormattedMoney(item.price)}</Text>
+                  <Text size={10} type='medium' style={{ textDecorationLine: 'line-through' }}>{FormatMoney.getFormattedMoney(item.price)}</Text>
                 }
               </View>
-              <Image
-                source={imageAssets.addBox}
-                style={{
-                  height: 24,
-                  width: 24,
-                  resizeMode: 'contain'
-                }}
-              />
+
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View style={{height: 24, width: 24, padding: 4,}}>
+                  <TouchableOpacity
+                    onPress={async () => {
+                      const body = {
+                        product_id: item.id
+                      }
+                      const res = await fetchFavoriteProduct(body);
+                      console.log(res, "resssss")
+                      if (res.status) {
+                        if (isProductLike) {
+                          setProductLike(productLike - 1);
+                        } else {
+                          setProductLike(productLike + 1);
+                        }
+                        setIsProductLike(!isProductLike)
+                      }
+                    }}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      backgroundColor: Color.textInput,
+                      borderColor: Color.text,
+                      borderWidth: 1,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Image
+                      source={isProductLike ? imageContentItem.heart_active : imageContentItem.heart_nonactive}
+                      style={{
+                        height: 10,
+                        width: 10,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </View>
+
+                <Image
+                  source={imageAssets.addBox}
+                  style={{
+                    height: 24,
+                    width: 24,
+                    resizeMode: 'contain'
+                  }}
+                />
+              </View>
             </View>
           </Container>
         </View>

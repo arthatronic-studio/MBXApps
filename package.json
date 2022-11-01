@@ -8,6 +8,7 @@
     "ios": "npx react-native run-ios",
     "ios_55": "npx react-native run-ios --simulator='iPhone 8 Plus'",
     "ios_65": "npx react-native run-ios --simulator='iPhone 11 Pro Max'",
+    "ios_67": "npx react-native run-ios --simulator='iPhone 14 Pro Max'",
     "iphone": "npx react-native run-ios --device 'iPhone'",
     "ip_bb": "npx react-native run-ios --device 'Sentinel Turret'",
     "start": "npx react-native start --reset-cache",

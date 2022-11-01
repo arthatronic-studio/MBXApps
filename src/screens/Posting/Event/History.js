@@ -79,7 +79,7 @@ const CustomTabBar = (props) => {
                     } : {}
                 }
               >
-                <Text size={12} type='medium' letterSpacing={0.5} color={isActive ? Color.theme : Color.primary}>{label}</Text>
+                <Text size={14} type={isActive ? 'bold' : 'medium'} letterSpacing={0.5} color={isActive ? Color.theme : Color.primary}>{label}</Text>
               </Container>
             </TouchableOpacity>
           )
@@ -135,12 +135,12 @@ const History = ({ navigation, route }) => {
         tabBar={(props) => <CustomTabBar {...props} />}
     >
         <Tab.Screen
-            name="● MY TICKET"
+            name="Ticket Active"
             component={HistoryTiketku}
             options={{tabBarLabel: 'Tiketku'}}
         />
         <Tab.Screen
-            name="● HISTORY"
+            name="History"
             component={HistoryRiwayat}
             options={{tabBarLabel: 'Riwayat'}}
         />

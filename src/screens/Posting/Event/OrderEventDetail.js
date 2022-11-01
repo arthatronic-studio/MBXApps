@@ -13,7 +13,7 @@ import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
 import { useIsFocused, useRoute } from '@react-navigation/native';
 import BluetoothStateManager from 'react-native-bluetooth-state-manager';
-import Kontakt, { KontaktModule } from 'react-native-kontaktio';
+// import Kontakt, { KontaktModule } from 'react-native-kontaktio';
 import Modal from 'react-native-modal';
 
 import { TouchableOpacity, Button } from '@src/components/Button';
@@ -36,18 +36,8 @@ import { postAPI } from 'src/api-rest/httpService';
 import ModalQRBottom from 'src/components/Modal/ModalQRBottom';
 import { stateUpdateProfile } from 'src/api-rest/stateUpdateProfile';
 
-const Content = styled(View)`
-    elevation: 2px
-    margin: 1px
-    marginBottom: 16px
-    borderRadius: 10px
-    paddingHorizontal: 10px
-    paddingVertical: 16px
-    backgroundColor: #fff 
-`;
-
-const { connect, init, startDiscovery, startScanning, isScanning } = Kontakt;
-const kontaktEmitter = new NativeEventEmitter(KontaktModule);
+// const { connect, init, startDiscovery, startScanning, isScanning } = Kontakt;
+// const kontaktEmitter = new NativeEventEmitter(KontaktModule);
 
 const OrderEventDetail = ({ navigation, route }) => {
   const items = route.params.item;
@@ -58,15 +48,15 @@ const OrderEventDetail = ({ navigation, route }) => {
   const { Color } = useColor();
   const modalOptionsRef = useRef();
   const dispatch = useDispatch();
-  const {height, width} = useWindowDimensions();
+  const { height, width } = useWindowDimensions();
 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(items);
   const [stateListEventUID, setStateListEventUID] = useState([]);
   const [modalEventVerification, setModalEventVerification] = useState({
     show: false,
-    error: true,
     item: null,
+    errorMessage: '',
   });
   const [isActiveBluetooth, setIsActiveBluetooth] = useState(false);
 
@@ -79,115 +69,57 @@ const OrderEventDetail = ({ navigation, route }) => {
   const isCheckin = auth && auth.user && auth.user.isCheckin;
 
   useEffect(() => {
-    initialConfig();
+    if (isCheckin && data.redeemableNow) {
+      setModalEventVerification({ ...modalEventVerification, show: true });
 
-    BluetoothStateManager.onStateChange((bluetoothState) => {
-      console.log('bluetoothState', bluetoothState);
-      if (bluetoothState === 'PoweredOn') {
-        setIsActiveBluetooth(true);
-      } else {
-        setIsActiveBluetooth(false);
-      }
-    }, true);
+      setTimeout(() => {
+        onVerifyTicket();
+      }, 5000);
+    }
   }, []);
 
-  const initialConfig = async () => {
-    if (Platform.OS === 'android' && Platform.Version < 31) {
-      await BluetoothStateManager.requestToEnable();
+  console.log('data.redeemableNow', data.redeemableNow);
+
+  const onVerifyTicket = async () => {
+    const body = {
+      isDetailPage: true,
+      ticket_id: data.id,
+    };
+
+    let newItem = null;
+
+    console.log('body', body);
+
+    const result = await postAPI('user-activity/beacons', body);
+
+    console.log('result', result);
+
+    if (result.status) {
+      // 1	Mural
+      // 2	Gate In
+      // 3	Gate Out
+      // 4	Area
+      // 5	Toko
+      // 6	Event
+
+      newItem = result.data;
+
+      let strTypeName = '';
+      if (result.beaconType && typeof result.beaconType.name === 'string') {
+        strTypeName = result.beaconType.name.toLowerCase();
+      }
+
+      console.log(`type: ${strTypeName}, id: , ${result.data.id}`);
+
+      const _isEventType = strTypeName === 'event';
+      if (_isEventType) {
+        const prof = await stateUpdateProfile();
+        console.log('prof', prof);
+      }
     }
+
+    setModalEventVerification({ ...modalEventVerification, show: true, item: newItem, errorMessage: result.status ? '' : result.message });
   }
-
-  useEffect(() => {
-    beaconSetup();
-  }, [isActiveBluetooth]);
-
-  useEffect(() => {
-    if (isCheckin && stateListEventUID.length > 0) {
-      setModalEventVerification({ ...modalEventVerification, show: true });
-    }
-  }, [isCheckin, stateListEventUID]);
-
-  useEffect(() => {
-    const timeout = isFocused ?
-      setTimeout(() => {
-        onPairingEvent();
-      }, 3000)
-      : null;
-
-    return () => {
-      clearTimeout(timeout);
-    }
-  }, [isCheckin, isFocused, stateListEventUID]);
-
-  const beaconSetup = async () => {
-    console.log('beaconSetup');
-    if (Platform.OS === 'android') {
-      // Android
-      // const granted = await requestLocationPermission();
-
-      // if (granted) {
-      await connect();
-      await startScanning();
-      // } else {
-      //   Alert.alert(
-      //     'Permission error',
-      //     'Location permission not granted. Cannot scan for beacons',
-      //     [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-      //     {cancelable: false},
-      //   );
-      // }
-    } else {
-      // iOS
-      await init();
-      await startDiscovery();
-    }
-
-    // Add beacon listener
-    if (Platform.OS === 'android') {
-      DeviceEventEmitter.addListener('beaconDidAppear', ({ beacons, region }) => {
-        console.log('beaconDidAppear', beacons);
-      });
-
-      DeviceEventEmitter.addListener('beaconsDidUpdate', ({ beacons, region }) => {
-        // console.log('beaconsDidUpdate', beacons, region);
-        // console.log('beaconsDidUpdate', beacons);
-
-        if (Array.isArray(beacons)) {
-          let newEventUID = [];
-
-          beacons.map((e, i) => {
-            // console.log('full info beacon', e);
-
-            const strength = 4;
-            const rumusRSSI = ((-69 - (e.rssi)) / (10 * strength));
-            const productRange = Math.pow(10, rumusRSSI) * 100;
-
-            const rangeForCompare = productRange - 50;
-
-            const isEventType = localStoragBeacons.listEventUID.indexOf(e.address);
-
-            // type beacon yang masuk kondisi checkin (harus checkin dulu)
-            if (isCheckin) {
-              if (isEventType !== -1 && rangeForCompare < localStoragBeacons.listEventRange[isEventType]) {
-                newEventUID.push(e.address);
-              }
-            }
-          });
-
-          setStateListEventUID(newEventUID);
-        }
-      });
-
-      DeviceEventEmitter.addListener('beaconDidDisappear', ({ beacons, region }) => {
-        console.log('beaconDidDisappear', beacons, region);
-        // klo beacon ilang
-      });
-    } else {
-      kontaktEmitter.addListener('didDiscoverDevices', ({ beacons }) => {
-        console.log('didDiscoverDevices', beacons);
-      });
-    }
-  };
 
   const onPairingEvent = async () => {
     if (stateListEventUID.length === 0 || modalEventVerification.show) {
@@ -206,7 +138,7 @@ const OrderEventDetail = ({ navigation, route }) => {
     let newItem = null;
 
     if (result.status) {
-      newItem = result.status;
+      newItem = result.item;
       // console.log('event', result);
 
       // update profile
@@ -214,7 +146,7 @@ const OrderEventDetail = ({ navigation, route }) => {
       console.log('prof', prof);
     }
 
-    setModalEventVerification({ ...modalEventVerification, show: true, item: newItem, error: !result.status });
+    setModalEventVerification({ ...modalEventVerification, show: true, item: newItem, errorMessage: result.status ? '' : result.message });
   }
 
   const onPayment = async () => {
@@ -240,7 +172,47 @@ const OrderEventDetail = ({ navigation, route }) => {
     }
   }
 
+  console.log('data', data);
+
   if (!data) return <View />
+
+  let eventName = '';
+  let eventImageUrl = '';
+
+  let ticketName = '';
+  let ticketRefund = '';
+
+  let ticketType = '';
+
+  let visitorTitle = '';
+  let visitorName = '';
+  let visitorEmail = '';
+  let visitorIdNumber = '';
+  let visitorPhone = '';
+
+  if (data) {
+    if (data.ticket) {
+      if (data.ticket.name) ticketName = data.ticket.name;
+      if (data.ticket.isRefundable) ticketRefund = 'Non-Refundable'; else ticketRefund = 'Refundable';
+
+      if (data.ticket.event) {
+        if (data.ticket.event.title) eventName = data.ticket.event.title;
+        if (data.ticket.event.image) eventImageUrl = data.ticket.event.image;
+      }
+
+      if (data.ticket.type) {
+        if (data.ticket.type.text) ticketType = data.ticket.type.text;
+      }
+    }
+
+    if (data.visitor) {
+      if (data.visitor.title_name && data.visitor.title_name.text) visitorTitle = data.visitor.title_name.text;
+      if (data.visitor.name) visitorName = data.visitor.name;
+      if (data.visitor.email) visitorEmail = data.visitor.email;
+      if (data.visitor.ktp) visitorIdNumber = data.visitor.ktp;
+      if (data.visitor.phone) visitorPhone = data.visitor.phone;
+    }
+  }
 
   return (
     <Scaffold
@@ -263,225 +235,106 @@ const OrderEventDetail = ({ navigation, route }) => {
         showsVerticalScrollIndicator={false}
       >
         <Container padding={16} color={Color.theme}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 12, borderWidth: 1, borderColor: Color.text }}>
             <View style={{ width: 40, height: 40, backgroundColor: Color.secondary, borderRadius: 4 }}>
-              <Image source={{ uri: data.ticket.event.image }} style={{ width: '100%', height: '100%', borderRadius: 4 }} />
+              <Image source={{ uri: eventImageUrl }} style={{ width: '100%', height: '100%', borderRadius: 4 }} />
             </View>
             <View style={{ paddingHorizontal: 10, width: '70%' }}>
-              <Text numberOfLines={2} align={'left'} style={{ fontWeight: 'bold' }}>{data.ticket.name}</Text>
+              <Text numberOfLines={2} align='left' type='medium'>{eventName}</Text>
+              <Divider height={4} />
+              <Text align='left' size={10} color={Color.textSoft}>{moment(data.selected_date).format('DD MMM YYYY')}</Text>
             </View>
           </View>
 
-          <Divider />
+          <Divider height={12} />
 
-          <Row style={{ alignItems: 'center', width: '100%' }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Image
-                source={imageAssets.calendar}
-                style={{
-                  height: 16,
-                  width: 16,
-                }}
-                resizeMode='contain'
-              />
-              <Text style={{ fontSize: 11, color: Color.secondary, marginHorizontal: 8 }}>{moment(data.selected_date).format('DD/MMM/YYYY')}</Text>
+          <View style={{ alignItems: 'center', borderWidth: 1, borderColor: Color.text }}>
+            <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 12, borderBottomWidth: 1, borderColor: Color.text }}>
+              <View style={{ flex: 1, }}>
+                <Text numberOfLines={2} align='left' type='bold'>{ticketName}</Text>
+                <Divider height={4} />
+                <Text align='left' size={10} color={Color.textSoft}>{ticketRefund}</Text>
+              </View>
+              <View style={{ backgroundColor: '#D6D6D6', paddingVertical: 5, paddingHorizontal: 9 }}>
+                <Text size={12} type='medium'>Regular</Text>
+              </View>
             </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Image
-                source={imageAssets.location}
-                style={{
-                  height: 16,
-                  width: 16,
-                }}
-                resizeMode='contain'
-              />
-              <Text style={{ fontSize: 11, color: Color.secondary, marginHorizontal: 8 }}>Jakarta</Text>
-            </View>
-          </Row>
-        </Container>
 
-        {/* <Content>
-          <Text align='left' type='bold' style={{ paddingBottom: 13 }}>Detail Transaksi</Text>
-          <View style={{ height: 1, backgroundColor: Color.grayLight, marginHorizontal: -10, marginBottom: 13 }} />
-          <Row style={{ marginBottom: 8 }}>
-            <Text type='medium' size={11} align='left' color={Color.textGray}>Status</Text>
-            <Col>
-              <Text align='right' size={12} color='#558617' type='bold'>{data.status}</Text>
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 8 }}>
-            <Text type='medium' size={11} align='left' color={Color.textGray}>No Recipt</Text>
-            <Col>
-              <Text align='right' size={12} color='#111' type='medium'>{data.orderNumber}</Text>
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 8 }}>
-            <Text type='medium' size={11} align='left' color={Color.textGray}>Tanggal Transaksi</Text>
-            <Col>
-              <Text align='right' size={12} color='#111' type='medium'>{moment(data.created_at).format('DD/MMM/YYYY')}</Text>
-            </Col>
-          </Row>
-        </Content> */}
+            <Container paddingTop={12} paddingHorizontal={8} width='100%'>
+              <Text align='left' type='medium'>● {ticketType}</Text>
+            </Container>
 
-        {/* <Content>
-          <Text align='left' type='bold' style={{ paddingBottom: 13 }}>Detail Produk</Text>
-          <View style={{ height: 1, backgroundColor: Color.grayLight, marginHorizontal: -10, marginBottom: 13 }} />
-          <View style={{ borderWidth: 1, borderColor: '#CDD1D2', padding: 10, borderRadius: 10 }}>
-            <Row>
-              <Image source={{ uri: '' }} style={{ height: 48, backgroundColor: '#ddd', width: 48, marginRight: 10 }} />
-              <Col>
-                <Text size={14} type='semibold' align='left'>{data.name}</Text>
-              </Col>
-            </Row>
-            <View style={{ height: 1, backgroundColor: Color.grayLight, marginVertical: 15 }} />
-            <Row style={{ marginBottom: 4 }}>
-              <Text size={12} type='bold' align='left'>{data.ticket.name}</Text>
-              <Col>
-                <Text size={11} align='right'>{moment(data.created_at).format('DD/MMM/YYYY')}</Text>
-              </Col>
-            </Row>
-            <Text size={11} align='left'>{data.amount} Tiket • 1 Pax</Text>
-            <View style={{ height: 1, backgroundColor: Color.grayLight, marginVertical: 15 }} />
-            <Row style={{ alignItems: 'center', }}>
-              <MaterialCommunityIcons name={'cash-refund'} color={Color.secondary} size={22} />
-              <Text style={{ fontSize: 10, color: Color.secondary, marginHorizontal: 5 }}>{data.ticket.refund ? 'Bisa Refund' : 'Tidak Bisa Refund'}</Text>
-              <Divider width={8} />
-              <AntDesign name='calendar' size={18} color={Color.secondary} />
-              <Text style={{ fontSize: 10, color: Color.secondary, marginHorizontal: 5 }}>{data.ticket.reservation ? 'Perlu Reservasi' : 'Tidak Perlu Reservasi'}</Text>
-            </Row>
-          </View>
-        </Content> */}
+            <Container paddingTop={12} paddingHorizontal={8} width='100%'>
+              <Row>
+                  <View style={{flex: 1}}>
+                    <Text type='medium' size={10} align='left'>Fullname</Text>
+                    <Divider height={4} />
+                    <Text type='bold' size={14} align='left'>{visitorTitle} {visitorName}</Text>
+                  </View>
 
-        {data.visitor && <Container padding={16}>
-          {[data.visitor].map((val, id) => (
-            <TouchableOpacity
-              key={id}
-              onPress={() => {
-                // navigation.navigate('MyTicket', { item: data });
-              }}
-              style={{ width: '100%', aspectRatio: 2.6/1, marginBottom: 10 }}
-            >
-              <ImageBackground
-                source={imageAssets.voucherSubtract}
-                imageStyle={{
-                  borderRadius: 8,
+                  <Divider width={8} />
+                  
+                  <View style={{flex: 1}}>
+                    <Text type='medium' size={10} align='left'>Phone number</Text>
+                    <Divider height={4} />
+                    <Text type='medium' size={14} align='left'>{visitorPhone}</Text>
+                  </View>
+              </Row>
+            </Container>
+
+            <Container paddingTop={12} paddingHorizontal={8} width='100%'>
+              <Row>
+                  <View style={{flex: 1}}>
+                    <Text type='medium' size={10} align='left'>Email</Text>
+                    <Divider height={4} />
+                    <Text type='medium' size={14} align='left'>{visitorEmail}</Text>
+                  </View>
+
+                  <Divider width={8} />
+
+                  <View style={{flex: 1}}>
+                    <Text type='medium' size={10} align='left'>ID Type</Text>
+                    <Divider height={4} />
+                    <Text type='medium' size={14} align='left'>KTP</Text>
+                  </View>
+              </Row>
+            </Container>
+
+            <Container paddingVertical={12} paddingHorizontal={8} width='100%'>
+              <Row>
+                  <View style={{flex: 1}}>
+                    <Text type='medium' size={10} align='left'>ID Number</Text>
+                    <Divider height={4} />
+                    <Text type='medium' size={14} align='left'>{visitorIdNumber}</Text>
+                  </View>
+
+                  <Divider width={8} />
+                  
+                  <View style={{flex: 1}}>
+                    
+                  </View>
+              </Row>
+            </Container>
+
+            <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 12, borderTopWidth: 1, borderColor: Color.text }}>
+              <View style={{ flex: 1, }}>
+                
+              </View>
+              
+              <TouchableOpacity
+                onPress={() => {
+                  setModalQRIndex(1);
                 }}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                }}
+                style={{ flexDirection: 'row', alignItems: 'center', padding: 9, backgroundColor: Color.text }}
               >
-                <Container padding={10} justify='space-between' height='100%'>
-                  <Container>
-                    <Container marginBottom={8}>
-                      <Text align='left' type='medium'>{val.title === 0 ? "Mr." : val === 1 ? "Mrs." : "Ms."} {val.name}</Text>
-                    </Container>
-                    <Row>
-                      <Row>
-                        <Image
-                          source={imageAssets.mail}
-                          style={{
-                            width: 16,
-                            height: 16,
-                            resizeMode: 'contain',
-                          }}
-                        />
-                        <Container paddingHorizontal={8}>
-                          <Text type='medium' size={11} align='left'>{val.email}</Text>
-                        </Container>
-                      </Row>
-                      <Row>
-                        <Image
-                          source={imageAssets.call}
-                          style={{
-                            width: 16,
-                            height: 16,
-                            resizeMode: 'contain',
-                          }}
-                        />
-                        <Container paddingHorizontal={8}>
-                          <Text type='medium' size={11} align='left'>{val.phone}</Text>
-                        </Container>
-                      </Row>
-                    </Row>
-                  </Container>
-
-                  <Container>
-                    <Row style={{justifyContent: 'space-between', alignItems: 'center'}}>
-                      <Text type='medium' align='left'>Regular Ticket</Text>
-
-                      <TouchableOpacity
-                        onPress={() => {
-                          setModalQRIndex(id);
-                        }}
-                        style={{flexDirection: 'row', alignItems: 'center', padding: 8, borderRadius: 120, borderWidth: 0.5, borderColor: Color.text}}
-                      >
-                        <Image
-                          source={imageAssets.qr}
-                          style={{
-                            width: 15,
-                            height: 15,
-                            marginRight: 8,
-                          }}
-                        />
-                        <Text size={12} type='medium' align='left' color={Color.primaryDark}>QR Code</Text>
-                      </TouchableOpacity>
-                    </Row>
-                  </Container>
-                </Container>
-              </ImageBackground>
-
-              <ModalQRBottom
-                visible={modalQRIndex !== -1}
-                value={data.qrValue}
-                labelTitle='QR Ticket'
-                labelCaption={`${val.title_name.text} ${val.name}`}
-                labelDetail={`Regular • ${data.invoice_id}`}
-                onClose={() => {
-                  setModalQRIndex(-1);
-                }}
-              />
-            </TouchableOpacity>
-          ))}
-        </Container>}
-
-        {/* <Content>
-          <Text align='left' type='bold' style={{ paddingBottom: 13 }}>Rincian Pembayaran</Text>
-          <View style={{ height: 1, backgroundColor: Color.grayLight, marginHorizontal: -10, marginBottom: 13 }} />
-          <Row style={{ marginBottom: 8 }}>
-            <Text type='medium' size={11} align='left' color={Color.textGray}>Metode Pembayaran</Text>
-            <Col>
-              <Text align='right' size={12} color='#558617' type='bold'>{data.payment ? data.payment.name : 'Belum dipilih'}</Text>
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 8 }}>
-            <Text type='medium' size={11} align='left' color={Color.textGray}>Subtotal</Text>
-            <Col>
-              <Text align='right' size={12} color='#111' type='medium'>{FormatMoney.getFormattedMoney(data.price)}</Text>
-            </Col>
-          </Row>
-          {data.discount != 0 && <Row style={{ marginBottom: 8 }}>
-            <Text type='medium' size={11} align='left' color={Color.textGray}>Diskon</Text>
-            <Col>
-              <Text align='right' size={12} color='#111' type='medium'>{FormatMoney.getFormattedMoney(data.discount)}</Text>
-            </Col>
-          </Row>}
-          <Row style={{ marginBottom: 8 }}>
-            <Text type='medium' size={11} align='left' color={Color.textGray}>Biaya Administrasi</Text>
-            <Col>
-              <Text align='right' size={12} color='#111' type='medium'>Rp0</Text>
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 8 }}>
-            <Text type='medium' size={11} align='left' color={Color.textGray}>Total Bayar</Text>
-            <Col>
-              <Text align='right' size={12} color='#111' type='medium'>{data.totalAmount}</Text>
-            </Col>
-          </Row>
-        </Content> */}
+                <Text size={12} type='medium' align='left' color={Color.textInput}>Show QR</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Container>
       </ScrollView>}
 
-      {data && data.status === 0 && <Container paddingHorizontal={16}>
+      {data && data.status === 0 && <Container padding={16}>
         <Button
           onPress={() => {
             onPayment();
@@ -490,12 +343,24 @@ const OrderEventDetail = ({ navigation, route }) => {
           Lanjut
         </Button>
       </Container>}
-      
+
+      {/* modal qr */}
+      <ModalQRBottom
+        visible={modalQRIndex !== -1}
+        value={data.qrValue}
+        labelTitle='QR Ticket'
+        labelCaption={`${visitorTitle} ${visitorName}`}
+        labelDetail={`${ticketType} • ${data.invoice_id}`}
+        onClose={() => {
+          setModalQRIndex(-1);
+        }}
+      />
+
       {/* modal event */}
       <Modal
         isVisible={isCheckin && modalEventVerification.show}
         onBackdropPress={() => {
-          
+
         }}
         animationIn="slideInDown"
         animationOut="slideOutDown"
@@ -505,64 +370,6 @@ const OrderEventDetail = ({ navigation, route }) => {
         >
           {/* loading */}
           {modalEventVerification.item ?
-          <View
-            style={{
-              paddingHorizontal: 16,
-              paddingVertical: 16,
-              alignItems: 'center',
-            }}
-          >
-            <View
-              style={{
-                alignItems: 'center',
-              }}
-            >
-              <View style={{ flexDirection: 'row', backgroundColor: Color.successLight, paddingVertical: 12, paddingHorizontal: 20, borderRadius: 120, alignItems: 'center' }}>
-                <Container width={14} height={14} radius={14} align='center' justify='center' color={Color.success}>
-                  <Entypo name='check' size={8} color={Color.textInput} />
-                </Container>
-                <Divider width={8} />
-                <Text size={12} color={Color.success}>Verifikasi Berhasil</Text>
-              </View>
-              <Divider />
-              <View
-                style={{
-                  width: '100%',
-                  aspectRatio: 16/9,
-                }}
-              >
-                <Image
-                  source={{ uri: 'https://anekatempatwisata.com/wp-content/uploads/2022/04/M-Bloc-Space.jpg' }}
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                    borderRadius: 8,
-                  }}
-                />
-              </View>
-            </View>
-
-            <Container paddingTop={16}>
-              <Text>Selamat datang di</Text>
-              <Text size={16} type='medium'>EVENT</Text>
-            </Container>
-
-            <Container width='100%' paddingTop={16}>
-              <Button
-                outline
-                color={Color.primaryMoreDark}
-                onPress={() => {
-                  setModalEventVerification({
-                    ...modalEventVerification,
-                    show: false,
-                  });
-                }}
-              >
-                Tutup
-              </Button>
-            </Container>
-          </View>
-          : modalEventVerification.error ?
             <View
               style={{
                 paddingHorizontal: 16,
@@ -572,20 +379,37 @@ const OrderEventDetail = ({ navigation, route }) => {
             >
               <View
                 style={{
-                  width: width / 7,
-                  height: width / 7,
-                  backgroundColor: Color.error,
-                  borderRadius: 16,
-                  justifyContent: 'center',
                   alignItems: 'center',
                 }}
               >
-                <Entypo name={'cross'} size={36} color={Color.textInput} />
+                <View style={{ flexDirection: 'row', backgroundColor: Color.successLight, paddingVertical: 12, paddingHorizontal: 20, borderRadius: 120, alignItems: 'center' }}>
+                  <Container width={14} height={14} radius={14} align='center' justify='center' color={Color.success}>
+                    <Entypo name='check' size={8} color={Color.textInput} />
+                  </Container>
+                  <Divider width={8} />
+                  <Text size={12} color={Color.success}>Verifikasi Berhasil</Text>
+                </View>
+                <Divider />
+                <View
+                  style={{
+                    width: '100%',
+                    aspectRatio: 16 / 9,
+                  }}
+                >
+                  <Image
+                    source={{ uri: 'https://anekatempatwisata.com/wp-content/uploads/2022/04/M-Bloc-Space.jpg' }}
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                      borderRadius: 8,
+                    }}
+                  />
+                </View>
               </View>
 
               <Container paddingTop={16}>
-                <Text size={16} type='medium'>Verifikasi Gagal</Text>
-                <Text size={11}>Nampaknya terjadi kesalahan. Lakukan verifikasi beberapa saat lagi</Text>
+                <Text>Selamat datang di</Text>
+                <Text size={16} type='medium'>EVENT</Text>
               </Container>
 
               <Container width='100%' paddingTop={16}>
@@ -603,40 +427,82 @@ const OrderEventDetail = ({ navigation, route }) => {
                 </Button>
               </Container>
             </View>
-          :
-          <View
-            style={{
-              padding: 32,
-              alignItems: 'center',
-            }}
-          >
-            <View
-              style={{
-                height: height / 6,
-                aspectRatio: 4 / 3,
-                marginBottom: 24,
-              }}
-            >
-              <Image
-                source={imageAssets.eventVerification}
+            : modalEventVerification.errorMessage !== '' ?
+              <View
                 style={{
-                  height: '100%',
-                  width: '100%',
-                  resizeMode: 'contain'
+                  paddingHorizontal: 16,
+                  paddingVertical: 16,
+                  alignItems: 'center',
                 }}
-              />
-            </View>
+              >
+                <View
+                  style={{
+                    width: width / 7,
+                    height: width / 7,
+                    backgroundColor: Color.error,
+                    borderRadius: 16,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Entypo name={'cross'} size={36} color={Color.textInput} />
+                </View>
 
-            <View
-              style={{
-                alignItems: 'center',
-              }}
-            >
-              <Text size={16} letterSpacing={0.15} type='medium'>Kamu ada di area event</Text>
-              <Divider height={4} />
-              <Text color={Color.placeholder}>Tunggu sebentar kami sedang melakukan verifikasi . . . </Text>
-            </View>
-          </View>
+                <Container paddingTop={16}>
+                  <Text size={16} type='medium'>Verifikasi Gagal</Text>
+                  {/* <Text size={11}>Nampaknya terjadi kesalahan. Lakukan verifikasi beberapa saat lagi</Text> */}
+                  <Text size={11}>{modalEventVerification.errorMessage}</Text>
+                </Container>
+
+                <Container width='100%' paddingTop={16}>
+                  <Button
+                    outline
+                    color={Color.primaryMoreDark}
+                    onPress={() => {
+                      setModalEventVerification({
+                        ...modalEventVerification,
+                        show: false,
+                      });
+                    }}
+                  >
+                    Tutup
+                  </Button>
+                </Container>
+              </View>
+              :
+              <View
+                style={{
+                  padding: 32,
+                  alignItems: 'center',
+                }}
+              >
+                <View
+                  style={{
+                    height: height / 6,
+                    aspectRatio: 4 / 3,
+                    marginBottom: 24,
+                  }}
+                >
+                  <Image
+                    source={imageAssets.eventVerification}
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                      resizeMode: 'contain'
+                    }}
+                  />
+                </View>
+
+                <View
+                  style={{
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text size={16} letterSpacing={0.15} type='medium'>Kamu ada di area event</Text>
+                  <Divider height={4} />
+                  <Text color={Color.placeholder}>Tunggu sebentar kami sedang melakukan verifikasi . . . </Text>
+                </View>
+              </View>
           }
         </View>
       </Modal>
