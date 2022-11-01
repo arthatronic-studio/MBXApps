@@ -298,7 +298,7 @@ const EventDetail = ({ navigation, route }) => {
                 flatlistRef.current.scrollToEnd({
                   animated: true
                 });
-              }, 1000);
+              }, 500);
             }
           }}
         />

@@ -60,17 +60,13 @@ const CheckoutEvent = ({ navigation, route }) => {
 
     const { Color } = useColor();
 
-    console.log(auth);
-
-    useEffect(() => {
-
-    }, []);
+    console.log('params.item', params.item);
 
     const submit = async () => {
         showLoading();
 
         const body = {
-            "event_ticket_id": params.item.event.id,
+            "event_ticket_id": params.item.id,
             "selected_date": params.selectedDate.format('YYYY-MM-DD'),
             "amount": params.qty,
             "visitor": listVisitors,
