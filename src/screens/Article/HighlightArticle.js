@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {Image, View, ScrollView} from 'react-native';
+import {Image, View, ScrollView, FlatList} from 'react-native';
 
 import {useColor} from '@src/components';
 import PostingHeader from '../../components/Posting/PostingHeader';
@@ -83,7 +83,7 @@ const HighlightArticle = ({
         <View
           style={{
             flexDirection: 'row',
-            flexWrap: 'wrap',
+            // flexWrap: 'wrap',
             paddingHorizontal: 8,
             ...style,
           }}>
