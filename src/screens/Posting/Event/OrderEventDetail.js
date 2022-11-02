@@ -340,7 +340,7 @@ const OrderEventDetail = ({ navigation, route }) => {
             onPayment();
           }}
         >
-          Lanjut
+          Continue Payment
         </Button>
       </Container>}
 

@@ -2,41 +2,20 @@ import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Image,
-  FlatList,
   ScrollView,
-  Platform,
-  Linking,
-  Pressable,
   useWindowDimensions,
+  Modal as ReactModal,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Foundation from 'react-native-vector-icons/Foundation';
-import Moment from 'moment';
 import {useSelector} from 'react-redux';
-import Header from '@src/components/Header';
 import {useLoading, usePopup, useColor, Alert, Row, Col} from '@src/components';
 import Text from '@src/components/Text';
 import Scaffold from '@src/components/Scaffold';
 import {TouchableOpacity, Button} from '@src/components/Button';
-import HighlightContentProduct from 'src/components/Content/HighlightContentProduct';
-import Client from '@src/lib/apollo';
-import {queryAddLike} from '@src/lib/query';
 import {Container, Divider, Line, Padding} from 'src/styled';
-import WidgetUserLikes from 'src/components/Posting/WidgetUserLikes';
-import ModalContentOptions from 'src/components/ModalContentOptions';
-import {analyticMethods, GALogEvent} from 'src/utils/analytics';
-import ImagesPath from 'src/components/ImagesPath';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import Feather from 'react-native-vector-icons/Feather';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {useIsFocused, useRoute} from '@react-navigation/native';
-import {getHistory} from 'src/lib/query/event';
 import {FormatMoney} from 'src/utils';
-import {postAPI} from 'src/api-rest/httpService';
-import imageAssets from 'assets/images';
+import WebViewScreen from 'src/components/WebViewScreen';
+import { fetchEatDetail } from 'src/api-rest/fetchEatDetail';
 
 const TenantHistoryDetail = ({navigation, route}) => {
   const {item} = route.params;
@@ -45,12 +24,33 @@ const TenantHistoryDetail = ({navigation, route}) => {
   const [loadingProps, showLoading, hideLoading] = useLoading();
   const auth = useSelector(state => state['auth']);
   const {width} = useWindowDimensions();
+  const [data, setData] = useState({});
+  const [paymentResponse, setPaymentResponse] = useState({});
 
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
-  const isFocused = useIsFocused();
+  const [sourceURL, setSourceURL] = useState('');
 
-  console.log(item, "iteeem");
+  const fetchDetail = async () => {
+    const res = await fetchEatDetail({ cart_id: item?.cart?.cart_id});
+    console.log(res, "res detail");
+    if(res.status){
+      setData(res.data);
+      setPaymentResponse(res.paymentResponse.data);
+    }
+  }
+
+  const onCloseWebview = status => {
+    setSourceURL('');
+    if (status === 'paymentPaid') navigation.navigate('PaymentSucceed');
+    else navigation.navigate('EatScreen');
+  };
+
+  const onPayment = () => {
+    setSourceURL(paymentResponse.redirect_url);
+  };
+
+  useEffect(() => {
+    fetchDetail();
+  }, []);
 
   return (
     <Scaffold
@@ -102,7 +102,7 @@ const TenantHistoryDetail = ({navigation, route}) => {
           <Container flexDirection="row" align="center">
             <View style={{width: width * 0.12, height: width * 0.12}}>
               <Image
-                source={{ uri: item?.cart?.location?.images[0] }}
+                source={{uri: item?.cart?.location?.images[0]}}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -132,45 +132,46 @@ const TenantHistoryDetail = ({navigation, route}) => {
             ● Your Order
           </Text>
           <Divider height={16} />
-          {item?.cart?.cart_detail && item.cart.cart_detail.map((data, index) => {
-            return (
-              <Container
-                key={index}
-                flex={1}
-                flexDirection="row"
-                justify="space-between"
-                align="center">
-                <Container flex={1} flexDirection="column">
-                  <Text
-                    align="left"
-                    color={Color.primary}
-                    size={18}
-                    type="medium"
-                    lineHeight={21.6}>
-                    {data.product_name}
-                  </Text>
-                  <Text
-                    size={14}
-                    type="medium"
-                    lineHeight={16.4}
-                    color={Color.primary}
-                    align="left">
-                    {FormatMoney.getFormattedMoney(data.amount)}
-                  </Text>
+          {item?.cart?.cart_detail &&
+            item.cart.cart_detail.map((data, index) => {
+              return (
+                <Container
+                  key={index}
+                  flex={1}
+                  flexDirection="row"
+                  justify="space-between"
+                  align="center">
+                  <Container flex={1} flexDirection="column">
+                    <Text
+                      align="left"
+                      color={Color.primary}
+                      size={18}
+                      type="medium"
+                      lineHeight={21.6}>
+                      {data.product_name}
+                    </Text>
+                    <Text
+                      size={14}
+                      type="medium"
+                      lineHeight={16.4}
+                      color={Color.primary}
+                      align="left">
+                      {FormatMoney.getFormattedMoney(data.amount)}
+                    </Text>
+                  </Container>
+                  <Container flex={1}>
+                    <Text
+                      align="right"
+                      size={14}
+                      type="medium"
+                      lineHeight={16.8}
+                      color="#242424">
+                      x{data.quantity}
+                    </Text>
+                  </Container>
                 </Container>
-                <Container flex={1}>
-                  <Text
-                    align="right"
-                    size={14}
-                    type="medium"
-                    lineHeight={16.8}
-                    color="#242424">
-                    x{data.quanit}
-                  </Text>
-                </Container>
-              </Container>
-            )
-          })}
+              );
+            })}
         </Container>
         <Divider height={16} />
         <Line width={width - 32} height={1} color={Color.black} />
@@ -193,7 +194,9 @@ const TenantHistoryDetail = ({navigation, route}) => {
                 type="medium"
                 lineHeight={21.6}
                 color="#242424">
-                {item?.cart?.nama_pelanggan ? item?.cart?.nama_pelanggan : 'User'}
+                {item?.cart?.nama_pelanggan
+                  ? item?.cart?.nama_pelanggan
+                  : 'User'}
               </Text>
             </Container>
             <Container flex={1}>
@@ -203,7 +206,7 @@ const TenantHistoryDetail = ({navigation, route}) => {
                 type="medium"
                 lineHeight={16.8}
                 color="#242424">
-                {item?.cart?.order_type_label}
+                {item?.cart?.order_type_label} {item?.cart?.order_type == 1 && '#' + item?.cart?.seats_number}
               </Text>
             </Container>
           </Container>
@@ -243,7 +246,7 @@ const TenantHistoryDetail = ({navigation, route}) => {
               </Text>
             </Container>
           </Container>
-          {/* <Divider height={16} />
+          <Divider height={16} />
           <Container padding={10} backgroundColor="#E5E5E5">
             <Container flex={1} flexDirection="row" justify="space-between">
               <Container flex={1}>
@@ -263,7 +266,7 @@ const TenantHistoryDetail = ({navigation, route}) => {
                   type="medium"
                   lineHeight={14.4}
                   color="#3D3D3D">
-                  {FormatMoney.getFormattedMoney(item.total_price)}
+                  {FormatMoney.getFormattedMoney(data?.amount)}
                 </Text>
               </Container>
             </Container>
@@ -286,7 +289,7 @@ const TenantHistoryDetail = ({navigation, route}) => {
                   type="medium"
                   lineHeight={14.4}
                   color="#3D3D3D">
-                  {FormatMoney.getFormattedMoney(item.total_price)}
+                  {FormatMoney.getFormattedMoney(data?.ppn)}
                 </Text>
               </Container>
             </Container>
@@ -309,7 +312,7 @@ const TenantHistoryDetail = ({navigation, route}) => {
                   type="medium"
                   lineHeight={14.4}
                   color="#3D3D3D">
-                  {FormatMoney.getFormattedMoney(item.total_price)}
+                  {FormatMoney.getFormattedMoney(0)}
                 </Text>
               </Container>
             </Container>
@@ -332,13 +335,31 @@ const TenantHistoryDetail = ({navigation, route}) => {
                   type="medium"
                   lineHeight={14.4}
                   color="#3D3D3D">
-                  {FormatMoney.getFormattedMoney(item.total_price)}
+                  {FormatMoney.getFormattedMoney(data?.total_amount)}
                 </Text>
               </Container>
             </Container>
-          </Container> */}
+          </Container>
         </Container>
       </ScrollView>
+      {item && item.status === 0 && (
+        <Container padding={16}>
+          <Button
+            onPress={() => {
+              onPayment();
+            }}>
+            Continue Payment
+          </Button>
+        </Container>
+      )}
+
+      <ReactModal
+        transparent
+        animationType="fade"
+        onRequestClose={onCloseWebview}
+        visible={sourceURL !== ''}>
+        <WebViewScreen url={sourceURL} onClose={onCloseWebview} />
+      </ReactModal>
     </Scaffold>
   );
 };
