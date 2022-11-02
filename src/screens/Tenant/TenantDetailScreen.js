@@ -890,6 +890,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
               item={item}
               numColumns={2}
               cartProductQuantity={quantity}
+              onRefresh={() => fetchData()}
               onPress={() => {
                 setCurrentIndexProduct(index);
                 setProductLike(listProducts[index].total_like ? listProducts[index].total_like : 0);

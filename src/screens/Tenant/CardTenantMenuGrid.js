@@ -20,13 +20,13 @@ const defaultProps = {
   cartProductQuantity: 0,
 };
 
-const CardTenantMenuGrid = ({ item, index, numColumns, onPress, cartProductQuantity }) => {
+const CardTenantMenuGrid = ({ item, index, numColumns, onPress, cartProductQuantity, onRefresh }) => {
   const { Color } = useColor();
   const navigation = useNavigation();
 
   const [quantity, setQuantity] = useState(cartProductQuantity);
   const [productLike, setProductLike] = useState(0);
-  const [isProductLike, setIsProductLike] = useState(false);
+  const [isProductLike, setIsProductLike] = useState(item.is_like);
 
   useEffect(() => {
     setQuantity(cartProductQuantity);
@@ -105,6 +105,7 @@ const CardTenantMenuGrid = ({ item, index, numColumns, onPress, cartProductQuant
                           setProductLike(productLike + 1);
                         }
                         setIsProductLike(!isProductLike)
+                        onRefresh();
                       }
                     }}
                     style={{
