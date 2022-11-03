@@ -82,15 +82,14 @@ const OrderEventDetail = ({ navigation, route }) => {
 
   const onVerifyTicket = async () => {
     const body = {
-      isDetailPage: true,
-      ticket_id: data.id,
+      ticket_order_id: data.id,
     };
 
     let newItem = null;
 
     console.log('body', body);
 
-    const result = await postAPI('user-activity/beacons', body);
+    const result = await postAPI('ticket-order/redeem', body);
 
     console.log('result', result);
 
@@ -111,11 +110,11 @@ const OrderEventDetail = ({ navigation, route }) => {
 
       console.log(`type: ${strTypeName}, id: , ${result.data.id}`);
 
-      const _isEventType = strTypeName === 'event';
-      if (_isEventType) {
+      // const _isEventType = strTypeName === 'event';
+      // if (_isEventType) {
         const prof = await stateUpdateProfile();
         console.log('prof', prof);
-      }
+      // }
     }
 
     setModalEventVerification({ ...modalEventVerification, show: true, item: newItem, errorMessage: result.status ? '' : result.message });

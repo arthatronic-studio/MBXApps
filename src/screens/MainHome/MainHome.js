@@ -60,6 +60,7 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 const scanUUIDs = []; // ['fda50693-a4e2-4fb1-afcf-c6eb07647825'];
 const scanTimeout = 60 * 30;
+const pairingInterval = 5000;
 
 const MainHome = ({ navigation, route }) => {
   const auth = useSelector(state => state['auth']);
@@ -92,7 +93,7 @@ const MainHome = ({ navigation, route }) => {
     // console.log('focus : ', isFocused, ', beaconCount: ' , allRegisteredBeacon.length);
     console.log(`last merch id: ${lastRespMerchID}, last art id: ${lastRespArtID}`);
     onPairingAllBeacon();
-  }, 3000);
+  }, pairingInterval);
 
   // did mount
   useEffect(() => {
@@ -250,6 +251,10 @@ const MainHome = ({ navigation, route }) => {
   };
 
   const onBleScan = () => {
+    if (auth.user && auth.user.isGuest) {
+      return;
+    }
+
     androidBluetoothPermission().then((status) => {
       if (status) {
         BleManager.scan(scanUUIDs, scanTimeout, false).then(() => {
