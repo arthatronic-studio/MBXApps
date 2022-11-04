@@ -143,8 +143,8 @@ android {
         applicationId "com.mblocxperienceapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 19
-        versionName "1.221030.019"
+        versionCode 20
+        versionName "1.221104.020"
         multiDexEnabled true
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
         missingDimensionStrategy 'react-native-camera', 'general'
