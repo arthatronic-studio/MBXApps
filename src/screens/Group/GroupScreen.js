@@ -353,7 +353,10 @@ const GroupScreen = ({navigation, route}) => {
                 />
 
                 {itemData.data.map((item, index) => {
-                  if (typeof item.axis === 'number' && typeof item.yaxis === 'number') {
+                  if (
+                    typeof item.axis === 'number' &&
+                    typeof item.yaxis === 'number'
+                  ) {
                     return (
                       <Marker
                         key={index}
@@ -377,8 +380,8 @@ const GroupScreen = ({navigation, route}) => {
                       </Marker>
                     );
                   }
-                  
-                  return <View />
+
+                  return <View />;
                 })}
               </MapView>
               <Divider height={32} />
@@ -433,7 +436,7 @@ const GroupScreen = ({navigation, route}) => {
           setSelected({});
         }}>
         <Container>
-          {Array.isArray(selected?.galleries_all) &&  selected?.galleries_all[0]?.image && 
+          {Array.isArray(selected?.images) && selected?.images[0] && (
             <Image
               style={{
                 width: width - 32,
@@ -441,9 +444,9 @@ const GroupScreen = ({navigation, route}) => {
                 resizeMode: 'cover',
                 // borderRadius: 8,
               }}
-              source={{ uri: selected?.galleries_all[0]?.image}}
+              source={{uri: selected?.images[0]}}
             />
-          }
+          )}
           <Divider height={10} />
           <Text size={16} type="medium" color={Color.black} align="left">
             {selected.name}
@@ -451,44 +454,41 @@ const GroupScreen = ({navigation, route}) => {
           <Divider height={4} />
           <Text size={10} color={Color.textSoft} align="left">
             {/* {selected.name} {'\u2022'} Restoran {'\u2022'} {selected.group} */}
-            {selected.name} {'\u2022'} {selected.group}
+            {selected.name} {'\u2022'} {selected.category}
           </Text>
           <Divider height={10} />
           <Container flex={1}>
-            {/* <Text align="left" color={Color.black}>
-              Cupcake ipsum dolor sit amet marshmallow ice cream muffin
-              liquorice. Wafer candy jujubes lollipop cake apple pie oat cake
-              chocolate bar pudding. Powder dragée cheesecake danish apple pie
-              sweet jujubes macaroon toffee.
-            </Text>
-            <Divider />
-            <Text align="left" color={Color.black}>
-              Toffee sweet donut lemon drops cheesecake cotton candy bonbon
-              gummies. Pie sweet wafer candy canes sugar plum. Candy canes
-              marshmallow biscuit sweet donut.
-            </Text>
-            <Divider height={10} /> */}
+            {selected.description && selected.description != '' && (
+              <>
+                <Text align="left" color={Color.black}>
+                  {selected.description}
+                </Text>
+                <Divider height={10} />
+              </>
+            )}
 
-            <TouchableOpacity
-              onPress={() => {
-                Linking.openURL(`${selected.link}`);
-              }}
-              style={{
-                flex: 1,
-                borderWidth: 1,
-                padding: 10,
-                // borderRadius: 8,
-                borderColor: '#ACAAA5',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Image source={imageAssets.instagram} />
-              <Divider width={14} />
-              <Text size={14} color={Color.primaryDark} type="medium">
-                Instagram
-              </Text>
-            </TouchableOpacity>
+            {selected.ig && selected.ig != '' &&
+              <TouchableOpacity
+                onPress={() => {
+                  Linking.openURL(`${selected.ig}`);
+                }}
+                style={{
+                  flex: 1,
+                  borderWidth: 1,
+                  padding: 10,
+                  // borderRadius: 8,
+                  borderColor: '#ACAAA5',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Image source={imageAssets.instagram} />
+                <Divider width={14} />
+                <Text size={14} color={Color.primaryDark} type="medium">
+                  Instagram
+                </Text>
+              </TouchableOpacity>
+            }
           </Container>
         </Container>
       </Modalize>
