@@ -83,8 +83,6 @@ const GroupScreen = ({navigation, route}) => {
       message: result.message,
       refresh: false,
     });
-
-    onLoadingEnd(false);
   };
 
   console.log(itemData, 'dataaaaa');

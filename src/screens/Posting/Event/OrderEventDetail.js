@@ -35,6 +35,7 @@ import imageAssets from 'assets/images';
 import { postAPI } from 'src/api-rest/httpService';
 import ModalQRBottom from 'src/components/Modal/ModalQRBottom';
 import { stateUpdateProfile } from 'src/api-rest/stateUpdateProfile';
+import { useInterval } from 'src/hooks/useInterval';
 
 // const { connect, init, startDiscovery, startScanning, isScanning } = Kontakt;
 // const kontaktEmitter = new NativeEventEmitter(KontaktModule);
@@ -68,6 +69,16 @@ const OrderEventDetail = ({ navigation, route }) => {
 
   const isCheckin = auth && auth.user && auth.user.isCheckin;
 
+  // useInterval(() => {
+  //   findEvent();
+  // }, 2000);
+
+  // const findEvent = async() => {
+  //   const body = [];
+  //   const result = await postAPI('user-activity/beacons-event', body);
+  //   console.log('result beacon event', result);
+  // }
+
   useEffect(() => {
     if (isCheckin && data.redeemableNow) {
       setModalEventVerification({ ...modalEventVerification, show: true });
@@ -77,8 +88,6 @@ const OrderEventDetail = ({ navigation, route }) => {
       }, 5000);
     }
   }, []);
-
-  console.log('data.redeemableNow', data.redeemableNow);
 
   const onVerifyTicket = async () => {
     const body = {
@@ -103,17 +112,23 @@ const OrderEventDetail = ({ navigation, route }) => {
 
       newItem = result.data;
 
-      let strTypeName = '';
-      if (result.beaconType && typeof result.beaconType.name === 'string') {
-        strTypeName = result.beaconType.name.toLowerCase();
-      }
+      const prof = await stateUpdateProfile();
+      console.log('prof', prof);
 
-      console.log(`type: ${strTypeName}, id: , ${result.data.id}`);
+      setTimeout(() => {
+        navigation.popToTop();
+      }, 5000);
+
+      // let strTypeName = '';
+      // if (result.beaconType && typeof result.beaconType.name === 'string') {
+      //   strTypeName = result.beaconType.name.toLowerCase();
+      // }
+
+      // console.log(`type: ${strTypeName}, id: , ${result.data.id}`);
 
       // const _isEventType = strTypeName === 'event';
       // if (_isEventType) {
-        const prof = await stateUpdateProfile();
-        console.log('prof', prof);
+        
       // }
     }
 
@@ -319,6 +334,21 @@ const OrderEventDetail = ({ navigation, route }) => {
               <View style={{ flex: 1, }}>
                 
               </View>
+
+              {isCheckin && data.redeemableNow && <TouchableOpacity
+                onPress={() => {
+                  Alert(
+                    'Konfirmasi',
+                    'Check in event sekarang?',
+                    () => onVerifyTicket()
+                  );
+                }}
+                style={{ flexDirection: 'row', alignItems: 'center', padding: 9, backgroundColor: Color.textInput, borderWidth: 1, borderColor: Color.text }}
+              >
+                <Text size={12} type='medium' align='left' color={Color.text}>Check in</Text>
+              </TouchableOpacity>}
+
+              <Divider width={10} />
               
               <TouchableOpacity
                 onPress={() => {

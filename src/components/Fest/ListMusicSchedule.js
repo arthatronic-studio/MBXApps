@@ -68,8 +68,6 @@ const ListMusicSchedule = ({
       // message: result.message,
       refresh: false,
     });
-
-    onLoadingEnd(false);
   };
 
   const renderSkeleton = () => {

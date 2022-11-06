@@ -32,7 +32,9 @@ const NotificationPromo = ({ navigation, route }) => {
   const fetchData = async () => {
     const result = await getAPI('notification?type=promo');
     console.log('result notif', result);
-    setHistory(result.data);
+    if (result.status && Array.isArray(result.data)) {
+      setHistory(result.data);
+    }
     setLoading(false);
   }
 

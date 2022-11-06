@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   ScrollView,
@@ -59,8 +59,8 @@ const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 const scanUUIDs = []; // ['fda50693-a4e2-4fb1-afcf-c6eb07647825'];
-const scanTimeout = 60 * 30;
-const pairingInterval = 5000;
+const scanTimeout = 60 * 60 * 24 * 365;
+const pairingInterval = 2000;
 
 const MainHome = ({ navigation, route }) => {
   const auth = useSelector(state => state['auth']);
@@ -73,6 +73,7 @@ const MainHome = ({ navigation, route }) => {
   const [loadingProps, showLoading] = useLoading();
 
   const peripherals = new Map();
+  const bodyBeaconsRef = useRef();
   const [allRegisteredBeacon, setAllRegisteredBeacon] = useState([]);
   const [lastRespMerchID, setLastRespMerchID] = useState(-1);
   const [lastRespArtID, setLastRespArtID] = useState(-1);
@@ -89,10 +90,16 @@ const MainHome = ({ navigation, route }) => {
   const isSecurity = auth && auth.user && auth.user.role && auth.user.role.value === 0;
   const showDebug = localStoragSetting && localStoragSetting.showDebug ? true : false;
 
+  // useInterval(() => {
+  //   // console.log('focus : ', isFocused, ', beaconCount: ' , allRegisteredBeacon.length);
+  //   console.log(`last merch id: ${lastRespMerchID}, last art id: ${lastRespArtID}`);
+  //   onPairingAllBeacon();
+  // }, pairingInterval);
+
   useInterval(() => {
     // console.log('focus : ', isFocused, ', beaconCount: ' , allRegisteredBeacon.length);
-    console.log(`last merch id: ${lastRespMerchID}, last art id: ${lastRespArtID}`);
-    onPairingAllBeacon();
+    // console.log(`last merch id: ${lastRespMerchID}, last art id: ${lastRespArtID} mata => `, Array.isArray(timeout.current) ? timeout.current.length : 'waiting');
+    onForceAllBeacon(bodyBeaconsRef.current);
   }, pairingInterval);
 
   // did mount
@@ -124,10 +131,17 @@ const MainHome = ({ navigation, route }) => {
 
       const newArgs = { beacon_uid: args.id, range: rangeForCompare };
 
+      // console.log('newArgs', newArgs);
+
       peripherals.set(newArgs.beacon_uid, newArgs);
-      const arrBeacons = Array.from(peripherals.values());
+      // const arrBeacons = Array.from(peripherals.values());
       // console.log('arrBeacons', arrBeacons.length);
-      setAllRegisteredBeacon(arrBeacons);
+      
+      // onForceAllBeacon(arrBeacons)
+
+      bodyBeaconsRef.current = Array.from(peripherals.values());
+
+      // setAllRegisteredBeacon(arrBeacons);
     });
 
     // const regisStopScan = bleManagerEmitter.addListener('BleManagerStopScan', () => {
@@ -220,6 +234,82 @@ const MainHome = ({ navigation, route }) => {
     }
   }
 
+  const onForceAllBeacon = async(body) => {
+    // console.log(`every ${pairingInterval} miliseconds`);
+    
+    // TODO: nanti ini buat di halaman OrderEventDetail setelah data disimpan di redux or scan di halaman OrderEventDetail matiin scan di home
+    // const resultD = await postAPI('user-activity/beacons-event', body);
+    // console.log('result beacon event', resultD);
+
+    if (auth && auth.user && !auth.user.isRegistered) {
+      setModalNeedUpdateProfile(true);
+      return;
+    }
+
+    if (!Array.isArray(body)) {
+      return;
+    }
+
+    if (body.length <= 0) return;
+    
+    const result = await postAPI('user-activity/beacons', body);
+    // console.log(`enhance body: ${body}, enhance resp:`, result);
+    // console.log(`enhance resp:`, result);
+
+    if (result.status) {
+      // 1	Mural
+      // 2	Gate In
+      // 3	Gate Out
+      // 4	Area
+      // 5	Toko
+      // 6	Event
+
+      let strTypeName = '';
+      if (result.beaconType && typeof result.beaconType.name === 'string') {
+        strTypeName = result.beaconType.name.toLowerCase();
+      }
+
+      console.log(`${isFocused} type: ${strTypeName}, id: , ${result.data.id}`);
+
+      const _isArtType = strTypeName === 'mural';
+      const _isCheckinType = strTypeName === 'gate in';
+      const _isCheckoutType = strTypeName === 'gate out';
+      const _isMerchType = strTypeName === 'toko';
+      const _isEventType = strTypeName === 'event';
+      const _listPromo = Array.isArray(result.promo) ? result.promo : [];
+
+      // type update profile
+      if (_isCheckinType || _isCheckoutType || _isEventType) {
+        const prof = await stateUpdateProfile();
+        console.log('prof', prof);
+      }
+
+      // == type promo
+      setListPromo(_listPromo);
+
+      // === type checkin
+      if (_isCheckinType) {
+        // dispatch({ type: 'AUTH.SET_CHECKIN', data: result.data });
+        setModalSuccessCheckin(true);
+        return;
+      }
+
+      // === type merchant
+      if (isFocused && _isMerchType && result.data.id !== lastRespMerchID) {
+        setListMerchantType([result.data]);
+        setLastRespMerchID(result.data.id);
+        return;
+      }
+
+      // === type art
+      if (isFocused && _isArtType && result.data.id !== lastRespArtID) {
+        setLastRespArtID(result.data.id);
+        navigation.navigate('DetailArtScreen', { item: result.data });
+        return;
+      }
+    }
+  }
+
   const onCheckout = async (uuid) => {
     const body = {
       beacon_uid: 'D5:60:C9:67:6F:70',
@@ -235,6 +325,9 @@ const MainHome = ({ navigation, route }) => {
 
       const prof = await stateUpdateProfile();
       console.log('prof', prof);
+
+      setLastRespArtID(-1);
+      setLastRespMerchID(-1);
 
       showLoading('success', result.message);
     } else {
@@ -630,8 +723,9 @@ const MainHome = ({ navigation, route }) => {
             showSeeAllText={false}
           />
 
-          {auth.user && auth.user.activeEvent && <Container paddingHorizontal={16} paddingBottom={16}>
-            <Container padding={10} radius={8} color='#F0FBFF'>
+          {/* event ticket */}
+          {isCheckin && auth.user && auth.user.activeEvent && <Container paddingHorizontal={16} paddingTop={16}>
+            <Container padding={10} borderWidth={1} borderColor={Color.text}>
               <Row justify='space-between'>
                 <Row>
                   <Container width='14%' style={{ aspectRatio: 1 }}>
@@ -640,7 +734,6 @@ const MainHome = ({ navigation, route }) => {
                       style={{
                         width: '100%',
                         height: '100%',
-                        borderRadius: 8,
                       }}
                     />
                   </Container>
