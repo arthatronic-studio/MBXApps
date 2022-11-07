@@ -94,7 +94,7 @@ const CheckoutEvent = ({ navigation, route }) => {
     const onCloseWebview = (status) => {
         setSourceURL('');
         if (status === 'paymentPaid') navigation.navigate('PaymentSucceed');
-        else navigation.navigate('EventScreen');
+        else navigation.navigate('EventScreen', { title: 'EVENT' });
     }
 
     return (

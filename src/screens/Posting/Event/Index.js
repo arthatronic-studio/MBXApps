@@ -28,8 +28,6 @@ import ListFeaturedEvent from 'src/components/Event/ListFeaturedEvent';
 
 const EventScreen = ({ navigation, route }) => {
   const { params } = route;
-  const { title, userProfileId } = params;
-  const isMainScreen = params && params.routeIndex;
 
   const user = useSelector(state => state['user.auth'].login.user);
   const { Color } = useColor();
