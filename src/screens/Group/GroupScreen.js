@@ -352,15 +352,14 @@ const GroupScreen = ({navigation, route}) => {
 
                 {itemData.data.map((item, index) => {
                   if (
-                    typeof item.axis === 'number' &&
-                    typeof item.yaxis === 'number'
+                    item.axis && item.yaxis
                   ) {
                     return (
                       <Marker
                         key={index}
                         coordinate={{
-                          latitude: parseFloat(item.axis),
-                          longitude: parseFloat(item.yaxis),
+                          latitude: parseFloat(item.yaxis),
+                          longitude: parseFloat(item.axis),
                         }}>
                         <Container
                           backgroundColor="#FCD100"
