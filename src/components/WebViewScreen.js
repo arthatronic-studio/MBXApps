@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { View, ActivityIndicator, SafeAreaView } from 'react-native';
+import { View, ActivityIndicator, SafeAreaView, Linking } from 'react-native';
 import PropTypes from 'prop-types';
 import Styled from 'styled-components';
 import { WebView } from 'react-native-webview';
@@ -95,6 +95,36 @@ const WebViewScreen = (props) => {
         <WebView
           ref={webviewRef}
           source={{ uri: url }}
+          originWhitelist={["https://*", "http://*", "gojek://*", "shopeeid://*"]}
+          onShouldStartLoadWithRequest={function (req) {
+            console.log('openExternalLink() run: ' + req.url);
+            if (
+              // Gopay app link prefixes
+              req.url.startsWith('https://gojek.link') ||
+              req.url.startsWith('gojek://') ||
+              // ShopeePay app link prefixes
+              req.url.startsWith('https://wsa.wallet.airpay.co.id') ||
+              req.url.startsWith('shopee://') ||
+              // UOB EzPay app link prefixes
+              req.url.startsWith('https://tmrwbyuobid.page.link') ||
+              // other app link prefixes, if needed
+              req.url.startsWith('intent://')
+            ) {
+              // URL meets the conditions to be handled specifically
+              if (Linking.canOpenURL(req.url)) {
+                console.log('opening non HTTP url: ' + req.url);
+                Linking.openURL(req.url); // URL will be opened on OS level, not by WebView
+                return false; // prevent WebView from loading the URL
+              } else {
+                // handle URL not able to be opened,
+                console.log('not able to open non HTTP url: ' + req.url);
+                return false; // try loading the URL via WebView anyway
+              }
+            }
+            console.log('opening url via webview normally: ' + req.url);
+            // URL doesn't meet the conditions to be handled specifically
+            return true; // URL will be loaded via WebView normally
+          }}
           onNavigationStateChange={checkURL}
           renderLoading={renderActivityIndicatorLoadingView}
           javaScriptEnabled

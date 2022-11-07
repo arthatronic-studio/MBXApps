@@ -112,11 +112,13 @@ export default ({navigation, route}) => {
     fullName: auth ? auth.user.name : '',
     email: auth ? auth.user.email : '',
     tanggalLahir: auth && auth.user.dob ? auth.user.dob : '',
+    ktp: auth && auth.user.ktp ? auth.user.ktp : '',
   });
   const [errorData, setErrorData] = useState({
     fullName: null,
     email: null,
     tanggalLahir: null,
+    ktp: null,
   });
 
   //Image
@@ -137,6 +139,8 @@ export default ({navigation, route}) => {
   const [modalSampulPicker, setModalSampulPicker] = useState(false);
   const [sampulImage, setSampulImage] = useState('');
   const [sampulMimeImage, setSampulMimeImage] = useState('image/jpeg');
+
+  const [isLoading, setIsLoading] = useState(false);
 
   // const redirectTo = (name, params) => {
   //   navigation.dispatch(
@@ -184,20 +188,30 @@ export default ({navigation, route}) => {
     setErrorData(newErrorState);
 
     if (valid) {
-      const body = {
+      setIsLoading(true);
+
+      let body = {
         name: userData.fullName,
         email: userData.email,
         gender: selectedJK.id,
         dob: Moment(userData.tanggalLahir).format('YYYY-MM-DD'),
-        foto: `data:${mimeImage};base64,${thumbImage}`,
         // foto_sampul: `data:${sampulMimeImage};base64,${sampulImage}`,
       };
+
+      if (thumbImage) {
+        body.foto = thumbImage ? `data:${mimeImage};base64,${thumbImage}` : '';
+      }
+
+      if (userData.ktp !== '') {
+        body.ktp = userData.ktp;
+      }
 
       console.log('body', body);
 
       const result = await stateUpdateProfile(body);
       console.log('result', result);
       if (result && result.status) {
+        setIsLoading(false);
         showPopup('Data berhasil diubah', 'success');
 
         setTimeout(() => {
@@ -209,6 +223,8 @@ export default ({navigation, route}) => {
         }, 2500);
 
         return;
+      } else {
+        setIsLoading(false);
       }
 
       showPopup(result.message, 'error');
@@ -286,7 +302,7 @@ export default ({navigation, route}) => {
   };
 
   return (
-    <Scaffold popupProps={popupProps}>
+    <Scaffold popupProps={popupProps} fallback={isLoading}>
       <KeyboardAwareScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{paddingBottom: 16}}>
@@ -294,19 +310,23 @@ export default ({navigation, route}) => {
           <Divider height={16} />
 
           <Container flex={1} flexDirection="column" align="flex-start">
-            <Image
-              source={
-                thumbImage !== ''
-                  ? {uri: `data:${mimeImage};base64,${thumbImage}`}
-                  : ImagesPath.userChat
-              }
-              style={{
-                width: width * 0.16,
-                height: width * 0.16,
-                backgroundColor: Color.border,
-                borderRadius: 50,
-              }}
-            />
+            <TouchableOpacity
+              onPress={() => setModalImagePicker(true)}
+            >
+              <Image
+                source={
+                  thumbImage !== ''
+                    ? {uri: `data:${mimeImage};base64,${thumbImage}`}
+                    : ImagesPath.userChat
+                }
+                style={{
+                  width: width * 0.16,
+                  height: width * 0.16,
+                  backgroundColor: Color.border,
+                  borderRadius: 50,
+                }}
+              />
+            </TouchableOpacity>
             <Divider height={11} />
             <Text
               size={14}
@@ -336,7 +356,8 @@ export default ({navigation, route}) => {
           <FormInputV2
             label="Nama Lengkap"
             placeholder="Masukan nama lengkap"
-            hideErrorHint
+            // hideErrorHint
+            error={errorData.fullName}
             keyboardType="default"
             value={userData.fullName}
             onChangeText={text => onChangeUserData('fullName', text)}
@@ -349,7 +370,8 @@ export default ({navigation, route}) => {
             editable={false}
             label="Tanggal Lahir"
             placeholder='yyyy-mm-dd'
-            hideErrorHint
+            // hideErrorHint
+            error={errorData.tanggalLahir}
             keyboardType="default"
             value={userData.tanggalLahir}
             // onChangeText={(text) => onChangeUserData('tanggalLahir', text)}
@@ -360,7 +382,8 @@ export default ({navigation, route}) => {
           <FormInputV2
             label="Tanggal Lahir"
             placeholder="dd/mm/yyyy"
-            hideErrorHint
+            // hideErrorHint
+            error={errorData.tanggalLahir}
             value={userData.tanggalLahir}
             onPress={() => setOpen(true)}
             editable={false}
@@ -381,12 +404,25 @@ export default ({navigation, route}) => {
           <FormInputV2
             label="Email"
             placeholder="contoh@email.com"
-            hideErrorHint
+            // hideErrorHint
+            error={errorData.email}
             keyboardType="email-address"
             value={userData.email}
             onChangeText={text => onChangeUserData('email', text)}
             onBlur={() => isValueError('email')}
             returnKeyType="next"
+          />
+
+          <FormInputV2
+            label="KTP"
+            placeholder="1234567890"
+            // hideErrorHint
+            error={errorData.ktp}
+            keyboardType="numeric"
+            value={userData.ktp}
+            onChangeText={text => onChangeUserData('ktp', text)}
+            onBlur={() => isValueError('ktp')}
+            returnKeyType="done"
           />
 
           <Divider height={40} />
@@ -397,12 +433,10 @@ export default ({navigation, route}) => {
             }}>
             <TouchableOpacity
               disabled={
-                userData.email !== '' &&
-                userData.tanggalLahir !== '' &&
-                userData.tanggalLahir !== '' &&
-                thumbImage !== ''
-                  ? false
-                  : true
+                userData.email !== ''
+                && userData.tanggalLahir !== ''
+                // && thumbImage !== ''
+                ? false : true
               }
               onPress={() => {
                 onSubmit();
@@ -411,24 +445,20 @@ export default ({navigation, route}) => {
                 paddingVertical: 12,
                 width: width - 32,
                 backgroundColor:
-                  userData.email !== '' &&
-                  userData.tanggalLahir !== '' &&
-                  userData.tanggalLahir !== '' &&
-                  thumbImage !== ''
-                    ? '#242424'
-                    : '#797979',
+                  userData.email !== ''
+                  && userData.tanggalLahir !== ''
+                  // && thumbImage !== ''
+                  ? '#242424' : '#797979',
               }}>
               <Text
                 size={14}
                 type="medium"
                 lineHeight={17}
                 color={
-                  userData.email !== '' &&
-                  userData.tanggalLahir !== '' &&
-                  userData.tanggalLahir !== '' &&
-                  thumbImage !== ''
-                    ? '#E7FF00'
-                    : '#FFFFFF'
+                  userData.email !== ''
+                  && userData.tanggalLahir !== ''
+                  // && thumbImage !== ''
+                  ? '#E7FF00' : '#FFFFFF'
                 }>
                 Save Change
               </Text>

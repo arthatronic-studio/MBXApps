@@ -179,6 +179,7 @@ const NotificationPromo = ({ navigation, route }) => {
         renderItem={({ item }) => {
           // const isNotReaded = item.status !== 3;
           const isNotReaded = false;
+          
           return (
             <TouchableOpacity 
               style={{
@@ -188,9 +189,10 @@ const NotificationPromo = ({ navigation, route }) => {
                 marginHorizontal: 16,
                 borderColor: Color.border,
                 backgroundColor: isNotReaded ? '#FFFCEB' : Color.white,
+                marginTop: 16,
             }}>
               <Container width={width*0.32} height={width*0.32}>
-                <Image source={{ uri: item.images }} style={{width: '100%', height: '100%', resizeMode: 'cover'}}/>
+                <Image source={{ uri: item.images }} style={{width: '100%', height: '100%', resizeMode: 'contain'}}/>
               </Container>
               <Divider width={12}/>
               <Container
@@ -209,9 +211,9 @@ const NotificationPromo = ({ navigation, route }) => {
                   {item.description}
                 </Text>
                 <Divider height={6}/>
-                <Text size={10} lineHeight={12} color="#797979" align='left'>
+                {/* <Text size={10} lineHeight={12} color="#797979" align='left'>
                   2 Hours Ago
-                </Text>
+                </Text> */}
               </Container>
             </TouchableOpacity>
           )

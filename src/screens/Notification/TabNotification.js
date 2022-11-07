@@ -23,7 +23,7 @@ const CustomTabBar = (props) => {
   console.log(props);
 
   return (
-    <Container paddingHorizontal={16} marginBottom={8}>
+    <Container paddingHorizontal={16}>
       <View
         style={{
           flexDirection: 'row',

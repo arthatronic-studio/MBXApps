@@ -54,6 +54,8 @@ const NotificationScreen = ({navigation, route}) => {
     setLoading(false);
   };
 
+  // console.log('hisrtory', history);
+
   useEffect(() => {
     // if (refreshing) {
     //   setRefreshing(false);
@@ -208,6 +210,8 @@ const NotificationScreen = ({navigation, route}) => {
         renderItem={({item}) => {
           // const isNotReaded = item.status !== 3;
           const isNotReaded = false;
+          const validImage = typeof item.images === 'string' && (item.images.includes('.jpg') || item.images.includes('.jpeg') || item.images.includes('.png'));
+
           return (
             <TouchableOpacity
               style={{
@@ -217,10 +221,11 @@ const NotificationScreen = ({navigation, route}) => {
                 marginHorizontal: 16,
                 borderColor: Color.border,
                 backgroundColor: isNotReaded ? '#FFFCEB' : Color.white,
+                marginTop: 16,
               }}>
-              <Container width={width * 0.214} height={width * 0.214}>
+              <Container width={width * 0.214} height={width * 0.214} color={validImage ? 'transparent' : Color.text} padding={validImage ? 0 : 8}>
                 <Image
-                  source={{uri: item.images}}
+                  source={{uri: validImage ? item.images : 'https://www.citypng.com/public/uploads/preview/transparent-billing-invoice-white-icon-21635327771x1jcbbwfpa.png' }}
                   style={{width: '100%', height: '100%', resizeMode: 'cover'}}
                 />
               </Container>
@@ -244,9 +249,9 @@ const NotificationScreen = ({navigation, route}) => {
                   {item.description}
                 </Text>
                 <Divider height={2} />
-                <Text size={10} lineHeight={12} color="#797979" align="left">
+                {/* <Text size={10} lineHeight={12} color="#797979" align="left">
                   2 Hours Ago
-                </Text>
+                </Text> */}
               </Container>
             </TouchableOpacity>
           );
