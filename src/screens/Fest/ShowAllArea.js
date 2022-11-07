@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   useWindowDimensions,
+  FlatList,
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import {useColor, Text, Header} from '@src/components';
@@ -15,6 +16,9 @@ import ListContenFest from 'src/components/Fest/ListContenFest';
 import {Modalize} from 'react-native-modalize';
 import {Container, Divider} from 'src/styled';
 import imageAssets from 'assets/images';
+import {fetchFestLocation} from 'src/api-rest/fest/fetchFestLocation';
+import { useIsFocused } from '@react-navigation/native';
+import CardContentFest from 'src/components/Fest/CardContentFest';
 
 const ShowAllArea = ({navigation, route}) => {
   const {title} = route.params;
@@ -23,18 +27,74 @@ const ShowAllArea = ({navigation, route}) => {
   const modalRef = useRef();
   const [selected, setSelected] = useState(false);
   const {width} = useWindowDimensions();
+  const isFocused = useIsFocused();
+  const [itemData, setItemData] = useState({
+    data: [],
+    loading: true,
+    message: '',
+    nextUrl: null,
+    loadNext: false,
+    refresh: false,
+  });
+
+  const fetchData = async first => {
+    let params = itemData.nextUrl
+      ? itemData.nextUrl
+      : '?type=experience&perPage=10';
+    const result = await fetchFestLocation(params);
+    if (result.status) {
+      console.log(result, 'resss');
+      setItemData({
+        ...itemData,
+        data: first ? result.data : itemData.data.concat(result.data),
+        nextUrl: result.nextUrl ? `?${result.nextUrl.split('?')[1]}` : null,
+        loading: false,
+        loadNext: false,
+        message: result.message,
+        refresh: false,
+      });
+    }
+  };
+
+  console.log(itemData, 'dataaa');
+
+  useEffect(() => {
+    if (isFocused) {
+      fetchData(true);
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
+    if (itemData.loadNext && itemData.nextUrl != null) {
+      fetchData(false);
+    }
+  }, [itemData.loadNext]);
 
   return (
     <Scaffold
       header={
         <Header centerTitle={false} title={title} iconLeftButton="arrow-left" />
       }>
-      <Container marginBottom={48}>
-        <ListContenFest
-          productCategory="AREA"
-          name={title}
-        />
-      </Container>
+      <FlatList
+        keyExtractor={(item, index) => item.toString() + index}
+        data={itemData.data}
+        numColumns={2}
+        contentContainerStyle={{
+          paddingHorizontal: 8,
+        }}
+        onEndReachedThreshold={0.3}
+        onEndReached={() => setItemData({...itemData, loadNext: true})}
+        renderItem={({item, index}) => {
+          return (
+            <CardContentFest
+              productCategory="AREA"
+              item={item}
+              horizontal={false}
+              numColumns={2}
+            />
+          );
+        }}
+      />
     </Scaffold>
   );
 };

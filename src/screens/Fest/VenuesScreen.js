@@ -19,7 +19,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {shadowStyle} from 'src/styles';
 import {Modalize} from 'react-native-modalize';
 import CardFestVenues from 'src/components/Fest/CardFestVenues';
-import { fetchFestLocation } from 'src/api-rest/fest/fetchFestLocation';
+import {fetchFestLocation} from 'src/api-rest/fest/fetchFestLocation';
+import itemUpdate from 'src/state/reducers/item-update';
 
 const VenuesScreen = ({navigation, route}) => {
   const {Color} = useColor();
@@ -30,97 +31,114 @@ const VenuesScreen = ({navigation, route}) => {
   const [refreshing, setRefreshing] = useState(false);
   const {width, height} = useWindowDimensions();
   const [loading, setLoading] = useState(false);
+  const [itemData, setItemData] = useState({
+    data: [],
+    loading: true,
+    message: '',
+    nextUrl: null,
+    loadNext: false,
+    refresh: false,
+  });
 
   const [categoryIndex, setCategoryIndex] = useState(0);
-  const category = ['Semua', 'Gratis', 'Tiket'];
-  const [selected, setSelected] = useState({});
-  const [data, setData] = useState([]);
+  const category = ['All', 'Free', 'Ticketing'];
 
-  const fetchData = async () => {
-    const body = {
-      type: "venues"
-    };
-    if(category[categoryIndex] ===  'Gratis'){
-      body.category = 1
+  const fetchData = async first => {
+    let params = itemData.nextUrl
+      ? itemData.nextUrl
+      : '?type=venues&perPage=10';
+    if (category[categoryIndex] === 'Ticketing') {
+      params = params + '&category=1';
     }
-    if(category[categoryIndex] ===  'Tiket'){
-      body.category = 2
+    if (category[categoryIndex] === 'Free') {
+      params = params + '&category=0';
     }
-    const result = await fetchFestLocation(body);
-    if(result.success){
-      setData(result.data);
+    const result = await fetchFestLocation(params);
+    if (result.status) {
+      console.log(result, 'resss');
+      setItemData({
+        ...itemData,
+        data: first ? result.data : itemData.data.concat(result.data),
+        nextUrl: result.nextUrl ? `?${result.nextUrl.split('?')[1]}` : null,
+        loading: false,
+        loadNext: false,
+        message: result.message,
+        refresh: false,
+      });
     }
-  }
+  };
+
+  console.log(itemData, 'dataaa');
 
   useEffect(() => {
-    fetchData();
-  }, [categoryIndex]);
+    if (isFocused) {
+      fetchData(true);
+    }
+  }, [categoryIndex, isFocused]);
+
+  useEffect(() => {
+    if (itemData.loadNext && itemData.nextUrl != null) {
+      fetchData(false);
+    }
+  }, [itemData.loadNext]);
 
   return (
     <Scaffold
       loadingProps={loadingProps}
       header={
-        <Header centerTitle={false} title="Venues" iconLeftButton="arrow-left" />
+        <Header
+          centerTitle={false}
+          title="Venues"
+          iconLeftButton="arrow-left"
+        />
       }>
-      <ScrollView>
-        {loading ? (
-          <Container
-            style={{
-              width: '100%',
-              aspectRatio: 21 / 9,
-              marginBottom: 16,
-              marginRight: 16,
-              backgroundColor: Color.textInput,
-              borderRadius: 8,
+      <FlatList
+        keyExtractor={(item, index) => item.toString() + index}
+        data={itemData.data}
+        contentContainerStyle={{
+          paddingHorizontal: 16,
+        }}
+        onEndReachedThreshold={0.3}
+        onEndReached={() => setItemData({...itemData, loadNext: true})}
+        renderItem={({item, index}) => {
+          return <CardFestVenues item={item} />;
+        }}
+        ListHeaderComponent={
+          <FlatList
+            keyExtractor={(item, index) => item.toString() + index}
+            data={category}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingHorizontal: 8,
               alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <ActivityIndicator size="large" color={Color.primary} />
-            <Divider />
-            <Text>Memuat</Text>
-          </Container>
-        ) : (
-          <Container>
-            <FlatList
-              keyExtractor={(item, index) => item.toString() + index}
-              data={category}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                paddingHorizontal: 16,
-                alignItems: 'center',
-              }}
-              ItemSeparatorComponent={() => <Divider width={10} />}
-              renderItem={({item, index}) => (
-                <TouchableOpacity onPress={() => setCategoryIndex(index)}>
-                  <Container
-                    style={{
-                      padding: 8,
-                      borderWidth: 1,
-                      // borderRadius: 8,
-                      borderColor: Color.textSoft,
-                      backgroundColor:
-                        index === categoryIndex ? '#121212' : 'transparent',
-                    }}>
-                    <Text size={12} type="medium" lineHeight={16} color={index === categoryIndex ? "#FEFEFE" : Color.text}>
-                      {item}
-                    </Text>
-                  </Container>
-                </TouchableOpacity>
-              )}
-            />
-            <Divider />
-            <Container paddingHorizontal={16}>
-              {data.map((item, index) => {
-                return (
-                  <CardFestVenues item={item}/>
-                );
-              })}
-            </Container>
-            <Divider />
-          </Container>
-        )}
-      </ScrollView>
+            }}
+            ItemSeparatorComponent={() => <Divider width={10} />}
+            renderItem={({item, index}) => (
+              <TouchableOpacity onPress={() => setCategoryIndex(index)}>
+                <Container
+                  style={{
+                    paddingVertical: 8,
+                    paddingHorizontal: 12,
+                    borderWidth: 1,
+                    // borderRadius: 8,
+                    borderColor: Color.textSoft,
+                    backgroundColor:
+                      index === categoryIndex ? '#121212' : 'transparent',
+                  }}>
+                  <Text
+                    size={12}
+                    type="medium"
+                    lineHeight={16}
+                    color={index === categoryIndex ? '#FEFEFE' : Color.text}>
+                    {item}
+                  </Text>
+                </Container>
+              </TouchableOpacity>
+            )}
+          />
+        }
+      />
     </Scaffold>
   );
 };

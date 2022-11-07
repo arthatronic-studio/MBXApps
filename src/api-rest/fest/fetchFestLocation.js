@@ -1,8 +1,11 @@
-import { postAPI } from '../httpService';
+import { getAPI } from '../httpService';
 
-export const fetchFestLocation = async(body) => {
-    const endpoint = 'festival/location';
-    const result = await postAPI(endpoint, body);
-    console.log(`result ${endpoint}`, body, result);
+export const fetchFestLocation = async(params) => {
+    let endpoint = 'festival/location';
+    if(params && params != ''){
+        endpoint = endpoint + params;
+    }
+    const result = await getAPI(endpoint);
+    console.log(`result ${endpoint}`, result);
     return result;
 }
