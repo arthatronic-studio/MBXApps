@@ -250,9 +250,10 @@ const GroupScreen = ({navigation, route}) => {
             return (
               <Container flex={1} flexDirection="row" paddingHorizontal={16}>
                 <Container flex={1}>
-                  {index == 0 && (
-                    <Text size={9} type="semibold" align="left">
-                      {'● ECOSYSTEM'.toUpperCase()}
+                  {(index == 0 ||
+                    item.category != itemData.data[index - 1].category) && (
+                    <Text size={10} type="semibold" align="left">
+                      ● {item.category}
                     </Text>
                   )}
                 </Container>
@@ -351,9 +352,7 @@ const GroupScreen = ({navigation, route}) => {
                 />
 
                 {itemData.data.map((item, index) => {
-                  if (
-                    item.axis && item.yaxis
-                  ) {
+                  if (item.axis && item.yaxis) {
                     return (
                       <Marker
                         key={index}
@@ -426,7 +425,7 @@ const GroupScreen = ({navigation, route}) => {
           width: width - 32,
         }}
         modalStyle={{
-          backgroundColor: Color.theme,          
+          backgroundColor: Color.theme,
           borderTopLeftRadius: 0,
           borderTopRightRadius: 0,
           paddingHorizontal: 16,
@@ -435,27 +434,23 @@ const GroupScreen = ({navigation, route}) => {
           setSelected({});
         }}>
         <Container>
-          <Container
-            flex={1}
-            align="flex-end"
-          >
+          <Container flex={1} align="flex-end">
             <TouchableOpacity
               onPress={() => modalRef.current.close()}
-              style={{ 
+              style={{
                 width: 24,
                 height: 24,
-               }}
-            >
+              }}>
               <Image
                 source={imageAssets.iconApp}
-                style={{ 
+                style={{
                   height: '100%',
-                  width: '100%'
-                 }}
+                  width: '100%',
+                }}
               />
             </TouchableOpacity>
           </Container>
-          <Divider height={16}/>
+          <Divider height={16} />
           {Array.isArray(selected?.images) && selected?.images[0] && (
             <Image
               style={{
@@ -469,7 +464,12 @@ const GroupScreen = ({navigation, route}) => {
             />
           )}
           <Divider height={10} />
-          <Text size={18} lineHeight={21.6} type="medium" color="#121212" align="left">
+          <Text
+            size={18}
+            lineHeight={21.6}
+            type="medium"
+            color="#121212"
+            align="left">
             {selected.name}
           </Text>
           <Divider height={4} />
@@ -480,14 +480,18 @@ const GroupScreen = ({navigation, route}) => {
           <Container flex={1}>
             {selected.description && selected.description != '' && (
               <>
-                <Text align="left" color={Color.black} size={14} lineHeight={22.4}>
+                <Text
+                  align="left"
+                  color={Color.black}
+                  size={14}
+                  lineHeight={22.4}>
                   {selected.description}
                 </Text>
                 <Divider height={10} />
               </>
             )}
 
-            {selected.ig && selected.ig != '' &&
+            {selected.ig && selected.ig != '' && (
               <TouchableOpacity
                 onPress={() => {
                   Linking.openURL(`${selected.ig}`);
@@ -502,13 +506,13 @@ const GroupScreen = ({navigation, route}) => {
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Image source={imageAssets.instagram}/>
+                <Image source={imageAssets.instagram} />
                 <Divider width={14} />
                 <Text size={14} color={Color.primarySoft} type="medium">
                   Instagram
                 </Text>
               </TouchableOpacity>
-            }
+            )}
           </Container>
         </Container>
       </Modalize>
