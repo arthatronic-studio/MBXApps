@@ -408,7 +408,7 @@ const GroupScreen = ({navigation, route}) => {
           keyboardShouldPersistTaps: 'handled',
         }}
         ref={modalRef}
-        // withHandle={false}
+        withHandle={false}
         handleStyle={{
           marginTop: 18,
           backgroundColor: '#E2E1DF',
@@ -420,44 +420,67 @@ const GroupScreen = ({navigation, route}) => {
           backgroundColor: Color.theme,
           alignItems: 'flex-start',
           paddingBottom: 16,
-          borderTopLeftRadius: 12,
-          borderTopRightRadius: 12,
+          // borderTopLeftRadius: 12,
+          // borderTopRightRadius: 12,
           paddingTop: 24,
           width: width - 32,
         }}
         modalStyle={{
-          backgroundColor: Color.theme,
+          backgroundColor: Color.theme,          
+          borderTopLeftRadius: 0,
+          borderTopRightRadius: 0,
           paddingHorizontal: 16,
         }}
         onClose={() => {
           setSelected({});
         }}>
         <Container>
+          <Container
+            flex={1}
+            align="flex-end"
+          >
+            <TouchableOpacity
+              onPress={() => modalRef.current.close()}
+              style={{ 
+                width: 24,
+                height: 24,
+               }}
+            >
+              <Image
+                source={imageAssets.iconApp}
+                style={{ 
+                  height: '100%',
+                  width: '100%'
+                 }}
+              />
+            </TouchableOpacity>
+          </Container>
+          <Divider height={16}/>
           {Array.isArray(selected?.images) && selected?.images[0] && (
             <Image
               style={{
                 width: width - 32,
                 height: (width - 32) * 0.55,
                 resizeMode: 'cover',
-                // borderRadius: 8,
+                borderWidth: 1,
+                borderColor: Color.black,
               }}
               source={{uri: selected?.images[0]}}
             />
           )}
           <Divider height={10} />
-          <Text size={16} type="medium" color={Color.black} align="left">
+          <Text size={18} lineHeight={21.6} type="medium" color="#121212" align="left">
             {selected.name}
           </Text>
           <Divider height={4} />
-          <Text size={10} color={Color.textSoft} align="left">
-            {/* {selected.name} {'\u2022'} Restoran {'\u2022'} {selected.group} */}
+          <Text size={12} lineHeight={12} color={Color.gray} align="left">
             {selected.name} {'\u2022'} {selected.category}
           </Text>
           <Divider height={10} />
           <Container flex={1}>
             {selected.description && selected.description != '' && (
               <>
-                <Text align="left" color={Color.black}>
+                <Text align="left" color={Color.black} size={14} lineHeight={22.4}>
                   {selected.description}
                 </Text>
                 <Divider height={10} />
@@ -474,14 +497,14 @@ const GroupScreen = ({navigation, route}) => {
                   borderWidth: 1,
                   padding: 10,
                   // borderRadius: 8,
-                  borderColor: '#ACAAA5',
+                  borderColor: Color.primarySoft,
                   flexDirection: 'row',
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Image source={imageAssets.instagram} />
+                <Image source={imageAssets.instagram}/>
                 <Divider width={14} />
-                <Text size={14} color={Color.primaryDark} type="medium">
+                <Text size={14} color={Color.primarySoft} type="medium">
                   Instagram
                 </Text>
               </TouchableOpacity>
