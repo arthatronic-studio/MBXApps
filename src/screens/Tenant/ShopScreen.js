@@ -24,6 +24,8 @@ import SearchBar from 'src/components/SearchBar';
 import imageAssets from 'assets/images';
 import ListTenantItem from 'src/screens/Tenant/ListTenantItem';
 import ListTenantFeatured from 'src/screens/Tenant/ListTenantFeatured';
+import { statusBarHeight } from 'src/utils/constants';
+import ListTenantCollaboratorItem from './ListTenantCollaboratorItem';
 
 const ShopScreen = ({ navigation, route }) => {
   const { params } = route;
@@ -156,7 +158,8 @@ const ShopScreen = ({ navigation, route }) => {
         showHeader={false}
         // showSeeAllText={false}
         style={{
-          paddingBottom: height / 5,
+          paddingBottom: statusBarHeight,
+          paddingHorizontal: 12,
         }}
         ListHeaderComponent={
           <>
@@ -175,6 +178,24 @@ const ShopScreen = ({ navigation, route }) => {
               }}
             /> */}
           </>
+        }
+        ListFooterComponent={
+          <Container paddingTop={24}>
+            <ListTenantCollaboratorItem
+              tenantType='shop'
+              productCategory='SHOP'
+              name='Toko'
+              title='● X COLLABORATOR'
+              // nav='EatScreen'
+              // refresh={refreshing || isFocused}
+              showHeader
+              // showSeeAllText={false}
+              style={{
+                paddingBottom: statusBarHeight,
+                paddingHorizontal: 12,
+              }}
+            />
+          </Container>
         }
       />
     </Scaffold>

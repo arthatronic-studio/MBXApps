@@ -24,6 +24,8 @@ import SearchBar from 'src/components/SearchBar';
 import imageAssets from 'assets/images';
 import ListTenantItem from 'src/screens/Tenant/ListTenantItem';
 import ListTenantFeatured from 'src/screens/Tenant/ListTenantFeatured';
+import ListTenantCollaboratorItem from './ListTenantCollaboratorItem';
+import { statusBarHeight } from 'src/utils/constants';
 
 const EatScreen = ({ navigation, route }) => {
   const { params } = route;
@@ -167,7 +169,7 @@ const EatScreen = ({ navigation, route }) => {
         showHeader={false}
         // showSeeAllText={false}
         style={{
-          paddingBottom: height / 5,
+          paddingBottom: statusBarHeight,
           paddingHorizontal: 12,
         }}
         ListHeaderComponent={
@@ -187,6 +189,25 @@ const EatScreen = ({ navigation, route }) => {
               }}
             /> */}
           </>
+        }
+        ListFooterComponent={
+          <Container paddingTop={24}>
+            <ListTenantCollaboratorItem
+              tenantType='eat'
+              productCategory='EAT'
+              name='Eat'
+              title='● X COLLABORATOR'
+              // nav='EatScreen'
+              // refresh={refreshing || isFocused}
+              refresh={refresh}
+              showHeader
+              // showSeeAllText={false}
+              style={{
+                paddingBottom: statusBarHeight,
+                paddingHorizontal: 12,
+              }}
+            />
+          </Container>
         }
       />
     </Scaffold>
