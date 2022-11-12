@@ -67,6 +67,9 @@ const CardFestVenues = ({
           {item.name}
         </Text>
         <Text align="left" size={11} color={"#797979"} type="medium" lineHeight={15}>
+          Max {item.max_people} People
+        </Text>
+        <Text align="left" size={11} color={"#797979"} type="medium" lineHeight={15}>
           {item.time_from} - {item.time_to}
         </Text>
 

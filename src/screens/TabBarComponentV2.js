@@ -19,6 +19,7 @@ import { queryGetNotification } from "src/lib/query";
 import { useIsFocused } from '@react-navigation/native';
 import client from '@src/lib/apollo';
 import imageAssets, { iconQris } from 'assets/images';
+import { fetchGetNotifCount } from 'src/api-rest/fetchGetNotifCount';
 
 const sizePerMenu = 24;
 
@@ -54,29 +55,20 @@ const TabBarComponentV2 = (props) => {
         });
     }, [activeRouteIndex, width]);
 
-    // useEffect(() => {
-    //     const variables = {
-    //         page: 0,
-    //         itemPerPage: 9999
-    //     }
-    //     client.query({
-    //         query: queryGetNotification,
-    //         variables,
-    //     })
-    //         .then((respone) => {
-    //             var response = respone['data']['getNotification'];
-    //             var res = response.filter(function (el) {
-    //                 return el.status === 1 | el.status === 2;
-    //             });
-    //             setNotificationCount(res.length)
-    //             console.log('ini ', res);
-    //         })
-    //         .catch((err) => {
-    //             console.log('ini ', err);
-    //             console.log(err);
+    const fetchNotif = async () => {
+        const res = await fetchGetNotifCount();
+        if(res.status){
+            setNotificationCount(res.data);
+        }
+    }
 
-    //         })
-    // }, [isFocused]);
+    useEffect(() => {
+        fetchNotif();
+
+        // return () => {
+        //     console.log("This will be logged on unmount");
+        //   }
+    }, [isFocused, activeRouteIndex]);
 
     const redirectTo = (name, params) => {
         props.navigation.dispatch(
@@ -182,6 +174,29 @@ const TabBarComponentV2 = (props) => {
                                             borderColor: isRouteActive ? 'transparent' : Color.primary,
                                         }}
                                     >
+                                        {route.id === 'not' && notificationCount > 0 &&
+                                            <View
+                                                style={{ 
+                                                    position: 'absolute',
+                                                    backgroundColor: Color.primary,
+                                                    right: -10,
+                                                    top: -10,
+                                                    height: 24,
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    borderRadius: 12,
+                                                    width: 24
+                                                }}
+                                            >
+                                                <Text
+                                                    size={12}
+                                                    color={Color.white}
+                                                    numberOfLines={1}
+                                                >
+                                                    {notificationCount}
+                                                </Text>
+                                            </View>
+                                        }
                                         {route.imageAsset ?
                                             <Image
                                                 source={route.imageAsset}

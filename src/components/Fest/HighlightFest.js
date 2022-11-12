@@ -105,17 +105,13 @@ const HighlightFest = props => {
       newData = initialData;
     }
     if(productCategory == 'VENUES'){
-      const body = {
-        type: "venues"
-      };
-      const result = await fetchFestLocation(body);
+      const params = '?type=venues&perPage=3';
+      const result = await fetchFestLocation(params);
       newData = result.data;
     }
     if(productCategory == 'AREA'){
-      const body = {
-        type: "experience"
-      };
-      const result = await fetchFestLocation(body);
+      const params = '?type=experience&perPage=3';
+      const result = await fetchFestLocation(params);
       newData = result.data;
     }
     if(productCategory === 'LINEUP'){

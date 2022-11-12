@@ -57,16 +57,16 @@ const VenuesDetail = ({navigation, route}) => {
           title={item.name}
           actions={
             <Container
-              backgroundColor={item.entrance == 2 ? '#E6CFA3' : '#FCD100'}
+              backgroundColor={item.entrance == 1 ? '#E6CFA3' : '#FCD100'}
               borderWidth={1}
-              borderColor={item.entrance == 2 ? '#644B1B' : '#1D1D1B'}
+              borderColor={item.entrance == 1 ? '#644B1B' : '#1D1D1B'}
               padding={8}>
               <Text
-                color={item.entrance == 2 ? '#644B1B' : '#1D1D1B'}
+                color={item.entrance == 1 ? '#644B1B' : '#1D1D1B'}
                 size={10}
                 lineHeight={12}
                 type="medium">
-                {item.entrance === 1 ? 'Gratis' : 'Tiket'}
+                {item.entrance === 0 ? 'FREE' : 'TICKETING'}
               </Text>
             </Container>
           }
