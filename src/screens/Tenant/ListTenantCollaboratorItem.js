@@ -123,6 +123,10 @@ const ListTenantCollaboratorItem = ({ tenantType, productCategory, name, horizon
     // if (productCategory === 'NEARBY_PLACE') extraProps.numColumns = 2;
     // if (horizontal) extraProps = {};
 
+    if (!itemData.loading && itemData.data.length === 0) {
+        return <View />;
+    }
+
     return (
         <View style={{ }}>
             {showHeader && horizontal && renderHeader()}
