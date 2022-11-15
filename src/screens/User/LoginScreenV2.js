@@ -295,15 +295,11 @@ const LoginScreenV2 = ({navigation, route}) => {
               placeholder="987-XXX-XXX"
               value={state.username}
               onChangeText={text => {
-                console.log(
-                  'state.username',
-                  state.username.length,
-                  typeof text,
-                );
-                if (
-                  (state.username.length <= 0 && text == 0) ||
-                  isNaN(parseInt(text))
-                ) {
+                console.log(typeof text);
+                if (text.charAt(0) === '0') {
+                  return;
+                }
+                if (text.length > 1 && isNaN(parseInt(text))) {
                   return;
                 }
                 setState({username: text});
@@ -318,6 +314,9 @@ const LoginScreenV2 = ({navigation, route}) => {
               keyboardType="numeric"
               error={state.error.username}
               prefixText="+62"
+              textinputProps={{
+                maxLength: 12
+              }}
             />
 
             {/* <FormInput

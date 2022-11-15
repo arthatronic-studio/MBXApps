@@ -144,7 +144,6 @@ const ListTenantCollaboratorItem = ({ tenantType, productCategory, name, horizon
                     onEndReached={() => setItemData({ ...itemData, loadNext: true })}
                     {...extraProps}
                     renderItem={({ item, index }) => {
-                        console.log('itemitem', item);
                         return (
                             // <CardTenantItem
                             //     index={index}

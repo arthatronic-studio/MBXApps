@@ -15,7 +15,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Fontisto from 'react-native-vector-icons/Fontisto';
-import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useIsFocused } from '@react-navigation/native';
 import Modal from 'react-native-modal';
@@ -328,6 +328,29 @@ const MainHome = ({ navigation, route }) => {
 
       setLastRespArtID(-1);
       setLastRespMerchID(-1);
+
+      showLoading('success', result.message);
+    } else {
+      showLoading('error', result.message);
+    }
+  }
+
+  const onEventCheckout = async (activeEvent) => {
+    // console.log('activeEvent', activeEvent);
+
+    const body = {
+      event_id: activeEvent.id,
+    };
+
+    console.log('body', body);
+
+    const result = await postAPI('user-activity/event-checkout', body);
+
+    console.log('result event-checkout', result);
+
+    if (result.status) {
+      const prof = await stateUpdateProfile();
+      // console.log('prof', prof);
 
       showLoading('success', result.message);
     } else {
@@ -727,7 +750,7 @@ const MainHome = ({ navigation, route }) => {
           {isCheckin && auth.user && auth.user.activeEvent && <Container paddingHorizontal={16} paddingTop={16}>
             <Container padding={10} borderWidth={1} borderColor={Color.text}>
               <Row justify='space-between'>
-                <Row>
+                <Row style={{flex: 1}}>
                   <Container width='14%' style={{ aspectRatio: 1 }}>
                     <Image
                       source={{ uri: auth.user.activeEvent.imageUrl }}
@@ -744,6 +767,29 @@ const MainHome = ({ navigation, route }) => {
                     <Text align='left' size={12} type='medium' numberOfLines={2} letterSpacing={0.5}>{auth.user.activeEvent.title}</Text>
                   </Container>
                 </Row>
+
+                <TouchableOpacity
+                    onPress={() => {
+                      Alert(
+                        'Konfirmasi',
+                        'Keluar dari Event?',
+                        () => onEventCheckout(auth.user.activeEvent),
+                      );
+                    }}
+                    style={{
+                      aspectRatio: 1,
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Text color={Color.error} size={9} type='semibold'>
+                      {'Exit '.toUpperCase()}
+                      <MaterialCommunityIcons
+                        name='arrow-up-thick'
+                        color={Color.error}
+                        size={10}
+                      />
+                    </Text>
+                  </TouchableOpacity>
               </Row>
             </Container>
           </Container>}

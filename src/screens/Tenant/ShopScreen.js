@@ -26,6 +26,7 @@ import ListTenantItem from 'src/screens/Tenant/ListTenantItem';
 import ListTenantFeatured from 'src/screens/Tenant/ListTenantFeatured';
 import { statusBarHeight } from 'src/utils/constants';
 import ListTenantCollaboratorItem from './ListTenantCollaboratorItem';
+import PostingHeader from 'src/components/Posting/PostingHeader';
 
 const ShopScreen = ({ navigation, route }) => {
   const { params } = route;
@@ -148,11 +149,24 @@ const ShopScreen = ({ navigation, route }) => {
 
       {/* <Divider /> */}
 
+      <>
+        <PostingHeader
+            title='● TENANT'
+            // onSeeAllPress={() => {
+            //     // navigation.navigate(nav, { title });
+            // }}
+            // productCategory={productCategory}
+            // showSeeAllText={showSeeAllText}
+            showSeeAllText={false}
+        />
+        <Divider height={8} />
+      </>
+
       <ListTenantItem
         tenantType='shop'
         productCategory='SHOP'
         name='Toko'
-        title='Semua Tempat'
+        title='● TENANT'
         // nav='EatScreen'
         // refresh={refreshing || isFocused}
         showHeader={false}
@@ -163,9 +177,10 @@ const ShopScreen = ({ navigation, route }) => {
         }}
         ListHeaderComponent={
           <>
-            <Container paddingHorizontal={8}>
+            {/* <Container paddingHorizontal={8}>
               <View style={{width: '100%', height: 1, backgroundColor: Color.primary}} />
-            </Container>
+            </Container> */}
+
             {/* <ListTenantFeatured
               tenantType='shop'
               horizontal

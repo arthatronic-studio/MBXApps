@@ -164,7 +164,7 @@ const NotificationPromo = ({ navigation, route }) => {
       //   if (modalListActionRef.current) modalListActionRef.current.open();
       // }
       // }
-      // emptyTitle="Notifikasi belum tersedia"
+      emptyTitle="Promo belum tersedia"
       showHeader={false}
       fallback={loading}
       empty={!loading && history.length === 0}

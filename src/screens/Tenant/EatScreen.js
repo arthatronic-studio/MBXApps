@@ -26,6 +26,7 @@ import ListTenantItem from 'src/screens/Tenant/ListTenantItem';
 import ListTenantFeatured from 'src/screens/Tenant/ListTenantFeatured';
 import ListTenantCollaboratorItem from './ListTenantCollaboratorItem';
 import { statusBarHeight } from 'src/utils/constants';
+import PostingHeader from 'src/components/Posting/PostingHeader';
 
 const EatScreen = ({ navigation, route }) => {
   const { params } = route;
@@ -158,11 +159,24 @@ const EatScreen = ({ navigation, route }) => {
 
       {/* <Divider /> */}
 
+      <>
+        <PostingHeader
+            title='● TENANT'
+            // onSeeAllPress={() => {
+            //     // navigation.navigate(nav, { title });
+            // }}
+            // productCategory={productCategory}
+            // showSeeAllText={showSeeAllText}
+            showSeeAllText={false}
+        />
+        <Divider height={8} />
+      </>
+
       <ListTenantItem
         tenantType='eat'
         productCategory='EAT'
         name='Eat'
-        title='Semua Tempat'
+        title='● TENANT'
         // nav='EatScreen'
         // refresh={refreshing || isFocused}
         refresh={refresh}
@@ -174,9 +188,10 @@ const EatScreen = ({ navigation, route }) => {
         }}
         ListHeaderComponent={
           <>
-            <Container paddingHorizontal={8}>
+            {/* <Container paddingHorizontal={8}>
               <View style={{width: '100%', height: 1, backgroundColor: Color.primary}} />
-            </Container>
+            </Container> */}
+
             {/* <ListTenantFeatured
               tenantType='eat'
               horizontal

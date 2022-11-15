@@ -106,18 +106,22 @@ const TenantDetailScreen = ({ navigation, route }) => {
     }
   }
 
-  console.log('params', params);
-
   const getCart = async () => {
     const cart = await fetchEatCartGet();
-    if (cart.status) {
+    console.log('cart', cart);
+
+    if (cart.status && cart.data) {
       setCartId(cart.data.id);
       setCartLocationId(cart.data.location_id);
 
       getDetail(cart.data.id, cart.data.location_id);
+    } else {
+      setCartId();
+      setCartLocationId();
+      setSelectedProductCount(0);
+      setCartAmount(FormatMoney.getFormattedMoney(0));
+      setListCartProduct([]);
     }
-
-    console.log('cart', cart);
   }
 
   const getDetail = async (cart_id, location_id) => {
@@ -129,6 +133,10 @@ const TenantDetailScreen = ({ navigation, route }) => {
       if (Array.isArray(result.data) && result.data.length > 0) {
         setListCartProduct(result.data[0].cart_detail || []);
       }
+    } else {
+      setSelectedProductCount(0);
+      setCartAmount(FormatMoney.getFormattedMoney(0));
+      setListCartProduct([]);
     }
   };
 
@@ -798,7 +806,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
                     if (isCartDiffTenant) {
                       Alert(
                         'Konfirmasi',
-                        'Apakah kanu mau mengganti toko/makanan?',
+                        'Apakah kamu mau mengganti toko/makanan?',
                         () => {
                           onAddToCart(item, index);
                         }

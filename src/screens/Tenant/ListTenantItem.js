@@ -136,7 +136,6 @@ const ListTenantItem = ({ tenantType, productCategory, name, horizontal, style, 
                     onEndReached={() => setItemData({ ...itemData, loadNext: true })}
                     {...extraProps}
                     renderItem={({ item, index }) => {
-                        console.log('itemitem', item);
                         return (
                             // <CardTenantItem
                             //     index={index}
