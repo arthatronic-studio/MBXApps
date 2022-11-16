@@ -63,7 +63,7 @@ const GroupScreen = ({navigation, route}) => {
   }, [itemData.loadNext]);
 
   const fetchData = async first => {
-    const param = itemData.nextUrl && !first ? itemData.nextUrl : `?perPage=10`;
+    const param = itemData.nextUrl && !first ? itemData.nextUrl : `?perPage=20`;
     const result = await fetchGetGroups(param);
 
     console.log(result, 'sult');
