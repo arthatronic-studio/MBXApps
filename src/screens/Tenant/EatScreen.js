@@ -161,13 +161,14 @@ const EatScreen = ({ navigation, route }) => {
 
       <>
         <PostingHeader
-            title='● TENANT'
+            title='TENANT'
             // onSeeAllPress={() => {
             //     // navigation.navigate(nav, { title });
             // }}
             // productCategory={productCategory}
             // showSeeAllText={showSeeAllText}
             showSeeAllText={false}
+            icon={imageAssets.iconMBloc}
         />
         <Divider height={8} />
       </>
@@ -176,7 +177,7 @@ const EatScreen = ({ navigation, route }) => {
         tenantType='eat'
         productCategory='EAT'
         name='Eat'
-        title='● TENANT'
+        title='TENANT'
         // nav='EatScreen'
         // refresh={refreshing || isFocused}
         refresh={refresh}
@@ -211,7 +212,8 @@ const EatScreen = ({ navigation, route }) => {
               tenantType='eat'
               productCategory='EAT'
               name='Eat'
-              title='● X COLLABORATOR'
+              title='COLLABORATOR'
+              icon={imageAssets.iconOnboarding}
               // nav='EatScreen'
               // refresh={refreshing || isFocused}
               refresh={refresh}

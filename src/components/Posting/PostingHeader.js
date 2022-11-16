@@ -36,6 +36,7 @@ const defaultProps = {
     style: {},
     iconType: null,
     iconName: null,
+    icon: null,
 };
 
 const PostingHeader = (props) => {
@@ -46,7 +47,8 @@ const PostingHeader = (props) => {
         showSeeAllText,
         style,
         iconType,
-        iconName
+        iconName,
+        icon,
     } = props;
 
     const {Color} = useColor();
@@ -80,6 +82,7 @@ const PostingHeader = (props) => {
             }}
         >
             <Row>
+                {icon && <Image source={icon} style={{ width: 24, height: 24, marginRight: 5 }} />}
                 {iconType && iconName && getIconMenu(iconType, iconName)}
 
                 {/* {validImage && <View style={{ width: 24, aspectRatio: 1, marginRight: 8 }}>

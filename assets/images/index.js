@@ -2,6 +2,7 @@ const iconApp = require('./icon-app.png');
 const iconSplash = require('./icon-splash.png');
 const iconOnboarding = require('./icon-onboarding.png');
 const iconOnboarding2 = require('./icon-onboarding-2.png');
+const iconMBloc = require('./icon-m-bloc.png');
 const imageBlank = require('./image-blank.png');
 const imageEmptyAuction = require('./image-empty-auction.png');
 const imageEmpty = require('./image-empty.png');
@@ -212,6 +213,7 @@ export const imageAssets = {
   iconMenuNotif,
   iconMenuSecond,
   iconMenuProfile,
+  iconMBloc,
   imageBlank,
   imageEmptyAuction,
   imageEmpty,
