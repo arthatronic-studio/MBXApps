@@ -44,6 +44,7 @@ const CardTenantMenuGrid = ({ item, index, numColumns, onPress, cartProductQuant
       style={{ width: `${100 / numColumns}%`, paddingTop: 8 }}
     >
       <TouchableOpacity
+        disabled={item.stock == 0}
         onPress={() => {
           onPress();
         }}
@@ -129,14 +130,16 @@ const CardTenantMenuGrid = ({ item, index, numColumns, onPress, cartProductQuant
                   </TouchableOpacity>
                 </View>
 
-                <Image
-                  source={imageAssets.addBox}
-                  style={{
-                    height: 24,
-                    width: 24,
-                    resizeMode: 'contain'
-                  }}
-                />
+                {item.stock != 0 &&
+                  <Image
+                    source={imageAssets.addBox}
+                    style={{
+                      height: 24,
+                      width: 24,
+                      resizeMode: 'contain'
+                    }}
+                  />
+                }
               </View>
             </View>
           </Container>
