@@ -11,6 +11,7 @@ import {Container} from 'src/styled';
 import ModalSyaratKetentuan from 'src/components/ModalSyaratKetentuan';
 import {useIsFocused, useRoute} from '@react-navigation/native';
 import {shadowStyle} from '@src/styles';
+import { fetchGetTerm } from 'src/api-rest/fetchGetTerm';
 import {
     Grid, Row, Col,
     Text,
@@ -51,40 +52,28 @@ const SyaratdanKetentuan = ({
     useEffect(() => {
       getSyaratKetentuan();
     }, [isFocused]);
-  const getSyaratKetentuan = () => {
-   
-
-    Client.query({
-      query: querySyaratKetentuan,
-    })
-      .then(res => {
-
-        console.log('Try Data', res);
-
-        let newData = [];
-        if (res.data.getSyaratKetentuan) {
-          newData = res.data.getSyaratKetentuan;
-        }
-
-        setList({
-          ...list,
-          data: newData,
-          loading: false,
-          message: '',
-        });
-        
-        
-
-      })
-      .catch(err => {
-        console.log('err', err);
-         setList({
-           ...list,
-           loading: false,
-           message: '',
-         });
-       
+  const getSyaratKetentuan = async () => {
+    const res = await fetchGetTerm();
+    if(res.success){
+      let newData = [];
+      if (Array.isArray(res.data)) {
+        newData = res.data;
+      }else{
+        newData = [res.data];
+      }
+      setList({
+        ...list,
+        data: newData,
+        loading: false,
+        message: '',
       });
+    }else{
+      setList({
+        ...list,
+        loading: false,
+        message: '',
+      });
+    }
   };
 
   const renderItem = ({item, index}) => (
@@ -95,7 +84,7 @@ const SyaratdanKetentuan = ({
       <TouchableOpacity
         onPress={() => {
           setmodalWebView(true);
-          setcontent(item.page_content);
+          setcontent(item.content);
         }}
         style={{
           paddingVertical: 16,
@@ -105,7 +94,7 @@ const SyaratdanKetentuan = ({
           ...shadowStyle,
         }}>
         <Text size={12} align='left' type="bold">
-          {item.page_title}
+          {item.title}
         </Text>
       </TouchableOpacity>
     </View>

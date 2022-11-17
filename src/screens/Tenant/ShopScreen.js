@@ -151,13 +151,14 @@ const ShopScreen = ({ navigation, route }) => {
 
       <>
         <PostingHeader
-            title='● TENANT'
+            title='TENANT'
             // onSeeAllPress={() => {
             //     // navigation.navigate(nav, { title });
             // }}
             // productCategory={productCategory}
             // showSeeAllText={showSeeAllText}
             showSeeAllText={false}
+            icon={imageAssets.iconMBloc}
         />
         <Divider height={8} />
       </>
@@ -166,7 +167,7 @@ const ShopScreen = ({ navigation, route }) => {
         tenantType='shop'
         productCategory='SHOP'
         name='Toko'
-        title='● TENANT'
+        title='TENANT'
         // nav='EatScreen'
         // refresh={refreshing || isFocused}
         showHeader={false}
@@ -200,7 +201,8 @@ const ShopScreen = ({ navigation, route }) => {
               tenantType='shop'
               productCategory='SHOP'
               name='Toko'
-              title='● X COLLABORATOR'
+              title=' COLLABORATOR'
+              icon={imageAssets.iconOnboarding}
               // nav='EatScreen'
               // refresh={refreshing || isFocused}
               showHeader
@@ -209,6 +211,9 @@ const ShopScreen = ({ navigation, route }) => {
                 paddingBottom: statusBarHeight,
                 paddingHorizontal: 12,
               }}
+              styleHeader={{ 
+                paddingHorizontal: 4,
+               }}
             />
           </Container>
         }

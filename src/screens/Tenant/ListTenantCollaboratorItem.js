@@ -34,9 +34,11 @@ const defaultProps = {
     showSeeAllText: false,
     showHeader: false,
     refresh: false,
+    icon: null,
+    styleHeader: {},
 };
 
-const ListTenantCollaboratorItem = ({ tenantType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, ListFooterComponent, showHeader, title, showSeeAllText, refresh}) => {
+const ListTenantCollaboratorItem = ({ tenantType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, ListFooterComponent, showHeader, title, showSeeAllText, refresh, icon, styleHeader}) => {
     const { width } = useWindowDimensions();
     const [itemData, setItemData] = useState(initialItemState);
     const auth = useSelector(state => state['auth']);
@@ -96,11 +98,13 @@ const ListTenantCollaboratorItem = ({ tenantType, productCategory, name, horizon
             <>
                 <PostingHeader
                     title={title}
+                    icon={icon}
                     onSeeAllPress={() => {
                         // navigation.navigate(nav, { title });
                     }}
                     productCategory={productCategory}
                     showSeeAllText={showSeeAllText}
+                    style={styleHeader}
                 />
                 <Divider height={8} />
             </>
