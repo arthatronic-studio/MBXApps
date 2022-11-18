@@ -33,6 +33,7 @@ const ShopScreen = ({ navigation, route }) => {
   const isMainScreen = params && params.routeIndex;
 
   const auth = useSelector(state => state['auth']);
+  console.log(auth, 'authhh');
   const { Color } = useColor();
   const isFocused = useIsFocused();
 
@@ -158,7 +159,7 @@ const ShopScreen = ({ navigation, route }) => {
             // productCategory={productCategory}
             // showSeeAllText={showSeeAllText}
             showSeeAllText={false}
-            icon={imageAssets.iconMBloc}
+            icon={auth?.user?.activityInfo?.blocx?.icon}
         />
         <Divider height={8} />
       </>
@@ -202,7 +203,7 @@ const ShopScreen = ({ navigation, route }) => {
               productCategory='SHOP'
               name='Toko'
               title=' COLLABORATOR'
-              icon={imageAssets.iconOnboarding}
+              icon={auth?.user?.activityInfo['x-colaborator']?.icon}
               // nav='EatScreen'
               // refresh={refreshing || isFocused}
               showHeader

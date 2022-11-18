@@ -168,7 +168,7 @@ const EatScreen = ({ navigation, route }) => {
             // productCategory={productCategory}
             // showSeeAllText={showSeeAllText}
             showSeeAllText={false}
-            icon={imageAssets.iconMBloc}
+            icon={auth?.user?.activityInfo?.blocx?.icon}
         />
         <Divider height={8} />
       </>
@@ -213,7 +213,7 @@ const EatScreen = ({ navigation, route }) => {
               productCategory='EAT'
               name='Eat'
               title='COLLABORATOR'
-              icon={imageAssets.iconOnboarding}
+              icon={auth?.user?.activityInfo['x-colaborator']?.icon}
               // nav='EatScreen'
               // refresh={refreshing || isFocused}
               refresh={refresh}
