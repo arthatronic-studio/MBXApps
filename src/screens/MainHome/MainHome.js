@@ -54,6 +54,7 @@ import PostingHeader from 'src/components/Posting/PostingHeader';
 import { redirectTo } from 'src/utils';
 import HighlightArticle from '../Article/HighlightArticle';
 import { useInterval } from 'src/hooks/useInterval';
+import ModalChangeLocation from 'src/components/Modal/ModalChangeLocation';
 
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
@@ -65,12 +66,16 @@ const pairingInterval = 2000;
 const MainHome = ({ navigation, route }) => {
   const auth = useSelector(state => state['auth']);
   const localStoragSetting = useSelector(state => state['setting']);
+  const modalChangeLocationRef = useRef();
 
   const dispatch = useDispatch();
   const { Color } = useColor();
   const isFocused = useIsFocused();
   const { width, height } = useWindowDimensions();
   const [loadingProps, showLoading] = useLoading();
+
+  const [loadingBanner, setLoadingBanner] = useState(true);
+  const [listBanner, setListBanner] = useState([]);
 
   const peripherals = new Map();
   const bodyBeaconsRef = useRef();
@@ -162,11 +167,30 @@ const MainHome = ({ navigation, route }) => {
   useEffect(() => {
     if (isFocused) {
       dispatch({ type: 'BOOKING.CLEAR_BOOKING' });
+      fetchBannerList();
       fetchData();
     } else {
       // onBleStopScan();
     }
   }, [isFocused]);
+
+  const fetchBannerList = async () => {
+    const result = await getAPI('banner');
+
+    console.log('result banner', result);
+
+    let newArr = [];
+    if (result.status) {
+      result.data.map((e) => {
+        newArr.push({
+          ...e,
+          image: e.file,
+        })
+      })
+    }
+    setListBanner(newArr);
+    setLoadingBanner(false);
+  };
 
   const onPairingAllBeacon = async() => {
     if (auth && auth.user && !auth.user.isRegistered) {
@@ -603,7 +627,18 @@ const MainHome = ({ navigation, route }) => {
             }}
           />
 
-          {isCheckin &&
+          <Container>
+            <Banner
+              showHeader={false}
+              data={listBanner}
+              loading={loadingBanner}
+            />
+          </Container>
+
+          <Divider height={spaceContentSize * 2} />
+
+          {/* checkin old design */}
+          {/* {isCheckin &&
             <Container padding={16} paddingTop={8}>
               <Container paddingVertical={16} style={{borderTopWidth: 1, borderBottomWidth: 1, bordeerColor: Color.text}}>
                 <Row justify='space-between' align='flex-end'>
@@ -639,6 +674,49 @@ const MainHome = ({ navigation, route }) => {
                     <Text color={Color.error} size={9} type='semibold'>
                       {'Disconnect'.toUpperCase()}
                     </Text>
+                  </TouchableOpacity>
+                </Row>
+              </Container>
+            </Container>
+          } */}
+
+          {/* checkin new design */}
+          {true &&
+            <Container padding={16} paddingTop={8}>
+              <Container paddingVertical={16} style={{borderWidth: 1, bordeerColor: Color.text, padding: 16}}>
+                <Row justify='space-between' align={isCheckin ? 'flex-end' : 'center'}>
+                  <Column>
+                    <Text size={11} type='medium' color={Color.placeholder}>{isCheckin ? "YOU'RE CONNECT TO" : "Current Selection" }</Text>
+                    <Divider height={2} />
+                    <Text size={18} lineHeight={21.6} type='medium'>{auth.user && auth.user.activityInfo && auth.user.activityInfo.location ? auth.user.activityInfo.location.name : ''}</Text>
+                  </Column>
+
+                  <TouchableOpacity
+                    onPress={() => {
+                      if(isCheckin){
+                        Alert('Konfirmasi', 'Keluar dari Area?', () =>
+                          onCheckout(),
+                        );
+                      }else{
+                        if(modalChangeLocationRef){
+                          modalChangeLocationRef.current.open();
+                        }
+                      }
+                    }}>
+                    {isCheckin ? (
+                      <Text color={Color.error} size={9} type="semibold">
+                        {'Disconnect'.toUpperCase()}
+                      </Text>
+                    ) : (
+                      <Image
+                        source={imageAssets.arrowRight}
+                        style={{
+                        height: 18,
+                        width: 18,
+                        resizeMode: 'contain',
+                        }}
+                      />
+                    )}
                   </TouchableOpacity>
                 </Row>
               </Container>
@@ -997,6 +1075,11 @@ const MainHome = ({ navigation, route }) => {
           visible
         />
       )}
+
+      {/* modal change location */}
+      <ModalChangeLocation
+        ref={modalChangeLocationRef}
+      />
     </Scaffold>
   );
 };

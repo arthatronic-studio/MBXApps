@@ -138,6 +138,7 @@ const article3 = require('./article3.png');
 const profileBackground = require('./profile-background.png');
 const backgroundQr = require('./background-qr.png');
 const empty = require('./empty.png');
+const checklist = require('./checklist.png');
 
 export {
   iconApp,
@@ -344,6 +345,7 @@ export const imageAssets = {
   arrowRight,
   backgroundQr,
   empty,
+  checklist,
 };
 
 export default imageAssets;

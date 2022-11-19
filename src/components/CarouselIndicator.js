@@ -56,9 +56,9 @@ const Indicator = ({ currentIndex, containerStyle, count }) => {
           left: 0,
           borderRadius: 3,
           marginRight: 8,
-          backgroundColor: Color.textInput,
+          backgroundColor: '#E7FF00',
           borderWidth: 0.5,
-          borderColor: Color.textInput,
+          borderColor: '#E7FF00',
           transform: [{ translateX: bgAnimatedRef }],
         }}
       />
