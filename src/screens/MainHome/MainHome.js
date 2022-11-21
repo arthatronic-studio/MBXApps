@@ -688,7 +688,17 @@ const MainHome = ({ navigation, route }) => {
                   <Column>
                     <Text size={11} type='medium' color={Color.placeholder}>{isCheckin ? "YOU'RE CONNECT TO" : "Current Selection" }</Text>
                     <Divider height={2} />
-                    <Text size={18} lineHeight={21.6} type='medium'>{auth.user && auth.user.activityInfo && auth.user.activityInfo.location ? auth.user.activityInfo.location.name : ''}</Text>
+                    <Text size={18} lineHeight={21.6} type="medium">
+                      {isCheckin
+                        ? auth.user &&
+                          auth.user.activityInfo &&
+                          auth.user.activityInfo.location
+                          ? auth.user.activityInfo.location.name
+                          : ''
+                        : auth.selectedLocation && auth.selectedLocation.name
+                        ? auth.selectedLocation.name
+                        : 'Select Location'}
+                    </Text>
                   </Column>
 
                   <TouchableOpacity

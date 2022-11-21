@@ -1,4 +1,4 @@
-import React, {useRef, forwardRef, useState} from 'react';
+import React, {useRef, forwardRef, useState, useEffect} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -11,56 +11,45 @@ import {Modalize} from 'react-native-modalize';
 import {Text, useColor} from '@src/components';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import {useCombinedRefs} from '@src/hooks';
 import {statusBarHeight} from 'src/utils/constants';
 import {Container, Divider, Line} from 'src/styled';
 import imageAssets from 'assets/images';
 import SearchBar from '../SearchBar';
+import { fetchGetBloc } from 'src/api-rest/fetchGetBloc';
 
 const defaultProps = {
-  data: [
-    {
-      name: '10 Menit',
-      value: 10,
-    },
-    {
-      name: '15 Menit',
-      value: 15,
-    },
-    {
-      name: '30 Menit',
-      value: 30,
-    },
-    {
-      name: '60 Menit',
-      value: 60,
-    },
-    {
-      name: '90 Menit',
-      value: 90,
-    },
-    {
-      name: '120 Menit',
-      value: 120,
-    },
-  ],
-  selectedValue: null,
-  onPress: () => {},
   onClose: () => {},
   style: {},
-  label: 'Durasi',
 };
 
 const ModalChangeLocation = forwardRef((props, ref) => {
-  const {data, selectedValue, onPress, onClose, children, style, label, name} =
-    props;
+  const {onClose, style} = props;
 
   const modalizeRef = useRef(null);
   const combinedRef = useCombinedRefs(ref, modalizeRef);
+  const dispatch = useDispatch();
 
   const auth = useSelector(state => state['auth']);
+
+  const [listLocation, setListLocation] = useState([]);
+
+  const fetchData = async () => {
+    const res = await fetchGetBloc();
+    if(res.success){
+      setListLocation(res.data);
+    }
+  }
+
+  const onSelect = async (data) => {
+    dispatch({ type: 'AUTH.SET_LOCATION', data: data });
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const {Color} = useColor();
   const {width} = useWindowDimensions();
@@ -109,7 +98,7 @@ const ModalChangeLocation = forwardRef((props, ref) => {
 
         <FlatList
           keyExtractor={(item, index) => item.toString() + index}
-          data={[{id: 1}, {id: 1}, {id: 1}]}
+          data={listLocation}
           contentContainerStyle={{
             paddingHorizontal: 16,
           }}
@@ -119,26 +108,24 @@ const ModalChangeLocation = forwardRef((props, ref) => {
           )}
           // onEndReached={() => setItemData({...itemData, loadNext: true})}
           renderItem={({item, index}) => {
-            const isSelected = index == 0;
+            const isSelected = JSON.stringify(item) === JSON.stringify(auth.selectedLocation);
             return (
               <TouchableOpacity
+                onPress={() => onSelect(item)}
                 style={{
                   padding: 16,
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  backgroundColor: isSelected ? Color.black : 'transparent'
+                  backgroundColor: isSelected ? Color.black : 'transparent',
                 }}>
-                <Container
-                  flex={1}
-                  flexDirection="column"
-                  align="flex-start">
+                <Container flex={1} flexDirection="column" align="flex-start">
                   <Text
                     size={18}
                     lineHeight={21.6}
                     color={isSelected ? Color.white : Color.black}
                     type="medium">
-                    M Bloc Space
+                    {item.name}
                   </Text>
                   <Divider height={4} />
                   <Text
@@ -176,14 +163,13 @@ const ModalChangeLocation = forwardRef((props, ref) => {
               </Container>
               <Divider height={6} />
               <Text size={18} lineHeight={21.6} type="medium" align="left">
-                {auth.user &&
-                auth.user.activityInfo &&
-                auth.user.activityInfo.location
-                  ? auth.user.activityInfo.location.name
-                  : ''}
+                {auth.selectedLocation &&
+                auth.selectedLocation.name
+                  ? auth.selectedLocation.name
+                  : 'Select Location'}
               </Text>
               <Divider height={16} />
-              <View
+              {/* <View
                 style={{
                   flex: 1,
                 }}>
@@ -197,8 +183,8 @@ const ModalChangeLocation = forwardRef((props, ref) => {
                   style={{paddingHorizontal: 0}}
                 />
               </View>
-              <Divider height={16} />
-              <FlatList
+              <Divider height={16} /> */}
+              {/* <FlatList
                 keyExtractor={(item, index) => item.toString() + index}
                 horizontal
                 data={[
@@ -235,7 +221,7 @@ const ModalChangeLocation = forwardRef((props, ref) => {
                   );
                 }}
               />
-              <Divider height={16} />
+              <Divider height={16} /> */}
               <Line width={'100%'} height={1} color={Color.black} />
             </Container>
           }

@@ -48,6 +48,11 @@ const HighlightTenant = ({ title, tenantType, numColumns }) => {
         let newArr = [];
         if(tenantType == 'eat'){
             let baseEndpoint = 'favorite-tenant/popular';
+            if(auth.checkin && auth.user.activityInfo.location){
+                baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.user.activityInfo.location.id}`;
+            }else if(auth.selectedLocation){
+                baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.selectedLocation.id}`;
+            }
             const result = await getAPI(baseEndpoint);
             console.log('result baseEndpoint', result, baseEndpoint);
             if (result.status) {
