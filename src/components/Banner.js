@@ -45,6 +45,9 @@ const Banner = ({ data, loading, showHeader, forArticle, leftIndicator, imageUrl
         navigation.navigate(e.link);
       }
     }
+    if(e.link_detail){
+      Linking.openURL(e.link_detail);
+    }
   }
 
   const renderskeleton = () => {
