@@ -8,6 +8,8 @@ import {bgSplashFooter, bgSplashHeader, iconSplash} from '@assets/images';
 import { Container } from 'src/styled';
 import { accessClient } from 'src/utils/access_client';
 import { stateBeaconSetting } from 'src/api-rest/stateBeaconSetting';
+import messaging from '@react-native-firebase/messaging';
+import { fetchFcm } from 'src/api-rest/fetchFcm';
 
 const SplashScreen = ({navigation, route}) => {
   const {width, height} = useWindowDimensions();
@@ -20,15 +22,28 @@ const SplashScreen = ({navigation, route}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorSettingBeacon, setErrorSettingBeacon] = useState(false);
 
-  console.log('auth splash', auth);
+  const fcm = async() => {
+    const fcmToken = await messaging().getToken();
+    if (fcmToken) {
+      const body = {
+        fcm_token: fcmToken,
+      };
+      const res = await fetchFcm(body);
+    } else {
+      console.log("=== No token received ===", fcmToken);
+    }
+  }
+
 
   useEffect(() => {
+
     dispatch({ type: 'THEME.SET_THEME', data: accessClient.Theme });
 
     setTimeout(() => {
       if (auth.token) {
         handleNavigate();
       } else {
+        fcm();
         dispatch({ type: 'AUTH.CLEAR' });
         dispatch({type: 'USER.LOGOUT'});
         redirectTo('OnBoardingScreenV2');

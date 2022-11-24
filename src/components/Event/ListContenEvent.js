@@ -52,18 +52,18 @@ const ListContenEvent = ({ productType, productCategory, name, horizontal, style
     }, [itemData.loadNext]);
 
     const fetchData = async () => {
-        let baseEndpoint = 'event';
-        if(auth.checkin && auth.user.activityInfo.location){
-            baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.user.activityInfo.location.id}`;
+        let baseEndpoint = 'event?';
+        if(auth.user.isCheckin && auth.user.activityInfo.location){
+            baseEndpoint = baseEndpoint + `bloc_location_id=${auth.user.activityInfo.location.id}`;
         }else if(auth.selectedLocation){
-            baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.selectedLocation.id}`;
+            baseEndpoint = baseEndpoint + `bloc_location_id=${auth.selectedLocation.id}`;
         }
         if (productType) {
             baseEndpoint = baseEndpoint + `&type=${productType}`   
         }
         const result = await getAPI(baseEndpoint);
 
-        // console.log('result', baseEndpoint, result);
+        console.log('result', baseEndpoint, result);
 
         setItemData({
             ...itemData,

@@ -144,6 +144,7 @@ const MainHome = ({ navigation, route }) => {
       
       // onForceAllBeacon(arrBeacons)
 
+      console.log(peripherals.values(), 'hahahah beacon4');
       bodyBeaconsRef.current = Array.from(peripherals.values());
 
       // setAllRegisteredBeacon(arrBeacons);
@@ -162,6 +163,8 @@ const MainHome = ({ navigation, route }) => {
       // regisStopScan.remove();
     }
   }, []);
+
+  console.log(bodyBeaconsRef, 'hahahah beacon5');
 
   // did focus
   useEffect(() => {
@@ -264,21 +267,33 @@ const MainHome = ({ navigation, route }) => {
     // TODO: nanti ini buat di halaman OrderEventDetail setelah data disimpan di redux or scan di halaman OrderEventDetail matiin scan di home
     // const resultD = await postAPI('user-activity/beacons-event', body);
     // console.log('result beacon event', resultD);
-
+    
     if (auth && auth.user && !auth.user.isRegistered) {
       setModalNeedUpdateProfile(true);
       return;
     }
-
+    
+    console.log(body, 'hahahah beacon3');
     if (!Array.isArray(body)) {
       return;
     }
 
+
     if (body.length <= 0) return;
+
+    const NewBody = body.map((item) => {
+      return {
+        ...item,
+        gues_id: auth.guest_id ? auth.guest_id : 0,
+      }
+    });
+
+    console.log(NewBody, 'hahahah beacon1');
     
-    const result = await postAPI('user-activity/beacons', body);
+    const result = await postAPI('user-activity/beacons', NewBody);
     // console.log(`enhance body: ${body}, enhance resp:`, result);
     // console.log(`enhance resp:`, result);
+    console.log(result, 'hahahah beacon2')
 
     if (result.status) {
       // 1	Mural
@@ -338,6 +353,7 @@ const MainHome = ({ navigation, route }) => {
     const body = {
       beacon_uid: 'D5:60:C9:67:6F:70',
       beacon_type: 'checkout',
+      gues_id: auth.guest_id ? auth.guest_id : 0,
     };
 
     const result = await postAPI('user-activity', body);

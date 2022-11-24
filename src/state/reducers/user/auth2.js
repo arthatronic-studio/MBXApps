@@ -3,6 +3,7 @@ const initialState = {
     user: null,
     checkin: null,
     selectedLocation: null,
+    guest_id: null,
 };
 
 const Auth2 = (state = initialState, action) => {
@@ -26,6 +27,11 @@ const Auth2 = (state = initialState, action) => {
           return {
             ...state,
             selectedLocation: action.data,
+          };
+        case 'AUTH.GUEST_ID':
+          return {
+            ...state,
+            guest_id: action.data,
           };
         case 'AUTH.CLEAR':
           return initialState;

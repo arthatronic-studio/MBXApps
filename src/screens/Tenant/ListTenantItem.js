@@ -60,7 +60,7 @@ const ListTenantItem = ({ tenantType, productCategory, name, horizontal, style, 
     const fetchData = async (first) => {
         let baseEndpoint = 'location';
         baseEndpoint = baseEndpoint + `?type=${tenantType}`;
-        if(auth.checkin && auth.user.activityInfo.location){
+        if(auth.user.isCheckin && auth.user.activityInfo.location){
             baseEndpoint = baseEndpoint + `&bloc_location_id=${auth.user.activityInfo.location.id}`;
         }else if(auth.selectedLocation){
             baseEndpoint = baseEndpoint + `&bloc_location_id=${auth.selectedLocation.id}`;

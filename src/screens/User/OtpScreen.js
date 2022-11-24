@@ -36,7 +36,7 @@ const OtpScreen = ({ navigation, route }) => {
     const [countdown, setCountdown] = useState(initialCountdown);
     const [showModalPopup, setShowModalPopup] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [fcmToken, setFcmToken] = useState('');
+    const [fcmToken, setFcmToken] = useState(params.body.device_token);
     const [errorSettingBeacon, setErrorSettingBeacon] = useState(false);
 
     const { Color } = useColor();
@@ -50,7 +50,7 @@ const OtpScreen = ({ navigation, route }) => {
     }, 1000);
 
     useEffect(() => {
-        // setFcmToken(params.body.device_token);
+        setFcmToken(params.body.device_token);
 
         if (params.isGuest) {
             setIsLoading(true);
@@ -189,14 +189,14 @@ const OtpScreen = ({ navigation, route }) => {
         const body = {
             otp,
             phone: params.body.phone,
-            // device_token: fcmToken,
+            fcm_token: fcmToken,
         };
 
-        console.log('body otp', body);
+        console.log('body otp guest', body);
 
         const result = await postNonAuth('validate-otp', body);
 
-        console.log('result', result);
+        console.log('result otp screen', result);
 
         setIsLoading(false);
 
@@ -209,6 +209,10 @@ const OtpScreen = ({ navigation, route }) => {
             dispatch({
                 type: 'AUTH.SET_USER',
                 data: result.data.user,
+            });
+            dispatch({
+                type: 'AUTH.GUEST_ID',
+                data: result.data.gues_id,
             });
 
             handleNavigate(result.data.user.isRegistered);

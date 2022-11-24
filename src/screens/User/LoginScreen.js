@@ -189,7 +189,7 @@ const LoginScreen = ({navigation, route}) => {
     setFallback(true);
 
     const result = await postNonAuth('otp', body);
-    console.log('result otp', result);
+    console.log('result otp login', result);
 
     setFallback(false);
 

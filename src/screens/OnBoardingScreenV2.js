@@ -21,6 +21,7 @@ import {onBoarding1, onBoarding2, onBoarding3} from 'assets/images';
 import imageAssets from 'assets/images';
 import {Divider} from 'src/styled';
 import { statusBarHeight } from 'src/utils/constants';
+import messaging from '@react-native-firebase/messaging';
 
 const listBoarding = [
   {
@@ -103,15 +104,30 @@ const OnBoardingScreenV2 = ({navigation}) => {
       moveText3();
     }, 2500);
   }, []);
+  
+  const handleNavigate = async () => {
+    let token = '';
+    const fcmToken = await messaging().getToken();
+    if (fcmToken) {
+      token = fcmToken;
+    }
+    const body = {
+      phone: '6283891122802',
+      device_token: token,
+    };
+
+    redirectTo('OtpScreenV2', { body, isGuest: true });
+  }
 
   useEffect(() => {
     if (isFocused) {
       if (user) {
         // redirectTo('MainPage');
+        
         const body = {
           phone: '6283891122802',
         };
-        redirectTo('OtpScreen', { body, isGuest: true });
+        redirectTo('OtpScreenV2', { body, isGuest: true });
       } else {
         // fetchOnBoarding();
       }
@@ -182,11 +198,12 @@ const OnBoardingScreenV2 = ({navigation}) => {
                     textDecorationLine: 'underline',
                   }}
                   onPress={() => {
+                    handleNavigate();
                     // redirectTo('MainPage');
-                    const body = {
-                      phone: '6283891122802',
-                    };
-                    redirectTo('OtpScreen', { body, isGuest: true });
+                    // const body = {
+                    //   phone: '6283891122802',
+                    // };
+                    // redirectTo('OtpScreen', { body, isGuest: true });
                   }}>
                   Skip
                 </Text>
@@ -260,11 +277,12 @@ const OnBoardingScreenV2 = ({navigation}) => {
 
         <AnimatedTouchableOpacity
           onPress={() => {
+            handleNavigate();
             // redirectTo('MainPage');
-            const body = {
-              phone: '6283891122802',
-            };
-            redirectTo('OtpScreen', { body, isGuest: true });
+            // const body = {
+            //   phone: '6283891122802',
+            // };
+            // redirectTo('OtpScreen', { body, isGuest: true });
           }}
           style={{
             transform: [{translateY: leftValue3}],

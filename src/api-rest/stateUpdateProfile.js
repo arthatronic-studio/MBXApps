@@ -2,11 +2,15 @@ import { store } from '../state/redux';
 import { postAPI } from './httpService';
 
 export const stateUpdateProfile = async(body) => {
+    const auth = await store.getState()['auth'];
     const endpoint = 'update-profile';
-    const result = await postAPI(endpoint, body);
-    
-    // console.log(`result ${endpoint} ${body}`, result);
-    
+    const NewBody = body ? body : {};
+    if(auth.guest_id){
+        NewBody.gues_id = auth.guest_id;
+    }else{
+        NewBody.gues_id = 0;
+    }
+    const result = await postAPI(endpoint, body);    
     if (result.status) {
         await store.dispatch({
             type: 'AUTH.SET_USER',
