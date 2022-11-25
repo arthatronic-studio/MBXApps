@@ -69,6 +69,8 @@ const PostingHeader = (props) => {
     }
     
     const validImage = productCategory && imageContent[productCategory];
+
+    console.log(typeof icon, 'haha');
     
     return (
         <Container
@@ -82,7 +84,7 @@ const PostingHeader = (props) => {
             }}
         >
             <Row>
-                {icon && <Image source={icon} style={{ width: 24, height: 24, marginRight: 5 }} />}
+                {icon && <Image source={typeof icon == 'string' ? {uri: icon} : icon} style={{ width: 24, height: 24, marginRight: 5 }} />}
                 {iconType && iconName && getIconMenu(iconType, iconName)}
 
                 {/* {validImage && <View style={{ width: 24, aspectRatio: 1, marginRight: 8 }}>

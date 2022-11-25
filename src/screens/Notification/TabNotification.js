@@ -118,12 +118,12 @@ const TabNotification = ({ navigation, route }) => {
         <Tab.Screen
             name="● NOTIFICATION"
             component={NotificationScreen}
-            options={{tabBarLabel: 'Tiketku'}}
+            options={{tabBarLabel: 'NOTIFICATION'}}
         />
         <Tab.Screen
             name="● PROMOS"
             component={NotificationPromo}
-            options={{tabBarLabel: 'Riwayat'}}
+            options={{tabBarLabel: 'PROMOS'}}
         />
     </Tab.Navigator>
     </Scaffold>

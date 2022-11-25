@@ -184,8 +184,14 @@ const LoginScreenV2 = ({navigation, route}) => {
   }, [state.allValid]);
 
   const onSubmitRest = async () => {
+    let token = '';
+    const fcmToken = await messaging().getToken();
+    if (fcmToken) {
+      token = fcmToken;
+    }
     const body = {
       phone: '62' + state.username,
+      device_token: token,
     };
 
     setFallback(true);

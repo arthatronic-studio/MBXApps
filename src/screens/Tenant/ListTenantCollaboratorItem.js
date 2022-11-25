@@ -62,6 +62,11 @@ const ListTenantCollaboratorItem = ({ tenantType, productCategory, name, horizon
     const fetchData = async (first) => {
         let baseEndpoint = 'location';
         baseEndpoint = baseEndpoint + `?type=${tenantType}&category=x_collaborator`;
+        if(auth.user.isCheckin && auth.user.activityInfo.location){
+            baseEndpoint = baseEndpoint + `&bloc_location_id=${auth.user.activityInfo.location.id}`;
+        }else if(auth.selectedLocation){
+            baseEndpoint = baseEndpoint + `&bloc_location_id=${auth.selectedLocation.id}`;
+        }
 
         // if (auth.user.activityInfo.location) {
             // baseEndpoint = baseEndpoint + `?bloc_location_id=${auth.user.activityInfo.location.id}&type=eat`;

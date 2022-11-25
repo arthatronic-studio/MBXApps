@@ -10,6 +10,7 @@ import CardContentProduct from '@src/components/Content/CardContentProduct';
 import { getAPI } from 'src/api-rest/httpService';
 import PostingHeader from '../Posting/PostingHeader';
 import ScreenEmptyEvent from '../Modal/ScreenEmptyEvent';
+import { useSelector } from 'react-redux';
 
 const propTypes = {
     productType: PropTypes.string,
@@ -38,6 +39,7 @@ const defaultProps = {
 const ListContenEvent = ({ productType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, headerLabelstyle, }) => {
     const { width } = useWindowDimensions();
     const [itemData, setItemData] = useState(initialItemState);
+    const auth = useSelector(state => state['auth']);
 
     useEffect(() => {
         fetchData();
@@ -50,13 +52,18 @@ const ListContenEvent = ({ productType, productCategory, name, horizontal, style
     }, [itemData.loadNext]);
 
     const fetchData = async () => {
-        let baseEndpoint = 'event';
+        let baseEndpoint = 'event?';
+        if(auth.user.isCheckin && auth.user.activityInfo.location){
+            baseEndpoint = baseEndpoint + `bloc_location_id=${auth.user.activityInfo.location.id}`;
+        }else if(auth.selectedLocation){
+            baseEndpoint = baseEndpoint + `bloc_location_id=${auth.selectedLocation.id}`;
+        }
         if (productType) {
-            baseEndpoint = baseEndpoint + `?type=${productType}`
+            baseEndpoint = baseEndpoint + `&type=${productType}`   
         }
         const result = await getAPI(baseEndpoint);
 
-        // console.log('result', baseEndpoint, result);
+        console.log('result', baseEndpoint, result);
 
         setItemData({
             ...itemData,

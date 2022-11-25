@@ -54,6 +54,7 @@ import PostingHeader from 'src/components/Posting/PostingHeader';
 import { redirectTo } from 'src/utils';
 import HighlightArticle from '../Article/HighlightArticle';
 import { useInterval } from 'src/hooks/useInterval';
+import ModalChangeLocation from 'src/components/Modal/ModalChangeLocation';
 
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
@@ -65,12 +66,16 @@ const pairingInterval = 2000;
 const MainHome = ({ navigation, route }) => {
   const auth = useSelector(state => state['auth']);
   const localStoragSetting = useSelector(state => state['setting']);
+  const modalChangeLocationRef = useRef();
 
   const dispatch = useDispatch();
   const { Color } = useColor();
   const isFocused = useIsFocused();
   const { width, height } = useWindowDimensions();
   const [loadingProps, showLoading] = useLoading();
+
+  const [loadingBanner, setLoadingBanner] = useState(true);
+  const [listBanner, setListBanner] = useState([]);
 
   const peripherals = new Map();
   const bodyBeaconsRef = useRef();
@@ -139,6 +144,7 @@ const MainHome = ({ navigation, route }) => {
       
       // onForceAllBeacon(arrBeacons)
 
+      console.log(peripherals.values(), 'hahahah beacon4');
       bodyBeaconsRef.current = Array.from(peripherals.values());
 
       // setAllRegisteredBeacon(arrBeacons);
@@ -158,15 +164,36 @@ const MainHome = ({ navigation, route }) => {
     }
   }, []);
 
+  console.log(bodyBeaconsRef, 'hahahah beacon5');
+
   // did focus
   useEffect(() => {
     if (isFocused) {
       dispatch({ type: 'BOOKING.CLEAR_BOOKING' });
+      fetchBannerList();
       fetchData();
     } else {
       // onBleStopScan();
     }
   }, [isFocused]);
+
+  const fetchBannerList = async () => {
+    const result = await getAPI('banner');
+
+    console.log('result banner', result);
+
+    let newArr = [];
+    if (result.status) {
+      result.data.map((e) => {
+        newArr.push({
+          ...e,
+          image: e.file,
+        })
+      })
+    }
+    setListBanner(newArr);
+    setLoadingBanner(false);
+  };
 
   const onPairingAllBeacon = async() => {
     if (auth && auth.user && !auth.user.isRegistered) {
@@ -240,21 +267,33 @@ const MainHome = ({ navigation, route }) => {
     // TODO: nanti ini buat di halaman OrderEventDetail setelah data disimpan di redux or scan di halaman OrderEventDetail matiin scan di home
     // const resultD = await postAPI('user-activity/beacons-event', body);
     // console.log('result beacon event', resultD);
-
+    
     if (auth && auth.user && !auth.user.isRegistered) {
       setModalNeedUpdateProfile(true);
       return;
     }
-
+    
+    console.log(body, 'hahahah beacon3');
     if (!Array.isArray(body)) {
       return;
     }
 
+
     if (body.length <= 0) return;
+
+    const NewBody = body.map((item) => {
+      return {
+        ...item,
+        gues_id: auth.guest_id ? auth.guest_id : 0,
+      }
+    });
+
+    console.log(NewBody, 'hahahah beacon1');
     
-    const result = await postAPI('user-activity/beacons', body);
+    const result = await postAPI('user-activity/beacons', NewBody);
     // console.log(`enhance body: ${body}, enhance resp:`, result);
     // console.log(`enhance resp:`, result);
+    console.log(result, 'hahahah beacon2')
 
     if (result.status) {
       // 1	Mural
@@ -314,6 +353,7 @@ const MainHome = ({ navigation, route }) => {
     const body = {
       beacon_uid: 'D5:60:C9:67:6F:70',
       beacon_type: 'checkout',
+      gues_id: auth.guest_id ? auth.guest_id : 0,
     };
 
     const result = await postAPI('user-activity', body);
@@ -603,7 +643,18 @@ const MainHome = ({ navigation, route }) => {
             }}
           />
 
-          {isCheckin &&
+          <Container>
+            <Banner
+              showHeader={false}
+              data={listBanner}
+              loading={loadingBanner}
+            />
+          </Container>
+
+          <Divider height={spaceContentSize * 2} />
+
+          {/* checkin old design */}
+          {/* {isCheckin &&
             <Container padding={16} paddingTop={8}>
               <Container paddingVertical={16} style={{borderTopWidth: 1, borderBottomWidth: 1, bordeerColor: Color.text}}>
                 <Row justify='space-between' align='flex-end'>
@@ -639,6 +690,59 @@ const MainHome = ({ navigation, route }) => {
                     <Text color={Color.error} size={9} type='semibold'>
                       {'Disconnect'.toUpperCase()}
                     </Text>
+                  </TouchableOpacity>
+                </Row>
+              </Container>
+            </Container>
+          } */}
+
+          {/* checkin new design */}
+          {true &&
+            <Container padding={16} paddingTop={8}>
+              <Container paddingVertical={16} style={{borderWidth: 1, bordeerColor: Color.text, padding: 16}}>
+                <Row justify='space-between' align={isCheckin ? 'flex-end' : 'center'}>
+                  <Column>
+                    <Text size={11} type='medium' color={Color.placeholder}>{isCheckin ? "YOU'RE CONNECT TO" : "Current Selection" }</Text>
+                    <Divider height={2} />
+                    <Text size={18} lineHeight={21.6} type="medium">
+                      {isCheckin
+                        ? auth.user &&
+                          auth.user.activityInfo &&
+                          auth.user.activityInfo.location
+                          ? auth.user.activityInfo.location.name
+                          : ''
+                        : auth.selectedLocation && auth.selectedLocation.name
+                        ? auth.selectedLocation.name
+                        : 'Select Location'}
+                    </Text>
+                  </Column>
+
+                  <TouchableOpacity
+                    onPress={() => {
+                      if(isCheckin){
+                        Alert('Konfirmasi', 'Keluar dari Area?', () =>
+                          onCheckout(),
+                        );
+                      }else{
+                        if(modalChangeLocationRef){
+                          modalChangeLocationRef.current.open();
+                        }
+                      }
+                    }}>
+                    {isCheckin ? (
+                      <Text color={Color.error} size={9} type="semibold">
+                        {'Disconnect'.toUpperCase()}
+                      </Text>
+                    ) : (
+                      <Image
+                        source={imageAssets.arrowRight}
+                        style={{
+                        height: 18,
+                        width: 18,
+                        resizeMode: 'contain',
+                        }}
+                      />
+                    )}
                   </TouchableOpacity>
                 </Row>
               </Container>
@@ -997,6 +1101,11 @@ const MainHome = ({ navigation, route }) => {
           visible
         />
       )}
+
+      {/* modal change location */}
+      <ModalChangeLocation
+        ref={modalChangeLocationRef}
+      />
     </Scaffold>
   );
 };

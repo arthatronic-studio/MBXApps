@@ -218,9 +218,10 @@ const NotificationScreen = ({navigation, route}) => {
                 flex: 1,
                 flexDirection: 'row',
                 alignItems: 'center',
-                marginHorizontal: 16,
+                paddingHorizontal: isNotReaded ? 16 : 0,
+                marginHorizontal: isNotReaded ? 0 : 16,
                 borderColor: Color.border,
-                backgroundColor: isNotReaded ? '#FFFCEB' : Color.white,
+                backgroundColor: isNotReaded ? '#FCFFE0' : Color.white,
                 marginTop: 16,
               }}>
               <Container width={width * 0.214} height={width * 0.214} color={validImage ? 'transparent' : Color.text} padding={validImage ? 0 : 8}>

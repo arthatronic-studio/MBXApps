@@ -24,7 +24,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-    label: 'Cari',
+    label: 'Search...',
     type: 'component',
     style: {},
     onPress: () => { },
@@ -39,8 +39,8 @@ const SearchBar = ({ type, label, style, onPress, value, onChangeText, textInput
     const isInputType = type === 'input';
 
     return (
-        <TouchableOpacity style={{ paddingHorizontal: 16 }}>
-            <View style={{ flexDirection: 'row', paddingHorizontal: 16, minHeight: 45, alignItems: 'center', justifyContent: 'space-between', backgroundColor: Color.textInput, borderColor: Color.primary, borderWidth: 1, ...style }}>
+        <TouchableOpacity style={{ paddingHorizontal: 16, ...style }}>
+            <View style={{ flexDirection: 'row', paddingHorizontal: 16, minHeight: 45, alignItems: 'center', justifyContent: 'space-between', backgroundColor: Color.textInput, borderColor: Color.primary, borderWidth: 1, }}>
                 {isInputType ?
                     <>
                         <TextInput
@@ -61,7 +61,7 @@ const SearchBar = ({ type, label, style, onPress, value, onChangeText, textInput
                                 <Ionicons name='close' color={Color.theme} size={16} onPress={() => onChangeText('')} />
                             </Container>
                         :
-                            <Octicons name='search' color={Color.border} size={16} />
+                            <Octicons name='search' color={Color.placeholder} size={16} />
                         }
                     </>
                     :
