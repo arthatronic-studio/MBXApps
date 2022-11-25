@@ -69,8 +69,6 @@ const PostingHeader = (props) => {
     }
     
     const validImage = productCategory && imageContent[productCategory];
-
-    console.log(typeof icon, 'haha');
     
     return (
         <Container

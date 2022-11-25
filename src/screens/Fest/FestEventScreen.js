@@ -25,8 +25,6 @@ const CustomTabBar = (props) => {
   const { Color } = useColor();
   const { width } = useWindowDimensions();
 
-  console.log(props, "haha");
-
   return (
     <Container paddingHorizontal={16}>
       <View

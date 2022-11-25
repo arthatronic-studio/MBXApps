@@ -102,7 +102,6 @@ const HighlightFestMusic = props => {
         if (res.data.contentProduct) {
           newData = res.data.contentProduct;
         }
-        console.log("hahahah")
 
         setItemData({
           ...itemData,
