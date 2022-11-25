@@ -184,6 +184,8 @@ const TenantDetailScreen = ({ navigation, route }) => {
       }
 
       setSelectedProductCount(result.jumlah_product);
+    } else {
+      showPopup(result.message, 'error');
     }
   }
 

@@ -674,7 +674,7 @@ const MainHome = ({ navigation, route }) => {
 
           {showDebug && renderDebug()}
 
-          {auth.user && auth.user.isRegister && <TouchableOpacity
+          {auth.user && auth.user.isRegistered && <TouchableOpacity
             onPress={() => navigation.navigate('CompleteProfile')}
             style={{ 
               marginHorizontal: 16,
