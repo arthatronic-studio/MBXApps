@@ -117,13 +117,22 @@ const MainHome = ({ navigation, route }) => {
       }
   
       const status = await androidBluetoothPermission();
-      if (status) {
-        BleManager.start({ showAlert: false }).then(() => {
-          setTimeout(() => {
-            onBleScan();
-          }, 5000);
-        });
-      }
+
+      BluetoothStateManager.onStateChange((bluetoothState) => {
+        console.log('bluetoothState', bluetoothState);
+        if (bluetoothState === 'PoweredOn') {
+          if (status) {
+            BleManager.start({ showAlert: false }).then(() => {
+              setTimeout(() => {
+                onBleScan();
+              }, 5000);
+            });
+          }
+        } else if (bluetoothState === 'PoweredOff') {
+          onBleStopScan();
+          bodyBeaconsRef.current = null;
+        }
+      }, true);
     }
 
     initAsync();
@@ -134,7 +143,11 @@ const MainHome = ({ navigation, route }) => {
       const productRange = Math.pow(10, rumusRSSI) * 100;
       const rangeForCompare = productRange - 50;
 
-      const newArgs = { beacon_uid: args.id, range: rangeForCompare };
+      const newArgs = {
+        beacon_uid: args.id,
+        range: rangeForCompare,
+        gues_id: auth.guest_id ? auth.guest_id : 0,
+      };
 
       // console.log('newArgs', newArgs);
 
@@ -144,7 +157,6 @@ const MainHome = ({ navigation, route }) => {
       
       // onForceAllBeacon(arrBeacons)
 
-      console.log(peripherals.values(), 'hahahah beacon4');
       bodyBeaconsRef.current = Array.from(peripherals.values());
 
       // setAllRegisteredBeacon(arrBeacons);
@@ -163,8 +175,6 @@ const MainHome = ({ navigation, route }) => {
       // regisStopScan.remove();
     }
   }, []);
-
-  console.log(bodyBeaconsRef, 'hahahah beacon5');
 
   // did focus
   useEffect(() => {
@@ -273,27 +283,16 @@ const MainHome = ({ navigation, route }) => {
       return;
     }
     
-    console.log(body, 'hahahah beacon3');
     if (!Array.isArray(body)) {
       return;
     }
 
 
     if (body.length <= 0) return;
-
-    const NewBody = body.map((item) => {
-      return {
-        ...item,
-        gues_id: auth.guest_id ? auth.guest_id : 0,
-      }
-    });
-
-    console.log(NewBody, 'hahahah beacon1');
     
-    const result = await postAPI('user-activity/beacons', NewBody);
+    const result = await postAPI('user-activity/beacons', body);
     // console.log(`enhance body: ${body}, enhance resp:`, result);
     // console.log(`enhance resp:`, result);
-    console.log(result, 'hahahah beacon2')
 
     if (result.status) {
       // 1	Mural
