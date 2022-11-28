@@ -119,13 +119,22 @@ const MainHome = ({navigation, route}) => {
       }
 
       const status = await androidBluetoothPermission();
-      if (status) {
-        BleManager.start({showAlert: false}).then(() => {
-          setTimeout(() => {
-            onBleScan();
-          }, 5000);
-        });
-      }
+
+      BluetoothStateManager.onStateChange(bluetoothState => {
+        console.log('bluetoothState', bluetoothState);
+        if (bluetoothState === 'PoweredOn') {
+          if (status) {
+            BleManager.start({showAlert: false}).then(() => {
+              setTimeout(() => {
+                onBleScan();
+              }, 5000);
+            });
+          }
+        } else if (bluetoothState === 'PoweredOff') {
+          onBleStopScan();
+          bodyBeaconsRef.current = null;
+        }
+      }, true);
     };
 
     initAsync();
@@ -138,7 +147,11 @@ const MainHome = ({navigation, route}) => {
         const productRange = Math.pow(10, rumusRSSI) * 100;
         const rangeForCompare = productRange - 50;
 
-        const newArgs = {beacon_uid: args.id, range: rangeForCompare};
+        const newArgs = {
+          beacon_uid: args.id,
+          range: rangeForCompare,
+          gues_id: auth.guest_id ? auth.guest_id : 0,
+        };
 
         // console.log('newArgs', newArgs);
 
@@ -281,15 +294,7 @@ const MainHome = ({navigation, route}) => {
 
     if (body.length <= 0) return;
 
-    const NewBody = body.map(item => {
-      return {
-        ...item,
-        gues_id: auth.guest_id ? auth.guest_id : 0,
-      };
-    });
-
-
-    const result = await postAPI('user-activity/beacons', NewBody);
+    const result = await postAPI('user-activity/beacons', body);
     // console.log(`enhance body: ${body}, enhance resp:`, result);
     // console.log(`enhance resp:`, result);
 
@@ -475,17 +480,62 @@ const MainHome = ({navigation, route}) => {
             }
           }}
           actions={
-            auth.user &&
-            !auth.user.isGuest && (
-              <View>
-                <Text size={11} type="medium" align="right">
-                  Hi,
-                </Text>
-                <Text size={17} type="medium" align="right">
-                  {auth.user.name.toUpperCase()}
-                </Text>
-              </View>
-            )
+            <View>
+              {auth.user && !auth.user.isGuest && (
+                <>
+                  <Text size={11} type="medium" align="right" lineHeight={13.2}>
+                    Hi,
+                  </Text>
+                  <Text size={17} type="medium" align="right" lineHeight={20.4}>
+                    {auth.user.name.toUpperCase()}
+                  </Text>
+                </>
+              )}
+              {isCheckin && (
+                <>
+                  <Divider height={2} />
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-end',
+                    }}>
+                    <Text
+                      size={9}
+                      type="semibold"
+                      lineHeight={14.4}
+                      letterSpacing={0.04}>
+                      {auth.user &&
+                      auth.user.activityInfo &&
+                      auth.user.activityInfo.location
+                        ? auth.user.activityInfo.location.name
+                        : ''}
+                    </Text>
+                    <Divider width={8} />
+                    <TouchableOpacity
+                      onPress={() => {
+                        if (isCheckin) {
+                          Alert('Konfirmasi', 'Keluar dari Area?', () =>
+                            onCheckout(),
+                          );
+                        } else {
+                          if (modalChangeLocationRef) {
+                            modalChangeLocationRef.current.open();
+                          }
+                        }
+                      }}>
+                      <Text
+                        size={9}
+                        lineHeight={14.4}
+                        type="medium"
+                        letterSpacing={0.04}
+                        color="#E50000">
+                        Disconnect
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              )}
+            </View>
           }
           // actions={
           //   <View style={{ flexDirection: 'row' }}>
@@ -658,7 +708,7 @@ const MainHome = ({navigation, route}) => {
           />
 
           {/* checkin new design */}
-          {true && (
+          {!isCheckin && (
             <Container paddingHorizontal={16} marginVertical={8}>
               <Container
                 paddingVertical={8}
@@ -676,7 +726,7 @@ const MainHome = ({navigation, route}) => {
                           auth.user.activityInfo &&
                           auth.user.activityInfo.location
                           ? auth.user.activityInfo.location.name
-                          : 'M Bloc Space'
+                          : ''
                         : auth.selectedLocation && auth.selectedLocation.name
                         ? auth.selectedLocation.name
                         : 'Select Location'}
@@ -797,7 +847,7 @@ const MainHome = ({navigation, route}) => {
 
           {showDebug && renderDebug()}
 
-          {auth.user && auth.user.isRegister && (
+          {auth.user && !auth.user.isRegistered && (
             <TouchableOpacity
               onPress={() => navigation.navigate('CompleteProfile')}
               style={{
@@ -953,11 +1003,9 @@ const MainHome = ({navigation, route}) => {
                     </Text>
                   </TouchableOpacity>
                 </Row>
-                <Container
-                  height={32}
-                >
+                <Container height={32}>
                   <Image
-                    style={{ width: '100%', height: '100%' }}
+                    style={{width: '100%', height: '100%'}}
                     source={imageAssets.reboundEvoria}
                   />
                 </Container>

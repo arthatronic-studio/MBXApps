@@ -161,8 +161,6 @@ const HighlightFest = props => {
     });
   };
 
-  console.log(itemData, productCategory, "hahaha");
-
   const renderHeader = () => {
     return (
       <PostingHeader

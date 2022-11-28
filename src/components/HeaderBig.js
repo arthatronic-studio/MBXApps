@@ -83,11 +83,11 @@ const HeaderBig = ({
           </SideButton>}
 
           {titleRight !== '' && (
-            <View style={{ borderBottomWidth: 1, borderColor: Color.text }}>
+            <View style={{ alignSelf: 'flex-end', borderBottomWidth: 1, borderColor: Color.text }}>
               <Text
                 size={17}
                 type='medium'
-                align='left'
+                align='right'
                 color={titleRightColor || Color.primary}
                 onPress={() => onPressRightButton &&  onPressRightButton()}
               >

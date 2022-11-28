@@ -90,7 +90,6 @@ const CreationMusic = ({navigation, route}) => {
         if (res.data.contentProduct) {
           newData = res.data.contentProduct;
         }
-        console.log('hahahah');
 
         setItemData({
           ...itemData,
