@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   ScrollView,
@@ -11,13 +11,13 @@ import {
   ActivityIndicator,
   NativeModules,
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { useIsFocused } from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import Modal from 'react-native-modal';
 import BluetoothStateManager from 'react-native-bluetooth-state-manager';
 import BleManager from 'react-native-ble-manager';
@@ -33,17 +33,17 @@ import {
   useLoading,
   Alert,
 } from '@src/components';
-import { Divider, Circle, Container, Row, Column } from '@src/styled';
+import {Divider, Circle, Container, Row, Column} from '@src/styled';
 import Banner from 'src/components/Banner';
 import imageAssets from 'assets/images';
 import WidgetHomeMenuStatic from './WidgetHomeMenuStatic';
-import { getAPI, postAPI } from 'src/api-rest/httpService';
+import {getAPI, postAPI} from 'src/api-rest/httpService';
 import HighlightEvent from 'src/components/Event/HighlightEvent';
-import { stateUpdateProfile } from 'src/api-rest/stateUpdateProfile';
+import {stateUpdateProfile} from 'src/api-rest/stateUpdateProfile';
 import HighlightTenant from 'src/screens/Tenant/HighlightTenant';
-import { stateBeaconSetting } from 'src/api-rest/stateBeaconSetting';
-import { androidBluetoothPermission } from 'src/lib/androidPermissions';
-import { shadowStyle } from 'src/styles';
+import {stateBeaconSetting} from 'src/api-rest/stateBeaconSetting';
+import {androidBluetoothPermission} from 'src/lib/androidPermissions';
+import {shadowStyle} from 'src/styles';
 import ModalBeaconPromo from './ModalBeaconPromo';
 import ModalLoading from './ModalLoading';
 import ModalNeedUpdateProfile from './ModalNeedUpdateProfile';
@@ -51,9 +51,9 @@ import ModalBeaconCheckin from './ModalBeaconCheckin';
 import DraggableButton from './DraggableButton';
 import ListContenEvent from 'src/components/Event/ListContenEvent';
 import PostingHeader from 'src/components/Posting/PostingHeader';
-import { redirectTo } from 'src/utils';
+import {redirectTo} from 'src/utils';
 import HighlightArticle from '../Article/HighlightArticle';
-import { useInterval } from 'src/hooks/useInterval';
+import {useInterval} from 'src/hooks/useInterval';
 import ModalChangeLocation from 'src/components/Modal/ModalChangeLocation';
 
 const BleManagerModule = NativeModules.BleManager;
@@ -63,15 +63,15 @@ const scanUUIDs = []; // ['fda50693-a4e2-4fb1-afcf-c6eb07647825'];
 const scanTimeout = 60 * 60 * 24 * 365;
 const pairingInterval = 2000;
 
-const MainHome = ({ navigation, route }) => {
+const MainHome = ({navigation, route}) => {
   const auth = useSelector(state => state['auth']);
   const localStoragSetting = useSelector(state => state['setting']);
   const modalChangeLocationRef = useRef();
 
   const dispatch = useDispatch();
-  const { Color } = useColor();
+  const {Color} = useColor();
   const isFocused = useIsFocused();
-  const { width, height } = useWindowDimensions();
+  const {width, height} = useWindowDimensions();
   const [loadingProps, showLoading] = useLoading();
 
   const [loadingBanner, setLoadingBanner] = useState(true);
@@ -92,8 +92,10 @@ const MainHome = ({ navigation, route }) => {
   const [modalNeedUpdateProfile, setModalNeedUpdateProfile] = useState(false);
 
   const isCheckin = auth && auth.user && auth.user.isCheckin;
-  const isSecurity = auth && auth.user && auth.user.role && auth.user.role.value === 0;
-  const showDebug = localStoragSetting && localStoragSetting.showDebug ? true : false;
+  const isSecurity =
+    auth && auth.user && auth.user.role && auth.user.role.value === 0;
+  const showDebug =
+    localStoragSetting && localStoragSetting.showDebug ? true : false;
 
   // useInterval(() => {
   //   // console.log('focus : ', isFocused, ', beaconCount: ' , allRegisteredBeacon.length);
@@ -115,40 +117,42 @@ const MainHome = ({ navigation, route }) => {
       if (Platform.OS === 'android' && Platform.Version < 31) {
         await BluetoothStateManager.requestToEnable();
       }
-  
+
       const status = await androidBluetoothPermission();
       if (status) {
-        BleManager.start({ showAlert: false }).then(() => {
+        BleManager.start({showAlert: false}).then(() => {
           setTimeout(() => {
             onBleScan();
           }, 5000);
         });
       }
-    }
+    };
 
     initAsync();
 
-    const regisDiscover = bleManagerEmitter.addListener("BleManagerDiscoverPeripheral", (args) => {
-      const strength = 4;
-      const rumusRSSI = ((-69 - (args.rssi)) / (10 * strength));
-      const productRange = Math.pow(10, rumusRSSI) * 100;
-      const rangeForCompare = productRange - 50;
+    const regisDiscover = bleManagerEmitter.addListener(
+      'BleManagerDiscoverPeripheral',
+      args => {
+        const strength = 4;
+        const rumusRSSI = (-69 - args.rssi) / (10 * strength);
+        const productRange = Math.pow(10, rumusRSSI) * 100;
+        const rangeForCompare = productRange - 50;
 
-      const newArgs = { beacon_uid: args.id, range: rangeForCompare };
+        const newArgs = {beacon_uid: args.id, range: rangeForCompare};
 
-      // console.log('newArgs', newArgs);
+        // console.log('newArgs', newArgs);
 
-      peripherals.set(newArgs.beacon_uid, newArgs);
-      // const arrBeacons = Array.from(peripherals.values());
-      // console.log('arrBeacons', arrBeacons.length);
-      
-      // onForceAllBeacon(arrBeacons)
+        peripherals.set(newArgs.beacon_uid, newArgs);
+        // const arrBeacons = Array.from(peripherals.values());
+        // console.log('arrBeacons', arrBeacons.length);
 
-      console.log(peripherals.values(), 'hahahah beacon4');
-      bodyBeaconsRef.current = Array.from(peripherals.values());
+        // onForceAllBeacon(arrBeacons)
 
-      // setAllRegisteredBeacon(arrBeacons);
-    });
+        bodyBeaconsRef.current = Array.from(peripherals.values());
+
+        // setAllRegisteredBeacon(arrBeacons);
+      },
+    );
 
     // const regisStopScan = bleManagerEmitter.addListener('BleManagerStopScan', () => {
     //   console.log('STOP!!!');
@@ -161,15 +165,13 @@ const MainHome = ({ navigation, route }) => {
       // }
       regisDiscover.remove();
       // regisStopScan.remove();
-    }
+    };
   }, []);
-
-  console.log(bodyBeaconsRef, 'hahahah beacon5');
 
   // did focus
   useEffect(() => {
     if (isFocused) {
-      dispatch({ type: 'BOOKING.CLEAR_BOOKING' });
+      dispatch({type: 'BOOKING.CLEAR_BOOKING'});
       fetchBannerList();
       fetchData();
     } else {
@@ -184,25 +186,25 @@ const MainHome = ({ navigation, route }) => {
 
     let newArr = [];
     if (result.status) {
-      result.data.map((e) => {
+      result.data.map(e => {
         newArr.push({
           ...e,
           image: e.file,
-        })
-      })
+        });
+      });
     }
     setListBanner(newArr);
     setLoadingBanner(false);
   };
 
-  const onPairingAllBeacon = async() => {
+  const onPairingAllBeacon = async () => {
     if (auth && auth.user && !auth.user.isRegistered) {
       setModalNeedUpdateProfile(true);
       return;
     }
 
     if (allRegisteredBeacon.length <= 0) return;
-    
+
     const body = allRegisteredBeacon;
     const result = await postAPI('user-activity/beacons', body);
     // console.log(`enhance body: ${body}, enhance resp:', ${result}`);
@@ -255,45 +257,41 @@ const MainHome = ({ navigation, route }) => {
       // === type art
       if (isFocused && _isArtType && result.data.id !== lastRespArtID) {
         setLastRespArtID(result.data.id);
-        navigation.navigate('DetailArtScreen', { item: result.data });
+        navigation.navigate('DetailArtScreen', {item: result.data});
         return;
       }
     }
-  }
+  };
 
-  const onForceAllBeacon = async(body) => {
+  const onForceAllBeacon = async body => {
     // console.log(`every ${pairingInterval} miliseconds`);
-    
+
     // TODO: nanti ini buat di halaman OrderEventDetail setelah data disimpan di redux or scan di halaman OrderEventDetail matiin scan di home
     // const resultD = await postAPI('user-activity/beacons-event', body);
     // console.log('result beacon event', resultD);
-    
+
     if (auth && auth.user && !auth.user.isRegistered) {
       setModalNeedUpdateProfile(true);
       return;
     }
-    
-    console.log(body, 'hahahah beacon3');
+
     if (!Array.isArray(body)) {
       return;
     }
 
-
     if (body.length <= 0) return;
 
-    const NewBody = body.map((item) => {
+    const NewBody = body.map(item => {
       return {
         ...item,
         gues_id: auth.guest_id ? auth.guest_id : 0,
-      }
+      };
     });
 
-    console.log(NewBody, 'hahahah beacon1');
-    
+
     const result = await postAPI('user-activity/beacons', NewBody);
     // console.log(`enhance body: ${body}, enhance resp:`, result);
     // console.log(`enhance resp:`, result);
-    console.log(result, 'hahahah beacon2')
 
     if (result.status) {
       // 1	Mural
@@ -343,13 +341,13 @@ const MainHome = ({ navigation, route }) => {
       // === type art
       if (isFocused && _isArtType && result.data.id !== lastRespArtID) {
         setLastRespArtID(result.data.id);
-        navigation.navigate('DetailArtScreen', { item: result.data });
+        navigation.navigate('DetailArtScreen', {item: result.data});
         return;
       }
     }
-  }
+  };
 
-  const onCheckout = async (uuid) => {
+  const onCheckout = async uuid => {
     const body = {
       beacon_uid: 'D5:60:C9:67:6F:70',
       beacon_type: 'checkout',
@@ -361,7 +359,7 @@ const MainHome = ({ navigation, route }) => {
     console.log('result checkout', result);
 
     if (result.status) {
-      dispatch({ type: 'AUTH.SET_CHECKIN', data: null });
+      dispatch({type: 'AUTH.SET_CHECKIN', data: null});
 
       const prof = await stateUpdateProfile();
       console.log('prof', prof);
@@ -373,9 +371,9 @@ const MainHome = ({ navigation, route }) => {
     } else {
       showLoading('error', result.message);
     }
-  }
+  };
 
-  const onEventCheckout = async (activeEvent) => {
+  const onEventCheckout = async activeEvent => {
     // console.log('activeEvent', activeEvent);
 
     const body = {
@@ -396,7 +394,7 @@ const MainHome = ({ navigation, route }) => {
     } else {
       showLoading('error', result.message);
     }
-  }
+  };
 
   const fetchData = async () => {
     const result = await getAPI('user-activity');
@@ -411,24 +409,20 @@ const MainHome = ({ navigation, route }) => {
       return;
     }
 
-    androidBluetoothPermission().then((status) => {
+    androidBluetoothPermission().then(status => {
       if (status) {
-        BleManager.scan(scanUUIDs, scanTimeout, false).then(() => {
-          
-        });
+        BleManager.scan(scanUUIDs, scanTimeout, false).then(() => {});
       }
     });
   };
 
   const onBleStopScan = () => {
-    androidBluetoothPermission().then((status) => {
+    androidBluetoothPermission().then(status => {
       if (status) {
-        BleManager.stopScan().then((res) => {
-          
-        });
+        BleManager.stopScan().then(res => {});
       }
     });
-  }
+  };
 
   const onRefresh = async () => {
     // setRefreshing(true);
@@ -441,15 +435,27 @@ const MainHome = ({ navigation, route }) => {
         <Text>Beacon List</Text>
         {allRegisteredBeacon.map((i, idx) => {
           return (
-            <View key={idx} style={{ width: '100%', alignItems: 'flex-start', paddingHorizontal: 16, marginBottom: 4, backgroundColor: Color.blueLight }}>
-              <Text size={12} aling='left'>UID:   {i.beacon_uid}</Text>
-              <Text size={12} aling='left'>Range: {i.range}</Text>
+            <View
+              key={idx}
+              style={{
+                width: '100%',
+                alignItems: 'flex-start',
+                paddingHorizontal: 16,
+                marginBottom: 4,
+                backgroundColor: Color.blueLight,
+              }}>
+              <Text size={12} aling="left">
+                UID: {i.beacon_uid}
+              </Text>
+              <Text size={12} aling="left">
+                Range: {i.range}
+              </Text>
             </View>
-          )
+          );
         })}
       </View>
-    )
-  }
+    );
+  };
 
   const spaceContentSize = 8;
 
@@ -461,7 +467,7 @@ const MainHome = ({ navigation, route }) => {
       loadingProps={loadingProps}
       header={
         <HeaderBig
-          type='MAIN_HOME'
+          type="MAIN_HOME"
           titleRight={auth.user && auth.user.isGuest ? 'LOGIN' : ''}
           onPressRightButton={() => {
             if (auth.user && auth.user.isGuest) {
@@ -469,10 +475,17 @@ const MainHome = ({ navigation, route }) => {
             }
           }}
           actions={
-            auth.user && !auth.user.isGuest && <View>
-              <Text size={11} type='medium' align='right'>Hi,</Text>
-              <Text size={17} type='medium' align='right'>{auth.user.name.toUpperCase()}</Text>
-            </View>
+            auth.user &&
+            !auth.user.isGuest && (
+              <View>
+                <Text size={11} type="medium" align="right">
+                  Hi,
+                </Text>
+                <Text size={17} type="medium" align="right">
+                  {auth.user.name.toUpperCase()}
+                </Text>
+              </View>
+            )
           }
           // actions={
           //   <View style={{ flexDirection: 'row' }}>
@@ -565,73 +578,74 @@ const MainHome = ({ navigation, route }) => {
         />
       }
       floatingActionButton={
-        isSecurity ? <View
-          style={{
-            bottom: -16,
-            height: width / 5 - 8,
-            width: width / 5 - 8,
-            borderRadius: width / 5 - 8,
-            backgroundColor: Color.primary,
-            alignSelf: 'center',
-            // borderWidth: 1,
-            // borderColor: Color.textButtonInline,
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('ScanQRScreen');
-            }}
-            style={{ width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}
-          >
-            <MaterialIcons
-              name='qr-code-scanner'
-              color={Color.textButtonInline}
-              size={38}
-            />
-          </TouchableOpacity>
-        </View>
-        : listPromo.length > 0 ? 
-        <View>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('SpecialOfferScreen', { listPromo })}
-            style={{ 
-              padding: 12,
-              backgroundColor: Color.black
-             }}
-          >
-            <Text type="bold" size={14} lineHeight={17} color={Color.white}>
-              SPECIAL OFFER
-            </Text>
-          </TouchableOpacity>
+        isSecurity ? (
           <View
-              style={{ 
+            style={{
+              bottom: -16,
+              height: width / 5 - 8,
+              width: width / 5 - 8,
+              borderRadius: width / 5 - 8,
+              backgroundColor: Color.primary,
+              alignSelf: 'center',
+              // borderWidth: 1,
+              // borderColor: Color.textButtonInline,
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('ScanQRScreen');
+              }}
+              style={{
+                width: '100%',
+                height: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <MaterialIcons
+                name="qr-code-scanner"
+                color={Color.textButtonInline}
+                size={38}
+              />
+            </TouchableOpacity>
+          </View>
+        ) : listPromo.length > 0 ? (
+          <View>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('SpecialOfferScreen', {listPromo})
+              }
+              style={{
+                padding: 12,
+                backgroundColor: Color.black,
+              }}>
+              <Text type="bold" size={14} lineHeight={17} color={Color.white}>
+                SPECIAL OFFER
+              </Text>
+            </TouchableOpacity>
+            <View
+              style={{
                 position: 'absolute',
                 backgroundColor: '#E00F00',
                 right: -10,
                 top: -10,
                 paddingVertical: 5,
                 paddingHorizontal: 8,
-                borderRadius: 24 
-               }}
-            >
+                borderRadius: 24,
+              }}>
               <Text size={12} type="mdium" color={Color.white} lineHeight={14}>
                 {listPromo.length}
               </Text>
-            </View> 
-        </View>
-        : <></>
-      }
-    >
+            </View>
+          </View>
+        ) : (
+          <></>
+        )
+      }>
       {/* <DraggableButton> */}
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }
-      >
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <Container color={Color.theme} paddingTop={8} paddingBottom={8}>
           <Animated.View
             style={{
@@ -642,6 +656,64 @@ const MainHome = ({ navigation, route }) => {
               borderBottomRightRadius: 24,
             }}
           />
+
+          {/* checkin new design */}
+          {true && (
+            <Container paddingHorizontal={16} marginVertical={8}>
+              <Container
+                paddingVertical={8}
+                style={{borderWidth: 1, bordeerColor: Color.text, padding: 16}}>
+                <Row
+                  justify="space-between"
+                  align={isCheckin ? 'flex-end' : 'center'}>
+                  <Column>
+                    <Text size={10} type="medium" color={Color.placeholder}>
+                      {isCheckin ? "YOU'RE CONNECT TO" : 'Current Selection'}
+                    </Text>
+                    <Text size={14} lineHeight={18.6} type="medium">
+                      {isCheckin
+                        ? auth.user &&
+                          auth.user.activityInfo &&
+                          auth.user.activityInfo.location
+                          ? auth.user.activityInfo.location.name
+                          : 'M Bloc Space'
+                        : auth.selectedLocation && auth.selectedLocation.name
+                        ? auth.selectedLocation.name
+                        : 'Select Location'}
+                    </Text>
+                  </Column>
+
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (isCheckin) {
+                        Alert('Konfirmasi', 'Keluar dari Area?', () =>
+                          onCheckout(),
+                        );
+                      } else {
+                        if (modalChangeLocationRef) {
+                          modalChangeLocationRef.current.open();
+                        }
+                      }
+                    }}>
+                    {isCheckin ? (
+                      <Text color={Color.error} size={8} type="semibold">
+                        {'Disconnect'.toUpperCase()}
+                      </Text>
+                    ) : (
+                      <Image
+                        source={imageAssets.arrowRight}
+                        style={{
+                          height: 14,
+                          width: 14,
+                          resizeMode: 'contain',
+                        }}
+                      />
+                    )}
+                  </TouchableOpacity>
+                </Row>
+              </Container>
+            </Container>
+          )}
 
           <Container>
             <Banner
@@ -696,59 +768,6 @@ const MainHome = ({ navigation, route }) => {
             </Container>
           } */}
 
-          {/* checkin new design */}
-          {true &&
-            <Container padding={16} paddingTop={8}>
-              <Container paddingVertical={16} style={{borderWidth: 1, bordeerColor: Color.text, padding: 16}}>
-                <Row justify='space-between' align={isCheckin ? 'flex-end' : 'center'}>
-                  <Column>
-                    <Text size={11} type='medium' color={Color.placeholder}>{isCheckin ? "YOU'RE CONNECT TO" : "Current Selection" }</Text>
-                    <Divider height={2} />
-                    <Text size={18} lineHeight={21.6} type="medium">
-                      {isCheckin
-                        ? auth.user &&
-                          auth.user.activityInfo &&
-                          auth.user.activityInfo.location
-                          ? auth.user.activityInfo.location.name
-                          : ''
-                        : auth.selectedLocation && auth.selectedLocation.name
-                        ? auth.selectedLocation.name
-                        : 'Select Location'}
-                    </Text>
-                  </Column>
-
-                  <TouchableOpacity
-                    onPress={() => {
-                      if(isCheckin){
-                        Alert('Konfirmasi', 'Keluar dari Area?', () =>
-                          onCheckout(),
-                        );
-                      }else{
-                        if(modalChangeLocationRef){
-                          modalChangeLocationRef.current.open();
-                        }
-                      }
-                    }}>
-                    {isCheckin ? (
-                      <Text color={Color.error} size={9} type="semibold">
-                        {'Disconnect'.toUpperCase()}
-                      </Text>
-                    ) : (
-                      <Image
-                        source={imageAssets.arrowRight}
-                        style={{
-                        height: 18,
-                        width: 18,
-                        resizeMode: 'contain',
-                        }}
-                      />
-                    )}
-                  </TouchableOpacity>
-                </Row>
-              </Container>
-            </Container>
-          }
-
           {/* takeout verify */}
           {/* {!isCheckin && <Container padding={16} paddingTop={8}>
             <Container paddingVertical={16} style={{borderTopWidth: 1, borderBottomWidth: 1, bordeerColor: Color.text}}>
@@ -778,125 +797,173 @@ const MainHome = ({ navigation, route }) => {
 
           {showDebug && renderDebug()}
 
-          {auth.user && auth.user.isRegister && <TouchableOpacity
-            onPress={() => navigation.navigate('CompleteProfile')}
-            style={{ 
-              marginHorizontal: 16,
-              borderWidth: 1,
-              padding: 10
-             }}
-          >
-            <AntDesign name="exclamationcircleo" size={20} color={"#1C1B1F"} />
-            <Divider height={10}/>
-            <Text type="semibold" size={12} lineHeight={22} align='left'>
-              Looks like you didn't complete your profile
-            </Text>
-            <Text align='left' size={12} type="medium" lineHeight={14}>
-              Complete your profile to get the full experience inside the app
-            </Text>
-            <Divider height={18}/>
-            <Text
-              type="medium"
-              lineHeight={14}
-              align='left'
-              onPress={() => {}}
-              size={12}
-              color={Color.primaryDark}
-            >
-              Complete Now{' '}
-              <Ionicons name="arrow-forward" size={12} color={Color.primaryDark} />
-            </Text>
-          </TouchableOpacity>}
+          {auth.user && auth.user.isRegister && (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('CompleteProfile')}
+              style={{
+                marginHorizontal: 16,
+                borderWidth: 1,
+                padding: 10,
+              }}>
+              <AntDesign
+                name="exclamationcircleo"
+                size={20}
+                color={'#1C1B1F'}
+              />
+              <Divider height={10} />
+              <Text type="semibold" size={12} lineHeight={22} align="left">
+                Looks like you didn't complete your profile
+              </Text>
+              <Text align="left" size={12} type="medium" lineHeight={14}>
+                Complete your profile to get the full experience inside the app
+              </Text>
+              <Divider height={18} />
+              <Text
+                type="medium"
+                lineHeight={14}
+                align="left"
+                onPress={() => {}}
+                size={12}
+                color={Color.primaryDark}>
+                Complete Now{' '}
+                <Ionicons
+                  name="arrow-forward"
+                  size={12}
+                  color={Color.primaryDark}
+                />
+              </Text>
+            </TouchableOpacity>
+          )}
 
-          {(isSecurity) && <Container paddingHorizontal={16}>
-            <Container padding={14} borderWidth={1}>
-              <Row justify='space-between'>
-                <Row>
-                  <Container paddingRight={16}>
-                    <Image
-                      source={imageAssets.people}
-                      style={{
-                        width: 32,
-                        height: 32,
-                      }}
-                    />
-                  </Container>
-                  <Column>
-                    <Text color={Color.textSoft} type='medium' size={11} letterSpacing={0.5}>Total Pengunjung</Text>
-                    <Divider height={2} />
-                    <Text type='medium' size={16} letterSpacing={0.15}>{visitorCount} Orang</Text>
-                  </Column>
+          {isSecurity && (
+            <Container paddingHorizontal={16}>
+              <Container padding={14} borderWidth={1}>
+                <Row justify="space-between">
+                  <Row>
+                    <Container paddingRight={16}>
+                      <Image
+                        source={imageAssets.people}
+                        style={{
+                          width: 32,
+                          height: 32,
+                        }}
+                      />
+                    </Container>
+                    <Column>
+                      <Text
+                        color={Color.textSoft}
+                        type="medium"
+                        size={11}
+                        letterSpacing={0.5}>
+                        Total Pengunjung
+                      </Text>
+                      <Divider height={2} />
+                      <Text type="medium" size={16} letterSpacing={0.15}>
+                        {visitorCount} Orang
+                      </Text>
+                    </Column>
+                  </Row>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('VisitorScreen');
+                    }}>
+                    <Text
+                      color={Color.primaryDark}
+                      type="medium"
+                      size={12}
+                      letterSpacing={0.5}>
+                      Lihat Detail
+                    </Text>
+                  </TouchableOpacity>
                 </Row>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('VisitorScreen');
-                  }}
-                >
-                  <Text color={Color.primaryDark} type='medium' size={12} letterSpacing={0.5}>Lihat Detail</Text>
-                </TouchableOpacity>
-              </Row>
+              </Container>
             </Container>
-          </Container>}
+          )}
 
           <Divider height={spaceContentSize * 2} />
 
           <ListContenEvent
-            productCategory='EVENT'
-            name='Event'
-            title='● SECURE YOUR TICKET NOW'
-            productType='highlight'
+            productCategory="EVENT"
+            name="Event"
+            title="● SECURE YOUR TICKET NOW"
+            productType="highlight"
             showHeader
             horizontal
             showSeeAllText={false}
           />
 
           {/* event ticket */}
-          {isCheckin && auth.user && auth.user.activeEvent && <Container paddingHorizontal={16} paddingTop={16}>
-            <Container padding={10} borderWidth={1} borderColor={Color.text}>
-              <Row justify='space-between'>
-                <Row style={{flex: 1}}>
-                  <Container width='14%' style={{ aspectRatio: 1 }}>
-                    <Image
-                      source={{ uri: auth.user.activeEvent.imageUrl }}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                      }}
-                    />
-                  </Container>
+          {isCheckin && auth.user && auth.user.activeEvent && (
+            <Container paddingHorizontal={16} paddingTop={16}>
+              <Container borderWidth={1} borderColor={Color.text}>
+                <Row justify="space-between">
+                  <Row style={{flex: 1}}>
+                    <Container width="22%" style={{aspectRatio: 1}}>
+                      <Image
+                        source={{uri: auth.user.activeEvent.imageUrl}}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                        }}
+                      />
+                    </Container>
 
-                  <Container paddingHorizontal={12} width='86%'>
-                    <Text align='left' size={10} color={Color.placeholder} letterSpacing={0.4}>Tiket Aktif</Text>
-                    <Divider height={2} />
-                    <Text align='left' size={12} type='medium' numberOfLines={2} letterSpacing={0.5}>{auth.user.activeEvent.title}</Text>
-                  </Container>
-                </Row>
+                    <Container paddingHorizontal={12} width="78%">
+                      <Text
+                        align="left"
+                        size={11}
+                        lineHeight={13.2}
+                        type="medium"
+                        color={'#797979'}
+                        letterSpacing={0.4}>
+                        Active Ticket
+                      </Text>
+                      <Divider height={2} />
+                      <Text
+                        color={Color.text}
+                        align="left"
+                        size={18}
+                        lineHeight={21.6}
+                        type="medium"
+                        numberOfLines={2}
+                        letterSpacing={0.5}>
+                        {auth?.user?.activeEvent?.title}
+                      </Text>
+                    </Container>
+                  </Row>
 
-                <TouchableOpacity
+                  <TouchableOpacity
                     onPress={() => {
-                      Alert(
-                        'Konfirmasi',
-                        'Keluar dari Event?',
-                        () => onEventCheckout(auth.user.activeEvent),
+                      Alert('Konfirmasi', 'Keluar dari Event?', () =>
+                        onEventCheckout(auth.user.activeEvent),
                       );
                     }}
                     style={{
+                      marginRight: 10,
                       aspectRatio: 1,
                       justifyContent: 'center',
-                    }}
-                  >
-                    <Text color={Color.error} size={9} type='semibold'>
+                    }}>
+                    <Text color={Color.error} size={11} type="semibold">
                       {'Exit '.toUpperCase()}
                       <MaterialCommunityIcons
-                        name='arrow-up-thick'
+                        name="arrow-up-thick"
                         color={Color.error}
-                        size={10}
+                        size={12}
                       />
                     </Text>
                   </TouchableOpacity>
-              </Row>
+                </Row>
+                <Container
+                  height={32}
+                >
+                  <Image
+                    style={{ width: '100%', height: '100%' }}
+                    source={imageAssets.reboundEvoria}
+                  />
+                </Container>
+              </Container>
             </Container>
-          </Container>}
+          )}
 
           <WidgetHomeMenuStatic />
 
@@ -905,13 +972,13 @@ const MainHome = ({ navigation, route }) => {
           <HighlightTenant
             title={'● Most Loved'.toUpperCase()}
             numColumns={1}
-            tenantType='eat'
+            tenantType="eat"
           />
 
           <Divider />
 
           <HighlightArticle
-            title='● ARTICLES'
+            title="● ARTICLES"
             numColumns={1}
             type="HIGHLIGHT"
           />
@@ -924,32 +991,36 @@ const MainHome = ({ navigation, route }) => {
           <View>
             <Divider />
 
-            <PostingHeader
-              title='● SPARK YOUR IDEAS'
-              showSeeAllText={false}
-            />
+            <PostingHeader title="● SPARK YOUR IDEAS" showSeeAllText={false} />
 
-            <Container paddingHorizontal={16} paddingTop={11} paddingBottom={11}>
-              <Text size={29} align='left' lineHeight={38}>
-                Customers as Industrial Age
-                phenomenon will be
-                replaced by <Text size={29} type='semibold'>Creative Prosumers</Text>,
-                people who produce many of their own
-                goods and services.{' '}
+            <Container
+              paddingHorizontal={16}
+              paddingTop={11}
+              paddingBottom={11}>
+              <Text size={29} align="left" lineHeight={38}>
+                Customers as Industrial Age phenomenon will be replaced by{' '}
+                <Text size={29} type="semibold">
+                  Creative Prosumers
+                </Text>
+                , people who produce many of their own goods and services.{' '}
                 <View>
-                  <Text size={11} type='medium' align='left'>Philip Kotler</Text>
-                  <Text size={11} type='medium' align='left'>-1986</Text>
+                  <Text size={11} type="medium" align="left">
+                    Philip Kotler
+                  </Text>
+                  <Text size={11} type="medium" align="left">
+                    -1986
+                  </Text>
                 </View>
               </Text>
 
               <Divider height={11} />
 
-              <Text size={16} type='medium' align='left'>
-                We believe colaboration make us stronger,
-                join and be part of our movement!
+              <Text size={16} type="medium" align="left">
+                We believe colaboration make us stronger, join and be part of
+                our movement!
               </Text>
 
-                {/* <TouchableOpacity
+              {/* <TouchableOpacity
                   style={{width: '50%', marginTop: 24, alignSelf: 'flex-end', paddingVertical: 12, borderWidth: 1, borderColor: Color.text}}
                 >
                   <Text>Spark Ideas</Text>
@@ -961,107 +1032,134 @@ const MainHome = ({ navigation, route }) => {
       {/* </DraggableButton> */}
 
       {/* modal merch */}
-      {isFocused && isCheckin && listMerchantType.length > 0 && <Modal
-        isVisible
-        animationIn="slideInDown"
-        animationOut="slideOutDown"
-        backdropColor={Color.semiwhite}>
-        <View
-          style={{ width: '100%', borderRadius: 16, backgroundColor: Color.theme, }}
-        >
+      {isFocused && isCheckin && listMerchantType.length > 0 && (
+        <Modal
+          isVisible
+          animationIn="slideInDown"
+          animationOut="slideOutDown"
+          backdropColor={Color.semiwhite}>
           <View
             style={{
-              paddingHorizontal: 10,
-              paddingVertical: 16,
-              alignItems: 'center',
-            }}
-          >
+              width: '100%',
+              borderRadius: 16,
+              backgroundColor: Color.theme,
+            }}>
             <View
               style={{
-                height: height / 8,
-                aspectRatio: 1,
-                marginBottom: 16,
-              }}
-            >
-              <Image
-                source={imageAssets.connectMerchant}
-                style={{
-                  height: '100%',
-                  width: '100%',
-                  resizeMode: 'contain'
-                }}
-              />
-            </View>
-
-            <View
-              style={{
+                paddingHorizontal: 10,
+                paddingVertical: 16,
                 alignItems: 'center',
-              }}
-            >
-              <Text size={16} letterSpacing={0.15} type='medium'>{listMerchantType.length > 1 ? 'Ada beberapa tenant deket kamu nih!' : 'Ada tenant dekat kamu nih!'}</Text>
-            </View>
-
-            <Container width='100%' paddingTop={16}>
-              <View style={{ width: '100%' }}>
-                {listMerchantType.map((item, idx) => {
-                  return (
-                    <TouchableOpacity
-                      key={idx}
-                      onPress={() => {
-                        navigation.navigate('TenantDetailScreen', { item });
-                      }}
-                      style={{
-                        width: '100%',
-                        padding: 10,
-                        flexDirection: 'row',
-                        borderWidth: 1,
-                        borderColor: Color.textSoft,
-                        borderRadius: 8,
-                        marginBottom: 8,
-                      }}
-                    >
-                      <View style={{ aspectRatio: 1 }}>
-                        <Image
-                          source={{ uri: Array.isArray(item.images) && item.images.length > 0 ? item.images[0] : '' }}
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            borderRadius: 8,
-                            backgroundColor: Color.border,
-                          }}
-                        />
-                      </View>
-                      <View style={{ flex: 1, padding: 10 }}>
-                        <Text align='left' type='medium' numberOfLines={2} letterSpacing={0.1}>{item.name}</Text>
-                        <Text align='left' type='medium' numberOfLines={2} size={10} color={Color.disabled}>{item.type}</Text>
-                      </View>
-                      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                        <Fontisto
-                          name={'angle-right'}
-                          color={Color.primaryMoreDark}
-                          size={15}
-                        />
-                      </View>
-                    </TouchableOpacity>
-                  )
-                })}
+              }}>
+              <View
+                style={{
+                  height: height / 8,
+                  aspectRatio: 1,
+                  marginBottom: 16,
+                }}>
+                <Image
+                  source={imageAssets.connectMerchant}
+                  style={{
+                    height: '100%',
+                    width: '100%',
+                    resizeMode: 'contain',
+                  }}
+                />
               </View>
-            </Container>
 
-            <Container width='100%' paddingTop={16}>
-              <Button
-                outline
-                color={Color.primaryMoreDark}
-                onPress={() => {
-                  setListMerchantType([]);
-                }}
-              >
-                Tutup
-              </Button>
-            </Container>
+              <View
+                style={{
+                  alignItems: 'center',
+                }}>
+                <Text size={16} letterSpacing={0.15} type="medium">
+                  {listMerchantType.length > 1
+                    ? 'Ada beberapa tenant deket kamu nih!'
+                    : 'Ada tenant dekat kamu nih!'}
+                </Text>
+              </View>
+
+              <Container width="100%" paddingTop={16}>
+                <View style={{width: '100%'}}>
+                  {listMerchantType.map((item, idx) => {
+                    return (
+                      <TouchableOpacity
+                        key={idx}
+                        onPress={() => {
+                          navigation.navigate('TenantDetailScreen', {item});
+                        }}
+                        style={{
+                          width: '100%',
+                          padding: 10,
+                          flexDirection: 'row',
+                          borderWidth: 1,
+                          borderColor: Color.textSoft,
+                          borderRadius: 8,
+                          marginBottom: 8,
+                        }}>
+                        <View style={{aspectRatio: 1}}>
+                          <Image
+                            source={{
+                              uri:
+                                Array.isArray(item.images) &&
+                                item.images.length > 0
+                                  ? item.images[0]
+                                  : '',
+                            }}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              borderRadius: 8,
+                              backgroundColor: Color.border,
+                            }}
+                          />
+                        </View>
+                        <View style={{flex: 1, padding: 10}}>
+                          <Text
+                            align="left"
+                            type="medium"
+                            numberOfLines={2}
+                            letterSpacing={0.1}>
+                            {item.name}
+                          </Text>
+                          <Text
+                            align="left"
+                            type="medium"
+                            numberOfLines={2}
+                            size={10}
+                            color={Color.disabled}>
+                            {item.type}
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}>
+                          <Fontisto
+                            name={'angle-right'}
+                            color={Color.primaryMoreDark}
+                            size={15}
+                          />
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              </Container>
+
+              <Container width="100%" paddingTop={16}>
+                <Button
+                  outline
+                  color={Color.primaryMoreDark}
+                  onPress={() => {
+                    setListMerchantType([]);
+                  }}>
+                  Tutup
+                </Button>
+              </Container>
+            </View>
           </View>
-        </View>
-      </Modal>}
+        </Modal>
+      )}
 
       {/* modal beacon checkin */}
       {isFocused && isCheckin && modalSuccessCheckin && (
@@ -1075,13 +1173,7 @@ const MainHome = ({ navigation, route }) => {
 
       {/* modal beacon promo */}
       {false && isFocused && (
-        <ModalBeaconPromo
-          item={null}
-          visible
-          onClose={() => {
-
-          }}
-        />
+        <ModalBeaconPromo item={null} visible onClose={() => {}} />
       )}
 
       {/* modal need update profile */}
@@ -1096,16 +1188,10 @@ const MainHome = ({ navigation, route }) => {
       )}
 
       {/* modal loading */}
-      {modalLoading && isFocused && (
-        <ModalLoading
-          visible
-        />
-      )}
+      {modalLoading && isFocused && <ModalLoading visible />}
 
       {/* modal change location */}
-      <ModalChangeLocation
-        ref={modalChangeLocationRef}
-      />
+      <ModalChangeLocation ref={modalChangeLocationRef} />
     </Scaffold>
   );
 };

@@ -139,6 +139,7 @@ const profileBackground = require('./profile-background.png');
 const backgroundQr = require('./background-qr.png');
 const empty = require('./empty.png');
 const checklist = require('./checklist.png');
+const reboundEvoria = require('./rebound-evoria.png');
 
 export {
   iconApp,
@@ -203,6 +204,7 @@ export {
   aboutFest1,
   aboutFest2,
   empty,
+  reboundEvoria,
 };
 
 export const imageAssets = {
@@ -346,6 +348,7 @@ export const imageAssets = {
   backgroundQr,
   empty,
   checklist,
+  reboundEvoria,
 };
 
 export default imageAssets;
