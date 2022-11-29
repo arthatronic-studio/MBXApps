@@ -410,9 +410,9 @@ const MainHome = ({navigation, route}) => {
   };
 
   const onBleScan = () => {
-    if (auth.user && auth.user.isGuest) {
-      return;
-    }
+    // if (auth.user && auth.user.isGuest) {
+    //   return;
+    // }
 
     androidBluetoothPermission().then(status => {
       if (status) {

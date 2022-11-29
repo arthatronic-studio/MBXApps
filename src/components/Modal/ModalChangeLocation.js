@@ -132,7 +132,7 @@ const ModalChangeLocation = forwardRef((props, ref) => {
                     size={11}
                     lineHeight={13.2}
                     color={isSelected ? Color.white : Color.black}>
-                    Bloc Group • Jakarta Selatan
+                    Bloc Group • {item?.location_name}
                   </Text>
                 </Container>
                 {isSelected && (
