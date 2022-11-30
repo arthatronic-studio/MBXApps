@@ -109,6 +109,8 @@ import EventScreen from 'src/screens/Posting/Event/Index';
 import EventDetail from 'src/screens/Posting/Event/Detail';
 import CreateEvent from 'src/screens/Posting/Event/CreateEvent';
 import CreateEventSecond from 'src/screens/Posting/Event/CreateEventSecond';
+import SeeAllEvent from 'src/screens/Posting/Event/SeeAllEvent';
+import SeeAllCollaboratorEvent from 'src/screens/Posting/Event/SeeAllCollaboratorEvent';
 
 // Job
 import JobScreen from 'src/screens/Posting/Job/Index';
@@ -464,6 +466,8 @@ function AppNavigator() {
       <Screen name="CheckoutEvent" component={CheckoutEvent} />
       <Screen name="PemesananTiket" component={PemesananTiket} />
       <Screen name="EventScreen" component={EventScreen} />
+      <Screen name="SeeAllEvent" component={SeeAllEvent} />
+      <Screen name="SeeAllCollaboratorEvent" component={SeeAllCollaboratorEvent} />
       <Screen name="EventDetail" component={EventDetail} />
       <Screen name="CreateEvent" component={CreateEvent} />
       <Screen name="CreateEventSecond" component={CreateEventSecond} />

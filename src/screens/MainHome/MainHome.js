@@ -500,7 +500,7 @@ const MainHome = ({navigation, route}) => {
                       justifyContent: 'flex-end',
                     }}>
                     <Text
-                      size={9}
+                      size={10}
                       type="semibold"
                       lineHeight={14.4}
                       letterSpacing={0.04}>
@@ -524,7 +524,7 @@ const MainHome = ({navigation, route}) => {
                         }
                       }}>
                       <Text
-                        size={9}
+                        size={10}
                         lineHeight={14.4}
                         type="medium"
                         letterSpacing={0.04}

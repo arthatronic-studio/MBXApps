@@ -32,15 +32,15 @@ const defaultProps = {
     onLoadingEnd: () => { },
     onSeeAll: () => { },
     ListHeaderComponent: null,
-    ListFooterComponent: null,
     title: '',
     showSeeAllText: false,
     showHeader: false,
     headerLabelstyle: {},
     pagination: true,
+    icon: null,
 };
 
-const ListContenEvent = ({ productType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, ListFooterComponent, showHeader, title, showSeeAllText, headerLabelstyle, pagination, onSeeAll }) => {
+const ListContenCollaboratorEvent = ({ productType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, headerLabelstyle, pagination, icon, onSeeAll }) => {
     const { width } = useWindowDimensions();
     const [itemData, setItemData] = useState(initialItemState);
     const auth = useSelector(state => state['auth']);
@@ -51,13 +51,13 @@ const ListContenEvent = ({ productType, productCategory, name, horizontal, style
     }, []);
 
     useEffect(() => {
-    if (itemData.loadNext && itemData.nextUrl != null && pagination) {
+        if (itemData.loadNext && itemData.nextUrl != null && pagination) {
             fetchData(false);
         }
     }, [itemData.loadNext]);
 
     const fetchData = async (first) => {
-        let baseEndpoint = 'event?perPage=9';
+        let baseEndpoint = 'event?perPage=9&category=x_collaborator';
         if(first){
             if(auth.user.isCheckin && auth.user.activityInfo.location){
                 baseEndpoint = baseEndpoint + `&bloc_location_id=${auth.user.activityInfo.location.id}`;
@@ -93,6 +93,7 @@ const ListContenEvent = ({ productType, productCategory, name, horizontal, style
         return (
             <PostingHeader
                 title={title}
+                icon={icon}
                 onSeeAllPress={() => {
                     onSeeAll();
                 }}
@@ -163,7 +164,6 @@ const ListContenEvent = ({ productType, productCategory, name, horizontal, style
                     }
                     }
                     ListHeaderComponent={ListHeaderComponent}
-                    ListFooterComponent={ListFooterComponent}
                     ListEmptyComponent={() => {
                         return (
                             <>
@@ -182,6 +182,6 @@ const ListContenEvent = ({ productType, productCategory, name, horizontal, style
     )
 }
 
-ListContenEvent.propTypes = propTypes;
-ListContenEvent.defaultProps = defaultProps;
-export default ListContenEvent;
+ListContenCollaboratorEvent.propTypes = propTypes;
+ListContenCollaboratorEvent.defaultProps = defaultProps;
+export default ListContenCollaboratorEvent;

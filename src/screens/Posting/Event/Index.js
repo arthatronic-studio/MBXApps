@@ -15,6 +15,7 @@ import Client from 'src/lib/apollo';
 import { queryBannerList } from '@src/lib/query/banner';
 import ListContentProductV2 from 'src/components/Content/ListContentProductV2';
 import { useCurrentUser } from 'src/hooks/useCanGenerateContent';
+import { statusBarHeight } from 'src/utils/constants';
 
 //Fonts
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -25,9 +26,11 @@ import SearchBar from 'src/components/SearchBar';
 import ListContenEvent from 'src/components/Event/ListContenEvent';
 import imageAssets from 'assets/images';
 import ListFeaturedEvent from 'src/components/Event/ListFeaturedEvent';
+import ListContenCollaboratorEvent from 'src/components/Event/ListContenCollaboratorEvent';
 
 const EventScreen = ({ navigation, route }) => {
   const { params } = route;
+  const auth = useSelector(state => state['auth']);
 
   const user = useSelector(state => state['user.auth'].login.user);
   const { Color } = useColor();
@@ -113,11 +116,15 @@ const EventScreen = ({ navigation, route }) => {
       <ListContenEvent
         productCategory='EVENT'
         name='Event'
-        title='● ALL EVENT'
-        // nav='EventScreen'
+        title='● EVENT'
+        nav='EventScreen'
+        pagination={false}
+        onSeeAll={() => {
+          navigation.navigate('SeeAllEvent', {title: 'ALL EVENT'});
+        }}
         // refresh={refreshing || isFocused}
         showHeader
-        // showSeeAllText={false}
+        showSeeAllText={true}
         style={{
           paddingBottom: height / 5,
         }}
@@ -147,6 +154,26 @@ const EventScreen = ({ navigation, route }) => {
 
             <Divider />
           </>
+        }
+        ListFooterComponent={
+          <Container paddingTop={24}>            
+            <ListContenCollaboratorEvent
+              productCategory='EVENT'
+              onSeeAll={() => {
+                navigation.navigate('SeeAllCollaboratorEvent', {title: 'X-COLLABORATOR'});
+              }}
+              name='Event'
+              title='COLLABORATOR'
+              icon={auth?.user?.activityInfo['x-colaborator']?.icon}
+              pagination={false}
+              showHeader
+              showSeeAllText={true}
+              style={{
+                paddingBottom: statusBarHeight,
+                // paddingHorizontal: 12,
+              }}
+            />
+          </Container>
         }
       />
     </Scaffold>

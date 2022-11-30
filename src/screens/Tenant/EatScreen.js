@@ -184,7 +184,7 @@ const EatScreen = ({ navigation, route }) => {
         showHeader={false}
         // showSeeAllText={false}
         style={{
-          paddingBottom: statusBarHeight,
+          paddingBottom: height / 5,
           paddingHorizontal: 12,
         }}
         ListHeaderComponent={
@@ -220,7 +220,7 @@ const EatScreen = ({ navigation, route }) => {
               showHeader
               // showSeeAllText={false}
               style={{
-                paddingBottom: statusBarHeight,
+                paddingBottom: height / 5,
                 paddingHorizontal: 12,
               }}
             />

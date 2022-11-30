@@ -51,9 +51,19 @@ const GroupScreen = ({navigation, route}) => {
     loadNext: false,
     refresh: false,
   });
+  
+  const [itemDataCollaborator, setItemDataCollaborator] = useState({
+    data: [],
+    loading: true,
+    message: '',
+    nextUrl: null,
+    loadNext: false,
+    refresh: false,
+  });
 
   useEffect(() => {
     fetchData(true);
+    fetchDataCollaborator(true);
   }, []);
 
   useEffect(() => {
@@ -61,6 +71,12 @@ const GroupScreen = ({navigation, route}) => {
       fetchData(false);
     }
   }, [itemData.loadNext]);
+  
+  useEffect(() => {
+    if (itemDataCollaborator.loadNext && itemDataCollaborator.nextUrl != null) {
+      fetchDataCollaborator(false);
+    }
+  }, [itemDataCollaborator.loadNext]);
 
   const fetchData = async first => {
     const param = itemData.nextUrl && !first ? itemData.nextUrl : `?perPage=20`;
@@ -84,8 +100,32 @@ const GroupScreen = ({navigation, route}) => {
       refresh: false,
     });
   };
+  
+  const fetchDataCollaborator = async first => {
+    const param = itemDataCollaborator.nextUrl && !first ? itemDataCollaborator.nextUrl : `?perPage=20&category=x_collaborator`;
+    const result = await fetchGetGroups(param);
+
+    console.log(result, 'sult', param);
+
+    let newArr = [];
+
+    if (result.status) {
+      if (Array.isArray(result.data)) newArr = result.data;
+    }
+
+    setItemDataCollaborator({
+      ...itemDataCollaborator,
+      data: first ? newArr : itemDataCollaborator.data.concat(newArr),
+      nextUrl: result.nextUrl ? `?${result.nextUrl.split('?')[1]}` : null,
+      loading: false,
+      loadNext: false,
+      message: result.message,
+      refresh: false,
+    });
+  };
 
   console.log(itemData, 'dataaaaa');
+  console.log(itemDataCollaborator, 'dataaaaa');
 
   const data = [
     {
@@ -243,13 +283,16 @@ const GroupScreen = ({navigation, route}) => {
         <FlatList
           showsHorizontalScrollIndicator={false}
           data={itemData.data}
+          contentContainerStyle={{
+            paddingBottom: 32,
+          }}
           showsVerticalScrollIndicator={false}
           renderItem={({item, index}) => {
             let orderNumber = (index + 1).toString();
             if (orderNumber.length <= 1) orderNumber = '0' + orderNumber;
             return (
               <Container flex={1} flexDirection="row" paddingHorizontal={16}>
-                <Container flex={1}>
+                <Container flex={2}>
                   {(index == 0 ||
                     item.category != itemData.data[index - 1].category) && (
                     <Text size={10} type="semibold" align="left">
@@ -257,7 +300,7 @@ const GroupScreen = ({navigation, route}) => {
                     </Text>
                   )}
                 </Container>
-                <Container flex={3}>
+                <Container flex={4.5}>
                   <TouchableOpacity
                     onPress={() => {
                       setSelected(item);
@@ -318,10 +361,10 @@ const GroupScreen = ({navigation, route}) => {
           onEndReached={() => setItemData({...itemData, loadNext: true})}
           ItemSeparatorComponent={() => (
             <Container flexDirection="row" paddingHorizontal={16}>
-              <Container flex={1} />
+              <Container flex={2} />
               <Container
                 marginVertical={10}
-                flex={3}
+                flex={4.5}
                 borderWidth={0.25}
                 color={'#141414'}
               />
@@ -386,18 +429,131 @@ const GroupScreen = ({navigation, route}) => {
                 flexDirection="row"
                 paddingBottom={10}
                 paddingHorizontal={16}>
-                <Container flex={1} />
-                <Container flex={3} borderWidth={0.25} color={'#141414'} />
+                <Container flex={2} />
+                <Container flex={4.5} borderWidth={0.25} color={'#141414'} />
               </Container>
             </Container>
           }
           ListFooterComponent={
-            <Container
-              paddingTop={10}
-              flexDirection="row"
-              paddingHorizontal={16}>
-              <Container flex={1} />
-              <Container flex={3} borderWidth={0.25} color={'#141414'} />
+            <Container>
+              <Container
+                paddingTop={10}
+                flexDirection="row"
+                paddingHorizontal={16}>
+                <Container flex={2} />
+                <Container flex={4.5} borderWidth={0.25} color={'#141414'} />
+              </Container>
+              <Divider height={32} />
+              <FlatList
+                showsHorizontalScrollIndicator={false}
+                data={itemDataCollaborator.data}
+                showsVerticalScrollIndicator={false}
+                renderItem={({item, index}) => {
+                  let orderNumber = (index + 1).toString();
+                  if (orderNumber.length <= 1) orderNumber = '0' + orderNumber;
+                  return (
+                    <Container
+                      flex={1}
+                      flexDirection="row"
+                      paddingHorizontal={16}>
+                      <Container flex={2}>
+                        {index == 0 && (
+                          <Text size={10} type="semibold" align="left">
+                            ● X-COLLABORATOR
+                          </Text>
+                        )}
+                      </Container>
+                      <Container flex={4.5}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            setSelected(item);
+                            modalRef.current.open();
+                          }}
+                          style={{
+                            width: '100%',
+                            flexDirection: 'row',
+                            paddingEnd: 16,
+                            borderColor: Color.primary,
+                          }}>
+                          <Container
+                            style={{
+                              flex: 1,
+                              alignItems: 'flex-start',
+                              justifyContent: 'center',
+                            }}>
+                            <Text size={11} type="medium" color={Color.primary}>
+                              {orderNumber}
+                            </Text>
+                          </Container>
+                          <Container
+                            style={{
+                              flex: 7,
+                              alignItems: 'flex-start',
+                              paddingRight: 8,
+                            }}>
+                            <Text
+                              size={18}
+                              type="medium"
+                              align="left"
+                              numberOfLines={2}>
+                              {item.name}
+                            </Text>
+                          </Container>
+                          <Container style={{justifyContent: 'center'}}>
+                            <Text
+                              size={11}
+                              type="medium"
+                              color={Color.primary}
+                              underline>
+                              View
+                            </Text>
+                            <Container
+                              style={{
+                                borderBottomWidth: 1,
+                                borderColor: Color.primary,
+                              }}
+                            />
+                          </Container>
+                        </TouchableOpacity>
+                      </Container>
+                    </Container>
+                  );
+                }}
+                keyExtractor={(item, index) => item.id + index.toString()}
+                onEndReachedThreshold={0.3}
+                onEndReached={() => setItemDataCollaborator({...itemDataCollaborator, loadNext: true})}
+                ListHeaderComponent={
+                  <Container
+                    flex={1}
+                    flexDirection="row"
+                    paddingBottom={10}
+                    paddingHorizontal={16}>
+                    <Container flex={2} />
+                    <Container flex={4.5} borderWidth={0.25} color={'#141414'} />
+                  </Container>
+                }
+                ListFooterComponent={
+                  <Container
+                    paddingTop={10}
+                    flex={1}
+                    flexDirection="row"
+                    paddingHorizontal={16}>
+                    <Container flex={2} />
+                    <Container flex={4.5} borderWidth={0.25} color={'#141414'} />
+                  </Container>
+                }
+                ItemSeparatorComponent={() => (
+                <Container flexDirection="row" paddingHorizontal={16}>
+                  <Container flex={2} />
+                  <Container
+                    marginVertical={10}
+                    flex={4.5}
+                    borderWidth={0.25}
+                    color={'#141414'}
+                  />
+                </Container>
+                )}
+              />
             </Container>
           }
         />
