@@ -1,5 +1,13 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {useColor, Text, Header, Row, useLoading, Col} from '@src/components';
+import {
+  useColor,
+  Text,
+  Header,
+  Row,
+  useLoading,
+  Col,
+  ScreenEmptyData,
+} from '@src/components';
 import Scaffold from '@src/components/Scaffold';
 import {ScrollView} from 'react-native-gesture-handler';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -27,6 +35,7 @@ import MapView, {
 } from 'react-native-maps';
 import {IndonesiaMapJson} from 'src/utils/constants';
 import {fetchGetGroups} from 'src/api-rest/fetchGetGroups';
+import {useSelector} from 'react-redux';
 
 const GroupScreen = ({navigation, route}) => {
   const {Color} = useColor();
@@ -38,6 +47,7 @@ const GroupScreen = ({navigation, route}) => {
   const [refreshing, setRefreshing] = useState(false);
   const {width, height} = useWindowDimensions();
   const [loading, setLoading] = useState(false);
+  const auth = useSelector(state => state['auth']);
 
   const [categoryIndex, setCategoryIndex] = useState(0);
   const category = ['Semua', 'bloc group', 'm bloc Market', 'RRK'];
@@ -51,7 +61,7 @@ const GroupScreen = ({navigation, route}) => {
     loadNext: false,
     refresh: false,
   });
-  
+
   const [itemDataCollaborator, setItemDataCollaborator] = useState({
     data: [],
     loading: true,
@@ -71,7 +81,7 @@ const GroupScreen = ({navigation, route}) => {
       fetchData(false);
     }
   }, [itemData.loadNext]);
-  
+
   useEffect(() => {
     if (itemDataCollaborator.loadNext && itemDataCollaborator.nextUrl != null) {
       fetchDataCollaborator(false);
@@ -100,9 +110,12 @@ const GroupScreen = ({navigation, route}) => {
       refresh: false,
     });
   };
-  
+
   const fetchDataCollaborator = async first => {
-    const param = itemDataCollaborator.nextUrl && !first ? itemDataCollaborator.nextUrl : `?perPage=20&category=x_collaborator`;
+    const param =
+      itemDataCollaborator.nextUrl && !first
+        ? itemDataCollaborator.nextUrl
+        : `?perPage=20&category=x_collaborator`;
     const result = await fetchGetGroups(param);
 
     console.log(result, 'sult', param);
@@ -459,7 +472,17 @@ const GroupScreen = ({navigation, route}) => {
                       <Container flex={2}>
                         {index == 0 && (
                           <Text size={10} type="semibold" align="left">
-                            ● X-COLLABORATOR
+                            <Image
+                              style={{
+                                height: 16,
+                                width: 16,
+                              }}
+                              source={{
+                                uri: auth?.user?.activityInfo['x-colaborator']
+                                  ?.icon,
+                              }}
+                            />{' '}
+                            Collaborator
                           </Text>
                         )}
                       </Container>
@@ -521,15 +544,42 @@ const GroupScreen = ({navigation, route}) => {
                 }}
                 keyExtractor={(item, index) => item.id + index.toString()}
                 onEndReachedThreshold={0.3}
-                onEndReached={() => setItemDataCollaborator({...itemDataCollaborator, loadNext: true})}
+                onEndReached={() =>
+                  setItemDataCollaborator({
+                    ...itemDataCollaborator,
+                    loadNext: true,
+                  })
+                }
                 ListHeaderComponent={
                   <Container
                     flex={1}
                     flexDirection="row"
                     paddingBottom={10}
                     paddingHorizontal={16}>
-                    <Container flex={2} />
-                    <Container flex={4.5} borderWidth={0.25} color={'#141414'} />
+                    {itemDataCollaborator.data.length > 0 ? (
+                      <>
+                        <Container flex={2} />
+                        <Container
+                          flex={4.5}
+                          borderWidth={0.25}
+                          color={'#141414'}
+                        />
+                      </>
+                    ) : (
+                      <Text size={10} type="semibold" align="left">
+                        <Image
+                          style={{
+                            height: 16,
+                            width: 16,
+                          }}
+                          source={{
+                            uri: auth?.user?.activityInfo['x-colaborator']
+                              ?.icon,
+                          }}
+                        />{' '}
+                        Collaborator
+                      </Text>
+                    )}
                   </Container>
                 }
                 ListFooterComponent={
@@ -539,20 +589,36 @@ const GroupScreen = ({navigation, route}) => {
                     flexDirection="row"
                     paddingHorizontal={16}>
                     <Container flex={2} />
-                    <Container flex={4.5} borderWidth={0.25} color={'#141414'} />
+                    {itemDataCollaborator.data.length > 0 && (
+                      <Container
+                        flex={4.5}
+                        borderWidth={0.25}
+                        color={'#141414'}
+                      />
+                    )}
                   </Container>
                 }
                 ItemSeparatorComponent={() => (
-                <Container flexDirection="row" paddingHorizontal={16}>
-                  <Container flex={2} />
-                  <Container
-                    marginVertical={10}
-                    flex={4.5}
-                    borderWidth={0.25}
-                    color={'#141414'}
-                  />
-                </Container>
+                  <Container flexDirection="row" paddingHorizontal={16}>
+                    <Container flex={2} />
+                    <Container
+                      marginVertical={10}
+                      flex={4.5}
+                      borderWidth={0.25}
+                      color={'#141414'}
+                    />
+                  </Container>
                 )}
+                ListEmptyComponent={() => {
+                  return (
+                    <>
+                      <ScreenEmptyData
+                        message={`group belum tersedia`}
+                        style={{width: width - 16}}
+                      />
+                    </>
+                  );
+                }}
               />
             </Container>
           }
