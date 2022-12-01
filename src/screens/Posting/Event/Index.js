@@ -169,7 +169,8 @@ const EventScreen = ({ navigation, route }) => {
               showHeader
               showSeeAllText={true}
               style={{
-                paddingBottom: statusBarHeight,
+                // paddingBottom: statusBarHeight,
+                paddingBottom: height / 5,
                 // paddingHorizontal: 12,
               }}
             />

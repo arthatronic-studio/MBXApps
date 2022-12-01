@@ -10,7 +10,7 @@ export const stateUpdateProfile = async(body) => {
     }else{
         NewBody.gues_id = 0;
     }
-    const result = await postAPI(endpoint, NewBody);    
+    const result = await postAPI(endpoint, NewBody);
     if (result.status) {
         await store.dispatch({
             type: 'AUTH.SET_USER',

@@ -70,19 +70,28 @@ const ListContenEvent = ({ productType, productCategory, name, horizontal, style
         }else{
             baseEndpoint = 'event?' + itemData.nextUrl;
         }
+
+        let newArr = [];
+
         const result = await getAPI(baseEndpoint);
 
         console.log('result', baseEndpoint, result, first);
 
-        setItemData({
-            ...itemData,
-            data: first ? result.data : itemData.data.concat(result.data ),
-            nextUrl: result.nextUrl ? `?${result.nextUrl.split("?")[1]}`: null,
-            loading: false,
-            loadNext: false,
-            message: result.message,
-            refresh: false,
-        });
+        if (result.status && Array.isArray(result.data)) {
+            newArr = result.data;
+        }
+
+        if(result.status){
+            setItemData({
+                ...itemData,
+                data: first ? newArr : itemData.data.concat(newArr),
+                nextUrl: result.nextUrl ? `?${result.nextUrl.split("?")[1]}`: null,
+                loading: false,
+                loadNext: false,
+                message: result.message,
+                refresh: false,
+            });
+        }
 
         onLoadingEnd(false);
     }
