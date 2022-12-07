@@ -27,6 +27,7 @@ import ListTenantFeatured from 'src/screens/Tenant/ListTenantFeatured';
 import { statusBarHeight } from 'src/utils/constants';
 import ListTenantCollaboratorItem from './ListTenantCollaboratorItem';
 import PostingHeader from 'src/components/Posting/PostingHeader';
+import ListTenantMarketItem from './ListTenantMarketItem';
 
 const ShopScreen = ({ navigation, route }) => {
   const { params } = route;
@@ -174,7 +175,7 @@ const ShopScreen = ({ navigation, route }) => {
         showHeader={false}
         // showSeeAllText={false}
         style={{
-          paddingBottom: statusBarHeight,
+          paddingBottom: height/5,
           paddingHorizontal: 12,
         }}
         ListHeaderComponent={
@@ -198,12 +199,12 @@ const ShopScreen = ({ navigation, route }) => {
         }
         ListFooterComponent={
           <Container paddingTop={24}>
-            <ListTenantCollaboratorItem
+            <ListTenantMarketItem
               tenantType='shop'
               productCategory='SHOP'
               name='Toko'
-              title=' COLLABORATOR'
-              icon={auth?.user?.activityInfo['x-colaborator']?.icon}
+              title=' M Bloc Market'
+              icon={imageAssets.mBlocMarket}
               // nav='EatScreen'
               // refresh={refreshing || isFocused}
               showHeader
@@ -215,6 +216,28 @@ const ShopScreen = ({ navigation, route }) => {
               styleHeader={{ 
                 paddingHorizontal: 4,
                }}
+               ListFooterComponent={       
+                <Container paddingTop={24}>
+                  <ListTenantCollaboratorItem
+                    tenantType='shop'
+                    productCategory='SHOP'
+                    name='Toko'
+                    title=' COLLABORATOR'
+                    icon={auth?.user?.activityInfo['x-colaborator']?.icon}
+                    // nav='EatScreen'
+                    // refresh={refreshing || isFocused}
+                    showHeader
+                    // showSeeAllText={false}
+                    style={{
+                      paddingBottom: statusBarHeight,
+                      paddingHorizontal: 12,
+                    }}
+                    styleHeader={{ 
+                      paddingHorizontal: 4,
+                    }}
+                  />
+                </Container>
+              }
             />
           </Container>
         }

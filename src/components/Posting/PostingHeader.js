@@ -82,7 +82,7 @@ const PostingHeader = (props) => {
             }}
         >
             <Row>
-                {icon && <Image source={typeof icon == 'string' ? {uri: icon} : icon} style={{ width: 24, height: 24, marginRight: 5 }} />}
+                {icon && <Image source={typeof icon == 'string' ? {uri: icon} : icon} style={{ width: 24, height: 24, marginRight: 5, resizeMode: 'contain' }} />}
                 {iconType && iconName && getIconMenu(iconType, iconName)}
 
                 {/* {validImage && <View style={{ width: 24, aspectRatio: 1, marginRight: 8 }}>
