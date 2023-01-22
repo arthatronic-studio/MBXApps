@@ -324,6 +324,11 @@ import FestListingMusic from 'src/screens/Fest/FestListingMusic';
 import ArticleScreen from 'src/screens/Article/ArticleScreen';
 import DetailArticleScreen from 'src/screens/Article/DetailArticleScreen';
 
+// Picu Wujudkan
+import PicuWujudkanScreen from 'src/screens/PicuWujudkan/PicuWujudkanScreen';
+import PicuWujudkanAllScreen from 'src/screens/PicuWujudkan/PicuWujudkanAllScreen';
+import DetailPicuWujudkanScreen from 'src/screens/PicuWujudkan/DetailPicuWujudkanScreen';
+
 // GROUP
 import GroupScreen from 'src/screens/Group/GroupScreen';
 
@@ -337,7 +342,6 @@ function AppNavigator() {
         gestureEnabled: Platform.OS === 'ios',
         headerShown: false
       }}>
-        
       {/* uncanny */}
       <Screen name="TestScreen" component={TestScreen} />
       <Screen name="SplashScreen" component={SplashScreen} />
@@ -633,9 +637,16 @@ function AppNavigator() {
       <Screen name="ArticleScreen" component={ArticleScreen} />
       <Screen name="DetailArticleScreen" component={DetailArticleScreen} />
 
+      {/* Picu Wujudkan */}
+      <Screen name="PicuWujudkanScreen" component={PicuWujudkanScreen} />
+      <Screen name="PicuWujudkanAllScreen" component={PicuWujudkanAllScreen} />
+      <Screen
+        name="DetailPicuWujudkanScreen"
+        component={DetailPicuWujudkanScreen}
+      />
+
       {/* Group */}
       <Screen name="GroupScreen" component={GroupScreen} />
-
     </Navigator>
   );
 }
