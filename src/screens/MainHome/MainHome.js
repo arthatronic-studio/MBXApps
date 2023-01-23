@@ -55,6 +55,7 @@ import {redirectTo} from 'src/utils';
 import HighlightArticle from '../Article/HighlightArticle';
 import {useInterval} from 'src/hooks/useInterval';
 import ModalChangeLocation from 'src/components/Modal/ModalChangeLocation';
+import HighlightPicuWujudkan from '../PicuWujudkan/HighlightPicuWujudkan';
 
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
@@ -1036,45 +1037,12 @@ const MainHome = ({navigation, route}) => {
             tenantType='shop'
           /> */}
 
-          <View>
-            <Divider />
-
-            <PostingHeader title="● SPARK YOUR IDEAS" showSeeAllText={false} />
-
-            <Container
-              paddingHorizontal={16}
-              paddingTop={11}
-              paddingBottom={11}>
-              <Text size={29} align="left" lineHeight={38}>
-                Customers as Industrial Age phenomenon will be replaced by{' '}
-                <Text size={29} type="semibold">
-                  Creative Prosumers
-                </Text>
-                , people who produce many of their own goods and services.{' '}
-                <View>
-                  <Text size={11} type="medium" align="left">
-                    Philip Kotler
-                  </Text>
-                  <Text size={11} type="medium" align="left">
-                    -1986
-                  </Text>
-                </View>
-              </Text>
-
-              <Divider height={11} />
-
-              <Text size={16} type="medium" align="left">
-                We believe colaboration make us stronger, join and be part of
-                our movement!
-              </Text>
-
-              {/* <TouchableOpacity
-                  style={{width: '50%', marginTop: 24, alignSelf: 'flex-end', paddingVertical: 12, borderWidth: 1, borderColor: Color.text}}
-                >
-                  <Text>Spark Ideas</Text>
-                </TouchableOpacity> */}
-            </Container>
-          </View>
+          <HighlightPicuWujudkan
+            title="● PICU WUJUDKAN"
+            showSeeAllText={true}
+            type="HIGHLIGHT"
+            numColumns={1}
+          />
         </Container>
       </ScrollView>
       {/* </DraggableButton> */}
