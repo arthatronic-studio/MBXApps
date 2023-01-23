@@ -1037,12 +1037,30 @@ const MainHome = ({navigation, route}) => {
             tenantType='shop'
           /> */}
 
-          <HighlightPicuWujudkan
+          {/* <HighlightPicuWujudkan
             title="● PICU WUJUDKAN"
             showSeeAllText={true}
             type="HIGHLIGHT"
             numColumns={1}
-          />
+          /> */}
+
+          <View>
+            <Divider />
+
+            <PostingHeader title="● PICU WUJUDKAN" showSeeAllText={true} onSeeAllPress={()=>navigation.navigate('PicuWujudkanScreen')}/>
+
+            <Container
+              paddingHorizontal={16}
+              paddingTop={11}
+              paddingBottom={11}>
+              <Text size={29} align="left" lineHeight={38}>
+                Laboratorium ide dan ruang diskusi untuk memicu lahirnya gagasan-gagasan kreatif.
+              </Text>
+
+              <Divider height={11} />
+
+            </Container>
+          </View>
         </Container>
       </ScrollView>
       {/* </DraggableButton> */}
