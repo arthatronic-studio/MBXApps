@@ -217,34 +217,34 @@ export default class ScanQRScreen extends Component {
   }
 
   barcodeReceived(e) {
-    console.log(e);
-    const parseData = this.isJsonString(e.data);
-    console.log(parseData);
+    // console.log(e);
+    // const parseData = this.isJsonString(e.data);
+    // console.log(parseData);
 
-    if (parseData) {
-      this.onSecurityScan(parseData);
-    }
-    else {
-      this.setState({
-        loadingProps: {
-          ...this.state.loadingProps,
-          visible: true,
-          loadingType: 'error',
-          message: 'QR Code tidak dikenal',
-        }
-      });
+    // if (parseData) {
+    this.onSecurityScan(e.data);
+    // }
+    // else {
+    //   this.setState({
+    //     loadingProps: {
+    //       ...this.state.loadingProps,
+    //       visible: true,
+    //       loadingType: 'error',
+    //       message: 'QR Code tidak dikenal',
+    //     }
+    //   });
   
-      setTimeout(() => {
-        this.setState({
-          loadingProps: {
-            ...this.state.loadingProps,
-            visible: false,
-          }
-        });
+    //   setTimeout(() => {
+    //     this.setState({
+    //       loadingProps: {
+    //         ...this.state.loadingProps,
+    //         visible: false,
+    //       }
+    //     });
 
-        this.scanner.reactivate();
-      }, 3000);
-    }
+    //     this.scanner.reactivate();
+    //   }, 3000);
+    // }
   }
 
   onPressRightButton() {
