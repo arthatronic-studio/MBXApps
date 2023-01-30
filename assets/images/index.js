@@ -141,6 +141,7 @@ const empty = require('./empty.png');
 const checklist = require('./checklist.png');
 const reboundEvoria = require('./rebound-evoria.png');
 const mBlocMarket = require('./m-bloc-market.png');
+const placeholderTenant = require('./placeholder-tenant.png');
 
 export {
   iconApp,
@@ -351,6 +352,7 @@ export const imageAssets = {
   checklist,
   reboundEvoria,
   mBlocMarket,
+  placeholderTenant,
 };
 
 export default imageAssets;

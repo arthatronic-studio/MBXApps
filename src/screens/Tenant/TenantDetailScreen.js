@@ -47,6 +47,8 @@ import { fetchFavoriteProduct } from 'src/api-rest/fetchFavoriteProduct';
 const TenantDetailScreen = ({ navigation, route }) => {
   const { params } = route;
 
+  console.log(params.tenantCategory, 'parfams');
+
   const { Color } = useColor();
   const flatlistRef = useRef();
   const auth = useSelector(state => state['auth']);
@@ -164,7 +166,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
     }
 
     const result = await fetchEatCartAdd(body);
-    console.log('result', result);
+    console.log('result cart', result);
     if (result.status) {
       if (Array.isArray(result.data) && result.data.length > 0) {
         if (result.data[0].nama_pelanggan) {
@@ -269,7 +271,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
             >
               <View style={{ width: '100%', aspectRatio: 16 / 9, }}>
                 <Image
-                  source={{ uri: '' }}
+                  source={imageAssets.imageBlank}
                   style={{
                     width: '100%',
                     height: '100%',
@@ -668,7 +670,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
           >
             <Image
               source={
-                Array.isArray(item.images) && item.images.length > 0 ? { uri: item.images[0] } : ''
+                Array.isArray(item.images) && item.images.length > 0 ? { uri: item.images[0] } : imageAssets.placeholderTenant
               }
               style={{
                 width: '100%',
@@ -931,6 +933,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
                 cartId,
                 cartLocationId,
                 namaPemesan,
+                tenantCategory: params.tenantCategory,
               });
             }}
             style={{

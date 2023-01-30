@@ -124,6 +124,7 @@ import PaymentScreen from '@src/screens/Payment/PaymentScreen';
 import PaymentDetail from '@src/screens/Payment/PaymentDetail';
 import PaymentInstruction from '@src/screens/Payment/PaymentInstruction';
 import PaymentSucceed from '@src/screens/Payment/PaymentSucceed';
+import PaymentMbmChannel from 'src/screens/Payment/PaymentMbmChannel';
 
 // PPOB
 import PulsaScreen from '@src/screens/PPOB/PulsaScreen';
@@ -541,6 +542,7 @@ function AppNavigator() {
       <Screen name="PaymentDetail" component={PaymentDetail} />
       <Screen name="PaymentInstruction" component={PaymentInstruction} />
       <Screen name="PaymentSucceed" component={PaymentSucceed} />
+      <Screen name="PaymentMbmChannel" component={PaymentMbmChannel} />
       {/* PPOB */}
       <Screen name="PulsaScreen" component={PulsaScreen} />
       <Screen name="PlnScreen" component={PlnScreen} />

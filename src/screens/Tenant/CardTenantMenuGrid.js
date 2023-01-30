@@ -38,6 +38,8 @@ const CardTenantMenuGrid = ({ item, index, numColumns, onPress, cartProductQuant
     imageUrl = item.images[0];
   }
 
+  console.log(item, 'item nih', imageUrl);
+
   return (
     <View
       key={index}
@@ -62,7 +64,7 @@ const CardTenantMenuGrid = ({ item, index, numColumns, onPress, cartProductQuant
         >
           <View style={{ width: '100%', aspectRatio: 1 }}>
             <Image
-              source={{ uri: imageUrl }}
+              source={imageUrl != '' ? { uri: imageUrl } : imageAssets.placeholderTenant}
               style={{
                 height: '100%',
                 width: '100%',

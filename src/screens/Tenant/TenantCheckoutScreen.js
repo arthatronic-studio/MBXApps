@@ -622,7 +622,7 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
                   }}
                 >
                   <Image
-                    source={items && Array.isArray(items.images) && items.images.length > 0 ? { uri: items.images[0] } : ''}
+                    source={items && Array.isArray(items.images) && items.images.length > 0 ? { uri: items.images[0] } : imageAssets.imageBlank}
                     style={{
                       width: '100%',
                       height: '100%',
@@ -665,16 +665,25 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
                 'Pesan sekarang?',
                 async() => {
                   const result = await fetchEatCartOrder({ cartId });
+                  console.log(result, 'hahaha');
                   showLoading(
                     result.status ? 'success' : 'error',
                     result.message,
                     () => {
                       if (result.status) {
-                        if (result.paymentResponse && result.paymentResponse.data && result.paymentResponse.data.redirect_url) {
-                            setSourceURL(result.paymentResponse.data.redirect_url);
-                        } else {
-                            navigation.navigate('PaymentSucceed');
+                        if(params.tenantCategory === 'mbm'){
+                          navigation.navigate('PaymentMbmChannel', {
+                            cartId: cartId,
+                            item: result,
+                          })
+                        }else{
+                          if (result.paymentResponse && result.paymentResponse.data && result.paymentResponse.data.redirect_url) {
+                              setSourceURL(result.paymentResponse.data.redirect_url);
+                          } else {
+                              navigation.navigate('PaymentSucceed');
+                          }
                         }
+                        
                       }
                     }
                   );
@@ -689,7 +698,7 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
               borderRadius: 120,
             }}
           >
-            <Text type='medium' size={12} color={'#E7FF00'}>Countinue Pay</Text>
+            <Text type='medium' size={12} color={'#E7FF00'}>Continue Pay</Text>
             <AntDesign
               name={'arrowright'}
               color={'#E7FF00'}

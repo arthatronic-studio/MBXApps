@@ -201,6 +201,7 @@ const ShopScreen = ({ navigation, route }) => {
           <Container paddingTop={24}>
             <ListTenantMarketItem
               tenantType='shop'
+              tenantCategory='mbm'
               productCategory='SHOP'
               name='Toko'
               title=' M Bloc Market'

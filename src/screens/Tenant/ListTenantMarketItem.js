@@ -24,6 +24,7 @@ const propTypes = {
 
 const defaultProps = {
     tenantType: 'eat',
+    tenantCategory: '',
     productCategory: '',
     name: '',
     horizontal: false,
@@ -38,7 +39,7 @@ const defaultProps = {
     styleHeader: {},
 };
 
-const ListTenantMarketItem = ({ tenantType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, ListFooterComponent, showHeader, title, showSeeAllText, refresh, icon, styleHeader}) => {
+const ListTenantMarketItem = ({ tenantType, tenantCategory, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, ListFooterComponent, showHeader, title, showSeeAllText, refresh, icon, styleHeader}) => {
     const { width } = useWindowDimensions();
     const [itemData, setItemData] = useState(initialItemState);
     const auth = useSelector(state => state['auth']);
@@ -156,6 +157,7 @@ const ListTenantMarketItem = ({ tenantType, productCategory, name, horizontal, s
                                 index={index}
                                 item={item}
                                 numColumns={1}
+                                tenantCategory={tenantCategory}
                             />
                         )
                     }
