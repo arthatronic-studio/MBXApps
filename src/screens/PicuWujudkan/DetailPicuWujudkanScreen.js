@@ -12,6 +12,7 @@ import {Row, Divider, Container} from 'src/styled';
 import HighlightPicuWujudkan from './HighlightPicuWujudkan';
 import imageAssets from 'assets/images';
 import {useIsFocused} from '@react-navigation/native';
+import HtmlView from 'src/components/HtmlView';
 
 const DetailPicuWujudkanScreen = ({navigation, route}) => {
   const {item} = route.params;
@@ -125,7 +126,7 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
                 lineHeight={14.4}
                 type="semibold"
                 color={Color.black}>
-                ARTICLE
+                ARTIKEL
               </Text>
               <Text align="left" size={10} lineHeight={12} type="medium">
                 {item.publisher} {item.created_at}
@@ -151,14 +152,19 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
             {item.detail.map((detail, index) => {
               return (
                 <View key={index}>
-                  <Text
+                  {/* <Text
                     align="left"
                     size={12}
                     lineHeight={18}
                     color={Color.black}
                     type="medium">
                     {detail.description}
-                  </Text>
+                  </Text> */}
+
+                  <HtmlView
+                    html={detail.description}
+                    style={{paddingTop: 8, color: Color.text}}
+                  />
 
                   <Divider height={16} />
 
@@ -206,7 +212,7 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
         </Container>
         <Divider height={24} />
         <HighlightPicuWujudkan
-          title="● OTHER ARTICLES"
+          title="● ARTIKEL LAINNYA"
           numColumns={1}
           type="OTHER"
           id={item.id}

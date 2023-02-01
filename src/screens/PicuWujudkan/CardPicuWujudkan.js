@@ -59,7 +59,7 @@ const CardPicuWujudkan = ({item, onPress, numColumns, horizontal}) => {
         </Text>
         <Divider height={8} />
         <Text align="left" size={10} lineHeight={12} type="semibold">
-          Article
+          Artikel
         </Text>
         <Text align="left" size={10} lineHeight={12} type="medium">
           {item.created_at}
