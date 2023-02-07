@@ -1022,12 +1022,13 @@ const MainHome = ({navigation, route}) => {
             title={'● Most Loved'.toUpperCase()}
             numColumns={1}
             tenantType="eat"
+            productCategory="EAT"
           />
 
           <Divider />
 
           <HighlightArticle
-            title="● ARTICLES"
+            title="● EXPERIENCE"
             numColumns={1}
             type="HIGHLIGHT"
           />

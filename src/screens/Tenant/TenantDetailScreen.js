@@ -46,6 +46,7 @@ import { fetchFavoriteProduct } from 'src/api-rest/fetchFavoriteProduct';
 
 const TenantDetailScreen = ({ navigation, route }) => {
   const { params } = route;
+  console.log(params, 'params nih');
 
   console.log(params.tenantCategory, 'parfams');
 
@@ -481,7 +482,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
 
       <Container paddingBottom={4}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Text align='left' type='medium'>● MENU</Text>
+          <Text align='left' type='medium'>● {params?.productCategory == 'SHOP' ? 'PRODUK' : 'MENU' }</Text>
           {/* <View style={{ flexDirection: 'row', padding: 8, backgroundColor: Color.error, borderRadius: 120 }}>
             <Image
               source={imageAssets.menu}
@@ -934,6 +935,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
                 cartLocationId,
                 namaPemesan,
                 tenantCategory: params.tenantCategory,
+                productCategory: params.productCategory
               });
             }}
             style={{

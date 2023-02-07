@@ -5,6 +5,7 @@ import {
   Platform,
   useWindowDimensions,
   Image,
+  FlatList,
 } from 'react-native';
 import {useColor, Text} from '@src/components';
 import Scaffold from '@src/components/Scaffold';
@@ -12,6 +13,44 @@ import {Row, Divider, Container} from 'src/styled';
 import HighlightArticle from './HighlightArticle';
 import imageAssets from 'assets/images';
 import { useIsFocused } from '@react-navigation/native';
+import WebView from 'react-native-webview';
+import VideoPlayerIos from 'src/components/VideoPlayerIos';
+
+const RenderContent = ({url, type}) => {
+  const {width, height} = useWindowDimensions();
+  const [error, setError] = useState(false);
+  const webviewRef = useRef();
+  const {Color} = useColor();
+  if (error) {
+    return (
+      <Container paddingVertical={8}>
+        <Text size={14} lineHeight={14} color={Color.text}>
+          Karya tidak ditemukan
+        </Text>
+      </Container>
+    );
+  } else {
+    return (
+      <View
+        style={{
+          width: width - 32,
+          aspectRatio: 1,
+        }}>
+        <WebView
+          ref={webviewRef}
+          source={{uri: url}}
+          allowsFullscreenVideo
+          injectedJavaScript={`document.getElementsByTagName("video")[0].controlsList="nodownload";`}
+          // allowsBackForwardNavigationGestures
+          style={{opacity: 0.99}}
+          onError={err => {
+            setError(true);
+          }}
+        />
+      </View>
+    );
+  }
+};
 
 const DetailArticleScreen = ({navigation, route}) => {
   const {item} = route.params;
@@ -19,6 +58,8 @@ const DetailArticleScreen = ({navigation, route}) => {
   const {height, width} = useWindowDimensions();
   const scrollRef = useRef();
   const [refreshing, setRefreshing] = useState(false);
+
+  console.log(item, 'item nih')
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -42,7 +83,7 @@ const DetailArticleScreen = ({navigation, route}) => {
           source={{uri: image}}
           style={{
             width: '100%',
-            height: width / 3,
+            height: (width - 32),
             resizeMode: 'cover',
           }}
         />
@@ -106,8 +147,8 @@ const DetailArticleScreen = ({navigation, route}) => {
           />
         </View>
         <Divider height={18} />
-        <Container flex={1} flexDirection="row" paddingHorizontal={16}>
-          <Container
+        <Container flex={1} flexDirection="column" paddingHorizontal={16}>
+          {/* <Container
             flex={1}
             marginRight={4}
             flexDirection="row"
@@ -129,8 +170,8 @@ const DetailArticleScreen = ({navigation, route}) => {
                 {item.publisher} {item.created_at}
               </Text>
             </Container>
-          </Container>
-          <Container flex={4} marginLeft={4}>
+          </Container> */}
+          {/* <Container flex={4} marginLeft={4}> */}
             {/* title */}
             <Text size={24} lineHeight={28.8} type="semibold" align="left">
               {item.title}
@@ -146,7 +187,29 @@ const DetailArticleScreen = ({navigation, route}) => {
             <Divider height={16} />
 
             {/* desc */}
-            {item.detail.map((detail, index) => {
+            <FlatList
+              keyExtractor={(item, index) => item.place_id + index.toString()}
+              data={item.detail}
+              keyboardShouldPersistTaps='handled'
+              pagingEnabled
+              horizontal
+              renderItem={({ item, index }) => {
+                if(item?.images?.length > 0){
+                  return (
+                    <Container width={width-32}>
+                      {cardImage(item.images[0], item.caption)}
+                      <Divider height={16} />
+                    </Container>
+                  )
+                }
+                if(item?.url != null){
+                  return (
+                    <RenderContent url={item.url}/>
+                  )
+                }
+              }}
+            />
+            {/* {item.detail.map((detail, index) => {
               return (
                 <View key={index}>
                   <Text
@@ -168,7 +231,7 @@ const DetailArticleScreen = ({navigation, route}) => {
                   )}
                 </View>
               );
-            })}
+            })} */}
 
             {/* <Divider height={16} /> */}
 
@@ -200,7 +263,7 @@ const DetailArticleScreen = ({navigation, route}) => {
                 }}
               />
             </Container> */}
-          </Container>
+          {/* </Container> */}
         </Container>
         <Divider height={24} />
         <HighlightArticle

@@ -165,6 +165,7 @@ const ListTenantCollaboratorItem = ({ tenantType, productCategory, name, horizon
                                 index={index}
                                 item={item}
                                 numColumns={1}
+                                productCategory={productCategory}
                             />
                         )
                     }

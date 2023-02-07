@@ -158,6 +158,7 @@ const ListTenantMarketItem = ({ tenantType, tenantCategory, productCategory, nam
                                 item={item}
                                 numColumns={1}
                                 tenantCategory={tenantCategory}
+                                productCategory={productCategory}
                             />
                         )
                     }

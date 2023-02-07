@@ -153,6 +153,7 @@ const ListTenantItem = ({ tenantType, productCategory, name, horizontal, style, 
                                 index={index}
                                 item={item}
                                 numColumns={1}
+                                productCategory={productCategory}
                             />
                         )
                     }

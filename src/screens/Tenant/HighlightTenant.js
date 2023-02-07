@@ -30,7 +30,7 @@ const defaultProps = {
     numColumns: 2,
 };
 
-const HighlightTenant = ({ title, tenantType, numColumns }) => {
+const HighlightTenant = ({ title, tenantType, numColumns, productCategory }) => {
 
     const auth = useSelector(state => state['auth']);
     const { Color } = useColor();
@@ -98,6 +98,7 @@ const HighlightTenant = ({ title, tenantType, numColumns }) => {
                             index={idx}
                             item={item}
                             numColumns={numColumns}
+                            productCategory={productCategory}
                         />
                     )
                 })}

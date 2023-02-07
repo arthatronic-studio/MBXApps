@@ -409,48 +409,52 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
         <Line height={1} width='100%' color={Color.primary} />
       </Container>
 
-      <Container paddingBottom={16} paddingHorizontal={16}>
-        <Container paddingTop={16} paddingBottom={12}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Text align='left' size={9}>{'● Orderer Type'.toUpperCase()}</Text>
-          </View>
-        </Container>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-          <Text size={18} type='medium'>{selectedOrderType ? selectedOrderType.name : '-'}</Text>
-          <TouchableOpacity onPress={() => setModalOrderType(true)} style={{borderBottomWidth: 1, borderColor: Color.primary}}>
-            <Text size={11} type='medium'>Change</Text>
-          </TouchableOpacity>
-        </View>
-        {/* <FormSelect
-          label=''
-          placeholder='Pilih'
-          value={selectedOrderType.name}
-          onPress={() => setModalOrderType(true)}
-          hideErrorHint
-        /> */}
+      {params.productCategory != 'SHOP' &&
+        <>
+          <Container paddingBottom={16} paddingHorizontal={16}>
+            <Container paddingTop={16} paddingBottom={12}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Text align='left' size={9}>{'● Orderer Type'.toUpperCase()}</Text>
+              </View>
+            </Container>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+              <Text size={18} type='medium'>{selectedOrderType ? selectedOrderType.name : '-'}</Text>
+              <TouchableOpacity onPress={() => setModalOrderType(true)} style={{borderBottomWidth: 1, borderColor: Color.primary}}>
+                <Text size={11} type='medium'>Change</Text>
+              </TouchableOpacity>
+            </View>
+            {/* <FormSelect
+              label=''
+              placeholder='Pilih'
+              value={selectedOrderType.name}
+              onPress={() => setModalOrderType(true)}
+              hideErrorHint
+            /> */}
 
-        {selectedOrderType.value === 1 && <View style={{flexDirection: 'row', paddingTop: 16, justifyContent: 'space-between', alignItems: 'center'}}>
-          {selectedSeatsAvailable ?
-            <Text size={18} type='medium'>{selectedSeatsAvailable.name}</Text>
-          :
-            <Text size={14} type='medium'>-Select Table-</Text>
-          }
-          <TouchableOpacity onPress={() => setModalSeatsAvailable(true)} style={{borderBottomWidth: 1, borderColor: Color.primary}}>
-            <Text size={11} type='medium'>Change</Text>
-          </TouchableOpacity>
-        </View>}
-        {/* <FormSelect
-          label=''
-          placeholder='Pilih'
-          value={selectedSeatsAvailable ? selectedSeatsAvailable.name : ''}
-          onPress={() => setModalSeatsAvailable(true)}
-          hideErrorHint
-        /> */}
-      </Container>
+            {selectedOrderType.value === 1 && <View style={{flexDirection: 'row', paddingTop: 16, justifyContent: 'space-between', alignItems: 'center'}}>
+              {selectedSeatsAvailable ?
+                <Text size={18} type='medium'>{selectedSeatsAvailable.name}</Text>
+              :
+                <Text size={14} type='medium'>-Select Table-</Text>
+              }
+              <TouchableOpacity onPress={() => setModalSeatsAvailable(true)} style={{borderBottomWidth: 1, borderColor: Color.primary}}>
+                <Text size={11} type='medium'>Change</Text>
+              </TouchableOpacity>
+            </View>}
+            {/* <FormSelect
+              label=''
+              placeholder='Pilih'
+              value={selectedSeatsAvailable ? selectedSeatsAvailable.name : ''}
+              onPress={() => setModalSeatsAvailable(true)}
+              hideErrorHint
+            /> */}
+          </Container>
+          <Container paddingHorizontal={16}>
+            <Line height={1} width='100%' color={Color.primary} />
+          </Container>
+        </>
+      }
 
-      <Container paddingHorizontal={16}>
-        <Line height={1} width='100%' color={Color.primary} />
-      </Container>
       
       <Container paddingHorizontal={16}>
         <Container paddingTop={16} paddingBottom={12}>

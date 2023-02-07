@@ -153,7 +153,7 @@ const ShopScreen = ({ navigation, route }) => {
 
       <>
         <PostingHeader
-            title='TENANT'
+            title='TOKO'
             // onSeeAllPress={() => {
             //     // navigation.navigate(nav, { title });
             // }}
@@ -169,7 +169,7 @@ const ShopScreen = ({ navigation, route }) => {
         tenantType='shop'
         productCategory='SHOP'
         name='Toko'
-        title='TENANT'
+        title='TOKO'
         // nav='EatScreen'
         // refresh={refreshing || isFocused}
         showHeader={false}

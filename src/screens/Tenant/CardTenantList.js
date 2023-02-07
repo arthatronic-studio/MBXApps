@@ -12,7 +12,7 @@ const defaultProps = {
     numColumns: 2,
 };
 
-const CardTenantList = ({ item, index, numColumns, tenantCategory }) => {
+const CardTenantList = ({ item, index, numColumns, tenantCategory, productCategory }) => {
     const { Color } = useColor();
     const navigation = useNavigation();
 
@@ -26,7 +26,7 @@ const CardTenantList = ({ item, index, numColumns, tenantCategory }) => {
         >
             <TouchableOpacity
                 onPress={() => {
-                    navigation.navigate('TenantDetailScreen', { item, tenantCategory })
+                    navigation.navigate('TenantDetailScreen', { item, tenantCategory, productCategory })
                 }}
                 style={{ width: '100%', flexDirection: 'row', borderBottomWidth: 1, paddingBottom: 12, paddingHorizontal: 16, borderColor: Color.primary }}
             >
