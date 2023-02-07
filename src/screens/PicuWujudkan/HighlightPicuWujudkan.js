@@ -22,7 +22,6 @@ import imageAssets from 'assets/images';
 import {fetchGetArticle} from 'src/api-rest/fetchGetArticle';
 import {fetchGetPicuWujudkan} from 'src/api-rest/fetchGetPicuWujudkan';
 
-
 const HighlightPicuWujudkan = ({
   type,
   title,
@@ -32,7 +31,7 @@ const HighlightPicuWujudkan = ({
   style,
   contentType,
   contentName,
-  category
+  category,
 }) => {
   const navigation = useNavigation();
 

@@ -25,6 +25,7 @@ import HighlightContentProductV2 from 'src/components/Content/HighlightContentPr
 import moment from 'moment';
 import {useCurrentUser} from 'src/hooks/useCanGenerateContent';
 import HighlightPicuWujudkan from './HighlightPicuWujudkan';
+import BannerPicuWujudkan from './BannerPicuWujudkan';
 // import ListTenantItem from 'src/screens/Tenant/ListTenantItem';
 // import ListArticle from './ListArticle';
 
@@ -37,7 +38,7 @@ const PicuWujudkanScreen = ({navigation, route}) => {
       translucent={Platform.OS === 'ios' ? true : false}
       useSafeArea={Platform.OS === 'ios' ? false : true}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <HighlightPicuWujudkan
+        {/* <HighlightPicuWujudkan
           title="● SEMARAK"
           showSeeAllText={true}
           type="OTHER"
@@ -54,8 +55,44 @@ const PicuWujudkanScreen = ({navigation, route}) => {
           contentType="all"
           contentName="GERAK"
           category="gerak"
+        /> */}
+        <BannerPicuWujudkan
+          title="● SEMARAK"
+          showSeeAllText={true}
+          type="OTHER"
+          numColumns={1}
+          contentType="all"
+          contentName="SEMARAK"
+          category="semarak"
         />
-        <HighlightPicuWujudkan
+        <BannerPicuWujudkan
+          title="● GERAK"
+          showSeeAllText={true}
+          type="OTHER"
+          numColumns={1}
+          contentType="all"
+          contentName="GERAK"
+          category="gerak"
+        />
+        <BannerPicuWujudkan
+          title="● DAMPAK"
+          showSeeAllText={true}
+          type="OTHER"
+          numColumns={1}
+          contentType="all"
+          contentName="DAMPAK"
+          category="dampak"
+        />
+        <BannerPicuWujudkan
+          title="● RUANG IDE"
+          showSeeAllText={true}
+          type="OTHER"
+          numColumns={1}
+          contentType="all"
+          contentName="RUANG IDE"
+          category="ruang_ide"
+        />
+        {/* <HighlightPicuWujudkan
           title="● DAMPAK"
           showSeeAllText={true}
           type="OTHER"
@@ -72,7 +109,7 @@ const PicuWujudkanScreen = ({navigation, route}) => {
           contentType="all"
           contentName="RUANG IDE"
           category="ruang_ide"
-        />
+        /> */}
       </ScrollView>
     </Scaffold>
   );

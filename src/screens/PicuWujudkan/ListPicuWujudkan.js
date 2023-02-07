@@ -117,7 +117,6 @@ const ListPicuWujudkan = ({
           numColumns={2}
           onEndReached={() => setItemData({...itemData, loadNext: true})}
           renderItem={({item, index}) => {
-            console.log('itemitem', item);
             return (
               <CardPicuWujudkan
                 key={index}
@@ -125,6 +124,7 @@ const ListPicuWujudkan = ({
                 item={item}
                 numColumns={2}
                 horizontal={false}
+                category={category}
               />
             );
           }}

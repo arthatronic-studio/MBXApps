@@ -1048,9 +1048,13 @@ const MainHome = ({navigation, route}) => {
           <View>
             <Divider />
 
-            <PostingHeader title="● PICU WUJUDKAN" showSeeAllText={true} onSeeAllPress={()=>navigation.navigate('PicuWujudkanScreen')}/>
+            <PostingHeader
+              title="● PICU WUJUDKAN"
+              showSeeAllText={true}
+              onSeeAllPress={() => navigation.navigate('PicuWujudkanScreen')}
+            />
 
-            <Container
+            {/* <Container
               paddingHorizontal={16}
               paddingTop={11}
               paddingBottom={11}>
@@ -1060,6 +1064,33 @@ const MainHome = ({navigation, route}) => {
 
               <Divider height={11} />
 
+            </Container> */}
+            <Container
+              paddingHorizontal={16}
+              paddingTop={11}
+              paddingBottom={11}>
+              <Text size={29} align="left" lineHeight={38}>
+                Customers as Industrial Age phenomenon will be replaced by{' '}
+                <Text size={29} type="semibold">
+                  Creative Prosumers
+                </Text>
+                , people who produce many of their own goods and services.{' '}
+                <View>
+                  <Text size={11} type="medium" align="left">
+                    Philip Kotler
+                  </Text>
+                  <Text size={11} type="medium" align="left">
+                    -1986
+                  </Text>
+                </View>
+              </Text>
+
+              <Divider height={11} />
+
+              <Text size={16} type="medium" align="left">
+                We believe colaboration make us stronger, join and be part of
+                our movement!
+              </Text>
             </Container>
           </View>
         </Container>

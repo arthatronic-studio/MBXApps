@@ -5,21 +5,42 @@ import {
   Platform,
   useWindowDimensions,
   Image,
+  FlatList,
 } from 'react-native';
-import {useColor, Text} from '@src/components';
+import {useColor, Text, TouchableOpacity} from '@src/components';
 import Scaffold from '@src/components/Scaffold';
 import {Row, Divider, Container} from 'src/styled';
 import HighlightPicuWujudkan from './HighlightPicuWujudkan';
 import imageAssets from 'assets/images';
 import {useIsFocused} from '@react-navigation/native';
 import HtmlView from 'src/components/HtmlView';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {fetchLike} from 'src/api-rest/fetchLike';
+
+const initialListData = {
+  data: [],
+  loading: true,
+  message: '',
+  loadNext: false,
+  page: 0,
+  refresh: false,
+  nextUrl: null,
+};
 
 const DetailPicuWujudkanScreen = ({navigation, route}) => {
-  const {item} = route.params;
+  const {item, category} = route.params;
+  // const [itemDetail, setItemDetail] = useState(item);
   const {Color} = useColor();
   const {height, width} = useWindowDimensions();
   const scrollRef = useRef();
   const [refreshing, setRefreshing] = useState(false);
+
+  const [likes, setLike] = useState(item?.liked_count ? item?.liked_count : 0);
+  const [is_liked, setIsLike] = useState(
+    item?.is_liked ? item?.is_liked : false,
+  );
+  const [listComment, setListComment] = useState(initialListData);
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -35,6 +56,20 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
       // animated: true,
     });
   }, [item]);
+
+  const onSubmitLike = async () => {
+    console.log("hoiii",category)
+    const body = {
+      type: 'blocx',
+      category: category,
+      parent_id: item.id,
+    };
+    const res = await fetchLike(body);
+    if (res.success) {
+      setLike(!is_liked ? likes + 1 : likes - 1);
+      setIsLike(!is_liked);
+    }
+  };
 
   const cardImage = (image, caption) => {
     return (
@@ -210,7 +245,125 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
             </Container> */}
           </Container>
         </Container>
-        <Divider height={24} />
+        <Divider height={8} />
+        <View
+          style={{
+            // backgroundColor: '#2B2B2B',
+            marginBottom: 24,
+            paddingVertical: 24,
+            flexDirection: 'row',
+            justifyContent: 'space-evenly',
+          }}>
+          <TouchableOpacity
+            onPress={() => onSubmitLike(item)}
+            style={{
+              height: '100%',
+              flexDirection: 'row',
+              borderColor: Color.border,
+            }}>
+            <Ionicons
+              size={26}
+              name={is_liked ? 'heart' : 'heart-outline'}
+              color={is_liked ? '#FF4343' : Color.text}
+            />
+            <Text style={{marginLeft: 6}} size={22}>
+              {likes}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('CommentListScreenV2', {
+                item: item,
+                type: category,
+              });
+            }}
+            style={{
+              height: '100%',
+              flexDirection: 'row',
+              borderColor: Color.border,
+            }}>
+            <MaterialIcons size={26} name={'chat'} color={Color.text} />
+            <Text style={{marginLeft: 6}} size={22}>
+              {item.comment_count}
+            </Text>
+          </TouchableOpacity>
+          <Container
+            style={{
+              height: '100%',
+              flexDirection: 'row',
+              borderColor: Color.border,
+            }}>
+            <MaterialIcons size={26} name={'share'} color={Color.text} />
+            <Text style={{marginLeft: 6}} size={22}>
+              {item.views_count}
+            </Text>
+          </Container>
+        </View>
+
+        <FlatList
+          style={{paddingHorizontal: 16}}
+          keyExtractor={(item, index) => item.toString() + index}
+          data={listComment.data}
+          showsVerticalScrollIndicator={false}
+          ItemSeparatorComponent={() => (
+            <>
+              <Divider height={16} />
+              <Line
+                height={1}
+                width={width - 32}
+                color={'rgba(237, 237, 237, 0.2)'}
+              />
+              <Divider height={16} />
+            </>
+          )}
+          ListHeaderComponent={() => (
+            <Container marginBottom={8}>
+              <Text style={{textAlign: 'left'}} size={14}>
+                Komentar
+              </Text>
+            </Container>
+          )}
+          ListFooterComponent={() => (
+            <TouchableOpacity
+              onPress={() =>
+              // console.log("apacoba",category)
+                navigation.navigate('CommentListScreenV2', {
+                  item: item,
+                  type: category,
+                })
+              }
+              style={{
+                marginBottom: 10,
+                paddingVertical: 16,
+                marginTop: 24,
+                borderColor: Color.text,
+                borderWidth: 1,
+              }}>
+              <Text size={16} lineHeight={18} type="bold" color={Color.text}>
+                Lihat Semua
+              </Text>
+            </TouchableOpacity>
+          )}
+          renderItem={({item: itemComment, index}) => {
+            return (
+              <CardCommentV2
+                type="mentor_interview"
+                itemComment={itemComment}
+                onPress={() =>
+                  navigation.navigate('CommentReplyScreenV2', {
+                    itemComment: itemComment,
+                    type: 'article',
+                  })
+                }
+                onPressDots={item => {
+                  setSelectedComment(item);
+                  modalListActionCommentRef.current.open();
+                }}
+              />
+            );
+          }}
+        />
+
         <HighlightPicuWujudkan
           title="● ARTIKEL LAINNYA"
           numColumns={1}

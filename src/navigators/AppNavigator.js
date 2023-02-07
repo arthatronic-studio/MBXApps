@@ -35,7 +35,9 @@ import TopUpScreen from '@src/screens/Topup/TopUpScreen';
 
 // screen
 import CommentListScreen from '@src/screens/CommentListScreen';
+import CommentListScreenV2 from '@src/screens/CommentListScreenV2';
 import CommentReplyScreen from 'src/screens/CommentReplyScreen';
+import CommentReplyScreenV2 from '@src/screens/CommentReplyScreenV2';
 import DetailEbookScreen from '@src/screens/DetailEbookScreen';
 import MainSearch from '@src/screens/MainHome/MainSearch';
 
@@ -495,7 +497,9 @@ function AppNavigator() {
       {/* screen */}
       <Screen name="Ebook" component={Ebook} />
       <Screen name="CommentListScreen" component={CommentListScreen} />
+      <Screen name="CommentListScreenV2" component={CommentListScreenV2} />
       <Screen name="CommentReplyScreen" component={CommentReplyScreen} />
+      <Screen name="CommentReplyScreenV2" component={CommentReplyScreenV2} />
       <Screen name="DetailEbookScreen" component={DetailEbookScreen} />
       <Screen name="MainSearch" component={MainSearch} />
       {/* forum */}

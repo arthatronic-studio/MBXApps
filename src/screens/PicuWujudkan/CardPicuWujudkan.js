@@ -16,7 +16,7 @@ const defaultProps = {
   style: {},
 };
 
-const CardPicuWujudkan = ({item, onPress, numColumns, horizontal}) => {
+const CardPicuWujudkan = ({item, onPress, numColumns, horizontal, category}) => {
   const {Color} = useColor();
   const navigation = useNavigation();
   const {width} = useWindowDimensions();
@@ -24,7 +24,7 @@ const CardPicuWujudkan = ({item, onPress, numColumns, horizontal}) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate('DetailPicuWujudkanScreen', {item: item});
+        navigation.navigate('DetailPicuWujudkanScreen', {item: item, category:category});
       }}
       style={{
         // width: width * 0.65,
@@ -58,7 +58,7 @@ const CardPicuWujudkan = ({item, onPress, numColumns, horizontal}) => {
           {item.title}
         </Text>
         <Divider height={8} />
-        <Text align="left" size={10} lineHeight={12} type="semibold">
+        {/* <Text align="left" size={10} lineHeight={12} type="semibold">
           Artikel
         </Text>
         <Text align="left" size={10} lineHeight={12} type="medium">
@@ -66,7 +66,7 @@ const CardPicuWujudkan = ({item, onPress, numColumns, horizontal}) => {
         </Text>
         <Text align="left" size={10} lineHeight={12} type="medium">
           by {item.publisher}
-        </Text>
+        </Text> */}
       </View>
     </TouchableOpacity>
   );
