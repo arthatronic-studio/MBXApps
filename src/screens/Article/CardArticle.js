@@ -57,10 +57,10 @@ const CardArticle = ({item, onPress, numColumns, horizontal}) => {
         <Text align="left" size={18} type="medium" lineHeight={20.4}>
           {item.title}
         </Text>
-        <Divider height={8} />
+        {/* <Divider height={8} />
         <Text align="left" size={10} lineHeight={12} type="semibold">
           Article
-        </Text>
+        </Text> */}
         <Text align="left" size={10} lineHeight={12} type="medium">
           {item.created_at}
         </Text>

@@ -40,7 +40,7 @@ const ArticleScreen = ({navigation, route}) => {
         tenantType="shop"
         productCategory="SHOP"
         name="Toko"
-        title="ALL ARTICLES"
+        title="ALL XPERIENCE"
         // nav='EatScreen'
         // refresh={refreshing || isFocused}
         showHeader={true}
@@ -50,7 +50,7 @@ const ArticleScreen = ({navigation, route}) => {
         ListHeaderComponent={
           <>
             <HighlightArticle
-              title="● HIGHLIGHT ARTICLE"
+              title="● HIGHLIGHT XPERIENCE"
               numColumns={1}
               type="HIGHLIGHT"
               showSeeAllText={false}

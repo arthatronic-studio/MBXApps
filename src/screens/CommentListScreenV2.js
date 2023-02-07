@@ -83,20 +83,22 @@ const CommentListScreenV2 = ({navigation, route}) => {
       ? listComment.nextUrl
       : `?perPage=10&parent_id=${item.id}&category=blocx&type=${type}`;
     const res = await fetchGetComment(parameter);
-    setListComment({
-      ...listComment,
-      data: first ? res.data : listComment.data.concat(res.data),
-      nextUrl: res.nextUrl ? `?${res.nextUrl.split('?')[1]}` : null,
-      loading: false,
-      loadNext: false,
-      refresh: false,
-    });
+    if(res.status){
+      setListComment({
+        ...listComment,
+        data: first ? res.data : listComment.data.concat(res.data),
+        nextUrl: res.nextUrl ? `?${res.nextUrl.split('?')[1]}` : null,
+        loading: false,
+        loadNext: false,
+        refresh: false,
+      });
+    }
   };
 
   const onComment = async () => {
     const body = {
       type: type,
-      category: 'evoria',
+      category: 'blocx',
       parent_id: item.id,
       message: comment,
     };
@@ -129,7 +131,6 @@ const CommentListScreenV2 = ({navigation, route}) => {
 
   return (
     <Scaffold
-      style={{backgroundColor: '#191919'}}
       loadingProps={loadingProps}
       popupProps={popupProps}
       header={
@@ -140,18 +141,6 @@ const CommentListScreenV2 = ({navigation, route}) => {
           customIcon={true}
           color={Color.text}
           style={{backgroundColor: Color.theme}}
-          actions={
-            <View
-              style={{
-                width: 75,
-                height: 24,
-              }}>
-              {/* <Image
-                source={imageBg.evoria}
-                style={{width: '100%', height: '100%'}}
-              /> */}
-            </View>
-          }
         />
       }>
       <KeyboardAvoidingView
@@ -185,7 +174,7 @@ const CommentListScreenV2 = ({navigation, route}) => {
                 onPress={() =>
                   navigation.navigate('CommentReplyScreenV2', {
                     itemComment: itemComment,
-                    type: 'article',
+                    type: type,
                   })
                 }
                 onPressDots={item => {
@@ -204,7 +193,7 @@ const CommentListScreenV2 = ({navigation, route}) => {
             paddingVertical: 8,
             paddingHorizontal: 16,
             justifyContent: 'space-between',
-            backgroundColor: Color.secondary,
+            backgroundColor: Color.textInput,
           }}>
           <View
             style={{

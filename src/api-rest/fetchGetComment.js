@@ -1,7 +1,7 @@
 import {getAPI} from './httpService';
 
 export const fetchGetComment = async params => {
-  let endpoint = 'comment';
+  let endpoint = 'blocx/comment';
   if (params && params != '') {
     endpoint = endpoint + params;
   }

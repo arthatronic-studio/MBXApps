@@ -1028,7 +1028,7 @@ const MainHome = ({navigation, route}) => {
           <Divider />
 
           <HighlightArticle
-            title="● EXPERIENCE"
+            title="● XPERIENCE"
             numColumns={1}
             type="HIGHLIGHT"
           />
