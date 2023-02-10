@@ -21,7 +21,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useIsFocused } from '@react-navigation/native';
 import Modal from 'react-native-modal';
-import Kontakt, { KontaktModule } from 'react-native-kontaktio';
+// import Kontakt, { KontaktModule } from 'react-native-kontaktio';
 import RNShake from 'react-native-shake';
 import BluetoothStateManager from 'react-native-bluetooth-state-manager';
 import BleManager from 'react-native-ble-manager';
@@ -50,37 +50,37 @@ import { stateUpdateProfile } from 'src/api-rest/stateUpdateProfile';
 import HighlightTenant from 'src/components/Tenant/HighlightTenant';
 import { stateBeaconSetting } from 'src/api-rest/stateBeaconSetting';
 
-const kontaktEmitter = new NativeEventEmitter(KontaktModule);
+// const kontaktEmitter = new NativeEventEmitter(KontaktModule);
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
-const {
-  // android
-  connect,
-  startScanning,
-  isScanning,
-  // ios
-  init,
-  configure,
-  // authorization
-  getAuthorizationStatus,
-  requestWhenInUseAuthorization,
-  requestAlwaysAuthorization,
-  // discovery
-  startDiscovery,
-  stopDiscovery,
-  restartDiscovery,
-  // ranging
-  startRangingBeaconsInRegion,
-  stopRangingBeaconsInRegion,
-  stopRangingBeaconsInAllRegions,
-  getRangedRegions,
-  // monitoring
-  startMonitoringForRegion,
-  stopMonitoringForRegion,
-  stopMonitoringForAllRegions,
-  getMonitoredRegions,
-} = Kontakt;
+// const {
+//   // android
+//   connect,
+//   startScanning,
+//   isScanning,
+//   // ios
+//   init,
+//   configure,
+//   // authorization
+//   getAuthorizationStatus,
+//   requestWhenInUseAuthorization,
+//   requestAlwaysAuthorization,
+//   // discovery
+//   startDiscovery,
+//   stopDiscovery,
+//   restartDiscovery,
+//   // ranging
+//   startRangingBeaconsInRegion,
+//   stopRangingBeaconsInRegion,
+//   stopRangingBeaconsInAllRegions,
+//   getRangedRegions,
+//   // monitoring
+//   startMonitoringForRegion,
+//   stopMonitoringForRegion,
+//   stopMonitoringForAllRegions,
+//   getMonitoredRegions,
+// } = Kontakt;
 
 const region1 = {
   identifier: 'RDL51822',
@@ -272,8 +272,8 @@ const MainHome = ({ navigation, route }) => {
       // const granted = await requestLocationPermission();
 
       // if (granted) {
-      await connect();
-      await startScanning();
+      // await connect();
+      // await startScanning();
       // } else {
       //   Alert.alert(
       //     'Permission error',
@@ -568,7 +568,7 @@ const MainHome = ({ navigation, route }) => {
     if (Platform.OS === 'ios') {
       await BleManager.scan([], 3, true);
     } else {
-      await startScanning();
+      // await startScanning();
     }
     await stateBeaconSetting();
     setRefreshing(false);
