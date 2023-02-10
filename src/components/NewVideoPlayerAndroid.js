@@ -47,7 +47,7 @@ export const NewVideoPlayerAndroid = ({
       loading: false,
       duration: duration,
       currentTime: 0,
-      paused: true,
+      paused: false,
     }));    
   };
 
@@ -168,8 +168,8 @@ export const NewVideoPlayerAndroid = ({
     <Container>
       <Container
         backgroundColor={Color.black}
-        width={width}
-        height={width * 0.5}>
+        width={item.widthVideo ? item.widthVideo : width - 32}
+        height={item.widthVideo ? item.heightVideo : (width - 32) * 0.5}>
         {item.videoFileName ? (
           <>
             <Video
@@ -183,7 +183,7 @@ export const NewVideoPlayerAndroid = ({
               onLoad={load}
               onEnd={onEnd}
               onProgress={progress}
-              style={{width: width, height: width * 0.5}}
+              style={{width: item.widthVideo ? item.widthVideo : width, height: item.heightVideo ? item.heightVideo : width * 0.5}}
             />
             {state.loading === true ? (
               <ImageBackground
@@ -266,7 +266,7 @@ export const NewVideoPlayerAndroid = ({
                         }
                       />
                       <Container
-                        width={width}
+                        width={item.widthVideo ? item.widthVideo : width}
                         flexDirection="row"
                         justify="space-between"
                         paddingHorizontal={16}>
@@ -294,9 +294,6 @@ export const NewVideoPlayerAndroid = ({
                 ) : (
                   <Container flex={1} flexDirection="row">
                     <TouchableNativeFeedback onPress={() => seekLeft()}>
-                      <Container flex={1} />
-                    </TouchableNativeFeedback>
-                    <TouchableNativeFeedback onPress={() => seekRight()}>
                       <Container flex={1} />
                     </TouchableNativeFeedback>
                   </Container>

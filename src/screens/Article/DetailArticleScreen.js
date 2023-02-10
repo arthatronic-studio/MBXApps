@@ -7,14 +7,16 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
+  StyleSheet,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import {useColor, Text, ModalListAction} from '@src/components';
 import Scaffold from '@src/components/Scaffold';
 import {Row, Divider, Container, Line} from 'src/styled';
 import HighlightArticle from './HighlightArticle';
 import imageAssets from 'assets/images';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import WebView from 'react-native-webview';
 import HtmlView from 'src/components/HtmlView';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -25,7 +27,8 @@ import {fetchGetArticle} from 'src/api-rest/fetchGetArticle';
 import {fetchGetComment} from 'src/api-rest/fetchGetComment';
 import {fetchDeleteComment} from 'src/api-rest/fetchDeleteComment';
 import YoutubePlayer from 'react-native-youtube-iframe';
-import { NewVideoPlayerAndroid } from 'src/components/NewVideoPlayerAndroid';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {NewVideoPlayerAndroid} from 'src/components/NewVideoPlayerAndroid';
 import VideoPlayerIos from 'src/components/VideoPlayerIos';
 
 const initialListData = {
@@ -38,8 +41,9 @@ const initialListData = {
   nextUrl: null,
 };
 
-const RenderContent = ({url, type}) => {
-  console.log(url, type, 'apanih');
+const RenderContent = ({url, type, image}) => {
+  console.log(url, type, 'apanih', image);
+  const navigation = useNavigation();
   const {width, height} = useWindowDimensions();
   const [error, setError] = useState(false);
   const youtubeRef = useRef();
@@ -47,6 +51,7 @@ const RenderContent = ({url, type}) => {
   const {Color} = useColor();
   const [beforePlay, setBeforePlay] = useState(true);
   const [playing, setPlaying] = useState(false);
+  const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
   const onStateChange = useCallback(state => {
     console.log('state', state);
@@ -95,7 +100,7 @@ const RenderContent = ({url, type}) => {
         <View
           style={{
             width: width - 32,
-            aspectRatio: 1,
+            aspectRatio: 3 / 4,
           }}>
           <WebView
             ref={webviewRef}
@@ -113,37 +118,68 @@ const RenderContent = ({url, type}) => {
     }
   }
   if (type == 'video') {
-    if (Platform.OS === 'ios')
-      return (
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('GalleryDetailScreen', {
+            image: image,
+            type: 'video',
+            video: url,
+          })
+        }}
+        style={{
+          width: width - 32,
+          aspectRatio: 3 / 4,
+        }}>
+        <Image
+          source={{uri: image}}
+          style={{
+            width: '100%',
+            height: '100%',
+            resizeMode: 'cover',
+          }}
+        />
         <View
           style={{
-            width: width - 32,
-            aspectRatio: 16 / 9,
+            ...StyleSheet.absoluteFillObject,
+            alignItems: 'center',
+            justifyContent: 'center',
           }}>
-          <VideoPlayerIos
-            item={{
-              videoFileName: url,
-            }}
-          />
+          <AntDesign name="playcircleo" size={64} color={Color.black} />
         </View>
-      );
-    else {
-      return (
-        <View
-          style={{
-            width: width - 32,
-            aspectRatio: 16 / 9,
-          }}>
-          <NewVideoPlayerAndroid
-            item={{
-              videoFileName: url,
-            }}
-            hideOnError
-            autoplay={true}
-          />
-        </View>
-      );
-    }
+      </TouchableOpacity>
+    );
+    // if (Platform.OS === 'ios')
+    //   return (
+    //     <View
+    //       style={{
+    //         width: width - 32,
+    //         aspectRatio: 16 / 9,
+    //       }}>
+    //       <VideoPlayerIos
+    //         item={{
+    //           videoFileName: url,
+    //         }}
+    //       />
+    //     </View>
+    //   );
+    // else {
+    //   return (
+    //     <View
+    //       style={{
+    //         width: width - 32,
+    //         aspectRatio: 16 / 9,
+    //       }}>
+    //       <NewVideoPlayerAndroid
+    //         item={{
+    //           videoFileName: url,
+    //         }}
+    //         hideOnError
+    //         autoplay={true}
+    //       />
+    //     </View>
+    //   );
+    // }
   }
   return (
     <Container paddingVertical={8}>
@@ -175,7 +211,7 @@ const DetailArticleScreen = ({navigation, route}) => {
   const fetchData = async () => {
     const param = `?article_id=${item.id}&category=blocx&type=article`;
     const res = await fetchGetArticle(param);
-    console.log("sini nih", res);
+    console.log('sini nih', res);
     if (res.success) {
       setItemDetail(res?.data[0]);
       setIsLike(res?.data[0].is_liked);
@@ -189,8 +225,8 @@ const DetailArticleScreen = ({navigation, route}) => {
       ? listComment.nextUrl
       : `?perPage=5&parent_id=${itemDetail.id}&category=blocx&type=article`;
     const res = await fetchGetComment(parameter);
-    console.log(res, 'res nih')
-    if(res.success){
+    console.log(res, 'res nih');
+    if (res.success) {
       setListComment({
         ...listComment,
         data: first ? res.data : listComment.data.concat(res.data),
@@ -372,7 +408,13 @@ const DetailArticleScreen = ({navigation, route}) => {
                 horizontal
                 renderItem={({item, index}) => {
                   if (item?.url != null) {
-                    return <RenderContent url={item.url} type={item.url_type} />;
+                    return (
+                      <RenderContent
+                        url={item.url}
+                        type={item.url_type}
+                        image={item?.images.length > 0 ? item.images[0] : null}
+                      />
+                    );
                   }
                   if (item?.images?.length > 0) {
                     return (

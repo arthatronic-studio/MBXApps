@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, FlatList, useWindowDimensions, Image, Platform } from 'react-native';
+import { View, FlatList, useWindowDimensions, Image, Platform, ActivityIndicator } from 'react-native';
 import Styled from 'styled-components';
 import { ReactNativeZoomableView } from '@openspacelabs/react-native-zoomable-view';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import RNFetchBlob from 'react-native-blob-util';
 import RNFS from 'react-native-fs';
+import Video from 'react-native-video';
 
 import {
     Button,
@@ -22,6 +23,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Container, Divider, Row } from 'src/styled';
 import Client from '@src/lib/apollo';
 import { queryContentProduct } from '@src/lib/query';
+import { NewVideoPlayerAndroid } from 'src/components/NewVideoPlayerAndroid';
 
 const GalleryDetailScreen = ({ navigation, route }) => {
     const { params } = route;
@@ -112,19 +114,19 @@ const GalleryDetailScreen = ({ navigation, route }) => {
             header={
                 <Header
                     title=''
-                    actions={
-                        <TouchableOpacity
-                            onPress={() => {
-                                onSaveToGallery();
-                            }}
-                        >
-                            <AntDesign
-                                name='save'
-                                size={24}
-                                // onPress={() => navigation.navigate('CardDetailForum')}
-                            />
-                        </TouchableOpacity>
-                    }
+                    // actions={
+                    //     <TouchableOpacity
+                    //         onPress={() => {
+                    //             onSaveToGallery();
+                    //         }}
+                    //     >
+                    //         <AntDesign
+                    //             name='save'
+                    //             size={24}
+                    //             // onPress={() => navigation.navigate('CardDetailForum')}
+                    //         />
+                    //     </TouchableOpacity>
+                    // }
                 />
             }
             fallback={isLoading}
@@ -132,83 +134,39 @@ const GalleryDetailScreen = ({ navigation, route }) => {
             popupProps={popupProps}
             loadingProps={loadingProps}
         >
-            <ReactNativeZoomableView
-                maxZoom={2.5}
-                minZoom={0.5}
-                zoomStep={0.5}
-                initialZoom={1}
-                bindToBorders={true}
-                onZoomAfter={() => {}}
-                style={{}}
-            >
-                <Image
-                    style={{ width: '100%', height: '100%', resizeMode: 'contain' }}
-                    source={{ uri: params.image }}
-                />
-            </ReactNativeZoomableView>
-
-            {/* <FlatList
-                keyExtractor={(item, index) => index.toString()}
-                ListHeaderComponent={
-                    <Container marginBottom={16}>
-                        {params.image !== null && <Image
-                            source={{uri: params.image}}
-                            style={{
-                                position: 'absolute',
-                                width: '100%',
-                                aspectRatio: 3/1,
-                                backgroundColor: Color.border,
-                            }}
-                        />}
-
-                        <Container
-                            width='100%'
-                            color={Color.primary}
-                            style={{position: 'absolute', aspectRatio: 3/1, opacity: 0.7}}
-                        />
-
-                        <Container
-                            width='100%'
-                            style={{aspectRatio: 3/1}}
-                            justify='center'
+            <View
+                collapsable={false}
+                style={{
+                    flex: 1,
+                }}>
+                    {params.type == 'video' ? (
+                      <NewVideoPlayerAndroid
+                        item={{
+                          videoFileName: params.video,
+                          image: params.image,
+                          widthVideo: width,
+                          heightVideo: height - width * 0.128 - 24,
+                        }}
+                        hideOnError
+                        autoplay={true}
+                      />
+                    ) : (
+                        <ReactNativeZoomableView
+                            maxZoom={2.5}
+                            minZoom={0.5}
+                            zoomStep={0.5}
+                            initialZoom={1}
+                            bindToBorders={true}
+                            onZoomAfter={() => {}}
+                            style={{}}
                         >
-                            <Text color={Color.textInput} size={30} type='bold'>
-                                Banner
-                            </Text>
-                        </Container>
-
-                        {listing.length === 0 &&
-                            <Container height={height / 2}>
-                                <ScreenEmptyData transparent message='Data belum tersedia' />
-                            </Container>
-                        }
-                    </Container>
-                }
-                data={listing}
-                renderItem={({ item, index }) => {
-                    return (
-                        <Container width={width} padding={16}>
                             <Image
-                                source={{uri: item.image}}
-                                style={{
-                                    width: '100%',
-                                    aspectRatio: 3/2,
-                                    borderRadius: 20,
-                                    backgroundColor: Color.primary,
-                                }}
+                                style={{ width: '100%', height: '100%', resizeMode: 'contain' }}
+                                source={{ uri: params.image }}
                             />
-                            
-                            <Divider height={8} />
-
-                            <Text align='left' type='bold' size={16} color={Color.textInput}>
-                                {item.productName}
-                            </Text>
-
-                            <Divider height={8} />
-                        </Container>
-                    )
-                }}
-            /> */}
+                        </ReactNativeZoomableView>
+                    )}
+            </View>
         </Scaffold>
     )
 }
