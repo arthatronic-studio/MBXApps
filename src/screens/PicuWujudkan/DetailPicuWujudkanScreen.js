@@ -143,7 +143,7 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
           source={{uri: image}}
           style={{
             width: '100%',
-            height: width / 3,
+            aspectRatio: 16 / 9,
             resizeMode: 'cover',
           }}
         />
@@ -198,7 +198,8 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
         <View
           style={{
             width: '100%',
-            height: width * 1.21,
+            aspectRatio: 16 / 9,
+            // height: width * 1.21,
             paddingHorizontal: 16,
           }}>
           <Image

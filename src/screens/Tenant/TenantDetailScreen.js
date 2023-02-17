@@ -347,7 +347,7 @@ const TenantDetailScreen = ({ navigation, route }) => {
               type='semibold'
               align='left'
             >
-              {'● Tenants'.toUpperCase()}
+              {params?.productCategory == 'SHOP' && params?.item?.category == "x_collaborator" ? '● TOKO' : '● TENANTS' }
             </Text>
           </View>
 

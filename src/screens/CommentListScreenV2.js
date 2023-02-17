@@ -51,7 +51,7 @@ const initialListData = {
 };
 
 const CommentListScreenV2 = ({navigation, route}) => {
-  const {item, type} = route.params;
+  const {item, type, category} = route.params;
   const isFocused = useIsFocused();
   const [comment, setComment] = useState('');
   const [selectedComment, setSelectedComment] = useState(initSelectedComment);
@@ -81,7 +81,8 @@ const CommentListScreenV2 = ({navigation, route}) => {
   const fetchData = async first => {
     let parameter = listComment.nextUrl
       ? listComment.nextUrl
-      : `?perPage=10&parent_id=${item.id}&category=picu_wujudkan&type=${type}`;
+      : `?perPage=10&parent_id=${item.id}&category=${category ? category : 'picu_wujudkan'}&type=${type}`;
+    console.log(parameter, 'params nih commnet')
     const res = await fetchGetComment(parameter);
     if(res.status){
       setListComment({
@@ -98,7 +99,7 @@ const CommentListScreenV2 = ({navigation, route}) => {
   const onComment = async () => {
     const body = {
       type: type,
-      category: 'picu_wujudkan',
+      category: category ? category : 'picu_wujudkan',
       parent_id: item.id,
       message: comment,
     };
@@ -171,11 +172,13 @@ const CommentListScreenV2 = ({navigation, route}) => {
               <CardCommentV2
                 type={type}
                 style={{padding: 0}}
+                category={category}
                 itemComment={itemComment}
                 onPress={() =>
                   navigation.navigate('CommentReplyScreenV2', {
                     itemComment: itemComment,
                     type: type,
+                    category: category ? category : 'picu_wujudkan',
                   })
                 }
                 onPressDots={item => {

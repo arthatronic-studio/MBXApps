@@ -59,7 +59,7 @@ const initialListData = {
 };
 
 const CommentReplyScreenV2 = ({navigation, route}) => {
-  const {itemComment, type} = route.params;
+  const {itemComment, type, category} = route.params;
   const isFocused = useIsFocused();
   const [textReply, setTextReply] = useState('');
   const [thumbImage, setThumbImage] = useState('');
@@ -94,9 +94,10 @@ const CommentReplyScreenV2 = ({navigation, route}) => {
   const fetchData = async first => {
     let parameter = listComment.nextUrl
       ? listComment.nextUrl
-      : `?perPage=10&parent_id=${itemComment.id}&category=picu_wujudkan&type=${
+      : `?perPage=10&parent_id=${itemComment.id}&category=${category ? category : 'picu_wujudkan'}&type=${
           type + '_comment'
         }&recipient_user_apps_id=${itemComment.user.id}`;
+    console.log(parameter, 'balas nih')
     const res = await fetchGetComment(parameter);
     setListComment({
       ...listComment,
@@ -111,7 +112,7 @@ const CommentReplyScreenV2 = ({navigation, route}) => {
   const onComment = async () => {
     const body = {
       type: type + '_comment',
-      category: 'picu_wujudkan',
+      category: category ? category : 'picu_wujudkan',
       parent_id: itemComment.id,
       message: textReply,
       recipient_user_apps_id: itemComment.user.id,
@@ -376,6 +377,7 @@ const CommentReplyScreenV2 = ({navigation, route}) => {
             return (
               <CardCommentV2
                 type={type}
+                category={category}
                 style={{padding: 0}}
                 itemComment={itemReply}
                 onPressDots={item => {

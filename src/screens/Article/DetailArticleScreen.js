@@ -225,7 +225,7 @@ const DetailArticleScreen = ({navigation, route}) => {
       ? listComment.nextUrl
       : `?perPage=5&parent_id=${itemDetail.id}&category=blocx&type=article`;
     const res = await fetchGetComment(parameter);
-    console.log(res, 'res nih');
+    console.log(res, 'res nih comment', parameter);
     if (res.success) {
       setListComment({
         ...listComment,
@@ -518,6 +518,7 @@ const DetailArticleScreen = ({navigation, route}) => {
                   navigation.navigate('CommentListScreenV2', {
                     item: item,
                     type: 'article',
+                    category: 'blocx',
                   });
                 }}
                 style={{
@@ -577,6 +578,7 @@ const DetailArticleScreen = ({navigation, route}) => {
                         navigation.navigate('CommentListScreenV2', {
                           item: item,
                           type: 'article',
+                          category: 'blocx',
                         })
                       }
                       style={{
@@ -603,11 +605,13 @@ const DetailArticleScreen = ({navigation, route}) => {
                 return (
                   <CardCommentV2
                     type="article"
+                    category="blocx"
                     itemComment={itemComment}
                     onPress={() =>
                       navigation.navigate('CommentReplyScreenV2', {
                         itemComment: itemComment,
                         type: 'article',
+                        category: 'blocx',
                       })
                     }
                     onPressDots={item => {

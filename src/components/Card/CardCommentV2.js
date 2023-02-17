@@ -16,9 +16,10 @@ const defaultProps = {
   style: {},
   onPress: null,
   onPressDots: () => {},
+  category: 'picu_wujudkan',
 };
 
-const CardCommentV2 = ({itemComment, style, onPress, type, onPressDots}) => {
+const CardCommentV2 = ({itemComment, style, onPress, type, onPressDots, category}) => {
   const {Color} = useColor();
   const navigation = useNavigation();
   const auth = useSelector(state => state['auth']);
@@ -31,10 +32,11 @@ const CardCommentV2 = ({itemComment, style, onPress, type, onPressDots}) => {
   const onSubmitLike = async () => {
     const body = {
       type: type + '_comment',
-      category: 'picu_wujudkan',
+      category: category,
       parent_id: itemComment.id,
     };
     const res = await fetchLike(body);
+    console.log(body, 'body nih', res)
     if (res.success) {
       setLike(!isLike ? like + 1 : like - 1);
       setIsLike(!like);

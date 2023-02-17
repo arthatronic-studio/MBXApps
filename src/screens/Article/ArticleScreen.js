@@ -47,33 +47,33 @@ const ArticleScreen = ({navigation, route}) => {
         style={{
           paddingBottom: height / 7,
         }}
-        ListHeaderComponent={
-          <>
-            <HighlightArticle
-              title="● HIGHLIGHT XPERIENCE"
-              numColumns={1}
-              type="HIGHLIGHT"
-              showSeeAllText={false}
-              style={{ paddingHorizontal: 0 }}
-            />
-            <Divider height={18}/>
-            <View
-              style={{ 
-                borderColor: Color.black,
-                borderWidth: 1,
-                marginHorizontal: 8,
-                justifyContent: 'center',
-                paddingHorizontal: 16,
-                height: width * 0.4
-               }}
-            >
-              <Text align="center" size={18} type="semibold" lineHeight={20.4} color={Color.black}>
-                Interested in contributing your writing to the larger community?
-              </Text>
-            </View>
-            <Divider height={16}/>
-          </>
-        }
+        // ListHeaderComponent={
+        //   <>
+        //     <HighlightArticle
+        //       title="● HIGHLIGHT XPERIENCE"
+        //       numColumns={1}
+        //       type="HIGHLIGHT"
+        //       showSeeAllText={false}
+        //       style={{ paddingHorizontal: 0 }}
+        //     />
+        //     <Divider height={18}/>
+        //     <View
+        //       style={{ 
+        //         borderColor: Color.black,
+        //         borderWidth: 1,
+        //         marginHorizontal: 8,
+        //         justifyContent: 'center',
+        //         paddingHorizontal: 16,
+        //         height: width * 0.4
+        //        }}
+        //     >
+        //       <Text align="center" size={18} type="semibold" lineHeight={20.4} color={Color.black}>
+        //         Interested in contributing your writing to the larger community?
+        //       </Text>
+        //     </View>
+        //     <Divider height={16}/>
+        //   </>
+        // }
       />
     </Scaffold>
   );
