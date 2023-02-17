@@ -81,7 +81,7 @@ const CommentListScreenV2 = ({navigation, route}) => {
   const fetchData = async first => {
     let parameter = listComment.nextUrl
       ? listComment.nextUrl
-      : `?perPage=10&parent_id=${item.id}&category=blocx&type=${type}`;
+      : `?perPage=10&parent_id=${item.id}&category=picu_wujudkan&type=${type}`;
     const res = await fetchGetComment(parameter);
     if(res.status){
       setListComment({
@@ -98,7 +98,7 @@ const CommentListScreenV2 = ({navigation, route}) => {
   const onComment = async () => {
     const body = {
       type: type,
-      category: 'blocx',
+      category: 'picu_wujudkan',
       parent_id: item.id,
       message: comment,
     };
@@ -131,6 +131,7 @@ const CommentListScreenV2 = ({navigation, route}) => {
 
   return (
     <Scaffold
+      // style={{backgroundColor: '#191919'}}
       loadingProps={loadingProps}
       popupProps={popupProps}
       header={

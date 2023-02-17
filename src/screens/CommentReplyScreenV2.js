@@ -94,7 +94,7 @@ const CommentReplyScreenV2 = ({navigation, route}) => {
   const fetchData = async first => {
     let parameter = listComment.nextUrl
       ? listComment.nextUrl
-      : `?perPage=10&parent_id=${itemComment.id}&category=evoria&type=${
+      : `?perPage=10&parent_id=${itemComment.id}&category=picu_wujudkan&type=${
           type + '_comment'
         }&recipient_user_apps_id=${itemComment.user.id}`;
     const res = await fetchGetComment(parameter);
@@ -111,7 +111,7 @@ const CommentReplyScreenV2 = ({navigation, route}) => {
   const onComment = async () => {
     const body = {
       type: type + '_comment',
-      category: 'evoria',
+      category: 'picu_wujudkan',
       parent_id: itemComment.id,
       message: textReply,
       recipient_user_apps_id: itemComment.user.id,
@@ -255,7 +255,7 @@ const CommentReplyScreenV2 = ({navigation, route}) => {
 
   return (
     <Scaffold
-      style={{backgroundColor: '#191919'}}
+      // style={{backgroundColor: '#191919'}}
       loadingProps={loadingProps}
       popupProps={popupProps}
       header={

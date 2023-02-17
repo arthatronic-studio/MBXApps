@@ -52,7 +52,7 @@ const HighlightPicuWujudkan = ({
     if (type == 'HIGHLIGHT') {
       param = `?perPage=4&highlight=1&category=picu_wujudkan`;
     } else if (type == 'OTHER') {
-      param = `?perPage=10&highlight=1&category=picu_wujudkan&type=${category}`;
+      param = `?category=picu_wujudkan&type=${category}`;
     }
     const result = await fetchGetPicuWujudkan(param);
     let newArr = [];

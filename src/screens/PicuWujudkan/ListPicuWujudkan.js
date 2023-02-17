@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, FlatList, useWindowDimensions} from 'react-native';
 import PropTypes from 'prop-types';
+import {useIsFocused} from '@react-navigation/native';
 
 import {ScreenEmptyData} from '@src/components';
 import {Container, Divider, Row} from 'src/styled';
@@ -13,7 +14,7 @@ import {useSelector} from 'react-redux';
 // import CardArticle from './CardArticle';
 import imageAssets from 'assets/images';
 import CardPicuWujudkan from './CardPicuWujudkan';
-import { fetchGetPicuWujudkan } from 'src/api-rest/fetchGetPicuWujudkan';
+import {fetchGetPicuWujudkan} from 'src/api-rest/fetchGetPicuWujudkan';
 
 const defaultProps = {
   tenantType: 'eat',
@@ -24,7 +25,7 @@ const defaultProps = {
   onLoadingEnd: () => {},
   ListHeaderComponent: null,
   title: '',
-  category: ''
+  category: '',
 };
 
 const ListPicuWujudkan = ({
@@ -44,11 +45,15 @@ const ListPicuWujudkan = ({
     refresh: false,
   });
 
+  const isFocused = useIsFocused();
+
   const auth = useSelector(state => state['auth']);
 
   useEffect(() => {
-    fetchData(true);
-  }, []);
+    if (isFocused) {
+      fetchData(true);
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     if (itemData.loadNext && itemData.nextUrl != null) {
@@ -128,16 +133,16 @@ const ListPicuWujudkan = ({
               />
             );
           }}
-        //   ListHeaderComponent={
-        //     <>
-        //       {ListHeaderComponent}
+          //   ListHeaderComponent={
+          //     <>
+          //       {ListHeaderComponent}
 
-        //       {
-        //         !horizontal &&
-        //         itemData.data.length > 0 &&
-        //         renderHeader()}
-        //     </>
-        //   }
+          //       {
+          //         !horizontal &&
+          //         itemData.data.length > 0 &&
+          //         renderHeader()}
+          //     </>
+          //   }
         />
       )}
     </View>

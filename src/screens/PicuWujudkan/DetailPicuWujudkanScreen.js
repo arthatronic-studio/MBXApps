@@ -7,9 +7,14 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import {useColor, Text, TouchableOpacity} from '@src/components';
+import {
+  useColor,
+  Text,
+  TouchableOpacity,
+  ModalListAction,
+} from '@src/components';
 import Scaffold from '@src/components/Scaffold';
-import {Row, Divider, Container} from 'src/styled';
+import {Row, Divider, Container, Line} from 'src/styled';
 import HighlightPicuWujudkan from './HighlightPicuWujudkan';
 import imageAssets from 'assets/images';
 import {useIsFocused} from '@react-navigation/native';
@@ -17,6 +22,10 @@ import HtmlView from 'src/components/HtmlView';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {fetchLike} from 'src/api-rest/fetchLike';
+import {fetchGetComment} from 'src/api-rest/fetchGetComment';
+import {fetchDeleteComment} from 'src/api-rest/fetchDeleteComment';
+import CardCommentV2 from 'src/components/Card/CardCommentV2';
+import {fetchGetArticle} from 'src/api-rest/fetchGetArticle';
 
 const initialListData = {
   data: [],
@@ -35,6 +44,11 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
   const {height, width} = useWindowDimensions();
   const scrollRef = useRef();
   const [refreshing, setRefreshing] = useState(false);
+  const [selectedComment, setSelectedComment] = useState({});
+  const [trigger, setTrigger] = useState(false);
+
+  const modalListActionRef = useRef();
+  const isFocused = useIsFocused();
 
   const [likes, setLike] = useState(item?.liked_count ? item?.liked_count : 0);
   const [is_liked, setIsLike] = useState(
@@ -50,6 +64,20 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
   };
 
   useEffect(() => {
+    if (isFocused) {
+      // fetchDetailArticle()
+      console.log("callled")
+      fetchDataComment(true);
+    }
+  }, [isFocused]);
+
+  useEffect(() => {
+    if (listComment.loadNext) {
+      fetchDataComment(false);
+    }
+  }, [listComment.loadNext]);
+
+  useEffect(() => {
     onRefresh();
     scrollRef.current?.scrollTo({
       y: 0,
@@ -58,16 +86,53 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
   }, [item]);
 
   const onSubmitLike = async () => {
-    console.log("hoiii",category)
     const body = {
-      type: 'blocx',
-      category: category,
+      type: category,
+      category: 'picu_wujudkan',
       parent_id: item.id,
     };
     const res = await fetchLike(body);
     if (res.success) {
       setLike(!is_liked ? likes + 1 : likes - 1);
       setIsLike(!is_liked);
+    }
+  };
+
+  // const fetchDetailArticle = async () =>{
+  //   let parameter = `?id=${item.id}&category=picu_wujudkan&type=${category}`;
+  //   const res = await fetchGetArticle(parameter)
+  //   console.log("deeeeee",res)
+  // }
+
+  const fetchDataComment = async first => {
+    let parameter = listComment.nextUrl
+      ? listComment.nextUrl
+      : `?perPage=5&parent_id=${item.id}&category=picu_wujudkan&type=${category}`;
+    const res = await fetchGetComment(parameter);
+    setListComment({
+      ...listComment,
+      data: first ? res.data : listComment.data.concat(res.data),
+      nextUrl: res.nextUrl ? `?${res.nextUrl.split('?')[1]}` : null,
+      loading: false,
+      loadNext: false,
+      refresh: false,
+    });
+  };
+
+  const onDelete = async () => {
+    const body = {
+      id: selectedComment.id,
+    };
+    const res = await fetchDeleteComment(body);
+    if (res.success) {
+      const dataTemp = listComment.data;
+      const newList = dataTemp.filter(item => item.id != selectedComment.id);
+      setListComment({
+        ...listComment,
+        data: newList,
+      });
+      setSelectedComment({});
+      setTrigger(true);
     }
   };
 
@@ -326,7 +391,7 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
           ListFooterComponent={() => (
             <TouchableOpacity
               onPress={() =>
-              // console.log("apacoba",category)
+                // console.log("apacoba",category)
                 navigation.navigate('CommentListScreenV2', {
                   item: item,
                   type: category,
@@ -344,24 +409,41 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
               </Text>
             </TouchableOpacity>
           )}
+         
           renderItem={({item: itemComment, index}) => {
+             
             return (
               <CardCommentV2
-                type="mentor_interview"
+                type= {category}
                 itemComment={itemComment}
                 onPress={() =>
                   navigation.navigate('CommentReplyScreenV2', {
                     itemComment: itemComment,
-                    type: 'article',
+                    type: category,
                   })
                 }
                 onPressDots={item => {
                   setSelectedComment(item);
-                  modalListActionCommentRef.current.open();
+                  modalListActionRef.current.open();
                 }}
               />
             );
           }}
+        />
+
+        <ModalListAction
+          ref={modalListActionRef}
+          data={[
+            {
+              id: 0,
+              name: 'Hapus',
+              color: '#FF4343',
+              onPress: () => {
+                onDelete();
+                modalListActionRef.current.close();
+              },
+            },
+          ]}
         />
 
         <HighlightPicuWujudkan

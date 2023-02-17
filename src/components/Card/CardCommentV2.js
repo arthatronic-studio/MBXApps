@@ -31,7 +31,7 @@ const CardCommentV2 = ({itemComment, style, onPress, type, onPressDots}) => {
   const onSubmitLike = async () => {
     const body = {
       type: type + '_comment',
-      category: 'evoria',
+      category: 'picu_wujudkan',
       parent_id: itemComment.id,
     };
     const res = await fetchLike(body);
