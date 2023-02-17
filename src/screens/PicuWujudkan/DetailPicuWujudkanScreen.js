@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, useCallback} from 'react';
 import {
   View,
   ScrollView,
@@ -26,6 +26,7 @@ import {fetchGetComment} from 'src/api-rest/fetchGetComment';
 import {fetchDeleteComment} from 'src/api-rest/fetchDeleteComment';
 import CardCommentV2 from 'src/components/Card/CardCommentV2';
 import {fetchGetArticle} from 'src/api-rest/fetchGetArticle';
+import YoutubePlayer from 'react-native-youtube-iframe';
 
 const initialListData = {
   data: [],
@@ -56,6 +57,25 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
   );
   const [listComment, setListComment] = useState(initialListData);
 
+  const youtubeRef = useRef();
+
+  const [playing, setPlaying] = useState(false);
+
+  const [beforePlay, setBeforePlay] = useState(true);
+
+  const onStateChange = useCallback(state => {
+    console.log('state', state);
+    if (state === 'playing') {
+      setBeforePlay(false);
+      setPlaying(true);
+    } else if (state === 'ended') {
+      setBeforePlay(true);
+      setPlaying(false);
+    } else if (state === 'paused') {
+      setPlaying(false);
+    }
+  }, []);
+
   const onRefresh = () => {
     setRefreshing(true);
     setTimeout(() => {
@@ -66,7 +86,7 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
   useEffect(() => {
     if (isFocused) {
       // fetchDetailArticle()
-      console.log("callled")
+      console.log('callled');
       fetchDataComment(true);
     }
   }, [isFocused]);
@@ -275,6 +295,26 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
                       <Divider height={16} />
                     </>
                   )}
+
+                  {detail.url !== null && detail.url_type == 'youtube' && (
+                    <View
+                      style={{
+                        // width: width - 32,
+                        aspectRatio: 16 / 9,
+                      }}>
+                      <YoutubePlayer
+                        ref={youtubeRef}
+                        width={'100%'}
+                        height={'100%'}
+                        play={playing}
+                        videoId={detail.url}
+                        onChangeState={onStateChange}
+                        borderRadius={true}
+                        webViewStyle={{opacity: 0.99}}
+                      />
+                      <Divider height={16} />
+                    </View>
+                  )}
                 </View>
               );
             })}
@@ -410,12 +450,10 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
               </Text>
             </TouchableOpacity>
           )}
-         
           renderItem={({item: itemComment, index}) => {
-             
             return (
               <CardCommentV2
-                type= {category}
+                type={category}
                 itemComment={itemComment}
                 onPress={() =>
                   navigation.navigate('CommentReplyScreenV2', {
