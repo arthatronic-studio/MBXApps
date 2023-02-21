@@ -115,6 +115,7 @@ const EventScreen = ({ navigation, route }) => {
 
       <ListContenEvent
         productCategory='EVENT'
+        perPage={1}
         name='Event'
         title='● EVENT'
         nav='EventScreen'
@@ -148,6 +149,7 @@ const EventScreen = ({ navigation, route }) => {
               showHeader
               horizontal
               showSeeAllText={false}
+              perPage={1}
               style={{paddingHorizontal: 0}}
               headerLabelstyle={{paddingHorizontal: 8}}
             />

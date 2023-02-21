@@ -151,7 +151,7 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
         {caption && (
           <>
             <Container width="80%">
-              <Text size={9} lineHeight={15} color={'#AEAEAE'} type="medium">
+              <Text size={12} lineHeight={15} color={'#AEAEAE'} type="medium">
                 {caption}
               </Text>
             </Container>
@@ -198,8 +198,8 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
         <View
           style={{
             width: '100%',
-            aspectRatio: 16 / 9,
-            // height: width * 1.21,
+            // aspectRatio: 16 / 9,
+            height: width * 1.21,
             paddingHorizontal: 16,
           }}>
           <Image

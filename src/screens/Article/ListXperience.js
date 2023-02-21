@@ -10,9 +10,9 @@ import { getAPI } from 'src/api-rest/httpService';
 import PostingHeader from 'src/components/Posting/PostingHeader';
 import { useSelector } from 'react-redux';
 import CardTenantList from 'src/screens/Tenant/CardTenantList';
-import CardArticle from './CardArticle';
 import imageAssets from 'assets/images';
 import { fetchGetArticle } from 'src/api-rest/fetchGetArticle';
+import CardXperience from './CardXperience';
 
 const propTypes = {
     productCategory: PropTypes.string.isRequired,
@@ -36,7 +36,7 @@ const defaultProps = {
     showHeader: false,
 };
 
-const ListArticle = ({ tenantType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, }) => {
+const ListXperience = ({ tenantType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, showHeader, title, showSeeAllText, }) => {
     const { width } = useWindowDimensions();
     const [itemData, setItemData] = useState({
         data: [],
@@ -122,7 +122,7 @@ const ListArticle = ({ tenantType, productCategory, name, horizontal, style, onL
                     renderItem={({ item, index }) => {
                         console.log('itemitem', item);
                         return (
-                            <CardArticle
+                            <CardXperience
                                 key={index}
                                 index={index}
                                 item={item}
@@ -145,6 +145,6 @@ const ListArticle = ({ tenantType, productCategory, name, horizontal, style, onL
     )
 }
 
-ListArticle.propTypes = propTypes;
-ListArticle.defaultProps = defaultProps;
-export default ListArticle;
+ListXperience.propTypes = propTypes;
+ListXperience.defaultProps = defaultProps;
+export default ListXperience;

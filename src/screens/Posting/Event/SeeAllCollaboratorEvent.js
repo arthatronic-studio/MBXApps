@@ -58,16 +58,18 @@ const SeeAllCollaboratorEvent = ({navigation, route}) => {
           // }
         />
       }>
-      <ListContenCollaboratorEvent
-        productCategory="EVENT"
-        name="Event"
-        icon={auth?.user?.activityInfo['x-colaborator']?.icon}
-        pagination={false}
-        showSeeAllText={true}
-        style={{
-          paddingBottom: statusBarHeight,
-        }}
-      />
+      <Container paddingBottom={48}>
+        <ListContenCollaboratorEvent
+          productCategory="EVENT"
+          name="Event"
+          icon={auth?.user?.activityInfo['x-colaborator']?.icon}
+          pagination={false}
+          showSeeAllText={true}
+          style={{
+            paddingBottom: statusBarHeight,
+          }}
+        />
+      </Container>
     </Scaffold>
   );
 };

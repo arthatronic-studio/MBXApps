@@ -26,7 +26,7 @@ import moment from 'moment';
 import {useCurrentUser} from 'src/hooks/useCanGenerateContent';
 import HighlightArticle from './HighlightArticle';
 import ListTenantItem from 'src/screens/Tenant/ListTenantItem';
-import ListArticle from './ListArticle';
+import ListXperience from './ListXperience';
 
 const ArticleScreen = ({navigation, route}) => {
   const {Color} = useColor();
@@ -36,14 +36,14 @@ const ArticleScreen = ({navigation, route}) => {
     <Scaffold
       translucent={Platform.OS === 'ios' ? true : false}
       useSafeArea={Platform.OS === 'ios' ? false : true}>
-      <ListArticle
+      <ListXperience
         tenantType="shop"
         productCategory="SHOP"
         name="Toko"
+        showHeader={false}
         title="ALL XPERIENCE"
         // nav='EatScreen'
         // refresh={refreshing || isFocused}
-        showHeader={true}
         style={{
           paddingBottom: height / 7,
         }}

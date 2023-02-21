@@ -59,16 +59,18 @@ const SeeAllEvent = ({ navigation, route }) => {
         />
       }
     >
-      <ListContenEvent
-        productCategory='EVENT'
-        name='Event'
-        title='● EVENT'
-        nav='EventScreen'
-        // refresh={refreshing || isFocused}
-        style={{
-          paddingBottom: height / 5,
-        }}
-      />
+      <Container paddingBottom={48}>
+        <ListContenEvent
+          productCategory='EVENT'
+          name='Event'
+          title='● EVENT'
+          nav='EventScreen'
+          // refresh={refreshing || isFocused}
+          style={{
+            paddingBottom: height / 5,
+          }}
+        />
+      </Container>
     </Scaffold>
   );
 };

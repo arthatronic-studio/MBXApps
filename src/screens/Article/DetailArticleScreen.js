@@ -289,8 +289,8 @@ const DetailArticleScreen = ({navigation, route}) => {
         <Divider height={8} />
         {caption && (
           <>
-            <Container width="80%">
-              <Text size={9} lineHeight={15} color={'#AEAEAE'} type="medium">
+            <Container>
+              <Text align="left" size={12} lineHeight={15} color={'#AEAEAE'} type="medium">
                 {caption}
               </Text>
             </Container>
@@ -386,11 +386,11 @@ const DetailArticleScreen = ({navigation, route}) => {
             </Container> */}
               {/* <Container flex={4} marginLeft={4}> */}
               {/* title */}
-              <Text size={24} lineHeight={28.8} type="semibold" align="left">
+              {/* <Text size={24} lineHeight={28.8} type="semibold" align="left">
                 {itemDetail.title}
-              </Text>
+              </Text> */}
 
-              <Divider height={16} />
+              {/* <Divider height={16} /> */}
 
               {/* subtitle */}
               <Text size={12} lineHeight={16} type="semibold" align="left">

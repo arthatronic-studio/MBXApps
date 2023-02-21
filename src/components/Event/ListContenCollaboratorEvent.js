@@ -57,7 +57,7 @@ const ListContenCollaboratorEvent = ({ productType, productCategory, name, horiz
     }, [itemData.loadNext]);
 
     const fetchData = async (first) => {
-        let baseEndpoint = 'event?perPage=9&category=x_collaborator';
+        let baseEndpoint = 'event?perPage=1&category=x_collaborator';
         if(first){
             if(auth.user.isCheckin && auth.user.activityInfo.location){
                 baseEndpoint = baseEndpoint + `&bloc_location_id=${auth.user.activityInfo.location.id}`;
@@ -163,6 +163,7 @@ const ListContenCollaboratorEvent = ({ productType, productCategory, name, horiz
                         }
 
                         return (
+                            // <></>
                             <CardContentProduct
                                 productCategory={productCategory}
                                 item={item}

@@ -42,7 +42,8 @@ const CardArticle = ({item, onPress, numColumns, horizontal}) => {
         <View
           style={{
             width: '100%',
-            height: width * 0.65,
+            aspectRatio: 1,
+            // height: width * 0.65,
           }}>
           <Image
             source={item.images[0] ? { uri: item.images[0] } : imageAssets.imageBlank}

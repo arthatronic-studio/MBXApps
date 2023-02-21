@@ -409,7 +409,7 @@ const TenantCheckoutScreen = ({ navigation, route }) => {
         <Line height={1} width='100%' color={Color.primary} />
       </Container>
 
-      {params.productCategory != 'SHOP' &&
+      {params.productCategory != 'SHOP' && false &&
         <>
           <Container paddingBottom={16} paddingHorizontal={16}>
             <Container paddingTop={16} paddingBottom={12}>

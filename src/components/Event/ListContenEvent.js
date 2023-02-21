@@ -21,6 +21,7 @@ const propTypes = {
     onLoadingEnd: PropTypes.func,
     showSeeAllText: PropTypes.bool,
     pagination: PropTypes.bool,
+    perPage: PropTypes.number,
 };
 
 const defaultProps = {
@@ -38,12 +39,14 @@ const defaultProps = {
     showHeader: false,
     headerLabelstyle: {},
     pagination: true,
+    perPage: 9,
 };
 
-const ListContenEvent = ({ productType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, ListFooterComponent, showHeader, title, showSeeAllText, headerLabelstyle, pagination, onSeeAll }) => {
+const ListContenEvent = ({ productType, productCategory, name, horizontal, style, onLoadingEnd, ListHeaderComponent, ListFooterComponent, showHeader, title, showSeeAllText, headerLabelstyle, pagination, onSeeAll, perPage }) => {
     const { width } = useWindowDimensions();
     const [itemData, setItemData] = useState(initialItemState);
     const auth = useSelector(state => state['auth']);
+    console.log(perPage, 'per page');
 
     useEffect(() => {
         setItemData(initialItemState);
@@ -57,7 +60,7 @@ const ListContenEvent = ({ productType, productCategory, name, horizontal, style
     }, [itemData.loadNext]);
 
     const fetchData = async (first) => {
-        let baseEndpoint = 'event?perPage=9';
+        let baseEndpoint = `event?perPage=1`;
         if(first){
             if(auth.user.isCheckin && auth.user.activityInfo.location){
                 baseEndpoint = baseEndpoint + `&bloc_location_id=${auth.user.activityInfo.location.id}`;

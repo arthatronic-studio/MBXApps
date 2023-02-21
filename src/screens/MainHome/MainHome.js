@@ -56,6 +56,7 @@ import HighlightArticle from '../Article/HighlightArticle';
 import {useInterval} from 'src/hooks/useInterval';
 import ModalChangeLocation from 'src/components/Modal/ModalChangeLocation';
 import HighlightPicuWujudkan from '../PicuWujudkan/HighlightPicuWujudkan';
+import HighlightXperience from '../Article/HighlightXperience';
 
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
@@ -1027,7 +1028,7 @@ const MainHome = ({navigation, route}) => {
 
           <Divider />
 
-          <HighlightArticle
+          <HighlightXperience
             title="● XPERIENCE"
             numColumns={1}
             type="HIGHLIGHT"
