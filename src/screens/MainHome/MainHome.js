@@ -1050,7 +1050,7 @@ const MainHome = ({navigation, route}) => {
             <Divider />
 
             <PostingHeader
-              title="● PICU WUJUDKAN"
+              title="● SPARK YOUR IDEAS"
               showSeeAllText={true}
               onSeeAllPress={() => navigation.navigate('PicuWujudkanScreen')}
             />
