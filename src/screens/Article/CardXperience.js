@@ -173,7 +173,7 @@ const CardXperience = ({item, onPress, numColumns, horizontal}) => {
         <Image
           source={{uri: image}}
           style={{
-            width: '100%',
+            width: width - 32,
             height: width - 32,
             resizeMode: 'cover',
           }}
