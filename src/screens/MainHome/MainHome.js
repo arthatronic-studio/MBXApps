@@ -57,6 +57,7 @@ import {useInterval} from 'src/hooks/useInterval';
 import ModalChangeLocation from 'src/components/Modal/ModalChangeLocation';
 import HighlightPicuWujudkan from '../PicuWujudkan/HighlightPicuWujudkan';
 import HighlightXperience from '../Article/HighlightXperience';
+import CardSpark from './CardSpark';
 
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
@@ -1066,33 +1067,7 @@ const MainHome = ({navigation, route}) => {
               <Divider height={11} />
 
             </Container> */}
-            <Container
-              paddingHorizontal={16}
-              paddingTop={11}
-              paddingBottom={11}>
-              <Text size={29} align="left" lineHeight={38}>
-                Customers as Industrial Age phenomenon will be replaced by{' '}
-                <Text size={29} type="semibold">
-                  Creative Prosumers
-                </Text>
-                , people who produce many of their own goods and services.{' '}
-                <View>
-                  <Text size={11} type="medium" align="left">
-                    Philip Kotler
-                  </Text>
-                  <Text size={11} type="medium" align="left">
-                    -1986
-                  </Text>
-                </View>
-              </Text>
-
-              <Divider height={11} />
-
-              <Text size={16} type="medium" align="left">
-                We believe colaboration make us stronger, join and be part of
-                our movement!
-              </Text>
-            </Container>
+            <CardSpark/>
           </View>
         </Container>
       </ScrollView>
