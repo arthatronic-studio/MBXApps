@@ -9,12 +9,18 @@ const config = {
       parse: {
         code: (code) => `${code}`,
       }
+    },
+    DetailPicuWujudkanScreen: {
+      path: "picuwujudkan/:id",
+      parse: {
+        id: (id) => `${id}`,
+      }
     }
   },
 };
 
 const linking = {
-  prefixes: ['tribes://'],
+  prefixes: ['blocx://'],
   config,
 };
 

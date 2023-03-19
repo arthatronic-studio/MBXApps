@@ -479,7 +479,8 @@ const MainHome = ({navigation, route}) => {
           titleRight={auth.user && auth.user.isGuest ? 'LOGIN' : ''}
           onPressRightButton={() => {
             if (auth.user && auth.user.isGuest) {
-              redirectTo('LoginScreenV2');
+              // redirectTo('LoginScreenV2');
+              navigation.navigate("LoginScreenV2");
             }
           }}
           actions={

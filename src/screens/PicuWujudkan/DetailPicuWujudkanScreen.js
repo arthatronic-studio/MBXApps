@@ -27,6 +27,7 @@ import {fetchDeleteComment} from 'src/api-rest/fetchDeleteComment';
 import CardCommentV2 from 'src/components/Card/CardCommentV2';
 import {fetchGetArticle} from 'src/api-rest/fetchGetArticle';
 import YoutubePlayer from 'react-native-youtube-iframe';
+import { onShare } from 'src/utils/share';
 
 const initialListData = {
   data: [],
@@ -39,8 +40,8 @@ const initialListData = {
 };
 
 const DetailPicuWujudkanScreen = ({navigation, route}) => {
-  const {item, category} = route.params;
-  // const [itemDetail, setItemDetail] = useState(item);
+  const {item, category, id} = route.params;
+  const [itemDetail, setItemDetail] = useState(item);
   const {Color} = useColor();
   const {height, width} = useWindowDimensions();
   const scrollRef = useRef();
@@ -85,7 +86,7 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
 
   useEffect(() => {
     if (isFocused) {
-      // fetchDetailArticle()
+      fetchDetailArticle()
       console.log('callled');
       fetchDataComment(true);
     }
@@ -109,7 +110,7 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
     const body = {
       type: category,
       category: 'picu_wujudkan',
-      parent_id: item.id,
+      parent_id: itemDetail?.id,
     };
     const res = await fetchLike(body);
     if (res.success) {
@@ -118,16 +119,19 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
     }
   };
 
-  // const fetchDetailArticle = async () =>{
-  //   let parameter = `?id=${item.id}&category=picu_wujudkan&type=${category}`;
-  //   const res = await fetchGetArticle(parameter)
-  //   console.log("deeeeee",res)
-  // }
+  const fetchDetailArticle = async () =>{
+    let parameter = `?article_id=${id ? id : item.id}&category=picu_wujudkan&type=${category}`;
+    const res = await fetchGetArticle(parameter)
+    if(res.success && Array.isArray(res.data) && res.data[0]){
+      setItemDetail(res.data[0]);
+      fetchDataComment(true, res?.data[0]?.id);
+    }
+  }
 
-  const fetchDataComment = async first => {
+  const fetchDataComment = async (first, id) => {
     let parameter = listComment.nextUrl
       ? listComment.nextUrl
-      : `?perPage=5&parent_id=${item.id}&category=picu_wujudkan&type=${category}`;
+      : `?perPage=5&parent_id=${id ? id : itemDetail?.id}&category=picu_wujudkan&type=${category}`;
     const res = await fetchGetComment(parameter);
     setListComment({
       ...listComment,
@@ -224,7 +228,7 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
           }}>
           <Image
             source={
-              item.images[0] ? {uri: item.images[0]} : imageAssets.imageBlank
+              itemDetail?.images[0] ? {uri: itemDetail?.images[0]} : imageAssets.imageBlank
             }
             style={{width: '100%', height: '100%', resizeMode: 'cover'}}
           />
@@ -250,27 +254,27 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
                 ARTIKEL
               </Text>
               <Text align="left" size={10} lineHeight={12} type="medium">
-                {item.publisher} {item.created_at}
+                {itemDetail?.publisher} {itemDetail?.created_at}
               </Text>
             </Container>
           </Container>
           <Container flex={4} marginLeft={4}>
             {/* title */}
             <Text size={24} lineHeight={28.8} type="semibold" align="left">
-              {item.title}
+              {itemDetail?.title}
             </Text>
 
             <Divider height={16} />
 
             {/* subtitle */}
             <Text size={12} lineHeight={16} type="semibold" align="left">
-              {item.subtitle}
+              {itemDetail?.subtitle}
             </Text>
 
             <Divider height={16} />
 
             {/* desc */}
-            {item.detail.map((detail, index) => {
+            {itemDetail?.detail.map((detail, index) => {
               return (
                 <View key={index}>
                   {/* <Text
@@ -390,20 +394,23 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
             }}>
             <MaterialIcons size={26} name={'chat'} color={Color.text} />
             <Text style={{marginLeft: 6}} size={22}>
-              {item.comment_count}
+              {itemDetail?.comment_count}
             </Text>
           </TouchableOpacity>
-          <Container
+          <TouchableOpacity
+            onPress={() => {
+              onShare(itemDetail?.share_link ? itemDetail?.share_link : 'link not found');
+            }}
             style={{
               height: '100%',
               flexDirection: 'row',
               borderColor: Color.border,
             }}>
             <MaterialIcons size={26} name={'share'} color={Color.text} />
-            <Text style={{marginLeft: 6}} size={22}>
+            {/* <Text style={{marginLeft: 6}} size={22}>
               {item.views_count}
-            </Text>
-          </Container>
+            </Text> */}
+          </TouchableOpacity>
         </View>
 
         <FlatList
@@ -489,8 +496,8 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
           title="● ARTIKEL LAINNYA"
           numColumns={1}
           type="OTHER"
-          id={item.id}
-          categoryId={item.category_id}
+          id={itemDetail?.id}
+          categoryId={itemDetail?.category_id}
           showSeeAllText={false}
           refresh={refreshing}
         />

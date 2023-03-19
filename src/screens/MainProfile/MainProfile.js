@@ -45,6 +45,7 @@ import Axios from 'axios';
 import {initSocket} from 'src/api-socket/currentSocket';
 import {assetImageProfile} from 'assets/images/profile';
 import { stateUpdateProfile } from 'src/api-rest/stateUpdateProfile';
+import { CommonActions } from '@react-navigation/native';
 
 const MainProfile = ({navigation, route}) => {
   const currentSocket = initSocket();
@@ -103,7 +104,7 @@ const MainProfile = ({navigation, route}) => {
   };
 
   const onPressExit = () => {
-    Alert('Logout', 'Apakah Anda yakin akan logout?', () =>
+    Alert('Logout', 'Apakah Anda yakin akan logout cok?', () =>
       onPressLogout(false),
     );
   };
@@ -111,7 +112,16 @@ const MainProfile = ({navigation, route}) => {
   const onPressLogout = () => {
     dispatch({type: 'AUTH.CLEAR'});
     dispatch({type: 'USER.LOGOUT'});
-    redirectTo('LoginScreenV2');
+    // redirectTo('LoginScreenV2');
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [
+          { name: "MainPage"},
+          { name: "LoginScreenV2"},
+        ],
+      })
+    );
 
     // dispatch({type: 'ARTICLE.CLEAR_HISTORY'});
     // currentSocket.disconnect();
@@ -536,7 +546,16 @@ const MainProfile = ({navigation, route}) => {
             {auth.user && auth.user.isGuest && (
               <TouchableOpacity
                 onPress={() => {
-                  redirectTo('LoginScreenV2');
+                  // redirectTo('LoginScreenV2');
+                  navigation.dispatch(
+                    CommonActions.reset({
+                      index: 0,
+                      routes: [
+                        { name: "MainPage"},
+                        { name: "LoginScreenV2"},
+                      ],
+                    })
+                  );
                 }}
                 style={{ 
                   paddingHorizontal: 56,

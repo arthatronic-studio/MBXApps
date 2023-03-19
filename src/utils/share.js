@@ -6,5 +6,5 @@ export const onShare = async(url, code) => {
         message: url,
     });
 
-    if (code) await fetchContentShare({ code });
+    // if (code) await fetchContentShare({ code });
 }
