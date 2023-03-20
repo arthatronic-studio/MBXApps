@@ -68,7 +68,7 @@ const HeaderBig = ({
         <View style={{flex: 1}}>
           {title === '' ?
             <View style={{flexDirection: 'row'}}>
-              <Image source={iconApp} style={{width: 40, height: 40}} resizeMode='contain' />
+              <Image source={iconApp} style={{width: 60, height: 40}} resizeMode='contain' />
             </View>
           :
             <Text size={28} type='bold'>{title}</Text>

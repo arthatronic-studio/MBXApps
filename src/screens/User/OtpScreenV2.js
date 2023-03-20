@@ -347,7 +347,7 @@ const OtpScreenV2 = ({navigation, route}) => {
                           textAlign: 'center',
                           fontFamily: 'Inter-Regular',
                           // borderBottomWidth: 2,
-                          color: '#141414',
+                          color: '#F2D376',
                           // color: isFocus || item.value !== '' ? Color.tertiary : Color.text,
                           backgroundColor: '#D9D9D9',
                           alignItems: 'center',
@@ -384,7 +384,7 @@ const OtpScreenV2 = ({navigation, route}) => {
                   Resend
                 </Text>
               </TouchableOpacity>
-              <Text align="right" size={11} type="medium" lineHeight={13} color="#141414">
+              <Text align="right" size={11} type="medium" lineHeight={13} color="#F2D376">
                 {` (${FormatDuration.getMinutesFromSeconds(countdown)})`}
               </Text>
             </Row>

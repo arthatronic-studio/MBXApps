@@ -203,7 +203,7 @@ const TabBarComponentV2 = (props) => {
                                                 style={{
                                                     height: 16,
                                                     width: 16,
-                                                    tintColor: isRouteActive ? Color.textInput : Color.primary
+                                                    tintColor: isRouteActive ? Color.text : Color.text
                                                 }}
                                             />
                                             :

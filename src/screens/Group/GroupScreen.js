@@ -379,7 +379,7 @@ const GroupScreen = ({navigation, route}) => {
                 marginVertical={10}
                 flex={4.5}
                 borderWidth={0.25}
-                color={'#141414'}
+                color={'#F2D376'}
               />
             </Container>
           )}
@@ -422,7 +422,7 @@ const GroupScreen = ({navigation, route}) => {
                           width={12}
                           borderRadius={6}
                           borderWidth={1}
-                          borderColor="#141414"
+                          borderColor="#F2D376"
                         />
                         <Callout>
                           <View style={{width: 75}}>
@@ -443,7 +443,7 @@ const GroupScreen = ({navigation, route}) => {
                 paddingBottom={10}
                 paddingHorizontal={16}>
                 <Container flex={2} />
-                <Container flex={4.5} borderWidth={0.25} color={'#141414'} />
+                <Container flex={4.5} borderWidth={0.25} color={'#F2D376'} />
               </Container>
             </Container>
           }
@@ -454,7 +454,7 @@ const GroupScreen = ({navigation, route}) => {
                 flexDirection="row"
                 paddingHorizontal={16}>
                 <Container flex={2} />
-                <Container flex={4.5} borderWidth={0.25} color={'#141414'} />
+                <Container flex={4.5} borderWidth={0.25} color={'#F2D376'} />
               </Container>
               <Divider height={32} />
               <FlatList
@@ -562,7 +562,7 @@ const GroupScreen = ({navigation, route}) => {
                         <Container
                           flex={4.5}
                           borderWidth={0.25}
-                          color={'#141414'}
+                          color={'#F2D376'}
                         />
                       </>
                     ) : (
@@ -593,7 +593,7 @@ const GroupScreen = ({navigation, route}) => {
                       <Container
                         flex={4.5}
                         borderWidth={0.25}
-                        color={'#141414'}
+                        color={'#F2D376'}
                       />
                     )}
                   </Container>
@@ -605,7 +605,7 @@ const GroupScreen = ({navigation, route}) => {
                       marginVertical={10}
                       flex={4.5}
                       borderWidth={0.25}
-                      color={'#141414'}
+                      color={'#F2D376'}
                     />
                   </Container>
                 )}

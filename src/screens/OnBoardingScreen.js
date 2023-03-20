@@ -19,7 +19,9 @@ import Scaffold from '@src/components/Scaffold';
 import HeaderBig from 'src/components/HeaderBig';
 import client from 'src/lib/apollo';
 import { queryBannerList } from 'src/lib/query/banner';
-import { onBoarding1, onBoarding2, onBoarding3 } from 'assets/images';
+import { tmii_onboarding_1 as onBoarding1 } from 'assets/images';
+const onBoarding2 = onBoarding1;
+const onBoarding3 = onBoarding1;
 
 const listBoarding = [
     {imageAsset: onBoarding1, title: 'SELAMAT DATANG DI BLOCX', subTitle: 'Cari apapun yang kamu butuhkan disini dengan mudah, hanya dengan sentuhan jari di satu aplikasi.'},
@@ -298,7 +300,7 @@ const OnBoardingScreen = ({ navigation }) => {
 
             <Submit
                 buttonLabel={isFinish ? "Login" : "Lanjut"}
-                buttonColor={Color.primary}
+                buttonColor={Color.text}
                 type="bottomSingleButton"
                 buttonBorderTopWidth={0}
                 onPress={() => {

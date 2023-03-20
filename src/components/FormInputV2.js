@@ -128,7 +128,7 @@ const FormInputV2 = forwardRef((props, ref) => {
               <Row>
                 {prefixText !== '' && (
                   <Container paddingRight={8}>
-                    <Text type="medium" size={22} lineHeight={26} color="#141414">
+                    <Text type="medium" size={22} lineHeight={26} color="#F2D376">
                       {prefixText}
                     </Text>
                   </Container>
@@ -191,7 +191,7 @@ const FormInputV2 = forwardRef((props, ref) => {
                 )}
               </Row>
               <Divider height={10}/>
-              <View style={{ borderWidth: 1, height: 1, borderColor: '#141414' }}/>
+              <View style={{ borderWidth: 1, height: 1, borderColor: '#F2D376' }}/>
             </View>
 
             {suffixIcon}

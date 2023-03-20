@@ -3,13 +3,22 @@ import {Text as ReactText} from 'react-native';
 import Styled from 'styled-components';
 import {useColor} from '@src/components';
 
+// export const fontFamily = {
+//   regular: 'NeueHaasDisplay-Light',
+//   medium: 'NeueHaasDisplay-Roman',
+//   semibold: 'NeueHaasDisplay-Mediu',
+//   bold: 'NeueHaasDisplay-Bold',
+//   light: 'NeueHaasDisplay-Thin',
+//   italic: 'NeueHaasDisplay-Thin',
+// };
+
 export const fontFamily = {
-  regular: 'NeueHaasDisplay-Light',
-  medium: 'NeueHaasDisplay-Roman',
-  semibold: 'NeueHaasDisplay-Mediu',
-  bold: 'NeueHaasDisplay-Bold',
-  light: 'NeueHaasDisplay-Thin',
-  italic: 'NeueHaasDisplay-Thin',
+  regular: 'Inter-Light',
+  medium: 'Inter-Regular',
+  semibold: 'Inter-Medium',
+  bold: 'Inter-Bold',
+  light: 'Inter-Thin',
+  italic: 'Inter-Thin',
 };
 
 const BaseText = Styled(ReactText)`

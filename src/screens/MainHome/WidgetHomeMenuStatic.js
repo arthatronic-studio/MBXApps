@@ -96,14 +96,14 @@ const WidgetHomeMenuStatic = () => {
               imageUrl: e.file,
             };
             break;
-          case 'fest':
-            obj = {
-              name: e.name,
-              navigate: e.navigate || 'FestScreen',
-              imageAsset: imageAssets.homeMenuFest,
-              imageUrl: e.file,
-            };
-            break;
+          // case 'fest':
+          //   obj = {
+          //     name: e.name,
+          //     navigate: e.navigate || 'FestScreen',
+          //     imageAsset: imageAssets.homeMenuFest,
+          //     imageUrl: e.file,
+          //   };
+          //   break;
           case 'group':
             obj = {
               name: e.name,
@@ -112,14 +112,14 @@ const WidgetHomeMenuStatic = () => {
               imageUrl: e.file,
             };
             break;
-          default:
-            obj = {
-              name: e.name,
-              navigate: e.navigate,
-              imageAsset: imageAssets.homeMenuFest,
-              imageUrl: e.file,
-            };
-            break;
+          // default:
+          //   obj = {
+          //     name: e.name,
+          //     navigate: e.navigate,
+          //     imageAsset: imageAssets.homeMenuFest,
+          //     imageUrl: e.file,
+          //   };
+          //   break;
         }
 
         if (obj) newData.push(obj);
@@ -232,7 +232,8 @@ const WidgetHomeMenuStatic = () => {
                     style={[
                       {
                         height: '100%',
-                        width: '100%'
+                        width: '100%',
+                        tintColor: Color.text
                       },
                       menu.comingsoon ? {opacity: 0.3} : {}
                     ]}
@@ -240,7 +241,7 @@ const WidgetHomeMenuStatic = () => {
                   />
                 </View>
                 
-                <Text size={10} type='medium' style={menu.comingsoon && {opacity: 0.3}} color={Color.textButtonInline}>
+                <Text size={10} type='medium' style={menu.comingsoon && {opacity: 0.3}} color={Color.text}>
                   {menu.name}
                 </Text>
 

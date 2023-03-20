@@ -143,6 +143,12 @@ const reboundEvoria = require('./rebound-evoria.png');
 const mBlocMarket = require('./m-bloc-market.png');
 const placeholderTenant = require('./placeholder-tenant.png');
 
+export const tmii_banner_1 = require('./tmii_banner_1.png');
+export const tmii_banner_2 = require('./tmii_banner_2.jpeg');
+export const tmii_onboarding_1 = require('./tmii_onboarding_1.jpeg');
+export const tmii_article_1 = require('./tmii_article_1.jpeg');
+export const tmii_article_2 = require('./tmii_article_2.jpeg');
+
 export {
   iconApp,
   iconSplash,

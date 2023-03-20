@@ -148,7 +148,7 @@ const MainProfile = ({navigation, route}) => {
   console.log('auth', auth);
 
   return (
-    <Scaffold loadingProps={loadingProps} showHeader={false} statusBarColor="#141414" barStyleColor="light-content">
+    <Scaffold loadingProps={loadingProps} showHeader={false} statusBarColor="#F2D376" barStyleColor="light-content">
       <ScrollView showsVerticalScrollIndicator={false}>
         {auth.user && !auth.user.isRegistered && <Container
           marginTop={16}

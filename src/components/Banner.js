@@ -9,6 +9,7 @@ import {Text, useColor} from '@src/components';
 import TouchableOpacity from 'src/components/Button/TouchableDebounce';
 import PostingHeader from 'src/components/Posting/PostingHeader';
 import { getSizeByRatio } from 'src/utils/get_ratio';
+import { tmii_banner_1 } from 'assets/images';
 
 const propTypes = {
   data: PropTypes.array,
@@ -117,12 +118,13 @@ const Banner = ({ data, loading, showHeader, forArticle, leftIndicator, imageUrl
                     onPress={() => onPress(e)}
                   >
                     <Image
-                      source={imageUrl ? {uri: e.image}: e.image}
+                      source={e.imageStatic}
+                      // source={imageUrl ? {uri: e.image}: e.image}
                       style={{
                         width: '100%',
                         height: '100%',
                         // borderRadius: 8,
-                        backgroundColor: Color.border,
+                        backgroundColor: Color.placeholder,
                       }}
                       resizeMode='cover'
                     />

@@ -60,6 +60,8 @@ const HighlightXperience = ({
     if (result.status) {
       if (Array.isArray(result.data)) newArr = result.data;
     }
+
+    console.log('newArr', newArr);
     
     setItemData(newArr);
   };

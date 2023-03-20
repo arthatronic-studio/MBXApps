@@ -14,7 +14,7 @@ import YoutubePlayer from 'react-native-youtube-iframe';
 import WebView from 'react-native-webview';
 
 import {FormatMoney} from 'src/utils';
-import imageAssets from 'assets/images';
+import imageAssets, { tmii_article_1, tmii_article_2 } from 'assets/images';
 import {Divider, Container} from 'src/styled';
 import {fetchLike} from 'src/api-rest/fetchLike';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -167,11 +167,12 @@ const CardXperience = ({item, onPress, numColumns, horizontal}) => {
   );
   const [listComment, setListComment] = useState(initialListData);
 
-  const cardImage = (image, caption) => {
+  const cardImage = (image, caption, index) => {
     return (
       <Container>
         <Image
-          source={{uri: image}}
+          source={index % 2 === 0 ? tmii_article_1 : tmii_article_2}
+          // source={{uri: image}}
           style={{
             width: '100%',
             height: width - 32,
@@ -277,21 +278,21 @@ const CardXperience = ({item, onPress, numColumns, horizontal}) => {
         pagingEnabled
         horizontal
         renderItem={({item, index}) => {
-          if (item?.url != null) {
-            return (
-              <Container justify="center">
-                <RenderContent
-                  url={item.url}
-                  type={item.url_type}
-                  image={item?.images.length > 0 ? item.images[0] : null}
-                />
-              </Container>
-            );
-          }
+          // if (item?.url != null) {
+          //   return (
+          //     <Container justify="center">
+          //       <RenderContent
+          //         url={item.url}
+          //         type={item.url_type}
+          //         image={item?.images.length > 0 ? item.images[0] : null}
+          //       />
+          //     </Container>
+          //   );
+          // }
           if (item?.images?.length > 0) {
             return (
               <Container width={width - 32}>
-                {cardImage(item.images[0], item.caption)}
+                {cardImage(item.images[0], item.caption, index)}
                 <Divider height={16} />
               </Container>
             );

@@ -62,7 +62,8 @@ const ModalBeaconCheckin = ({ item, visible, onClose }) => {
             >
               <Text size={12}>Selamat Datang di</Text>
               <Divider height={4} />
-              <Text size={22} letterSpacing={0.15} type='medium'>{auth.user && auth.user.activityInfo && auth.user.activityInfo.location ? auth.user.activityInfo.location.name : ''}</Text>
+              <Text size={22} letterSpacing={0.15} type='medium'>TMII</Text>
+              {/* <Text size={22} letterSpacing={0.15} type='medium'>{auth.user && auth.user.activityInfo && auth.user.activityInfo.location ? auth.user.activityInfo.location.name : ''}</Text> */}
               <Divider />
               <View
                 style={{
@@ -71,7 +72,7 @@ const ModalBeaconCheckin = ({ item, visible, onClose }) => {
                 }}
               >
                 <Image
-                  source={{ uri: 'https://anekatempatwisata.com/wp-content/uploads/2022/04/M-Bloc-Space.jpg' }}
+                  source={{ uri: 'https://kcic.co.id/lkapp/wp-content/uploads/2021/06/Keong-Emas-TMII.jpg' }}
                   style={{
                     height: '100%',
                     width: '100%',

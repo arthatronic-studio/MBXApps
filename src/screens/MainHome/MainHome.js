@@ -35,7 +35,7 @@ import {
 } from '@src/components';
 import {Divider, Circle, Container, Row, Column} from '@src/styled';
 import Banner from 'src/components/Banner';
-import imageAssets from 'assets/images';
+import imageAssets, { tmii_banner_2 } from 'assets/images';
 import WidgetHomeMenuStatic from './WidgetHomeMenuStatic';
 import {getAPI, postAPI} from 'src/api-rest/httpService';
 import HighlightEvent from 'src/components/Event/HighlightEvent';
@@ -57,6 +57,7 @@ import {useInterval} from 'src/hooks/useInterval';
 import ModalChangeLocation from 'src/components/Modal/ModalChangeLocation';
 import HighlightPicuWujudkan from '../PicuWujudkan/HighlightPicuWujudkan';
 import HighlightXperience from '../Article/HighlightXperience';
+import { tmii_banner_1 } from '@assets/images';
 
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
@@ -201,10 +202,11 @@ const MainHome = ({navigation, route}) => {
 
     let newArr = [];
     if (result.status) {
-      result.data.map(e => {
+      result.data.map((e, idx) => {
         newArr.push({
           ...e,
           image: e.file,
+          imageStatic: idx % 2 === 0 ? tmii_banner_1 : tmii_banner_2,
         });
       });
     }
@@ -476,6 +478,7 @@ const MainHome = ({navigation, route}) => {
         <HeaderBig
           type="MAIN_HOME"
           titleRight={auth.user && auth.user.isGuest ? 'LOGIN' : ''}
+          titleRightColor={Color.text}
           onPressRightButton={() => {
             if (auth.user && auth.user.isGuest) {
               redirectTo('LoginScreenV2');
@@ -775,7 +778,7 @@ const MainHome = ({navigation, route}) => {
             />
           </Container>
 
-          <Divider height={spaceContentSize * 2} />
+          {/* <Divider height={spaceContentSize * 2} /> */}
 
           {/* checkin old design */}
           {/* {isCheckin &&
@@ -932,9 +935,9 @@ const MainHome = ({navigation, route}) => {
             </Container>
           )}
 
-          <Divider height={spaceContentSize * 2} />
+          {/* <Divider height={spaceContentSize * 2} /> */}
 
-          <ListContenEvent
+          {/* <ListContenEvent
             productCategory="EVENT"
             name="Event"
             title="● SECURE YOUR TICKET NOW"
@@ -942,7 +945,7 @@ const MainHome = ({navigation, route}) => {
             showHeader
             horizontal
             showSeeAllText={false}
-          />
+          /> */}
 
           {/* event ticket */}
           {isCheckin && auth.user && auth.user.activeEvent && (
@@ -1019,17 +1022,17 @@ const MainHome = ({navigation, route}) => {
 
           {/* <Divider /> */}
 
-          <HighlightTenant
+          {/* <HighlightTenant
             title={'● Most Loved'.toUpperCase()}
             numColumns={1}
             tenantType="eat"
             productCategory="EAT"
-          />
+          /> */}
 
-          <Divider />
+          {/* <Divider /> */}
 
           <HighlightXperience
-            title="● XPERIENCE"
+            title="Artikel"
             numColumns={1}
             type="HIGHLIGHT"
           />
@@ -1049,11 +1052,11 @@ const MainHome = ({navigation, route}) => {
           <View>
             <Divider />
 
-            <PostingHeader
+            {/* <PostingHeader
               title="● PICU WUJUDKAN"
               showSeeAllText={true}
               onSeeAllPress={() => navigation.navigate('PicuWujudkanScreen')}
-            />
+            /> */}
 
             {/* <Container
               paddingHorizontal={16}
@@ -1066,7 +1069,7 @@ const MainHome = ({navigation, route}) => {
               <Divider height={11} />
 
             </Container> */}
-            <Container
+            {/* <Container
               paddingHorizontal={16}
               paddingTop={11}
               paddingBottom={11}>
@@ -1092,7 +1095,7 @@ const MainHome = ({navigation, route}) => {
                 We believe colaboration make us stronger, join and be part of
                 our movement!
               </Text>
-            </Container>
+            </Container> */}
           </View>
         </Container>
       </ScrollView>

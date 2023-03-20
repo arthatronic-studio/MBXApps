@@ -84,9 +84,9 @@ const SplashScreen = ({navigation, route}) => {
     <Scaffold
       showHeader={false}
       style={{
-        backgroundColor: '#141414',
+        backgroundColor: Color.theme
       }}
-      statusBarColor={'#141414'}
+      statusBarColor={Color.theme}
       popupProps={popupProps}
       fallback={isLoading}
     >
@@ -136,7 +136,7 @@ const SplashScreen = ({navigation, route}) => {
         </View>}
       </Container>
 
-      <View style={{position: 'absolute', bottom: 50, width: '100%', alignItems: 'center'}}>
+      {/* <View style={{position: 'absolute', bottom: 50, width: '100%', alignItems: 'center'}}>
         <Image
           source={bgSplashFooter}
           style={{
@@ -144,18 +144,18 @@ const SplashScreen = ({navigation, route}) => {
             resizeMode:"contain"
           }}
         />
-      </View>
+      </View> */}
       <View style={{position: 'absolute', bottom: 0, width: '200%', alignSelf: 'center' }}>
         <View
           style={{ 
-            backgroundColor: '#EEFF00',
+            backgroundColor: Color.primary,
             paddingVertical: 15,
             width: '100%',
             alignSelf: 'center'
            }}
         >
-          <Text numberOfLines={1} size={14} color="#141414" type="medium" lineHeight={17} align='center'>
-          The Experience Agregator   •    blocx.id   •   blocX   •   The Experience Agitator   •   blocx.com            
+          <Text numberOfLines={1} size={14} color={Color.text} type="medium" lineHeight={17} align='center'>
+            Timpat Digital
           </Text>
         </View>
       </View>
