@@ -20,7 +20,7 @@ const config = {
 };
 
 const linking = {
-  prefixes: ['blocx://'],
+  prefixes: ['mblocxperienceapp://'],
   config,
 };
 

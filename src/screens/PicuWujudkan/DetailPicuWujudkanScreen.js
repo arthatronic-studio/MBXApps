@@ -41,6 +41,7 @@ const initialListData = {
 
 const DetailPicuWujudkanScreen = ({navigation, route}) => {
   const {item, category, id} = route.params;
+  console.log(id, 'id nih')
   const [itemDetail, setItemDetail] = useState(item);
   const {Color} = useColor();
   const {height, width} = useWindowDimensions();
@@ -120,7 +121,8 @@ const DetailPicuWujudkanScreen = ({navigation, route}) => {
   };
 
   const fetchDetailArticle = async () =>{
-    let parameter = `?article_id=${id ? id : item.id}&category=picu_wujudkan&type=${category}`;
+    let parameter = `?article_id=${id ? id : item.id}&category=picu_wujudkan`;
+    console.log(parameter, 'parameter nih')
     const res = await fetchGetArticle(parameter)
     if(res.success && Array.isArray(res.data) && res.data[0]){
       setItemDetail(res.data[0]);
