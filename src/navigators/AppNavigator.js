@@ -1,7 +1,7 @@
 import React from 'react';
-import { Platform } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { accessClient } from 'src/utils/access_client';
+import {Platform} from 'react-native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {accessClient} from 'src/utils/access_client';
 
 // uncanny
 import TestScreen from 'src/screens/TestScreen';
@@ -29,6 +29,7 @@ import ForgotPasswordScreen from '@src/screens/User/ForgotPasswordScreen';
 import UserChangePassword from '@src/screens/User/UserChangePassword';
 import OtpScreen from 'src/screens/User/OtpScreen';
 import OtpScreenV2 from 'src/screens/User/OtpScreenV2';
+import WebViewScreen from 'src/screens/User/WebView';
 
 // topup
 import TopUpScreen from '@src/screens/Topup/TopUpScreen';
@@ -101,7 +102,6 @@ import CreateNews from 'src/screens/Posting/News/CreateNews';
 import EditNews from 'src/screens/Posting/News/EditNews';
 import ShowAllNews from 'src/screens/Posting/News/ShowAllNews';
 
-
 // Place
 import PlaceScreen from 'src/screens/Posting/Place/Index';
 import PlaceDetail from 'src/screens/Posting/Place/Detail';
@@ -147,7 +147,7 @@ import ChatDetailScreen from '@src/screens/Chat/ChatDetailScreen';
 import ChatUserListScreen from '@src/screens/Chat/ChatUserListScreen';
 import ChatInfoScreen from '@src/screens/Chat/ChatInfoScreen';
 
-// Lelang 
+// Lelang
 import Lelang from 'src/screens/Lelang/Lelang';
 import DetailLelang from 'src/screens/Lelang/DetailLelang';
 import CardBid from 'src/screens/Lelang/CardBid';
@@ -335,22 +335,25 @@ import DetailPicuWujudkanScreen from 'src/screens/PicuWujudkan/DetailPicuWujudka
 // GROUP
 import GroupScreen from 'src/screens/Group/GroupScreen';
 
-const { Navigator, Screen } = createStackNavigator();
+const {Navigator, Screen} = createStackNavigator();
 
 function AppNavigator() {
   return (
     <Navigator
-      initialRouteName={"SplashScreen"}
+      initialRouteName={'SplashScreen'}
       screenOptions={{
         gestureEnabled: Platform.OS === 'ios',
-        headerShown: false
+        headerShown: false,
       }}>
       {/* uncanny */}
       <Screen name="TestScreen" component={TestScreen} />
       <Screen name="SplashScreen" component={SplashScreen} />
 
       <Screen name="DocumentasiEvent" component={DocumentasiEvent} />
-      <Screen name="DocumentasiEventDetail" component={DocumentasiEventDetail} />
+      <Screen
+        name="DocumentasiEventDetail"
+        component={DocumentasiEventDetail}
+      />
       <Screen name="OnBoardEvent" component={OnBoardEvent} />
       <Screen name="EditEvent" component={EditEvent} />
       <Screen name="EditEventSecond" component={EditEventSecond} />
@@ -388,7 +391,10 @@ function AppNavigator() {
       <Screen name="AuctionHistory" component={AuctionHistory} />
       <Screen name="TestLelang" component={TestLelang} />
       <Screen name="AddProductAuction" component={AddProductAuction} />
-      <Screen name="AddProductAuctionSecond" component={AddProductAuctionSecond} />
+      <Screen
+        name="AddProductAuctionSecond"
+        component={AddProductAuctionSecond}
+      />
       {/* Promo Popup */}
       <Screen name="PromoScreen" component={PromoScreen} />
       <Screen name="PromoDetailScreen" component={PromoDetailScreen} />
@@ -446,6 +452,7 @@ function AppNavigator() {
       <Screen name="UserChangePassword" component={UserChangePassword} />
       <Screen name="OtpScreen" component={OtpScreen} />
       <Screen name="OtpScreenV2" component={OtpScreenV2} />
+      <Screen name="WebViewScreen" component={WebViewScreen} />
       {/* topup */}
       <Screen name="TopUpScreen" component={TopUpScreen} />
       {/* content */}
@@ -474,7 +481,10 @@ function AppNavigator() {
       <Screen name="PemesananTiket" component={PemesananTiket} />
       <Screen name="EventScreen" component={EventScreen} />
       <Screen name="SeeAllEvent" component={SeeAllEvent} />
-      <Screen name="SeeAllCollaboratorEvent" component={SeeAllCollaboratorEvent} />
+      <Screen
+        name="SeeAllCollaboratorEvent"
+        component={SeeAllCollaboratorEvent}
+      />
       <Screen name="EventDetail" component={EventDetail} />
       <Screen name="CreateEvent" component={CreateEvent} />
       <Screen name="CreateEventSecond" component={CreateEventSecond} />
@@ -485,7 +495,10 @@ function AppNavigator() {
       <Screen name="MyEvent" component={MyEvent} />
       <Screen name="SavedEvent" component={SavedEvent} />
       <Screen name="SearchEvent" component={SearchEvent} />
-      <Screen name="DocumentasiSearchEvent" component={DocumentasiSearchEvent} />
+      <Screen
+        name="DocumentasiSearchEvent"
+        component={DocumentasiSearchEvent}
+      />
       <Screen name="EventHistory" component={History} />
       <Screen name="MyTicket" component={MyTicket} />
 
@@ -508,7 +521,10 @@ function AppNavigator() {
       <Screen name="CreateThreadScreen" component={CreateThreadScreen} />
       <Screen name="ForumReport" component={ForumReport} />
       <Screen name="ForumReportDetail" component={ForumReportDetail} />
-      <Screen name="CreateThreadMultipleScreen" component={CreateThreadMultipleScreen} />
+      <Screen
+        name="CreateThreadMultipleScreen"
+        component={CreateThreadMultipleScreen}
+      />
       <Screen name="DetailForumScreen" component={DetailForumScreen} />
       <Screen name="EditThreadScreen" component={EditThreadScreen} />
       <Screen name="ForumScreen" component={ForumScreen} />
@@ -516,13 +532,28 @@ function AppNavigator() {
       <Screen name="ForumKutipan" component={ForumKutipan} />
       <Screen name="ForumTopicScreen" component={ForumTopicScreen} />
       <Screen name="ForumGroupScreen" component={ForumGroupScreen} />
-      <Screen name="ForumGroupDetailScreen" component={ForumGroupDetailScreen} />
-      <Screen name="ForumGroupPermintaanScreen" component={ForumGroupPermintaanScreen} />
-      <Screen name="ForumGroupAllMemberScreen" component={ForumGroupAllMemberScreen} />
-      <Screen name="ForumThreadManageScreen" component={ForumThreadManageScreen} />
-      <Screen name="ForumThreadManageDetailScreen" component={ForumThreadManageDetailScreen} />
+      <Screen
+        name="ForumGroupDetailScreen"
+        component={ForumGroupDetailScreen}
+      />
+      <Screen
+        name="ForumGroupPermintaanScreen"
+        component={ForumGroupPermintaanScreen}
+      />
+      <Screen
+        name="ForumGroupAllMemberScreen"
+        component={ForumGroupAllMemberScreen}
+      />
+      <Screen
+        name="ForumThreadManageScreen"
+        component={ForumThreadManageScreen}
+      />
+      <Screen
+        name="ForumThreadManageDetailScreen"
+        component={ForumThreadManageDetailScreen}
+      />
       <Screen name="CardDetailForum" component={CardDetailForum} />
-      
+
       {/* profile */}
       <Screen name="ChangeProfile" component={ChangeProfile} />
       <Screen name="ChangeProfileV2" component={ChangeProfileV2} />
@@ -533,7 +564,10 @@ function AppNavigator() {
       <Screen name="BlockUser" component={BlockUser} />
       <Screen name="ReferralCodeScreen" component={ReferralCodeScreen} />
       <Screen name="FAQScreen" component={FAQScreen} />
-      <Screen name="ContentProductSaveScreen" component={ContentProductSaveScreen} />
+      <Screen
+        name="ContentProductSaveScreen"
+        component={ContentProductSaveScreen}
+      />
       <Screen name="UserProfileScreen" component={UserProfileScreen} />
       <Screen name="ProfileDetail" component={ProfileDetail} />
       <Screen name="CompleteProfile" component={CompleteProfile} />
@@ -587,14 +621,26 @@ function AppNavigator() {
       <Screen name="SurveyFourth" component={SurveyFourth} />
       {/* Transaction */}
       <Screen name="TransactionDetail" component={TransactionDetail} />
-      <Screen name="TransactionDetailSucces" component={TransactionDetailSucces} />
-      <Screen name="TransactionDetailSeller" component={TransactionDetailSeller} />
+      <Screen
+        name="TransactionDetailSucces"
+        component={TransactionDetailSucces}
+      />
+      <Screen
+        name="TransactionDetailSeller"
+        component={TransactionDetailSeller}
+      />
 
       {/* gallery */}
       <Screen name="GalleryScreen" component={GalleryScreen} />
       <Screen name="GalleryDetailScreen" component={GalleryDetailScreen} />
-      <Screen name="GalleryDetailSliderScreen" component={GalleryDetailSliderScreen} />
-      <Screen name="GalleryDetailSliderScreenEvent" component={GalleryDetailSliderScreenEvent} />
+      <Screen
+        name="GalleryDetailSliderScreen"
+        component={GalleryDetailSliderScreen}
+      />
+      <Screen
+        name="GalleryDetailSliderScreenEvent"
+        component={GalleryDetailSliderScreenEvent}
+      />
 
       {/* security */}
       <Screen name="VisitorScreen" component={VisitorScreen} />

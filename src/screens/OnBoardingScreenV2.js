@@ -20,7 +20,7 @@ import {queryBannerList} from 'src/lib/query/banner';
 import {onBoarding1, onBoarding2, onBoarding3} from 'assets/images';
 import imageAssets from 'assets/images';
 import {Divider} from 'src/styled';
-import { statusBarHeight } from 'src/utils/constants';
+import {statusBarHeight} from 'src/utils/constants';
 import messaging from '@react-native-firebase/messaging';
 
 const listBoarding = [
@@ -104,7 +104,7 @@ const OnBoardingScreenV2 = ({navigation}) => {
       moveText3();
     }, 2500);
   }, []);
-  
+
   const handleNavigate = async () => {
     let token = '';
     const fcmToken = await messaging().getToken();
@@ -116,18 +116,32 @@ const OnBoardingScreenV2 = ({navigation}) => {
       device_token: token,
     };
 
-    redirectTo('OtpScreenV2', { body, isGuest: true });
-  }
+    redirectTo('OtpScreenV2', {body, isGuest: true});
+  };
+
+  const handleNavigateWebView = async () => {
+    let token = '';
+    const fcmToken = await messaging().getToken();
+    if (fcmToken) {
+      token = fcmToken;
+    }
+    const body = {
+      phone: '6283891122802',
+      device_token: token,
+    };
+
+    redirectTo('WebViewScreen', {body, isGuest: true});
+  };
 
   useEffect(() => {
     if (isFocused) {
       if (user) {
         // redirectTo('MainPage');
-        
+
         const body = {
           phone: '6283891122802',
         };
-        redirectTo('OtpScreenV2', { body, isGuest: true });
+        redirectTo('OtpScreenV2', {body, isGuest: true});
       } else {
         // fetchOnBoarding();
       }
@@ -149,7 +163,7 @@ const OnBoardingScreenV2 = ({navigation}) => {
   return (
     <Scaffold
       style={{
-        backgroundColor: Color.primary
+        backgroundColor: Color.primary,
       }}
       header={
         user ? (
@@ -218,10 +232,9 @@ const OnBoardingScreenV2 = ({navigation}) => {
         paddingHorizontal={16}
         style={{flex: 1, justifyContent: 'space-between'}}>
         <Animated.View
-          style={{ 
-            flex: 8
-           }}
-        >
+          style={{
+            flex: 8,
+          }}>
           <Animated.Text
             style={{
               transform: [{translateX: leftValue1}],
@@ -302,6 +315,31 @@ const OnBoardingScreenV2 = ({navigation}) => {
               lineHeight: 20,
             }}>
             Get Started
+          </Animated.Text>
+        </AnimatedTouchableOpacity>
+
+        <AnimatedTouchableOpacity
+          onPress={() => {
+            handleNavigateWebView();
+          }}
+          style={{
+            transform: [{translateY: leftValue3}],
+            marginVertical: 16,
+            borderWidth: 1,
+            padding: 12,
+            borderColor: '#E7FF00',
+            flex: 1,
+            maxHeight: 53,
+          }}>
+          <Animated.Text
+            style={{
+              color: '#E7FF00',
+              textAlign: 'center',
+              fontWeight: '500',
+              fontSize: 17,
+              lineHeight: 20,
+            }}>
+            Redirect To WebView
           </Animated.Text>
         </AnimatedTouchableOpacity>
       </Animated.View>
