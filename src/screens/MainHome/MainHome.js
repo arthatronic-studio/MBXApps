@@ -480,7 +480,7 @@ const MainHome = ({navigation, route}) => {
           onPressRightButton={() => {
             if (auth.user && auth.user.isGuest) {
               // redirectTo('LoginScreenV2');
-              navigation.navigate("LoginScreenV2");
+              navigation.navigate('LoginScreenV2');
             }
           }}
           actions={
@@ -1068,7 +1068,7 @@ const MainHome = ({navigation, route}) => {
               <Divider height={11} />
 
             </Container> */}
-            <CardSpark/>
+            <CardSpark />
           </View>
         </Container>
       </ScrollView>

@@ -33,7 +33,7 @@ import {FormatDuration} from 'src/utils';
 import {postNonAuth} from 'src/api-rest/httpService';
 import {stateBeaconSetting} from 'src/api-rest/stateBeaconSetting';
 import imageAssets from 'assets/images';
-import { stateUpdateProfile } from 'src/api-rest/stateUpdateProfile';
+import {stateUpdateProfile} from 'src/api-rest/stateUpdateProfile';
 
 const initialCountdown = 60 * 1;
 
@@ -92,13 +92,14 @@ const OtpScreenV2 = ({navigation, route}) => {
     setListTextInput(newListTextInput);
   };
 
-
   useEffect(() => {
     // showPopup('Otp berhasil dikirim', 'success');
 
     resetOtp();
 
-    const unsub = Keyboard.addListener('keyboardDidHide', () => setActiveIndex());
+    const unsub = Keyboard.addListener('keyboardDidHide', () =>
+      setActiveIndex(),
+    );
 
     return () => {
       unsub.remove();
@@ -234,7 +235,7 @@ const OtpScreenV2 = ({navigation, route}) => {
     const beaconSetting = await stateBeaconSetting();
 
     const fcm_token = await messaging().getToken();
-    const body = { fcm_token };
+    const body = {fcm_token};
     const updateProfile = await stateUpdateProfile(body);
     console.log('updateProfile', updateProfile);
 
@@ -266,10 +267,7 @@ const OtpScreenV2 = ({navigation, route}) => {
       style={{
         backgroundColor: '#EEEEEE',
       }}
-      header={
-        <HeaderBig style={{ backgroundColor: 'transparent' }} />
-      }
-    >
+      header={<HeaderBig style={{backgroundColor: 'transparent'}} />}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         bounces={false}
@@ -384,27 +382,36 @@ const OtpScreenV2 = ({navigation, route}) => {
                   Resend
                 </Text>
               </TouchableOpacity>
-              <Text align="right" size={11} type="medium" lineHeight={13} color="#141414">
+              <Text
+                align="right"
+                size={11}
+                type="medium"
+                lineHeight={13}
+                color="#141414">
                 {` (${FormatDuration.getMinutesFromSeconds(countdown)})`}
               </Text>
             </Row>
           </Padding>
 
-          <Container align='flex-end'>
-              <NativeTouchable
-                onPress={() => onSubmit()}
-                disabled={listTextInput.length < 4}
-                style={{ 
-                  backgroundColor: listTextInput.length < 4 ? '#797979' : '#242424',
-                  paddingVertical: 12,
-                  paddingHorizontal: 64.5,
-                 }}
-              >
-                <Text color={listTextInput.length < 4 ? Color.white : '#E7FF00'} type="medium" size={14} lineHeight={16}>
-                  Verify
-                </Text>
-              </NativeTouchable>
-            </Container>
+          <Container align="flex-end">
+            <NativeTouchable
+              onPress={() => onSubmit()}
+              disabled={listTextInput.length < 4}
+              style={{
+                backgroundColor:
+                  listTextInput.length < 4 ? '#797979' : '#242424',
+                paddingVertical: 12,
+                paddingHorizontal: 64.5,
+              }}>
+              <Text
+                color={listTextInput.length < 4 ? Color.white : '#E7FF00'}
+                type="medium"
+                size={14}
+                lineHeight={16}>
+                Verify
+              </Text>
+            </NativeTouchable>
+          </Container>
 
           {/* <Button
             style={{marginBottom: 20, ...shadowStyle}}

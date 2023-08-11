@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Image, useWindowDimensions} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {Button, Scaffold, Text, useColor, usePopup} from '@src/components';
 import {bgSplashFooter, bgSplashHeader, iconSplash} from '@assets/images';
-import { Container } from 'src/styled';
-import { accessClient } from 'src/utils/access_client';
-import { stateBeaconSetting } from 'src/api-rest/stateBeaconSetting';
+import {Container} from 'src/styled';
+import {accessClient} from 'src/utils/access_client';
+import {stateBeaconSetting} from 'src/api-rest/stateBeaconSetting';
 import messaging from '@react-native-firebase/messaging';
-import { fetchFcm } from 'src/api-rest/fetchFcm';
+import {fetchFcm} from 'src/api-rest/fetchFcm';
 
 const SplashScreen = ({navigation, route}) => {
   const {width, height} = useWindowDimensions();
@@ -22,7 +22,7 @@ const SplashScreen = ({navigation, route}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorSettingBeacon, setErrorSettingBeacon] = useState(false);
 
-  const fcm = async() => {
+  const fcm = async () => {
     const fcmToken = await messaging().getToken();
     if (fcmToken) {
       const body = {
@@ -30,38 +30,36 @@ const SplashScreen = ({navigation, route}) => {
       };
       const res = await fetchFcm(body);
     } else {
-      console.log("=== No token received ===", fcmToken);
+      console.log('=== No token received ===', fcmToken);
     }
-  }
-
+  };
 
   useEffect(() => {
-
-    dispatch({ type: 'THEME.SET_THEME', data: accessClient.Theme });
+    dispatch({type: 'THEME.SET_THEME', data: accessClient.Theme});
 
     setTimeout(() => {
       if (auth.token) {
         handleNavigate();
       } else {
         fcm();
-        dispatch({ type: 'AUTH.CLEAR' });
+        dispatch({type: 'AUTH.CLEAR'});
         dispatch({type: 'USER.LOGOUT'});
         redirectTo('OnBoardingScreenV2');
       }
     }, 3000);
   }, []);
 
-  const handleNavigate = async() => {
+  const handleNavigate = async () => {
     // setIsLoading(true);
-    
+
     // const beaconSetting = await stateBeaconSetting();
 
     // setIsLoading(false);
 
     // if (beaconSetting) {
-      redirectTo('MainPage');
+    redirectTo('MainPage');
 
-      // setErrorSettingBeacon(false);
+    // setErrorSettingBeacon(false);
 
     //   return;
     // }
@@ -69,7 +67,7 @@ const SplashScreen = ({navigation, route}) => {
     // setErrorSettingBeacon(true);
 
     // showPopup('Initial error, silakan muat ulang', 'error');
-  }
+  };
 
   const redirectTo = nav => {
     navigation.dispatch(
@@ -88,8 +86,7 @@ const SplashScreen = ({navigation, route}) => {
       }}
       statusBarColor={'#141414'}
       popupProps={popupProps}
-      fallback={isLoading}
-    >
+      fallback={isLoading}>
       {/* <View style={{position: 'absolute', width: '100%', aspectRatio: 1 }}>
         <Image
           source={bgSplashHeader}
@@ -100,62 +97,72 @@ const SplashScreen = ({navigation, route}) => {
         />
       </View> */}
 
-      <Container
-        height={height}
-        width={width}
-        align='center'
-        justify='center'
-      >
+      <Container height={height} width={width} align="center" justify="center">
         <View
           style={{
             width: '44%',
             aspectRatio: 1,
             marginBottom: 12,
-          }}
-        >
-        <Image
-          source={iconSplash}
-          style={{
-            height: '100%',
-            width: '100%',
-          }}
-          resizeMode='contain'
-        />
+          }}>
+          <Image
+            source={iconSplash}
+            style={{
+              height: '100%',
+              width: '100%',
+            }}
+            resizeMode="contain"
+          />
         </View>
 
         {/* <Text size={11} type='bold'>
           blocX
         </Text> */}
 
-        {errorSettingBeacon && <View style={{width: '100%', paddingTop: 16}}>
-          <Button
-            onPress={() => handleNavigate()}
-          >
-            Muat Ulang
-          </Button>
-        </View>}
+        {errorSettingBeacon && (
+          <View style={{width: '100%', paddingTop: 16}}>
+            <Button onPress={() => handleNavigate()}>Muat Ulang</Button>
+          </View>
+        )}
       </Container>
 
-      <View style={{position: 'absolute', bottom: 50, width: '100%', alignItems: 'center'}}>
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 50,
+          width: '100%',
+          alignItems: 'center',
+        }}>
         <Image
           source={bgSplashFooter}
           style={{
             width: '22%',
-            resizeMode:"contain"
+            resizeMode: 'contain',
           }}
         />
       </View>
-      <View style={{position: 'absolute', bottom: 0, width: '200%', alignSelf: 'center' }}>
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          width: '200%',
+          alignSelf: 'center',
+        }}>
         <View
-          style={{ 
+          style={{
             backgroundColor: '#EEFF00',
             paddingVertical: 15,
             width: '100%',
-            alignSelf: 'center'
-           }}
-        >
-          <Text numberOfLines={1} size={14} color="#141414" type="medium" lineHeight={17} align='center'>
-          The Experience Agregator   •    blocx.id   •   blocX   •   The Experience Agitator   •   blocx.com            
+            alignSelf: 'center',
+          }}>
+          <Text
+            numberOfLines={1}
+            size={14}
+            color="#141414"
+            type="medium"
+            lineHeight={17}
+            align="center">
+            The Experience Agregator • blocx.id • blocX • The Experience
+            Agitator • blocx.com
           </Text>
         </View>
       </View>

@@ -1,32 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Image,
   Linking,
   useWindowDimensions,
+  Touchable,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
-import {
-  Text,
-  TouchableOpacity,
-  useColor,
-} from '@src/components';
+import {Text, TouchableOpacity, useColor} from '@src/components';
 import {shadowStyle} from '@src/styles';
 import {Container} from '@src/styled';
-import { analyticMethods, GALogEvent } from 'src/utils/analytics';
+import {analyticMethods, GALogEvent} from 'src/utils/analytics';
 import client from 'src/lib/apollo';
-import { queryMenuList } from 'src/lib/query';
-import { accessClient } from 'src/utils/access_client';
-import { initialItemState } from 'src/utils/constants';
+import {queryMenuList} from 'src/lib/query';
+import {accessClient} from 'src/utils/access_client';
+import {initialItemState} from 'src/utils/constants';
 import ModalMenuHome from 'src/screens/MainHome/ModalMenuHome';
 import imageAssets from 'assets/images';
-import { getAPI } from 'src/api-rest/httpService';
+import {getAPI} from 'src/api-rest/httpService';
+import messaging from '@react-native-firebase/messaging';
+import {redirectTo} from 'src/utils';
 
-const defaultProps = {
-  
-};
+const defaultProps = {};
 
 const WidgetHomeMenuStatic = () => {
   const {Color} = useColor();
@@ -42,7 +39,7 @@ const WidgetHomeMenuStatic = () => {
     fetchMenuList();
   }, []);
 
-  const fetchMenuList = async() => {
+  const fetchMenuList = async () => {
     const result = await getAPI('menu');
     // console.log('result menu', result);
 
@@ -54,7 +51,7 @@ const WidgetHomeMenuStatic = () => {
 
       result.data.map((e, idx) => {
         let obj;
-      
+
         switch (e.code) {
           case 'shop':
             obj = {
@@ -128,7 +125,7 @@ const WidgetHomeMenuStatic = () => {
 
     setListMenuHome(newData);
     setNumOfColumn(newNumOfColumn);
-  }
+  };
 
   const renderMenuBadge = () => {
     return (
@@ -140,14 +137,15 @@ const WidgetHomeMenuStatic = () => {
           top: -6,
           right: 16,
         }}>
-        <View style={{
-          backgroundColor: Color.error,
-          borderRadius: 30,
-          paddingBottom: 1,
-          paddingHorizontal: 5,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
+        <View
+          style={{
+            backgroundColor: Color.error,
+            borderRadius: 30,
+            paddingBottom: 1,
+            paddingHorizontal: 5,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
           <Text size={8} color={Color.textInput}>
             New
           </Text>
@@ -156,11 +154,25 @@ const WidgetHomeMenuStatic = () => {
     );
   };
 
-  const menuPerColumn = listMenuHome.length < numOfColumn ? listMenuHome.length : numOfColumn;
-  const widthPerMenu = (100 / menuPerColumn);
+  const menuPerColumn =
+    listMenuHome.length < numOfColumn ? listMenuHome.length : numOfColumn;
+  const widthPerMenu = 100 / menuPerColumn;
   const paddingInMenu = 16;
 
   if (listMenuHome.length === 0) return <View />;
+
+  const handleNavigateWebView = async () => {
+    let token = '';
+    const fcmToken = await messaging().getToken();
+    if (fcmToken) {
+      token = fcmToken;
+    }
+    const body = {
+      phone: '6283891122802',
+      device_token: token,
+    };
+    redirectTo('WebViewScreen', {body, isGuest: true});
+  };
 
   return (
     <Container padding={paddingInMenu - 2}>
@@ -170,8 +182,7 @@ const WidgetHomeMenuStatic = () => {
           flexDirection: 'row',
           flexWrap: 'wrap',
           borderRadius: 8,
-        }}
-      >
+        }}>
         {listMenuHome.map((menu, idx) => {
           if (Platform.OS === 'ios' && menu.comingsoon) {
             return null;
@@ -192,23 +203,29 @@ const WidgetHomeMenuStatic = () => {
                 //   method: analyticMethods.viewAll,
                 // });
 
-                if (menu.navigate.includes('http://') || menu.navigate.includes('https://')) {
-                  navigation.navigate('WebviewGeneralScreen', { url: menu.navigate });
+                if (
+                  menu.navigate.includes('http://') ||
+                  menu.navigate.includes('https://')
+                ) {
+                  navigation.navigate('WebviewGeneralScreen', {
+                    url: menu.navigate,
+                  });
                   return;
-                }
-                else if (menu.navigate === 'modal') {
+                } else if (menu.navigate === 'modal') {
                   setModalMenuHome(true);
                   return;
                 }
 
-                navigation.navigate(menu.navigate, { title: menu.name, ...menu.params });
+                navigation.navigate(menu.navigate, {
+                  title: menu.name,
+                  ...menu.params,
+                });
               }}
               style={{
                 width: `${widthPerMenu}%`,
                 aspectRatio: 1,
                 padding: 2,
-              }}
-            >
+              }}>
               <View
                 style={{
                   width: '100%',
@@ -216,8 +233,7 @@ const WidgetHomeMenuStatic = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   backgroundColor: Color.primary,
-                }}
-              >
+                }}>
                 <View
                   style={{
                     width: '33%',
@@ -225,22 +241,27 @@ const WidgetHomeMenuStatic = () => {
                     marginBottom: 8,
                     justifyContent: 'center',
                     alignItems: 'center',
-                  }}
-                >
+                  }}>
                   <Image
-                    source={menu.imageUrl ? { uri: menu.imageUrl } : menu.imageAsset}
+                    source={
+                      menu.imageUrl ? {uri: menu.imageUrl} : menu.imageAsset
+                    }
                     style={[
                       {
                         height: '100%',
-                        width: '100%'
+                        width: '100%',
                       },
-                      menu.comingsoon ? {opacity: 0.3} : {}
+                      menu.comingsoon ? {opacity: 0.3} : {},
                     ]}
                     resizeMode="contain"
                   />
                 </View>
-                
-                <Text size={10} type='medium' style={menu.comingsoon && {opacity: 0.3}} color={Color.textButtonInline}>
+
+                <Text
+                  size={10}
+                  type="medium"
+                  style={menu.comingsoon && {opacity: 0.3}}
+                  color={Color.textButtonInline}>
                   {menu.name}
                 </Text>
 
@@ -250,7 +271,29 @@ const WidgetHomeMenuStatic = () => {
           );
         })}
       </Container>
-
+      <TouchableOpacity
+        onPress={() => {
+          handleNavigateWebView();
+        }}
+        style={{
+          marginVertical: 16,
+          borderWidth: 1,
+          padding: 12,
+          borderColor: '#000000',
+          flex: 1,
+          maxHeight: 53,
+        }}>
+        <Text
+          style={{
+            color: '#000000',
+            textAlign: 'center',
+            fontWeight: '500',
+            fontSize: 17,
+            lineHeight: 20,
+          }}>
+          Redirect To WebView
+        </Text>
+      </TouchableOpacity>
       <ModalMenuHome
         visible={modalMenuHome}
         onClose={() => {
