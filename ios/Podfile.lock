@@ -491,7 +491,7 @@ PODS:
     - react-native-video/Video (= 5.2.1)
   - react-native-video/Video (5.2.1):
     - React-Core
-  - react-native-webview (11.23.0):
+  - react-native-webview (13.3.1):
     - React-Core
   - React-perflogger (0.69.4)
   - React-RCTActionSheet (0.69.4):
@@ -929,7 +929,7 @@ SPEC CHECKSUMS:
   React: 482cd1ba23c471be1aed3800180be2427418d7be
   React-bridging: c2ea4fed6fe4ed27c12fd71e88b5d5d3da107fde
   React-callinvoker: d4d1f98163fb5e35545e910415ef6c04796bb188
-  React-Codegen: ff35fb9c7f6ec2ed34fb6de2e1099d88dfb25f2f
+  React-Codegen: 9cb8451d5b81b95b961e7ba7188efa09c3fbfc83
   React-Core: 4d3443a45b67c71d74d7243ddde9569d1e4f4fad
   React-CoreModules: 70be25399366b5632ab18ecf6fe444a8165a7bea
   React-cxxreact: 822d3794fc0bf206f4691592f90e086dd4f92228
@@ -959,7 +959,7 @@ SPEC CHECKSUMS:
   react-native-track-player: 12c7bdc776f11c382c11fecdade3743ebe0af78c
   react-native-tracking-transparency: 25ff1ff866e338c137c818bdec20526bb05ffcc1
   react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253
-  react-native-webview: e771bc375f789ebfa02a26939a57dbc6fa897336
+  react-native-webview: c2b70afb1d910cdd8810375aecc6c2894e2ba061
   React-perflogger: cb386fd44c97ec7f8199c04c12b22066b0f2e1e0
   React-RCTActionSheet: f803a85e46cf5b4066c2ac5e122447f918e9c6e5
   React-RCTAnimation: 19c80fa950ccce7f4db76a2a7f2cf79baae07fc7
@@ -995,4 +995,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 3049e3437c645045cf2bc624793457902d56f9db
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1
